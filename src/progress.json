@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T12:17:45.484533+00:00",
+  "updatedAt": "2026-10-13T12:21:12.569Z",
   "release": {
     "version": "v0.17",
     "date": "2026-10-13",
@@ -497,12 +497,13 @@
       "id": "CFDDOM1",
       "title": "内外の流体領域を作成",
       "category": "流体",
-      "status": "queued",
+      "status": "building",
       "detail": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "titleEn": "Create internal/external fluid regions",
       "detailEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
-      "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks."
+      "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
+      "lastUpdate": "外部囲いからCAD部品体積を差し引く流体領域と体積メッシュ生成を実装中。内部流路の自動抽出は残作業"
     },
     {
       "id": "CFDMESH1",
