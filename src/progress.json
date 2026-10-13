@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:03:20.418Z",
+  "updatedAt": "2026-10-13T11:07:27.376Z",
   "release": {
     "version": "v0.10",
     "date": "2026-10-13",
@@ -313,12 +313,13 @@
       "id": "REG3",
       "title": "円筒の角度・長さで領域を指定",
       "category": "3D",
-      "status": "queued",
+      "status": "building",
       "detail": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
       "acceptance": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
       "titleEn": "Select cylinder regions by angle and length",
       "detailEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
-      "acceptanceEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload."
+      "acceptanceEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
+      "lastUpdate": "円筒の角度・軸方向範囲の選択と寸法の保存再適用を実装。面積・回転移動・保存復元のテスト成功、実画面検証へ"
     },
     {
       "id": "REG4",
