@@ -1,5 +1,5 @@
 import {validateProject} from './regions.js';
-const metrics={elastic:[['maxDisplacementMm','mm'],['maxVonMisesPa','Pa']],thermal:[['minTemperature','°C'],['maxTemperature','°C']],acoustic:[['maxPressurePa','Pa peak'],['maxSplDb','dB RMS']]};
+const metrics={channelFlow:[['maxSpeedMs','m/s'],['outletFlowM3s','m³/s']],elastic:[['maxDisplacementMm','mm'],['maxVonMisesPa','Pa']],thermal:[['minTemperature','°C'],['maxTemperature','°C']],acoustic:[['maxPressurePa','Pa peak'],['maxSplDb','dB RMS']]};
 export function createCaseStore(){
  let cases=[];
  function validate(c){
@@ -12,8 +12,8 @@ export function createCaseStore(){
   if(o.maxAdaptiveSeconds!==undefined&&(!Number.isFinite(o.maxAdaptiveSeconds)||o.maxAdaptiveSeconds<=0||o.maxAdaptiveSeconds>110))throw Error('Invalid adaptive time limit');
   const r=c.output.result;
   if(!metrics[r?.kind]||metrics[r.kind].some(([k])=>!Number.isFinite(r[k])))throw Error('Invalid case result');
-  if(c.output.input.study&&c.output.input.study.kind!==({elastic:'structural',thermal:'thermal',acoustic:'acoustic'}[r.kind]))throw Error('Case discipline does not match result');
-  if((r.kind==='elastic'&&(r.maxDisplacementMm<0||r.maxVonMisesPa<0))||(r.kind==='thermal'&&(r.minTemperature<-273.15||r.minTemperature>r.maxTemperature))||(r.kind==='acoustic'&&r.maxPressurePa<0))throw Error('Invalid case result range');
+  if(c.output.input.study&&c.output.input.study.kind!==({elastic:'structural',thermal:'thermal',acoustic:'acoustic',channelFlow:'channelFlow'}[r.kind]))throw Error('Case discipline does not match result');
+  if((r.kind==='channelFlow'&&r.maxSpeedMs<0)||(r.kind==='elastic'&&(r.maxDisplacementMm<0||r.maxVonMisesPa<0))||(r.kind==='thermal'&&(r.minTemperature<-273.15||r.minTemperature>r.maxTemperature))||(r.kind==='acoustic'&&r.maxPressurePa<0))throw Error('Invalid case result range');
   return structuredClone(c);
  }
  return Object.freeze({

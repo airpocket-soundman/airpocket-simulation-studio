@@ -95,3 +95,15 @@ In structural analysis, enable Thermal expansion and stress and enter uniform pa
 Save a thermal case, set structural constraints and expansion on the same solid, then select Saved thermal case and Use temperature field for structural analysis. The final saved time step is interpolated using linear tetrahedral barycentric coordinates, allowing a different structural mesh size. Nodes outside the source thermal domain are rejected without extrapolation. Coupling is one way: structural deformation does not alter the thermal solution. Project and case archives retain the source field. Use transferTemperature(source,targetMesh) in Node or analysisApi.applyThermalCase(index) in the browser.
 
 Radiation uses gray-body exchange with a large isothermal environment (view factor 1). Damped Newton iterations solve the Kelvin fourth-power law and reject nonconvergence. Inter-part radiation is unsupported. Thermal resistance supports coincident planar patches on two parts with separate nodes; overlap integration couples nonmatching triangulations. Gaps, overlaps and shared nodes are rejected. Contact pressure and friction are unsupported. The contact example reproduces 0.380952 W and interface temperatures 61.905 / 58.095 °C. Temperature transfer requires body identifiers.
+
+## Fully developed laminar channels (v0.17)
+
+The laminar channel example uses a built-in round pipe with viscosity 0.001 Pa·s, density 1000 kg/m³ and pressure drop 0.01 Pa. Reference peak speed is 0.006 m/s and flow is 1.35717e-6 m³/s. UI verification on 5,211 elements gave 0.006133 m/s, outlet flow 1.3031e-6 m³/s and 0.171% inlet/outlet imbalance.
+
+For steady incompressible Newtonian fully developed unidirectional flow only, solve μ∇²u = −Δp/L with Tet4/PCG. Pressure is an imposed linear gauge-pressure profile from the specified drop, not a general coupled velocity/pressure solve. Walls are no-slip and end caps have zero axial velocity gradient. Built-in rectangular channels also support a selected axis; the built-in cylinder uses Y.
+
+Fluid density, dynamic viscosity and sound speed are separate from solid material inputs. A conservative Re ≤ 1500 and peak-speed Mach ≤ 0.1 limit rejects out-of-regime cases. Compare end fluxes and refine the mesh; displayed imbalance is a numerical diagnostic. Other discipline boundary conditions cannot coexist. General STEP flow, entrance effects, bends, separation, turbulence and thermal-fluid coupling remain unsupported.
+
+API: `analysisApi.loadFlowExample()`, `studioApi.setStudy({kind:'channelFlow', flowAxis, pressureDropPa, dynamicViscosity, fluidDensity, fluidSoundSpeed})`, `analysisApi.analyze()`. Node calls `solveChannelFlow(mesh,source,study,options)` directly. Velocity is node XYZ in m/s, speed in m/s, pressure in Pa and end fluxes in m³/s. Probes, archived cases, comparisons and saved views are supported.
+
+Reference: [COMSOL round-pipe pressure-drop explanation](https://www.comsol.com/blogs/creating-app-modeling-flow-control-pipe-network).

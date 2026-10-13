@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T12:07:14.975Z",
+  "updatedAt": "2026-10-13T12:17:45.484533+00:00",
   "release": {
-    "version": "v0.16",
+    "version": "v0.17",
     "date": "2026-10-13",
-    "description": "適応解析の変位・応力収束診断と特異点の疑い、要素数・時間・停滞停止を追加。3段階の履歴表示と上限のケース保存復元を確認。85テスト。特異点の数学的確定・厳密誤差保証は未対応。",
-    "descriptionEn": "Adaptive displacement/stress trend diagnostics, suspected singularities, element/time/stall stops, three-level history and saved budgets. 85 tests. Mathematical singularity proof and certified error bounds remain unsupported."
+    "description": "円管・角柱の十分発達した層流流路を追加。速度・指定圧力場・流量・Re/Machと保存ケースに対応。93テスト。円管のUI出口流量1.3031e-6 m³/s（参照1.35717e-6）、流量差0.171%。一般3D流れは未対応。",
+    "descriptionEn": "Fully developed laminar round/rectangular channels with velocity, imposed pressure profile, flow, Re/Mach and cases. 93 tests. UI round-pipe outlet 1.3031e-6 m³/s vs reference 1.35717e-6, imbalance 0.171%. General 3D flow remains unsupported."
   },
   "tasks": [
     {
@@ -204,14 +204,15 @@
     {
       "id": "CFD1",
       "title": "流体領域を作り、流れを解析",
-      "status": "building",
+      "status": "queued",
       "category": "流体",
       "detail": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
       "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
       "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
-      "lastUpdate": "最初の流体機能として、十分発達した層流流路の速度・流量・圧力差と参照解テストを実装中。一般3D流れは残作業"
+      "lastUpdate": "十分発達した流路はCFDCHAN1として公開。一般3Dの入口出口・速度圧力連成・形状対応と質量保存は残作業。",
+      "lastUpdateEn": "Fully developed channels released as CFDCHAN1. General 3D inlet/outlet, velocity-pressure coupling, geometry support and mass conservation remain outstanding."
     },
     {
       "id": "GPU1",
@@ -662,8 +663,9 @@
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "Node回帰テスト48件成功。ケースの実計算・復元再計算を追加。公開UI/CAD/3D操作の一括自動化は残作業。",
-      "lastUpdateEn": "All 48 Node regression tests pass, including real case calculations and archive replay. Automated public UI/CAD/3D workflows remain outstanding."
+      "lastUpdate": "93自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
+      "lastUpdateEn": "93 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
+      "evidence": "tests/worker-pipeline.test.mjs"
     },
     {
       "id": "PERF1",
@@ -791,6 +793,23 @@
       "titleEn": "Simulate layers and infill",
       "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
       "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens."
+    },
+    {
+      "id": "CFDCHAN1",
+      "title": "十分発達した層流流路を計算",
+      "category": "流体",
+      "status": "released",
+      "detail": "円管・角柱の速度、流量、指定圧力差を参照解と比較。適用範囲・数値流量差を表示。",
+      "acceptance": "円管・角柱の速度、流量、指定圧力差を参照解と比較。適用範囲・数値流量差を表示。",
+      "titleEn": "Compute fully developed laminar channel flow",
+      "detailEn": "Compare round/rectangular channel velocity, flow and imposed pressure drop to reference solutions. Display scope and numerical flux imbalance.",
+      "acceptanceEn": "Compare round/rectangular channel velocity, flow and imposed pressure drop to reference solutions. Display scope and numerical flux imbalance.",
+      "depends": [
+        "MESH2"
+      ],
+      "lastUpdate": "円管Poiseuille・角柱Fourier参照、粘度比例、逆流、JS/WASM、保存復元・測定を確認。UI 5211要素で流量差0.171%。一般3Dの速度圧力連成・STEP・乱流は未対応。",
+      "lastUpdateEn": "Verified pipe Poiseuille and rectangular Fourier references, viscosity scaling, reverse flow, JS/WASM, archives and probes. UI 5211 elements, 0.171% flow imbalance. General 3D velocity-pressure coupling, STEP and turbulence remain unsupported.",
+      "evidence": "tests/channel-flow.test.mjs"
     }
   ],
   "solvers": [

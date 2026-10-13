@@ -95,3 +95,15 @@ API: `studioApi.addCondition({type:'displacement',value:0.04,direction:[0,0,1]})
 熱伝導解析をケース保存したあと、同じ形状に構造の条件と線膨張係数を設定します。「保存した熱解析ケース」から選び「温度分布を構造解析に使用」を押すと、保存した最後の時間ステップの温度を使います。線形四面体の重心座標で温度を補間するため、構造メッシュのサイズを変更できます。元の熱領域外の節点は補外せず拒否します。熱側は構造変形の影響を受けない一方向連成です。温度場はプロジェクト・ケースに保存されます。NodeではtransferTemperature(source,targetMesh)、ブラウザではanalysisApi.applyThermalCase(index)を使用できます。
 
 熱放射は大きな等温周囲との灰色体放射（形態係数1）です。Kelvinの4乗則を減衰Newton法で解き、未収束は拒否します。部品間放射は未対応です。接触熱抵抗は別々の節点を持つ2部品の一致した平面パッチに対応し、異なる三角形分割を重なり積分で結びます。隙間・重複・共有節点は拒否します。接触圧や摩擦は未対応です。接触サンプルは0.380952 Wと界面温度61.905 / 58.095 °Cを再現します。温度転送には部品識別が必要です。
+
+## 十分発達した層流流路（v0.17）
+
+「層流流路サンプル」は内蔵円筒を流体領域にし、粘度0.001 Pa·s、密度1000 kg/m³、圧力差0.01 Paを指定します。円管の参照最大速度は0.006 m/s、流量は1.35717e-6 m³/sです。UIでは5,211要素で最大0.006133 m/s、出口1.3031e-6 m³/s、入口出口の差0.171%を確認しました。
+
+定常・非圧縮・Newton流体・一方向で十分発達した流れに限り、μ∇²u = −Δp/L の速度問題をTet4/PCGで解きます。圧力場は指定圧力差から作る線形のゲージ圧で、速度と圧力の一般的な連成解法ではありません。側面は滑りなし、両端は軸方向速度勾配0。内蔵角柱も軸を指定して使用できます。円筒はY軸です。
+
+画面の流体設定は固体の材料物性とは別です。流体密度・粘度・音速を入力します。Re ≤ 1500、最大速度のMach ≤ 0.1という保守的な範囲に制限し、範囲外を拒否します。入口出口の流量と差を表示し、メッシュ依存性を確認してください。選択した構造・熱・音響条件は一緒に使えません。STEPの一般形状、入口助走、曲がり、剥離、乱流、熱流体連成は未対応です。
+
+API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', flowAxis, pressureDropPa, dynamicViscosity, fluidDensity, fluidSoundSpeed})`、`analysisApi.analyze()`。Nodeでは `solveChannelFlow(mesh,source,study,options)` を直接実行できます。結果のvelocityは節点XYZのm/s、speedはm/s、pressureはPa、入口出口流量はm³/sです。測定・ケース保存・比較・保存結果表示にも対応します。
+
+参考: [COMSOLの円管圧損の解説](https://www.comsol.com/blogs/creating-app-modeling-flow-control-pipe-network)。
