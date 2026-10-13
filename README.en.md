@@ -4,7 +4,7 @@
 
 A browser application for defining regions directly on 3D models and running structural, thermal, fluid and acoustic simulations with validated open-source engines.
 
-v0.6 implements STEP/built-in volume meshing, linear structure with pressure, normal traction and gravity, steady/transient conduction with convection and total heat input manual/adaptive local refinement and reanalysis, frequency acoustics, sweeps and result probes. [Usage and supported scope](docs/en/analysis-guide.md). Fluid, absorbing boundaries, nonlinear behavior, failure and contact remain unimplemented. Partial regions use projection with a reported 15% area-error threshold; exact CAD splitting remains planned.
+v0.7 implements STEP/built-in volume meshing, linear structure with pressure, normal traction and gravity, steady/transient conduction with convection and total heat input manual/adaptive local refinement and reanalysis, frequency acoustics, sweeps and result probes. [Usage and supported scope](docs/en/analysis-guide.md). Fluid, absorbing boundaries, nonlinear behavior, failure and contact remain unimplemented. Partial regions use projection with a reported 15% area-error threshold; exact CAD splitting remains planned.
 
 - [App](https://airpocket-soundman.github.io/airpocket-simulation-studio/?lang=en)
 - [Live development board](https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html?lang=en)

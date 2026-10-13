@@ -1,3 +1,4 @@
+import {validateFrame} from './constraints.js';
 import {validateMaterialProperties} from './materials.js';
 export function areaOfTriangle(p, t) {
   const i=t*9, ax=p[i+3]-p[i], ay=p[i+4]-p[i+1], az=p[i+5]-p[i+2], bx=p[i+6]-p[i], by=p[i+7]-p[i+1], bz=p[i+8]-p[i+2];
@@ -27,7 +28,8 @@ export function validateProject(project) {
     if(!Array.isArray(m.faceIds)||m.faceIds.length!==m.positions.length/9||!m.faceIds.every(Number.isInteger)) throw Error('面データが不正です。');
   }
   for(const c of project.conditions) {
-    if(!['fixed','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','acousticPressure'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
+    if(!['fixed','displacement','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','acousticPressure'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
+    if(c.type==='displacement'){if(Math.hypot(...c.direction)<1e-12)throw Error('Invalid constraint direction');if(c.frame){validateFrame(c.frame);if(c.direction.some((v,k)=>Math.abs(v-c.frame.axes[c.frame.axis][k])>1e-7))throw Error('Constraint direction does not match local frame');}}
     if(c.type==='convection'&&(!(c.value>0)||!Number.isFinite(c.ambientTemperature)||c.ambientTemperature<-273.15))throw Error('Invalid convection parameters');
     if(c.type==='temperature'&&c.value<-273.15)throw Error('Temperature is below absolute zero');
     if(c.type==='force' && Math.hypot(...c.direction)===0) throw Error('荷重方向が不正です。');

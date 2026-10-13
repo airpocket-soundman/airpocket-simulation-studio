@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:38:01.239Z",
+  "updatedAt": "2026-10-13T08:52:05.768Z",
   "release": {
     "version": "v0.6",
     "date": "2026-10-13",
@@ -388,13 +388,15 @@
       "id": "BC2",
       "title": "方向別拘束・指定変位を設定",
       "category": "構造",
-      "status": "building",
+      "status": "ready",
       "detail": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "titleEn": "Set directional constraints and prescribed displacement",
       "detailEn": "Persist constraints including local coordinates and units; verify solver conversion.",
       "acceptanceEn": "Persist constraints including local coordinates and units; verify solver conversion.",
-      "lastUpdate": "方向別拘束・指定変位・回転した局所座標を実装し、参照変形と反力を検証する。"
+      "lastUpdate": "方向別拘束・指定変位・局所軸回転をUI/APIに接続。43件のテストで軸変形・反力・回転不変性・WASM一致・拘束の矛盾を確認。Pages検証待ち。",
+      "lastUpdateEn": "Connected directional supports, prescribed displacement and rotated local axes to UI/API. 43 tests verify axial strain/reactions, rotation invariance, WASM agreement and conflicts. Pages validation pending.",
+      "evidence": "tests/constraints.test.mjs"
     },
     {
       "id": "BC3",

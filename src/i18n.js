@@ -1,6 +1,11 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '共有節点で指定変位が矛盾しています。':'Conflicting displacement constraints on a shared node','拘束不足です。独立した部品の平行移動・回転を止めてください。':'Insufficient constraints. Restrain translation and rotation of every disconnected solid.','拘束方向がほぼ平行です。方向の重複を見直してください。':'Constraint directions are nearly parallel. Review overlapping directions.','黄色: 選択中　青: 拘束　橙: 荷重・指定変位':'Yellow: selected · Blue: constrained · Orange: load / prescribed displacement',
+
+ '構造・熱・音響 · v0.7':'Structure · Heat · Acoustics · v0.7','指定変位サンプル':'Displacement example','方向別拘束・指定変位':'Directional constraints / prescribed displacement','拘束する軸':'Constrained axis','回転した局所座標を使う':'Use rotated local coordinates','局所座標の回転 X / Y / Z（°）':'Local frame rotation X / Y / Z (degrees)','局所回転X':'Local rotation X','局所回転Y':'Local rotation Y','局所回転Z':'Local rotation Z','指定変位（mm）':'Prescribed displacement (mm)','選択範囲をこの方向だけ固定':'Constrain selected region in this direction','選択範囲に指定変位':'Set displacement on selected region','登録した方向以外は自由です。共有節点で矛盾する指定と、剛体運動が残る拘束を拒否します。':'Other directions remain free. Conflicting shared-node constraints and unrestrained rigid motion are rejected.',
+ '領域の節点反力（共有節点を含む、全体座標）':'Region nodal reactions (including shared nodes, global coordinates)','指定方向 ':'Prescribed direction ','拘束方向 ':'Constraint direction ','指定変位 ':'Displacement ','全体方向':'Global direction','局所X':'Local X','局所Y':'Local Y','局所Z':'Local Z','局所X（全体Z）に0.04 mm。可動面の参照反力100 N、固定面は−100 Nです。':'0.04 mm in local X (global Z). Reference actuator reaction 100 N; fixed-face reaction −100 N.',
+
  '合力 ':'Applied force ','体積荷重 ':'Body force ',
 
  '構造・熱・音響 · v0.6':'Structure · Heat · Acoustics · v0.6','圧力・重力サンプル':'Pressure / gravity example','圧力・法線荷重・重力':'Pressure, normal traction and gravity','圧力（kPa、正は内向き）':'Pressure (kPa, positive inward)','選択範囲に圧力':'Set pressure on selected region','法線表面荷重（kPa、正は外向き）':'Normal traction (kPa, positive outward)','選択範囲に法線表面荷重':'Set normal traction on selected region','重力・一様加速度を使う':'Enable gravity / uniform acceleration','加速度 X / Y / Z（m/s²）':'Acceleration X / Y / Z (m/s²)','加速度X':'Acceleration X','加速度Y':'Acceleration Y','加速度Z':'Acceleration Z',
@@ -27,7 +32,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 40件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 40 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 43件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 43 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',

@@ -8,12 +8,13 @@ function dist2(x,y,z,p,k){
 }
 export function transferConditions(project,mesh,{areaTolerance=.15}={}){
  const normals=project.conditions.some(c=>['pressure','normalTraction'].includes(c.type))?outwardSurfaceNormals(mesh):null;const matches=mesh.surface.map((s,si)=>{const center=[0,0,0];for(const i of s.nodes)for(let k=0;k<3;k++)center[k]+=mesh.nodes[i*3+k]/3;let best=Infinity,meshId=-1,triangle=-1;project.meshes.forEach((m,mi)=>{for(let t=0;t<m.positions.length/9;t++){const d=dist2(...center,m.positions,t*9);if(d<best){best=d;meshId=mi;triangle=t;}}});const positions=s.nodes.flatMap(i=>mesh.nodes.slice(i*3,i*3+3));return {surface:s,normal:normals?.[si],meshId,triangle,distanceMm:Math.sqrt(best),area:areaOfTriangle(positions,0)};});
- const fixed=new Set(),forces=new Map(),reports=[],temperatures=new Map(),heatFlux=new Map(),acousticPressures=new Map(),convection=[],convFaces=new Set();
- for(const c of project.conditions){const selected=new Map(c.regions.map(r=>[r.mesh,new Set(r.triangles)])),mapped=matches.filter(m=>selected.get(m.meshId)?.has(m.triangle));let originalArea=0;for(const r of c.regions)for(const t of r.triangles)originalArea+=areaOfTriangle(project.meshes[r.mesh].positions,t);const mappedArea=mapped.reduce((a,m)=>a+m.area,0),error=originalArea?Math.abs(mappedArea-originalArea)/originalArea:1;
+ const displacements=[],fixed=new Set(),forces=new Map(),reports=[],temperatures=new Map(),heatFlux=new Map(),acousticPressures=new Map(),convection=[],convFaces=new Set();
+ for(const [conditionIndex,c]of project.conditions.entries()){const selected=new Map(c.regions.map(r=>[r.mesh,new Set(r.triangles)])),mapped=matches.filter(m=>selected.get(m.meshId)?.has(m.triangle));let originalArea=0;for(const r of c.regions)for(const t of r.triangles)originalArea+=areaOfTriangle(project.meshes[r.mesh].positions,t);const mappedArea=mapped.reduce((a,m)=>a+m.area,0),error=originalArea?Math.abs(mappedArea-originalArea)/originalArea:1;
  if(!mapped.length||error>areaTolerance)throw Error(`Selected region transfer error ${(error*100).toFixed(1)}%; refine the mesh (tolerance ${(areaTolerance*100).toFixed(0)}%)`);
  const maxDistance=Math.max(...mapped.map(m=>m.distanceMm));if(maxDistance>mesh.size*.15)throw Error('Surface projection distance is too large; refine the mesh');
- reports.push({type:c.type,originalAreaMm2:originalArea,mappedAreaMm2:mappedArea,relativeAreaError:error,maxProjectionDistanceMm:maxDistance,approximation:'surface triangle centroid projection'});
+ reports.push({conditionIndex,...(['fixed','displacement'].includes(c.type)?{nodes:[...new Set(mapped.flatMap(m=>m.surface.nodes))],direction:c.type==='displacement'?c.direction:null,valueMm:c.type==='displacement'?c.value:0}:{}),type:c.type,originalAreaMm2:originalArea,mappedAreaMm2:mappedArea,relativeAreaError:error,maxProjectionDistanceMm:maxDistance,approximation:'surface triangle centroid projection'});
  if(c.type==='fixed')for(const m of mapped)for(const i of m.surface.nodes)fixed.add(i);
+ else if(c.type==='displacement')for(const m of mapped)for(const i of m.surface.nodes)displacements.push({node:i,direction:[...c.direction],valueMm:c.value});
  else if(c.type==='force'){const norm=Math.hypot(...c.direction);for(const m of mapped)for(const i of m.surface.nodes){const v=forces.get(i)||[0,0,0];for(let k=0;k<3;k++)v[k]+=c.value*c.direction[k]/norm*m.area/mappedArea/3;forces.set(i,v);}}
  else if(['pressure','normalTraction'].includes(c.type)){const signed=c.type==='pressure'?-c.value:c.value;for(const m of mapped)for(const i of m.surface.nodes){const v=forces.get(i)||[0,0,0];for(let k=0;k<3;k++)v[k]+=signed*m.area*1e-6*m.normal[k]/3;forces.set(i,v);}}
  else if(c.type==='temperature')for(const m of mapped)for(const i of m.surface.nodes){if(temperatures.has(i)&&Math.abs(temperatures.get(i)-c.value)>1e-8)throw Error('Conflicting temperatures on a shared node');temperatures.set(i,c.value);}
@@ -23,5 +24,5 @@ export function transferConditions(project,mesh,{areaTolerance=.15}={}){
  else if(c.type==='acousticPressure')for(const m of mapped)for(const i of m.surface.nodes){if(acousticPressures.has(i)&&Math.abs(acousticPressures.get(i)-c.value)>1e-8)throw Error('Conflicting acoustic pressure regions');acousticPressures.set(i,c.value);}
  else throw Error('Unsupported boundary condition');
  }
- return {fixed:[...fixed],forces:[...forces].map(([node,value])=>({node,value})),temperatures:[...temperatures],heatFlux:[...heatFlux],acousticPressures:[...acousticPressures],convection,reports};
+ return {displacements,fixed:[...fixed],forces:[...forces].map(([node,value])=>({node,value})),temperatures:[...temperatures],heatFlux:[...heatFlux],acousticPressures:[...acousticPressures],convection,reports};
 }

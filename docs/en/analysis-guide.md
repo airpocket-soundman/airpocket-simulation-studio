@@ -62,7 +62,7 @@ API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}
 
 Set pressure or normal traction on selected surfaces. UI units are kPa; storage/API uses Pa. Positive pressure is inward; positive normal traction is outward. Negative values reverse the direction. These are loads per area, distinct from total force in N. Outward normals use the adjacent tetrahedron, independent of display triangle winding.
 
-Enter gravity/uniform acceleration in global m/s². All solids share registered density (kg/m³). Each element distributes its density × volume × acceleration to its nodes. Disable gravity when unused. Remeshing rebuilds loads; reactions include both surface and body forces. Each disconnected solid needs at least three non-collinear fixed nodes; support through contact is not implemented.
+Enter gravity/uniform acceleration in global m/s². All solids share registered density (kg/m³). Each element distributes its density × volume × acceleration to its nodes. Disable gravity when unused. Remeshing rebuilds loads; reactions include both surface and body forces. Full fixing requires at least three non-collinear nodes per disconnected solid. Directional supports must remove all rigid translation/rotation; support through contact is not implemented.
 
 Reference: 10×10×40 mm, E=1 GPa, ν=0, ρ=1000 kg/m³, upper-face pressure 1 MPa, acceleration [0,0,−10] m/s². Pressure 100 N + body force 0.04 N produces reaction 100.04 N and reference maximum displacement 0.040008 mm. Results display/export applied force, body force and reactions.
 
@@ -71,3 +71,15 @@ A radius 12 mm/length 60 mm half-cylinder under 100 kPa has projected-area resul
 After selection, call `studioApi.addCondition({type:'pressure',value:1e6})` or `{type:'normalTraction',value:1e6}`. Set gravity with `studioApi.setStudy({...study,kind:'structural',gravityEnabled:true,gravity:[0,0,-9.80665]})`. `gravityEnabled:false` disables it; API studies specifying only a gravity vector enable it. Load the reference using `analysisApi.loadPressureExample()`.
 
 Pressure is a linear static load following original geometry normals. Follower loads using deformed normals are not supported.
+
+## Directional constraints and prescribed displacement (v0.7)
+
+Select a region, choose axis X/Y/Z and register a zero directional constraint or a displacement in mm. Other directions remain free and can receive additional conditions. Sign follows the selected axis.
+
+Local frames use degree angles with fixed global X→Y→Z rotation order, matrix Rz Ry Rx. Projects retain the right-handed orthonormal frame and the constraint direction in global coordinates; the latter is shown in the condition list. Displacements always persist in mm and convert to meters in the solver.
+
+Reference: a40 mm bar,10×10 mm cross-section, E=1 GPa, ν=0, fully fixed base. Rotate the local frame −90° about Y and prescribe0.04 mm along local X (global Z) at the end. Reference stress1 MPa; nodal reactions are100 N on the actuated end and−100 N at the base, with zero overall reaction. Region totals include all support reactions at their nodes; overlapping regions can include a node more than once. Do not sum overlapping groups. These are not decomposed multipliers for individual constraint directions.
+
+Tests cover rotated-coordinate Poisson contraction, JS/WASM agreement and save/restore. Nodal directions are orthogonalized and the stiffness is transformed for strong constraints; no penalty is used. Every disconnected component must remove six rigid modes. Conflicts, nearly parallel directions and insufficient supports are rejected. Directions are constant per region; varying surface-normal roller conditions, rigid links and contact remain unsupported.
+
+API: `studioApi.addCondition({type:'displacement',value:0.04,direction:[0,0,1]})`. Value is mm and direction is normalized. Use `frameFromEuler([0,-90,0],0)` (degrees and axis index) and register `{type:'displacement',value:0.04,frame}` for a local axis. `analysisApi.loadDisplacementExample()` loads the reference. Outputs include global nodal `constraintReactions`, region nodal `constraintRegionReactions`, and `forceBalanceErrorN` (applied + support force).
