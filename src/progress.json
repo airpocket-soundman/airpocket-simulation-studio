@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T21:55:20.462937+00:00",
+  "updatedAt": "2026-10-13T21:58:44.714207+00:00",
   "release": {
     "version": "v0.35",
     "date": "2026-10-14",
@@ -986,6 +986,22 @@
       "acceptance": "実STL立方体の体積と単軸変位・荷重反力、形状不備の拒否、保存復元、日英UIを検証。",
       "acceptanceEn": "Verify actual STL cube volume, axial displacement and reactions, invalid shell rejection, archives and JP/EN UI.",
       "evidence": "src/mesh-core.js; src/surface-inspection.js"
+    },
+    {
+      "id": "FATIGUE1",
+      "title": "単軸弾性載荷のS-N疲労寿命を評価",
+      "titleEn": "Assess S-N fatigue life under uniaxial elastic loading",
+      "status": "building",
+      "category": "材料",
+      "detail": "試験の完全両振りS-N曲線を入力し、単軸比例載荷の応力振幅・Goodman平均応力補正・Miner損傷を評価。試験範囲外の外挿、塑性疲労やき裂進展は行わない。",
+      "detailEn": "Use fully reversed measured S-N data for uniaxial proportional elastic stress amplitudes, Goodman mean-stress correction and Miner damage. No extrapolation, plastic fatigue or crack growth.",
+      "acceptance": "架空の参照S-N曲線の寿命・補正・損傷、入力不備/降伏超過/多軸の拒否、API・保存復元・日英UIを検証。",
+      "acceptanceEn": "Verify synthetic reference life, correction and damage, invalid data/yield/multiaxial rejection, API, archives and JP/EN UI.",
+      "depends": [
+        "FEM1",
+        "MAT2"
+      ],
+      "evidence": "src/fatigue-core.js; src/fatigue-material.js; docs/fatigue.md"
     }
   ],
   "solvers": [
