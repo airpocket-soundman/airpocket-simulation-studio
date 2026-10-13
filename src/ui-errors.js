@@ -1,5 +1,13 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+ 'Invalid planar rectangle dimensions':'矩形の位置と上下限を確認してください。',
+ 'Planar rectangle must be covered by one planar display surface':'矩形全体が1枚の平面の内側に入るように指定してください。',
+ 'Planar rectangle must lie on one external planar CAD face':'矩形は1枚の外側CAD平面に指定してください。',
+ 'Exact planar patches require a STEP or box solid':'矩形のCAD分割はSTEPか直方体に対応します。',
+ 'Exact planar patches currently require a single CAD volume':'矩形のCAD分割は単一のCAD部品に対応します。',
+ 'Exact planar thermal contact patches are not yet supported':'矩形のCAD分割による接触熱抵抗は未対応です。',
+ 'At most twenty exact planar patches are supported':'矩形のCAD分割は20領域までです。',
+
  'Internal fluid seed is inside the solid or on its boundary':'指定点は固体内、またはその境界上です。流体空間の内側を指定してください。',
  'Selected fluid leaks to a box face not declared as a port; adjust the cap planes':'指定した流体空間が、ポート以外の箱の面に接続しています。開口を閉じる位置を見直してください。',
  'A declared port does not intersect the selected fluid volume':'指定したポートが流体空間に接していません。端面の位置かポート指定を見直してください。',

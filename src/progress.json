@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T20:21:05.092865+00:00",
+  "updatedAt": "2026-10-13T20:25:27.744174+00:00",
   "release": {
-    "version": "v0.29",
+    "version": "v0.30",
     "date": "2026-10-14",
-    "testCount": 151,
-    "description": "解析断面の補間色表示と変形座標のクリック測定を追加。過渡音・固有振動の測定表示を修正。151テスト、公開配信物13項目、公開画面13項目を検証済み。",
-    "descriptionEn": "Added interpolated result sections and probes mapped from deformed display coordinates. Fixed transient/modal probe output. Verified 151 tests, thirteen deployed-runtime checks and thirteen public browser checks."
+    "testCount": 156,
+    "description": "平面矩形のCAD分割・境界適合メッシュ・寸法保存を追加。156テスト、ローカル配信物14項目、画面14項目を確認。公開確認中。曲面・斜面の厳密な領域分割は残作業。",
+    "descriptionEn": "Added exact planar CAD rectangles, boundary-conforming meshing and saved dimensions. Verified 156 tests, fourteen local distribution checks and fourteen browser checks; deployment verification pending. Exact curved and oblique patches remain outstanding."
   },
   "tasks": [
     {
@@ -914,6 +914,18 @@
       "acceptance": "断面の面積・補間場と変形点の座標、UI測定を参照値で検証。",
       "acceptanceEn": "Verify section areas/interpolated fields, deformed-point mapping and UI probes against references.",
       "evidence": "src/result-slice.js; tests/result-slice.test.mjs; tests/probe.test.mjs; scripts/qa-browser.cua.js; docs/result-sections.md"
+    },
+    {
+      "id": "REG2P",
+      "title": "平面矩形をCAD分割して荷重・拘束へ反映",
+      "titleEn": "Apply exact planar CAD rectangles to loads and supports",
+      "status": "checking",
+      "category": "3D",
+      "detail": "単一STEP・直方体のX/Y/Z平面を矩形分割。面積と荷重を検証し、他の面の対応と寸法保存を維持。公開確認中。",
+      "detailEn": "Fragment X/Y/Z planar faces of single STEP/box solids; verify area/load conservation while retaining original face identities and saved dimensions. Deployment verification pending.",
+      "acceptance": "STEP各軸面、メッシュ変更後の面積・合計荷重・反力、UI矩形表示、保存復元と不整合拒否を確認。",
+      "acceptanceEn": "Verify STEP faces on all axes, remesh area/load/reaction balance, UI rectangle display, roundtrips and inconsistent archive rejection.",
+      "evidence": "src/planar-region.js; tests/planar-region.test.mjs; tests/worker-pipeline.test.mjs; docs/planar-regions.md"
     }
   ],
   "solvers": [

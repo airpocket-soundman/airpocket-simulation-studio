@@ -1,3 +1,4 @@
+import {fragmentPlanarRegions} from './planar-region.js';
 import {addTube,assertFluidSeed,selectInternalFluid} from './internal-fluid.js';
 import {sourceFingerprint} from './source-identity.js';
 import {validateFluidDomain,enclosureBounds,validateSphere} from './fluid-domain.js';
@@ -9,7 +10,7 @@ export function inspectMesh(mesh){
  const qualityHistogram=Array(5).fill(0);if(mesh.qualities){if(mesh.qualities.length!==mesh.tetrahedra.length||!mesh.qualities.every(Number.isFinite))throw Error('Invalid mesh quality data');for(const q of mesh.qualities)qualityHistogram[Math.max(0,Math.min(4,Math.floor(q*5)))]++;}
  return {nodeCount:mesh.nodes.length/3,elementCount:mesh.tetrahedra.length,volumeMm3:volume,minVolumeMm3:minVolume,minQuality:mesh.qualities?.length?Math.min(...mesh.qualities):null,qualityHistogram};
 }
-export async function generateMesh(initialize,source,{size=5,refinements=[],maxElements=30000}={}){
+export async function generateMesh(initialize,source,{size=5,refinements=[],maxElements=30000,planarRegions=[]}={}){
  const sourceHash=await sourceFingerprint(source);
  if(source.kind==='boxes'){if(!Array.isArray(source.boxes)||!source.boxes.length||source.boxes.length>10||source.boxes.some(b=>!Array.isArray(b)||b.length!==6||!b.every(Number.isFinite)||b.slice(3).some(v=>v<=0)))throw Error('Invalid independent box solids');for(let i=0;i<source.boxes.length;i++)for(let j=0;j<i;j++)if([0,1,2].every(k=>Math.min(source.boxes[i][k]+source.boxes[i][k+3],source.boxes[j][k]+source.boxes[j][k+3])>Math.max(source.boxes[i][k],source.boxes[j][k])+1e-9))throw Error('Independent box solids cannot overlap in volume');const mesh={sourceHash,nodes:[],tetrahedra:[],surface:[],qualities:[],nodeBodies:[],size,engine:'Gmsh WASM 0.3.0 / independent solids'};for(const [bodyIndex,bounds]of source.boxes.entries()){const part=await generateMesh(initialize,{kind:'box',bounds},{size,refinements,maxElements}),offset=mesh.nodes.length/3;mesh.nodes.push(...part.nodes);mesh.nodeBodies.push(...Array(part.nodes.length/3).fill(bodyIndex));mesh.tetrahedra.push(...part.tetrahedra.map(t=>t.map(i=>i+offset)));mesh.surface.push(...part.surface.map(f=>({...f,nodes:f.nodes.map(i=>i+offset),bodyIndex})));mesh.qualities.push(...part.qualities);if(mesh.tetrahedra.length>maxElements)throw Error('Assembly element limit exceeded; increase mesh size');}mesh.summary=inspectMesh(mesh);return mesh;}
 
@@ -33,7 +34,7 @@ export async function generateMesh(initialize,source,{size=5,refinements=[],maxE
   if(enclosed.length){gmsh.model.occ.remove(enclosed,true);gmsh.model.occ.synchronize();}
   }
  }
- gmsh.model.occ.synchronize();const volumes=gmsh.model.getEntities(3).dimTags||gmsh.model.getEntities(3);if(!volumes.length)throw Error('No solid volume found');
+ const partition=fragmentPlanarRegions(gmsh,source,planarRegions);gmsh.model.occ.synchronize();const volumes=gmsh.model.getEntities(3).dimTags||gmsh.model.getEntities(3);if(!volumes.length)throw Error('No solid volume found');
  const bounds=gmsh.model.getBoundingBox(-1,-1),estimate=6*(bounds.xmax-bounds.xmin)*(bounds.ymax-bounds.ymin)*(bounds.zmax-bounds.zmin)/size**3;if(estimate>maxElements*4)throw Error('Requested mesh is too fine for the browser limit; increase mesh size');
  if(refinements.length)gmsh.model.mesh.setSizeCallback((_dim,_tag,x,y,z,lc)=>{let h=Math.min(lc,size);for(const r of refinements){const d=Math.hypot(x-r.center[0],y-r.center[1],z-r.center[2]);if(d<r.radius)h=Math.min(h,r.size+(size-r.size)*d/r.radius);}return h;});
  gmsh.model.mesh.generate(3);
@@ -41,8 +42,8 @@ export async function generateMesh(initialize,source,{size=5,refinements=[],maxE
  for(let k=0;k<e.elementTypes.length;k++){if(e.elementTypes[k]!==4)throw Error('Unsupported volume element type');for(let i=0;i<e.nodeTags[k].length;i+=4)tetrahedra.push(e.nodeTags[k].slice(i,i+4).map(tag=>index.get(tag)));tags.push(...e.elementTags[k]);}
  if(tetrahedra.length>maxElements)throw Error('Element limit exceeded; increase mesh size');
  const surface=[],entities=gmsh.model.getEntities(2).dimTags||gmsh.model.getEntities(2);
- for(let i=0;i<entities.length;i+=2){const tag=entities[i+1],s=gmsh.model.mesh.getElements(2,tag);for(let k=0;k<s.elementTypes.length;k++){if(s.elementTypes[k]!==2)continue;for(let j=0;j<s.nodeTags[k].length;j+=3)surface.push({nodes:s.nodeTags[k].slice(j,j+3).map(t=>index.get(t)),faceTag:tag});}}
- if(domainSelection)for(const f of surface){const port=domainSelection.ports.find(p=>p.faceTag===f.faceTag);if(port)f.portPlane=port.plane;}const mesh={...(domainSelection?{domainSelection}:{}),sourceHash,nodes:n.coord,tetrahedra,surface,qualities:gmsh.model.mesh.getElementQualities(tags,'minSICN').elementsQuality,size,engine:'Gmsh WASM 0.3.0'};mesh.summary=inspectMesh(mesh);return mesh;
+ for(let i=0;i<entities.length;i+=2){const tag=entities[i+1],s=gmsh.model.mesh.getElements(2,tag);for(let k=0;k<s.elementTypes.length;k++){if(s.elementTypes[k]!==2)continue;for(let j=0;j<s.nodeTags[k].length;j+=3)surface.push({nodes:s.nodeTags[k].slice(j,j+3).map(t=>index.get(t)),faceTag:partition?.originalTags.get(tag)??tag,...(partition?{patchConditions:partition.patches.filter(p=>p.tags.includes(tag)).map(p=>p.conditionIndex)}:{})});}}
+ if(domainSelection)for(const f of surface){const port=domainSelection.ports.find(p=>p.faceTag===f.faceTag);if(port)f.portPlane=port.plane;}const mesh={...(partition?{planarPatches:partition.patches}:{}),...(domainSelection?{domainSelection}:{}),sourceHash,nodes:n.coord,tetrahedra,surface,qualities:gmsh.model.mesh.getElementQualities(tags,'minSICN').elementsQuality,size,engine:'Gmsh WASM 0.3.0'};mesh.summary=inspectMesh(mesh);return mesh;
  }catch(e){throw Error(e.message+(logs.length?' · '+logs.slice(-2).join(' / '):''));}finally{gmsh.finalize();}
 }
 

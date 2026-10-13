@@ -171,3 +171,5 @@ export function installLanguage(){
  observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
  const observer=new MutationObserver(scan);scan();
 }
+
+addTranslations({'平面を矩形寸法で選ぶ':'Select a planar rectangle by dimensions','面に垂直な軸':'Axis normal to the face','面の位置（mm）':'Face position (mm)','範囲の下限（mm）':'Range minimum (mm)','範囲の上限（mm）':'Range maximum (mm)','矩形領域を選択':'Select rectangle','範囲は残りの2軸をX/Y/Z順で指定します。単一のSTEP・直方体の外側平面に対応。矩形の境界をCAD分割してメッシュへ反映します。曲面と接触面は未対応です。':'Use the other two axes in X/Y/Z order for the ranges. Supports external planar faces of single STEP or box solids. CAD fragmentation makes the mesh conform to rectangle edges. Curved and contact interfaces are not supported.','矩形領域を選択しました。条件を追加してください。':'Rectangle selected. Add a boundary condition.','矩形CAD領域: ':'CAD rectangle: '});
