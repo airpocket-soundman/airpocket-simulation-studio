@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T06:10:42.004Z",
+  "updatedAt": "2026-10-13T06:13:38.836Z",
   "release": {
     "version": "v0.1",
     "date": "2026-10-13",
@@ -91,7 +91,9 @@
       "acceptance": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
       "titleEn": "Generate a volume mesh in the browser",
       "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
-      "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions."
+      "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
+      "lastUpdate": "Gmsh WASM 0.3.0の候補とブラウザ条件を調査。未導入。",
+      "lastUpdateEn": "Investigated Gmsh WASM 0.3.0 and browser requirements; not integrated."
     },
     {
       "id": "REG2",
@@ -245,14 +247,15 @@
       "id": "LIVE1",
       "title": "ボードに最新進捗を自動反映",
       "category": "共通",
-      "status": "checking",
+      "status": "released",
       "detail": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
       "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
-      "lastUpdate": "二重取得・古いデータの拒否をテスト済み。公開画面を再確認",
+      "lastUpdate": "公開画面で59件と取得時刻を確認。古いデータの巻き戻しを防止。",
       "evidence": "src/board.js",
       "titleEn": "Refresh progress automatically",
       "detailEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps.",
-      "acceptanceEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps."
+      "acceptanceEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps.",
+      "lastUpdateEn": "Verified 59 tasks and live timestamps on Pages; stale snapshots cannot regress progress."
     },
     {
       "id": "MAT2",
@@ -648,12 +651,13 @@
       "acceptance": "アプリ・管理ボードの静的表示と動的メッセージを両言語化。言語を保存する。",
       "depends": [],
       "optional": false,
-      "status": "checking",
+      "status": "released",
       "titleEn": "Offer English and Japanese web interfaces",
       "detailEn": "Localize the app, board and dynamic messages; preserve language preference.",
       "acceptanceEn": "Localize the app, board and dynamic messages; preserve language preference.",
-      "lastUpdate": "JP/EN切替と作業タイトル・詳細の英語版を実装。公開画面確認中",
-      "evidence": "src/i18n.js"
+      "lastUpdate": "アプリ・ボードのEN/JP表示と、物性を保持した言語切替を公開画面で確認。",
+      "evidence": "src/i18n.js",
+      "lastUpdateEn": "Verified English/Japanese app and board, including switching language without losing material values."
     },
     {
       "id": "I18N2",

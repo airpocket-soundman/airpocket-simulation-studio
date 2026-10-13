@@ -86,4 +86,4 @@ new ResizeObserver(()=>{const rect=$('canvas').parentElement.getBoundingClientRe
 demo();renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera);});
 
 installLanguage();
-document.addEventListener('studio-language',()=>{if(['Curved sample · Ø24 × 60 mm','曲面サンプル · Ø24 × 60 mm'].includes(modelName)){$('name').textContent=language==='en'?'Curved sample · Ø24 × 60 mm':'曲面サンプル · Ø24 × 60 mm';}renderMaterial();});
+document.addEventListener('studio-language',()=>{if(['Curved sample · Ø24 × 60 mm','曲面サンプル · Ø24 × 60 mm'].includes(modelName)){$('name').textContent=language==='en'?'Curved sample · Ø24 × 60 mm':'曲面サンプル · Ø24 × 60 mm';}});
