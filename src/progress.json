@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:14:38.906Z",
+  "updatedAt": "2026-10-13T11:17:34.861Z",
   "release": {
-    "version": "v0.11",
+    "version": "v0.12",
     "date": "2026-10-13",
-    "description": "円筒を角度・軸方向の長さで選び、数値指定を保存・再適用できる機能を追加。面積・回転移動・保存復元を検証、自動テスト63件。流体・非線形・CAD境界への厳密な適合等は残作業。",
-    "descriptionEn": "Adds cylindrical region selection by angle and axial length with saved reusable dimensions. Area, rigid transformations and archive roundtrips verified by 63 tests. Fluid, nonlinear and exact CAD boundary conformity remain outstanding."
+    "description": "表示形状の閉鎖辺・重複・退化・向き・寸法検査と不備箇所の選択を追加。検査は元データを変更せず、修復は元CAD/メッシュで実施。自動テスト68件。自己交差・流体・非線形等は未対応。",
+    "descriptionEn": "Adds display surface edge closure, duplicate, degenerate, winding and dimension inspection with defect triangle selection. Geometry is unchanged; repair in source CAD/mesh. 68 tests. Self-intersections, fluid and nonlinear analyses remain unsupported."
   },
   "tasks": [
     {
@@ -352,13 +352,15 @@
       "id": "CAD3",
       "title": "形状の閉鎖・不備・単位を検査",
       "category": "3D",
-      "status": "building",
+      "status": "released",
       "detail": "開いた表面、重複、退化要素を識別。修復可否を表示。",
       "acceptance": "開いた表面、重複、退化要素を識別。修復可否を表示。",
       "titleEn": "Check closed geometry, defects and units",
       "detailEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options.",
       "acceptanceEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options.",
-      "lastUpdate": "表面の閉鎖辺・重複・退化・向き・寸法を検査し不備箇所を選択するUI/APIを実装。参照形状の検査テスト成功"
+      "lastUpdate": "閉鎖辺・重複・退化・向き・寸法と不備選択を実装。正常円筒と不備サンプルをUI確認。自己交差等は未検査、自動修復なしを明示。全68テスト成功",
+      "evidence": "tests/surface-inspection.test.mjs",
+      "lastUpdateEn": "Implemented edge closure, duplicate, degenerate, winding and dimension checks with defect selection. Normal cylinder and defective sample verified in UI. Self-intersection/exact solid checks and automatic repair are explicitly excluded. All 68 tests pass."
     },
     {
       "id": "MESH2",

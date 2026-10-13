@@ -1,3 +1,4 @@
+import {inspectSurface} from './surface-inspection.js';
 import {cylindricalTriangles} from './cylindrical-region.js';
 import {frameFromEuler} from './constraints.js';
 import {validateProject,areaOfTriangle} from './regions.js';
@@ -19,6 +20,7 @@ export function createStudioApi(adapter) {
     version:1,
     frameFromEuler,
     getSummary:summary,
+    inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},
     exportProject:()=>current(),
     loadProject(project){const p=clone(project);p.selection??=p.meshes?.map(()=>[]);return write(p,'load');},
     selectTriangles(mesh,triangles,{replace=true,erase=false}={}){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh]||!Array.isArray(triangles))throw Error('選択対象が不正です。');if(!triangles.every(t=>Number.isInteger(t)&&t>=0&&t<p.meshes[mesh].faceIds.length))throw Error('三角形番号が不正です。');if(replace)p.selection=p.meshes.map(()=>[]);const s=new Set(p.selection[mesh]);triangles.forEach(t=>erase?s.delete(t):s.add(t));p.selection[mesh]=[...s];return write(p,'selection');},
