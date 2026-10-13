@@ -20,3 +20,5 @@ Compare identical geometry, loads, materials, boundaries, units and convergence 
 Browser execution requires checking language/toolchain, Fortran/BLAS/sparse/MPI dependencies, filesystem assumptions, memory and licensing. Native binaries cannot run directly from Pages. Do not label a newly assembled browser engine as CalculiX or another original engine. Review licenses, source/notice obligations and redistribution before shipping any solver.
 
 Official sources: [CalculiX](https://www.calculix.de/), [Elmer](https://github.com/ElmerCSC/elmerfem), [Code_Aster](https://code-aster.org/en/product/main), [OpenFOAM](https://openfoam.org/), [Gmsh](https://gmsh.info/doc/texinfo/).
+
+MFEM 4.10 independent stiffness assembly and CG are implemented as a WASM structural engine. [Scope and build process](native-solvers.md). Other candidates above remain unported.

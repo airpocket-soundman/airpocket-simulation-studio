@@ -40,3 +40,5 @@
 - OpenFOAM: https://openfoam.org/
 - 共役熱伝達など: https://openfoam.org/chemical-process-engineering/
 - Gmsh: https://gmsh.info/doc/texinfo/
+
+MFEM 4.10の独立した剛性組立・CGのWASM構造エンジンを実装しました。[対応範囲とビルド手順](native-solvers.md)。他の上記候補は未移植です。

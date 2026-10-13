@@ -1,14 +1,15 @@
 {
   "name": "airpocket-simulation-studio",
   "private": true,
-  "version": "0.19.0",
+  "version": "0.20.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build",
-    "test": "node scripts/build-kernel.mjs && node --test tests/*.test.mjs",
+    "build": "node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build",
+    "test": "node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node --test tests/*.test.mjs",
     "check:project": "node scripts/check-project.mjs",
-    "task:status": "node scripts/task-status.mjs"
+    "task:status": "node scripts/task-status.mjs",
+    "native:build": "node scripts/ensure-native.mjs"
   },
   "dependencies": {
     "@loumalouomega/gmsh-wasm": "0.3.0",

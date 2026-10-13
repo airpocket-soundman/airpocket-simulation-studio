@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T14:17:02.509Z",
+  "updatedAt": "2026-10-13T14:53:07.696001+00:00",
   "release": {
-    "version": "v0.19",
+    "version": "v0.20",
     "date": "2026-10-13",
-    "description": "線形構造のWebGPU計算とWASM CPU精度補正、CPU切替を追加。実Intel GPUで荷重・指定変位・適応3段階と保存表示を検証。103自動テスト。小モデルはCPUの方が速く、既定はCPU。熱・音響・流体のGPU経路は未対応。",
-    "descriptionEn": "Linear structural WebGPU compute with WASM CPU correction and fallback. Actual Intel GPU verified loads, prescribed displacement, three-stage adaptation and saved views. 103 tests. CPU is faster for the tested small model and remains default. Thermal/acoustic/fluid GPU paths remain unsupported."
+    "description": "MFEM 4.10のC++剛性組立・CGをWASM移植。Airpocketと同一条件でエンジンを選択・比較でき、局所拘束・重力・熱膨張・適応解析に対応。107テスト。MFEMアダプターは線形構造のみ。他OSS移植・一般3D流体・非線形は残作業。",
+    "descriptionEn": "MFEM 4.10 C++ stiffness assembly and CG ported to WASM. Choose/compare engines on identical inputs, including local constraints, gravity, thermal strain and adaptation. 107 tests. MFEM adapter supports linear structure only. Other OSS ports, general 3D flow and nonlinear work remain outstanding."
   },
   "tasks": [
     {
@@ -114,16 +114,16 @@
     {
       "id": "WASM1",
       "title": "構造ソルバーのWASM移植を検証",
-      "status": "building",
+      "status": "released",
       "category": "構造",
       "detail": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "titleEn": "Validate a structural solver WASM port",
       "detailEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
       "acceptanceEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
-      "lastUpdate": "独立したOSS計算経路としてMFEMのserial C++版をWASM化し、Airpocketと参照値比較する実装を開始",
-      "lastUpdateEn": "Implemented WASM matrix operations for a new Tet4 engine; native solver ports remain incomplete. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
-      "evidence": "src/fem-kernel.wat"
+      "lastUpdate": "MFEM 4.10をserial C++からWASM化し、独立した組立・CGと元剛性の残差を検証。UI両エンジン0.04 mm/100 N、圧力重力0.040008 mm/100.04 N、3段階適応を確認。107テスト。MFEMは構造のみ、他OSSは未移植。",
+      "lastUpdateEn": "Ported serial MFEM 4.10 C++ to WASM with independent assembly/CG and common residual verification. UI both engines 0.04 mm/100 N, pressure/gravity 0.040008 mm/100.04 N and three-stage adaptation. 107 tests. MFEM structural scope only; other OSS engines remain unported.",
+      "evidence": "tests/mfem.test.mjs, tests/worker-pipeline.test.mjs"
     },
     {
       "id": "FEM1",
@@ -162,7 +162,7 @@
     {
       "id": "SOLVER1",
       "title": "対応するソルバーを選択・比較",
-      "status": "queued",
+      "status": "released",
       "category": "共通",
       "detail": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。",
       "depends": [
@@ -171,7 +171,10 @@
       "acceptance": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。",
       "titleEn": "Select and compare validated solvers",
       "detailEn": "Enable only validated browser engines; report unsupported conditions and compare equivalent reference cases.",
-      "acceptanceEn": "Enable only validated browser engines; report unsupported conditions and compare equivalent reference cases."
+      "acceptanceEn": "Enable only validated browser engines; report unsupported conditions and compare equivalent reference cases.",
+      "lastUpdate": "MFEM 4.10をserial C++からWASM化し、独立した組立・CGと元剛性の残差を検証。UI両エンジン0.04 mm/100 N、圧力重力0.040008 mm/100.04 N、3段階適応を確認。107テスト。MFEMは構造のみ、他OSSは未移植。",
+      "lastUpdateEn": "Ported serial MFEM 4.10 C++ to WASM with independent assembly/CG and common residual verification. UI both engines 0.04 mm/100 N, pressure/gravity 0.040008 mm/100.04 N and three-stage adaptation. 107 tests. MFEM structural scope only; other OSS engines remain unported.",
+      "evidence": "tests/mfem.test.mjs, tests/worker-pipeline.test.mjs"
     },
     {
       "id": "HEAT1",
@@ -668,8 +671,8 @@
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "103自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
-      "lastUpdateEn": "103 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
+      "lastUpdate": "107自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
+      "lastUpdateEn": "107 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
       "evidence": "tests/worker-pipeline.test.mjs"
     },
     {
@@ -870,6 +873,11 @@
       "Airpocket Tet4 / Heat Tet4 / Acoustic Tet4 / Channel",
       "線形構造・熱・周波数音響・十分発達した層流",
       "CPU/WASM実装。構造のWebGPU + CPU補正は試験版"
+    ],
+    [
+      "MFEM 4.10",
+      "線形構造の独立した剛性組立・CG",
+      "WASM移植・倍精度検証済み（構造のみ）"
     ]
   ]
 }

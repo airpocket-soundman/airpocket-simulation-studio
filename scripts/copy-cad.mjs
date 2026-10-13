@@ -12,3 +12,8 @@ for(const pkg of ['three','occt-import-js','@loumalouomega/gmsh-wasm','coi-servi
  if(!license) throw Error(`Missing license: ${pkg}`);
  await copyFile(`node_modules/${pkg}/${license}`,`public/licenses/${pkg.replaceAll('/','-')}.txt`);
 }
+
+import {readFile} from 'node:fs/promises';
+const nativePaths=JSON.parse(await readFile(new URL('../.native-cache/paths.json',import.meta.url),'utf8'));
+await copyFile(nativePaths.mfem+'/LICENSE',new URL('../public/licenses/mfem-LICENSE',import.meta.url));
+await copyFile(nativePaths.mfem+'/NOTICE',new URL('../public/licenses/mfem-NOTICE',import.meta.url));
