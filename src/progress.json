@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:49:28.997Z",
+  "updatedAt": "2026-10-13T07:52:21.377Z",
   "release": {
-    "version": "v0.4",
+    "version": "v0.5",
     "date": "2026-10-13",
-    "description": "構造・熱・音響に加え、対流放熱と合計熱入力、温度未固定の非定常熱解析に対応。流体・非線形・破壊・吸音・熱放射は未実装。",
-    "descriptionEn": "Adds convection, total heat input and unconstrained transient heat to structural, thermal and acoustic analysis. Fluid, nonlinear behavior, failure, absorption and thermal radiation remain unimplemented."
+    "description": "構造・熱・音響、適応細分化に加え、選択領域の局所メッシュ設定・保存復元と計算中止後の再実行を検証。自動テスト36件。流体・非線形・破壊等は未実装。",
+    "descriptionEn": "Adds persistent selected-region local sizing and verified cancellation/restart to structure, heat, acoustics and adaptation. 36 automated tests. Fluid, nonlinear behavior and failure remain unimplemented."
   },
   "tasks": [
     {
@@ -359,14 +359,14 @@
       "id": "MESH2",
       "title": "品質と局所細分化を表示",
       "category": "構造",
-      "status": "ready",
+      "status": "released",
       "detail": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "titleEn": "Show quality and local refinement",
       "detailEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
       "acceptanceEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
-      "lastUpdate": "選択領域の局所サイズ・影響半径をUI/APIから登録し保存復元。実Gmsh密度増加・体積保存・品質ヒストグラムを確認。",
-      "lastUpdateEn": "Local size/radius via UI/API with persistence; real Gmsh density increase, volume and quality histogram verified.",
+      "lastUpdate": "選択領域の局所サイズ・影響半径をUI/APIから登録し保存復元。実Gmsh密度増加・体積保存・品質ヒストグラムを確認。 Pagesで中止→再実行と585要素の局所細分化、0.04 mm・反力100 Nを確認。",
+      "lastUpdateEn": "Local size/radius via UI/API with persistence; real Gmsh density increase, volume and quality histogram verified. Pages verified cancellation/restart, 585-element local mesh, 0.04 mm and 100 N reaction.",
       "evidence": "tests/local-mesh.test.mjs"
     },
     {
@@ -409,14 +409,14 @@
       "id": "RUN1",
       "title": "計算を中止し失敗理由を表示",
       "category": "共通",
-      "status": "ready",
+      "status": "released",
       "detail": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "titleEn": "Cancel calculations and explain failures",
       "detailEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
       "acceptanceEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
-      "lastUpdate": "中止後の再実行を実画面で確認。タイムアウト・未収束・メモリ失敗・古いWorker応答の排除をAPIテストで確認。",
-      "lastUpdateEn": "UI cancellation/restart verified. API tests cover timeout, nonconvergence, memory/start failure and stale Worker responses.",
+      "lastUpdate": "中止後の再実行を実画面で確認。タイムアウト・未収束・メモリ失敗・古いWorker応答の排除をAPIテストで確認。 Pagesで中止→再実行と585要素の局所細分化、0.04 mm・反力100 Nを確認。",
+      "lastUpdateEn": "UI cancellation/restart verified. API tests cover timeout, nonconvergence, memory/start failure and stale Worker responses. Pages verified cancellation/restart, 585-element local mesh, 0.04 mm and 100 N reaction.",
       "evidence": "tests/analysis-client.test.mjs"
     },
     {
