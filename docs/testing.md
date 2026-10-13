@@ -29,6 +29,8 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 
 v0.33の[J2微小ひずみ塑性](plasticity.md)は、正の線形等方硬化と単調載荷を対象にします。`tests/plasticity.test.mjs`は材料応答、整合接線の数値微分、静水圧で降伏しないこと、材料点の除荷、柱の参照解を検証します。`node --test tests/plasticity-integration.test.mjs`は画面と同じWorkerから実Gmsh/WASMを使い、10×10×40 mm柱の参照応力251.7412935 MPa、相当塑性ひずみ0.0017412935、上端反力25174.12935 N、収束履歴・保存復元・点測定・不正な塑性状態の原子的拒否を確認します。MFEM/WebGPU、適応解析、固有振動、熱応力との組み合わせも拒否します。材料点の除荷テストはFE繰返し載荷や疲労への対応を意味しません。Nodeテストは公開UIの操作確認やTet4のロッキングに対する精度保証とは別です。
 
+v0.35の[閉鎖STL体積メッシュ](stl-meshing.md)は、最大2000三角形の外向き・単一閉鎖凸殻を対象にします。`tests/stl-source.test.mjs`は元形状の検査、`tests/stl-mesh.test.mjs`は体積メッシュと元殻の体積・境界の整合を検証します。`node --test tests/stl-integration.test.mjs`は実Gmsh/WASM Workerで10 mm立方体、E=1 GPa・ν=0・100 N引張の参照変位0.01 mmと反力−100 N、三角形条件の転送、プロジェクトとケースの保存復元、点測定、不正入力を拒否した後の状態保持、適応解析・CAD領域分割の拒否を確認します。STLの条件転送は近似であり、一般の凹形状・複数殻・自己交差の修復や任意形状の精度を保証するものではありません。ソーステストと公開ブラウザ操作の確認は別です。
+
 音響のスイープもsrc/acoustic-sweep.jsをNodeから直接実行できる。測定はsrc/probe.jsのsampleResult(mesh,result,[x,y,z])。ブラウザではwindow.analysisApi.probe([x,y,z])で直前の結果を測定。適応解析の出力adaptive.iterationsには全反復のメッシュ・境界・結果を保持する。
 
 計算の管理テスト: 中止→再実行、旧Worker応答の無視、入力スナップショット、時間上限、未収束・メモリ失敗後の解放を短時間で確認する。実際のメモリ枯渇は発生させず、Worker失敗を注入して処理を確認。実画面では中止と再実行、局所メッシュの生成を確認する。
@@ -47,7 +49,7 @@ v0.33の[J2微小ひずみ塑性](plasticity.md)は、正の線形等方硬化�
 
 `runtime-manifest.json` にバージョン、コミット、各ファイルの長さとSHA-256を記録します。検証結果は `.qa/published-report.json`、ブラウザ用の参照形状は `.qa/published-reference.step`。失敗した実行は成功レポートを上書きして失敗を記録します。ソースと比較するためのプロジェクト/ケース検証ヘルパーは手元のコードです。公開Workerの実行ファイルは配信版そのものです。
 
-`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の177テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
+`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の185テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
 
 ### ブラウザの回帰レシピ
 

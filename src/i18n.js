@@ -1,6 +1,9 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+"STLの体積メッシュは2000三角形までの閉鎖・外向き・単一凸形状に対応します。開いた面、複数殻、凹形状は拒否します。CAD領域分割・流体領域生成・適応解析は未対応です。":"STL volume meshing supports a single closed outward-facing convex shell with up to 2000 triangles. Open surfaces, multiple shells and concave shapes are rejected. CAD patch fragmentation, fluid-domain creation and adaptation are unsupported.",
+"閉鎖した凸STLを読み込みました。面選択は三角形単位です。材料と条件を登録して体積メッシュ・解析を実行できます。":"Closed convex STL loaded. Select individual triangles, register materials and conditions, then generate a volume mesh or run analysis.",
+
 "弾塑性の載荷・除荷サンプル":"Plastic loading / unloading example",
 "弾塑性の荷重倍率履歴（任意、カンマ区切り）":"Plastic load fraction history (optional, comma-separated)",
 "空欄は通常の単調載荷。指定すると各倍率で荷重と指定変位を増減し、履歴の長さを増分数に使います。弾性除荷と残留塑性ひずみを表示します。疲労寿命は計算しません。":"Leave blank for ordinary monotonic loading. Each fraction scales loads and prescribed displacements; the history length sets the step count. Shows elastic unloading and residual plastic strain. Fatigue life is not calculated.",

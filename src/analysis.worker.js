@@ -1,5 +1,6 @@
+import {validateStlSource} from './stl-source.js';
 import {solvePlasticity} from './plasticity-core.js';
-import {validatePlasticLoadFractions} from './regions.js';
+import {validatePlasticLoadFractions,validateProject} from './regions.js';
 import {modalNormalVelocity,validateVibrationStudy} from './vibration-source.js';
 import {solveModal} from './modal-core.js';
 import {solveAcousticTransient,validateTransientAcousticStudy} from './acoustic-transient.js';
@@ -19,7 +20,12 @@ import {wasmMatvecFactory} from './wasm-matvec.js';
 import {solveThermal} from './thermal-core.js';
 import {solveAcoustic} from './acoustic-core.js';
 import {acousticSweep} from './acoustic-sweep.js';
-self.onmessage=async({data})=>{try{if(data.operation!=='mesh'&&(data.project.study?.kind==='fluidDomain'||data.source.kind==='fluidDomain'&&data.project.study?.kind!=='acoustic'&&!(data.source.mode==='internal'&&data.project.study?.kind==='channelFlow')))throw Error('Exterior fluid domains support meshing only outside acoustic analysis; general 3D flow solving remains unsupported');const {default:load}=await import(/* @vite-ignore */data.base+'gmsh/gmsh.mjs');let instance,matvecFactory,mfemInstance,loadMfem;if(data.options.method==='mfem-wasm'){const module=await import(/* @vite-ignore */data.base+'mfem/mfem.mjs');loadMfem=()=>mfemInstance??=module.default();}if(['wasm-pcg','webgpu-pcg','mfem-wasm'].includes(data.options.method)){const response=await fetch(data.base+'fem-kernel.wasm');if(!response.ok)throw Error('WASM kernel unavailable');const wasm=await WebAssembly.instantiate(await response.arrayBuffer());matvecFactory=wasmMatvecFactory(wasm.instance);}const initialize=options=>instance??=load(options),progress=text=>self.postMessage({progress:text});
+self.onmessage=async({data})=>{try{if(data.source?.kind==='stl'){
+ validateStlSource(data.source);validateProject(data.project);
+ if(data.project.sourceModel?.kind!=='stl'||data.source.positions.length!==data.project.sourceModel.positions.length||data.source.positions.some((v,i)=>v!==data.project.sourceModel.positions[i]))throw Error('STL worker source does not match the project');
+ if(data.options.adaptive)throw Error('STL volume meshing does not support adaptive refinement');
+ if(data.project.conditions.some(c=>c.planarRegion||c.cylindricalRegion?.exactCad))throw Error('STL volume meshing does not support exact CAD patches');
+ }if(data.operation!=='mesh'&&(data.project.study?.kind==='fluidDomain'||data.source.kind==='fluidDomain'&&data.project.study?.kind!=='acoustic'&&!(data.source.mode==='internal'&&data.project.study?.kind==='channelFlow')))throw Error('Exterior fluid domains support meshing only outside acoustic analysis; general 3D flow solving remains unsupported');const {default:load}=await import(/* @vite-ignore */data.base+'gmsh/gmsh.mjs');let instance,matvecFactory,mfemInstance,loadMfem;if(data.options.method==='mfem-wasm'){const module=await import(/* @vite-ignore */data.base+'mfem/mfem.mjs');loadMfem=()=>mfemInstance??=module.default();}if(['wasm-pcg','webgpu-pcg','mfem-wasm'].includes(data.options.method)){const response=await fetch(data.base+'fem-kernel.wasm');if(!response.ok)throw Error('WASM kernel unavailable');const wasm=await WebAssembly.instantiate(await response.arrayBuffer());matvecFactory=wasmMatvecFactory(wasm.instance);}const initialize=options=>instance??=load(options),progress=text=>self.postMessage({progress:text});
  validatePlasticLoadFractions(data.project.study);
  if(data.project.study?.plasticLoadFractions!==undefined&&(data.project.study.kind!=='structural'||!data.project.materialProperties?.plasticity))throw Error('Plastic load fractions require a structural plasticity model');
  if(data.operation!=='mesh'&&data.project.materialProperties?.plasticity&&(data.project.study?.modalAnalysis||data.options.adaptive||['webgpu-pcg','mfem-wasm'].includes(data.options.method)||data.project.study?.thermalStress))throw Error('Plasticity supports CPU structure without adaptation, modal analysis or thermal stress');
