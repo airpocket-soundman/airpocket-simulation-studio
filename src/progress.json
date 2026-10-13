@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:35:55.788Z",
+  "updatedAt": "2026-10-13T11:36:59.225Z",
   "release": {
     "version": "v0.14",
     "date": "2026-10-13",
@@ -481,12 +481,13 @@
       "id": "HEAT2",
       "title": "熱放射と接触熱抵抗を実装",
       "category": "熱",
-      "status": "queued",
+      "status": "building",
       "detail": "時間履歴とエネルギー収支を参照解に照合。",
       "acceptance": "時間履歴とエネルギー収支を参照解に照合。",
       "titleEn": "Implement thermal radiation and contact resistance",
       "detailEn": "Compare time histories and energy balance to reference solutions.",
-      "acceptanceEn": "Compare time histories and energy balance to reference solutions."
+      "acceptanceEn": "Compare time histories and energy balance to reference solutions.",
+      "lastUpdate": "熱放射の非線形境界と接触熱抵抗の実装・参照解検証を開始"
     },
     {
       "id": "CFDDOM1",
