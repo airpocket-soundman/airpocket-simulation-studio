@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:09:49.599Z",
+  "updatedAt": "2026-10-13T11:14:38.906Z",
   "release": {
     "version": "v0.11",
     "date": "2026-10-13",
@@ -352,12 +352,13 @@
       "id": "CAD3",
       "title": "形状の閉鎖・不備・単位を検査",
       "category": "3D",
-      "status": "queued",
+      "status": "building",
       "detail": "開いた表面、重複、退化要素を識別。修復可否を表示。",
       "acceptance": "開いた表面、重複、退化要素を識別。修復可否を表示。",
       "titleEn": "Check closed geometry, defects and units",
       "detailEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options.",
-      "acceptanceEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options."
+      "acceptanceEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options.",
+      "lastUpdate": "表面の閉鎖辺・重複・退化・向き・寸法を検査し不備箇所を選択するUI/APIを実装。参照形状の検査テスト成功"
     },
     {
       "id": "MESH2",
