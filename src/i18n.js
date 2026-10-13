@@ -1,11 +1,16 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '放熱サンプル':'Cooling example','合計熱入力（W、流入を正）':'Total heat input (W, positive inward)','選択範囲に合計熱入力を設定':'Set total heat on selected region','熱伝達率（W/m²K）':'Heat transfer coefficient (W/m²K)','周囲温度（°C）':'Ambient temperature (°C)','選択範囲に対流放熱を設定':'Set convection on selected region','熱伝達率は流れ・姿勢などに応じた値を入力します。流体解析からの自動算出は未対応です。':'Enter a coefficient appropriate to flow, orientation and conditions. Automatic calculation from CFD is not supported.',
+ '放熱サンプルを設定しました。先端温度の参照値は46.667 °Cです。':'Cooling example configured. Reference tip temperature: 46.667 °C.',
+ '構造・熱・音響 · v0.4':'Structure · Heat · Acoustics · v0.4',
+ '対流による流入 ':'Convection heat inward ','温度境界の供給 ':'Temperature boundary heat input ','対流 ':'Convection ','合計熱入力 ':'Total heat ',
+
  'SPL（dB、RMS）':'SPL (dB, RMS)',
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 29件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 29 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 32件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 32 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',

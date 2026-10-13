@@ -28,7 +28,7 @@ Adaptive mode combines recovered-stress variation, strain and displacement to se
 
 Select thermal analysis and define temperature (°C), heat flux (W/m², positive inward) and volumetric heat (W/m³). Do not mix structural constraints/forces with thermal conditions. Steady conduction needs conductivity; transient conduction also needs density, specific heat, time step, step count and initial temperature. Integration uses backward Euler and lumped mass.
 
-The thermal example establishes a linear 20–100 °C field. Display temperature, heat flux, residual and energy-balance error; exported results retain time history. Convection, radiation and contact resistance remain unimplemented.
+The thermal example establishes a linear 20–100 °C field. Display temperature, heat flux, residual and energy-balance error; exported results retain time history. Convection and total surface heat input are supported. Radiation and contact resistance remain unimplemented.
 
 ## API and validation
 
@@ -39,3 +39,13 @@ Tests cover volume preservation, size changes, region area/resultant force, axia
 ## Acoustics
 
 Choose Acoustic example, then Run analysis to display pressure, SPL or phase. Enable frequency sweep in acoustic details and enter the receiver position and frequency range. Model the medium through which sound travels as the solid domain. Select Probe and click the 3D results surface to measure a location. See [numerical model and limits](acoustics.md). The API also exposes loadAcousticExample.
+
+### Convection and total heat input (v0.4)
+
+Set coefficient h (W/m²K) and ambient temperature (°C) on a selected surface. Outward convection is h(T−ambient). Supply h for the relevant flow, orientation and surface conditions; it is not inferred from material. Overlapping convection regions are rejected to avoid double counting.
+
+Total heat input (W) is distributed by selected area while preserving its total. This differs from flux (W/m²) and volumetric heating (W/m³). Positive is inward, negative outward. Unspecified surfaces are insulated. Every disconnected steady body needs temperature or convection anchoring. Transient heat can run without fixed temperatures using initial temperature and heat capacity.
+
+Cooling example: 40 mm length, 10×10 mm cross-section, k=2 W/mK, base 100 °C, tip h=100 W/m²K/ambient 20 °C, insulated sides. Reference tip 46.667 °C and outward heat 0.266667 W. Energy balance is applied heat + inward convection + prescribed-temperature reaction − storage rate. A negative convection term means cooling. History retains convection and stored energy.
+
+After selecting a region, call `studioApi.addCondition({type:'convection',value:100,ambientTemperature:20})` or `studioApi.addCondition({type:'heatPower',value:1})`. Load the reference with `analysisApi.loadConvectionExample()`.
