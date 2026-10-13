@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:49:59.072233+00:00",
+  "updatedAt": "2026-10-13T19:49:49.141976+00:00",
   "release": {
-    "version": "v0.27",
+    "version": "v0.28",
     "date": "2026-10-14",
-    "testCount": 140,
-    "description": "直方体の振動モードから外部音響への一方向連成を追加。140テスト、公開配信物12項目、公開画面回帰11項目を検証済み。一般曲面/双方向連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added one-way box-mode to exterior sound coupling. Verified 140 tests, twelve deployed-runtime checks and eleven public browser checks. General curved/two-way coupling and general 3D flow remain outstanding."
+    "testCount": 147,
+    "description": "CAD内の指定点と箱端面による内部流体抽出、ポート選択、円形/角形STEP直管の認識と層流計算、二言語の診断を追加。147テスト、配信物13項目、画面12項目が成功。公開確認中。一般3D流体と任意方向の開口閉鎖は残作業。",
+    "descriptionEn": "Added CAD seed/box-cap internal fluid extraction, port selection, circular/rectangular STEP channel recognition and laminar flow, plus bilingual diagnostics. 147 tests, thirteen distribution checks and twelve browser checks pass. Public verification pending. General 3D flow and arbitrary cap directions remain outstanding."
   },
   "tasks": [
     {
@@ -510,14 +510,15 @@
       "id": "CFDDOM1",
       "title": "内外の流体領域を作成",
       "category": "流体",
-      "status": "building",
-      "detail": "CAD差分と内部の指定点で流体空間を抽出し、箱の切断面で入口・出口を指定する機能を実装中。管内の実形状、漏れ・固体内の点の拒否、層流参照解で検証。",
+      "status": "checking",
+      "detail": "CAD差分と指定点で一つの内部体積を抽出し、箱のX/Y/Z端面をポートに指定。円形・角形STEP直管をCADで認識し層流計算、閉じた空洞はメッシュ/音響に対応。漏れ・固体内の点・保存破損を検査。公開確認中。任意方向の蓋と体積結合はCFDPORT1。",
       "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "titleEn": "Create internal/external fluid regions",
-      "detailEn": "Implementing CAD-subtracted seed-selected fluid spaces with box-plane inlet/outlet caps. Verify actual pipe geometry, leakage/solid-seed rejection and laminar references.",
+      "detailEn": "Extract one seed-selected CAD-subtracted volume with X/Y/Z box-plane ports. Recognize circular/rectangular STEP channels for laminar flow; closed cavities support meshing/acoustics. Verify leaks, solid seeds and archive corruption. Public verification pending. Arbitrary caps and volume joining are CFDPORT1.",
       "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
       "lastUpdate": "外部囲いのCAD差分と実メッシュはCFDENC1として公開。内部流路の自動抽出、一般3Dの入口出口条件・漏れ検証は残作業。",
-      "lastUpdateEn": "Exterior CAD subtraction and actual meshes released as CFDENC1. Automatic internal passage extraction, general 3D inlet/outlet conditions and leak checks remain outstanding."
+      "lastUpdateEn": "Exterior CAD subtraction and actual meshes released as CFDENC1. Automatic internal passage extraction, general 3D inlet/outlet conditions and leak checks remain outstanding.",
+      "evidence": "src/internal-fluid.js; tests/internal-fluid.test.mjs; docs/internal-fluid.md; scripts/qa-browser.cua.js"
     },
     {
       "id": "CFDMESH1",
@@ -884,6 +885,20 @@
       "detailEn": "Implement conservative curved-interface transfer, forced frequency response/damping and acoustic pressure feedback, and verify coupled references.",
       "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
       "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance."
+    },
+    {
+      "id": "CFDPORT1",
+      "title": "任意方向の開口閉鎖・流体体積の結合",
+      "titleEn": "Arbitrary opening caps and fluid-volume joining",
+      "status": "queued",
+      "category": "流体",
+      "depends": [
+        "CFDDOM1"
+      ],
+      "detail": "CAD開口のワイヤーから任意方向の蓋を作り、複数CADボリュームに分割された流体を結合。3D上の点指定と漏れ検査を整備。",
+      "detailEn": "Cap arbitrarily oriented CAD opening wires, join fluid split across several CAD volumes, and improve 3D seed selection/leak checks.",
+      "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
+      "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references."
     }
   ],
   "solvers": [

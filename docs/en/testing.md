@@ -45,7 +45,7 @@ Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar 
 
 `runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
 
-After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 140 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 147 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
 
 ### Browser regression recipe
 
