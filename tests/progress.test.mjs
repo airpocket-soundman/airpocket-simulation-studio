@@ -1,4 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {validateProgress} from '../src/progress.js';
 const current=()=>JSON.parse(readFileSync(new URL('../src/progress.json',import.meta.url)));
+test('a stale network snapshot cannot regress deployed progress',async()=>{const {applyProgress,tasks}=await import('../src/board-data.js');const stale=current();stale.updatedAt='2020-01-01T00:00:00Z';stale.tasks=stale.tasks.filter(t=>t.status==='released').map(t=>({...t,depends:[]}));assert.equal(applyProgress(stale),false);const after=await import('../src/board-data.js');assert.equal(after.tasks,tasks);});
 test('entire roadmap has unique IDs, valid dependencies and evidence',()=>{assert.ok(validateProgress(current()).tasks.length>40);});
 test('reject circular or missing dependencies and false release',()=>{const p=current();p.tasks[0].depends=[p.tasks[1].id];p.tasks[1].depends=[p.tasks[0].id];assert.throws(()=>validateProgress(p));const q=current();q.tasks[0].depends=['missing'];assert.throws(()=>validateProgress(q));const r=current();delete r.tasks[0].evidence;assert.throws(()=>validateProgress(r));});

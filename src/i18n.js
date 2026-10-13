@@ -1,5 +1,5 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
-export const language=new URLSearchParams(location.search).get('lang')||savedLanguage;
+export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
  'Webアプリとして公開':'Publish as a web app','GitHub Pagesで配信。モデルはブラウザ内で処理する。':'Hosted on GitHub Pages. Models are processed in the browser.',
  'CPUを基本に、GPUを段階的に追加':'CPU baseline, GPU acceleration later','WASMとWorkerでローカルCPUを使用。WebGPU計算は専用処理と検証を追加してから。':'Use WASM and Workers on the local CPU. Add dedicated, validated WebGPU computation later.',
@@ -43,14 +43,13 @@ export const dictionary={
  '対応するプロジェクトではありません。':'Unsupported project.','形状数が不正です。':'Invalid geometry count.','形状データが不正です。':'Invalid geometry data.','形状が大きすぎます。':'Geometry is too large.','面データが不正です。':'Invalid face data.','条件データが不正です。':'Invalid condition data.','荷重方向が不正です。':'Invalid force direction.','領域データが不正です。':'Invalid region data.','選択データが不正です。':'Invalid selection data.',
 };
 let replacements=Object.entries(dictionary).sort((a,b)=>b[0].length-a[0].length);
-export function addTranslations(entries){Object.assign(dictionary,entries);replacements=Object.entries(dictionary).sort((a,b)=>b[0].length-a[0].length);}
+export function addTranslations(entries){for(const [key,value]of Object.entries(entries))if(key&&typeof value==='string'&&value.length)dictionary[key]=value;replacements=Object.entries(dictionary).sort((a,b)=>b[0].length-a[0].length);}
 export function translate(s){if(language!=='en')return s;if(dictionary[s])return dictionary[s];let result=s;for(const [jp,en]of replacements)if(result.includes(jp))result=result.split(jp).join(en);return result.replace(/(\d+) 三角形を選択/g,'$1 triangles selected').replace(/(\d+) 件/g,'$1 items').replace(/ の後/g,' required').replace(/固定 (\d+)/g,'Fixed $1').replace(/荷重 (\d+)/g,'Force $1').replace(/方向 \(/g,'Direction (').replace(/全体座標/g,'Global coordinates').replace(/ 公開/g,' deployed');}
 export function installLanguage(){
- document.documentElement.lang=language==='en'?'en':'ja';
- const bar=document.createElement('div');bar.className='language-switch';bar.dataset.noTranslate='true';for(const [code,label]of [['ja','JP'],['en','EN']]){const a=document.createElement('a');a.textContent=label;const u=new URL(location.href);u.searchParams.set('lang',code);a.href=u.href;a.lang=code;a.className=code===language?'selected':'';a.onclick=()=>{try{localStorage.setItem('studio-language',code);}catch{}};bar.append(a);}document.body.append(bar);
- if(language!=='en')return;
- function scan(){observer.disconnect();for(const el of document.querySelectorAll('option'))if(!el.hasAttribute('value'))el.setAttribute('value',el.textContent);const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=walker.nextNode()){if(n.parentElement?.closest('script,style,input,textarea,[data-no-translate],#name,.memo'))continue;const value=translate(n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;}
- for(const el of document.querySelectorAll('[placeholder],[aria-label],option')){if(el.tagName==='OPTION'&&!el.hasAttribute('value'))el.setAttribute('value',el.textContent);for(const attr of ['placeholder','aria-label'])if(el.hasAttribute(attr))el.setAttribute(attr,translate(el.getAttribute(attr)));}
+ const originals=new WeakMap(),attributes=new WeakMap();
+ const bar=document.createElement('div');bar.className='language-switch';bar.dataset.noTranslate='true';for(const [code,label]of [['ja','JP'],['en','EN']]){const a=document.createElement('a');a.textContent=label;const u=new URL(location.href);u.searchParams.set('lang',code);a.href=u.href;a.lang=code;a.onclick=e=>{e.preventDefault();language=code;try{localStorage.setItem('studio-language',code);}catch{}const url=new URL(location.href);url.searchParams.set('lang',code);history.replaceState(null,'',url);scan();document.dispatchEvent(new Event('studio-language'));};bar.append(a);}document.body.append(bar);
+ function scan(){observer.disconnect();document.documentElement.lang=language==='en'?'en':'ja';for(const a of bar.children)a.className=a.lang===language?'selected':'';for(const el of document.querySelectorAll('option'))if(!el.hasAttribute('value'))el.setAttribute('value',el.textContent);const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=walker.nextNode()){if(n.parentElement?.closest('script,style,input,textarea,[data-no-translate],#name,.memo'))continue;let record=originals.get(n);if(!record||n.nodeValue!==record.output)record={source:n.nodeValue};const value=translate(record.source);record.output=value;originals.set(n,record);if(value!==n.nodeValue)n.nodeValue=value;}
+ for(const el of document.querySelectorAll('[placeholder],[aria-label]')){let source=attributes.get(el);if(!source){source={};for(const attr of ['placeholder','aria-label'])if(el.hasAttribute(attr))source[attr]=el.getAttribute(attr);attributes.set(el,source);}for(const [attr,value]of Object.entries(source))el.setAttribute(attr,translate(value));}
  observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
  const observer=new MutationObserver(scan);scan();
 }

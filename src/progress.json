@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T06:06:04.663Z",
+  "updatedAt": "2026-10-13T06:10:42.004Z",
   "release": {
     "version": "v0.1",
     "date": "2026-10-13",
@@ -248,7 +248,7 @@
       "status": "checking",
       "detail": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
       "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
-      "lastUpdate": "ライブ取得と依存関係検証を実装。公開画面を確認中",
+      "lastUpdate": "二重取得・古いデータの拒否をテスト済み。公開画面を再確認",
       "evidence": "src/board.js",
       "titleEn": "Refresh progress automatically",
       "detailEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps.",
@@ -258,10 +258,10 @@
       "id": "MAT2",
       "title": "材料の数値・単位・出典を登録",
       "category": "材料",
-      "status": "checking",
+      "status": "released",
       "detail": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
       "acceptance": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
-      "lastUpdate": "数値範囲・保存復元の自動テスト完了。公開UIを確認予定",
+      "lastUpdate": "公開UIで70000 MPa・ポアソン比0.3・出典を登録。保存復元のテスト完了",
       "evidence": "tests/materials.test.mjs",
       "titleEn": "Register material values, units and sources",
       "detailEn": "Enter and validate elastic constants, density, strength, thermal data and provenance; verify project roundtrips.",
@@ -663,11 +663,11 @@
       "acceptance": "README、機能、材料、構成、ソルバー、ロードマップ、検証、メッシュ、印刷部品を両言語で対応させる。",
       "depends": [],
       "optional": false,
-      "status": "checking",
+      "status": "released",
       "titleEn": "Provide English and Japanese repository documentation",
       "detailEn": "Provide corresponding README, features, materials, architecture, solvers, roadmap, tests, meshing and printed-parts documents.",
       "acceptanceEn": "Provide corresponding README, features, materials, architecture, solvers, roadmap, tests, meshing and printed-parts documents.",
-      "lastUpdate": "全仕様文書の英語版・相互リンクを追加。対応を自動検証",
+      "lastUpdate": "EN/JP文書の対応と相互リンクをテスト済み。GitHubへ公開",
       "evidence": "tests/docs.test.mjs"
     },
     {
@@ -678,11 +678,12 @@
       "acceptance": "dev-portalに解析アプリと開発管理へのリンクを公開して確認。",
       "depends": [],
       "optional": false,
-      "status": "checking",
+      "status": "released",
       "evidence": "docs/testing.md",
       "titleEn": "Add links to the development portal",
       "detailEn": "Publish and verify links to the app and board from dev-portal.",
-      "acceptanceEn": "Publish and verify links to the app and board from dev-portal."
+      "acceptanceEn": "Publish and verify links to the app and board from dev-portal.",
+      "lastUpdate": "ポータルで解析アプリと開発管理へのリンクを確認済み"
     },
     {
       "id": "PRINT1",

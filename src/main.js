@@ -1,4 +1,4 @@
-import {installLanguage} from './i18n.js';
+import {installLanguage,language} from './i18n.js';
 import { materialFields,materialReadiness } from './materials.js';
 import { createStudioApi } from './studio-api.js';
 import * as THREE from 'three';
@@ -47,7 +47,7 @@ function updateMarkers(){for(const child of [...markers.children]){child.travers
  const scale=new THREE.Box3().setFromObject(group).getSize(new THREE.Vector3()).length()*.13;
  for(const c of conditions){if(c.type!=='force')continue;const center=new THREE.Vector3();let n=0;for(const r of c.regions){const p=meshes[r.mesh].geometry.attributes.position;for(const t of r.triangles)for(let v=0;v<3;v++){center.add(new THREE.Vector3().fromBufferAttribute(p,t*3+v));n++;}}if(n){center.divideScalar(n);markers.add(new THREE.ArrowHelper(new THREE.Vector3(...c.direction).normalize(),center,scale,0xffac58));}}
 }
-function demo(){const g=new THREE.CylinderGeometry(12,12,60,64,24,false).toNonIndexed(),p=g.attributes.position.array;const ids=[];for(let t=0;t<p.length/9;t++){const i=t*9;ids.push(Math.abs(p[i+1]-30)<.001&&Math.abs(p[i+4]-30)<.001&&Math.abs(p[i+7]-30)<.001?1:Math.abs(p[i+1]+30)<.001&&Math.abs(p[i+4]+30)<.001&&Math.abs(p[i+7]+30)<.001?2:0);}setModel([geometryData(g,ids)],'曲面サンプル · Ø24 × 60 mm');g.dispose();status('曲面の一部分をブラシで選べます。');}
+function demo(){const g=new THREE.CylinderGeometry(12,12,60,64,24,false).toNonIndexed(),p=g.attributes.position.array;const ids=[];for(let t=0;t<p.length/9;t++){const i=t*9;ids.push(Math.abs(p[i+1]-30)<.001&&Math.abs(p[i+4]-30)<.001&&Math.abs(p[i+7]-30)<.001?1:Math.abs(p[i+1]+30)<.001&&Math.abs(p[i+4]+30)<.001&&Math.abs(p[i+7]+30)<.001?2:0);}setModel([geometryData(g,ids)],language==='en'?'Curved sample · Ø24 × 60 mm':'曲面サンプル · Ø24 × 60 mm');g.dispose();status('曲面の一部分をブラシで選べます。');}
 function hitAt(x,y){const rect=$('canvas').getBoundingClientRect();mouse.set((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1);ray.setFromCamera(mouse,camera);return ray.intersectObjects(meshes,false)[0];}
 function paint(event){const hit=hitAt(event.clientX,event.clientY);if(!hit)return;const m=hit.object,mi=m.userData.index,t=hit.faceIndex,face=m.userData.faceIds[t],p=m.geometry.attributes.position.array;
  let candidates=mode==='face'?m.userData.faceIds.flatMap((f,i)=>f===face?[i]:[]):brushTriangles(p,hit.point,Number($('radius').value));
@@ -86,3 +86,4 @@ new ResizeObserver(()=>{const rect=$('canvas').parentElement.getBoundingClientRe
 demo();renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera);});
 
 installLanguage();
+document.addEventListener('studio-language',()=>{if(['Curved sample · Ø24 × 60 mm','曲面サンプル · Ø24 × 60 mm'].includes(modelName)){$('name').textContent=language==='en'?'Curved sample · Ø24 × 60 mm':'曲面サンプル · Ø24 × 60 mm';}renderMaterial();});
