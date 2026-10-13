@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T14:53:07.696001+00:00",
+  "updatedAt": "2026-10-13T15:00:53.321401+00:00",
   "release": {
     "version": "v0.20",
     "date": "2026-10-13",
@@ -299,12 +299,14 @@
       "id": "MAT3",
       "title": "温度・速度依存と異方性を登録",
       "category": "材料",
-      "status": "queued",
+      "status": "building",
       "detail": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
       "acceptance": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
       "titleEn": "Register temperature/rate dependence and anisotropy",
       "detailEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases.",
-      "acceptanceEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases."
+      "acceptanceEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases.",
+      "lastUpdate": "材料の試験範囲・方向性登録と、一様温度での弾性物性補間を実装中。",
+      "lastUpdateEn": "Implementing test envelopes, directional metadata and uniform-temperature elastic interpolation."
     },
     {
       "id": "MAT4",
