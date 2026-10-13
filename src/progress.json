@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T05:58:15.015Z",
+  "updatedAt": "2026-10-13T06:00:01.200Z",
   "release": {
     "version": "v0.1",
     "date": "2026-10-13",
@@ -188,17 +188,21 @@
       "id": "LIVE1",
       "title": "ボードに最新進捗を自動反映",
       "category": "共通",
-      "status": "building",
+      "status": "checking",
       "detail": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
-      "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。"
+      "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
+      "lastUpdate": "ライブ取得と依存関係検証を実装。公開画面を確認中",
+      "evidence": "src/board.js"
     },
     {
       "id": "MAT2",
       "title": "材料の数値・単位・出典を登録",
       "category": "材料",
-      "status": "queued",
+      "status": "checking",
       "detail": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
-      "acceptance": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。"
+      "acceptance": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
+      "lastUpdate": "数値範囲・保存復元の自動テスト完了。公開UIを確認予定",
+      "evidence": "tests/materials.test.mjs"
     },
     {
       "id": "MAT3",

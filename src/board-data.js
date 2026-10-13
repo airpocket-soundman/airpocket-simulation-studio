@@ -1,4 +1,4 @@
-import initial from './progress.json';
+import initial from './progress.json' with {type:'json'};
 import {validateProgress} from './progress.js';
 export let {release,tasks,solvers,updatedAt}=validateProgress(initial);
 export function applyProgress(p){validateProgress(p);({release,tasks,solvers,updatedAt}=p);}

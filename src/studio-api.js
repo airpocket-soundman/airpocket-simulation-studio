@@ -23,6 +23,7 @@ export function createStudioApi(adapter) {
     addCondition({type,value=0,direction=[1,0,0]}){const p=current(),regions=p.selection.map((s,mesh)=>({mesh,triangles:[...new Set(s)]})).filter(r=>r.triangles.length);if(!regions.length)throw Error('領域を選んでください。');if(!['fixed','force'].includes(type)||!Number.isFinite(value)||value<0)throw Error('条件が不正です。');const c={type,value:type==='fixed'?0:value,direction:type==='fixed'?[1,0,0]:direction,regions};p.conditions.push(c);p.selection=p.meshes.map(()=>[]);return write(p,'condition');},
     removeCondition(index){const p=current();if(!Number.isInteger(index)||!p.conditions[index])throw Error('条件番号が不正です。');p.conditions.splice(index,1);return write(p,'condition');},
     selectCondition(index){const p=current(),c=p.conditions[index];if(!Number.isInteger(index)||!c)throw Error('条件番号が不正です。');p.selection=p.meshes.map(()=>[]);for(const r of c.regions)p.selection[r.mesh]=[...new Set([...p.selection[r.mesh],...r.triangles])];return write(p,'selection');},
-    setMaterial(material){if(!['金属','樹脂','ガラス','ゴム'].includes(material))throw Error('材料カテゴリが不正です。');const p=current();p.material=material;return write(p,'material');}
+    setMaterial(material){if(!['金属','樹脂','ガラス','ゴム'].includes(material))throw Error('材料カテゴリが不正です。');const p=current();p.material=material;p.materialProperties={};return write(p,'material');},
+    setMaterialProperties(properties){const p=current();p.materialProperties=clone(properties);return write(p,'material');}
   });
 }

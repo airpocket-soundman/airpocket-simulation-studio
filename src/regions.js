@@ -1,3 +1,4 @@
+import {validateMaterialProperties} from './materials.js';
 export function areaOfTriangle(p, t) {
   const i=t*9, ax=p[i+3]-p[i], ay=p[i+4]-p[i+1], az=p[i+5]-p[i+2], bx=p[i+6]-p[i], by=p[i+7]-p[i+1], bz=p[i+8]-p[i+2];
   return Math.hypot(ay*bz-az*by,az*bx-ax*bz,ax*by-ay*bx)/2;
@@ -15,6 +16,7 @@ export function validateProject(project) {
   if(project?.version!==1 || !Array.isArray(project.meshes) || !Array.isArray(project.conditions)) throw Error('対応するプロジェクトではありません。');
   if(!project.meshes.length || project.meshes.length>500) throw Error('形状数が不正です。');
   let total=0;
+  if(project.materialProperties!==undefined)validateMaterialProperties(project.materialProperties);
   for(const m of project.meshes) {
     if(!Array.isArray(m.positions)||m.positions.length%9||!m.positions.length||!m.positions.every(Number.isFinite)) throw Error('形状データが不正です。');
     total+=m.positions.length;
