@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T09:02:09.122Z",
+  "updatedAt": "2026-10-13T09:22:25.521Z",
   "release": {
-    "version": "v0.7",
+    "version": "v0.8",
     "date": "2026-10-13",
-    "description": "方向別拘束・指定変位・回転した局所座標と領域別の節点反力を追加。構造・熱・音響の試作版、自動テスト43件。流体・非線形等は未実装。",
-    "descriptionEn": "Adds directional constraints, prescribed displacement, rotated local coordinates and region nodal reactions. Structural/thermal/acoustic prototype with43 tests; fluid and nonlinear analyses remain unimplemented."
+    "description": "計算時の入力・実行設定を固定するケース保存・比較・JSON復元を追加。構造・熱・音響の試作版、自動テスト45件。流体・非線形等は未実装。",
+    "descriptionEn": "Adds independent saved cases, comparison and JSON archives with frozen calculation inputs and settings. Structural/thermal/acoustic prototype with 45 tests; fluid and nonlinear analyses remain unimplemented."
   },
   "tasks": [
     {
@@ -444,12 +444,15 @@
       "id": "RESULT2",
       "title": "ケースを複製・比較・出力",
       "category": "共通",
-      "status": "queued",
+      "status": "released",
       "detail": "計算時入力を固定し、過去結果を変更しない。",
       "acceptance": "計算時入力を固定し、過去結果を変更しない。",
       "titleEn": "Duplicate, compare and export cases",
       "detailEn": "Freeze input snapshots and keep old results unchanged when editing current cases.",
-      "acceptanceEn": "Freeze input snapshots and keep old results unchanged when editing current cases."
+      "acceptanceEn": "Freeze input snapshots and keep old results unchanged when editing current cases.",
+      "lastUpdate": "計算時入力・実行設定を固定して最大8件を比較、JSON復元と複製再計算を確認。自動テスト45件成功",
+      "lastUpdateEn": "Implemented independent case snapshots, comparison, JSON archive roundtrip and input duplication; 45 tests and build passed, browser save and rerun verified.",
+      "evidence": "src/cases.js"
     },
     {
       "id": "THERMBC1",

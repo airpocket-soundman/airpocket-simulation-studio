@@ -83,3 +83,6 @@ API: 選択後`studioApi.addCondition({type:'pressure',value:1e6})`または`{ty
 回転した節点座標でのポアソン収縮、JS/WASM一致、保存復元を検証。各節点の拘束方向を直交化し、変換した剛性行列で強制変位を解く。ペナルティ法は使わない。独立部品ごとの剛体モード6種類を拘束が除くか確認し、拘束不足・共有節点の矛盾・ほぼ平行な方向を拒否する。方向は各領域で一定。曲面法線に沿って変わるローラー拘束、剛体連結、接触は未対応。
 
 API: `studioApi.addCondition({type:'displacement',value:0.04,direction:[0,0,1]})`。valueはmm、directionは単位化して使う。局所座標は`studioApi.frameFromEuler([0,-90,0],0)`（角度、拘束軸番号）で作成し、`{type:'displacement',value:0.04,frame}`を登録。参照例は`analysisApi.loadDisplacementExample()`。出力`constraintReactions`は全体座標の節点反力、`constraintRegionReactions`は領域の節点反力、`forceBalanceErrorN`は外力＋拘束反力。
+
+### ケース保存・比較
+計算後に名前を付けて最大8件を保存し、最大変位・応力、温度範囲、音圧・SPLを並べられます。入力と計算設定を固定したJSONケース集を書き出し／読み込みできます。保存先はセッション内メモリなので、閉じる前に書き出してください。入力の複製・復元後は再計算します。異なる解析分野・形状・メッシュの値の単純比較には注意してください。`window.caseApi` の `add / list / compare / export / import / remove` はUIと同じ保存機能です。
