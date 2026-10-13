@@ -11,3 +11,5 @@ The example subtracts a 10 mm cube from a 30 mm cube: 26,000 mm³ and 949 elemen
 Exterior domains support meshing and project roundtrips only; general 3D flow solving is not connected. Incorrect structural solving is rejected. Automatic internal passage extraction, fluid inlet/outlet conditions, boundary-layer meshing, turbulence and conjugate heat transfer remain outstanding. Fully developed laminar round/rectangular channels are a separate limited mode.
 
 Browser API: `await analysisApi.createExteriorDomain(paddingMm)` and `await analysisApi.loadExteriorExample()`. Node: `exteriorFluidSource(project,paddingMm)` builds input and `generateMesh(initialize,source,{size})` produces the actual mesh. Automated tests cover simple/multiple solids, sealed STEP cavities and source/project persistence.
+
+Spherical exterior air domains also support [radiation acoustics](exterior-acoustics.md). General 3D flow remains unsupported.

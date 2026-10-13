@@ -45,7 +45,7 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 
 `runtime-manifest.json` にバージョン、コミット、各ファイルの長さとSHA-256を記録します。検証結果は `.qa/published-report.json`、ブラウザ用の参照形状は `.qa/published-reference.step`。失敗した実行は成功レポートを上書きして失敗を記録します。ソースと比較するためのプロジェクト/ケース検証ヘルパーは手元のコードです。公開Workerの実行ファイルは配信版そのものです。
 
-`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の119テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
+`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の126テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
 
 ### ブラウザの回帰レシピ
 

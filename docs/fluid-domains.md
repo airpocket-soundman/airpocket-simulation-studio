@@ -11,3 +11,5 @@ STEPまたは内蔵部品を読み込み、「部品から囲いまでの余白�
 生成した外部領域はメッシュ生成とプロジェクト保存復元のみ対応し、一般3Dの流体ソルバーには未接続です。構造ソルバーで誤って計算することを拒否します。内部流路の自動抽出、入口出口の流体条件、境界層メッシュ、乱流、共役熱伝達は残作業です。一般流体計算が完了したとは扱いません。十分発達した円管・角柱の層流は別の限定モードです。
 
 ブラウザAPI: `await analysisApi.createExteriorDomain(paddingMm)`、`await analysisApi.loadExteriorExample()`。Node: `exteriorFluidSource(project,paddingMm)`で入力を作り、`generateMesh(initialize,source,{size})`で実メッシュを生成できます。単純部品、複数部品、STEPの密閉空洞と元形状の保存復元を自動検証しています。
+
+球形の外部空気領域は[外部音響](exterior-acoustics.md)でも利用できます。一般3D流れは引き続き未対応です。
