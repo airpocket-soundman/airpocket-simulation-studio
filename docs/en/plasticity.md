@@ -42,11 +42,11 @@ await window.analysisApi.analyze({size: 5, method: 'wasm-pcg', adaptive: false})
 
 Element values are in `result.plasticity.equivalentPlasticStrain`; its `maxEquivalentPlasticStrain` holds the maximum. `plasticStrain` contains six plastic-strain components per element. The UI displays equivalent plastic strain as a percentage.
 
-Supported execution is Airpocket JS/WASM CPU, up to 2000 tetrahedra and 2000 nodes. A final total principal strain with absolute value above 0.02 is rejected. This bound is not an accuracy guarantee. MFEM, WebGPU, adaptive remeshing, modal analysis, thermal stress, temperature-dependent properties, mechanical contact, fatigue, fracture and finite-strain plasticity are unsupported.
+Supported execution is Airpocket JS/WASM CPU, up to 2000 tetrahedra and 2000 nodes. A total principal strain with absolute value above 0.02 is rejected at every converged increment. This bound is not an accuracy guarantee. MFEM, WebGPU, adaptive remeshing, modal analysis, thermal stress, temperature-dependent properties, mechanical contact, fatigue, fracture and finite-strain plasticity are unsupported.
 
 Tet4 can lock under isochoric plastic deformation and predict an excessively stiff response. Agreement for a uniform bar does not establish accuracy for arbitrary geometry. Compare reactions, displacements and plastic zones against independent reference solutions and multiple meshes.
 
-References are the author's [FEniCSx radial-return and consistent-tangent example, including its locking warning](https://bleyerj.github.io/comet-fenicsx/tours/nonlinear_problems/plasticity/plasticity.html), and the [official MOOSE isotropic plasticity update](https://mooseframework.inl.gov/source/materials/IsotropicPlasticityStressUpdate.html). This implementation is not a port of those solvers or an accuracy certification. Regression coverage belongs in `tests/plasticity.test.mjs` and `tests/worker-pipeline.test.mjs`; consult the actual verification record for execution results.
+References are the author's [FEniCSx radial-return and consistent-tangent example, including its locking warning](https://bleyerj.github.io/comet-fenicsx/tours/nonlinear_problems/plasticity/plasticity.html), and the [official MOOSE isotropic plasticity update](https://mooseframework.inl.gov/source/materials/IsotropicPlasticityStressUpdate.html). This implementation is not a port of those solvers or an accuracy certification. Regression coverage belongs in `tests/plasticity.test.mjs` and `tests/plasticity-integration.test.mjs`; consult the actual verification record for execution results.
 
 ## Loading and unloading history
 

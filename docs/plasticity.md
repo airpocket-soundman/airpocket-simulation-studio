@@ -42,11 +42,11 @@ await window.analysisApi.analyze({size: 5, method: 'wasm-pcg', adaptive: false})
 
 要素値は`result.plasticity.equivalentPlasticStrain`、最大値は`maxEquivalentPlasticStrain`です。`plasticStrain`は要素ごとの塑性ひずみ6成分です。画面の相当塑性ひずみは%表示です。
 
-CPUのAirpocket JS/WASM、最大2000四面体・2000節点が対象です。最終全ひずみの主値の絶対値が0.02を超える場合は拒否します。この上限は精度保証ではありません。MFEM、WebGPU、適応再メッシュ、固有振動、熱応力、温度依存物性、機械的接触、疲労、破壊、有限ひずみ塑性は未対応です。
+CPUのAirpocket JS/WASM、最大2000四面体・2000節点が対象です。各収束増分の全ひずみの主値の絶対値が0.02を超える場合は拒否します。この上限は精度保証ではありません。MFEM、WebGPU、適応再メッシュ、固有振動、熱応力、温度依存物性、機械的接触、疲労、破壊、有限ひずみ塑性は未対応です。
 
 Tet4は体積一定の塑性変形でロッキングし、過度に硬い応答を出す可能性があります。均一柱の一致だけでは任意形状の精度を保証できません。独立した参照解と複数メッシュで、反力・変位・塑性域を比較してください。
 
-実装の参照は[FEniCSxの著者によるradial return・整合接線とロッキングの説明](https://bleyerj.github.io/comet-fenicsx/tours/nonlinear_problems/plasticity/plasticity.html)と[MOOSE公式の等方塑性更新](https://mooseframework.inl.gov/source/materials/IsotropicPlasticityStressUpdate.html)です。これらのソルバーの移植や精度認証ではありません。回帰検証の対象ファイルは`tests/plasticity.test.mjs`と`tests/worker-pipeline.test.mjs`です。実行結果は個別の検証記録を確認してください。
+実装の参照は[FEniCSxの著者によるradial return・整合接線とロッキングの説明](https://bleyerj.github.io/comet-fenicsx/tours/nonlinear_problems/plasticity/plasticity.html)と[MOOSE公式の等方塑性更新](https://mooseframework.inl.gov/source/materials/IsotropicPlasticityStressUpdate.html)です。これらのソルバーの移植や精度認証ではありません。回帰検証の対象ファイルは`tests/plasticity.test.mjs`と`tests/plasticity-integration.test.mjs`です。実行結果は個別の検証記録を確認してください。
 
 ## 載荷・除荷の履歴
 
