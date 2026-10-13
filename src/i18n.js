@@ -1,6 +1,8 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '未実装の残作業':'Remaining implementation',
+
  '空洞サンプル':'Cavity example','一面を1 Paで駆動、他の5面は剛壁。一次共鳴の参照周波数は2143.75 Hzです。':'One face is driven at 1 Pa; the other five walls are rigid. Reference first resonance: 2143.75 Hz.',
 
  '計算を中止しました。':'Calculation cancelled','体積メッシュを生成中…':'Generating volume mesh…','領域条件を転送中…':'Transferring boundary regions…','構造解析を計算中…':'Solving linear elasticity…','熱伝導を計算中…':'Solving heat conduction…','音響解析を計算中…':'Solving frequency-domain acoustics…',
