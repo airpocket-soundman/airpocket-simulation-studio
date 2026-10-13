@@ -1,6 +1,13 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '登録した温度表の範囲外です。補外は行いません。':'Material temperature table does not allow extrapolation',
+ '登録した材料の有効温度範囲外です。':'Temperature is outside the registered material validity range',
+ '温度依存の弾性物性には一様温度が必要です。':'Temperature-dependent elasticity currently requires a uniform temperature',
+ '速度依存の構造モデルは未対応です。':'Rate-dependent structural constitutive models are not supported',
+ '直交異方性の構造モデルは未対応です。':'Orthotropic structural constitutive models are not supported',
+ '静解析のひずみ速度0が登録した試験範囲外です。':'Static structure has zero strain rate, outside the registered test envelope',
+
  '物性評価温度: ':'Material evaluation temperature: ',' / 補間ヤング率 ':' / Interpolated Young’s modulus ',' / ポアソン比 ':' / Poisson’s ratio ',
  '温度・速度・方向性のデータ（任意、JSON）':'Temperature, rate and direction data (optional JSON)',
  '表のヤング率はPa、温度は°C。速度の範囲は1/s。方向性・速度依存は登録のみで、対応していない構造計算を拒否します。':'Table Young’s modulus uses Pa, temperature uses °C, and rate bounds use 1/s. Directional and rate-dependent laws are registered only; unsupported structural calculations are rejected.',
