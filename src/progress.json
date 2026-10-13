@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T21:09:46.179470+00:00",
+  "updatedAt": "2026-10-13T21:23:17.426536+00:00",
   "release": {
-    "version": "v0.32",
+    "version": "v0.33",
     "date": "2026-10-14",
-    "testCount": 164,
-    "description": "斜め平面の回転座標による矩形CAD分割と、保存した回転情報の整合検査を追加。164テスト、公開配信物16項目、公開画面16項目を検証済み。任意曲面の厳密分割は残作業。",
-    "descriptionEn": "Added rotated planar CAD rectangles and validation of saved rotation controls. Verified 164 tests, sixteen deployed-runtime checks and sixteen public browser checks. Exact arbitrary curved patches remain outstanding."
+    "testCount": 173,
+    "description": "J2微小ひずみ弾塑性・正の等方硬化、荷重増分履歴、相当塑性ひずみ表示と保存整合検査を追加。173テストとローカル画面の参照値・保存復元・日英表示を確認。公開配信を検証中。",
+    "descriptionEn": "Added small-strain J2 plasticity with positive isotropic hardening, increment histories, equivalent plastic strain display and archive consistency validation. Verified 173 source tests and focused local browser references, archives and JP/EN. Public deployment verification is pending."
   },
   "tasks": [
     {
@@ -955,10 +955,10 @@
       "id": "PLAST1",
       "title": "金属のJ2弾塑性・等方硬化を計算",
       "titleEn": "Compute small-strain J2 plasticity with isotropic hardening",
-      "status": "building",
+      "status": "checking",
       "category": "構造",
-      "detail": "降伏後の塑性ひずみと正の等方硬化を計算。材料応答・整合接線・荷重反力・UI・保存を並行実装。破断・疲労は含まない。",
-      "detailEn": "Compute post-yield plastic strain and positive isotropic hardening; implement material response, consistent tangent, reaction checks, UI and archives in parallel. Excludes fracture and fatigue.",
+      "detail": "単調載荷のJ2弾塑性を実装。単軸参照応力251.741MPa・塑性ひずみ0.174129%・反力25174.129Nを検証。保存変位・ひずみ・最終エネルギー・反力の矛盾を拒否。公開版を確認中。",
+      "detailEn": "Implemented monotonic J2 plasticity; verified axial stress 251.741 MPa, plastic strain 0.174129% and reaction 25174.129 N. Inconsistent displacement, strain, final energy and reaction archives are refused. Public verification pending.",
       "acceptance": "材料接線の差分検証、単軸の参照応力・塑性ひずみ・反力、WASM/JS一致、保存復元とUIを検証。",
       "acceptanceEn": "Verify finite-difference material tangent, analytical uniaxial stress/plastic strain/reactions, WASM/JS agreement, archives and UI.",
       "evidence": "src/plasticity-core.js; tests/plasticity.test.mjs; docs/plasticity.md"

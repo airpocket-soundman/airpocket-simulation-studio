@@ -1,3 +1,4 @@
+import {validatePlasticity} from './plasticity-material.js';
 import {validateHyperelastic} from './hyperelastic-material.js';
 import {validateMaterialDependence} from './material-dependence.js';
 export const materialFields=[
@@ -18,6 +19,9 @@ export function validateMaterialProperties(p){
  for(const k of ['source','grade','notes'])if(p[k]!==undefined&&(typeof p[k]!=='string'||p[k].length>10000))throw Error('材料の記録が不正です。');
  validateMaterialDependence(p.dependence);
  validateHyperelastic(p.hyperelastic);
+ validatePlasticity(p.plasticity);
+ if(p.plasticity&&p.hyperelastic)throw Error('Plasticity cannot be combined with hyperelasticity');
+ if(p.plasticity&&p.dependence?.elasticTemperatureTable)throw Error('Plasticity cannot be combined with an elastic temperature table');
  if(p.hyperelastic&&p.dependence?.elasticTemperatureTable)throw Error('Hyperelastic parameters cannot be combined with a linear elastic temperature table');
  return p;
 }

@@ -27,6 +27,8 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 
 計算APIと検証例は[解析ガイド](analysis-guide.md)を参照。体積メッシュ・構造・熱・適応ループもNodeから直接検証する。
 
+v0.33の[J2微小ひずみ塑性](plasticity.md)は、正の線形等方硬化と単調載荷を対象にします。`tests/plasticity.test.mjs`は材料応答、整合接線の数値微分、静水圧で降伏しないこと、材料点の除荷、柱の参照解を検証します。`node --test tests/plasticity-integration.test.mjs`は画面と同じWorkerから実Gmsh/WASMを使い、10×10×40 mm柱の参照応力251.7412935 MPa、相当塑性ひずみ0.0017412935、上端反力25174.12935 N、収束履歴・保存復元・点測定・不正な塑性状態の原子的拒否を確認します。MFEM/WebGPU、適応解析、固有振動、熱応力との組み合わせも拒否します。材料点の除荷テストはFE繰返し載荷や疲労への対応を意味しません。Nodeテストは公開UIの操作確認やTet4のロッキングに対する精度保証とは別です。
+
 音響のスイープもsrc/acoustic-sweep.jsをNodeから直接実行できる。測定はsrc/probe.jsのsampleResult(mesh,result,[x,y,z])。ブラウザではwindow.analysisApi.probe([x,y,z])で直前の結果を測定。適応解析の出力adaptive.iterationsには全反復のメッシュ・境界・結果を保持する。
 
 計算の管理テスト: 中止→再実行、旧Worker応答の無視、入力スナップショット、時間上限、未収束・メモリ失敗後の解放を短時間で確認する。実際のメモリ枯渇は発生させず、Worker失敗を注入して処理を確認。実画面では中止と再実行、局所メッシュの生成を確認する。
@@ -45,7 +47,7 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 
 `runtime-manifest.json` にバージョン、コミット、各ファイルの長さとSHA-256を記録します。検証結果は `.qa/published-report.json`、ブラウザ用の参照形状は `.qa/published-reference.step`。失敗した実行は成功レポートを上書きして失敗を記録します。ソースと比較するためのプロジェクト/ケース検証ヘルパーは手元のコードです。公開Workerの実行ファイルは配信版そのものです。
 
-`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の164テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
+`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の173テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
 
 ### ブラウザの回帰レシピ
 

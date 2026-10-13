@@ -27,6 +27,8 @@ Progress: `npm run task:status -- ID STATUS "note" [evidence]`, then commit and 
 
 See the [analysis guide](analysis-guide.md) for calculation APIs and direct Node verification of meshing, structural/thermal solving and adaptation.
 
+v0.33 [small-strain J2 plasticity](plasticity.md) supports positive linear isotropic hardening under monotonic loading. `tests/plasticity.test.mjs` checks material response, finite-difference consistent tangents, hydrostatic non-yielding, material-point unloading and analytical bar references. `node --test tests/plasticity-integration.test.mjs` uses the canonical worker with real Gmsh/WASM to verify a 10×10×40 mm bar: reference stress 251.7412935 MPa, equivalent plastic strain 0.0017412935 and top reaction 25174.12935 N. It also checks converged histories, archive roundtrips, point probes, atomic rejection of corrupted plastic state and refusal of MFEM/WebGPU, adaptation, modal analysis and thermal-stress combinations. Material-point unloading tests do not establish support for cyclic FE loading or fatigue. These Node checks are separate from deployed UI verification and do not certify Tet4 accuracy against plastic locking.
+
 Run src/acoustic-sweep.js directly in Node for acoustic sweeps. Use sampleResult(mesh,result,[x,y,z]) from src/probe.js, or window.analysisApi.probe([x,y,z]) in the browser. Adaptive output retains every mesh/boundary/result in adaptive.iterations.
 
 Runtime tests cover cancellation/restart, stale Worker responses, input snapshots, deadlines and resource cleanup after convergence/memory/start failure. Memory exhaustion is injected as a Worker failure rather than exhausting the machine. The real UI verifies cancellation/restart and local meshing.
@@ -45,7 +47,7 @@ Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar 
 
 `runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
 
-After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 164 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 173 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
 
 ### Browser regression recipe
 

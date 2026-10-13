@@ -1,5 +1,25 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+ 'Plasticity supports CPU structure without adaptation, modal analysis or thermal stress':'弾塑性はCPUの構造解析に対応します。適応解析・固有振動・熱応力を解除してください。',
+ 'Solving small-strain J2 plasticity…':'微小ひずみのJ2弾塑性を計算中…',
+
+"Valid elastic constants required for plasticity":"弾塑性には正のヤング率と−1より大きく0.49未満のポアソン比が必要です。",
+"Plasticity parameters required":"弾塑性の降伏応力と等方硬化係数を登録してください。",
+"Invalid plasticity strain or committed state":"弾塑性ひずみか確定状態が不正です。",
+"Plasticity does not support thermal stress or hyperelasticity":"弾塑性は熱応力・超弾性との併用に対応していません。",
+"Valid density and acceleration required for plasticity gravity":"弾塑性の重力計算には有効な密度と加速度が必要です。",
+
+"Invalid plasticity model":"弾塑性モデルが不正です。J2等方硬化の形式を確認してください。",
+"J2 plasticity requires positive yield stress and isotropic hardening modulus in Pa":"降伏応力と等方硬化係数は正の有限値（Pa）で指定してください。",
+"Invalid plasticity test conditions":"弾塑性の試験条件の記録が不正です。",
+"Plasticity cannot be combined with hyperelasticity":"弾塑性と超弾性は併用できません。",
+"Plasticity cannot be combined with an elastic temperature table":"弾塑性では温度別の弾性定数表を併用できません。",
+"Plasticity supports Airpocket CPU solvers only":"弾塑性はAirpocketのCPUソルバーだけに対応します。",
+"Plasticity Newton line search failed; reduce load or increase load steps":"弾塑性のNewton探索が収束しません。荷重を減らすか増分数を増やしてください。",
+"Plasticity Newton iteration limit reached; no converged result returned":"弾塑性のNewton反復上限に達しました。未収束の結果は返しません。",
+"Plasticity small-strain limit exceeded: maximum absolute principal strain must be <= 0.02":"微小ひずみの上限を超えました。主ひずみの絶対値は2%以下にしてください。",
+"Plasticity prototype limit is 2000 tetrahedra and 2000 nodes":"弾塑性の初期実装は2000四面体・2000節点までです。",
+
  'Planar frame axes must be finite orthonormal vectors':'矩形の局所座標は互いに直交する単位ベクトルで指定してください。',
  'Planar rotation controls do not match the saved frame':'矩形の回転情報が保存した局所座標と一致していません。',
  'Invalid planar rotation controls':'矩形の回転と面位置を確認してください。',
@@ -59,7 +79,9 @@ const messages={
 export const errorTranslations=Object.fromEntries(Object.entries(messages).map(([en,jp])=>[jp,en]));
 errorTranslations['固有振動の反復 ']='Natural-mode iteration ';
 errorTranslations['過渡音響の時間ステップ ']='Transient acoustic time step ';
+errorTranslations['弾塑性の荷重増分 ']='Plasticity load step ';
+errorTranslations[' が収束しました。']=' converged';
 export function localizeStatus(text){
  for(const [en,jp]of Object.entries(messages))if(text===en||text.startsWith(en+' · '))return jp+text.slice(en.length);
- return text.replace(/^Modal subspace /,'固有振動の反復 ').replace(/^Transient acoustics /,'過渡音響の時間ステップ ');
+ return text.replace(/^Plasticity load step (\d+)\/(\d+) converged$/,'弾塑性の荷重増分 $1/$2 が収束しました。').replace(/^Modal subspace /,'固有振動の反復 ').replace(/^Transient acoustics /,'過渡音響の時間ステップ ');
 }
