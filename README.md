@@ -4,17 +4,17 @@
 
 3Dモデル上で解析領域を指定し、OSSソルバーで構造・熱・流体・振動音響を解析するアプリの開発計画。
 
-現状は3D領域設定の試作版。STEPのWASM読み込み、STL表示、回転・拡大、CAD面選択、曲面ブラシ選択、固定・荷重の登録、JSON保存・復元を実装。体積メッシュ生成と解析ソルバーは未実装。
+v0.2ではSTEP・組込み形状の体積メッシュ、線形構造解析、定常・非定常熱伝導、局所細分化と再解析を実装。[使い方と対応範囲](docs/analysis-guide.md)。流体・音響・非線形・破壊・接触はまだ未対応。
 
 アプリ: https://airpocket-soundman.github.io/airpocket-simulation-studio/
 
 開発管理ボード: https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html
 
-公式進捗は src/board-data.js で管理し、公開時に更新する。ローカル開発メモは各ブラウザだけに保存し、JSONで書き出せる。
+公式進捗は src/progress.json で管理し、公開時に更新する。ローカル開発メモは各ブラウザだけに保存し、JSONで書き出せる。
 
 開発: `npm ci` → `npm run build` → `npm run dev`。検証: `npm test`。mainへのpushでGitHub ActionsがビルドしPagesへ公開。
 
-現在の部分選択は表示三角形による近似で、CAD面分割・再メッシュへの領域転送は未実装。STEP読込は表示用の三角形と元のCAD面の対応を取得する段階で、正確なCAD形状編集はまだできない。
+現在の部分選択は表示三角形による近似で、CAD面分割は未実装。再メッシュへの転送は投影近似で、面積誤差を表示し15%を超える場合は停止する。STEP読込は表示用の三角形と元のCAD面の対応を取得する段階で、正確なCAD形状編集はまだできない。
 
 - [実装する機能](docs/features.md)
 - [ソルバー候補と選択方式](docs/solvers.md)

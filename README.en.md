@@ -4,7 +4,7 @@
 
 A browser application for defining regions directly on 3D models and running structural, thermal, fluid and acoustic simulations with validated open-source engines.
 
-Current prototype: browser-local STEP import through WASM, STL display, orbit/zoom/pan, CAD-face and visible partial-surface selection, constraints and directional force setup, validated material-property input, JSON project roundtrips, a shared command API and headless tests. Volume meshing and analysis solvers are not integrated yet. Display triangles are not analysis elements. Exact CAD editing and region transfer after remeshing remain planned.
+v0.2 implements STEP/built-in volume meshing, linear structural analysis, steady/transient conduction and local refinement/reanalysis. [Usage and supported scope](docs/en/analysis-guide.md). Fluid, acoustics, nonlinear behavior, failure and contact remain unimplemented. Partial regions use projection with a reported 15% area-error threshold; exact CAD splitting remains planned.
 
 - [App](https://airpocket-soundman.github.io/airpocket-simulation-studio/?lang=en)
 - [Live development board](https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html?lang=en)

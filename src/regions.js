@@ -17,6 +17,8 @@ export function validateProject(project) {
   if(!project.meshes.length || project.meshes.length>500) throw Error('形状数が不正です。');
   let total=0;
   if(project.materialProperties!==undefined)validateMaterialProperties(project.materialProperties);
+  if(project.study){const s=project.study;if(!['structural','thermal'].includes(s.kind))throw Error('Unsupported analysis discipline');if(s.timeStep!==undefined&&(!Number.isFinite(s.timeStep)||s.timeStep<=0))throw Error('Invalid time step');if(s.steps!==undefined&&(!Number.isInteger(s.steps)||s.steps<1||s.steps>100))throw Error('Invalid time step count');if(s.initialTemperature!==undefined&&(!Number.isFinite(s.initialTemperature)||s.initialTemperature<-273.15))throw Error('Invalid initial temperature');if(s.volumetricSource!==undefined&&!Number.isFinite(s.volumetricSource))throw Error('Invalid volumetric heat source');}
+  if(project.sourceModel){const s=project.sourceModel;if(!['step','box','cylinder'].includes(s.kind))throw Error('Invalid solid source');if(s.kind==='step'&&(typeof s.data!=='string'||s.data.length>70000000||!/^[A-Za-z0-9+/]*={0,2}$/.test(s.data)))throw Error('Invalid STEP source');if(s.kind==='box'&&(!Array.isArray(s.bounds)||s.bounds.length!==6||!s.bounds.every(Number.isFinite)||s.bounds.slice(3).some(v=>v<=0)))throw Error('Invalid box dimensions');}
   for(const m of project.meshes) {
     if(!Array.isArray(m.positions)||m.positions.length%9||!m.positions.length||!m.positions.every(Number.isFinite)) throw Error('形状データが不正です。');
     total+=m.positions.length;
@@ -24,7 +26,8 @@ export function validateProject(project) {
     if(!Array.isArray(m.faceIds)||m.faceIds.length!==m.positions.length/9||!m.faceIds.every(Number.isInteger)) throw Error('面データが不正です。');
   }
   for(const c of project.conditions) {
-    if(!['fixed','force'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
+    if(!['fixed','force','temperature','heatFlux'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
+    if(c.type==='temperature'&&c.value<-273.15)throw Error('Temperature is below absolute zero');
     if(c.type==='force' && Math.hypot(...c.direction)===0) throw Error('荷重方向が不正です。');
     for(const r of c.regions) if(!Number.isInteger(r.mesh)||!project.meshes[r.mesh]||!Array.isArray(r.triangles)||!r.triangles.every(t=>Number.isInteger(t)&&t>=0&&t<project.meshes[r.mesh].faceIds.length)) throw Error('領域データが不正です。');
   }

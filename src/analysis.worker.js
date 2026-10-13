@@ -1,0 +1,11 @@
+import {generateMesh} from './mesh-core.js';
+import {transferConditions} from './boundaries.js';
+import {solveElastic} from './fem-core.js';
+import {adaptiveSolve} from './adaptive.js';
+import {wasmMatvecFactory} from './wasm-matvec.js';
+import {solveThermal} from './thermal-core.js';
+self.onmessage=async({data})=>{try{const {default:load}=await import(/* @vite-ignore */data.base+'gmsh/gmsh.mjs');let instance,matvecFactory;if(data.options.method==='wasm-pcg'){const response=await fetch(data.base+'fem-kernel.wasm');if(!response.ok)throw Error('WASM kernel unavailable');const wasm=await WebAssembly.instantiate(await response.arrayBuffer());matvecFactory=wasmMatvecFactory(wasm.instance);}const initialize=options=>instance??=load(options),progress=text=>self.postMessage({progress:text});
+ const thermal=data.project.study?.kind==='thermal';if(data.operation!=='mesh'&&data.project.conditions.some(c=>thermal?!['temperature','heatFlux'].includes(c.type):!['fixed','force'].includes(c.type)))throw Error('Remove boundary conditions belonging to the other discipline or use the matching example');if(thermal&&data.options.adaptive)throw Error('Adaptive refinement currently supports structural analysis only');
+ const build=options=>generateMesh(initialize,data.source,{...data.options,...options}),solve=async mesh=>{progress('Transferring boundary regions…');const boundary=transferConditions(data.project,mesh);progress(thermal?'Solving heat conduction…':'Solving linear elasticity…');const result=thermal?solveThermal(mesh,data.project.materialProperties,boundary,{...data.project.study,...data.options,matvecFactory}):solveElastic(mesh,data.project.materialProperties,boundary,{method:data.options.method,matvecFactory});return {mesh,boundary,result};};
+ progress('Generating volume mesh…');let output;if(data.operation==='mesh')output={mesh:await build(data.options)};else if(data.options.adaptive)output=await adaptiveSolve({mesh:build,solve},{maxRounds:data.options.maxRounds||3,tolerance:data.options.tolerance||.01,baseSize:data.options.size,onProgress:progress});else output=await solve(await build(data.options));self.postMessage({result:output});
+ }catch(e){self.postMessage({error:e.message});}};

@@ -1,0 +1,2 @@
+import wabtFactory from 'wabt';import {readFile,mkdir,writeFile} from 'node:fs/promises';
+const wabt=await wabtFactory(),module=wabt.parseWat('fem-kernel.wat',await readFile(new URL('../src/fem-kernel.wat',import.meta.url),'utf8'),{bulk_memory:true});module.validate();await mkdir(new URL('../public/',import.meta.url),{recursive:true});await writeFile(new URL('../public/fem-kernel.wasm',import.meta.url),module.toBinary({write_debug_names:true}).buffer);module.destroy();

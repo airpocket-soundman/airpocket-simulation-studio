@@ -4,6 +4,8 @@
 
 - Three.js — MIT — https://github.com/mrdoob/three.js
 - Vite — MIT — https://github.com/vitejs/vite
+- Gmsh WASM 0.3.0 — GPL-2.0-or-later。変更していない実行環境をgmsh/に分離して配信します。対応するソースとビルド手順: https://github.com/loumalouomega/GMSH-JS/tree/3fdabeeb1dac2417446cefb9f75ecb6645315cd6 。GmshとOpenCASCADEの版は同リポジトリのsubmoduleとビルド手順で固定されています。本アプリもGPL-2.0-or-laterで配布し、対応するアプリソースと依存のlockfileを公開します。
+- coi-serviceworker 0.1.7 — MIT — https://github.com/gzuidhof/coi-serviceworker 。PagesでGmshの実行に必要なブラウザ分離を有効にします。
 - occt-import-js 0.0.23 — LGPL-2.1 — https://github.com/kovacsv/occt-import-js
 
 変更していないJavaScriptとWASMをcad/に分離して配信します。ソースとビルド手順は上流リポジトリで公開されています。Open CASCADEのライセンスと通知は上流ソースに含まれます: https://github.com/Open-Cascade-SAS/OCCT 。ライセンス文書はビルド時にpublic/licensesへコピーします。
