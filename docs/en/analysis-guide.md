@@ -35,3 +35,7 @@ The thermal example establishes a linear 20–100 °C field. Display temperature
 Expose window.analysisApi.generateMesh({size:4}), analyze({size:4,method:'wasm-pcg',adaptive:true,maxRounds:3}) and cancel(). Discipline, properties and boundaries come from studioApi's project state. loadExample/loadThermalExample configure references. Results include frozen input and export as JSON.
 
 Tests cover volume preservation, size changes, region area/resultant force, axial reference displacement, bending error reduction, reactions, JS/WASM agreement, real adaptation, steady temperature/flux and transient response. The refined cantilever test is within 15% of its beam reference under that test's conditions; this is not an accuracy guarantee for arbitrary models.
+
+## Acoustics
+
+Choose Acoustic example, then Run analysis to display pressure, SPL or phase. Enable frequency sweep in acoustic details and enter the receiver position and frequency range. Model the medium through which sound travels as the solid domain. Select Probe and click the 3D results surface to measure a location. See [numerical model and limits](acoustics.md). The API also exposes loadAcousticExample.

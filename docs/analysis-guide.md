@@ -35,3 +35,7 @@ Airpocket Tet4は本リポジトリの独自エンジン。JavaScriptで要素�
 `window.analysisApi.generateMesh({size:4})`、`window.analysisApi.analyze({size:4,method:'wasm-pcg',adaptive:true,maxRounds:3})`、`window.analysisApi.cancel()`を公開する。解析種別・物性・条件はstudioApiのプロジェクト状態から取得する。loadExample / loadThermalExampleで参照例を設定できる。結果は計算時の入力スナップショットを含み、JSON出力できる。
 
 自動テスト: 体積保存、サイズ変更、部分領域の面積・合力、軸引張の参照値、曲げ細分化による誤差低減、反力、JS/WASM一致、実際の適応ループ、定常熱の温度・熱流束、非定常の温度応答。片持ち梁の細かいメッシュの参照変位誤差はテスト条件下で15%以内。これは全モデルの精度保証ではない。
+
+## 音響
+
+「音響サンプル」→「解析を実行」で音圧・SPL・位相を表示する。音響の詳細で周波数スイープを有効にし、受音点と周波数範囲を指定する。対象形状は部品そのものではなく、音が伝わる媒質の領域として用意する。「測定」を選び結果の3D表面をクリックすると、その位置の値を表示する。[数値モデルと制限](acoustics.md)。APIのloadAcousticExampleも利用可能。

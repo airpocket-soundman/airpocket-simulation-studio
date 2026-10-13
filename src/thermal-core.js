@@ -1,6 +1,6 @@
 import {elementGeometry,pcg} from './fem-core.js';
 import {meshComponents} from './components.js';
-export function solveThermal(mesh,properties,boundary,{matvecFactory,transient=false,timeStep=1,steps=10,initialTemperature=20,volumetricSource=0}={}){
+export function solveThermal(mesh,properties,boundary,{matvecFactory,method,transient=false,timeStep=1,steps=10,initialTemperature=20,volumetricSource=0}={}){
  const k=properties.conductivity;if(!(k>0)||!Number.isFinite(k))throw Error('Positive thermal conductivity required');
  if(!boundary.temperatures?.length)throw Error('At least one prescribed temperature region required');
  if(!Number.isFinite(volumetricSource)||!Number.isFinite(initialTemperature)||initialTemperature<-273.15)throw Error('Invalid thermal inputs');
@@ -13,7 +13,7 @@ export function solveThermal(mesh,properties,boundary,{matvecFactory,transient=f
  let field=new Float64Array(n).fill(initialTemperature),solveResult,lastPrevious=field;const history=[];
  const system=transient?entries.map(({ids,k:matrix},e)=>{const matrix2=matrix.slice(),geo=elementGeometry(mesh,mesh.tetrahedra[e]),localMass=properties.density*properties.specificHeat*geo.volume/4/timeStep;for(let i=0;i<4;i++)matrix2[i*4+i]+=localMass;return {ids,k:matrix2};}):entries;
  const count=transient?steps:1;
- for(let step=0;step<count;step++){const rhs=transient?Float64Array.from(load,(v,i)=>v+mass[i]*field[i]/timeStep):load;const previous=field;lastPrevious=previous;solveResult=pcg(n,system,rhs,temperatures,{matvecFactory});field=solveResult.solution;const storedEnergy=transient?field.reduce((s,v,i)=>s+mass[i]*(v-previous[i]),0):0;history.push({time:transient?(step+1)*timeStep:0,minTemperature:Math.min(...field),maxTemperature:Math.max(...field),storedEnergyJ:storedEnergy,residual:solveResult.residual});}
+ for(let step=0;step<count;step++){const rhs=transient?Float64Array.from(load,(v,i)=>v+mass[i]*field[i]/timeStep):load;const previous=field;lastPrevious=previous;solveResult=pcg(n,system,rhs,temperatures,{matvecFactory,tolerance:method==='pcg-strict'?1e-10:1e-8});field=solveResult.solution;const storedEnergy=transient?field.reduce((s,v,i)=>s+mass[i]*(v-previous[i]),0):0;history.push({time:transient?(step+1)*timeStep:0,minTemperature:Math.min(...field),maxTemperature:Math.max(...field),storedEnergyJ:storedEnergy,residual:solveResult.residual});}
  const flux=mesh.tetrahedra.map((t,e)=>[0,1,2].map(d=>-k*t.reduce((s,i,a)=>s+gradients[e][a][d]*field[i],0)));
  const conduction=new Float64Array(n);for(const {ids,k:matrix}of entries)for(let i=0;i<4;i++)for(let j=0;j<4;j++)conduction[ids[i]]+=matrix[i*4+j]*field[ids[j]];
  const storageRate=transient?field.reduce((sum,v,i)=>sum+mass[i]*(v-lastPrevious[i])/timeStep,0):0;

@@ -4,7 +4,7 @@ import {tasks,stages,release,solvers,updatedAt,applyProgress} from './board-data
 import './board.css';
 const repo='https://github.com/airpocket-soundman/airpocket-simulation-studio';
 const colors=['#747163','#416eb0','#8a60a3','#af612b','#3f7f68','#716239'];
-function taskTranslations(){const entries={};for(const t of tasks){entries[t.title]=t.titleEn;entries[t.detail]=t.detailEn;entries[t.acceptance]=t.acceptanceEn;}addTranslations(entries);}
+function taskTranslations(){const entries={};for(const t of tasks){entries[t.title]=t.titleEn;entries[t.detail]=t.detailEn;entries[t.acceptance]=t.acceptanceEn;if(t.lastUpdateEn)entries[t.lastUpdate]=t.lastUpdateEn;}if(release.descriptionEn)entries[release.description]=release.descriptionEn;addTranslations(entries);}
 taskTranslations();
 let view='work',query='',category='all',notes=[];
 try{notes=JSON.parse(localStorage.getItem('studio-dev-notes')||'[]');if(!Array.isArray(notes)||!notes.every(n=>typeof n.text==='string'&&typeof n.date==='string'))notes=[];}catch{}
