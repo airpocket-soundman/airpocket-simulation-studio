@@ -2,11 +2,11 @@
   "version": 1,
   "updatedAt": "2026-10-13T23:35:23.413752+00:00",
   "release": {
-    "version": "v0.37",
+    "version": "v0.38",
     "date": "2026-10-14",
-    "testCount": 209,
-    "description": "外部箱の3D Stokes流、PNG/WebMと4種類のアニメーション、ローカルMCP5ツールと専用skillを追加。209テスト・公開配信物21項目・公開画面22項目が成功。StokesはRe<=0.1のP1/P1安定化試作。P2統合と一般流体は残作業。",
-    "descriptionEn": "Added finite-box 3D Stokes flow, PNG/WebM with four animation types, five local MCP tools and a dedicated skill. Passed 209 source tests, twenty-one public runtime checks and twenty-two public browser checks. Stokes is a stabilized P1/P1 prototype at Re<=0.1; P2 integration and general flow remain outstanding."
+    "testCount": 214,
+    "description": "公開樹脂物性61件を同梱。PP・PE・ABSの充填材・含有率別検索、比較、適用、出典と仮定・手修正の保存、MCP検索を追加。214テスト・公開配信物22項目・公開画面23項目が成功。配向・クリープ・未掲載物性の校正は未対応。",
+    "descriptionEn": "Preinstalled 61 sourced polymer entries with filler/content filters, comparison, application, provenance, assumptions and overrides in archives, plus MCP lookup. Passed 214 source tests, 22 public runtime checks and 23 public browser checks. Orientation, creep and unpublished properties remain uncalibrated."
   },
   "tasks": [
     {
@@ -1061,7 +1061,7 @@
       "id": "MATCAT1",
       "title": "公開樹脂物性を銘柄・充填材・含有率で選択",
       "titleEn": "Select published polymer grades, fillers and contents",
-      "status": "checking",
+      "status": "released",
       "category": "材料",
       "depends": [
         "MAT2"
