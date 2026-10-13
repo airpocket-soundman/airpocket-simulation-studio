@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T15:09:14.820726+00:00",
+  "updatedAt": "2026-10-13T15:19:37.290358+00:00",
   "release": {
-    "version": "v0.21",
+    "version": "v0.22",
     "date": "2026-10-14",
-    "description": "温度・速度・方向性・試験条件の材料データを登録。一様温度の弾性定数を補間し、Airpocket/MFEMに反映。温度範囲外と未対応構成則を拒否。111テスト。異方性・速度依存構成則・ゴム大変形・一般3D流体は残作業。",
-    "descriptionEn": "Register temperature/rate/direction/test data. Interpolate uniform-temperature elastic constants for Airpocket/MFEM; reject invalid temperature ranges and unsupported constitutive laws. 111 tests. Anisotropic/rate-dependent constitutive laws, large rubber deformation and general 3D flow remain outstanding."
+    "description": "圧縮性Neo-Hookean有限ひずみのCPU解析、荷重増分Newton法、材料・試験曲線登録、反力・Cauchy応力・収束履歴の保存を追加。117テスト。ほぼ非圧縮ゴム・接触・破壊・一般3D流体は残作業。",
+    "descriptionEn": "Added compressible Neo-Hookean finite-strain CPU analysis, load-stepped Newton solve, parameter/test-curve registration and saved reactions, Cauchy stress and convergence history. 117 tests. Near-incompressible rubber, contact, failure and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -313,14 +313,15 @@
       "id": "MAT4",
       "title": "ゴムの超弾性パラメータを登録",
       "category": "材料",
-      "status": "building",
+      "status": "released",
       "detail": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
       "acceptance": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
       "titleEn": "Register hyperelastic rubber parameters",
       "detailEn": "Store constitutive parameters and test curves; verify supported element/solver combinations.",
       "acceptanceEn": "Store constitutive parameters and test curves; verify supported element/solver combinations.",
-      "lastUpdate": "圧縮性Neo-Hookeanの材料登録、有限ひずみ・整合接線・荷重増分Newton法を実装中。ほぼ非圧縮、接触、座屈は別対応。",
-      "lastUpdateEn": "Implementing compressible Neo-Hookean registration, finite strain, consistent tangent and load-stepped Newton solve. Near-incompressibility, contact and buckling require separate work."
+      "lastUpdate": "圧縮性Neo-Hookeanのμ/Kと試験曲線を登録し、CPU Tet4の有限ひずみ・整合接線・増分Newton解析を実装。引張・圧縮・力指定と回転不変性を検証。K/μ≤20、2000要素/節点。ほぼ非圧縮・接触・粘弾性・追従圧力・熱膨張・適応解析は未対応。",
+      "lastUpdateEn": "Registered compressible Neo-Hookean μ/K and test curves; implemented finite-strain CPU Tet4 consistent-tangent load-stepped Newton solve. Verified stretch, compression, force control and objectivity. K/μ≤20, 2000 elements/nodes. Near-incompressibility, contact, viscoelasticity, follower pressure, thermal strain and adaptation are unsupported.",
+      "evidence": "tests/hyperelastic.test.mjs; tests/worker-pipeline.test.mjs"
     },
     {
       "id": "REG3",

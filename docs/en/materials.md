@@ -15,3 +15,5 @@ Separate category, constitutive law, measured properties and failure criterion. 
 Thermal data includes conductivity, specific heat, density, expansion coefficient and, when necessary, emissivity. Thermal stress also needs a reference temperature. Store grade, source, units, valid temperatures, strain rate, orientation, test conditions and calibration history. Preserve uncertainty and the experimentally validated range for fracture predictions.
 
 API material properties use SI for modulus/strength (Pa); the UI displays MPa. Density is kg/m³, conductivity W/(m·K), specific heat J/(kg·K), expansion 1/K, temperature limits °C. Null means missing. For linear isotropic elasticity, -1 < Poisson ratio < 0.5; incompressible rubber needs a different validated formulation.
+
+Compressible Neo-Hookean finite-strain CPU analysis is supported within the limits documented in [hyperelasticity](hyperelasticity.md). Near-incompressibility and viscoelasticity remain unsupported.

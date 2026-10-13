@@ -1,6 +1,15 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ 'ゴム大変形サンプル':'Rubber finite-strain example','圧縮性Neo-Hookeanモデル':'Compressible Neo-Hookean model','超弾性モデルを使う（構造・CPU）':'Use hyperelasticity (structural CPU)','せん断弾性率 μ（MPa）':'Shear modulus μ (MPa)','体積弾性率 K（MPa）':'Bulk modulus K (MPa)','試験曲線（任意、JSON）':'Test curve (optional JSON)',
+ '曲線は [伸長比, 公称応力Pa]。登録値の自動フィットは行いません。K/μは2/3〜20。ほぼ非圧縮のゴム、接触、破断、圧力追従荷重は未対応です。':'Curve rows are [stretch, nominal stress Pa]. Parameters are not fitted automatically. K/μ must be 2/3–20. Near-incompressible rubber, contact, failure and follower pressure are unsupported.',
+ '非線形構造の反復設定':'Nonlinear structural iteration settings','荷重増分数':'Load increments','増分ごとのNewton反復上限':'Newton iteration limit per increment',
+ '超弾性の構造解析では荷重と指定変位を段階的に増やします。2000要素・2000節点まで。未収束なら結果を返しません。':'Hyperelastic loads and prescribed displacement are increased in steps. Limit: 2000 elements and 2000 nodes. Unconverged solutions are rejected.',
+ '圧縮性Neo-Hookeanモデルを登録済み。構造のCPU解析を使用します。':'Compressible Neo-Hookean material registered. Use a structural CPU solver.',
+ '横方向の変位を0、上端の変位を8 mmに設定。20%伸長の有限ひずみ参照サンプルです。':'Lateral displacement is zero and the top moves 8 mm: a finite-strain reference with 20% stretch.',
+ ' / 荷重増分 ':' / Load increments ',' / 最小J ':' / Minimum J ',
+ '線形弾性・圧縮性Neo-Hookean・熱伝導・熱放射・接触熱抵抗・周波数音響・十分発達した層流流路を計算します。外部流体領域はメッシュ生成のみ対応。曲面の部分領域は三角形への投影近似です。一般3D流体・機械的接触・破壊・ほぼ非圧縮のゴムは未対応です。':'Computes linear elasticity, compressible Neo-Hookean finite strain, heat conduction, radiation, thermal contact, frequency acoustics and fully developed laminar channels. Exterior domains support meshing only. Partial curved regions use triangle projection. General 3D flow, mechanical contact, failure and near-incompressible rubber are unsupported.',
+
  '登録した温度表の範囲外です。補外は行いません。':'Material temperature table does not allow extrapolation',
  '登録した材料の有効温度範囲外です。':'Temperature is outside the registered material validity range',
  '温度依存の弾性物性には一様温度が必要です。':'Temperature-dependent elasticity currently requires a uniform temperature',

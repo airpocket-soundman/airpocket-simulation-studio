@@ -1,3 +1,4 @@
+import {validateHyperelastic} from './hyperelastic-material.js';
 import {validateMaterialDependence} from './material-dependence.js';
 export const materialFields=[
  {key:'youngModulus',label:'ヤング率',unit:'MPa',scale:1e6,min:0,exclusive:true},
@@ -16,6 +17,8 @@ export function validateMaterialProperties(p){
  if(p.temperatureMin!=null&&p.temperatureMax!=null&&p.temperatureMin>p.temperatureMax)throw Error('有効温度の上下限が逆です。');
  for(const k of ['source','grade','notes'])if(p[k]!==undefined&&(typeof p[k]!=='string'||p[k].length>10000))throw Error('材料の記録が不正です。');
  validateMaterialDependence(p.dependence);
+ validateHyperelastic(p.hyperelastic);
+ if(p.hyperelastic&&p.dependence?.elasticTemperatureTable)throw Error('Hyperelastic parameters cannot be combined with a linear elastic temperature table');
  return p;
 }
 export function materialReadiness(category,p={}){
