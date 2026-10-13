@@ -7,7 +7,8 @@ export async function analyzeProject(project,options={},operation='elastic'){
  const settings={size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options};
  if(!Number.isFinite(settings.size)||settings.size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(settings.method))throw Error('Invalid CPU analysis settings');
  return new Promise((resolve,reject)=>{
-  const worker=new Worker(new URL('./headless-worker.mjs',import.meta.url),{stdout:true,stderr:true});
+  // A file Worker must not inherit inline/eval or test-runner launch flags.
+  const worker=new Worker(new URL('./headless-worker.mjs',import.meta.url),{stdout:true,stderr:true,execArgv:[]});
   worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);
   let finished=false;const finish=(error,result)=>{if(finished)return;finished=true;clearTimeout(timer);worker.terminate();error?reject(error):resolve({...result,input,calculation:{operation,options:settings}});};
   const timer=setTimeout(()=>finish(Error('Analysis exceeded 120 seconds')),120000);
