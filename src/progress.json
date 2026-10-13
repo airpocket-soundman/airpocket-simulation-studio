@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:57:33.121853+00:00",
+  "updatedAt": "2026-10-13T11:59:01.200Z",
   "release": {
     "version": "v0.15",
     "date": "2026-10-13",
@@ -383,13 +383,13 @@
       "id": "MESH3",
       "title": "応力特異点とメッシュ収束を判別",
       "category": "検証",
-      "status": "queued",
+      "status": "building",
       "detail": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "titleEn": "Distinguish stress singularities from mesh convergence",
       "detailEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
       "acceptanceEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
-      "lastUpdate": "反復ごとの要素数・変位変化・応力変動を保持。曲げ参照例で細分化を検証。 完了条件に未実装部分が残るため、確認待ちから残実装の待ち列へ移動。",
+      "lastUpdate": "変位だけでなく応力とピーク位置の細分化を比較する診断、停滞・時間・要素数の停止判定を実装中",
       "lastUpdateEn": "Record iteration element counts, displacement changes and stress variation; bending refinement tested. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
       "evidence": "tests/bending.test.mjs"
     },
