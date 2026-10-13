@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:36:59.225Z",
+  "updatedAt": "2026-10-13T11:57:33.121853+00:00",
   "release": {
-    "version": "v0.14",
+    "version": "v0.15",
     "date": "2026-10-13",
-    "description": "断面クリップ・半透明・部品非表示と表示操作APIを追加。露出した内部の元の面の選択、非表示部品の除外を実画面で検証。自動テスト73件。切断面の新規生成・流体・非線形等は未対応。",
-    "descriptionEn": "Adds section clipping, opacity, part visibility and viewer API. Browser verified original interior face selection and rejection of hidden parts. 73 tests. No generated section caps; fluid/nonlinear features remain outstanding."
+    "description": "熱放射と平面の接触熱抵抗を実装。界面の温度差を保持する転送・測定に対応。81自動テストと画面で100 °C、0.380952 Wを検証。流体・非線形・部品間放射は未対応。",
+    "descriptionEn": "Thermal radiation and planar contact resistance, including body-aware temperature transfer and probes. 81 tests plus UI references of 100 °C and 0.380952 W. Fluid, nonlinear and inter-part radiation remain outstanding."
   },
   "tasks": [
     {
@@ -481,13 +481,15 @@
       "id": "HEAT2",
       "title": "熱放射と接触熱抵抗を実装",
       "category": "熱",
-      "status": "building",
+      "status": "released",
       "detail": "時間履歴とエネルギー収支を参照解に照合。",
       "acceptance": "時間履歴とエネルギー収支を参照解に照合。",
       "titleEn": "Implement thermal radiation and contact resistance",
       "detailEn": "Compare time histories and energy balance to reference solutions.",
       "acceptanceEn": "Compare time histories and energy balance to reference solutions.",
-      "lastUpdate": "熱放射の非線形境界と接触熱抵抗の実装・参照解検証を開始"
+      "lastUpdate": "定常・非定常の放射と接触熱抵抗、収支・異なる面分割・JS/WASM・温度不連続を検証。UI参照100 °C / 0.380952 W。",
+      "lastUpdateEn": "Verified steady/transient radiation and contact, energy balance, nonmatching interfaces, JS/WASM and temperature jumps. UI references 100 °C / 0.380952 W.",
+      "evidence": "tests/radiation.test.mjs, tests/thermal-contact.test.mjs"
     },
     {
       "id": "CFDDOM1",

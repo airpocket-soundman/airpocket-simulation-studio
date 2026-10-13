@@ -1,6 +1,9 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '接触熱抵抗サンプル':'Thermal contact example','接触熱伝達率（W/m²K）':'Contact conductance (W/m²K)','選択した2部品間に接触熱抵抗':'Set contact resistance between two selected parts','別々の節点を持つ、同じ位置の平面を両側から選択してください。選択面全体が一致する必要があります。':'Select coincident planar faces on two parts with separate nodes. The entire selected patches must match.','接触熱抵抗の参照熱移動量は0.380952 W、界面温度は61.905 / 58.095 °Cです。':'Reference transfer is 0.380952 W; interface temperatures are 61.905 / 58.095 °C.',
+ '熱放射サンプル':'Thermal radiation example','放射率（0より大きく1以下）':'Emissivity (greater than 0, up to 1)','放射の周囲温度（°C）':'Radiation ambient temperature (°C)','選択範囲に熱放射':'Set radiation on selected region','放射計算の最大反復数':'Maximum radiation iterations','大きな等温周囲との灰色体放射（形態係数1）を計算します。部品間の放射は未対応です。':'Gray-body radiation to a large isothermal environment, view factor 1. Radiation exchange between parts is unsupported.','放射率0.8、周囲20 °C。合計熱入力との平衡温度の参照値は100 °Cです。':'Emissivity 0.8, surroundings 20 °C. Reference equilibrium under the specified heat input is 100 °C.','熱放射 ':'Radiation ',' · 放射率 ':' · Emissivity ',' / 放射による流入 ':' / Radiation inflow ',' / 放射反復 ':' / Radiation iterations ',
+
  '部品表示は条件設定画面の操作です。解析対象は全ての部品です。':'Part visibility controls the setup viewer. All parts are included in analysis.',
  '内部面選択サンプル':'Interior face example','外側20 mmと内側8 mmの表示サンプル。露出した内側の元の面を選択できます。':'Display sample with outer 20 mm and inner 8 mm parts. Select exposed original faces of the inner part.',
  '内部を見る':'Inspect inside','断面表示':'Section view','切断方向':'Section axis','切断位置（mm）':'Section position (mm)','残す側を反転':'Flip retained side','形状の透明度':'Model opacity','部品 ':'Part ',' を表示':' visible','切断面には新しい選択面を作りません。露出した元の面を選択できます。半透明でも手前の面が選択されます。奥を選ぶには部品を非表示にしてください。':'Clipping creates no selectable cap. Select exposed original faces. Transparent front faces still intercept selection; hide parts to select behind them.',
@@ -51,7 +54,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 73件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 43 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 81件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 81 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',
