@@ -25,6 +25,7 @@ export function createStudioApi(adapter) {
     selectCondition(index){const p=current(),c=p.conditions[index];if(!Number.isInteger(index)||!c)throw Error('条件番号が不正です。');p.selection=p.meshes.map(()=>[]);for(const r of c.regions)p.selection[r.mesh]=[...new Set([...p.selection[r.mesh],...r.triangles])];return write(p,'selection');},
     setMaterial(material){if(!['金属','樹脂','ガラス','ゴム'].includes(material))throw Error('材料カテゴリが不正です。');const p=current();p.material=material;p.materialProperties={};return write(p,'material');},
     setMaterialProperties(properties){const p=current();p.materialProperties=clone(properties);return write(p,'material');},
+    setMeshSettings(settings){const p=current();p.meshSettings=clone(settings);return write(p,'meshSettings');},
     setStudy(study){const p=current();p.study=clone(study);return write(p,'study');}
   });
 }

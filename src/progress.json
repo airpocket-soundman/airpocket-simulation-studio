@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:44:45.309Z",
+  "updatedAt": "2026-10-13T07:49:28.997Z",
   "release": {
     "version": "v0.4",
     "date": "2026-10-13",
@@ -83,7 +83,7 @@
     {
       "id": "MESH1",
       "title": "ブラウザで体積メッシュを生成",
-      "status": "checking",
+      "status": "queued",
       "category": "構造",
       "detail": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
       "depends": [
@@ -359,15 +359,15 @@
       "id": "MESH2",
       "title": "品質と局所細分化を表示",
       "category": "構造",
-      "status": "building",
+      "status": "ready",
       "detail": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "titleEn": "Show quality and local refinement",
       "detailEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
       "acceptanceEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
-      "lastUpdate": "体積・minSICN品質・内部要素表示と局所サイズ場を実装。",
-      "lastUpdateEn": "Implemented volume/quality inspection, internal mesh display and local size fields.",
-      "evidence": "src/mesh-core.js"
+      "lastUpdate": "選択領域の局所サイズ・影響半径をUI/APIから登録し保存復元。実Gmsh密度増加・体積保存・品質ヒストグラムを確認。",
+      "lastUpdateEn": "Local size/radius via UI/API with persistence; real Gmsh density increase, volume and quality histogram verified.",
+      "evidence": "tests/local-mesh.test.mjs"
     },
     {
       "id": "MESH3",
@@ -409,15 +409,15 @@
       "id": "RUN1",
       "title": "計算を中止し失敗理由を表示",
       "category": "共通",
-      "status": "building",
+      "status": "ready",
       "detail": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "titleEn": "Cancel calculations and explain failures",
       "detailEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
       "acceptanceEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
-      "lastUpdate": "Worker中止・120秒上限・入力変更・未収束・要素数制限を実装。",
-      "lastUpdateEn": "Implemented cancellation, 120 second limit, stale-input detection, nonconvergence and element limits.",
-      "evidence": "src/analysis-client.js"
+      "lastUpdate": "中止後の再実行を実画面で確認。タイムアウト・未収束・メモリ失敗・古いWorker応答の排除をAPIテストで確認。",
+      "lastUpdateEn": "UI cancellation/restart verified. API tests cover timeout, nonconvergence, memory/start failure and stale Worker responses.",
+      "evidence": "tests/analysis-client.test.mjs"
     },
     {
       "id": "RESULT1",

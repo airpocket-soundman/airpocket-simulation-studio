@@ -49,3 +49,11 @@ Total heat input (W) is distributed by selected area while preserving its total.
 Cooling example: 40 mm length, 10×10 mm cross-section, k=2 W/mK, base 100 °C, tip h=100 W/m²K/ambient 20 °C, insulated sides. Reference tip 46.667 °C and outward heat 0.266667 W. Energy balance is applied heat + inward convection + prescribed-temperature reaction − storage rate. A negative convection term means cooling. History retains convection and stored energy.
 
 After selecting a region, call `studioApi.addCondition({type:'convection',value:100,ambientTemperature:20})` or `studioApi.addCondition({type:'heatPower',value:1})`. Load the reference with `analysisApi.loadConvectionExample()`.
+
+## Manual local refinement (v0.5)
+
+Select a face or curved brush region, open Refine mesh near selected regions and register local target size/influence radius in mm. Regenerate or solve again. Spherical size fields start at triangle centroids and smoothly return to global sizing at the radius. At most80 centers/registration and160 total. This is not exact CAD splitting; local size must be15–100% of global size.
+
+Settings persist in the project and combine with adaptive sizing. Replacing geometry clears them. Minimum minSICN quality and elements below0.2 are shown; exported mesh summaries include the complete histogram. These metrics do not guarantee numerical accuracy.
+
+API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}]})`, all dimensions in mm. In Node, `selectedRefinements(project,{size:2,radius:12})` builds fields from a selection.

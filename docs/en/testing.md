@@ -28,3 +28,5 @@ Progress: `npm run task:status -- ID STATUS "note" [evidence]`, then commit and 
 See the [analysis guide](analysis-guide.md) for calculation APIs and direct Node verification of meshing, structural/thermal solving and adaptation.
 
 Run src/acoustic-sweep.js directly in Node for acoustic sweeps. Use sampleResult(mesh,result,[x,y,z]) from src/probe.js, or window.analysisApi.probe([x,y,z]) in the browser. Adaptive output retains every mesh/boundary/result in adaptive.iterations.
+
+Runtime tests cover cancellation/restart, stale Worker responses, input snapshots, deadlines and resource cleanup after convergence/memory/start failure. Memory exhaustion is injected as a Worker failure rather than exhausting the machine. The real UI verifies cancellation/restart and local meshing.

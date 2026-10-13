@@ -1,8 +1,18 @@
-export function createAnalysisClient(getProject,onProgress){let worker=null,timer=null;
- function cancel(){worker?.terminate();worker=null;clearTimeout(timer);}
- let rejectActive=null;
- function start(operation,options={}){options={size:5,method:"wasm-pcg",...options};if(worker)return Promise.reject(Error('A calculation is already running'));const project=getProject();if(!project.sourceModel)return Promise.reject(Error('Reload a STEP file or use the built-in sample; this project has no original solid'));if(!crossOriginIsolated)return Promise.reject(Error('Browser isolation is not ready. Reload once, or use a compatible browser.'));
- return new Promise((resolve,reject)=>{rejectActive=reject;worker=new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'});timer=setTimeout(()=>{cancel();reject(Error('Calculation exceeded 120 seconds'));},120000);worker.onerror=e=>{cancel();reject(Error(e.message));};worker.onmessage=({data})=>{if(data.progress){onProgress(data.progress);return;}cancel();rejectActive=null;data.error?reject(Error(data.error)):resolve({...data.result,input:project});};worker.postMessage({operation,project,source:project.sourceModel,options,base:new URL(import.meta.env.BASE_URL,location.href).href});});
+export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
+ const createWorker=runtime.createWorker||(()=>new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'}));
+ const isIsolated=runtime.isIsolated||(()=>globalThis.crossOriginIsolated);
+ const baseUrl=runtime.baseUrl||(()=>new URL(import.meta.env?.BASE_URL||'/',location.href).href),timeoutMs=runtime.timeoutMs??120000;
+ let active=null;
+ function finish(job,error,result){if(active!==job)return;active=null;clearTimeout(job.timer);job.worker.terminate();error?job.reject(error):job.resolve({...result,input:job.project});}
+ function start(operation,options={}){
+ if(active)return Promise.reject(Error('A calculation is already running'));
+ let project;try{project=structuredClone(getProject());if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');}catch(e){return Promise.reject(e);}
+ return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}const job={worker,project,resolve,reject};active=job;
+ job.timer=setTimeout(()=>finish(job,Error(`Calculation exceeded ${timeoutMs/1000} seconds`)),timeoutMs);
+ worker.onerror=e=>finish(job,Error(e.message||'Worker failed'));
+ worker.onmessage=({data})=>{if(active!==job)return;if(data.progress){onProgress(data.progress);return;}finish(job,data.error?Error(data.error):null,data.result);};
+ try{worker.postMessage({operation,project,source:project.sourceModel,options:{size:5,method:'wasm-pcg',...options},base:baseUrl()});}catch(e){finish(job,e);}
+ });
  }
- return {generateMesh:options=>start('mesh',options),analyze:options=>start('elastic',options),cancel:()=>{cancel();rejectActive?.(Error('Calculation cancelled'));rejectActive=null;}};
+ return {generateMesh:options=>start('mesh',options),analyze:options=>start('elastic',options),cancel:()=>{if(active)finish(active,Error('Calculation cancelled'));}};
 }

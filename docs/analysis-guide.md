@@ -49,3 +49,11 @@ Airpocket Tet4は本リポジトリの独自エンジン。JavaScriptで要素�
 「放熱サンプル」は長さ40 mm、断面10×10 mm、k=2 W/mK、根元100 °C、先端h=100 W/m²K・周囲20 °C。側面は断熱で、先端温度46.667 °C、放熱0.266667 Wが参照値。エネルギー収支は合計熱入力＋対流による流入＋温度境界の供給−蓄熱率。対流による流入が負なら放熱。履歴にも対流熱と蓄熱を保存する。
 
 API例: `studioApi.addCondition({type:'convection',value:100,ambientTemperature:20})`、`studioApi.addCondition({type:'heatPower',value:1})`。先に表面領域を選択する。`analysisApi.loadConvectionExample()`で参照モデルを読み込める。
+
+## 手動の局所細分化（v0.5）
+
+面・曲面ブラシで領域を選び「選択領域のメッシュを細分化」を開く。局所目標サイズと影響半径（mm）を指定し登録後、再生成・再解析する。三角形の中心からの球状サイズ場で、半径の端へ向かって全体サイズへ滑らかに戻す。最大80中心/登録、合計160中心。CAD境界の厳密な分割ではない。局所寸法は全体寸法の15〜100%。
+
+設定はプロジェクトに保存し、適応ループの自動細分化と合わせて使える。モデルを入れ替えたら解除する。最小品質と品質0.2未満の要素数を表示し、全品質帯の要素数を結果に保存。品質はminSICNで、品質や要素数だけから解析精度は保証しない。
+
+API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}]})`。中心・寸法・半径はmm。Nodeからは`selectedRefinements(project,{size:2,radius:12})`で選択からサイズ場を作成できる。

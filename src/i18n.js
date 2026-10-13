@@ -1,6 +1,13 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '計算を中止しました。':'Calculation cancelled','体積メッシュを生成中…':'Generating volume mesh…','領域条件を転送中…':'Transferring boundary regions…','構造解析を計算中…':'Solving linear elasticity…','熱伝導を計算中…':'Solving heat conduction…','音響解析を計算中…':'Solving frequency-domain acoustics…',
+
+ '構造・熱・音響 · v0.5':'Structure · Heat · Acoustics · v0.5',
+ '選択領域のメッシュを細分化':'Refine mesh near selected regions','局所目標サイズ（mm）':'Local target size (mm)','影響半径（mm）':'Influence radius (mm)','選択領域の周囲を細分化':'Refine near selection','局所設定を解除':'Clear local settings',' 箇所の局所設定':' local sizing regions','局所メッシュ設定を登録しました。':'Local mesh settings registered.','局所サイズは全体の15〜100%にしてください。':'Local size must be 15–100% of the global size.',
+ '選択した三角形の中心を起点に、半径内で徐々に細かくします。厳密なCAD境界分割ではありません。局所サイズは全体の15〜100%です。':'Refine progressively around selected triangle centroids within the influence radius. This is not exact CAD splitting. Local size must be 15–100% of global size.',
+ '品質0.2未満 ':'Quality below 0.2: ',' 要素':' elements',
+
  '放熱サンプル':'Cooling example','合計熱入力（W、流入を正）':'Total heat input (W, positive inward)','選択範囲に合計熱入力を設定':'Set total heat on selected region','熱伝達率（W/m²K）':'Heat transfer coefficient (W/m²K)','周囲温度（°C）':'Ambient temperature (°C)','選択範囲に対流放熱を設定':'Set convection on selected region','熱伝達率は流れ・姿勢などに応じた値を入力します。流体解析からの自動算出は未対応です。':'Enter a coefficient appropriate to flow, orientation and conditions. Automatic calculation from CFD is not supported.',
  '放熱サンプルを設定しました。先端温度の参照値は46.667 °Cです。':'Cooling example configured. Reference tip temperature: 46.667 °C.',
  '構造・熱・音響 · v0.4':'Structure · Heat · Acoustics · v0.4',
@@ -10,7 +17,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 32件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 32 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 36件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 36 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',
