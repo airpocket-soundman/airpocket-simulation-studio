@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T10:55:03.987Z",
+  "updatedAt": "2026-10-13T11:03:20.418Z",
   "release": {
-    "version": "v0.9",
+    "version": "v0.10",
     "date": "2026-10-13",
-    "description": "熱膨張・熱応力と、保存した熱解析から構造への一方向温度転送を追加。異なるメッシュの補間・参照応力・反力を検証。自動テスト57件。流体、非線形、双方向連成等は残作業。",
-    "descriptionEn": "Adds thermal expansion/stress and one-way temperature transfer from saved thermal cases to structural meshes. Interpolation, reference stresses and reactions verified by 57 tests. Fluid, nonlinear and two-way coupling remain outstanding."
+    "description": "周波数依存の複素インピーダンス吸音境界と吸収パワーを追加。進行波・リアクタンス・JS/WASM一致を検証。自動テスト60件。流体・非線形・外部放射等は残作業。",
+    "descriptionEn": "Adds frequency-dependent complex impedance boundaries and absorbed acoustic power. Outgoing waves, reactive boundaries and JS/WASM agreement verified by 60 tests. Fluid, nonlinear and exterior radiation analyses remain outstanding."
   },
   "tasks": [
     {
@@ -527,14 +527,15 @@
       "id": "ACOU2",
       "title": "周波数依存の吸音境界を設定",
       "category": "音響",
-      "status": "queued",
+      "status": "released",
       "detail": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
       "acceptance": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
       "titleEn": "Set frequency-dependent absorbing boundaries",
       "detailEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption.",
       "acceptanceEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption.",
-      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。 完了条件に未実装部分が残るため、確認待ちから残実装の待ち列へ移動。",
-      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain. Unimplemented acceptance criteria remain; moved from checking to the implementation queue."
+      "lastUpdate": "周波数表の補間、複素吸音境界、吸収パワーを実装。UIで1.0016Pa・1.2130e-7Wを参照値と照合。全60テスト成功",
+      "lastUpdateEn": "Implemented complex boundary impedance with frequency tables, interpolation and absorbed power. Matched pipe UI result 1.0016 Pa and 1.2130e-7 W agrees with reference; 60 tests pass.",
+      "evidence": "tests/impedance.test.mjs"
     },
     {
       "id": "ACOU3",

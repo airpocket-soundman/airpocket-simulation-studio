@@ -1,0 +1,5 @@
+export function validateImpedance(condition){
+ if(!(condition.value>0)||!Number.isFinite(condition.value)||!Number.isFinite(condition.reactance??0))throw Error('Passive acoustic impedance requires positive resistance and finite reactance');
+ if(condition.impedanceTable!==undefined){const table=condition.impedanceTable;if(!Array.isArray(table)||table.length<2||table.length>100||table.some((v,i)=>!Array.isArray(v)||v.length!==3||!v.every(Number.isFinite)||v[0]<=0||v[1]<=0||(i&&v[0]<=table[i-1][0])))throw Error('Impedance table requires ascending [Hz, resistance, reactance] rows');}
+}
+export function impedanceAt(condition,frequency){validateImpedance(condition);const table=condition.impedanceTable;if(!table)return [condition.value,condition.reactance??0];if(frequency<table[0][0]||frequency>table.at(-1)[0])throw Error('Frequency outside impedance table; extrapolation is disabled');for(let i=1;i<table.length;i++)if(frequency<=table[i][0]){const a=table[i-1],b=table[i],t=(frequency-a[0])/(b[0]-a[0]);return [a[1]+t*(b[1]-a[1]),a[2]+t*(b[2]-a[2])];}}
