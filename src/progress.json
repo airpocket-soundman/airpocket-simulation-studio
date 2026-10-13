@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T15:00:53.321401+00:00",
+  "updatedAt": "2026-10-13T15:06:13.373246+00:00",
   "release": {
-    "version": "v0.20",
-    "date": "2026-10-13",
-    "description": "MFEM 4.10のC++剛性組立・CGをWASM移植。Airpocketと同一条件でエンジンを選択・比較でき、局所拘束・重力・熱膨張・適応解析に対応。107テスト。MFEMアダプターは線形構造のみ。他OSS移植・一般3D流体・非線形は残作業。",
-    "descriptionEn": "MFEM 4.10 C++ stiffness assembly and CG ported to WASM. Choose/compare engines on identical inputs, including local constraints, gravity, thermal strain and adaptation. 107 tests. MFEM adapter supports linear structure only. Other OSS ports, general 3D flow and nonlinear work remain outstanding."
+    "version": "v0.21",
+    "date": "2026-10-14",
+    "description": "温度・速度・方向性・試験条件の材料データを登録。一様温度の弾性定数を補間し、Airpocket/MFEMに反映。温度範囲外と未対応構成則を拒否。111テスト。異方性・速度依存構成則・ゴム大変形・一般3D流体は残作業。",
+    "descriptionEn": "Register temperature/rate/direction/test data. Interpolate uniform-temperature elastic constants for Airpocket/MFEM; reject invalid temperature ranges and unsupported constitutive laws. 111 tests. Anisotropic/rate-dependent constitutive laws, large rubber deformation and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -299,14 +299,15 @@
       "id": "MAT3",
       "title": "温度・速度依存と異方性を登録",
       "category": "材料",
-      "status": "building",
+      "status": "released",
       "detail": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
       "acceptance": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
       "titleEn": "Register temperature/rate dependence and anisotropy",
       "detailEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases.",
       "acceptanceEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases.",
-      "lastUpdate": "材料の試験範囲・方向性登録と、一様温度での弾性物性補間を実装中。",
-      "lastUpdateEn": "Implementing test envelopes, directional metadata and uniform-temperature elastic interpolation."
+      "lastUpdate": "温度表・速度範囲・異方性軸・試験条件を保存。一様温度の弾性物性を補間し、MFEMを含む構造解析で検証。熱の全ステップの温度範囲も照合。非一様温度の物性補間・異方性/速度依存の構成則は未対応として拒否。",
+      "lastUpdateEn": "Persist temperature tables, rate envelopes, anisotropic axes and test conditions. Verified uniform-temperature elastic interpolation with MFEM and Airpocket; enforce thermal step envelopes. Nonuniform temperature interpolation and anisotropic/rate-dependent structural laws remain unsupported and are rejected.",
+      "evidence": "tests/material-dependence.test.mjs; tests/worker-pipeline.test.mjs"
     },
     {
       "id": "MAT4",

@@ -1,3 +1,4 @@
+import {validateMaterialDependence} from './material-dependence.js';
 export const materialFields=[
  {key:'youngModulus',label:'ヤング率',unit:'MPa',scale:1e6,min:0,exclusive:true},
  {key:'poissonRatio',label:'ポアソン比',unit:'',scale:1,min:-1,max:.5,exclusive:true},
@@ -14,6 +15,7 @@ export function validateMaterialProperties(p){
  for(const f of materialFields){const v=p[f.key];if(v===undefined||v===null)continue;if(!Number.isFinite(v)||(f.min!==undefined&&(f.exclusive?v<=f.min:v<f.min))||(f.max!==undefined&&(f.exclusive?v>=f.max:v>f.max)))throw Error(f.label+'が有効範囲外です。');}
  if(p.temperatureMin!=null&&p.temperatureMax!=null&&p.temperatureMin>p.temperatureMax)throw Error('有効温度の上下限が逆です。');
  for(const k of ['source','grade','notes'])if(p[k]!==undefined&&(typeof p[k]!=='string'||p[k].length>10000))throw Error('材料の記録が不正です。');
+ validateMaterialDependence(p.dependence);
  return p;
 }
 export function materialReadiness(category,p={}){

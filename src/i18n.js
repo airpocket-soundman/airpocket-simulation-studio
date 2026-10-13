@@ -1,6 +1,12 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '物性評価温度: ':'Material evaluation temperature: ',' / 補間ヤング率 ':' / Interpolated Young’s modulus ',' / ポアソン比 ':' / Poisson’s ratio ',
+ '温度・速度・方向性のデータ（任意、JSON）':'Temperature, rate and direction data (optional JSON)',
+ '表のヤング率はPa、温度は°C。速度の範囲は1/s。方向性・速度依存は登録のみで、対応していない構造計算を拒否します。':'Table Young’s modulus uses Pa, temperature uses °C, and rate bounds use 1/s. Directional and rate-dependent laws are registered only; unsupported structural calculations are rejected.',
+ '物性を評価する一様温度（°C）':'Uniform material evaluation temperature (°C)',
+ '温度別の弾性定数は線形補間します。熱応力を使う場合は、その部品温度を評価温度に使います。非一様温度での物性補間は未対応です。':'Elastic constants are interpolated linearly with temperature. Thermal-stress calculations use the solid temperature instead. Nonuniform temperature-dependent elasticity is unsupported.',
+
 '線形弾性・熱伝導・熱放射・接触熱抵抗・周波数音響・十分発達した層流流路を計算します。外部流体領域はメッシュ生成のみ対応。曲面の部分領域は三角形への投影近似です。一般3D流体・機械的接触・破壊・ゴムの大変形は未対応です。':'Computes linear elasticity, heat conduction, radiation, thermal contact resistance, frequency acoustics and fully developed laminar channels. Exterior fluid domains support meshing only. Partial curved regions use triangle projection. General 3D flow, mechanical contact, failure and large rubber deformation remain unsupported.',
  '線形構造の独立した剛性組立・CG':'Independent linear structural stiffness assembly and CG','WASM移植・倍精度検証済み（構造のみ）':'WASM port verified in float64 (structural only)',
  'MFEM 4.10 · WASM CPU（構造・別エンジン）':'MFEM 4.10 · WASM CPU (structural, separate engine)','Airpocketは共通の要素モデルの実行方式を選択。MFEMは独立した構造の剛性組立・CGソルバーです。荷重・拘束転送と結果表示は共通です。CalculiX等は未導入。':'Airpocket choices share an element model. MFEM independently assembles structural stiffness and solves using CG. Boundary transfer and result display are shared. CalculiX and other engines are not ported.',' / 倍精度 / 独立剛性組立 / 検証残差 ':' / Float64 / Independent stiffness assembly / Verified residual ',
