@@ -30,3 +30,5 @@ Progress is stored in src/progress.json; the board fetches updates every 20 seco
 - [Exterior radiation and far-field directivity](docs/en/exterior-acoustics.md)
 
 - [Transient acoustics](docs/en/transient-acoustics.md)
+
+- [Natural vibration](docs/en/modal-analysis.md)

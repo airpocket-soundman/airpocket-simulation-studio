@@ -43,3 +43,5 @@ v0.24ではSTEP・組込み形状の体積メッシュ、線形構造・指定�
 - [外部放射と遠方界の指向性](docs/exterior-acoustics.md)
 
 - [過渡音響](docs/transient-acoustics.md)
+
+- [固有振動](docs/modal-analysis.md)

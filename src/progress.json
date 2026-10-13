@@ -1,11 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:11:47.369957+00:00",
+  "updatedAt": "2026-10-13T18:18:06.560901+00:00",
   "release": {
-    "version": "v0.25",
+    "version": "v0.26",
     "date": "2026-10-14",
-    "description": "過渡音響、受音波形、時間別3D表示、正規化WAV、ケース保存を追加。134テスト、公開配信物10項目と公開画面で検証済み。振動連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added transient acoustics, receiver traces, 3D time frames, normalized WAV and case archives. 134 tests, ten deployed-runtime checks and public UI verified. Vibration coupling and general 3D flow remain outstanding."
+    "testCount": 137,
+    "description": "線形部品の固有振動数・振動形状・モード切替・保存を追加。137テストと配信物11項目が成功。公開画面を検証中。振動→音の連成と一般3D流体等は残作業。",
+    "descriptionEn": "Added linear structural natural frequencies, mode shapes, mode selection and archives. 137 tests and eleven distribution checks pass; public UI verification in progress. Vibration-to-sound coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -627,7 +628,11 @@
       "acceptance": "複素振幅・位相・法線速度と参照解を検証。",
       "titleEn": "Couple structural vibration to acoustics",
       "detailEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
-      "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions."
+      "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
+      "depends": [
+        "MODAL1",
+        "ACOU3"
+      ]
     },
     {
       "id": "COUPLE5",
@@ -853,14 +858,14 @@
       "id": "MODAL1",
       "title": "部品の固有振動数・振動形状",
       "titleEn": "Structural natural frequencies and mode shapes",
-      "status": "building",
+      "status": "checking",
       "category": "連成",
       "detail": "線形Tet4剛性と集中質量の一般化固有値を部分空間逆反復で計算。近接する曲げモード、収束残差、密度・剛性のスケーリングを検証し、モードの3D表示と保存へ接続。",
       "detailEn": "Compute generalized eigenmodes from linear Tet4 stiffness and lumped mass using block inverse iteration. Verify paired bending modes, residuals and stiffness/density scaling; connect mode viewing and archives.",
       "acceptance": "低次モードの固有振動数と3D振動形状を選択し、誤差検査結果と保存から再表示できる。",
       "acceptanceEn": "Select low-order natural frequencies and 3D mode shapes, show verified residuals and restore saved modes.",
-      "evidence": "src/modal-core.js; tests/modal.test.mjs",
-      "dependencies": [
+      "evidence": "src/modal-core.js; tests/modal.test.mjs; docs/modal-analysis.md",
+      "depends": [
         "SOLVER1",
         "MAT2"
       ]
