@@ -1,3 +1,4 @@
+import {frameFromEuler} from './constraints.js';
 import {validateProject,areaOfTriangle} from './regions.js';
 
 // The browser and headless tests use the same commands and validation.
@@ -15,6 +16,7 @@ export function createStudioApi(adapter) {
   function summary(){const p=read();if(!p)return {loaded:false};let area=0,count=0;p.selection.forEach((s,i)=>{for(const t of new Set(s)){area+=areaOfTriangle(p.meshes[i].positions,t);count++;}});return {loaded:true,name:p.name,meshCount:p.meshes.length,selectedTriangles:count,selectedAreaMm2:area,conditionCount:p.conditions.length,material:p.material};}
   return Object.freeze({
     version:1,
+    frameFromEuler,
     getSummary:summary,
     exportProject:()=>current(),
     loadProject(project){const p=clone(project);p.selection??=p.meshes?.map(()=>[]);return write(p,'load');},

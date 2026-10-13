@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:52:05.768Z",
+  "updatedAt": "2026-10-13T09:02:09.122Z",
   "release": {
-    "version": "v0.6",
+    "version": "v0.7",
     "date": "2026-10-13",
-    "description": "圧力・法線表面荷重・重力を追加。曲面の圧力合力と再メッシュ後の体積荷重・反力を検証。構造・熱・音響の試作版、自動テスト40件。流体・非線形等は未実装。",
-    "descriptionEn": "Adds pressure, normal traction and gravity. Validated curved pressure resultants and remeshed body forces/reactions. Structural/thermal/acoustic prototype with 40 tests; fluid and nonlinear analyses remain unimplemented."
+    "description": "方向別拘束・指定変位・回転した局所座標と領域別の節点反力を追加。構造・熱・音響の試作版、自動テスト43件。流体・非線形等は未実装。",
+    "descriptionEn": "Adds directional constraints, prescribed displacement, rotated local coordinates and region nodal reactions. Structural/thermal/acoustic prototype with43 tests; fluid and nonlinear analyses remain unimplemented."
   },
   "tasks": [
     {
@@ -388,14 +388,14 @@
       "id": "BC2",
       "title": "方向別拘束・指定変位を設定",
       "category": "構造",
-      "status": "ready",
+      "status": "released",
       "detail": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "titleEn": "Set directional constraints and prescribed displacement",
       "detailEn": "Persist constraints including local coordinates and units; verify solver conversion.",
       "acceptanceEn": "Persist constraints including local coordinates and units; verify solver conversion.",
-      "lastUpdate": "方向別拘束・指定変位・局所軸回転をUI/APIに接続。43件のテストで軸変形・反力・回転不変性・WASM一致・拘束の矛盾を確認。Pages検証待ち。",
-      "lastUpdateEn": "Connected directional supports, prescribed displacement and rotated local axes to UI/API. 43 tests verify axial strain/reactions, rotation invariance, WASM agreement and conflicts. Pages validation pending.",
+      "lastUpdate": "Pagesで局所X（全体Z）の0.04 mmと再メッシュ後の反力±100 Nを確認。全体Zの0.02 mmでは±50 N。矛盾した指定変位の日本語診断と、回転不変性・WASM一致・保存復元を検証。43件合格。",
+      "lastUpdateEn": "Pages verified0.04 mm in local X/global Z and±100 N after remeshing; global Z0.02 mm gives±50 N. Verified conflict diagnosis, rotational invariance, WASM agreement and persistence;43 tests pass.",
       "evidence": "tests/constraints.test.mjs"
     },
     {
