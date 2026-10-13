@@ -107,3 +107,5 @@ API: `studioApi.addCondition({type:'displacement',value:0.04,direction:[0,0,1]})
 API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', flowAxis, pressureDropPa, dynamicViscosity, fluidDensity, fluidSoundSpeed})`、`analysisApi.analyze()`。Nodeでは `solveChannelFlow(mesh,source,study,options)` を直接実行できます。結果のvelocityは節点XYZのm/s、speedはm/s、pressureはPa、入口出口流量はm³/sです。測定・ケース保存・比較・保存結果表示にも対応します。
 
 参考: [COMSOLの円管圧損の解説](https://www.comsol.com/blogs/creating-app-modeling-flow-control-pipe-network)。
+
+接触界面の座標をAPIで測定する場合は analysisApi.probe(point,{bodyIndex:0}) のように部品を指定します。複数の部品に属する点で部品指定がない場合は、曖昧な値を返さず拒否します。画面では選択した面の部品を追跡し、測定に部品番号を表示します。

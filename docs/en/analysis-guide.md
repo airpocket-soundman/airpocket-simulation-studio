@@ -107,3 +107,5 @@ Fluid density, dynamic viscosity and sound speed are separate from solid materia
 API: `analysisApi.loadFlowExample()`, `studioApi.setStudy({kind:'channelFlow', flowAxis, pressureDropPa, dynamicViscosity, fluidDensity, fluidSoundSpeed})`, `analysisApi.analyze()`. Node calls `solveChannelFlow(mesh,source,study,options)` directly. Velocity is node XYZ in m/s, speed in m/s, pressure in Pa and end fluxes in m³/s. Probes, archived cases, comparisons and saved views are supported.
 
 Reference: [COMSOL round-pipe pressure-drop explanation](https://www.comsol.com/blogs/creating-app-modeling-flow-control-pipe-network).
+
+For API probes on contact interfaces, specify the part, e.g. analysisApi.probe(point,{bodyIndex:0}). A point belonging to multiple bodies without an explicit part is rejected instead of returning an ambiguous value. UI probes track the picked face body in both setup and result views and report its index.

@@ -1,6 +1,8 @@
+import {validateComputeMetadata} from './cases.js';
 import {inspectMesh} from './mesh-core.js';
 export function prepareCaseView(saved){
  const output=structuredClone(saved?.output),mesh=output?.mesh,r=output?.result;
+ validateComputeMetadata(r);
  if(!mesh||!r||!Array.isArray(mesh.tetrahedra)||mesh.tetrahedra.length>30000||!Array.isArray(mesh.nodes)||mesh.nodes.length>360000)throw Error('Invalid saved result mesh');
  mesh.summary=inspectMesh(mesh);const n=mesh.summary.nodeCount,e=mesh.summary.elementCount;
  if(!Array.isArray(mesh.surface)||!mesh.surface.length||mesh.surface.length>120000||mesh.surface.some(f=>!Array.isArray(f.nodes)||f.nodes.length!==3||new Set(f.nodes).size!==3||!f.nodes.every(i=>Number.isInteger(i)&&i>=0&&i<n)))throw Error('Invalid saved result surface');

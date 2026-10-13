@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T12:41:37.655Z",
+  "updatedAt": "2026-10-13T13:37:22.199005+00:00",
   "release": {
-    "version": "v0.18",
+    "version": "v0.19",
     "date": "2026-10-13",
-    "description": "外部流体領域をCAD差分で作成し、実体積メッシュを生成。密閉空洞の除外、元CADの保存復元、断面の内側面選択を検証。98テスト。解析分野ごとに設定欄を整理。一般3D流れのソルバー・内部流路の自動抽出は未対応。",
-    "descriptionEn": "Exterior fluid domain via CAD subtraction and actual volume meshing. Verified sealed-cavity exclusion, original CAD persistence and inner-face selection through clipping. 98 tests. Discipline-specific setup controls. General 3D flow solving and automatic internal passage extraction remain unsupported."
+    "description": "線形構造のWebGPU計算とWASM CPU精度補正、CPU切替を追加。実Intel GPUで荷重・指定変位・適応3段階と保存表示を検証。103自動テスト。小モデルはCPUの方が速く、既定はCPU。熱・音響・流体のGPU経路は未対応。",
+    "descriptionEn": "Linear structural WebGPU compute with WASM CPU correction and fallback. Actual Intel GPU verified loads, prescribed displacement, three-stage adaptation and saved views. 103 tests. CPU is faster for the tested small model and remains default. Thermal/acoustic/fluid GPU paths remain unsupported."
   },
   "tasks": [
     {
@@ -132,15 +132,15 @@
       "category": "構造",
       "detail": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
       "depends": [
-        "MESH1",
-        "WASM1"
+        "CAD1",
+        "API1"
       ],
       "acceptance": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
       "titleEn": "Calculate displacement and stress",
       "detailEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
       "acceptanceEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
-      "lastUpdate": "Pagesで軸引張0.04 mm・反力100 Nを確認。片持ち梁の参照変位とメッシュ収束は自動テストで確認。",
-      "lastUpdateEn": "Pages axial bar gives 0.04 mm and balances 100 N; automated tests validate cantilever reference and refinement.",
+      "lastUpdate": "Airpocket線形Tet4の体積メッシュ・剛性・拘束・荷重を実装済み。厳密CAD境界（MESH1）と別OSS移植（WASM1）は拡張の残作業で、この実装の前提ではありません。",
+      "lastUpdateEn": "Airpocket linear Tet4 volume meshes, stiffness, constraints and loads are implemented. Exact CAD boundaries (MESH1) and separate native OSS ports (WASM1) are outstanding extensions, not prerequisites of this implemented backend.",
       "evidence": "tests/bending.test.mjs"
     },
     {
@@ -216,18 +216,20 @@
     },
     {
       "id": "GPU1",
-      "title": "WebGPUで計算を高速化",
-      "status": "building",
+      "title": "WebGPU計算とCPU切替を追加",
+      "status": "released",
       "category": "共通",
       "detail": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。",
       "depends": [
         "FEM1"
       ],
       "acceptance": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。",
-      "titleEn": "Accelerate calculations with WebGPU",
+      "titleEn": "Add WebGPU computation with CPU fallback",
       "detailEn": "Add after the CPU baseline works; validate precision, convergence and browser support with CPU fallback.",
       "acceptanceEn": "Add after the CPU baseline works; validate precision, convergence and browser support with CPU fallback.",
-      "lastUpdate": "WebGPUの利用環境と計算経路を調査。CPUへのフォールバックと精度検証を実装予定"
+      "lastUpdate": "実GPUで疎行列積、CPU倍精度補正と残差検証を確認。圧力重力0.040008 mm/100.04 N、局所指定変位±100 N、3段階適応。103テスト。小例GPU724ms対CPU49msで加速保証なし。構造の試験版のみ。",
+      "lastUpdateEn": "Actual GPU sparse matvec, float64 CPU correction and residual checks verified. Pressure/gravity 0.040008 mm/100.04 N, local prescribed ±100 N and three-stage adaptation. 103 tests. Small example GPU724ms vs CPU49ms, no speedup guarantee. Experimental linear structural scope only.",
+      "evidence": "tests/gpu-core.test.mjs, tests/worker-pipeline.test.mjs, tests/cases.test.mjs"
     },
     {
       "id": "COUPLE1",
@@ -666,8 +668,8 @@
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "98自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
-      "lastUpdateEn": "98 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
+      "lastUpdate": "103自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
+      "lastUpdateEn": "103 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
       "evidence": "tests/worker-pipeline.test.mjs"
     },
     {
@@ -865,9 +867,9 @@
       "WASM実行確認済み"
     ],
     [
-      "Airpocket Tet4 / Heat Tet4 / Acoustic Tet4",
-      "線形構造・熱伝導・周波数音響 / Linear structure, conduction & frequency acoustics",
-      "CPU/WASM · Pages検証済み / Verified on Pages"
+      "Airpocket Tet4 / Heat Tet4 / Acoustic Tet4 / Channel",
+      "線形構造・熱・周波数音響・十分発達した層流",
+      "CPU/WASM実装。構造のWebGPU + CPU補正は試験版"
     ]
   ]
 }

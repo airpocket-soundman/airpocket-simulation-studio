@@ -1,0 +1,19 @@
+export function packCsr(entries,n){
+ if(!Number.isInteger(n)||n<1||n>360000||!Array.isArray(entries))throw Error('Invalid GPU matrix size');const offsets=new Uint32Array(n+1);let count=0;
+ for(const {ids,k}of entries){if(!Array.isArray(ids)||!ids.length||!ids.every(i=>Number.isInteger(i)&&i>=0&&i<n)||k?.length!==ids.length**2||!Array.from(k).every(Number.isFinite))throw Error('Invalid GPU matrix entries');for(let i=0;i<ids.length;i++)for(let j=0;j<ids.length;j++)if(k[i*ids.length+j]!==0){offsets[ids[i]+1]++;if(++count>16000000)throw Error('GPU matrix memory limit exceeded');}}
+ for(let i=1;i<=n;i++)offsets[i]+=offsets[i-1];const cursor=offsets.slice(0,n),cols=new Uint32Array(Math.max(count,1)),values=new Float32Array(Math.max(count,1));for(const {ids,k}of entries)for(let i=0;i<ids.length;i++)for(let j=0;j<ids.length;j++){const v=k[i*ids.length+j];if(v!==0){const at=cursor[ids[i]]++;cols[at]=ids[j];values[at]=v;if(!Number.isFinite(values[at]))throw Error('GPU coefficient exceeds float32 range');}}return {n,count,offsets,cols,values};
+}
+const shader=`struct Settings { n: u32, padding0: u32, padding1: u32, padding2: u32 }
+@group(0) @binding(0) var<storage,read> offsets: array<u32>;
+@group(0) @binding(1) var<storage,read> cols: array<u32>;
+@group(0) @binding(2) var<storage,read> vals: array<f32>;
+@group(0) @binding(3) var<storage,read> x: array<f32>;
+@group(0) @binding(4) var<storage,read_write> y: array<f32>;
+@group(0) @binding(5) var<uniform> settings: Settings;
+@compute @workgroup_size(64) fn main(@builtin(global_invocation_id) gid: vec3<u32>) {let row=gid.x;if(row>=settings.n){return;}var sum=0.0;for(var i=offsets[row];i<offsets[row+1u];i=i+1u){sum=sum+vals[i]*x[cols[i]];}y[row]=sum;}`;
+export async function createGpuMatvec(device,matrix){const buffers=[];let destroyed=false;
+ function make(size,usage,data){if(size>device.limits.maxBufferSize||((usage&GPUBufferUsage.STORAGE)&&size>device.limits.maxStorageBufferBindingSize))throw Error('GPU buffer limit exceeded');const b=device.createBuffer({size:Math.max(size,4),usage});buffers.push(b);if(data)device.queue.writeBuffer(b,0,data);return b;}
+ try{const module=device.createShaderModule({code:shader}),pipeline=await device.createComputePipelineAsync({layout:'auto',compute:{module,entryPoint:'main'}}),a=make(matrix.offsets.byteLength,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST,matrix.offsets),b=make(matrix.cols.byteLength,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST,matrix.cols),c=make(matrix.values.byteLength,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST,matrix.values),input=make(matrix.n*4,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST),output=make(matrix.n*4,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_SRC),settings=make(16,GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST,new Uint32Array([matrix.n,0,0,0])),readback=make(matrix.n*4,GPUBufferUsage.MAP_READ|GPUBufferUsage.COPY_DST),group=device.createBindGroup({layout:pipeline.getBindGroupLayout(0),entries:[a,b,c,input,output,settings].map((buffer,binding)=>({binding,resource:{buffer}}))});
+ return {async apply(vector){if(destroyed||vector.length!==matrix.n)throw Error('Invalid GPU vector');const x=Float32Array.from(vector);if(!x.every(Number.isFinite))throw Error('GPU vector exceeds float32 range');device.queue.writeBuffer(input,0,x);const encoder=device.createCommandEncoder(),pass=encoder.beginComputePass();pass.setPipeline(pipeline);pass.setBindGroup(0,group);pass.dispatchWorkgroups(Math.ceil(matrix.n/64));pass.end();encoder.copyBufferToBuffer(output,0,readback,0,matrix.n*4);device.queue.submit([encoder.finish()]);await readback.mapAsync(GPUMapMode.READ);let values;try{values=Float64Array.from(new Float32Array(readback.getMappedRange()));}finally{readback.unmap();}if(!values.every(Number.isFinite))throw Error('GPU matvec produced nonfinite values');return values;},destroy(){destroyed=true;buffers.forEach(b=>b.destroy());}};
+ }catch(e){buffers.forEach(b=>b.destroy());throw e;}
+}
