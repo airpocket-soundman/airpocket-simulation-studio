@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:36:37.162Z",
+  "updatedAt": "2026-10-13T07:39:09.043Z",
   "release": {
-    "version": "v0.3",
+    "version": "v0.4",
     "date": "2026-10-13",
-    "description": "体積メッシュ、線形構造、熱伝導、局所細分化に加え、周波数音響・スイープ・測定点を実装。流体・非線形・破壊・吸音境界は未実装。",
-    "descriptionEn": "Volume meshing, linear structure, heat conduction, local refinement, frequency acoustics, sweeps and probes. Fluid, nonlinear behavior, failure and absorbing boundaries remain unimplemented."
+    "description": "構造・熱・音響に加え、対流放熱と合計熱入力、温度未固定の非定常熱解析に対応。流体・非線形・破壊・吸音・熱放射は未実装。",
+    "descriptionEn": "Adds convection, total heat input and unconstrained transient heat to structural, thermal and acoustic analysis. Fluid, nonlinear behavior, failure, absorption and thermal radiation remain unimplemented."
   },
   "tasks": [
     {
@@ -176,15 +176,15 @@
     {
       "id": "HEAT1",
       "title": "熱伝導と温度変化を計算",
-      "status": "ready",
+      "status": "released",
       "category": "熱",
       "detail": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
       "acceptance": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
       "titleEn": "Calculate conduction and temperature changes",
       "detailEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance.",
       "acceptanceEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance.",
-      "lastUpdate": "対流放熱・合計熱入力・温度未固定の熱過渡を実装。32件のテストに合格し、画面で先端46.667 °Cと熱収支を確認。Pages確認待ち。",
-      "lastUpdateEn": "Implemented convection, total heat input and unconstrained transient heat. 32 tests pass; UI tip 46.667 °C and balance verified. Pages verification pending.",
+      "lastUpdate": "Pagesで先端46.667 °C、放熱0.266667 W、熱収支誤差4.21e-12 Wを確認。32件の自動テストで定常・非定常・合計熱入力・WASM一致を検証。",
+      "lastUpdateEn": "Pages verified tip46.667 °C, cooling0.266667 W and balance error4.21e-12 W. 32 tests cover steady/transient heat, total heat and WASM agreement.",
       "evidence": "tests/thermal.test.mjs"
     },
     {
@@ -448,14 +448,14 @@
       "id": "THERMBC1",
       "title": "温度・発熱・対流境界を指定",
       "category": "熱",
-      "status": "ready",
+      "status": "released",
       "detail": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "titleEn": "Set temperatures, sources and convection",
       "detailEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
       "acceptanceEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
-      "lastUpdate": "対流放熱・合計熱入力・温度未固定の熱過渡を実装。32件のテストに合格し、画面で先端46.667 °Cと熱収支を確認。Pages確認待ち。",
-      "lastUpdateEn": "Implemented convection, total heat input and unconstrained transient heat. 32 tests pass; UI tip 46.667 °C and balance verified. Pages verification pending.",
+      "lastUpdate": "Pagesで先端46.667 °C、放熱0.266667 W、熱収支誤差4.21e-12 Wを確認。32件の自動テストで定常・非定常・合計熱入力・WASM一致を検証。",
+      "lastUpdateEn": "Pages verified tip46.667 °C, cooling0.266667 W and balance error4.21e-12 W. 32 tests cover steady/transient heat, total heat and WASM agreement.",
       "evidence": "tests/thermal.test.mjs"
     },
     {
