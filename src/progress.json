@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T06:13:38.836Z",
+  "updatedAt": "2026-10-13T06:38:41.155Z",
   "release": {
     "version": "v0.1",
     "date": "2026-10-13",
@@ -82,7 +82,7 @@
     {
       "id": "MESH1",
       "title": "ブラウザで体積メッシュを生成",
-      "status": "queued",
+      "status": "checking",
       "category": "構造",
       "detail": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
       "depends": [
@@ -92,35 +92,42 @@
       "titleEn": "Generate a volume mesh in the browser",
       "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
       "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
-      "lastUpdate": "Gmsh WASM 0.3.0の候補とブラウザ条件を調査。未導入。",
-      "lastUpdateEn": "Investigated Gmsh WASM 0.3.0 and browser requirements; not integrated."
+      "lastUpdate": "Gmsh WASMでSTEP・組込み形状の体積メッシュを実装。Pages検証前。",
+      "lastUpdateEn": "Implemented volume meshing for STEP and built-in solids; Pages validation pending.",
+      "evidence": "src/mesh-core.js"
     },
     {
       "id": "REG2",
       "title": "選択領域をCADと解析メッシュに反映",
-      "status": "queued",
+      "status": "checking",
       "category": "3D",
       "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
       "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
       "titleEn": "Transfer regions to CAD and analysis meshes",
       "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
-      "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing."
+      "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
+      "lastUpdate": "投影近似と15%の面積誤差上限を実装。寸法領域・CAD面分割は未対応。",
+      "lastUpdateEn": "Implemented projection transfer with a 15% area-error limit. Dimensional regions/CAD splitting remain pending.",
+      "evidence": "src/boundaries.js"
     },
     {
       "id": "WASM1",
       "title": "構造ソルバーのWASM移植を検証",
-      "status": "queued",
+      "status": "checking",
       "category": "構造",
       "detail": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "titleEn": "Validate a structural solver WASM port",
       "detailEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
-      "acceptanceEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet."
+      "acceptanceEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
+      "lastUpdate": "独自Tet4エンジンのWASM行列演算を実装。CalculiX等の移植は未完了。",
+      "lastUpdateEn": "Implemented WASM matrix operations for a new Tet4 engine; native solver ports remain incomplete.",
+      "evidence": "src/fem-kernel.wat"
     },
     {
       "id": "FEM1",
       "title": "固定と荷重から変形・応力を計算",
-      "status": "queued",
+      "status": "checking",
       "category": "構造",
       "detail": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
       "depends": [
@@ -130,7 +137,10 @@
       "acceptance": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
       "titleEn": "Calculate displacement and stress",
       "detailEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
-      "acceptanceEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence."
+      "acceptanceEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
+      "lastUpdate": "軸引張と片持ち梁の参照解・反力・細分化を検証。ブラウザ試作を接続。",
+      "lastUpdateEn": "Validated axial tension, cantilever refinement and reactions; browser prototype connected.",
+      "evidence": "tests/elastic.test.mjs"
     },
     {
       "id": "MAT1",
@@ -165,13 +175,16 @@
     {
       "id": "HEAT1",
       "title": "熱伝導と温度変化を計算",
-      "status": "queued",
+      "status": "checking",
       "category": "熱",
       "detail": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
       "acceptance": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
       "titleEn": "Calculate conduction and temperature changes",
       "detailEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance.",
-      "acceptanceEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance."
+      "acceptanceEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance.",
+      "lastUpdate": "定常・非定常の四面体熱伝導を実装。参照温度・熱流束・エネルギー収支を確認。対流は未対応。",
+      "lastUpdateEn": "Implemented steady/transient tetrahedral conduction; reference temperature, flux and balance verified. Convection remains pending.",
+      "evidence": "src/thermal-core.js"
     },
     {
       "id": "ACOU1",
@@ -318,12 +331,15 @@
       "id": "CAD2",
       "title": "元のCADデータをプロジェクトに保持",
       "category": "3D",
-      "status": "queued",
+      "status": "checking",
       "detail": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "titleEn": "Preserve original CAD in projects",
       "detailEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
-      "acceptanceEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear."
+      "acceptanceEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
+      "lastUpdate": "元のSTEPをプロジェクトに保存し再メッシュ可能。CAD更新への面参照の再照合は未対応。",
+      "lastUpdateEn": "Retain original STEP for remeshing; face-reference reconciliation after CAD changes remains pending.",
+      "evidence": "src/regions.js"
     },
     {
       "id": "CAD3",
@@ -340,23 +356,29 @@
       "id": "MESH2",
       "title": "品質と局所細分化を表示",
       "category": "構造",
-      "status": "queued",
+      "status": "checking",
       "detail": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
       "titleEn": "Show quality and local refinement",
       "detailEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
-      "acceptanceEn": "Inspect volume mesh quality/degeneracy and refine selected regions."
+      "acceptanceEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
+      "lastUpdate": "体積・minSICN品質・内部要素表示と局所サイズ場を実装。",
+      "lastUpdateEn": "Implemented volume/quality inspection, internal mesh display and local size fields.",
+      "evidence": "src/mesh-core.js"
     },
     {
       "id": "MESH3",
       "title": "メッシュ収束を比較",
       "category": "検証",
-      "status": "queued",
+      "status": "checking",
       "detail": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "titleEn": "Compare mesh convergence",
       "detailEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
-      "acceptanceEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities."
+      "acceptanceEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
+      "lastUpdate": "反復ごとの要素数・変位変化・応力変動を保持。曲げ参照例で細分化を検証。",
+      "lastUpdateEn": "Record iteration element counts, displacement changes and stress variation; bending refinement tested.",
+      "evidence": "tests/bending.test.mjs"
     },
     {
       "id": "BC2",
@@ -384,23 +406,29 @@
       "id": "RUN1",
       "title": "計算を中止し失敗理由を表示",
       "category": "共通",
-      "status": "queued",
+      "status": "checking",
       "detail": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
       "titleEn": "Cancel calculations and explain failures",
       "detailEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
-      "acceptanceEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence."
+      "acceptanceEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
+      "lastUpdate": "Worker中止・120秒上限・入力変更・未収束・要素数制限を実装。",
+      "lastUpdateEn": "Implemented cancellation, 120 second limit, stale-input detection, nonconvergence and element limits.",
+      "evidence": "src/analysis-client.js"
     },
     {
       "id": "RESULT1",
       "title": "変位・応力の結果を表示",
       "category": "構造",
-      "status": "queued",
+      "status": "checking",
       "detail": "変形倍率、凡例、単位、最大値、プローブを確認。",
       "acceptance": "変形倍率、凡例、単位、最大値、プローブを確認。",
       "titleEn": "Display displacement and stress results",
       "detailEn": "Verify deformation scale, legends, units, maxima and point probes.",
-      "acceptanceEn": "Verify deformation scale, legends, units, maxima and point probes."
+      "acceptanceEn": "Verify deformation scale, legends, units, maxima and point probes.",
+      "lastUpdate": "変位・応力・温度・熱流束のカラーマップ、変形倍率、反力、凡例を実装。プローブは未対応。",
+      "lastUpdateEn": "Implemented deformation/stress/temperature/flux maps, scales, reactions and legends; probes remain pending.",
+      "evidence": "src/main.js"
     },
     {
       "id": "RESULT2",
@@ -417,12 +445,15 @@
       "id": "THERMBC1",
       "title": "温度・発熱・対流境界を指定",
       "category": "熱",
-      "status": "queued",
+      "status": "checking",
       "detail": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "titleEn": "Set temperatures, sources and convection",
       "detailEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
-      "acceptanceEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources."
+      "acceptanceEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
+      "lastUpdate": "温度・表面熱流束・体積発熱を設定可能。対流・合計発熱は未対応。",
+      "lastUpdateEn": "Temperature, surface heat flux and volumetric sources implemented. Convection/total-power input remain pending.",
+      "evidence": "src/main.js"
     },
     {
       "id": "HEAT2",
@@ -622,10 +653,13 @@
         "MESH2"
       ],
       "optional": false,
-      "status": "queued",
+      "status": "checking",
       "titleEn": "Refine locally using simulation results",
       "detailEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions.",
-      "acceptanceEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions."
+      "acceptanceEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions.",
+      "lastUpdate": "応力変動・ひずみ・変位に応じて局所細分化。実メッシュ再生成を検証。",
+      "lastUpdateEn": "Refinement driven by stress variation, strain and displacement; real mesh regeneration tested.",
+      "evidence": "src/adaptive.js"
     },
     {
       "id": "ADAPT2",
@@ -638,10 +672,13 @@
         "MESH3"
       ],
       "optional": false,
-      "status": "queued",
+      "status": "checking",
       "titleEn": "Repeat remeshing and solving until convergence",
       "detailEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
-      "acceptanceEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities."
+      "acceptanceEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
+      "lastUpdate": "再メッシュ・領域再転送・再解析のループと上限停止を実装。公開確認前。",
+      "lastUpdateEn": "Implemented remeshing, region transfer, solving and stopping limits; deployment check pending.",
+      "evidence": "tests/adaptive.test.mjs"
     },
     {
       "id": "I18N1",
@@ -746,12 +783,17 @@
     [
       "Gmsh",
       "メッシュ生成",
-      "ブラウザ実行未検証"
+      "WASM · 体積生成実装 / Volume meshing implemented"
     ],
     [
       "occt-import-js",
       "STEP読込 / CAD表示",
       "WASM実行確認済み"
+    ],
+    [
+      "Airpocket Tet4 / Heat Tet4",
+      "線形構造・熱伝導 / Linear structure & conduction",
+      "CPU/WASM · 公開検証中"
     ]
   ]
 }
