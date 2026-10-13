@@ -2,7 +2,7 @@
 
 [日本語](../stokes-flow.md)
 
-v0.37 implements CPU velocity–pressure coupling, shared APIs, the worker, probes and saved-result consistency checks; verification is in progress. This guide records the limited prototype scope and individual measured test results. Final deployed execution/UI verification is pending, and these results do not certify accuracy for arbitrary geometry.
+v0.37 implements CPU velocity–pressure coupling, shared APIs, the worker, probes and saved-result consistency checks. All 209 source tests, 21 public runtime checks and 22 public browser checks passed. This guide records a limited prototype and individual measured results; it does not certify arbitrary-geometry accuracy.
 
 The implementation solves steady incompressible 3D viscous flow of a Newtonian fluid around a fixed CAD solid inside a finite outer box. All outer faces receive the same velocity vector; the solid surface has zero-velocity no-slip conditions. One pressure node fixes the additive pressure constant. This velocity–pressure problem is distinct from the existing fully developed channel model.
 

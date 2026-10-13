@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T22:52:43.582010+00:00",
+  "updatedAt": "2026-10-13T23:05:10.796648+00:00",
   "release": {
-    "version": "v0.36",
+    "version": "v0.37",
     "date": "2026-10-14",
-    "testCount": 193,
-    "description": "単軸比例弾性載荷のS-N疲労評価、Goodman平均応力補正とMiner損傷、評価と試験データの保存整合を追加。193テスト、公開配信物20項目、v0.36公開画面20項目が成功。塑性疲労・多軸疲労・き裂進展は残作業。",
-    "descriptionEn": "Added uniaxial proportional elastic S-N fatigue, Goodman correction, Miner damage and archived assessment/data consistency. Verified 193 source tests, twenty deployed runtime checks and twenty v0.36 public browser checks. Plastic/multiaxial fatigue and crack growth remain outstanding."
+    "testCount": 209,
+    "description": "外部箱の3D Stokes流、PNG/WebMと4種類のアニメーション、ローカルMCP5ツールと専用skillを追加。209テスト・公開配信物21項目・公開画面22項目が成功。StokesはRe<=0.1のP1/P1安定化試作。P2統合と一般流体は残作業。",
+    "descriptionEn": "Added finite-box 3D Stokes flow, PNG/WebM with four animation types, five local MCP tools and a dedicated skill. Passed 209 source tests, twenty-one public runtime checks and twenty-two public browser checks. Stokes is a stabilized P1/P1 prototype at Re<=0.1; P2 integration and general flow remain outstanding."
   },
   "tasks": [
     {
@@ -1007,10 +1007,10 @@
       "id": "STOKES1",
       "title": "外部領域の3D低速粘性流を計算",
       "titleEn": "Compute three-dimensional creeping flow around solids",
-      "status": "checking",
+      "status": "released",
       "category": "流体",
-      "detail": "外部箱内の3D Stokes流をCPU GMRESで実装。Re<=0.1、速度・圧力・反力抗力・保存・点測定と日英UIを検証中。一般Navier–Stokes流は未対応。",
-      "detailEn": "Implemented finite-box 3D Stokes flow with CPU GMRES at Re<=0.1. Checking velocity, pressure, reaction drag, archives, probes and JP/EN UI. General Navier–Stokes flow remains unsupported.",
+      "detail": "外部箱のP1/P1安定化Stokes流、速度・圧力・反力抗力・保存・点測定と日英UIを公開確認。209テスト・公開配信物21項目・画面22項目が成功。Re<=0.1、最大2000節点・8000四面体。",
+      "detailEn": "Publicly verified finite-box stabilized P1/P1 Stokes velocity/pressure, reaction drag, archives, probes and JP/EN UI. Passed 209 tests, 21 public runtime and 22 public browser checks. Re<=0.1; 2000-node/8000-tetrahedron limit.",
       "acceptance": "混合速度圧力解の参照解・抗力・質量診断・JS/WASM・保存・日英UIと非対応領域の拒否を検証。",
       "acceptanceEn": "Verify mixed velocity-pressure references, drag, mass diagnostics, JS/WASM, archives, JP/EN UI and unsupported-domain refusal.",
       "depends": [
@@ -1023,9 +1023,9 @@
       "title": "画像と4種類のアニメーションを保存",
       "titleEn": "Export images and four animation types",
       "category": "共通",
-      "status": "checking",
-      "detail": "表面・内部メッシュ・断面をPNG/WebMへ出力。回転・変形往復・過渡音響・断面移動と表示復元を確認中。",
-      "detailEn": "Export surfaces, internal mesh and sections to PNG/WebM; checking orbit, deformation, transient acoustic frames, moving sections and restoration.",
+      "status": "released",
+      "detail": "PNG/WebM保存と回転・変形往復・過渡音響・断面移動、表示復元と非対応結果の拒否を公開画面で確認。メッシュ・表面・断面を出力。",
+      "detailEn": "Public browser verifies PNG/WebM, orbit/deformation/transient/slice animation, restoration and unsupported-result refusal. Exports include mesh, surfaces and sections.",
       "acceptance": "実ブラウザでPNGとWebM保存、4種類の再生、設定復元、非対応結果の拒否、日英を検証。",
       "acceptanceEn": "Verify PNG/WebM in the browser, four playback types, restored settings, unsupported-result refusal and JP/EN.",
       "evidence": "src/visual-export.js; docs/visual-export.md"
@@ -1035,12 +1035,27 @@
       "title": "MCPと専用skillから保存解析を操作",
       "titleEn": "Operate saved analyses through MCP and a dedicated skill",
       "category": "共通",
-      "status": "checking",
-      "detail": "ローカル標準入出力の5ツール。共通CPU Workerで解析し、保存入力・ケース・点測定を検証。専用skillを作成。",
-      "detailEn": "Five local stdio tools use the shared CPU Worker for analysis, project/case validation and probes, with a dedicated skill.",
+      "status": "released",
+      "detail": "ローカル標準入出力の5ツールと専用skillを作成・登録。実CPU Workerの0.04 mm参照変位・点測定、初期化とツール一覧、既存出力拒否を検証。クリーンCIでも209件成功。",
+      "detailEn": "Created and registered five local stdio tools and a dedicated skill. Verified real CPU Worker 0.04 mm displacement/probes, initialization/listing and existing-output refusal. All 209 tests pass in clean CI.",
       "acceptance": "MCP初期化・ツール一覧・実Worker参照変位と点測定・既存出力拒否・skill検証を確認。",
       "acceptanceEn": "Verify MCP initialization/listing, real Worker displacement and probes, existing-output refusal and skill validation.",
       "evidence": "scripts/studio-mcp.mjs; tests/studio-mcp.test.mjs; skills/airpocket-studio/SKILL.md"
+    },
+    {
+      "id": "STOKES2",
+      "title": "二次速度要素のStokes計算を保存・表示へ統合",
+      "titleEn": "Integrate quadratic-velocity Stokes into archives and viewing",
+      "status": "queued",
+      "category": "流体",
+      "depends": [
+        "STOKES1"
+      ],
+      "detail": "単独検証済みP2/P1 Taylor–HoodをWorker・保存結果・点測定・断面へ接続し、独立な場の整合と精度・上限を検証。",
+      "detailEn": "Connect independently tested P2/P1 Taylor–Hood to Worker, archives, probes and sections; verify physical field consistency, accuracy and budgets.",
+      "acceptance": "二次補間、仮想節点と保存整合、球の参照精度、一様外箱、JS/WASM、日英UIを確認。",
+      "acceptanceEn": "Verify quadratic interpolation, virtual-node/archive consistency, sphere references, uniform box, JS/WASM and JP/EN UI.",
+      "evidence": "src/stokes-p2-core.js; tests/stokes-p2.test.mjs"
     }
   ],
   "solvers": [
@@ -1083,6 +1098,11 @@
       "MFEM 4.10",
       "線形構造の独立した剛性組立・CG",
       "WASM移植・倍精度検証済み（構造のみ）"
+    ],
+    [
+      "Airpocket Stokes P1/P1 PSPG",
+      "外部箱の低Reynolds数粘性流 / finite-box creeping flow",
+      "CPU/WASM GMRES · Re<=0.1 · 2000 nodes / 8000 tetrahedra"
     ]
   ]
 }

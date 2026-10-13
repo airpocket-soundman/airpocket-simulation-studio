@@ -39,7 +39,7 @@ Run src/acoustic-sweep.js directly in Node for acoustic sweeps. Use sampleResult
 
 Runtime tests cover cancellation/restart, stale Worker responses, input snapshots, deadlines and resource cleanup after convergence/memory/start failure. Memory exhaustion is injected as a Worker failure rather than exhausting the machine. The real UI verifies cancellation/restart and local meshing.
 
-### 2096-10-13 case regression validation
+### 2026-10-13 case regression validation
 All 48 automated tests pass. Added coverage rejects mismatched disciplines, operations and invalid result ranges atomically; prevents worker leaks with uncloneable options; and freezes nested calculation settings. A real Gmsh mesh and structural solver produce 0.04 mm at E=1 GPa and 0.02 mm at E=2 GPa under 100 N axial loading, both with −100 N reaction. Replaying JSON archived inputs reproduces displacement arrays and reactions exactly. At this stage, public UI/CAD/3D workflow automation was incomplete.
 
 `node --test tests/worker-pipeline.test.mjs` directly executes the canonical analysis.worker.js handler with real Gmsh/WASM, boundary transfer and solvers, covering structural adaptation, radiation, contact and flow in about 2.4 seconds. Node self/fetch adapters do not verify browser worker threads, isolation or 3D controls; those require separate deployed UI checks.
@@ -77,4 +77,6 @@ This recipe verifies the current in-app browser. It does not establish cross-bro
 
 The transient acoustic distribution check verifies arrival time, pressure amplitude and archives using the deployed Worker. Unit tests verify WAV bandwidth filtering and physical duration.
 
-The browser recipe now has 11 checks, including transient traces/time controls/WAV UI, natural modes, saved-mode exterior sound and a large four-case JSON roundtrip. Large open export text is read through scoped DOM values rather than requesting the entire accessibility tree.
+The browser recipe now has 22 checks, including transient traces/time controls/WAV UI, natural modes, saved-mode exterior sound and a large four-case JSON roundtrip. Large open export text is read through scoped DOM values rather than requesting the entire accessibility tree.
+
+The public v0.37 run passed all 22 browser checks, including finite-box Stokes, PNG/WebM and four animation types with restored view settings. MCP tests verify clean CPU Worker execution, protocol initialization/listing and refusal to overwrite saved output.
