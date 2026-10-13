@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T15:06:13.373246+00:00",
+  "updatedAt": "2026-10-13T15:09:14.820726+00:00",
   "release": {
     "version": "v0.21",
     "date": "2026-10-14",
@@ -313,12 +313,14 @@
       "id": "MAT4",
       "title": "ゴムの超弾性パラメータを登録",
       "category": "材料",
-      "status": "queued",
+      "status": "building",
       "detail": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
       "acceptance": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
       "titleEn": "Register hyperelastic rubber parameters",
       "detailEn": "Store constitutive parameters and test curves; verify supported element/solver combinations.",
-      "acceptanceEn": "Store constitutive parameters and test curves; verify supported element/solver combinations."
+      "acceptanceEn": "Store constitutive parameters and test curves; verify supported element/solver combinations.",
+      "lastUpdate": "圧縮性Neo-Hookeanの材料登録、有限ひずみ・整合接線・荷重増分Newton法を実装中。ほぼ非圧縮、接触、座屈は別対応。",
+      "lastUpdateEn": "Implementing compressible Neo-Hookean registration, finite strain, consistent tangent and load-stepped Newton solve. Near-incompressibility, contact and buckling require separate work."
     },
     {
       "id": "REG3",
