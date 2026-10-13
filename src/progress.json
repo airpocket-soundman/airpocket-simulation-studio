@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:18:06.560901+00:00",
+  "updatedAt": "2026-10-13T18:25:13.261814+00:00",
   "release": {
     "version": "v0.26",
     "date": "2026-10-14",
     "testCount": 137,
-    "description": "線形部品の固有振動数・振動形状・モード切替・保存を追加。137テストと配信物11項目が成功。公開画面を検証中。振動→音の連成と一般3D流体等は残作業。",
-    "descriptionEn": "Added linear structural natural frequencies, mode shapes, mode selection and archives. 137 tests and eleven distribution checks pass; public UI verification in progress. Vibration-to-sound coupling and general 3D flow remain outstanding."
+    "description": "線形部品の固有振動数・振動形状・モード切替・保存を追加。137テスト、公開配信物11項目と公開画面で検証済み。振動→音の連成と一般3D流体等は残作業。",
+    "descriptionEn": "Added linear structural natural frequencies, mode shapes, mode selection and archives. 137 tests, eleven deployed-runtime checks and public UI verified. Vibration-to-sound coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -623,11 +623,11 @@
       "id": "COUPLE4",
       "title": "構造振動から音響へ連成",
       "category": "連成",
-      "status": "queued",
-      "detail": "複素振幅・位相・法線速度と参照解を検証。",
+      "status": "building",
+      "detail": "保存した直方体部品のモードに指定振幅・位相を与え、法線速度を球形外部音響へ渡す一方向連成を実装中。管内波動の位相・音圧と入力／放射パワーを検証。一般曲面と双方向連成は別タスク。",
       "acceptance": "複素振幅・位相・法線速度と参照解を検証。",
       "titleEn": "Couple structural vibration to acoustics",
-      "detailEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
+      "detailEn": "Implementing one-way coupling from saved box-solid modes with prescribed amplitude/phase to spherical exterior normal-velocity acoustics. Verify pipe phase/pressure and input/radiated power. General curved and two-way coupling are separate.",
       "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
       "depends": [
         "MODAL1",
@@ -858,10 +858,10 @@
       "id": "MODAL1",
       "title": "部品の固有振動数・振動形状",
       "titleEn": "Structural natural frequencies and mode shapes",
-      "status": "checking",
+      "status": "released",
       "category": "連成",
-      "detail": "線形Tet4剛性と集中質量の一般化固有値を部分空間逆反復で計算。近接する曲げモード、収束残差、密度・剛性のスケーリングを検証し、モードの3D表示と保存へ接続。",
-      "detailEn": "Compute generalized eigenmodes from linear Tet4 stiffness and lumped mass using block inverse iteration. Verify paired bending modes, residuals and stiffness/density scaling; connect mode viewing and archives.",
+      "detail": "集中質量Tet4のブロック逆反復・Rayleigh–Ritz、自由自由度の残差検査、モード切替・保存を実装。片持ち梁の収束、剛性・密度のスケーリング、JS/WASM、公開Workerと画面を検証。",
+      "detailEn": "Implemented lumped Tet4 block inverse iteration/Rayleigh–Ritz, verified free-DOF residuals, mode selection and archives. Verified cantilever refinement, stiffness/density scaling, JS/WASM, deployed Worker and UI.",
       "acceptance": "低次モードの固有振動数と3D振動形状を選択し、誤差検査結果と保存から再表示できる。",
       "acceptanceEn": "Select low-order natural frequencies and 3D mode shapes, show verified residuals and restore saved modes.",
       "evidence": "src/modal-core.js; tests/modal.test.mjs; docs/modal-analysis.md",
@@ -869,6 +869,20 @@
         "SOLVER1",
         "MAT2"
       ]
+    },
+    {
+      "id": "COUPLE4B",
+      "title": "曲面・強制振動・双方向の音響連成",
+      "titleEn": "Curved interfaces, forced vibration and two-way acoustics",
+      "status": "queued",
+      "category": "連成",
+      "depends": [
+        "COUPLE4"
+      ],
+      "detail": "曲面間の保守的な場の転送、荷重に対する周波数応答・減衰、音圧を構造へ戻す作用を実装し、連成参照解で検証。",
+      "detailEn": "Implement conservative curved-interface transfer, forced frequency response/damping and acoustic pressure feedback, and verify coupled references.",
+      "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
+      "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance."
     }
   ],
   "solvers": [
