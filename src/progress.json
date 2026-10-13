@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T15:19:37.290358+00:00",
+  "updatedAt": "2026-10-13T15:25:52.070177+00:00",
   "release": {
     "version": "v0.22",
     "date": "2026-10-14",
@@ -671,14 +671,14 @@
       "id": "QA1",
       "title": "公開環境で回帰検証を実行",
       "category": "検証",
-      "status": "queued",
+      "status": "building",
       "detail": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
       "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "107自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
-      "lastUpdateEn": "107 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
+      "lastUpdate": "公開済みのWorker/WASMを取得し、Node Workerから同じ解析経路を直接動かす高速回帰環境を追加中。CAD・保存・失敗経路と画面操作の確認手順を整備。",
+      "lastUpdateEn": "Adding fast regression against the deployed Worker/WASM through a real Node Worker, plus CAD, archive, failure and browser verification procedures.",
       "evidence": "tests/worker-pipeline.test.mjs"
     },
     {
