@@ -32,6 +32,37 @@ Run src/acoustic-sweep.js directly in Node for acoustic sweeps. Use sampleResult
 Runtime tests cover cancellation/restart, stale Worker responses, input snapshots, deadlines and resource cleanup after convergence/memory/start failure. Memory exhaustion is injected as a Worker failure rather than exhausting the machine. The real UI verifies cancellation/restart and local meshing.
 
 ### 2026-10-13 case regression validation
-All 48 automated tests pass. Added coverage rejects mismatched disciplines, operations and invalid result ranges atomically; prevents worker leaks with uncloneable options; and freezes nested calculation settings. A real Gmsh mesh and structural solver produce 0.04 mm at E=1 GPa and 0.02 mm at E=2 GPa under 100 N axial loading, both with −100 N reaction. Replaying JSON archived inputs reproduces displacement arrays and reactions exactly. QA1 automation of public UI/CAD/3D workflows remains incomplete.
+All 48 automated tests pass. Added coverage rejects mismatched disciplines, operations and invalid result ranges atomically; prevents worker leaks with uncloneable options; and freezes nested calculation settings. A real Gmsh mesh and structural solver produce 0.04 mm at E=1 GPa and 0.02 mm at E=2 GPa under 100 N axial loading, both with −100 N reaction. Replaying JSON archived inputs reproduces displacement arrays and reactions exactly. At this stage, public UI/CAD/3D workflow automation was incomplete.
 
 `node --test tests/worker-pipeline.test.mjs` directly executes the canonical analysis.worker.js handler with real Gmsh/WASM, boundary transfer and solvers, covering structural adaptation, radiation, contact and flow in about 2.4 seconds. Node self/fetch adapters do not verify browser worker threads, isolation or 3D controls; those require separate deployed UI checks.
+
+
+### Verify deployed runtime assets directly (v0.23)
+
+`npm run test:published` downloads the GitHub Pages runtime and executes its deployed analysis/CAD workers and WASM in real Node Workers. This checks distributed bundles separately from source tests. It rejects a deployed commit that differs from local HEAD; run after the latest Pages deployment completes.
+
+Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar channels, insufficient constraints and restart, project/case archives, the deployed STEP reader and STEP volume meshing. The first run fetches about 60 MB uncompressed. Content-addressed caching preserves unchanged WASM across commits. Cached checks took approximately six seconds on this machine.
+
+`runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
+
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 119 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+
+### Browser regression recipe
+
+`scripts/qa-browser.cua.js` uses only documented CUA operations to verify MFEM/rubber references, case text export/import/saved display, JP/EN, STEP face selection, orbit and repeated selection, and project restoration. Use a dedicated scratch tab: the recipe reloads it and replaces its test models/cases. Visible JSON text enables roundtrip testing where ordinary download events cannot be captured.
+
+In a CUA JavaScript session, pass an existing test tab and the generated local reference file. Each `next()` executes one milestone, allowing progress and failures to be inspected. Adapt absolute paths to the local checkout.
+
+```js
+const fs = await import('node:fs/promises');
+const qa = await import('file:///D:/github/airpocket-soundman/airpocket-simulation-studio/scripts/qa-browser.cua.js');
+const run = qa.runStudioBrowserQa(
+  testTab,
+  'D:/github/airpocket-soundman/airpocket-simulation-studio/.qa/published-reference.step',
+  'https://airpocket-soundman.github.io/airpocket-simulation-studio/',
+  {writeText: (path, text) => fs.writeFile(path, text)}
+);
+await run.next(); // Advance one milestone; the final done=true value is the report.
+```
+
+This recipe verifies the current in-app browser. It does not establish cross-browser performance or exhaustive UI coverage; PERF1 tracks separate measurements. It is not a standalone browser-control script for the ordinary Node CLI.

@@ -1,6 +1,8 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ 'プロジェクトをテキストで受け取る':'Get project as text','プロジェクトテキストを表示':'Show project text','プロジェクトのJSONテキスト':'Project JSON text','ケース集をテキストで受け取る':'Get case archive as text','ケース集テキストを表示':'Show case archive text','ケース集のJSONテキスト':'Case archive JSON text','テキストをコピーし、.jsonファイルとして保存して読み込めます。':'Copy the text, save it as a .json file, then import it.',
+
  'ゴム大変形サンプル':'Rubber finite-strain example','圧縮性Neo-Hookeanモデル':'Compressible Neo-Hookean model','超弾性モデルを使う（構造・CPU）':'Use hyperelasticity (structural CPU)','せん断弾性率 μ（MPa）':'Shear modulus μ (MPa)','体積弾性率 K（MPa）':'Bulk modulus K (MPa)','試験曲線（任意、JSON）':'Test curve (optional JSON)',
  '曲線は [伸長比, 公称応力Pa]。登録値の自動フィットは行いません。K/μは2/3〜20。ほぼ非圧縮のゴム、接触、破断、圧力追従荷重は未対応です。':'Curve rows are [stretch, nominal stress Pa]. Parameters are not fitted automatically. K/μ must be 2/3–20. Near-incompressible rubber, contact, failure and follower pressure are unsupported.',
  '非線形構造の反復設定':'Nonlinear structural iteration settings','荷重増分数':'Load increments','増分ごとのNewton反復上限':'Newton iteration limit per increment',

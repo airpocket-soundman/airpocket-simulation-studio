@@ -32,6 +32,37 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 計算の管理テスト: 中止→再実行、旧Worker応答の無視、入力スナップショット、時間上限、未収束・メモリ失敗後の解放を短時間で確認する。実際のメモリ枯渇は発生させず、Worker失敗を注入して処理を確認。実画面では中止と再実行、局所メッシュの生成を確認する。
 
 ### 2026-10-13 ケース回帰検証
-自動テスト48件成功。追加したテストは、不正な解析分野・計算操作・結果範囲を拒否して既存ケースを保持すること、保存できない設定でWorkerを残さないこと、入れ子の実行設定を計算開始時に固定することを確認します。実際のGmshメッシュと構造ソルバーで、100 Nの軸引張に対してE=1 GPaで0.04 mm、E=2 GPaで0.02 mm、どちらも反力−100 Nを確認。JSONケース集の復元後に再計算し、変位配列・反力が元の結果と一致します。公開UI/CAD/3D操作を一括自動化するQA1は未完了です。
+自動テスト48件成功。追加したテストは、不正な解析分野・計算操作・結果範囲を拒否して既存ケースを保持すること、保存できない設定でWorkerを残さないこと、入れ子の実行設定を計算開始時に固定することを確認します。実際のGmshメッシュと構造ソルバーで、100 Nの軸引張に対してE=1 GPaで0.04 mm、E=2 GPaで0.02 mm、どちらも反力−100 Nを確認。JSONケース集の復元後に再計算し、変位配列・反力が元の結果と一致します。この時点では、公開UI/CAD/3D操作の一括検証は未完了でした。
 
 `node --test tests/worker-pipeline.test.mjs` は画面と同じanalysis.worker.jsの処理を直接実行し、実Gmsh/WASM・領域転送・ソルバーまで構造適応/放射/接触/流体を約2.4秒で検証します。Node用のself/fetchアダプターで、ブラウザのWorkerスレッド・COI・3D操作そのものは検証しません。それらは公開画面で別途確認します。
+
+
+### 公開された実行ファイルを直接検証する（v0.23）
+
+`npm run test:published` はGitHub Pagesの実行ファイルをダウンロードし、実際のNode Workerで公開済みの解析WorkerとWASMを実行します。ソース側だけのテストとは別に、配信されたバンドルを検証できます。公開コミットが手元のHEADと異なる場合は失敗するので、Pagesのデプロイ完了後に実行してください。
+
+構造のAirpocket/MFEM、熱放射、有限ひずみゴム、層流流路、拘束不足と再実行、プロジェクト/ケース集の復元、公開CAD WorkerによるSTEP読込みと体積メッシュをチェックします。初回は約60 MB（展開後）の実行ファイルを取得し、以降は内容ハッシュごとにキャッシュします。WASMが変わらなければコミットが変わっても再取得しません。キャッシュ後の検証は今回の環境で約6秒でした。
+
+`runtime-manifest.json` にバージョン、コミット、各ファイルの長さとSHA-256を記録します。検証結果は `.qa/published-report.json`、ブラウザ用の参照形状は `.qa/published-reference.step`。失敗した実行は成功レポートを上書きして失敗を記録します。ソースと比較するためのプロジェクト/ケース検証ヘルパーは手元のコードです。公開Workerの実行ファイルは配信版そのものです。
+
+`npm run build` の後に `npm run test:published -- --local` で生成済みの配信物を確認できます。CIは通常の119テスト、ビルド、この配信物チェックを行い、それらが成功したときにPagesへ公開します。Node用のself/fetch/CADスクリプトアダプターを使用するため、ブラウザのCOI・描画・実GPUの証明には使いません。
+
+### ブラウザの回帰レシピ
+
+`scripts/qa-browser.cua.js` は文書化されたCUA操作だけで、MFEM参照解、ゴム解析、ケース集のテキスト書き出し/再読込/保存結果表示、JP/EN、STEPのCAD面選択、回転後の再選択、プロジェクト復元を検証します。専用の作業用タブを使ってください。開始時にリロードし、そのタブのモデルとケースを置き換えます。通常のダウンロードイベントが取得できない環境でも、画面のJSONテキストを使って復元経路を確認できます。
+
+CUAのJavaScriptセッションで、取得済みのタブとローカル参照ファイルを渡します。`next()`は検証1段階を実行するので、各結果を確認しながら進められます。以下のパスはローカルのリポジトリに合わせます。
+
+```js
+const fs = await import('node:fs/promises');
+const qa = await import('file:///D:/github/airpocket-soundman/airpocket-simulation-studio/scripts/qa-browser.cua.js');
+const run = qa.runStudioBrowserQa(
+  testTab,
+  'D:/github/airpocket-soundman/airpocket-simulation-studio/.qa/published-reference.step',
+  'https://airpocket-soundman.github.io/airpocket-simulation-studio/',
+  {writeText: (path, text) => fs.writeFile(path, text)}
+);
+await run.next(); // 1段階ずつ実行。done=trueのvalueが全体レポート。
+```
+
+このレシピは現在の組み込みブラウザで検証します。複数ブラウザの性能や全てのUI組み合わせを保証するものではなく、PERF1の測定は別に行います。通常のNode CLIからブラウザ操作を行うスクリプトではありません。
