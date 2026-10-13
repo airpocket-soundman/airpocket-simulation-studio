@@ -1,13 +1,15 @@
-# Adaptive meshing and repeated analysis
+# Adaptive meshing and reanalysis
 
 [日本語](../adaptive-meshing.md)
 
-Generate a volume mesh for analysis. Refining display triangles alone does not satisfy this requirement.
+Gmsh volume mesh → structural solve → recovered stress, strain and displacement indicators → local refinement → boundary transfer → reanalysis, for at most five rounds. All completed meshes, boundaries and results are retained without changing materials or loads.
 
-Loop: initial mesh → solve → evaluate error, displacement, strain and stress → refine locally → transfer boundary conditions → solve again → assess convergence.
+Compare the latest two changes across at least three increasingly refined meshes. Default tolerances are 1% displacement and 5% peak von Mises stress. Stop when both are stable and recovered stress variation is below 0.2. This is output stability, not a certified error bound.
 
-Allow displacement magnitude to guide refinement as requested. Also use displacement gradients, strain/stress gradients and residual or recovery-based error estimates: displacement magnitude alone can over-refine rigid motion or smooth bending. Support explicit local sizes around selected regions, contacts and thin features.
+Stop with a suspected singularity if displacement is stable while peak-element cube-root volume decreases by at least 5% twice, stress grows above tolerance twice, and growth does not decay. This cannot mathematically distinguish all singularities from unresolved stress concentrations. Changes in peak location need further examination.
 
-Stop on relative changes in selected outputs, estimated error, iteration/element limits, memory or time limits. Identify singularities where peak stress does not converge. Preserve every mesh, input snapshot, result and convergence history. Do not silently change materials or loads.
+Element and between-stage time limits, or stalled refinement, return the last completed analysis with unconfirmed convergence. An oversized initial mesh fails. Time limits do not interrupt a synchronous mesher or solve immediately; the worker also has a 120-second hard timeout and a cancel button.
 
-Start with refinement only. Add coarsening and mesh optimization after verifying conservation and region boundaries. The result-driven loop requires an integrated solver; this feature is currently planned.
+The UI displays elements, displacement, stress, peak-element size and elapsed time. API options `maxAdaptiveElements`, `maxAdaptiveSeconds`, `tolerance` and `stressTolerance` are retained in saved cases. Coarsening, mechanical contact and certified error estimation remain unsupported.
+
+Reference: [COMSOL mesh refinement guidance](https://www.comsol.com/support/knowledgebase/1261.). Displacement and local stress require separate convergence checks; this app's thresholds are implementation diagnostics.

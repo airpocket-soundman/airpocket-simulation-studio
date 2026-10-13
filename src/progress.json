@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:59:01.200Z",
+  "updatedAt": "2026-10-13T12:04:50.525140+00:00",
   "release": {
-    "version": "v0.15",
+    "version": "v0.16",
     "date": "2026-10-13",
-    "description": "熱放射と平面の接触熱抵抗を実装。界面の温度差を保持する転送・測定に対応。81自動テストと画面で100 °C、0.380952 Wを検証。流体・非線形・部品間放射は未対応。",
-    "descriptionEn": "Thermal radiation and planar contact resistance, including body-aware temperature transfer and probes. 81 tests plus UI references of 100 °C and 0.380952 W. Fluid, nonlinear and inter-part radiation remain outstanding."
+    "description": "適応解析の変位・応力収束診断と特異点の疑い、要素数・時間・停滞停止を追加。3段階の履歴表示と上限のケース保存復元を確認。85テスト。特異点の数学的確定・厳密誤差保証は未対応。",
+    "descriptionEn": "Adaptive displacement/stress trend diagnostics, suspected singularities, element/time/stall stops, three-level history and saved budgets. 85 tests. Mathematical singularity proof and certified error bounds remain unsupported."
   },
   "tasks": [
     {
@@ -383,15 +383,15 @@
       "id": "MESH3",
       "title": "応力特異点とメッシュ収束を判別",
       "category": "検証",
-      "status": "building",
+      "status": "released",
       "detail": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
       "titleEn": "Distinguish stress singularities from mesh convergence",
       "detailEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
       "acceptanceEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
-      "lastUpdate": "変位だけでなく応力とピーク位置の細分化を比較する診断、停滞・時間・要素数の停止判定を実装中",
-      "lastUpdateEn": "Record iteration element counts, displacement changes and stress variation; bending refinement tested. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
-      "evidence": "tests/bending.test.mjs"
+      "lastUpdate": "3解像度の変位・応力とピーク要素サイズの診断、特異点の疑いで停止。要素・時間・停滞で最終完了結果を保持。UIで428→737→1156要素、500上限停止、保存復元を検証。数学的確定・誤差保証は対象外。",
+      "lastUpdateEn": "Three-level displacement/stress/peak-size trends detect suspected singularities. Element/time/stall stops retain completed results. UI verified 428→737→1156 elements, 500-element stop and budget restoration. No mathematical singularity proof or certified error bound.",
+      "evidence": "tests/mesh-convergence.test.mjs, tests/adaptive.test.mjs, tests/cases.test.mjs"
     },
     {
       "id": "BC2",
@@ -705,13 +705,13 @@
         "MESH3"
       ],
       "optional": false,
-      "status": "queued",
+      "status": "released",
       "titleEn": "Stop adaptive loops using singularity detection",
       "detailEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
       "acceptanceEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
-      "lastUpdate": "全反復のメッシュ・境界・結果を保存。Pagesで収束停止を確認。特異点の自動識別と厳密誤差評価は未完了。 完了条件に未実装部分が残るため、確認待ちから残実装の待ち列へ移動。",
-      "lastUpdateEn": "All meshes, boundaries and results retained; Pages convergence stop verified. Automatic singularity detection and rigorous error estimation remain. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
-      "evidence": "tests/adaptive.test.mjs"
+      "lastUpdate": "3解像度の変位・応力とピーク要素サイズの診断、特異点の疑いで停止。要素・時間・停滞で最終完了結果を保持。UIで428→737→1156要素、500上限停止、保存復元を検証。数学的確定・誤差保証は対象外。",
+      "lastUpdateEn": "Three-level displacement/stress/peak-size trends detect suspected singularities. Element/time/stall stops retain completed results. UI verified 428→737→1156 elements, 500-element stop and budget restoration. No mathematical singularity proof or certified error bound.",
+      "evidence": "tests/mesh-convergence.test.mjs, tests/adaptive.test.mjs, tests/cases.test.mjs"
     },
     {
       "id": "I18N1",

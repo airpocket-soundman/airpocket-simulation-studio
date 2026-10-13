@@ -10,3 +10,5 @@ test('corrupt calculation operation, discipline and result ranges cannot replace
   const bad=store.export();change(bad.cases[0].output);assert.throws(()=>store.import(bad));assert.deepEqual(store.export(),before);
  }
 });
+
+test('adaptive budgets roundtrip and invalid imported settings cannot replace cases',()=>{const store=createCaseStore(),o=output();Object.assign(o.calculation.options,{adaptive:true,tolerance:.01,stressTolerance:.05,maxAdaptiveElements:500,maxAdaptiveSeconds:60});store.add('bounded',o);const saved=store.export(),other=createCaseStore();other.import(JSON.parse(JSON.stringify(saved)));assert.deepEqual(other.export(),saved);for(const [key,value]of [['tolerance',0],['stressTolerance',1],['maxAdaptiveElements',30001],['maxAdaptiveElements',1.5],['maxAdaptiveSeconds',111]]){const bad=structuredClone(saved);bad.cases[0].output.calculation.options[key]=value;assert.throws(()=>other.import(bad));assert.deepEqual(other.export(),saved);}});

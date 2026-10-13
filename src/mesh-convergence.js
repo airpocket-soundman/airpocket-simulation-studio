@@ -1,0 +1,7 @@
+export function diagnoseConvergence(history,{tolerance=.01,stressTolerance=.05}={}){
+ if(!Array.isArray(history)||!history.length||![tolerance,stressTolerance].every(v=>Number.isFinite(v)&&v>0&&v<1))throw Error('Invalid convergence inputs');
+ for(const h of history)if(!Number.isInteger(h.elements)||h.elements<1||!['maxDisplacementMm','maxVonMisesPa','peakSizeMm'].every(k=>Number.isFinite(h[k])&&h[k]>=0))throw Error('Invalid convergence history');
+ const relative=(a,b)=>Math.abs(b-a)/Math.max(Math.abs(a),Math.abs(b),1e-20),changes=history.slice(1).map((h,i)=>({displacement:relative(history[i].maxDisplacementMm,h.maxDisplacementMm),stress:relative(history[i].maxVonMisesPa,h.maxVonMisesPa),stressGrowth:(h.maxVonMisesPa-history[i].maxVonMisesPa)/Math.max(history[i].maxVonMisesPa,1e-20),refined:h.elements>history[i].elements,peakRefined:h.peakSizeMm<history[i].peakSizeMm*.95}));
+ const recent=changes.slice(-2),enough=recent.length===2,refined=enough&&recent.every(c=>c.refined),displacementStable=refined&&recent.every(c=>c.displacement<tolerance),stressStable=refined&&recent.every(c=>c.stress<stressTolerance),suspectedSingularity=displacementStable&&recent.every(c=>c.peakRefined&&c.stressGrowth>stressTolerance)&&recent[1].stressGrowth>=recent[0].stressGrowth*.8;
+ return {status:suspectedSingularity?'suspected-singularity':displacementStable&&stressStable?'stable':changes.length&&!changes.at(-1).refined?'stalled':'unresolved',displacementStable,stressStable,suspectedSingularity,changes,tolerance,stressTolerance,certified:false};
+}

@@ -1,6 +1,7 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '適応解析の要素数上限':'Adaptive element limit','適応解析の時間上限（秒）':'Adaptive time limit (seconds)','変位の変化許容値（%）':'Displacement change tolerance (%)','応力の変化許容値（%）':'Stress change tolerance (%)','少なくとも3回の解析を比較します。特異点は傾向からの推定で、誤差の保証ではありません。時間上限は処理間で確認し、全計算の120秒上限も適用します。':'Compare at least three analyses. Singularity diagnosis is a trend estimate, not an error guarantee. Time is checked between stages; the 120-second total calculation limit also applies.','変位・応力の変化条件を満たしました。':'Displacement and stress change thresholds met.','収束未確認。':'Convergence unconfirmed.','接触熱抵抗 ':'Thermal contact resistance ',
  '接触熱抵抗サンプル':'Thermal contact example','接触熱伝達率（W/m²K）':'Contact conductance (W/m²K)','選択した2部品間に接触熱抵抗':'Set contact resistance between two selected parts','別々の節点を持つ、同じ位置の平面を両側から選択してください。選択面全体が一致する必要があります。':'Select coincident planar faces on two parts with separate nodes. The entire selected patches must match.','接触熱抵抗の参照熱移動量は0.380952 W、界面温度は61.905 / 58.095 °Cです。':'Reference transfer is 0.380952 W; interface temperatures are 61.905 / 58.095 °C.',
  '熱放射サンプル':'Thermal radiation example','放射率（0より大きく1以下）':'Emissivity (greater than 0, up to 1)','放射の周囲温度（°C）':'Radiation ambient temperature (°C)','選択範囲に熱放射':'Set radiation on selected region','放射計算の最大反復数':'Maximum radiation iterations','大きな等温周囲との灰色体放射（形態係数1）を計算します。部品間の放射は未対応です。':'Gray-body radiation to a large isothermal environment, view factor 1. Radiation exchange between parts is unsupported.','放射率0.8、周囲20 °C。合計熱入力との平衡温度の参照値は100 °Cです。':'Emissivity 0.8, surroundings 20 °C. Reference equilibrium under the specified heat input is 100 °C.','熱放射 ':'Radiation ',' · 放射率 ':' · Emissivity ',' / 放射による流入 ':' / Radiation inflow ',' / 放射反復 ':' / Radiation iterations ',
 
@@ -54,7 +55,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 81件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 81 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 85件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 85 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',
