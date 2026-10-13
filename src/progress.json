@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T09:22:25.521Z",
+  "updatedAt": "2026-10-13T09:27:24.048606Z",
   "release": {
     "version": "v0.8",
     "date": "2026-10-13",
-    "description": "計算時の入力・実行設定を固定するケース保存・比較・JSON復元を追加。構造・熱・音響の試作版、自動テスト45件。流体・非線形等は未実装。",
-    "descriptionEn": "Adds independent saved cases, comparison and JSON archives with frozen calculation inputs and settings. Structural/thermal/acoustic prototype with 45 tests; fluid and nonlinear analyses remain unimplemented."
+    "description": "計算時の入力・実行設定を固定するケース保存・比較・JSON復元を追加。構造・熱・音響の試作版、自動テスト48件。流体・非線形等は未実装。",
+    "descriptionEn": "Adds independent saved cases, comparison and JSON archives with frozen calculation inputs and settings. Structural/thermal/acoustic prototype with 48 tests; fluid and nonlinear analyses remain unimplemented."
   },
   "tasks": [
     {
@@ -450,8 +450,8 @@
       "titleEn": "Duplicate, compare and export cases",
       "detailEn": "Freeze input snapshots and keep old results unchanged when editing current cases.",
       "acceptanceEn": "Freeze input snapshots and keep old results unchanged when editing current cases.",
-      "lastUpdate": "計算時入力・実行設定を固定して最大8件を比較、JSON復元と複製再計算を確認。自動テスト45件成功",
-      "lastUpdateEn": "Implemented independent case snapshots, comparison, JSON archive roundtrip and input duplication; 45 tests and build passed, browser save and rerun verified.",
+      "lastUpdate": "追加回帰テストで不正ケースの受入れとWorkerの解放漏れを発見・修正。実材料比較0.04→0.02 mm、JSON復元からの再計算一致を確認。全48件成功。",
+      "lastUpdateEn": "Regression tests found and fixed corrupt case acceptance and a worker leak. Real material comparison gives 0.04 to 0.02 mm; archive replay reproduces displacements and reactions exactly. All 48 tests passed.",
       "evidence": "src/cases.js"
     },
     {
@@ -644,7 +644,9 @@
       "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages."
+      "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
+      "lastUpdate": "Node回帰テスト48件成功。ケースの実計算・復元再計算を追加。公開UI/CAD/3D操作の一括自動化は残作業。",
+      "lastUpdateEn": "All 48 Node regression tests pass, including real case calculations and archive replay. Automated public UI/CAD/3D workflows remain outstanding."
     },
     {
       "id": "PERF1",

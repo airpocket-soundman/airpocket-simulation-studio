@@ -6,9 +6,11 @@ export function createCaseStore(){
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
   const o=c.output?.calculation?.options;
-  if(!o||!Number.isFinite(o.size)||o.size<=0||!['pcg','pcg-strict','wasm-pcg'].includes(o.method)||typeof o.adaptive!=='boolean'||!Number.isInteger(o.maxRounds)||o.maxRounds<1||o.maxRounds>5)throw Error('Invalid case calculation settings');
+  if(c.output.calculation.operation!=='elastic'||!o||!Number.isFinite(o.size)||o.size<=0||!['pcg','pcg-strict','wasm-pcg'].includes(o.method)||typeof o.adaptive!=='boolean'||!Number.isInteger(o.maxRounds)||o.maxRounds<1||o.maxRounds>5)throw Error('Invalid case calculation settings');
   const r=c.output.result;
   if(!metrics[r?.kind]||metrics[r.kind].some(([k])=>!Number.isFinite(r[k])))throw Error('Invalid case result');
+  if(c.output.input.study&&c.output.input.study.kind!==({elastic:'structural',thermal:'thermal',acoustic:'acoustic'}[r.kind]))throw Error('Case discipline does not match result');
+  if((r.kind==='elastic'&&(r.maxDisplacementMm<0||r.maxVonMisesPa<0))||(r.kind==='thermal'&&(r.minTemperature<-273.15||r.minTemperature>r.maxTemperature))||(r.kind==='acoustic'&&r.maxPressurePa<0))throw Error('Invalid case result range');
   return structuredClone(c);
  }
  return Object.freeze({
