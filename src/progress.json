@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-13T05:58:15.015Z",
+  "release": {
+    "version": "v0.1",
+    "date": "2026-10-13",
+    "description": "3D領域設定と共通APIの試作版。解析計算は未実装。"
+  },
+  "tasks": [
+    {
+      "id": "CAD1",
+      "title": "STEPをWASMで読み込む",
+      "status": "released",
+      "category": "3D",
+      "detail": "ブラウザ内のWorkerでSTEPをmmに変換し、表示三角形とCAD面の対応を取得。公開サイトで立方体の読み込みを確認。",
+      "evidence": "src/cad.worker.js",
+      "acceptance": "ブラウザ内のWorkerでSTEPをmmに変換し、表示三角形とCAD面の対応を取得。公開サイトで立方体の読み込みを確認。"
+    },
+    {
+      "id": "VIEW1",
+      "title": "モデルを回転・拡大し、全体を表示",
+      "status": "released",
+      "category": "3D",
+      "detail": "回転、パン、ズーム、全体表示。狭い画面では縦並びに切り替える。",
+      "evidence": "src/main.js",
+      "acceptance": "回転、パン、ズーム、全体表示。狭い画面では縦並びに切り替える。"
+    },
+    {
+      "id": "REG1",
+      "title": "曲面の一部分をブラシで選ぶ",
+      "status": "released",
+      "category": "3D",
+      "detail": "空間距離によるブラシ、消しゴム、面選択、戻す、面積表示。見えている領域を選択。CAD上の正確な分割と再メッシュへの転送は未対応。",
+      "evidence": "src/regions.js",
+      "acceptance": "空間距離によるブラシ、消しゴム、面選択、戻す、面積表示。見えている領域を選択。CAD上の正確な分割と再メッシュへの転送は未対応。"
+    },
+    {
+      "id": "BC1",
+      "title": "固定と方向付き荷重を登録",
+      "status": "released",
+      "category": "構造",
+      "detail": "全方向固定と合計荷重の設定・領域再選択・削除。荷重方向を矢印で表示。設定保存のみで、まだ計算しない。",
+      "evidence": "src/main.js",
+      "acceptance": "全方向固定と合計荷重の設定・領域再選択・削除。荷重方向を矢印で表示。設定保存のみで、まだ計算しない。"
+    },
+    {
+      "id": "SAVE1",
+      "title": "プロジェクトの保存と復元",
+      "status": "released",
+      "category": "共通",
+      "detail": "表示形状・選択・条件・材料カテゴリをJSONに書き出し、復元。元のSTEPの正確なCAD形状そのものは保存しない。",
+      "evidence": "src/studio-api.js",
+      "acceptance": "表示形状・選択・条件・材料カテゴリをJSONに書き出し、復元。元のSTEPの正確なCAD形状そのものは保存しない。"
+    },
+    {
+      "id": "API1",
+      "title": "UIと共通APIで高速に検証",
+      "status": "released",
+      "category": "検証",
+      "detail": "領域選択、条件操作、保存復元の直接APIとNodeテスト。5件の自動テスト、公開時にも実行。",
+      "evidence": "docs/testing.md",
+      "acceptance": "領域選択、条件操作、保存復元の直接APIとNodeテスト。5件の自動テスト、公開時にも実行。"
+    },
+    {
+      "id": "MESH1",
+      "title": "ブラウザで体積メッシュを生成",
+      "status": "queued",
+      "category": "構造",
+      "detail": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
+      "depends": [
+        "REG2"
+      ],
+      "acceptance": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。"
+    },
+    {
+      "id": "REG2",
+      "title": "選択領域をCADと解析メッシュに反映",
+      "status": "queued",
+      "category": "3D",
+      "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
+      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。"
+    },
+    {
+      "id": "WASM1",
+      "title": "構造ソルバーのWASM移植を検証",
+      "status": "queued",
+      "category": "構造",
+      "detail": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
+      "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。"
+    },
+    {
+      "id": "FEM1",
+      "title": "固定と荷重から変形・応力を計算",
+      "status": "queued",
+      "category": "構造",
+      "detail": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
+      "depends": [
+        "MESH1",
+        "WASM1"
+      ],
+      "acceptance": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。"
+    },
+    {
+      "id": "MAT1",
+      "title": "金属・樹脂・ガラス・ゴムの物性を設定",
+      "status": "queued",
+      "category": "材料",
+      "detail": "材料カテゴリと物性・構成則を段階的に対応。MAT2〜MAT4、FAIL2〜FAIL3の完了後に総合確認。",
+      "acceptance": "カテゴリだけでなく、出典・単位・有効条件・構成則を登録。ゴムの大変形、ガラスの破壊判定などは段階的に対応。",
+      "depends": [
+        "MAT2",
+        "MAT3",
+        "MAT4"
+      ]
+    },
+    {
+      "id": "SOLVER1",
+      "title": "対応するソルバーを選択・比較",
+      "status": "queued",
+      "category": "共通",
+      "detail": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。",
+      "depends": [
+        "FEM1"
+      ],
+      "acceptance": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。"
+    },
+    {
+      "id": "HEAT1",
+      "title": "熱伝導と温度変化を計算",
+      "status": "queued",
+      "category": "熱",
+      "detail": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
+      "acceptance": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。"
+    },
+    {
+      "id": "ACOU1",
+      "title": "共鳴と周波数別の音圧を表示",
+      "status": "queued",
+      "category": "音響",
+      "detail": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
+      "acceptance": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。"
+    },
+    {
+      "id": "CFD1",
+      "title": "流体領域を作り、流れを解析",
+      "status": "queued",
+      "category": "流体",
+      "detail": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
+      "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。"
+    },
+    {
+      "id": "GPU1",
+      "title": "WebGPUで計算を高速化",
+      "status": "queued",
+      "category": "共通",
+      "detail": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。",
+      "depends": [
+        "FEM1"
+      ],
+      "acceptance": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。"
+    },
+    {
+      "id": "COUPLE1",
+      "title": "熱・構造・音響・流体をつなぐ",
+      "status": "queued",
+      "category": "連成",
+      "detail": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
+      "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。"
+    },
+    {
+      "id": "FAIL1",
+      "title": "破壊・疲労・接触・非線形を扱う",
+      "status": "queued",
+      "category": "構造",
+      "detail": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
+      "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。"
+    },
+    {
+      "id": "BOARD1",
+      "title": "開発管理ボードを公開",
+      "category": "共通",
+      "status": "released",
+      "detail": "検索・カード詳細・ソルバー状態・開発メモを公開。",
+      "evidence": "src/board.js",
+      "acceptance": "検索・カード詳細・ソルバー状態・開発メモを公開。"
+    },
+    {
+      "id": "LIVE1",
+      "title": "ボードに最新進捗を自動反映",
+      "category": "共通",
+      "status": "building",
+      "detail": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
+      "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。"
+    },
+    {
+      "id": "MAT2",
+      "title": "材料の数値・単位・出典を登録",
+      "category": "材料",
+      "status": "queued",
+      "detail": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
+      "acceptance": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。"
+    },
+    {
+      "id": "MAT3",
+      "title": "温度・速度依存と異方性を登録",
+      "category": "材料",
+      "status": "queued",
+      "detail": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
+      "acceptance": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。"
+    },
+    {
+      "id": "MAT4",
+      "title": "ゴムの超弾性パラメータを登録",
+      "category": "材料",
+      "status": "queued",
+      "detail": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
+      "acceptance": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。"
+    },
+    {
+      "id": "REG3",
+      "title": "円筒の角度・長さで領域を指定",
+      "category": "3D",
+      "status": "queued",
+      "detail": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
+      "acceptance": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。"
+    },
+    {
+      "id": "REG4",
+      "title": "断面・半透明・部品非表示",
+      "category": "3D",
+      "status": "queued",
+      "detail": "内部面を選択でき、隠れた面の誤選択を防ぐ。",
+      "acceptance": "内部面を選択でき、隠れた面の誤選択を防ぐ。"
+    },
+    {
+      "id": "CAD2",
+      "title": "元のCADデータをプロジェクトに保持",
+      "category": "3D",
+      "status": "queued",
+      "detail": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
+      "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。"
+    },
+    {
+      "id": "CAD3",
+      "title": "形状の閉鎖・不備・単位を検査",
+      "category": "3D",
+      "status": "queued",
+      "detail": "開いた表面、重複、退化要素を識別。修復可否を表示。",
+      "acceptance": "開いた表面、重複、退化要素を識別。修復可否を表示。"
+    },
+    {
+      "id": "MESH2",
+      "title": "品質と局所細分化を表示",
+      "category": "構造",
+      "status": "queued",
+      "detail": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
+      "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。"
+    },
+    {
+      "id": "MESH3",
+      "title": "メッシュ収束を比較",
+      "category": "検証",
+      "status": "queued",
+      "detail": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
+      "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。"
+    },
+    {
+      "id": "BC2",
+      "title": "方向別拘束・指定変位を設定",
+      "category": "構造",
+      "status": "queued",
+      "detail": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
+      "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。"
+    },
+    {
+      "id": "BC3",
+      "title": "圧力・法線荷重・重力を設定",
+      "category": "構造",
+      "status": "queued",
+      "detail": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
+      "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。"
+    },
+    {
+      "id": "RUN1",
+      "title": "計算を中止し失敗理由を表示",
+      "category": "共通",
+      "status": "queued",
+      "detail": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
+      "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。"
+    },
+    {
+      "id": "RESULT1",
+      "title": "変位・応力の結果を表示",
+      "category": "構造",
+      "status": "queued",
+      "detail": "変形倍率、凡例、単位、最大値、プローブを確認。",
+      "acceptance": "変形倍率、凡例、単位、最大値、プローブを確認。"
+    },
+    {
+      "id": "RESULT2",
+      "title": "ケースを複製・比較・出力",
+      "category": "共通",
+      "status": "queued",
+      "detail": "計算時入力を固定し、過去結果を変更しない。",
+      "acceptance": "計算時入力を固定し、過去結果を変更しない。"
+    },
+    {
+      "id": "THERMBC1",
+      "title": "温度・発熱・対流境界を指定",
+      "category": "熱",
+      "status": "queued",
+      "detail": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
+      "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。"
+    },
+    {
+      "id": "HEAT2",
+      "title": "過渡・放射・接触熱抵抗",
+      "category": "熱",
+      "status": "queued",
+      "detail": "時間履歴とエネルギー収支を参照解に照合。",
+      "acceptance": "時間履歴とエネルギー収支を参照解に照合。"
+    },
+    {
+      "id": "CFDDOM1",
+      "title": "内外の流体領域を作成",
+      "category": "流体",
+      "status": "queued",
+      "detail": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
+      "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。"
+    },
+    {
+      "id": "CFDMESH1",
+      "title": "流体境界層メッシュ",
+      "category": "流体",
+      "status": "queued",
+      "detail": "壁面解像度と品質、境界条件の対応を検証。",
+      "acceptance": "壁面解像度と品質、境界条件の対応を検証。"
+    },
+    {
+      "id": "CFD2",
+      "title": "乱流・非定常の流れ",
+      "category": "流体",
+      "status": "queued",
+      "detail": "モデルと適用範囲を指定し、収束・質量収支を検証。",
+      "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。"
+    },
+    {
+      "id": "CFD3",
+      "title": "圧縮性・多相流",
+      "category": "流体",
+      "status": "queued",
+      "detail": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。",
+      "acceptance": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。"
+    },
+    {
+      "id": "ACOU2",
+      "title": "音源・受音点・吸音境界を設定",
+      "category": "音響",
+      "status": "queued",
+      "detail": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
+      "acceptance": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。"
+    },
+    {
+      "id": "ACOU3",
+      "title": "音の外部放射・指向性",
+      "category": "音響",
+      "status": "queued",
+      "detail": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
+      "acceptance": "開放境界・領域サイズ・波長のメッシュ収束を確認。"
+    },
+    {
+      "id": "ACOU4",
+      "title": "過渡波動・可聴化",
+      "category": "音響",
+      "status": "queued",
+      "detail": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
+      "acceptance": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。"
+    },
+    {
+      "id": "COUPLE2",
+      "title": "熱から構造へ温度を転送",
+      "category": "連成",
+      "status": "queued",
+      "detail": "補間・基準温度・熱膨張と参照例題を検証。",
+      "acceptance": "補間・基準温度・熱膨張と参照例題を検証。"
+    },
+    {
+      "id": "COUPLE3",
+      "title": "固体と流体の共役熱伝達",
+      "category": "連成",
+      "status": "queued",
+      "detail": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。"
+    },
+    {
+      "id": "COUPLE4",
+      "title": "構造振動から音響へ連成",
+      "category": "連成",
+      "status": "queued",
+      "detail": "複素振幅・位相・法線速度と参照解を検証。",
+      "acceptance": "複素振幅・位相・法線速度と参照解を検証。"
+    },
+    {
+      "id": "COUPLE5",
+      "title": "流体構造の双方向連成",
+      "category": "連成",
+      "status": "queued",
+      "detail": "時間同期・力の保存・安定性を検証。",
+      "acceptance": "時間同期・力の保存・安定性を検証。"
+    },
+    {
+      "id": "FAIL2",
+      "title": "ガラス等の脆性破壊を評価",
+      "category": "材料",
+      "status": "queued",
+      "detail": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
+      "acceptance": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。"
+    },
+    {
+      "id": "FAIL3",
+      "title": "金属塑性・疲労を評価",
+      "category": "材料",
+      "status": "queued",
+      "detail": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。",
+      "acceptance": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。"
+    },
+    {
+      "id": "CONTACT1",
+      "title": "接触・摩擦・ボルトを扱う",
+      "category": "構造",
+      "status": "queued",
+      "detail": "接触収束と反力・摩擦条件を検証。",
+      "acceptance": "接触収束と反力・摩擦条件を検証。"
+    },
+    {
+      "id": "QA1",
+      "title": "公開環境で回帰検証を実行",
+      "category": "検証",
+      "status": "queued",
+      "detail": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
+      "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。"
+    },
+    {
+      "id": "PERF1",
+      "title": "対応するモデル規模を測定",
+      "category": "検証",
+      "status": "queued",
+      "detail": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。"
+    }
+  ],
+  "solvers": [
+    [
+      "CalculiX",
+      "構造・熱",
+      "WASM移植未検証"
+    ],
+    [
+      "Elmer",
+      "構造・熱・流体・音響",
+      "WASM移植未検証"
+    ],
+    [
+      "Code_Aster",
+      "高度な構造・熱・音響候補",
+      "WASM移植未検証"
+    ],
+    [
+      "OpenFOAM",
+      "流体・共役熱伝達",
+      "WASM移植未検証"
+    ],
+    [
+      "Gmsh",
+      "メッシュ生成",
+      "ブラウザ実行未検証"
+    ],
+    [
+      "occt-import-js",
+      "STEP読込 / CAD表示",
+      "WASM実行確認済み"
+    ]
+  ]
+}

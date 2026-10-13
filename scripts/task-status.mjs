@@ -1,0 +1,4 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {validateProgress,statusNames} from '../src/progress.js';
+const [id,status,note,evidence]=process.argv.slice(2);
+try{if(!id||!statusNames.includes(status))throw Error('Usage: npm run task:status -- ID STATUS "note" [evidence]');const file=new URL('../src/progress.json',import.meta.url),p=validateProgress(JSON.parse(await readFile(file,'utf8'))),t=p.tasks.find(t=>t.id===id);if(!t)throw Error('Unknown task');if(status==='building'&&(t.depends||[]).some(id=>!['ready','released'].includes(p.tasks.find(t=>t.id===id).status)))throw Error('前提作業が未完了です。');t.status=status;if(note)t.lastUpdate=note;if(evidence)t.evidence=evidence;p.updatedAt=new Date().toISOString();validateProgress(p);await writeFile(file,JSON.stringify(p,null,2)+'\n');console.log(`${id}: ${status}`);}catch(e){console.error(e.message);process.exitCode=1;}
