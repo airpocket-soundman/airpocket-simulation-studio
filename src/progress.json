@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:22:09.807Z",
+  "updatedAt": "2026-10-13T08:30:30.692Z",
   "release": {
     "version": "v0.5",
     "date": "2026-10-13",
@@ -399,13 +399,15 @@
       "id": "BC3",
       "title": "圧力・法線荷重・重力を設定",
       "category": "構造",
-      "status": "building",
+      "status": "ready",
       "detail": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "titleEn": "Set pressure, normal loads and gravity",
       "detailEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
       "acceptanceEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
-      "lastUpdate": "圧力・法線表面荷重・重力を実装し、面法線と合力保存を検証する。"
+      "lastUpdate": "圧力・法線表面荷重・重力をUI/APIに接続。面法線反転への不変性、合力・反力、曲面圧力のメッシュ収束、独立部品の拘束不足を40件の自動テストで確認。Pages検証待ち。",
+      "lastUpdateEn": "UI/API pressure, normal traction and gravity implemented. 40 tests verify normal orientation, resultants/reactions, curved pressure convergence and disconnected constraints; Pages verification pending.",
+      "evidence": "tests/pressure.test.mjs"
     },
     {
       "id": "RUN1",

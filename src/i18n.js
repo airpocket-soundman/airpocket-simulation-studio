@@ -1,6 +1,12 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '合力 ':'Applied force ','体積荷重 ':'Body force ',
+
+ '構造・熱・音響 · v0.6':'Structure · Heat · Acoustics · v0.6','圧力・重力サンプル':'Pressure / gravity example','圧力・法線荷重・重力':'Pressure, normal traction and gravity','圧力（kPa、正は内向き）':'Pressure (kPa, positive inward)','選択範囲に圧力':'Set pressure on selected region','法線表面荷重（kPa、正は外向き）':'Normal traction (kPa, positive outward)','選択範囲に法線表面荷重':'Set normal traction on selected region','重力・一様加速度を使う':'Enable gravity / uniform acceleration','加速度 X / Y / Z（m/s²）':'Acceleration X / Y / Z (m/s²)','加速度X':'Acceleration X','加速度Y':'Acceleration Y','加速度Z':'Acceleration Z',
+ '圧力は各面の法線に沿って作用します。加速度は全部品に作用し、登録済みの密度（kg/m³）が必要です。':'Pressure follows local surface normals. Acceleration acts on all solids and requires registered density (kg/m³).','体積メッシュの外向き法線で計算':'Uses outward normals from the solid mesh','圧力1 MPaと加速度−10 m/s²。参照変位0.040008 mm、反力100.04 Nです。':'Pressure 1 MPa and acceleration −10 m/s². Reference displacement 0.040008 mm and reaction 100.04 N.',
+ '圧力 ':'Pressure ','法線荷重 ':'Normal traction ','（内向きを正）':' (positive inward)','（外向きを正）':' (positive outward)',
+
  '未実装の残作業':'Remaining implementation',
 
  '空洞サンプル':'Cavity example','一面を1 Paで駆動、他の5面は剛壁。一次共鳴の参照周波数は2143.75 Hzです。':'One face is driven at 1 Pa; the other five walls are rigid. Reference first resonance: 2143.75 Hz.',
@@ -21,7 +27,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 37件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 37 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 40件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 40 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',

@@ -57,3 +57,15 @@ Select a face or curved brush region, open Refine mesh near selected regions and
 Settings persist in the project and combine with adaptive sizing. Replacing geometry clears them. Minimum minSICN quality and elements below0.2 are shown; exported mesh summaries include the complete histogram. These metrics do not guarantee numerical accuracy.
 
 API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}]})`, all dimensions in mm. In Node, `selectedRefinements(project,{size:2,radius:12})` builds fields from a selection.
+
+## Pressure, normal traction and gravity (v0.6)
+
+Set pressure or normal traction on selected surfaces. UI units are kPa; storage/API uses Pa. Positive pressure is inward; positive normal traction is outward. Negative values reverse the direction. These are loads per area, distinct from total force in N. Outward normals use the adjacent tetrahedron, independent of display triangle winding.
+
+Enter gravity/uniform acceleration in global m/s². All solids share registered density (kg/m³). Each element distributes its density × volume × acceleration to its nodes. Disable gravity when unused. Remeshing rebuilds loads; reactions include both surface and body forces. Each disconnected solid needs at least three non-collinear fixed nodes; support through contact is not implemented.
+
+Reference:10×10×40 mm, E=1 GPa, ν=0, ρ=1000 kg/m³, upper-face pressure1 MPa, acceleration[0,0,−10] m/s². Pressure100 N + body force0.04 N produces reaction100.04 N and reference maximum displacement0.040008 mm. Results display/export applied force, body force and reactions.
+
+A radius12 mm/length60 mm half-cylinder under100 kPa has projected-area resultant144 N. Tests require vector error below2% and reduced error when size changes from5 to2 mm. This is specific validation, not a general accuracy guarantee. Partial regions retain surface projection/area-error limits.
+
+After selection, call `studioApi.addCondition({type:'pressure',value:1e6})` or `{type:'normalTraction',value:1e6}`. Set gravity with `studioApi.setStudy({...study,kind:'structural',gravityEnabled:true,gravity:[0,0,-9.80665]})`. `gravityEnabled:false` disables it; API studies specifying only a gravity vector enable it. Load the reference using `analysisApi.loadPressureExample()`.

@@ -57,3 +57,15 @@ API例: `studioApi.addCondition({type:'convection',value:100,ambientTemperature:
 設定はプロジェクトに保存し、適応ループの自動細分化と合わせて使える。モデルを入れ替えたら解除する。最小品質と品質0.2未満の要素数を表示し、全品質帯の要素数を結果に保存。品質はminSICNで、品質や要素数だけから解析精度は保証しない。
 
 API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}]})`。中心・寸法・半径はmm。Nodeからは`selectedRefinements(project,{size:2,radius:12})`で選択からサイズ場を作成できる。
+
+## 圧力・法線表面荷重・重力（v0.6）
+
+選択面に圧力または法線表面荷重を設定できる。UIはkPa、保存・APIはPa。圧力は正値が内向き、法線表面荷重は正値が外向き。負値は逆向き。これは面積あたりの荷重で、合計Nを指定する従来の荷重とは異なる。外向き法線は隣接する四面体の内外から決め、表示三角形の頂点順序には依存しない。
+
+重力・一様加速度は全体座標のm/s²で入力。全部品に共通の密度（kg/m³）が必要で、要素の体積から各節点へ体積荷重を配分する。重力を使わないときは無効化する。再メッシュごとに荷重を作り直し、圧力と重力の両方を反力の計算へ含める。独立部品ごとに3点以上の非共線な固定が必要。部品間の接触による支持は未対応。
+
+圧力・重力サンプルは10×10×40 mm、E=1 GPa、ν=0、ρ=1000 kg/m³、上面圧力1 MPa、加速度[0,0,−10] m/s²。圧力100 N＋自重0.04 Nに対して反力100.04 N、最大変位の参照値0.040008 mm。結果に合力、体積荷重、反力を表示・保存する。
+
+曲面の参照検証は半径12 mm・長さ60 mmの円筒の半周に100 kPaを掛け、投影面積からの合力144 Nと比較する。テスト条件下でベクトル誤差2%未満、5 mmから2 mmの細分化で誤差が減ることを確認。任意形状の精度保証ではない。部分領域には従来の表面投影・面積誤差上限が適用される。
+
+API: 選択後`studioApi.addCondition({type:'pressure',value:1e6})`または`{type:'normalTraction',value:1e6}`。重力は`studioApi.setStudy({...study,kind:'structural',gravityEnabled:true,gravity:[0,0,-9.80665]})`。`gravityEnabled:false`で無効化し、gravityベクトルだけを指定したAPI入力は有効として扱う。参照例は`analysisApi.loadPressureExample()`。
