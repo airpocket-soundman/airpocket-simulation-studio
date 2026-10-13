@@ -6,6 +6,10 @@
 
 アプリ: https://airpocket-soundman.github.io/airpocket-simulation-studio/
 
+開発管理ボード: https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html
+
+公式進捗は src/board-data.js で管理し、公開時に更新する。ローカル開発メモは各ブラウザだけに保存し、JSONで書き出せる。
+
 開発: `npm ci` → `npm run build` → `npm run dev`。検証: `npm test`。mainへのpushでGitHub ActionsがビルドしPagesへ公開。
 
 現在の部分選択は表示三角形による近似で、CAD面分割・再メッシュへの領域転送は未実装。STEP読込は表示用の三角形と元のCAD面の対応を取得する段階で、正確なCAD形状編集はまだできない。
