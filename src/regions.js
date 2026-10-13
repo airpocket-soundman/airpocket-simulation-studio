@@ -1,3 +1,4 @@
+import {cylindricalFrame} from './cylindrical-region.js';
 import {validateImpedance} from './acoustic-impedance.js';
 import {validateTemperatureSource} from './temperature-transfer.js';
 import {validateFrame} from './constraints.js';

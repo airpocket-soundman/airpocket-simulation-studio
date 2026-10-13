@@ -25,3 +25,6 @@ Create separate fluid regions, internal passages or external enclosures; configu
 ## Shared
 
 Materials with sources/units/validity ranges; solver capability checks; mesh quality/local sizing/convergence; progress/cancel/logs/failure diagnosis; legends, units, probes, sections, deformed shapes and time histories. Preserve geometry, regions, material data, mesh, solver version/settings and results for each case. Support project/case duplication, comparison and reports. Acoustics and adaptive meshing have separate specifications.
+
+### Cylindrical angle and length selection
+Select display triangles using axis/origin, radius/tolerance, axial interval and start angle/angular span. Angles follow the right-hand rule; zero follows X (Y for an X-axis cylinder). End caps are excluded and rear triangles are included. This is centroid-based approximation, not exact boundary splitting. The last dimension preset is saved in projects and can be reapplied after clearing selection or restoring a project. UI supports X/Y/Z axes; studioApi.selectCylindricalRegion(mesh,spec) accepts arbitrary axis/reference vectors. spec contains origin, axis, reference, radius, tolerance, axialMin, axialMax, startDegrees and sweepDegrees. CAD update reconciliation and exact remesh conformity (REG2/CAD2) remain separate work.

@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:07:27.376Z",
+  "updatedAt": "2026-10-13T11:09:49.599Z",
   "release": {
-    "version": "v0.10",
+    "version": "v0.11",
     "date": "2026-10-13",
-    "description": "周波数依存の複素インピーダンス吸音境界と吸収パワーを追加。進行波・リアクタンス・JS/WASM一致を検証。自動テスト60件。流体・非線形・外部放射等は残作業。",
-    "descriptionEn": "Adds frequency-dependent complex impedance boundaries and absorbed acoustic power. Outgoing waves, reactive boundaries and JS/WASM agreement verified by 60 tests. Fluid, nonlinear and exterior radiation analyses remain outstanding."
+    "description": "円筒を角度・軸方向の長さで選び、数値指定を保存・再適用できる機能を追加。面積・回転移動・保存復元を検証、自動テスト63件。流体・非線形・CAD境界への厳密な適合等は残作業。",
+    "descriptionEn": "Adds cylindrical region selection by angle and axial length with saved reusable dimensions. Area, rigid transformations and archive roundtrips verified by 63 tests. Fluid, nonlinear and exact CAD boundary conformity remain outstanding."
   },
   "tasks": [
     {
@@ -313,13 +313,15 @@
       "id": "REG3",
       "title": "円筒の角度・長さで領域を指定",
       "category": "3D",
-      "status": "building",
+      "status": "released",
       "detail": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
       "acceptance": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
       "titleEn": "Select cylinder regions by angle and length",
       "detailEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
       "acceptanceEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
-      "lastUpdate": "円筒の角度・軸方向範囲の選択と寸法の保存再適用を実装。面積・回転移動・保存復元のテスト成功、実画面検証へ"
+      "lastUpdate": "円筒の角度・長さ指定と保存再適用を実装。UIで376.84mm²・256三角形の再選択、回転移動と保存復元をテスト。全63件成功",
+      "lastUpdateEn": "Implemented saved cylindrical dimensions and shared selection API. UI verified radius 12 mm, span 90°, axial length 20 mm: 376.84 mm² / 256 triangles, restored after clearing. All 63 tests pass.",
+      "evidence": "tests/cylindrical-region.test.mjs"
     },
     {
       "id": "REG4",

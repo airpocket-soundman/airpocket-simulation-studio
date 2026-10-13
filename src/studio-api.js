@@ -1,3 +1,4 @@
+import {cylindricalTriangles} from './cylindrical-region.js';
 import {frameFromEuler} from './constraints.js';
 import {validateProject,areaOfTriangle} from './regions.js';
 
@@ -21,6 +22,7 @@ export function createStudioApi(adapter) {
     exportProject:()=>current(),
     loadProject(project){const p=clone(project);p.selection??=p.meshes?.map(()=>[]);return write(p,'load');},
     selectTriangles(mesh,triangles,{replace=true,erase=false}={}){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh]||!Array.isArray(triangles))throw Error('選択対象が不正です。');if(!triangles.every(t=>Number.isInteger(t)&&t>=0&&t<p.meshes[mesh].faceIds.length))throw Error('三角形番号が不正です。');if(replace)p.selection=p.meshes.map(()=>[]);const s=new Set(p.selection[mesh]);triangles.forEach(t=>erase?s.delete(t):s.add(t));p.selection[mesh]=[...s];return write(p,'selection');},
+    selectCylindricalRegion(mesh,spec){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh])throw Error('Invalid cylindrical mesh');const triangles=cylindricalTriangles(p.meshes[mesh].positions,spec);p.selection=p.meshes.map(()=>[]);p.selection[mesh]=triangles;p.cylindricalRegion={...clone(spec),mesh};return write(p,'selection');},
     clearSelection(){const p=current();p.selection=p.meshes.map(()=>[]);return write(p,'selection');},
     addCondition({type,value=0,direction=[1,0,0],ambientTemperature,frame,reactance=0,impedanceTable}){const p=current(),regions=p.selection.map((s,mesh)=>({mesh,triangles:[...new Set(s)]})).filter(r=>r.triangles.length);if(!regions.length)throw Error('領域を選んでください。');if(!['fixed','displacement','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','acousticPressure','acousticImpedance'].includes(type)||!Number.isFinite(value)||(type==='force'&&value<0))throw Error('条件が不正です。');const c={type,value:type==='fixed'?0:value,direction:type==='displacement'&&frame?frame.axes?.[frame.axis]:['force','displacement'].includes(type)?direction:[1,0,0],regions};if(type==='acousticImpedance'){c.reactance=reactance;if(impedanceTable!==undefined)c.impedanceTable=clone(impedanceTable);}if(type==='displacement'&&frame)c.frame=clone(frame);if(type==='convection')c.ambientTemperature=ambientTemperature;p.conditions.push(c);p.selection=p.meshes.map(()=>[]);return write(p,'condition');},
     removeCondition(index){const p=current();if(!Number.isInteger(index)||!p.conditions[index])throw Error('条件番号が不正です。');p.conditions.splice(index,1);return write(p,'condition');},
