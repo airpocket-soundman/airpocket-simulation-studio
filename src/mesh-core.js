@@ -3,7 +3,8 @@ export function inspectMesh(mesh){
  if(!Array.isArray(mesh.nodes)||mesh.nodes.length%3||!mesh.nodes.every(Number.isFinite)||!Array.isArray(mesh.tetrahedra)||!mesh.tetrahedra.length)throw Error('Invalid volume mesh');
  let volume=0,minVolume=Infinity;
  for(const t of mesh.tetrahedra){if(t.length!==4||new Set(t).size!==4||!t.every(i=>Number.isInteger(i)&&i>=0&&i<mesh.nodes.length/3))throw Error('Invalid tetrahedron');let v=tetraVolume(mesh.nodes,t);if(Math.abs(v)<1e-15)throw Error('Degenerate tetrahedron');if(v<0){[t[0],t[1]]=[t[1],t[0]];v=-v;}volume+=v;minVolume=Math.min(minVolume,v);}
- return {nodeCount:mesh.nodes.length/3,elementCount:mesh.tetrahedra.length,volumeMm3:volume,minVolumeMm3:minVolume,minQuality:mesh.qualities?.length?Math.min(...mesh.qualities):null,qualityHistogram:[0,1,2,3,4].map(bin=>(mesh.qualities||[]).filter(q=>q>=bin*.2&&(bin===4?q<=1:q<(bin+1)*.2)).length)};
+ const qualityHistogram=Array(5).fill(0);if(mesh.qualities){if(mesh.qualities.length!==mesh.tetrahedra.length||!mesh.qualities.every(Number.isFinite))throw Error('Invalid mesh quality data');for(const q of mesh.qualities)qualityHistogram[Math.max(0,Math.min(4,Math.floor(q*5)))]++;}
+ return {nodeCount:mesh.nodes.length/3,elementCount:mesh.tetrahedra.length,volumeMm3:volume,minVolumeMm3:minVolume,minQuality:mesh.qualities?.length?Math.min(...mesh.qualities):null,qualityHistogram};
 }
 export async function generateMesh(initialize,source,{size=5,refinements=[],maxElements=30000}={}){
  if(!Number.isFinite(size)||size<=0)throw Error('Mesh size must be positive');if(!Array.isArray(refinements)||refinements.length>1000||refinements.some(r=>!Array.isArray(r.center)||r.center.length!==3||!r.center.every(Number.isFinite)||!Number.isFinite(r.radius)||r.radius<=0||!Number.isFinite(r.size)||r.size<size*.15||r.size>size))throw Error('Local mesh size must be between 15% and 100% of global size, with a positive radius');

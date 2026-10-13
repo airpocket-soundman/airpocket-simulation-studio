@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:52:21.377Z",
+  "updatedAt": "2026-10-13T07:56:23.078Z",
   "release": {
     "version": "v0.5",
     "date": "2026-10-13",
@@ -190,15 +190,16 @@
     {
       "id": "ACOU1",
       "title": "共鳴と周波数別の音圧を表示",
-      "status": "checking",
+      "status": "ready",
       "category": "音響",
-      "detail": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
-      "acceptance": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
+      "detail": "選定したブラウザ用Helmholtzエンジンで音源面・受音点・境界を設定し、管と音圧駆動空洞の参照応答・共鳴を検証。",
+      "acceptance": "ブラウザで周波数別音圧・位相・SPLを表示し、管と音圧駆動空洞の参照応答・共鳴を検証。",
       "titleEn": "Display resonance and frequency-domain pressure",
-      "detailEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references.",
-      "acceptanceEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references.",
-      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。",
-      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain."
+      "detailEn": "Set source, receiver and boundaries with the selected browser Helmholtz engine; validate reference responses and resonances in a pipe and pressure-driven cavity.",
+      "acceptanceEn": "Display frequency pressure, phase and SPL in the browser and validate pipe and pressure-driven cavity responses/resonances.",
+      "lastUpdate": "独自OSSのAirpocket Acoustic Tet4を採用。管4287.5 Hz・空洞2143.75 Hzの共鳴と減衰下の有限振幅を37件のテストで確認。Elmer本体の移植は別途未実装。",
+      "lastUpdateEn": "Selected the repository OSS Airpocket Acoustic Tet4 engine. 37 tests verify pipe4287.5 Hz/cavity2143.75 Hz resonance and finite damped amplitude. Elmer itself is not ported.",
+      "evidence": "tests/acoustic.test.mjs"
     },
     {
       "id": "CFD1",
