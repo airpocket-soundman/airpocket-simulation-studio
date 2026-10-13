@@ -11,9 +11,10 @@ assert.equal(a.samples.length,3);for(let i=0;i<3;i++){assert.ok(Math.abs(a.sampl
 });
 test('pressure-driven cavity and pipe exhibit reference resonances with finite damping',async()=>{
  let instance;const init=opts=>instance??=initialize(opts);
- for(const {bounds,size,frequency,off,closed,expected,tolerance}of [{bounds:[0,0,0,20,20,40],size:5,frequency:2143.75,off:[1500,2800],closed:true,expected:63.663,tolerance:.025},{bounds:[0,0,0,10,10,40],size:4,frequency:4287.5,off:[3500,5000],closed:false,expected:31.837,tolerance:.06}]){
+ for(const {bounds,size,frequency,off,closed,tolerance}of [{bounds:[0,0,0,20,20,40],size:5,frequency:2143.75,off:[1500,2800],closed:true,tolerance:.025},{bounds:[0,0,0,10,10,40],size:4,frequency:4287.5,off:[3500,5000],closed:false,tolerance:.06}]){
  const mesh=await generateMesh(init,{kind:'box',bounds},{size}),p=[];assert.equal(mesh.summary.qualityHistogram.reduce((s,v)=>s+v,0),mesh.tetrahedra.length);
  for(let i=0;i<mesh.nodes.length/3;i++){const z=mesh.nodes[i*3+2];if(Math.abs(z)<1e-7)p.push([i,1]);if(!closed&&Math.abs(z-40)<1e-7)p.push([i,0]);}
+ const loss=.02,k=2*Math.PI*frequency/343,a=k*Math.sqrt((Math.sqrt(1+loss*loss)+1)/2),b=-k*Math.sqrt((Math.sqrt(1+loss*loss)-1)/2),length=bounds[5]*.001,expected=closed?1/Math.hypot(Math.cos(a*length),Math.sinh(b*length)):Math.hypot(Math.sin(a*length/2),Math.sinh(b*length/2))/Math.hypot(Math.sin(a*length),Math.sinh(b*length));
  const solve=f=>solveAcoustic(mesh,{acousticPressures:p},{frequency:f,lossFactor:.02}),peak=solve(frequency);assert.ok(Math.abs(peak.maxPressurePa/expected-1)<tolerance);for(const f of off)assert.ok(peak.maxPressurePa>10*solve(f).maxPressurePa);assert.ok(peak.residual<1e-8);
  }
 });

@@ -20,6 +20,6 @@ Structural vibration, impedance/absorption boundaries, open boundaries, radiatio
 
 ## Resonance validation (v0.5)
 
-The20×20×40 mm cavity prescribes1 Pa on one face and rigid conditions on the other five. At343 m/s, first resonance is c/(4L)=2143.75 Hz. With volumetric loss0.02, computed peak63.275 Pa matches reference63.663 Pa within2.5%. The pipe with1 Pa/0 Pa ends resonates at c/(2L)=4287.5 Hz; peak30.453 Pa matches31.837 Pa within6%. Tests require peaks more than ten times neighboring-frequency responses.
+The 20×20×40 mm cavity prescribes 1 Pa on one face and rigid conditions on the other five. At 343 m/s, first resonance is c/(4L)=2143.75 Hz. With volumetric loss 0.02, computed peak 63.275 Pa matches reference 63.662 Pa within 2.5%. The pipe with 1 Pa/0 Pa ends resonates at c/(2L)=4287.5 Hz; peak 30.453 Pa matches 31.831 Pa within 6%. Tests require peaks more than ten times neighboring-frequency responses.
 
 This validates frequency responses for specific boundaries/dimensions/meshes, not direct eigenfrequency extraction for arbitrary geometry. Real resonance depends on driving, absorption and openings. References are p(z)=cos(k_eff(L−z))/cos(k_eff L) for the cavity and p(z)=sin(k_eff(L−z))/sin(k_eff L) for the pipe, with k_eff²=(2πf/c)²(1−iη). Elmer itself is not ported; these calculations use the repository's OSS engine.

@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:56:23.078Z",
+  "updatedAt": "2026-10-13T07:58:40.711Z",
   "release": {
     "version": "v0.5",
     "date": "2026-10-13",
-    "description": "構造・熱・音響、適応細分化に加え、選択領域の局所メッシュ設定・保存復元と計算中止後の再実行を検証。自動テスト36件。流体・非線形・破壊等は未実装。",
-    "descriptionEn": "Adds persistent selected-region local sizing and verified cancellation/restart to structure, heat, acoustics and adaptation. 36 automated tests. Fluid, nonlinear behavior and failure remain unimplemented."
+    "description": "選択領域の局所メッシュ設定、計算中止・再実行、管と音圧駆動空洞の共鳴を検証。構造・熱・音響の試作機能を公開。自動テスト37件。高度な解析は未実装。",
+    "descriptionEn": "Verified local region sizing, cancellation/restart, pipe and pressure-driven cavity resonances. Prototype structural, thermal and acoustic features published; 37 tests. Advanced analyses remain unimplemented."
   },
   "tasks": [
     {
@@ -190,15 +190,15 @@
     {
       "id": "ACOU1",
       "title": "共鳴と周波数別の音圧を表示",
-      "status": "ready",
+      "status": "released",
       "category": "音響",
       "detail": "選定したブラウザ用Helmholtzエンジンで音源面・受音点・境界を設定し、管と音圧駆動空洞の参照応答・共鳴を検証。",
       "acceptance": "ブラウザで周波数別音圧・位相・SPLを表示し、管と音圧駆動空洞の参照応答・共鳴を検証。",
       "titleEn": "Display resonance and frequency-domain pressure",
       "detailEn": "Set source, receiver and boundaries with the selected browser Helmholtz engine; validate reference responses and resonances in a pipe and pressure-driven cavity.",
       "acceptanceEn": "Display frequency pressure, phase and SPL in the browser and validate pipe and pressure-driven cavity responses/resonances.",
-      "lastUpdate": "独自OSSのAirpocket Acoustic Tet4を採用。管4287.5 Hz・空洞2143.75 Hzの共鳴と減衰下の有限振幅を37件のテストで確認。Elmer本体の移植は別途未実装。",
-      "lastUpdateEn": "Selected the repository OSS Airpocket Acoustic Tet4 engine. 37 tests verify pipe4287.5 Hz/cavity2143.75 Hz resonance and finite damped amplitude. Elmer itself is not ported.",
+      "lastUpdate": "独自OSSのAirpocket Acoustic Tet4を採用。管4287.5 Hz・空洞2143.75 Hzの共鳴と減衰下の有限振幅を37件のテストで確認。Elmer本体の移植は別途未実装。 Pagesで2143.75 Hzの空洞サンプルを検証。",
+      "lastUpdateEn": "Selected the repository OSS Airpocket Acoustic Tet4 engine. 37 tests verify pipe4287.5 Hz/cavity2143.75 Hz resonance and finite damped amplitude. Elmer itself is not ported. Cavity example at2143.75 Hz verified on Pages.",
       "evidence": "tests/acoustic.test.mjs"
     },
     {
