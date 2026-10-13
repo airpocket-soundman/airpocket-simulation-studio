@@ -1,3 +1,4 @@
+import {validateCatalogSelection} from './catalog-provenance.js';
 import {validatePlasticity} from './plasticity-material.js';
 import {validateFatigueData} from './fatigue-material.js';
 import {validateHyperelastic} from './hyperelastic-material.js';
@@ -22,6 +23,7 @@ export function validateMaterialProperties(p){
  validateHyperelastic(p.hyperelastic);
  validatePlasticity(p.plasticity);
  validateFatigueData(p.fatigueData);
+ validateCatalogSelection(p.catalogSelection,p);
  if(p.plasticity&&p.hyperelastic)throw Error('Plasticity cannot be combined with hyperelasticity');
  if(p.plasticity&&p.dependence?.elasticTemperatureTable)throw Error('Plasticity cannot be combined with an elastic temperature table');
  if(p.hyperelastic&&p.dependence?.elasticTemperatureTable)throw Error('Hyperelastic parameters cannot be combined with a linear elastic temperature table');

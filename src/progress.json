@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T23:05:10.796648+00:00",
+  "updatedAt": "2026-10-13T23:35:23.413752+00:00",
   "release": {
     "version": "v0.37",
     "date": "2026-10-14",
@@ -1056,6 +1056,21 @@
       "acceptance": "二次補間、仮想節点と保存整合、球の参照精度、一様外箱、JS/WASM、日英UIを確認。",
       "acceptanceEn": "Verify quadratic interpolation, virtual-node/archive consistency, sphere references, uniform box, JS/WASM and JP/EN UI.",
       "evidence": "src/stokes-p2-core.js; tests/stokes-p2.test.mjs"
+    },
+    {
+      "id": "MATCAT1",
+      "title": "公開樹脂物性を銘柄・充填材・含有率で選択",
+      "titleEn": "Select published polymer grades, fillers and contents",
+      "status": "checking",
+      "category": "材料",
+      "depends": [
+        "MAT2"
+      ],
+      "detail": "PP・HDPE/LDPE・ABSを中心に61件を同梱。出典・規格・未掲載値・利用者の仮定・手修正を区別し、選択・解析・保存とMCP検索を検証。",
+      "detailEn": "Bundle 61 entries centered on PP, HDPE/LDPE and ABS. Distinguish sources, standards, missing values, user assumptions and overrides; verify selection, solving, archives and MCP lookup.",
+      "acceptance": "公式PDFの値と単位、含有率の区別、未掲載値を推定しないこと、等方近似とポアソン比の明示、保存・日英UI・公開版を検証。",
+      "acceptanceEn": "Verify official values/units, filler contents, no invented missing data, explicit isotropy/Poisson assumptions, archives, JP/EN UI and deployment.",
+      "evidence": "src/polymer-catalog.json; tests/material-catalog.test.mjs; docs/polymer-library.md"
     }
   ],
   "solvers": [

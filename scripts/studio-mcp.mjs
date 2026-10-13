@@ -7,8 +7,10 @@ import {createStudioApi} from '../src/studio-api.js';
 import {createCaseStore} from '../src/cases.js';
 import {sampleResult} from '../src/probe.js';
 import {analyzeProject} from './headless-analysis.mjs';
+import {catalogVersion,catalogEntries,catalogEntry} from '../src/material-catalog.js';
 const pathSchema={type:'string',minLength:1,description:'Absolute local JSON file path'},object=(properties,required=[])=>({type:'object',properties,required,additionalProperties:false});
 const toolList=[
+ {name:'studio_material_catalog',description:'Read preinstalled primary-source polymer property data. Filter grades by family, filler and content; experimental formulations are separate. Poisson ratio is unpublished and must be treated as a user assumption, not manufacturer data.',inputSchema:object({id:{type:'string'},family:{type:'string'},filler:{enum:['unfilled','glassFiber','longGlassFiber','glassBead','talc']},contentPercent:{type:'number',minimum:0,maximum:100},search:{type:'string'},includeExperimental:{type:'boolean'}})},
  {name:'studio_progress',description:'Read released and outstanding features, including solver limits.',inputSchema:object({})},
  {name:'studio_inspect_project',description:'Validate a saved project and summarize its geometry, study and conditions.',inputSchema:object({path:pathSchema},['path'])},
  {name:'studio_analyze',description:'Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.',inputSchema:object({path:pathSchema,outputPath:pathSchema,operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']}},['path','outputPath'])},
@@ -21,6 +23,7 @@ export async function callStudioTool(name,args={}){
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
  if(name==='studio_progress')return JSON.parse(await readFile(new URL('../src/progress.json',import.meta.url),'utf8'));
+ if(name==='studio_material_catalog'){if(args.id!==undefined)return {version:catalogVersion,material:catalogEntry(args.id)};const materials=catalogEntries(args);return {version:catalogVersion,count:materials.length,materials};}
  if(name==='studio_inspect_project'){const api=createStudioApi();api.loadProject(await jsonFile(args.path));return {...api.getSummary(),study:api.exportProject().study};}
  if(name==='studio_validate_cases'){const store=createCaseStore();store.import(await jsonFile(args.path));return store.compare();}
  if(name==='studio_probe'){const output=await jsonFile(args.path);const store=createCaseStore();store.add('Probe validation',output);return sampleResult(output.mesh,output.result,args.point,{elementIndex:args.elementIndex,modeIndex:args.modeIndex});}
@@ -39,7 +42,7 @@ export function startServer(){
   if(message.jsonrpc!=='2.0'||typeof message.method!=='string'){send({jsonrpc:'2.0',id:hasId?message.id:null,error:{code:-32600,message:'Invalid request'}});return;}
   try{
    let result;
-   if(message.method==='initialize'){initialized=true;result={protocolVersion:['2025-11-25','2025-06-18','2025-03-26','2024-11-05'].includes(message.params?.protocolVersion)?message.params.protocolVersion:'2025-11-25',capabilities:{tools:{}},serverInfo:{name:'airpocket-simulation-studio',version:'0.37.0'}};}
+   if(message.method==='initialize'){initialized=true;result={protocolVersion:['2025-11-25','2025-06-18','2025-03-26','2024-11-05'].includes(message.params?.protocolVersion)?message.params.protocolVersion:'2025-11-25',capabilities:{tools:{}},serverInfo:{name:'airpocket-simulation-studio',version:'0.38.0'}};}
    else if(message.method==='notifications/initialized'){if(initialized)ready=true;return;}
    else if(message.method==='ping')result={};
    else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});

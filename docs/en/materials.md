@@ -17,3 +17,5 @@ Thermal data includes conductivity, specific heat, density, expansion coefficien
 API material properties use SI for modulus/strength (Pa); the UI displays MPa. Density is kg/m³, conductivity W/(m·K), specific heat J/(kg·K), expansion 1/K, temperature limits °C. Null means missing. For linear isotropic elasticity, -1 < Poisson ratio < 0.5; incompressible rubber needs a different validated formulation.
 
 Compressible Neo-Hookean finite-strain CPU analysis is supported within the limits documented in [hyperelasticity](hyperelasticity.md). Near-incompressibility and viscoelasticity remain unsupported.
+
+[Preinstalled polymer library](polymer-library.md): 61 primary-source entries with explicit assumptions and provenance.
