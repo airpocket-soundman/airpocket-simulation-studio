@@ -12,3 +12,5 @@
 - [開発順序と受け入れ条件](docs/roadmap.md)
 
 作成日: 2026-10-13
+
+配布方針: GitHub Pagesで公開するWebアプリ。計算はブラウザのWeb WorkerとWASMでローカルCPUを使用し、GPU計算はWebGPU対応を検証して追加する。[ブラウザ実行設計](docs/browser-runtime.md)。現在は公開アプリ未実装。
