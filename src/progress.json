@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T20:25:27.744174+00:00",
+  "updatedAt": "2026-10-13T20:31:35.006208+00:00",
   "release": {
     "version": "v0.30",
     "date": "2026-10-14",
     "testCount": 156,
-    "description": "平面矩形のCAD分割・境界適合メッシュ・寸法保存を追加。156テスト、ローカル配信物14項目、画面14項目を確認。公開確認中。曲面・斜面の厳密な領域分割は残作業。",
-    "descriptionEn": "Added exact planar CAD rectangles, boundary-conforming meshing and saved dimensions. Verified 156 tests, fourteen local distribution checks and fourteen browser checks; deployment verification pending. Exact curved and oblique patches remain outstanding."
+    "description": "平面矩形のCAD分割・境界適合メッシュ・寸法保存を追加。156テスト、公開配信物14項目、公開画面14項目を検証済み。曲面・斜面の厳密な領域分割は残作業。",
+    "descriptionEn": "Added exact planar CAD rectangles, boundary-conforming meshing and saved dimensions. Verified 156 tests, fourteen deployed-runtime checks and fourteen public browser checks. Exact curved and oblique patches remain outstanding."
   },
   "tasks": [
     {
@@ -919,13 +919,25 @@
       "id": "REG2P",
       "title": "平面矩形をCAD分割して荷重・拘束へ反映",
       "titleEn": "Apply exact planar CAD rectangles to loads and supports",
-      "status": "checking",
+      "status": "released",
       "category": "3D",
-      "detail": "単一STEP・直方体のX/Y/Z平面を矩形分割。面積と荷重を検証し、他の面の対応と寸法保存を維持。公開確認中。",
-      "detailEn": "Fragment X/Y/Z planar faces of single STEP/box solids; verify area/load conservation while retaining original face identities and saved dimensions. Deployment verification pending.",
+      "detail": "単一STEP・直方体のX/Y/Z平面を矩形分割。面積・合計荷重・反力、公開版の寸法選択・保存復元を確認。他の面の対応を維持。",
+      "detailEn": "Fragment X/Y/Z planes of single STEP/box solids; verified area/load/reaction balance and public dimensional selection/case restore while retaining original face identities.",
       "acceptance": "STEP各軸面、メッシュ変更後の面積・合計荷重・反力、UI矩形表示、保存復元と不整合拒否を確認。",
       "acceptanceEn": "Verify STEP faces on all axes, remesh area/load/reaction balance, UI rectangle display, roundtrips and inconsistent archive rejection.",
       "evidence": "src/planar-region.js; tests/planar-region.test.mjs; tests/worker-pipeline.test.mjs; docs/planar-regions.md"
+    },
+    {
+      "id": "REG2C",
+      "title": "円筒の部分領域をCAD分割してメッシュへ反映",
+      "titleEn": "Fragment cylindrical CAD patches for conforming meshes",
+      "status": "building",
+      "category": "3D",
+      "detail": "角度と軸方向範囲で円筒面を分割。角度の折り返し、全周の帯、回転STEPと面積・荷重・保存検証を実装中。",
+      "detailEn": "Split cylindrical faces by angular and axial dimensions; implement wraparound/full sleeves, rotated STEP references and area/load/archive verification.",
+      "acceptance": "CAD面積、曲面の三角形近似誤差の改善、合計荷重、UI選択・保存復元を検証。",
+      "acceptanceEn": "Verify CAD area, refinement of faceted-surface area error, conserved force and UI selection/case restore.",
+      "evidence": "src/cylindrical-cad.js; tests/cylindrical-cad.test.mjs"
     }
   ],
   "solvers": [
