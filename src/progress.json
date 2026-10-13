@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T20:00:24.456532+00:00",
+  "updatedAt": "2026-10-13T20:13:59.391089+00:00",
   "release": {
-    "version": "v0.28",
+    "version": "v0.29",
     "date": "2026-10-14",
-    "testCount": 147,
-    "description": "内部流体のCAD抽出・ポート選択・円形/角形STEP直管の層流計算と二言語診断を追加。147テスト、公開配信物13項目、公開画面12項目を検証済み。一般3D流体と任意方向の開口閉鎖は残作業。",
-    "descriptionEn": "Added internal CAD fluid extraction, port selection, circular/rectangular STEP channel flow and bilingual diagnostics. Verified 147 tests, thirteen deployed-runtime checks and twelve public browser checks. General 3D flow and arbitrary cap directions remain outstanding."
+    "testCount": 151,
+    "description": "解析断面の補間色表示と変形座標のクリック測定を追加。過渡音・固有振動の測定表示を修正。151テスト、ローカル配信物13項目、画面13項目を検証。公開確認中。",
+    "descriptionEn": "Added interpolated result sections and probes mapped from deformed display coordinates. Fixed transient/modal probe output. Verified 151 tests, thirteen local distribution checks and thirteen browser checks; deployment verification pending."
   },
   "tasks": [
     {
@@ -904,16 +904,16 @@
       "id": "VIEW2",
       "title": "解析断面の色表示と正確なクリック測定",
       "titleEn": "Colored result sections and accurate point probes",
-      "status": "building",
+      "status": "checking",
       "category": "3D",
       "depends": [
         "REG4"
       ],
-      "detail": "四面体を切断した面に計算結果を補間表示。変形表示から元の座標へ戻し、過渡音と固有振動の測定表示も確認。",
-      "detailEn": "Interpolate computed fields on tetrahedral cross-sections, map deformed display points back to physical coordinates, and verify transient/modal probe formatting.",
+      "detail": "断面生成・線形場補間・共有面重複・変形座標逆対応をテスト。内部流路の断面とクリック測定、過渡音・固有振動を画面で確認。Pages公開確認中。",
+      "detailEn": "Tested section extraction, affine interpolation, shared-face deduplication and deformed-coordinate mapping. Verified internal-flow sections/probes and transient/modal UI probes. Pages verification pending.",
       "acceptance": "断面の面積・補間場と変形点の座標、UI測定を参照値で検証。",
       "acceptanceEn": "Verify section areas/interpolated fields, deformed-point mapping and UI probes against references.",
-      "evidence": "src/result-slice.js; tests/result-slice.test.mjs"
+      "evidence": "src/result-slice.js; tests/result-slice.test.mjs; tests/probe.test.mjs; scripts/qa-browser.cua.js; docs/result-sections.md"
     }
   ],
   "solvers": [
