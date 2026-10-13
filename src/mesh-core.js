@@ -1,3 +1,4 @@
+import {validateFluidDomain} from './fluid-domain.js';
 export function tetraVolume(nodes,t){const p=t.map(i=>nodes.slice(i*3,i*3+3)),a=p[1].map((v,i)=>v-p[0][i]),b=p[2].map((v,i)=>v-p[0][i]),c=p[3].map((v,i)=>v-p[0][i]);return (a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]))/6;}
 export function inspectMesh(mesh){
  if(!Array.isArray(mesh.nodes)||mesh.nodes.length%3||!mesh.nodes.every(Number.isFinite)||!Array.isArray(mesh.tetrahedra)||!mesh.tetrahedra.length)throw Error('Invalid volume mesh');
@@ -13,10 +14,18 @@ export async function generateMesh(initialize,source,{size=5,refinements=[],maxE
  const logs=[];const gmsh=await initialize({print:s=>logs.push(s),printErr:s=>logs.push(s)});gmsh.initialize();
  try{
  gmsh.option.setNumber('General.Terminal',0);gmsh.option.setNumber('General.NumThreads',1);gmsh.option.setNumber('Mesh.MeshSizeMin',refinements.length?size*.15:size);gmsh.option.setNumber('Mesh.MeshSizeMax',size);gmsh.option.setNumber('Mesh.ElementOrder',1);gmsh.option.setNumber('Mesh.MeshSizeFromCurvature',12);gmsh.model.add('analysis');
- if(source.kind==='step'){gmsh.option.setString('Geometry.OCCTargetUnit','MM');const bytes=Uint8Array.from(atob(source.data),c=>c.charCodeAt(0));gmsh.FS.writeFile('/model.step',bytes);gmsh.model.occ.importShapes('/model.step');}
- else if(source.kind==='cylinder')gmsh.model.occ.addCylinder(0,-30,0,0,60,0,12);
- else if(source.kind==='box')gmsh.model.occ.addBox(...source.bounds);
+ const solid=source.kind==='fluidDomain'?validateFluidDomain(source).solid:source;
+ if(solid.kind==='step'){gmsh.option.setString('Geometry.OCCTargetUnit','MM');const bytes=Uint8Array.from(atob(solid.data),c=>c.charCodeAt(0));gmsh.FS.writeFile('/model.step',bytes);gmsh.model.occ.importShapes('/model.step');}
+ else if(solid.kind==='cylinder')gmsh.model.occ.addCylinder(0,-30,0,0,60,0,12);
+ else if(solid.kind==='box')gmsh.model.occ.addBox(...solid.bounds);
+ else if(solid.kind==='boxes')for(const bounds of solid.boxes)gmsh.model.occ.addBox(...bounds);
  else throw Error('Volume meshing currently requires STEP or a built-in solid');
+ if(source.kind==='fluidDomain'){
+  gmsh.model.occ.synchronize();const tools=gmsh.model.getEntities(3).dimTags||gmsh.model.getEntities(3);if(!tools.length)throw Error('No solid volume to subtract from fluid enclosure');const bbox=gmsh.model.getBoundingBox(-1,-1),b=source.enclosure;if([0,1,2].some(k=>b[k]>=bbox[['xmin','ymin','zmin'][k]]-1e-6||b[k]+b[k+3]<=bbox[['xmax','ymax','zmax'][k]]+1e-6))throw Error('Fluid enclosure must completely contain the original solid with a positive gap');
+  const tag=gmsh.model.occ.addBox(...b),cut=gmsh.model.occ.cut([3,tag],tools,-1,true,true);if(!cut.outDimTags?.length)throw Error('No fluid volume remains after subtraction');gmsh.model.occ.synchronize();
+  const enclosed=[];for(let i=0;i<cut.outDimTags.length;i+=2){const volume=gmsh.model.getBoundingBox(3,cut.outDimTags[i+1]);if([0,1,2].every(k=>volume[['xmin','ymin','zmin'][k]]>b[k]+1e-6&&volume[['xmax','ymax','zmax'][k]]<b[k]+b[k+3]-1e-6))enclosed.push(3,cut.outDimTags[i+1]);}
+  if(enclosed.length){gmsh.model.occ.remove(enclosed,true);gmsh.model.occ.synchronize();}
+ }
  gmsh.model.occ.synchronize();const volumes=gmsh.model.getEntities(3).dimTags||gmsh.model.getEntities(3);if(!volumes.length)throw Error('No solid volume found');
  const bounds=gmsh.model.getBoundingBox(-1,-1),estimate=6*(bounds.xmax-bounds.xmin)*(bounds.ymax-bounds.ymin)*(bounds.zmax-bounds.zmin)/size**3;if(estimate>maxElements*4)throw Error('Requested mesh is too fine for the browser limit; increase mesh size');
  if(refinements.length)gmsh.model.mesh.setSizeCallback((_dim,_tag,x,y,z,lc)=>{let h=Math.min(lc,size);for(const r of refinements){const d=Math.hypot(x-r.center[0],y-r.center[1],z-r.center[2]);if(d<r.radius)h=Math.min(h,r.size+(size-r.size)*d/r.radius);}return h;});

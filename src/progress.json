@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T12:21:12.569Z",
+  "updatedAt": "2026-10-13T12:33:15.814454+00:00",
   "release": {
-    "version": "v0.17",
+    "version": "v0.18",
     "date": "2026-10-13",
-    "description": "円管・角柱の十分発達した層流流路を追加。速度・指定圧力場・流量・Re/Machと保存ケースに対応。93テスト。円管のUI出口流量1.3031e-6 m³/s（参照1.35717e-6）、流量差0.171%。一般3D流れは未対応。",
-    "descriptionEn": "Fully developed laminar round/rectangular channels with velocity, imposed pressure profile, flow, Re/Mach and cases. 93 tests. UI round-pipe outlet 1.3031e-6 m³/s vs reference 1.35717e-6, imbalance 0.171%. General 3D flow remains unsupported."
+    "description": "外部流体領域をCAD差分で作成し、実体積メッシュを生成。密閉空洞の除外、元CADの保存復元、断面の内側面選択を検証。98テスト。解析分野ごとに設定欄を整理。一般3D流れのソルバー・内部流路の自動抽出は未対応。",
+    "descriptionEn": "Exterior fluid domain via CAD subtraction and actual volume meshing. Verified sealed-cavity exclusion, original CAD persistence and inner-face selection through clipping. 98 tests. Discipline-specific setup controls. General 3D flow solving and automatic internal passage extraction remain unsupported."
   },
   "tasks": [
     {
@@ -497,13 +497,14 @@
       "id": "CFDDOM1",
       "title": "内外の流体領域を作成",
       "category": "流体",
-      "status": "building",
+      "status": "queued",
       "detail": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "titleEn": "Create internal/external fluid regions",
       "detailEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
       "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
-      "lastUpdate": "外部囲いからCAD部品体積を差し引く流体領域と体積メッシュ生成を実装中。内部流路の自動抽出は残作業"
+      "lastUpdate": "外部囲いのCAD差分と実メッシュはCFDENC1として公開。内部流路の自動抽出、一般3Dの入口出口条件・漏れ検証は残作業。",
+      "lastUpdateEn": "Exterior CAD subtraction and actual meshes released as CFDENC1. Automatic internal passage extraction, general 3D inlet/outlet conditions and leak checks remain outstanding."
     },
     {
       "id": "CFDMESH1",
@@ -664,8 +665,8 @@
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "93自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
-      "lastUpdateEn": "93 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
+      "lastUpdate": "98自動テスト。実際の解析ワーカー処理をNodeで直接実行し、WASM構造適応・放射・接触・流体を約2.4秒で検証。公開ブラウザのCAD/3D操作の一括自動化は残作業。",
+      "lastUpdateEn": "98 automated tests. Canonical analysis worker runs directly in Node, verifying WASM structural adaptation, radiation, contact and flow in about 2.4 seconds. Automated deployed CAD/3D browser checks remain outstanding.",
       "evidence": "tests/worker-pipeline.test.mjs"
     },
     {
@@ -811,6 +812,24 @@
       "lastUpdate": "円管Poiseuille・角柱Fourier参照、粘度比例、逆流、JS/WASM、保存復元・測定を確認。UI 5211要素で流量差0.171%。一般3Dの速度圧力連成・STEP・乱流は未対応。",
       "lastUpdateEn": "Verified pipe Poiseuille and rectangular Fourier references, viscosity scaling, reverse flow, JS/WASM, archives and probes. UI 5211 elements, 0.171% flow imbalance. General 3D velocity-pressure coupling, STEP and turbulence remain unsupported.",
       "evidence": "tests/channel-flow.test.mjs"
+    },
+    {
+      "id": "CFDENC1",
+      "title": "外部囲いから流体体積を作る",
+      "category": "流体",
+      "status": "released",
+      "detail": "CAD体積を囲いから差し引き、閉じた内部空洞を除外。実メッシュと保存復元・内側面選択を検証。",
+      "acceptance": "CAD体積を囲いから差し引き、閉じた内部空洞を除外。実メッシュと保存復元・内側面選択を検証。",
+      "titleEn": "Create exterior fluid volume from an enclosure",
+      "detailEn": "Subtract CAD solids from an enclosure and exclude sealed cavities. Verify actual meshes, persistence and inner-face selection.",
+      "acceptanceEn": "Subtract CAD solids from an enclosure and exclude sealed cavities. Verify actual meshes, persistence and inner-face selection.",
+      "depends": [
+        "MESH2",
+        "REG4"
+      ],
+      "lastUpdate": "箱・複数部品・STEPの密閉空洞を検証。UI 26000 mm³ / 949要素、断面から100 mm²の内側面を選択。一般3D流体計算は拒否し、メッシュ生成のみと明示。",
+      "lastUpdateEn": "Verified boxes, assemblies and sealed STEP cavities. UI 26000 mm³ / 949 elements and 100 mm² inner-face selection through clipping. General 3D flow solving is rejected; scope is explicitly meshing only.",
+      "evidence": "tests/fluid-domain.test.mjs, tests/worker-pipeline.test.mjs"
     }
   ],
   "solvers": [

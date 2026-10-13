@@ -36,3 +36,5 @@ Replace with selected region updates a registered condition region while preserv
 
 ### Section clipping, opacity and part visibility
 Inspect inside sets an X/Y/Z clipping plane and retained side for setup models and analysis results. No new cap geometry is generated; select exposed original interior faces. Transparent front faces still intercept selection; hide parts to select behind them. Part visibility affects the setup viewer only, not analysis contents. Viewer settings are session-only and are not saved in projects. window.viewApi.get()/set({clipEnabled,axis,position,flip,opacity,hiddenParts}) shares the same controls. The interior sample overlaps 20 mm and 8 mm display-only parts. Browser validation selected 64 mm² inside after clipping, 400 mm² in front through transparency, and 64 mm² inside after hiding the outer part.
+
+Exterior fluid-domain CAD subtraction and meshing are implemented. [Scope and usage](fluid-domains.md). General 3D flow solving and automatic internal passage extraction remain unsupported. Fully developed round/rectangular laminar channels are a separate limited mode.

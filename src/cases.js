@@ -10,7 +10,7 @@ export function createCaseStore(){
   for(const k of ['tolerance','stressTolerance'])if(o[k]!==undefined&&(!Number.isFinite(o[k])||o[k]<=0||o[k]>=1))throw Error('Invalid adaptive tolerance');
   if(o.maxAdaptiveElements!==undefined&&(!Number.isInteger(o.maxAdaptiveElements)||o.maxAdaptiveElements<1||o.maxAdaptiveElements>30000))throw Error('Invalid adaptive element limit');
   if(o.maxAdaptiveSeconds!==undefined&&(!Number.isFinite(o.maxAdaptiveSeconds)||o.maxAdaptiveSeconds<=0||o.maxAdaptiveSeconds>110))throw Error('Invalid adaptive time limit');
-  const r=c.output.result;
+  const r=c.output.result;if(r?.kind!=='elastic'&&o.adaptive)throw Error('Adaptive cases require structural results');
   if(!metrics[r?.kind]||metrics[r.kind].some(([k])=>!Number.isFinite(r[k])))throw Error('Invalid case result');
   if(c.output.input.study&&c.output.input.study.kind!==({elastic:'structural',thermal:'thermal',acoustic:'acoustic',channelFlow:'channelFlow'}[r.kind]))throw Error('Case discipline does not match result');
   if((r.kind==='channelFlow'&&r.maxSpeedMs<0)||(r.kind==='elastic'&&(r.maxDisplacementMm<0||r.maxVonMisesPa<0))||(r.kind==='thermal'&&(r.minTemperature<-273.15||r.minTemperature>r.maxTemperature))||(r.kind==='acoustic'&&r.maxPressurePa<0))throw Error('Invalid case result range');
