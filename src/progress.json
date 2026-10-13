@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T22:06:36.834805+00:00",
+  "updatedAt": "2026-10-13T22:15:39.585477+00:00",
   "release": {
     "version": "v0.36",
     "date": "2026-10-14",
     "testCount": 193,
-    "description": "単軸比例弾性載荷のS-N疲労評価、Goodman平均応力補正とMiner損傷、評価と試験データの保存整合を追加。193テスト、ローカル配信物20項目と疲労画面の参照値・保存・日英表示が成功。公開確認中。",
-    "descriptionEn": "Added S-N fatigue assessment under uniaxial proportional elastic loading, Goodman correction, Miner damage and strict archived assessment/data consistency. Verified 193 source tests, twenty local runtime checks and focused browser references, archives and JP/EN. Public verification pending."
+    "description": "単軸比例弾性載荷のS-N疲労評価、Goodman平均応力補正とMiner損傷、評価と試験データの保存整合を追加。193テスト、公開配信物20項目、v0.36公開画面20項目が成功。塑性疲労・多軸疲労・き裂進展は残作業。",
+    "descriptionEn": "Added uniaxial proportional elastic S-N fatigue, Goodman correction, Miner damage and archived assessment/data consistency. Verified 193 source tests, twenty deployed runtime checks and twenty v0.36 public browser checks. Plastic/multiaxial fatigue and crack growth remain outstanding."
   },
   "tasks": [
     {
@@ -991,10 +991,10 @@
       "id": "FATIGUE1",
       "title": "単軸弾性載荷のS-N疲労寿命を評価",
       "titleEn": "Assess S-N fatigue life under uniaxial elastic loading",
-      "status": "checking",
+      "status": "released",
       "category": "材料",
-      "detail": "R=-1のS-N曲線・出典・試験条件を登録し、単軸比例弾性結果から寿命と一定振幅損傷を評価。193テスト・ローカル配信物20項目・疲労画面の保存復元が成功。多軸/塑性疲労と試験範囲外は拒否。公開確認中。",
-      "detailEn": "Registered R=-1 S-N data with provenance/conditions and assessed life and constant-amplitude damage from uniaxial proportional elastic results. Passed 193 source tests, twenty local runtime checks and focused browser restoration. Multiaxial/plastic fatigue and extrapolation are refused. Public verification pending.",
+      "detail": "R=-1のS-N曲線・出典・試験条件を登録し、単軸比例弾性結果から寿命と一定振幅損傷を評価。193テスト・公開配信物20項目・公開画面20項目が成功。多軸/塑性疲労と試験範囲外は拒否。",
+      "detailEn": "Registered R=-1 S-N data with provenance/conditions and assessed life and constant-amplitude damage from uniaxial proportional elastic results. Passed 193 source tests, twenty public runtime and twenty public browser checks. Multiaxial/plastic fatigue and extrapolation are refused.",
       "acceptance": "架空の参照S-N曲線の寿命・補正・損傷、入力不備/降伏超過/多軸の拒否、API・保存復元・日英UIを検証。",
       "acceptanceEn": "Verify synthetic reference life, correction and damage, invalid data/yield/multiaxial rejection, API, archives and JP/EN UI.",
       "depends": [
