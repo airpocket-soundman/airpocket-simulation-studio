@@ -1,6 +1,11 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+"弾塑性の載荷・除荷サンプル":"Plastic loading / unloading example",
+"弾塑性の荷重倍率履歴（任意、カンマ区切り）":"Plastic load fraction history (optional, comma-separated)",
+"空欄は通常の単調載荷。指定すると各倍率で荷重と指定変位を増減し、履歴の長さを増分数に使います。弾性除荷と残留塑性ひずみを表示します。疲労寿命は計算しません。":"Leave blank for ordinary monotonic loading. Each fraction scales loads and prescribed displacements; the history length sets the step count. Shows elastic unloading and residual plastic strain. Fatigue life is not calculated.",
+"弾塑性の載荷・除荷サンプルを設定しました。倍率1まで載荷後0.6まで除荷します。最終応力11.7413 MPa、相当塑性ひずみ0.174129%・可動面反力1174.129 Nが参照値です。":"Plastic loading/unloading example configured. Loads to fraction 1 then unloads to 0.6. Final reference stress 11.7413 MPa, equivalent plastic strain 0.174129%, actuator reaction 1174.129 N.",
+
 "弾塑性引張サンプル":"Plastic axial tension example",
 "J2微小ひずみ弾塑性・等方硬化":"J2 small-strain plasticity / isotropic hardening",
 "弾塑性を使う（構造・CPU）":"Use plasticity (structural CPU)",

@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T21:23:17.426536+00:00",
+  "updatedAt": "2026-10-13T21:32:05.218838+00:00",
   "release": {
-    "version": "v0.33",
+    "version": "v0.34",
     "date": "2026-10-14",
-    "testCount": 173,
-    "description": "J2微小ひずみ弾塑性・正の等方硬化、荷重増分履歴、相当塑性ひずみ表示と保存整合検査を追加。173テストとローカル画面の参照値・保存復元・日英表示を確認。公開配信を検証中。",
-    "descriptionEn": "Added small-strain J2 plasticity with positive isotropic hardening, increment histories, equivalent plastic strain display and archive consistency validation. Verified 173 source tests and focused local browser references, archives and JP/EN. Public deployment verification is pending."
+    "testCount": 177,
+    "description": "J2の指定荷重倍率履歴と弾性除荷を追加。177テストとローカル画面で塑性ひずみ不変・エネルギー低下・保存した入力の復元・日英表示を確認。公開版の検証は次に実施。",
+    "descriptionEn": "Added prescribed J2 loading and unloading histories. Verified 177 source tests and focused local browser residual strain, declining elastic energy, restored inputs and JP/EN. Public verification is pending."
   },
   "tasks": [
     {
@@ -955,12 +955,24 @@
       "id": "PLAST1",
       "title": "金属のJ2弾塑性・等方硬化を計算",
       "titleEn": "Compute small-strain J2 plasticity with isotropic hardening",
-      "status": "checking",
+      "status": "released",
       "category": "構造",
-      "detail": "単調載荷のJ2弾塑性を実装。単軸参照応力251.741MPa・塑性ひずみ0.174129%・反力25174.129Nを検証。保存変位・ひずみ・最終エネルギー・反力の矛盾を拒否。公開版を確認中。",
-      "detailEn": "Implemented monotonic J2 plasticity; verified axial stress 251.741 MPa, plastic strain 0.174129% and reaction 25174.129 N. Inconsistent displacement, strain, final energy and reaction archives are refused. Public verification pending.",
+      "detail": "J2微小ひずみ弾塑性と正の等方硬化を実装。v0.33の173テスト・公開配信物17項目・公開画面17項目が成功。単軸応力・反力・塑性ひずみと保存整合を検証済み。",
+      "detailEn": "Implemented small-strain J2 plasticity with positive isotropic hardening. v0.33 passed 173 source tests, seventeen public runtime and seventeen public browser checks, including axial references and archive consistency.",
       "acceptance": "材料接線の差分検証、単軸の参照応力・塑性ひずみ・反力、WASM/JS一致、保存復元とUIを検証。",
       "acceptanceEn": "Verify finite-difference material tangent, analytical uniaxial stress/plastic strain/reactions, WASM/JS agreement, archives and UI.",
+      "evidence": "src/plasticity-core.js; tests/plasticity.test.mjs; docs/plasticity.md"
+    },
+    {
+      "id": "PLAST2",
+      "title": "J2塑性の載荷・除荷履歴を計算",
+      "titleEn": "Compute loading and unloading histories for J2 plasticity",
+      "status": "checking",
+      "category": "構造",
+      "detail": "14増分で載荷後に倍率0.6まで除荷。応力11.7412935MPa・反力1174.12935N・相当塑性ひずみ不変をJS/WASMで照合。保存入力の復元不具合も画面検証で修正。公開確認中。",
+      "detailEn": "Verified fourteen-increment unloading to fraction 0.6: 11.7412935 MPa, 1174.12935 N and unchanged plastic strain on JS/WASM. Fixed a saved-input restoration bug found by browser QA. Public verification pending.",
+      "acceptance": "単軸0.3%から0.18%へ除荷し応力11.7412935MPa、反力1174.12935N、相当塑性ひずみ不変を確認。WASM/JS・保存復元・日英UIを検証。",
+      "acceptanceEn": "Verify unloading from 0.3% to 0.18% strain: 11.7412935 MPa, 1174.12935 N and unchanged equivalent plastic strain; check WASM/JS, archives and JP/EN UI.",
       "evidence": "src/plasticity-core.js; tests/plasticity.test.mjs; docs/plasticity.md"
     }
   ],

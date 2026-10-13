@@ -1,5 +1,11 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+"Invalid saved plasticity material dependence":"保存した弾塑性結果の材料依存設定は計算に対応していません。",
+"Plasticity load steps must match the load fractions length":"弾塑性の増分数は荷重倍率の個数と一致させてください。",
+"Invalid plastic load fractions: use 1–30 fractions in [0,1], positive first/final fractions, maximum 1 and matching load steps":"荷重倍率は0～1の有限値を1～30個指定し、最初と最後は正、最大は1、増分数は履歴の長さと一致させてください。",
+"Plastic load fractions require a structural plasticity model":"荷重倍率履歴は弾塑性の構造解析だけに使用できます。",
+"Invalid plasticity load fractions: require 1–30 values in [0,1], positive first and last values, and a peak of 1":"弾塑性の荷重倍率は0～1の有限値を1～30個指定し、最初と最後は正、最大は1にしてください。",
+
  'Plasticity supports CPU structure without adaptation, modal analysis or thermal stress':'弾塑性はCPUの構造解析に対応します。適応解析・固有振動・熱応力を解除してください。',
  'Solving small-strain J2 plasticity…':'微小ひずみのJ2弾塑性を計算中…',
 

@@ -64,6 +64,17 @@ test('plastic WASM worker agrees with a free-contraction reference and restores 
   const bad=structuredClone(archive),saved=restored.export();corrupt(bad.cases[0].output);
   assert.throws(()=>restored.import(bad),message);assert.deepEqual(restored.export(),saved);
  }
+ // Saved material dependence must remain compatible with the J2 solver.
+ for(const fields of [
+  {dependence:{rateDependent:true}},
+  {dependence:{directionality:'orthotropic',axes:[[1,0,0],[0,1,0],[0,0,1]]}},
+  {dependence:{elasticTemperatureTable:[{temperature:20,youngModulus:200e9,poissonRatio:.3},{temperature:40,youngModulus:200e9,poissonRatio:.3}]}},
+  {rateDependent:true},{directionality:'orthotropic'},{orthotropic:{}},{elasticTemperatureTable:[]}
+ ]){
+  const bad=structuredClone(archive),saved=restored.export();Object.assign(bad.cases[0].output.input.materialProperties,fields);
+  assert.throws(()=>prepareCaseView(bad.cases[0]),/Invalid saved plasticity material dependence/);
+  assert.throws(()=>restored.import(bad));assert.deepEqual(restored.export(),saved);
+ }
  // Modal metadata cannot conceal registered plasticity with a missing committed result.
  {
   const bad=structuredClone(archive),saved=restored.export(),output=bad.cases[0].output;
@@ -87,5 +98,43 @@ test('plastic worker refuses adaptation, independent/GPU engines, modal and ther
  }
  for(const study of [{modalAnalysis:true},{thermalStress:true,temperature:20}]){
   const terminal=await run({...project,study:{...project.study,...study}});assert.equal(terminal.result,undefined);assert.match(terminal.error,/plastic/i);
+ }
+});
+
+test('plastic WASM worker unloads elastically and preserves the nonmonotonic history through archives',async()=>{
+ const project=referenceProject(),fractions=[...Array.from({length:10},(_,i)=>(i+1)/10),.9,.8,.7,.6];
+ project.study.plasticLoadFractions=fractions;delete project.study.nonlinearLoadSteps;
+ const api=createStudioApi();api.loadProject(project);const input=api.exportProject(),terminal=await run(input);assert.equal(terminal.error,undefined);
+ const output=terminal.result,r=output.result,kappa=(200e9*.003-250e6)/(200e9+1e9),stress=200e9*(.0018-kappa);
+ assert.equal(r.plasticity.loadSteps,14);assert.deepEqual(r.plasticity.history.map(h=>h.loadFraction),fractions);
+ assert.deepEqual(r.plasticity.loadFractions,fractions);
+ assert.ok(r.plasticity.history.every(h=>h.residual<1e-8));
+ for(const s of r.stresses)close(s[2],stress);
+ for(const k of r.plasticity.equivalentPlasticStrain)close(k,kappa);
+ for(const h of r.plasticity.history.slice(9))close(h.maxEquivalentPlasticStrain,kappa);
+ close(r.constraintRegionReactions.find(v=>v.conditionIndex===3).directionalReactionN,stress*1e-4);
+ const store=createCaseStore();store.add('Elastic unloading',{...output,input,calculation:{operation:'elastic',options:{size:5,method:'wasm-pcg',adaptive:false,maxRounds:3}}});
+ const archive=JSON.parse(JSON.stringify(store.export())),restored=createCaseStore();restored.import(archive);
+ const view=prepareCaseView(restored.list()[0]);assert.deepEqual(view.input.study.plasticLoadFractions,fractions);assert.deepEqual(view.result.plasticity,r.plasticity);
+ const point=[0,1,2].map(k=>view.mesh.tetrahedra[0].reduce((sum,n)=>sum+view.mesh.nodes[3*n+k]/4,0)),probe=sampleResult(view.mesh,view.result,point,{elementIndex:0});
+ close(probe.equivalentPlasticStrain,kappa);close(probe.vonMisesPa,stress);
+ for(const corrupt of [o=>o.result.plasticity.history[10].loadFraction=.95,o=>o.result.plasticity.history[10].maxEquivalentPlasticStrain=0,o=>o.input.study.nonlinearLoadSteps=10,o=>o.result.plasticity.loadFractions[10]=.95]){
+  const bad=structuredClone(archive),saved=restored.export();corrupt(bad.cases[0].output);
+  assert.throws(()=>restored.import(bad));assert.deepEqual(restored.export(),saved);
+ }
+ for(const badFractions of [[],[0,1],[.1,.9],[.1,1,0],[.1,1,Infinity],[.1,1,1.01],Array(31).fill(1)]){
+  const bad={...input,study:{...input.study,plasticLoadFractions:badFractions}},saved=api.exportProject();
+  assert.throws(()=>api.loadProject(bad),/plastic load fractions/i);assert.deepEqual(api.exportProject(),saved);
+  const failed=await run(bad);assert.equal(failed.result,undefined);assert.match(failed.error,/plastic load fractions/i);
+ }
+ const mismatched={...input,study:{...input.study,nonlinearLoadSteps:10}};
+ assert.throws(()=>api.loadProject(mismatched),/plastic load fractions/i);
+ assert.match((await run(mismatched)).error,/plastic load fractions/i);
+ for(const incompatible of [
+  {...input,materialProperties:{youngModulus:200e9,poissonRatio:.3}},
+  {...input,study:{...input.study,kind:'thermal'}}
+ ]){
+  assert.throws(()=>api.loadProject(incompatible),/require a structural plasticity model/i);
+  assert.match((await run(incompatible)).error,/require a structural plasticity model/i);
  }
 });

@@ -10,7 +10,7 @@ H differs from the post-yield tangent Et of the total uniaxial stress–strain c
 
 The model uses 3D small strain, isotropic linear elasticity and associated von Mises flow. Its yield function is `f = sqrt(3/2 s:s) - (σY + H κ)`, where s is deviatoric stress and κ is accumulated equivalent plastic strain. Hydrostatic stress alone does not cause yielding. A trial stress outside the yield surface is corrected by radial return with `Δκ = max(f_trial, 0) / (3G + H)`.
 
-Loads and prescribed displacements are applied incrementally. Newton iterations restore equilibrium using a consistent tangent. Plastic state is committed only after an increment converges; iteration trial states must not accumulate as history. Nonconvergence is not a successful result. The material-point model supports elastic unloading and residual plastic strain; this does not establish support for user-defined cyclic FE loading through the analysis UI.
+Loads and prescribed displacements are applied incrementally. Newton iterations restore equilibrium using a consistent tangent. Plastic state is committed only after an increment converges; iteration trial states must not accumulate as history. Nonconvergence is not a successful result. Use the plastic load fraction history input to prescribe loading and unloading. Accumulated equivalent plastic strain remains during elastic unloading. Repeated loading updates the material state, but fatigue damage and fatigue life are not calculated.
 
 ## Reference bar and output
 
@@ -47,3 +47,18 @@ Supported execution is Airpocket JS/WASM CPU, up to 2000 tetrahedra and 2000 nod
 Tet4 can lock under isochoric plastic deformation and predict an excessively stiff response. Agreement for a uniform bar does not establish accuracy for arbitrary geometry. Compare reactions, displacements and plastic zones against independent reference solutions and multiple meshes.
 
 References are the author's [FEniCSx radial-return and consistent-tangent example, including its locking warning](https://bleyerj.github.io/comet-fenicsx/tours/nonlinear_problems/plasticity/plasticity.html), and the [official MOOSE isotropic plasticity update](https://mooseframework.inl.gov/source/materials/IsotropicPlasticityStressUpdate.html). This implementation is not a port of those solvers or an accuracy certification. Regression coverage belongs in `tests/plasticity.test.mjs` and `tests/worker-pipeline.test.mjs`; consult the actual verification record for execution results.
+
+## Loading and unloading history
+
+The loading/unloading example is available as `window.analysisApi.loadPlasticUnloadExample()`. It uses the same bar, loading from fraction 0.1 to 1 and unloading through 0.9, 0.8, 0.7 and 0.6 over 14 increments. Final prescribed displacement is 0.072 mm and axial strain is 0.0018. Equivalent plastic strain remains approximately 0.00174129353; after elastic unloading, axial stress is approximately 11.74129353 MPa and actuator reaction is approximately 1174.129353 N. This example does not unload to zero force.
+
+Fractions scale both external loads and prescribed displacements. This history is supported only for structural plasticity. Leave the UI input blank for ordinary equal monotonic increments. Supply 1–30 finite fractions in [0,1], with positive first and final values and a maximum exactly equal to 1. Intermediate zero is permitted. The step count must equal the array length; the UI sets it automatically when a history is entered.
+
+```js
+const study = window.studioApi.exportProject().study;
+const plasticLoadFractions = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1,.9,.8,.7,.6];
+window.studioApi.setStudy({...study, plasticLoadFractions,
+  nonlinearLoadSteps: plasticLoadFractions.length});
+```
+
+`plasticity.history[].loadFraction` records each loading or unloading fraction. Accumulated equivalent plastic strain and `plasticDissipationJ` do not decrease during elastic unloading. Case archives preserve the residual plastic strain, hardening state, final energies and increment history. Returning freely to zero external force and imposing zero displacement can produce different residual stresses. Fatigue life, kinematic hardening, the Bauschinger effect, crack growth and fracture prediction are unsupported.

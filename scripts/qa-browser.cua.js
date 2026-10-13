@@ -28,6 +28,7 @@ export async function* runStudioBrowserQa(tab,stepFile,base='https://airpocket-s
  await tab.playwright.locator('#cylindrical-cad-demo').click();await tab.playwright.locator('summary').filter({hasText:'円筒を角度・長さで選ぶ'}).click();await tab.playwright.locator('#cylinder-select').click();await observe();expect(Math.abs(parseFloat(await tab.playwright.locator('#area').innerText())-376.99)<.01,'Exact cylinder selection area mismatch');await tab.playwright.locator('summary').filter({hasText:'円筒を角度・長さで選ぶ'}).click();const cylinder=await solve();expect(cylinder.includes('反力 [123.000'),'Cylindrical patch force/reaction mismatch');await tab.playwright.locator('#case-name').fill('CUA cylindrical CAD patch');await tab.playwright.locator('#case-add').click();await observe();await tab.playwright.locator('#case-list article').filter({hasText:'CUA cylindrical CAD patch'}).getByRole('button',{name:'保存結果を3D表示',exact:true}).click();await observe();expect((await tab.playwright.locator('#conditions').innerText()).includes('CAD円筒領域'),'Saved cylindrical dimensions lost');checks.push({name:'exact-cylindrical-cad-selection-reaction-and-case',passed:true});yield checks.at(-1);
  checks.push(await checkObliqueBrowserQa(tab,stepFile));yield checks.at(-1);
  checks.push(await checkPlasticityBrowserQa(tab));yield checks.at(-1);
+ checks.push(await checkPlasticUnloadBrowserQa(tab));yield checks.at(-1);
  return {target:base,checkedAt:new Date().toISOString(),checks,limitations:['One current in-app browser; cross-browser performance and exhaustive UI combinations require separate checks.']};
 }
 
@@ -68,4 +69,32 @@ export async function checkPlasticityBrowserQa(tab){
  expect((await tab.playwright.locator('#result-summary').innerText()).includes('J2 isotropic hardening / Small strain'),'English plasticity metadata missing');expect((await tab.playwright.locator('#plastic-demo').innerText()).includes('Plastic axial tension'),'English plastic demo label missing');
  await tab.playwright.getByRole('link',{name:'JP',exact:true}).click();await saved.getByRole('button',{name:'保存結果を3D表示',exact:true}).click();await tab.playwright.locator('#result-field').selectOption('plasticStrain');expect((await tab.playwright.locator('#result-legend').innerText()).includes('%'),'Saved plastic strain field lost');
  return {name:'j2-plasticity-free-contraction-strain-reaction-history-and-case',passed:true,stressMPa:stress,actuatorReactionN:actuator};
+}
+
+export async function checkPlasticUnloadBrowserQa(tab){
+ const expect=(value,message)=>{if(!value)throw Error(message);};
+ const snapshot=()=>tab.playwright.locator('#status').evaluate(el=>({status:el.textContent.trim(),busy:!el.ownerDocument.querySelector('#cancel-run').disabled}));
+ const inputState=()=>tab.playwright.locator('#plastic-load-fractions').evaluate(el=>({fractions:el.value.split(',').map(Number),disabled:el.disabled,steps:Number(el.ownerDocument.querySelector('#nonlinear-steps').value)}));
+ const expectedFractions=[.1,.2,.3,.4,.5,.6,.7,.8,.9,1,.9,.8,.7,.6];
+ await tab.playwright.getByRole('link',{name:'JP',exact:true}).click();await tab.playwright.locator('#plastic-unload-demo').click();
+ expect((await snapshot()).status.includes('倍率1まで載荷後0.6まで除荷'),'Plastic unloading demo setup failed');
+ const configured=await inputState();expect(JSON.stringify(configured.fractions)===JSON.stringify(expectedFractions)&&configured.steps===14&&!configured.disabled,'Plastic unloading fractions were not configured');
+ await tab.playwright.locator('#solve-run').click();let solved=false;
+ for(let attempt=0;attempt<6;attempt++){
+  const state=await snapshot();if(state.status==='解析が完了しました。'){solved=true;break;}if(!state.busy)throw Error('Plastic unloading analysis failed: '+state.status);
+  try{await tab.playwright.locator('#status').filter({hasText:'解析が完了しました。'}).waitFor({state:'visible',timeoutMs:5000});}catch(error){if(!/deadline|[Tt]imed out/.test(error.message))throw error;}
+ }
+ expect(solved||(await snapshot()).status==='解析が完了しました。','Plastic unloading exceeded six bounded waits');
+ const summary=await tab.playwright.locator('#result-summary').innerText(),stress=Number(summary.match(/最大von Mises\s+([0-9.e+-]+)\s+MPa/)?.[1]);expect(Math.abs(stress-11.7412935)<.001,'Unloaded stress reference mismatch: '+stress);expect(summary.includes('最大相当塑性ひずみ 0.174129%'),'Residual plastic strain metadata missing');
+ const reactions=await tab.playwright.locator('#constraint-reactions').innerText(),actuator=Number(reactions.match(/#4[^\n]*指定方向\s+([0-9.e+-]+)\s+N/)?.[1]);expect(Math.abs(actuator-1174.12935)<.01,'Unloaded actuator reaction mismatch: '+reactions);
+ const history=await tab.playwright.locator('#result-summary table').evaluate(el=>Array.from(el.querySelectorAll('tr')).slice(1).map(row=>Array.from(row.querySelectorAll('td'),td=>Number(td.textContent))));
+ expect(history.length===14,'Unloading history should have fourteen increments');expect(history.every((row,i)=>row[0]===i+1&&row[1]===expectedFractions[i]),'Unloading history fractions mismatch');const peak=history[9],final=history[13];expect(peak[4]===final[4]&&Math.abs(final[4]-.174129)<1e-6,'Equivalent plastic strain changed on elastic unloading');expect(final[5]<peak[5]&&final[6]===peak[6]&&final[7]===peak[7],'Unloading energy history should reduce elastic energy and retain hardening/dissipation');
+ await tab.playwright.locator('#result-field').selectOption('plasticStrain');expect((await tab.playwright.locator('#result-legend').innerText()).includes('0.1741'),'Unloaded plastic strain field missing');
+ if(await tab.playwright.locator('#case-list article').count()>=8){const own=tab.playwright.locator('#case-list article').filter({hasText:'CUA plasticity reference'});expect(await own.count()===1,'No owned plastic QA case available to free a slot');await own.getByRole('button',{name:'削除',exact:true}).click();}
+ await tab.playwright.locator('#case-name').fill('CUA plastic unload reference');await tab.playwright.locator('#case-add').click();const saved=tab.playwright.locator('#case-list article').filter({hasText:'CUA plastic unload reference'});expect(await saved.count()===1,'Unloading case save failed: '+(await snapshot()).status);
+ await tab.playwright.locator('#plastic-demo').click();expect((await tab.playwright.locator('#plastic-load-fractions').evaluate(el=>el.value))==='','Monotonic demo did not clear unloading input');await saved.getByRole('button',{name:'保存結果を3D表示',exact:true}).click();
+ const restored=await inputState();expect(JSON.stringify(restored.fractions)===JSON.stringify(expectedFractions)&&restored.steps===14&&!restored.disabled,'Saved unloading input was not restored');expect(await tab.playwright.locator('#result-summary table tr').count()===15,'Saved unloading history lost');
+ await tab.playwright.getByRole('link',{name:'EN',exact:true}).click();await saved.getByRole('button',{name:'View saved result in 3D',exact:true}).click();expect((await tab.playwright.locator('#result-summary').innerText()).includes('Maximum equivalent plastic strain 0.174129%'),'English unloading metadata missing');expect((await tab.playwright.locator('#plastic-unload-demo').innerText()).includes('Plastic loading / unloading'),'English unloading button missing');
+ await tab.playwright.getByRole('link',{name:'JP',exact:true}).click();await saved.getByRole('button',{name:'保存結果を3D表示',exact:true}).click();expect((await tab.playwright.locator('#result-summary').innerText()).includes('最大相当塑性ひずみ 0.174129%'),'Japanese unloading metadata missing');expect((await inputState()).fractions.at(-1)===.6,'Saved final unloading fraction lost');
+ return {name:'j2-loading-unloading-residual-strain-energy-history-and-case',passed:true,stressMPa:stress,actuatorReactionN:actuator,finalLoadFraction:.6};
 }
