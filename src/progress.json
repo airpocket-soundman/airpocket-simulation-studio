@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T15:52:45.007075+00:00",
+  "updatedAt": "2026-10-13T16:03:27.068433+00:00",
   "release": {
     "version": "v0.23",
     "date": "2026-10-14",
-    "description": "公開Worker/WASMの直接回帰チェック、配信ファイルのハッシュ検証・キャッシュ、段階実行のCUAブラウザ回帰、プロジェクト/ケース集のJSONテキスト受取りを追加。119テスト。公開版での回帰を最終確認中。一般3D流体・接触・破壊等は残作業。",
-    "descriptionEn": "Added deployed Worker/WASM regression, content hashes/cache, milestone-based CUA browser regression and project/case JSON text export. 119 tests. Final public regression verification underway. General 3D flow, contact and failure remain outstanding."
+    "description": "公開Worker/WASMの直接回帰チェック、ハッシュ検証・キャッシュ、段階実行CUAブラウザ回帰、JSONテキスト受取りを追加。119テスト、公開実行ファイル8項目とブラウザ7項目で検証済み。一般3D流体・接触・破壊等は残作業。",
+    "descriptionEn": "Added deployed Worker/WASM regression, hash verification/cache, milestone CUA browser regression and JSON text export. 119 tests, eight deployed-runtime checks and seven browser checks verified. General 3D flow, contact and failure remain outstanding."
   },
   "tasks": [
     {
@@ -569,12 +569,14 @@
       "id": "ACOU3",
       "title": "音の外部放射・指向性",
       "category": "音響",
-      "status": "queued",
+      "status": "building",
       "detail": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
       "acceptance": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
       "titleEn": "Support external radiation and directivity",
       "detailEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence.",
-      "acceptanceEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence."
+      "acceptanceEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence.",
+      "lastUpdate": "球形の外部音響領域、球面放射境界と指向性の測定を実装予定。有限領域・境界近似の誤差を参照解とメッシュ/領域サイズで検証。",
+      "lastUpdateEn": "Implementing spherical exterior acoustic domains, radiation boundaries and directivity sampling, with reference and mesh/domain-size validation of finite-domain boundary approximation."
     },
     {
       "id": "ACOU4",
@@ -671,14 +673,14 @@
       "id": "QA1",
       "title": "公開環境で回帰検証を実行",
       "category": "検証",
-      "status": "checking",
+      "status": "released",
       "detail": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
       "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
       "titleEn": "Run regression checks on the deployed app",
       "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
       "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
-      "lastUpdate": "生成された配信物の実Node Worker検証は約6秒で成功。CUAの段階実行でMFEM/ゴム、日英、ケース再読込、STEP面選択・回転、プロジェクト復元を確認。公開版で同じ手順を最終確認中。",
-      "lastUpdateEn": "Generated runtime passes real Node Worker regression in about 6 seconds. Milestone CUA checks verified MFEM/rubber, JP/EN, archive import, STEP face selection/orbit and project restoration. Repeating against the deployed version.",
+      "lastUpdate": "公開0.23の実行ファイル8項目を7.68秒で検証。公開ブラウザでもMFEM/ゴム、日英、ケース再読込、STEP面400 mm²・回転後再選択、プロジェクト復元の7項目を自動確認。通常のダウンロードイベントを取得できない環境ではJSONテキスト経由で検証。複数ブラウザ性能と網羅的UI組合せは別対応。",
+      "lastUpdateEn": "Verified eight deployed 0.23 runtime checks in 7.68 seconds and seven public CUA browser checks: MFEM/rubber, JP/EN, case import, 400 mm² STEP face selection/orbit and project restoration. JSON text supports environments without captured download events. Cross-browser performance and exhaustive UI combinations remain separate.",
       "evidence": "scripts/check-published.mjs; scripts/qa-browser.cua.js; docs/testing.md"
     },
     {
