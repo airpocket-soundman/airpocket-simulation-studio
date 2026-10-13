@@ -2,12 +2,18 @@
 
 [日本語](../acoustics.md)
 
-Distinguish solid vibration, sound propagation in air/other media and flow-generated sound. Planned features: natural frequencies/modes, forced frequency response and damping; acoustic domains, source faces, pressure/normal-velocity excitation and receivers; cavity/pipe resonance, sweeps, pressure amplitude/phase and response curves.
+v0.3 implements frequency-domain acoustics in a uniform medium. The interior of an imported STEP solid is the acoustic domain. Airpocket Acoustic Tet4 solves the complex Helmholtz equation using linear tetrahedra and BiCGStab, with WASM or JavaScript matrix products. This is not a port of Elmer or Code_Aster.
 
-Configure rigid walls and frequency-dependent impedance/absorption. Record sound speed, density, damping and temperature, plus dynamic structural properties. Sound pressure levels must state reference pressure, RMS/peak convention, frequency and any weighting; air/water references differ.
+## Available features
 
-Later add vibration radiation, coupled vibroacoustics, directivity and transmission loss. Validate open boundaries and domain-size convergence for external acoustics. Consider dedicated BEM only when needed. Flow noise, transient waves, impulse responses and auralization are later milestones; a single-frequency pressure result does not establish audible timbre.
+- Prescribed real peak pressure on selected surface regions; unspecified walls are rigid.
+- Frequency, sound speed, medium density, volumetric loss factor and reference pressure.
+- 3D peak pressure, phase and SPL. SPL uses RMS (peak divided by √2), defaults to 20 µPa reference and has a plotting floor of 1e-12 Pa RMS.
+- Coordinate-based interior receiver, up to 20 sweep samples, surface-click probes and JSON input/result export.
+- Reject mesh target sizes above one sixth wavelength. This is a guard, not an accuracy guarantee; convergence checks are still required.
 
-Elmer’s Helmholtz model is the first candidate; Code_Aster is an additional candidate. Browser builds are not yet validated. Structural transfers must preserve frequency, complex amplitude, phase and normal velocity.
+## Validation and limits
 
-Benchmark against rectangular cavity modes, pipe resonance with specified boundaries and known wave solutions. Size meshes for the highest frequency and sweeps to capture resonance peaks. Do not present undamped infinite/very high peaks as real measured SPL. [Elmer models manual](https://www.nic.funet.fi/pub/sci/physics/elmer/doc/ElmerModelsManual.pdf).
+For a 10×10×40 mm pipe with 1 Pa/0 Pa ends and rigid sides, the 2 kHz solution differs from its sinusoidal reference by less than 0.006 Pa at each node. A 500–3000 Hz receiver sweep matches between WASM and JavaScript within 1e-7 Pa. Pressure display, sweep table and surface probes were verified through the UI.
+
+Structural vibration, impedance/absorption boundaries, open boundaries, radiation, cavity eigenmodes, transient waves, auralization, flow noise and structural-acoustic coupling remain unimplemented. The uniform volumetric loss factor is not a material absorption coefficient. Iterative failures near resonance stop with an error; results do not guarantee physical sound levels.

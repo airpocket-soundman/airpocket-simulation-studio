@@ -5,12 +5,12 @@ export function refinementIndicators(mesh,result){
 }
 export async function adaptiveSolve({mesh,solve},{maxRounds=3,tolerance=.01,baseSize=5,onProgress=()=>{}}={}){
  if(!Number.isInteger(maxRounds)||maxRounds<1||maxRounds>5||!(tolerance>0&&tolerance<1))throw Error('Invalid adaptive limits');
- const history=[],refinements=[];let previous=null,last=null,converged=false;
+ const history=[],iterations=[],refinements=[];let previous=null,last=null,converged=false;
  for(let round=0;round<maxRounds;round++){
  onProgress(`Adaptive round ${round+1}/${maxRounds}: meshing`);const m=await mesh({size:baseSize,refinements});onProgress(`Adaptive round ${round+1}/${maxRounds}: solving`);last=await solve(m);const indicators=refinementIndicators(m,last.result),variation=Math.max(...indicators.map(i=>i.variation)),u=last.result.maxDisplacementMm,change=previous===null?null:Math.abs(u-previous)/Math.max(Math.abs(u),1e-20);
- history.push({round:round+1,elements:m.tetrahedra.length,maxDisplacementMm:u,maxVonMisesPa:last.result.maxVonMisesPa,relativeDisplacementChange:change,stressVariationIndicator:variation,solverResidual:last.result.residual});
+ iterations.push(last);history.push({round:round+1,elements:m.tetrahedra.length,maxDisplacementMm:u,maxVonMisesPa:last.result.maxVonMisesPa,relativeDisplacementChange:change,stressVariationIndicator:variation,solverResidual:last.result.residual});
  if(change!==null&&change<tolerance&&variation<.2){converged=true;break;}
  previous=u;indicators.sort((a,b)=>b.score-a.score);const count=Math.max(1,Math.min(80,Math.ceil(indicators.length*.15)));for(const r of indicators.slice(0,count))refinements.push({center:r.center,radius:baseSize*1.5,size:Math.max(baseSize*.15,baseSize/2**(round+1))});
  }
- return {...last,adaptive:{converged,history,stopReason:converged?'output change and stress variation thresholds met':'maximum refinement rounds reached',indicator:'recovered stress variation, strain and displacement; not a certified error bound'}};
+ return {...last,adaptive:{converged,history,iterations,stopReason:converged?'output change and stress variation thresholds met':'maximum refinement rounds reached',indicator:'recovered stress variation, strain and displacement; not a certified error bound'}};
 }

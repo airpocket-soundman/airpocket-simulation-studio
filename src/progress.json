@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T06:38:41.155Z",
+  "updatedAt": "2026-10-13T07:06:31.135Z",
   "release": {
-    "version": "v0.1",
+    "version": "v0.3",
     "date": "2026-10-13",
-    "description": "3D領域設定と共通APIの試作版。解析計算は未実装。"
+    "description": "体積メッシュ、線形構造、熱伝導、局所細分化に加え、周波数音響・スイープ・測定点を実装。流体・非線形・破壊・吸音境界は未実装。"
   },
   "tasks": [
     {
@@ -189,13 +189,15 @@
     {
       "id": "ACOU1",
       "title": "共鳴と周波数別の音圧を表示",
-      "status": "queued",
+      "status": "checking",
       "category": "音響",
       "detail": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
       "acceptance": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
       "titleEn": "Display resonance and frequency-domain pressure",
       "detailEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references.",
-      "acceptanceEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references."
+      "acceptanceEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references.",
+      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。",
+      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain."
     },
     {
       "id": "CFD1",
@@ -426,8 +428,8 @@
       "titleEn": "Display displacement and stress results",
       "detailEn": "Verify deformation scale, legends, units, maxima and point probes.",
       "acceptanceEn": "Verify deformation scale, legends, units, maxima and point probes.",
-      "lastUpdate": "変位・応力・温度・熱流束のカラーマップ、変形倍率、反力、凡例を実装。プローブは未対応。",
-      "lastUpdateEn": "Implemented deformation/stress/temperature/flux maps, scales, reactions and legends; probes remain pending.",
+      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。",
+      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain.",
       "evidence": "src/main.js"
     },
     {
@@ -514,12 +516,14 @@
       "id": "ACOU2",
       "title": "音源・受音点・吸音境界を設定",
       "category": "音響",
-      "status": "queued",
+      "status": "checking",
       "detail": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
       "acceptance": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
       "titleEn": "Set acoustic sources, receivers and absorption",
       "detailEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption.",
-      "acceptanceEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption."
+      "acceptanceEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption.",
+      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。",
+      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain."
     },
     {
       "id": "ACOU3",

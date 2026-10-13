@@ -1,0 +1,13 @@
+export function bicgstab(n,entries,rhs,dirichlet,{matvecFactory,tolerance=1e-8,maxIterations=3000}={}){
+ const mask=new Uint8Array(n),g=new Float64Array(n),diagonal=new Float64Array(n);for(const [i,v]of dirichlet){mask[i]=1;g[i]=v;}
+ const apply=matvecFactory?matvecFactory(entries,n):x=>{const y=new Float64Array(n);for(const {ids,k}of entries)for(let i=0;i<ids.length;i++)for(let j=0;j<ids.length;j++)y[ids[i]]+=k[i*ids.length+j]*x[ids[j]];return y;};
+ for(const {ids,k}of entries)ids.forEach((id,i)=>diagonal[id]+=Math.abs(k[i*ids.length+i]));
+ const kg=apply(g),b=Float64Array.from(rhs,(v,i)=>mask[i]?0:v-kg[i]);let r=b.slice(),reference=r.slice(),p=new Float64Array(n),v=new Float64Array(n),x=new Float64Array(n),alpha=1,omega=1,rhoOld=1;
+ const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0),norm=Math.sqrt(dot(b,b));if(norm===0)return {solution:g,iterations:0,residual:0};const precondition=a=>Float64Array.from(a,(v,i)=>mask[i]?0:v/(diagonal[i]||1));let residual=1;
+ for(let iteration=0;iteration<maxIterations;iteration++){
+ const rho=dot(reference,r);if(Math.abs(rho)<1e-30)throw Error('BiCGStab breakdown; change frequency or refine the mesh');const beta=(rho/rhoOld)*(alpha/omega);for(let i=0;i<n;i++)p[i]=r[i]+beta*(p[i]-omega*v[i]);const phat=precondition(p);v=apply(phat).slice();for(let i=0;i<n;i++)if(mask[i])v[i]=0;const den=dot(reference,v);if(Math.abs(den)<1e-30)throw Error('BiCGStab breakdown');alpha=rho/den;const s=Float64Array.from(r,(q,i)=>q-alpha*v[i]);
+ if(Math.sqrt(dot(s,s))/norm<tolerance){for(let i=0;i<n;i++)x[i]+=alpha*phat[i];residual=Math.sqrt(dot(s,s))/norm;return {solution:Float64Array.from(x,(v,i)=>v+g[i]),iterations:iteration+1,residual};}
+ const shat=precondition(s),t=apply(shat);for(let i=0;i<n;i++)if(mask[i])t[i]=0;const tt=dot(t,t);if(tt<1e-30)throw Error('BiCGStab breakdown');omega=dot(t,s)/tt;if(Math.abs(omega)<1e-30)throw Error('BiCGStab breakdown');for(let i=0;i<n;i++){x[i]+=alpha*phat[i]+omega*shat[i];r[i]=s[i]-omega*t[i];}residual=Math.sqrt(dot(r,r))/norm;if(residual<tolerance)return {solution:Float64Array.from(x,(v,i)=>v+g[i]),iterations:iteration+1,residual};rhoOld=rho;
+ }
+ throw Error('BiCGStab did not converge');
+}
