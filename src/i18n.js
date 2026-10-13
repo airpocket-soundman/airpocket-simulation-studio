@@ -1,6 +1,9 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '部品表示は条件設定画面の操作です。解析対象は全ての部品です。':'Part visibility controls the setup viewer. All parts are included in analysis.',
+ '内部面選択サンプル':'Interior face example','外側20 mmと内側8 mmの表示サンプル。露出した内側の元の面を選択できます。':'Display sample with outer 20 mm and inner 8 mm parts. Select exposed original faces of the inner part.',
+ '内部を見る':'Inspect inside','断面表示':'Section view','切断方向':'Section axis','切断位置（mm）':'Section position (mm)','残す側を反転':'Flip retained side','形状の透明度':'Model opacity','部品 ':'Part ',' を表示':' visible','切断面には新しい選択面を作りません。露出した元の面を選択できます。半透明でも手前の面が選択されます。奥を選ぶには部品を非表示にしてください。':'Clipping creates no selectable cap. Select exposed original faces. Transparent front faces still intercept selection; hide parts to select behind them.',
  '円筒寸法: 半径 ':'Cylinder dimensions: radius ',' / 軸方向 ':' / Axial range ',' / 角度 ':' / Angle ',
  '選択範囲で更新':'Replace with selected region','数値領域を再適用':'Reapply dimensional region','条件の領域を更新しました。':'Condition region updated.',
  '形状不備サンプル':'Geometry defect example',
@@ -15,7 +18,7 @@ export const dictionary={
  '熱応力サンプル':'Thermal stress example','60 Kの温度上昇。軸方向の参照応力−0.6 MPa、両端反力は±60 Nです。':'Temperature rise 60 K. Reference axial stress −0.6 MPa; end reactions ±60 N.',
  '熱膨張・熱応力':'Thermal expansion and stress','構造解析に温度変化を適用':'Apply temperature changes to structural analysis','部品温度（°C）':'Part temperature (°C)','無応力の基準温度（°C）':'Stress-free reference temperature (°C)','登録した線膨張係数を使います。温度変化による自由膨張と拘束による応力を計算します。':'Uses the registered expansion coefficient to calculate free expansion and stress caused by constraints.',
  '保存結果を3D表示':'View saved result in 3D','先に実行中の計算を中止してください。':'Cancel the running calculation first.','保存時の入力と結果を表示しています。':'Showing the saved input and result.',
- '構造・熱・音響 · v0.13':'Structure · Heat · Acoustics · v0.13','最大変位':'Maximum displacement','最大von Mises':'Maximum von Mises','最低温度':'Minimum temperature','最高温度':'Maximum temperature','最大音圧':'Maximum pressure','最大SPL':'Maximum SPL',
+ '構造・熱・音響 · v0.14':'Structure · Heat · Acoustics · v0.14','最大変位':'Maximum displacement','最大von Mises':'Maximum von Mises','最低温度':'Minimum temperature','最高温度':'Maximum temperature','最大音圧':'Maximum pressure','最大SPL':'Maximum SPL',
  '解析ケースの比較':'Compare analysis cases','ケース名':'Case name','現在の計算結果を保存':'Save current calculation','ケース集を書き出す':'Export case archive','ケース集を開く':'Import case archive','入力を複製して復元':'Duplicate and restore input','削除':'Delete','最大8件。閉じる前に書き出してください。保存結果は再計算せず表示できます。入力だけ復元した場合は再計算してください。':'Up to 8 cases. Export before closing. View saved results without recalculation. Recalculate after restoring inputs only.',
  '共有節点で指定変位が矛盾しています。':'Conflicting displacement constraints on a shared node','拘束不足です。独立した部品の平行移動・回転を止めてください。':'Insufficient constraints. Restrain translation and rotation of every disconnected solid.','拘束方向がほぼ平行です。方向の重複を見直してください。':'Constraint directions are nearly parallel. Review overlapping directions.','黄色: 選択中　青: 拘束　橙: 荷重・指定変位':'Yellow: selected · Blue: constrained · Orange: load / prescribed displacement',
 
@@ -48,7 +51,7 @@ export const dictionary={
  '線形弾性・熱伝導・均一媒質の周波数音響を計算します。曲面の部分領域は表面三角形への投影近似を使い、面積誤差を表示します。接触・破壊・ゴムの大変形は未対応です。':'Calculates linear elasticity, heat conduction and uniform-medium frequency acoustics. Partial curved regions use surface projection with reported area errors. Contact, fracture and large rubber deformation are not supported.',
  '音圧 ':'Pressure ','温度 ':'Temperature ','面積誤差 ':'Area error ','節点 / ':'nodes / ','四面体 · ':'tetrahedra · ',
 
- 'テスト: 70件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 43 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
+ 'テスト: 73件の自動テスト。構造の変位・反力、熱伝導、音響の管内波動、再メッシュ、WASMとCPU結果の一致を確認。検証範囲はドキュメントに記載。':'Tests: 43 automated checks cover displacement/reactions, conduction, pipe acoustics, remeshing and WASM/CPU agreement. Documents describe the validation scope.',
 
  '同じ要素モデルの実行方式を選択します。構造・熱はPCG、音響はBiCGStab。CalculiX等は未導入。':'Choose the execution backend for the same element model. Structure/heat use PCG; acoustics uses BiCGStab. CalculiX is not integrated.',
  'Airpocket Tet4 · JavaScript（厳密収束）':'Airpocket Tet4 · JavaScript (strict convergence)',

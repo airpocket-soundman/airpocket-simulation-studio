@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:27:13.296Z",
+  "updatedAt": "2026-10-13T11:35:55.788Z",
   "release": {
-    "version": "v0.13",
+    "version": "v0.14",
     "date": "2026-10-13",
-    "description": "登録済み条件の領域更新と、条件ごとの円筒寸法保存・再適用を追加。荷重値の保持・表示メッシュ分割変更・不一致時の保全を検証。自動テスト70件。CAD境界適合・流体・非線形等は残作業。",
-    "descriptionEn": "Adds registered condition region editing and per-condition cylindrical dimension restoration. Load preservation, tessellation changes and atomic failures verified by 70 tests. Exact CAD conformity, fluid and nonlinear analyses remain outstanding."
+    "description": "断面クリップ・半透明・部品非表示と表示操作APIを追加。露出した内部の元の面の選択、非表示部品の除外を実画面で検証。自動テスト73件。切断面の新規生成・流体・非線形等は未対応。",
+    "descriptionEn": "Adds section clipping, opacity, part visibility and viewer API. Browser verified original interior face selection and rejection of hidden parts. 73 tests. No generated section caps; fluid/nonlinear features remain outstanding."
   },
   "tasks": [
     {
@@ -327,13 +327,15 @@
       "id": "REG4",
       "title": "断面・半透明・部品非表示",
       "category": "3D",
-      "status": "building",
+      "status": "released",
       "detail": "内部面を選択でき、隠れた面の誤選択を防ぐ。",
       "acceptance": "内部面を選択でき、隠れた面の誤選択を防ぐ。",
       "titleEn": "Add sections, transparency and hiding parts",
       "detailEn": "Select internal faces while preventing unintended selection of occluded surfaces.",
       "acceptanceEn": "Select internal faces while preventing unintended selection of occluded surfaces.",
-      "lastUpdate": "断面表示・半透明・部品非表示を実装中。切断で除いた面と非表示部品を選択から除外"
+      "lastUpdate": "断面・半透明・部品非表示とAPIを実装。UIで内側64mm²、半透明の手前400mm²、非表示後の内側64mm²、全非表示時0を確認。全73テスト成功",
+      "evidence": "tests/view-settings.test.mjs",
+      "lastUpdateEn": "Added clipping, opacity, part visibility and viewer API. UI verified inner 64 mm² after clipping, front 400 mm² through transparency, inner 64 mm² after hiding outer part, and no selection with all parts hidden. 73 tests pass."
     },
     {
       "id": "CAD2",
