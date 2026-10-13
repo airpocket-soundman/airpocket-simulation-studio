@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T06:00:01.200Z",
+  "updatedAt": "2026-10-13T06:06:04.663Z",
   "release": {
     "version": "v0.1",
     "date": "2026-10-13",
@@ -14,7 +14,10 @@
       "category": "3D",
       "detail": "ブラウザ内のWorkerでSTEPをmmに変換し、表示三角形とCAD面の対応を取得。公開サイトで立方体の読み込みを確認。",
       "evidence": "src/cad.worker.js",
-      "acceptance": "ブラウザ内のWorkerでSTEPをmmに変換し、表示三角形とCAD面の対応を取得。公開サイトで立方体の読み込みを確認。"
+      "acceptance": "ブラウザ内のWorkerでSTEPをmmに変換し、表示三角形とCAD面の対応を取得。公開サイトで立方体の読み込みを確認。",
+      "titleEn": "Import STEP with WASM",
+      "detailEn": "Import STEP locally in a Worker, convert to mm, and retain CAD-face to triangle mappings. Cube import verified on Pages.",
+      "acceptanceEn": "Import STEP locally in a Worker, convert to mm, and retain CAD-face to triangle mappings. Cube import verified on Pages."
     },
     {
       "id": "VIEW1",
@@ -23,7 +26,10 @@
       "category": "3D",
       "detail": "回転、パン、ズーム、全体表示。狭い画面では縦並びに切り替える。",
       "evidence": "src/main.js",
-      "acceptance": "回転、パン、ズーム、全体表示。狭い画面では縦並びに切り替える。"
+      "acceptance": "回転、パン、ズーム、全体表示。狭い画面では縦並びに切り替える。",
+      "titleEn": "Orbit, zoom and fit the model",
+      "detailEn": "Support orbit, pan, zoom and fit, with a stacked layout on narrow screens.",
+      "acceptanceEn": "Support orbit, pan, zoom and fit, with a stacked layout on narrow screens."
     },
     {
       "id": "REG1",
@@ -32,7 +38,10 @@
       "category": "3D",
       "detail": "空間距離によるブラシ、消しゴム、面選択、戻す、面積表示。見えている領域を選択。CAD上の正確な分割と再メッシュへの転送は未対応。",
       "evidence": "src/regions.js",
-      "acceptance": "空間距離によるブラシ、消しゴム、面選択、戻す、面積表示。見えている領域を選択。CAD上の正確な分割と再メッシュへの転送は未対応。"
+      "acceptance": "空間距離によるブラシ、消しゴム、面選択、戻す、面積表示。見えている領域を選択。CAD上の正確な分割と再メッシュへの転送は未対応。",
+      "titleEn": "Brush a partial curved surface",
+      "detailEn": "Spatial-radius brush, erase, CAD-face selection, undo and area display. CAD splitting and remeshing transfer remain unimplemented.",
+      "acceptanceEn": "Spatial-radius brush, erase, CAD-face selection, undo and area display. CAD splitting and remeshing transfer remain unimplemented."
     },
     {
       "id": "BC1",
@@ -41,7 +50,10 @@
       "category": "構造",
       "detail": "全方向固定と合計荷重の設定・領域再選択・削除。荷重方向を矢印で表示。設定保存のみで、まだ計算しない。",
       "evidence": "src/main.js",
-      "acceptance": "全方向固定と合計荷重の設定・領域再選択・削除。荷重方向を矢印で表示。設定保存のみで、まだ計算しない。"
+      "acceptance": "全方向固定と合計荷重の設定・領域再選択・削除。荷重方向を矢印で表示。設定保存のみで、まだ計算しない。",
+      "titleEn": "Register constraints and directional forces",
+      "detailEn": "Register all-direction constraints and total force with direction arrows; select and remove regions. Configuration only, no solve.",
+      "acceptanceEn": "Register all-direction constraints and total force with direction arrows; select and remove regions. Configuration only, no solve."
     },
     {
       "id": "SAVE1",
@@ -50,7 +62,10 @@
       "category": "共通",
       "detail": "表示形状・選択・条件・材料カテゴリをJSONに書き出し、復元。元のSTEPの正確なCAD形状そのものは保存しない。",
       "evidence": "src/studio-api.js",
-      "acceptance": "表示形状・選択・条件・材料カテゴリをJSONに書き出し、復元。元のSTEPの正確なCAD形状そのものは保存しない。"
+      "acceptance": "表示形状・選択・条件・材料カテゴリをJSONに書き出し、復元。元のSTEPの正確なCAD形状そのものは保存しない。",
+      "titleEn": "Save and restore projects",
+      "detailEn": "Roundtrip display geometry, selected triangles, conditions and material category in JSON. Original exact CAD is not yet retained.",
+      "acceptanceEn": "Roundtrip display geometry, selected triangles, conditions and material category in JSON. Original exact CAD is not yet retained."
     },
     {
       "id": "API1",
@@ -59,7 +74,10 @@
       "category": "検証",
       "detail": "領域選択、条件操作、保存復元の直接APIとNodeテスト。5件の自動テスト、公開時にも実行。",
       "evidence": "docs/testing.md",
-      "acceptance": "領域選択、条件操作、保存復元の直接APIとNodeテスト。5件の自動テスト、公開時にも実行。"
+      "acceptance": "領域選択、条件操作、保存復元の直接APIとNodeテスト。5件の自動テスト、公開時にも実行。",
+      "titleEn": "Validate through the shared UI/API core",
+      "detailEn": "Direct commands for selection, conditions and project roundtrips are tested headlessly and during deployment.",
+      "acceptanceEn": "Direct commands for selection, conditions and project roundtrips are tested headlessly and during deployment."
     },
     {
       "id": "MESH1",
@@ -70,7 +88,10 @@
       "depends": [
         "REG2"
       ],
-      "acceptance": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。"
+      "acceptance": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
+      "titleEn": "Generate a volume mesh in the browser",
+      "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
+      "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions."
     },
     {
       "id": "REG2",
@@ -78,7 +99,10 @@
       "status": "queued",
       "category": "3D",
       "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
-      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。"
+      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
+      "titleEn": "Transfer regions to CAD and analysis meshes",
+      "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
+      "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing."
     },
     {
       "id": "WASM1",
@@ -86,7 +110,10 @@
       "status": "queued",
       "category": "構造",
       "detail": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
-      "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。"
+      "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
+      "titleEn": "Validate a structural solver WASM port",
+      "detailEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
+      "acceptanceEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet."
     },
     {
       "id": "FEM1",
@@ -98,7 +125,10 @@
         "MESH1",
         "WASM1"
       ],
-      "acceptance": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。"
+      "acceptance": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
+      "titleEn": "Calculate displacement and stress",
+      "detailEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
+      "acceptanceEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence."
     },
     {
       "id": "MAT1",
@@ -111,7 +141,10 @@
         "MAT2",
         "MAT3",
         "MAT4"
-      ]
+      ],
+      "titleEn": "Support metal, polymer, glass and rubber",
+      "detailEn": "Integrate categories, properties and constitutive laws after MAT2–MAT4 and material-specific validation.",
+      "acceptanceEn": "Integrate categories, properties and constitutive laws after MAT2–MAT4 and material-specific validation."
     },
     {
       "id": "SOLVER1",
@@ -122,7 +155,10 @@
       "depends": [
         "FEM1"
       ],
-      "acceptance": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。"
+      "acceptance": "移植と検証を通ったソルバーのみ選択可能。未対応の条件を列挙し、同条件の比較ケースを用意。",
+      "titleEn": "Select and compare validated solvers",
+      "detailEn": "Enable only validated browser engines; report unsupported conditions and compare equivalent reference cases.",
+      "acceptanceEn": "Enable only validated browser engines; report unsupported conditions and compare equivalent reference cases."
     },
     {
       "id": "HEAT1",
@@ -130,7 +166,10 @@
       "status": "queued",
       "category": "熱",
       "detail": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
-      "acceptance": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。"
+      "acceptance": "定常・非定常熱伝導、温度・熱流束・発熱・対流境界。参照解とエネルギー収支で検証。",
+      "titleEn": "Calculate conduction and temperature changes",
+      "detailEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance.",
+      "acceptanceEn": "Steady/transient conduction, prescribed temperatures, heat flux, sources and convection; verify reference solutions and energy balance."
     },
     {
       "id": "ACOU1",
@@ -138,7 +177,10 @@
       "status": "queued",
       "category": "音響",
       "detail": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
-      "acceptance": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。"
+      "acceptance": "Elmer等のブラウザ実行可否を確認。音源面・受音点・境界を設定し、空洞と管の共鳴を検証。",
+      "titleEn": "Display resonance and frequency-domain pressure",
+      "detailEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references.",
+      "acceptanceEn": "Validate browser execution of an acoustic engine, source/receiver setup and cavity/pipe resonance references."
     },
     {
       "id": "CFD1",
@@ -146,7 +188,10 @@
       "status": "queued",
       "category": "流体",
       "detail": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
-      "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。"
+      "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
+      "titleEn": "Create fluid regions and simulate flow",
+      "detailEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
+      "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation."
     },
     {
       "id": "GPU1",
@@ -157,7 +202,10 @@
       "depends": [
         "FEM1"
       ],
-      "acceptance": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。"
+      "acceptance": "CPU版を成立させてから追加。専用計算処理の精度・収束・対応ブラウザを検証し、CPUへの切り替えを用意。",
+      "titleEn": "Accelerate calculations with WebGPU",
+      "detailEn": "Add after the CPU baseline works; validate precision, convergence and browser support with CPU fallback.",
+      "acceptanceEn": "Add after the CPU baseline works; validate precision, convergence and browser support with CPU fallback."
     },
     {
       "id": "COUPLE1",
@@ -165,7 +213,10 @@
       "status": "queued",
       "category": "連成",
       "detail": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
-      "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。"
+      "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
+      "titleEn": "Couple thermal, structural, fluid and acoustic models",
+      "detailEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers.",
+      "acceptanceEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers."
     },
     {
       "id": "FAIL1",
@@ -173,7 +224,10 @@
       "status": "queued",
       "category": "構造",
       "detail": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
-      "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。"
+      "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
+      "titleEn": "Support failure, fatigue, contact and nonlinear behavior",
+      "detailEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions.",
+      "acceptanceEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions."
     },
     {
       "id": "BOARD1",
@@ -182,7 +236,10 @@
       "status": "released",
       "detail": "検索・カード詳細・ソルバー状態・開発メモを公開。",
       "evidence": "src/board.js",
-      "acceptance": "検索・カード詳細・ソルバー状態・開発メモを公開。"
+      "acceptance": "検索・カード詳細・ソルバー状態・開発メモを公開。",
+      "titleEn": "Publish the development board",
+      "detailEn": "Deploy search, task details, solver status and local notes on Pages.",
+      "acceptanceEn": "Deploy search, task details, solver status and local notes on Pages."
     },
     {
       "id": "LIVE1",
@@ -192,7 +249,10 @@
       "detail": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
       "acceptance": "20秒間隔で進捗データを取得。失敗時は前回表示を保ち、最終取得時刻を表示。",
       "lastUpdate": "ライブ取得と依存関係検証を実装。公開画面を確認中",
-      "evidence": "src/board.js"
+      "evidence": "src/board.js",
+      "titleEn": "Refresh progress automatically",
+      "detailEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps.",
+      "acceptanceEn": "Fetch progress every 20 seconds, retain prior data on failure and display fetch/update timestamps."
     },
     {
       "id": "MAT2",
@@ -202,7 +262,10 @@
       "detail": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
       "acceptance": "E、ポアソン比、密度、強度、熱物性の入力・検証・保存復元。",
       "lastUpdate": "数値範囲・保存復元の自動テスト完了。公開UIを確認予定",
-      "evidence": "tests/materials.test.mjs"
+      "evidence": "tests/materials.test.mjs",
+      "titleEn": "Register material values, units and sources",
+      "detailEn": "Enter and validate elastic constants, density, strength, thermal data and provenance; verify project roundtrips.",
+      "acceptanceEn": "Enter and validate elastic constants, density, strength, thermal data and provenance; verify project roundtrips."
     },
     {
       "id": "MAT3",
@@ -210,7 +273,10 @@
       "category": "材料",
       "status": "queued",
       "detail": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
-      "acceptance": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。"
+      "acceptance": "有効温度・ひずみ速度・方向性・試験条件を保存し、対象外を識別。",
+      "titleEn": "Register temperature/rate dependence and anisotropy",
+      "detailEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases.",
+      "acceptanceEn": "Store valid temperature, strain rate, directions and test conditions; identify out-of-range cases."
     },
     {
       "id": "MAT4",
@@ -218,7 +284,10 @@
       "category": "材料",
       "status": "queued",
       "detail": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
-      "acceptance": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。"
+      "acceptance": "試験曲線と構成則を登録し、対応ソルバーと要素の組み合わせを検証。",
+      "titleEn": "Register hyperelastic rubber parameters",
+      "detailEn": "Store constitutive parameters and test curves; verify supported element/solver combinations.",
+      "acceptanceEn": "Store constitutive parameters and test curves; verify supported element/solver combinations."
     },
     {
       "id": "REG3",
@@ -226,7 +295,10 @@
       "category": "3D",
       "status": "queued",
       "detail": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
-      "acceptance": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。"
+      "acceptance": "軸方向と周方向の寸法指定を保存し、回転・再読込で同じ領域を確認。",
+      "titleEn": "Select cylinder regions by angle and length",
+      "detailEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
+      "acceptanceEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload."
     },
     {
       "id": "REG4",
@@ -234,7 +306,10 @@
       "category": "3D",
       "status": "queued",
       "detail": "内部面を選択でき、隠れた面の誤選択を防ぐ。",
-      "acceptance": "内部面を選択でき、隠れた面の誤選択を防ぐ。"
+      "acceptance": "内部面を選択でき、隠れた面の誤選択を防ぐ。",
+      "titleEn": "Add sections, transparency and hiding parts",
+      "detailEn": "Select internal faces while preventing unintended selection of occluded surfaces.",
+      "acceptanceEn": "Select internal faces while preventing unintended selection of occluded surfaces."
     },
     {
       "id": "CAD2",
@@ -242,7 +317,10 @@
       "category": "3D",
       "status": "queued",
       "detail": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
-      "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。"
+      "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
+      "titleEn": "Preserve original CAD in projects",
+      "detailEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
+      "acceptanceEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear."
     },
     {
       "id": "CAD3",
@@ -250,7 +328,10 @@
       "category": "3D",
       "status": "queued",
       "detail": "開いた表面、重複、退化要素を識別。修復可否を表示。",
-      "acceptance": "開いた表面、重複、退化要素を識別。修復可否を表示。"
+      "acceptance": "開いた表面、重複、退化要素を識別。修復可否を表示。",
+      "titleEn": "Check closed geometry, defects and units",
+      "detailEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options.",
+      "acceptanceEn": "Identify open surfaces, duplicates and degenerate geometry; report repair options."
     },
     {
       "id": "MESH2",
@@ -258,7 +339,10 @@
       "category": "構造",
       "status": "queued",
       "detail": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
-      "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。"
+      "acceptance": "体積メッシュの退化・品質指標を確認し、指定領域を細分化。",
+      "titleEn": "Show quality and local refinement",
+      "detailEn": "Inspect volume mesh quality/degeneracy and refine selected regions.",
+      "acceptanceEn": "Inspect volume mesh quality/degeneracy and refine selected regions."
     },
     {
       "id": "MESH3",
@@ -266,7 +350,10 @@
       "category": "検証",
       "status": "queued",
       "detail": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
-      "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。"
+      "acceptance": "複数解像度の変位・応力を比較し、収束と特異点を区別。",
+      "titleEn": "Compare mesh convergence",
+      "detailEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities.",
+      "acceptanceEn": "Compare displacement/stress at multiple resolutions and distinguish convergence from singularities."
     },
     {
       "id": "BC2",
@@ -274,7 +361,10 @@
       "category": "構造",
       "status": "queued",
       "detail": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
-      "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。"
+      "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
+      "titleEn": "Set directional constraints and prescribed displacement",
+      "detailEn": "Persist constraints including local coordinates and units; verify solver conversion.",
+      "acceptanceEn": "Persist constraints including local coordinates and units; verify solver conversion."
     },
     {
       "id": "BC3",
@@ -282,7 +372,10 @@
       "category": "構造",
       "status": "queued",
       "detail": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
-      "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。"
+      "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
+      "titleEn": "Set pressure, normal loads and gravity",
+      "detailEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
+      "acceptanceEn": "Validate curved normals, resultant force/moment and pressure versus total force."
     },
     {
       "id": "RUN1",
@@ -290,7 +383,10 @@
       "category": "共通",
       "status": "queued",
       "detail": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
-      "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。"
+      "acceptance": "Workerの中止、時間制限、メモリ不足、未収束を扱う。",
+      "titleEn": "Cancel calculations and explain failures",
+      "detailEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence.",
+      "acceptanceEn": "Support Worker cancellation, timeouts, memory failures and nonconvergence."
     },
     {
       "id": "RESULT1",
@@ -298,7 +394,10 @@
       "category": "構造",
       "status": "queued",
       "detail": "変形倍率、凡例、単位、最大値、プローブを確認。",
-      "acceptance": "変形倍率、凡例、単位、最大値、プローブを確認。"
+      "acceptance": "変形倍率、凡例、単位、最大値、プローブを確認。",
+      "titleEn": "Display displacement and stress results",
+      "detailEn": "Verify deformation scale, legends, units, maxima and point probes.",
+      "acceptanceEn": "Verify deformation scale, legends, units, maxima and point probes."
     },
     {
       "id": "RESULT2",
@@ -306,7 +405,10 @@
       "category": "共通",
       "status": "queued",
       "detail": "計算時入力を固定し、過去結果を変更しない。",
-      "acceptance": "計算時入力を固定し、過去結果を変更しない。"
+      "acceptance": "計算時入力を固定し、過去結果を変更しない。",
+      "titleEn": "Duplicate, compare and export cases",
+      "detailEn": "Freeze input snapshots and keep old results unchanged when editing current cases.",
+      "acceptanceEn": "Freeze input snapshots and keep old results unchanged when editing current cases."
     },
     {
       "id": "THERMBC1",
@@ -314,7 +416,10 @@
       "category": "熱",
       "status": "queued",
       "detail": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
-      "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。"
+      "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
+      "titleEn": "Set temperatures, sources and convection",
+      "detailEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
+      "acceptanceEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources."
     },
     {
       "id": "HEAT2",
@@ -322,7 +427,10 @@
       "category": "熱",
       "status": "queued",
       "detail": "時間履歴とエネルギー収支を参照解に照合。",
-      "acceptance": "時間履歴とエネルギー収支を参照解に照合。"
+      "acceptance": "時間履歴とエネルギー収支を参照解に照合。",
+      "titleEn": "Add transient, radiation and contact resistance",
+      "detailEn": "Compare time histories and energy balance to reference solutions.",
+      "acceptanceEn": "Compare time histories and energy balance to reference solutions."
     },
     {
       "id": "CFDDOM1",
@@ -330,7 +438,10 @@
       "category": "流体",
       "status": "queued",
       "detail": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
-      "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。"
+      "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
+      "titleEn": "Create internal/external fluid regions",
+      "detailEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
+      "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks."
     },
     {
       "id": "CFDMESH1",
@@ -338,7 +449,10 @@
       "category": "流体",
       "status": "queued",
       "detail": "壁面解像度と品質、境界条件の対応を検証。",
-      "acceptance": "壁面解像度と品質、境界条件の対応を検証。"
+      "acceptance": "壁面解像度と品質、境界条件の対応を検証。",
+      "titleEn": "Generate fluid boundary-layer meshes",
+      "detailEn": "Validate wall resolution, quality and boundary-condition mapping.",
+      "acceptanceEn": "Validate wall resolution, quality and boundary-condition mapping."
     },
     {
       "id": "CFD2",
@@ -346,7 +460,10 @@
       "category": "流体",
       "status": "queued",
       "detail": "モデルと適用範囲を指定し、収束・質量収支を検証。",
-      "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。"
+      "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。",
+      "titleEn": "Support turbulence and unsteady flow",
+      "detailEn": "Specify model assumptions and validate convergence and mass balance.",
+      "acceptanceEn": "Specify model assumptions and validate convergence and mass balance."
     },
     {
       "id": "CFD3",
@@ -354,7 +471,10 @@
       "category": "流体",
       "status": "queued",
       "detail": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。",
-      "acceptance": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。"
+      "acceptance": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。",
+      "titleEn": "Support compressible/multiphase flow",
+      "detailEn": "Later phase; verify each phase/compressibility model against published examples.",
+      "acceptanceEn": "Later phase; verify each phase/compressibility model against published examples."
     },
     {
       "id": "ACOU2",
@@ -362,7 +482,10 @@
       "category": "音響",
       "status": "queued",
       "detail": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
-      "acceptance": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。"
+      "acceptance": "基準音圧、振幅規約、位相、周波数依存の吸音を記録。",
+      "titleEn": "Set acoustic sources, receivers and absorption",
+      "detailEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption.",
+      "acceptanceEn": "Record reference pressure, amplitude conventions, phase and frequency-dependent absorption."
     },
     {
       "id": "ACOU3",
@@ -370,7 +493,10 @@
       "category": "音響",
       "status": "queued",
       "detail": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
-      "acceptance": "開放境界・領域サイズ・波長のメッシュ収束を確認。"
+      "acceptance": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
+      "titleEn": "Support external radiation and directivity",
+      "detailEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence.",
+      "acceptanceEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence."
     },
     {
       "id": "ACOU4",
@@ -378,7 +504,10 @@
       "category": "音響",
       "status": "queued",
       "detail": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
-      "acceptance": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。"
+      "acceptance": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
+      "titleEn": "Support transient acoustics and auralization",
+      "detailEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre.",
+      "acceptanceEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre."
     },
     {
       "id": "COUPLE2",
@@ -386,7 +515,10 @@
       "category": "連成",
       "status": "queued",
       "detail": "補間・基準温度・熱膨張と参照例題を検証。",
-      "acceptance": "補間・基準温度・熱膨張と参照例題を検証。"
+      "acceptance": "補間・基準温度・熱膨張と参照例題を検証。",
+      "titleEn": "Transfer thermal fields to structural analysis",
+      "detailEn": "Verify interpolation, reference temperatures, thermal expansion and benchmark cases.",
+      "acceptanceEn": "Verify interpolation, reference temperatures, thermal expansion and benchmark cases."
     },
     {
       "id": "COUPLE3",
@@ -394,7 +526,10 @@
       "category": "連成",
       "status": "queued",
       "detail": "境界の熱流・温度を転送し、エネルギー保存を検証。",
-      "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。"
+      "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "titleEn": "Couple solid/fluid heat transfer",
+      "detailEn": "Transfer temperatures/heat flux and verify energy conservation.",
+      "acceptanceEn": "Transfer temperatures/heat flux and verify energy conservation."
     },
     {
       "id": "COUPLE4",
@@ -402,7 +537,10 @@
       "category": "連成",
       "status": "queued",
       "detail": "複素振幅・位相・法線速度と参照解を検証。",
-      "acceptance": "複素振幅・位相・法線速度と参照解を検証。"
+      "acceptance": "複素振幅・位相・法線速度と参照解を検証。",
+      "titleEn": "Couple structural vibration to acoustics",
+      "detailEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
+      "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions."
     },
     {
       "id": "COUPLE5",
@@ -410,7 +548,10 @@
       "category": "連成",
       "status": "queued",
       "detail": "時間同期・力の保存・安定性を検証。",
-      "acceptance": "時間同期・力の保存・安定性を検証。"
+      "acceptance": "時間同期・力の保存・安定性を検証。",
+      "titleEn": "Add two-way fluid/structure coupling",
+      "detailEn": "Verify time synchronization, force conservation and stability.",
+      "acceptanceEn": "Verify time synchronization, force conservation and stability."
     },
     {
       "id": "FAIL2",
@@ -418,7 +559,10 @@
       "category": "材料",
       "status": "queued",
       "detail": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
-      "acceptance": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。"
+      "acceptance": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
+      "titleEn": "Evaluate brittle fracture in glass and similar materials",
+      "detailEn": "Validate models including defects, fracture toughness, surface state and uncertainty.",
+      "acceptanceEn": "Validate models including defects, fracture toughness, surface state and uncertainty."
     },
     {
       "id": "FAIL3",
@@ -426,7 +570,10 @@
       "category": "材料",
       "status": "queued",
       "detail": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。",
-      "acceptance": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。"
+      "acceptance": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。",
+      "titleEn": "Evaluate metal plasticity and fatigue",
+      "detailEn": "Compare stress-strain curves, histories and fatigue data with reference examples.",
+      "acceptanceEn": "Compare stress-strain curves, histories and fatigue data with reference examples."
     },
     {
       "id": "CONTACT1",
@@ -434,7 +581,10 @@
       "category": "構造",
       "status": "queued",
       "detail": "接触収束と反力・摩擦条件を検証。",
-      "acceptance": "接触収束と反力・摩擦条件を検証。"
+      "acceptance": "接触収束と反力・摩擦条件を検証。",
+      "titleEn": "Support contact, friction and bolts",
+      "detailEn": "Validate contact convergence, reactions and friction conditions.",
+      "acceptanceEn": "Validate contact convergence, reactions and friction conditions."
     },
     {
       "id": "QA1",
@@ -442,7 +592,10 @@
       "category": "検証",
       "status": "queued",
       "detail": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
-      "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。"
+      "acceptance": "API、CAD、3D操作、保存・復元を公開版で確認する手順を自動化。",
+      "titleEn": "Run regression checks on the deployed app",
+      "detailEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages.",
+      "acceptanceEn": "Automate checks for the API, CAD, 3D interactions and project roundtrips on Pages."
     },
     {
       "id": "PERF1",
@@ -450,7 +603,118 @@
       "category": "検証",
       "status": "queued",
       "detail": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
-      "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。"
+      "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "titleEn": "Measure supported model sizes",
+      "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
+      "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits."
+    },
+    {
+      "id": "ADAPT1",
+      "title": "解析結果から局所メッシュを細分化",
+      "category": "構造",
+      "detail": "変位と勾配・誤差指標から細分化対象を決め、境界条件を再転送する。",
+      "acceptance": "変位と勾配・誤差指標から細分化対象を決め、境界条件を再転送する。",
+      "depends": [
+        "FEM1",
+        "MESH2"
+      ],
+      "optional": false,
+      "status": "queued",
+      "titleEn": "Refine locally using simulation results",
+      "detailEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions.",
+      "acceptanceEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions."
+    },
+    {
+      "id": "ADAPT2",
+      "title": "再メッシュ・再解析の収束ループ",
+      "category": "構造",
+      "detail": "反復結果を保持し、誤差・変化量・要素数・時間上限で停止。特異点を識別する。",
+      "acceptance": "反復結果を保持し、誤差・変化量・要素数・時間上限で停止。特異点を識別する。",
+      "depends": [
+        "ADAPT1",
+        "MESH3"
+      ],
+      "optional": false,
+      "status": "queued",
+      "titleEn": "Repeat remeshing and solving until convergence",
+      "detailEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
+      "acceptanceEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities."
+    },
+    {
+      "id": "I18N1",
+      "title": "Web画面をENとJPに切り替え",
+      "category": "共通",
+      "detail": "アプリ・管理ボードの静的表示と動的メッセージを両言語化。言語を保存する。",
+      "acceptance": "アプリ・管理ボードの静的表示と動的メッセージを両言語化。言語を保存する。",
+      "depends": [],
+      "optional": false,
+      "status": "checking",
+      "titleEn": "Offer English and Japanese web interfaces",
+      "detailEn": "Localize the app, board and dynamic messages; preserve language preference.",
+      "acceptanceEn": "Localize the app, board and dynamic messages; preserve language preference.",
+      "lastUpdate": "JP/EN切替と作業タイトル・詳細の英語版を実装。公開画面確認中",
+      "evidence": "src/i18n.js"
+    },
+    {
+      "id": "I18N2",
+      "title": "リポジトリ文書をENとJPで提供",
+      "category": "共通",
+      "detail": "README、機能、材料、構成、ソルバー、ロードマップ、検証、メッシュ、印刷部品を両言語で対応させる。",
+      "acceptance": "README、機能、材料、構成、ソルバー、ロードマップ、検証、メッシュ、印刷部品を両言語で対応させる。",
+      "depends": [],
+      "optional": false,
+      "status": "checking",
+      "titleEn": "Provide English and Japanese repository documentation",
+      "detailEn": "Provide corresponding README, features, materials, architecture, solvers, roadmap, tests, meshing and printed-parts documents.",
+      "acceptanceEn": "Provide corresponding README, features, materials, architecture, solvers, roadmap, tests, meshing and printed-parts documents.",
+      "lastUpdate": "全仕様文書の英語版・相互リンクを追加。対応を自動検証",
+      "evidence": "tests/docs.test.mjs"
+    },
+    {
+      "id": "PORTAL1",
+      "title": "開発ポータルに入口を追加",
+      "category": "共通",
+      "detail": "dev-portalに解析アプリと開発管理へのリンクを公開して確認。",
+      "acceptance": "dev-portalに解析アプリと開発管理へのリンクを公開して確認。",
+      "depends": [],
+      "optional": false,
+      "status": "checking",
+      "evidence": "docs/testing.md",
+      "titleEn": "Add links to the development portal",
+      "detailEn": "Publish and verify links to the app and board from dev-portal.",
+      "acceptanceEn": "Publish and verify links to the app and board from dev-portal."
+    },
+    {
+      "id": "PRINT1",
+      "title": "Bambuのスライスデータを読み込む",
+      "category": "3Dプリント",
+      "detail": "最終段階の任意機能。3MF・G-codeの内容を確認し、形状・造形設定・経路を抽出。",
+      "acceptance": "最終段階の任意機能。3MF・G-codeの内容を確認し、形状・造形設定・経路を抽出。",
+      "depends": [
+        "ADAPT2",
+        "SOLVER1"
+      ],
+      "optional": true,
+      "status": "queued",
+      "titleEn": "Import Bambu slicing data",
+      "detailEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths.",
+      "acceptanceEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths."
+    },
+    {
+      "id": "PRINT2",
+      "title": "積層とインフィルを反映して解析",
+      "category": "3Dプリント",
+      "detail": "最終段階の任意機能。異方性の等価モデルから開始し、壁・層・インフィルの詳細化と試験データによる検証。",
+      "acceptance": "最終段階の任意機能。異方性の等価モデルから開始し、壁・層・インフィルの詳細化と試験データによる検証。",
+      "depends": [
+        "PRINT1",
+        "MAT3"
+      ],
+      "optional": true,
+      "status": "queued",
+      "titleEn": "Simulate layers and infill",
+      "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
+      "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens."
     }
   ],
   "solvers": [

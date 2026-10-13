@@ -1,5 +1,7 @@
 # Airpocket Simulation Studio
 
+[English](README.en.md)
+
 3Dモデル上で解析領域を指定し、OSSソルバーで構造・熱・流体・振動音響を解析するアプリの開発計画。
 
 現状は3D領域設定の試作版。STEPのWASM読み込み、STL表示、回転・拡大、CAD面選択、曲面ブラシ選択、固定・荷重の登録、JSON保存・復元を実装。体積メッシュ生成と解析ソルバーは未実装。
@@ -25,3 +27,5 @@
 作成日: 2026-10-13
 
 配布方針: GitHub Pagesで公開するWebアプリ。計算はブラウザのWeb WorkerとWASMでローカルCPUを使用し、GPU計算はWebGPU対応を検証して追加する。[ブラウザ実行設計](docs/browser-runtime.md)。ユーザーの指示でソースリポジトリを公開へ変更。[利用ライブラリ](THIRD_PARTY.md)。
+
+追加仕様: [適応メッシュ](docs/adaptive-meshing.md)、[3Dプリント部品（最終段階の任意機能）](docs/printed-parts.md)。画面右下のJP / ENで言語を切り替えられます。

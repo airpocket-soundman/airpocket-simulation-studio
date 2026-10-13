@@ -1,0 +1,56 @@
+let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
+export const language=new URLSearchParams(location.search).get('lang')||savedLanguage;
+export const dictionary={
+ 'Webアプリとして公開':'Publish as a web app','GitHub Pagesで配信。モデルはブラウザ内で処理する。':'Hosted on GitHub Pages. Models are processed in the browser.',
+ 'CPUを基本に、GPUを段階的に追加':'CPU baseline, GPU acceleration later','WASMとWorkerでローカルCPUを使用。WebGPU計算は専用処理と検証を追加してから。':'Use WASM and Workers on the local CPU. Add dedicated, validated WebGPU computation later.',
+ '一つの製品、独立した解析モジュール':'One product, independent analysis modules','3D操作と領域を共通化し、構造・熱・流体・音響の画面と計算を分離。':'Share 3D controls and regions; separate structural, thermal, fluid and acoustic workflows and calculations.',
+ 'UIとAPIで検証':'Verify through UI and API','同じ処理をAPIから直接呼び出す。高速テストと実画面の確認を組み合わせる。':'Call the shared core directly through an API. Combine fast tests with actual UI verification.',
+ '構造・熱・流体・音響候補':'Structural / thermal / fluid / acoustic candidates','高度な構造・熱・音響候補':'Advanced structural / thermal / acoustic candidates','流体・共役熱伝達':'Fluid / conjugate heat transfer','メッシュ生成':'Mesh generation','STEP読込 / CAD表示':'STEP import / CAD display',
+ 'ブラウザで動く解析アプリをつくる。':'Building a browser-based simulation app.',
+ '候補ソルバーのネイティブ版の機能が、そのままブラウザで使えるわけではありません。解析用ソルバーはすべて未接続。':'Native engine capabilities are not automatically available in the browser. No analysis solver is connected yet.',
+ '3D領域設定と共通APIの試作版。解析計算は未実装。':'Prototype with 3D region setup and a shared API. Analysis computation is not implemented.',
+ 'テスト: 共通APIを含む5件の自動テスト。公開画面ではSTEP読込・曲面ブラシ・固定登録を確認。解析精度の検証はソルバー実装後。':'Tests cover the shared API. STEP import, curved-surface brushing and constraint registration were checked on Pages. Numerical accuracy will be validated after solver integration.',
+ '開発管理ボード':'Development board','開発管理':'Development','作業':'Tasks','開発メモ':'Development notes','ソルバー':'Solvers','公開版':'Release','決定事項':'Decisions',
+ '左から右へ進み、右端が公開版です。':'Work moves from left to right; the rightmost column is deployed.',
+ '順番を待っている':'Queued','つくっている':'Building','確かめている':'Checking','直している':'Fixing','次の版を待っている':'Ready for release','公開版に入っている':'Deployed',
+ '未着手':'Not started','実装中':'Implementation','検証中':'Validation','修正中':'Fixes','検証済み・未公開':'Validated, not deployed','Pagesで利用できる':'Available on Pages',
+ 'この段階の作業はありません。':'No tasks at this stage.','条件に一致する作業はありません。':'No matching tasks.','すべての分野':'All disciplines','作業を検索':'Search tasks','分野で絞り込む':'Filter by discipline',
+ '現在の公開版':'Current release','解析は準備中':'Analysis is not implemented','＋ 開発メモを書く':'+ Write a note','解析アプリを開く ↗':'Open simulation app ↗','GitHubを開く ↗':'Open GitHub ↗','閉じる':'Close','完了条件':'Acceptance criteria','前提: ':'Dependencies: ','最新の記録: ':'Latest update: ','実装・検証記録を開く ↗':'Open implementation / validation record ↗',
+ 'このブラウザに保存したメモ。公式の進捗とは別に管理します。':'Notes saved in this browser, separate from official progress.',
+ '候補と導入状況。使える機能は検証後に増やします。':'Candidates and integration status. Capabilities are enabled after validation.',
+ '今、GitHub Pagesで利用できるもの。':'What is currently available on GitHub Pages.','開発の前提と構成。':'Project decisions and architecture.',
+ '進捗は20秒ごとに自動取得します。作業の区切りごとに更新。カードを押すと詳細を確認できます。':'Progress refreshes every 20 seconds and is recorded at work milestones. Open a card for details.',
+ '開発メモはこのブラウザだけに保存され、GitHubや他の利用者には共有されません。':'Notes are stored only in this browser and are not shared with GitHub or other users.',
+ '最新進捗を確認中…':'Checking latest progress…','接続中 · 最終取得 ':'Connected · Last fetched ',' / 進捗更新 ':' / Progress updated ',
+ '最新進捗を取得できません。前回のデータを表示中（20秒後に再試行）。':'Cannot fetch progress. Showing the previous snapshot; retrying in 20 seconds.',
+ '候補':'Candidate','用途':'Purpose','状態':'Status','構造':'Structural','共通':'Common','検証':'Validation','材料':'Materials','熱':'Thermal','音響':'Acoustics','流体':'Fluid','連成':'Coupling','3Dプリント':'3D printing','任意':'Optional',
+ 'WASM移植未検証':'WASM port not validated','ブラウザ実行未検証':'Browser execution not validated','WASM実行確認済み':'WASM execution verified',
+ '開発メモを書く':'Write a development note','このブラウザに保存します。共有するには書き出したファイルを使ってください。':'Saved in this browser. Export a file to share it.','内容':'Content','このブラウザに保存':'Save in this browser','メモを書き出す':'Export notes','気になった点、次に試したいこと…':'Issues to investigate or things to try…','内容を入力してください。':'Enter a note.','メモはまだありません。「開発メモを書く」から追加できます。':'No notes yet. Use “Write a development note” to add one.','保存できません。ブラウザの保存容量・設定を確認してください。':'Cannot save. Check browser storage settings and capacity.',
+ '3D上で、解析する場所を決める':'Define analysis regions directly in 3D','領域設定プレビュー · v0.1':'Region setup preview · v0.1','01 モデル':'01 Model','STEP / STL を開く':'Open STEP / STL','曲面サンプル':'Curved sample','全体表示':'Fit model','STLの長さ単位':'STL length unit',
+ 'STEPはmmに変換。ファイルはこのブラウザで処理します。':'STEP is converted to mm. Files are processed locally in this browser.','02 領域を選ぶ':'02 Select regions','回転':'Orbit','面':'Face','ブラシ':'Brush','消しゴム':'Erase','ブラシ半径':'Brush radius','戻す':'Undo','選択解除':'Clear selection','表面の三角形を表示':'Show surface triangles','選択なし':'Nothing selected',
+ 'ブラシは空間距離による範囲です。見えている同じ面の三角形だけを選択。選択モードでは右ドラッグで回転します。':'The brush uses spatial distance and selects visible triangles on the same CAD face. Right-drag to orbit in selection mode.',
+ '保存・復元':'Save / restore','プロジェクトを書き出す':'Export project','プロジェクトを開く':'Open project','表示形状・選択・設定条件を保存':'Save display geometry, selection and conditions',
+ 'ホイール: 拡大縮小 / 右ドラッグ: 選択モードで回転 / 中ドラッグ: 移動':'Wheel: zoom / Right-drag: orbit in selection mode / Middle-drag: pan','黄色: 選択中　青: 固定　橙: 荷重':'Yellow: selected · Blue: fixed · Orange: force',
+ '03 解析条件':'03 Analysis setup','解析分野':'Discipline','熱（準備中）':'Thermal (planned)','流体（準備中）':'Fluid (planned)','振動・音響（準備中）':'Vibration / acoustics (planned)','材料カテゴリ':'Material category','金属':'Metal','樹脂':'Polymer','ガラス':'Glass','ゴム':'Rubber',
+ '材料物性を入力':'Enter material properties','ヤング率':'Young’s modulus','ポアソン比':'Poisson’s ratio','密度':'Density','評価用の強度':'Evaluation strength','熱伝導率':'Thermal conductivity','比熱':'Specific heat','線膨張係数':'Thermal expansion coefficient','有効温度の下限':'Minimum valid temperature','有効温度の上限':'Maximum valid temperature','グレード':'Grade','物性の出典':'Property source','強度の意味・試験条件':'Strength definition / test conditions','降伏強度、引張強度など':'Yield or tensile strength, etc.','物性を登録':'Register properties','未入力':'Not entered',
+ '選択範囲を固定':'Fix selected region','合計荷重（N）':'Total force (N)','全体座標での荷重方向 X / Y / Z':'Force direction in global coordinates: X / Y / Z','X方向':'X direction','Y方向':'Y direction','Z方向':'Z direction','選択範囲に荷重':'Apply force to selected region','設定した条件':'Registered conditions','条件はまだありません。':'No conditions yet.','全方向の変位を拘束':'Constrain displacement in all directions','領域を選択':'Select region','削除':'Remove','計算エンジン':'Calculation engine','ブラウザ版ソルバー検証中':'Browser solver validation pending','CPU / WASM を基本に、対応ソルバーを追加予定。':'CPU / WASM is the baseline. Validated solvers will be added.','解析する（未実装）':'Run analysis (not implemented)',
+ '現在は領域と条件を設定する試作版です。表示の三角形は解析用の体積メッシュではありません。変形・強度の計算はまだ行いません。':'This prototype configures regions and conditions. Display triangles are not a volume mesh. Deformation and strength calculations are not implemented.',
+ '曲面の一部分をブラシで選べます。':'Use the brush to select part of the curved surface.','モデルを読み込んでいます…':'Loading model…','STEP読み込み完了。CAD面またはブラシで領域を指定できます。':'STEP loaded. Select CAD faces or brush regions.','条件を登録しました。まだ解析計算は行っていません。':'Condition registered. No analysis has been run.','材料物性を登録しました。':'Material properties registered.','プロジェクトを書き出しました。':'Project exported.','プロジェクトを復元しました。':'Project restored.',
+ '線形弾性の物性は不足しています。':'Linear elastic properties are incomplete.','線形弾性の基本物性を登録済み。':'Basic linear elastic properties registered.','解析ソルバーは未接続です。':'No analysis solver is connected.',
+ '大変形には超弾性モデルと試験データが必要です。':'Large deformation requires a hyperelastic model and test data.','強度だけでは欠陥や表面状態を含む破壊予測はできません。':'Strength alone cannot predict fracture including defects and surface conditions.','温度・速度・方向による物性の変化を確認してください。':'Check temperature, rate and directional dependence.','強度の意味と試験条件を記録してください。':'Record the strength definition and test conditions.',
+ '読み込み失敗: ':'Import failed: ','復元失敗: ':'Restore failed: ','が有効範囲外です。':' is outside the valid range.','有効温度の上下限が逆です。':'Temperature limits are reversed.','領域を選んでください。':'Select a region.','条件が不正です。':'Invalid condition.','材料の記録が不正です。':'Invalid material record.','物性データが不正です。':'Invalid material properties.',
+ '初期版の上限は50 MBです。':'The prototype limit is 50 MB.','ファイルが大きすぎます。':'File is too large.','有効な形状がありません。':'No valid geometry found.','読み込みが時間制限（90秒）を超えました。':'Import exceeded the 90 second limit.','STL: 面選択は三角形単位です。ブラシで見えている範囲を選べます。':'STL: face selection uses individual triangles. Brush visible regions.',
+ '対応するプロジェクトではありません。':'Unsupported project.','形状数が不正です。':'Invalid geometry count.','形状データが不正です。':'Invalid geometry data.','形状が大きすぎます。':'Geometry is too large.','面データが不正です。':'Invalid face data.','条件データが不正です。':'Invalid condition data.','荷重方向が不正です。':'Invalid force direction.','領域データが不正です。':'Invalid region data.','選択データが不正です。':'Invalid selection data.',
+};
+let replacements=Object.entries(dictionary).sort((a,b)=>b[0].length-a[0].length);
+export function addTranslations(entries){Object.assign(dictionary,entries);replacements=Object.entries(dictionary).sort((a,b)=>b[0].length-a[0].length);}
+export function translate(s){if(language!=='en')return s;if(dictionary[s])return dictionary[s];let result=s;for(const [jp,en]of replacements)if(result.includes(jp))result=result.split(jp).join(en);return result.replace(/(\d+) 三角形を選択/g,'$1 triangles selected').replace(/(\d+) 件/g,'$1 items').replace(/ の後/g,' required').replace(/固定 (\d+)/g,'Fixed $1').replace(/荷重 (\d+)/g,'Force $1').replace(/方向 \(/g,'Direction (').replace(/全体座標/g,'Global coordinates').replace(/ 公開/g,' deployed');}
+export function installLanguage(){
+ document.documentElement.lang=language==='en'?'en':'ja';
+ const bar=document.createElement('div');bar.className='language-switch';bar.dataset.noTranslate='true';for(const [code,label]of [['ja','JP'],['en','EN']]){const a=document.createElement('a');a.textContent=label;const u=new URL(location.href);u.searchParams.set('lang',code);a.href=u.href;a.lang=code;a.className=code===language?'selected':'';a.onclick=()=>{try{localStorage.setItem('studio-language',code);}catch{}};bar.append(a);}document.body.append(bar);
+ if(language!=='en')return;
+ function scan(){observer.disconnect();for(const el of document.querySelectorAll('option'))if(!el.hasAttribute('value'))el.setAttribute('value',el.textContent);const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=walker.nextNode()){if(n.parentElement?.closest('script,style,input,textarea,[data-no-translate],#name,.memo'))continue;const value=translate(n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;}
+ for(const el of document.querySelectorAll('[placeholder],[aria-label],option')){if(el.tagName==='OPTION'&&!el.hasAttribute('value'))el.setAttribute('value',el.textContent);for(const attr of ['placeholder','aria-label'])if(el.hasAttribute(attr))el.setAttribute(attr,translate(el.getAttribute(attr)));}
+ observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
+ const observer=new MutationObserver(scan);scan();
+}

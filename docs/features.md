@@ -1,5 +1,7 @@
 # 実装する機能
 
+[English](en/features.md)
+
 以下はすべて計画。段階は roadmap.md を参照。
 
 ## 3D操作と領域指定

@@ -1,0 +1,3 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readdirSync,existsSync,readFileSync} from 'node:fs';
+test('every JP specification has an English counterpart and reciprocal link',()=>{for(const n of readdirSync('docs').filter(n=>n.endsWith('.md'))){assert.ok(existsSync('docs/en/'+n),n);assert.ok(readFileSync('docs/'+n,'utf8').includes('en/'+n));assert.ok(readFileSync('docs/en/'+n,'utf8').includes('../'+n));}});
+test('every task has English title and acceptance criteria',()=>{const p=JSON.parse(readFileSync('src/progress.json'));for(const t of p.tasks)for(const k of ['titleEn','detailEn','acceptanceEn'])assert.ok(typeof t[k]==='string'&&t[k].length,t.id+' '+k);});

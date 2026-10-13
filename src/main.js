@@ -1,3 +1,4 @@
+import {installLanguage} from './i18n.js';
 import { materialFields,materialReadiness } from './materials.js';
 import { createStudioApi } from './studio-api.js';
 import * as THREE from 'three';
@@ -28,7 +29,7 @@ function geometryData(g,faceIds){if(g.index)g=g.toNonIndexed();g.computeVertexNo
 function setModel(data,name){
  for(const m of meshes){m.geometry.dispose();m.material.dispose();}group.clear();markers.clear();
  meshes=data.map((d,index)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(d.positions,3));g.computeVertexNormals();g.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(d.positions.length),3));const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.55,metalness:.18,side:THREE.DoubleSide}));m.userData={index,faceIds:d.faceIds,kind:d.kind||'cad'};group.add(m);return m;});
- selection=meshes.map(()=>new Set());conditions=[];materialProperties={};history=[];modelName=name;$('name').textContent=name;fit();repaint();renderConditions();
+ selection=meshes.map(()=>new Set());conditions=[];materialProperties={};history=[];modelName=name;$('name').textContent=name;fit();repaint();renderConditions();if($('mat-youngModulus'))renderMaterial();
 }
 function fit(){controls.enableDamping=false;const box=new THREE.Box3().setFromObject(group),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),r=Math.max(size.x,size.y,size.z,1);controls.target.copy(center);camera.position.copy(center).add(new THREE.Vector3(r*1.4,r*.9,r*1.6));camera.near=r/10000;camera.far=r*100;camera.updateProjectionMatrix();controls.update();controls.enableDamping=true;$('radius').max=Math.max(r/2,1);$('radius').value=Math.min(6,r/10);$('radiusText').textContent=$('radius').value;}
 function snapshot(){history.push(selection.map(s=>[...s]));if(history.length>30)history.shift();}
@@ -83,3 +84,5 @@ $('save').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(ap
 $('restore').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>200*1024*1024)throw Error('ファイルが大きすぎます。');api.loadProject(JSON.parse(await f.text()));status('プロジェクトを復元しました。');}catch(error){status('復元失敗: '+error.message);}finally{e.target.value='';}};
 new ResizeObserver(()=>{const rect=$('canvas').parentElement.getBoundingClientRect();renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/rect.height;camera.updateProjectionMatrix();}).observe($('canvas').parentElement);
 demo();renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera);});
+
+installLanguage();
