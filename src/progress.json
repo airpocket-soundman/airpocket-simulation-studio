@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T17:39:23.182250+00:00",
+  "updatedAt": "2026-10-13T17:53:55.203715+00:00",
   "release": {
     "version": "v0.24",
     "date": "2026-10-14",
-    "description": "球形外部音響領域、1次球面放射、Kirchhoff–Helmholtz遠方界と指向性図、波長/実メッシュ辺の検査を追加。同じCAD面全体の再メッシュ対応も修正。126テスト。公開版での最終回帰を確認中。過渡音・振動連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added spherical exterior acoustic domains, first-order radiation, Kirchhoff–Helmholtz far-field/directivity plots and actual edge/wavelength validation. Fixed complete unchanged CAD-face transfer across remeshing. 126 tests; final public regression underway. Transient acoustics, vibration coupling and general 3D flow remain outstanding."
+    "description": "球形外部音響、1次球面放射、Kirchhoff–Helmholtz遠方界・指向性図、実メッシュ波長検査、CAD面全体の再メッシュ対応を追加。126テスト、公開9項目と画面で検証済み。過渡音・振動連成・一般3D流体等は残作業。",
+    "descriptionEn": "Added spherical exterior acoustics, first-order radiation, Kirchhoff–Helmholtz far-field/directivity, actual wavelength resolution and unchanged CAD-face remeshing. 126 tests, nine deployed-runtime checks and public UI verified. Transient acoustics, vibration coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -569,26 +569,28 @@
       "id": "ACOU3",
       "title": "音の外部放射・指向性",
       "category": "音響",
-      "status": "checking",
+      "status": "released",
       "detail": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
       "acceptance": "開放境界・領域サイズ・波長のメッシュ収束を確認。",
       "titleEn": "Support external radiation and directivity",
       "detailEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence.",
       "acceptanceEn": "Validate open boundaries, domain extent and wavelength-dependent mesh convergence.",
-      "lastUpdate": "球面放射条件と遠方界積分、極座標図/ケース保存を実装。球音源の音圧誤差が4→2 mmメッシュで6.3%→2.5%へ減少。20/30 mm領域、位相・振幅・方向性を検証。画面の曲面条件再転送もCAD同一性で修正。公開版を確認中。境界は1次近似、PML/BEM未対応。",
-      "lastUpdateEn": "Implemented spherical radiation, far-field integral, polar plots and archives. Sphere pressure error decreases from 6.3% to 2.5% for 4→2 mm meshes; validated 20/30 mm domains, phase, amplitude and angular trace. Fixed whole curved-face remeshing via CAD identity. Public validation underway. Boundary is first order; PML/BEM unsupported.",
+      "lastUpdate": "公開版で2 mmメッシュの5.1248 mPa（参照5 mPa）、放射4.0161e−7 W、保存指向性を確認。配信実行ファイル9項目も8.36秒で成功。境界は1次近似で、PML/BEMは未対応。",
+      "lastUpdateEn": "Public 2 mm mesh verified at 5.1248 mPa (reference5 mPa), radiated4.0161e−7 W and saved directivity. Nine deployed runtime checks passed in8.36 seconds. Boundary remains first order; PML/BEM unsupported.",
       "evidence": "tests/acoustic-radiation.test.mjs; tests/source-identity.test.mjs; tests/worker-pipeline.test.mjs"
     },
     {
       "id": "ACOU4",
       "title": "過渡波動・可聴化",
       "category": "音響",
-      "status": "queued",
+      "status": "building",
       "detail": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
       "acceptance": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
       "titleEn": "Support transient acoustics and auralization",
       "detailEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre.",
-      "acceptanceEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre."
+      "acceptanceEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre.",
+      "lastUpdate": "時間領域の波動方程式、安定性を確認した陽的時間積分、観測点の圧力波形とWAV試聴を実装中。周波数場の音圧を音色とみなさず、時間応答から生成します。",
+      "lastUpdateEn": "Implementing time-domain wave propagation, stability-controlled explicit stepping, receiver pressure histories and WAV listening from computed temporal responses."
     },
     {
       "id": "COUPLE2",
