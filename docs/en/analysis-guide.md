@@ -86,3 +86,5 @@ API: `studioApi.addCondition({type:'displacement',value:0.04,direction:[0,0,1]})
 
 ### Saved cases and comparison
 Save up to eight named calculations and compare displacement/stress, temperature ranges, or pressure/SPL. JSON archives retain independent input, calculation settings and results. Cases live in session memory: export before closing. Duplicating/restoring input requires recalculation. Compare within the same physics and account for geometry and mesh differences. `window.caseApi` exposes `add / list / compare / export / import / remove`, shared with the UI.
+
+Use "View saved result in 3D" to load archived inputs, mesh and results for color display, deformation and probing without recalculation. `window.caseApi.view(index)` performs the same action. Cancel any running calculation first. Invalid mesh or display fields are rejected before changing current inputs.
