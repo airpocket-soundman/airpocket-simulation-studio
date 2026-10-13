@@ -28,3 +28,5 @@ Progress is stored in src/progress.json; the board fetches updates every 20 seco
 - [Finite-strain rubber analysis](docs/en/hyperelasticity.md)
 
 - [Exterior radiation and far-field directivity](docs/en/exterior-acoustics.md)
+
+- [Transient acoustics](docs/en/transient-acoustics.md)

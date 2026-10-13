@@ -8,6 +8,7 @@ export function sampleResult(mesh,result,point,{bodyIndex}={}){
  if(result.kind==='elastic'){out.displacementMm=[0,1,2].map(k=>t.reduce((s,i,a)=>s+w[a]*result.displacement[i*3+k],0));out.magnitudeMm=Math.hypot(...out.displacementMm);out.vonMisesPa=result.vonMises[e];}
  else if(result.kind==='thermal'){out.temperature=scalar(result.temperature);out.flux=result.flux[e];}
  else if(result.kind==='channelFlow'){out.velocityMs=[0,1,2].map(k=>t.reduce((s,i,a)=>s+w[a]*result.velocity[3*i+k],0));out.speedMs=Math.hypot(...out.velocityMs);out.pressurePa=scalar(result.pressure);}
+ else if(result.kind==='acousticTransient'){out.pressurePa=scalar(result.pressure);out.time=result.time;}
  else if(result.kind==='acoustic'){out.pressureReal=scalar(result.real);out.pressureImag=scalar(result.imag);out.peakPressurePa=Math.hypot(out.pressureReal,out.pressureImag);out.rmsPressurePa=out.peakPressurePa/Math.SQRT2;out.splDb=20*Math.log10(Math.max(out.rmsPressurePa,1e-12)/result.referencePressurePa);out.phase=Math.atan2(out.pressureImag,out.pressureReal);}
  if(mesh.nodeBodies){out.bodyIndex=mesh.nodeBodies[t[0]];if(bodyIndex===undefined){if(first&&first.bodyIndex!==out.bodyIndex)throw Error('Probe point belongs to multiple bodies; specify bodyIndex');first??=out;continue;}}
  return out;

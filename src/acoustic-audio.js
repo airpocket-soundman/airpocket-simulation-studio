@@ -1,0 +1,9 @@
+/** Physical receiver trace -> normalized mono PCM16 WAV, no time stretching.
+ * Windowed-sinc low-pass prevents direct downsampling of the high-rate FEM trace.
+ */
+export function acousticWav(result,sampleRate=44100){
+ if(result.kind!=='acousticTransient'||!Array.isArray(result.receiverPressurePa)||result.receiverPressurePa.length!==result.steps+1||!result.receiverPressurePa.every(Number.isFinite)||!(result.timeStep>0)||!(result.duration>0)||result.duration>.1||![44100,48000].includes(sampleRate))throw Error('Invalid transient audio trace');
+ const samples=result.receiverPressurePa,inputRate=1/result.timeStep,cutoff=Math.min(.45*sampleRate,.45*inputRate),radius=Math.min(samples.length,Math.ceil(16*inputRate/cutoff)),count=Math.max(1,Math.floor(result.duration*sampleRate)),out=new Float64Array(count);let peak=0;
+ for(let j=0;j<count;j++){const x=j*inputRate/sampleRate,mid=Math.floor(x);let sum=0,weights=0;for(let i=mid-radius;i<=mid+radius;i++){const distance=i-x,a=2*cutoff/inputRate*distance,sinc=Math.abs(a)<1e-12?1:Math.sin(Math.PI*a)/(Math.PI*a),window=.5+.5*Math.cos(Math.PI*distance/(radius+1)),w=sinc*window;weights+=w;if(i>=0&&i<samples.length)sum+=w*samples[i];}out[j]=sum/weights;peak=Math.max(peak,Math.abs(out[j]));}
+ const bytes=new Uint8Array(44+count*2),v=new DataView(bytes.buffer),text=(offset,s)=>[...s].forEach((c,i)=>v.setUint8(offset+i,c.charCodeAt(0)));text(0,'RIFF');v.setUint32(4,36+count*2,true);text(8,'WAVE');text(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sampleRate,true);v.setUint32(28,sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,count*2,true);for(let i=0;i<count;i++)v.setInt16(44+2*i,Math.round((peak?out[i]/peak:0)*32767),true);return {bytes,sampleRate,durationSeconds:count/sampleRate,normalizationPeakPa:peak};
+}

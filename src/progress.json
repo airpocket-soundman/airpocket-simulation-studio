@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T17:53:55.203715+00:00",
+  "updatedAt": "2026-10-13T18:04:35.228332+00:00",
   "release": {
-    "version": "v0.24",
+    "version": "v0.25",
     "date": "2026-10-14",
-    "description": "球形外部音響、1次球面放射、Kirchhoff–Helmholtz遠方界・指向性図、実メッシュ波長検査、CAD面全体の再メッシュ対応を追加。126テスト、公開9項目と画面で検証済み。過渡音・振動連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added spherical exterior acoustics, first-order radiation, Kirchhoff–Helmholtz far-field/directivity, actual wavelength resolution and unchanged CAD-face remeshing. 126 tests, nine deployed-runtime checks and public UI verified. Transient acoustics, vibration coupling and general 3D flow remain outstanding."
+    "description": "過渡音響、受音波形、時間別3D表示、正規化WAV、ケース保存を追加。134テストと配信物10項目が成功し、公開画面を検証中。振動連成・一般3D流体等は残作業。",
+    "descriptionEn": "Added transient acoustics, receiver traces, 3D time frames, normalized WAV and case archives. 134 tests and ten distribution checks pass; public UI verification in progress. Vibration coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -583,14 +583,15 @@
       "id": "ACOU4",
       "title": "過渡波動・可聴化",
       "category": "音響",
-      "status": "building",
-      "detail": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
-      "acceptance": "インパルス応答と音への変換を検証。単一周波数から音色を保証しない。",
+      "status": "checking",
+      "detail": "集中質量Tet4と中心差分で音圧の時間発展を計算。CFL上限、ガウス変調パルス、実インピーダンス、球面放射、受音波形・時間別3D表示・正規化WAV・ケース保存を実装。解析解・WASM一致と公開検証を実施中。",
+      "acceptance": "集中質量Tet4と中心差分で音圧の時間発展を計算。CFL上限、ガウス変調パルス、実インピーダンス、球面放射、受音波形・時間別3D表示・正規化WAV・ケース保存を実装。解析解・WASM一致と公開検証を実施中。",
       "titleEn": "Support transient acoustics and auralization",
-      "detailEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre.",
-      "acceptanceEn": "Validate impulse responses and audio conversion; a single-frequency result does not establish timbre.",
+      "detailEn": "Implemented lumped Tet4 central-difference wave propagation, conservative CFL bound, Gaussian-modulated pulse, real impedance/spherical radiation, receiver waveform, 3D time frames, normalized WAV and case archives. Analytical/WASM and deployment checks in progress.",
+      "acceptanceEn": "Implemented lumped Tet4 central-difference wave propagation, conservative CFL bound, Gaussian-modulated pulse, real impedance/spherical radiation, receiver waveform, 3D time frames, normalized WAV and case archives. Analytical/WASM and deployment checks in progress.",
       "lastUpdate": "時間領域の波動方程式、安定性を確認した陽的時間積分、観測点の圧力波形とWAV試聴を実装中。周波数場の音圧を音色とみなさず、時間応答から生成します。",
-      "lastUpdateEn": "Implementing time-domain wave propagation, stability-controlled explicit stepping, receiver pressure histories and WAV listening from computed temporal responses."
+      "lastUpdateEn": "Implementing time-domain wave propagation, stability-controlled explicit stepping, receiver pressure histories and WAV listening from computed temporal responses.",
+      "evidence": "src/acoustic-transient.js; tests/acoustic-transient.test.mjs; docs/transient-acoustics.md"
     },
     {
       "id": "COUPLE2",

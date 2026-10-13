@@ -45,7 +45,7 @@ Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar 
 
 `runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
 
-After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 126 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 134 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
 
 ### Browser regression recipe
 
@@ -66,3 +66,5 @@ await run.next(); // Advance one milestone; the final done=true value is the rep
 ```
 
 This recipe verifies the current in-app browser. It does not establish cross-browser performance or exhaustive UI coverage; PERF1 tracks separate measurements. It is not a standalone browser-control script for the ordinary Node CLI.
+
+The transient acoustic distribution check verifies arrival time, pressure amplitude and archives using the deployed Worker. Unit tests verify WAV bandwidth filtering and physical duration.
