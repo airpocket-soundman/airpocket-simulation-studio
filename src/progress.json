@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T13:37:22.199005+00:00",
+  "updatedAt": "2026-10-13T14:17:02.509Z",
   "release": {
     "version": "v0.19",
     "date": "2026-10-13",
@@ -114,14 +114,14 @@
     {
       "id": "WASM1",
       "title": "構造ソルバーのWASM移植を検証",
-      "status": "queued",
+      "status": "building",
       "category": "構造",
       "detail": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "acceptance": "CalculiX等の候補について依存・ビルド・メモリ・ライセンスを調査し、小規模例題をブラウザで実行。候補はまだ導入済みではない。",
       "titleEn": "Validate a structural solver WASM port",
       "detailEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
       "acceptanceEn": "Investigate dependencies, build, memory and licensing, then solve small browser examples. Native candidates are not integrated yet.",
-      "lastUpdate": "独自Tet4エンジンのWASM行列演算を実装。CalculiX等の移植は未完了。 完了条件に未実装部分が残るため、確認待ちから残実装の待ち列へ移動。",
+      "lastUpdate": "独立したOSS計算経路としてMFEMのserial C++版をWASM化し、Airpocketと参照値比較する実装を開始",
       "lastUpdateEn": "Implemented WASM matrix operations for a new Tet4 engine; native solver ports remain incomplete. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
       "evidence": "src/fem-kernel.wat"
     },
