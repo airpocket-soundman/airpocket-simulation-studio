@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T21:49:43.438505+00:00",
+  "updatedAt": "2026-10-13T21:55:20.462937+00:00",
   "release": {
     "version": "v0.35",
     "date": "2026-10-14",
     "testCount": 185,
-    "description": "単一の閉じた凸STLから体積メッシュ生成と構造解析を追加。185テスト、ローカル配信物19項目、実画面のSTL読込・参照解・保存復元・日英表示を確認。任意の凹STLやSTL適応解析は未対応。公開確認中。",
-    "descriptionEn": "Added volume meshing and structural analysis for one closed convex STL shell. Verified 185 source tests, nineteen local distribution checks and focused browser import, references, archives and JP/EN. Arbitrary concave STL and STL adaptation remain unsupported. Public verification pending."
+    "description": "単一の閉じた凸STLから体積メッシュ生成と構造解析を追加。185テスト、公開配信物19項目、v0.35公開画面19項目が成功。体積・単軸参照解・保存メッシュの境界整合・日英表示を検証済み。任意の凹STLやSTL適応解析は未対応。",
+    "descriptionEn": "Added volume meshing and structural analysis for one closed convex STL shell. Verified 185 source tests, nineteen deployed runtime checks and nineteen v0.35 public browser checks, including volume, axial references, archive boundary consistency and JP/EN. Arbitrary concave STL and STL adaptation remain unsupported."
   },
   "tasks": [
     {
@@ -979,10 +979,10 @@
       "id": "STLMESH1",
       "title": "閉じた凸STLから体積メッシュを生成",
       "titleEn": "Generate volume meshes from closed convex STL shells",
-      "status": "checking",
+      "status": "released",
       "category": "3D",
-      "detail": "2000三角形までの単一・閉鎖・外向き・凸STLをmmで検証しGmshで体積化。体積と単軸変位・反力、局所細分化、保存メッシュの境界整合、実画面の保存復元を確認。公開版を検証中。",
-      "detailEn": "Validated one closed outward convex STL shell up to 2000 triangles in mm and tetrahedralized with Gmsh. Verified volume, axial displacement/reactions, local refinement, archive boundary consistency and browser restoration. Public verification pending.",
+      "detail": "2000三角形までの単一・閉鎖・外向き・凸STLをmmで検証しGmshで体積化。185テスト・公開配信物19項目・公開画面19項目が成功。局所細分化、単軸変位・反力と保存メッシュの境界整合も確認済み。",
+      "detailEn": "Validated one closed outward convex STL shell up to 2000 triangles in mm and tetrahedralized with Gmsh. Passed 185 source tests, nineteen public runtime and nineteen public browser checks, including local refinement, axial references and archive boundary consistency.",
       "acceptance": "実STL立方体の体積と単軸変位・荷重反力、形状不備の拒否、保存復元、日英UIを検証。",
       "acceptanceEn": "Verify actual STL cube volume, axial displacement and reactions, invalid shell rejection, archives and JP/EN UI.",
       "evidence": "src/mesh-core.js; src/surface-inspection.js"
