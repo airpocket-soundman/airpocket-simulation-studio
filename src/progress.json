@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T09:30:53.767955Z",
+  "updatedAt": "2026-10-13T10:55:03.987Z",
   "release": {
-    "version": "v0.8",
+    "version": "v0.9",
     "date": "2026-10-13",
-    "description": "計算時の入力・実行設定を固定するケース保存・比較・JSON復元を追加。構造・熱・音響の試作版、自動テスト51件。流体・非線形等は未実装。",
-    "descriptionEn": "Adds independent saved cases, comparison and JSON archives with frozen calculation inputs and settings. Structural/thermal/acoustic prototype with 51 tests; fluid and nonlinear analyses remain unimplemented."
+    "description": "熱膨張・熱応力と、保存した熱解析から構造への一方向温度転送を追加。異なるメッシュの補間・参照応力・反力を検証。自動テスト57件。流体、非線形、双方向連成等は残作業。",
+    "descriptionEn": "Adds thermal expansion/stress and one-way temperature transfer from saved thermal cases to structural meshes. Interpolation, reference stresses and reactions verified by 57 tests. Fluid, nonlinear and two-way coupling remain outstanding."
   },
   "tasks": [
     {
@@ -562,12 +562,15 @@
       "id": "COUPLE2",
       "title": "熱から構造へ温度を転送",
       "category": "連成",
-      "status": "queued",
+      "status": "released",
       "detail": "補間・基準温度・熱膨張と参照例題を検証。",
       "acceptance": "補間・基準温度・熱膨張と参照例題を検証。",
       "titleEn": "Transfer thermal fields to structural analysis",
       "detailEn": "Verify interpolation, reference temperatures, thermal expansion and benchmark cases.",
-      "acceptanceEn": "Verify interpolation, reference temperatures, thermal expansion and benchmark cases."
+      "acceptanceEn": "Verify interpolation, reference temperatures, thermal expansion and benchmark cases.",
+      "lastUpdate": "熱膨張・基準温度・温度場補間を実装。218→1006要素で20〜100°Cを転送し参照両端反力±40NをUI/WASMで確認。全57テスト成功",
+      "lastUpdateEn": "Implemented expansion, reference temperature and temperature-field interpolation. Pages-ready UI/WASM verified 20–100 °C transfer from 218 to 1006 elements with reference end reactions ±40 N. All 57 tests pass.",
+      "evidence": "tests/temperature-transfer.test.mjs"
     },
     {
       "id": "COUPLE3",
