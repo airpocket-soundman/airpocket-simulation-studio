@@ -1,5 +1,66 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+"Unexpected saved Stokes metadata":"Stokes流以外の結果にStokes流の情報が保存されています。",
+"Invalid saved Stokes study or execution mode":"保存したStokes流の解析条件または実行方式が不正です。",
+"Invalid saved Stokes fields":"保存したStokes流の速度・圧力・応力の値が不正です。",
+"Saved Stokes display fingerprint does not match its fluid mesh":"保存したStokes表示面と流体メッシュの元形状識別が一致しません。",
+"Saved Stokes metadata does not match its input":"保存したStokes流の情報が元の解析入力と一致しません。",
+"Saved Stokes velocity does not match its boundary":"保存したStokes流の境界速度が指定条件と一致しません。",
+"Saved Stokes pressure gauge mismatch":"保存したStokes流の圧力基準が指定条件と一致しません。",
+"Invalid saved Stokes extrema or convergence":"保存したStokes流の最大・最小値または収束情報が不正です。",
+"Saved Stokes fluid mesh must be connected without unused nodes":"保存したStokes流体メッシュは未使用節点のない単一の連結領域にしてください。",
+"Invalid saved Stokes tetrahedron":"保存したStokes流の四面体が不正です。",
+"Saved Stokes stress or divergence does not match its fields":"保存したStokes流の応力または発散が速度・圧力と一致しません。",
+"Invalid saved Stokes boundary surface":"保存したStokes流の境界表面が不正です。",
+"Saved Stokes boundary surface is incomplete":"保存したStokes流の境界表面が不足しています。",
+"Saved Stokes forces do not match their physical fields":"保存したStokes流の反力・抗力が速度・圧力・応力と一致しません。",
+"Saved Stokes diagnostics do not match their fields":"保存したStokes流の診断値が物理量と一致しません。",
+"Stokes inner boundary does not match the original solid geometry":"Stokes流の物体境界が元のソリッド形状と一致しません。",
+"Stokes CAD bounding box does not match the original solid dimensions":"Stokes流のCAD外形寸法が元のソリッド寸法と一致しません。",
+"Stokes supports Airpocket CPU solvers only":"Stokes流はAirpocketのCPUソルバーだけに対応します。",
+
+"Stokes CAD bounding box understates the body dimensions":"Stokes流のCAD外形寸法が物体メッシュより小さく登録されています。",
+"Stokes STEP flow requires the original CAD solid bounding box":"STEP形状のStokes流には元のCADソリッドの外形寸法が必要です。",
+
+"Stokes body nodes do not match its CAD bounding box":"Stokes流の物体表面節点が元のCAD外形寸法と一致しません。",
+
+'Stokes uses automatic outer velocity and no-slip boundaries; remove manual conditions':'Stokes流では外側一様速度と物体の滑りなし境界を自動設定します。手動条件を削除してください。',
+
+"Stokes study requires positive viscosity and density and a finite nonzero free-stream velocity":"Stokes流には正の粘度・密度と、有限でゼロでない外側速度が必要です。",
+"Stokes reference length must be positive in mm":"Stokes流の代表長さはmm単位の正の値を指定してください。",
+"Stokes prototype requires Reynolds number <= 0.1":"Stokes流の初期実装はレイノルズ数0.1以下に限定しています。",
+"Stokes requires an external fluid domain with a box enclosure":"Stokes流には物体の周囲の外部箱領域が必要です。",
+"Invalid Stokes boundary mesh":"Stokes流の境界メッシュが不正です。",
+"Invalid Stokes boundary face":"Stokes流の境界面が不正です。",
+"Stokes requires distinct outer box and inner no-slip boundaries":"Stokes流の外側箱境界と物体の滑りなし境界を区別してください。",
+"Stokes fluid mesh lies outside its enclosure":"Stokes流のメッシュが外側箱の外にあります。",
+"Stokes body has an invalid characteristic length":"Stokes流の物体の代表寸法が不正です。",
+"Stokes reference length cannot be smaller than the body bounding-box span":"Stokes流の代表長さは物体の最大外形寸法以上にしてください。",
+"Stokes preconditioner has a missing diagonal":"Stokes流の連立方程式に必要な対角成分がありません。",
+"Stokes preconditioner breakdown":"Stokes流の連立方程式の前処理に失敗しました。",
+"Stokes GMRES breakdown":"Stokes流のGMRES反復を続行できません。",
+"Stokes GMRES iteration limit reached; no converged result returned":"Stokes流のGMRES反復上限に達しました。未収束の結果は返しません。",
+"Stokes requires positive viscosity, density, reference length and nonzero reference velocity":"Stokes流には正の粘度・密度・代表長さとゼロでない基準速度が必要です。",
+"Invalid Stokes solver iteration or time budget":"Stokes流の反復数または計算時間の設定が不正です。",
+"Stokes prototype limit is 2000 nodes and 8000 valid tetrahedra":"Stokes流の初期実装は2000節点・8000四面体までです。",
+"Stokes time budget exceeded; no converged result returned":"Stokes流の計算時間上限を超えました。未収束の結果は返しません。",
+"Stokes requires boundary velocity map, one pressure gauge and body face tags":"Stokes流には境界速度、1個の圧力基準、物体面の識別が必要です。",
+"Stokes body face tags do not match the mesh":"Stokes流の物体面識別とメッシュが一致しません。",
+"Invalid Stokes boundary velocity":"Stokes流の境界速度が不正です。",
+"Stokes requires velocity on every exterior and body boundary node":"Stokes流の外側境界と物体表面の全節点に速度を設定してください。",
+"Stokes inner body boundary must have zero no-slip velocity":"Stokes流の物体表面は速度0の滑りなし境界にしてください。",
+"Stokes reference length must cover the body bounding-box dimension":"Stokes流の代表長さは物体の最大外形寸法を含む値にしてください。",
+"Stokes prototype computed velocity exceeds Reynolds number 0.1":"計算した流速がレイノルズ数0.1の上限を超えました。",
+"Invalid Stokes tetrahedron":"Stokes流の四面体が不正です。",
+"Invalid Stokes element geometry":"Stokes流の要素形状が不正です。",
+"Stokes requires one connected fluid mesh without unused nodes":"Stokes流には未使用節点のない単一の連結した流体メッシュが必要です。",
+"Invalid Stokes boundary surface":"Stokes流の境界表面が不正です。",
+"Stokes requires the complete fluid boundary surface":"Stokes流には流体の境界表面全体が必要です。",
+"Stokes requires unconstrained pressure degrees of freedom":"Stokes流の圧力に自由な未知数を残してください。",
+"Disconnected or invalid Stokes system":"Stokes流の連立方程式が分離しているか不正です。",
+"Stokes true residual did not converge; no result returned":"Stokes流の実残差が収束しません。結果は返しません。",
+"Stokes physical result exceeded the numerical range":"Stokes流の物理量が数値範囲を超えました。",
+
 "Saved fatigue request has no assessment result":"保存した疲労評価の要求に対応する評価結果がありません。",
 "Invalid saved fatigue assessment scope":"保存した疲労評価の対象または荷重設定が対応範囲外です。",
 "Invalid saved fatigue life or damage fields":"保存した疲労寿命・損傷・応力振幅の値が不正です。",
@@ -144,7 +205,9 @@ errorTranslations['固有振動の反復 ']='Natural-mode iteration ';
 errorTranslations['過渡音響の時間ステップ ']='Transient acoustic time step ';
 errorTranslations['弾塑性の荷重増分 ']='Plasticity load step ';
 errorTranslations[' が収束しました。']=' converged';
+errorTranslations['Stokes GMRESの反復 ']='Stokes GMRES ';
+errorTranslations[' 回']=' iterations';
 export function localizeStatus(text){
  for(const [en,jp]of Object.entries(messages))if(text===en||text.startsWith(en+' · '))return jp+text.slice(en.length);
- return text.replace(/^Plasticity load step (\d+)\/(\d+) converged$/,'弾塑性の荷重増分 $1/$2 が収束しました。').replace(/^Modal subspace /,'固有振動の反復 ').replace(/^Transient acoustics /,'過渡音響の時間ステップ ');
+ return text.replace(/^Stokes GMRES (\d+) iterations$/,'Stokes GMRESの反復 $1 回').replace(/^Plasticity load step (\d+)\/(\d+) converged$/,'弾塑性の荷重増分 $1/$2 が収束しました。').replace(/^Modal subspace /,'固有振動の反復 ').replace(/^Transient acoustics /,'過渡音響の時間ステップ ');
 }

@@ -1,6 +1,37 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+"Stokes流":"Stokes flow",
+"定常Stokes流":"Steady Stokes flow",
+"最小圧力":"Minimum pressure",
+"最大圧力":"Maximum pressure",
+
+"Re評価の代表長さ（mm、空欄は物体寸法）":"Reference length for Reynolds number (mm; blank = body size)",
+
+"線形弾性・圧縮性Neo-Hookean・熱伝導・熱放射・接触熱抵抗・周波数／過渡音響・十分発達した層流流路を計算します。外部の空気領域で音の放射を解析できます。3Dクリープ流は外部箱のRe ≤ 0.1に限定。その他の一般流体はメッシュ生成のみ対応。平面矩形と円筒寸法領域はCAD分割に対応。他の曲面部分は投影近似です。一般3D流体・機械的接触・破壊・ほぼ非圧縮のゴムは未対応です。":"Computes linear elasticity, compressible Neo-Hookean finite strain, heat conduction, radiation/contact, frequency/transient acoustics and developed laminar channels. Exterior air domains support radiation. 3D creeping flow is limited to an exterior box at Re ≤ 0.1; other general fluid domains support meshing only. Planar rectangles and dimensional cylindrical patches support CAD fragmentation; other curved partial regions use projection. General inertial 3D flow, mechanical contact, failure and near-incompressible rubber are unsupported.",
+"外部領域はメッシュ生成・音響・外部箱のStokes流に対応します。慣性を含む一般3D流れは未対応です。":"Exterior domains support meshing, acoustics and Stokes flow in an exterior box. General 3D flow with inertia is unsupported.",
+
+"球の外部クリープ流サンプル":"Sphere exterior creeping-flow example",
+"流体（3Dクリープ流・Stokes）":"Fluid (3D creeping flow / Stokes)",
+"流体物性・流路の設定":"Fluid properties and channel settings",
+"3Dクリープ流の設定":"3D creeping-flow settings",
+"外側境界の一様速度 X / Y / Z（m/s）":"Uniform outer boundary velocity X / Y / Z (m/s)",
+"外側速度X":"Outer velocity X",
+"外側速度Y":"Outer velocity Y",
+"外側速度Z":"Outer velocity Z",
+"Re評価の代表長さ（mm）":"Reference length for Reynolds number (mm)",
+"外部の箱領域で、外側の全境界を一様速度、物体表面を滑りなしに設定します。圧力の基準は自動で指定します。手動の領域条件は使いません。Re ≤ 0.1の定常Stokes流・CPUのみ。慣性・乱流・非定常流は未対応です。有限の箱境界なので、無限領域の球の式とは厳密に一致しません。":"In an exterior box, all outer boundaries have uniform velocity and the body has no slip. A pressure gauge is set automatically. Manual region conditions are unused. Steady Stokes flow at Re ≤ 0.1, CPU only. Inertia, turbulence and transient flow are unsupported. The finite box does not exactly match an unbounded sphere solution.",
+"Stokes流の外部箱領域を生成しました。外側一様速度と物体の滑りなし境界を自動設定して解析します。":"Exterior Stokes box created. Outer uniform velocity and inner no-slip boundaries are set automatically.",
+"Stokes流には物体の周囲の外部箱領域が必要です。":"Stokes flow requires an exterior box around the body.",
+"球の外部Stokesサンプルを設定しました。半径5 mm・箱40 mm・速度0.001 m/s・粘度1 Pa·s・Re=0.01。解析を実行してください。無限領域の参照式への厳密一致は保証しません。":"Exterior sphere Stokes example configured: radius 5 mm, box 40 mm, velocity 0.001 m/s, viscosity 1 Pa·s, Re = 0.01. Run the analysis. Exact agreement with the unbounded-domain formula is not guaranteed.",
+"反力からの抗力 ":"Reaction drag ",
+"発散RMS ":"RMS divergence ",
+"相対正味流束 ":"Relative net flux ",
+"定常Stokes / P1速度・圧力 / PSPG / GMRES ":"Steady Stokes / P1 velocity-pressure / PSPG / GMRES ",
+"圧力基準節点 ":"Pressure gauge node ",
+"代表長さ ":"Reference length ",
+"外側一様速度・物体の滑りなし境界を持つ有限の箱です。慣性・乱流は含みません。抗力は反力からの評価を主に使い、表面応力の積分値は精度が低い推定です。メッシュと外側領域の大きさを変えて比較してください。":"Finite box with uniform outer velocity and a no-slip body. No inertia or turbulence. Reaction drag is the primary force estimate; surface stress integration has lower accuracy. Compare mesh and enclosure sizes.",
+
 "荷重倍率: ":"Load factors: ",
 "平均応力補正: ":"Mean stress correction: ",
 "最大補正振幅: ":"Maximum corrected amplitude: ",

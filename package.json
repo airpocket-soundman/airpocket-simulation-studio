@@ -1,7 +1,7 @@
 {
   "name": "airpocket-simulation-studio",
   "private": true,
-  "version": "0.36.0",
+  "version": "0.37.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
@@ -10,7 +10,8 @@
     "check:project": "node scripts/check-project.mjs",
     "task:status": "node scripts/task-status.mjs",
     "native:build": "node scripts/ensure-native.mjs",
-    "test:published": "node scripts/check-published.mjs"
+    "test:published": "node scripts/check-published.mjs",
+    "mcp": "node scripts/studio-mcp.mjs"
   },
   "dependencies": {
     "@loumalouomega/gmsh-wasm": "0.3.0",

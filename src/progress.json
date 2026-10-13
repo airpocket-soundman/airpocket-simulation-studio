@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T22:15:39.585477+00:00",
+  "updatedAt": "2026-10-13T22:52:43.582010+00:00",
   "release": {
     "version": "v0.36",
     "date": "2026-10-14",
@@ -1007,16 +1007,40 @@
       "id": "STOKES1",
       "title": "外部領域の3D低速粘性流を計算",
       "titleEn": "Compute three-dimensional creeping flow around solids",
-      "status": "building",
+      "status": "checking",
       "category": "流体",
-      "detail": "慣性を無視できるRe<=0.1の3D Stokes流を試作。球の解析境界条件・抗力・圧力とメッシュ収束を先に検証し、外部箱領域のUIへ接続する。",
-      "detailEn": "Prototype 3D Stokes flow at Re<=0.1. Verify analytical sphere boundary conditions, drag, pressure and mesh convergence before connecting the external-box UI.",
+      "detail": "外部箱内の3D Stokes流をCPU GMRESで実装。Re<=0.1、速度・圧力・反力抗力・保存・点測定と日英UIを検証中。一般Navier–Stokes流は未対応。",
+      "detailEn": "Implemented finite-box 3D Stokes flow with CPU GMRES at Re<=0.1. Checking velocity, pressure, reaction drag, archives, probes and JP/EN UI. General Navier–Stokes flow remains unsupported.",
       "acceptance": "混合速度圧力解の参照解・抗力・質量診断・JS/WASM・保存・日英UIと非対応領域の拒否を検証。",
       "acceptanceEn": "Verify mixed velocity-pressure references, drag, mass diagnostics, JS/WASM, archives, JP/EN UI and unsupported-domain refusal.",
       "depends": [
         "CFDENC1"
       ],
       "evidence": "src/stokes-core.js; docs/stokes-flow.md"
+    },
+    {
+      "id": "VISUAL1",
+      "title": "画像と4種類のアニメーションを保存",
+      "titleEn": "Export images and four animation types",
+      "category": "共通",
+      "status": "checking",
+      "detail": "表面・内部メッシュ・断面をPNG/WebMへ出力。回転・変形往復・過渡音響・断面移動と表示復元を確認中。",
+      "detailEn": "Export surfaces, internal mesh and sections to PNG/WebM; checking orbit, deformation, transient acoustic frames, moving sections and restoration.",
+      "acceptance": "実ブラウザでPNGとWebM保存、4種類の再生、設定復元、非対応結果の拒否、日英を検証。",
+      "acceptanceEn": "Verify PNG/WebM in the browser, four playback types, restored settings, unsupported-result refusal and JP/EN.",
+      "evidence": "src/visual-export.js; docs/visual-export.md"
+    },
+    {
+      "id": "MCP1",
+      "title": "MCPと専用skillから保存解析を操作",
+      "titleEn": "Operate saved analyses through MCP and a dedicated skill",
+      "category": "共通",
+      "status": "checking",
+      "detail": "ローカル標準入出力の5ツール。共通CPU Workerで解析し、保存入力・ケース・点測定を検証。専用skillを作成。",
+      "detailEn": "Five local stdio tools use the shared CPU Worker for analysis, project/case validation and probes, with a dedicated skill.",
+      "acceptance": "MCP初期化・ツール一覧・実Worker参照変位と点測定・既存出力拒否・skill検証を確認。",
+      "acceptanceEn": "Verify MCP initialization/listing, real Worker displacement and probes, existing-output refusal and skill validation.",
+      "evidence": "scripts/studio-mcp.mjs; tests/studio-mcp.test.mjs; skills/airpocket-studio/SKILL.md"
     }
   ],
   "solvers": [
