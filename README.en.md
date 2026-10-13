@@ -4,7 +4,7 @@
 
 A browser application for defining regions directly on 3D models and running structural, thermal, fluid and acoustic simulations with validated open-source engines.
 
-v0.31 supports STEP/built-in volume meshes, linear structure/displacement/thermal stress, compressible Neo-Hookean finite strain, steady/transient conduction, convection/radiation/planar thermal contact, local/adaptive refinement and convergence diagnostics, frequency/transient acoustics, exterior radiation/directivity/WAV, natural modes and one-way box-mode acoustics, CAD seed/box-cap internal fluid extraction and CAD-verified developed round/rectangular channels, section viewing, probes and case comparisons. Structure can use Airpocket or independent MFEM 4.10 WASM; Airpocket also has experimental WebGPU with CPU correction. [Usage and scope](docs/en/analysis-guide.md). General 3D flow, plasticity/fracture, mechanical contact, near-incompressible rubber, general curved/two-way acoustics and other candidate solver ports remain outstanding.
+v0.32 supports STEP/built-in volume meshes, linear structure/displacement/thermal stress, compressible Neo-Hookean finite strain, steady/transient conduction, convection/radiation/planar thermal contact, local/adaptive refinement and convergence diagnostics, frequency/transient acoustics, exterior radiation/directivity/WAV, natural modes and one-way box-mode acoustics, CAD seed/box-cap internal fluid extraction and CAD-verified developed round/rectangular channels, section viewing, probes and case comparisons. Structure can use Airpocket or independent MFEM 4.10 WASM; Airpocket also has experimental WebGPU with CPU correction. [Usage and scope](docs/en/analysis-guide.md). General 3D flow, plasticity/fracture, mechanical contact, near-incompressible rubber, general curved/two-way acoustics and other candidate solver ports remain outstanding.
 
 - [App](https://airpocket-soundman.github.io/airpocket-simulation-studio/?lang=en)
 - [Live development board](https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html?lang=en)
@@ -42,3 +42,5 @@ Progress is stored in src/progress.json; the board fetches updates every 20 seco
 [Exact planar CAD rectangles](docs/en/planar-regions.md)
 
 [Exact cylindrical CAD patches](docs/en/cylindrical-cad.md)
+
+[Oblique planes and rotated rectangles](docs/en/oblique-planar.md)

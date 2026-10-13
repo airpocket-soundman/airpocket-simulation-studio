@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T20:48:45.912488+00:00",
+  "updatedAt": "2026-10-13T21:00:41.009736+00:00",
   "release": {
-    "version": "v0.31",
+    "version": "v0.32",
     "date": "2026-10-14",
-    "testCount": 161,
-    "description": "角度・長さによる円筒曲面のCAD分割、曲面に沿う指定範囲表示、粗い表示三角形より小さい領域指定を追加。161テスト、公開配信物15項目、公開画面15項目を検証済み。任意曲面と斜め平面の厳密分割は残作業。",
-    "descriptionEn": "Added dimensional cylindrical CAD patches, curved overlays and regions smaller than display triangles. Verified 161 tests, fifteen deployed-runtime checks and fifteen public browser checks. Exact arbitrary curved and oblique planar patches remain outstanding."
+    "testCount": 164,
+    "description": "斜め平面の回転座標による矩形CAD分割と、保存した回転情報の整合検査を追加。164テスト、ローカル配信物16項目、画面の既存15項目と斜め平面の単独操作を確認。公開確認中。任意曲面の厳密分割は残作業。",
+    "descriptionEn": "Added rotated planar CAD rectangles and validation of saved rotation controls. Verified 164 tests, sixteen local distribution checks, fifteen browser regression checks and the focused oblique scenario; deployment verification pending. Exact arbitrary curved patches remain outstanding."
   },
   "tasks": [
     {
@@ -943,10 +943,10 @@
       "id": "REG2O",
       "title": "斜め平面の矩形領域をCAD分割",
       "titleEn": "Fragment rectangular CAD patches on oblique planes",
-      "status": "building",
+      "status": "checking",
       "category": "3D",
-      "detail": "回転した局所座標で矩形を指定。斜めSTEPの面積、荷重・反力、UIと寸法復元を実装中。",
-      "detailEn": "Define rectangles in rotated local coordinates; implement oblique STEP area/load/reaction checks, UI and dimension restoration.",
+      "detail": "30度回転STEPの100 mm²全体固定と36 mm²荷重を分割し、面積・反力を検証。UIの回転指定・寸法復元と日英表示を確認。公開確認中。",
+      "detailEn": "Verified 100 mm² full-face support and 36 mm² load patches on a 30-degree STEP, area/reaction balance, UI rotation/dimension restoration and bilingual labels. Deployment verification pending.",
       "acceptance": "回転STEP上の矩形を正確に分割し、指定面積・荷重とUI回転情報の保存を検証。",
       "acceptanceEn": "Verify exact oblique STEP rectangles, specified area/force and persisted UI rotation controls.",
       "evidence": "src/planar-region.js; tests/oblique-planar.test.mjs"

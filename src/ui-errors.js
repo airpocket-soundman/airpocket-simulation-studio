@@ -1,5 +1,9 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+ 'Planar frame axes must be finite orthonormal vectors':'矩形の局所座標は互いに直交する単位ベクトルで指定してください。',
+ 'Planar rotation controls do not match the saved frame':'矩形の回転情報が保存した局所座標と一致していません。',
+ 'Invalid planar rotation controls':'矩形の回転と面位置を確認してください。',
+
  'Exact cylindrical patch is too small':'円筒領域が小さすぎます。角度と軸方向の範囲を広げてください。',
  'Exact cylindrical patches require a STEP or cylindrical solid':'円筒のCAD分割はSTEPか円筒・中空管に対応します。',
  'Exact cylindrical thermal contact patches are not yet supported':'円筒のCAD分割による接触熱抵抗は未対応です。',
