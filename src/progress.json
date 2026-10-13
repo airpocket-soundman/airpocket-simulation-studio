@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:00:13.969Z",
+  "updatedAt": "2026-10-13T08:22:09.807Z",
   "release": {
     "version": "v0.5",
     "date": "2026-10-13",
@@ -399,12 +399,13 @@
       "id": "BC3",
       "title": "圧力・法線荷重・重力を設定",
       "category": "構造",
-      "status": "queued",
+      "status": "building",
       "detail": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "titleEn": "Set pressure, normal loads and gravity",
       "detailEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
-      "acceptanceEn": "Validate curved normals, resultant force/moment and pressure versus total force."
+      "acceptanceEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
+      "lastUpdate": "圧力・法線表面荷重・重力を実装し、面法線と合力保存を検証する。"
     },
     {
       "id": "RUN1",
