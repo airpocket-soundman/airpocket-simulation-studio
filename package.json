@@ -1,1 +1,19 @@
-{"name":"airpocket-simulation-studio","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"node scripts/copy-cad.mjs && vite build","test":"node --test tests/*.test.mjs"},"dependencies":{"three":"0.186.1","occt-import-js":"0.0.23"},"devDependencies":{"vite":"^7.1.0"}}
+{
+  "name": "airpocket-simulation-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "node scripts/copy-cad.mjs && vite build",
+    "test": "node --test tests/*.test.mjs",
+    "check:project": "node scripts/check-project.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1",
+    "occt-import-js": "0.0.23"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}

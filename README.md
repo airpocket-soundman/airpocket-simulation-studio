@@ -16,6 +16,7 @@
 - [振動・音響の解析](docs/acoustics.md)
 - [構成とプロジェクト分割の判断](docs/architecture.md)
 - [開発順序と受け入れ条件](docs/roadmap.md)
+- [APIと高速な検証](docs/testing.md)
 
 作成日: 2026-10-13
 
