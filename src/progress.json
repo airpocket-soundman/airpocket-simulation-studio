@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T11:17:34.861Z",
+  "updatedAt": "2026-10-13T11:22:46.674572Z",
   "release": {
-    "version": "v0.12",
+    "version": "v0.13",
     "date": "2026-10-13",
-    "description": "表示形状の閉鎖辺・重複・退化・向き・寸法検査と不備箇所の選択を追加。検査は元データを変更せず、修復は元CAD/メッシュで実施。自動テスト68件。自己交差・流体・非線形等は未対応。",
-    "descriptionEn": "Adds display surface edge closure, duplicate, degenerate, winding and dimension inspection with defect triangle selection. Geometry is unchanged; repair in source CAD/mesh. 68 tests. Self-intersections, fluid and nonlinear analyses remain unsupported."
+    "description": "登録済み条件の領域更新と、条件ごとの円筒寸法保存・再適用を追加。荷重値の保持・表示メッシュ分割変更・不一致時の保全を検証。自動テスト70件。CAD境界適合・流体・非線形等は残作業。",
+    "descriptionEn": "Adds registered condition region editing and per-condition cylindrical dimension restoration. Load preservation, tessellation changes and atomic failures verified by 70 tests. Exact CAD conformity, fluid and nonlinear analyses remain outstanding."
   },
   "tasks": [
     {
@@ -319,8 +319,8 @@
       "titleEn": "Select cylinder regions by angle and length",
       "detailEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
       "acceptanceEn": "Persist axial/circumferential dimensions and reproduce the same region after orbit and reload.",
-      "lastUpdate": "円筒の角度・長さ指定と保存再適用を実装。UIで376.84mm²・256三角形の再選択、回転移動と保存復元をテスト。全63件成功",
-      "lastUpdateEn": "Implemented saved cylindrical dimensions and shared selection API. UI verified radius 12 mm, span 90°, axial length 20 mm: 376.84 mm² / 256 triangles, restored after clearing. All 63 tests pass.",
+      "lastUpdate": "条件ごとに円筒寸法を保持し、選択範囲での領域更新と数値指定の再適用を追加。荷重値・方向を保持し、表示分割変更と未一致時の保全をテスト。",
+      "lastUpdateEn": "Added per-condition cylindrical dimensions, region replacement and dimensional reapplication while preserving load values/directions. Tessellation changes and unmatched-region atomic failures tested.",
       "evidence": "tests/cylindrical-region.test.mjs"
     },
     {

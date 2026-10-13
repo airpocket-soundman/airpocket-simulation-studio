@@ -31,6 +31,7 @@ export function validateProject(project) {
     if(!Array.isArray(m.faceIds)||m.faceIds.length!==m.positions.length/9||!m.faceIds.every(Number.isInteger)) throw Error('面データが不正です。');
   }
   for(const c of project.conditions) {
+    if(c.cylindricalRegion){const d=c.cylindricalRegion;cylindricalFrame(d);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid condition cylindrical mesh');}
     if(!['fixed','displacement','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','acousticPressure','acousticImpedance'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
     if(c.type==='displacement'){if(Math.hypot(...c.direction)<1e-12)throw Error('Invalid constraint direction');if(c.frame){validateFrame(c.frame);if(c.direction.some((v,k)=>Math.abs(v-c.frame.axes[c.frame.axis][k])>1e-7))throw Error('Constraint direction does not match local frame');}}
     if(c.type==='acousticImpedance')validateImpedance(c);if(c.type==='convection'&&(!(c.value>0)||!Number.isFinite(c.ambientTemperature)||c.ambientTemperature<-273.15))throw Error('Invalid convection parameters');
