@@ -7,3 +7,5 @@ Choose Probe and click the section or result surface. Deformed display points ma
 Sections are display surfaces, not CAD faces for load or support assignment. Coincident original boundary faces are not duplicated. Section extraction runs on the CPU and large meshes can take time when moving the plane.
 
 Verification: `tests/result-slice.test.mjs` checks area, affine interpolation, shared-face deduplication and deformed-coordinate mapping. `tests/probe.test.mjs` checks transient/modal values and explicit shared-face element selection. Browser checks cover the internal-channel section and point probe.
+
+[日本語](../result-sections.md)
