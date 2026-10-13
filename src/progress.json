@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:11:10.110Z",
+  "updatedAt": "2026-10-13T07:31:48.710Z",
   "release": {
     "version": "v0.3",
     "date": "2026-10-13",
@@ -448,13 +448,13 @@
       "id": "THERMBC1",
       "title": "温度・発熱・対流境界を指定",
       "category": "熱",
-      "status": "checking",
+      "status": "building",
       "detail": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "acceptance": "温度、熱流束、合計発熱、体積発熱の単位と領域を確認。",
       "titleEn": "Set temperatures, sources and convection",
       "detailEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
       "acceptanceEn": "Verify units and regions for prescribed temperature, heat flux, total and volumetric sources.",
-      "lastUpdate": "温度・表面熱流束・体積発熱を設定可能。対流・合計発熱は未対応。",
+      "lastUpdate": "対流境界と合計発熱を実装中。参照温度・熱収支で検証する。",
       "lastUpdateEn": "Temperature, surface heat flux and volumetric sources implemented. Convection/total-power input remain pending.",
       "evidence": "src/main.js"
     },
