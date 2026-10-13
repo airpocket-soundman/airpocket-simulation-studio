@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:30:30.692Z",
+  "updatedAt": "2026-10-13T08:34:31.417Z",
   "release": {
-    "version": "v0.5",
+    "version": "v0.6",
     "date": "2026-10-13",
-    "description": "選択領域の局所メッシュ設定、計算中止・再実行、管と音圧駆動空洞の共鳴を検証。構造・熱・音響の試作機能を公開。自動テスト37件。高度な解析は未実装。",
-    "descriptionEn": "Verified local region sizing, cancellation/restart, pipe and pressure-driven cavity resonances. Prototype structural, thermal and acoustic features published; 37 tests. Advanced analyses remain unimplemented."
+    "description": "圧力・法線表面荷重・重力を追加。曲面の圧力合力と再メッシュ後の体積荷重・反力を検証。構造・熱・音響の試作版、自動テスト40件。流体・非線形等は未実装。",
+    "descriptionEn": "Adds pressure, normal traction and gravity. Validated curved pressure resultants and remeshed body forces/reactions. Structural/thermal/acoustic prototype with 40 tests; fluid and nonlinear analyses remain unimplemented."
   },
   "tasks": [
     {
@@ -399,14 +399,14 @@
       "id": "BC3",
       "title": "圧力・法線荷重・重力を設定",
       "category": "構造",
-      "status": "ready",
+      "status": "released",
       "detail": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "acceptance": "曲面の法線、合力・モーメント、圧力と合計力の違いを検証。",
       "titleEn": "Set pressure, normal loads and gravity",
       "detailEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
       "acceptanceEn": "Validate curved normals, resultant force/moment and pressure versus total force.",
-      "lastUpdate": "圧力・法線表面荷重・重力をUI/APIに接続。面法線反転への不変性、合力・反力、曲面圧力のメッシュ収束、独立部品の拘束不足を40件の自動テストで確認。Pages検証待ち。",
-      "lastUpdateEn": "UI/API pressure, normal traction and gravity implemented. 40 tests verify normal orientation, resultants/reactions, curved pressure convergence and disconnected constraints; Pages verification pending.",
+      "lastUpdate": "Pagesで圧力・重力の再メッシュ解析を確認。変位0.040008 mm、合力−100.04 N・反力100.04 N。法線荷重への切替と重力無効化も確認。40件のテストに合格。",
+      "lastUpdateEn": "Pages verified pressure/gravity remeshing: displacement0.040008 mm, applied−100.04 N and reaction100.04 N. Normal traction switching and gravity disable also verified; 40 tests pass.",
       "evidence": "tests/pressure.test.mjs"
     },
     {

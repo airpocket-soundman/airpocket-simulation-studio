@@ -69,3 +69,5 @@ API: `studioApi.setMeshSettings({refinements:[{center:[5,5,40],size:2,radius:12}
 曲面の参照検証は半径12 mm・長さ60 mmの円筒の半周に100 kPaを掛け、投影面積からの合力144 Nと比較する。テスト条件下でベクトル誤差2%未満、5 mmから2 mmの細分化で誤差が減ることを確認。任意形状の精度保証ではない。部分領域には従来の表面投影・面積誤差上限が適用される。
 
 API: 選択後`studioApi.addCondition({type:'pressure',value:1e6})`または`{type:'normalTraction',value:1e6}`。重力は`studioApi.setStudy({...study,kind:'structural',gravityEnabled:true,gravity:[0,0,-9.80665]})`。`gravityEnabled:false`で無効化し、gravityベクトルだけを指定したAPI入力は有効として扱う。参照例は`analysisApi.loadPressureExample()`。
+
+圧力は元の形状の法線に作用する線形静荷重です。変形後の法線へ追従する荷重は未対応です。

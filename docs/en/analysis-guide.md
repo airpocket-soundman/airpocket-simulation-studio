@@ -64,8 +64,10 @@ Set pressure or normal traction on selected surfaces. UI units are kPa; storage/
 
 Enter gravity/uniform acceleration in global m/s². All solids share registered density (kg/m³). Each element distributes its density × volume × acceleration to its nodes. Disable gravity when unused. Remeshing rebuilds loads; reactions include both surface and body forces. Each disconnected solid needs at least three non-collinear fixed nodes; support through contact is not implemented.
 
-Reference:10×10×40 mm, E=1 GPa, ν=0, ρ=1000 kg/m³, upper-face pressure1 MPa, acceleration[0,0,−10] m/s². Pressure100 N + body force0.04 N produces reaction100.04 N and reference maximum displacement0.040008 mm. Results display/export applied force, body force and reactions.
+Reference: 10×10×40 mm, E=1 GPa, ν=0, ρ=1000 kg/m³, upper-face pressure 1 MPa, acceleration [0,0,−10] m/s². Pressure 100 N + body force 0.04 N produces reaction 100.04 N and reference maximum displacement 0.040008 mm. Results display/export applied force, body force and reactions.
 
-A radius12 mm/length60 mm half-cylinder under100 kPa has projected-area resultant144 N. Tests require vector error below2% and reduced error when size changes from5 to2 mm. This is specific validation, not a general accuracy guarantee. Partial regions retain surface projection/area-error limits.
+A radius 12 mm/length 60 mm half-cylinder under 100 kPa has projected-area resultant 144 N. Tests require vector error below 2% and reduced error when size changes from 5 to 2 mm. This is specific validation, not a general accuracy guarantee. Partial regions retain surface projection/area-error limits.
 
 After selection, call `studioApi.addCondition({type:'pressure',value:1e6})` or `{type:'normalTraction',value:1e6}`. Set gravity with `studioApi.setStudy({...study,kind:'structural',gravityEnabled:true,gravity:[0,0,-9.80665]})`. `gravityEnabled:false` disables it; API studies specifying only a gravity vector enable it. Load the reference using `analysisApi.loadPressureExample()`.
+
+Pressure is a linear static load following original geometry normals. Follower loads using deformed normals are not supported.
