@@ -16,7 +16,7 @@ v0.3 implements frequency-domain acoustics in a uniform medium. The interior of 
 
 For a 10×10×40 mm pipe with 1 Pa/0 Pa ends and rigid sides, the 2 kHz solution differs from its sinusoidal reference by less than 0.006 Pa at each node. A 500–3000 Hz receiver sweep matches between WASM and JavaScript within 1e-7 Pa. Pressure display, sweep table and surface probes were verified through the UI.
 
-Structural vibration, open boundaries, radiation, cavity eigenmodes, transient waves, auralization, flow noise and structural-acoustic coupling remain unimplemented. The uniform volumetric loss factor is not a material absorption coefficient. Iterative failures near resonance stop with an error; results do not guarantee physical sound levels.
+[Exterior radiation/directivity](exterior-acoustics.md), [transient waves/WAV](transient-acoustics.md), [structural natural modes](modal-analysis.md) and [one-way box-mode acoustics](vibration-acoustics.md) are implemented. Direct acoustic cavity eigenvalue extraction, flow noise and general curved/two-way coupling remain unimplemented. The uniform volumetric loss factor is not a material absorption coefficient. Iterative failures near resonance stop with an error; results do not guarantee physical sound levels.
 
 ## Resonance validation (v0.5)
 

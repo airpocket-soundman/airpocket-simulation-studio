@@ -2,9 +2,9 @@
 
 [English](README.en.md)
 
-3Dモデル上で解析領域を指定し、OSSソルバーで構造・熱・流体・振動音響を解析するアプリの開発計画。
+3Dモデル上で解析領域を指定し、構造・熱・流体・振動音響をローカル計算するWebアプリ。
 
-v0.24ではSTEP・組込み形状の体積メッシュ、線形構造・指定変位・熱応力、定常/非定常熱伝導・対流・熱放射・平面接触熱抵抗、局所/適応細分化と収束傾向診断、周波数音響・吸音境界・スイープ、十分発達した層流流路、断面/透明度/部品表示、結果測定とケース保存比較を実装。[使い方と対応範囲](docs/analysis-guide.md)。一般3D流体・非線形・破壊・機械的接触・各OSSソルバーのWASM移植は未実装です。
+v0.27はSTEP・組込み形状の体積メッシュ、線形構造・指定変位・熱応力、圧縮性Neo-Hookean有限ひずみ、定常/非定常熱伝導・対流・熱放射・平面接触熱抵抗、局所/適応細分化と収束診断、周波数/過渡音響・外部放射・指向性・WAV、固有振動と直方体モードから音への一方向連成、十分発達した層流流路、断面表示・測定・ケース比較に対応。構造にはAirpocketと独立したMFEM 4.10 WASMエンジンを選択でき、Airpocket構造のWebGPU + CPU補正も実装。[使い方と対応範囲](docs/analysis-guide.md)。一般3D流体、塑性・破壊、機械的接触、ほぼ非圧縮のゴム、一般曲面/双方向の音響連成と他の候補ソルバーの移植は残作業です。
 
 アプリ: https://airpocket-soundman.github.io/airpocket-simulation-studio/
 
@@ -26,7 +26,7 @@ v0.24ではSTEP・組込み形状の体積メッシュ、線形構造・指定�
 
 作成日: 2026-10-13
 
-配布方針: GitHub Pagesで公開するWebアプリ。計算はブラウザのWeb WorkerとWASMでローカルCPUを使用し、GPU計算はWebGPU対応を検証して追加する。[ブラウザ実行設計](docs/browser-runtime.md)。ユーザーの指示でソースリポジトリを公開へ変更。[利用ライブラリ](THIRD_PARTY.md)。
+配布方針: GitHub Pagesで公開するWebアプリ。計算はブラウザのWeb WorkerとWASMでローカルCPUを使用し、構造のWebGPU計算は倍精度CPU補正付きの試験版。[ブラウザ実行設計](docs/browser-runtime.md)。ユーザーの指示でソースリポジトリを公開へ変更。[利用ライブラリ](THIRD_PARTY.md)。
 
 追加仕様: [適応メッシュ](docs/adaptive-meshing.md)、[3Dプリント部品（最終段階の任意機能）](docs/printed-parts.md)。画面右下のJP / ENで言語を切り替えられます。
 
@@ -45,3 +45,5 @@ v0.24ではSTEP・組込み形状の体積メッシュ、線形構造・指定�
 - [過渡音響](docs/transient-acoustics.md)
 
 - [固有振動](docs/modal-analysis.md)
+
+- [振動から外部音響への一方向連成](docs/vibration-acoustics.md)

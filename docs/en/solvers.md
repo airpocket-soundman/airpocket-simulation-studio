@@ -6,7 +6,7 @@ These are native OSS candidates, not a promise that they run in the browser. Eac
 
 |Candidate|Role|Integration intent|
 |---|---|---|
-|CalculiX|Linear/nonlinear structural, static/dynamic and thermal|First structural candidate|
+|CalculiX|Linear/nonlinear structural, static/dynamic and thermal|Additional structural candidate|
 |Elmer FEM|Structural, thermal, fluid and acoustic equations|Thermal/acoustic and comparison candidate|
 |Code_Aster|Advanced structural, thermal, fatigue/fracture|Later specialist adapter|
 |OpenFOAM Foundation|CFD and solid/fluid heat transfer|Primary CFD candidate; finite volume, not FEM|

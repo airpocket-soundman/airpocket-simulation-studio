@@ -2,7 +2,7 @@
 
 [日本語](../roadmap.md)
 
-The canonical task list is src/progress.json and the live development board. Each task includes status, acceptance criteria, dependencies and implementation evidence where deployed. Three-dimensional region setup and the shared API are available; physics solvers are not integrated.
+The canonical task list is src/progress.json and the live development board. Each task includes status, acceptance criteria, dependencies and implementation evidence where deployed. Three-dimensional region setup and the shared API are available; Airpocket structure/heat/limited flow/frequency and transient acoustics/natural modes and independent MFEM structural WASM are integrated. General 3D flow and advanced material/coupling tasks remain.
 
 1. CAD import/viewing, curved partial regions, project persistence and browser runtime feasibility.
 2. Volume meshing and linear static analysis; cantilever displacement/reactions, force conservation, units and mesh convergence.

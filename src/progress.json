@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:25:13.261814+00:00",
+  "updatedAt": "2026-10-13T18:42:43.053664+00:00",
   "release": {
-    "version": "v0.26",
+    "version": "v0.27",
     "date": "2026-10-14",
-    "testCount": 137,
-    "description": "線形部品の固有振動数・振動形状・モード切替・保存を追加。137テスト、公開配信物11項目と公開画面で検証済み。振動→音の連成と一般3D流体等は残作業。",
-    "descriptionEn": "Added linear structural natural frequencies, mode shapes, mode selection and archives. 137 tests, eleven deployed-runtime checks and public UI verified. Vibration-to-sound coupling and general 3D flow remain outstanding."
+    "testCount": 140,
+    "description": "直方体の振動モードから外部音響への一方向連成を追加。140テスト、配信物12項目、画面回帰11項目が成功。公開確認中。一般曲面/双方向連成・一般3D流体等は残作業。",
+    "descriptionEn": "Added one-way box-mode to exterior sound coupling. 140 tests, twelve distribution checks and eleven browser checks pass. Public verification pending. General curved/two-way coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -623,16 +623,17 @@
       "id": "COUPLE4",
       "title": "構造振動から音響へ連成",
       "category": "連成",
-      "status": "building",
-      "detail": "保存した直方体部品のモードに指定振幅・位相を与え、法線速度を球形外部音響へ渡す一方向連成を実装中。管内波動の位相・音圧と入力／放射パワーを検証。一般曲面と双方向連成は別タスク。",
+      "status": "checking",
+      "detail": "直方体の保存モードから指定振幅・位相の法線速度を球形外部音響へ渡す一方向連成を実装。管内の位相・音圧、供給／放射パワー、実Worker・画面・4ケース集復元を検証済み。公開配信を確認中。一般曲面と双方向はCOUPLE4B。",
       "acceptance": "複素振幅・位相・法線速度と参照解を検証。",
       "titleEn": "Couple structural vibration to acoustics",
-      "detailEn": "Implementing one-way coupling from saved box-solid modes with prescribed amplitude/phase to spherical exterior normal-velocity acoustics. Verify pipe phase/pressure and input/radiated power. General curved and two-way coupling are separate.",
+      "detailEn": "Implemented prescribed amplitude/phase box-mode normal velocity into spherical exterior acoustics. Verified pipe phase/pressure, source/radiated power, real Worker, UI and four-case roundtrip. Public deployment pending. General curved/two-way coupling is COUPLE4B.",
       "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
       "depends": [
         "MODAL1",
         "ACOU3"
-      ]
+      ],
+      "evidence": "src/vibration-source.js; tests/vibration-source.test.mjs; docs/vibration-acoustics.md; scripts/qa-browser.cua.js"
     },
     {
       "id": "COUPLE5",

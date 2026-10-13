@@ -26,6 +26,6 @@ export function sphericalRadiation(mesh,boundary,sphere,study){
  const omega=2*Math.PI*study.frequency,a=(wave.decay+1000/sphere.radiusMm)/rho,b=wave.real/rho,den=a*a+b*b,value=omega*b/den,reactance=omega*a/den;
  if(!(value>0)||![value,reactance].every(Number.isFinite))throw Error('Radiation impedance exceeds numerical limits');
  const keys=new Set(faces.map(f=>[...f.nodes].sort((a,b)=>a-b).join(','))),outerNodes=new Set(faces.flatMap(f=>f.nodes));
- if((boundary.acousticPressures||[]).some(([i])=>outerNodes.has(i))||(boundary.impedance||[]).some(f=>keys.has([...f.nodes].sort((a,b)=>a-b).join(','))))throw Error('Spherical radiation cannot overlap prescribed pressure or other impedance');
+ if((boundary.normalVelocity||[]).some(f=>f.nodes.some(i=>outerNodes.has(i)))||(boundary.acousticPressures||[]).some(([i])=>outerNodes.has(i))||(boundary.impedance||[]).some(f=>keys.has([...f.nodes].sort((a,b)=>a-b).join(','))))throw Error('Spherical radiation cannot overlap prescribed pressure or other impedance');
  return {impedance:faces.map(f=>({nodes:[...f.nodes],areaM2:f.areaM2,value,reactance,radiation:true})),metadata:{model:'spherical-first-order',centerMm:[...sphere.centerMm],radiusMm:sphere.radiusMm,faceCount:faces.length,waveNumberReal:wave.real,waveNumberDecay:wave.decay,airDensity:rho}};
 }

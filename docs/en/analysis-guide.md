@@ -8,11 +8,11 @@ Use STEP or built-in solids/examples. Internal geometry coordinates are mm. Orig
 
 Enter a target size in mm and generate a volume mesh. Gmsh WASM 0.3.0 generates first-order tetrahedra; inspect node/element counts, total volume and minimum minSICN quality. The internal-mesh toggle reveals internal elements. Current limits: 30,000 elements and 120 seconds per job.
 
-A Service Worker enables browser isolation. A first visit to Pages may reload once. Unsupported environments fail with a diagnosis. GPU is used for rendering; meshing and calculation use the local CPU.
+A Service Worker enables browser isolation. A first visit to Pages may reload once. Unsupported environments fail with a diagnosis. GPU renders the scene; meshing uses the local CPU. Structure can use [WASM/independent MFEM](native-solvers.md) or [WebGPU with CPU correction](webgpu.md).
 
 ## Structural
 
-Define fixed regions and total forces with global directions. Registered modulus/Poisson ratio feed linear isotropic small-deformation elasticity. Constrain every disconnected solid sufficiently. Contact, rubber large deformation, plasticity and fracture are not supported.
+Define fixed regions and total forces with global directions. Registered modulus/Poisson ratio feed linear isotropic small-deformation elasticity. Constrain every disconnected solid sufficiently. This linear mode excludes contact, plasticity and fracture. Use [Neo-Hookean mode](hyperelasticity.md) for compressible rubber finite strain.
 
 Airpocket Tet4 is the repository's own engine. Element assembly and PCG control are JavaScript; the WASM CPU option executes double-precision matrix operations in WASM. JavaScript PCG and stricter convergence are alternatives of the same physical engine, not different solver products. CalculiX/Elmer are not integrated.
 
