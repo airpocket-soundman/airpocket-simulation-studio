@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:42:43.053664+00:00",
+  "updatedAt": "2026-10-13T18:49:59.072233+00:00",
   "release": {
     "version": "v0.27",
     "date": "2026-10-14",
     "testCount": 140,
-    "description": "直方体の振動モードから外部音響への一方向連成を追加。140テスト、配信物12項目、画面回帰11項目が成功。公開確認中。一般曲面/双方向連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added one-way box-mode to exterior sound coupling. 140 tests, twelve distribution checks and eleven browser checks pass. Public verification pending. General curved/two-way coupling and general 3D flow remain outstanding."
+    "description": "直方体の振動モードから外部音響への一方向連成を追加。140テスト、公開配信物12項目、公開画面回帰11項目を検証済み。一般曲面/双方向連成・一般3D流体等は残作業。",
+    "descriptionEn": "Added one-way box-mode to exterior sound coupling. Verified 140 tests, twelve deployed-runtime checks and eleven public browser checks. General curved/two-way coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -510,11 +510,11 @@
       "id": "CFDDOM1",
       "title": "内外の流体領域を作成",
       "category": "流体",
-      "status": "queued",
-      "detail": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
+      "status": "building",
+      "detail": "CAD差分と内部の指定点で流体空間を抽出し、箱の切断面で入口・出口を指定する機能を実装中。管内の実形状、漏れ・固体内の点の拒否、層流参照解で検証。",
       "acceptance": "流路抽出・外部囲い・入口出口と壁の漏れを確認。",
       "titleEn": "Create internal/external fluid regions",
-      "detailEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
+      "detailEn": "Implementing CAD-subtracted seed-selected fluid spaces with box-plane inlet/outlet caps. Verify actual pipe geometry, leakage/solid-seed rejection and laminar references.",
       "acceptanceEn": "Extract passages or external enclosures and check inlets, outlets and wall leaks.",
       "lastUpdate": "外部囲いのCAD差分と実メッシュはCFDENC1として公開。内部流路の自動抽出、一般3Dの入口出口条件・漏れ検証は残作業。",
       "lastUpdateEn": "Exterior CAD subtraction and actual meshes released as CFDENC1. Automatic internal passage extraction, general 3D inlet/outlet conditions and leak checks remain outstanding."
@@ -623,11 +623,11 @@
       "id": "COUPLE4",
       "title": "構造振動から音響へ連成",
       "category": "連成",
-      "status": "checking",
-      "detail": "直方体の保存モードから指定振幅・位相の法線速度を球形外部音響へ渡す一方向連成を実装。管内の位相・音圧、供給／放射パワー、実Worker・画面・4ケース集復元を検証済み。公開配信を確認中。一般曲面と双方向はCOUPLE4B。",
+      "status": "released",
+      "detail": "直方体の保存モードから指定振幅・位相の法線速度を球形外部音響へ渡す一方向連成。管内の位相・音圧、供給／放射パワー、公開Worker・画面・4ケース集復元を検証。一般曲面と双方向はCOUPLE4B。",
       "acceptance": "複素振幅・位相・法線速度と参照解を検証。",
       "titleEn": "Couple structural vibration to acoustics",
-      "detailEn": "Implemented prescribed amplitude/phase box-mode normal velocity into spherical exterior acoustics. Verified pipe phase/pressure, source/radiated power, real Worker, UI and four-case roundtrip. Public deployment pending. General curved/two-way coupling is COUPLE4B.",
+      "detailEn": "One-way prescribed amplitude/phase box-mode normal velocity into spherical exterior acoustics. Verified pipe phase/pressure, source/radiated power, deployed Worker/UI and four-case roundtrip. General curved/two-way coupling is COUPLE4B.",
       "acceptanceEn": "Validate complex amplitudes, phases, normal velocities and reference solutions.",
       "depends": [
         "MODAL1",
