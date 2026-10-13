@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T07:08:47.239Z",
+  "updatedAt": "2026-10-13T07:11:10.110Z",
   "release": {
     "version": "v0.3",
     "date": "2026-10-13",
@@ -93,8 +93,8 @@
       "titleEn": "Generate a volume mesh in the browser",
       "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
       "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
-      "lastUpdate": "Gmsh WASMでSTEP・組込み形状の体積メッシュを実装。Pages検証前。",
-      "lastUpdateEn": "Implemented volume meshing for STEP and built-in solids; Pages validation pending.",
+      "lastUpdate": "STEP・組込み形状の体積生成をPagesで確認。部分領域は投影近似。厳密なCAD面分割・領域適合は未完了。",
+      "lastUpdateEn": "Pages volume meshing verified for STEP/built-in shapes. Partial regions use projection; exact CAD splitting/conformity remain.",
       "evidence": "src/mesh-core.js"
     },
     {
@@ -128,7 +128,7 @@
     {
       "id": "FEM1",
       "title": "固定と荷重から変形・応力を計算",
-      "status": "checking",
+      "status": "released",
       "category": "構造",
       "detail": "線形静解析の縦通し。片持ち梁の理論値、反力、合力保存とメッシュ収束を確認。",
       "depends": [
@@ -139,9 +139,9 @@
       "titleEn": "Calculate displacement and stress",
       "detailEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
       "acceptanceEn": "Complete linear static analysis; verify cantilever reference displacement, reactions, total force and mesh convergence.",
-      "lastUpdate": "軸引張と片持ち梁の参照解・反力・細分化を検証。ブラウザ試作を接続。",
-      "lastUpdateEn": "Validated axial tension, cantilever refinement and reactions; browser prototype connected.",
-      "evidence": "tests/elastic.test.mjs"
+      "lastUpdate": "Pagesで軸引張0.04 mm・反力100 Nを確認。片持ち梁の参照変位とメッシュ収束は自動テストで確認。",
+      "lastUpdateEn": "Pages axial bar gives 0.04 mm and balances 100 N; automated tests validate cantilever reference and refinement.",
+      "evidence": "tests/bending.test.mjs"
     },
     {
       "id": "MAT1",
@@ -423,15 +423,15 @@
       "id": "RESULT1",
       "title": "変位・応力の結果を表示",
       "category": "構造",
-      "status": "checking",
+      "status": "released",
       "detail": "変形倍率、凡例、単位、最大値、プローブを確認。",
       "acceptance": "変形倍率、凡例、単位、最大値、プローブを確認。",
       "titleEn": "Display displacement and stress results",
       "detailEn": "Verify deformation scale, legends, units, maxima and point probes.",
       "acceptanceEn": "Verify deformation scale, legends, units, maxima and point probes.",
-      "lastUpdate": "周波数Helmholtz・音圧境界・受音点・スイープ・3D測定を実装。管の参照解とWASM一致を確認。吸音・外部放射・空洞共鳴の検証は残る。",
-      "lastUpdateEn": "Implemented frequency Helmholtz, pressure boundaries, receivers, sweep and 3D probing. Pipe reference and WASM agreement verified; absorption, radiation and cavity resonance validation remain.",
-      "evidence": "src/main.js"
+      "lastUpdate": "Pagesで変形倍率100・応力表示・凡例・単位・最大値・表面測定を確認。変位のAPI補間もテスト済み。",
+      "lastUpdateEn": "Pages verified deformation scale 100, stress display, legend, units, maxima and surface probes. API displacement interpolation is tested.",
+      "evidence": "src/probe.js"
     },
     {
       "id": "RESULT2",
@@ -658,13 +658,13 @@
         "MESH2"
       ],
       "optional": false,
-      "status": "checking",
+      "status": "released",
       "titleEn": "Refine locally using simulation results",
       "detailEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions.",
       "acceptanceEn": "Use displacement, gradients and error indicators to select refinement regions and transfer boundary conditions.",
-      "lastUpdate": "応力変動・ひずみ・変位に応じて局所細分化。実メッシュ再生成を検証。",
-      "lastUpdateEn": "Refinement driven by stress variation, strain and displacement; real mesh regeneration tested.",
-      "evidence": "src/adaptive.js"
+      "lastUpdate": "Pagesで428→737要素の実再メッシュ・領域再転送・再解析を確認。参照変位0.04 mmと合力を保持。",
+      "lastUpdateEn": "Pages verified actual 428→737-element remeshing, region transfer and reanalysis; 0.04 mm and total load preserved.",
+      "evidence": "tests/adaptive.test.mjs"
     },
     {
       "id": "ADAPT2",
@@ -681,8 +681,8 @@
       "titleEn": "Repeat remeshing and solving until convergence",
       "detailEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
       "acceptanceEn": "Retain iteration results; stop on error/output changes, element/time limits and singularities.",
-      "lastUpdate": "再メッシュ・領域再転送・再解析のループと上限停止を実装。公開確認前。",
-      "lastUpdateEn": "Implemented remeshing, region transfer, solving and stopping limits; deployment check pending.",
+      "lastUpdate": "全反復のメッシュ・境界・結果を保存。Pagesで収束停止を確認。特異点の自動識別と厳密誤差評価は未完了。",
+      "lastUpdateEn": "All meshes, boundaries and results retained; Pages convergence stop verified. Automatic singularity detection and rigorous error estimation remain.",
       "evidence": "tests/adaptive.test.mjs"
     },
     {
@@ -796,9 +796,9 @@
       "WASM実行確認済み"
     ],
     [
-      "Airpocket Tet4 / Heat Tet4",
-      "線形構造・熱伝導 / Linear structure & conduction",
-      "CPU/WASM · 公開検証中"
+      "Airpocket Tet4 / Heat Tet4 / Acoustic Tet4",
+      "線形構造・熱伝導・周波数音響 / Linear structure, conduction & frequency acoustics",
+      "CPU/WASM · Pages検証済み / Verified on Pages"
     ]
   ]
 }
