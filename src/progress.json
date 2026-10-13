@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T08:34:31.417Z",
+  "updatedAt": "2026-10-13T08:38:01.239Z",
   "release": {
     "version": "v0.6",
     "date": "2026-10-13",
@@ -388,12 +388,13 @@
       "id": "BC2",
       "title": "方向別拘束・指定変位を設定",
       "category": "構造",
-      "status": "queued",
+      "status": "building",
       "detail": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "acceptance": "局所座標を含む拘束と単位を保存し、入力変換を検証。",
       "titleEn": "Set directional constraints and prescribed displacement",
       "detailEn": "Persist constraints including local coordinates and units; verify solver conversion.",
-      "acceptanceEn": "Persist constraints including local coordinates and units; verify solver conversion."
+      "acceptanceEn": "Persist constraints including local coordinates and units; verify solver conversion.",
+      "lastUpdate": "方向別拘束・指定変位・回転した局所座標を実装し、参照変形と反力を検証する。"
     },
     {
       "id": "BC3",
