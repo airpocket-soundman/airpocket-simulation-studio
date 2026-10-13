@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T12:04:50.525140+00:00",
+  "updatedAt": "2026-10-13T12:07:14.975Z",
   "release": {
     "version": "v0.16",
     "date": "2026-10-13",
@@ -204,13 +204,14 @@
     {
       "id": "CFD1",
       "title": "流体領域を作り、流れを解析",
-      "status": "queued",
+      "status": "building",
       "category": "流体",
       "detail": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
       "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
-      "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation."
+      "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
+      "lastUpdate": "最初の流体機能として、十分発達した層流流路の速度・流量・圧力差と参照解テストを実装中。一般3D流れは残作業"
     },
     {
       "id": "GPU1",
