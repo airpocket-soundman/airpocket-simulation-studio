@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T18:04:35.228332+00:00",
+  "updatedAt": "2026-10-13T18:11:47.369957+00:00",
   "release": {
     "version": "v0.25",
     "date": "2026-10-14",
-    "description": "過渡音響、受音波形、時間別3D表示、正規化WAV、ケース保存を追加。134テストと配信物10項目が成功し、公開画面を検証中。振動連成・一般3D流体等は残作業。",
-    "descriptionEn": "Added transient acoustics, receiver traces, 3D time frames, normalized WAV and case archives. 134 tests and ten distribution checks pass; public UI verification in progress. Vibration coupling and general 3D flow remain outstanding."
+    "description": "過渡音響、受音波形、時間別3D表示、正規化WAV、ケース保存を追加。134テスト、公開配信物10項目と公開画面で検証済み。振動連成・一般3D流体等は残作業。",
+    "descriptionEn": "Added transient acoustics, receiver traces, 3D time frames, normalized WAV and case archives. 134 tests, ten deployed-runtime checks and public UI verified. Vibration coupling and general 3D flow remain outstanding."
   },
   "tasks": [
     {
@@ -583,11 +583,11 @@
       "id": "ACOU4",
       "title": "過渡波動・可聴化",
       "category": "音響",
-      "status": "checking",
-      "detail": "集中質量Tet4と中心差分で音圧の時間発展を計算。CFL上限、ガウス変調パルス、実インピーダンス、球面放射、受音波形・時間別3D表示・正規化WAV・ケース保存を実装。解析解・WASM一致と公開検証を実施中。",
+      "status": "released",
+      "detail": "集中質量Tet4と中心差分による時間発展、CFL上限、パルス・実インピーダンス・球面放射、受音波形・時間別3D表示・正規化WAV・保存を実装。解析解、WASM一致、公開Workerと画面で検証。異媒質・振動連成は別タスク。",
       "acceptance": "集中質量Tet4と中心差分で音圧の時間発展を計算。CFL上限、ガウス変調パルス、実インピーダンス、球面放射、受音波形・時間別3D表示・正規化WAV・ケース保存を実装。解析解・WASM一致と公開検証を実施中。",
       "titleEn": "Support transient acoustics and auralization",
-      "detailEn": "Implemented lumped Tet4 central-difference wave propagation, conservative CFL bound, Gaussian-modulated pulse, real impedance/spherical radiation, receiver waveform, 3D time frames, normalized WAV and case archives. Analytical/WASM and deployment checks in progress.",
+      "detailEn": "Implemented lumped Tet4 central differences, conservative CFL, pulses, real impedance/spherical radiation, receiver traces, 3D time frames, normalized WAV and archives. Verified analytical references, WASM agreement, deployed Worker and UI. Heterogeneous media and vibration coupling are separate.",
       "acceptanceEn": "Implemented lumped Tet4 central-difference wave propagation, conservative CFL bound, Gaussian-modulated pulse, real impedance/spherical radiation, receiver waveform, 3D time frames, normalized WAV and case archives. Analytical/WASM and deployment checks in progress.",
       "lastUpdate": "時間領域の波動方程式、安定性を確認した陽的時間積分、観測点の圧力波形とWAV試聴を実装中。周波数場の音圧を音色とみなさず、時間応答から生成します。",
       "lastUpdateEn": "Implementing time-domain wave propagation, stability-controlled explicit stepping, receiver pressure histories and WAV listening from computed temporal responses.",
@@ -848,6 +848,22 @@
       "lastUpdate": "箱・複数部品・STEPの密閉空洞を検証。UI 26000 mm³ / 949要素、断面から100 mm²の内側面を選択。一般3D流体計算は拒否し、メッシュ生成のみと明示。",
       "lastUpdateEn": "Verified boxes, assemblies and sealed STEP cavities. UI 26000 mm³ / 949 elements and 100 mm² inner-face selection through clipping. General 3D flow solving is rejected; scope is explicitly meshing only.",
       "evidence": "tests/fluid-domain.test.mjs, tests/worker-pipeline.test.mjs"
+    },
+    {
+      "id": "MODAL1",
+      "title": "部品の固有振動数・振動形状",
+      "titleEn": "Structural natural frequencies and mode shapes",
+      "status": "building",
+      "category": "連成",
+      "detail": "線形Tet4剛性と集中質量の一般化固有値を部分空間逆反復で計算。近接する曲げモード、収束残差、密度・剛性のスケーリングを検証し、モードの3D表示と保存へ接続。",
+      "detailEn": "Compute generalized eigenmodes from linear Tet4 stiffness and lumped mass using block inverse iteration. Verify paired bending modes, residuals and stiffness/density scaling; connect mode viewing and archives.",
+      "acceptance": "低次モードの固有振動数と3D振動形状を選択し、誤差検査結果と保存から再表示できる。",
+      "acceptanceEn": "Select low-order natural frequencies and 3D mode shapes, show verified residuals and restore saved modes.",
+      "evidence": "src/modal-core.js; tests/modal.test.mjs",
+      "dependencies": [
+        "SOLVER1",
+        "MAT2"
+      ]
     }
   ],
   "solvers": [
