@@ -1,5 +1,10 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+ 'Exact cylindrical patch is too small':'円筒領域が小さすぎます。角度と軸方向の範囲を広げてください。',
+ 'Exact cylindrical patches require a STEP or cylindrical solid':'円筒のCAD分割はSTEPか円筒・中空管に対応します。',
+ 'Exact cylindrical thermal contact patches are not yet supported':'円筒のCAD分割による接触熱抵抗は未対応です。',
+ 'CAD patch area or boundary verification failed':'CAD領域の面積か境界の検証に失敗しました。寸法が実際のCAD面に一致するか確認してください。',
+
  'Invalid planar rectangle dimensions':'矩形の位置と上下限を確認してください。',
  'Planar rectangle must be covered by one planar display surface':'矩形全体が1枚の平面の内側に入るように指定してください。',
  'Planar rectangle must lie on one external planar CAD face':'矩形は1枚の外側CAD平面に指定してください。',
