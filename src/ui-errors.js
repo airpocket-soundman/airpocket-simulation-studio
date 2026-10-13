@@ -1,5 +1,30 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+"Saved fatigue request has no assessment result":"保存した疲労評価の要求に対応する評価結果がありません。",
+"Invalid saved fatigue assessment scope":"保存した疲労評価の対象または荷重設定が対応範囲外です。",
+"Invalid saved fatigue life or damage fields":"保存した疲労寿命・損傷・応力振幅の値が不正です。",
+"Saved fatigue assessment does not match its stresses or S-N data":"保存した疲労評価が元の応力またはS-N試験データと一致しません。",
+"Fatigue assessment requires uniaxial elastic structure without thermal stress":"疲労評価には熱応力を含まない単軸の線形弾性構造解析が必要です。",
+
+"Fatigue evaluation requires measured S-N material data":"S-N試験データが未登録です。寿命を推定せず、出典と試験条件を含むデータを登録してください。",
+"Fatigue evaluation requires a linear elastic result without thermal stress, plasticity or hyperelasticity":"疲労評価は熱応力・塑性・超弾性を含まない線形弾性結果だけに対応します。",
+"Fatigue evaluation requires finite six-component element stresses in Pa":"疲労評価にはPa単位の有限な要素応力6成分が必要です。",
+"Invalid fatigue load settings":"疲労の最小・最大荷重倍率、適用回数、平均応力補正を確認してください。",
+"Fatigue evaluation currently supports proportional uniaxial stress states only":"疲労評価は同じ方向の比例単軸応力だけに対応します。多軸の主応力状態は評価できません。",
+"Fatigue peak stress exceeds the elastic yield limit":"繰返しの最大応力が登録した降伏応力を超えるため、弾性の疲労評価はできません。",
+"Fatigue stress amplitude is outside the measured S-N curve range":"応力振幅がS-N試験データの範囲外です。補外して寿命を推定しません。",
+"Fatigue Goodman correction requires mean stress below ultimate tensile strength":"Goodman補正には引張強さより小さい平均引張応力が必要です。",
+"Fatigue calculation exceeded the numerical range":"疲労評価の計算が数値範囲を超えました。応力と繰返し回数を確認してください。",
+
+"Run a linear structural analysis before fatigue evaluation":"疲労評価の前に線形構造解析を実行してください。",
+"Fatigue evaluation does not support thermal stress":"熱応力を含む結果は疲労評価できません。",
+"Invalid fatigue data model or unknown field":"疲労データのモデルか登録項目が不正です。",
+"Fatigue S-N data requires fully reversed stress ratio -1":"S-N曲線は応力比R=−1の完全両振り試験データを指定してください。",
+"Fatigue data requires ultimate strength greater than positive yield stress in Pa":"疲労データは正の降伏応力と、それより大きい引張強さをPa単位で指定してください。",
+"Fatigue data requires nonempty source and test conditions (maximum 10000 characters each)":"疲労データの出典と試験条件をそれぞれ10000文字以内で記録してください。空欄にはできません。",
+"Fatigue S-N curve requires 2–100 measured points":"S-N曲線は2～100点の試験データを指定してください。",
+"Fatigue S-N points require strictly decreasing positive stress amplitudes in Pa and strictly increasing positive cycles":"S-N曲線は正の応力振幅（Pa）を降順、正の回数を昇順に指定してください。",
+
 "Unexpected saved STL mesh metadata":"STL以外の元形状にSTLメッシュ情報が保存されています。",
 "Invalid saved STL mesh metadata":"保存したSTLメッシュの体積・三角形数・凸形状検証情報が不正です。",
 "Saved STL meshes do not support adaptive refinement or exact CAD patches":"保存したSTLメッシュでは適応解析とCAD領域分割を使用できません。",

@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T21:58:44.714207+00:00",
+  "updatedAt": "2026-10-13T22:06:36.834805+00:00",
   "release": {
-    "version": "v0.35",
+    "version": "v0.36",
     "date": "2026-10-14",
-    "testCount": 185,
-    "description": "単一の閉じた凸STLから体積メッシュ生成と構造解析を追加。185テスト、公開配信物19項目、v0.35公開画面19項目が成功。体積・単軸参照解・保存メッシュの境界整合・日英表示を検証済み。任意の凹STLやSTL適応解析は未対応。",
-    "descriptionEn": "Added volume meshing and structural analysis for one closed convex STL shell. Verified 185 source tests, nineteen deployed runtime checks and nineteen v0.35 public browser checks, including volume, axial references, archive boundary consistency and JP/EN. Arbitrary concave STL and STL adaptation remain unsupported."
+    "testCount": 193,
+    "description": "単軸比例弾性載荷のS-N疲労評価、Goodman平均応力補正とMiner損傷、評価と試験データの保存整合を追加。193テスト、ローカル配信物20項目と疲労画面の参照値・保存・日英表示が成功。公開確認中。",
+    "descriptionEn": "Added S-N fatigue assessment under uniaxial proportional elastic loading, Goodman correction, Miner damage and strict archived assessment/data consistency. Verified 193 source tests, twenty local runtime checks and focused browser references, archives and JP/EN. Public verification pending."
   },
   "tasks": [
     {
@@ -991,10 +991,10 @@
       "id": "FATIGUE1",
       "title": "単軸弾性載荷のS-N疲労寿命を評価",
       "titleEn": "Assess S-N fatigue life under uniaxial elastic loading",
-      "status": "building",
+      "status": "checking",
       "category": "材料",
-      "detail": "試験の完全両振りS-N曲線を入力し、単軸比例載荷の応力振幅・Goodman平均応力補正・Miner損傷を評価。試験範囲外の外挿、塑性疲労やき裂進展は行わない。",
-      "detailEn": "Use fully reversed measured S-N data for uniaxial proportional elastic stress amplitudes, Goodman mean-stress correction and Miner damage. No extrapolation, plastic fatigue or crack growth.",
+      "detail": "R=-1のS-N曲線・出典・試験条件を登録し、単軸比例弾性結果から寿命と一定振幅損傷を評価。193テスト・ローカル配信物20項目・疲労画面の保存復元が成功。多軸/塑性疲労と試験範囲外は拒否。公開確認中。",
+      "detailEn": "Registered R=-1 S-N data with provenance/conditions and assessed life and constant-amplitude damage from uniaxial proportional elastic results. Passed 193 source tests, twenty local runtime checks and focused browser restoration. Multiaxial/plastic fatigue and extrapolation are refused. Public verification pending.",
       "acceptance": "架空の参照S-N曲線の寿命・補正・損傷、入力不備/降伏超過/多軸の拒否、API・保存復元・日英UIを検証。",
       "acceptanceEn": "Verify synthetic reference life, correction and damage, invalid data/yield/multiaxial rejection, API, archives and JP/EN UI.",
       "depends": [
@@ -1002,6 +1002,21 @@
         "MAT2"
       ],
       "evidence": "src/fatigue-core.js; src/fatigue-material.js; docs/fatigue.md"
+    },
+    {
+      "id": "STOKES1",
+      "title": "外部領域の3D低速粘性流を計算",
+      "titleEn": "Compute three-dimensional creeping flow around solids",
+      "status": "building",
+      "category": "流体",
+      "detail": "慣性を無視できるRe<=0.1の3D Stokes流を試作。球の解析境界条件・抗力・圧力とメッシュ収束を先に検証し、外部箱領域のUIへ接続する。",
+      "detailEn": "Prototype 3D Stokes flow at Re<=0.1. Verify analytical sphere boundary conditions, drag, pressure and mesh convergence before connecting the external-box UI.",
+      "acceptance": "混合速度圧力解の参照解・抗力・質量診断・JS/WASM・保存・日英UIと非対応領域の拒否を検証。",
+      "acceptanceEn": "Verify mixed velocity-pressure references, drag, mass diagnostics, JS/WASM, archives, JP/EN UI and unsupported-domain refusal.",
+      "depends": [
+        "CFDENC1"
+      ],
+      "evidence": "src/stokes-core.js; docs/stokes-flow.md"
     }
   ],
   "solvers": [

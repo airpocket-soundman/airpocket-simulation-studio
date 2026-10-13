@@ -1,6 +1,38 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+"荷重倍率: ":"Load factors: ",
+"平均応力補正: ":"Mean stress correction: ",
+"最大補正振幅: ":"Maximum corrected amplitude: ",
+"S-N出典: ":"S-N source: ",
+"試験条件: ":"Test conditions: ",
+
+"単軸疲労の参照サンプル":"Uniaxial fatigue reference example",
+"疲労のS-N試験データ":"Fatigue S-N test data",
+"疲労データを登録する":"Register fatigue data",
+"S-N曲線（JSON、応力振幅Pa・破断までの回数）":"S-N curve (JSON, stress amplitude in Pa and cycles to failure)",
+"引張強さ（MPa）":"Ultimate tensile strength (MPa)",
+"疲労評価用の降伏応力（MPa）":"Yield stress for fatigue evaluation (MPa)",
+"疲労データの出典（必須）":"Fatigue data source (required)",
+"疲労試験の条件（必須）":"Fatigue test conditions (required)",
+"材料・温度・応力比・表面状態":"Material, temperature, stress ratio and surface condition",
+"S-N曲線は応力比R=−1の完全両振り試験で、振幅が降順・回数が昇順の2～100点を指定します。曲線範囲外へ補外せず、データがなければ寿命を表示しません。局所単軸の線形弾性結果だけを評価します。多軸・塑性・熱応力・き裂成長は未対応です。":"Supply 2–100 fully reversed S-N test points at R = −1, with decreasing amplitude and increasing life. No extrapolation beyond the curve or life estimate without data. Supports local uniaxial linear elastic results only. Multiaxial stress, plasticity, thermal stress and crack growth are unsupported.",
+"結果から疲労を評価":"Evaluate fatigue from results",
+"最小荷重倍率":"Minimum load factor",
+"最大荷重倍率":"Maximum load factor",
+"適用する繰返し回数":"Applied cycles",
+"平均応力補正":"Mean stress correction",
+"補正なし":"None",
+"表示中の結果を疲労評価":"Evaluate displayed result for fatigue",
+"保存した入力のS-N試験データを使い、同じ応力状態を倍率で繰り返す一定振幅の評価です。損傷は適用回数÷寿命で、破壊の予測や安全保証ではありません。":"Uses S-N data from the saved analysis input for a constant-amplitude cycle scaling the same stress state. Damage is applied cycles divided by life; it is not a fracture prediction or safety guarantee.",
+"表示中の線形弾性結果を疲労評価しました。":"Fatigue evaluation of the displayed linear elastic result completed.",
+"最短疲労寿命: ":"Shortest fatigue life: ",
+"振幅0（寿命未定義）":"Zero amplitude (life undefined)",
+"最大損傷: ":"Maximum damage: ",
+"最大応力振幅: ":"Maximum stress amplitude: ",
+"登録したR=−1のS-Nデータによる一定振幅の評価です。疲労き裂や破壊のシミュレーションではありません。":"Constant-amplitude stress-life estimate using the registered R = −1 data. No fatigue crack or fracture simulation.",
+"架空の疲労サンプルを設定しました。解析後に疲労評価を実行してください。振幅1 MPa、参照寿命100万回・10万回で損傷0.1です。材料保証値ではありません。":"Synthetic fatigue example configured. Run structural analysis, then evaluate fatigue. At 1 MPa amplitude, reference life is 1 million cycles and damage after 100,000 cycles is 0.1. These are not certified material values.",
+
 "STLの体積メッシュは2000三角形までの閉鎖・外向き・単一凸形状に対応します。開いた面、複数殻、凹形状は拒否します。CAD領域分割・流体領域生成・適応解析は未対応です。":"STL volume meshing supports a single closed outward-facing convex shell with up to 2000 triangles. Open surfaces, multiple shells and concave shapes are rejected. CAD patch fragmentation, fluid-domain creation and adaptation are unsupported.",
 "閉鎖した凸STLを読み込みました。面選択は三角形単位です。材料と条件を登録して体積メッシュ・解析を実行できます。":"Closed convex STL loaded. Select individual triangles, register materials and conditions, then generate a volume mesh or run analysis.",
 

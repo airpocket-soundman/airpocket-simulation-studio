@@ -1,4 +1,5 @@
 import {validatePlasticResult} from './plasticity-result.js';
+import {validateFatigueResult} from './fatigue-result.js';
 import {validateStlMesh} from './stl-source.js';
 import {validateCylindricalMesh} from './cylindrical-cad.js';
 import {validatePlanarMesh} from './planar-region.js';
@@ -8,6 +9,7 @@ import {inspectMesh} from './mesh-core.js';
 export function prepareCaseView(saved){
  const output=structuredClone(saved?.output),mesh=output?.mesh,r=output?.result;
  validateStlMesh(mesh,output?.input,output?.calculation);
+ validateFatigueResult(mesh,r,output?.input,output?.calculation);
  validatePlanarMesh(mesh,output.input);validateCylindricalMesh(mesh,output.input);validatePlasticResult(mesh,r,output.input);validateComputeMetadata(r);validateInternalMesh(mesh,output?.input?.sourceModel);
  if(!mesh||!r||!Array.isArray(mesh.tetrahedra)||mesh.tetrahedra.length>30000||!Array.isArray(mesh.nodes)||mesh.nodes.length>360000)throw Error('Invalid saved result mesh');
  mesh.summary=inspectMesh(mesh);const n=mesh.summary.nodeCount,e=mesh.summary.elementCount;
