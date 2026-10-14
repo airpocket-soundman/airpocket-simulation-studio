@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T06:58:02.718Z",
+  "updatedAt": "2026-10-14T07:32:38.451Z",
   "release": {
     "version": "v0.42",
     "date": "2026-10-14",
@@ -809,10 +809,13 @@
         "SOLVER1"
       ],
       "optional": true,
-      "status": "queued",
+      "status": "checking",
       "titleEn": "Import Bambu slicing data",
       "detailEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths.",
-      "acceptanceEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths."
+      "acceptanceEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths.",
+      "lastUpdate": "3MF/ZIP64の形状・単位・部品変換、Bambu設定とG-codeの押出経路を抽出。層ごとの確認ビュー・書出し・不正データの拒否を実装。公式校正3MFと参照ファイルで確認。公開検証待ち。",
+      "lastUpdateEn": "Extract 3MF/ZIP64 geometry, units and component transforms, Bambu settings and G-code deposition paths. Add layer preview/export and invalid-data refusal. Verify official calibration 3MF and synthetic fixtures; deployed verification remains.",
+      "evidence": "src/print-3mf.js; src/print-gcode.js; src/print-zip.js; src/print-ui.js; tests/print-import.test.mjs"
     },
     {
       "id": "PRINT2",

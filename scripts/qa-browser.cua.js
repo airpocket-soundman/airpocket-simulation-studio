@@ -1,3 +1,4 @@
+import {checkPrintImportBrowserQa} from './qa-print.cua.js';
 // Run through the documented CUA browser API on a dedicated scratch tab.
 // This intentionally reloads the tab and replaces its test models/cases.
 export async function* runStudioBrowserQa(tab,stepFile,base='https://airpocket-soundman.github.io/airpocket-simulation-studio/',io){
@@ -38,6 +39,7 @@ export async function* runStudioBrowserQa(tab,stepFile,base='https://airpocket-s
  checks.push(await checkTaylorHoodBrowserQa(tab));yield checks.at(-1);
  for await(const entry of checkCadUpdateBrowserQa(tab,{projectFile:stepFile.replace(/[^/\\]+$/,'cad-update-project.json'),stepFile:stepFile.replace(/[^/\\]+$/,'cad-update-reference.step'),changedFile:stepFile.replace(/[^/\\]+$/,'cad-update-changed.step'),writeText:io.writeText})){checks.push(entry);yield entry;}
  for await(const entry of checkFractureBrowserQa(tab)){checks.push(entry);yield entry;}
+ for await(const entry of checkPrintImportBrowserQa(tab,stepFile.replace(/[^/\\]+$/,''))){checks.push(entry);yield entry;}
  return {target:base,version,checkedAt:new Date().toISOString(),checks,limitations:['One current in-app browser; cross-browser performance and exhaustive UI combinations require separate checks.']};
 }
 

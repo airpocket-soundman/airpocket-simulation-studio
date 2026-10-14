@@ -15,6 +15,7 @@ import {prepareCaseView} from '../src/case-view.js';
 
 async function main(){
 await mkdir(new URL('../.qa/',import.meta.url),{recursive:true});
+await import('./print-fixtures.mjs');
 const local=process.argv.includes('--local'),base=local?new URL('../dist/',import.meta.url):new URL('https://airpocket-soundman.github.io/airpocket-simulation-studio/'),started=performance.now(),checks=[];
 async function bytes(url,limit=80e6){if(url.protocol==='file:'){const data=await readFile(url);if(data.length>limit)throw Error('Runtime resource size limit');return data;}const response=await fetch(url,{signal:AbortSignal.timeout(60000),cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status+' '+url.pathname);const chunks=[];let size=0;for await(const chunk of response.body){size+=chunk.length;if(size>limit)throw Error('Runtime resource size limit');chunks.push(chunk);}return Buffer.concat(chunks);}
 
