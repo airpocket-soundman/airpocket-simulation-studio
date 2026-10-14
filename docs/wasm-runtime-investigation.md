@@ -37,3 +37,9 @@ node scripts/reproduce-wasm-runtime.mjs 12 .qa/wasm-runtime-new.json
 | `scripts/analysis-job-service.mjs` | `31e13dda192136982e8f0970f7dc546dd0d8c9c6d944dbb3bbf90b329d8aff30` |
 | `src/analysis-jobs.js` | `7ca4bc24d58005e7dc5d3c63b8b03e44965d2df36faffc18b9ca96e7f8b7f16e` |
 | `tests/analysis-job-service.test.mjs` | `b6c778d514b3ec8d8abd0cea7143397f6197294dabf6c391cd789fac9c963b30` |
+
+### 2026-10-14: v2 bundle検証中のV8停止再発
+
+全体初回試験は518件中514成功・1失敗・3スキップ（68.639秒）。Node v24.11.1/V8で既知の`jit_page_->allocations_.erase(addr) == 1` Fatal errorが再発し、`tests/material-catalog.test.mjs`のプロセスが失敗した。同じファイルの単独再実行は7件成功（2.945秒）。単独成功は原因解決を意味せず、RUNTIMEWASM1は未解決のまま。
+
+[再発の機械可読証拠](evidence/2026-10-14-wasm-material-catalog-failure.json)へトレース、Node/V8環境、ソースハッシュ、初回結果と単独再実行を保存した。全体再試行は確認中で、初回失敗を置き換えず併記する。

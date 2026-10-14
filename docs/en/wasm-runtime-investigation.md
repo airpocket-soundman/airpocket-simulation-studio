@@ -37,3 +37,9 @@ node scripts/reproduce-wasm-runtime.mjs 12 .qa/wasm-runtime-new.json
 | `scripts/analysis-job-service.mjs` | `31e13dda192136982e8f0970f7dc546dd0d8c9c6d944dbb3bbf90b329d8aff30` |
 | `src/analysis-jobs.js` | `7ca4bc24d58005e7dc5d3c63b8b03e44965d2df36faffc18b9ca96e7f8b7f16e` |
 | `tests/analysis-job-service.test.mjs` | `b6c778d514b3ec8d8abd0cea7143397f6197294dabf6c391cd789fac9c963b30` |
+
+### 2026-10-14: recurring V8 stop during v2 bundle validation
+
+The first full suite reported 518 tests: 514 passed, one failed and three skipped in 68.639 seconds. Node v24.11.1/V8 again stopped with the known fatal `jit_page_->allocations_.erase(addr) == 1`, failing the `tests/material-catalog.test.mjs` process. An isolated rerun of that file passed seven tests in 2.945 seconds. This does not establish root-cause resolution; RUNTIMEWASM1 remains unresolved.
+
+The [machine-readable recurrence evidence](../evidence/2026-10-14-wasm-material-catalog-failure.json) preserves trace, Node/V8 environment, source hashes, initial results and the isolated retry. The full-suite retry remains under verification and will be recorded alongside the original failure.

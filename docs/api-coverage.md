@@ -16,11 +16,11 @@
 | 体積メッシュ・解析 | guiAnalysisJobs.run、analysisApi.startJob/listJobs/getJob/getJobResult/releaseJob（旧generateMesh/analyzeも互換維持） | studio_analyze、studio_start_analysis/studio_job_status/studio_release_job（CPU・保存JSON） | 公開HTTPS接続・再起動後のジョブ復元 |
 | 中間情報 | analysisApi.jobEvents/getJobArtifact（任意のブラウザ内場保持） | studio_job_events、studio_job_artifact（登録済み成果物のハッシュ照合・要約・点補間・最大200ノード/値のページ） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
 | 中止 | analysisApi.cancel/cancelJob | studio_cancel_job（runningのみ、saving不可） | 接続モードのcancelJobを提供。ローカルGUI監視を確認、公開接続を継続 |
-| 点測定 | analysisApi.probe、resultViewApi.probe、window.measurementApi（版・表示状態を固定した履歴） | studio_probe、接続probeとmeasurementの7操作、studio_verify_measurements | 履歴GUI・ケース同梱 |
-| ケース・比較 | caseApi/caseOperations/caseArchiveTransfer（ID・内容版・根拠照合・分割転送） | studio_validate_cases、接続モードのcaseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove、caseArchiveExport/caseArchiveRead/caseArchiveImport/caseArchiveWrite/caseArchiveCommit/caseArchiveRelease、caseBundleListと分割転送6操作、studio_validate_case_bundle | 結果間の対応付け・名前付きビューの拡張 |
+| 点測定 | analysisApi.probe、resultViewApi.probe、window.measurementApi（版・表示状態を固定した履歴） | studio_probe、接続probeとmeasurementの7操作、studio_verify_measurements | 履歴GUI・結果種の検証拡充 |
+| ケース・比較 | caseApi/caseOperations/caseArchiveTransfer（ID・内容版・根拠照合・分割転送・v2測定同梱） | studio_validate_cases、接続モードのcaseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove、caseArchiveExport/caseArchiveRead/caseArchiveImport/caseArchiveWrite/caseArchiveCommit/caseArchiveRelease、caseBundleListと分割転送6操作、studio_validate_case_bundle | 結果間の対応付け・名前付きビューの拡張 |
 | 断面・部品表示 | viewApi | 接続モードのgetView/setView | ビュー設定・レイヤー・カメラの共通契約 |
 | 結果表示・時刻・モード・カメラ | resultViewApi.get/set/probe、固定色範囲・表示レイヤー | 接続モードのgetResultView/setResultView/probe | 熱の保存時刻場、異なる結果へのビュー同期 |
-| 名前付きビュー | namedViewApi.list/save/apply/remove/export/import | 接続モードのnamedViewList/namedViewSave/namedViewApply/namedViewRemove/namedViewExport/namedViewImport | ケース集への同梱、異なる結果への適用 |
+| 名前付きビュー | namedViewApi.list/save/apply/remove/export/import | 接続モードのnamedViewList/namedViewSave/namedViewApply/namedViewRemove/namedViewExport/namedViewImport | 異なる結果への適用 |
 | PNG/WebM・アニメーション | visualExportApi、共有レンダラー | 接続モードのexportCapabilities/startExport/exportStatus/exportArtifact/cancelExport/releaseExport | 永続保存、MP4/GIF、決定的な固定フレーム書き出し |
 | CAD更新 | cadUpdateApi.preview/apply（入力・置換版照合）、studioApiの既存操作 | studio_preview_cad_update / studio_apply_cad_update、ライブpreviewCadUpdate / applyCadUpdate | 大きなCADのライブ分割転送、更新後の領域再選択と根拠再確認 |
 | 材料カタログ | studioApi.applyCatalogMaterial、適用条件必須のカタログUI | studio_material_catalog、studio_edit_project/接続editのapplyCatalogMaterial | 全材料モデルの適用条件・根拠契約の拡充 |

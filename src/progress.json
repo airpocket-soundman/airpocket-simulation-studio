@@ -1462,11 +1462,11 @@
       "status": "checking",
       "category": "基盤",
       "depends": [],
-      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。",
-      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script.",
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md"
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json"
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1570,8 +1570,8 @@
       ],
       "detail": "共通measurementApiとMCP6操作を追加。点・結果SHA・表示量/時刻/固有モード・測定値・暫定評価を保存。100件/300000 UTF8bytes、一覧/内容版を照合。履歴JSONのみ明示保存し、取込値は独立検証済みに昇格しない。",
       "detailEn": "Add shared measurementApi and six MCP methods. Retain point, result SHA, field/time/mode, values and provisional assessment. Enforce100 entries/300000 UTF8bytes and archive/item revisions. Explicit JSON persistence; imported values never become independently verified.",
-      "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。履歴GUI・自動永続化・結果ケース同梱・公開HTTPS実証は残す。",
-      "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. HistoryGUI, automatic persistence, case bundling and publicHTTPS remain.",
+      "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。ケース同梱はCASEMEASUREMENTBUNDLE1で追加。履歴GUI・自動永続化・公開HTTPS実証は残す。",
+      "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. Case bundling is added byCASEMEASUREMENTBUNDLE1. HistoryGUI, automatic persistence and publicHTTPS remain.",
       "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md"
     },
     {
@@ -1589,6 +1589,22 @@
       "acceptance": "最終全体517中514成功・3スキップ、新15対象成功。熱・固有・過渡の再補間、改変/孤立/旧SHA拒否、最後のハッシュ中の更新競合拒否を検証。既存WASM場/履歴1件を実stdio MCPとNode上のライブアダプターで照合。ビルド・配信物26項目・SKILL検証成功。今回は新解析/実ブラウザ検証なし、物理精度の独立保証なし。",
       "acceptanceEn": "Final suite514passed/three skipped of517,15new checks pass. Thermal/modal/transient replay, tampering/orphan/rawSHA rejection and final-hash race refusal verified. One existingWASM field/history record matches through realstdioMCP and Node-hosted live adapter. Build,26distribution checks andSKILL validation pass. No new solve/actual browser check or independent physical validation in this change.",
       "evidence": "src/measurement-verification.js; src/measurement-verification-api.js; tests/measurement-verification.test.mjs; tests/measurement-verification-api.test.mjs; tests/mcp-measurement-verification.test.mjs; docs/evidence/2026-10-14-measurement-verification.json; docs/testing.md"
+    },
+    {
+      "id": "CASEMEASUREMENTBUNDLE1",
+      "title": "ケース・ビュー・測定履歴を検証付きで一体保存",
+      "titleEn": "Bundle cases, views and verified recorded measurements",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "CASEVIEWBUNDLE1",
+        "MEASUREMENTVERIFY1"
+      ],
+      "detail": "v2case-view-bundleにmeasurementArchiveを追加。表示用SHAに対応する保存場から全履歴を再補間し、3保存データを同期的一括置換。v1互換を維持しv2環境へのv1取込は測定を空へ明示置換。GUI/共通API/既存MCP分割転送で利用。",
+      "detailEn": "Add measurementArchive to v2case-view-bundle. Reinterpolate every record from display-SHA-matched saved fields and atomically replace all three stores. Preserve v1 compatibility; v1 imports into v2 hosts explicitly clear history. GUI/sharedAPI/existingMCP chunked transfers supported.",
+      "acceptance": "新v2 core6件・関連35件・MCP2件成功。実IABで0/0/0→1/1/1取込、209414bytesのGUI/MCP4分割一致、v1で1/1/0→書出v2で1/1/1復元、円柱入力不変・保存結果/倍率25復元、日英を確認。初回全体は既知V8停止で1失敗。再試行523中520成功・3スキップ、ビルド・配信物26・SKILL成功。V8原因未解決。公開HTTPS・最大容量・全物理GUIは残す。",
+      "acceptanceEn": "Six new core,35related and twoMCP tests pass. ActualIAB verifies0/0/0→1/1/1 import,209414byteGUI/MCP fourpage equality,v1→1/1/0 then exportedv2→1/1/1 restore, unchanged cylinder inputs, saved display/deform25 and JP/EN. Initial full suite had one knownV8 stop. Retry520passed/three skipped of523; build/26distribution/SKILL pass. V8 cause unresolved; publicHTTPS,maximum capacity and allphysicsGUI remain.",
+      "evidence": "src/case-view-bundle.js; src/measurement-history.js; src/named-result-views.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/testing.md"
     }
   ],
   "solvers": [

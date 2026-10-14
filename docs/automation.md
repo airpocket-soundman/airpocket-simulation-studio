@@ -195,13 +195,13 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 
 ## ケースと名前付きビューの一体保存
 
-別形式の`{version:1,kind:"case-view-bundle",caseArchive:{version:1,cases},namedViewArchive:{version:1,views}}`でケース集と名前付きビューを一緒に保存します。既存のケース単独・ビュー単独形式は維持します。`studio_validate_case_bundle({path})`は読取専用でケースの物理結果とビューの参照を検証し、件数と版の要約を返します。
+旧v1形式は`{version:1,kind:"case-view-bundle",caseArchive:{version:1,cases},namedViewArchive:{version:1,views}}`のまま維持します。通常の保存はv2の`{version:2,kind:"case-view-bundle",caseArchive,namedViewArchive,measurementArchive}`でケース・ビュー・測定履歴を同梱します。各子アーカイブは既存のversion 1形式です。既存のケース単独・ビュー単独形式は維持します。`studio_validate_case_bundle({path})`は読取専用でケースの物理結果とビューの参照を検証し、件数と版の要約を返します。
 
-接続の`caseBundleList()`は確認権限で`archiveRevision`とケース/ビュー件数を返します。確認権限の`caseBundleExport({expectedArchiveRevision})`、`caseBundleRead({transferId,offset,length})`、`caseBundleRelease({transferId})`と、編集権限の`caseBundleImport({expectedArchiveRevision,totalBytes,sha256})`、`caseBundleWrite({transferId,offset,data})`、`caseBundleCommit({transferId})`はケース集転送と同じ引数・分割契約を使用します。bundle転送内で合計100,000,000バイト・最大4枠を共有します。これは保持バッファ予算で、ピークヒープの上限ではありません。
+接続の`caseBundleList()`は確認権限で`archiveRevision`とケース/ビュー/測定件数を返します。確認権限の`caseBundleExport()`、`caseBundleRead({transferId,offset,length})`、`caseBundleRelease({transferId})`と、編集権限の`caseBundleImport({expectedArchiveRevision,totalBytes,sha256})`、`caseBundleWrite({transferId,offset,data})`、`caseBundleCommit({transferId})`はケース集転送と同じ引数・分割契約を使用します。bundle転送内で合計100,000,000バイト・最大4枠を共有します。これは保持バッファ予算で、ピークヒープの上限ではありません。
 
 各ビューのresultRevisionは同梱ケースを`prepareCaseView`で表示用に正規化したoutput全体のSHA-256と一致する必要があります。旧ケースでは表示時にmesh.summaryを再計算するため、生の保存JSONのハッシュとは異なることがあります。保存ケースの物理データを書き換えたり、指定ビューの版を自動で対応付け直したりしません。生JSONの版だけを参照する旧ビューは拒否し、ケースを表示して名前付きビューを保存し直してください。対応する結果がないビューは書出を拒否し、対応するケースを保存するかビューを削除して修復します。自動で孤立ビューを捨てません。不正な表示量・モード・フレーム・setupのメッシュ数も拒否します。
 
-取込はハッシュ・現在の両アーカイブの版・入力スナップショットを検査してから、ケースとビューを同期的に一括確定します。現在の入力・表示への自動適用は行いません。名前付きビューIDは維持し、実行時ケースIDは内容変更により再発行される場合があるためcaseListで取得し直します。別結果への対応付けや版の置換は行いません。GUIにも一体形式専用の書出・取込操作を追加します。
+取込はハッシュ・現在の関連アーカイブの版・入力スナップショットを検査してから、v2ではケース・ビュー・測定履歴の3ストアを同期的に一括確定します。v1を取り込む場合は履歴がファイルに含まれないため、既存の測定履歴を明示的に空へ置換します。必要な履歴は取込前に保存してください。現在の入力・表示への自動適用は行いません。名前付きビューIDは維持し、実行時ケースIDは内容変更により再発行される場合があるためcaseListで取得し直します。別結果への対応付けや版の置換は行いません。GUIにも一体形式専用の書出・取込操作を追加します。
 
 共有APIは`window.caseBundleApi.list/exportArchive/importArchive`、分割転送は`window.caseBundleTransfer`（既存caseArchiveTransferと同じbeginExport/read/beginImport/write/commit/release）です。GUIの専用操作は`installCaseBundleUi`で組み込みます。
 
@@ -226,3 +226,9 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 接続の`measurementVerify({expectedArchiveRevision,expectedCaseArchiveRevision})`は現在の履歴とケース集を版照合します。expectedCaseArchiveRevisionは生のcaseArchive JSON全体のSHA-256で、各記録の表示用結果版とは異なります。共有APIは`window.measurementApi.verify`です。
 
 ライブ照合では先に`caseList()`と`measurementList()`を呼び、前者のarchiveRevisionをexpectedCaseArchiveRevision、後者のarchiveRevisionをexpectedArchiveRevisionへ渡します。ケース転送は不要です。verify応答は照合した履歴のarchiveRevisionとcaseArchiveRevisionも返します。
+
+v2の検証・書出・取込は、同梱した全測定履歴を対応する表示用結果版のケースから再補間し、evidence全体の一致を必要とします。改変や孤立履歴は拒否し、自動で捨てません。既存のbundle7操作と100 MB分割転送を使い、GUIの一体保存操作もケース・ビュー・測定を扱います。保存場との一致は独立ソルバーや実物精度の証拠ではなく、履歴フラグは変更しません。
+
+v2ホストのv1取込応答は`measurementsCleared:true`と、空履歴を含む実効v2の版を返します。v2の件数要約にはmeasurementCountを含みます。ローカル実画面でv1履歴クリア・v2再取込・書出バイト一致を確認した範囲は[検証記録](testing.md)を参照してください。
+
+`caseBundleExport()`は読取専用で現在のスナップショットを固定し、その版を返します。呼出時expectedArchiveRevisionによる版の条件指定は行いません。取込開始のexpectedArchiveRevisionと確定時のCAS検査は必須のままです。

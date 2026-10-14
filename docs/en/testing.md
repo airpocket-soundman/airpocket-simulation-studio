@@ -245,3 +245,19 @@ This change re-interpolates history from saved fields matching display-prepared 
 All 15 new targets passed (nine core, five host/session and one real MCP), including modal/transient context recomputation. Existing real-WASM-derived case/measurement archives verified one record through both the real stdio saved-file tool and a Node-hosted live adapter. See the [machine-readable record](../evidence/2026-10-14-measurement-verification.json). This check ran no new solve or actual browser test; it demonstrates recomputation agreement with existing saved fields.
 
 A race where history changed while hashing the final exported snapshot was fixed. A synchronous host-internal archive match immediately before return rejects stale verification responses; a regression test covers this case. The internal function is not exposed through the window API or connector.
+
+## 2026-10-14: measurement history in v2 bundles
+
+Six new v2 core tests were added; all 35 bundle/history/named tests and two updated MCP tests passed. Tool/method counts remain 26/28 and 69. The initial V8 failure remains recorded below. Full-suite retry passed520 of523 with three skips and zero failures (concurrency4,68.23seconds). Build,26distribution checks (28.44seconds) andSKILL validation passed.
+
+The local Codex in-app browser and real stdio MCP/HTTP restored GUI v2 import from 0/0/0 cases/views/measurements to 1/1/1, with measurementVerify:true and a 0.03999999999944816 mm point displacement. The actual 209,414-byte GUI download matched all bytes from four MCP chunks. GUI v1 import cleared history to 1/1/0; reimporting the downloaded v2 restored 1/1/1 and the same composite revision.
+
+Current default-cylinder inputs and their revision remained unchanged during import. Subsequent MCP caseView/namedViewApply restored the saved result and deformation scale25. Japanese/English labels, imported counts and the legacy-history-clear explanation were checked. Existing real-WASM saved fields were used; no new solve was run.
+
+Saved evidence includes the [proof record](../evidence/2026-10-14-case-view-measurement-bundle-proof.json) and [screenshot](../evidence/2026-10-14-case-view-measurement-bundle.jpg). The record source field identifies two existing archives from which raw v2 is reconstructible, avoiding duplicated raw storage. This establishes recomputation agreement with saved fields, not independent-solver/physical accuracy, public HTTPS or maximum-capacity behavior.
+
+### 2026-10-14: recurring V8 stop during v2 bundle validation
+
+The first full suite reported 518 tests: 514 passed, one failed and three skipped in 68.639 seconds. Node v24.11.1/V8 again stopped with the known fatal `jit_page_->allocations_.erase(addr) == 1`, failing the `tests/material-catalog.test.mjs` process. An isolated rerun of that file passed seven tests in 2.945 seconds. This does not establish root-cause resolution; RUNTIMEWASM1 remains unresolved.
+
+The [machine-readable recurrence evidence](../evidence/2026-10-14-wasm-material-catalog-failure.json) preserves trace, Node/V8 environment, source hashes, initial results and the isolated retry. The full-suite retry passed520 of523 with three skips and zero failures in68.23seconds. Both runs remain recorded andRUNTIMEWASM1 remains unresolved.

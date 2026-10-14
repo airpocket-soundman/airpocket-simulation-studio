@@ -456,7 +456,7 @@ window.namedViewApi=Object.freeze(Object.fromEntries(['list','save','apply','rem
 namedViewUi=installNamedViewUi({api:window.namedViewApi,resultView:window.resultViewApi,translate:addTranslations,language:()=>language});
 window.caseOperations=createCaseOperations({store:window.caseApi,getAnalysis:()=>lastAnalysis,view:viewCase,loadProject:project=>api.loadProject(project),isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 window.caseArchiveTransfer=createCaseArchiveTransfer({cases:window.caseOperations});
-const caseBundle=createCaseViewBundle({store:caseStore,namedViews,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+const caseBundle=createCaseViewBundle({store:caseStore,namedViews,measurements,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 window.caseBundleApi=Object.freeze({...caseBundle,async importArchive(...args){const result=await caseBundle.importArchive(...args);try{renderCases();await namedViewUi.refresh();}catch(error){status(error.message);return {...result,presentationWarning:error.message};}return result;}});
 window.caseBundleTransfer=createCaseArchiveTransfer({cases:window.caseBundleApi});
 installCaseBundleUi({api:window.caseBundleApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive(),translate:addTranslations,language:()=>language,status});

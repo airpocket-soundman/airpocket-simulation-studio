@@ -1,4 +1,4 @@
-import {getProjectRevision} from './project-revision.js';
+import {getProjectRevision,canonicalJson} from './project-revision.js';
 import {validateViewSettings} from './view-settings.js';
 
 const plain=v=>v!==null&&typeof v==='object'&&!Array.isArray(v)&&(Object.getPrototypeOf(v)===Object.prototype||Object.getPrototypeOf(v)===null);
@@ -48,6 +48,8 @@ export function createNamedResultViews({resultView,setupView,isBusy=()=>false,id
     try{const value=callback();if(value&&typeof value.then==='function')throw Error('Named view replacement requires a synchronous host callback');archive=next;consumed=true;return response;}finally{locked=false;}
    }});
   },
+  // Host-only synchronous check for multi-archive read transactions.
+  matchesArchive:value=>canonicalJson(archive)===canonicalJson(value),
   list:listing,
   async export(){return validateNamedViewArchive(archive);},
   async save({name,expectedResultRevision,expectedArchiveRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{name=validName(name);await expectedArchive(expectedArchiveRevision);if(archive.views.length>=16)throw Error('Named view limit reached');const current=await resultView.get();if(!revision(expectedResultRevision)||current.resultRevision!==expectedResultRevision)throw Error('Displayed result revision conflict');const v={id:id(),name,resultRevision:current.resultRevision,result:structuredClone(current.state),setup:structuredClone(setupView.get())};const next=validateNamedViewArchive({version:1,views:[...archive.views,v]});const summary=await item(v),nextRevision=await getProjectRevision(next),latest=await resultView.get();if(latest.resultRevision!==current.resultRevision||JSON.stringify(latest.state)!==JSON.stringify(current.state)||JSON.stringify(setupView.get())!==JSON.stringify(v.setup))throw Error('Viewer changed during named view snapshot');check(guard);archive=next;return {...summary,archiveRevision:nextRevision};});},

@@ -1,0 +1,353 @@
+{
+  "environment": "Actual local Codex in-app browser and real stdio MCP/HTTP. Uses existing saved WASM reference fields, no new solve.",
+  "sources": {
+    "v1": "2026-10-14-case-view-bundle.json",
+    "measurements": "2026-10-14-measurement-history.json -> exported.archive",
+    "construction": "{...v1,version:2,measurementArchive:measurements}"
+  },
+  "initialBundle": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:eb702a6fbf45e307819a9670a72945e7dab70f137e1817d4bc943ab48a9f5cdb",
+    "caseCount": 0,
+    "viewCount": 0,
+    "measurementCount": 0
+  },
+  "verify": {
+    "metadata": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "caseCount": 1,
+      "viewCount": 1,
+      "measurementCount": 1
+    },
+    "verification": {
+      "schemaVersion": 1,
+      "caseCount": 1,
+      "measurementCount": 1,
+      "verified": true,
+      "verification": "recomputed-from-saved-results",
+      "physicalAccuracyVerified": false,
+      "matches": [
+        {
+          "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+          "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+          "caseIndexes": [
+            0
+          ]
+        }
+      ],
+      "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4",
+      "caseArchiveRevision": "sha256:6e18ae7a1ff09a9af976ac4ef27ecd0a8972c3692f6cfdde85876e2147ac6f95"
+    },
+    "measurement": {
+      "schemaVersion": 1,
+      "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+      "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+      "evidence": {
+        "analysisAssessment": {
+          "completePreflight": false,
+          "mode": "legacy",
+          "provisional": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ],
+          "schemaVersion": 1
+        },
+        "displacementMm": [
+          1.3812181241744085e-12,
+          2.496925609531012e-12,
+          0.03999999999944816
+        ],
+        "display": {
+          "field": "displacement",
+          "frameIndex": null,
+          "modeIndex": null
+        },
+        "element": 158,
+        "kind": "elastic",
+        "magnitudeMm": 0.03999999999944816,
+        "point": [
+          5,
+          5,
+          40
+        ],
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "schemaVersion": 1,
+        "vonMisesPa": 999999.9999830347,
+        "weights": [
+          -4.440892098500626e-16,
+          0.5005865574720816,
+          0.4994134425279184,
+          0
+        ]
+      },
+      "id": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+      "name": "WASM reference tip",
+      "options": {},
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "recordedEvidence": true,
+      "independentlyVerified": false
+    },
+    "exported": {
+      "transferId": "5288cbf9-b5f3-46b4-9af7-2c539537d9c5",
+      "direction": "export",
+      "archiveRevision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "totalBytes": 209414,
+      "sha256": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "maxChunkBytes": 65536
+    },
+    "readPages": 4,
+    "initialInputUnchanged": true,
+    "validator": {
+      "schemaVersion": 1,
+      "archiveVersion": 2,
+      "measurementCount": 1,
+      "measurementVerification": {
+        "schemaVersion": 1,
+        "caseCount": 1,
+        "measurementCount": 1,
+        "verified": true,
+        "verification": "recomputed-from-saved-results",
+        "physicalAccuracyVerified": false,
+        "matches": [
+          {
+            "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+            "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+            "caseIndexes": [
+              0
+            ]
+          }
+        ]
+      },
+      "revision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "caseCount": 1,
+      "viewCount": 1,
+      "matches": [
+        {
+          "viewId": "5499fec0-b718-4e28-a498-b2b4c74c2471",
+          "name": "Bundle fixed reference view",
+          "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+          "caseIndexes": [
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "legacy": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:5abd32f7f5363543f781816860d12fea7bed2d2d79c0c369f1fd76379e0f09ed",
+    "caseCount": 1,
+    "viewCount": 1,
+    "measurementCount": 0,
+    "historyCleared": true
+  },
+  "restore": {
+    "metadata": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "caseCount": 1,
+      "viewCount": 1,
+      "measurementCount": 1
+    },
+    "verification": {
+      "schemaVersion": 1,
+      "caseCount": 1,
+      "measurementCount": 1,
+      "verified": true,
+      "verification": "recomputed-from-saved-results",
+      "physicalAccuracyVerified": false,
+      "matches": [
+        {
+          "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+          "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+          "caseIndexes": [
+            0
+          ]
+        }
+      ],
+      "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4",
+      "caseArchiveRevision": "sha256:6e18ae7a1ff09a9af976ac4ef27ecd0a8972c3692f6cfdde85876e2147ac6f95"
+    },
+    "measurement": {
+      "schemaVersion": 1,
+      "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+      "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+      "evidence": {
+        "analysisAssessment": {
+          "completePreflight": false,
+          "mode": "legacy",
+          "provisional": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ],
+          "schemaVersion": 1
+        },
+        "displacementMm": [
+          1.3812181241744085e-12,
+          2.496925609531012e-12,
+          0.03999999999944816
+        ],
+        "display": {
+          "field": "displacement",
+          "frameIndex": null,
+          "modeIndex": null
+        },
+        "element": 158,
+        "kind": "elastic",
+        "magnitudeMm": 0.03999999999944816,
+        "point": [
+          5,
+          5,
+          40
+        ],
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "schemaVersion": 1,
+        "vonMisesPa": 999999.9999830347,
+        "weights": [
+          -4.440892098500626e-16,
+          0.5005865574720816,
+          0.4994134425279184,
+          0
+        ]
+      },
+      "id": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+      "name": "WASM reference tip",
+      "options": {},
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "recordedEvidence": true,
+      "independentlyVerified": false
+    },
+    "exported": {
+      "transferId": "1dc631c8-996b-471b-9978-afc62b4296a0",
+      "direction": "export",
+      "archiveRevision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "totalBytes": 209414,
+      "sha256": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "maxChunkBytes": 65536
+    },
+    "readPages": 4,
+    "initialInputUnchanged": true,
+    "validator": {
+      "schemaVersion": 1,
+      "archiveVersion": 2,
+      "measurementCount": 1,
+      "measurementVerification": {
+        "schemaVersion": 1,
+        "caseCount": 1,
+        "measurementCount": 1,
+        "verified": true,
+        "verification": "recomputed-from-saved-results",
+        "physicalAccuracyVerified": false,
+        "matches": [
+          {
+            "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+            "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+            "caseIndexes": [
+              0
+            ]
+          }
+        ]
+      },
+      "revision": "sha256:0d98cb73bcc92d21181c21161c7adea94d44af4f9c0745ea8e20ad0c7a77e730",
+      "caseCount": 1,
+      "viewCount": 1,
+      "matches": [
+        {
+          "viewId": "5499fec0-b718-4e28-a498-b2b4c74c2471",
+          "name": "Bundle fixed reference view",
+          "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+          "caseIndexes": [
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "displayed": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+    "kind": "elastic",
+    "fields": [
+      {
+        "id": "displacement",
+        "unit": "mm"
+      },
+      {
+        "id": "stress",
+        "unit": "MPa"
+      }
+    ],
+    "state": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 25,
+      "surface": true,
+      "surfaceWire": true,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": {
+        "field": "displacement",
+        "maximum": 0.05,
+        "minimum": 0
+      },
+      "camera": {
+        "position": [
+          80,
+          60,
+          80
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          0,
+          1
+        ],
+        "fov": 35
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 0,
+    "analysisAssessment": {
+      "completePreflight": false,
+      "mode": "legacy",
+      "provisional": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ],
+      "schemaVersion": 1
+    },
+    "frames": [],
+    "modes": []
+  },
+  "guiExportEqualsMcp": {
+    "equal": true,
+    "bytes": 209414
+  },
+  "localization": {
+    "japaneseAndEnglishLabels": true,
+    "legacyClearWarningVisible": true,
+    "importCountLocalized": true
+  }
+}

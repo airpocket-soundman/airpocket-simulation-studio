@@ -1,0 +1,48 @@
+{
+  "environment": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "baseCommit": "042f0c1b5ebe3c911270c61def2c9243f9b79159",
+  "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+  "scope": "First full suite during case/view/measurement bundle v2 development; known runtime failure remains unresolved.",
+  "observed": {
+    "tests": 518,
+    "passed": 514,
+    "failed": 1,
+    "skipped": 3,
+    "durationMs": 68638.9754,
+    "failedFile": "tests/material-catalog.test.mjs"
+  },
+  "trace": "# Fatal error in , line 0\n# Check failed: jit_page_->allocations_.erase(addr) == 1.\n#\n#\n#\n#FailureMessage Object: 000000CAA03FAC90\n----- Native stack trace -----\n\n 1: 00007FF7DFBDD52D node::MultiIsolatePlatform::DisposeIsolate+5341\n 2: 00007FF7E102C79F V8_Fatal+287\n 3: 00007FF7E080A926 v8::internal::ThreadIsolation::UnregisterWasmAllocation+198\n 4: 00007FF7DFEA3E37 DSA_get0_engine+10663\n 5: 00007FF7DFE53FE0 v8::WasmStreaming::Unpack+73200\n 6: 00007FF7DFE670AA v8::WasmStreaming::Unpack+151226\n 7: 00007FF7DFE66E7A v8::WasmStreaming::Unpack+150666\n 8: 00007FF7DFEA23CA DSA_get0_engine+3898\n 9: 00007FF7DFEA50C7 DSA_get0_engine+15415\n10: 00007FF7DFFCD1A7 DSA_get0_engine+1228055\n11: 000002121FE77750 \n✖ tests\\material-catalog.test.mjs (2871.4151ms)",
+  "sourceHashes": {
+    "tests/material-catalog.test.mjs": "sha256:7c31ab26fd6c890129c80781e57f09f420681e0cb7448ac4b3f304df7ebddcbb",
+    "scripts/headless-analysis.mjs": "sha256:fcba38379837fd6453337533fe5375bb67f38a456288ed6f8285fafc62686b27",
+    "scripts/headless-worker.mjs": "sha256:93eedf9ea28b2173e6896bbf33d5a75940b8c412ee908bd86d18042984f7002c",
+    "src/cad.worker.js": "sha256:df53e4b1f203105208e43e7050f272f02974269474e52ce5e82578b6d00db35e",
+    "src/analysis.worker.js": "sha256:4a716e64004ab6bfb24ebb41d90b01f27e575513f429887e56f001e99a537423",
+    "src/case-view-bundle.js": "sha256:1a56a97e32f3f94e699aa6aad6a8ff1b4cb80ad88346ca4e861226803713dec6",
+    "src/measurement-history.js": "sha256:0f63a972d1bf554f8492d04ef5c9ecdbd8fec7df3a1fd9f85b99c2da3a6b76fc"
+  },
+  "standaloneRetry": {
+    "command": "node --test tests/material-catalog.test.mjs",
+    "passed": 7,
+    "failed": 0,
+    "durationMs": 2944.8982
+  },
+  "conclusion": "Intermittent V8 WASM allocation unregister failure observed again. A passing standalone retry does not demonstrate a runtime fix or identify the root cause.",
+  "fullSuiteRetry": {
+    "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+    "tests": 523,
+    "passed": 520,
+    "failed": 0,
+    "skipped": 3,
+    "durationMs": 68229.4125
+  },
+  "distributionCheck": {
+    "passed": 26,
+    "durationSeconds": 28.44
+  }
+}
