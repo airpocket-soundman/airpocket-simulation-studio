@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T06:46:41.947Z",
+  "updatedAt": "2026-10-14T06:58:02.718Z",
   "release": {
-    "version": "v0.41",
+    "version": "v0.42",
     "date": "2026-10-14",
-    "testCount": 226,
-    "description": "STEP更新を事前照合し、一致する面へ条件を引き継ぐ。消失・重複・再現できない部分領域は値を保持して再選択を要求し、未解決中の解析を拒否。226テスト・公開配信物25項目・公開画面35項目が成功。永続CAD ID・一般曲面の再分割追跡は未対応。",
-    "descriptionEn": "Preview STEP updates and transfer conditions to uniquely matched faces. Retain values and require reselection for missing, ambiguous or unreproducible regions; block unresolved analyses. Passed 226 source tests, 25 public runtime checks and 35 public browser checks. Persistent CAD IDs and general curved retessellation tracking remain unsupported."
+    "testCount": 232,
+    "description": "欠陥・靱性・残留応力の上下限、表面状態・試験温度を使う脆性材料のモードI LEFM評価を追加。金属J2塑性/除荷・単軸S–N疲労と材料別モデルの接続を総合確認。232テスト・配信物26項目・公開画面38項目が成功。き裂進展・破壊確率・塑性疲労・混合モードは未対応。",
+    "descriptionEn": "Added mode-I brittle-material LEFM screening with flaw/toughness/residual-stress bounds, surface state and test temperature. Verified J2 plasticity/unloading, uniaxial S–N fatigue and material-specific model integration. Passed 232 tests, 26 public runtime checks and 38 public browser checks. Crack propagation/probability, plastic fatigue and mixed modes remain unsupported."
   },
   "tasks": [
     {
@@ -147,7 +147,7 @@
     {
       "id": "MAT1",
       "title": "材料別の構成則を解析に接続",
-      "status": "queued",
+      "status": "released",
       "category": "材料",
       "detail": "材料カテゴリと物性・構成則を段階的に対応。MAT2〜MAT4、FAIL2〜FAIL3の完了後に総合確認。",
       "acceptance": "カテゴリだけでなく、出典・単位・有効条件・構成則を登録。ゴムの大変形、ガラスの破壊判定などは段階的に対応。",
@@ -158,7 +158,10 @@
       ],
       "titleEn": "Connect material-specific constitutive models",
       "detailEn": "Integrate categories, properties and constitutive laws after MAT2–MAT4 and material-specific validation.",
-      "acceptanceEn": "Integrate categories, properties and constitutive laws after MAT2–MAT4 and material-specific validation."
+      "acceptanceEn": "Integrate categories, properties and constitutive laws after MAT2–MAT4 and material-specific validation.",
+      "evidence": "src/materials.js; src/material-dependence.js; tests/worker-pipeline.test.mjs; tests/fracture.test.mjs; docs/materials.md",
+      "lastUpdate": "材料の出典・単位・有効範囲、線形弾性、金属J2塑性、圧縮性Neo-Hookean、脆性材料モードI評価を登録・解析・保存へ接続して総合確認。異方性/速度依存構成則、ほぼ非圧縮ゴム、混合モード破壊は未対応として区別。",
+      "lastUpdateEn": "Integrated provenance, units and validity with linear elasticity, metal J2 plasticity, compressible Neo-Hookean and brittle mode-I screening through registration, execution and archives. Anisotropic/rate-dependent laws, near-incompressible rubber and mixed-mode fracture remain explicitly unsupported."
     },
     {
       "id": "SOLVER1",
@@ -651,26 +654,29 @@
       "id": "FAIL2",
       "title": "ガラス等の脆性破壊を評価",
       "category": "材料",
-      "status": "checking",
+      "status": "released",
       "detail": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
       "acceptance": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
       "titleEn": "Evaluate brittle fracture in glass and similar materials",
       "detailEn": "Validate models including defects, fracture toughness, surface state and uncertainty.",
       "acceptanceEn": "Validate models including defects, fracture toughness, surface state and uncertainty.",
-      "evidence": "src/fracture-core.js; src/fracture-ui.js; tests/fracture.test.mjs; docs/brittle-fracture.md",
-      "lastUpdate": "欠陥寸法・靱性・残留応力の上下限、き裂法線、表面状態と試験温度を使うモードI LEFM評価を実装。参照式、実WASM、保存改変拒否と画面操作を検証中。",
-      "lastUpdateEn": "Implement mode-I LEFM screening with flaw/toughness/residual-stress bounds, crack normal, surface state and test temperature. Verify references, real WASM execution, archive tampering and browser operations."
+      "evidence": "src/fracture-core.js; tests/fracture.test.mjs; docs/brittle-fracture.md",
+      "lastUpdate": "公開v0.42でモードI公称応力、欠陥/靱性/残留応力の上下限、表面状態・出典・試験温度、保存再計算を確認。架空参照のKI/KIC=0.59081795〜1.77245385。き裂進展・Weibull確率・応力腐食・混合モードは未対応。",
+      "lastUpdateEn": "Verified public v0.42 mode-I nominal stress screening, flaw/toughness/residual-stress bounds, surface provenance/test temperature and recomputed archives. Synthetic utilization bounds 0.59081795–1.77245385. Crack propagation, Weibull probabilities, stress corrosion and mixed modes remain unsupported."
     },
     {
       "id": "FAIL3",
       "title": "金属塑性・疲労を評価",
       "category": "材料",
-      "status": "queued",
+      "status": "released",
       "detail": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。",
       "acceptance": "応力ひずみ曲線、履歴、疲労データと参照例題を照合。",
       "titleEn": "Evaluate metal plasticity and fatigue",
       "detailEn": "Compare stress-strain curves, histories and fatigue data with reference examples.",
-      "acceptanceEn": "Compare stress-strain curves, histories and fatigue data with reference examples."
+      "acceptanceEn": "Compare stress-strain curves, histories and fatigue data with reference examples.",
+      "evidence": "tests/plasticity.test.mjs; tests/plasticity-integration.test.mjs; tests/fatigue-integration.test.mjs; docs/plasticity.md; docs/fatigue.md",
+      "lastUpdate": "J2等方硬化の微小ひずみ載荷/弾性除荷の応力・残留ひずみ・反力と履歴、単軸比例の実測S–N入力/補間・Goodman・Miner評価を総合確認。232テスト・公開画面38項目。塑性疲労・多軸疲労・任意繰返し校正は未対応。",
+      "lastUpdateEn": "Verified small-strain J2 isotropic loading/elastic unloading stresses, residual strain, reactions and histories, plus proportional-uniaxial measured S–N inputs/interpolation, Goodman and Miner assessment. Passed 232 tests and 38 public browser checks. Plastic/multiaxial fatigue and arbitrary cyclic calibration remain unsupported."
     },
     {
       "id": "CONTACT1",
