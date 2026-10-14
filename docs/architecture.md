@@ -12,8 +12,8 @@
 
 音響も共通製品内の独立モジュールとする。固体の振動領域と空気等の音響領域を区別し、構造振動から音響境界へ受け渡す契約を設ける。流体騒音は通常の流体計算とは別のモデル・計算条件を必要とする。
 
-- UI: TypeScript / React と Three.js 系の3D表示。実装前にCAD面との対応を試作検証。
-- CAD・メッシュ: OpenCASCADE系のWASMとブラウザで実行できるメッシュ生成を検証。GmshはWASM化の可否を確認する候補。可視化三角形から元のCAD面を追跡。
+- UI: 現在はJavaScript / Vite / Three.js。CAD面と表示三角形の対応を利用する。TypeScript / Reactへの移行は必須要件としない。
+- CAD・メッシュ: OpenCASCADE系のWASMでSTEPを読み込み、Gmsh WASMで体積メッシュを生成する。可視化三角形から元のCAD面を追跡。対応形状と領域転送の制限は個別仕様を参照。
 - 実行: GitHub Pagesで配信する静的Webアプリ。Web Worker内のWASMで利用者のローカルCPUを使う。インストール・常駐Python・WSL2を初期版の必須条件にしない。
 - GPU: 初期は3D描画に利用。WebGPUによる解析計算は専用実装・検証を要する追加バックエンドとし、CPUへ戻せる構成。
 - 結果: 変位・応力・温度・流速・圧力等を共通フィールドへ変換。VTK等の形式を候補に、節点／要素／積分点の差を保持。
@@ -21,7 +21,7 @@
 
 将来のディレクトリ案: apps/ui、packages/model、packages/viewer、workers、adapters/calculix、adapters/elmer、adapters/code-aster、adapters/openfoam、benchmarks。
 
-ブラウザ実行・配布の詳細は browser-runtime.md。ネイティブ実行は将来の任意拡張であり、初期版の前提から外す。
+ブラウザ実行・配布の詳細は[browser-runtime.md](browser-runtime.md)。[製品方針](product-direction.md)に沿って共通コアをWASM版とネイティブ版で利用することを後続目標とする。ネイティブ版は別途導入する選択肢であり、ブラウザ版の利用条件にしない。現在のMFEMとNode実行はWASMであり、ネイティブ機械語版ではない。分割と検証順序は[開発計画](roadmap.md)のP6を参照。
 
 ## 保存モデル
 

@@ -6,13 +6,13 @@
 
 ## 基本構成
 
-- TypeScript / React / Three.jsの静的ビルドをGitHub Actionsで生成し、GitHub Pagesへ配信。
+- 現在はJavaScript / Vite / Three.jsの静的ビルドをGitHub Actionsで生成し、GitHub Pagesへ配信。TypeScript / Reactへの移行は未決定。
 - リポジトリ名を含むベースパス、WASM・WorkerのURL、MIME、HTTPSを公開環境で確認。
 - CAD読み込み・メッシュ生成・解析をWeb Workerに分離。CPU計算はWASMを優先。画面操作と中止操作を保つ。
 - 初期は単一スレッドの計算。マルチスレッドWASMはSharedArrayBufferとcross-origin isolationの条件を満たす場合だけ有効化。Workerに移すことと計算のマルチコア化は別。
 - GitHub Pagesで必要なCOOP/COEPヘッダーを直接設定できると仮定しない。Service Workerによる対応は、再読み込み・キャッシュ・ブラウザ互換性を実サイトで検証してから採用。単一スレッド版を必ず用意。
 - 3D描画のGPU利用と、解析計算のGPU利用を別管理。WebGPU計算は対応API・アダプターを検出し、CPU版を残す。
-- モデルは利用者のブラウザで処理し、初期版にモデルのサーバー送信処理を設けない。保存はIndexedDB等とプロジェクトファイルの書き出し・読み込み。容量超過・保存失敗を通知。
+- 現在はモデルを利用者のブラウザで処理し、モデルのサーバー送信処理を設けない。保存はプロジェクトファイルの書き出し・読み込みを使い、ローカル保存はメモ・設定等に利用する。IndexedDB等による拡張は将来案。容量超過・保存失敗を通知する。将来のエージェント/リレー接続では共有情報・許可・失効を別途定義し、外部LLMへの送信をローカル計算と区別する。
 
 ## ソルバー採用の条件
 

@@ -2,6 +2,10 @@
 
 [日本語](../solvers.md)
 
+## Current implementation versus candidates
+
+Current engines are Airpocket and MFEM WASM for linear isotropic Tet4 structure, subject to documented CPU/WebGPU and material/discipline restrictions. Candidate-engine selection described below is a future adapter goal, not the current selectable list. Additional ports are not prerequisites for [P0–P5](roadmap.md).
+
 These are native OSS candidates, not a promise that they run in the browser. Each adapter/version/element/material/boundary combination must be built and validated.
 
 |Candidate|Role|Integration intent|

@@ -2,7 +2,7 @@
 
 [日本語](../browser-runtime.md)
 
-Deploy a static application through GitHub Actions to Pages. Check repository-relative URLs, Worker/WASM assets, MIME types and HTTPS on the deployed site. Models remain in the browser; save/restore through local project files, with local storage used for notes/preferences.
+Deploy a static application through GitHub Actions to Pages. Check repository-relative URLs, Worker/WASM assets, MIME types and HTTPS on the deployed site. Models currently remain in the browser; save/restore through local project files, with local storage used for notes/preferences. The current stack is JavaScript/Vite/Three.js; React/TypeScript migration and IndexedDB persistence are future options. Future agent/relay transports must define sharing permissions and expiry separately; local computation does not imply no external LLM transmission.
 
 Use Workers to keep the interface responsive. Start with single-threaded WASM. Moving a calculation to a Worker does not itself make the solver multicore. Multithreaded WASM requires SharedArrayBuffer/cross-origin isolation; do not assume Pages allows custom COOP/COEP response headers. Any Service Worker workaround must be validated for reload/cache/compatibility, and a single-threaded fallback remains necessary.
 

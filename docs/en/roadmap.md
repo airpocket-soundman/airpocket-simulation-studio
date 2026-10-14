@@ -1,18 +1,52 @@
-# Roadmap and acceptance
+# Development plan and acceptance
 
 [日本語](../roadmap.md)
 
-The canonical task list is src/progress.json and the live development board. Each task includes status, acceptance criteria, dependencies and implementation evidence where deployed. Three-dimensional region setup and the shared API are available; Airpocket structure/heat/limited flow/frequency and transient acoustics/natural modes and independent MFEM structural WASM are integrated. General 3D flow and advanced material/coupling tasks remain.
+Updated 2026-10-14. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
 
-1. CAD import/viewing, curved partial regions, project persistence and browser runtime feasibility.
-2. Volume meshing and linear static analysis; cantilever displacement/reactions, force conservation, units and mesh convergence.
-3. A second validated engine and steady/transient thermal analysis with reference solutions and energy balance; begin cavity/pipe acoustics.
-4. Nonlinear materials, practical rubber models and advanced structural adapters; compare test curves and standard cases.
-5. Fluid domains, laminar flow and validated CFD engine; pipe pressure losses, mesh convergence and mass balance.
-6. Adaptive remeshing/reanalysis, thermal stress, conjugate heat transfer, vibroacoustics, turbulence and contact; validate transfers/conservation.
-7. Failure/fatigue models with measured material data, uncertainties and benchmark/experimental validation.
-8. Final optional printed-parts mode using Bambu slice data after standard analysis works.
+## Baseline and tracking
 
-Cross-cutting tasks include English/Japanese interfaces and documents, the live board, regression APIs, cancellation/diagnostics, performance limits, solver comparisons and report/export support. Exact ordering follows dependencies and feasibility results, not engine names alone.
+The published baseline is v0.43. Its recorded verification is 242 tests, 26 runtime checks and 42 browser checks; these were not rerun for this documentation review. Reuse STEP/regions, shared APIs, volume meshes, Airpocket structural/thermal/limited-flow/acoustic/modal analysis, MFEM linear-structural WASM, cases, PNG/WebM and saved-JSON MCP. Scope restrictions remain in the analysis guide and discipline documents.
 
-Completion requires input generation, execution, result reading and convergence diagnostics—not merely installing an engine. Record reference values, justified tolerances, version, mesh and measured error. Test on Pages; native-only success is insufficient. Identify missing properties, unsupported models, lost regions, poor meshes and failed/unconverged runs.
+`src/progress.json` tracks existing tasks and release evidence. Early task descriptions retain historical scope and are not a complete current capability list. P0–P6 below are planning identifiers, not existing progress IDs. Register implementation tasks with dependencies, acceptance criteria and evidence when work starts; a plan alone does not justify released status.
+
+Keep REG2 and PRINT2 in progress. Reuse unresolved-region rejection in P1. Finish a bounded save/refusal/regression checkpoint for the orthotropic foundation; prioritize P0–P2 over further printing extensions. Orthotropic infrastructure does not complete printed-part analysis.
+
+## Priorities and dependencies
+
+| Plan | Deliverable | Dependencies | Acceptance |
+|---|---|---|---|
+| P0 Capabilities and contracts | GUI/shared API/MCP operation matrix, target-specific capabilities, units, diagnostic codes and schema versions | Existing API/MCP | List implemented and missing operations; expose actual Airpocket/MFEM/CPU/WebGPU combinations and stable unsupported-input diagnostics, without claiming entire library capabilities |
+| P1 Inputs and provenance | STEP import, semantic regions, materials/conditions, sources/assumptions/confirmation and preflight | P0 | Create a single-part linear-structural input without screen coordinates. Detect invalid units, unconfirmed required values, insufficient constraints and unresolved regions. Label provisional runs; preserve state on failure |
+| P2 Preparation and performance | On-demand modules, hashes/versions/cache, Worker reuse, staged progress and resource estimates | P0; independent parts may proceed alongside P1 | Link PERF1; record transfer, preparation, meshing, solve, repeat time and peak memory for specified geometry/device/browser/network/cold-warm cache. Check download/storage failure, cancellation and cleanup; set model limits after measurement |
+| P3 Jobs and live connection | Job IDs, frozen input revisions, atomic patches, idempotency, progress/cancel/reconnect and browser session transport | P0/P1; integrate P2 acquisition state | GUI/MCP agree. Test stale changes, duplicate requests, disconnect/browser close and late responses after cancellation. Define permission, sharing and expiry; never mutate running snapshots |
+| P4 Viewer and export | Layers, fixed ranges, camera/view persistence, probes, time controls, shared API/MCP and fixed-frame export | P0; live operations/export jobs require P3 | Restore views against the same result revision. Separate deformation demonstrations from physical time. Regress PNG/WebM, detect MP4/GIF support and alternatives, restore state after cancelled export; follow viewer specification |
+| P5 Integrated design iteration | SolidCraft STEP exchange and three bracket thickness alternatives with design/input revision tracking | P1–P4 | Complete questioning, setup, solve, repair, CAD changes, remeshing, comparison and video export through MCP. Never silently remap missing/split/ambiguous regions; record common conditions/ranges and per-case convergence |
+| P6 Shared core and native proof | Modular validation/units/diagnostics and WASM/native machine-code linear-structural contract proof | P0/P1; not required to complete P5 | Match supported input/diagnostic/result schemas and compare references, tolerances and balances. Node-hosted WASM does not count as a native machine-code build |
+
+Start with the P0 operation matrix, capability schema and diagnostic contract, then apply them to P1 single-part linear structure before expanding to every feature. Dates, owners and performance thresholds are unset.
+
+## Decision gates
+
+- Before P1: settle API/save schema compatibility, migration and unsupported-version rejection against existing projects, cases and six MCP tools.
+- Before P3: compare local-companion and relay transports for setup, authorization, information sharing, disconnection and installation-free reach. Local computation does not imply no external data transmission.
+- After P2 measurements: decide module boundaries, resource limits, cache/Worker policy and performance targets.
+- After the P6 small proof: decide Rust scope based on interoperability, size, startup, performance and maintenance. A wholesale rewrite remains undecided.
+- Before P5: validate real STEP exchange, design IDs/revisions/hashes, named regions and failed matching/reselection. The external SolidCraft API has not been verified in this review.
+
+## Existing backlog and later extensions
+
+MESH1/REG2/CFDPORT1 retain unfinished general-surface and arbitrary-port work beyond existing planar/cylindrical support; prioritize the scope P1/P5 need. CFD1/CFDMESH1/CFD2/CFD3 must distinguish channel/Stokes support from general Navier–Stokes, turbulence, compressible and multiphase models, each requiring references, balances, convergence and resource measurements.
+
+Keep existing limited coupling/material/fatigue/fracture support separate from COUPLE1/COUPLE3/COUPLE4B/COUPLE5, CONTACT1 and FAIL1 extensions. PRINT2 separates import/preview from layer/infill structural analysis and requires measured calibration; further printing extensions remain optional after standard analysis and agent iteration work.
+
+CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not prerequisites for P0–P5. Add streamlines, particles and isosurfaces in viewer-specification order; visualization does not add a physical solver model.
+
+## Completion gates
+
+1. Complete bounded input creation, validation, run, results and save/restore. Record input validity, numerical convergence and physical accuracy separately.
+2. Save references, justified tolerances, measured error, mesh, engine/module versions and frozen input.
+3. Verify shared API/MCP and check browser-targeted features on Pages, including UI. Node runtime checks do not replace rendering or real-GPU checks. Verify native-only features in their declared environment.
+4. Check state preservation after invalid input/failure/cancellation, resource cleanup, Japanese/English text and links; attach evidence to progress tasks.
+
+See the [documentation consistency review](development-review.md) for findings and remaining decisions.

@@ -62,3 +62,5 @@ v0.42 reconciles CAD faces before applying STEP updates and retains unresolved c
 [v0.42 brittle fracture assessment](docs/en/brittle-fracture.md): register flaw, toughness and residual-stress bounds with surface state for static linear-elastic mode-I nominal-stress screening. Crack propagation, failure probability and lifetime remain unsupported.
 
 [v0.43 3MF/G-code import](docs/en/printing-import.md): inspect original geometry, manufacturing settings and plate deposition paths with layer previews and JSON exports. Structural analysis using layer/infill properties is a separate integration task.
+
+- [Development documentation consistency review](docs/en/development-review.md)

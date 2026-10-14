@@ -1,7 +1,9 @@
 import direction from '../docs/product-direction.md?raw';
 import competition from '../docs/competitive-landscape.md?raw';
+import viewer from '../docs/result-viewer-direction.md?raw';
+import agent from '../docs/agent-operation.md?raw';
 
-const documents=[['製品仕様', 'product-direction.md', direction], ['競合比較', 'competitive-landscape.md', competition]];
+const documents=[['製品仕様', 'product-direction.md', direction], ['競合比較', 'competitive-landscape.md', competition], ['結果ビューア・出力仕様', 'result-viewer-direction.md', viewer], ['LLM運用・API仕様', 'agent-operation.md', agent]];
 const element=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
 
 export function renderStrategy(root,repo){

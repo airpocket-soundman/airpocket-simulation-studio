@@ -152,6 +152,8 @@ SolidCraftがパラメトリック設計・寸法変更を担当し、Airpocket�
 
 ## 関連資料
 
+- [LLMを主な操作主体とするAPIとMCP](agent-operation.md)
+- [結果ビューアと出力の仕様案](result-viewer-direction.md)
 - [ターゲットに基づく競合比較](competitive-landscape.md)
 - [構成](architecture.md)
 - [ブラウザ実行](browser-runtime.md)
