@@ -46,3 +46,34 @@ or compile the proof executable.
 Without `AIRPOCKET_NATIVE_PROOF`, the two optional native tests are skipped.
 Supplying a `.cjs` or `.mjs` runs an explicitly named WASM development check;
 supplying a host executable requires `runtime: "host-native"`.
+
+## Reproducible host / WASM CI gate
+
+The `Verify host-native MFEM proof` workflow uses Linux g++ with C++17,
+the same `.native-cache` key and pinned SDK/MFEM setup as the application build.
+It runs the existing setup/build scripts, then:
+
+```text
+node scripts/check-native-proof.mjs --build
+```
+
+This command requires the existing caches and does not download anything itself.
+It verifies the SHA-256 of the pinned MFEM archive and compares all 1594 original
+source files to that archive, builds the host CMake target and the same-source
+WASM proof, runs `tests/native-proof.test.mjs` against the actual host executable,
+and runs the contract and host/WASM parity tests. A platform-native executable
+header and the exact `host-native` runtime marker are mandatory; a WASM or script
+substitute fails the gate. Five positive/negative/zero-load fixtures and eight
+malformed-input cases check finite result fields, units through analytical
+references, residual, force balance, empty failure stdout and stderr diagnostics.
+
+For previously built executables, omit `--build`. Override their locations with
+`AIRPOCKET_NATIVE_PROOF` and `AIRPOCKET_NATIVE_PROOF_WASM` if needed. Running
+`node --test tests/native-proof-contract.test.mjs` alone runs the portable contract
+checks and skips the actual cross-runtime check unless both paths are supplied.
+
+A completed gate writes `.native-cache/native-proof-report.json`, uploaded as
+`native-proof-evidence`, containing the source pin, source/binary hashes and each
+runtime's numerical outputs. Workflow creation alone is not evidence of a passed
+host run: inspect the completed Actions run and its artifact. This gate only proves
+the axial fixture; it does not complete the saved-project native backend or P6.

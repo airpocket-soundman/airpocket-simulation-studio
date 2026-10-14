@@ -1,0 +1,51 @@
+name: Verify host-native MFEM proof
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'native/**'
+      - 'scripts/*native*'
+      - 'tests/native-proof*'
+      - '.github/workflows/native-proof.yml'
+  pull_request:
+    paths:
+      - 'native/**'
+      - 'scripts/*native*'
+      - 'tests/native-proof*'
+      - '.github/workflows/native-proof.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-proof-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  host-and-wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: .native-cache
+          key: ${{ runner.os }}-mfem-v1-${{ hashFiles('native/**', 'scripts/setup-native.py', 'scripts/build-native.py') }}
+      - name: Install host C++17 build prerequisites
+        run: sudo apt-get update && sudo apt-get install -y g++ cmake ninja-build
+      - name: Prepare existing pinned SDK and MFEM cache
+        run: python scripts/setup-native.py
+      - name: Build existing WASM MFEM library
+        run: python scripts/build-native.py
+      - name: Build host C++17 proof and require actual host/WASM parity
+        run: node scripts/check-native-proof.mjs --build
+      - name: Upload completed proof evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-proof-evidence
+          path: .native-cache/native-proof-report.json
+          if-no-files-found: error
