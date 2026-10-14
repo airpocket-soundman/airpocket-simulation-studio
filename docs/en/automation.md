@@ -336,3 +336,19 @@ Converged plasticity/hyperelastic load steps emit/transfer structuralDisplacemen
 Field summaries return displacement/mm, solver:"plasticity"|"hyperelastic", step/steps, actual loadFactor (including unloading0–1) and minimumMagnitudeMm/maximumMagnitudeMm. Steps are not physical time; no time is included. Pages use displacementMm:[[x,y,z],...] separately from existing scalar page.values. Point measurements return displacementMm/magnitudeMm/step/steps/loadFactor. Stress/internal Newton residuals are absent. A converged step does not guarantee final-job convergence, numerical accuracy or physical validity; intermediate artifacts remain provisional.
 
 Existing nodeBodies/bodyIndex/elementIndex ambiguity rules, input/mesh/hash verification, shared64 MB/256-event retention and release conditions remain. Schema/units/3N vectors/steps/finite magnitudes are checked; illegal time/stress metadata and numerical overflow are refused.
+
+## Thermal-conduction evidence and assumption contract
+
+Quantitative/exploratory thermal conduction uses thermal-conduction required inputs. Explicit conductivity, study.transient and volumetricSource are required; transient also requires density/specificHeat/timeStep/steps/initialTemperature. Register evidence for each temperature/heatFlux/heatPower/convection/radiation/thermalContact type/value/regions, any CAD planar/cylindrical specifications and convection/radiation ambientTemperature. Contact requires paired regions on two parts and positive conductance. Temperatures must be at/above absolute zero. Steady conduction needs a temperature/convection/radiation anchor, with per-component transfer checked after meshing.
+
+Quantitative requires confirmed required evidence; exploratory needs explicit values/assumptions and remains provisional. Assumptions cannot replace missing values. Runtime transient/volumetricSource/timeStep/steps/initialTemperature may equal saved study values but cannot override them differently. Radiation iteration seed/numerical iteration limits are not new mandatory evidence.
+
+Legacy thermal inputs retain requiredPointers:[], requiredInputContract:"unsupported", limited warning and previous allowed/schema1 saved-assessment compatibility. capabilities.preflight.requiredInputContracts lists static isotropic structure and thermal conduction. No new evidence pointer covers the full sourceModel; CAD authenticity is not certified. completePreflight:false/remainingChecks stay unchanged: source applicability, mesh quality, boundary transfer, convergence, mesh dependence and physical accuracy remain checks.
+
+Thermal units are degC, conductivity W/(m·K), specificHeat J/(kg·K), density kg/m³, volumetricSource W/m³, heatFlux W/m², convection/contact conductance W/(m²·K) and timeStep seconds. No automatic unit conversion or property inference is performed.
+
+## Propagate provisional coupling-source assessment
+
+Temperature/vibration sources copy available schema1 sourceAssessment. When coupling is active, sourceAssessment.provisional:true is OR-propagated to current preflight/saved-result provisional status, including legacy destinations, so explicit upstream assumptions cannot disappear. Mode, existing allowed, schemaVersion1 and remainingChecks stay compatible. Existing GUI thermal-case/modal-source actions use the same helper. Old sources without metadata remain supported; invalid sourceAssessment is refused by validators. This preserves provisional lineage, not quantitative confirmation.
+
+heatPower boundary type/value/regions also require evidence; its unit is W. Saved-result validation refuses deleting source assessment metadata to erase inherited provisional status.

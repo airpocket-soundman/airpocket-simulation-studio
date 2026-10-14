@@ -115,3 +115,5 @@ API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', 
 保存熱ケースを熱応力源へ使うAPIはwindow.caseSourceApi.apply（接続applyCaseSource、kind:temperature）。現在の構造・thermalStress設定とsolid一致を先に確認し、入力版とケース版を指定する。clearはsourceだけを除去し、他の設定を維持する。[契約](automation.md)参照。
 
 表面検査のLLM経路は接続inspectSurfaceと保存MCP studio_inspect_project.surfaceInspection。問題三角形は返却入力版に限定されたページで取得し、閉鎖辺の合格を形状妥当性や体積メッシュ保証と混同しない。[操作契約](automation.md)参照。
+
+熱伝導のquantitative/exploratoryにはk・定常/過渡・体積発熱と全熱境界の明示値/根拠が必要。過渡はrho/cp/dt/steps/初期温度を追加し、実行時物理設定は保存studyから変更しない。legacyと保存assessment互換は維持する。[操作契約](automation.md)の熱根拠節とpreflight.requiredPointersを参照。

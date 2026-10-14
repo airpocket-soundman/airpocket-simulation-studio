@@ -1,0 +1,18 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {preflightProject,requireAnalysisPreflight,validateSavedAssessment} from '../src/analysis-preflight.js';
+import {createProjectFromBuiltin} from '../src/project-import.js';
+const lineage=()=>({schemaVersion:1,mode:'exploratory',provisional:true,completePreflight:false,remainingChecks:['Physical applicability remains unchecked']});
+function temperatureInput(){const p=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}});p.materialProperties={youngModulus:1e9,poissonRatio:0};p.conditions=[{type:'fixed',value:0,direction:[1,0,0],regions:[{mesh:0,triangles:[0]}]}];p.study={kind:'structural',thermalStress:true,temperature:20,referenceTemperature:20,gravityEnabled:false,temperatureSource:{name:'Source',sourceAssessment:lineage(),mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},temperature:[20,20,20,20]}};return p;}
+function vibrationInput(){const p=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}});p.sourceModel={kind:'fluidDomain',solid:{kind:'box',bounds:[0,0,0,1,1,1]},enclosure:{kind:'sphere',center:[.5,.5,.5],radius:3}};p.study={kind:'acoustic',frequency:10,soundSpeed:343,exteriorRadiation:true,sweep:false,acousticTransient:false,vibrationSource:{name:'Mode',modeIndex:0,bounds:[0,0,0,1,1,1],mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},displacement:[1,0,0,...Array(9).fill(0)],frequencyHz:10,amplitudeMm:.001,phaseDeg:0,sourceAssessment:lineage()}};return p;}
+test('only actively used source assessments propagate provisional status and mesh generation does not',()=>{
+ for(const p of [temperatureInput(),vibrationInput()]){const report=preflightProject(p);assert.equal(report.allowed,true);assert.equal(report.provisional,true);assert.equal(report.mode,'legacy');assert.equal(preflightProject(p,{}, {operation:'mesh'}).provisional,false);}
+ const inactive=temperatureInput();inactive.study.thermalStress=false;assert.equal(preflightProject(inactive).allowed,true);assert.equal(preflightProject(inactive).provisional,false);
+ for(const p of [temperatureInput(),vibrationInput()]){const key=p.study.kind==='acoustic'?'vibrationSource':'temperatureSource';delete p.study[key].sourceAssessment;assert.equal(preflightProject(p).provisional,false);p.study[key].sourceAssessment={...lineage(),provisional:false};assert.equal(preflightProject(p).provisional,false);}
+});
+test('saved derived assessments must preserve inherited provisional status and cannot delete both declarations',()=>{
+ for(const p of [temperatureInput(),vibrationInput()]){const assessment=requireAnalysisPreflight(p),saved={input:p,calculation:{options:{method:'pcg'}},analysisAssessment:assessment,result:{analysisAssessment:structuredClone(assessment)},job:{final:true,provisional:true}};assert.equal(validateSavedAssessment(saved),true);
+  for(const mutate of [s=>s.analysisAssessment.provisional=false,s=>s.result.analysisAssessment.provisional=false,s=>s.job.provisional=false,s=>{delete s.analysisAssessment;delete s.result.analysisAssessment;}]){const tampered=structuredClone(saved);mutate(tampered);assert.throws(()=>validateSavedAssessment(tampered),/assessment/);}
+ }
+ const legacy={input:temperatureInput()};delete legacy.input.study.temperatureSource.sourceAssessment;assert.equal(validateSavedAssessment(legacy),true);
+});
+test('malformed lineage is rejected by source validation without inventing an assessment',()=>{const p=temperatureInput();p.study.temperatureSource.sourceAssessment.provisional='yes';const before=structuredClone(p),report=preflightProject(p);assert.equal(report.allowed,false);assert.ok(report.diagnostics.some(d=>d.code==='PROJECT_INVALID'));assert.deepEqual(p,before);});

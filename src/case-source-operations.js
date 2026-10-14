@@ -1,3 +1,4 @@
+import {copySourceAssessment} from './source-assessment.js';
 import {canonicalJson,getProjectRevision} from './project-revision.js';
 import {prepareCaseView} from './case-view.js';
 import {validateTemperatureSource} from './temperature-transfer.js';
@@ -18,7 +19,7 @@ export function buildTemperatureCaseSource(project,reference){
  if(output.result.kind!=='thermal')throw Error('Choose a saved thermal case');
  if(!next.sourceModel||canonicalJson(next.sourceModel)!==canonicalJson(output.input.sourceModel))throw Error('Temperature source requires the exact same solid geometry');
  if((output.result.contactTransfers?.length||next.sourceModel.kind==='boxes'&&next.sourceModel.boxes.length>1)&&!output.mesh.nodeBodies)throw Error('Contact or multiple-solid temperature transfer requires matching body identifiers; legacy cases without them cannot be applied');
- const source={name:reference.name,mesh:{nodes:output.mesh.nodes,tetrahedra:output.mesh.tetrahedra,...(output.mesh.nodeBodies?{nodeBodies:output.mesh.nodeBodies}:{})},temperature:output.result.temperature};
+ const source={name:reference.name,...copySourceAssessment(output),mesh:{nodes:output.mesh.nodes,tetrahedra:output.mesh.tetrahedra,...(output.mesh.nodeBodies?{nodeBodies:output.mesh.nodeBodies}:{})},temperature:output.result.temperature};
  validateTemperatureSource(source);inspectMesh(source.mesh);next.study={...s,temperatureSource:source};invalidate(next,'temperatureSource');return next;
 }
 export function buildVibrationCaseSource(project,reference,options){
@@ -28,7 +29,7 @@ export function buildVibrationCaseSource(project,reference,options){
  if(output.result.kind!=='modal'||!mode||solid?.kind!=='box'||next.sourceModel?.kind!=='fluidDomain'||next.sourceModel.mode==='internal'||canonicalJson(next.sourceModel.solid)!==canonicalJson(solid))throw Error('Modal sound requires the unchanged saved box solid in an exterior fluid domain');
  if(s?.kind!=='acoustic'||s.exteriorRadiation!==true||s.acousticTransient||s.sweep||s.frequency!==mode.frequencyHz)throw Error('Explicit exterior frequency acoustics must match the selected saved mode frequency');
  if(next.conditions.some(c=>['acousticPressure','acousticImpedance'].includes(c.type)))throw Error('Modal sound requires removal of manual acoustic pressure and impedance conditions');
- const source={name:reference.name,...settings,mesh:{nodes:output.mesh.nodes,tetrahedra:output.mesh.tetrahedra},bounds:[...solid.bounds],displacement:[...mode.displacement],frequencyHz:mode.frequencyHz};
+ const source={name:reference.name,...settings,...copySourceAssessment(output),mesh:{nodes:output.mesh.nodes,tetrahedra:output.mesh.tetrahedra},bounds:[...solid.bounds],displacement:[...mode.displacement],frequencyHz:mode.frequencyHz};
  validateVibrationSource(source);inspectMesh(source.mesh);next.study={...s,vibrationSource:source};validateVibrationStudy(next.study);invalidate(next,'vibrationSource');return next;
 }
 /** getCase is trusted host-only and returns data plus a synchronous assertCurrent

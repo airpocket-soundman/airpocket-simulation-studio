@@ -1,0 +1,1291 @@
+{
+  "environment": "Actual local IAB/browser Worker/WASM and real stdio MCP/HTTP. All physical reference values are explicit unconfirmed agent proposals with assumptions, not measured data or user confirmations.",
+  "properties": {
+    "conductivity": 1,
+    "density": 1000,
+    "specificHeat": 1000
+  },
+  "study": {
+    "kind": "thermal",
+    "transient": true,
+    "timeStep": 1,
+    "steps": 3,
+    "initialTemperature": 20,
+    "volumetricSource": 0
+  },
+  "inputProvenance": {
+    "schemaVersion": 1,
+    "entries": [
+      {
+        "pointer": "/study/kind",
+        "value": "thermal",
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/study/transient",
+        "value": true,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/study/volumetricSource",
+        "value": 0,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/materialProperties/conductivity",
+        "value": 1,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/materialProperties/density",
+        "value": 1000,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/materialProperties/specificHeat",
+        "value": 1000,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/study/timeStep",
+        "value": 1,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/study/steps",
+        "value": 3,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/study/initialTemperature",
+        "value": 20,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/conditions/0/type",
+        "value": "temperature",
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/conditions/0/value",
+        "value": 100,
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      },
+      {
+        "pointer": "/conditions/0/regions",
+        "value": [
+          {
+            "mesh": 0,
+            "triangles": [
+              8,
+              9
+            ]
+          }
+        ],
+        "source": {
+          "kind": "agent-proposal"
+        },
+        "rationale": "Explicit virtual reference-case inputs",
+        "applicability": "Homogeneous reference-only transient heat conduction",
+        "status": "unconfirmed",
+        "assumption": "Virtual reference values for pipeline verification; not measured engineering data"
+      }
+    ]
+  },
+  "beforeEvidence": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "thermal-transient",
+      "profile": {
+        "id": "thermal-transient",
+        "models": [
+          "thermal-transient"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "time-step",
+            "kind": "thermal",
+            "cadence": "each solved time step, excluding initial state",
+            "metrics": [
+              {
+                "name": "minTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "maxTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "time",
+                "unit": "s"
+              },
+              {
+                "name": "storedEnergyJ",
+                "unit": "J"
+              },
+              {
+                "name": "radiationHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "convectionHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "nonlinearIterations",
+                "unit": "count"
+              },
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [
+          {
+            "kind": "thermal",
+            "name": "temperature",
+            "unit": "degC",
+            "timeUnit": "s",
+            "cadence": "each solved time step, excluding initial state"
+          }
+        ],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": true,
+        "available": true,
+        "scalarFieldsSupported": true,
+        "vectorFieldsSupported": false,
+        "meshSupported": true,
+        "meshAvailable": true,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "exploratory",
+    "allowed": false,
+    "provisional": false,
+    "completePreflight": false,
+    "requiredInputContract": "thermal-conduction",
+    "requiredPointers": [
+      "/study/kind",
+      "/study/transient",
+      "/study/volumetricSource",
+      "/materialProperties/conductivity",
+      "/materialProperties/density",
+      "/materialProperties/specificHeat",
+      "/study/timeStep",
+      "/study/steps",
+      "/study/initialTemperature",
+      "/conditions/0/type",
+      "/conditions/0/value",
+      "/conditions/0/regions"
+    ],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1",
+      "conductivity": "W/(m*K)",
+      "specificHeat": "J/(kg*K)",
+      "initialTemperature": "degC",
+      "ambientTemperature": "degC",
+      "timeStep": "s",
+      "volumetricSource": "W/m3",
+      "heatFlux": "W/m2",
+      "heatPower": "W",
+      "heatTransferCoefficient": "W/(m2*K)",
+      "contactConductance": "W/(m2*K)",
+      "emissivity": "1"
+    },
+    "diagnostics": [
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/kind",
+        "evidence": {
+          "value": "thermal"
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/transient",
+        "evidence": {
+          "value": true
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/volumetricSource",
+        "evidence": {
+          "value": 0
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/materialProperties/conductivity",
+        "evidence": {
+          "value": 1
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/materialProperties/density",
+        "evidence": {
+          "value": 1000
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/materialProperties/specificHeat",
+        "evidence": {
+          "value": 1000
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/timeStep",
+        "evidence": {
+          "value": 1
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/steps",
+        "evidence": {
+          "value": 3
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/initialTemperature",
+        "evidence": {
+          "value": 20
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/type",
+        "evidence": {
+          "value": "temperature"
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/value",
+        "evidence": {
+          "value": 100
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/regions",
+        "evidence": {
+          "value": [
+            {
+              "mesh": 0,
+              "triangles": [
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      }
+    ],
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "preflight": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "thermal-transient",
+      "profile": {
+        "id": "thermal-transient",
+        "models": [
+          "thermal-transient"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "time-step",
+            "kind": "thermal",
+            "cadence": "each solved time step, excluding initial state",
+            "metrics": [
+              {
+                "name": "minTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "maxTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "time",
+                "unit": "s"
+              },
+              {
+                "name": "storedEnergyJ",
+                "unit": "J"
+              },
+              {
+                "name": "radiationHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "convectionHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "nonlinearIterations",
+                "unit": "count"
+              },
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [
+          {
+            "kind": "thermal",
+            "name": "temperature",
+            "unit": "degC",
+            "timeUnit": "s",
+            "cadence": "each solved time step, excluding initial state"
+          }
+        ],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": true,
+        "available": true,
+        "scalarFieldsSupported": true,
+        "vectorFieldsSupported": false,
+        "meshSupported": true,
+        "meshAvailable": true,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "exploratory",
+    "allowed": true,
+    "provisional": true,
+    "completePreflight": false,
+    "requiredInputContract": "thermal-conduction",
+    "requiredPointers": [
+      "/study/kind",
+      "/study/transient",
+      "/study/volumetricSource",
+      "/materialProperties/conductivity",
+      "/materialProperties/density",
+      "/materialProperties/specificHeat",
+      "/study/timeStep",
+      "/study/steps",
+      "/study/initialTemperature",
+      "/conditions/0/type",
+      "/conditions/0/value",
+      "/conditions/0/regions"
+    ],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1",
+      "conductivity": "W/(m*K)",
+      "specificHeat": "J/(kg*K)",
+      "initialTemperature": "degC",
+      "ambientTemperature": "degC",
+      "timeStep": "s",
+      "volumetricSource": "W/m3",
+      "heatFlux": "W/m2",
+      "heatPower": "W",
+      "heatTransferCoefficient": "W/(m2*K)",
+      "contactConductance": "W/(m2*K)",
+      "emissivity": "1"
+    },
+    "diagnostics": [],
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "override": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "thermal-transient",
+      "profile": {
+        "id": "thermal-transient",
+        "models": [
+          "thermal-transient"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "time-step",
+            "kind": "thermal",
+            "cadence": "each solved time step, excluding initial state",
+            "metrics": [
+              {
+                "name": "minTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "maxTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "time",
+                "unit": "s"
+              },
+              {
+                "name": "storedEnergyJ",
+                "unit": "J"
+              },
+              {
+                "name": "radiationHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "convectionHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "nonlinearIterations",
+                "unit": "count"
+              },
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [
+          {
+            "kind": "thermal",
+            "name": "temperature",
+            "unit": "degC",
+            "timeUnit": "s",
+            "cadence": "each solved time step, excluding initial state"
+          }
+        ],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": false,
+        "available": false,
+        "scalarFieldsSupported": true,
+        "vectorFieldsSupported": false,
+        "meshSupported": true,
+        "meshAvailable": false,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "exploratory",
+    "allowed": false,
+    "provisional": true,
+    "completePreflight": false,
+    "requiredInputContract": "thermal-conduction",
+    "requiredPointers": [
+      "/study/kind",
+      "/study/transient",
+      "/study/volumetricSource",
+      "/materialProperties/conductivity",
+      "/materialProperties/density",
+      "/materialProperties/specificHeat",
+      "/study/timeStep",
+      "/study/steps",
+      "/study/initialTemperature",
+      "/conditions/0/type",
+      "/conditions/0/value",
+      "/conditions/0/regions"
+    ],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1",
+      "conductivity": "W/(m*K)",
+      "specificHeat": "J/(kg*K)",
+      "initialTemperature": "degC",
+      "ambientTemperature": "degC",
+      "timeStep": "s",
+      "volumetricSource": "W/m3",
+      "heatFlux": "W/m2",
+      "heatPower": "W",
+      "heatTransferCoefficient": "W/(m2*K)",
+      "contactConductance": "W/(m2*K)",
+      "emissivity": "1"
+    },
+    "diagnostics": [
+      {
+        "code": "THERMAL_RUNTIME_OVERRIDE",
+        "severity": "error",
+        "target": "/options/timeStep",
+        "message": "Runtime thermal override differs from the provenance-bearing project study",
+        "evidence": {
+          "studyPointer": "/study/timeStep"
+        },
+        "suggestions": [
+          "Provide the intended thermal input and record its source or an explicit exploratory assumption"
+        ],
+        "requiresUserIntent": true
+      }
+    ],
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "documented": {
+    "schemaVersion": 1,
+    "revision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+    "summary": {
+      "loaded": true,
+      "name": "Exploratory thermal provenance",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 1,
+      "material": "金属"
+    }
+  },
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+    "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791993121811,
+    "updatedAt": 1791993122199,
+    "lastSequence": 11,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "thermal",
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "volumeMm3": 1000,
+        "minVolumeMm3": 5.208333333333333,
+        "minQuality": 0.6783107244378801,
+        "qualityHistogram": [
+          0,
+          0,
+          0,
+          20,
+          80
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 4,
+        "retainedBytes": 5343,
+        "storageLimited": false,
+        "sharedBytes": 5343,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "catalog": {
+    "schemaVersion": 1,
+    "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+    "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+    "provisional": true,
+    "artifacts": [
+      {
+        "artifactId": "0001",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 2276,
+        "sha256": "fcf247b2661c91fd59f3ac6544abc47d7055fe68e99bdf3680391e83037eda92",
+        "kind": "mesh",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0002",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1023,
+        "sha256": "2fcd3e1af51b23ba5e858e280631493574401bb5babeacd80ad99dbbb14c463e",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0003",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1022,
+        "sha256": "2750d1cc3d03ae4f546d2d09e11f872220a3f619d00b6ac81bf01f91c0328031",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0004",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1022,
+        "sha256": "a18e2d879b3203ac09ed1da127696d09360b243d7467c1e55901033542c66ab8",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      }
+    ],
+    "total": 4,
+    "nextOffset": null,
+    "jobState": "succeeded"
+  },
+  "snapshots": [
+    {
+      "schemaVersion": 1,
+      "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+      "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+      "artifact": {
+        "artifactId": "0002",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1023,
+        "sha256": "2fcd3e1af51b23ba5e858e280631493574401bb5babeacd80ad99dbbb14c463e",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "boundsMm": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          10
+        ],
+        "bodyIdentifiersAvailable": false,
+        "bodyCount": null
+      },
+      "provisional": true,
+      "field": {
+        "kind": "thermal",
+        "name": "temperature",
+        "unit": "degC",
+        "time": 1,
+        "timeUnit": "s",
+        "minimum": 20.05356158695172,
+        "maximum": 100
+      },
+      "measurement": {
+        "point": [
+          5,
+          5,
+          5
+        ],
+        "element": 46,
+        "weights": [
+          0.018971582150902888,
+          0.017489427295363846,
+          0.017489427295363846,
+          0.9460495632583691
+        ],
+        "time": 1,
+        "value": 23.88745725131812,
+        "field": "temperature",
+        "unit": "degC",
+        "timeUnit": "s"
+      },
+      "page": {
+        "offset": 0,
+        "count": 1,
+        "total": 45,
+        "nextOffset": 1,
+        "hasMore": true,
+        "nodesMm": [
+          [
+            0,
+            0,
+            10
+          ]
+        ],
+        "values": [
+          100
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+      "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+      "artifact": {
+        "artifactId": "0003",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1022,
+        "sha256": "2750d1cc3d03ae4f546d2d09e11f872220a3f619d00b6ac81bf01f91c0328031",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "boundsMm": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          10
+        ],
+        "bodyIdentifiersAvailable": false,
+        "bodyCount": null
+      },
+      "provisional": true,
+      "field": {
+        "kind": "thermal",
+        "name": "temperature",
+        "unit": "degC",
+        "time": 2,
+        "timeUnit": "s",
+        "minimum": 20.21880018223169,
+        "maximum": 100
+      },
+      "measurement": {
+        "point": [
+          5,
+          5,
+          5
+        ],
+        "element": 46,
+        "weights": [
+          0.018971582150902888,
+          0.017489427295363846,
+          0.017489427295363846,
+          0.9460495632583691
+        ],
+        "time": 2,
+        "value": 26.140091620582655,
+        "field": "temperature",
+        "unit": "degC",
+        "timeUnit": "s"
+      },
+      "page": {
+        "offset": 0,
+        "count": 1,
+        "total": 45,
+        "nextOffset": 1,
+        "hasMore": true,
+        "nodesMm": [
+          [
+            0,
+            0,
+            10
+          ]
+        ],
+        "values": [
+          100
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+      "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+      "artifact": {
+        "artifactId": "0004",
+        "jobId": "10612a25-6186-443a-b298-759bfe6b4182",
+        "inputRevision": "sha256:9d92de5d3f4e4840a2e037e1fcdc4a1096b3834c6ba57ede6e6389a6a2721299",
+        "bytes": 1022,
+        "sha256": "a18e2d879b3203ac09ed1da127696d09360b243d7467c1e55901033542c66ab8",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "boundsMm": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          10
+        ],
+        "bodyIdentifiersAvailable": false,
+        "bodyCount": null
+      },
+      "provisional": true,
+      "field": {
+        "kind": "thermal",
+        "name": "temperature",
+        "unit": "degC",
+        "time": 3,
+        "timeUnit": "s",
+        "minimum": 20.52211734422814,
+        "maximum": 100
+      },
+      "measurement": {
+        "point": [
+          5,
+          5,
+          5
+        ],
+        "element": 46,
+        "weights": [
+          0.018971582150902888,
+          0.017489427295363846,
+          0.017489427295363846,
+          0.9460495632583691
+        ],
+        "time": 3,
+        "value": 28.298613153037422,
+        "field": "temperature",
+        "unit": "degC",
+        "timeUnit": "s"
+      },
+      "page": {
+        "offset": 0,
+        "count": 1,
+        "total": 45,
+        "nextOffset": 1,
+        "hasMore": true,
+        "nodesMm": [
+          [
+            0,
+            0,
+            10
+          ]
+        ],
+        "values": [
+          100
+        ]
+      }
+    }
+  ],
+  "measurement": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:e16834dc30bd9c599e39965a7fa183398a4844586b2e9e1cb28ec02e91aee48e",
+    "kind": "thermal",
+    "display": {
+      "field": "temperature",
+      "modeIndex": null,
+      "frameIndex": null
+    },
+    "point": [
+      5,
+      5,
+      5
+    ],
+    "element": 46,
+    "weights": [
+      0.018971582150902888,
+      0.017489427295363846,
+      0.017489427295363846,
+      0.9460495632583691
+    ],
+    "temperature": 28.298613153037422,
+    "flux": [
+      -2124.8183876358044,
+      -2395.264401000541,
+      -15735.146667448253
+    ],
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    }
+  },
+  "validation": {
+    "runtime": "Node v24.11.1",
+    "fullSuite": {
+      "tests": 674,
+      "passed": 671,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 83531.7619
+    },
+    "newTests": 19,
+    "realMcpJobs": 7,
+    "actualBrowserThermalJobs": 1,
+    "pureHelperRetestPassed": 6,
+    "build": {
+      "passed": true,
+      "durationSeconds": 2.67
+    },
+    "distribution": {
+      "passed": 26,
+      "durationSeconds": 28.39
+    },
+    "skillValid": true,
+    "limitations": "Virtual reference inputs, not measured material/user confirmation. Known V8 failure remains unresolved; passing is not root-fix or physical accuracy proof."
+  }
+}

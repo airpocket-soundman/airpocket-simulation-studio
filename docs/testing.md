@@ -355,3 +355,15 @@ caseReference保持、入力/ケースの二重照合、出典変更時のsource
 場はexecutionSettled後に取得しており、終端前に受領できるタイミングを保証する証拠ではない。最初のQA編集はaddCondition後の再選択不足で原子的に拒否され、手順修正と再接続後に成功した。アプリ不具合や拒否前の成功として扱わない。荷重ステップは時刻ではなく、応力・内部Newton残差・数値精度/最終収束の保証を追加しない。既知Node24/V8停止の根治や公開HTTPSの検証ではない。
 
 全体試験の実行中に、MCPツール説明だけを非線形荷重ステップのベクトル場を含む表現へ補足した。実行コードは変更していない。今回の成功は既知V8停止の根治証明ではない。
+
+## 2026-10-15: 熱伝導の必須入力・根拠契約
+
+quantitative/exploratory熱伝導の明示物性/時間/境界値と根拠、runtime物理上書き拒否、legacyallowed/schema1assessment互換と能力一覧が対象。ツール・操作数は不変。最終試験・実証結果は末尾に記録した。
+
+熱契約と連成の試験結果を以下に記録する。ローカルCodexアプリ内ブラウザと実MCPで10 mm角boxにk=1 W/(m·K)・rho=1,000 kg/m³・cp=1,000 J/(kg·K)、transient:true・dt1秒・3ステップ・初期20 °C・体積発熱0・上面100 °Cを明示した。exploratoryでも根拠なしはPROVENANCE_REQUIREDで拒否。12必須pointer全てにagent-proposal/unconfirmedと明示の仮想仮定を登録するとallowed:true/provisional:trueになり、runtime dt2秒の上書きは拒否した。
+
+実WASMの3時刻場と最終点[5,5,5]の28.298613153037422 °Cが一致し、保存ケース表示のGUI暫定ラベル、入力版不変を確認した。[機械可読記録](evidence/2026-10-15-browser-thermal-provenance.json)と[画面](evidence/2026-10-15-browser-thermal-provenance.jpg)を保存。別途Node MCPの実7ジョブも検証した。この入力は測定物性やユーザー確認ではない仮想参照入力で、確認済み定量精度を示さない。
+
+同バッチで連成元sourceAssessmentの暫定性継承を追加。探索熱の仮定がlegacy熱応力等で消えないよう、有効sourceのprovisionalを派生判定へOR伝播する。GUI/API共有、旧source互換、不正metadata拒否と保存結果検査を検証した。
+
+最終Node v24.11.1全体試験は674件中671成功・3スキップ・失敗0（83,531.7619 ms）。新規19件（core6・integration4・MCP3・helper3・lineage preflight3）、実MCP7ジョブと実ブラウザ熱1ジョブを確認した。途中でsourceAssessmentの空remainingChecks拒否を補強しpure6件を再実行して成功（総件数不変）。ビルド・専門SKILL検証は成功。ビルド2.67秒、配信物26項目も28.39秒ですべて成功。既知V8停止の根治・物理精度は証明しない。

@@ -1,5 +1,7 @@
+import {validateSourceAssessment} from './source-assessment.js';
 import {invert} from './fem-core.js';
 export function validateTemperatureSource(source){
+ if(source?.sourceAssessment!==undefined)validateSourceAssessment(source.sourceAssessment);
  const m=source?.mesh;
  if(!m||!Array.isArray(m.nodes)||m.nodes.length%3||!m.nodes.length||m.nodes.length>360000||!m.nodes.every(Number.isFinite)||!Array.isArray(m.tetrahedra)||!m.tetrahedra.length||m.tetrahedra.length>30000||!Array.isArray(source.temperature)||source.temperature.length!==m.nodes.length/3||!source.temperature.every(v=>Number.isFinite(v)&&v>=-273.15))throw Error('Invalid transferred temperature field');
  for(const t of m.tetrahedra)if(!Array.isArray(t)||t.length!==4||new Set(t).size!==4||!t.every(i=>Number.isInteger(i)&&i>=0&&i<m.nodes.length/3))throw Error('Invalid transferred temperature elements');

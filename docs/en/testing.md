@@ -351,3 +351,15 @@ Two local Codex in-app-browser real Worker/WASM jobs used a1×1×2 mm box create
 Fields were retrieved after execution settlement; this does not prove guaranteed preterminal delivery timing. The first QA edit omitted reselection after addCondition and was atomically refused; corrected steps/reconnection succeeded. This is not an application defect or pre-refusal success. Load steps are not time; stress/internal Newton residuals and numerical/final-convergence guarantees are not added. This does not establish Node24/V8 root-cause resolution or public HTTPS connectivity.
 
 During the full suite, only MCP tool descriptions were expanded to mention nonlinear load-step vector fields; execution code was unchanged. Passing does not establish resolution of the known V8 stop.
+
+## 2026-10-15: required thermal-input evidence contract
+
+Targets cover quantitative/exploratory conduction properties/time/boundary evidence, runtime physical-override refusal, legacy allowed/schema1-assessment compatibility and capability discovery. Tool/method counts are unchanged. Final validation results are recorded below.
+
+The local Codex in-app browser/real MCP explicitly configured a10 mm cube with k=1 W/(m·K), rho=1,000 kg/m³, cp=1,000 J/(kg·K), transient:true, dt1 second, three steps, initial20 °C, zero volumetric source and100 °C top boundary. Exploratory without evidence refused PROVENANCE_REQUIRED. Recording all12 required pointers as agent-proposal/unconfirmed with explicit virtual assumptions yielded allowed:true/provisional:true; runtime dt2 override was refused.
+
+Three real-WASM time fields and final[5,5,5] sample agreed at28.298613153037422 °C. Saved-case GUI provisional labeling and unchanged input revision were checked. See the [machine-readable record](../evidence/2026-10-15-browser-thermal-provenance.json) and [screenshot](../evidence/2026-10-15-browser-thermal-provenance.jpg). Seven actual Node MCP jobs are also covered. These virtual reference inputs are neither measured properties nor user confirmation and do not establish confirmed quantitative accuracy.
+
+The same batch adds coupling-source sourceAssessment lineage: active upstream provisional status is OR-propagated so exploratory thermal assumptions survive legacy thermal-stress derivation. Shared GUI/API behavior, old-source compatibility, invalid-metadata refusal and saved-result validation extend coverage.
+
+The final Node v24.11.1 suite passed671 of674 tests with three skips and zero failures in83,531.7619 ms. Nineteen new tests cover six core, four integration, three MCP, three helper and three lineage preflight cases, with seven actual MCP jobs and one actual-browser thermal job. Empty sourceAssessment remainingChecks refusal was strengthened during validation; six pure tests passed again without count changes. Build/SKILL validation passed; build took2.67 seconds and all26 distribution checks passed in28.39 seconds. V8 root-fix/physical accuracy are not established.

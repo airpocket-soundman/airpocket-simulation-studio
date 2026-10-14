@@ -1,8 +1,10 @@
+import {validateSourceAssessment} from './source-assessment.js';
 import {sampleResult} from './probe.js';
 import {inspectMesh} from './mesh-core.js';
 import {outwardSurfaceNormals} from './surface-loads.js';
 
 export function validateVibrationSource(s){
+ if(s?.sourceAssessment!==undefined)validateSourceAssessment(s.sourceAssessment);
  const m=s?.mesh,b=s?.bounds;
  if(!m||!Array.isArray(m.nodes)||m.nodes.length<12||m.nodes.length%3||m.nodes.length>6000||!m.nodes.every(Number.isFinite)||!Array.isArray(m.tetrahedra)||!m.tetrahedra.length||m.tetrahedra.length>8000||m.tetrahedra.some(t=>!Array.isArray(t)||t.length!==4||new Set(t).size!==4||!t.every(i=>Number.isInteger(i)&&i>=0&&i<m.nodes.length/3))||!Array.isArray(s.displacement)||s.displacement.length!==m.nodes.length||!s.displacement.every(Number.isFinite)||!Array.isArray(b)||b.length!==6||!b.every(Number.isFinite)||[3,4,5].some(i=>b[i]<=0)||!Number.isFinite(s.frequencyHz)||s.frequencyHz<=0||!Number.isFinite(s.amplitudeMm)||s.amplitudeMm<0||s.amplitudeMm>Math.min(...b.slice(3))*.01||!Number.isFinite(s.phaseDeg)||Math.abs(s.phaseDeg)>360||!Number.isInteger(s.modeIndex)||s.modeIndex<0||s.modeIndex>5||typeof s.name!=='string'||s.name.length>100)throw Error('Invalid modal acoustic source');
  if(m.nodes.some((v,i)=>v<b[i%3]-1e-5||v>b[i%3]+b[i%3+3]+1e-5)||Math.abs(Math.max(...Array.from({length:m.nodes.length/3},(_,i)=>Math.hypot(...s.displacement.slice(3*i,3*i+3))))-1)>1e-8)throw Error('Modal acoustic source requires a box and a 1 mm normalized mode');

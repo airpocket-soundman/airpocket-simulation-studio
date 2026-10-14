@@ -1,0 +1,22 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {validateSourceAssessment,copySourceAssessment} from '../src/source-assessment.js';
+import {buildTemperatureCaseSource} from '../src/case-source-operations.js';
+import {createProjectFromBuiltin} from '../src/project-import.js';import {requireAnalysisPreflight} from '../src/analysis-preflight.js';
+const assessment=()=>({schemaVersion:1,mode:'exploratory',provisional:true,completePreflight:false,remainingChecks:['Mesh convergence and physical applicability']});
+test('strict source assessment validation rejects malformed, unknown and lossy metadata',()=>{
+ for(const mode of ['legacy','quantitative','exploratory']){const value={...assessment(),mode},before=structuredClone(value);assert.equal(validateSourceAssessment(value),value);assert.deepEqual(value,before);}
+ for(const value of [null,[],{}, {...assessment(),extra:true},{...assessment(),schemaVersion:2},{...assessment(),mode:'trusted'},{...assessment(),provisional:1},{...assessment(),completePreflight:true},{...assessment(),remainingChecks:[]},{...assessment(),remainingChecks:['']},{...assessment(),remainingChecks:[3]},{...assessment(),remainingChecks:Array(1)}])assert.throws(()=>validateSourceAssessment(value));
+ let called=false;const accessor=assessment();Object.defineProperty(accessor,'mode',{enumerable:true,get(){called=true;return 'legacy';}});assert.throws(()=>validateSourceAssessment(accessor));assert.equal(called,false);const arrayGetter=assessment();Object.defineProperty(arrayGetter.remainingChecks,'0',{enumerable:true,get(){called=true;return 'Check';}});assert.throws(()=>validateSourceAssessment(arrayGetter));assert.equal(called,false);
+});
+test('copy uses the recorded assessment without upgrading it and detaches the metadata',()=>{
+ const top=assessment(),fallback={...assessment(),mode:'legacy',provisional:false};const result=copySourceAssessment({analysisAssessment:top,result:{analysisAssessment:fallback}});assert.deepEqual(result,{sourceAssessment:top});result.sourceAssessment.remainingChecks[0]='Changed';assert.notEqual(top.remainingChecks[0],'Changed');assert.deepEqual(copySourceAssessment({result:{analysisAssessment:fallback}}),{sourceAssessment:fallback});assert.deepEqual(copySourceAssessment({}),{});assert.deepEqual(copySourceAssessment(null),{});assert.throws(()=>copySourceAssessment({analysisAssessment:{bad:true},result:{analysisAssessment:fallback}}));
+});
+test('an exploratory thermal result retains its assessed source status when used as a temperature field',()=>{
+ const original=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}}),thermal={...structuredClone(original),study:{kind:'thermal',transient:false,volumetricSource:0},materialProperties:{conductivity:2},conditions:[{type:'temperature',value:20,direction:[1,0,0],regions:[{mesh:0,triangles:[0]}]}],analysisIntent:{mode:'exploratory'}};
+ const pointers=['/study/kind','/study/transient','/study/volumetricSource','/materialProperties/conductivity','/conditions/0/type','/conditions/0/value','/conditions/0/regions'];
+ const at=pointer=>pointer.slice(1).split('/').reduce((value,key)=>value[key],thermal);thermal.inputProvenance={schemaVersion:1,entries:pointers.map(pointer=>({pointer,value:structuredClone(at(pointer)),source:{kind:'agent-proposal'},rationale:'Explicit exploratory thermal input',assumption:'Unverified reference input',status:'unconfirmed',applicability:'Synthetic test only'}))};
+ const declared=requireAnalysisPreflight(thermal,{method:'pcg'},{target:'node'});assert.equal(declared.provisional,true);
+ const output={input:thermal,analysisAssessment:declared,calculation:{operation:'elastic',options:{size:5,method:'pcg',adaptive:false,maxRounds:3}},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],surface:[{nodes:[0,1,2]}]},result:{kind:'thermal',temperature:[20,20,20,20],flux:[[0,0,0]],minTemperature:20,maxTemperature:20,analysisAssessment:structuredClone(declared)}};
+ const target={...original,study:{kind:'structural',thermalStress:true,temperature:20,referenceTemperature:20},materialProperties:{youngModulus:1e9,poissonRatio:0}},before=structuredClone(output),built=buildTemperatureCaseSource(target,{name:'Exploratory thermal',output});
+ assert.deepEqual(built.study.temperatureSource.sourceAssessment,declared);assert.deepEqual(output,before);built.study.temperatureSource.sourceAssessment.remainingChecks.push('Changed');assert.deepEqual(output,before);
+});

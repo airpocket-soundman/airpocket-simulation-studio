@@ -336,3 +336,19 @@ sourceとその祖先`/study`の既存根拠entryは、場の数値が同じで�
 field要約はsolver:"plasticity"|"hyperelastic"、step/steps、実際のloadFactor（除荷を含む0〜1）、minimumMagnitudeMm/maximumMagnitudeMmとdisplacement/mmを返します。stepは物理時刻ではなく、timeを含めません。ページの変位は`displacementMm:[[x,y,z],...]`で、既存スカラーpage.valuesとは別です。pointの測定はdisplacementMm・magnitudeMm・step/steps/loadFactorを返します。応力・内部Newton残差を含まず、ステップ収束はジョブ全体の最終収束・数値精度・物理妥当性を保証しません。中間成果物は常にprovisionalです。
 
 既存のnodeBodiesとbodyIndex/elementIndexの曖昧点拒否、入力/メッシュ/ハッシュ照合、共有64 MB・256イベント保持、解放条件を維持します。形式・単位・3Nベクトル・step範囲・変位の大きさの有限性を検査し、不正なtime/応力項目や数値オーバーフローを拒否します。
+
+## 熱伝導の確認済み入力・仮定契約
+
+quantitative/exploratoryの熱伝導は`thermal-conduction`契約を使います。conductivity、study.transient、volumetricSourceを明示し、過渡ではdensity/specificHeat/timeStep/steps/initialTemperatureも必要です。各temperature/heatFlux/heatPower/convection/radiation/thermalContactのtype/value/regions、存在するCAD平面/円筒等の指定、対流・放射のambientTemperatureに根拠を登録します。接触は2部品の対領域と正のconductanceを必要とします。温度は絶対零度以上、定常は温度/対流/放射のanchorを必要とし、メッシュ後に各連結成分の境界転送を検証します。
+
+quantitativeは必須根拠の確認済み状態、exploratoryは明示した値と仮定を要求し暫定とします。未入力値を仮定だけで補うことはできません。runtimeのtransient/volumetricSource/timeStep/steps/initialTemperatureは保存studyと同値の場合だけ受け付け、不一致の物理上書きを拒否します。放射反復の初期seedや数値反復上限は新しい必須根拠に含めません。
+
+legacy熱入力は従来のrequiredPointers:[]・requiredInputContract:"unsupported"・limited警告を維持し、既存allowedとschema1保存assessmentの互換性を保ちます。capabilities.preflight.requiredInputContractsは静的等方構造と熱伝導を一覧化します。元sourceModel全体の新しい根拠登録は要求せず、CADの真偽認証は行いません。completePreflight:falseとremainingChecksは維持し、出典適用性・品質・境界転送・収束・メッシュ依存性・物理精度の確認は残ります。
+
+熱の単位は温度degC、conductivity W/(m·K)、specificHeat J/(kg·K)、密度kg/m³、volumetricSource W/m³、heatFlux W/m²、対流/接触conductance W/(m²·K)、timeStep秒です。自動の単位変換・物性推測を行いません。
+
+## 連成元の暫定判定の継承
+
+温度/振動sourceは利用可能なschema1のsourceAssessmentをコピーします。連成が有効な場合、sourceAssessment.provisional:trueを現在のpreflight/保存結果のprovisionalへOR伝播し、派生先がlegacyでも元の明示仮定を非暫定へ消しません。mode・既存allowed・schemaVersion1・remainingChecksは維持します。旧GUIの熱ケース適用/モード音源作成も同じ処理を使います。metadataのない旧sourceは互換維持し、不正なsourceAssessmentはvalidatorで拒否します。出典の暫定性を保持する処理で、定量確認を追加するものではありません。
+
+heatPowerも熱境界のtype/value/regions根拠に含み、単位はWです。sourceAssessmentを含む保存結果から元metadataを削除して暫定性を落とす改変は保存結果検証で拒否します。
