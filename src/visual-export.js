@@ -24,10 +24,12 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  function download(blob,name){if(downloadUrl)URL.revokeObjectURL(downloadUrl);downloadUrl=URL.createObjectURL(blob);const link=$('visual-export-download');link.href=downloadUrl;link.download=name;link.textContent=language()==='en'?'Download again':'もう一度ダウンロード';link.hidden=false;link.click();}
  const stop=()=>{if(active)active.stop=true;};$('animation-stop').onclick=stop;
  $('view-png').onclick=()=>{try{message('表示中の画像','Current view');capture().toBlob(blob=>{if(blob)download(blob,'simulation-view.png');else message('画像を作成できませんでした。','Image capture failed.');},'image/png');}catch(error){message(error.message,error.message);}};
- async function animate(record){
+ async function animate(record,{animation,seconds:requestedSeconds,signal,onProgress=()=>{},save=true}={}){
   if(active)throw Error(language()==='en'?'Playback is already active.':'再生中です。');
   if(!$('cancel-run').disabled)throw Error(language()==='en'?'Wait for analysis to finish.':'解析の完了を待ってください。');
-  const kind=$('animation-kind').value,seconds=Number($('animation-seconds').value),output=getAnalysis(),result=output?.result;
+  const kind=animation??$('animation-kind').value,seconds=requestedSeconds??Number($('animation-seconds').value),output=getAnalysis(),result=output?.result;
+  if(signal?.aborted)throw Error('Export cancelled');
+  if(!['orbit','deformation','time','slice'].includes(kind))throw Error('Invalid animation type');
   if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error(language()==='en'?'Duration must be 1–15 seconds.':'長さは1～15秒で指定してください。');
   if(kind==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error(language()==='en'?'Deformation requires a structural or modal result.':'変形には構造または固有振動の結果が必要です。');
   const time=$('acoustic-time-frame');
@@ -36,26 +38,37 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(type=>typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(type));
   if(record&&(!mime||!canvas.captureStream))throw Error(language()==='en'?'WebM recording is unavailable in this browser.':'このブラウザはWebM録画に対応していません。');
   const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value},state={stop:false};
+  const abort=()=>{state.stop=true;};signal?.addEventListener('abort',abort,{once:true});
   active=state;controls.enabled=false;controls.enableDamping=false;message('再生を開始しています。','Starting playback.');
-  const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='animation-stop'),disabled=locked.map(el=>el.disabled);
+  const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='animation-stop'&&el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);
   locked.forEach(el=>{el.disabled=true;});$('animation-stop').disabled=false;
   let recorder,stream,chunks=[],finished;
   try{
-   if(record){capture();stream=canvas.captureStream(24);recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:5000000});finished=new Promise((resolve,reject)=>{recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};recorder.onstop=resolve;recorder.onerror=e=>reject(e.error||Error('Recording failed'));});recorder.start();}
+   if(record){capture();stream=canvas.captureStream(24);recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:5000000});finished=new Promise((resolve,reject)=>{recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};recorder.onstop=resolve;recorder.onerror=e=>reject(e.error||Error('Recording failed'));});finished.catch(()=>{state.stop=true;});recorder.start();}
    const started=performance.now(),offset=saved.position.clone().sub(saved.target);
-   await new Promise((resolve,reject)=>{function tick(now){try{const phase=Math.max(0,Math.min(1,(now-started)/(seconds*1000))),s=animationState(kind,phase,{scale:Number(saved.scale),frames:result?.snapshots?.length||1,min:coordinates.length?Math.min(...coordinates):0,max:coordinates.length?Math.max(...coordinates):1});if(getAnalysis()!==output||state.stop){resolve();return;}
+   await new Promise((resolve,reject)=>{function tick(now){try{const phase=Math.max(0,Math.min(1,(now-started)/(seconds*1000))),s=animationState(kind,phase,{scale:Number(saved.scale),frames:result?.snapshots?.length||1,min:coordinates.length?Math.min(...coordinates):0,max:coordinates.length?Math.max(...coordinates):1});if(getAnalysis()!==output){state.stop=true;resolve();return;}if(state.stop){resolve();return;}
     if(kind==='orbit'){camera.position.copy(offset).applyAxisAngle({x:0,y:1,z:0},s.angle).add(saved.target);camera.lookAt(saved.target);}
     else if(kind==='deformation'){$('deform-scale').value=s.deformScale;redraw();}
     else if(kind==='time'){time.value=s.frame;time.dispatchEvent(new Event('input'));}
     else {$('clip-enabled').checked=true;$('clip-position').value=s.position;$('clip-position').dispatchEvent(new Event('input'));}
-    message(kind==='time'?'表示時間 '+result.snapshots[s.frame].time.toPrecision(5)+' s（動画は表示用の時間尺度）':kind==='deformation'?'表示用の変形往復 · 倍率 '+s.deformScale.toPrecision(4):'アニメーション '+kind+' · '+Math.round(phase*100)+'%',kind==='time'?'Physical time '+result.snapshots[s.frame].time.toPrecision(5)+' s (visualization time scale)':kind==='deformation'?'Visual deformation cycle · scale '+s.deformScale.toPrecision(4):'Animation '+kind+' · '+Math.round(phase*100)+'%');capture();if(phase>=1)resolve();else requestAnimationFrame(tick);
+    message(kind==='time'?'表示時間 '+result.snapshots[s.frame].time.toPrecision(5)+' s（動画は表示用の時間尺度）':kind==='deformation'?'表示用の変形往復 · 倍率 '+s.deformScale.toPrecision(4):'アニメーション '+kind+' · '+Math.round(phase*100)+'%',kind==='time'?'Physical time '+result.snapshots[s.frame].time.toPrecision(5)+' s (visualization time scale)':kind==='deformation'?'Visual deformation cycle · scale '+s.deformScale.toPrecision(4):'Animation '+kind+' · '+Math.round(phase*100)+'%');capture();onProgress({fraction:phase,kind,physicalTimeSeconds:kind==='time'?result.snapshots[s.frame].time:undefined});if(phase>=1)resolve();else requestAnimationFrame(tick);
    }catch(error){reject(error);}}requestAnimationFrame(tick);});
   }finally{
    try{if(recorder&&recorder.state!=='inactive')recorder.stop();if(finished)await finished;}
-   finally{stream?.getTracks().forEach(track=>track.stop());camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;}}
+   finally{stream?.getTracks().forEach(track=>track.stop());camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}}
   }
-  if(record&&chunks.length)download(new Blob(chunks,{type:mime}),'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
+  const blob=record&&chunks.length?new Blob(chunks,{type:mime}):null;if(save&&blob&&!state.stop)download(blob,'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
+  if(state.stop)throw Error('Export cancelled');if(record&&!blob)throw Error('Recording produced no data');return blob;
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
- return {stop,capture,isActive:()=>active!==null};
+ async function render({format,animation,seconds,signal,onProgress=()=>{}}){
+  if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
+  if(signal?.aborted)throw Error('Export cancelled');
+  if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false});
+  if(format!=='png')throw Error('Unsupported export format');
+  const state={stop:false};active=state;const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
+  try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
+ }
+ const capabilities=()=>({schemaVersion:1,png:true,webm:typeof MediaRecorder!=='undefined'&&!!canvas.captureStream&&['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].some(type=>MediaRecorder.isTypeSupported(type)),mp4:false,gif:false,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15});
+ return {stop,capture,render,capabilities,isActive:()=>active!==null};
 }

@@ -1,3 +1,4 @@
+import {createVisualExportJobs} from './visual-export-jobs.js';
 import {createResultViewApi,resultFields,displayRange,colorFraction} from './result-view-api.js';
 import {createCaseOperations} from './case-operations.js';
 import {installBrowserSession} from './browser-session-ui.js';
@@ -431,6 +432,9 @@ window.resultViewApi=createResultViewApi({getAnalysis:()=>lastAnalysis,isBusy:()
 }});
 document.addEventListener('studio-language',()=>{if(lastAnalysis)showAnalysis();});
 for(const id of ['color-fixed','color-min','color-max'])$(id).onchange=async()=>{try{const current=await window.resultViewApi.get();await window.resultViewApi.set({expectedResultRevision:current.resultRevision,settings:{colorRange:$('color-fixed').checked?{field:current.state.field,minimum:Number($('color-min').value),maximum:Number($('color-max').value)}:null}});}catch(error){syncColorRangeControls();status(error.message);}};
+let exportPreparedAnalysis;
+const visualExportJobs=createVisualExportJobs({prepare:async()=>{if(!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Viewer is busy');const output=lastAnalysis,view=await window.resultViewApi.get();if(lastAnalysis!==output||!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Displayed result changed or viewer busy');exportPreparedAnalysis=output;return {resultRevision:view.resultRevision,view:{result:view.state,setup:window.viewApi.get(),language}};},render:args=>{if(lastAnalysis!==exportPreparedAnalysis)throw Error('Displayed result changed before export');return visualExport.render(args);}});
+window.visualExportApi=Object.freeze({...visualExportJobs,capabilities:()=>({...visualExport.capabilities(),maxArtifactBytes:32*1024*1024,maxArtifactChunkBytes:65536})});
 window.caseOperations=createCaseOperations({store:window.caseApi,getAnalysis:()=>lastAnalysis,view:viewCase,loadProject:project=>api.loadProject(project),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()});
 
 
@@ -443,4 +447,4 @@ window.analysisApi.evaluateFracture=options=>fractureUi.evaluate(options);
 
 window.printImportApi=installPrintImport({language:()=>language,translate:addTranslations,status,isBusy:()=>!$('cancel-run').disabled||$('model').disabled});
 
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});

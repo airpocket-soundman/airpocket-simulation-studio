@@ -59,7 +59,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 See [official MCP configuration](https://learn.chatgpt.com/docs/extend/mcp?surface=cli). Copy `skills/airpocket-studio` into personal `.codex/skills/airpocket-studio` to install the skill.
 
-Default MCP works with saved JSON; connector mode also invokes permitted browser operations. Use the UI for image/video exports. CPU execution does not verify browser rendering, GPU behavior or physical accuracy for arbitrary geometry.
+Default MCP works with saved JSON; connector mode also invokes permitted browser operations. Use connector export jobs or the UI for image/video exports. CPU execution does not verify browser rendering, GPU behavior or physical accuracy for arbitrary geometry.
 
 `studio_material_catalog` retrieves installed polymer references; see [polymer library](polymer-library.md).
 
@@ -76,7 +76,7 @@ The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. 
 - Inspect: `inspect` (revision/methods), `geometry`, `preflight`, `jobStatus`, `jobEvents`, `jobArtifact`, `probe` (including provisional assessment).
 - Edit: `edit({expectedRevision,operations})`, using the same 17 atomic operations; refuses revision conflicts, intervening changes, active jobs and revoked connections.
 - Analysis: `startJob({inputRevision,requestId,operation,options})`, `cancelJob({jobId})`, `releaseJob({jobId})`, `showJob({jobId,name})`. Showing a solved result creates a case only when its input revision matches; mesh-only display is unsupported.
-- View: `getView`/`setView` expose section/opacity/part settings; result cameras use the result-view API below; image/video export is not connected.
+- View: `getView`/`setView` expose section/opacity/part settings; result cameras use the result-view API below; image/video export uses the jobs described below.
 
 At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, complete GUI job monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
 
@@ -96,4 +96,18 @@ Acoustic time selection uses stored frames only; unavailable times are refused. 
 
 Use caseList's caseId/revision for `caseView`, `caseRestoreInput`, `caseRemove` with `{caseId,expectedRevision}`, or `caseRename` with an additional name. `caseSave({name,expectedResultRevision})` stores the current displayed result (eight-case limit). Shared API: window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove. IDs are page-local and become invalid when an external archive change is observed; rename updates content revision.
 
-Inspect scope permits lists/probes/view reads, view scope changes result settings, analyze scope saves results, and edit scope renames/removes/restores/views cases. Viewing a case restores its saved input, so it requires edit permission. Revocation, deadlines, intervening changes and calculation/playback conflicts are rechecked before committing. MCP image/video jobs, live case-archive import/export and persisted named views remain pending.
+Inspect scope permits lists/probes/view reads, view scope changes result settings, analyze scope saves results, and edit scope renames/removes/restores/views cases. Viewing a case restores its saved input, so it requires edit permission. Revocation, deadlines, intervening changes and calculation/playback conflicts are rechecked before committing. Live case-archive import/export and persisted named views remain pending.
+
+## PNG/WebM export jobs
+
+The optional connector exposes 28 methods (18 default tools, 20 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+
+Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
+
+Poll `exportStatus({jobId})` for progress and running/completed/failed/cancelled state. Completed artifact metadata includes `mimeType`, `name`, `totalBytes` and `sha256`. Retrieve `exportArtifact({jobId,offset:0,length:65536})`, decode its base64 `data`, and follow the returned `nextOffset` until null. Length is at most 65,536 bytes; offsets count decoded bytes. Concatenate pages and verify byte count and SHA-256 against the metadata before using the artifact. This requires no arbitrary browser code, arbitrary-path reads or global filesystem access. Export jobs do not automatically download or persist files.
+
+Use `cancelExport({jobId})` to stop and `releaseExport({jobId})` to free retained slots and bytes. Late output after cancellation/release is inaccessible. Default retention is 32 MiB across four jobs; only one renderer runs at a time, including cancellation cleanup. Disconnect also cancels exports started by that connection. Page exit loses artifacts; restart recovery and persistence in case archives are unsupported.
+
+Capabilities/status/artifact reads require inspect scope; start/cancel/release require view scope. Video requests 24 fps through real-time recording, not deterministic fixed-frame export. Time playback supports stored transient-acoustic frames only; video duration and physical time differ. Deformation animation cycles display scale and does not solve a loading history.
+
+Real-time recording requests 24 fps but does not guarantee frame counts; background tabs and load can drop frames. Deterministic fixed-frame export remains unimplemented.

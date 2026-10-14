@@ -59,7 +59,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 [公式MCP設定手順](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)を参照。`skills/airpocket-studio`を個人の`.codex/skills/airpocket-studio`へコピーして専用skillを使えます。
 
-通常モードのMCPは保存JSONを操作し、接続モードでは許可されたブラウザ操作も利用できます。画像・動画はブラウザUIを使います。MCP計算の成功は画面・GPU・任意形状の物理精度の検証とは別です。
+通常モードのMCPは保存JSONを操作し、接続モードでは許可されたブラウザ操作も利用できます。画像・動画は接続モードの出力ジョブまたはブラウザUIを使います。MCP計算の成功は画面・GPU・任意形状の物理精度の検証とは別です。
 
 `studio_material_catalog`で同梱した樹脂物性を検索できます。[材料ライブラリ](polymer-library.md)。
 
@@ -76,7 +76,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 - 確認: `inspect`（revision・操作一覧）、`geometry`（面ページ）、`preflight`、`jobStatus`、`jobEvents`、`jobArtifact`、`probe`（表示結果の点値・暫定評価）。
 - 編集: `edit({expectedRevision,operations})`。同じ17操作を原子的に適用。版不一致・途中の入力変更・実行中・接続解除を拒否。
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
-- 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は未接続。
+- 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は下記の出力ジョブを使います。
 
 命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIとの全ジョブ表示統合、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
@@ -96,4 +96,18 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ケースは`caseList()`の`caseId`と`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
 
-共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。画像/動画書き出しのMCPジョブ化、ケース集のライブ入出力、名前付きビューの永続化は継続課題です。
+共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力と名前付きビューの永続化は継続課題です。
+
+## PNG/WebMの出力ジョブ
+
+任意接続モードは28操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+
+`getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
+
+`exportStatus({jobId})`で進捗とrunning/completed/failed/cancelledを確認します。completedの成果物メタデータには`mimeType`、`name`、`totalBytes`、`sha256`が含まれます。`exportArtifact({jobId,offset:0,length:65536})`からbase64の`data`を復号し、返却された`nextOffset`がnullになるまでページを取得します。lengthは最大65,536バイトで、offsetは復号後のバイト位置です。結合したバイト数とSHA-256をメタデータに照合してから利用します。ブラウザ内の任意コード実行、任意パス読取、グローバルなファイルシステム操作は不要です。自動ダウンロードや永続保存は行いません。
+
+`cancelExport({jobId})`で中止し、不要になったら`releaseExport({jobId})`で保持枠と成果物を解放します。取消・解放後に届いた録画結果は取得できません。既定の保持上限は合計32 MiBと4ジョブ、レンダラーは取消後の後処理を含め同時に1件です。切断はその接続が開始した出力ジョブも中止します。ページ終了で出力は消失し、再起動復元・ケース集への永続保存は提供しません。
+
+共有範囲は能力・状態・成果物取得が確認（inspect）、開始・取消・解放が表示（view）です。動画は実時間の24 fps録画で、固定フレームの決定的な書き出しではありません。time再生は保存された過渡音響フレームに限り、動画の再生秒数と物理時刻は別です。変形アニメーションは表示倍率の周期変化で、負荷履歴の解析結果ではありません。
+
+実時間録画は24 fpsを要求するがフレーム数を保証しない。背景タブや高負荷で欠落し得る。固定フレーム・決定的な動画出力は未対応。

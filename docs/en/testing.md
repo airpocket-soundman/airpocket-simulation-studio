@@ -115,3 +115,13 @@ For 61 stored acoustic frames, the zero-time probe returned zero seconds and zer
 Displayed frame/mode selection uses a shared sampling function. Unit tests cover versioned probes, validated atomic view changes/rollback, stable case IDs/content revisions and expired mutations. Named/persisted view settings, MCP PNG/WebM export jobs and thermal time display remain unfinished.
 
 Additional NUMERICREFERENCE1 investigation passed 200 generated references and a default-concurrency instrumented full run (343 tests, 340 passed, three skipped). The 100 recorded converged steps had relative residuals from 2.01e-15 to 1.616e-14; all 300 recorded line-search trials accepted a full step. The original failure was not reproduced. Production solver, tolerances and existing tests were unchanged; failed-input capture and root-cause investigation remain open.
+
+## 2026-10-14: LLM PNG/WebM export jobs
+
+Real Chrome and stdio MCP exported a revision-pinned PNG: 77,944 bytes retrieved as 65,536 and 12,408 byte pages, concatenated and verified against SHA-256 f2ea64eca6a3bfca2a3a10b1758673535fdecd343583aad470f7344250bc537d. Visual inspection confirmed the model name, 20–100 degC legend and thermal field.
+
+A one-second orbit WebM contained 8,795 verified bytes. ffprobe reported VP9, 1365×957, 0.970924 seconds and two frames. Background-tab real-time recording did not achieve requested 24 fps; this is not fixed-frame verification. Capabilities explicitly report recording:realtime, targetFrameRate:24 and frameCountGuaranteed:false.
+
+Cancelling an active 15-second export restored the exact pre-export result view/camera/layers. Cancelled artifacts and released jobs refused retrieval. Unit tests cover non-downloading PNG/WebM returns, render/recorder errors, cancellation restoration, stream cleanup, disconnect controls, revisions/idempotence/expiry, retention budgets, 64 KiB paging/SHA-256 and disconnect during preparation. The optional connector now has 28 methods; default saved-file MCP capabilities remain distinct. Public HTTPS pairing, MP4/GIF, deterministic fixed-frame output and persistent export storage remain unfinished.
+
+The final full suite passed 370 of 373 tests, with three skips and zero failures at concurrency four. Build, 26 distribution checks and specialist SKILL validation also passed.

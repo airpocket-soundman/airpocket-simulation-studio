@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T10:41:34.637Z",
+  "updatedAt": "2026-10-14T10:50:31.540Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1391,6 +1391,22 @@
       "acceptance": "実MCP/Chromeで一連の操作と古い版の削除拒否を確認。14単体テスト成功。ケース集のライブ入出力と表示状態永続化は未対応。",
       "acceptanceEn": "Real MCP/Chrome verified the lifecycle and stale-removal refusal; 14 unit tests passed. Live archive import/export and persisted display settings remain unfinished.",
       "evidence": "src/case-operations.js; tests/case-operations.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "BROWSEREXPORT1",
+      "title": "LLM向け画像・動画出力ジョブ",
+      "titleEn": "LLM image and video export jobs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "RESULTCONTROL1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "結果版・ビューを固定してPNG/WebMの開始・進捗・中止・解放・SHA-256付きbase64分割取得を提供。任意接続28操作。32 MiB/4ジョブ/64 KiBページ上限。",
+      "detailEn": "Revision/view-pinned PNG/WebM start/status/cancel/release and hashed base64 pages. Optional connector:28 methods. 32 MiB/four jobs/64 KiB page limits.",
+      "acceptance": "全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化・公開HTTPS接続は未完了。",
+      "acceptanceEn": "370 passed, three skipped of373. Real MCP/Chrome verified hashed PNG77944 bytes/two pages, WebM8795 bytes, cancellation restoration and artifact refusal. Background one-second video had two frames. Fixed-frame export, MP4/GIF, persistence and public HTTPS pairing remain unfinished.",
+      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [
