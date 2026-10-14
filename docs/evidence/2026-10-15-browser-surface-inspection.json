@@ -1,0 +1,242 @@
+{
+  "environment": "Actual local IAB and stdio MCP/HTTP, shared display-surface inspector. Defect fixture selected through its existing GUI button.",
+  "valid": {
+    "created": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "revision": "sha256:94fdb2e521e9b369f0d9ee4f2f5412767aeac25967aeabe15ebe52986cca561f",
+      "summary": {
+        "loaded": true,
+        "name": "Closed inspection reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "units": {
+        "geometry": "mm"
+      }
+    },
+    "report": {
+      "schemaVersion": 1,
+      "revision": "sha256:94fdb2e521e9b369f0d9ee4f2f5412767aeac25967aeabe15ebe52986cca561f",
+      "meshIndex": 0,
+      "units": {
+        "geometry": "mm",
+        "volume": "mm3"
+      },
+      "basis": "display-triangles",
+      "problemTriangles": [],
+      "problemTrianglesTruncated": false,
+      "problemTriangleCount": 0,
+      "problemOffset": 0,
+      "problemLimit": 2,
+      "nextProblemOffset": null,
+      "triangles": 12,
+      "weldedVertices": 8,
+      "toleranceMm": 1.732050807568877e-06,
+      "boundsMm": {
+        "min": [
+          0,
+          0,
+          0
+        ],
+        "max": [
+          10,
+          10,
+          10
+        ],
+        "dimensions": [
+          10,
+          10,
+          10
+        ]
+      },
+      "boundaryEdges": 0,
+      "nonmanifoldEdges": 0,
+      "inconsistentWindingEdges": 0,
+      "degenerateTriangles": 0,
+      "duplicateTriangles": 0,
+      "components": 1,
+      "closedEdgeTopology": true,
+      "signedVolumeMm3": 999.9999999999999,
+      "selfIntersectionsChecked": false,
+      "repair": "No automatic repair: fix holes, duplicates and winding in the source CAD/mesh, then reload.",
+      "cadExactGeometryChecked": false,
+      "geometryModified": false,
+      "limitations": [
+        "Display triangles are tolerance-welded for topology diagnostics; source CAD exact geometry is not checked",
+        "Self intersections are not checked; closed edge topology does not prove a valid solid",
+        "No automatic repair is performed; problem triangle indices refer to the returned project revision"
+      ]
+    }
+  },
+  "defect": {
+    "beforeRevision": "sha256:3751ee7d25475cad39c0f593e91f5cce926f2f408ee8945e9b6f5c3d2b9ed649",
+    "first": {
+      "schemaVersion": 1,
+      "revision": "sha256:3751ee7d25475cad39c0f593e91f5cce926f2f408ee8945e9b6f5c3d2b9ed649",
+      "meshIndex": 0,
+      "units": {
+        "geometry": "mm",
+        "volume": "mm3"
+      },
+      "basis": "display-triangles",
+      "problemTriangles": [
+        0,
+        4
+      ],
+      "problemTrianglesTruncated": true,
+      "problemTriangleCount": 7,
+      "problemOffset": 0,
+      "problemLimit": 2,
+      "nextProblemOffset": 2,
+      "triangles": 13,
+      "weldedVertices": 8,
+      "toleranceMm": 1.732050807568877e-06,
+      "boundsMm": {
+        "min": [
+          -5,
+          -5,
+          -5
+        ],
+        "max": [
+          5,
+          5,
+          5
+        ],
+        "dimensions": [
+          10,
+          10,
+          10
+        ]
+      },
+      "boundaryEdges": 2,
+      "nonmanifoldEdges": 2,
+      "inconsistentWindingEdges": 1,
+      "degenerateTriangles": 1,
+      "duplicateTriangles": 1,
+      "components": 2,
+      "closedEdgeTopology": false,
+      "signedVolumeMm3": null,
+      "selfIntersectionsChecked": false,
+      "repair": "No automatic repair: fix holes, duplicates and winding in the source CAD/mesh, then reload.",
+      "cadExactGeometryChecked": false,
+      "geometryModified": false,
+      "limitations": [
+        "Display triangles are tolerance-welded for topology diagnostics; source CAD exact geometry is not checked",
+        "Self intersections are not checked; closed edge topology does not prove a valid solid",
+        "No automatic repair is performed; problem triangle indices refer to the returned project revision"
+      ]
+    },
+    "second": {
+      "schemaVersion": 1,
+      "revision": "sha256:3751ee7d25475cad39c0f593e91f5cce926f2f408ee8945e9b6f5c3d2b9ed649",
+      "meshIndex": 0,
+      "units": {
+        "geometry": "mm",
+        "volume": "mm3"
+      },
+      "basis": "display-triangles",
+      "problemTriangles": [
+        6,
+        8
+      ],
+      "problemTrianglesTruncated": true,
+      "problemTriangleCount": 7,
+      "problemOffset": 2,
+      "problemLimit": 2,
+      "nextProblemOffset": 4,
+      "triangles": 13,
+      "weldedVertices": 8,
+      "toleranceMm": 1.732050807568877e-06,
+      "boundsMm": {
+        "min": [
+          -5,
+          -5,
+          -5
+        ],
+        "max": [
+          5,
+          5,
+          5
+        ],
+        "dimensions": [
+          10,
+          10,
+          10
+        ]
+      },
+      "boundaryEdges": 2,
+      "nonmanifoldEdges": 2,
+      "inconsistentWindingEdges": 1,
+      "degenerateTriangles": 1,
+      "duplicateTriangles": 1,
+      "components": 2,
+      "closedEdgeTopology": false,
+      "signedVolumeMm3": null,
+      "selfIntersectionsChecked": false,
+      "repair": "No automatic repair: fix holes, duplicates and winding in the source CAD/mesh, then reload.",
+      "cadExactGeometryChecked": false,
+      "geometryModified": false,
+      "limitations": [
+        "Display triangles are tolerance-welded for topology diagnostics; source CAD exact geometry is not checked",
+        "Self intersections are not checked; closed edge topology does not prove a valid solid",
+        "No automatic repair is performed; problem triangle indices refer to the returned project revision"
+      ]
+    },
+    "selected": {
+      "schemaVersion": 1,
+      "revision": "sha256:034e481cc10e68069f925ea136c1173393e658c42ebcfb714c8b1956957fdb00",
+      "summary": {
+        "loaded": true,
+        "name": "穴・重複・退化の検査サンプル",
+        "meshCount": 1,
+        "selectedTriangles": 2,
+        "selectedAreaMm2": 100,
+        "conditionCount": 0,
+        "material": "金属"
+      }
+    },
+    "stale": "[{\"type\":\"text\",\"text\":\"Project revision conflict.\"}]"
+  },
+  "guiComparison": {
+    "boundaryEdges": 2,
+    "nonmanifoldEdges": 2,
+    "inconsistentWindingEdges": 1,
+    "degenerateTriangles": 1,
+    "duplicateTriangles": 1,
+    "components": 2,
+    "dimensionsMm": [
+      10,
+      10,
+      10
+    ],
+    "selectedTrianglesThroughMcp": 2
+  },
+  "validation": {
+    "runtime": "Node24.11.1",
+    "initialFullSuite": {
+      "tests": 636,
+      "passed": 633,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 75640.9398
+    },
+    "finalFullSuite": {
+      "tests": 637,
+      "passed": 634,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 74774.2525
+    },
+    "newTests": 6,
+    "skillValid": true,
+    "knownV8FailureResolved": false,
+    "scope": "Browser evidence precedes the final aggregate-volume finite guard; ordinary-dimension behavior is unchanged. The final full suite includes the six-cube numerical-overflow regression. No actual browser numerical solve is claimed.",
+    "distributionChecks": 26,
+    "distributionSeconds": 27.94,
+    "buildPassed": true
+  }
+}

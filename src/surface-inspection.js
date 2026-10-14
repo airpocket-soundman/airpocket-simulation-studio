@@ -1,4 +1,5 @@
-export function inspectSurface(positions,{toleranceMm}={}){
+export function inspectSurface(positions,{toleranceMm,problemOffset=0,problemLimit=1000}={}){
+ if(!Number.isSafeInteger(problemOffset)||problemOffset<0||!Number.isInteger(problemLimit)||problemLimit<1||problemLimit>1000)throw Error('Invalid surface problem page');
  if(!Array.isArray(positions)||!positions.length||positions.length%9||positions.length>2700000||!positions.every(Number.isFinite))throw Error('Surface inspection requires finite triangles (maximum 300000)');
  const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<positions.length;i++) {const k=i%3;min[k]=Math.min(min[k],positions[i]);max[k]=Math.max(max[k],positions[i]);}
  if(max.some((v,k)=>!Number.isFinite(v-min[k])))throw Error('Surface coordinates exceed numerical range');
@@ -12,5 +13,9 @@ export function inspectSurface(positions,{toleranceMm}={}){
  }
  let boundaryEdges=0,nonmanifoldEdges=0,inconsistentWindingEdges=0;for(const e of edges.values()){if(e.length!==2||e[0].sign===e[1].sign)for(const v of e)problems.add(v.triangle);if(e.length===1)boundaryEdges++;if(e.length>2)nonmanifoldEdges++;if(e.length===2&&e[0].sign===e[1].sign)inconsistentWindingEdges++;}
  const closedEdgeTopology=!boundaryEdges&&!nonmanifoldEdges&&!inconsistentWindingEdges&&!degenerateTriangles&&!duplicateTriangles,components=new Set(parent.map((_,i)=>root(i))).size;
- return {problemTriangles:[...problems].sort((a,b)=>a-b).slice(0,1000),problemTrianglesTruncated:problems.size>1000,triangles:positions.length/9,weldedVertices:vertices.length,toleranceMm:epsilon,boundsMm:{min,max,dimensions:max.map((v,k)=>v-min[k])},boundaryEdges,nonmanifoldEdges,inconsistentWindingEdges,degenerateTriangles,duplicateTriangles,components,closedEdgeTopology,signedVolumeMm3:closedEdgeTopology?volumes.reduce((s,v)=>s+v,0):null,selfIntersectionsChecked:false,repair:'No automatic repair: fix holes, duplicates and winding in the source CAD/mesh, then reload.'};
+ const signedVolumeMm3=closedEdgeTopology?volumes.reduce((sum,value)=>sum+value,0):null;
+ if(signedVolumeMm3!==null&&!Number.isFinite(signedVolumeMm3))throw Error('Surface coordinates exceed numerical range');
+ const ordered=[...problems].sort((a,b)=>a-b);if(problemOffset>ordered.length)throw Error('Surface problem offset exceeds total');
+ const nextProblemOffset=problemOffset+problemLimit<ordered.length?problemOffset+problemLimit:null;
+ return {problemTriangles:ordered.slice(problemOffset,problemOffset+problemLimit),problemTrianglesTruncated:nextProblemOffset!==null,problemTriangleCount:ordered.length,problemOffset,problemLimit,nextProblemOffset,triangles:positions.length/9,weldedVertices:vertices.length,toleranceMm:epsilon,boundsMm:{min,max,dimensions:max.map((v,k)=>v-min[k])},boundaryEdges,nonmanifoldEdges,inconsistentWindingEdges,degenerateTriangles,duplicateTriangles,components,closedEdgeTopology,signedVolumeMm3,selfIntersectionsChecked:false,repair:'No automatic repair: fix holes, duplicates and winding in the source CAD/mesh, then reload.'};
 }

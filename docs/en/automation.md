@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 79 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 80 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -314,3 +314,17 @@ window.caseSourceApi.clear({expectedRevision,kind})/connected clearCaseSource re
 Existing provenance entries for the source and ancestor /study become unconfirmed with assumption:null and confirmation removed, even if field numbers match: a different source cannot inherit old confirmation. Other evidence/analysisIntent remain. Sources store caseReference:{schemaVersion:1,caseId,revision}; the revision content hash supports tracing, but runtime caseId does not guarantee persistent lookup after reload. Nonlegacy required-evidence contracts for thermal/modal coupling remain unsupported and existing limited preflight refusal remains. Successful application does not guarantee quantitative validity.
 
 Temperature sources require nodeBodies for multiple-box solids as well as contact; legacy cases without IDs are refused. Vibration-source boundary conflicts include manual impedance as well as pressure conditions.
+
+## Revision-bound display-surface inspection
+
+Inspect-scoped `inspectSurface({meshIndex,toleranceMm?,problemOffset?,problemLimit?})` and saved MCP `studio_inspect_project({path,surfaceInspection:{meshIndex,toleranceMm?,problemOffset?,problemLimit?}})` inspect one explicit meshIndex. Saved MCP adds report.surfaceInspection. problemLimit defaults100/max200. problemTriangleCount is the full problem count; problemTriangles pages that complete set with problemOffset/problemLimit/nextProblemOffset. Null nextProblemOffset means end; problemTrianglesTruncated means further entries remain. This does not page only the legacy inspector's1,000-item prefix.
+
+Reports include boundary/nonmanifold/winding edges, degenerate/duplicate triangles, components, closed-edge topology and signed volume in mm³ when available. toleranceMm must be finite/positive; omission uses the existing display-size-derived tolerance. Source/display data remain unchanged. Triangle indices belong only to the returned project revision; use it as edit expectedRevision when selecting through selectTriangles.
+
+Self-intersections and exact CAD are unchecked; no automatic repair occurs. closedEdgeTopology:true does not guarantee one outward valid physical solid or successful volume meshing. Repair holes/duplicates/winding in source CAD/mesh and reload.
+
+The flat report also includes full-project SHA-256 revision, meshIndex, units:{geometry:"mm",volume:"mm3"}, basis:"display-triangles", cadExactGeometryChecked:false, geometryModified:false and limitations. Shared function: inspectProjectSurface(project,options).
+
+Even when individual triangle calculations are finite, aggregate signed-volume overflow is refused rather than returning Infinity converted to JSON null.
+
+When joining pages, keep meshIndex and toleranceMm fixed as well as revision. Explicitly reuse the first returned toleranceMm in later calls. Different tolerances can change the problem set at the same project revision; revision equality alone does not establish identical inspection conditions.

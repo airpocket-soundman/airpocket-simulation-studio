@@ -1,3 +1,4 @@
+import {inspectProjectSurface} from './project-surface-inspection.js';
 import {catalogVersion,createCatalogMaterial} from './material-catalog.js';
 import {getCapabilities,diagnoseExecution} from './capabilities.js';
 import {validateInputProvenance} from './input-provenance.js';
@@ -38,6 +39,7 @@ export function createStudioApi(adapter) {
     async applyOperations(operations,options={}){const snapshot=current(),commands=clone(operations),editOptions=clone(options);const {applyProjectOperations}=await import('./project-operations.js');const result=await applyProjectOperations(snapshot,commands,editOptions);if(JSON.stringify(current())!==JSON.stringify(snapshot))throw Error('Project revision conflict.');const updated=write(result.project,'batch');return {schemaVersion:result.schemaVersion,previousRevision:result.previousRevision,revision:result.revision,results:result.results,summary:updated};},
     frameFromEuler,
     getSummary:summary,
+    inspectSurfaceDiagnostics(options){return inspectProjectSurface(current(),options);},
     inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},
     async inspectGeometrySummary(options={}){const snapshot=current();const {inspectProjectGeometry}=await import('./geometry-inspection.js');return inspectProjectGeometry(snapshot,options);},
     exportProject:()=>current(),

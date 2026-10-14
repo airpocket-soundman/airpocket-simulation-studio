@@ -113,3 +113,5 @@ API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', 
 [内部領域のCAD抽出と端面ポート](internal-fluid.md)。箱のX/Y/Z平面で開口を閉じ、指定点を含むCAD体積を取り出せます。一般3D流体の計算と任意方向の開口閉鎖は未対応です。
 
 保存熱ケースを熱応力源へ使うAPIはwindow.caseSourceApi.apply（接続applyCaseSource、kind:temperature）。現在の構造・thermalStress設定とsolid一致を先に確認し、入力版とケース版を指定する。clearはsourceだけを除去し、他の設定を維持する。[契約](automation.md)参照。
+
+表面検査のLLM経路は接続inspectSurfaceと保存MCP studio_inspect_project.surfaceInspection。問題三角形は返却入力版に限定されたページで取得し、閉鎖辺の合格を形状妥当性や体積メッシュ保証と混同しない。[操作契約](automation.md)参照。

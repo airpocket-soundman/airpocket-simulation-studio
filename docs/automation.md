@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは79操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは80操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -314,3 +314,17 @@ knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/seve
 sourceとその祖先`/study`の既存根拠entryは、場の数値が同じでも出典が変わるためunconfirmedへ戻し、assumption:null・confirmation除去とします。他の根拠とanalysisIntentは保持します。source内に`caseReference:{schemaVersion:1,caseId,revision}`を保存し、revisionは内容ハッシュで追跡します。caseIdは実行時IDで、再読込後の永続lookupを保証しません。熱/モード連成のnonlegacy必須根拠契約は未対応のため、既存preflightのlimited拒否を維持します。適用成功は定量妥当性の保証ではありません。
 
 温度源は接触だけでなく複数boxesのsolidでもnodeBodiesを必要とし、部品IDのない旧ケースを拒否します。振動源の境界競合には手動音圧だけでなくインピーダンス条件も含みます。
+
+## 表示表面の版付き検査
+
+確認権限の`inspectSurface({meshIndex,toleranceMm?,problemOffset?,problemLimit?})`と保存MCPの`studio_inspect_project({path,surfaceInspection:{meshIndex,toleranceMm?,problemOffset?,problemLimit?}})`は、単一の明示meshIndexを対象に表面を読み取ります。保存MCPではreport.surfaceInspectionへ結果を追加します。problemLimitは既定100・最大200です。problemTriangleCountは全問題数、problemTrianglesは全体からのページで、problemOffset/problemLimit/nextProblemOffsetを返します。nextProblemOffset:nullは末尾、problemTrianglesTruncatedは後続があることを示します。旧検査関数の既定1,000件prefixからページを切る方式ではありません。
+
+境界辺・非多様体辺・向き不一致・退化/重複三角形・成分・閉鎖辺トポロジーと、可能な場合の符号付き体積mm³を返します。toleranceMmは正の有限値で、指定しない場合は表示寸法に基づく既存許容差を使います。元source/表示データは変更しません。問題三角形の添字は返却したプロジェクトrevisionに限定され、必要ならその版をeditのexpectedRevisionとしてselectTrianglesを使います。
+
+自己交差・厳密CADは未検査で、自動修復はしません。closedEdgeTopologyがtrueでも単一の外向き・妥当な実形状や体積メッシュ生成を保証しません。穴・重複・向きは元CAD/メッシュで修正して再読込してください。
+
+新reportはflat形式でrevision（全projectのSHA-256）、meshIndex、units:{geometry:"mm",volume:"mm3"}、basis:"display-triangles"、cadExactGeometryChecked:false、geometryModified:false、limitationsも含みます。共有の検査関数はinspectProjectSurface(project,options)です。
+
+有限な各三角形でも符号付き体積の全体集計が数値範囲を超える場合は拒否し、InfinityをJSONのnullへ変換して返しません。
+
+ページを結合するときはrevisionだけでなくmeshIndexとtoleranceMmも同一に固定してください。初回に返ったtoleranceMmを後続呼出へ明示すると再現できます。許容差を変えると同じ入力版でも問題集合が変わるため、revision一致だけでは検査条件の一致を保証しません。

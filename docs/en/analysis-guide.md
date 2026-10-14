@@ -113,3 +113,5 @@ For API probes on contact interfaces, specify the part, e.g. analysisApi.probe(p
 [Internal CAD extraction and cap ports](internal-fluid.md) uses X/Y/Z box planes and a seed-selected CAD volume. General 3D flow and arbitrarily oriented caps remain unsupported.
 
 Saved thermal cases can be applied through window.caseSourceApi.apply/connected applyCaseSource with kind:temperature. Configure structural/thermalStress and exact solid identity first, then supply input/case revisions. Clear removes only the source, preserving other settings. See the [contract](automation.md).
+
+LLM surface inspection uses connected inspectSurface or saved MCP studio_inspect_project.surfaceInspection. Problem triangles are paged and scoped to the returned input revision; passing closed-edge topology does not establish shape validity or volume meshing. See the [contract](automation.md).

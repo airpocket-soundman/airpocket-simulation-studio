@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T15:22:07.322177Z",
+  "updatedAt": "2026-10-14T15:29:53.917134Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1766,6 +1766,22 @@
       "acceptance": "実MCPで熱/振動の適用・解除と版/権限/物理条件拒否を確認。実ブラウザで60°C熱場保存→明示した構造条件→連成温度場適用→WASM熱膨張の先端0.016000000003499108mm（参照0.016）を確認。新13試験を含む全体631件中628成功・3skip（Node24.11.1、75.52秒）。ビルド・配信物26項目27.94秒・SKILL成功。固有音源MCPは検証済み合成場であり数値精度の主張ではない。定量根拠契約/公開HTTPS/既知Node24V8停止は未完。",
       "acceptanceEn": "Real MCP verifies thermal/modal apply and clear plus revision,scope and physical-condition refusal. Actual browser saves a60Cthermal field, applies it to explicitly configured structure and verifies WASM tip expansion0.016000000003499108mm (reference0.016). Full suite:628passed/3skipped of631 including13new tests onNode24.11.1 (75.52s). Build,26distribution checks27.94s andSKILL pass. Modal MCP uses validated synthetic fields and does not establish numerical accuracy. Quantitative provenance contracts,public HTTPS and knownNode24V8 failure remain incomplete.",
       "evidence": "src/case-source-operations.js; src/case-operations.js; src/main.js; tests/case-source-operations.test.mjs; tests/case-source-reader.test.mjs; tests/browser-case-source-session.test.mjs; tests/mcp-case-source.test.mjs; docs/evidence/2026-10-15-browser-case-source.json; docs/testing.md"
+    },
+    {
+      "id": "SURFACEINSPECTIONAPI1",
+      "title": "表示形状の不備検査を版付きAPI・MCPから取得する",
+      "titleEn": "Expose revisioned display-surface defect inspection through APIs and MCP",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "GUIと同じ表面検査を保存/ライブMCPへ公開し、全問題三角形の総数と最大200件のページ、入力版を返す。入力不変、自己交差/CAD精度未検査と自動修復なしを明記し、合算体積の非有限値を拒否する。",
+      "detailEn": "Expose the GUI surface inspector to saved/live MCP with full problem counts, pages of up to200triangle indices and input revisions. Preserve inputs, distinguish unchecked self-intersections/exact CAD and no repair, and reject nonfinite aggregate volume.",
+      "acceptance": "実MCPで240件の問題を200+40件のページで取得し元JSONバイト不変。実ブラウザで閉立方体1000mm³、不備サンプルの問題7枚とGUI診断一致、2件ずつ取得・選択・古い版拒否を確認。新6試験を含む最終全体637中634成功・3skip（Node24.11.1、74.77秒）。有限体積合算回帰も成功。ビルド・配信物26項目27.94秒・SKILL成功。自己交差/正確CAD/最大容量は未検証、既知Node24V8停止は未解決。",
+      "acceptanceEn": "Real MCP retrieves240problems in200+40pages without changing source JSON bytes. Actual browser verifies a1000mm3closed cube, seven defect triangles matching GUI diagnostics, two-item pages/selection and stale-revision refusal. Final full suite:634passed/3skipped of637 including six new tests onNode24.11.1 (74.77s),including aggregate-volume overflow refusal. Build,26distribution checks27.94s andSKILL pass. Self-intersections,exact CAD and maximum scale remain unverified; known Node24V8 failure remains unresolved.",
+      "evidence": "src/surface-inspection.js; src/project-surface-inspection.js; src/studio-api.js; scripts/studio-mcp.mjs; tests/project-surface-inspection.test.mjs; tests/mcp-surface-inspection.test.mjs; docs/evidence/2026-10-15-browser-surface-inspection.json; docs/testing.md"
     }
   ],
   "solvers": [
