@@ -64,6 +64,16 @@ sourceFingerprintは`f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e86359
 
 新規のライフサイクル12件と診断CLI6件の計18件、および実処理を含む関連10件が成功。ビルド・ローカル配信物26項目（27.87秒）・SKILL検証成功。
 
-共有ジョブのterminal先行に対し、executionSettled/resourceStateとresource-stateイベントでexecuteチェーンの終了を別に追跡する変更を準備中。解放はterminalかつ実行終了時のみとし、drainは現在pendingのみを待つ。最終検証待ちで、V8根治は引き続き未証明。
+JOBSETTLEMENT1で、共有ジョブのterminal先行とは別にexecutionSettled/resourceStateとresource-stateイベントでexecuteチェーンの終了を追跡する契約を実装済み。解放はterminalかつ実行終了時のみで、drainは現在pendingのみを待つ。資源所有権の契約が整っても、V8根治は証明しない。
 
 状態名はpending/settled、解放可否はreleaseAllowedへ精密化。executorの自己cleanup後のPromise確定を追跡し、ブラウザvoid terminateのOS終了を主張しない。終端後rejectはexecutionErrorへ別記するが通常Abortとcleanup異常を区別しない。同期close互換を維持し、drain/closeAsync・正常MCP EOFは終了待機する契約。
+
+## 2026-10-14: 観測プロファイル試験での修正後再発
+
+HEAD f7a2ea8を基準とする今回の初回全体試験は584件中580成功・1失敗・3スキップ（70,927.9791 ms）。Node v24.11.1/V8既存環境で、新しいMCP観測プロファイル試験のMCP子プロセスが終了コード2147483651となり、`jit_page_->allocations_.erase(addr) == 1`と`UnregisterWasmAllocation`を再び記録した。[追跡証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)を保存した。
+
+これはWorker終了所有権とsettlement修正後にも発生した独立した再発証拠で、根本解決は未証明のまま。単独再実行は1試験・実ジョブ7件を3,715.4345 msで成功したが、これで初回停止を取り消さない。同じソースの全体再試行は584件中581成功・3スキップ（71,435.0784 ms）。記録した8ソースのSHAも一致する。追加の観測照合だけを既存Worker試験へ組み込んだ最終回帰試験は別途記録する。RUNTIMEWASM1は未解決を維持する。
+
+観測照合を既存Worker試験3ファイルへ追加した後の最終Node24実行でも、既存`analysis-job-service.test.mjs`が同じfatalで停止した。報告件数は583件中579成功・1失敗・3スキップ（70,992.8209 ms）。途中プロセス停止により通常の全体件数より減っており、試験を削減した結果ではない。productionソースはこの再実行のために変更していない。同ファイルの単独再試行3件は1,660.2976 msで成功したが、再現性と根本原因は未解決。
+
+既存[再発証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)のfinalCoverageRunへ2回目の失敗を追記した。公式QA portable Node26.10.0の最終ソース全体比較は584件中581成功・3スキップ、V8fatalなし（試験175,036.3216 ms、壁時計176,762 ms）。[生記録](evidence/2026-10-14-observation-profiles-node26-full.json)と、追加helperを含む照合済みソースSHAを保存した。これは性能ベンチマークや上流修正との原因一致の証明ではない。既定Nodeは変更しない。比較や再試行が成功しても、Node24で観測した失敗や原因未解決を取り消さない。

@@ -303,3 +303,7 @@ nodeBodiesの保持・ページ取得、bodyIndex/elementIndexを指定した中
 ## 2026-10-14: ライブ組込み形状の新入力作成
 
 共有アダプターと編集権限createBuiltinProjectによる新規入力、保存MCPとの形状契約一致、版/CAS・busy・失効の拒否と現在結果の無効化が対象。27/29ツールは不変、接続71操作。新10件を含む576件中573成功・3スキップ（69.71秒）。5形状と原子的拒否、同期host正規化の検証、実stdio/HTTPから作成→設定→実CPU Worker→中間メッシュ→先端0.04 mm測定を確認。実ブラウザもファイル読込・GUIサンプル選択なしで10×10×40 mm角柱をMCP作成し、E=1 GPa・ν=0・固定/100 Nを明示設定、解析・結果表示・測定0.04000000000143204 mmまで成功した。作成の返却版が次のinspectと一致し、不正寸法・古い版は入力を変更しない。ブラウザ起動時のstudy既定値・Float32表示メッシュ・meshSettingsを確定前に正規化し、UI接続経路も同アダプターを共有する。[記録](evidence/2026-10-14-browser-builtin-proof.json)と[画面](evidence/2026-10-14-browser-builtin-proof.jpg)。ビルド・配信物26項目（27.94秒）・SKILL成功。これは組込み形状の確認で、STEPライブ取込や一般CAD作成の完成ではない。
+
+## 2026-10-14: ソルバー別中間観測プロファイル
+
+観測profilesとdiagnoseExecution/preflight.selectedObservationの機械可読な選択を追加する。実装済み観測と実行可否・物理妥当性を区別し、保持条件やゼロ反復を取得保証としない。27/29ツール・71操作は不変。新8試験を追加。実stdioの7解析（CPU線形、定常/過渡熱、過渡/周波数音響、流路、MFEM）と、既存Worker22試験へ追加したメッシュ/固有振動/塑性/超弾性/Stokes/WebGPUのCPUフォールバック・適応解析の観測照合が成功し、13profileを実経路で確認した。実GPUの検証ではない。実ブラウザでも選択thermal-transient、3時刻のイベントと保存場、26.715924632310557°Cの点取得を確認し、MFEM熱の未対応選択を拒否した。[記録](evidence/2026-10-14-observation-profiles-browser.json)と[画面](evidence/2026-10-14-observation-profiles-browser.jpg)。Node24全体は既知V8停止を2回再捕捉、間の同ソース再試行は584中581成功・3スキップ。最終ソースNode26全体は同584中581成功・3スキップ（175.04秒）。[失敗証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)と[比較生記録](evidence/2026-10-14-observation-profiles-node26-full.json)を保存し、根治扱いしない。ビルド・配信物26項目（27.53秒）・SKILL成功。

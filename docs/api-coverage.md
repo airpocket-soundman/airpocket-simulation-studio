@@ -7,7 +7,7 @@
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
 | ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（71操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
-| 対応能力 | studioApi.getCapabilities | studio_capabilities | 必要入力・有効範囲・全組合せへ拡張 |
+| 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 静的等方線形構造以外の必須入力契約、メッシュ後検査との統合 |
 | 保存入力の検査・復元 | studioApi.loadProject/exportProject/getSummary/getRevision/applyOperations、builtinProjectApi.create | studio_inspect_project（検査・revision・寸法要約・最大50面ページ）、studio_edit_project（原子的編集・新規保存）、studio_create_builtin_project、接続createBuiltinProject（組込み形状） | 操作細分化と全作成経路の網羅性確認 |

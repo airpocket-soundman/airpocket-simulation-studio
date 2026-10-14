@@ -1,3 +1,4 @@
+import {resolveObservationProfile} from './observation-profiles.js';
 import {diagnoseExecution,getCapabilities} from './capabilities.js';
 import {validateProject} from './regions.js';
 import {validateMaterialProperties} from './materials.js';
@@ -14,6 +15,7 @@ const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressur
 export function preflightProject(project,options={}, {target='browser',operation='solve',mode}={}){
  if(!object(project)||!object(options)||!['browser','node'].includes(target)||!['solve','mesh'].includes(operation))throw TypeError('Invalid preflight arguments');
  const diagnostics=[],requiredPointers=[];
+ const selectedObservation=resolveObservationProfile(project,options,target,operation);
  const add=(code,targetPath,message,evidence,suggestions,severity='error')=>diagnostics.push({code,severity,target:targetPath,message,evidence,suggestions,requiresUserIntent:true});
  const selectedMode=mode??project.analysisIntent?.mode??(project.inputProvenance===undefined?'legacy':'quantitative');
  const validMode=['legacy','quantitative','exploratory'].includes(selectedMode);
@@ -48,7 +50,7 @@ export function preflightProject(project,options={}, {target='browser',operation
  }else if(operation==='solve')add('PREFLIGHT_CONTRACT_LIMITED','/study','Required-input provenance contract is not implemented for this study/material combination',{kind:study.kind??'structural'},['Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run'],effectiveMode==='legacy'?'warning':'error');
  let provenance;
  try{provenance=inspectInputProvenance(project,project.inputProvenance,{mode:effectiveMode,requiredPointers:effectiveMode==='legacy'?[]:requiredPointers});diagnostics.push(...provenance.diagnostics);}catch(error){add('PROVENANCE_INVALID','/inputProvenance','Provenance could not be inspected',{message:error.message},['Use JSON input and repair the provenance contract']);}
- return {schemaVersion:1,target,operation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:provenance?.provisional??false,completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...units},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
+ return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:provenance?.provisional??false,completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...units},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
 }
 
 export function requireAnalysisPreflight(project,options={},runtime={}){

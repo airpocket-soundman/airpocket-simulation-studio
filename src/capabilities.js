@@ -1,3 +1,4 @@
+import {getObservationProfiles,resolveObservationProfile} from './observation-profiles.js';
 // Small metadata only: importing this module must not initialize CAD or solvers.
 const cpuMethods=['pcg','pcg-strict','wasm-pcg'];
 export function getCapabilities({target='browser'}={}){
@@ -13,7 +14,7 @@ export function getCapabilities({target='browser'}={}){
   candidates:['CalculiX','Elmer','Code_Aster','OpenFOAM'].map(id=>({id,status:'candidate',executable:false})),
   operations:{projectInspection:true,geometryInspection:true,projectEditing:true,atomicProjectEditing:true,provenance:true,preflight:true,mesh:true,solve:true,probe:true,caseValidation:true,jobs:true,intermediateEvents:true,liveBrowserMcp:false,mcpProjectCreation:true,mcpProjectImport:true,mcpProjectEditing:true,mcpJobs:true,mcpIntermediateArtifactRead:true,mcpVisualExport:false},
   connector:{available:true,defaultEnabled:false,builtinProjectCreation:true,resultViews:true,caseOperations:true,caseArchiveTransfer:true,resultAssessments:true,cadUpdates:true,visualExportJobs:true,namedResultViews:true,transport:'temporary-loopback-http',requiresBrowserGrant:true,discovery:'studio_browser_sessions',liveCapability:'studio_browser_call inspect',publicHttpsVerified:false},
-  observation:{schemaVersion:1,jobLifetime:'current-process-or-browser-session',inputRevision:'sha256',eventCursor:'sequence',eventRetention:256,jobRetention:32,provisional:true,intermediateFields:target==='node'?'optional-artifacts':'optional-browser-memory',maxIntermediateBytes:64_000_000,metrics:['mesh-quality','pcg-residual','modal-residual','nonlinear-load-step','thermal-time-step','acoustic-time-step'],limitations:['No production native machine-code backend; live browser MCP requires the optional paired connector','Some solvers report stage progress only','Intermediate snapshots do not establish final convergence or physical accuracy','Cancellation is unavailable during final file publication']},
+  observation:{profiles:getObservationProfiles({target}),schemaVersion:1,jobLifetime:'current-process-or-browser-session',inputRevision:'sha256',eventCursor:'sequence',eventRetention:256,jobRetention:32,provisional:true,intermediateFields:target==='node'?'optional-artifacts':'optional-browser-memory',maxIntermediateBytes:64_000_000,metrics:['mesh-quality','pcg-residual','modal-residual','nonlinear-load-step','thermal-time-step','acoustic-time-step'],limitations:['No production native machine-code backend; live browser MCP requires the optional paired connector','Some solvers report stage progress only','Intermediate snapshots do not establish final convergence or physical accuracy','Cancellation is unavailable during final file publication']},
   diagnostics:{schemaVersion:1,coverage:'execution-combinations-and-static-isotropic-linear-inputs',completePreflight:false,provenanceModes:['legacy','quantitative','exploratory'],strictInputContract:'static-isotropic-linear-structure',remainingChecks:['Post-mesh boundary transfer and rigid-body constraint rank','Mesh convergence and physical applicability']},
   note:'Implemented scope is not universal physical validation. Geometry, boundary, material, mesh and runtime validation still apply.'
  };
@@ -21,7 +22,7 @@ export function getCapabilities({target='browser'}={}){
 const issue=(code,target,message,evidence,suggestions)=>({code,severity:'error',target,message,evidence,suggestions,requiresUserIntent:false});
 export function diagnoseExecution(project,options={},target='browser'){
  getCapabilities({target});
- if(!options||typeof options!=='object'||Array.isArray(options)||options.adaptive!==undefined&&typeof options.adaptive!=='boolean'||options.method!==undefined&&typeof options.method!=='string')throw Error('Invalid execution diagnostic options');
+ if(!options||typeof options!=='object'||Array.isArray(options)||options.adaptive!==undefined&&typeof options.adaptive!=='boolean'||options.method!==undefined&&typeof options.method!=='string'||options.includeFields!==undefined&&typeof options.includeFields!=='boolean')throw Error('Invalid execution diagnostic options');
  const diagnostics=[],method=options.method??'wasm-pcg',kind=project?.study?.kind??'structural',study=project?.study??{},material=project?.materialProperties??{};
  const methods=[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])];
  if(!methods.includes(method))diagnostics.push(issue('EXECUTION_METHOD_UNSUPPORTED','options.method','Execution method is unavailable for this target',{method,target},methods));
@@ -33,5 +34,5 @@ export function diagnoseExecution(project,options={},target='browser'){
  }
  if(study.modalAnalysis&&!cpuMethods.includes(method))diagnostics.push(issue('MODAL_METHOD_UNSUPPORTED','options.method','Modal analysis requires an Airpocket CPU method',{method},cpuMethods));
  if(options.adaptive&&kind!=='structural')diagnostics.push(issue('ADAPTIVE_STUDY_UNSUPPORTED','options.adaptive','Adaptive refinement supports structure only',{kind},['Disable adaptive refinement']));
- return {schemaVersion:1,completePreflight:false,diagnostics};
+ return {schemaVersion:1,completePreflight:false,diagnostics,selectedObservation:resolveObservationProfile(project,options,target)};
 }

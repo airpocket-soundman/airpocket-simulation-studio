@@ -1,0 +1,151 @@
+{
+  "runtime": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "executable": "C:\\Program Files\\nodejs\\node.exe"
+  },
+  "head": "f7a2ea86222e1879520eee1ec7f5243ed7cd94d8",
+  "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+  "results": {
+    "total": 584,
+    "passed": 580,
+    "failed": 1,
+    "skipped": 3,
+    "durationMs": 70927.9791
+  },
+  "failedTest": "tests/mcp-observation-profiles.test.mjs:25",
+  "logSha256": "53bc29ea26b48210029f519ce6752f4f69c96e844b24eda4a89531ca68ac2594",
+  "failure": "✖ failing tests:\r\n\r\ntest at tests\\mcp-observation-profiles.test.mjs:25:1\r\n✖ real MCP observation profiles match actual CPU, thermal, acoustic, channel-flow and MFEM job events (3907.8973ms)\r\n  Error: MCP exited 2147483651: \r\n  \r\n  #\r\n  # Fatal error in , line 0\r\n  # Check failed: jit_page_->allocations_.erase(addr) == 1.\r\n  #\r\n  #\r\n  #\r\n  #FailureMessage Object: 00000079355FC070\r\n  ----- Native stack trace -----\r\n  \r\n   1: 00007FF7DFBDD52D node::MultiIsolatePlatform::DisposeIsolate+5341\r\n   2: 00007FF7E102C79F V8_Fatal+287\r\n   3: 00007FF7E080A926 v8::internal::ThreadIsolation::UnregisterWasmAllocation+198\r\n   4: 00007FF7DFEA3E37 DSA_get0_engine+10663\r\n   5: 00007FF7DFE53FE0 v8::WasmStreaming::Unpack+73200\r\n   6: 00007FF7DFE670AA v8::WasmStreaming::Unpack+151226\r\n   7: 00007FF7DFE66E7A v8::WasmStreaming::Unpack+150666\r\n   8: 00007FF7DFEA23CA DSA_get0_engine+3898\r\n   9: 00007FF7DFEA50C7 DSA_get0_engine+15415\r\n  10: 00007FF7DFFCD1A7 DSA_get0_engine+1228055\r\n  11: 0000025ED9E77750 \r\n  \r\n      at ChildProcess.<anonymous> (file:///D:/github/airpocket-soundman/airpocket-simulation-studio/tests/mcp-observation-profiles.test.mjs:20:52)\r\n      at ChildProcess.emit (node:events:508:28)\r\n      at ChildProcess._handle.onexit (node:internal/child_process:294:12)\r\n",
+  "sources": [
+    {
+      "path": "src/observation-profiles.js",
+      "bytes": 11091,
+      "sha256": "d67be12701cd1d5d116d2bd47de0dd077fc51711911da93e58adf360d36c4f98"
+    },
+    {
+      "path": "src/capabilities.js",
+      "bytes": 6488,
+      "sha256": "24bbaf0ed08a8c45bb891ffc4e3e626197829df986e226ffe8848bec732cdf7c"
+    },
+    {
+      "path": "src/analysis-preflight.js",
+      "bytes": 9440,
+      "sha256": "19fea2cf329b008ccba562939380f8187d7ef0f1d33b68a9be1b3266654ab7e7"
+    },
+    {
+      "path": "scripts/studio-mcp.mjs",
+      "bytes": 34093,
+      "sha256": "c795e6e6a9ef7b5c7c22cae265ace8db72b3fa3ec6acda7af12b69dbc1b35705"
+    },
+    {
+      "path": "scripts/headless-analysis.mjs",
+      "bytes": 3535,
+      "sha256": "786abd3909c1fd5d71398b6c3d9ac29fd96af1b5f484c4e3648c2bd0c30421a1"
+    },
+    {
+      "path": "scripts/analysis-job-service.mjs",
+      "bytes": 8001,
+      "sha256": "f82052e04e920a01e854f4129a7fb7bb8a6f3cd44a7b917dddf8d32982dbaee6"
+    },
+    {
+      "path": "src/analysis-jobs.js",
+      "bytes": 7198,
+      "sha256": "e2bb9e511f4e77f786ef28a86c4c7f6db15fce59b57dbc3040d5758cb5ca453e"
+    },
+    {
+      "path": "tests/mcp-observation-profiles.test.mjs",
+      "bytes": 8277,
+      "sha256": "00cf748894fe26cad35dac00c378583536bcb21a2f22e04b1aa2ad90f53f0cfb"
+    }
+  ],
+  "interpretation": "Node/V8 fatal during WASM allocation unregistration recurred after Worker termination ownership changes. This is not a profile assertion mismatch. Root cause/fix remains unproven; retry success cannot erase this failure.",
+  "followup": {
+    "isolated": {
+      "tests": 1,
+      "actualJobs": 7,
+      "passed": 1,
+      "durationMs": 3715.4345
+    },
+    "fullRetry": {
+      "total": 584,
+      "passed": 581,
+      "failed": 0,
+      "skipped": 3,
+      "durationMs": 71435.0784,
+      "logSha256": "d8a28e5ca4f79e71b1fddf5d335eb3a29ab9b468b222c476d8ce5b45d84db6a1"
+    },
+    "listedSourceHashesUnchanged": true,
+    "rootFixProven": false
+  },
+  "finalCoverageRun": {
+    "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+    "results": {
+      "reportedTotal": 583,
+      "passed": 579,
+      "failed": 1,
+      "skipped": 3,
+      "durationMs": 70992.8209
+    },
+    "failedTest": "tests/analysis-job-service.test.mjs",
+    "failureExcerpt": "\r\n# Fatal error in , line 0\r\n# Check failed: jit_page_->allocations_.erase(addr) == 1.\r\n#\r\n#\r\n#\r\n#FailureMessage Object: 00000001073FC0B0\r\n----- Native stack trace -----\r\n\r\n 1: 00007FF7DFBDD52D node::MultiIsolatePlatform::DisposeIsolate+5341\r\n 2: 00007FF7E102C79F V8_Fatal+287\r\n 3: 00007FF7E080A926 v8::internal::ThreadIsolation::UnregisterWasmAllocation+198\r\n 4: 00007FF7DFEA3E37 DSA_get0_engine+10663\r\n 5: 00007FF7DFE53FE0 v8::WasmStreaming::Unpack+73200\r\n 6: 00007FF7DFE670AA v8::WasmStreaming::Unpack+151226\r\n 7: 00007FF7DFE66E7A v8::WasmStreaming::Unpack+150666\r\n 8: 00007FF7DFEA23CA DSA_get0_engine+3898\r\n 9: 00007FF7DFEA50C7 DSA_get0_engine+15415\r\n10: 00007FF7DFFCD1A7 DSA_get0_engine+1228055\r\n11: 0000010B5A3F7750 \r\n✖ tests\\analysis-job-service.test.mjs (1522.0328ms)\r\n✔ jobs freeze input, retry idempotently, guard ",
+    "logSha256": "246ab9bf344bd177de33ed31ef2a7aeb070dd5d8624c758fd0b60c30c587a352",
+    "sources": [
+      {
+        "path": "tests/analysis-job-service.test.mjs",
+        "bytes": 6772,
+        "sha256": "b6c778d514b3ec8d8abd0cea7143397f6197294dabf6c391cd789fac9c963b30"
+      },
+      {
+        "path": "tests/worker-pipeline.test.mjs",
+        "bytes": 22603,
+        "sha256": "527030c518b29584ff8cc74e1502c32fdf9730e2723a77e00317a76f396e8af5"
+      },
+      {
+        "path": "tests/plasticity-integration.test.mjs",
+        "bytes": 11155,
+        "sha256": "e3cec1fc36eb3ed084941aa22e06fd8151d1f965259de78603933cc8009b0329"
+      },
+      {
+        "path": "tests/stokes-integration.test.mjs",
+        "bytes": 8307,
+        "sha256": "aaf6b8e1462914b2fa6f58d607c86c077fe0b5d75f7558561dd0ca47f9618973"
+      },
+      {
+        "path": "tests/helpers/observation-profile.mjs",
+        "bytes": 1726,
+        "sha256": "f4354f2a8d2bff5c00ebf0054967bb536f75d69dc8421ba6fce1e3bb5ff3472e"
+      }
+    ],
+    "interpretation": "Existing analysis-job-service process crashed with the same V8 CHECK. Reported test total is lower because the process aborted before all nested tests completed. Only observation assertions in existing tests had changed since the successful retry; production source was unchanged.",
+    "recordedProductionSourceHashesUnchanged": true
+  },
+  "comparisonControl": {
+    "report": "docs/evidence/2026-10-14-observation-profiles-node26-full.json",
+    "childRuntime": {
+      "executable": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\node-v26.10.0-win-x64\\node.exe",
+      "node": "v26.10.0",
+      "v8": "14.6.202.34-node.34",
+      "platform": "win32",
+      "arch": "x64",
+      "release": "node"
+    },
+    "sourceFingerprint": "sha256:0ae828ab2358a5de6c827805c4eb39269f8c801c7335beda0502afecaf89af19",
+    "allPassed": true,
+    "total": 584,
+    "passed": 581,
+    "failed": 0,
+    "skipped": 3,
+    "testDurationMs": 175036.3216,
+    "wallMs": 176762,
+    "recordedFinalTestHashesIncludingHelperStillMatch": true,
+    "additionalTestHelperSha256": "f4354f2a8d2bff5c00ebf0054967bb536f75d69dc8421ba6fce1e3bb5ff3472e",
+    "defaultRuntimeChanged": false,
+    "rootFixProven": false
+  },
+  "postVerificationFormatting": {
+    "path": "tests/helpers/observation-profile.mjs",
+    "change": "Remove one extra trailing blank line only; executable statements unchanged.",
+    "beforeSha256": "f4354f2a8d2bff5c00ebf0054967bb536f75d69dc8421ba6fce1e3bb5ff3472e",
+    "afterSha256": "e2c3f333ffd5fb1e38cac5613bf7203992fbd970ed2a2bbc4a6b2b622a0e6aa8"
+  }
+}

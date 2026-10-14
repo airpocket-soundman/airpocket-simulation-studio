@@ -1,0 +1,789 @@
+{
+  "environment": "Actual local IAB/native browser Worker + stdio MCP/HTTP. Selected browser observation profile compared with emitted thermal events and retained scalar field; unsupported MFEM/thermal is refused before solving.",
+  "catalogProfileIds": [
+    "mesh",
+    "elastic-cpu",
+    "modal-cpu",
+    "plasticity-cpu",
+    "hyperelastic-cpu",
+    "thermal-steady",
+    "thermal-transient",
+    "acoustic-transient",
+    "acoustic-frequency",
+    "channel-flow",
+    "stokes",
+    "elastic-mfem"
+  ],
+  "preflight": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "thermal-transient",
+      "profile": {
+        "id": "thermal-transient",
+        "models": [
+          "thermal-transient"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "time-step",
+            "kind": "thermal",
+            "cadence": "each solved time step, excluding initial state",
+            "metrics": [
+              {
+                "name": "minTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "maxTemperature",
+                "unit": "degC"
+              },
+              {
+                "name": "time",
+                "unit": "s"
+              },
+              {
+                "name": "storedEnergyJ",
+                "unit": "J"
+              },
+              {
+                "name": "radiationHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "convectionHeatW",
+                "unit": "W"
+              },
+              {
+                "name": "nonlinearIterations",
+                "unit": "count"
+              },
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [
+          {
+            "kind": "thermal",
+            "name": "temperature",
+            "unit": "degC",
+            "timeUnit": "s",
+            "cadence": "each solved time step, excluding initial state"
+          }
+        ],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": true,
+        "available": true,
+        "scalarFieldsSupported": true,
+        "meshSupported": true,
+        "meshAvailable": true,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "legacy",
+    "allowed": true,
+    "provisional": false,
+    "completePreflight": false,
+    "requiredInputContract": "unsupported",
+    "requiredPointers": [],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1"
+    },
+    "diagnostics": [
+      {
+        "code": "PREFLIGHT_CONTRACT_LIMITED",
+        "severity": "warning",
+        "target": "/study",
+        "message": "Required-input provenance contract is not implemented for this study/material combination",
+        "evidence": {
+          "kind": "thermal"
+        },
+        "suggestions": [
+          "Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run"
+        ],
+        "requiresUserIntent": true
+      }
+    ],
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "unavailable": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": false,
+      "profileId": null,
+      "profile": null,
+      "reasons": [
+        {
+          "code": "METHOD_STUDY_UNSUPPORTED",
+          "message": "Method supports structural studies only"
+        }
+      ],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": true,
+        "available": false,
+        "scalarFieldsSupported": false,
+        "meshSupported": false,
+        "meshAvailable": false,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "legacy",
+    "allowed": false,
+    "provisional": false,
+    "completePreflight": false,
+    "requiredInputContract": "unsupported",
+    "requiredPointers": [],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1"
+    },
+    "diagnostics": [
+      {
+        "code": "ENGINE_STUDY_UNSUPPORTED",
+        "severity": "error",
+        "target": "options.method",
+        "message": "This method supports structural analysis only",
+        "evidence": {
+          "method": "mfem-wasm",
+          "kind": "thermal"
+        },
+        "suggestions": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "PREFLIGHT_CONTRACT_LIMITED",
+        "severity": "warning",
+        "target": "/study",
+        "message": "Required-input provenance contract is not implemented for this study/material combination",
+        "evidence": {
+          "kind": "thermal"
+        },
+        "suggestions": [
+          "Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run"
+        ],
+        "requiresUserIntent": true
+      }
+    ],
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+    "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791988583208,
+    "updatedAt": 1791988583627,
+    "lastSequence": 11,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "thermal",
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "volumeMm3": 1000,
+        "minVolumeMm3": 5.208333333333333,
+        "minQuality": 0.6783107244378801,
+        "qualityHistogram": [
+          0,
+          0,
+          0,
+          20,
+          80
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 4,
+        "retainedBytes": 5341,
+        "storageLimited": false,
+        "sharedBytes": 5341,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "events": {
+    "schemaVersion": 1,
+    "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+    "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791988583208,
+    "updatedAt": 1791988583627,
+    "lastSequence": 11,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "thermal",
+      "mesh": {
+        "nodeCount": 45,
+        "elementCount": 100,
+        "volumeMm3": 1000,
+        "minVolumeMm3": 5.208333333333333,
+        "minQuality": 0.6783107244378801,
+        "qualityHistogram": [
+          0,
+          0,
+          0,
+          20,
+          80
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 4,
+        "retainedBytes": 5341,
+        "storageLimited": false,
+        "sharedBytes": 5341,
+        "maxBytes": 64000000
+      }
+    },
+    "events": [
+      {
+        "state": "running",
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 1,
+        "elapsedMs": 0,
+        "type": "state",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "preparation",
+        "message": "Simulation modules loaded",
+        "converged": null,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 2,
+        "elapsedMs": 139,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "progress",
+        "message": "Generating volume mesh…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 3,
+        "elapsedMs": 143,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "mesh",
+        "metrics": {
+          "nodeCount": 45,
+          "elementCount": 100,
+          "volumeMm3": 1000,
+          "minVolumeMm3": 5.208333333333333,
+          "minQuality": 0.6783107244378801,
+          "qualityHistogram": [
+            0,
+            0,
+            0,
+            20,
+            80
+          ]
+        },
+        "converged": null,
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0001",
+          "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+          "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+          "bytes": 2276,
+          "sha256": "628b6c0460670f3a5307b41ef726bfe1ee9b61844fac7cd7a3562fc470517bc7",
+          "kind": "mesh",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "meshAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 4,
+        "elapsedMs": 396,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "progress",
+        "message": "Transferring boundary regions…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 5,
+        "elapsedMs": 399,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "progress",
+        "message": "Solving heat conduction…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 6,
+        "elapsedMs": 402,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 1,
+        "steps": 3,
+        "time": 1,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 1,
+          "minTemperature": 20.06387385456985,
+          "maxTemperature": 100,
+          "storedEnergyJ": 16.45630729610821,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 1.0918352754725987e-9
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0002",
+          "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+          "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+          "bytes": 1022,
+          "sha256": "3b5a5cff57cfac05f3f238d9e7df373bc269db7ba6e5b25c4d67f4056bb126f0",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 1,
+          "nodeCount": 45
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 7,
+        "elapsedMs": 418,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 2,
+        "steps": 3,
+        "time": 2,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 2,
+          "minTemperature": 20.237519102834273,
+          "maxTemperature": 100,
+          "storedEnergyJ": 2.0224406759003726,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 1.2166563743342117e-9
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0003",
+          "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+          "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+          "bytes": 1020,
+          "sha256": "34100668742f05b77bc4a808a16744bb7f4324825bcaad8d0c7f8c404f0b3605",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 2,
+          "nodeCount": 45
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 8,
+        "elapsedMs": 418,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 3,
+        "steps": 3,
+        "time": 3,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 3,
+          "minTemperature": 20.533941246613693,
+          "maxTemperature": 100,
+          "storedEnergyJ": 1.8759772753465256,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 1.2760681251329732e-9
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0004",
+          "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+          "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+          "bytes": 1023,
+          "sha256": "ed1cf612c65b54d5ec513205c7a51a62aa8da5c1f02b0f57370eaa0572957795",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 3,
+          "nodeCount": 45
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 9,
+        "elapsedMs": 418,
+        "type": "progress",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "state": "succeeded",
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 10,
+        "elapsedMs": 419,
+        "type": "state",
+        "executionSettled": false,
+        "resourceState": "pending",
+        "releaseAllowed": false
+      },
+      {
+        "state": "succeeded",
+        "schemaVersion": 1,
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "sequence": 11,
+        "elapsedMs": 419,
+        "type": "resource-state",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true
+      }
+    ],
+    "truncated": false,
+    "nextSequence": 11,
+    "hasMore": false
+  },
+  "catalog": {
+    "schemaVersion": 1,
+    "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+    "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+    "provisional": true,
+    "artifacts": [
+      {
+        "artifactId": "0001",
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "bytes": 2276,
+        "sha256": "628b6c0460670f3a5307b41ef726bfe1ee9b61844fac7cd7a3562fc470517bc7",
+        "kind": "mesh",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0002",
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "bytes": 1022,
+        "sha256": "3b5a5cff57cfac05f3f238d9e7df373bc269db7ba6e5b25c4d67f4056bb126f0",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0003",
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "bytes": 1020,
+        "sha256": "34100668742f05b77bc4a808a16744bb7f4324825bcaad8d0c7f8c404f0b3605",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0004",
+        "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+        "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+        "bytes": 1023,
+        "sha256": "ed1cf612c65b54d5ec513205c7a51a62aa8da5c1f02b0f57370eaa0572957795",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      }
+    ],
+    "total": 4,
+    "nextOffset": null,
+    "jobState": "succeeded"
+  },
+  "artifact": {
+    "schemaVersion": 1,
+    "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+    "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+    "artifact": {
+      "artifactId": "0004",
+      "jobId": "6efdccf5-bc55-4ecf-8d99-3b377363b970",
+      "inputRevision": "sha256:777ec57a39983af6fb2a8bb3b385f5e0fd27968fbcd2d6ec65be4e5b9109cf03",
+      "bytes": 1023,
+      "sha256": "ed1cf612c65b54d5ec513205c7a51a62aa8da5c1f02b0f57370eaa0572957795",
+      "kind": "thermal",
+      "provisional": true,
+      "storage": "browser-memory"
+    },
+    "mesh": {
+      "nodeCount": 45,
+      "elementCount": 100,
+      "boundsMm": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        10
+      ],
+      "bodyIdentifiersAvailable": false,
+      "bodyCount": null
+    },
+    "provisional": true,
+    "field": {
+      "kind": "thermal",
+      "name": "temperature",
+      "unit": "degC",
+      "time": 3,
+      "timeUnit": "s",
+      "minimum": 20.533941246613693,
+      "maximum": 100
+    },
+    "measurement": {
+      "point": [
+        5,
+        5,
+        5
+      ],
+      "element": 46,
+      "weights": [
+        0.018971582150902888,
+        0.017489427295363846,
+        0.017489427295363846,
+        0.9460495632583691
+      ],
+      "time": 3,
+      "value": 26.715924632310557,
+      "field": "temperature",
+      "unit": "degC",
+      "timeUnit": "s"
+    },
+    "page": {
+      "offset": 0,
+      "count": 2,
+      "total": 45,
+      "nextOffset": 2,
+      "hasMore": true,
+      "nodesMm": [
+        [
+          0,
+          0,
+          10
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "values": [
+        20.54286308422506,
+        100
+      ]
+    }
+  }
+}

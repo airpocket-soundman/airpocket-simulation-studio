@@ -64,6 +64,16 @@ Saved evidence includes the [comparison summary](../evidence/2026-10-14-runtime-
 
 All 18 new targets passed (12 lifecycle and six diagnostic CLI tests), as did ten real related tests. Build,26 local-distribution checks (27.87seconds) and SKILL validation passed.
 
-A follow-up tracks execute-chain settlement separately from early terminal state using executionSettled/resourceState and resource-state events. Release requires terminal plus settled execution; drain waits for currently pending executions only. Final verification is pending; V8 resolution remains unproven.
+JOBSETTLEMENT1 implements execute-chain settlement tracking separately from early terminal state using executionSettled/resourceState and resource-state events. Release requires terminal plus settled execution; drain waits for currently pending executions only. This established resource-ownership contract does not prove V8 resolution.
 
 State naming is pending/settled with releaseAllowed for retention release. This tracks executor completion after adapter cleanup, not browser OS-thread exit. Terminal-late rejection is separate executionError without distinguishing Abort from cleanup failure. Synchronous close stays compatible; drain/closeAsync and normal MCP EOF await settlement.
+
+## 2026-10-14: post-repair recurrence in observation-profile testing
+
+The initial full suite based on HEAD f7a2ea8 reported 584 tests: 580 passed, one failed and three skipped in70,927.9791 ms. Under the existing Node v24.11.1/V8 environment, the new MCP observation-profile test's MCP child exited2147483651, again recording `jit_page_->allocations_.erase(addr) == 1` and `UnregisterWasmAllocation`. Saved [recurrence evidence](../evidence/2026-10-14-observation-profiles-v8-failure.json) preserves the failure.
+
+This independently demonstrates recurrence after Worker exit-ownership and settlement repairs; root-cause resolution remains unproven. The isolated retry passed one test and seven real jobs in3,715.4345 ms, without negating the initial stop. The unchanged-source full-suite retry passed581 and skipped three of584 in71,435.0784ms. All eight recorded source hashes still matched. A final regression after adding observation assertions to existing Worker tests is recorded separately. RUNTIMEWASM1 stays unresolved.
+
+After adding observation assertions to three existing Worker test files, the final Node24 run again stopped with the same fatal in existing analysis-job-service.test.mjs. It reported583 tests:579 passed, one failed and three skipped in70,992.8209 ms. The lower count reflects process abortion, not reduced test coverage. Production sources were not changed for this rerun. Its isolated retry passed three tests in1,660.2976ms, without resolving recurrence or root cause.
+
+The existing [failure evidence](../evidence/2026-10-14-observation-profiles-v8-failure.json) now includes this second failure as finalCoverageRun. The final-source full comparison on official QA portable Node26.10.0 passed581/skipped3 of584 without V8fatal (test175,036.3216ms,wall176,762ms). Its [raw report](../evidence/2026-10-14-observation-profiles-node26-full.json) and matching source SHAs including the additional helper are retained. This is not a performance benchmark or proof of identity with an upstream cause. Default Node remains unchanged. A passing comparison/retry does not negate the observed Node24 failures or establish resolution.

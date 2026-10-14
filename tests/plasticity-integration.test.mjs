@@ -1,3 +1,4 @@
+import {assertObservedProfile} from './helpers/observation-profile.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -8,7 +9,7 @@ import {prepareCaseView} from '../src/case-view.js';
 import {sampleResult} from '../src/probe.js';
 
 let sequence=0;
-async function run(project,options={}){
+async function run(project,options={},observe=false){
  const previousSelf=globalThis.self,previousFetch=globalThis.fetch,messages=[],base=new URL('./fixtures/worker/',import.meta.url).href;
  globalThis.self={postMessage:data=>messages.push(data)};
  globalThis.fetch=async url=>{
@@ -18,8 +19,8 @@ async function run(project,options={}){
  };
  try{
   await import(new URL('../src/analysis.worker.js',import.meta.url).href+'?plastic-integration='+sequence++);
-  await globalThis.self.onmessage({data:{operation:'elastic',project:structuredClone(project),source:project.sourceModel,options:{size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options},base}});
-  const terminal=messages.findLast(m=>m.result||m.error);assert.ok(terminal);return terminal;
+  await globalThis.self.onmessage({data:{operation:'elastic',observe,project:structuredClone(project),source:project.sourceModel,options:{size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options},base}});
+  const terminal=messages.findLast(m=>m.result||m.error);assert.ok(terminal);if(observe)assertObservedProfile(project,{method:'wasm-pcg',...options},'elastic',messages);return terminal;
  }finally{
   if(previousSelf===undefined)delete globalThis.self;else globalThis.self=previousSelf;
   globalThis.fetch=previousFetch;
@@ -38,7 +39,7 @@ const close=(actual,expected,relative=1e-6)=>assert.ok(Math.abs(actual-expected)
 test('plastic WASM worker agrees with a free-contraction reference and restores state/probes atomically',async()=>{
  const project=referenceProject(),api=createStudioApi();api.loadProject(project);
  const input=api.exportProject();assert.deepEqual(input.materialProperties.plasticity,project.materialProperties.plasticity);
- const terminal=await run(input);assert.equal(terminal.error,undefined);
+ const terminal=await run(input,{},true);assert.equal(terminal.error,undefined);
  const output=terminal.result,r=output.result,kappa=(200e9*.003-250e6)/(200e9+1e9),stress=250e6+1e9*kappa;
  assert.match(r.engine,/WASM CPU/);assert.ok(output.mesh.tetrahedra.length<=2000);
  for(const s of r.stresses){close(s[2],stress);assert.ok(Math.abs(s[0])+Math.abs(s[1])<stress*1e-6);}
