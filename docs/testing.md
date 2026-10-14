@@ -311,3 +311,11 @@ nodeBodiesの保持・ページ取得、bodyIndex/elementIndexを指定した中
 ## 2026-10-14: MCPのNode runtime読取報告
 
 3つの読取MCPのトップレベルruntime、4値allowlistとnull、不一致環境のnot-assessed・実測完全一致のみobserved-riskを対象とする。実行path等の送信や実行制御・既定変更・物理allowed/保存assessment変更は行わない。27/29ツール・71操作は不変。新4件を含む関連25試験をNode24.11.1（2,274.3868 ms）と26.10.0（11,410.0885 ms）で各25成功。実stdioの3読取toolが同じ実identityを返し、入力と既存の判定結果が不変であることを確認。[Node24の報告](evidence/2026-10-14-runtime-info-node24.json)はobserved-riskでもpreflight.allowed:true、[Node26の報告](evidence/2026-10-14-runtime-info-node26.json)はnot-assessedかつcompatibilityVerified:falseを保持した。これは既知停止の根治や未評価環境の安全保証ではない。今回の変更範囲に対する試験で、全体数値試験は再実行していない。ビルド・配信物26項目（27.75秒）・SKILL成功。
+
+## 2026-10-15: ライブSTEP/STL分割取込
+
+Node v24.11.1の全体試験は610件中607成功・3スキップ・失敗0（84,610.6801 ms）。新規22件を追加し、直前の全体584件と前回のruntime報告4件から拡張した。27/29ツールは不変・接続75操作。ビルド成功（既存のchunk size警告のみ）、最新配信物26項目も29.40秒ですべて成功。専門SKILL検証も成功した。
+
+実MCPで64 KiBを超えるSTEPを複数チャンクで送り、実OCCTによる取込とSTLの明示scale25.4を確認。ローカルのCodexアプリ内ブラウザでは15,416バイトのSTEPを取り込み、10×10×40 mm・12三角形・6面を確認した。返却した入力版はinspect版と一致し、同じcommitの再送も同じ結果を返した。[機械可読記録](evidence/2026-10-15-browser-input-import.json)と[画面](evidence/2026-10-15-browser-input-import.jpg)を保存。
+
+最初のUI確認は試験中のreloadでsessionが失われ初期化されたため、全体試験終了後に再pairして取込成功を確認した。これをアプリの取込不具合や成功前の証拠として扱わない。既知Node24/V8停止は未解決で、今回の全体成功は根治証明ではない。任意50 MiB STEPの処理・最大保持容量・ピークヒープ・公開HTTPSを確認した記録ではない。

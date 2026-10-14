@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは71操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは75操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -282,3 +282,13 @@ MCPのstudio_capabilities・studio_diagnose_execution・studio_preflight_project
 既知のWindows x64・Node v24.11.1・V8 13.6.233.10-node.28と完全一致する環境だけ、knownIssueAssessment:observed-risk、warningコードNODE_WASM_ALLOCATION_FATAL_OBSERVED、status:unresolvedと保存証拠を案内します。他の環境はnot-assessedで、安全・非該当と判定しません。compatibilityVerified:false・rootFixProven:falseです。読取報告は実行拒否や既定runtimeの自動変更を行わず、入力診断allowedや保存analysisAssessmentを変えません。
 
 knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/severity:"warning"/status:"unresolved"/message/evidence/suggestionsを含みます。evidenceは`docs/evidence/2026-10-14-observation-profiles-v8-failure.json`の配列です。未評価環境のdiagnosticsは空で、Node26比較の成功を安全証明へ変換しません。
+
+## ライブSTEP/STLの分割取込
+
+共有`inputImportApi.import({expectedRevision,format,bytes,name?,scaleToMm?})`はformat:"step"|"stl"とArrayBuffer/Uint8Arrayを受け取り、新しい入力を作ります。接続は編集権限の4操作を使います。`inputImportBegin({expectedRevision,format,name?,scaleToMm?,totalBytes,sha256})`で元ファイルの版・サイズ・`sha256:64hex`を宣言し、`inputImportWrite({transferId,offset,data})`へ先頭から最大65,536復号バイトのcanonical base64を送ります。直前の同一チャンク再送を受理し、`inputImportCommit({transferId})`の重複確定も冪等です。`inputImportRelease({transferId})`で保持を解放します。共有転送は`inputImportTransfer.beginImport/write/commit/release`です。
+
+1ファイル50 MiB、全体で100,000,000バイト・4件のstagingを保持します。これはピークヒープ制限ではなく、50 MiBの任意STEPを処理可能と保証しません。STEPは元バイトを保持しmmへ正規化。STLは正のscaleToMmを明示し、既存の閉・外向き・凸の単一シェル、最大2,000三角形の制限に従います。
+
+候補を事前検証し、ブラウザの正規化と新入力版計算を済ませてからCASで適用します。既存の物性・条件は継承せず、通常の新規入力と同じく現在結果を無効化します。ケース・ビュー・測定・印刷の別ストアは維持します。入力変更・busy・失効・release・切断により遅いパース結果の確定を拒否します。
+
+接続の取込transferは所有する接続だけが利用でき、他sessionからの利用は拒否します。命令期限は15秒で、任意の50 MiB STEPがその時間内に完了する保証はありません。取消中はCAD Workerの終了処理までlockを保持し、void terminateはOSスレッド終了の証明とは扱いません。

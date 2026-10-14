@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T12:04:35.186Z",
+  "updatedAt": "2026-10-14T15:07:19.454723Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1715,6 +1715,23 @@
       "acceptance": "新4件を含む関連25試験をNode24.11.1と26.10.0で各25成功（2.27秒/11.41秒）。両環境の実stdio3読取で環境一致・入力不変・allowed維持と未評価/警告を確認。ビルド・配信物26項目（27.75秒）・SKILL成功。全体数値試験の再実行ではなく、既知V8停止の根治や未知環境の安全を証明しない。",
       "acceptanceEn": "All25targeted tests including four new tests pass on Node24.11.1 and26.10.0 (2.27s/11.41s). Real stdio three-tool reports on both runtimes verify identities,unchanged inputs/allowed and risk-versus-unassessed status. Build,26distribution checks27.75s andSKILL pass. Not a rerun of the full numerical suite or proof of V8 resolution/unknown-runtime safety.",
       "evidence": "scripts/node-runtime-info.mjs; scripts/studio-mcp.mjs; tests/node-runtime-info.test.mjs; tests/mcp-runtime-info.test.mjs; tests/capabilities.test.mjs; docs/evidence/2026-10-14-runtime-info-node24.json; docs/evidence/2026-10-14-runtime-info-node26.json; docs/testing.md"
+    },
+    {
+      "id": "BROWSERINPUTIMPORT1",
+      "title": "LLMからライブ入力へSTEP/STLを分割取込する",
+      "titleEn": "Import STEP/STL into live browser inputs through bounded LLM transfers",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "BROWSERBUILTIN1",
+        "AGENTINPUT1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "共有取込APIと編集権限の4操作で元バイト・SHA256・入力版を照合。STEPのmm正規化、STLの明示単位、候補事前検証とCAS、接続所有転送、取消時のCAD Worker終了処理を実装。",
+      "detailEn": "Expose shared import operations and four edit-scoped methods with source-byte SHA256 and revision checks, STEP millimeter normalization, explicit STL scaling, prevalidated CAS, session-owned transfers and cancellation-aware CAD Worker cleanup.",
+      "acceptance": "新22試験を含む全体610件中607成功・3skip（Node24.11.1、84.61秒）。実MCPで複数chunk STEP/OCCTと25.4倍STL、実ブラウザでSTEP10×10×40mmと版一致・再確定を確認。ビルド・配信物26項目29.40秒・SKILL成功。50MiB/100MB stagingはピークヒープや15秒完了保証ではない。既知Node24 V8停止は未解決。",
+      "acceptanceEn": "Full suite:607passed/3skipped of610 including22new tests on Node24.11.1 (84.61s). Real MCP covers multi-chunk STEP/OCCT and25.4-scaled STL; actual browser verifies10x10x40mm STEP, revision agreement and repeated commit. Build,26distribution checks29.40s andSKILL pass. Staging limits are not peak-heap or15-second completion guarantees. Known Node24 V8 fatal remains unresolved.",
+      "evidence": "src/input-import-operations.js; src/input-import-transfer.js; src/cad-import-client.js; src/browser-session.js; tests/input-import-operations.test.mjs; tests/input-import-transfer.test.mjs; tests/cad-import-client.test.mjs; tests/browser-input-import-session.test.mjs; tests/mcp-input-import.test.mjs; docs/evidence/2026-10-15-browser-input-import.json; docs/testing.md"
     }
   ],
   "solvers": [

@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createBrowserSession,browserMethods} from '../src/browser-session.js';
+import {createInputImportTransfer} from '../src/input-import-transfer.js';
+import {createHash} from 'node:crypto';
+const revision='sha256:'+'a'.repeat(64),bytes=Buffer.from('cad'),metadata={expectedRevision:revision,format:'step',totalBytes:bytes.length,sha256:'sha256:'+createHash('sha256').update(bytes).digest('hex')};
+test('input import staging is permitted while busy but commit waits; transfer ownership is session-specific',async()=>{
+ let busy=true,imports=0;const inputImports=createInputImportTransfer({imports:{async import(args,{guard,signal}){assert.equal(guard(),true);assert.equal(signal.aborted,false);imports++;return {revision};}}}),a=createBrowserSession({inputImports,isBusy:()=>busy}),b=createBrowserSession({inputImports}),entry=await a.call('inputImportBegin',metadata);
+ await a.call('inputImportWrite',{transferId:entry.transferId,offset:0,data:bytes.toString('base64')});for(const method of ['inputImportWrite','inputImportCommit','inputImportRelease'])await assert.rejects(b.call(method,{transferId:entry.transferId,offset:0,data:bytes.toString('base64')}),/not owned/);await assert.rejects(a.call('inputImportCommit',{transferId:entry.transferId}),/busy/);assert.equal(imports,0);busy=false;assert.equal((await a.call('inputImportCommit',{transferId:entry.transferId})).revision,revision);assert.equal(imports,1);await a.call('inputImportRelease',{transferId:entry.transferId});
+ for(const method of ['inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease'])assert.equal(browserMethods[method],'edit');
+});
+test('release may interrupt an active commit and disconnect aborts only its own staging',async()=>{
+ let resume,entered,signal;const started=new Promise(resolve=>entered=resolve),inputImports=createInputImportTransfer({imports:{async import(args,{guard,signal:received}){signal=received;entered();await new Promise(resolve=>resume=resolve);if(!guard()||received.aborted)throw Error('expired');return {};}}}),a=createBrowserSession({inputImports}),b=createBrowserSession({inputImports}),entry=await a.call('inputImportBegin',metadata),other=await b.call('inputImportBegin',metadata);await a.call('inputImportWrite',{transferId:entry.transferId,offset:0,data:bytes.toString('base64')});const commit=a.call('inputImportCommit',{transferId:entry.transferId});await started;await assert.rejects(a.call('setView',{}),/busy/);await a.call('inputImportRelease',{transferId:entry.transferId});assert.equal(signal.aborted,true);resume();await assert.rejects(commit,/expired/);a.disconnect();await b.call('inputImportWrite',{transferId:other.transferId,offset:0,data:bytes.toString('base64')});b.disconnect();assert.throws(()=>inputImports.write({transferId:other.transferId,offset:0,data:bytes.toString('base64')}),/released/);
+});
+test('expired input import begin cannot leak a staged transfer and unknown adapters reject',async()=>{
+ let resume,released=false;const session=createBrowserSession({inputImports:{async beginImport(){await new Promise(resolve=>resume=resolve);return {transferId:'late'};},release(){released=true;}}}),pending=session.call('inputImportBegin',{});session.disconnect();resume();await assert.rejects(pending,/expired/);assert.equal(released,true);for(const method of ['inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease'])await assert.rejects(createBrowserSession({}).call(method,{}),/unavailable/);
+});

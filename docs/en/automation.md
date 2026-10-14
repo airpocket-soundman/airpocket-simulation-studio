@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 71 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 75 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -282,3 +282,13 @@ MCP studio_capabilities, studio_diagnose_execution and studio_preflight_project 
 Only an exact Windows x64/Node v24.11.1/V8 13.6.233.10-node.28 match reports knownIssueAssessment:observed-risk, warning code NODE_WASM_ALLOCATION_FATAL_OBSERVED, unresolved status and saved evidence. Other environments are not-assessed, not declared safe/unaffected. compatibilityVerified:false and rootFixProven:false remain explicit. Reporting does not refuse execution, automatically change default runtime, or alter input-diagnostic allowed/saved analysisAssessment.
 
 knownIssueAssessment is a string; the matching diagnostics array contains one code/severity:"warning"/status:"unresolved"/message/evidence/suggestions entry. evidence is an array containing docs/evidence/2026-10-14-observation-profiles-v8-failure.json. Unassessed environments have empty diagnostics; Node26 comparison success is not converted into safety proof.
+
+## Chunked live STEP/STL import
+
+Shared inputImportApi.import({expectedRevision,format,bytes,name?,scaleToMm?}) accepts format:"step"|"stl" and ArrayBuffer/Uint8Array to create new inputs. Four edit-scoped connector operations are used. inputImportBegin({expectedRevision,format,name?,scaleToMm?,totalBytes,sha256}) declares current input revision, original size and sha256:64hex. Send sequential inputImportWrite({transferId,offset,data}) with canonical base64 chunks up to65,536 decoded bytes. Immediate identical chunk retry is accepted; repeated inputImportCommit({transferId}) is idempotent. inputImportRelease({transferId}) frees retention. Shared transfer methods are inputImportTransfer.beginImport/write/commit/release.
+
+Each file is capped at50 MiB; staging retains at most100,000,000 bytes/four transfers. This is not a peak-heap bound or a guarantee that arbitrary50 MiB STEP can be processed. STEP preserves original bytes and normalizes to mm. STL requires explicit positive scaleToMm and existing closed/outward/convex single-shell limits, at most2,000 triangles.
+
+Candidate validation, browser normalization and new input-revision computation precede CAS commit. Previous material/conditions are not inherited; current results are invalidated like new input loading. Separate case/view/measurement/print stores remain. Intervening inputs, busy state, revocation/expiry, release or disconnect prevent late parser results from committing.
+
+Only the owning session may use its import transfers; other sessions are refused. The command deadline is15 seconds, without guaranteeing arbitrary50 MiB STEP completes within it. Cancellation retains the lock through CAD Worker termination handling; void terminate is not proof of OS-thread exit.

@@ -1,0 +1,38 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {createInterface} from 'node:readline';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import initializeOcct from 'occt-import-js';
+import {createBrowserSession,connectBrowserSession} from '../src/browser-session.js';
+import {createStudioApi} from '../src/studio-api.js';
+import {createInputImportTransfer} from '../src/input-import-transfer.js';
+import {createInputImportOperations} from '../src/input-import-operations.js';
+import {createProjectFromBuiltin,createProjectFromStep,STEP_IMPORT_OPTIONS} from '../src/project-import.js';
+const origin='http://127.0.0.1:5174',hash=bytes=>'sha256:'+createHash('sha256').update(bytes).digest('hex');
+// Real byte parsers and MCP/HTTP; the semantic host is Node, not a browser UI.
+test('real MCP and HTTP import actual STEP and scaled STL through session-owned bounded transfers',async t=>{
+ const child=spawn(process.execPath,['scripts/studio-mcp.mjs','--browser-origin='+origin],{cwd:new URL('../',import.meta.url),stdio:['pipe','pipe','pipe']});
+ const lines=createInterface({input:child.stdout}),pending=new Map(),clients=[];let serial=0,stderr='';
+ const rejectPending=error=>{for(const item of pending.values()){clearTimeout(item.timer);item.reject(error);}pending.clear();};
+ lines.on('line',line=>{try{const message=JSON.parse(line),item=pending.get(message.id);if(item){clearTimeout(item.timer);pending.delete(message.id);item.resolve(message);}}catch(error){rejectPending(error);}});
+ child.on('error',rejectPending);child.on('exit',()=>rejectPending(Error('MCP child exited')));
+ t.after(async()=>{for(const client of clients)client.stop();rejectPending(Error('Test cleanup'));child.stdin.end();if(child.exitCode===null&&child.signalCode===null){const timer=setTimeout(()=>child.kill(),2000);await new Promise(resolve=>child.once('exit',resolve));clearTimeout(timer);}lines.close();});
+ const details=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Connector did not start: '+stderr)),5000);child.stderr.on('data',data=>{stderr+=data;const match=stderr.match(/Browser connector: (.+)\n/);if(match){clearTimeout(timer);resolve(JSON.parse(match[1]));}});child.once('error',error=>{clearTimeout(timer);reject(error);});});
+ const rpc=(method,params)=>new Promise((resolve,reject)=>{const id=++serial,timer=setTimeout(()=>{pending.delete(id);reject(Error('MCP response timed out: '+method));},5000);pending.set(id,{resolve,reject,timer});child.stdin.write(JSON.stringify({jsonrpc:'2.0',id,method,params})+'\n');});
+ await rpc('initialize',{protocolVersion:'2025-11-25'});child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
+ const tools=await rpc('tools/list',{});assert.ok(tools.result.tools.some(tool=>tool.name==='studio_browser_call'));
+ const studio=createStudioApi();studio.loadProject(createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}}));let cad,busy=false;const imports=createInputImportOperations({studio,isBusy:()=>busy,parseStep:async(bytes,options,{signal})=>{cad??=initializeOcct();const occt=await cad;if(signal.aborted)throw Error('aborted');return createProjectFromStep({bytes,result:occt.ReadStepFile(bytes,{...STEP_IMPORT_OPTIONS}),linearUnit:'millimeter',...options});}}),inputImports=createInputImportTransfer({imports});
+ const pair=async scopes=>{const session=createBrowserSession({studio,inputImports,isBusy:()=>busy}),client=connectBrowserSession({...details,scopes,session,fetcher:(url,options)=>fetch(url,{...options,headers:{...options.headers,Origin:origin}}),intervalMs:2});clients.push(client);return (await client.ready).sessionId;};
+ const sessionId=await pair(['inspect','edit']),raw=(method,args={},id=sessionId)=>rpc('tools/call',{name:'studio_browser_call',arguments:{sessionId:id,method,args}}),call=async(method,args={},id=sessionId)=>{const reply=await raw(method,args,id);assert.notEqual(reply.result.isError,true,reply.result.content?.[0]?.text);return reply.result.structuredContent.value;},refuses=async(method,args,id=sessionId)=>assert.equal((await raw(method,args,id)).result.isError,true);
+ const inspection=await call('inspect');assert.equal(Object.keys(inspection.methods).length,75);const initial=studio.exportProject(),fixture=await readFile(new URL('./fixtures/cad-update-reference.step',import.meta.url),'utf8'),step=Buffer.from(fixture.replace('END-ISO-10303-21;','/* transfer padding */\n'.repeat(4000)+'END-ISO-10303-21;'));assert.ok(step.length>65536);
+ async function upload(bytes,metadata,id=sessionId){const entry=await call('inputImportBegin',{totalBytes:bytes.length,sha256:hash(bytes),...metadata},id);for(let offset=0;offset<bytes.length;offset+=65536)await call('inputImportWrite',{transferId:entry.transferId,offset,data:bytes.subarray(offset,offset+65536).toString('base64')},id);return entry;}
+ busy=true;const entry=await upload(step,{expectedRevision:inspection.revision,format:'step',name:'実STEP'});assert.deepEqual(studio.exportProject(),initial);await refuses('inputImportCommit',{transferId:entry.transferId});busy=false;
+ const another=await pair(['inspect','edit']);for(const method of ['inputImportWrite','inputImportCommit','inputImportRelease'])await refuses(method,{transferId:entry.transferId,offset:0,data:'YQ=='},another);
+ const imported=await call('inputImportCommit',{transferId:entry.transferId});assert.equal(imported.units.geometry,'mm');assert.equal(imported.revision,(await call('inspect')).revision);assert.equal(studio.exportProject().sourceModel.kind,'step');assert.deepEqual(Buffer.from(studio.exportProject().sourceModel.data,'base64'),step);assert.deepEqual((await call('geometry')).boundsMm.size,[10,10,40]);assert.deepEqual(await call('inputImportCommit',{transferId:entry.transferId}),imported);await call('inputImportRelease',{transferId:entry.transferId});
+ const previous=studio.exportProject(),bad=await upload(step,{expectedRevision:inspection.revision,format:'step'});await refuses('inputImportCommit',{transferId:bad.transferId});assert.deepEqual(studio.exportProject(),previous);await call('inputImportRelease',{transferId:bad.transferId});
+ const positions=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}}).meshes[0].positions,facets=[];for(let i=0;i<positions.length;i+=9)facets.push('facet normal 0 0 0\nouter loop\n'+[0,3,6].map(k=>'vertex '+positions.slice(i+k,i+k+3).join(' ')).join('\n')+'\nendloop\nendfacet');const stl=Buffer.from('solid cube\n'+facets.join('\n')+'\nendsolid cube\n'),staged=await upload(stl,{expectedRevision:imported.revision,format:'stl',name:'インチSTL',scaleToMm:25.4});const converted=await call('inputImportCommit',{transferId:staged.transferId});assert.equal(converted.revision,(await call('inspect')).revision);assert.equal(studio.exportProject().sourceModel.kind,'stl');assert.deepEqual((await call('geometry')).boundsMm.size,[Math.fround(25.4),Math.fround(25.4),Math.fround(25.4)]);await call('inputImportRelease',{transferId:staged.transferId});
+ const readonly=await pair(['inspect']);await refuses('inputImportBegin',{expectedRevision:converted.revision,format:'step',totalBytes:step.length,sha256:hash(step)},readonly);
+ const abandoned=await upload(step,{expectedRevision:converted.revision,format:'step'}),last=studio.exportProject();clients[0].stop();await refuses('inputImportCommit',{transferId:abandoned.transferId});await assert.rejects(inputImports.commit({transferId:abandoned.transferId}),/released/);assert.deepEqual(studio.exportProject(),last);
+});

@@ -1,0 +1,71 @@
+{
+  "environment": "Actual local IAB, browser CAD Worker and real stdio MCP/HTTP; STEP supplied as raw binary chunks through semantic methods.",
+  "file": "tests/fixtures/cad-update-reference.step",
+  "sha256": "sha256:c9bf8b03e2a7c3142e04032459cc12d552358e616857827a143b572bce5bca90",
+  "totalBytes": 15416,
+  "beforeRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+  "imported": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:afc4fc0885498495c792019e4ac34b9b92ea5266ebdc773e0f9e365364da5247",
+    "summary": {
+      "loaded": true,
+      "name": "LLM STEP import",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "afterRevision": "sha256:afc4fc0885498495c792019e4ac34b9b92ea5266ebdc773e0f9e365364da5247",
+  "geometry": {
+    "schemaVersion": 1,
+    "units": {
+      "coordinates": "mm",
+      "area": "mm2"
+    },
+    "basis": "display-tessellation",
+    "meshCount": 1,
+    "triangleCount": 12,
+    "faceCount": 6,
+    "boundsMm": {
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        10,
+        10,
+        40
+      ],
+      "size": [
+        10,
+        10,
+        40
+      ]
+    },
+    "faceIdentityScope": "display-mesh-revision",
+    "persistentCadFaceIds": false,
+    "facePagesRequireMeshIndex": true
+  },
+  "validation": {
+    "runtime": "Node24.11.1",
+    "fullSuite": {
+      "tests": 610,
+      "passed": 607,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 84610.6801
+    },
+    "distributionChecks": 26,
+    "distributionSeconds": 29.4,
+    "skillValid": true,
+    "knownV8FailureResolved": false
+  },
+  "uiVerification": "The final screenshot and name match were recorded after regression tests completed and the page was paired again; development-server reloads reset ephemeral browser input and sessions."
+}

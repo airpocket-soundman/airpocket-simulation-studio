@@ -1,3 +1,6 @@
+import {createCadImportClient} from './cad-import-client.js';
+import {createInputImportOperations} from './input-import-operations.js';
+import {createInputImportTransfer} from './input-import-transfer.js';
 import {normalizeBrowserBuiltinProject} from './browser-builtin-project.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
 import {createMeasurementVerificationApi} from './measurement-verification-api.js';
@@ -119,14 +122,8 @@ $('clear').onclick=()=>{snapshot();planarRegion=null;if(cylindricalRegion?.exact
 function addCondition(type){try{api.addCondition({type,value:type==='force'?Number($('force').value):0,direction:['dx','dy','dz'].map(id=>Number($(id).value))});status('条件を登録しました。まだ解析計算は行っていません。');}catch(error){status(error.message);}}
 $('fixed').onclick=()=>addCondition('fixed');$('load').onclick=()=>addCondition('force');
 function renderConditions(){cadUpdateUi?.refresh();const root=$('conditions');root.replaceChildren();if(!conditions.length){root.textContent='条件はまだありません。';return;}conditions.forEach((c,i)=>{const div=document.createElement('div');div.className='condition';const strong=document.createElement('strong');strong.textContent=c.type==='fixed'?`固定 ${i+1}`:c.type==='displacement'?`指定変位 ${i+1} · ${c.value} mm (${c.frame?'局所'+['X','Y','Z'][c.frame.axis]:'全体方向'})`:c.type==='pressure'?`圧力 ${i+1} · ${c.value/1000} kPa（内向きを正）`:c.type==='normalTraction'?`法線荷重 ${i+1} · ${c.value/1000} kPa（外向きを正）`:c.type==='acousticImpedance'?`吸音境界 ${i+1} · ${c.value} + i ${c.reactance??0} Pa·s/m`:c.type==='acousticPressure'?`音圧 ${i+1} · ${c.value} Pa（peak）`:c.type==='temperature'?`温度 ${i+1} · ${c.value} °C`:c.type==='thermalContact'?`接触熱抵抗 ${i+1} · ${c.value} W/m²K`:c.type==='radiation'?`熱放射 ${i+1} · 放射率 ${c.value} / ${c.ambientTemperature} °C`:c.type==='convection'?`対流 ${i+1} · ${c.value} W/m²K / ${c.ambientTemperature} °C`:c.type==='heatPower'?`合計熱入力 ${i+1} · ${c.value} W`:c.type==='heatFlux'?`熱流束 ${i+1} · ${c.value} W/m²`:`荷重 ${i+1} · ${c.value} N`;div.append(strong);if(c.cadUpdateRequired){const warning=document.createElement('p');warning.textContent=language==='en'?'CAD update: reselect the region and press Update with selection. Condition values are retained.':'CAD更新: 領域を再選択して「選択範囲で更新」を押してください。条件値は保持しています。';div.append(warning);}const text=document.createElement('small');text.textContent=c.type==='fixed'?'全方向の変位を拘束':c.type==='displacement'?`拘束方向 (${c.direction.map(v=>v.toFixed(4)).join(', ')}) · 全体座標`:c.type==='force'?`方向 (${c.direction.join(', ')}) · 全体座標`:['pressure','normalTraction'].includes(c.type)?'体積メッシュの外向き法線で計算':['acousticPressure','acousticImpedance'].includes(c.type)?'音響の境界条件':'熱の境界条件';div.append(text);if(c.planarRegion){const d=c.planarRegion,info=document.createElement('small');info.textContent='矩形CAD領域: '+(d.frame?'任意平面 / ':['X','Y','Z'][d.axis]+' = '+d.position+' mm / ')+planarArea(d)+' mm²';div.append(info);}if(c.cylindricalRegion){const d=c.cylindricalRegion,info=document.createElement('small');info.textContent=(d.exactCad?'CAD円筒領域: 半径 ':'円筒寸法: 半径 ')+d.radius+' mm / 軸方向 '+d.axialMin+' → '+d.axialMax+' mm / 角度 '+d.startDegrees+'° + '+d.sweepDegrees+'°';div.append(info);}const row=document.createElement('div');for(const [label,action]of [['領域を選択',()=>{snapshot();api.selectCondition(i);}],['選択範囲で更新',()=>{try{api.replaceConditionRegion(i);status('条件の領域を更新しました。');}catch(e){status(e.message);}}],...((c.cylindricalRegion||c.planarRegion)?[['数値領域を再適用',()=>{try{api.reapplyConditionRegion(i);}catch(e){status(e.message);}}]]:[]),['削除',()=>{api.removeCondition(i);}]]){const b=document.createElement('button');b.textContent=label;b.onclick=action;row.append(b);}div.append(row);root.append(div);});}
-function cadImport(buffer){return new Promise((resolve,reject)=>{
- if(worker){reject(Error('A CAD import is already running'));return;}
- const active=new Worker(new URL('./cad.worker.js',import.meta.url),{type:'classic'});worker=active;
- const finish=()=>{clearTimeout(timer);active.terminate();if(worker===active)worker=null;};
- const timer=setTimeout(()=>{finish();reject(Error('読み込みが時間制限（90秒）を超えました。'));},90000);
- active.onmessage=({data})=>{finish();data.error?reject(Error(data.error)):resolve(data.result);};active.onerror=e=>{finish();reject(Error(e.message));};
- try{active.postMessage({buffer,base:new URL(import.meta.env.BASE_URL,location.href).href},[buffer]);}catch(error){finish();reject(error);}
-});}
+const cadImportClient=createCadImportClient({createWorker:()=>new Worker(new URL('./cad.worker.js',import.meta.url),{type:'classic'}),base:new URL(import.meta.env.BASE_URL,location.href).href,onActive:active=>{worker=active;}});
+function cadImport(buffer,runtime={}){return cadImportClient.import(buffer,runtime);}
 function inputBytes(bytes){
  const view=bytes instanceof ArrayBuffer?new Uint8Array(bytes):bytes instanceof Uint8Array?bytes:null;
  if(!view||!view.byteLength||view.byteLength>MAX_IMPORT_BYTES)throw Error('Import requires nonempty bytes (maximum 50 MB).');
@@ -139,10 +136,10 @@ function installInputProject(project,preserveUiSettings=false){
  else api.loadProject(project);
  return api.exportProject();
 }
-async function readStepProject(bytes,options={}){
+async function readStepProject(bytes,options={},runtime={}){
  const original=inputBytes(bytes),settings=structuredClone(options);
  // Transfer a separate copy: the retained CAD source must never be detached.
- const result=await cadImport(original.slice().buffer);
+ const result=await cadImport(original.slice().buffer,runtime);
  return createProjectFromStep({...settings,bytes:original,result,linearUnit:'millimeter'});
 }
 async function readStepUpdate(file){const project=await readStepProject(await file.arrayBuffer(),{name:file.name});return {name:project.name,meshes:project.meshes,sourceModel:project.sourceModel};}
@@ -168,17 +165,17 @@ const api=createStudioApi({get:getProject,set:(p,reason)=>{$('stokes-reference-l
 window.studioApi=api;
 window.inputApi=Object.freeze({
  async importStep(bytes,options={}){
-  if(!$('cancel-run').disabled||$('model').disabled||worker)throw Error('An import or calculation is already running');
+  if(!$('cancel-run').disabled||$('model').disabled||worker||window.inputImportApi?.isBusy())throw Error('An import or calculation is already running');
   const revision=projectRevision,snapshot=JSON.stringify(getProject()),project=await readStepProject(bytes,options);
   if(projectRevision!==revision||JSON.stringify(getProject())!==snapshot)throw Error('Inputs changed during import; import again');
   return installInputProject(project);
  },
  importStl(bytes,{scaleToMm,...options}={}){
-  if(!$('cancel-run').disabled||$('model').disabled||worker)throw Error('An import or calculation is already running');
+  if(!$('cancel-run').disabled||$('model').disabled||worker||window.inputImportApi?.isBusy())throw Error('An import or calculation is already running');
   return installInputProject(createProjectFromStl({...structuredClone(options),bytes:inputBytes(bytes),scaleToMm}));
  },
  createBuiltin(source,options={}){
-  if(!$('cancel-run').disabled||$('model').disabled||worker)throw Error('An import or calculation is already running');
+  if(!$('cancel-run').disabled||$('model').disabled||worker||window.inputImportApi?.isBusy())throw Error('An import or calculation is already running');
   return installInputProject(createProjectFromBuiltin({...structuredClone(options),source:structuredClone(source)}));
  }
 });
@@ -469,6 +466,12 @@ const materialCatalog=installMaterialCatalog({api,language:()=>language,translat
 
 cadUpdateUi=installCadUpdate({api,readStep:readStepUpdate,getRevision:()=>projectRevision,getSnapshot:()=>{const p=getProject();for(const key of ['meshes','sourceModel','selection','planarRegion','cylindricalRegion'])delete p[key];return JSON.stringify(p);},isBusy:()=>!$('cancel-run').disabled||$('model').disabled,onImportBusy:busy=>{$('model').disabled=busy;},language:()=>language,translate:addTranslations,status});
 
+window.inputImportApi=createInputImportOperations({studio:api,normalizeProject:project=>normalizeBrowserBuiltinProject(project,builtinInitialStudy),isBusy:()=>analysis.isBusy()||!!worker||!$('cancel-run').disabled||$('model').disabled||visualExport.isActive(),parseStep:async(bytes,options,runtime)=>{
+ const controls=['model','mesh-run','solve-run'].map(id=>$(id)),disabled=controls.map(control=>control.disabled);
+ for(const control of controls)control.disabled=true;
+ try{return await readStepProject(bytes,options,runtime);}finally{controls.forEach((control,index)=>{control.disabled=disabled[index];});cadUpdateUi?.refresh();}
+}});
+window.inputImportTransfer=createInputImportTransfer({imports:window.inputImportApi});
 window.builtinProjectApi=createBuiltinProjectOperations({studio:api,normalizeProject:project=>normalizeBrowserBuiltinProject(project,builtinInitialStudy),isBusy:()=>analysis.isBusy()||!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 window.cadUpdateApi=createCadUpdateOperations({studio:api,validateReplacement:validateBrowserCadReplacement,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 
@@ -486,4 +489,4 @@ window.printImportApi=installPrintImport({language:()=>language,translate:addTra
 
 window.printOperations=createPrintOperations({...window.printImportApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||$('print-file').disabled||visualExport.isActive()});
 window.printTransfer=createPrintTransfer({prints:window.printOperations});
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,builtinProjects:window.builtinProjectApi,prints:window.printOperations,printTransfers:window.printTransfer,caseBundles:window.caseBundleApi,caseBundleTransfers:window.caseBundleTransfer,measurements:window.measurementApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,builtinProjects:window.builtinProjectApi,inputImports:window.inputImportTransfer,prints:window.printOperations,printTransfers:window.printTransfer,caseBundles:window.caseBundleApi,caseBundleTransfers:window.caseBundleTransfer,measurements:window.measurementApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
