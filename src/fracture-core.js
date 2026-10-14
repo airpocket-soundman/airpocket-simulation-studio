@@ -13,7 +13,7 @@ export function validateFractureOptions(o){
 }
 export function evaluateFracture(r,properties,options){
  const d=properties?.fractureData;validateFractureData(d);if(!d)throw Error('Fracture assessment requires registered toughness and surface data');validateFractureOptions(options);
- if(r?.kind!=='elastic'||r.plasticity||r.hyperelastic||properties.plasticity||properties.hyperelastic||r.thermalStress||r.temperature!==undefined||r.referenceTemperature!=null||r.thermalStrains?.some(row=>!Array.isArray(row)||row.some(v=>!Number.isFinite(v)||v!==0)))throw Error('Fracture assessment requires linear elasticity without thermal stress or nonlinear materials');
+ if(r?.kind!=='elastic'||r.orthotropic||properties.orthotropic||r.plasticity||r.hyperelastic||properties.plasticity||properties.hyperelastic||r.thermalStress||r.temperature!==undefined||r.referenceTemperature!=null||r.thermalStrains?.some(row=>!Array.isArray(row)||row.some(v=>!Number.isFinite(v)||v!==0)))throw Error('Fracture assessment requires linear elasticity without thermal stress or nonlinear materials');
  if(!Array.isArray(r.stresses)||!r.stresses.length||r.stresses.length>30000||r.stresses.some(s=>!Array.isArray(s)||s.length!==6||!s.every(Number.isFinite)))throw Error('Fracture assessment requires finite six-component element stresses in Pa');
  const temperature=r.materialEvaluation;if(!temperature||![temperature.temperatureMin,temperature.temperatureMax].every(Number.isFinite)||temperature.temperatureMin<d.temperatureRangeC[0]||temperature.temperatureMax>d.temperatureRangeC[1])throw Error('Fracture toughness does not cover the result temperature');
  const normalStressPa=[],intensityRangePaSqrtM=[],utilizationRange=[],criticalFlawRangeMm=[],classification=[],n=options.crackNormal;

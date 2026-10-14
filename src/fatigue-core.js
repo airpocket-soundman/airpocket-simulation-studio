@@ -16,7 +16,7 @@ function curveLife(amplitude,curve){
 export function evaluateFatigue(elasticResult,properties,options={}){
  const data=properties?.fatigueData;validateFatigueData(data);if(!data)throw Error('Fatigue evaluation requires measured S-N material data');
  const r=elasticResult;
- if(r?.kind!=='elastic'||r.plasticity||r.hyperelastic||properties.plasticity||properties.hyperelastic||r.thermalStress||r.temperature!==undefined||r.referenceTemperature!=null||r.thermalStrains?.some(row=>!Array.isArray(row)||row.some(v=>!Number.isFinite(v)||v!==0)))throw Error('Fatigue evaluation requires a linear elastic result without thermal stress, plasticity or hyperelasticity');
+ if(r?.kind!=='elastic'||r.orthotropic||properties.orthotropic||r.plasticity||r.hyperelastic||properties.plasticity||properties.hyperelastic||r.thermalStress||r.temperature!==undefined||r.referenceTemperature!=null||r.thermalStrains?.some(row=>!Array.isArray(row)||row.some(v=>!Number.isFinite(v)||v!==0)))throw Error('Fatigue evaluation requires a linear elastic result without thermal stress, plasticity or hyperelasticity');
  if(!Array.isArray(r.stresses)||!r.stresses.length||r.stresses.length>30000||r.stresses.some(s=>!Array.isArray(s)||s.length!==6||!s.every(Number.isFinite)))throw Error('Fatigue evaluation requires finite six-component element stresses in Pa');
  if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Invalid fatigue load settings');
  const {minLoadFactor=0,maxLoadFactor=1,meanStressCorrection='none',appliedCycles=1}=options;

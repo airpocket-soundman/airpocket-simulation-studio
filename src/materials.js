@@ -1,3 +1,4 @@
+import {validateOrthotropic} from './orthotropic-material.js';
 import {validateCatalogSelection} from './catalog-provenance.js';
 import {validatePlasticity} from './plasticity-material.js';
 import {validateFractureData} from './fracture-core.js';
@@ -20,6 +21,10 @@ export function validateMaterialProperties(p){
  for(const f of materialFields){const v=p[f.key];if(v===undefined||v===null)continue;if(!Number.isFinite(v)||(f.min!==undefined&&(f.exclusive?v<=f.min:v<f.min))||(f.max!==undefined&&(f.exclusive?v>=f.max:v>f.max)))throw Error(f.label+'が有効範囲外です。');}
  if(p.temperatureMin!=null&&p.temperatureMax!=null&&p.temperatureMin>p.temperatureMax)throw Error('有効温度の上下限が逆です。');
  for(const k of ['source','grade','notes'])if(p[k]!==undefined&&(typeof p[k]!=='string'||p[k].length>10000))throw Error('材料の記録が不正です。');
+ validateOrthotropic(p.orthotropic);
+ if(p.orthotropic&&(p.plasticity||p.hyperelastic||p.fractureData||p.fatigueData||p.dependence?.elasticTemperatureTable))throw Error('Orthotropic elasticity cannot be combined with isotropic nonlinear, failure or temperature-table models');
+ if(p.orthotropic&&p.dependence?.directionality==='isotropic')throw Error('Orthotropic constants conflict with isotropic directionality');
+ if(p.orthotropic&&p.dependence?.axes&&p.dependence.axes.some((v,i)=>v.some((x,j)=>Math.abs(x-p.orthotropic.axes[i][j])>1e-8)))throw Error('Orthotropic material axes conflict with registered dependence axes');
  validateMaterialDependence(p.dependence);
  validateHyperelastic(p.hyperelastic);
  validatePlasticity(p.plasticity);
@@ -34,5 +39,5 @@ export function validateMaterialProperties(p){
 }
 export function materialReadiness(category,p={}){
  validateMaterialProperties(p);
- return {linearElasticMissing:['youngModulus','poissonRatio'].filter(k=>p[k]==null),thermalMissing:['conductivity','density','specificHeat'].filter(k=>p[k]==null),note:category==='ゴム'?'大変形には超弾性モデルと試験データが必要です。':category==='ガラス'?'強度だけでは欠陥や表面状態を含む破壊予測はできません。':category==='樹脂'?'温度・速度・方向による物性の変化を確認してください。':'強度の意味と試験条件を記録してください。'};
+ return {linearElasticMissing:p.orthotropic?[]:['youngModulus','poissonRatio'].filter(k=>p[k]==null),thermalMissing:['conductivity','density','specificHeat'].filter(k=>p[k]==null),note:category==='ゴム'?'大変形には超弾性モデルと試験データが必要です。':category==='ガラス'?'強度だけでは欠陥や表面状態を含む破壊予測はできません。':category==='樹脂'?'温度・速度・方向による物性の変化を確認してください。':'強度の意味と試験条件を記録してください。'};
 }

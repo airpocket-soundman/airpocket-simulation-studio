@@ -11,6 +11,7 @@ function symmetricEigen(matrix){
 
 export function solveModal(mesh,properties,boundary,{modeCount=2,maxIterations=60,matvecFactory,onProgress=()=>{}}={}){
  if(!Number.isInteger(modeCount)||modeCount<1||modeCount>6||!Number.isInteger(maxIterations)||maxIterations<1||maxIterations>100)throw Error('Invalid modal iteration settings');
+ if(properties.orthotropic)throw Error('Orthotropic modal analysis is not yet validated');
  if(properties.hyperelastic||!(properties.density>0)||!Number.isFinite(properties.density))throw Error('Modal analysis requires linear elasticity and positive density');
  if((boundary.forces||[]).some(f=>f.value.some(v=>v!==0))||(boundary.displacements||[]).some(f=>f.valueMm!==0))throw Error('Modal analysis accepts homogeneous supports only; remove loads and prescribed motion');
  if(mesh.nodes.length>6000||mesh.tetrahedra.length>8000)throw Error('Modal prototype limit: 2000 nodes / 8000 tetrahedra');

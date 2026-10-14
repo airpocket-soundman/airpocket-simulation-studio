@@ -828,10 +828,13 @@
         "MAT3"
       ],
       "optional": true,
-      "status": "queued",
+      "status": "building",
       "titleEn": "Simulate layers and infill",
       "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
-      "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens."
+      "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
+      "lastUpdate": "直交異方性の9定数・材料軸を静的線形CPU解析へ接続。理論棒変形、回転共変性、せん断、JS/WASM一致、Workerと保存結果検証を追加。印刷条件の校正、壁・層・インフィル詳細と実測検証は未完了。",
+      "lastUpdateEn": "Connected nine orthotropic constants and material axes to static linear CPU analysis. Added analytical bar, rotation covariance, shear, JS/WASM parity, Worker and archive validation. Print-condition calibration, wall/layer/infill detail and measured validation remain unfinished.",
+      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs"
     },
     {
       "id": "CFDCHAN1",

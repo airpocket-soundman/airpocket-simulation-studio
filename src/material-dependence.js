@@ -1,3 +1,4 @@
+import {validateOrthotropic} from './orthotropic-material.js';
 const finiteTemperature=t=>Number.isFinite(t)&&t>=-273.15;
 export function validateMaterialDependence(d){
  if(d===undefined)return;
@@ -18,10 +19,11 @@ export function checkMaterialTemperature(properties,temperature){
  if(values.some(t=>properties.temperatureMin!=null&&t<properties.temperatureMin-1e-6||properties.temperatureMax!=null&&t>properties.temperatureMax+1e-6))throw Error('Temperature is outside the registered material validity range');
 }
 export function resolveElasticMaterial(properties,temperature=20){
- const d=properties.dependence;validateMaterialDependence(d);checkMaterialTemperature(properties,temperature);
+ validateOrthotropic(properties.orthotropic);const d=properties.dependence;validateMaterialDependence(d);checkMaterialTemperature(properties,temperature);
  if(d?.rateDependent)throw Error('Rate-dependent structural constitutive models are not supported');
- if(d?.directionality==='orthotropic')throw Error('Orthotropic structural constitutive models are not supported');
+ if(d?.directionality==='orthotropic'&&!properties.orthotropic)throw Error('Orthotropic structural constitutive models are not supported');
  if(d?.strainRateMin>0)throw Error('Static structure has zero strain rate, outside the registered test envelope');
+ if(properties.orthotropic&&d?.elasticTemperatureTable)throw Error('Orthotropic elasticity cannot use an isotropic temperature table');
  const table=d?.elasticTemperatureTable,values=Array.isArray(temperature)?temperature:[temperature],t=values[0];
  if(!table)return {properties:{...properties},evaluation:{temperatureMin:values.reduce((a,b)=>Math.min(a,b),Infinity),temperatureMax:values.reduce((a,b)=>Math.max(a,b),-Infinity),interpolated:false}};
  if(values.some(v=>Math.abs(v-t)>1e-9))throw Error('Temperature-dependent elasticity currently requires a uniform temperature');

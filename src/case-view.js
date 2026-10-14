@@ -1,3 +1,4 @@
+import {validateOrthotropicResult} from './orthotropic-result.js';
 import {validatePlasticResult} from './plasticity-result.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {validateStokesResult} from './stokes-result.js';
@@ -16,7 +17,7 @@ export function prepareCaseView(saved){
  validateStlMesh(mesh,output?.input,output?.calculation);
  validateFatigueResult(mesh,r,output?.input,output?.calculation);
  validateFractureResult(mesh,r,output?.input,output?.calculation);
- validatePlanarMesh(mesh,output.input);validateCylindricalMesh(mesh,output.input);validatePlasticResult(mesh,r,output.input);validateComputeMetadata(r);validateInternalMesh(mesh,output?.input?.sourceModel);
+ validatePlanarMesh(mesh,output.input);validateCylindricalMesh(mesh,output.input);validatePlasticResult(mesh,r,output.input);validateOrthotropicResult(mesh,r,output?.input,output?.calculation);validateComputeMetadata(r);validateInternalMesh(mesh,output?.input?.sourceModel);
  if(!mesh||!r||!Array.isArray(mesh.tetrahedra)||mesh.tetrahedra.length>30000||!Array.isArray(mesh.nodes)||mesh.nodes.length>360000)throw Error('Invalid saved result mesh');
  mesh.summary=inspectMesh(mesh);const n=mesh.summary.nodeCount,e=mesh.summary.elementCount;
  if(!Array.isArray(mesh.surface)||!mesh.surface.length||mesh.surface.length>120000||mesh.surface.some(f=>!Array.isArray(f.nodes)||f.nodes.length!==3||new Set(f.nodes).size!==3||!f.nodes.every(i=>Number.isInteger(i)&&i>=0&&i<n)))throw Error('Invalid saved result surface');
