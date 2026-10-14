@@ -483,3 +483,11 @@ P1/P3の候補検査・版照合・実行中非変更の限定確認であり、
 最終の既定Node v24.11.1全体は872件中869成功・3skip・失敗0（117.41秒）。初回870件中4失敗は追加操作による旧80件固定assertで、4箇所を81へ更新し対象4件と全体で確認した。初回記録も保持する。ビルド3.01秒、ローカル配信物26項目30.52秒、文書・進捗7件、SKILL検証が成功。全体後のハッシュ差分は進捗JSONと生成publicコピーのみ。新機能は公開待ちreadyであり、公開HTTPSやV8根治を示さない。
 
 公開進捗・gate検証追加の対象19件は成功。既定Node24.11.1全体は883件報告中879成功・1失敗・3skip（121.81秒）でanalysis-job-serviceに既知V8 CHECKが再発した。失敗を保存し、該当単独3件成功と同ソースNode26.10.0比較884中881成功・3skip（305.69秒）を区別する。既定runtime変更や根治の証明ではない。ビルド2.72秒、配信物26件27.90秒が成功。実ローカルGUIはdirty manifestを日英で未照合として拒否し初期記録/公開履歴を保持した。成功側の実ブラウザ版照合は未検証。全体後のsource差分は進捗JSONと生成publicコピーのみ。[全体](evidence/2026-10-15-publication-progress-full.json)、[既定失敗](evidence/2026-10-15-publication-progress-node24-failed.json)、[未照合画面](evidence/2026-10-15-published-progress-unverified-ja.jpg)を参照。
+
+## 2026-10-15: bounded入力検査の契約と検証範囲
+
+新共有inspectInputと既存studio_inspect_projectのsection opt-inは、保存入力・現在入力を版付きのsection/Pointerページで読み、物理配列やsource全文をdescriptorへ展開しない契約を追加する。対象は既定/上限ページ、既知単位、canonical-JSON hash、欠落パス、Pointer escape/section制限、旧版拒否、検査前後の入力不変、旧section無し応答との分離である。旧形の巨大study応答をbounded検証へ数えない。
+
+[操作仕様](automation.md)のconditions→/conditions/0→expectedRevision付きpreview/editを検証の単位とする。完全な物理根拠の真偽・適用性、応答上限から実行時メモリ上限への一般化、旧登録MCP serverの新引数対応は保証しない。本節に全体試験の未確定件数や未確認GUIの成功を含めず、実測結果・証跡は確定時に別記する。
+
+既定Node24.11.1の全体897件中894成功・3skip・失敗0（112.67秒）。全体後にMCP位置引数の明示JSON型共有を追加し、保存/ライブの数値・record・配列受理と不正型拒否を含む最終対象30件が成功。型宣言だけを戻した既存2ファイルの再構成SHAは全体時と一致し、実行時意味を変えていないことを記録した。全体後の末尾空行除去は対象3件で確認、公開gate0完了に伴うpending fixture修正後は進捗/文書12件成功。最終899件の全体成功とは宣言しない。最終build2.86秒、配信物26件28.73秒、repo/installed SKILL検証が成功。[全体と差分記録](evidence/2026-10-15-input-inspection-full.json)を参照。

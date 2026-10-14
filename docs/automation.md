@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは81操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -460,3 +460,17 @@ Workerが捕捉した実行失敗には、従来のmessageを維持して`failur
 プレビューのpreflightは完全な検査結果からallowed/provisionalを保持しつつ、返却診断を最大50、requiredPointersを最大100へ限定し、reportPageで総数とtruncatedを示します。根拠配列は値を返さずlength/omitted、長い文字列は長さ、深さ3・16keyを超える物体も省略を明示します。完全な診断は既存preflight APIで確認してください。返却value JSONは最大65,536 UTF-8バイトで、超過時はEDIT_PREVIEW_RESPONSE_LIMITとして入力不変のまま拒否します。これはMCPのcontent.textとstructuredContentへの二重格納を含むRPC総量の上限ではありません。
 
 ブラウザではtrusted hostの純粋normalizeProjectをGUIと共有し、study既定値やms/µs表示変換など、実際に保存される表現を候補へ先に反映します。応答のnormalizationはapplied:true、previousRevision（未変換候補）、revision（最終候補）、changedPointers、requiresReview、noteです。requiresReview:trueなら変換点を確認してから最終revisionを承認してください。未変換候補の版は確定に使いません。最終候補にpreflightとexpectedResultingRevision照合を行い、その後だけcommitします。normalizerはwireから指定できず、保存JSON用Node MCPにはGUI変換を入れないため、同じ元入力でもbrowser/nodeの候補版は異なり得ます。既定値やinactive fieldの表現差を無視して一致を推測しないでください。
+
+## 保存・ライブ入力を小さいページで検査する
+
+共有`studioApi.inspectInput({section:"study",pointer?,expectedRevision?,offset:0,limit:20})`とinspect権限のライブ`inspectInput`で、現在入力の値を変更せずに取得します。保存入力MCPは既存`studio_inspect_project({path,section:"study",pointer?,expectedRevision?,offset?,limit?})`を使います。sectionはproject/study/material/conditions/provenance/selection/source/meshes/meshSettings/units/intentで、共有・ライブの既定はprojectです。MCPはsectionを明示するとこの専用応答だけを返し、旧geometry/face/full-study応答と混載しません。
+
+返答はschemaVersion:1、入力revision、section、pointer、exists、既知のunits、limitationsと、存在する値のdescriptor、必要に応じたpageです。objectはkey順の最大50件、arrayは最大200件、既定20件でoffset/nextOffsetを使います。nested配列/物体はlength/keyCount/sha256/omittedの要約です。返ったabsolute JSON Pointerを選択section内で指定して必要部分へ掘り、毎回expectedRevisionを渡してください。`~`は`~0`、`/`は`~1`にescapeします。不正Pointerやsection外への移動・旧版は拒否します。存在しない値はexists:falseで、推測値を作りません。
+
+sourceのSTEP等data文字列や大きい文字列も値をdescriptorへ展開せず、長さとopaqueなhashを返します。明示した文字列Pointerでは最大200 UTF-16 code unitsずつ取得できます。hashは正規化JSON値のSHA-256であり、元STEPファイルのbyte hashとは別です。単位はアプリが知る物性・条件・温度場・形状などに限り、未知単位を推測しません。応答value JSONは最大65,536 UTF-8バイトで、INPUT_INSPECTION_RESPONSE_LIMIT時はlimitを下げます。モデルを保存・編集せず、全体を複製して返すこともありませんが、identity/hash計算は元入力を扱うため計算量まで一定ではありません。
+
+例: `studio_inspect_project({path,section:"conditions",limit:20})`でrevisionとPointerを得た後、同じrevisionで`{path,section:"conditions",pointer:"/conditions/0",expectedRevision:revision}`を読みます。必要値と根拠を確認してからpreview/editへ元revisionを渡し、必要ならpreview.revisionをexpectedResultingRevisionに使います。検査は根拠の真正性や物理適用性の保証ではありません。
+
+互換用のsection無しstudio_inspect_projectは従来shapeを維持し、巨大study/source配列を含み得るためboundedと扱いません。section無しでpointer/offset/limit/expectedRevisionは使えず、sectionありでmeshIndex/faceOffset/faceLimit/surfaceInspectionとの混在も拒否します。実登録serverが旧版なら新引数の対応を仮定せず、必要時は明示したローカルrepo fallbackを使います。ツール数29/31は変えず、ライブinspectInputを加え82操作です。
+
+編集/previewの位置引数は数値・真偽値・null・record・通常のネスト配列を明示した共通JSON schemaを返す。これは各methodの位置・物理検証を置き換えない。登録済みクライアントが古いargs:string[]を投影している場合、数値やrecordを文字列化して合わせず、登録schemaの更新を確認するか、明示したローカルcallStudioTool経路を使う。現hostの投影改善は未確認であり、生MCP契約の成功と区別する。

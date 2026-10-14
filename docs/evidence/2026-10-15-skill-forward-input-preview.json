@@ -1,0 +1,1344 @@
+{
+  "schemaVersion": 1,
+  "report": {
+    "schemaVersion": 1,
+    "status": "completed-preview-only",
+    "task": "Inspect current material/load/supports, preview axial load 150 N, do not apply or solve",
+    "fixtureClassification": "Explicit synthetic reference; not measured material calibration",
+    "resourcesRead": [
+      {
+        "path": "skills/airpocket-studio/SKILL.md",
+        "scope": "Full entry point"
+      },
+      {
+        "path": "skills/airpocket-studio/references/saved-inputs.md",
+        "scope": "Saved input inspection, discovery/fallback and edit preview workflow"
+      },
+      {
+        "path": "skills/airpocket-studio/references/physics-provenance.md",
+        "scope": "Applicable modal/orthotropic section, surrounding search hits only"
+      },
+      {
+        "path": "docs/automation.md",
+        "scope": "First 22 lines and semantic edit operation search hits"
+      }
+    ],
+    "registeredToolDiscovery": {
+      "count": 29,
+      "inspectionSchemaHasSection": false,
+      "previewArgsDeclaration": "args: Array<string>",
+      "actualCapabilitiesAdvertiseInputInspection": true,
+      "legacyRegisteredInspectionProvidesConditionCountOnly": true
+    },
+    "executionPaths": [
+      {
+        "environment": "Actual registered MCP tools",
+        "tools": [
+          "studio_capabilities",
+          "studio_progress",
+          "studio_inspect_project (legacy shape)"
+        ]
+      },
+      {
+        "environment": "Local repository scripts/studio-mcp.mjs callStudioTool under Node v24.11.1; documented explicit fallback",
+        "tools": [
+          "studio_inspect_project section mode",
+          "studio_preview_edit"
+        ],
+        "reason": "Registered inspection tool schema has no section arguments; registered preview args declaration is Array<string> and cannot faithfully represent numeric/object positional arguments. Used the documented repository fallback deliberately, not as registered-tool equivalence."
+      }
+    ],
+    "observed": {
+      "revision": "sha256:a90c2cc7d57b4341d4ee35047e30bd29b26f45ee58e55064d3927005c69df907",
+      "material": {
+        "axes": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "model": "linear-orthotropic",
+        "poissonRatios": [
+          0,
+          0,
+          0
+        ],
+        "shearModuliPa": [
+          400000000,
+          500000000,
+          600000000
+        ],
+        "source": "Synthetic axial reference, not measured material data",
+        "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios",
+        "youngModuliPa": [
+          1000000000,
+          2000000000,
+          3000000000
+        ]
+      },
+      "conditions": [
+        {
+          "direction": [
+            1,
+            0,
+            0
+          ],
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ]
+            }
+          ],
+          "type": "fixed",
+          "value": 0
+        },
+        {
+          "direction": [
+            0,
+            0,
+            1
+          ],
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                8,
+                9
+              ]
+            }
+          ],
+          "type": "force",
+          "value": 100
+        }
+      ],
+      "bounds": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ],
+      "selectedRegionLocations": [
+        {
+          "index": 0,
+          "type": "fixed",
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ],
+              "zCoordinates": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "type": "force",
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                8,
+                9
+              ],
+              "zCoordinates": [
+                40
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "proposal": {
+      "oldForceN": 100,
+      "newForceN": 150,
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "mesh": 0,
+          "triangles": [
+            8,
+            9
+          ]
+        }
+      ],
+      "fixedSupportRetained": {
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "regions": [
+          {
+            "mesh": 0,
+            "triangles": [
+              10,
+              11
+            ]
+          }
+        ],
+        "type": "fixed",
+        "value": 0
+      },
+      "operations": [
+        {
+          "method": "removeCondition",
+          "args": [
+            1
+          ]
+        },
+        {
+          "method": "clearSelection",
+          "args": []
+        },
+        {
+          "method": "selectTriangles",
+          "args": [
+            0,
+            [
+              8,
+              9
+            ],
+            {
+              "replace": true
+            }
+          ]
+        },
+        {
+          "method": "addCondition",
+          "args": [
+            {
+              "type": "force",
+              "value": 150,
+              "direction": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "previousRevision": "sha256:a90c2cc7d57b4341d4ee35047e30bd29b26f45ee58e55064d3927005c69df907",
+      "candidateRevision": "sha256:0456c40334ce34a5b4cc75a87bb8deb4b0bad554ac8f22fceebbb6af3ed7d106",
+      "changedPointers": {
+        "pointers": [
+          "/conditions"
+        ],
+        "total": 1,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "node",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "node",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "quantitative",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-orthotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/orthotropic/model",
+          "/materialProperties/orthotropic/youngModuliPa",
+          "/materialProperties/orthotropic/poissonRatios",
+          "/materialProperties/orthotropic/shearModuliPa",
+          "/materialProperties/orthotropic/axes",
+          "/materialProperties/orthotropic/source",
+          "/materialProperties/orthotropic/testConditions",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "youngModuliPa": "Pa",
+          "shearModuliPa": "Pa",
+          "poissonRatios": "1",
+          "axes": "1",
+          "materialTemperature": "degC",
+          "strainRateMin": "1/s",
+          "strainRateMax": "1/s"
+        },
+        "diagnostics": [
+          {
+            "code": "PROVENANCE_STALE",
+            "severity": "error",
+            "target": "/conditions/1/value",
+            "evidence": {
+              "recordedValue": 100,
+              "exists": true,
+              "value": 150
+            },
+            "suggestions": [
+              "Review changed input and replace its provenance snapshot"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 1,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 17,
+          "requiredPointersTruncated": false
+        },
+        "runtime": {
+          "schemaVersion": 1,
+          "kind": "node",
+          "node": "v24.11.1",
+          "v8": "13.6.233.10-node.28",
+          "platform": "win32",
+          "arch": "x64",
+          "knownIssueAssessment": "observed-risk",
+          "diagnostics": [
+            {
+              "code": "NODE_WASM_ALLOCATION_FATAL_OBSERVED",
+              "severity": "warning",
+              "status": "unresolved",
+              "message": "A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.",
+              "evidence": [
+                "docs/evidence/2026-10-14-observation-profiles-v8-failure.json",
+                "docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json"
+              ],
+              "suggestions": [
+                "Inspect the recorded evidence and its limits.",
+                "Consider the already verified browser path or an explicit runtime comparison.",
+                "For headless jobs, explicitly selecting process isolation can contain a child exit without fixing V8.",
+                "Do not automatically change the runtime or environment."
+              ]
+            }
+          ],
+          "compatibilityVerified": false,
+          "rootFixProven": false
+        }
+      },
+      "interpretation": "Preview succeeded as a transaction, but quantitative preflight refuses stale load provenance recorded as 100 N; no evidence was changed or invented."
+    },
+    "inputIntegrity": {
+      "before": {
+        "path": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\skill-forward-user-project.json",
+        "bytes": 10045,
+        "sha256": "e10a33f1e5adc717ad91e6ad450fb0aedb4322ca17aa624e1c119e6bda159cd2"
+      },
+      "after": {
+        "path": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\skill-forward-user-project.json",
+        "bytes": 10045,
+        "sha256": "e10a33f1e5adc717ad91e6ad450fb0aedb4322ca17aa624e1c119e6bda159cd2"
+      },
+      "exactBytesPreserved": true
+    },
+    "prohibitedActions": {
+      "apply": false,
+      "editFilePublication": false,
+      "solverJob": false,
+      "gitChanges": false,
+      "registrationChanges": false
+    },
+    "guidanceFindings": [
+      {
+        "severity": "medium",
+        "resource": "Registered tool declaration (registered-tool-discovery.json)",
+        "finding": "studio_preview_edit.operations.args is exposed as Array<string>, although semantic operations require numbers/objects. The repository fallback allowed correct preview without misusing the declared schema."
+      },
+      {
+        "severity": "low",
+        "resource": "skills/airpocket-studio/references/saved-inputs.md legacy studio_inspect_project bullet",
+        "finding": "Legacy wording says inspect study/conditions, but actual registered legacy result contains conditionCount and material category only, not condition records or materialProperties. New bounded section guidance correctly addresses this gap and explicitly warns older schemas may lack it."
+      },
+      {
+        "severity": "low",
+        "resource": "docs/automation.md semantic edit operation list, referenced by saved-inputs",
+        "finding": "Lists methods and says positional args, but does not provide a complete worked example for replacing one condition value while preserving its original regions. The removeCondition/clearSelection/selectTriangles/addCondition plan used prior implementation knowledge as well as the documented method list."
+      }
+    ],
+    "knowledgeSupplement": {
+      "used": true,
+      "details": [
+        "Author familiarity informed the exact remove/select/add positional operation batch and interpreting fixed versus directional displacement.",
+        "All physical values, directions, regions and source labels were obtained from actual bounded inspection replies, not assumed from SDK familiarity."
+      ],
+      "claim": "This is a real workflow execution evaluation with disclosed prior implementation knowledge, not proof that SKILL text alone is sufficient."
+    },
+    "harnessObservation": {
+      "message": "The first convenience reader refused an array with nextOffset rather than fetching it automatically. Corrected by explicitly requesting only selected triangle-coordinate pages. This was harness behavior, not an API failure or misleading SKILL instruction."
+    },
+    "rawResponseFiles": [
+      "additional-01.json",
+      "additional-02.json",
+      "additional-03.json",
+      "additional-04.json",
+      "bounds.json",
+      "condition-0.json",
+      "condition-1.json",
+      "conditions-root.json",
+      "detail-01.json",
+      "detail-02.json",
+      "detail-03.json",
+      "detail-04.json",
+      "detail-05.json",
+      "detail-06.json",
+      "detail-07.json",
+      "detail-08.json",
+      "detail-09.json",
+      "detail-10.json",
+      "detail-11.json",
+      "detail-12.json",
+      "detail-13.json",
+      "detail-14.json",
+      "detail-15.json",
+      "detail-16.json",
+      "detail-17.json",
+      "detail-18.json",
+      "detail-19.json",
+      "detail-20.json",
+      "detail-21.json",
+      "input-integrity-after.json",
+      "input-integrity-before.json",
+      "intent.json",
+      "material-root.json",
+      "observed-input.json",
+      "orthotropic.json",
+      "preview-response.json",
+      "project-root.json",
+      "provenance.json",
+      "registered-capabilities.json",
+      "registered-legacy-inspect.json",
+      "registered-progress.json",
+      "registered-tool-discovery.json",
+      "source-root.json",
+      "study-root.json"
+    ]
+  },
+  "selectedRawResponses": {
+    "input-integrity-before.json": {
+      "path": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\skill-forward-user-project.json",
+      "bytes": 10045,
+      "sha256": "e10a33f1e5adc717ad91e6ad450fb0aedb4322ca17aa624e1c119e6bda159cd2"
+    },
+    "input-integrity-after.json": {
+      "path": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\skill-forward-user-project.json",
+      "bytes": 10045,
+      "sha256": "e10a33f1e5adc717ad91e6ad450fb0aedb4322ca17aa624e1c119e6bda159cd2"
+    },
+    "registered-tool-discovery.json": {
+      "tools": [
+        {
+          "name": "mcp__airpocket_studio__studio_analyze",
+          "description": "Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_analyze(args: {\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  operation?: \"solve\" | \"mesh\";\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n  size?: number;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_apply_cad_update",
+          "description": "Apply a reviewed STEP CAD replacement using exact input and replacement revisions, preserving physical setup and requiring confirmation of old provenance. Unmatched conditions remain pending and block analysis. Exclusively publishes a distinct new JSON; never overwrites input, replacement or an existing output.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_apply_cad_update(args: {\n  expectedReplacementRevision: string;\n  expectedRevision: string;\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n  // Absolute local JSON file path\n  replacementPath: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_assess_result",
+          "description": "Evaluate fatigue or Mode-I fracture screening from a saved structural elastic analysis using its recorded material evidence and explicit options. Requires the exact result revision; publishes a distinct new analysis JSON without overwriting files. Does not infer missing material data or claim failure probability.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_assess_result(args: {\n  expectedResultRevision: string;\n  kind: \"fatigue\" | \"fracture\";\n  options: { [key: string]: unknown; };\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_assessment",
+          "description": "Read validated fatigue/fracture screening metadata (or available:false with its result revision before evaluation) and a bounded element page (default 50, maximum 200) from a saved analysis. Optional exact result revision prevents reading a different version. Does not write files.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_assessment(args: {\n  expectedResultRevision?: string;\n  kind: \"fatigue\" | \"fracture\";\n  limit?: number;\n  offset?: number;\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_browser_contracts",
+          "description": "Discover declared input schemas,required scopes,revision arguments,units,side effects and limits for live browser operations without connecting or executing them. Query one method,scope or a bounded page (default 5,maximum 10; <=64 KiB). Nested physical validation remains authoritative in the adapters. Declarations do not grant access or prove an optional browser adapter is available.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_browser_contracts(args: { limit?: number; method?: \"inspect\" | \"inspectInput\" | \"geometry\" | \"inspectSurface\" | \"createBuiltinProject\" | \"prepareFluidDomain\" | \"applyCaseSource\" | \"clearCaseSource\" | \"applyFluidDomainMesh\" | \"inputImportBegin\" | \"inputImportWrite\" | \"inputImportCommit\" | \"inputImportRelease\" | \"preflight\" | \"previewEdit\" | \"listJobs\" | \"jobStatus\" | \"jobEvents\" | \"jobArtifacts\" | \"jobArtifact\" | \"probe\" | \"edit\" | \"startJob\" | \"cancelJob\" | \"releaseJob\" | \"showJob\" | \"getView\" | \"setView\" | \"getResultView\" | \"setResultView\" | \"caseList\" | \"caseView\" | \"caseRestoreInput\" | \"caseRename\" | \"caseRemove\" | \"caseSave\" | \"exportCapabilities\" | \"startExport\" | \"exportStatus\" | \"exportArtifact\" | \"cancelExport\" | \"releaseExport\" | \"namedViewList\" | \"namedViewExport\" | \"namedViewSave\" | \"namedViewApply\" | \"namedViewRemove\" | \"namedViewImport\" | \"caseArchiveExport\" | \"caseArchiveRead\" | \"caseArchiveImport\" | \"caseArchiveWrite\" | \"caseArchiveCommit\" | \"caseArchiveRelease\" | \"getAssessment\" | \"evaluateAssessment\" | \"previewCadUpdate\" | \"applyCadUpdate\" | \"printInspect\" | \"importPrint\" | \"getPrintData\" | \"setPrintView\" | \"printTransferExport\" | \"printTransferRead\" | \"printTransferImport\" | \"printTransferWrite\" | \"printTransferCommit\" | \"printTransferRelease\" | \"caseBundleList\" | \"caseBundleExport\" | \"caseBundleRead\" | \"caseBundleImport\" | \"caseBundleWrite\" | \"caseBundleCommit\" | \"caseBundleRelease\" | \"measurementList\" | \"measurementGet\" | \"measurementSave\" | \"measurementRemove\" | \"measurementExport\" | \"measurementImport\" | \"measurementVerify\"; offset?: number; scope?: \"inspect\" | \"edit\" | \"analyze\" | \"view\"; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_cancel_job",
+          "description": "Cancel a running CPU Worker and preserve input and prior outputs. Already terminal jobs are unchanged. Final file publication (saving state) cannot be cancelled.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_cancel_job(args: { jobId: string; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_capabilities",
+          "description": "Read actual target-specific engine capabilities, declared observation profiles and candidate status without loading solver modules. Observation declarations describe emitted diagnostics, not convergence or physical accuracy guarantees. This is not a complete physical preflight. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_capabilities(args: {}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_create_builtin_project",
+          "description": "Create a new project with an explicit built-in source: box(bounds), boxes(boxes), fixed cylinder(kind only), sphere(center/radius), tube(center/axis/innerRadius/outerRadius/length), using mm. No material values or boundary conditions are invented.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_create_builtin_project(args: {\n  name?: string;\n  // Absolute local JSON file path\n  outputPath: string;\n  source: { [key: string]: unknown; };\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_diagnose_execution",
+          "description": "Read stable diagnostics for unsupported execution combinations and the selected observation profile for a saved project. The selected profile is a declaration, not evidence that a job emitted it. Geometry, units, constraints and material completeness still require full validation. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_diagnose_execution(args: {\n  adaptive?: boolean;\n  includeFields?: boolean;\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_edit_project",
+          "description": "Atomically apply semantic setup operations to saved JSON and publish a new outputPath. Requires the revision from studio_inspect_project; stale revisions and unsupported methods are rejected. Never alters the input or an open browser. Returns a compact summary, not the full model.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_edit_project(args: {\n  // Optional exact resulting input revision from studio_preview_edit; rejects a different transaction result before publication.\n  expectedResultingRevision?: string;\n  expectedRevision: string;\n  operations: Array<{ args: Array<string>; method: \"selectTriangles\" | \"selectCadFace\" | \"selectPlanarRegion\" | \"selectCylindricalRegion\" | \"clearSelection\" | \"addCondition\" | \"removeCondition\" | \"selectCondition\" | \"replaceConditionRegion\" | \"reapplyConditionRegion\" | \"setMaterial\" | \"setMaterialProperties\" | \"setMaterialPreset\" | \"applyCatalogMaterial\" | \"setStudy\" | \"setMeshSettings\" | \"setInputProvenance\" | \"setAnalysisIntent\"; }>;\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_import_print",
+          "description": "Read a local 3MF or linear G-code file up to 50,000,000 bytes and exclusively publish a distinct new parsed print JSON. Interprets geometry and possible deposition paths without sending commands to hardware or inferring strength. Returns compact revisioned metadata, not geometry arrays.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_import_print(args: {\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_import_project",
+          "description": "Import STEP/STP with real OCCT unit normalization to mm, or outward closed convex STL with explicit scaleToMm, and publish a new project JSON. Preserves source bytes and CAD face mappings. Never replaces source or an existing output.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_import_project(args: {\n  name?: string;\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n  scaleToMm?: number;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_inspect_print",
+          "description": "Validate a saved parsed print JSON and return compact metadata or a bounded segments/triangles page (maximum 200). Coordinates use mm; layerIndex is a zero-based layer filter. Optional exact revision prevents stale reads.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_inspect_print(args: {\n  expectedRevision?: string;\n  kind?: \"segments\" | \"triangles\";\n  layerIndex?: number;\n  limit?: number;\n  offset?: number;\n  // Absolute local JSON file path\n  path: string;\n  viewId?: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_inspect_project",
+          "description": "Legacy mode validates saved input and returns a compact mm geometry summary, study, conditions and revision. Legacy study may contain large arrays and is not a bounded input view. Prefer section mode for revisioned bounded input inspection; section mode returns only that response, without legacy study/geometry. Optional meshIndex returns paginated observed face geometry (at most 50); face IDs belong to a display-mesh revision, not persistent CAD identities. Optional surfaceInspection requests bounded display-triangle topology diagnostics; no CAD-exact geometry, self-intersection certification or repair is performed.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_inspect_project(args: unknown): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_job_artifact",
+          "description": "Read a registered provisional mesh/scalar-time-field/nonlinear-load-step displacement artifact by jobId and artifactId. Verifies hashes and input/mesh identity; ambiguous multi-body interface points require bodyIndex or elementIndex. Returns compact statistics, optional point interpolation or a bounded node/value page (limit <= 200, default summary only). Nonlinear displacement pages contain vectors in mm and step/loadFactor, not physical time or stress. Does not accept arbitrary file paths or treat intermediate values as final.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_job_artifact(args: { artifactId: string; bodyIndex?: number; elementIndex?: number; jobId: string; limit?: number; offset?: number; point?: Array<number>; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_job_artifacts",
+          "description": "List registered provisional intermediate artifact metadata with bounded pagination (default 50, maximum 100), independently of event retention. Does not read or verify files; select an artifactId and use studio_job_artifact for hash-verified contents. Empty pages are not job completion.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_job_artifacts(args: { jobId: string; limit?: number; offset?: number; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_job_events",
+          "description": "Read new intermediate events after a sequence cursor (up to 100). Reports truncation if old events were dropped. Events carry job ID, input revision and provisional labels; field artifacts carry hashes. Empty pages are not completion.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_job_events(args: { afterSequence?: number; jobId: string; limit?: number; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_job_status",
+          "description": "Get a retained job state, executionSettled, resourceState (pending/settled), releaseAllowed, input revision and final artifact summary. Cancellation is terminal before execution settles; a settled execution is not proof of physical memory reclamation. Jobs are retained only for this MCP process lifetime.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_job_status(args: { jobId: string; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_material_catalog",
+          "description": "Read preinstalled primary-source polymer property data. Filter grades by family, filler and content; experimental formulations are separate. Poisson ratio is unpublished and must be treated as a user assumption, not manufacturer data.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_material_catalog(args: { contentPercent?: number; family?: string; filler?: \"unfilled\" | \"glassFiber\" | \"longGlassFiber\" | \"glassBead\" | \"talc\"; id?: string; includeExperimental?: boolean; search?: string; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_preflight_project",
+          "description": "Inspect physical input, unit, execution, provenance and selected observation declarations without running solvers. Strict quantitative/exploratory provenance covers static isotropic/orthotropic structure, isotropic modal and temperature-evaluated/thermal-stress structure, small-strain J2 and Neo-Hookean structure, thermal conduction, acoustics and limited channel/exterior Stokes flow within their implemented combinations. Returns required input pointers and remaining mesh/constraint/accuracy checks; allowed is not a physical accuracy guarantee. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_preflight_project(args: {\n  adaptive?: boolean;\n  includeFields?: boolean;\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  mode?: \"legacy\" | \"quantitative\" | \"exploratory\";\n  operation?: \"solve\" | \"mesh\";\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_preview_cad_update",
+          "description": "Preview STEP CAD replacement without modifying files. Requires the current project revision. Replacement is an absolute STEP/STP (OCCT normalizes to mm) or saved STEP project JSON. Returns replacement revision and bounded condition reports (maximum 50), never full geometry.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_preview_cad_update(args: {\n  expectedRevision: string;\n  limit?: number;\n  offset?: number;\n  // Absolute local JSON file path\n  path: string;\n  // Absolute local JSON file path\n  replacementPath: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_preview_edit",
+          "description": "Preview semantic input edits without writing files or changing a browser. Returns the exact resulting input revision, bounded changed JSON pointers, compact summary and Node physical preflight. A valid edit can return preflight.allowed false with missing-input diagnostics. Nested operation payloads remain validated by the actual semantic methods; no physical input is inferred.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_preview_edit(args: {\n  expectedRevision: string;\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  mode?: \"legacy\" | \"quantitative\" | \"exploratory\";\n  operation?: \"solve\" | \"mesh\";\n  operations: Array<{\n  // Positional arguments of the selected semantic method; nested material, boundary and provenance validation is runtime-only.\n  args: Array<string>;\n  method: \"selectTriangles\" | \"selectCadFace\" | \"selectPlanarRegion\" | \"selectCylindricalRegion\" | \"clearSelection\" | \"addCondition\" | \"removeCondition\" | \"selectCondition\" | \"replaceConditionRegion\" | \"reapplyConditionRegion\" | \"setMaterial\" | \"setMaterialProperties\" | \"setMaterialPreset\" | \"applyCatalogMaterial\" | \"setStudy\" | \"setMeshSettings\" | \"setInputProvenance\" | \"setAnalysisIntent\";\n}>;\n  // Absolute local JSON file path\n  path: string;\n  size?: number;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_probe",
+          "description": "Measure a saved analysis at a point in mm. Use bodyIndex or elementIndex to select ambiguous multi-body interface points. Returns physical units and the verified saved analysisAssessment when available; no extrapolation outside the mesh.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_probe(args: {\n  bodyIndex?: number;\n  elementIndex?: number;\n  modeIndex?: number;\n  // Absolute local JSON file path\n  path: string;\n  point: Array<number>;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_progress",
+          "description": "Read released and outstanding features, including solver limits.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_progress(args: {}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_release_job",
+          "description": "Release terminal job metadata/events only after executionSettled is true, and free its idempotency key to free the bounded registry. Saved files are retained. A retry with the released request ID may create a new job.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_release_job(args: { jobId: string; }): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_start_analysis",
+          "description": "Start a local CPU analysis job and immediately return its job ID and frozen input revision. Poll studio_job_events for bounded intermediate summaries. requestId makes retries idempotent while the job is retained. Optional includeFields writes provisional meshes, scalar time fields and supported converged nonlinear load-step displacement fields beside outputPath. Does not change the browser.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_start_analysis(args: {\n  adaptive?: boolean;\n  includeFields?: boolean;\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  operation?: \"solve\" | \"mesh\";\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n  requestId: string;\n  size?: number;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_validate_case_bundle",
+          "description": "Read and validate a v1 case/view or v2 case/view/measurement bundle, using existing saved-result validation, exact restored-result links and compatible display settings. Recompute all v2 recorded measurements against saved fields; this does not certify physical accuracy. Returns only counts, revision and compact matching metadata; never physical arrays or complete archives.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_validate_case_bundle(args: {\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_validate_cases",
+          "description": "Validate saved cases including physical result metadata and return comparison metrics.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_validate_cases(args: {\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+        },
+        {
+          "name": "mcp__airpocket_studio__studio_verify_measurements",
+          "description": "Read saved cases and measurement history, match restored result revisions, and recompute every recorded point with its stored display context and selectors. Returns compact matching proof only; does not modify files or certify physical accuracy.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_verify_measurements(args: {\n  // Absolute local JSON file path\n  casesPath: string;\n  // Absolute local JSON file path\n  measurementsPath: string;\n}): Promise<CallToolResult>; };\n```"
+        }
+      ],
+      "inspectionSchemaHasSection": false,
+      "registeredPreviewArgumentDeclaration": "args: Array<string>"
+    },
+    "observed-input.json": {
+      "revision": "sha256:a90c2cc7d57b4341d4ee35047e30bd29b26f45ee58e55064d3927005c69df907",
+      "material": {
+        "axes": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "model": "linear-orthotropic",
+        "poissonRatios": [
+          0,
+          0,
+          0
+        ],
+        "shearModuliPa": [
+          400000000,
+          500000000,
+          600000000
+        ],
+        "source": "Synthetic axial reference, not measured material data",
+        "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios",
+        "youngModuliPa": [
+          1000000000,
+          2000000000,
+          3000000000
+        ]
+      },
+      "conditions": [
+        {
+          "direction": [
+            1,
+            0,
+            0
+          ],
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ]
+            }
+          ],
+          "type": "fixed",
+          "value": 0
+        },
+        {
+          "direction": [
+            0,
+            0,
+            1
+          ],
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                8,
+                9
+              ]
+            }
+          ],
+          "type": "force",
+          "value": 100
+        }
+      ],
+      "bounds": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ],
+      "selectedRegionLocations": [
+        {
+          "index": 0,
+          "type": "fixed",
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ],
+              "zCoordinates": [
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "type": "force",
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                8,
+                9
+              ],
+              "zCoordinates": [
+                40
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "preview-response.json": {
+      "tool": "studio_preview_edit",
+      "execution": "Local repository callStudioTool, no publication or solver",
+      "request": {
+        "path": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\skill-forward-user-project.json",
+        "expectedRevision": "sha256:a90c2cc7d57b4341d4ee35047e30bd29b26f45ee58e55064d3927005c69df907",
+        "operations": [
+          {
+            "method": "removeCondition",
+            "args": [
+              1
+            ]
+          },
+          {
+            "method": "clearSelection",
+            "args": []
+          },
+          {
+            "method": "selectTriangles",
+            "args": [
+              0,
+              [
+                8,
+                9
+              ],
+              {
+                "replace": true
+              }
+            ]
+          },
+          {
+            "method": "addCondition",
+            "args": [
+              {
+                "type": "force",
+                "value": 150,
+                "direction": [
+                  0,
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        ],
+        "method": "wasm-pcg",
+        "mode": "quantitative"
+      },
+      "response": {
+        "schemaVersion": 1,
+        "previousRevision": "sha256:a90c2cc7d57b4341d4ee35047e30bd29b26f45ee58e55064d3927005c69df907",
+        "revision": "sha256:0456c40334ce34a5b4cc75a87bb8deb4b0bad554ac8f22fceebbb6af3ed7d106",
+        "operationCount": 4,
+        "changedPointers": {
+          "pointers": [
+            "/conditions"
+          ],
+          "total": 1,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "summary": {
+          "loaded": true,
+          "name": "Synthetic skill forward-test reference",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 2,
+          "material": "金属"
+        },
+        "preflight": {
+          "schemaVersion": 1,
+          "target": "node",
+          "operation": "solve",
+          "selectedObservation": {
+            "schemaVersion": 1,
+            "target": "node",
+            "operation": "solve",
+            "supported": true,
+            "profileId": "elastic-cpu",
+            "profile": {
+              "id": "elastic-cpu",
+              "models": [
+                "linear-elastic",
+                "orthotropic"
+              ],
+              "methods": [
+                "pcg",
+                "pcg-strict",
+                "wasm-pcg"
+              ],
+              "events": [
+                {
+                  "stage": "preparation",
+                  "cadence": "after module initialization",
+                  "metrics": []
+                },
+                {
+                  "stage": "mesh",
+                  "cadence": "after each generated mesh",
+                  "metrics": [
+                    {
+                      "name": "nodeCount",
+                      "unit": "count"
+                    },
+                    {
+                      "name": "elementCount",
+                      "unit": "count"
+                    },
+                    {
+                      "name": "volumeMm3",
+                      "unit": "mm^3"
+                    },
+                    {
+                      "name": "minVolumeMm3",
+                      "unit": "mm^3"
+                    },
+                    {
+                      "name": "minQuality",
+                      "unit": "dimensionless"
+                    },
+                    {
+                      "name": "qualityHistogram",
+                      "unit": "count"
+                    }
+                  ]
+                },
+                {
+                  "stage": "progress",
+                  "cadence": "worker text progress converted by the client",
+                  "metrics": []
+                },
+                {
+                  "stage": "diagnostic",
+                  "when": "execution-failure",
+                  "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                  "metrics": [],
+                  "failureSchemaVersion": 1
+                },
+                {
+                  "stage": "iteration",
+                  "solver": "pcg",
+                  "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                  "metrics": [
+                    {
+                      "name": "residual",
+                      "unit": "dimensionless"
+                    },
+                    {
+                      "name": "tolerance",
+                      "unit": "dimensionless"
+                    }
+                  ]
+                }
+              ],
+              "textProgress": true,
+              "fields": [],
+              "limitations": [
+                "Declaration of implemented observation paths only; not execution permission or physical validation",
+                "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+              ]
+            },
+            "reasons": [],
+            "adaptive": {
+              "enabled": false,
+              "structuredRoundEvents": false,
+              "meshPerRound": false,
+              "textProgressOnly": false
+            },
+            "fieldRetention": {
+              "requested": false,
+              "available": false,
+              "scalarFieldsSupported": false,
+              "vectorFieldsSupported": false,
+              "meshSupported": true,
+              "meshAvailable": false,
+              "maxBytes": 64000000,
+              "eventRetention": 256,
+              "availabilityIsGuarantee": false
+            },
+            "declarationOnly": true,
+            "physicalAccuracyVerified": false
+          },
+          "mode": "quantitative",
+          "allowed": false,
+          "provisional": false,
+          "completePreflight": false,
+          "requiredInputContract": "static-orthotropic-linear-structure",
+          "requiredPointers": [
+            "/study/kind",
+            "/study/gravityEnabled",
+            "/materialProperties/orthotropic/model",
+            "/materialProperties/orthotropic/youngModuliPa",
+            "/materialProperties/orthotropic/poissonRatios",
+            "/materialProperties/orthotropic/shearModuliPa",
+            "/materialProperties/orthotropic/axes",
+            "/materialProperties/orthotropic/source",
+            "/materialProperties/orthotropic/testConditions",
+            "/conditions/0/type",
+            "/conditions/0/value",
+            "/conditions/0/direction",
+            "/conditions/0/regions",
+            "/conditions/1/type",
+            "/conditions/1/value",
+            "/conditions/1/direction",
+            "/conditions/1/regions"
+          ],
+          "units": {
+            "geometry": "mm",
+            "youngModulus": "Pa",
+            "force": "N",
+            "temperature": "degC",
+            "velocity": "m/s",
+            "pressure": "Pa",
+            "displacement": "mm",
+            "density": "kg/m3",
+            "gravity": "m/s2",
+            "poissonRatio": "1",
+            "youngModuliPa": "Pa",
+            "shearModuliPa": "Pa",
+            "poissonRatios": "1",
+            "axes": "1",
+            "materialTemperature": "degC",
+            "strainRateMin": "1/s",
+            "strainRateMax": "1/s"
+          },
+          "diagnostics": [
+            {
+              "code": "PROVENANCE_STALE",
+              "severity": "error",
+              "target": "/conditions/1/value",
+              "evidence": {
+                "recordedValue": 100,
+                "exists": true,
+                "value": 150
+              },
+              "suggestions": [
+                "Review changed input and replace its provenance snapshot"
+              ],
+              "requiresUserIntent": true
+            }
+          ],
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ],
+          "reportPage": {
+            "diagnosticsTotal": 1,
+            "diagnosticsTruncated": false,
+            "requiredPointersTotal": 17,
+            "requiredPointersTruncated": false
+          },
+          "runtime": {
+            "schemaVersion": 1,
+            "kind": "node",
+            "node": "v24.11.1",
+            "v8": "13.6.233.10-node.28",
+            "platform": "win32",
+            "arch": "x64",
+            "knownIssueAssessment": "observed-risk",
+            "diagnostics": [
+              {
+                "code": "NODE_WASM_ALLOCATION_FATAL_OBSERVED",
+                "severity": "warning",
+                "status": "unresolved",
+                "message": "A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.",
+                "evidence": [
+                  "docs/evidence/2026-10-14-observation-profiles-v8-failure.json",
+                  "docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json"
+                ],
+                "suggestions": [
+                  "Inspect the recorded evidence and its limits.",
+                  "Consider the already verified browser path or an explicit runtime comparison.",
+                  "For headless jobs, explicitly selecting process isolation can contain a child exit without fixing V8.",
+                  "Do not automatically change the runtime or environment."
+                ]
+              }
+            ],
+            "compatibilityVerified": false,
+            "rootFixProven": false
+          }
+        },
+        "limitations": [
+          "Read-only preview; no live input, file or solver state is changed.",
+          "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+          "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+          "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+          "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+        ]
+      }
+    }
+  },
+  "allLocalResponseHashes": {
+    "additional-01.json": {
+      "bytes": 3350,
+      "sha256": "e1e361e361f09d5bcb50b2b1e944293471ea1b8ff368081375a9d942f502fde2",
+      "included": false
+    },
+    "additional-02.json": {
+      "bytes": 3366,
+      "sha256": "2f7c6c272ce6391c88ddb880539d27abb1a248a6b79933317137ad843d8af9a1",
+      "included": false
+    },
+    "additional-03.json": {
+      "bytes": 3352,
+      "sha256": "5537d0ad027d3e35eac1792ccfb2b5c2636a5bd6a46af7afce01658594c4d8ac",
+      "included": false
+    },
+    "additional-04.json": {
+      "bytes": 3352,
+      "sha256": "6ff8a2d61ed4f90375d62cfca5beb76161eeed62d4eae8047dd8083718f02ba8",
+      "included": false
+    },
+    "bounds.json": {
+      "bytes": 2781,
+      "sha256": "5925989a9c1cd096482c5dc1227f39b9d0528df81f61c92db14528b54e1e40e5",
+      "included": false
+    },
+    "condition-0.json": {
+      "bytes": 2590,
+      "sha256": "7532878c714d482037106b582f928c7bd4931ba16d5836d81a32cc27f15e84fa",
+      "included": false
+    },
+    "condition-1.json": {
+      "bytes": 2590,
+      "sha256": "f6709a69b9393d7292d104ac3c729c5d3f873f921dffeb97b956b54b807556e3",
+      "included": false
+    },
+    "conditions-root.json": {
+      "bytes": 2075,
+      "sha256": "b6e9b0e456ca2bf7c18a4d6ca65b7aceb5769d515280d53a1cde93e58af855c3",
+      "included": false
+    },
+    "detail-01.json": {
+      "bytes": 3845,
+      "sha256": "13f97706d90795a59f557d138f9e3a7dc9288f47b2bbfb82182bce26867ad694",
+      "included": false
+    },
+    "detail-02.json": {
+      "bytes": 2902,
+      "sha256": "8a561a9d7e98198f179fa248ea816a17ae49439ddf761c2d7437112c6dee3e91",
+      "included": false
+    },
+    "detail-03.json": {
+      "bytes": 2433,
+      "sha256": "2709919d902497a5ef1517ebf010e5a91fb5a66cf59c1eb142515d142b0c33f7",
+      "included": false
+    },
+    "detail-04.json": {
+      "bytes": 2433,
+      "sha256": "28e6d91d1ea803ed78ac1b7d4da8494f693e7678bbd46532738f59e229c2b2b7",
+      "included": false
+    },
+    "detail-05.json": {
+      "bytes": 2433,
+      "sha256": "ea037ac08406af2291e3cffaba847b2ac6d413383269e4f300ba3dbe34bc19f7",
+      "included": false
+    },
+    "detail-06.json": {
+      "bytes": 2503,
+      "sha256": "41cf86f8a5f2620c322b083e42ec2fb5b5bbd53c2a0825938c3a27ca621b083a",
+      "included": false
+    },
+    "detail-07.json": {
+      "bytes": 2535,
+      "sha256": "7f8fc150b1aeb6ea96a286a79aac8e78dbc29b16bbad73d21f0a11764f76495b",
+      "included": false
+    },
+    "detail-08.json": {
+      "bytes": 2538,
+      "sha256": "99812bddb9af6f9b384ba88a36ebc4cf7ec026cc9c96dfbf97699d639f33f88d",
+      "included": false
+    },
+    "detail-09.json": {
+      "bytes": 2590,
+      "sha256": "4d3d0543222b52ef1b8dfded7758edf776d58aeca599334b51123b7b2633a7bd",
+      "included": false
+    },
+    "detail-10.json": {
+      "bytes": 2287,
+      "sha256": "4a2cfffb415d37dd13b7eba6c673cdfb5ab97d64c12c6aaf06e7968028c2b33d",
+      "included": false
+    },
+    "detail-11.json": {
+      "bytes": 1955,
+      "sha256": "4b13c1ad54f68b02129d147ac3ff6fffa532b54df806b781ae20390cc29ffff5",
+      "included": false
+    },
+    "detail-12.json": {
+      "bytes": 2094,
+      "sha256": "cd4e69f725c755cf1a8813757a485f6f8776b96180a08a9152b40feb0eabc913",
+      "included": false
+    },
+    "detail-13.json": {
+      "bytes": 1969,
+      "sha256": "b585be65c084e73c6319222e4ebd2ba8ea3a440141fb52ba2150bd70e6a194e8",
+      "included": false
+    },
+    "detail-14.json": {
+      "bytes": 2590,
+      "sha256": "6791925301f7a4b813361e75dc4ec547495e782d9bc05ff35844d7e56045c1b0",
+      "included": false
+    },
+    "detail-15.json": {
+      "bytes": 2287,
+      "sha256": "b63a8c2c8efed06a2d48086595fad6ba8c018c342d7de19dc4adbfc84dab5969",
+      "included": false
+    },
+    "detail-16.json": {
+      "bytes": 1955,
+      "sha256": "19fe46de0f195e72649a978f49a9a08996fe0e0cf0866eb46a2d13f0e168a846",
+      "included": false
+    },
+    "detail-17.json": {
+      "bytes": 2094,
+      "sha256": "8f62d780b5a3f0b6c2d72be28e4af85d6f654e661835ff6dc4fc2512ca9ff97c",
+      "included": false
+    },
+    "detail-18.json": {
+      "bytes": 1967,
+      "sha256": "ab40baf9bed4a8bf5b45e31ee621c21309d0d3a7d7444d08d56d08d756589225",
+      "included": false
+    },
+    "detail-19.json": {
+      "bytes": 2248,
+      "sha256": "4cc2c97458f748526e88578d7edbb218bfa52aad2065d2c57d51cbb281580f02",
+      "included": false
+    },
+    "detail-20.json": {
+      "bytes": 3023,
+      "sha256": "3dd5b1d70054c7bf80f78ad3dd4c35b0ae2c69ada3ddaa45848363dd04f0be9d",
+      "included": false
+    },
+    "detail-21.json": {
+      "bytes": 5291,
+      "sha256": "28ad2f0fe6d60ac48ef67abbde01bee90f8f774415774d190353c9767c8dcd04",
+      "included": false
+    },
+    "input-integrity-after.json": {
+      "bytes": 212,
+      "sha256": "95d68413380fb1465a54636560622abe92ace8d7bfc439d4006e0664c83a8328",
+      "included": true
+    },
+    "input-integrity-before.json": {
+      "bytes": 212,
+      "sha256": "95d68413380fb1465a54636560622abe92ace8d7bfc439d4006e0664c83a8328",
+      "included": true
+    },
+    "intent.json": {
+      "bytes": 1766,
+      "sha256": "7f999bf5bc73b8ada49ffe5bc55f10f54373b843d0dc7a0092bc942902c18707",
+      "included": false
+    },
+    "material-root.json": {
+      "bytes": 1834,
+      "sha256": "24f9558315099a1667045e67297c7f197da35e9c6de4a917f7c8d80dabf1851e",
+      "included": false
+    },
+    "observed-input.json": {
+      "bytes": 1802,
+      "sha256": "03a6a8ec823541b13260a7564013ceca57c4c00c78e63203543e77e14facd238",
+      "included": true
+    },
+    "orthotropic.json": {
+      "bytes": 3845,
+      "sha256": "4c9042db5d45c7c02b849c72899a0da779e6f0a61e8605477aac3257c7b63b66",
+      "included": false
+    },
+    "preview-response.json": {
+      "bytes": 9408,
+      "sha256": "74e18f61084368313d5b92b08622f1d96184faa1781faa737cd0f44371d4afbd",
+      "included": true
+    },
+    "project-root.json": {
+      "bytes": 4079,
+      "sha256": "d5da53f7b1923d45fc7180c32f0db7cfc8b16e22b4315e7b3b25f2d2d61f0879",
+      "included": false
+    },
+    "provenance.json": {
+      "bytes": 2032,
+      "sha256": "5a76d608de329d7888d7be340dcc5147730fda9314747c49a92bb77bbe162da9",
+      "included": false
+    },
+    "registered-capabilities.json": {
+      "bytes": 80978,
+      "sha256": "1c00dbf8884ee4306adcf69bf4cc45909762a861105dad5c9db076149340dbfd",
+      "included": false
+    },
+    "registered-legacy-inspect.json": {
+      "bytes": 1865,
+      "sha256": "0e489b33a79074799c08f9b0ba0fbd3c44f628cae9030c2316b349683a92b7c9",
+      "included": false
+    },
+    "registered-progress.json": {
+      "bytes": 401615,
+      "sha256": "8aad3afacf548bb9d28ff2ddc743834fab5a87e4ceaf3b08d4c954e41dc57e17",
+      "included": false
+    },
+    "registered-tool-discovery.json": {
+      "bytes": 22747,
+      "sha256": "cc7fcc72b450c112c5e9f512f78fcad838e4f74ffb9868772dd9f9c49b8c7c06",
+      "included": true
+    },
+    "report.json": {
+      "bytes": 16633,
+      "sha256": "c035ed4dab1909ce86122e8002b8915e3c4dae772b9b40378e91b2aada8b256a",
+      "included": true
+    },
+    "source-root.json": {
+      "bytes": 2003,
+      "sha256": "764827949d16c65ab76496a7a23ac56ebc1e106f77fb1bd500a07022814ba438",
+      "included": false
+    },
+    "study-root.json": {
+      "bytes": 1772,
+      "sha256": "20605bef63ce6607164bdee4342ee2778f820cc95943ba9dc05efbc17ba970dc",
+      "included": false
+    }
+  },
+  "limitations": [
+    "Full progress/capability catalogs omitted from this evidence package; their hashes are recorded and originals remain in ignored local QA storage.",
+    "Evaluation used additional SDK implementation knowledge and the local callStudioTool path.",
+    "The subsequent narrow Skill correction removes unnecessary full-roadmap/catalog retrieval; no repeated end-to-end evaluation is claimed.",
+    "Registered-client argument projection after explicit JSON-schema metadata changes remains unverified."
+  ]
+}

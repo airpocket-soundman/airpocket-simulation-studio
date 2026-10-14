@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "syncedAt": "2026-10-14T23:18:23.371495+00:00",
+  "targetKind": "Existing user airpocket-studio skill directory",
+  "backupKind": "Local ignored QA directory; original Skill and UI metadata retained",
+  "sourceRevision": "a446dc515fce99bc03dde6ae96f7860ecf7716c9 plus reviewed uncommitted skill/input-inspection changes",
+  "entryBytesBefore": 2908,
+  "entryBytesAfter": 4491,
+  "files": [
+    {
+      "path": "SKILL.md",
+      "bytes": 4491,
+      "sha256": "bba01f4a2bcb71e7910310645fecc2231c82faa27f291e30ff5a3afd348a1668",
+      "installedMatches": true
+    },
+    {
+      "path": "references/browser-session.md",
+      "bytes": 6585,
+      "sha256": "7d11b26c67bc84a8b97fb34539ecf2ef12d1e9767aaa2be66257d0082c919ca6",
+      "installedMatches": true
+    },
+    {
+      "path": "references/case-archives-measurements.md",
+      "bytes": 7600,
+      "sha256": "b71ed5121e6b7fdd841e609e6ca541cecf1bb466491f764989ecf462130f8103",
+      "installedMatches": true
+    },
+    {
+      "path": "references/geometry-imports.md",
+      "bytes": 12090,
+      "sha256": "8d1b794bf432bb9bbff40401d006d1d6969d0d8dd3ff361b04ea5a3556d9fbfb",
+      "installedMatches": true
+    },
+    {
+      "path": "references/jobs-observations.md",
+      "bytes": 6991,
+      "sha256": "e5a18733c1e121e2c9b6a462283067517abe1af433867ba2090fddedd089ba77",
+      "installedMatches": true
+    },
+    {
+      "path": "references/physics-provenance.md",
+      "bytes": 9332,
+      "sha256": "4c03a0bf4a4f302bbc90bc1d1fb8480d2e69661a7dd217423f07d74d775a164e",
+      "installedMatches": true
+    },
+    {
+      "path": "references/result-views.md",
+      "bytes": 5513,
+      "sha256": "27d19cb62992114aed43389857adf3da80a23ebd06920e0c532920242cc84473",
+      "installedMatches": true
+    },
+    {
+      "path": "references/runtime-diagnostics.md",
+      "bytes": 4635,
+      "sha256": "e8827bdc7baa6fef0256d7ceaf0c06cc78f91ce01938c320634e10d2e4382ff4",
+      "installedMatches": true
+    },
+    {
+      "path": "references/saved-inputs.md",
+      "bytes": 18049,
+      "sha256": "19e1a4c9eeb808ff387f3930c21d1c8b3988c4ab4323211d04e9385ac920ac4c",
+      "installedMatches": true
+    }
+  ],
+  "uiMetadataUnchanged": true,
+  "serverRegistrationUnchanged": true,
+  "limitations": [
+    "Matching installed files does not refresh already-loaded conversation skill or MCP tool declarations.",
+    "Forward evaluation used SDK implementation knowledge; not proof of Skill-only complete workflow."
+  ],
+  "refinedAfterForwardEvaluation": "Avoid full roadmap/catalog requests for input-only tasks; engine capabilities only when selecting execution routes."
+}
