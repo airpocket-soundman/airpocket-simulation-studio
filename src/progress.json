@@ -219,7 +219,7 @@
       "detailEn": "After publication infrastructure and existing I/O/API/MCP/Skill work, prioritize ordinary-speed external airflow around fixed solids among new solvers. Evaluate existing OSS low-Mach incompressible viscous Navier–Stokes with inertia on native reference cases; assess unsteady/turbulence needs at the target Reynolds numbers.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work.",
       "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
-      "lastUpdateEn": "Fully developed channels released as CFDCHAN1. General 3D inlet/outlet, velocity-pressure coupling, geometry support and mass conservation remain outstanding."
+      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete."
     },
     {
       "id": "GPU1",
@@ -2152,6 +2152,23 @@
       "acceptance": "追加2/最終対象30件成功。実MCP/ライブで150N案と同領域適用、不正位置型拒否を検証。全体897は型宣言変更前。実登録SDKの型生成改善は再登録後の確認を残す。",
       "acceptanceEn": "Two new/thirty final targeted checks pass,including real MCP/live150N preview/same-region commit and invalid positional types. Full897 preceded declaration changes. Generated registered-SDK projection still requires refreshed-registration verification.",
       "evidence": "src/semantic-operation-schema.js; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json"
+    },
+    {
+      "id": "BROWSERCONNECTOR1",
+      "title": "ブラウザ専用MCPを単体ファイルで配布する",
+      "titleEn": "Distribute browser-only MCP as one file",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P3",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "既存Node24で動く3ツールの一時ローカル接続。配信manifestに版・サイズ・SHA256と必要runtimeを結び付ける。",
+      "detailEn": "Temporary local connector with three tools using existing Node24; bind distribution bytes and SHA256 to the manifest revision and runtime requirement.",
+      "acceptance": "単体隔離起動・契約・認証・権限・失効・切断・EOF終了を確認。公開配布物と実HTTPS接続の確認を残し、Node同梱版や再起動復旧とは区別する。",
+      "acceptanceEn": "Verify isolated single-file startup,contracts,authentication,scopes,expiry,disconnect and EOF cleanup. Public artifact/actual HTTPS verification remains; distinguish runtime bundling and restart recovery.",
+      "evidence": "scripts/studio-browser-mcp.mjs; scripts/build-browser-connector.mjs; tests/browser-only-mcp.test.mjs; tests/browser-connector-bundle.test.mjs; docs/evidence/2026-10-15-browser-connector.json"
     }
   ],
   "solvers": [
@@ -2279,7 +2296,8 @@
           "BROWSERBRIDGE1",
           "GUIJOBS1",
           "AGENTJOBS1",
-          "BROWSERFIELDS1"
+          "BROWSERFIELDS1",
+          "BROWSERCONNECTOR1"
         ],
         "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
       },

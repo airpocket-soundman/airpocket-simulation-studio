@@ -80,6 +80,20 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
+### 単体browser connector配布（実装済み・未公開）
+
+ブラウザ操作だけを使う軽量エントリは、ビルド時に `dist/assets/studio-browser-mcp.mjs` という単一ファイルになります。既存のNode 24が必要ですが、取得したファイルの実行にはリポジトリ、npm install、ネイティブソルバー、CAD/Gmsh/OCCTのローカル資産は不要です。Node自体を同梱した実行形式ではありません。ビルドには従来どおりリポジトリとnpm依存関係が必要です。
+
+配布時は、信頼する完全なコミットrevisionまたはreleaseタグを先に固定し、その版の `runtime-manifest.json` を取得します。manifestの `revision` が固定したコミットと一致し、`dirty:false` であることを確認してください。タグの場合は信頼するタグから完全なコミットへ解決します。同じ配布場所のmanifestとファイルだけの一致は、配布元の信頼性の保証にはなりません。
+
+manifestの任意フィールド `connector` は `{path:"assets/studio-browser-mcp.mjs",minimumNodeMajor:24,transport:"stdio"}` です。manifestのURLを基準に `connector.path` を解決し、取得したファイルのバイト長と生バイトのSHA-256を `files[connector.path].bytes` / `.sha256`（小文字16進数）と照合してから実行します。旧manifestにはconnectorが存在し得ないため、その場合はこの単体配布があると判断しません。公開された場合のパスは `/airpocket-simulation-studio/assets/studio-browser-mcp.mjs` です。
+
+MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https://airpocket-soundman.github.io` のように登録します。引数は実ページの正確なOrigin一つだけで、パスを含めません。公開ページのURL全体は `/airpocket-simulation-studio/` を含みますが、Originには含みません。stderrの `Browser connector:` にendpoint・origin・pairingTokenを出し、stdoutはJSON-RPC専用です。接続情報は上記のアプリ接続UIに入力し、必要なscopeだけを許可します。初期選択はinspectです。ローカル接続先の制限、Origin/Host/Bearer検査、期限切れの条件は既存接続と同じです。
+
+この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の29ツール／接続時31ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
+
+ソース実装と、単一ファイルだけを隔離ディレクトリへ置いたNode 24でのstdio・HTTP模擬ブラウザ接続・scope拒否・EOF終了のテストは完了しています。この配布物はまだ公開しておらず、公開HTTPSページと実ブラウザからの接続・ブラウザ権限は未検証です。
+
 ### ブラウザの途中の場を取得する
 
 接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと熱/過渡音響スカラー場・塑性/超弾性ステップ変位場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。

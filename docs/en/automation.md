@@ -80,6 +80,20 @@ The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. 
 
 At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, all GUI-route monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
 
+### Single-file browser connector distribution (implemented, unpublished)
+
+The browser-only entry builds to one file, `dist/assets/studio-browser-mcp.mjs`. It requires an existing Node 24 installation. Running the downloaded file requires no repository, npm install, native solver, or local CAD/Gmsh/OCCT assets. It is not an executable that bundles Node. Building it still requires the repository and npm dependencies.
+
+First pin a trusted full commit revision or release tag, then obtain that version's `runtime-manifest.json`. Check that its `revision` matches the pinned commit and that `dirty` is false. Resolve a trusted tag to its full commit when pinning a tag. Matching a manifest and file from the same distribution alone does not establish trust in that distribution.
+
+The optional manifest field `connector` is `{path:"assets/studio-browser-mcp.mjs",minimumNodeMajor:24,transport:"stdio"}`. Resolve `connector.path` against the manifest URL. Before execution, compare the downloaded file's byte length and SHA-256 of its raw bytes with `files[connector.path].bytes` and `.sha256` (lowercase hexadecimal). Older manifests may omit connector; its absence does not advertise this distribution. If published, its path will be `/airpocket-simulation-studio/assets/studio-browser-mcp.mjs`.
+
+Configure the MCP client with, for example, `node studio-browser-mcp.mjs --browser-origin=https://airpocket-soundman.github.io`. Supply exactly one argument containing the actual page's exact Origin, without a path. The public page URL includes `/airpocket-simulation-studio/`; its Origin does not. stderr emits `Browser connector:` with endpoint, origin and pairingToken; stdout is JSON-RPC only. Enter these connection details in the app's connection UI and grant only the needed scopes. Inspect is selected by default. Loopback binding, Origin/Host/Bearer checks and expiration follow the existing connector rules above.
+
+This entry exposes exactly three tools: `studio_browser_contracts`, `studio_browser_sessions` and `studio_browser_call`. Discovering contracts grants no permission; calls require the paired session's scopes. It is a separate entry from the existing server with 29 default tools or 31 tools in connector mode, which also handles saved files. To end a connection, disconnect in the app to cancel connection-owned jobs. Closing stdin (EOF) from the MCP client also closes the server, sessions and pending commands. Reconnection requires a fresh grant.
+
+Source implementation and isolated Node 24 tests are complete: the tests place only the single file in a separate directory and exercise stdio, an HTTP fake browser, scope refusal and EOF shutdown. This distribution has not been published. A real browser connection from the public HTTPS page, including browser permissions, has not been tested.
+
 ### Browser intermediate fields
 
 Use `startJob` with `includeFields:true` to retain intermediate meshes, thermal/transient-acoustic scalar fields and plasticity/hyperelastic step displacement fields in browser memory. Pass an `artifact.artifactId` from jobEvents to `jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`, or use shared `analysisApi.getJobArtifact(jobId,artifactId,options)`. The default returns summaries only; pages contain at most 200 nodes. Point measurements require a field artifact.

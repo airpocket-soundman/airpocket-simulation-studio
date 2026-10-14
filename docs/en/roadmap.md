@@ -72,8 +72,8 @@ Partial implementations exist for P0 capabilities/diagnostics,P1 input/provenanc
 
 ## Decision gates
 
-- Before P1: settle API/save schema compatibility, migration and unsupported-version rejection against existing projects, cases and six MCP tools.
-- Before P3: compare local-companion and relay transports for setup, authorization, information sharing, disconnection and installation-free reach. Local computation does not imply no external data transmission.
+- Before P1: settle API/save schema compatibility, migration and unsupported-version rejection against existing projects, cases and the full current shared API/MCP operation contracts.
+- Before public P3 acceptance: validate the chosen temporary-local connector with public HTTPS and the same-origin serving alternative, environment-specific setup/permissions, authentication, sharing, disconnection and installation-free reach. Local computation does not imply no external data transmission.
 - After P2 measurements: decide module boundaries, resource limits, cache/Worker policy and performance targets.
 - After the P6 small proof: decide Rust scope based on interoperability, size, startup, performance and maintenance. A wholesale rewrite remains undecided.
 - Before P5: validate real STEP exchange, design IDs/revisions/hashes, named regions and failed matching/reselection. The external SolidCraft API has not been verified in this review.
