@@ -1,0 +1,16 @@
+{
+  "environment": "Node deterministic deferred Worker adapter; not native WASM reproduction",
+  "gitBase": "59a9c43c876c35b43ea8b46cd6a9066d92a590c1",
+  "beforeSourceSha256": "fcba38379837fd6453337533fe5375bb67f38a456288ed6f8285fafc62686b27",
+  "afterSourceSha256": "786abd3909c1fd5d71398b6c3d9ac29fd96af1b5f484c4e3648c2bd0c30421a1",
+  "before": {
+    "settledBeforeWorkerExit": true,
+    "workerStillActive": true,
+    "terminationCalls": 1
+  },
+  "after": {
+    "settledBeforeWorkerExit": false,
+    "workerStillActive": true,
+    "terminationCalls": 1
+  }
+}

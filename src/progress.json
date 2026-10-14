@@ -1462,11 +1462,11 @@
       "status": "checking",
       "category": "基盤",
       "depends": [],
-      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。",
-      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs.",
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。 終了待機をHEADLESSLIFECYCLE1で修正。公式ハッシュ照合したportable Node26.10.0と24.11.1を同ソース全体試験で各2回実行し、毎回538成功・3スキップ、fatalは非再現。v24.19.0は当該V8修正を含む対照でない。原因解決やNode26への既定移行は断定しない。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json"
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json"
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1605,6 +1605,21 @@
       "acceptance": "新v2 core6件・関連35件・MCP2件成功。実IABで0/0/0→1/1/1取込、209414bytesのGUI/MCP4分割一致、v1で1/1/0→書出v2で1/1/1復元、円柱入力不変・保存結果/倍率25復元、日英を確認。初回全体は既知V8停止で1失敗。再試行523中520成功・3スキップ、ビルド・配信物26・SKILL成功。V8原因未解決。公開HTTPS・最大容量・全物理GUIは残す。",
       "acceptanceEn": "Six new core,35related and twoMCP tests pass. ActualIAB verifies0/0/0→1/1/1 import,209414byteGUI/MCP fourpage equality,v1→1/1/0 then exportedv2→1/1/1 restore, unchanged cylinder inputs, saved display/deform25 and JP/EN. Initial full suite had one knownV8 stop. Retry520passed/three skipped of523; build/26distribution/SKILL pass. V8 cause unresolved; publicHTTPS,maximum capacity and allphysicsGUI remain.",
       "evidence": "src/case-view-bundle.js; src/measurement-history.js; src/named-result-views.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/testing.md"
+    },
+    {
+      "id": "HEADLESSLIFECYCLE1",
+      "title": "解析APIの応答前にWorker終了を待機する",
+      "titleEn": "Wait for Worker termination before settling headless analysis",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "RUNTIMEWASM1"
+      ],
+      "detail": "headless解析の成功・失敗・取消・時間切れでterminate完了後だけPromiseを確定。終了処理失敗と元エラーを保持し、遅延応答と二重確定を防止。診断CLIに対象・並列数・別Node・親子環境・ソース指紋・途中記録を追加。共有ジョブの取消terminal先行は別の制約として残す。",
+      "detailEn": "Headless success/failure/cancel/timeout promises settle only after termination. Preserve cleanup and original errors; prevent late replies and duplicate settlements. Diagnostic CLI gains targets/concurrency/runtime identity/source fingerprints/checkpoints. Shared-job cancellation may still become terminal before cleanup ends.",
+      "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブ取消terminal先行は残す。ビルド・配信物26項目・SKILL成功。",
+      "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. Shared-job early cancellation terminal remains. Build,26distribution checks andSKILL passed.",
+      "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json"
     }
   ],
   "solvers": [

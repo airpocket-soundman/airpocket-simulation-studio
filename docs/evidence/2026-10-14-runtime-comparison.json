@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "scope": "Frozen-source full-suite comparison after awaiting Worker termination; no pre-change full-suite control and no native failure reproduced in these four runs.",
+  "sourceFingerprint": "sha256:f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e863594b595",
+  "testFileCount": 128,
+  "concurrency": 4,
+  "results": {
+    "24": {
+      "childRuntime": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "node": "v24.11.1",
+        "v8": "13.6.233.10-node.28",
+        "platform": "win32",
+        "arch": "x64",
+        "release": "node"
+      },
+      "parentRuntime": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "node": "v24.11.1",
+        "v8": "13.6.233.10-node.28",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "runtimeBinarySha256": "f13ac3ca23248dc389507e8fe38c34489ab7edb3e6d6700eb6da6a0b7e128eaf",
+      "evidence": "2026-10-14-runtime-node24-full.json",
+      "evidenceSha256": "2ae4f8b532f6099acca81a2b6623b9e1d28c148b4f0e948f62f2a307b94556ef",
+      "nodeOptionsPresent": false,
+      "trials": [
+        {
+          "iteration": 1,
+          "code": 0,
+          "wallDurationMs": 68083,
+          "wasmAllocationFatal": false,
+          "tests": 541,
+          "pass": 538,
+          "fail": 0,
+          "skipped": 3,
+          "duration_ms": 67986.382
+        },
+        {
+          "iteration": 2,
+          "code": 0,
+          "wallDurationMs": 69192,
+          "wasmAllocationFatal": false,
+          "tests": 541,
+          "pass": 538,
+          "fail": 0,
+          "skipped": 3,
+          "duration_ms": 69098.2428
+        }
+      ]
+    },
+    "26": {
+      "childRuntime": {
+        "executable": "D:\\github\\airpocket-soundman\\airpocket-simulation-studio\\.qa\\node-v26.10.0-win-x64\\node.exe",
+        "node": "v26.10.0",
+        "v8": "14.6.202.34-node.34",
+        "platform": "win32",
+        "arch": "x64",
+        "release": "node"
+      },
+      "parentRuntime": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "node": "v24.11.1",
+        "v8": "13.6.233.10-node.28",
+        "platform": "win32",
+        "arch": "x64"
+      },
+      "runtimeBinarySha256": "cea6ac365f9bb9586dafd2084d996e092e7d3e7d07ab52d1f76bf53d1fca9bc4",
+      "evidence": "2026-10-14-runtime-node26-full.json",
+      "evidenceSha256": "07dfaa5a13ff567d1685161dd11b0d62f56cda8728f435d3c3e58c78c1af2c5e",
+      "nodeOptionsPresent": false,
+      "trials": [
+        {
+          "iteration": 1,
+          "code": 0,
+          "wallDurationMs": 163283,
+          "wasmAllocationFatal": false,
+          "tests": 541,
+          "pass": 538,
+          "fail": 0,
+          "skipped": 3,
+          "duration_ms": 161603.2054
+        },
+        {
+          "iteration": 2,
+          "code": 0,
+          "wallDurationMs": 161887,
+          "wasmAllocationFatal": false,
+          "tests": 541,
+          "pass": 538,
+          "fail": 0,
+          "skipped": 3,
+          "duration_ms": 160084.9643
+        }
+      ]
+    }
+  },
+  "officialPortableRuntime": {
+    "url": "https://nodejs.org/dist/v26.10.0/win-x64/node.exe",
+    "checksumsUrl": "https://nodejs.org/dist/v26.10.0/SHASUMS256.txt",
+    "sha256": "cea6ac365f9bb9586dafd2084d996e092e7d3e7d07ab52d1f76bf53d1fca9bc4"
+  },
+  "globalRuntimeChanged": false,
+  "v8RootCauseResolved": false,
+  "performanceLimit": "Sequential Windows observations with uncontrolled cold-start/security/cache effects; not a production performance benchmark.",
+  "finalValidation": {
+    "buildPassed": true,
+    "distributionChecksPassed": 26,
+    "distributionSeconds": 27.87,
+    "skillValidationPassed": true,
+    "defaultNode": "v24.11.1"
+  }
+}

@@ -265,3 +265,17 @@ coreは版・バイト数・ハッシュ・UTF-8、逐次チャンクと直前�
 全体初回試験は518件中514成功・1失敗・3スキップ（68.639秒）。Node v24.11.1/V8で既知の`jit_page_->allocations_.erase(addr) == 1` Fatal errorが再発し、`tests/material-catalog.test.mjs`のプロセスが失敗した。同じファイルの単独再実行は7件成功（2.945秒）。単独成功は原因解決を意味せず、RUNTIMEWASM1は未解決のまま。
 
 [再発の機械可読証拠](evidence/2026-10-14-wasm-material-catalog-failure.json)へトレース、Node/V8環境、ソースハッシュ、初回結果と単独再実行を保存した。全体再試行は523件中520成功・3スキップ・失敗0（68.23秒）。初回失敗を置き換えず併記し、RUNTIMEWASM1は未解決として残す。
+
+## 2026-10-14: WASM診断とWorker終了所有権
+
+診断CLIのtarget/runtime/concurrency指定とチェックポイントを拡充し、headless完了PromiseをWorker終了後へ変更。共有job取消terminalとWorker資源解放の時点は異なる。v24.19.0は修正済み対照ではなく、公式ハッシュ照合済みportable v26.10.0を.qa内で比較する。詳細・一次資料は[調査記録](wasm-runtime-investigation.md)。最終試験・比較結果は下記の通りで、V8根治は未証明。
+
+## 2026-10-14: 所有権修正後の同一ソース比較結果
+
+sourceFingerprintは`f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e863594b595`。同じ128試験ファイル、並列数4で各Nodeを2新規プロセス実行した。Node v24.11.1は各541件中538成功・3スキップ・失敗0（壁時計68,083/69,192 ms、試験時間67,986.382/69,098.2428 ms）。Node v26.10.0も同じ件数で全成功（壁時計163,283/161,887 ms、試験時間161,603.2054/160,084.9643 ms）。全4回で既知native fatalは再現しなかった。
+
+全比較はWorker所有権修正後で、修正前の同条件全体対照はない。Node26が遅かったのは今回の観測で、コールドスタート・セキュリティ・キャッシュを制御しておらず製品性能ベンチマークではない。特定V8修正や所有権修正が停止を根治した因果証明にもならない。既定Nodeは変更せず、RUNTIMEWASM1は未解決を維持する。
+
+[比較要約](evidence/2026-10-14-runtime-comparison.json)、[Node24全記録](evidence/2026-10-14-runtime-node24-full.json)、[Node26全記録](evidence/2026-10-14-runtime-node26-full.json)を保存。[FakeWorkerによる修正前後比較](evidence/2026-10-14-headless-worker-ownership.json)は旧settledBeforeExit:true、新false、terminateCallsは両者1で、終了待機の資源契約を決定論的に示す。native WASM停止の再現試験ではない。
+
+新規のライフサイクル12件と診断CLI6件の計18件、および実処理を含む関連10件が成功。ビルド・ローカル配信物26項目（27.87秒）・SKILL検証成功。

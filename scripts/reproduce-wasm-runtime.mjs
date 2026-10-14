@@ -1,27 +1,44 @@
 // Isolated diagnostic only: never changes solver settings or production launch flags.
 import {spawn,execFileSync} from 'node:child_process';
-import {open,readFile} from 'node:fs/promises';
-import {resolve,dirname} from 'node:path';
+import {open,readFile,readdir} from 'node:fs/promises';
+import {resolve,dirname,isAbsolute,relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),target='tests/analysis-job-service.test.mjs';
-const [countText,output,...extra]=process.argv.slice(2),iterations=Number(countText);
-if(extra.length||!/^\d+$/.test(countText??'')||!Number.isInteger(iterations)||iterations<1||iterations>100||!output)throw Error('Usage: node scripts/reproduce-wasm-runtime.mjs <iterations 1..100> <new-output.json>');
-const destination=resolve(output),file=await open(destination,'wx');
-try{
- const sources=['scripts/headless-analysis.mjs','scripts/headless-worker.mjs','scripts/analysis-job-service.mjs','src/analysis-jobs.js',target],sourceSha256={};
- for(const path of sources)sourceSha256[path]=createHash('sha256').update(await readFile(resolve(root,path))).digest('hex');
- const report={schemaVersion:1,startedAt:new Date().toISOString(),runtime:{executable:process.execPath,node:process.version,v8:process.versions.v8,platform:process.platform,arch:process.arch},gitHead:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',timeout:5000}).trim(),sourceSha256,target,iterationsRequested:iterations,timeoutMs:30000,outputLimitBytesPerStream:1000000,results:[]};
- for(let iteration=1;iteration<=iterations;iteration++){
-  const started=Date.now(),result=await new Promise(resolveResult=>{
-   const child=spawn(process.execPath,['--test',target],{cwd:root,stdio:['ignore','pipe','pipe']}),parts={stdout:[],stderr:[]},sizes={stdout:0,stderr:0};let timedOut=false,outputLimited=false,error;
-   const timer=setTimeout(()=>{timedOut=true;child.kill();},report.timeoutMs);
-   for(const stream of ['stdout','stderr'])child[stream].on('data',chunk=>{sizes[stream]+=chunk.length;if(sizes[stream]>report.outputLimitBytesPerStream){outputLimited=true;child.kill();}else parts[stream].push(chunk);});
-   child.on('error',value=>{error=value.message;});child.on('close',(code,signal)=>{clearTimeout(timer);const stdout=Buffer.concat(parts.stdout).toString('utf8'),stderr=Buffer.concat(parts.stderr).toString('utf8');resolveResult({iteration,code,signal,durationMs:Date.now()-started,timedOut,outputLimited,...(error?{error}:{}),wasmAllocationFatal:/jit_page_->allocations_\.erase\(addr\) == 1/.test(stdout+stderr),stdout,stderr});});
-  });
-  report.results.push(result);console.log(JSON.stringify({iteration,code:result.code,timedOut:result.timedOut,wasmAllocationFatal:result.wasmAllocationFatal}));
-  if(result.code!==0||result.timedOut||result.outputLimited||result.error)break;
- }
- report.finishedAt=new Date().toISOString();report.allPassed=report.results.length===iterations&&report.results.every(r=>r.code===0&&!r.timedOut&&!r.outputLimited&&!r.error);
- await file.writeFile(JSON.stringify(report,null,2)+'\n');if(!report.allPassed)process.exitCode=1;
-}finally{await file.close();}
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const targets=Object.freeze({'analysis-jobs':['tests/analysis-job-service.test.mjs'],'material-catalog':['tests/material-catalog.test.mjs']});
+const usage='Usage: node scripts/reproduce-wasm-runtime.mjs <iterations 1..100> <new-output.json> [--target=analysis-jobs|material-catalog|full] [--concurrency=1..4] [--runtime=<absolute node executable>]';
+export function parseReproductionArgs(argv,{defaultRuntime=process.execPath}={}){
+ if(!Array.isArray(argv)||argv.some(value=>typeof value!=='string'))throw Error(usage);const [countText,output,...flags]=argv,iterations=Number(countText);
+ if(!/^\d+$/.test(countText??'')||!Number.isInteger(iterations)||iterations<1||iterations>100||!output||output.startsWith('--')||output.includes('\0'))throw Error(usage);
+ let target='analysis-jobs',concurrency=null,runtime=defaultRuntime;const seen=new Set();
+ for(const flag of flags){const match=/^--(target|concurrency|runtime)=(.+)$/.exec(flag);if(!match||seen.has(match[1]))throw Error(usage);seen.add(match[1]);const [,name,value]=match;if(name==='target'){if(value!=='full'&&!Object.hasOwn(targets,value))throw Error(usage);target=value;}else if(name==='concurrency'){if(!/^[1-4]$/.test(value))throw Error(usage);concurrency=Number(value);}else runtime=value;}
+ if(typeof runtime!=='string'||!isAbsolute(runtime)||runtime.includes('\0'))throw Error('Runtime must be an absolute Node executable path');
+ return {iterations,output:resolve(output),target,concurrency,runtime:resolve(runtime)};
+}
+export async function selectReproductionTests(target){if(Object.hasOwn(targets,target))return [...targets[target]];if(target!=='full')throw Error('Unknown diagnostic target');return (await readdir(resolve(root,'tests'),{withFileTypes:true})).filter(entry=>entry.isFile()&&entry.name.endsWith('.test.mjs')).map(entry=>'tests/'+entry.name).sort();}
+export async function writeReproductionCheckpoint(file,report){const bytes=Buffer.from(JSON.stringify(report,null,2)+'\n');let offset=0;while(offset<bytes.length){const result=await file.write(bytes,offset,bytes.length-offset,offset);if(!result.bytesWritten)throw Error('Diagnostic checkpoint write made no progress');offset+=result.bytesWritten;}await file.truncate(bytes.length);await file.sync();}
+const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
+const parentIdentity=()=>({executable:process.execPath,node:process.version,v8:process.versions.v8,platform:process.platform,arch:process.arch});
+export function queryNodeIdentity(runtime){if(typeof runtime!=='string'||!isAbsolute(runtime)||runtime.includes('\0'))throw Error('Runtime must be an absolute Node executable path');const query="JSON.stringify({executable:process.execPath,node:process.version,v8:process.versions.v8,platform:process.platform,arch:process.arch,release:process.release.name})",identity=JSON.parse(execFileSync(runtime,['-p',query],{cwd:root,encoding:'utf8',timeout:5000,maxBuffer:1000000,shell:false,windowsHide:true}).trim());if(identity.release!=='node'||!/^v\d+\./.test(identity.node)||typeof identity.v8!=='string'||!isAbsolute(identity.executable))throw Error('Selected runtime did not identify itself as Node');return identity;}
+async function sourceFiles(tests){const files=new Set([...tests,'scripts/reproduce-wasm-runtime.mjs','package.json','package-lock.json','scripts/worker-runtime/gmsh/gmsh.mjs','scripts/worker-runtime/mfem/mfem.mjs']);for(const directory of ['src','scripts'])for(const entry of await readdir(resolve(root,directory),{withFileTypes:true}))if(entry.isFile()&&/\.(?:js|mjs|json)$/.test(entry.name))files.add(directory+'/'+entry.name);async function wasm(directory){for(const entry of await readdir(directory,{withFileTypes:true})){const path=resolve(directory,entry.name);if(entry.isDirectory())await wasm(path);else if(entry.isFile()&&entry.name.endsWith('.wasm'))files.add(relative(root,path).replaceAll('\\','/'));}}await wasm(resolve(root,'public'));return [...files].sort();}
+export async function runWasmReproduction(config){
+ const file=await open(config.output,'wx'),runtime=parentIdentity(),report={schemaVersion:1,startedAt:new Date().toISOString(),runtime,parentRuntime:{...runtime},childRuntime:null,targetName:config.target,target:config.target==='full'?'full':targets[config.target][0],targetTests:[],iterationsRequested:config.iterations,concurrency:config.concurrency,timeoutMs:config.target==='full'?180000:30000,outputLimitBytesPerStream:1000000,runtimeRequested:config.runtime,nodeOptionsPresent:!!process.env.NODE_OPTIONS,...(process.env.NODE_OPTIONS?{nodeOptionsSha256:sha256(process.env.NODE_OPTIONS)}:{}),status:'initializing',results:[]};let activeChild=null,interrupted=null;
+ const stop=signal=>{interrupted=signal;activeChild?.kill();},onInt=()=>stop('SIGINT'),onTerm=()=>stop('SIGTERM');process.on('SIGINT',onInt);process.on('SIGTERM',onTerm);
+ try{
+  await writeReproductionCheckpoint(file,report);report.childRuntime=queryNodeIdentity(config.runtime);report.targetTests=await selectReproductionTests(config.target);
+  report.gitHead=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',timeout:5000,shell:false,windowsHide:true}).trim();report.gitDirtyEntries=execFileSync('git',['status','--porcelain=v1','--untracked-files=all','-z'],{cwd:root,encoding:'utf8',timeout:5000,maxBuffer:1000000,shell:false,windowsHide:true}).split('\0').filter(Boolean);report.sourceSha256={};
+  for(const path of await sourceFiles(report.targetTests)){const candidate=resolve(root,path),sameOutput=process.platform==='win32'?candidate.toLowerCase()===config.output.toLowerCase():candidate===config.output;if(!sameOutput)report.sourceSha256[path]=sha256(await readFile(candidate));}report.sourceFingerprint='sha256:'+sha256(JSON.stringify(report.sourceSha256));
+  report.childArgv=['--test',...(config.concurrency===null?[]:['--test-concurrency='+config.concurrency]),...report.targetTests];report.status='running';await writeReproductionCheckpoint(file,report);
+  for(let iteration=1;iteration<=config.iterations&&!interrupted;iteration++){
+   report.activeIteration={iteration,startedAt:new Date().toISOString()};await writeReproductionCheckpoint(file,report);if(interrupted){delete report.activeIteration;break;}const started=Date.now(),result=await new Promise(resolveResult=>{
+    const child=spawn(config.runtime,report.childArgv,{cwd:root,stdio:['ignore','pipe','pipe'],shell:false,windowsHide:true}),parts={stdout:[],stderr:[]},sizes={stdout:0,stderr:0};activeChild=child;let timedOut=false,outputLimited=false,error;
+    const timer=setTimeout(()=>{timedOut=true;child.kill();},report.timeoutMs);
+    for(const stream of ['stdout','stderr'])child[stream].on('data',chunk=>{sizes[stream]+=chunk.length;if(sizes[stream]>report.outputLimitBytesPerStream){outputLimited=true;child.kill();}else parts[stream].push(chunk);});
+    child.on('error',value=>{error=value.message;});child.on('close',(code,signal)=>{clearTimeout(timer);activeChild=null;const stdout=Buffer.concat(parts.stdout).toString('utf8'),stderr=Buffer.concat(parts.stderr).toString('utf8');resolveResult({iteration,code,signal,durationMs:Date.now()-started,timedOut,outputLimited,...(error?{error}:{}),wasmAllocationFatal:/jit_page_->allocations_\.erase\(addr\) == 1/.test(stdout+stderr),stdout,stderr});});
+   });
+   report.results.push(result);delete report.activeIteration;await writeReproductionCheckpoint(file,report);console.log(JSON.stringify({iteration,code:result.code,timedOut:result.timedOut,wasmAllocationFatal:result.wasmAllocationFatal}));if(result.code!==0||result.timedOut||result.outputLimited||result.error)break;
+  }
+  report.finishedAt=new Date().toISOString();report.allPassed=!interrupted&&report.results.length===config.iterations&&report.results.every(result=>result.code===0&&!result.timedOut&&!result.outputLimited&&!result.error);report.status=interrupted?'interrupted':report.allPassed?'completed':'failed';if(interrupted)report.interruptedBy=interrupted;await writeReproductionCheckpoint(file,report);if(!report.allPassed)process.exitCode=1;return report;
+ }catch(error){report.status='failed';report.finishedAt=new Date().toISOString();report.error=error.message;await writeReproductionCheckpoint(file,report);throw error;}finally{process.off('SIGINT',onInt);process.off('SIGTERM',onTerm);await file.close();}
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url))await runWasmReproduction(parseReproductionArgs(process.argv.slice(2)));

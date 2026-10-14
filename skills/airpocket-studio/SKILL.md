@@ -170,3 +170,9 @@ v2 bundles recompute every recorded measurement against the matching display-pre
 On a measurement-enabled host, v1 import returns measurementsCleared:true and an effective v2 revision with empty history. v2 metadata includes measurementCount. Local actual-UI v1 clearing/v2 restoration and GUI/MCP export-byte equality were checked.
 
 caseBundleExport() is read-only: it returns the captured snapshot revision, without an expectedArchiveRevision precondition. Keep expectedArchiveRevision mandatory for import/CAS.
+
+## Recover from runtime termination
+
+A V8 `jit_page_->allocations_.erase(addr) == 1` fatal is an unresolved runtime failure; do not label it physical invalidity or solver nonconvergence. After an stdio process stops, its in-memory jobs/events and retained request-id idempotency are lost. Do not assume old job IDs can be recovered. Before retrying, reread original inputs, existing output paths and published artifacts to establish what completed; use a new outputPath/requestId for recomputation. Do not overwrite files or silently change solver/tolerances.
+
+For investigation, scripts/reproduce-wasm-runtime.mjs can fix target/runtime/concurrency and save an exclusive report with parent/child runtime identities and source fingerprints; consult docs/wasm-runtime-investigation.md. Node24.19.0 retains the old wrapper code and is not a fixed control. Node26 source contains the correction/successor implementation, making it a comparison candidate, not proof that this application's root cause is resolved.

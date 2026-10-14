@@ -42,4 +42,24 @@ node scripts/reproduce-wasm-runtime.mjs 12 .qa/wasm-runtime-new.json
 
 The first full suite reported 518 tests: 514 passed, one failed and three skipped in 68.639 seconds. Node v24.11.1/V8 again stopped with the known fatal `jit_page_->allocations_.erase(addr) == 1`, failing the `tests/material-catalog.test.mjs` process. An isolated rerun of that file passed seven tests in 2.945 seconds. This does not establish root-cause resolution; RUNTIMEWASM1 remains unresolved.
 
-The [machine-readable recurrence evidence](../evidence/2026-10-14-wasm-material-catalog-failure.json) preserves trace, Node/V8 environment, source hashes, initial results and the isolated retry. The full-suite retry remains under verification and will be recorded alongside the original failure.
+The [machine-readable recurrence evidence](../evidence/2026-10-14-wasm-material-catalog-failure.json) preserves trace, Node/V8 environment, source hashes, initial results and the isolated retry. The saved full-suite retry passed 520 of 523 tests with three skips and zero failures in 68.229 seconds; all 26 distribution checks passed in 28.44 seconds. These are recorded alongside the original failure, not as proof of root-cause resolution.
+
+## Diagnostic CLI and Worker ownership update
+
+`node scripts/reproduce-wasm-runtime.mjs <1..100> <new-output.json> [--target=analysis-jobs|material-catalog|full] [--concurrency=1..4] [--runtime=<absolute Node executable>]` compares identical sources under selected runtimes. Defaults are analysis-jobs and the parent Node; omitted concurrency uses Node defaults. Full enumerates .test.mjs files directly under tests, with 180 seconds per run (30 for other targets) and a 1,000,000-byte limit per output stream. Failures stop subsequent iterations. Exclusive new output records synced checkpoints before/after each iteration, parent/child Node/V8, argv, Git dirty entries, test list, source/WASM hashes/fingerprint, stdout/stderr, exit code/signal and fatal detection. NODE_OPTIONS records presence/hash, not its value.
+
+The headless completion Promise now waits for worker.terminate() before settling success/failure, including cancellation and timeout. This corrects resource ownership, not V8. Shared-job cancellation can become terminal earlier; all-terminal jobs do not guarantee all Workers have exited.
+
+Official [v24.11.1](https://raw.githubusercontent.com/nodejs/node/v24.11.1/deps/v8/src/wasm/wasm-import-wrapper-cache.cc) and [v24.19.0](https://raw.githubusercontent.com/nodejs/node/v24.19.0/deps/v8/src/wasm/wasm-import-wrapper-cache.cc) retain old MaybeGet AddRef-before-is_dying ordering. Bundled v24.19.0 is not a fixed control. The official [v26.10.0 release](https://nodejs.org/en/blog/release/v26.10.0) tag contains [atomic V8 reference management](https://raw.githubusercontent.com/nodejs/node/v26.10.0/deps/v8/src/wasm/wasm-code-manager.h) and successor wrapper-cache code. Containing that correction does not prove this application's root cause is identical.
+
+Official portable Node v26.10.0 / V8 14.6.202.34-node.34 was obtained only under .qa. node.exe SHA-256 `cea6ac365f9bb9586dafd2084d996e092e7d3e7d07ab52d1f76bf53d1fca9bc4` matched official SHASUMS. Global PATH and installed Node were unchanged. Frozen-source comparison results are recorded below. Non-reproduction alone cannot establish resolution.
+
+## 2026-10-14: identical-source comparison after ownership repair
+
+Source fingerprint: `f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e863594b595`. The same 128 test files ran at concurrency four in two fresh processes per runtime. Node v24.11.1 passed 538 of 541 tests with three skips and zero failures in each run (wall68,083/69,192 ms; test67,986.382/69,098.2428 ms). Node v26.10.0 passed identical counts (wall163,283/161,887 ms; test161,603.2054/160,084.9643 ms). The known native fatal did not reproduce in any of four runs.
+
+All comparisons used the ownership repair; there is no pre-change full-suite control under identical conditions. Node26 was slower in this observation, but cold start/security/cache were uncontrolled: this is not a product performance benchmark or causal proof that a particular V8/ownership correction resolved the stop. Default Node remains unchanged and RUNTIMEWASM1 remains unresolved.
+
+Saved evidence includes the [comparison summary](../evidence/2026-10-14-runtime-comparison.json), [Node24 report](../evidence/2026-10-14-runtime-node24-full.json) and [Node26 report](../evidence/2026-10-14-runtime-node26-full.json). The [deterministic FakeWorker before/after record](../evidence/2026-10-14-headless-worker-ownership.json) shows old settledBeforeExit:true versus new false, with terminateCalls:1 in both. It proves the exit-wait ownership contract, not native WASM crash reproduction.
+
+All 18 new targets passed (12 lifecycle and six diagnostic CLI tests), as did ten real related tests. Build,26 local-distribution checks (27.87seconds) and SKILL validation passed.
