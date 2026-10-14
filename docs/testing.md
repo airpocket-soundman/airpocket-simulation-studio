@@ -469,3 +469,15 @@ P0の操作発見とP3の直接失敗伝達の限定範囲を確認した。完�
 同一ソースの既定Node v24.11.1/V8 13.6.233.10-node.28は839件報告中835成功・1失敗・3skip（111,123.5471 ms）。stokes-observation-pipelineで既知の`jit_page_->allocations_.erase(addr) == 1`によるnative fatalが再発した。[失敗の生ログとハッシュ](evidence/2026-10-15-operation-contracts-node24-failed.json)を保存し、該当ファイル単独3件成功（2,121.8792 ms）とも区別する。公式ハッシュ照合済みportable Node v26.10.0/V8 14.6.202.34-node.34による同一ソース比較は840件中837成功・3skip・失敗0（284,504.7249 ms）。既定Nodeを変更せず、V8根治も断定しないためBROWSERCONTRACTS1はcheckingを維持する。ビルド2.81秒、既定Node24のローカル配信物26項目28.18秒、専門SKILL、日英文書/進捗5件が成功。全体後のsource hash差分は進捗JSONとビルド生成publicコピーだけ。
 
 最終差分検査で契約定義1ファイル末尾の余分な空行を除去した。末尾改行以外のバイト一致・変更前後SHAを全体証跡に保存し、契約/HTTP/MCPの対象10件を再検証した。
+
+## 2026-10-15: 読取専用編集候補とホスト表現の版照合
+
+新規試験30件（pure preview 8、共有/ライブ7、MCP3、study8、mesh4）を追加。GUI study共用抽出は既存24状態を読取専用で旧/新比較し一致を確認した。既存のms/µs表示変換を含む候補を明示normalization後の版で検査・確定し、actual inspect版との一致を実ローカルGUIで確認した。新たな利用者向けUI操作は追加していない。
+
+実GUIでは100 Nジョブの前後ともrunningである間に150 N設定案をプレビューし、現在入力と元snapshotが変わらないことを確認。完了後だけ候補版を適用した。別途明示したsize 1・JavaScriptの100 Nとsize 5・WASMの150 Nの2解析が成功し、中央変位0.02/0.03 mm、最大0.04/0.06 mmを得た。legacy/completePreflight:false表示は維持した。これは異なるメッシュ・実行経路を持つQA比較で、一般の物理精度やメッシュ独立性の証明ではない。[主GUI記録](evidence/2026-10-15-browser-edit-preview.json)と[画面](evidence/2026-10-15-browser-edit-preview.jpg)、[全体記録](evidence/2026-10-15-edit-preview-full.json)を参照。
+
+初回のsize 0.6はmesh集計のstack overflowとなった。修正後は既存の30,000要素上限へ正しく到達して拒否し、上限は変更していない。初回ジョブの完全exportはVite HMRで未取得のため、[初回記録](evidence/2026-10-15-browser-edit-preview-first-attempt.json)・[running画面](evidence/2026-10-15-browser-edit-preview-running.jpg)の観測field/setup/running情報を、主記録のraw成功結果と区別する。
+
+P1/P3の候補検査・版照合・実行中非変更の限定確認であり、全P0〜P6は未完了。nested物理検証・公開HTTPS・再起動越しジョブ、一般物理精度、既知Node24/V8問題の根治は証明していない。
+
+最終の既定Node v24.11.1全体は872件中869成功・3skip・失敗0（117.41秒）。初回870件中4失敗は追加操作による旧80件固定assertで、4箇所を81へ更新し対象4件と全体で確認した。初回記録も保持する。ビルド3.01秒、ローカル配信物26項目30.52秒、文書・進捗7件、SKILL検証が成功。全体後のハッシュ差分は進捗JSONと生成publicコピーのみ。新機能は公開待ちreadyであり、公開HTTPSやV8根治を示さない。

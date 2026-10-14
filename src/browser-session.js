@@ -5,6 +5,7 @@ import {canonicalJson} from './project-revision.js';
 import {browserMethods} from './browser-operation-names.js';
 export {browserMethods} from './browser-operation-names.js';
 import {getAnalysisFailure} from './analysis-failure.js';
+import {previewProjectOperations} from './project-edit-preview.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
 export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
@@ -34,9 +35,14 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='applyCaseSource'||method==='clearCaseSource'){if(!caseSources||editing||busy())throw Error('Case source operations unavailable or browser busy');editing=true;try{return await caseSources[method==='applyCaseSource'?'apply':'clear'](args,{guard:valid});}finally{editing=false;}}
    if(method==='prepareFluidDomain'||method==='applyFluidDomainMesh'){if(!fluidDomains||editing||busy())throw Error('Fluid domain operations unavailable or browser busy');editing=true;try{return await fluidDomains[method==='prepareFluidDomain'?'prepare':'applyMesh'](args,{guard:valid});}finally{editing=false;}}
    if(method==='preflight')return studio.preflight(args.options||{},args.context||{});
+   if(method==='previewEdit'){
+    const snapshot=project(),previewOptions={expectedRevision:args.expectedRevision,options:args.options,operation:args.operation,mode:args.mode},response=typeof studio.previewOperations==='function'?await studio.previewOperations(args.operations,previewOptions):await previewProjectOperations(snapshot,args.operations,{...previewOptions,target:'browser'});
+    if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during edit preview.'),{code:'EDIT_PREVIEW_STALE'});
+    return response;
+   }
    if(method==='edit'){
     if(editing||busy())throw Error('Browser is busy');editing=true;
-    try{if(typeof args.expectedRevision!=='string')throw Error('expectedRevision is required');const snapshot=project();const output=await applyProjectOperations(snapshot,args.operations,{expectedRevision:args.expectedRevision});if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot)||busy())throw Error('Project changed, command expired or connection revoked');studio.loadProject(output.project);return {schemaVersion:1,revision:await getProjectRevision(project()),summary:studio.getSummary()};}finally{editing=false;}
+    try{if(typeof args.expectedRevision!=='string')throw Error('expectedRevision is required');const snapshot=project();if(typeof studio.applyOperations==='function'){const applied=await studio.applyOperations(args.operations,{expectedRevision:args.expectedRevision,expectedResultingRevision:args.expectedResultingRevision},{guard:()=>valid()&&!busy()});return {schemaVersion:1,revision:applied.revision,summary:applied.summary,...(applied.normalization?{normalization:applied.normalization}:{})};}const output=await applyProjectOperations(snapshot,args.operations,{expectedRevision:args.expectedRevision,expectedResultingRevision:args.expectedResultingRevision});if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot)||busy())throw Error('Project changed, command expired or connection revoked');studio.loadProject(output.project);return {schemaVersion:1,revision:await getProjectRevision(project()),summary:studio.getSummary()};}finally{editing=false;}
    }
    if(method==='startJob'){if(typeof args.inputRevision!=='string'||typeof args.requestId!=='string'||!args.requestId.trim())throw Error('inputRevision and requestId are required');const fingerprint=canonicalJson(args),prior=requests.get(args.requestId);if(prior&&prior.fingerprint!==fingerprint)throw Error('requestId conflicts with previous browser request');if(editing||(!prior&&busy()))throw Error('Browser is busy');editing=true;try{const snapshot=project();if(await getProjectRevision(snapshot)!==args.inputRevision||JSON.stringify(project())!==JSON.stringify(snapshot)||!valid())throw Error('Project revision conflict or expired command');const job=analysis.startJob(args);owned.add(job.jobId);requests.set(args.requestId,{fingerprint,jobId:job.jobId});return job;}finally{editing=false;}}
    if(method==='listJobs')return analysis.listJobs(args);

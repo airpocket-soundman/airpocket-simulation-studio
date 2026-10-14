@@ -1,0 +1,2284 @@
+{
+  "environment": "Actual local browser with native Worker/WASM and live stdio MCP/HTTP;explicit synthetic axial QA references,not measured calibration.",
+  "initial": {
+    "schemaVersion": 1,
+    "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "project": {
+      "loaded": true,
+      "name": "曲面サンプル · Ø24 × 60 mm",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "methods": {
+      "inspect": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "previewEdit": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "caseList": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:12a02fbb1c259923ed68c10d048d291e5b182a35d883610f18c331f3a55e08b0",
+    "summary": {
+      "loaded": true,
+      "name": "Reviewed next-step axial reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "nonIdempotentUnitRoundtrip": {
+    "preview": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:12a02fbb1c259923ed68c10d048d291e5b182a35d883610f18c331f3a55e08b0",
+      "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "operationCount": 1,
+      "changedPointers": {
+        "pointers": [
+          "/study/acousticDuration",
+          "/study/referenceLengthMm"
+        ],
+        "total": 2,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [
+          {
+            "code": "STRUCTURAL_SUPPORT_MISSING",
+            "severity": "error",
+            "target": "/conditions",
+            "message": "No fixed or displacement support was specified",
+            "evidence": {
+              "supportCount": 0
+            },
+            "suggestions": [
+              "Specify intended supports; do not add artificial constraints only to make the solve converge"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "MATERIAL_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/youngModulus",
+            "message": "Required explicit material value is missing",
+            "evidence": {
+              "key": "youngModulus",
+              "unit": "Pa"
+            },
+            "suggestions": [
+              "Obtain the material value and its source, or record an explicit exploratory assumption"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "MATERIAL_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/poissonRatio",
+            "message": "Required explicit material value is missing",
+            "evidence": {
+              "key": "poissonRatio",
+              "unit": "1"
+            },
+            "suggestions": [
+              "Obtain the material value and its source, or record an explicit exploratory assumption"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 3,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 4,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:498974f7b63da7837190984e26fb94659900f84411f3b34373c6285cbd560691",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticDuration",
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 43,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4"
+      }
+    },
+    "committed": {
+      "schemaVersion": 1,
+      "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:498974f7b63da7837190984e26fb94659900f84411f3b34373c6285cbd560691",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticDuration",
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 43,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4"
+      }
+    }
+  },
+  "setup": {
+    "preview": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "operationCount": 6,
+      "changedPointers": {
+        "pointers": [
+          "/conditions",
+          "/materialProperties/poissonRatio",
+          "/materialProperties/youngModulus",
+          "/study/acousticDuration"
+        ],
+        "total": 4,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": true,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 0,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 12,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:e05da47b0b3163a55d2425db41a1b2a6e390849c6b2415c9cdf8538531357eb3",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 42,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8"
+      }
+    },
+    "applied": {
+      "schemaVersion": 1,
+      "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:e05da47b0b3163a55d2425db41a1b2a6e390849c6b2415c9cdf8538531357eb3",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 42,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8"
+      }
+    }
+  },
+  "fineMeshLimitAfterFix": {
+    "started": {
+      "schemaVersion": 1,
+      "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017540191,
+      "updatedAt": 1792017540191,
+      "lastSequence": 1,
+      "firstAvailableSequence": 1
+    },
+    "done": {
+      "schemaVersion": 1,
+      "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "failed",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017540191,
+      "updatedAt": 1792017542702,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_FAILED",
+        "message": "Element limit exceeded; increase mesh size",
+        "failure": {
+          "schemaVersion": 1,
+          "code": "ANALYSIS_MESH_FAILED",
+          "stage": "mesh",
+          "message": "Element limit exceeded; increase mesh size",
+          "diagnostics": [
+            {
+              "code": "ANALYSIS_MESH_FAILED",
+              "severity": "error",
+              "stage": "mesh",
+              "target": "/",
+              "message": "Element limit exceeded; increase mesh size",
+              "evidence": {},
+              "suggestions": [],
+              "requiresUserIntent": true
+            }
+          ]
+        }
+      }
+    },
+    "events": {
+      "schemaVersion": 1,
+      "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "failed",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017540191,
+      "updatedAt": 1792017542702,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_FAILED",
+        "message": "Element limit exceeded; increase mesh size",
+        "failure": {
+          "schemaVersion": 1,
+          "code": "ANALYSIS_MESH_FAILED",
+          "stage": "mesh",
+          "message": "Element limit exceeded; increase mesh size",
+          "diagnostics": [
+            {
+              "code": "ANALYSIS_MESH_FAILED",
+              "severity": "error",
+              "stage": "mesh",
+              "target": "/",
+              "message": "Element limit exceeded; increase mesh size",
+              "evidence": {},
+              "suggestions": [],
+              "requiresUserIntent": true
+            }
+          ]
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 2,
+          "elapsedMs": 140,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 3,
+          "elapsedMs": 141,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "diagnostic",
+          "failure": {
+            "schemaVersion": 1,
+            "code": "ANALYSIS_MESH_FAILED",
+            "stage": "mesh",
+            "message": "Element limit exceeded; increase mesh size",
+            "diagnostics": [
+              {
+                "code": "ANALYSIS_MESH_FAILED",
+                "severity": "error",
+                "stage": "mesh",
+                "target": "/",
+                "message": "Element limit exceeded; increase mesh size",
+                "evidence": {},
+                "suggestions": [],
+                "requiresUserIntent": true
+              }
+            ]
+          },
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 4,
+          "elapsedMs": 2510,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "failed",
+          "error": {
+            "code": "JOB_FAILED",
+            "message": "Element limit exceeded; increase mesh size",
+            "failure": {
+              "schemaVersion": 1,
+              "code": "ANALYSIS_MESH_FAILED",
+              "stage": "mesh",
+              "message": "Element limit exceeded; increase mesh size",
+              "diagnostics": [
+                {
+                  "code": "ANALYSIS_MESH_FAILED",
+                  "severity": "error",
+                  "stage": "mesh",
+                  "target": "/",
+                  "message": "Element limit exceeded; increase mesh size",
+                  "evidence": {},
+                  "suggestions": [],
+                  "requiresUserIntent": true
+                }
+              ]
+            }
+          },
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 5,
+          "elapsedMs": 2511,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "failed",
+          "schemaVersion": 1,
+          "jobId": "d89f260c-b1b3-42f2-b8d4-8e96932b4cea",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 6,
+          "elapsedMs": 2511,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "truncated": false,
+      "nextSequence": 6,
+      "hasMore": false
+    }
+  },
+  "iterationInProgress": {
+    "first": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017576266,
+      "lastSequence": 1,
+      "firstAvailableSequence": 1
+    },
+    "before": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017576385,
+      "lastSequence": 3,
+      "firstAvailableSequence": 1
+    },
+    "future": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+      "operationCount": 3,
+      "changedPointers": {
+        "pointers": [
+          "/conditions"
+        ],
+        "total": 1,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": true,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 0,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 12,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+        "changedPointers": {
+          "pointers": [],
+          "total": 0,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": false,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6"
+      }
+    },
+    "afterPreview": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017579212,
+      "lastSequence": 13,
+      "firstAvailableSequence": 1
+    }
+  },
+  "iteration": {
+    "first": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017576266,
+      "lastSequence": 1,
+      "firstAvailableSequence": 1
+    },
+    "before": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017576385,
+      "lastSequence": 3,
+      "firstAvailableSequence": 1
+    },
+    "future": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+      "operationCount": 3,
+      "changedPointers": {
+        "pointers": [
+          "/conditions"
+        ],
+        "total": 1,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": true,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 0,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 12,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+        "changedPointers": {
+          "pointers": [],
+          "total": 0,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": false,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6"
+      }
+    },
+    "afterPreview": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017579212,
+      "lastSequence": 13,
+      "firstAvailableSequence": 1
+    },
+    "firstDone": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017582348,
+      "lastSequence": 29,
+      "firstAvailableSequence": 1,
+      "result": {
+        "kind": "elastic",
+        "mesh": {
+          "nodeCount": 4179,
+          "elementCount": 18922,
+          "volumeMm3": 4000.00000000002,
+          "minVolumeMm3": 0.0579535674707136,
+          "minQuality": 0.30000869886453835,
+          "qualityHistogram": [
+            0,
+            276,
+            1013,
+            4671,
+            12962
+          ]
+        },
+        "resultAvailable": true,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "intermediate": {
+          "retainedArtifacts": 0,
+          "retainedBytes": 0,
+          "storageLimited": false,
+          "sharedBytes": 0,
+          "maxBytes": 64000000
+        }
+      }
+    },
+    "events": {
+      "schemaVersion": 1,
+      "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017576266,
+      "updatedAt": 1792017582348,
+      "lastSequence": 29,
+      "firstAvailableSequence": 1,
+      "result": {
+        "kind": "elastic",
+        "mesh": {
+          "nodeCount": 4179,
+          "elementCount": 18922,
+          "volumeMm3": 4000.00000000002,
+          "minVolumeMm3": 0.0579535674707136,
+          "minQuality": 0.30000869886453835,
+          "qualityHistogram": [
+            0,
+            276,
+            1013,
+            4671,
+            12962
+          ]
+        },
+        "resultAvailable": true,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "intermediate": {
+          "retainedArtifacts": 0,
+          "retainedBytes": 0,
+          "storageLimited": false,
+          "sharedBytes": 0,
+          "maxBytes": 64000000
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 2,
+          "elapsedMs": 118,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 3,
+          "elapsedMs": 119,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 4179,
+            "elementCount": 18922,
+            "volumeMm3": 4000.00000000002,
+            "minVolumeMm3": 0.0579535674707136,
+            "minQuality": 0.30000869886453835,
+            "qualityHistogram": [
+              0,
+              276,
+              1013,
+              4671,
+              12962
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "meshAvailable": false,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 4,
+          "elapsedMs": 913,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 5,
+          "elapsedMs": 913,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving linear elasticity…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 6,
+          "elapsedMs": 934,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 1,
+          "residual": 1.2535226947442575,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 7,
+          "elapsedMs": 1710,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 25,
+          "residual": 1.2885939814994034,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 8,
+          "elapsedMs": 1912,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 50,
+          "residual": 1.3473041264664165,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 9,
+          "elapsedMs": 2119,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 75,
+          "residual": 0.01085237120948736,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 10,
+          "elapsedMs": 2320,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 100,
+          "residual": 0.0023161240692016233,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 11,
+          "elapsedMs": 2540,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 125,
+          "residual": 0.0036102358170285787,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 12,
+          "elapsedMs": 2744,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 150,
+          "residual": 0.001732428932896668,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 13,
+          "elapsedMs": 2946,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 175,
+          "residual": 0.00027288053801783203,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 14,
+          "elapsedMs": 3157,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 200,
+          "residual": 0.000054985056943776276,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 15,
+          "elapsedMs": 3371,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 225,
+          "residual": 0.00021983153978212544,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 16,
+          "elapsedMs": 3582,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 250,
+          "residual": 0.0002494301538505967,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 17,
+          "elapsedMs": 3795,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 275,
+          "residual": 0.00009808064186009468,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 18,
+          "elapsedMs": 4006,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 300,
+          "residual": 0.000023669618944358954,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 19,
+          "elapsedMs": 4216,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 325,
+          "residual": 0.00004159985798247509,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 20,
+          "elapsedMs": 4445,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 350,
+          "residual": 0.0000028963308500764557,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 21,
+          "elapsedMs": 4666,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 375,
+          "residual": 0.0000025507338392747275,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 22,
+          "elapsedMs": 4886,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 400,
+          "residual": 0.000004142371297897045,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 23,
+          "elapsedMs": 5107,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 425,
+          "residual": 3.033873853743519e-7,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 24,
+          "elapsedMs": 5319,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 450,
+          "residual": 1.7794147424246465e-8,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 25,
+          "elapsedMs": 5528,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 475,
+          "residual": 3.0206542558735586e-7,
+          "tolerance": 1e-8,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 26,
+          "elapsedMs": 5737,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 496,
+          "residual": 9.951907179051193e-9,
+          "tolerance": 1e-8,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 27,
+          "elapsedMs": 5924,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 28,
+          "elapsedMs": 6082,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "8d89c173-4be0-4d06-8956-371f89df6e82",
+          "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+          "sequence": 29,
+          "elapsedMs": 6082,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "truncated": false,
+      "nextSequence": 29,
+      "hasMore": false
+    },
+    "originalMeasurement": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:0e417d915ea06daef7631cd3aaf9d9c60839fd7e599051c3cda52bddbcc20c13",
+      "kind": "elastic",
+      "display": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null
+      },
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 1605,
+      "weights": [
+        0.6112211874901696,
+        0.02790850265165634,
+        0.30870834152808335,
+        0.052161968330092456
+      ],
+      "displacementMm": [
+        -2.4390872669235885e-12,
+        -4.283155506773106e-12,
+        0.019999999999717747
+      ],
+      "magnitudeMm": 0.019999999999717747,
+      "vonMisesPa": 999999.9994019571,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      }
+    },
+    "applied": {
+      "schemaVersion": 1,
+      "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+        "changedPointers": {
+          "pointers": [],
+          "total": 0,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": false,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6"
+      }
+    },
+    "second": {
+      "schemaVersion": 1,
+      "jobId": "26127a5d-c49e-42da-8802-e8b247af6b71",
+      "inputRevision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+      "state": "running",
+      "executionSettled": false,
+      "resourceState": "pending",
+      "releaseAllowed": false,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017590174,
+      "updatedAt": 1792017590174,
+      "lastSequence": 1,
+      "firstAvailableSequence": 1
+    },
+    "secondDone": {
+      "schemaVersion": 1,
+      "jobId": "26127a5d-c49e-42da-8802-e8b247af6b71",
+      "inputRevision": "sha256:5d782a725995b188e080263ff8d2d6bba8cf5783c9b33ffe0a8efad47c5223d6",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792017590174,
+      "updatedAt": 1792017591272,
+      "lastSequence": 14,
+      "firstAvailableSequence": 1,
+      "result": {
+        "kind": "elastic",
+        "mesh": {
+          "nodeCount": 94,
+          "elementCount": 218,
+          "volumeMm3": 3999.9999999999977,
+          "minVolumeMm3": 6.0397097262876045,
+          "minQuality": 0.3471214125206645,
+          "qualityHistogram": [
+            0,
+            2,
+            9,
+            86,
+            121
+          ]
+        },
+        "resultAvailable": true,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "intermediate": {
+          "retainedArtifacts": 0,
+          "retainedBytes": 0,
+          "storageLimited": false,
+          "sharedBytes": 0,
+          "maxBytes": 64000000
+        }
+      }
+    },
+    "measurement": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:aa7ef151d82e0dc56b099d22a26d519e8b86f720f2890ed5478a13cd78e21f24",
+      "kind": "elastic",
+      "display": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null
+      },
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 4,
+      "weights": [
+        0.4955120306152899,
+        0.004487969384709967,
+        0.49076473928685793,
+        0.009235260713141957
+      ],
+      "displacementMm": [
+        9.530799660021012e-13,
+        -9.008322640319063e-13,
+        0.03000000000069077
+      ],
+      "magnitudeMm": 0.03000000000069077,
+      "vonMisesPa": 1500000.000263842,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      }
+    }
+  },
+  "firstAttemptEvidence": "2026-10-15-browser-edit-preview-first-attempt.json",
+  "limitations": [
+    "The first job was observed running before preview;stored job/input revisions and unchanged current input were checked.",
+    "No solver restart or physical change was made inside an executing job. The150N comparison is explicitly declared.",
+    "Reference agreement does not establish general physical accuracy,mesh independence or runtime root-fix."
+  ]
+}
