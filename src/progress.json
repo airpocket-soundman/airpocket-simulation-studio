@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T04:48:10.203748+00:00",
+  "updatedAt": "2026-10-14T05:02:06.757125+00:00",
   "release": {
-    "version": "v0.39",
+    "version": "v0.40",
     "date": "2026-10-14",
-    "testCount": 216,
-    "description": "PBT・PET・PA6・PEEK・PC/ABSの30件を追加し公開樹脂物性91件。比較行から選択、暫定資料の区別とISO密度換算を追加。216テスト・公開配信物23項目・公開画面30項目が成功。配向・クリープ・未掲載物性の校正は未対応。",
-    "descriptionEn": "Added 30 PBT/PET/PA6/PEEK/PC/ABS references for 91 total, comparison-row selection, preliminary-source labels and ISO density conversion. Passed 216 source tests, 23 public runtime checks and 30 public browser checks. Orientation, creep and unpublished properties remain uncalibrated."
+    "testCount": 219,
+    "description": "Stokesの二次速度・一次圧力P2/P1をWorker・保存・点測定・断面へ統合。中間節点と物理場・反力・流量・速度上界の保存照合を追加。219テスト・公開配信物24項目・公開画面31項目が成功。慣性流・乱流・二次CAD幾何適合は未対応。",
+    "descriptionEn": "Integrated P2/P1 Taylor–Hood Stokes with Worker, archives, quadratic probes and sections. Validate midpoint topology, physical fields, forces, fluxes and continuous velocity bounds. Passed 219 source tests, 24 public runtime checks and 31 public browser checks. Inertia, turbulence and quadratic CAD geometry remain unsupported."
   },
   "tasks": [
     {
@@ -1046,7 +1046,7 @@
       "id": "STOKES2",
       "title": "二次速度要素のStokes計算を保存・表示へ統合",
       "titleEn": "Integrate quadratic-velocity Stokes into archives and viewing",
-      "status": "checking",
+      "status": "released",
       "category": "流体",
       "depends": [
         "STOKES1"
@@ -1055,7 +1055,7 @@
       "detailEn": "Connect independently tested P2/P1 Taylor–Hood to Worker, archives, probes and sections; verify physical field consistency, accuracy and budgets.",
       "acceptance": "二次補間、仮想節点と保存整合、球の参照精度、一様外箱、JS/WASM、日英UIを確認。",
       "acceptanceEn": "Verify quadratic interpolation, virtual-node/archive consistency, sphere references, uniform box, JS/WASM and JP/EN UI.",
-      "evidence": "src/stokes-p2-core.js; tests/stokes-p2.test.mjs",
+      "evidence": "src/stokes-p2-core.js; src/stokes-p2-result.js; src/stokes-interpolation.js; tests/stokes-p2-integration.test.mjs",
       "lastUpdate": "P2/P1をWorker・保存・二次速度の点測定と断面へ接続。中間節点・物理場・運動量と弱い非圧縮条件の保存照合を追加。",
       "lastUpdateEn": "Connect P2/P1 to Worker, archives, quadratic probes/sections with midpoint/physical-field and momentum/weak-incompressibility validation."
     },
