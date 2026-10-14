@@ -58,3 +58,5 @@ v0.39 bundles 91 published polymer records (87 manufacturer entries and four exp
 v0.40 integrates selectable Taylor–Hood P2/P1 Stokes with archives, quadratic velocity probes and sections. [Setup and limits](docs/en/stokes-flow.md).
 
 v0.41 reconciles CAD faces before applying STEP updates and retains unresolved conditions for saving and manual reselection. Analysis is blocked while regions remain unresolved. [CAD update](docs/en/cad-update.md).
+
+[v0.42 brittle fracture assessment](docs/en/brittle-fracture.md): register flaw, toughness and residual-stress bounds with surface state for static linear-elastic mode-I nominal-stress screening. Crack propagation, failure probability and lifetime remain unsupported.

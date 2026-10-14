@@ -1,5 +1,13 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+"Fracture data requires mode-I toughness bounds, temperature range, source, test conditions and surface state":"モードIの破壊靱性の上下限・温度範囲・出典・試験条件・表面状態を登録してください。",
+"Fracture assessment requires positive flaw/geometry bounds, a unit crack normal and documented nominal stress assumptions":"欠陥寸法と形状係数の正しい上下限、長さ1のき裂法線、形状と公称応力の根拠を入力してください。",
+"Fracture assessment requires registered toughness and surface data":"破壊靱性・出典・試験条件・表面状態の登録が必要です。",
+"Fracture assessment requires linear elasticity without thermal stress or nonlinear materials":"脆性破壊評価は、熱応力・塑性・超弾性を使わない線形弾性結果に対応します。",
+"Fracture assessment requires a displayed linear structural result":"線形構造の解析結果を表示してから脆性破壊評価を実行してください。",
+"Fracture toughness does not cover the result temperature":"解析温度が破壊靱性の試験温度範囲外です。",
+"Fracture assessment rejects mixed-mode shear on the specified crack plane":"指定したき裂面にせん断応力があります。混合モードは未対応です。",
+"Fracture toughness requires a linear elastic material":"破壊靱性の評価には線形弾性材料を使ってください。塑性・超弾性とは組み合わせられません。",
 "Resolve CAD update regions before analysis":"CAD更新で未解決の領域があります。条件を再選択してから解析してください。",
 "Invalid unresolved CAD condition":"保存したCAD更新の未解決条件が不正です。",
 "Condition has no selected region":"条件の領域が空です。領域を選択して登録してください。",

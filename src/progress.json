@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T05:45:27.131Z",
+  "updatedAt": "2026-10-14T06:46:41.947Z",
   "release": {
     "version": "v0.41",
     "date": "2026-10-14",
@@ -651,12 +651,15 @@
       "id": "FAIL2",
       "title": "ガラス等の脆性破壊を評価",
       "category": "材料",
-      "status": "queued",
+      "status": "checking",
       "detail": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
       "acceptance": "欠陥・破壊靱性・表面状態・不確実性を含むモデルを検証。",
       "titleEn": "Evaluate brittle fracture in glass and similar materials",
       "detailEn": "Validate models including defects, fracture toughness, surface state and uncertainty.",
-      "acceptanceEn": "Validate models including defects, fracture toughness, surface state and uncertainty."
+      "acceptanceEn": "Validate models including defects, fracture toughness, surface state and uncertainty.",
+      "evidence": "src/fracture-core.js; src/fracture-ui.js; tests/fracture.test.mjs; docs/brittle-fracture.md",
+      "lastUpdate": "欠陥寸法・靱性・残留応力の上下限、き裂法線、表面状態と試験温度を使うモードI LEFM評価を実装。参照式、実WASM、保存改変拒否と画面操作を検証中。",
+      "lastUpdateEn": "Implement mode-I LEFM screening with flaw/toughness/residual-stress bounds, crack normal, surface state and test temperature. Verify references, real WASM execution, archive tampering and browser operations."
     },
     {
       "id": "FAIL3",

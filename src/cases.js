@@ -1,5 +1,6 @@
 import {validatePlasticResult} from './plasticity-result.js';
 import {validateStokesResult} from './stokes-result.js';
+import {validateFractureResult} from './fracture-core.js';
 import {validateFatigueResult} from './fatigue-result.js';
 import {validateStlMesh} from './stl-source.js';
 import {validateCylindricalMesh} from './cylindrical-cad.js';
@@ -17,6 +18,7 @@ export function createCaseStore(){
   validateStokesResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
   validateStlMesh(c.output?.mesh,c.output?.input,c.output?.calculation);
   validateFatigueResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
+  validateFractureResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
   const o=c.output?.calculation?.options;
   if(c.output.calculation.operation!=='elastic'||!o||!Number.isFinite(o.size)||o.size<=0||!['pcg','pcg-strict','wasm-pcg','webgpu-pcg','mfem-wasm'].includes(o.method)||typeof o.adaptive!=='boolean'||!Number.isInteger(o.maxRounds)||o.maxRounds<1||o.maxRounds>5)throw Error('Invalid case calculation settings');
   for(const k of ['tolerance','stressTolerance'])if(o[k]!==undefined&&(!Number.isFinite(o[k])||o[k]<=0||o[k]>=1))throw Error('Invalid adaptive tolerance');
