@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T08:41:16.569125+00:00",
+  "updatedAt": "2026-10-14T08:42:10.512631+00:00",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1206,6 +1206,37 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "UIRESEARCH1",
+      "title": "既存CAEのUIを研究し改善案をまとめる",
+      "titleEn": "Study existing CAE interfaces and propose improvements",
+      "status": "queued",
+      "category": "UI",
+      "depends": [
+        "P0",
+        "P1",
+        "P3",
+        "P4"
+      ],
+      "detail": "LLM向けAPI・MCP・専門SKILL・中間結果パイプラインを優先し、その後に既存CAEの代表的な操作フローを調査。対象候補はFreeCAD FEM、PrePoMax、SALOME/ParaView、商用CAEの公開資料。対象と版は調査時に確定する。",
+      "detailEn": "After prioritized LLM functionality, study representative CAE workflows using public documentation or accessible applications; record selected products and versions at research time.",
+      "acceptance": "形状取込、モデル/解析ツリー、領域選択、材料/条件、ジョブ監視、診断、結果/比較/出力を共通例題で比較。資料URL・版・確認日・観察と推測を記録。初心者の操作負担とエージェントとの協働を評価し、優先順位付き改善案と画面案を残す。",
+      "acceptanceEn": "Compare import, model/study trees, selection, materials/conditions, job monitoring, diagnostics and results/comparison/export with a common scenario. Record source URLs, versions, dates and observed versus inferred findings. Deliver ranked improvements and screen proposals for beginners and agent collaboration."
+    },
+    {
+      "id": "UIIMPROVE1",
+      "title": "CAEのUI研究に基づいて操作画面を改良",
+      "titleEn": "Improve interfaces based on CAE workflow research",
+      "status": "queued",
+      "category": "UI",
+      "depends": [
+        "UIRESEARCH1"
+      ],
+      "detail": "調査で優先した改善を段階実装する。既存CAEの画面構成をそのまま増やすのではなく、本アプリの初心者とLLM協働の用途に適用する。",
+      "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
+      "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
+      "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions."
     }
   ],
   "solvers": [

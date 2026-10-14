@@ -52,6 +52,15 @@ Keep existing limited coupling/material/fatigue/fracture support separate from C
 
 CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not prerequisites for P0–P5. Add streamlines, particles and isosurfaces in viewer-specification order; visualization does not add a physical solver model.
 
+## Follow-up: CAE interface research and improvement
+
+Prioritize LLM functionality: P0/P1, the P3 intermediate-result pipeline, API/MCP coverage of existing features in P4, and specialist-SKILL development throughout. Track interface work after these tasks.
+
+- **UIRESEARCH1**: Study import, model/study trees, region selection, materials/conditions, job monitoring, diagnostics, comparison and export. Candidate references include FreeCAD FEM, PrePoMax, SALOME/ParaView and public commercial-CAE documentation. Record chosen products, versions, source URLs, review dates and observed versus inferred behavior. Use a common scenario to compare beginner effort, recovery and LLM collaboration; deliver ranked improvements and screen proposals. Depends on P0/P1/P3/P4.
+- **UIIMPROVE1**: Implement ranked findings incrementally. Compare completion, interactions and recovery before/after on the same scenario. Pair new user functions with semantic APIs, MCP and SKILL guidance; check JP/EN, narrow screens, keyboard operation, persistence and published UI regressions. Depends on UIRESEARCH1.
+
+Research and improvement have not started; no product ranking or interface approach has been selected.
+
 ## Completion gates
 
 1. Complete bounded input creation, validation, run, results and save/restore. Record input validity, numerical convergence and physical accuracy separately.
