@@ -57,5 +57,5 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(record&&chunks.length)download(new Blob(chunks,{type:mime}),'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
- return {stop,capture};
+ return {stop,capture,isActive:()=>active!==null};
 }

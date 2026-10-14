@@ -103,3 +103,15 @@ The complete suite with `node --test --test-concurrency=4 tests/*.test.mjs` pass
 At [5,5,20] mm, the intermediate temperature was 20.002566084871628 degC at one second and 20.027338600398892 degC at three seconds. The last sample matched the final result probe while intermediate artifacts remained provisional. No heat flux is invented from intermediate temperatures. Tests cover budgets, release, remeshing, units, revision conflicts and late replies; expired undispatched commands are refused, and late replies no longer disconnect the session.
 
 One default-concurrency full run failed in the existing force-controlled Neo-Hookean bar's Newton line search. Forty isolated generated references did not reproduce it; the cause remains unresolved, tracked as NUMERICREFERENCE1 for failed-mesh/state capture and reproducibility. Solver tolerances were not changed. The 25 ms cancel/timeout test race now uses a controlled clock rather than wall-time scheduling.
+
+## 2026-10-14: LLM result-view and saved-case operations
+
+The full suite completed 356 tests: 353 passed, three skipped, zero failed, at concurrency four. Build and 26 local-distribution checks passed. Tests cover revisions, scopes, revocation and busy conflicts for result/case operations in the optional 22-method connector. Public HTTPS connector verification remains pending.
+
+Real Chrome and stdio MCP verified thermal field selection, a fixed 20–100 degC range, wire visibility and camera replay; invalid ranges preserve the previous state, and the fixed-range legend follows Japanese/English switching. Saved-case create/rename/list/restore-input/view/remove succeeded; a stale removal revision was refused. Restoring inputs cleared the displayed result; viewing the saved case restored the original result revision.
+
+For 61 stored acoustic frames, the zero-time probe returned zero seconds and zero Pa; the final frame returned 0.004 seconds and 2.5926219431124826e-11 Pa. Unstored times and foreign result revisions were refused. Selecting the second structural mode produced its matching 278.6660713516683 Hz probe frequency; normalized modes are not driven dynamic response.
+
+Displayed frame/mode selection uses a shared sampling function. Unit tests cover versioned probes, validated atomic view changes/rollback, stable case IDs/content revisions and expired mutations. Named/persisted view settings, MCP PNG/WebM export jobs and thermal time display remain unfinished.
+
+Additional NUMERICREFERENCE1 investigation passed 200 generated references and a default-concurrency instrumented full run (343 tests, 340 passed, three skipped). The 100 recorded converged steps had relative residuals from 2.01e-15 to 1.616e-14; all 300 recorded line-search trials accepted a full step. The original failure was not reproduced. Production solver, tolerances and existing tests were unchanged; failed-input capture and root-cause investigation remain open.

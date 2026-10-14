@@ -49,6 +49,12 @@ test('late browser replies do not disconnect the client or prevent subsequent ob
  assert.deepEqual(await bridge.call(sessionId,'inspect'),{ok:true});assert.equal(disconnects,0);client.stop();
 });
 
+test('showJob rechecks busy state after asynchronous input verification before publishing a case',async()=>{
+ const studio=createStudioApi();studio.loadProject(createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,10,10,40]}}));let busy=false,shown=0;
+ const session=createBrowserSession({studio,analysis:{getJobResult:()=>({input:studio.exportProject()})},isBusy:()=>busy,showResult:()=>{shown++;return {shown:true};}});
+ const displaying=session.call('showJob',{jobId:'done'});busy=true;await assert.rejects(displaying,/busy/);assert.equal(shown,0);busy=false;assert.deepEqual(await session.call('showJob',{jobId:'done'}),{shown:true});
+});
+
 test('real HTTP polling client enforces browser scopes and stops connection-owned jobs',async t=>{
  const bridge=await createBrowserBridge({origin,timeoutMs:1000});t.after(()=>bridge.close());
  let disconnected=0;const calls=[];

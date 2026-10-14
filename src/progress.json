@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T10:14:07.567Z",
+  "updatedAt": "2026-10-14T10:41:34.637Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1356,11 +1356,41 @@
       "status": "queued",
       "category": "基盤",
       "depends": [],
-      "detail": "力制御Neo-Hookean棒の全体テストで一度Newton line search失敗。個別40回は成功。生成メッシュ・反復状態・実行条件を捕捉し、原因と修正を検証する。",
-      "detailEn": "A force-controlled Neo-Hookean bar failed once in the full suite; 40 isolated generated references passed. Capture failed mesh/iterations/environment and verify the cause and correction.",
+      "detail": "力制御Neo-Hookean棒で一度Newton line search失敗。追加200回と計測付き並列全体検証では再現せず。ソルバー・許容差は未変更。失敗入力と反復状態の捕捉を継続。",
+      "detailEn": "One force-controlled Neo-Hookean bar line-search failure remains unreproduced after 200 generated references and an instrumented parallel full run. Solver/tolerances unchanged; failed-input and iteration capture remain open.",
       "acceptance": "失敗入力を固定して再現し、変位・反力・独立伸長解・残差と不正入力拒否を維持して修正を検証。",
       "acceptanceEn": "Reproduce a frozen failing input and verify displacement, reaction, independent stretch, residual and invalid-input refusal after correction.",
       "evidence": "tests/hyperelastic.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "RESULTCONTROL1",
+      "title": "LLMが結果表示と測定を同じ状態で操作する",
+      "titleEn": "Let the LLM control and sample the displayed result",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "結果版を照合し、表示量・保存時刻・モード・レイヤー・固定範囲・カメラを取得/変更。点測定は表示フレーム/モードを使用。",
+      "detailEn": "Versioned field, stored time/mode, layer, fixed-range and camera reads/updates. Probes use the displayed frame/mode.",
+      "acceptance": "全体356件中353成功・3スキップ。実MCP/Chromeで固定範囲・カメラ再適用・時刻/モード測定・不正版拒否・日英凡例を確認。名前付き永続ビューとPNG/WebMのMCP化は残す。",
+      "acceptanceEn": "353 passed, three skipped of 356. Real MCP/Chrome verified range/camera replay, selected time/mode probes, revision refusal and localized legends. Named persisted views and MCP PNG/WebM remain pending.",
+      "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "CASEOPS1",
+      "title": "保存ケースを版付きAPIで操作する",
+      "titleEn": "Operate saved cases through revisioned APIs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "ケースID・内容版を返し、保存・表示・入力復元・改名・削除を権限と期限付きで操作。既存保存形式を維持。",
+      "detailEn": "Stable case IDs/content revisions with scoped, expiring save/view/restore-input/rename/remove operations. Preserve the existing archive format.",
+      "acceptance": "実MCP/Chromeで一連の操作と古い版の削除拒否を確認。14単体テスト成功。ケース集のライブ入出力と表示状態永続化は未対応。",
+      "acceptanceEn": "Real MCP/Chrome verified the lifecycle and stale-removal refusal; 14 unit tests passed. Live archive import/export and persisted display settings remain unfinished.",
+      "evidence": "src/case-operations.js; tests/case-operations.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [

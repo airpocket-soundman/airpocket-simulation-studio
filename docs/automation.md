@@ -76,7 +76,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 - 確認: `inspect`（revision・操作一覧）、`geometry`（面ページ）、`preflight`、`jobStatus`、`jobEvents`、`jobArtifact`、`probe`（表示結果の点値・暫定評価）。
 - 編集: `edit({expectedRevision,operations})`。同じ17操作を原子的に適用。版不一致・途中の入力変更・実行中・接続解除を拒否。
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
-- 表示: `getView`、`setView`。断面・透過・部品表示設定。カメラ・画像/動画出力は未接続。
+- 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は未接続。
 
 命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIとの全ジョブ表示統合、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
@@ -85,3 +85,15 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと対応する熱/過渡音響の節点スカラー場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。
 
 取得時にSHA-256・入力版・対応メッシュを検査し、物理時刻（秒）・単位・provisional:trueを返します。再メッシュは新しいメッシュ参照へ切り替え、過去の場は元のメッシュと結び付けたまま保持します。既定64,000,000バイトの直列化データ予算は全ブラウザジョブで共有し、上限では要約と計算を続行。実ヒープ使用量の上限ではありません。観測が不正な場合はobservation-errorを返し、最終解析結果の判定と区別します。releaseJob/closeJobsで解放し、ページ終了で消失します。ファイルへの永続保存・全ソルバーの全反復場は提供しません。
+
+## 結果ビューとケースの意味的操作
+
+接続モードの`getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})`は、結果全体を送らず`resultRevision`、物理量と表示単位、現在の表示設定、保存時刻/モードのページ（各最大50件）を返します。`setResultView({expectedResultRevision,settings})`で変更します。
+
+`settings`は`field`、`deformScale`、`surface`、`surfaceWire`、`volumeWire`、`section`、`modeIndex`、`frameIndex`または`timeSeconds`、`camera`、`colorRange`です。カメラはmmの`position`/`target`と`up`、度の`fov`。固定色は`{field,minimum,maximum}`、自動範囲はnull。値の単位は返却されたfield単位（応力はMPa、温度はdegC等）に従い、範囲外は端の色に固定します。物理量を変更して新範囲を指定しなければ自動範囲へ戻ります。
+
+過渡音響は保存された時刻だけを選択し、未保存時刻は拒否します。熱の最終結果から途中場を表示する機能は未対応。固有モードは正規化形状で、実際の動的応答ではありません。`probe({point,expectedResultRevision?,options?})`は表示中の保存時刻/モードを測定し、結果版・選択状態・根拠評価を返します。変形表示倍率は物理値を変更しません。共通APIは`window.resultViewApi.get/set/probe`です。ビュー設定はJSONで取得・再適用できますが、ケース集に自動保存しません。
+
+ケースは`caseList()`の`caseId`と`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
+
+共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。画像/動画書き出しのMCPジョブ化、ケース集のライブ入出力、名前付きビューの永続化は継続課題です。

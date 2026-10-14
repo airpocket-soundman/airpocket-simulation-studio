@@ -76,7 +76,7 @@ The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. 
 - Inspect: `inspect` (revision/methods), `geometry`, `preflight`, `jobStatus`, `jobEvents`, `jobArtifact`, `probe` (including provisional assessment).
 - Edit: `edit({expectedRevision,operations})`, using the same 17 atomic operations; refuses revision conflicts, intervening changes, active jobs and revoked connections.
 - Analysis: `startJob({inputRevision,requestId,operation,options})`, `cancelJob({jobId})`, `releaseJob({jobId})`, `showJob({jobId,name})`. Showing a solved result creates a case only when its input revision matches; mesh-only display is unsupported.
-- View: `getView`/`setView` expose section/opacity/part settings; camera/image/video export is not connected.
+- View: `getView`/`setView` expose section/opacity/part settings; result cameras use the result-view API below; image/video export is not connected.
 
 At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, complete GUI job monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
 
@@ -85,3 +85,15 @@ At most 16 commands are pending, with a 15-second reply timeout. A timeout does 
 Use `startJob` with `includeFields:true` to retain intermediate meshes and thermal/transient-acoustic nodal scalar fields in browser memory. Pass an `artifact.artifactId` from jobEvents to `jobArtifact({jobId,artifactId,point?,offset?,limit?})`, or use shared `analysisApi.getJobArtifact(jobId,artifactId,options)`. The default returns summaries only; pages contain at most 200 nodes. Point measurements require a field artifact.
 
 Reads verify SHA-256, input revision and mesh identity, returning physical seconds, units and provisional:true. Remeshing changes subsequent mesh references while old fields keep their original mesh. All browser jobs share a default 64,000,000-byte serialized-data budget; this is not a heap-memory ceiling. Limits retain summaries and computation. Invalid observations produce observation-error without asserting that the final solve is invalid. releaseJob/closeJobs free artifacts; page exit loses them. Persistent files and every iteration field from all solvers are unsupported.
+
+## Semantic result views and cases
+
+Connector `getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})` returns a resultRevision, fields/display units, current settings and stored time/mode metadata pages (at most 50 each), without large result arrays. Use `setResultView({expectedResultRevision,settings})`.
+
+Settings: field, deformScale, surface, surfaceWire, volumeWire, section, modeIndex, frameIndex or timeSeconds, camera and colorRange. Camera position/target are mm, up is a direction and fov is degrees. Fixed colorRange is `{field,minimum,maximum}` in the reported display unit (stress MPa, temperature degC, etc.); null selects automatic ranges. Values outside a fixed range use endpoint colors. Changing fields resets automatic range unless a valid new range is supplied.
+
+Acoustic time selection uses stored frames only; unavailable times are refused. Displaying intermediate thermal fields from final results is unsupported. Modes are normalized shapes, not dynamic responses. Connector `probe({point,expectedResultRevision?,options?})` measures the selected frame/mode and returns result identity, selection and assessment. Display deformation does not change physical values. Shared API: window.resultViewApi.get/set/probe. Settings can be captured/reapplied as JSON but are not automatically persisted in case archives.
+
+Use caseList's caseId/revision for `caseView`, `caseRestoreInput`, `caseRemove` with `{caseId,expectedRevision}`, or `caseRename` with an additional name. `caseSave({name,expectedResultRevision})` stores the current displayed result (eight-case limit). Shared API: window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove. IDs are page-local and become invalid when an external archive change is observed; rename updates content revision.
+
+Inspect scope permits lists/probes/view reads, view scope changes result settings, analyze scope saves results, and edit scope renames/removes/restores/views cases. Viewing a case restores its saved input, so it requires edit permission. Revocation, deadlines, intervening changes and calculation/playback conflicts are rechecked before committing. MCP image/video jobs, live case-archive import/export and persisted named views remain pending.

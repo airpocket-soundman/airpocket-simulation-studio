@@ -1,10 +1,10 @@
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
 import {canonicalJson} from './project-revision.js';
 
-export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view'});
+export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze'});
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,view,getResult,probe,showResult,isBusy=()=>false}) {
+export function createBrowserSession({studio,analysis,view,resultView,cases,getResult,probe,showResult,isBusy=()=>false}) {
  const owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const busy=()=>isBusy()||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}});
  return {
@@ -29,13 +29,17 @@ export function createBrowserSession({studio,analysis,view,getResult,probe,showR
    if(method==='cancelJob')return analysis.cancelJob(args.jobId);
    if(method==='releaseJob'){const result=analysis.releaseJob(args.jobId);owned.delete(args.jobId);for(const [id,r]of requests)if(r.jobId===args.jobId)requests.delete(id);return result;}
    if(method==='showJob'){
-    if(busy())throw Error('Browser is busy');const output=analysis.getJobResult(args.jobId);
+    if(busy()||editing)throw Error('Browser is busy');editing=true;try{const output=analysis.getJobResult(args.jobId);
     const snapshot=project();if(await getProjectRevision(snapshot)!==await getProjectRevision(output.input)||JSON.stringify(project())!==JSON.stringify(snapshot)||!valid())throw Error('Project revision conflict, expired command or connection revoked; saved result is not current input');
-    return showResult(output,args.name||'Agent result');
+    if(busy())throw Error('Browser became busy before displaying the saved result');return showResult(output,args.name||'Agent result');}finally{editing=false;}
    }
-   if(method==='probe'){const output=getResult();if(!output?.result)throw Error('No displayed result');return {...probe(output.mesh,output.result,args.point,args.options||{}),analysisAssessment:output.analysisAssessment};}
+   if(method==='probe'){if(resultView?.probe)return resultView.probe(args);const output=getResult();if(!output?.result)throw Error('No displayed result');return {...probe(output.mesh,output.result,args.point,args.options||{}),analysisAssessment:output.analysisAssessment};}
    if(method==='getView')return view.get();
-   if(method==='setView'){view.set(args);return view.get();}
+   if(method==='setView'){if(busy()||editing)throw Error('Browser is busy');view.set(args);return view.get();}
+   if(method==='getResultView'){if(!resultView)throw Error('Result view API unavailable');return resultView.get(args);}
+   if(method==='setResultView'){if(!resultView||busy()||editing)throw Error('Result view unavailable or browser busy');return resultView.set(args,{guard:valid});}
+   if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
+   if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
   disconnect(){epoch++;for(const jobId of owned){try{analysis.cancelJob(jobId);}catch{/* terminal or released */}}owned.clear();requests.clear();}
  };
