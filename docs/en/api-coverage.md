@@ -6,6 +6,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
+| Operation contract discovery | studioApi.getBrowserOperationContracts | studio_browser_contracts (no session; maximum 10 entries/65,536 UTF-8 bytes) | Nested applicability/physical validation stays in adapters |
 | Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (80 scoped methods) | Local GUI job monitoring verified; continue public HTTPS connectivity and reconnection |
 | Capabilities | studioApi.getCapabilities; diagnoseExecution/preflight.selectedObservation (profile selection) | studio_capabilities; selectedObservation in diagnosis/preflight and MCP-only runtime | Extend required inputs, validity limits and all combinations |
 | Execution-combination diagnostics | studioApi.diagnoseExecution | studio_diagnose_execution | Extend structured diagnostics to units, required values, constraints and mesh |
@@ -54,3 +55,5 @@ Nonlegacy preflight includes isotropic modal and static orthotropic linear-struc
 Nonlegacy evidence contracts also cover static temperature evaluation, thermal stress, small-strain J2 and compressible Neo-Hookean structure. Thermal source mesh/temperature evidence remains required with or without caseReference; source provisional status propagates. See [contracts](automation.md) for physical history versus numerical settings, CPU limits, field-snapshot size and authenticity limits.
 
 Worker/shared hosts/GUI wrappers/jobs/MCP preserve bounded failure schema1 metadata (maximum 16,384 UTF-8 bytes), distinguishing typed constraint/boundary diagnostics from generic stage fallbacks. Paths include job.error.failure, executionError.failure, direct MCP structuredContent.error.failure and optional diagnostic events, without delivery/root-cause-repair/physical-accuracy guarantees. Legacy messages/JOB_* codes and counts (13/12 profiles, 27/29 tools, 80 live methods) remain. See [specification](automation.md).
+
+Current counts are 28 default/30 connector MCP tools and 80 live operations. studio_browser_contracts accepts method/scope/offset/limit to discover schema1 argument envelopes, revisions, units, effects and limitations before pairing. declarationOnly grants no permission and does not guarantee complete JSON Schema validation or adapter availability. Direct thrown-operation failures retain failure metadata through the HTTP bridge, using the existing jobStatus diagnostic format. See [workflow](automation.md). Earlier 27/29 counts record the scope when those increments were added.

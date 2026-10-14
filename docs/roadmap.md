@@ -89,3 +89,9 @@ LLM向け機能（P0・P1、P3の中間結果パイプライン、P4の全既存
 既存message/JOB_*との互換を維持し、Workerからホスト・ジョブ・GUIラッパー・MCPまで有界failure schema1を渡す経路を追加した。対象33件、実MCPの6失敗シナリオと直接失敗応答、別途明示した有効モデルの後続成功を確認。実GUIでも拘束不足rank 3/6を再現し、固定底面100 Nの別宣言比較モデルを実行した。[検証内容](testing.md)と[全体記録](evidence/2026-10-15-execution-failure-full.json)を参照。
 
 これはP0/P1の診断・修復判断を支える情報伝達の限定達成である。stage fallbackは根本原因の証明ではなく、比較モデル成功も利用者物理の修復を証明しない。`completePhysicalValidation:false`とメッシュ/境界/収束/資料適用性の後検証を維持する。P0〜P6全体と既存残タスクは未完了であり、各段階の完了条件を縮小しない。
+
+## 2026-10-15: P0操作発見・P3直接失敗伝達の限定達成
+
+全80操作の契約をsessionなしの通常MCPでも発見できる経路と、直接ブラウザ操作の例外failureをHTTP/MCPへ保持する経路を追加した。対象28試験、実MCP、ローカルGUIのカタログ取得・入力作成・不正frame拒否・入力版不変・明示修正編集成功・scope拒否を確認した。[検証内容](testing.md)、[GUI記録](evidence/2026-10-15-browser-operation-contracts.json)、[画面](evidence/2026-10-15-browser-operation-contracts.jpg)、[全体記録](evidence/2026-10-15-operation-contracts-full.json)を参照。
+
+GUI検証ではソルバーを実行していない。P0/P3の今回範囲だけの達成であり、nested物理スキーマの完全化、公開HTTPS、再起動越しジョブ復旧、P0〜P6全体は未完了とする。宣言取得は権限付与や物理妥当性の証明ではなく、既存の各完了条件を維持する。

@@ -1,3 +1,4 @@
+import {getBrowserOperationContracts} from '../src/browser-operation-contracts.js';
 import {getAnalysisFailure} from '../src/analysis-failure.js';
 import {inspectNodeRuntime} from './node-runtime-info.mjs';
 import {verifyMeasurementArchive} from '../src/measurement-verification.js';
@@ -11,7 +12,7 @@ import {createCadUpdateOperations} from '../src/cad-update-operations.js';
 import {inspectProjectGeometry} from '../src/geometry-inspection.js';
 import {inspectProjectSurface} from '../src/project-surface-inspection.js';
 import {createBrowserBridge} from './browser-bridge.mjs';
-import {browserMethods} from '../src/browser-session.js';
+import {browserMethods} from '../src/browser-operation-names.js';
 import {importProjectFile,createProjectFromBuiltin} from './import-project.mjs';
 import {preflightProject} from '../src/analysis-preflight.js';
 import {createHeadlessJobService,summarizeAnalysis} from './analysis-job-service.mjs';
@@ -38,6 +39,7 @@ export function configureAnalysisExecution({isolation='worker',createProcessWork
 }
 let browserBridge;
 const toolList=[
+ {name:'studio_browser_contracts',description:'Discover declared input schemas,required scopes,revision arguments,units,side effects and limits for live browser operations without connecting or executing them. Query one method,scope or a bounded page (default 5,maximum 10; <=64 KiB). Nested physical validation remains authoritative in the adapters. Declarations do not grant access or prove an optional browser adapter is available.',inputSchema:object({method:{enum:Object.keys(browserMethods)},scope:{enum:['inspect','edit','analyze','view']},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:10}})},
  {name:'studio_job_artifacts',description:'List registered provisional intermediate artifact metadata with bounded pagination (default 50, maximum 100), independently of event retention. Does not read or verify files; select an artifactId and use studio_job_artifact for hash-verified contents. Empty pages are not job completion.',inputSchema:object({jobId:{type:'string',minLength:1},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:100}},['jobId'])},
  {name:'studio_verify_measurements',description:'Read saved cases and measurement history, match restored result revisions, and recompute every recorded point with its stored display context and selectors. Returns compact matching proof only; does not modify files or certify physical accuracy.',inputSchema:object({casesPath:pathSchema,measurementsPath:pathSchema},['casesPath','measurementsPath'])},
  {name:'studio_validate_case_bundle',description:'Read and validate a v1 case/view or v2 case/view/measurement bundle, using existing saved-result validation, exact restored-result links and compatible display settings. Recompute all v2 recorded measurements against saved fields; this does not certify physical accuracy. Returns only counts, revision and compact matching metadata; never physical arrays or complete archives.',inputSchema:object({path:pathSchema},['path'])},
@@ -72,6 +74,7 @@ export async function callStudioTool(name,args={}){
  executionConfigurationLocked=true;
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
+ if(name==='studio_browser_contracts')return getBrowserOperationContracts(args);
  if(name==='studio_import_print'){
   if(typeof args.path!=='string'||!isAbsolute(args.path)||typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase())throw Error('Use distinct absolute print input and output paths');
   const input=resolve(args.path),info=await stat(input),extension=extname(input).toLowerCase();
@@ -163,7 +166,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const originArg=process.argv.slice(2).find(arg=>arg.startsWith('--browser-origin='));
  if(originArg){browserBridge=await createBrowserBridge({origin:originArg.slice('--browser-origin='.length)});toolList.push(
   {name:'studio_browser_sessions',description:'List browser sessions explicitly paired with this temporary loopback connector, including granted scopes. No filesystem or shell is exposed through the browser transport.',inputSchema:object({}),annotations:{readOnlyHint:true,openWorldHint:false}},
-  {name:'studio_browser_call',description:'Invoke a named semantic operation in a paired browser. inspect returns its current input revision; inspectSurface returns bounded read-only display-triangle topology diagnostics for an explicit meshIndex without automatic repair; edit requires expectedRevision. createBuiltinProject replaces the live input using expectedRevision and an explicit built-in source (plus optional name); requires edit scope and creates no material values or boundary conditions. applyCaseSource uses a saved caseId/caseRevision and expectedRevision to attach temperature or explicit modal vibration input; clearCaseSource removes only the chosen source. Both require edit scope. prepareFluidDomain constructs a revision-checked mesh-only fluid source; run startJob with operation mesh, await successful settled execution, then applyFluidDomainMesh with expectedRevision and jobId to apply its trusted surface. Physics parameters require explicit edit. Live STEP/STL imports use inputImportBegin/Write/Commit/Release with revision-checked metadata, whole-file SHA-256 and bounded base64 chunks; staged transfers belong to their paired session. startJob requires inputRevision and requestId; includeFields:true retains bounded browser-memory fields readable through jobArtifact. Poll jobStatus/jobEvents, then showJob only if its frozen input still matches. Visual exports use startExport/exportStatus/exportArtifact/cancelExport/releaseExport with bounded base64 pages; exportCapabilities reports format support. Named views use namedViewList/Save/Apply/Remove/Export/Import and require exact result revisions on restoration. Case archives use caseArchiveExport/Read/Import/Write/Commit/Release with bounded base64 pages, full hashes and archive revision checks. Respect user-granted scopes; commands time out, so inspect state before retrying mutations. Browser closure/disconnect cancels connection-owned jobs.',inputSchema:object({sessionId:{type:'string'},method:{enum:Object.keys(browserMethods)},args:{type:'object'}},['sessionId','method']),annotations:{readOnlyHint:false,openWorldHint:false}}
+  {name:'studio_browser_call',description:'Invoke a named semantic operation in an explicitly paired browser. First use studio_browser_contracts with the method name to obtain its required arguments,revision fields,units,scope and side effects. inspect returns the current input revision. startJob freezes that revision; poll jobStatus/jobEvents and wait for executionSettled before release. Respect granted scopes. A timeout can occur after a mutation; inspect state before retrying. Disconnect cancels connection-owned running jobs. Browser optional adapters may be unavailable; declarations do not grant permissions.',inputSchema:object({sessionId:{type:'string'},method:{enum:Object.keys(browserMethods)},args:{type:'object'}},['sessionId','method']),annotations:{readOnlyHint:false,openWorldHint:false}}
  );process.stderr.write('Browser connector: '+JSON.stringify({endpoint:browserBridge.endpoint,origin:browserBridge.origin,pairingToken:browserBridge.pairingToken})+'\n');}
  startServer();
 }

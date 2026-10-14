@@ -6,6 +6,7 @@
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
+| 操作契約の発見 | studioApi.getBrowserOperationContracts | studio_browser_contracts（session不要・最大10件/65,536 UTF-8バイト） | nested適用性・物理検証は実adapterで維持 |
 | ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（80操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
@@ -54,3 +55,5 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 温度評価・熱応力・小ひずみJ2・圧縮性Neo-Hookeanも非legacy根拠契約の対象です。温度sourceはcaseReferenceの有無によらずmesh/temperatureの値根拠が必要で、元結果の暫定状態が伝播します。荷重履歴と数値設定、対応CPU制限、場snapshotのサイズと真正性の限界は[契約](automation.md)を参照してください。
 
 実行失敗はWorker/共有ホスト/GUIラッパー/ジョブ/MCPでfailure schema1（最大16,384 UTF-8バイト）を保持します。型付き拘束・境界診断と汎用stage fallbackを区別します。job.error.failure、executionError.failure、直接MCP structuredContent.error.failure、任意のdiagnostic eventに対応しますが、到着や原因修復・物理精度は保証しません。従来message/JOB_* codeを維持。profile13/12・ツール27/29・ライブ80操作は変更しません。[仕様](automation.md)を参照してください。
+
+現行は通常28・接続30 MCPツール、ライブ80操作です。studio_browser_contractsでmethod/scope/offset/limitを指定し、schema1の宣言と引数envelope・版・単位・副作用・制限を接続前に取得できます。declarationOnlyであり権限付与・完全JSON Schema検証・adapter利用可能性の保証ではありません。直接操作throwのfailureもHTTP bridge経由で保持し、既存jobStatusと同じ診断形式を維持します。手順は[仕様](automation.md)を参照してください。以前の27/29は当時の追加範囲を示す記録です。

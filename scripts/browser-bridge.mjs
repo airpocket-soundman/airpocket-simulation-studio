@@ -1,3 +1,4 @@
+import {restoreAnalysisError} from '../src/analysis-failure.js';
 import {createServer} from 'node:http';
 import {randomBytes,randomUUID} from 'node:crypto';
 
@@ -24,7 +25,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
    }
    const s=[...sessions.values()].find(x=>x.secret===token);if(!s)return send(401,{error:'Session expired or revoked'});s.touched=now();
    if(req.url==='/poll'&&req.method==='GET'){const commands=[...s.commands.values()].filter(c=>!c.delivered&&now()<c.expiresAt);commands.forEach(c=>c.delivered=true);return send(200,{commands:commands.map(({id,method,args,expiresAt})=>({id,method,args,expiresAt}))});}
-   if(req.url==='/reply'&&req.method==='POST'){const c=s.commands.get(body.id);if(!c)return send(200,{ok:true,accepted:false,reason:'Command expired or was already completed'});clearTimeout(c.timer);s.commands.delete(c.id);if(body.error)c.reject(fail(String(body.error.message||'Browser operation failed'),String(body.error.code||'BROWSER_OPERATION_FAILED')));else c.resolve(body.value);return send(200,{ok:true,accepted:true});}
+   if(req.url==='/reply'&&req.method==='POST'){const c=s.commands.get(body.id);if(!c)return send(200,{ok:true,accepted:false,reason:'Command expired or was already completed'});clearTimeout(c.timer);s.commands.delete(c.id);if(body.error)c.reject(Object.assign(restoreAnalysisError(String(body.error.message||'Browser operation failed'),body.error.failure),{code:String(body.error.code||'BROWSER_OPERATION_FAILED')}));else c.resolve(body.value);return send(200,{ok:true,accepted:true});}
    if(req.url==='/disconnect'&&req.method==='POST'){remove(s.id,'Browser disconnected');return send(200,{ok:true});}
    send(404,{error:'Unknown bridge route'});
   }catch(error){if(!res.headersSent)send(400,{error:error.message});else res.destroy();}

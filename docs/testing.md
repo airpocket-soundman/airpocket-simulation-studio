@@ -457,3 +457,15 @@ Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗g
 diagnostic eventは取得できる場合の途中観測であり、終端前の配信を保証しない。失敗後も生成済みメッシュ/中間成果物は残り得るが、失敗した解析の最終JSONは保存しない。`completePhysicalValidation:false`を維持し、P0/P1の診断伝達の限定範囲を確認したものとする。物理妥当性・根本原因の修正・メッシュ独立性やP0〜P6全体の完了を意味しない。
 
 最終Node v24.11.1 / V8 13.6.233.10-node.28 / win32 x64の全体試験は823件中820成功・3スキップ・失敗0（101,723.5468 ms）。初回は成功時のみを想定した既存MFEMプロファイル試験1件が条件付き診断宣言を拒否したため、試験を修正した。[初回記録](evidence/2026-10-15-execution-failure-first-full.json)も保存し、修正後の全体結果と区別する。ビルド2.71秒、ローカル配信物26項目、専門SKILL検証、日英文書/進捗5件が成功。全体実行後のsource hash差分はsrc/progress.jsonとビルド生成publicコピーのみ。既知Node24/V8障害の根治は証明していない。
+
+## 2026-10-15: 操作契約の発見と直接失敗診断の伝達
+
+対象28試験が成功。実MCPはbrowser-origin未指定・sessionなしで契約カタログを取得し、実HTTP/MCP経路では局所座標の正規直交性例外のfailure保持、入力版不変、明示修正後の成功、読取専用scopeからの編集拒否を確認した。契約は全80操作の引数envelope・権限・版・単位・副作用・制限の宣言であり、nested物理スキーマの完全化や権限の付与ではない。
+
+実ローカルGUIでも全80契約の取得、createBuiltinによる入力作成、不正local frame編集の拒否、入力版不変、明示した正規直交frameへの編集成功（condition 1）とMCP error.failure保持を確認した。このGUI検証ではソルバーを実行していない。[GUI機械可読記録](evidence/2026-10-15-browser-operation-contracts.json)、[画面](evidence/2026-10-15-browser-operation-contracts.jpg)、[全体記録](evidence/2026-10-15-operation-contracts-full.json)を参照。
+
+P0の操作発見とP3の直接失敗伝達の限定範囲を確認した。完全なnested物理スキーマ、公開HTTPS接続、再起動を越すジョブ復旧は未完了。宣言や修正編集の成功は物理精度・解析成功の証拠ではなく、P0〜P6全体の完了を意味しない。
+
+同一ソースの既定Node v24.11.1/V8 13.6.233.10-node.28は839件報告中835成功・1失敗・3skip（111,123.5471 ms）。stokes-observation-pipelineで既知の`jit_page_->allocations_.erase(addr) == 1`によるnative fatalが再発した。[失敗の生ログとハッシュ](evidence/2026-10-15-operation-contracts-node24-failed.json)を保存し、該当ファイル単独3件成功（2,121.8792 ms）とも区別する。公式ハッシュ照合済みportable Node v26.10.0/V8 14.6.202.34-node.34による同一ソース比較は840件中837成功・3skip・失敗0（284,504.7249 ms）。既定Nodeを変更せず、V8根治も断定しないためBROWSERCONTRACTS1はcheckingを維持する。ビルド2.81秒、既定Node24のローカル配信物26項目28.18秒、専門SKILL、日英文書/進捗5件が成功。全体後のsource hash差分は進捗JSONとビルド生成publicコピーだけ。
+
+最終差分検査で契約定義1ファイル末尾の余分な空行を除去した。末尾改行以外のバイト一致・変更前後SHAを全体証跡に保存し、契約/HTTP/MCPの対象10件を再検証した。

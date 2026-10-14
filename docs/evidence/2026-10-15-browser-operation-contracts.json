@@ -1,0 +1,1001 @@
+{
+  "environment": "Actual local in-app browser with stdio MCP and HTTP polling; no solver run or physical accuracy claim.",
+  "toolCount": 30,
+  "methodCount": 80,
+  "contractByteLengths": [
+    {
+      "method": "inspect",
+      "bytes": 408
+    },
+    {
+      "method": "geometry",
+      "bytes": 855
+    },
+    {
+      "method": "inspectSurface",
+      "bytes": 893
+    },
+    {
+      "method": "createBuiltinProject",
+      "bytes": 2971
+    },
+    {
+      "method": "prepareFluidDomain",
+      "bytes": 2587
+    },
+    {
+      "method": "applyCaseSource",
+      "bytes": 2027
+    },
+    {
+      "method": "clearCaseSource",
+      "bytes": 889
+    },
+    {
+      "method": "applyFluidDomainMesh",
+      "bytes": 1034
+    },
+    {
+      "method": "inputImportBegin",
+      "bytes": 1559
+    },
+    {
+      "method": "inputImportWrite",
+      "bytes": 1073
+    },
+    {
+      "method": "inputImportCommit",
+      "bytes": 924
+    },
+    {
+      "method": "inputImportRelease",
+      "bytes": 652
+    },
+    {
+      "method": "preflight",
+      "bytes": 1031
+    },
+    {
+      "method": "listJobs",
+      "bytes": 517
+    },
+    {
+      "method": "jobStatus",
+      "bytes": 402
+    },
+    {
+      "method": "jobEvents",
+      "bytes": 665
+    },
+    {
+      "method": "jobArtifacts",
+      "bytes": 626
+    },
+    {
+      "method": "jobArtifact",
+      "bytes": 1093
+    },
+    {
+      "method": "probe",
+      "bytes": 806
+    },
+    {
+      "method": "edit",
+      "bytes": 2007
+    },
+    {
+      "method": "startJob",
+      "bytes": 1102
+    },
+    {
+      "method": "cancelJob",
+      "bytes": 482
+    },
+    {
+      "method": "releaseJob",
+      "bytes": 493
+    },
+    {
+      "method": "showJob",
+      "bytes": 618
+    },
+    {
+      "method": "getView",
+      "bytes": 349
+    },
+    {
+      "method": "setView",
+      "bytes": 811
+    },
+    {
+      "method": "getResultView",
+      "bytes": 612
+    },
+    {
+      "method": "setResultView",
+      "bytes": 1131
+    },
+    {
+      "method": "caseList",
+      "bytes": 397
+    },
+    {
+      "method": "caseView",
+      "bytes": 760
+    },
+    {
+      "method": "caseRestoreInput",
+      "bytes": 793
+    },
+    {
+      "method": "caseRename",
+      "bytes": 876
+    },
+    {
+      "method": "caseRemove",
+      "bytes": 788
+    },
+    {
+      "method": "caseSave",
+      "bytes": 713
+    },
+    {
+      "method": "exportCapabilities",
+      "bytes": 363
+    },
+    {
+      "method": "startExport",
+      "bytes": 1311
+    },
+    {
+      "method": "exportStatus",
+      "bytes": 381
+    },
+    {
+      "method": "exportArtifact",
+      "bytes": 636
+    },
+    {
+      "method": "cancelExport",
+      "bytes": 429
+    },
+    {
+      "method": "releaseExport",
+      "bytes": 448
+    },
+    {
+      "method": "namedViewList",
+      "bytes": 359
+    },
+    {
+      "method": "namedViewExport",
+      "bytes": 347
+    },
+    {
+      "method": "namedViewSave",
+      "bytes": 833
+    },
+    {
+      "method": "namedViewApply",
+      "bytes": 714
+    },
+    {
+      "method": "namedViewRemove",
+      "bytes": 516
+    },
+    {
+      "method": "namedViewImport",
+      "bytes": 780
+    },
+    {
+      "method": "caseArchiveExport",
+      "bytes": 641
+    },
+    {
+      "method": "caseArchiveRead",
+      "bytes": 900
+    },
+    {
+      "method": "caseArchiveImport",
+      "bytes": 988
+    },
+    {
+      "method": "caseArchiveWrite",
+      "bytes": 1105
+    },
+    {
+      "method": "caseArchiveCommit",
+      "bytes": 971
+    },
+    {
+      "method": "caseArchiveRelease",
+      "bytes": 542
+    },
+    {
+      "method": "getAssessment",
+      "bytes": 749
+    },
+    {
+      "method": "evaluateAssessment",
+      "bytes": 1162
+    },
+    {
+      "method": "previewCadUpdate",
+      "bytes": 1300
+    },
+    {
+      "method": "applyCadUpdate",
+      "bytes": 1566
+    },
+    {
+      "method": "printInspect",
+      "bytes": 553
+    },
+    {
+      "method": "importPrint",
+      "bytes": 1244
+    },
+    {
+      "method": "getPrintData",
+      "bytes": 1144
+    },
+    {
+      "method": "setPrintView",
+      "bytes": 859
+    },
+    {
+      "method": "printTransferExport",
+      "bytes": 792
+    },
+    {
+      "method": "printTransferRead",
+      "bytes": 994
+    },
+    {
+      "method": "printTransferImport",
+      "bytes": 1200
+    },
+    {
+      "method": "printTransferWrite",
+      "bytes": 1127
+    },
+    {
+      "method": "printTransferCommit",
+      "bytes": 1019
+    },
+    {
+      "method": "printTransferRelease",
+      "bytes": 529
+    },
+    {
+      "method": "caseBundleList",
+      "bytes": 438
+    },
+    {
+      "method": "caseBundleExport",
+      "bytes": 656
+    },
+    {
+      "method": "caseBundleRead",
+      "bytes": 915
+    },
+    {
+      "method": "caseBundleImport",
+      "bytes": 1003
+    },
+    {
+      "method": "caseBundleWrite",
+      "bytes": 1120
+    },
+    {
+      "method": "caseBundleCommit",
+      "bytes": 1081
+    },
+    {
+      "method": "caseBundleRelease",
+      "bytes": 557
+    },
+    {
+      "method": "measurementList",
+      "bytes": 354
+    },
+    {
+      "method": "measurementGet",
+      "bytes": 509
+    },
+    {
+      "method": "measurementSave",
+      "bytes": 1235
+    },
+    {
+      "method": "measurementRemove",
+      "bytes": 675
+    },
+    {
+      "method": "measurementExport",
+      "bytes": 358
+    },
+    {
+      "method": "measurementImport",
+      "bytes": 872
+    },
+    {
+      "method": "measurementVerify",
+      "bytes": 776
+    }
+  ],
+  "createContract": {
+    "method": "createBuiltinProject",
+    "scope": "edit",
+    "description": "Replace input with an explicit built-in solid without inventing material or boundary conditions.",
+    "inputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "expectedRevision": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "Exact SHA-256 revision returned by the relevant inspection; never infer a revision."
+        },
+        "source": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "box"
+                },
+                "bounds": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "description": "[minimumX,minimumY,minimumZ,sizeX,sizeY,sizeZ] in mm; sizes positive."
+                }
+              },
+              "required": [
+                "kind",
+                "bounds"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "boxes"
+                },
+                "boxes": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 6,
+                    "maxItems": 6,
+                    "description": "[minimumX,minimumY,minimumZ,sizeX,sizeY,sizeZ] in mm; sizes positive."
+                  },
+                  "minItems": 1,
+                  "maxItems": 10,
+                  "description": "Independent boxes must not overlap in positive volume."
+                }
+              },
+              "required": [
+                "kind",
+                "boxes"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "cylinder"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "sphere"
+                },
+                "center": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "radius": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "kind",
+                "center",
+                "radius"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "tube"
+                },
+                "center": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "axis": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 2
+                },
+                "outerRadius": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "innerRadius": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "length": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "kind",
+                "center",
+                "axis",
+                "outerRadius",
+                "innerRadius",
+                "length"
+              ]
+            }
+          ],
+          "description": "Built-in solid in mm. Cylinder is fixed radius 12, length 60, Y axis. Tube innerRadius must be less than outerRadius; coordinate overflow and volume overlap are runtime checks."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "expectedRevision",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "sideEffects": [
+      "Replaces the live project input and invalidates its displayed analysis through the host."
+    ],
+    "revisionFields": [
+      "expectedRevision"
+    ],
+    "units": {
+      "source.bounds": "mm",
+      "source.boxes": "mm",
+      "source.center": "mm",
+      "source.radius": "mm",
+      "source.outerRadius": "mm",
+      "source.innerRadius": "mm",
+      "source.length": "mm"
+    },
+    "limitations": [
+      "This is project creation, not meshing or physical setup.",
+      "Geometry-specific overflow, overlap and validity checks are additional runtime constraints."
+    ]
+  },
+  "editContract": {
+    "method": "edit",
+    "scope": "edit",
+    "description": "Apply a batch of semantic input operations atomically against the inspected input revision.",
+    "inputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "expectedRevision": {
+          "type": "string",
+          "description": "Exact input revision returned by inspect; comparison rejects stale revisions."
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "enum": [
+                  "selectTriangles",
+                  "selectCadFace",
+                  "selectPlanarRegion",
+                  "selectCylindricalRegion",
+                  "clearSelection",
+                  "addCondition",
+                  "removeCondition",
+                  "selectCondition",
+                  "replaceConditionRegion",
+                  "reapplyConditionRegion",
+                  "applyCatalogMaterial",
+                  "setMaterial",
+                  "setMaterialProperties",
+                  "setMaterialPreset",
+                  "setStudy",
+                  "setMeshSettings",
+                  "setInputProvenance",
+                  "setAnalysisIntent"
+                ]
+              },
+              "args": {
+                "type": "array",
+                "description": "Positional arguments of the selected semantic method. selectTriangles(meshIndex,triangleIndices,optional flags); selectCadFace(meshIndex,faceId); selectPlanarRegion/selectCylindricalRegion(meshIndex,descriptor); clearSelection(); condition methods(index or definition); material/study/provenance setters use their documented payload objects. Nested descriptor validation remains runtime-only."
+              }
+            },
+            "required": [
+              "method",
+              "args"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "expectedRevision",
+        "operations"
+      ]
+    },
+    "sideEffects": [
+      "Replaces the live project input and invalidates its displayed analysis through the host."
+    ],
+    "revisionFields": [
+      "expectedRevision"
+    ],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "density": "kg/m3",
+      "displacement": "mm",
+      "force": "N",
+      "pressure": "Pa",
+      "temperature": "degC"
+    },
+    "limitations": [
+      "No material, load, direction or region is inferred.",
+      "Operation envelope rejects extra keys, but the live edit envelope itself does not currently reject extra keys.",
+      "An empty operation list is accepted; no documented 100-operation cap is enforced by this shared adapter.",
+      "Physical and geometric nested data are not fully described by this discovery schema."
+    ]
+  },
+  "before": {
+    "schemaVersion": 1,
+    "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "project": {
+      "loaded": true,
+      "name": "曲面サンプル · Ø24 × 60 mm",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "methods": {
+      "inspect": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "caseList": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:40d787481c5ac2516eeffaff999f47bd0d5ff4420c17225af8546ccab6409548",
+    "summary": {
+      "loaded": true,
+      "name": "Discovered contract and explicit roller reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "failed": {
+    "isError": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "Local axes must be orthonormal"
+      }
+    ],
+    "structuredContent": {
+      "error": {
+        "code": "ANALYSIS_CONSTRAINT_FRAME_ORTHONORMALITY",
+        "message": "Local axes must be orthonormal",
+        "failure": {
+          "schemaVersion": 1,
+          "code": "ANALYSIS_CONSTRAINT_FRAME_ORTHONORMALITY",
+          "stage": "constraints",
+          "message": "Local axes must be orthonormal",
+          "diagnostics": [
+            {
+              "code": "ANALYSIS_CONSTRAINT_FRAME_ORTHONORMALITY",
+              "severity": "error",
+              "stage": "constraints",
+              "target": "/conditions/frame/axes",
+              "message": "Local axes must be orthonormal",
+              "evidence": {
+                "axisIndex": 0,
+                "otherAxisIndex": 0,
+                "tolerance": 1e-7
+              },
+              "suggestions": [
+                "Review the intended supports and coordinate directions; preserve the physical constraints rather than adding artificial restraints"
+              ],
+              "requiresUserIntent": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  "afterRejected": {
+    "schemaVersion": 1,
+    "revision": "sha256:40d787481c5ac2516eeffaff999f47bd0d5ff4420c17225af8546ccab6409548",
+    "project": {
+      "loaded": true,
+      "name": "Discovered contract and explicit roller reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "methods": {
+      "inspect": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "caseList": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "edited": {
+    "schemaVersion": 1,
+    "revision": "sha256:3430e3daec14de6d75b63f2431ede4e18ff54d8ec3b1529b01080ef7919abb25",
+    "summary": {
+      "loaded": true,
+      "name": "Discovered contract and explicit roller reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 1,
+      "material": "金属"
+    }
+  },
+  "after": {
+    "schemaVersion": 1,
+    "revision": "sha256:3430e3daec14de6d75b63f2431ede4e18ff54d8ec3b1529b01080ef7919abb25",
+    "project": {
+      "loaded": true,
+      "name": "Discovered contract and explicit roller reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 1,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "methods": {
+      "inspect": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "caseList": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "limitations": [
+    "Command envelope declarations do not grant permissions or establish optional adapter availability.",
+    "Corrected local frame is an explicitly declared QA input,not inferred physical repair.",
+    "No post-mesh,convergence or physical accuracy validation was performed."
+  ]
+}

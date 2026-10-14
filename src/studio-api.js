@@ -1,3 +1,4 @@
+import {getBrowserOperationContracts} from './browser-operation-contracts.js';
 import {inspectProjectSurface} from './project-surface-inspection.js';
 import {catalogVersion,createCatalogMaterial} from './material-catalog.js';
 import {getCapabilities,diagnoseExecution} from './capabilities.js';
@@ -31,6 +32,7 @@ export function createStudioApi(adapter) {
   return Object.freeze({
     version:1,
     getCapabilities,
+    getBrowserOperationContracts,
     diagnoseExecution:(options={},target='browser')=>diagnoseExecution(current(),options,target),
     preflight:(options={},runtime={})=>preflightProject(current(),options,runtime),
     setInputProvenance(document){const p=current();p.inputProvenance=clone(document);return write(p,'provenance');},

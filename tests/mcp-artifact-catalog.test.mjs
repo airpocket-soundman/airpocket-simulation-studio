@@ -25,7 +25,7 @@ function server(){
 test('real MCP artifact catalog discovers bounded registered fields independently of event pages',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'studio-artifact-catalog-')),mcp=server();
  try{
-  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();const tools=(await mcp.request('tools/list',{})).result.tools;assert.equal(tools.length,27);assert.equal(tools.find(tool=>tool.name==='studio_job_artifacts').annotations.readOnlyHint,true);
+  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();const tools=(await mcp.request('tools/list',{})).result.tools;assert.equal(tools.length,28);assert.equal(tools.find(tool=>tool.name==='studio_job_artifacts').annotations.readOnlyHint,true);
   const p=project();p.study={kind:'thermal',transient:true,timeStep:1,steps:4,initialTemperature:20};p.materialProperties={conductivity:1,density:1000,specificHeat:1000};p.conditions=[{...p.conditions[0],type:'temperature',value:100}];
   const path=join(dir,'input.json'),outputPath=join(dir,'thermal.json'),original=JSON.stringify(p);await writeFile(path,original);
   const job=await mcp.call('studio_start_analysis',{path,outputPath,requestId:'catalog',includeFields:true});

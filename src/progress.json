@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T22:03:48.220719Z",
+  "updatedAt": "2026-10-14T22:19:56.037717Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1462,11 +1462,11 @@
       "status": "checking",
       "category": "基盤",
       "depends": [],
-      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。 終了待機をHEADLESSLIFECYCLE1で修正。公式ハッシュ照合したportable Node26.10.0と24.11.1を同ソース全体試験で各2回実行し、毎回538成功・3スキップ、fatalは非再現。v24.19.0は当該V8修正を含む対照でない。原因解決やNode26への既定移行は断定しない。 観測profile追加の全体試験でも所有権/settlement修正後に同fatalが再発（584中580成功・1失敗・3スキップ）。単独7実jobと同ソース再試験581成功・3スキップは通ったが、修正根治の証拠ではない。 観測照合追加後も既存analysis-job-serviceで2回目fatal（583報告中579成功・1失敗・3skip）。最終同ソースNode26比較は584中581成功・3skip、175.04秒で非再現。既定Nodeを変更せず未解決。",
-      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved.",
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。 終了待機をHEADLESSLIFECYCLE1で修正。公式ハッシュ照合したportable Node26.10.0と24.11.1を同ソース全体試験で各2回実行し、毎回538成功・3スキップ、fatalは非再現。v24.19.0は当該V8修正を含む対照でない。原因解決やNode26への既定移行は断定しない。 観測profile追加の全体試験でも所有権/settlement修正後に同fatalが再発（584中580成功・1失敗・3スキップ）。単独7実jobと同ソース再試験581成功・3スキップは通ったが、修正根治の証拠ではない。 観測照合追加後も既存analysis-job-serviceで2回目fatal（583報告中579成功・1失敗・3skip）。最終同ソースNode26比較は584中581成功・3skip、175.04秒で非再現。既定Nodeを変更せず未解決。 80操作契約追加の既定Node24全体でもstokes-observation-pipelineで同V8fatal再発（839報告/835成功/1失敗/3skip）。該当単独3件は成功。Node26比較は根治や既定移行の証明ではない。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json"
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json"
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1928,6 +1928,23 @@
       "acceptance": "新22件・対象33件と観測統合1件成功。全体823件中820成功・3skip。実MCP6失敗/direct応答・実GUI拘束rank3/6・別宣言100N比較モデル成功を確認。旧エラー/中止/期限切れ/cleanup/入力不変を維持。全物理検査・推測修復・V8根治は未達。",
       "acceptanceEn": "22new,33target and one observation integration test pass;full823:820passed/3skipped. Real MCP six failures/direct response,GUI rank3/6 and separately declared100N comparison success checked. Legacy messages,cancel/timeout,cleanup and input identity retained. Complete physical validation,inferred repair and V8 resolution remain unproven.",
       "evidence": "src/analysis-failure.js; tests/mcp-execution-failure.test.mjs; tests/analysis-host-failure.test.mjs; docs/evidence/2026-10-15-execution-failure-full.json; docs/evidence/2026-10-15-execution-failure-first-full.json; docs/evidence/2026-10-15-browser-execution-failure.json; docs/testing.md"
+    },
+    {
+      "id": "BROWSERCONTRACTS1",
+      "title": "全ライブ操作の契約を必要時にLLMへ返す",
+      "titleEn": "Discover all live operation contracts on demand",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P3",
+        "EXECUTIONDIAGNOSTICS1"
+      ],
+      "detail": "全80ライブ操作の入力schema・scope・版照合・単位・副作用・制限を共有APIと接続不要MCPから最大10件/64KiBで取得。直接例外のfailureをHTTP越しに保持。",
+      "detailEn": "Discover schemas,scopes,revision fields,units,effects and limitations for all80live operations through shared API and session-free MCP,in pages of at most10/64KiB. Preserve validated thrown failure metadata across HTTP.",
+      "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gate未達。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
+      "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0.",
+      "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md"
     }
   ],
   "solvers": [

@@ -4,7 +4,7 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-27ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+28ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -67,7 +67,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の27ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の28ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは80操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは80操作を公開します（通常28ツール、接続モード30ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -440,3 +440,11 @@ Workerが捕捉した実行失敗には、従来のmessageを維持して`failur
 非同期ジョブは既存の`error.code`（JOB_FAILED/JOB_CANCELLED/JOB_TIMEOUT）とmessageを維持し、取得できた診断を`error.failure`へ保持します。中止・timeout後の実行拒否は`executionError.failure`へ保持し、既存のJOB_EXECUTION_REJECTED_AFTER_TERMINALを変えません。cleanupのAggregateErrorでは取得できる最初のprimary診断を保持し、cleanupをソルバー原因へ置き換えません。直接MCP失敗は`isError:true`と従来textに加えて`structuredContent.error.failure`を返します。GUIラッパーもmetadataを保持しますが、すべての失敗が型付き診断を持つわけではありません。
 
 観測要求時は捕捉Worker失敗を`stage:"diagnostic"`、failure、converged:false、provisional:trueのeventで終端error前に通知します。ただし中止・通信断・callback例外・retention等で取得は保証されません。profile宣言だけからeventの到着を断定せず、job状態と残る診断を確認してください。失敗した解析は最終解析JSONを保存しませんが、既に生成したメッシュや中間成果物は残り得ます。診断対応は根本原因の修正完了・数値収束・物理精度の証明ではありません。13ブラウザ/12 Node profile、27通常/29接続MCPツール、ライブ80操作は変更しません。
+
+## 接続前のブラウザ操作契約の取得
+
+`studio_browser_contracts({method?,scope?,offset?,limit?})`は通常MCPでも常時使える読取専用ツールです。セッションや接続コードなしで全80操作の宣言を調べます。まず例として`{method:"setResultView"}`を取得し、必要引数・revisionFields・units・sideEffects・limitationsとscopeを確認してから、必要な権限を明示接続したセッションの`studio_browser_call`を使ってください。scopeはinspect/edit/analyze/viewで絞れ、methodと併用できます。offsetは既定0、limitは既定5・最大10で、返るnextOffsetがnullになるまで続けます。UTF-8応答は最大65,536バイトで、件数上限より前にページが分割される場合もあります。
+
+共有APIは`studioApi.getBrowserOperationContracts(query)`です。応答はschemaVersion/contractVersion:1、target:browser、declarationOnly:true、requiresBrowserGrant:trueとDraft 2020-12のschemaDialectを持ちます。inputSchemaは命令envelopeと記載したnested項目の宣言で、完全な物理・アーカイブ・相互参照検証を表現するものではありません。実adapterの引数・版・適用性・物理検証が引き続き優先されます。inspect/capabilitiesは発見先だけを案内し、大きな契約一覧を埋め込みません。
+
+取得しても権限は付与されず、任意adapterの利用可能性や実行成功を証明しません。通常28・接続30ツールへ増えますが、ライブ操作数80とprofile13/12は変わりません。以前の節の27/29は当該機能追加時の記録です。また直接ブラウザ操作がthrowした失敗はconnectBrowserSessionからHTTP bridge/MCPまで検証済みfailure metadataを保持します。jobStatusのerror.failure保持は従来どおりであり、nested診断形式や物理検証の範囲を変更するものではありません。
