@@ -45,7 +45,7 @@
 
 イベントには`jobId`・`inputRevision`・`sequence`が付き、中間スナップショットは`provisional:true`です。メッシュ/品質、反復残差、対応解析の時刻場・適応段階等、実際に発生したイベントのみ取得できます。全ソルバーの全反復・全物理場を保証しません。`includeFields:true`では新規ディレクトリ`outputPath + ".intermediate"`に暫定メッシュ/時刻場JSONを保存し、イベントの成果物参照にパス・バイト数・SHA-256を含めます。場JSONには取得できた対応メッシュへの`meshArtifact`参照を含み、再メッシュで参照を更新します。既存ディレクトリは再利用しません。既定の合計上限64 MB（64,000,000バイト）以降は場保存を止め、`observation-limit`を通知して要約と解析を継続します。中止・失敗時も既に書いた暫定ファイルが残り得ます。`provisional:false`の最終保存結果でも物理精度・収束の確認は別途必要です。
 
-ブラウザの`analysisApi.startJob`、`getJob`、`jobEvents`、`cancelJob`、`getJobResult`、`releaseJob`も同じライフサイクルを使います。`startJob`の`inputRevision`と`requestId`は呼出側が渡します。ブラウザのイベントは要約のみで、場・メッシュの中間成果物保存は提供しません。これはライブブラウザのMCP接続ではありません。
+ブラウザの`analysisApi.startJob`、`getJob`、`jobEvents`、`cancelJob`、`getJobResult`、`releaseJob`も同じライフサイクルを使います。`startJob`の`inputRevision`と`requestId`は呼出側が渡します。ブラウザのイベントは要約のみで、場・メッシュの中間成果物保存は提供しません。下記の接続モードで、このAPIをライブMCPへ公開できます。
 
 `studio_job_artifact({jobId,artifactId,point?,offset?,limit?})`はイベントにある登録済み`artifactId`から中間成果物を取得します。任意パスは受け付けず、ハッシュ・ジョブ入力版・対応メッシュを照合します。既定は要約のみ。現行の場は熱の温度と過渡音響の圧力スカラーです。これらは`point:[x,y,z]`（mm）の補間、または`offset`と`limit`（最大200）のノード/値ページを必要に応じて取得できます。メッシュ単独では座標ページを取得でき、点補間には場が必要です。解放済みジョブの登録は利用できません。最終保存の`job.final:true`は保存完了を表し、仮定があれば`job.provisional:true`を維持します。最終保存と非暫定・物理検証済みを同一視しないでください。
 
@@ -59,8 +59,23 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 [公式MCP設定手順](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)を参照。`skills/airpocket-studio`を個人の`.codex/skills/airpocket-studio`へコピーして専用skillを使えます。
 
-MCPはローカル保存JSONを操作し、開いているブラウザを変更しません。画像・動画はブラウザUIを使います。MCP計算の成功は画面・GPU・任意形状の物理精度の検証とは別です。
+通常モードのMCPは保存JSONを操作し、接続モードでは許可されたブラウザ操作も利用できます。画像・動画はブラウザUIを使います。MCP計算の成功は画面・GPU・任意形状の物理精度の検証とは別です。
 
 `studio_material_catalog`で同梱した樹脂物性を検索できます。[材料ライブラリ](polymer-library.md)。
 
 `studio_capabilities`でNode実行の能力と候補ソルバーを取得し、`studio_diagnose_execution`へ保存プロジェクトの`path`と任意の`method`・`adaptive`を渡して実行組合せの診断を取得できます。診断にはコード・重要度・対象・根拠・修正候補を含みます。現段階では単位・拘束・物性・メッシュ等を含む完全な解析前検査ではありません。ブラウザは`window.studioApi.getCapabilities()`と`diagnoseExecution(options)`を使います。
+
+## 一時ローカル接続（初期実装）
+
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の18ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+
+ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
+
+`studio_browser_call({sessionId,method,args})` の対応操作:
+
+- 確認: `inspect`（revision・操作一覧）、`geometry`（面ページ）、`preflight`、`jobStatus`、`jobEvents`、`probe`（表示結果の点値・暫定評価）。
+- 編集: `edit({expectedRevision,operations})`。同じ17操作を原子的に適用。版不一致・途中の入力変更・実行中・接続解除を拒否。
+- 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
+- 表示: `getView`、`setView`。断面・透過・部品表示設定。カメラ・画像/動画出力は未接続。
+
+命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。ブラウザ中間場の保持、再起動復元、GUIとの全ジョブ表示統合、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。

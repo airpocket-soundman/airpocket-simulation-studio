@@ -45,7 +45,7 @@ Jobs live only in the same MCP/Node process; restart recovery and reconnection a
 
 Events carry `jobId`, `inputRevision`, and `sequence`; intermediate snapshots carry `provisional:true`. Only observations actually emitted by the selected solver are available, including mesh/quality, iterative residuals, supported time fields and adaptive stages. This does not guarantee every iteration or field from every solver. With `includeFields:true`, provisional mesh/time-field JSON is saved in a new `outputPath + ".intermediate"` directory. Event artifact references contain a path, byte count and SHA-256; field JSON includes a `meshArtifact` reference when the corresponding mesh was saved, reset on remeshing. Existing directories are refused. The default aggregate limit is 64 MB (64,000,000 bytes); beyond it, an `observation-limit` event is emitted and summaries and computation continue without further field storage. Already written provisional files may remain after failure/cancellation. Even final saved results labeled `provisional:false` require convergence and physical-accuracy checks.
 
-Browser `analysisApi.startJob`, `getJob`, `jobEvents`, `cancelJob`, `getJobResult`, and `releaseJob` use the same lifecycle. Callers supply `inputRevision` and `requestId` to `startJob`. Browser events contain summaries only, without intermediate mesh/field artifact storage. This does not connect MCP to a live browser.
+Browser `analysisApi.startJob`, `getJob`, `jobEvents`, `cancelJob`, `getJobResult`, and `releaseJob` use the same lifecycle. Callers supply `inputRevision` and `requestId` to `startJob`. Browser events contain summaries only, without intermediate mesh/field artifact storage. The optional connector below exposes these APIs through live MCP.
 
 `studio_job_artifact({jobId,artifactId,point?,offset?,limit?})` retrieves an intermediate artifact registered under the `artifactId` from an event. It accepts no arbitrary path and verifies hashes, job input revision and associated mesh. The default response is a summary. Current fields are thermal temperature and transient-acoustic pressure scalars. For these, request interpolation at `point:[x,y,z]` in mm, or a node/value page using `offset` and `limit` (maximum 200), only when needed. Mesh-only artifacts provide coordinate pages; point interpolation requires a field. Registration is unavailable after job release. Final saved `job.final:true` means publication completed; assumed inputs can still retain `job.provisional:true`. Final publication does not mean non-provisional or physically validated results.
 
@@ -59,8 +59,23 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 See [official MCP configuration](https://learn.chatgpt.com/docs/extend/mcp?surface=cli). Copy `skills/airpocket-studio` into personal `.codex/skills/airpocket-studio` to install the skill.
 
-MCP works with local saved JSON without changing an open browser. Use the UI for image/video exports. CPU execution does not verify browser rendering, GPU behavior or physical accuracy for arbitrary geometry.
+Default MCP works with saved JSON; connector mode also invokes permitted browser operations. Use the UI for image/video exports. CPU execution does not verify browser rendering, GPU behavior or physical accuracy for arbitrary geometry.
 
 `studio_material_catalog` retrieves installed polymer references; see [polymer library](polymer-library.md).
 
 `studio_capabilities` returns Node execution capabilities and candidate engines. `studio_diagnose_execution` accepts a saved-project `path` and optional `method`/`adaptive` and returns execution-combination diagnostics with codes, severity, targets, evidence and suggestions. This is not complete unit/constraint/material/mesh preflight. Browser callers use `window.studioApi.getCapabilities()` and `diagnoseExecution(options)`.
+
+## Temporary local connector (initial implementation)
+
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 18 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+
+The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
+
+`studio_browser_call({sessionId,method,args})` supports:
+
+- Inspect: `inspect` (revision/methods), `geometry`, `preflight`, `jobStatus`, `jobEvents`, `probe` (including provisional assessment).
+- Edit: `edit({expectedRevision,operations})`, using the same 17 atomic operations; refuses revision conflicts, intervening changes, active jobs and revoked connections.
+- Analysis: `startJob({inputRevision,requestId,operation,options})`, `cancelJob({jobId})`, `releaseJob({jobId})`, `showJob({jobId,name})`. Showing a solved result creates a case only when its input revision matches; mesh-only display is unsupported.
+- View: `getView`/`setView` expose section/opacity/part settings; camera/image/video export is not connected.
+
+At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Browser intermediate-field retention, restart recovery, complete GUI job monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.

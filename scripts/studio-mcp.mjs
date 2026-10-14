@@ -1,4 +1,6 @@
 import {inspectProjectGeometry} from '../src/geometry-inspection.js';
+import {createBrowserBridge} from './browser-bridge.mjs';
+import {browserMethods} from '../src/browser-session.js';
 import {importProjectFile,createProjectFromBuiltin} from './import-project.mjs';
 import {preflightProject} from '../src/analysis-preflight.js';
 import {createHeadlessJobService,summarizeAnalysis} from './analysis-job-service.mjs';
@@ -17,6 +19,7 @@ import {analyzeProject} from './headless-analysis.mjs';
 import {catalogVersion,catalogEntries,catalogEntry} from '../src/material-catalog.js';
 const pathSchema={type:'string',minLength:1,description:'Absolute local JSON file path'},object=(properties,required=[])=>({type:'object',properties,required,additionalProperties:false});
 const jobService=createHeadlessJobService();
+let browserBridge;
 const toolList=[
  {name:'studio_import_project',description:'Import STEP/STP with real OCCT unit normalization to mm, or outward closed convex STL with explicit scaleToMm, and publish a new project JSON. Preserves source bytes and CAD face mappings. Never replaces source or an existing output.',inputSchema:object({path:pathSchema,outputPath:pathSchema,scaleToMm:{type:'number',exclusiveMinimum:0},name:{type:'string',minLength:1}},['path','outputPath'])},
  {name:'studio_create_builtin_project',description:'Create a new project with an explicit built-in source: box(bounds), boxes(boxes), fixed cylinder(kind only), sphere(center/radius), tube(center/axis/innerRadius/outerRadius/length), using mm. No material values or boundary conditions are invented.',inputSchema:object({source:{type:'object'},outputPath:pathSchema,name:{type:'string',minLength:1}},['source','outputPath'])},
@@ -42,6 +45,8 @@ const summary=summarizeAnalysis;
 export async function callStudioTool(name,args={}){
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
+ if(name==='studio_browser_sessions')return {sessions:browserBridge.list()};
+ if(name==='studio_browser_call'){if(!Object.hasOwn(browserMethods,args.method)||typeof args.sessionId!=='string')throw Error('Invalid browser operation');return browserBridge.call(args.sessionId,args.method,args.args||{},browserMethods[args.method]);}
  if(['studio_import_project','studio_create_builtin_project'].includes(name)){
   if(typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||args.name!==undefined&&(typeof args.name!=='string'||!args.name.trim()))throw Error('Invalid project import destination or name');
   if(name==='studio_import_project'&&(typeof args.path!=='string'||!isAbsolute(args.path)||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase()))throw Error('Use distinct absolute input and output paths');
@@ -72,7 +77,14 @@ export async function callStudioTool(name,args={}){
  await writeFile(resolve(args.outputPath),JSON.stringify(output)+'\n',{flag:'wx'});return {...summary(output),outputPath:resolve(args.outputPath)};
 }
 const send=message=>process.stdout.write(JSON.stringify(message)+'\n');
-if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url))startServer();
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+ const originArg=process.argv.slice(2).find(arg=>arg.startsWith('--browser-origin='));
+ if(originArg){browserBridge=await createBrowserBridge({origin:originArg.slice('--browser-origin='.length)});toolList.push(
+  {name:'studio_browser_sessions',description:'List browser sessions explicitly paired with this temporary loopback connector, including granted scopes. No filesystem or shell is exposed through the browser transport.',inputSchema:object({}),annotations:{readOnlyHint:true,openWorldHint:false}},
+  {name:'studio_browser_call',description:'Invoke a named semantic operation in a paired browser. inspect returns its current input revision; edit requires expectedRevision. startJob requires inputRevision and requestId. Poll jobStatus/jobEvents, then showJob only if its frozen input still matches. Respect user-granted scopes; commands time out, so inspect state before retrying mutations. Browser closure/disconnect cancels connection-owned jobs.',inputSchema:object({sessionId:{type:'string'},method:{enum:Object.keys(browserMethods)},args:{type:'object'}},['sessionId','method']),annotations:{readOnlyHint:false,openWorldHint:false}}
+ );process.stderr.write('Browser connector: '+JSON.stringify({endpoint:browserBridge.endpoint,origin:browserBridge.origin,pairingToken:browserBridge.pairingToken})+'\n');}
+ startServer();
+}
 export function startServer(){
  let initialized=false,ready=false,queue=Promise.resolve();const input=createInterface({input:process.stdin,crlfDelay:Infinity});
  input.on('line',line=>{queue=queue.then(async()=>{
@@ -92,5 +104,5 @@ export function startServer(){
    if(hasId)send({jsonrpc:'2.0',id:message.id,result});
   }catch(error){if(hasId)send({jsonrpc:'2.0',id:message.id,error:{code:error.code||-32603,message:error.message}});}
  }).catch(error=>process.stderr.write(error.message+'\n'));});
- input.on('close',()=>{queue.finally(()=>jobService.close()).catch(error=>process.stderr.write(error.message+'\n'));});
+ input.on('close',()=>{queue.finally(async()=>{jobService.close();await browserBridge?.close();}).catch(error=>process.stderr.write(error.message+'\n'));});
 }

@@ -1,0 +1,47 @@
+import {createServer} from 'node:http';
+import {randomBytes,randomUUID} from 'node:crypto';
+
+// Ephemeral transport only: it never serves files, evaluates code or exposes a shell.
+export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=15000,now=Date.now}={}) {
+ const allowed=new URL(origin);if(allowed.origin!==origin||!['http:','https:'].includes(allowed.protocol))throw Error('Use an exact browser origin');
+ const pairingToken=randomBytes(32).toString('base64url'),sessions=new Map();let closed=false;
+ const fail=(message,code='BROWSER_BRIDGE_ERROR')=>Object.assign(Error(message),{code});
+ function remove(id,reason){const s=sessions.get(id);if(!s)return;for(const c of s.commands.values()){clearTimeout(c.timer);c.reject(fail(reason));}sessions.delete(id);}
+ function expire(){for(const [id,s]of sessions)if(now()-s.touched>=ttlMs)remove(id,'Browser session expired');}
+ const server=createServer(async(req,res)=>{
+  const send=(status,value)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(value));};
+  try{
+   if(req.headers.host!==`127.0.0.1:${server.address().port}`||req.headers.origin!==origin)return send(403,{error:'Origin or host refused'});
+   res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin');
+   if(req.method==='OPTIONS'){res.setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS');res.setHeader('Access-Control-Allow-Headers','Authorization, Content-Type');return send(200,{});}
+   expire();const token=req.headers.authorization?.replace(/^Bearer /,'');
+   let body={};if(req.method==='POST'){let bytes=0,chunks=[];for await(const chunk of req){bytes+=chunk.length;if(bytes>1000000)throw fail('Request exceeds one megabyte');chunks.push(chunk);}body=JSON.parse(Buffer.concat(chunks).toString()||'{}');}
+   if(req.url==='/pair'&&req.method==='POST'){
+    if(token!==pairingToken)return send(401,{error:'Invalid pairing token'});
+    if(sessions.size>=8)throw fail('Browser session limit reached');
+    if(!Array.isArray(body.scopes)||!body.scopes.length||body.scopes.some(x=>!['inspect','edit','analyze','view'].includes(x)))throw fail('Invalid scopes');
+    const id=randomUUID(),secret=randomBytes(32).toString('base64url');sessions.set(id,{id,secret,scopes:[...new Set(body.scopes)],touched:now(),commands:new Map()});return send(200,{sessionId:id,token:secret,expiresAfterIdleMs:ttlMs});
+   }
+   const s=[...sessions.values()].find(x=>x.secret===token);if(!s)return send(401,{error:'Session expired or revoked'});s.touched=now();
+   if(req.url==='/poll'&&req.method==='GET'){const commands=[...s.commands.values()].filter(c=>!c.delivered);commands.forEach(c=>c.delivered=true);return send(200,{commands:commands.map(({id,method,args})=>({id,method,args}))});}
+   if(req.url==='/reply'&&req.method==='POST'){const c=s.commands.get(body.id);if(!c)return send(409,{error:'Unknown or expired command'});clearTimeout(c.timer);s.commands.delete(c.id);if(body.error)c.reject(fail(String(body.error.message||'Browser operation failed'),String(body.error.code||'BROWSER_OPERATION_FAILED')));else c.resolve(body.value);return send(200,{ok:true});}
+   if(req.url==='/disconnect'&&req.method==='POST'){remove(s.id,'Browser disconnected');return send(200,{ok:true});}
+   send(404,{error:'Unknown bridge route'});
+  }catch(error){if(!res.headersSent)send(400,{error:error.message});else res.destroy();}
+ });
+ server.requestTimeout=10000;server.headersTimeout=10000;
+ await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',resolve);});
+ const sweep=setInterval(expire,Math.min(ttlMs,10000));sweep.unref();
+ return {
+  endpoint:`http://127.0.0.1:${server.address().port}`,pairingToken,origin,
+  list(){expire();return [...sessions.values()].map(({id,scopes,touched})=>({sessionId:id,scopes,lastSeen:new Date(touched).toISOString()}));},
+  call(sessionId,method,args={},scope='inspect'){
+   expire();const s=sessions.get(sessionId);if(closed||!s)return Promise.reject(fail('Browser session unavailable'));
+   if(!s.scopes.includes(scope))return Promise.reject(fail('Browser permission scope refused','BROWSER_SCOPE_REFUSED'));
+   if(s.commands.size>=16)return Promise.reject(fail('Browser command limit reached'));
+   if(JSON.stringify(args).length>500000)return Promise.reject(fail('Command exceeds size limit'));
+   return new Promise((resolve,reject)=>{const id=randomUUID(),timer=setTimeout(()=>{s.commands.delete(id);reject(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'));},timeoutMs);s.commands.set(id,{id,method,args,resolve,reject,timer,delivered:false});});
+  },
+  async close(){closed=true;clearInterval(sweep);for(const id of sessions.keys())remove(id,'Bridge stopped');await new Promise(resolve=>server.close(resolve));}
+ };
+}

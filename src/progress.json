@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T09:30:07.015Z",
+  "updatedAt": "2026-10-14T09:44:26.729Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1131,7 +1131,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "STEP/STL/組込み形状作成、CAD面ID選択、入力根拠と限定静解析preflightを実装・検証。全物理・全GUI操作のAPI化と失敗後の結果保持は継続。"
+      "lastUpdate": "STEP/STL・根拠・限定preflightに加え、再実行失敗/中止時の前回結果保持を実ブラウザで確認。全物理契約は継続。"
     },
     {
       "id": "P2",
@@ -1161,7 +1161,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "MCPの登録済み中間成果物をハッシュ検証し、要約・点値・最大200節点で取得可能。ライブブラウザ接続と再起動復元は継続。"
+      "lastUpdate": "一時loopback接続と許可付き13操作を実MCP/Chromeで検証。入力版・原子的編集・実Worker・途中イベント・結果表示/点測定を共有。公開HTTPS接続・再起動復元・GUIジョブ監視は継続。"
     },
     {
       "id": "P4",
@@ -1314,6 +1314,23 @@
       "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。",
       "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs"
+    },
+    {
+      "id": "BROWSERBRIDGE1",
+      "title": "自分のLLMを許可付きブラウザセッションへ接続",
+      "titleEn": "Connect the user LLM to a scoped browser session",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "API1",
+        "MCP1",
+        "AGENTEDIT1"
+      ],
+      "detail": "Origin/Host/Bearer検査付き一時loopback。確認/編集/計算/表示を選んで許可し、13意味的操作をMCPへ公開。切断は接続経由の計算を中止。",
+      "detailEn": "Temporary loopback with Origin/Host/Bearer checks; explicit inspect/edit/analyze/view grants expose 13 semantic MCP operations. Disconnect cancels connection-owned jobs.",
+      "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。公開HTTPS接続と全GUIジョブ統合は残る。",
+      "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Public HTTPS and full GUI job integration remain pending.",
+      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md"
     }
   ],
   "solvers": [

@@ -18,7 +18,7 @@ Start with P0/P1, then prioritize P3 intermediate-result/shared-job pipelines an
 
 The published baseline is v0.43. Its recorded verification is 242 tests, 26 runtime checks and 42 browser checks; these were not rerun for this documentation review. Reuse STEP/regions, shared APIs, volume meshes, Airpocket structural/thermal/limited-flow/acoustic/modal analysis, MFEM linear-structural WASM, cases, PNG/WebM and saved-JSON MCP. Scope restrictions remain in the analysis guide and discipline documents.
 
-`src/progress.json` tracks existing tasks and release evidence. Early task descriptions retain historical scope and are not a complete current capability list. P0–P6 below are planning identifiers, not existing progress IDs. Register implementation tasks with dependencies, acceptance criteria and evidence when work starts; a plan alone does not justify released status.
+`src/progress.json` tracks existing tasks and release evidence. Early task descriptions retain historical scope and are not a complete current capability list. P0–P6 below are registered planning identifiers in progress JSON. Register implementation tasks with dependencies, acceptance criteria and evidence when work starts; a plan alone does not justify released status.
 
 Keep REG2 and PRINT2 in progress. Reuse unresolved-region rejection in P1. Finish a bounded save/refusal/regression checkpoint for the orthotropic foundation; prioritize P0–P2 over further printing extensions. Orthotropic infrastructure does not complete printed-part analysis.
 
