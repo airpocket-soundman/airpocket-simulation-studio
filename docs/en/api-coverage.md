@@ -44,3 +44,5 @@ Saved thermal/modal coupling sources use caseSourceApi.apply/clear and connected
 Surface inspection is available through connected inspectSurface/studio_inspect_project.surfaceInspection with revision-bound pages over all problem indices. Exact CAD, self-intersections and automatic repair remain outside scope.
 
 Structured P1/P2 Stokes GMRES residuals use existing jobEvents with phase/residualKind distinguishing measured preconditioned, estimated and final numerical checks; no intermediate fields are added.
+
+Harmonic/sweep BiCGStab residuals and frequency-step start/complete, plus channel PCG residuals, use existing jobEvents. Profile counts remain13/12 and tool/live-operation counts are unchanged. Neither path adds field arrays; recurrence convergence is not physical accuracy or job success.

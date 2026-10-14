@@ -121,3 +121,5 @@ Quantitative/exploratory conduction requires explicit k, steady/transient intent
 Acoustic-wave, fully-developed channel and exterior Stokes support quantitative/exploratory evidence contracts. Inspect requiredPointers for active settings/boundaries/original geometry; avoid ignored runtime sources or differing physical overrides. Legacy compatibility and postmesh checks remain. See the [contract](automation.md).
 
 Stokes iteration progress distinguishes measured preconditioned, estimated Arnoldi and final original-equation residuals by phase/residualKind. converged does not establish flow balance, physical accuracy or job success. See [Stokes](stokes-flow.md).
+
+Harmonic acoustics/frequency sweeps expose scalar BiCGStab residuals; fully developed channels expose PCG residuals through jobEvents. Acoustic frequencyHz/solvePhase and frequency-step start/complete identify the solve. Recurrence convergence does not establish job success or physical accuracy: inspect later checks and terminal state. No intermediate pressure/velocity field or physical-time axis is added. See the [observation contract](automation.md).

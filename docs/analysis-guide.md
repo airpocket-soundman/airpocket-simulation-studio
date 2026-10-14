@@ -121,3 +121,5 @@ API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', 
 音響acoustic-wave、十分発達channel、外部Stokesもquantitative/exploratoryの明示入力・根拠契約を持つ。active設定と境界/元形状をrequiredPointersで確認し、無視されるruntime source入力や異なる物理値を使わない。legacy互換とメッシュ後検証は維持。[契約](automation.md)参照。
 
 Stokesの反復進捗はphase/residualKindで前処理残差の実測・Arnoldi推定・最終の元方程式数値検査を区別する。convergedを流量収支や物理精度・ジョブ成功と同一視しない。[Stokes仕様](stokes-flow.md)を参照。
+
+調和音響と周波数スイープではBiCGStab、十分発達流路ではPCGのスカラー残差をjobEventsから確認できます。音響はfrequencyHz/solvePhaseとfrequency-stepのstart/completeで解析対象を識別します。再帰残差のconvergedだけでジョブ成功や物理精度を判定せず、後段の検査と終端状態を確認してください。途中の圧力・速度場や物理時間は追加されません。[取得仕様](automation.md)を参照。

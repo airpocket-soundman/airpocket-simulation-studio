@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T16:24:23.838717Z",
+  "updatedAt": "2026-10-14T16:33:42.391223Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1849,6 +1849,22 @@
       "acceptance": "新8件・実7ジョブと実IAB P1/P2の残差/点値・暫定表示・input版不変・includeFieldsfalse成果物0を確認。Node24.11.1全体705件中702成功・3skip（85.56秒）。ビルド2.65秒成功、再撮影2QAジョブも同値で全体画面確認。配信物26項目27.79秒・SKILL検証成功。終端後pollの証拠であり前受領timing/物理精度/既知V8根治を保証しない。",
       "acceptanceEn": "Eight new tests/seven real jobs and IAB P1/P2 residuals/probes/provisional labels/unchanged input/zero artifacts with includeFieldsfalse checked. Node24.11.1 full705:702passed/3skipped(85.56s);build2.65s passed;two QA recapture jobs matched with overall views;all26distribution27.79s/SKILL pass. Postsettlement polling does not guarantee preterminal timing,physical accuracy or known V8 resolution.",
       "evidence": "src/stokes-core.js; src/stokes-p2-core.js; src/observation-profiles.js; docs/evidence/2026-10-15-browser-stokes-observation.json; docs/testing.md"
+    },
+    {
+      "id": "WAVECHANNELOBS1",
+      "title": "周波数音響・掃引・流路の反復残差をLLMへ返す",
+      "titleEn": "Expose harmonic/sweep acoustic and channel iteration observations to LLMs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "OBSERVATIONPROFILES1"
+      ],
+      "detail": "BiCGStabとchannel PCGの再帰相対残差、音響掃引の開始/完了を構造化し既存jobEventsへ接続。phase/solvePhase/周波数とresidualKindを宣言し独立true残差や途中場と区別する。",
+      "detailEn": "Expose BiCGStab/channel-PCG recurrence residuals and acoustic sweep start/completion through existing jobEvents,declaring phase/solvePhase/frequency/residualKind without claiming independent true residuals or intermediate fields.",
+      "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。",
+      "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees.",
+      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json"
     }
   ],
   "solvers": [

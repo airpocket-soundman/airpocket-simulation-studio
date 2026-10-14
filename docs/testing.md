@@ -391,3 +391,21 @@ restart実測・Arnoldi推定・final自由方程式検査の3phaseとP1/P2通�
 明示的な仮想agent仮定・GUI暫定表示・入力版不変・includeFields:falseで成果物0件を確認。[機械可読記録](evidence/2026-10-15-browser-stokes-observation.json)と[画面](evidence/2026-10-15-browser-stokes-observation.jpg)を保存。pollはsettled後で、終端前受領タイミングの保証ではない。全体試験の最終結果は下記に記録する。
 
 同一凍結ソースのNode v24.11.1全体試験は705件中702成功・3スキップ・失敗0（85,556.7625 ms）、新規8件。初回IAB画面はカメラが近く全面緑となったため、[12,8,14]・target原点へ修正して2ジョブを再実行・撮影し、全体表示を目視確認した。残差・測定値は同一。検証対象の7ジョブとは別のQA再実行として記録する。ビルドは2.65秒で成功、配信物26項目も27.79秒ですべて成功。専門SKILL検証も成功。
+
+## 2026-10-15: 調和音響・流路の構造化観測
+
+BiCGStabのs-check/r-check/zero-rhs、sweepのfrequency-step start/complete、channel PCGの既存頻度と最終結果不変を検証する。音響の零右辺はiteration0を通知し、流路の零右辺は通知しない。再帰残差と独立true検査を区別し、後段失敗・observer例外・field配列非公開も確認する。
+
+`tests/mcp-acoustic-channel-observation.test.mjs`の2件（metadata1・実MCP3ジョブを扱う1件）、既存profile4件と既存実MCP profile1件/7ジョブが成功。`tests/channel-flow-observation.test.mjs`のpure4件と`tests/acoustic-observation.test.mjs`のpure5件も成功。非有限の異常行列では通知省略と元エラー保持を確認した。全体試験のruntime別結果は下記に記録する。これらは出典真偽や物理精度・Node/V8問題の根治を証明しない。
+
+実Codexアプリ内ブラウザのWorker/WASMで2ジョブが成功。明示agent仮定の10×10×40 mm音響箱は基準1,000 Hzと500/1,500 Hzのsweepで反復9件・frequency-step4件を取得し、点[5,5,20]のpeak1.2547030627749856 Pa、SPL92.93991929253048 dBを確認した。2×2×4 mm流路はPCG2件、点[1,1,2]のvz0.00005579846498232953 m/s・p0.0004999999999999998 Paを確認。暫定GUI表示、入力版不変、includeFields:falseで成果物0件も確認した。[機械可読記録](evidence/2026-10-15-browser-wave-channel-observation.json)と[画面](evidence/2026-10-15-browser-wave-channel-observation.jpg)。pollはsettled後の取得であり、終端前の通知タイミングを保証する証拠ではない。
+
+正常な実ブラウザ確認後、異常telemetryの単体回帰を補強した。音圧と基準圧の比のoverflowでSPLが非有限になる合成入力でも元の計算結果を変えず、sweep completeの非有限metrics通知を省略する。既存5件目の試験内の補強で、新規対象14件の件数は変わらない。
+
+最終候補のNode v24.11.1（V8 13.6.233.10-node.28、Windows x64）、`node --test --test-concurrency=4 tests/*.test.mjs`は718件中714成功・1ファイル失敗・3スキップ（87,594.1589 ms）で終了した。`tests/analysis-job-service.test.mjs`で既知のnative fatal `jit_page_->allocations_.erase(addr) == 1`が再発した。機能assertionの失敗ではないが、全体試験成功とは扱わない。[runtime・source hash・生ログの失敗記録](evidence/2026-10-15-wave-channel-node24-v8-failure.json)。
+
+同じNode24で対象ファイルをconcurrency1・fresh process1回だけ診断再実行し、成功した（[追跡済み単独診断記録](evidence/2026-10-15-wave-channel-node24-isolated-jobs.json)）。再現コマンドは`node scripts/reproduce-wasm-runtime.mjs 1 <未使用の出力JSONパス> --target=analysis-jobs --concurrency=1`。単独成功は原因確定や根治の証拠ではない。既定Node・solver・許容差・起動フラグは変更せず、別portable Node26の全体比較結果を下記に記録する。
+
+別portable Node26の全体比較は719件中716成功・失敗0・3スキップ（219,476.5307 ms）で成功した。[実行ファイルhash・runtime・source hash・生ログの比較記録](evidence/2026-10-15-wave-channel-node26-comparison.json)を保存し、Node24失敗時とのsourceDriftは空配列だった。Node24の単独診断は3件中3成功、fresh process1回である。件数は各runtimeの実記録どおりに示し、Node24の718とNode26の719を揃えていない。
+
+Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗gateは未解消。タスクはcheckingを維持し、全体を一括でgreenとは扱わない。ビルドは2.72秒で成功。既定Node24によるローカル配信物検査26項目は28.04秒ですべて成功し、専門SKILLの検証も成功した。これらの成功で全体試験の失敗gateは解消されない。

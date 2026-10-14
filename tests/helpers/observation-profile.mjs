@@ -19,7 +19,7 @@ export function assertObservedProfile(project,options,operation,messages){
    assert.equal(event.field.units[field.name],field.unit);
   }
  }
- for(const declared of selected.profile.events.filter(item=>!['preparation','mesh','progress'].includes(item.stage)))assert.ok(events.some(event=>event.stage===declared.stage&&event.solver===declared.solver&&event.kind===declared.kind),selected.profileId+' did not exercise declared numerical path');
+ for(const declared of selected.profile.events.filter(item=>!['preparation','mesh','progress'].includes(item.stage)&&(!item.when||item.when==='frequency-sweep'&&project.study.sweep)))assert.ok(events.some(event=>event.stage===declared.stage&&event.solver===declared.solver&&event.kind===declared.kind),selected.profileId+' did not exercise declared numerical path');
  if(!selected.profile.fields.length)assert.ok(events.every(event=>event.field===undefined));
  return selected;
 }

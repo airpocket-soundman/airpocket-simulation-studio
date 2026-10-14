@@ -284,19 +284,17 @@ const definitions=[
  ],
  [
   "acoustic-frequency",
+  ["acoustic-frequency","acoustic-sweep"],
   [
-   "acoustic-frequency",
-   "acoustic-sweep"
+   {stage:'iteration',solver:'bicgstab',kind:'acoustic',residualKind:'recurrence-relative',phases:['s-check','r-check','zero-rhs'],solvePhases:['single','sweep'],cadence:'first iteration, every 25 iterations, convergence and iteration limit; zero RHS emits iteration zero',metrics:[{name:'residual',unit:'dimensionless'},{name:'tolerance',unit:'dimensionless'},{name:'frequencyHz',unit:'Hz'}],residualBasis:'recursive residual norm divided by eliminated right-hand-side norm; no independent true-residual recalculation'},
+   {stage:'frequency-step',solver:'acoustic-sweep',kind:'acoustic',when:'frequency-sweep',phases:['start','complete'],cadence:'start and complete of each requested sweep frequency; iteration events carry solvePhase sweep and step/steps',metrics:[{name:'frequencyHz',unit:'Hz'},{name:'residual',unit:'dimensionless'},{name:'iterations',unit:'count'},{name:'peakPressurePa',unit:'Pa'},{name:'splDb',unit:'dB'}],completeMetricsOnly:['residual','iterations','peakPressurePa','splDb']}
   ],
-  [],
   []
  ],
  [
   "channel-flow",
-  [
-   "channelFlow"
-  ],
-  [],
+  ["channelFlow"],
+  [{stage:'iteration',solver:'pcg',kind:'channelFlow',residualKind:'recurrence-relative',cadence:'first iteration, every 25 iterations, and tolerance crossing; zero RHS emits none',metrics:[{name:'residual',unit:'dimensionless'},{name:'tolerance',unit:'dimensionless'}],residualBasis:'recursive residual norm divided by eliminated right-hand-side norm; no independent true-residual recalculation'}],
   []
  ],
  [
@@ -373,7 +371,7 @@ const common=[
 const clone=value=>JSON.parse(JSON.stringify(value));
 export function getObservationProfiles({target='browser'}={}){
  if(!['browser','node'].includes(target))throw Error('Unknown execution target');
- return definitions.filter(([id])=>target==='browser'||id!=='elastic-webgpu').map(([id,models,events,fields])=>({id,models,methods:id==='mesh'?[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])]:id==='elastic-mfem'?['mfem-wasm']:id==='elastic-webgpu'?['webgpu-pcg']:[...cpuMethods],events:clone([...common,...events]),textProgress:true,fields:clone(fields),limitations:['Declaration of implemented observation paths only; not execution permission or physical validation','Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them',...(events.length?[]:['No structured numerical iteration events']),...(id==='acoustic-frequency'?['Frequency sweeps emit text progress, not structured frequency-step events']:[]),...(id==='stokes'?['Arnoldi estimates and restart residuals use a preconditioned system; only final-check reports the checked original-system relative residual','A converged numerical residual does not establish physical accuracy, flow balance or mesh independence','No intermediate Stokes velocity or pressure field arrays are retained']:[])]}));
+ return definitions.filter(([id])=>target==='browser'||id!=='elastic-webgpu').map(([id,models,events,fields])=>({id,models,methods:id==='mesh'?[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])]:id==='elastic-mfem'?['mfem-wasm']:id==='elastic-webgpu'?['webgpu-pcg']:[...cpuMethods],events:clone([...common,...events]),textProgress:true,fields:clone(fields),limitations:['Declaration of implemented observation paths only; not execution permission or physical validation','Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them',...(events.length?[]:['No structured numerical iteration events']),...(['acoustic-frequency','channel-flow'].includes(id)?['Recurrence residual convergence is not an independent true-residual check or physical accuracy guarantee','Later checks may fail after numerical convergence; no intermediate pressure or velocity fields are retained']:[]),...(id==='stokes'?['Arnoldi estimates and restart residuals use a preconditioned system; only final-check reports the checked original-system relative residual','A converged numerical residual does not establish physical accuracy, flow balance or mesh independence','No intermediate Stokes velocity or pressure field arrays are retained']:[])]}));
 }
 export function resolveObservationProfile(project,options={},target='browser',operation='solve'){
  const profiles=getObservationProfiles({target});

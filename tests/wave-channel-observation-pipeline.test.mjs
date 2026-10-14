@@ -1,0 +1,23 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {Worker} from 'node:worker_threads';
+import {createAnalysisClient} from '../src/analysis-client.js';
+import {getProjectRevision} from '../src/project-revision.js';
+import {createProjectFromBuiltin} from '../src/project-import.js';
+function models(){
+ const base=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,2,2,4]}}),all=base.meshes[0].faceIds.map((_,i)=>i);
+ const harmonic=structuredClone(base);harmonic.materialProperties={};harmonic.study={kind:'acoustic',acousticTransient:false,sweep:false,exteriorRadiation:false,directivityEnabled:false,frequency:1000,soundSpeed:343,airDensity:1.2,lossFactor:0,referencePressurePa:20e-6};harmonic.conditions=[{type:'acousticPressure',value:1,direction:[0,0,1],regions:[{mesh:0,triangles:all}]}];
+ const transient=structuredClone(harmonic);transient.study={...harmonic.study,acousticTransient:true,acousticDuration:.0025,pulseWidth:.0002,dampingRate:0,acousticTimeStep:0,receiverPoint:[1,1,2]};
+ const channel=structuredClone(base);channel.materialProperties={};channel.conditions=[];channel.study={kind:'channelFlow',dynamicViscosity:.001,fluidDensity:1000,fluidSoundSpeed:1500,pressureDropPa:.001,flowAxis:2};
+ const stokes=structuredClone(base);stokes.materialProperties={};stokes.conditions=[];stokes.sourceModel={kind:'fluidDomain',solid:{kind:'sphere',center:[0,0,0],radius:1},enclosure:[-3,-3,-3,6,6,6]};stokes.study={kind:'creepingFlow',dynamicViscosity:.01,fluidDensity:1.2,freeStreamVelocity:[.0001,0,0],referenceLengthMm:2,stokesVelocityElement:'P1'};
+ return {harmonic,transient,channel,stokes};
+}
+function client(input){return createAnalysisClient(()=>input,()=>{},{isIsolated:()=>true,baseUrl:()=>'/unused/',createWorker:()=>{const worker=new Worker(new URL('../scripts/headless-worker.mjs',import.meta.url),{execArgv:[],stdout:true,stderr:true}),adapter={postMessage:value=>worker.postMessage(value),terminate:()=>worker.terminate()};worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);worker.on('message',data=>adapter.onmessage?.({data}));worker.on('error',error=>adapter.onerror?.({message:error.message}));return adapter;}});}
+for(const kind of ['harmonic','sweep','channel'])test('browser client forwards '+kind+' scalar numerical observations without field retention',async()=>{
+ const fixtures=models(),input=kind==='sweep'?structuredClone(fixtures.harmonic):fixtures[kind];if(kind==='sweep')Object.assign(input.study,{sweep:true,sweepStart:500,sweepEnd:1500,sweepCount:2,receiverPoint:[1,1,2]});const before=structuredClone(input),api=client(input);
+ try{const inputRevision=await getProjectRevision(input),job=api.startJob({inputRevision,requestId:kind,includeFields:false,options:{size:1,method:'wasm-pcg'}});let done;const deadline=Date.now()+30000;do{done=api.getJob(job.jobId);assert.ok(Date.now()<deadline);if(!done.executionSettled)await new Promise(resolve=>setTimeout(resolve,5));}while(!done.executionSettled);assert.equal(done.state,'succeeded',JSON.stringify(done.error));
+ const events=api.jobEvents(job.jobId,{afterSequence:0,limit:100}).events,iterations=events.filter(e=>e.stage==='iteration'),output=api.getJobResult(job.jobId);assert.ok(iterations.length);for(const e of iterations){assert.equal(e.solver,kind==='channel'?'pcg':'bicgstab');assert.equal(e.residualKind,'recurrence-relative');assert.equal(e.inputRevision,inputRevision);assert.equal(e.jobId,job.jobId);assert.equal(e.provisional,true);assert.ok(Number.isFinite(e.residual)&&e.residual>=0);assert.equal(e.field,undefined);assert.equal(e.time,undefined);assert.ok(Object.values(e).every(value=>!Array.isArray(value)));}
+ if(kind==='sweep'){const frequencies=events.filter(e=>e.stage==='frequency-step');assert.equal(frequencies.length,4);assert.deepEqual(frequencies.filter(e=>e.phase==='start').map(e=>e.frequencyHz),[500,1500]);assert.deepEqual(frequencies.filter(e=>e.phase==='complete').map(e=>e.frequencyHz),[500,1500]);assert.ok(iterations.some(e=>e.solvePhase==='single'));assert.ok(iterations.some(e=>e.solvePhase==='sweep'));for(const [i,event]of frequencies.filter(e=>e.phase==='complete').entries()){const sample=output.result.sweep.samples[i];assert.equal(event.frequencyHz,sample.frequency);for(const key of ['residual','peakPressurePa','splDb'])assert.equal(event.metrics[key],sample[key]);assert.ok(Number.isSafeInteger(event.metrics.iterations)&&event.metrics.iterations>=0);}}else assert.equal(iterations.at(-1).residual,output.result.residual);
+ assert.equal(api.listJobArtifacts(job.jobId).artifacts.length,0);assert.deepEqual(input,before);api.releaseJob(job.jobId);assert.throws(()=>api.jobEvents(job.jobId),/Unknown/);
+ }finally{await api.closeJobsAsync();}
+});

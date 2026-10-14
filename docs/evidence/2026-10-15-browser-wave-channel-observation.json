@@ -1,0 +1,1623 @@
+{
+  "environment": "Actual local IAB/browser Worker/WASM with real stdio MCP/HTTP; explicit virtual agent assumptions, no measured properties or user confirmations",
+  "runs": [
+    {
+      "kind": "acoustic",
+      "study": {
+        "kind": "acoustic",
+        "acousticTransient": false,
+        "sweep": true,
+        "exteriorRadiation": false,
+        "directivityEnabled": false,
+        "frequency": 1000,
+        "soundSpeed": 343,
+        "airDensity": 1.2,
+        "lossFactor": 0.01,
+        "referencePressurePa": 2e-05,
+        "sweepStart": 500,
+        "sweepEnd": 1500,
+        "sweepCount": 2,
+        "receiverPoint": [
+          5,
+          5,
+          20
+        ]
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "acoustic",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/acousticTransient",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/sweep",
+            "value": true,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/exteriorRadiation",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/directivityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/frequency",
+            "value": 1000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/soundSpeed",
+            "value": 343,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/airDensity",
+            "value": 1.2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/lossFactor",
+            "value": 0.01,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/referencePressurePa",
+            "value": 2e-05,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/sweepStart",
+            "value": 500,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/sweepEnd",
+            "value": 1500,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/sweepCount",
+            "value": 2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/receiverPoint",
+            "value": [
+              5,
+              5,
+              20
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "acousticPressure",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 1,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          }
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "acoustic-frequency",
+          "profile": {
+            "id": "acoustic-frequency",
+            "models": [
+              "acoustic-frequency",
+              "acoustic-sweep"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "bicgstab",
+                "kind": "acoustic",
+                "residualKind": "recurrence-relative",
+                "phases": [
+                  "s-check",
+                  "r-check",
+                  "zero-rhs"
+                ],
+                "solvePhases": [
+                  "single",
+                  "sweep"
+                ],
+                "cadence": "first iteration, every 25 iterations, convergence and iteration limit; zero RHS emits iteration zero",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "frequencyHz",
+                    "unit": "Hz"
+                  }
+                ],
+                "residualBasis": "recursive residual norm divided by eliminated right-hand-side norm; no independent true-residual recalculation"
+              },
+              {
+                "stage": "frequency-step",
+                "solver": "acoustic-sweep",
+                "kind": "acoustic",
+                "when": "frequency-sweep",
+                "phases": [
+                  "start",
+                  "complete"
+                ],
+                "cadence": "start and complete of each requested sweep frequency; iteration events carry solvePhase sweep and step/steps",
+                "metrics": [
+                  {
+                    "name": "frequencyHz",
+                    "unit": "Hz"
+                  },
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "iterations",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "peakPressurePa",
+                    "unit": "Pa"
+                  },
+                  {
+                    "name": "splDb",
+                    "unit": "dB"
+                  }
+                ],
+                "completeMetricsOnly": [
+                  "residual",
+                  "iterations",
+                  "peakPressurePa",
+                  "splDb"
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them",
+              "Recurrence residual convergence is not an independent true-residual check or physical accuracy guarantee",
+              "Later checks may fail after numerical convergence; no intermediate pressure or velocity fields are retained"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "acoustic-wave",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/acousticTransient",
+          "/study/sweep",
+          "/study/exteriorRadiation",
+          "/study/directivityEnabled",
+          "/study/frequency",
+          "/study/soundSpeed",
+          "/study/airDensity",
+          "/study/lossFactor",
+          "/study/referencePressurePa",
+          "/study/sweepStart",
+          "/study/sweepEnd",
+          "/study/sweepCount",
+          "/study/receiverPoint",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "frequency": "Hz",
+          "soundSpeed": "m/s",
+          "airDensity": "kg/m3",
+          "lossFactor": "1",
+          "referencePressurePa": "Pa",
+          "impedance": "Pa*s/m",
+          "time": "s",
+          "acousticDuration": "s",
+          "pulseWidth": "s",
+          "acousticTimeStep": "s",
+          "dampingRate": "1/s",
+          "amplitudeMm": "mm",
+          "phaseDeg": "deg",
+          "directivityDistanceMm": "mm"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+        "summary": {
+          "loaded": true,
+          "name": "Observed acoustic",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 1,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+        "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791995603652,
+        "updatedAt": 1791995604110,
+        "lastSequence": 23,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "acoustic",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 2,
+          "elapsedMs": 147,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 3,
+          "elapsedMs": 148,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "meshAvailable": false,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 4,
+          "elapsedMs": 412,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 5,
+          "elapsedMs": 412,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving frequency-domain acoustics…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 6,
+          "elapsedMs": 417,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 1,
+          "residual": 0.40655309729261974,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 1000,
+          "solvePhase": "single",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 7,
+          "elapsedMs": 425,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 25,
+          "residual": 7.247886086225711e-05,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 1000,
+          "solvePhase": "single",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 8,
+          "elapsedMs": 445,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "s-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 40,
+          "residual": 5.145035714196451e-09,
+          "tolerance": 1e-08,
+          "converged": true,
+          "kind": "acoustic",
+          "frequencyHz": 1000,
+          "solvePhase": "single",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 9,
+          "elapsedMs": 445,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Acoustic sweep 1/2: 500.0 Hz",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 10,
+          "elapsedMs": 446,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "frequency-step",
+          "solver": "acoustic-sweep",
+          "kind": "acoustic",
+          "phase": "start",
+          "step": 1,
+          "steps": 2,
+          "frequencyHz": 500,
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 11,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 1,
+          "residual": 0.405748055176813,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 500,
+          "solvePhase": "sweep",
+          "step": 1,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 12,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 25,
+          "residual": 1.6901320363794466e-05,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 500,
+          "solvePhase": "sweep",
+          "step": 1,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 13,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "s-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 40,
+          "residual": 7.064616265896329e-10,
+          "tolerance": 1e-08,
+          "converged": true,
+          "kind": "acoustic",
+          "frequencyHz": 500,
+          "solvePhase": "sweep",
+          "step": 1,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 14,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "frequency-step",
+          "solver": "acoustic-sweep",
+          "kind": "acoustic",
+          "phase": "complete",
+          "step": 1,
+          "steps": 2,
+          "frequencyHz": 500,
+          "converged": true,
+          "metrics": {
+            "residual": 7.064616265896329e-10,
+            "iterations": 40,
+            "peakPressurePa": 1.0529324185191746,
+            "splDb": 91.41711007599179
+          },
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 15,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Acoustic sweep 2/2: 1500.0 Hz",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 16,
+          "elapsedMs": 450,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "frequency-step",
+          "solver": "acoustic-sweep",
+          "kind": "acoustic",
+          "phase": "start",
+          "step": 2,
+          "steps": 2,
+          "frequencyHz": 1500,
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 17,
+          "elapsedMs": 453,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 1,
+          "residual": 0.4078991569109406,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 1500,
+          "solvePhase": "sweep",
+          "step": 2,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 18,
+          "elapsedMs": 457,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "r-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 25,
+          "residual": 0.0003731467890945805,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "acoustic",
+          "frequencyHz": 1500,
+          "solvePhase": "sweep",
+          "step": 2,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 19,
+          "elapsedMs": 457,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "bicgstab",
+          "phase": "s-check",
+          "residualKind": "recurrence-relative",
+          "iteration": 40,
+          "residual": 1.202078253724171e-09,
+          "tolerance": 1e-08,
+          "converged": true,
+          "kind": "acoustic",
+          "frequencyHz": 1500,
+          "solvePhase": "sweep",
+          "step": 2,
+          "steps": 2,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 20,
+          "elapsedMs": 457,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "frequency-step",
+          "solver": "acoustic-sweep",
+          "kind": "acoustic",
+          "phase": "complete",
+          "step": 2,
+          "steps": 2,
+          "frequencyHz": 1500,
+          "converged": true,
+          "metrics": {
+            "residual": 1.202078253724171e-09,
+            "iterations": 40,
+            "peakPressurePa": 1.8703796322841313,
+            "splDb": 96.40769542094856
+          },
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 21,
+          "elapsedMs": 457,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 22,
+          "elapsedMs": 458,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+          "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+          "sequence": 23,
+          "elapsedMs": 458,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "a3e6d33b-c82c-4a7e-9274-71b3e2dc407a",
+        "inputRevision": "sha256:e01fed73537d292d72ca7dfce6711739160edcf5d7eda05b3e60179fb44602fa",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:b11c7dbbc520fa9b880c73eca20b19d07b834f3f7695f4fac9e4827b3f87f9dd",
+        "kind": "acoustic",
+        "display": {
+          "field": "pressure",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          5,
+          5,
+          20
+        ],
+        "element": 4,
+        "weights": [
+          0.4955120306152899,
+          0.004487969384709967,
+          0.49076473928685793,
+          0.009235260713141957
+        ],
+        "pressureReal": 1.2546988825094687,
+        "pressureImag": -0.0032388217641617463,
+        "peakPressurePa": 1.2547030627749856,
+        "rmsPressurePa": 0.8872090440637227,
+        "splDb": 92.93991929253048,
+        "phase": -0.002581348095147031,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "channelFlow",
+      "study": {
+        "kind": "channelFlow",
+        "dynamicViscosity": 0.001,
+        "fluidDensity": 1000,
+        "fluidSoundSpeed": 1500,
+        "pressureDropPa": 0.001,
+        "flowAxis": 2
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "channelFlow",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/dynamicViscosity",
+            "value": 0.001,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/fluidDensity",
+            "value": 1000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions",
+            "value": [],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/kind",
+            "value": "box",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/bounds",
+            "value": [
+              0,
+              0,
+              0,
+              2,
+              2,
+              4
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/flowAxis",
+            "value": 2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/pressureDropPa",
+            "value": 0.001,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/fluidSoundSpeed",
+            "value": 1500,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual observation reference",
+            "applicability": "Existing limited acoustic/channel model",
+            "status": "unconfirmed",
+            "assumption": "Virtual assumptions only; not measured or user-confirmed"
+          }
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "channel-flow",
+          "profile": {
+            "id": "channel-flow",
+            "models": [
+              "channelFlow"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "kind": "channelFlow",
+                "residualKind": "recurrence-relative",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero RHS emits none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "recursive residual norm divided by eliminated right-hand-side norm; no independent true-residual recalculation"
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them",
+              "Recurrence residual convergence is not an independent true-residual check or physical accuracy guarantee",
+              "Later checks may fail after numerical convergence; no intermediate pressure or velocity fields are retained"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "fully-developed-channel-flow",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/dynamicViscosity",
+          "/study/fluidDensity",
+          "/conditions",
+          "/sourceModel/kind",
+          "/sourceModel/bounds",
+          "/study/flowAxis",
+          "/study/pressureDropPa",
+          "/study/fluidSoundSpeed"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "dynamicViscosity": "Pa*s",
+          "fluidDensity": "kg/m3",
+          "fluidSoundSpeed": "m/s",
+          "pressureDropPa": "Pa",
+          "freeStreamVelocity": "m/s",
+          "referenceLengthMm": "mm"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+        "summary": {
+          "loaded": true,
+          "name": "Observed channelFlow",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 0,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+        "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791995614555,
+        "updatedAt": 1791995614942,
+        "lastSequence": 10,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "channelFlow",
+          "mesh": {
+            "nodeCount": 62,
+            "elementCount": 144,
+            "volumeMm3": 16.000000000000004,
+            "minVolumeMm3": 0.03762867047047275,
+            "minQuality": 0.43000851316653615,
+            "qualityHistogram": [
+              0,
+              0,
+              4,
+              41,
+              99
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 2,
+          "elapsedMs": 124,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 3,
+          "elapsedMs": 124,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 62,
+            "elementCount": 144,
+            "volumeMm3": 16.000000000000004,
+            "minVolumeMm3": 0.03762867047047275,
+            "minQuality": 0.43000851316653615,
+            "qualityHistogram": [
+              0,
+              0,
+              4,
+              41,
+              99
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "meshAvailable": false,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 4,
+          "elapsedMs": 380,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 5,
+          "elapsedMs": 381,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving fully developed channel flow…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 6,
+          "elapsedMs": 384,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 1,
+          "residual": 0.21678632846349957,
+          "tolerance": 1e-08,
+          "converged": false,
+          "kind": "channelFlow",
+          "residualKind": "recurrence-relative",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 7,
+          "elapsedMs": 387,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "pcg",
+          "iteration": 8,
+          "residual": 6.351441718622083e-09,
+          "tolerance": 1e-08,
+          "converged": true,
+          "kind": "channelFlow",
+          "residualKind": "recurrence-relative",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 8,
+          "elapsedMs": 387,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 9,
+          "elapsedMs": 387,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+          "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+          "sequence": 10,
+          "elapsedMs": 387,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "ca99bee2-dc21-4775-8e11-5627d28c414c",
+        "inputRevision": "sha256:16bab9bb4425bf1bc88ac3f29d47177605620ae8e779b0655022175d646ec0de",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:6c31cb303b63e5fbd87bc2e63fde5e269a502e077d34cb7aa4e17147448cb5a4",
+        "kind": "channelFlow",
+        "display": {
+          "field": "speed",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          1,
+          1,
+          2
+        ],
+        "element": 131,
+        "weights": [
+          0.48556199014392387,
+          0.022892486108887056,
+          0.0049306837882971966,
+          0.48661483995889143
+        ],
+        "velocityMs": [
+          0,
+          0,
+          5.579846498232953e-05
+        ],
+        "speedMs": 5.579846498232953e-05,
+        "pressurePa": 0.0004999999999999998,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    }
+  ],
+  "validation": {
+    "status": "checking",
+    "defaultRuntime": {
+      "node": "v24.11.1",
+      "tests": 718,
+      "passed": 714,
+      "failedFiles": 1,
+      "skipped": 3,
+      "durationMs": 87594.1589,
+      "gatePassed": false,
+      "knownWasmFatal": true,
+      "evidence": "docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json"
+    },
+    "isolatedDefaultRetry": {
+      "passed": 3,
+      "failed": 0,
+      "durationMs": 1678.6269,
+      "evidence": "docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json"
+    },
+    "alternateRuntime": {
+      "node": "v26.10.0",
+      "v8": "14.6.202.34-node.34",
+      "tests": 719,
+      "passed": 716,
+      "failed": 0,
+      "skipped": 3,
+      "durationMs": 219476.5307,
+      "sourceDrift": [],
+      "evidence": "docs/evidence/2026-10-15-wave-channel-node26-comparison.json"
+    },
+    "build": {
+      "passed": true,
+      "durationSeconds": 2.72
+    },
+    "distribution": {
+      "passed": true,
+      "checks": 26,
+      "durationSeconds": 28.04,
+      "runtime": "Node v24.11.1",
+      "doesNotReplaceFailedFullSuite": true
+    },
+    "limitation": "Alternate-runtime success does not replace failed default-runtime gate or establish V8 root-cause resolution.",
+    "skillValidation": true
+  }
+}
