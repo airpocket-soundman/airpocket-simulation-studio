@@ -1557,6 +1557,22 @@
       "acceptance": "全体484中481成功・3スキップ。実ローカルIAB/Worker/WASM/MCPで208374bytesのGUI/MCP一致、0件から1ケース1ビューへ読込、全表示設定と0.04mm点値を復元。旧ケース/固有/過渡の文脈拒否は単体試験。ビルド・配信物26項目成功。公開HTTPS・最大容量・全結果種の実画面は未確認。",
       "acceptanceEn": "481passed/three skipped of484. Actual local IAB/Worker/WASM/MCP verifies208374byte GUI/MCP equality, empty-to-one case/view import, complete display restoration and0.04mm probe. Legacy/modal/transient context refusal covered by unit tests. Build and26distribution checks passed. Public HTTPS, maximum sizes and every result kind inUI remain unverified.",
       "evidence": "src/case-view-bundle.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-bundle-proof.json; docs/testing.md"
+    },
+    {
+      "id": "MEASUREMENTHISTORY1",
+      "title": "結果版に結び付く測定履歴をLLMから保存・再利用",
+      "titleEn": "Retain and reuse result-bound point measurements through user LLMs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "RESULTCONTROL1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "共通measurementApiとMCP6操作を追加。点・結果SHA・表示量/時刻/固有モード・測定値・暫定評価を保存。100件/300000 UTF8bytes、一覧/内容版を照合。履歴JSONのみ明示保存し、取込値は独立検証済みに昇格しない。",
+      "detailEn": "Add shared measurementApi and six MCP methods. Retain point, result SHA, field/time/mode, values and provisional assessment. Enforce100 entries/300000 UTF8bytes and archive/item revisions. Explicit JSON persistence; imported values never become independently verified.",
+      "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。履歴GUI・自動永続化・結果ケース同梱・公開HTTPS実証は残す。",
+      "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. HistoryGUI, automatic persistence, case bundling and publicHTTPS remain.",
+      "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md"
     }
   ],
   "solvers": [

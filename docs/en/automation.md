@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 62 methods (25 default tools, 27 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 68 methods (25 default tools, 27 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -206,3 +206,13 @@ Import verifies hashes, both current archive revisions and snapshots before sync
 Shared API: `window.caseBundleApi.list/exportArchive/importArchive`; chunk transfer uses `window.caseBundleTransfer` with the existing caseArchiveTransfer beginExport/read/beginImport/write/commit/release contract. Dedicated GUI controls are installed by `installCaseBundleUi`.
 
 Local actual-browser/real-WASM/real-MCP checks verified identical GUI download and MCP chunk export, GUI reimport and case/view restoration ([test record](testing.md)). Public HTTPS, maximum capacity and actual GUI coverage of every result kind are not established.
+
+## Result-revision and display-bound measurement history
+
+Shared `window.measurementApi` provides list/get/save/remove/exportArchive/importArchive. Connector measurementList, measurementGet and measurementExport require inspect scope; measurementSave, measurementRemove and measurementImport require edit scope. Saved entries freeze resultRevision, point, options, display context including selected time/mode, measurements and assessment. Options accept only bodyIndex/elementIndex; modeIndex/frameIndex overrides are refused in favor of current resultView context.
+
+History is strict JSON with at most 100 entries and 300,000 UTF-8 bytes for the complete archive, fitting inline command/reply limits. Complete results are not included. Import schema/type validation does not establish independently recomputed numerical validity against original results. Switching current results does not rewrite historical revisions/values. This change adds no GUI; explicitly export history that should be saved.
+
+`measurementList()` returns archiveRevision and each measurementId, content revision, name and resultRevision. Save with `measurementSave({name,expectedResultRevision,expectedArchiveRevision,point,options})`, obtaining both revisions from result-view/history reads first. Read using `measurementGet({measurementId,expectedRevision?})`; remove with `measurementRemove({measurementId,expectedRevision,expectedArchiveRevision?})`, preferably supplying both revisions. Responses explicitly report recordedEvidence:true and independentlyVerified:false.
+
+`measurementExport()` returns `{archiveRevision,archive:{version:1,measurements:[{id,name,resultRevision,point,options,evidence}]}}`. `measurementImport({archive,expectedArchiveRevision})` replaces the complete list and reports imported:true. IDs persist in the archive; duplicate IDs are rejected. No timestamp is recorded. Guard callbacks are host-private, not public JSON arguments.

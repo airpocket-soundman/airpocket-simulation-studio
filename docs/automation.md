@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは62操作を公開します（通常25ツール、接続モード27ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは68操作を公開します（通常25ツール、接続モード27ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -206,3 +206,13 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 共有APIは`window.caseBundleApi.list/exportArchive/importArchive`、分割転送は`window.caseBundleTransfer`（既存caseArchiveTransferと同じbeginExport/read/beginImport/write/commit/release）です。GUIの専用操作は`installCaseBundleUi`で組み込みます。
 
 ローカル実ブラウザ・実WASM・実MCPで、GUIダウンロードとMCP分割書出の同一性、GUI再取込、ケースと表示設定の復元を確認しました（[検証記録](testing.md)）。公開HTTPS・最大容量・全結果種の実GUI確認は含みません。
+
+## 結果版と表示状態を固定した測定履歴
+
+共有の`window.measurementApi`は`list/get/save/remove/exportArchive/importArchive`を提供します。接続の`measurementList`・`measurementGet`・`measurementExport`は確認権限、`measurementSave`・`measurementRemove`・`measurementImport`は編集権限です。保存時のresultRevision、点、options、表示中の時刻/モードなどのdisplay、測定値と根拠評価を固定します。optionsは`bodyIndex`・`elementIndex`のみで、modeIndex/frameIndexの上書きは受け付けず表示中のresultView文脈を使います。
+
+履歴は最大100件、アーカイブ全体で300,000 UTF-8バイト以内の厳密なJSONです。履歴に結果本体を含めず、インライン転送の命令・応答上限内で扱います。取込で型や構造を検査しても、値を元結果から独立に再計算して検証した扱いにはしません。現在の結果を切り替えても過去の版・測定値を置き換えません。今回GUIは追加しません。必要な履歴は明示的に書き出して保存してください。
+
+`measurementList()`は`archiveRevision`と各`measurementId`・内容`revision`・name・resultRevisionを返します。保存は`measurementSave({name,expectedResultRevision,expectedArchiveRevision,point,options})`で、先に結果ビューと履歴一覧から両版を取得してください。`measurementGet({measurementId,expectedRevision?})`で記録を読み、`measurementRemove({measurementId,expectedRevision,expectedArchiveRevision?})`で削除します。削除時は両版の指定を推奨します。返却には`recordedEvidence:true,independentlyVerified:false`を明示します。
+
+`measurementExport()`は`{archiveRevision,archive:{version:1,measurements:[{id,name,resultRevision,point,options,evidence}]}}`を返します。`measurementImport({archive,expectedArchiveRevision})`で一覧全体を置換し、imported:trueを返します。IDはアーカイブで保持し、重複IDを拒否します。日時は記録しません。guardはホスト内部用で、公開JSON引数へ指定しません。

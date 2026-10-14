@@ -1,0 +1,206 @@
+{
+  "environment": "Actual local in-app browser with real stdio MCP/HTTP. Display uses previously computed Worker/WASM reference case; no new solver execution in this check.",
+  "source": "2026-10-14-case-view-bundle.json",
+  "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+  "saved": {
+    "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+    "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+    "name": "WASM reference tip",
+    "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+    "recordedEvidence": true,
+    "independentlyVerified": false,
+    "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4"
+  },
+  "record": {
+    "schemaVersion": 1,
+    "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+    "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+    "evidence": {
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "displacementMm": [
+        1.3812181241744085e-12,
+        2.496925609531012e-12,
+        0.03999999999944816
+      ],
+      "display": {
+        "field": "displacement",
+        "frameIndex": null,
+        "modeIndex": null
+      },
+      "element": 158,
+      "kind": "elastic",
+      "magnitudeMm": 0.03999999999944816,
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "schemaVersion": 1,
+      "vonMisesPa": 999999.9999830347,
+      "weights": [
+        -4.440892098500626e-16,
+        0.5005865574720816,
+        0.4994134425279184,
+        0
+      ]
+    },
+    "id": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+    "name": "WASM reference tip",
+    "options": {},
+    "point": [
+      5,
+      5,
+      40
+    ],
+    "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+    "recordedEvidence": true,
+    "independentlyVerified": false
+  },
+  "exported": {
+    "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4",
+    "archive": {
+      "measurements": [
+        {
+          "evidence": {
+            "analysisAssessment": {
+              "completePreflight": false,
+              "mode": "legacy",
+              "provisional": false,
+              "remainingChecks": [
+                "Mesh quality and element validity after generation",
+                "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+                "Source applicability, convergence, mesh dependence and physical accuracy"
+              ],
+              "schemaVersion": 1
+            },
+            "displacementMm": [
+              1.3812181241744085e-12,
+              2.496925609531012e-12,
+              0.03999999999944816
+            ],
+            "display": {
+              "field": "displacement",
+              "frameIndex": null,
+              "modeIndex": null
+            },
+            "element": 158,
+            "kind": "elastic",
+            "magnitudeMm": 0.03999999999944816,
+            "point": [
+              5,
+              5,
+              40
+            ],
+            "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+            "schemaVersion": 1,
+            "vonMisesPa": 999999.9999830347,
+            "weights": [
+              -4.440892098500626e-16,
+              0.5005865574720816,
+              0.4994134425279184,
+              0
+            ]
+          },
+          "id": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+          "name": "WASM reference tip",
+          "options": {},
+          "point": [
+            5,
+            5,
+            40
+          ],
+          "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06"
+        }
+      ],
+      "version": 1
+    },
+    "recordedEvidence": true,
+    "independentlyVerified": false
+  },
+  "imported": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4",
+    "count": 1,
+    "measurements": [
+      {
+        "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+        "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+        "name": "WASM reference tip",
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "recordedEvidence": true,
+        "independentlyVerified": false
+      }
+    ],
+    "recordedEvidence": true,
+    "independentlyVerified": false,
+    "imported": true
+  },
+  "restored": {
+    "schemaVersion": 1,
+    "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+    "revision": "sha256:b9e7cb2cb6e2ae0a534761adbb3853f798ee1f70331b93a0d4a9e52edab39dd4",
+    "evidence": {
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "displacementMm": [
+        1.3812181241744085e-12,
+        2.496925609531012e-12,
+        0.03999999999944816
+      ],
+      "display": {
+        "field": "displacement",
+        "frameIndex": null,
+        "modeIndex": null
+      },
+      "element": 158,
+      "kind": "elastic",
+      "magnitudeMm": 0.03999999999944816,
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "schemaVersion": 1,
+      "vonMisesPa": 999999.9999830347,
+      "weights": [
+        -4.440892098500626e-16,
+        0.5005865574720816,
+        0.4994134425279184,
+        0
+      ]
+    },
+    "id": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+    "name": "WASM reference tip",
+    "options": {},
+    "point": [
+      5,
+      5,
+      40
+    ],
+    "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+    "recordedEvidence": true,
+    "independentlyVerified": false
+  },
+  "staleRejected": true
+}
