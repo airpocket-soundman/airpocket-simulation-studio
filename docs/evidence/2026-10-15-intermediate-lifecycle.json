@@ -1,0 +1,270 @@
+{
+  "checkedAt": "2026-10-14T23:46:57.207Z",
+  "baseRevision": "0e536380e79acda0dde2bcdf28c778f4cf54ce60",
+  "sources": {
+    "scripts/studio-mcp.mjs": {
+      "bytes": 39517,
+      "sha256": "9916f671c4b9afcec94314b50b6ee6cccdc475df5ddd66bf6a5fde8f2fe964d2"
+    },
+    "skills/airpocket-studio/SKILL.md": {
+      "bytes": 4559,
+      "sha256": "688e510a0299d801277bb01cf8312f20480e461b2ab7ecc1389a3d03656d3bc5"
+    },
+    "skills/airpocket-studio/references/browser-session.md": {
+      "bytes": 8246,
+      "sha256": "212003dc94f2dbafc6da843af8423323b617cc20c35648b0f0f9d1601ab416f2"
+    },
+    "skills/airpocket-studio/references/jobs-observations.md": {
+      "bytes": 7728,
+      "sha256": "435609ce3e8e8b38aed659183b531c3c71e98419b108f5a3cc2409fca13be618"
+    },
+    "src/acoustic-transient.js": {
+      "bytes": 7621,
+      "sha256": "f95cf47d2fe52fb0356271144fbdc7d151c6dad53420e23280e230c432d28c9d"
+    },
+    "src/analysis-client.js": {
+      "bytes": 8238,
+      "sha256": "2e97127497b0248b3f2771b3540973b0056dd5ef3136cd7eeef489aabec7d25d"
+    },
+    "src/analysis.worker.js": {
+      "bytes": 15193,
+      "sha256": "d21a210753ab7fac52ff25ef301c8f7dd87dcb2c5f6992d55f4ffc68f9b1ecbb"
+    },
+    "src/browser-operation-job-contracts.js": {
+      "bytes": 4412,
+      "sha256": "9cb9eb6451f4f5ce2d7bb07b8eda3a2e2e4d546307da44d091ea441654510ec2"
+    },
+    "src/browser-session.js": {
+      "bytes": 19917,
+      "sha256": "0644b47012aa9a07642947d7f85316941fdcdf7b1183c6c2e794e53d00db5005"
+    },
+    "src/intermediate-results.js": {
+      "bytes": 6858,
+      "sha256": "25ec6fbddf9ede492ca286fe2de9c8991a6959e3658b287d53024773b62e514d"
+    },
+    "src/progress.json": {
+      "bytes": 212776,
+      "sha256": "6621a502da096f00c09b3d55fb2575d53a6d8afe78d14e629e5239a11ecad103"
+    },
+    "src/thermal-core.js": {
+      "bytes": 6140,
+      "sha256": "a195e9652b63c1cf2b95e22c39cdb5646a31c3ab4c5df21ece92db9f6e850485"
+    },
+    "tests/acoustic-transient.test.mjs": {
+      "bytes": 5782,
+      "sha256": "cbd6b05435450cd76148920f4cea37797658833a133ac78d8fe55d63793427df"
+    },
+    "tests/analysis-client.test.mjs": {
+      "bytes": 9033,
+      "sha256": "26da02f47684e9667717ccada7f805b7515bba5aaadbddf63d764edda039832a"
+    },
+    "tests/intermediate-results.test.mjs": {
+      "bytes": 4628,
+      "sha256": "a1e3568ae5596d98d7e6df43b4e791f64031a605090cb0a3fd4508bb9102d686"
+    },
+    "tests/mcp-artifact-catalog.test.mjs": {
+      "bytes": 7412,
+      "sha256": "c3a66229d097f6524bae2e8740372edf2366e48210969c4354b564167ef71ea8"
+    },
+    "tests/mcp-input-workflow.test.mjs": {
+      "bytes": 7850,
+      "sha256": "39791f96dfbb1f6cb81dfc07990ff6b8df40d881507cb8fd4bea5776228bdac3"
+    },
+    "tests/thermal.test.mjs": {
+      "bytes": 6547,
+      "sha256": "101d630db8c6f080d8e5e3da0990c1851fa6c5a18cb82b767b2533567770aea5"
+    },
+    "tests/worker-pipeline.test.mjs": {
+      "bytes": 24316,
+      "sha256": "658356da73263060a955742e7711e257338b9b1fe4c09ab3a4ff2d8d84c2ccb8"
+    },
+    "tests/browser-artifact-page-contract.test.mjs": {
+      "bytes": 1794,
+      "sha256": "b3669ba20737721dfd32d18532ae089fe0f5455e87240388f5931eccaee019ed"
+    }
+  },
+  "logs": {
+    ".qa/intermediate-lifecycle-full.log": {
+      "bytes": 97313,
+      "sha256": "311c9f578ed001395f8dcfec46156d171a7e875a391dd5c01a5e0cc893f66a89",
+      "tail": "✔ canonical worker uses exact rectangular CAD patches and validates their saved areas (539.9058ms)\n✔ canonical worker conserves force on exact cylindrical CAD patches and restores saved dimensions (2248.3858ms)\n✔ canonical worker only sends thermal and transient acoustic fields when both observation flags are true (2245.3675ms)\nℹ tests 913\nℹ suites 0\nℹ pass 910\nℹ fail 0\nℹ cancelled 0\nℹ skipped 3\nℹ todo 0\nℹ duration_ms 132243.3647\n"
+    },
+    ".qa/intermediate-lifecycle-targeted.log": {
+      "bytes": 2617,
+      "sha256": "a0342716b71cb5c823e416ced07cf237ae59a5eb273861f39a0ceefd4b23d4e4",
+      "tail": "✔ intermediate measurements reject unsupported fields, bad units, bad meshes, extrapolation and oversized pages (0.7345ms)\n✔ explicit element pages reconstruct adaptive connectivity against exact node pages without changing defaults (1.4836ms)\n✔ element connectivity pages are capped, validate element offsets and reject measurement mixing (0.7918ms)\nℹ tests 23\nℹ suites 0\nℹ pass 23\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 752.4443\n"
+    },
+    ".qa/intermediate-lifecycle-progress.log": {
+      "bytes": 1283,
+      "sha256": "8bdefdb721efd741bb3d7d53e52605f8191ac00e303ffe77111852074a1cd22b",
+      "tail": "✔ gate evidence requires explicit successful verification and matching candidate manifest identity (39.3897ms)\n✔ milestone completion requires every gate and one verified publication candidate (4.5353ms)\n✔ validator bounds nested publication metadata and rejects explicit null or accessor metadata (13.3544ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1063.4722\n"
+    },
+    ".qa/intermediate-lifecycle-build.log": {
+      "bytes": 2840,
+      "sha256": "6870ce11c4183caa3292c6e3c4b39efbd39b93feca0adfb593563f40163a5b0f",
+      "tail": "dist/assets/i18n-BCksTE3y.js                    74.15 kB │ gzip:  26.59 kB\ndist/assets/development-B9z1fX0q.js            267.78 kB │ gzip:  88.26 kB\ndist/assets/app-C-QBTELS.js                  1,349.53 kB │ gzip: 361.19 kB\n\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n✓ built in 9.16s\nStandalone browser connector: 71174 bytes / 41c781d2fe44a76f5b0558ada2f75e2a0682a2bc76c2b9ff8a59484c116368fa\nRuntime manifest: 0.43.0 / 0e53638\n"
+    },
+    ".qa/intermediate-lifecycle-local.log": {
+      "bytes": 1414,
+      "sha256": "06ad6807050608762420aad0632b5b7216cdc136dcaa164c993b10321609947e",
+      "tail": "PASS internal-cad-channel-and-port-archive 3762 ms\nPASS exact-planar-cad-patch-and-archive 861 ms\nPASS exact-cylindrical-cad-patch-and-reaction 2384 ms\nPASS j2-plasticity-free-contraction-and-archive 1296 ms\nPASS j2-plasticity-elastic-unloading-and-archive 1869 ms\nPASS failure-and-restart 1059 ms\nPASS project-and-case-roundtrips 16 ms\nPASS published-cad-reader-and-step-mesher 1554 ms\nPASS cad-update-reconciliation-pending-repair-and-step-worker-reference 1446 ms\nPASS oblique-planar-cad-area-and-reaction 1175 ms\nLocal build 0.43.0 0e53638 verified in 59.67 s\n"
+    }
+  },
+  "localDistribution": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "0e536380e79acda0dde2bcdf28c778f4cf54ce60",
+    "local": true,
+    "checkedAt": "2026-10-14T23:46:30.140Z",
+    "elapsedMs": 59671.9245,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 23,
+        "downloaded": 8
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 1372.7374
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 1487.4029000000005
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 1927.7345999999998
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 6072.0098
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 1086.4115000000002
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 3327.8378999999986
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 672.9448000000011
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 1251.5717000000004
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 1892.634399999999
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 7317.2233000000015
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 4853.134600000001
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 2980.982399999997
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 2399.3171999999977
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 2115.7018000000025
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 4615.262999999999
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 3762.4762000000046
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 860.7165000000023
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 2383.9314000000013
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 1295.695200000002
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 1869.3843999999954
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 1058.9746000000014
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 16.05500000000029
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 1553.9766000000018
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 1445.616900000001
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 1175.4716999999946
+      }
+    ],
+    "limitations": [
+      "Node workers execute deployed CAD/analysis assets; browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "scope": [
+    "Same-intermediate-mesh bounded node and element connectivity reconstruction through shared API,live adapter and real stdio MCP.",
+    "Legacy direct analyze/generateMesh cancellation and asynchronous settlement through close/drain APIs.",
+    "Suppress unrequested thermal/transient-acoustic observation field generation and Worker transfer while preserving final results and direct-solver defaults.",
+    "Repository/installed Skill synchronization recorded separately."
+  ],
+  "limitations": [
+    "No actual public HTTPS pairing or full Skill-only end-to-end claim.",
+    "Shared64MB retention applies to stored serialized observations,not peak heap or pending event queues.",
+    "Final result/snapshot storage and execution resources still require separate limits.",
+    "Progress/docs task registration followed full-suite startup;post-registration12 checks passed separately.",
+    "Public publication and full P0-P6 remain incomplete."
+  ]
+}

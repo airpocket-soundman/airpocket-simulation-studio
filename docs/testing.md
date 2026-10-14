@@ -499,3 +499,9 @@ P1/P3の候補検査・版照合・実行中非変更の限定確認であり、
 全体904件中901成功・3skip・失敗0（129.44秒）。この全体実行開始後に読取契約のannotationsを追加したため、最終コードの関連12件成功を別記する。進捗登録後の文書/進捗/gate12件も成功。build成功、単体70,942 bytes、ローカル配信物26項目成功（70.07秒）。ローカルmanifestはdirtyで、公開配布完了の証明ではない。[証跡](evidence/2026-10-15-browser-connector.json)にソースhashとログhash・末尾を保存した。
 
 前回PRの8a486ffは公開run38654646686のverify/deploy/verify-published、公開26項目、注釈付きreleaseタグの参照先一致を確認した。今回のconnectorはその公開物に含まれない。実HTTPS接続、Node同梱配布、再起動復旧、P0〜P6全体は未完了。
+
+## 2026-10-15: 中間メッシュ取得と解析終了の整合
+
+中間artifactへpageKind:elementsを追加し、同じ保持メッシュの節点と四面体接続を有界取得できるようにした。共有API・ブラウザadapter・実stdio MCPで接続ページと不正指定拒否を検証。旧analyze/generateMeshもdrain/closeの終了待機対象とし、遅着応答・非同期terminate・終了失敗の回帰を追加した。熱/過渡音響は場要求なしで観測配列を生成/転送せず、実Workerで最終結果の一致と要約継続を確認した。
+
+全体913件中910成功・3skip・失敗0（132.24秒）。統合対象23件、solver/Worker29件、登録後の文書/進捗/gate12件も成功。buildとローカル配信物26項目（59.67秒）が成功。[検証証跡](evidence/2026-10-15-intermediate-lifecycle.json)、[Skill同期](evidence/2026-10-15-skill-minimal-connector.json)を保存した。後者は10ファイルの一致とvalidator成功であり、Skill単独一巡の証明ではない。公開HTTPS接続、待機イベント/ヒープの上限、再起動復旧、P0〜P6全体は未完了。

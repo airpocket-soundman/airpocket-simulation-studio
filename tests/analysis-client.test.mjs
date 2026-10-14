@@ -32,3 +32,34 @@ test('browser jobs retain optional time fields, expose artifact probes, and repo
  const point=await h.api.getJobArtifact(job.jobId,frame.artifact.artifactId,{point:[.25,.25,.25]});assert.equal(point.measurement.value,35);assert.equal(h.api.getJob(job.jobId).result.intermediate.retainedArtifacts,2);
  h.api.releaseJob(job.jobId);await assert.rejects(async()=>h.api.getJobArtifact(job.jobId,frame.artifact.artifactId),/Unknown job/);h.api.closeJobs();
 });
+
+test('closing direct analysis and mesh calls waits for cleanup and ignores late results',async()=>{
+ for(const method of ['analyze','generateMesh']){
+  let completeCleanup,worker,terminations=0;const cleanup=new Promise(resolve=>{completeCleanup=resolve;});
+  const h=harness({createWorker:()=>worker={postMessage(){},terminate(){terminations++;return cleanup;}}});
+  const running=h.api[method](),rejected=assert.rejects(running,/cancelled/);let closed=false;
+  const closing=h.api.closeJobsAsync().then(value=>{closed=true;return value;});
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(closed,false);assert.equal(h.api.isBusy(),true);assert.equal(terminations,1);
+  worker.onmessage({data:{result:{wrong:true}}});h.api.closeJobs();assert.equal(terminations,1);
+  await assert.rejects(h.api.analyze(),/already running/);completeCleanup();
+  assert.deepEqual(await closing,{drained:true,jobIds:[]});await rejected;assert.equal(h.api.isBusy(),false);
+ }
+});
+
+test('draining a direct execution observes completion without cancellation or waiting for future work',async()=>{
+ const h=harness(),running=h.api.analyze();let drained=false;
+ const waiting=h.api.drainJobs().then(value=>{drained=true;return value;});
+ await new Promise(resolve=>setImmediate(resolve));assert.equal(drained,false);assert.equal(h.workers[0].terminated,0);
+ h.workers[0].send({result:{mesh:{summary:{nodeCount:4}}}});await running;
+ const future=h.api.generateMesh();assert.deepEqual(await waiting,{drained:true,jobIds:[]});assert.equal(h.api.isBusy(),true);
+ h.workers[1].send({result:{mesh:{summary:{nodeCount:4}}}});await future;assert.equal(h.api.isBusy(),false);
+});
+
+test('synchronous close cancels direct work and drain settles even when cleanup rejects',async()=>{
+ let rejectCleanup,terminations=0;const cleanup=new Promise((_resolve,reject)=>{rejectCleanup=reject;});
+ const h=harness({createWorker:()=>({postMessage(){},terminate(){terminations++;return cleanup;}})});
+ const running=h.api.analyze(),rejected=assert.rejects(running,/Worker cleanup failed/);h.api.closeJobs();let drained=false;
+ const waiting=h.api.drainJobs().then(value=>{drained=true;return value;});await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(drained,false);assert.equal(terminations,1);assert.equal(h.api.isBusy(),true);rejectCleanup(Error('Worker cleanup failed'));
+ assert.deepEqual(await waiting,{drained:true,jobIds:[]});await rejected;assert.equal(h.api.isBusy(),false);
+});
