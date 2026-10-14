@@ -1,3 +1,4 @@
+import {createMeasurementVerificationApi} from './measurement-verification-api.js';
 import {createMeasurementHistory} from './measurement-history.js';
 import {createCaseViewBundle} from './case-view-bundle.js';
 import {installCaseBundleUi} from './case-bundle-ui.js';
@@ -447,7 +448,8 @@ for(const id of ['color-fixed','color-min','color-max'])$(id).onchange=async()=>
 let exportPreparedAnalysis;
 const visualExportJobs=createVisualExportJobs({prepare:async()=>{if(!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Viewer is busy');const output=lastAnalysis,view=await window.resultViewApi.get();if(lastAnalysis!==output||!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Displayed result changed or viewer busy');exportPreparedAnalysis=output;return {resultRevision:view.resultRevision,view:{result:view.state,setup:window.viewApi.get(),language}};},render:args=>{if(lastAnalysis!==exportPreparedAnalysis)throw Error('Displayed result changed before export');return visualExport.render(args);}});
 window.visualExportApi=Object.freeze({...visualExportJobs,capabilities:()=>({...visualExport.capabilities(),maxArtifactBytes:32*1024*1024,maxArtifactChunkBytes:65536})});
-window.measurementApi=createMeasurementHistory({resultView:window.resultViewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+const measurements=createMeasurementHistory({resultView:window.resultViewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+window.measurementApi=Object.freeze({...Object.fromEntries(['list','get','save','remove','exportArchive','importArchive'].map(method=>[method,measurements[method]])),...createMeasurementVerificationApi({getCaseArchive:()=>caseStore.export(),measurements,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()})});
 const namedViews=createNamedResultViews({resultView:window.resultViewApi,setupView:window.viewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 let namedViewUi;
 window.namedViewApi=Object.freeze(Object.fromEntries(['list','save','apply','remove','export','import'].map(method=>[method,async(...args)=>{const value=await namedViews[method](...args);if(['save','remove','import'].includes(method))await namedViewUi?.refresh().catch(error=>status(error.message));return value;}] )));

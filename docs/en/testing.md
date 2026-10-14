@@ -237,3 +237,11 @@ All 18 new targets passed: eight core tests, five physics kinds using real resul
 The local Codex in-app browser and real stdio MCP/HTTP imported the existing real-WASM reference bundle `docs/evidence/2026-10-14-case-view-bundle.json` and displayed it using caseView. No new solve was run in this verification. At [5,5,40], displacement 0.03999999999944816 mm was saved to history. get/export/remove-to-zero/import-to-one/get preserved the complete record identically; stale archive revisions were refused.
 
 Saved evidence includes the [machine-readable record](../evidence/2026-10-14-measurement-history.json) and [screenshot](../evidence/2026-10-14-measurement-history.jpg). The screenshot shows the displayed result/connector; no history GUI was added. Records freeze result revision, point, options, display, values and assessment. Import does not promote historical values to independently verified numerical evidence. Public HTTPS is outside this check.
+
+## 2026-10-14: measurement recomputation against saved results
+
+This change re-interpolates history from saved fields matching display-prepared result revisions and compares complete evidence. Tool counts are 26 default/28 connected, with 69 methods. The final full suite passed514 of517 with three skips and zero failures (concurrency4,68.83seconds). Build,26 local-distribution checks (28.57seconds) and SKILL validation passed. Agreement with saved results does not establish independent-solver or physical accuracy.
+
+All 15 new targets passed (nine core, five host/session and one real MCP), including modal/transient context recomputation. Existing real-WASM-derived case/measurement archives verified one record through both the real stdio saved-file tool and a Node-hosted live adapter. See the [machine-readable record](../evidence/2026-10-14-measurement-verification.json). This check ran no new solve or actual browser test; it demonstrates recomputation agreement with existing saved fields.
+
+A race where history changed while hashing the final exported snapshot was fixed. A synchronous host-internal archive match immediately before return rejects stale verification responses; a regression test covers this case. The internal function is not exposed through the window API or connector.

@@ -2,9 +2,9 @@
 
 [日本語](../automation.md)
 
-`npm run mcp` starts a local stdio MCP server implementing the [2025-11-25 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
+`npm run mcp` starts a local stdio MCP server implementing the [2025-11-26 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
 
-Twenty-five tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_validate_case_bundle`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
+Twenty-six tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_validate_case_bundle`, `studio_verify_measurements`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})` normalizes STEP/STP to mm through OCCT and saves a new input JSON retaining original STEP data and CAD-face mappings. STL requires a positive explicit `scaleToMm` and follows the current outward, closed, convex single-shell and size restrictions. The input-file limit is 50 MiB. `studio_create_builtin_project({source,outputPath,name?})` creates mm-based `box` (bounds), `boxes` (boxes), fixed-size `cylinder` (kind only), `sphere` (center/radius), or `tube` (center/axis/innerRadius/outerRadius/length). It does not invent material values, supports or loads.
 
@@ -67,7 +67,7 @@ Default MCP works with saved JSON; connector mode also invokes permitted browser
 
 ## Temporary local connector (initial implementation)
 
-Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 25 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 26 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
 
 The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 68 methods (25 default tools, 27 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 69 methods (26 default tools, 28 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -216,3 +216,13 @@ History is strict JSON with at most 100 entries and 300,000 UTF-8 bytes for the 
 `measurementList()` returns archiveRevision and each measurementId, content revision, name and resultRevision. Save with `measurementSave({name,expectedResultRevision,expectedArchiveRevision,point,options})`, obtaining both revisions from result-view/history reads first. Read using `measurementGet({measurementId,expectedRevision?})`; remove with `measurementRemove({measurementId,expectedRevision,expectedArchiveRevision?})`, preferably supplying both revisions. Responses explicitly report recordedEvidence:true and independentlyVerified:false.
 
 `measurementExport()` returns `{archiveRevision,archive:{version:1,measurements:[{id,name,resultRevision,point,options,evidence}]}}`. `measurementImport({archive,expectedArchiveRevision})` replaces the complete list and reports imported:true. IDs persist in the archive; duplicate IDs are rejected. No timestamp is recorded. Guard callbacks are host-private, not public JSON arguments.
+
+## Recompute measurement history from saved results
+
+`studio_verify_measurements({casesPath,measurementsPath})` reads a saved case archive and measurement archive, strictly validates both, finds each display-prepared result matching resultRevision and interpolates through real resultView.probe using recorded field/time/mode/point/options. Complete recorded evidence must match canonical JSON; mismatches and orphan records are refused.
+
+Success returns compact `{schemaVersion:1,caseCount,measurementCount,verified:true,verification:"recomputed-from-saved-results",physicalAccuracyVerified:false,matches:[{measurementId,resultRevision,caseIndexes}]}`. This establishes agreement with saved fields, not independent-solver or physical accuracy. Existing recordedEvidence/independentlyVerified flags are unchanged.
+
+Connected `measurementVerify({expectedArchiveRevision,expectedCaseArchiveRevision})` checks current history/case versions. expectedCaseArchiveRevision hashes the complete raw caseArchive JSON, distinct from each display-prepared result revision. Shared API: window.measurementApi.verify.
+
+For live verification, call caseList() and measurementList() first. Pass the former archiveRevision as expectedCaseArchiveRevision and the latter as expectedArchiveRevision; no case transfer is needed. Verification also returns archiveRevision for history and caseArchiveRevision for the checked cases.

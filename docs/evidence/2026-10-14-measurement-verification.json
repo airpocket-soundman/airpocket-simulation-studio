@@ -1,0 +1,42 @@
+{
+  "environment": "Real stdio MCP offline tool; Node-hosted live semantic adapter (not actual browser verification this round)",
+  "caseSource": "2026-10-14-case-view-bundle.json -> caseArchive",
+  "measurementSource": "2026-10-14-measurement-history.json -> exported.archive",
+  "offline": {
+    "schemaVersion": 1,
+    "caseCount": 1,
+    "measurementCount": 1,
+    "verified": true,
+    "verification": "recomputed-from-saved-results",
+    "physicalAccuracyVerified": false,
+    "matches": [
+      {
+        "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "caseIndexes": [
+          0
+        ]
+      }
+    ]
+  },
+  "liveAdapter": {
+    "schemaVersion": 1,
+    "caseCount": 1,
+    "measurementCount": 1,
+    "verified": true,
+    "verification": "recomputed-from-saved-results",
+    "physicalAccuracyVerified": false,
+    "matches": [
+      {
+        "measurementId": "b5c0c15b-3573-43ff-93dc-4d549b06a952",
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "caseIndexes": [
+          0
+        ]
+      }
+    ],
+    "archiveRevision": "sha256:497e4e15b37ad2e48eaf2d16e7d9d7cfb15141de5cc0369d969b2aa1013c8ac4",
+    "caseArchiveRevision": "sha256:6e18ae7a1ff09a9af976ac4ef27ecd0a8972c3692f6cfdde85876e2147ac6f95"
+  },
+  "limitation": "Reinterpolation from previously computed saved WASM fields; not a new solve or independent physical validation."
+}

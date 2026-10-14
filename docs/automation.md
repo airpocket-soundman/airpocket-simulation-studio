@@ -4,7 +4,7 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-25ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+26ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -67,7 +67,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の25ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の26ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは68操作を公開します（通常25ツール、接続モード27ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは69操作を公開します（通常26ツール、接続モード28ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -216,3 +216,13 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 `measurementList()`は`archiveRevision`と各`measurementId`・内容`revision`・name・resultRevisionを返します。保存は`measurementSave({name,expectedResultRevision,expectedArchiveRevision,point,options})`で、先に結果ビューと履歴一覧から両版を取得してください。`measurementGet({measurementId,expectedRevision?})`で記録を読み、`measurementRemove({measurementId,expectedRevision,expectedArchiveRevision?})`で削除します。削除時は両版の指定を推奨します。返却には`recordedEvidence:true,independentlyVerified:false`を明示します。
 
 `measurementExport()`は`{archiveRevision,archive:{version:1,measurements:[{id,name,resultRevision,point,options,evidence}]}}`を返します。`measurementImport({archive,expectedArchiveRevision})`で一覧全体を置換し、imported:trueを返します。IDはアーカイブで保持し、重複IDを拒否します。日時は記録しません。guardはホスト内部用で、公開JSON引数へ指定しません。
+
+## 保存結果からの測定履歴の再計算照合
+
+`studio_verify_measurements({casesPath,measurementsPath})`は保存ケース集と測定アーカイブを読み、履歴を保存結果から再計算して照合します。両入力を厳密に検証し、各resultRevisionと一致する表示用正規化結果を探して、表示量・時刻/モード・点・optionsから実resultView.probeで補間します。記録のevidence全体とcanonical JSONで一致する必要があり、不一致や対応結果のない履歴は拒否します。
+
+成功は`{schemaVersion:1,caseCount,measurementCount,verified:true,verification:"recomputed-from-saved-results",physicalAccuracyVerified:false,matches:[{measurementId,resultRevision,caseIndexes}]}`という要約で返します。これは保存場と記録の一致を示し、独立ソルバーとの一致や実物の精度を保証しません。既存履歴のrecordedEvidence/independentlyVerifiedフラグを書き換えません。
+
+接続の`measurementVerify({expectedArchiveRevision,expectedCaseArchiveRevision})`は現在の履歴とケース集を版照合します。expectedCaseArchiveRevisionは生のcaseArchive JSON全体のSHA-256で、各記録の表示用結果版とは異なります。共有APIは`window.measurementApi.verify`です。
+
+ライブ照合では先に`caseList()`と`measurementList()`を呼び、前者のarchiveRevisionをexpectedCaseArchiveRevision、後者のarchiveRevisionをexpectedArchiveRevisionへ渡します。ケース転送は不要です。verify応答は照合した履歴のarchiveRevisionとcaseArchiveRevisionも返します。

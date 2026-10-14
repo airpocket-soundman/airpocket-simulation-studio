@@ -1573,6 +1573,22 @@
       "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。履歴GUI・自動永続化・結果ケース同梱・公開HTTPS実証は残す。",
       "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. HistoryGUI, automatic persistence, case bundling and publicHTTPS remain.",
       "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md"
+    },
+    {
+      "id": "MEASUREMENTVERIFY1",
+      "title": "保存場から測定履歴を再補間して照合",
+      "titleEn": "Recompute measurement evidence from archived fields",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "MEASUREMENTHISTORY1",
+        "CASEARCHIVE1"
+      ],
+      "detail": "保存ケースの表示用SHAと履歴を結び、実resultView.probeで点・時刻・モードを再現しevidence全体を照合。共通API・読取MCP・ライブ確認操作を追加。履歴を変更せず、保存場との一致と物理精度保証を区別。",
+      "detailEn": "Match history with display-prepared saved-result SHA and replay real resultView.probe for point/time/mode, comparing complete evidence. Shared API, read-only MCP and live inspect operation preserve history and distinguish field agreement from physical accuracy.",
+      "acceptance": "最終全体517中514成功・3スキップ、新15対象成功。熱・固有・過渡の再補間、改変/孤立/旧SHA拒否、最後のハッシュ中の更新競合拒否を検証。既存WASM場/履歴1件を実stdio MCPとNode上のライブアダプターで照合。ビルド・配信物26項目・SKILL検証成功。今回は新解析/実ブラウザ検証なし、物理精度の独立保証なし。",
+      "acceptanceEn": "Final suite514passed/three skipped of517,15new checks pass. Thermal/modal/transient replay, tampering/orphan/rawSHA rejection and final-hash race refusal verified. One existingWASM field/history record matches through realstdioMCP and Node-hosted live adapter. Build,26distribution checks andSKILL validation pass. No new solve/actual browser check or independent physical validation in this change.",
+      "evidence": "src/measurement-verification.js; src/measurement-verification-api.js; tests/measurement-verification.test.mjs; tests/measurement-verification-api.test.mjs; tests/mcp-measurement-verification.test.mjs; docs/evidence/2026-10-14-measurement-verification.json; docs/testing.md"
     }
   ],
   "solvers": [
