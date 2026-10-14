@@ -1,6 +1,6 @@
 import {semanticOperationArgumentsSchema} from '../src/semantic-operation-schema.js';
 import {getBrowserOperationContracts} from '../src/browser-operation-contracts.js';
-import {getAnalysisFailure} from '../src/analysis-failure.js';
+import {startMcpStdio} from './mcp-stdio.mjs';
 import {inspectNodeRuntime} from './node-runtime-info.mjs';
 import {verifyMeasurementArchive} from '../src/measurement-verification.js';
 import {prepareCaseView} from '../src/case-view.js';
@@ -24,7 +24,6 @@ import {publishJson} from './json-artifacts.mjs';
 import {createResultAssessmentApi} from '../src/result-assessment-api.js';
 import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 // MCP 2025-11-25 stdio transport; stdout contains JSON-RPC messages only.
-import {createInterface} from 'node:readline';
 import {readFile,writeFile,stat,realpath,lstat} from 'node:fs/promises';
 import {resolve,isAbsolute,extname,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -174,7 +173,6 @@ export async function callStudioTool(name,args={}){
  const output=await analyzeProject(await jsonFile(args.path),{...(args.size!==undefined?{size:args.size}:{}),...(args.method!==undefined?{method:args.method}:{})},args.operation==='mesh'?'mesh':'elastic',{isolation:analysisIsolation});
  await writeFile(resolve(args.outputPath),JSON.stringify(output)+'\n',{flag:'wx'});return {...summary(output),outputPath:resolve(args.outputPath)};
 }
-const send=message=>process.stdout.write(JSON.stringify(message)+'\n');
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const isolationArgs=process.argv.slice(2).filter(arg=>arg==='--analysis-isolation'||arg.startsWith('--analysis-isolation='));
  if(isolationArgs.length>1||isolationArgs.length===1&&!['worker','process'].includes(isolationArgs[0].slice('--analysis-isolation='.length)))throw Error('Use one --analysis-isolation=worker|process');
@@ -188,23 +186,5 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
 }
 export function startServer(){
  executionConfigurationLocked=true;
- let initialized=false,ready=false,queue=Promise.resolve();const input=createInterface({input:process.stdin,crlfDelay:Infinity});
- input.on('line',line=>{queue=queue.then(async()=>{
-  let message;try{if(line.length>1000000)throw Error();message=JSON.parse(line);}catch{send({jsonrpc:'2.0',id:null,error:{code:-32700,message:'Invalid JSON-RPC message'}});return;}
-  const hasId=!!message&&typeof message==='object'&&Object.hasOwn(message,'id');
-  if(!message||typeof message!=='object'||Array.isArray(message)||message.jsonrpc!=='2.0'||typeof message.method!=='string'){send({jsonrpc:'2.0',id:hasId?message.id:null,error:{code:-32600,message:'Invalid request'}});return;}
-  try{
-   let result;
-   if(message.method==='initialize'){initialized=true;result={protocolVersion:['2025-11-25','2025-06-18','2025-03-26','2024-11-05'].includes(message.params?.protocolVersion)?message.params.protocolVersion:'2025-11-25',capabilities:{tools:{}},serverInfo:{name:'airpocket-simulation-studio',version:'0.43.0'}};}
-   else if(message.method==='notifications/initialized'){if(initialized)ready=true;return;}
-   else if(message.method==='ping')result={};
-   else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});
-   else if(message.method==='tools/list')result={tools:toolList};
-   else if(message.method==='tools/call'){try{const value=await callStudioTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
-   else if(message.method.startsWith('notifications/'))return;
-   else throw Object.assign(Error('Method not found'),{code:-32601});
-   if(hasId)send({jsonrpc:'2.0',id:message.id,result});
-  }catch(error){if(hasId)send({jsonrpc:'2.0',id:message.id,error:{code:error.code||-32603,message:error.message}});}
- }).catch(error=>process.stderr.write(error.message+'\n'));});
- input.on('close',()=>{queue.finally(async()=>{await jobService.closeAsync();await browserBridge?.close();}).catch(error=>process.stderr.write(error.message+'\n'));});
+ return startMcpStdio({tools:toolList,callTool:callStudioTool,close:async()=>{await jobService.closeAsync();await browserBridge?.close();}});
 }

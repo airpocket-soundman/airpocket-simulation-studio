@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build && node scripts/build-manifest.mjs",
+    "build": "node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build && node scripts/build-browser-connector.mjs && node scripts/build-manifest.mjs",
     "test": "node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && node --test tests/*.test.mjs",
     "check:project": "node scripts/check-project.mjs",
     "task:status": "node scripts/task-status.mjs",
