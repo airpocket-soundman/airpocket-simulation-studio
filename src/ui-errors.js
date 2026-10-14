@@ -1,5 +1,13 @@
 // Keep core/API errors in English; localize their UI presentation without changing diagnostics.
 const messages={
+"Resolve CAD update regions before analysis":"CAD更新で未解決の領域があります。条件を再選択してから解析してください。",
+"Invalid unresolved CAD condition":"保存したCAD更新の未解決条件が不正です。",
+"Condition has no selected region":"条件の領域が空です。領域を選択して登録してください。",
+"CAD update requires STEP solids without saved coupled fields":"CAD更新は元のSTEPモデルで行ってください。保存した温度場・振動源を使う連成は先に解除してください。",
+"CAD update requires original STEP display faces":"CAD更新には元のSTEP表示面が必要です。生成済みメッシュ表示面は使用できません。",
+"CAD update requires named CAD faces":"CAD面の識別がない表示面は照合できません。STEPを再読込してください。",
+"CAD update limit is 2000 display faces":"CAD更新の照合上限は2000表示面です。",
+"CAD update cannot compare degenerate display faces":"面積が0または数値範囲外の表示面は照合できません。",
 "Unexpected saved Stokes metadata":"Stokes流以外の結果にStokes流の情報が保存されています。",
 "Invalid saved Stokes study or execution mode":"保存したStokes流の解析条件または実行方式が不正です。",
 "Invalid saved Stokes fields":"保存したStokes流の速度・圧力・応力の値が不正です。",

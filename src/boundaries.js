@@ -1,4 +1,5 @@
 import {cylinderPatchArea} from './cylindrical-cad.js';
+import {requireResolvedCadConditions} from './cad-update-state.js';
 import {planarArea} from './planar-region.js';
 import {thermalContactEntries} from './thermal-contact.js';
 import {outwardSurfaceNormals} from './surface-loads.js';
@@ -11,6 +12,7 @@ function dist2(x,y,z,p,k){
 }
 function planeOf(p,triangles){const k=triangles[0]*9,origin=p.slice(k,k+3),u=[0,1,2].map(j=>p[k+3+j]-p[k+j]),v=[0,1,2].map(j=>p[k+6+j]-p[k+j]),c=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],norm=Math.hypot(...c);if(!norm)return null;const normal=c.map(x=>x/norm),tolerance=Math.max(1e-5,...origin.map(v=>Math.abs(v)*1e-7));for(const t of triangles)for(let a=0;a<3;a++)if(Math.abs(normal.reduce((s,v,j)=>s+v*(p[t*9+a*3+j]-origin[j]),0))>tolerance)return null;return {origin,normal,tolerance};}
 export function transferConditions(project,mesh,{areaTolerance=.15}={}){
+ requireResolvedCadConditions(project);
  const identities=project.meshes.map(m=>m.kind==='gmsh-surface');
  project.meshes.forEach((m,i)=>{if(identities[i]&&(!m.sourceHash||m.sourceHash!==mesh.sourceHash))throw Error('CAD source changed; reload the surface and reselect boundary regions');});
  const tagTriangles=project.meshes.map((m,i)=>{const tags=new Map();if(identities[i])m.faceIds.forEach((tag,t)=>{const group=tags.get(tag)||[];group.push(t);tags.set(tag,group);});return tags;});

@@ -1,3 +1,4 @@
+import {requireResolvedCadConditions} from './cad-update-state.js';
 export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  const createWorker=runtime.createWorker||(()=>new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'}));
  const isIsolated=runtime.isIsolated||(()=>globalThis.crossOriginIsolated);
@@ -6,7 +7,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  function finish(job,error,result){if(active!==job)return;active=null;clearTimeout(job.timer);job.worker.terminate();error?job.reject(error):job.resolve({...result,input:job.project,calculation:{operation:job.operation,options:job.options}});}
  function start(operation,options={}){
  if(active)return Promise.reject(Error('A calculation is already running'));
- let project,settings;try{project=structuredClone(getProject());settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');}catch(e){return Promise.reject(e);}
+ let project,settings;try{project=structuredClone(getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');}catch(e){return Promise.reject(e);}
  return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}const job={worker,project,operation,options:settings,resolve,reject};active=job;
  job.timer=setTimeout(()=>finish(job,Error(`Calculation exceeded ${timeoutMs/1000} seconds`)),timeoutMs);
  worker.onerror=e=>finish(job,Error(e.message||'Worker failed'));

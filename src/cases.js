@@ -6,12 +6,14 @@ import {validateCylindricalMesh} from './cylindrical-cad.js';
 import {validatePlanarMesh} from './planar-region.js';
 import {validateInternalMesh} from './internal-fluid.js';
 import {validateProject} from './regions.js';
+import {requireResolvedCadConditions} from './cad-update-state.js';
 const metrics={stokes:[['maxSpeedMs','m/s'],['minPressurePa','Pa'],['maxPressurePa','Pa']],modal:[['lowestFrequencyHz','Hz'],['highestFrequencyHz','Hz']],acousticTransient:[['receiverPeakPa','Pa peak'],['receiverRmsPa','Pa record RMS']],channelFlow:[['maxSpeedMs','m/s'],['outletFlowM3s','m³/s']],elastic:[['maxDisplacementMm','mm'],['maxVonMisesPa','Pa']],thermal:[['minTemperature','°C'],['maxTemperature','°C']],acoustic:[['maxPressurePa','Pa peak'],['maxSplDb','dB RMS']]};
 export function createCaseStore(){
  let cases=[];
  function validate(c){
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
+  requireResolvedCadConditions(c.output.input);
   validateStokesResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
   validateStlMesh(c.output?.mesh,c.output?.input,c.output?.calculation);
   validateFatigueResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);

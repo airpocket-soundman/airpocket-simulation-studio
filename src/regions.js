@@ -1,4 +1,5 @@
 import {validateStlSource} from './stl-source.js';
+import {validatePendingCadCondition} from './cad-update-state.js';
 import {validateStokesStudy} from './stokes-study.js';
 import {validatePlanarRegion,planarTriangles} from './planar-region.js';
 import {validateVibrationStudy} from './vibration-source.js';
@@ -59,6 +60,8 @@ export function validateProject(project) {
   }
   if(project.planarRegion){const d=validatePlanarRegion(project.planarRegion);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid planar mesh');planarTriangles(project.meshes[d.mesh].positions,d);}
   for(const c of project.conditions) {
+    if(c.cadUpdateRequired!==undefined){validatePendingCadCondition(c,validateProject);continue;}
+    if(!Array.isArray(c.regions)||!c.regions.length||c.regions.some(r=>!Array.isArray(r.triangles)||!r.triangles.length))throw Error('Condition has no selected region');
     if(c.planarRegion){const d=validatePlanarRegion(c.planarRegion);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh]||c.regions.length!==1||c.regions[0].mesh!==d.mesh)throw Error('Invalid planar condition mesh');const expected=planarTriangles(project.meshes[d.mesh].positions,d),actual=new Set(c.regions[0].triangles);if(actual.size!==expected.length||!expected.every(t=>actual.has(t)))throw Error('Planar dimensions do not match the saved region');if(c.type==='thermalContact')throw Error('Exact planar thermal contact patches are not yet supported');}
     if(c.cylindricalRegion){const d=c.cylindricalRegion;if(d.exactCad&&c.type==='thermalContact')throw Error('Exact cylindrical thermal contact patches are not yet supported');cylindricalFrame(d);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid condition cylindrical mesh');}
     if(!['fixed','displacement','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','radiation','thermalContact','acousticPressure','acousticImpedance'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');

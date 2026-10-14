@@ -1,4 +1,5 @@
 import {solveStokes} from './stokes-core.js';
+import {requireResolvedCadConditions} from './cad-update-state.js';
 import {solveStokesP2} from './stokes-p2-core.js';
 import {stokesBoundary,validateStokesStudy} from './stokes-study.js';
 import {evaluateFatigue} from './fatigue-core.js';
@@ -24,7 +25,7 @@ import {wasmMatvecFactory} from './wasm-matvec.js';
 import {solveThermal} from './thermal-core.js';
 import {solveAcoustic} from './acoustic-core.js';
 import {acousticSweep} from './acoustic-sweep.js';
-self.onmessage=async({data})=>{try{if(data.source?.kind==='stl'){
+self.onmessage=async({data})=>{try{if(data.operation!=='mesh')requireResolvedCadConditions(data.project);if(data.source?.kind==='stl'){
  validateStlSource(data.source);validateProject(data.project);
  if(data.project.sourceModel?.kind!=='stl'||data.source.positions.length!==data.project.sourceModel.positions.length||data.source.positions.some((v,i)=>v!==data.project.sourceModel.positions[i]))throw Error('STL worker source does not match the project');
  if(data.options.adaptive)throw Error('STL volume meshing does not support adaptive refinement');

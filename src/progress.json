@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T05:02:06.757125+00:00",
+  "updatedAt": "2026-10-14T05:22:45.788839+00:00",
   "release": {
     "version": "v0.40",
     "date": "2026-10-14",
@@ -356,15 +356,15 @@
       "id": "CAD2",
       "title": "CAD更新時に面参照を照合",
       "category": "3D",
-      "status": "queued",
+      "status": "checking",
       "detail": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "titleEn": "Reconcile face references after CAD updates",
       "detailEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
       "acceptanceEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
-      "lastUpdate": "元のSTEPをプロジェクトに保存し再メッシュ可能。CAD更新への面参照の再照合は未対応。 完了条件に未実装部分が残るため、確認待ちから残実装の待ち列へ移動。",
-      "lastUpdateEn": "Retain original STEP for remeshing; face-reference reconciliation after CAD changes remains pending. Unimplemented acceptance criteria remain; moved from checking to the implementation queue.",
-      "evidence": "src/regions.js"
+      "lastUpdate": "STEP更新の事前照合と適用、再分割・面番号/部品順変更、未解決条件の値保存・再選択・解析拒否を追加。実STEPの40→50 mm引張と保存復元を検証。",
+      "lastUpdateEn": "Add STEP update preview/application, retessellation and face/part reordering, retained unresolved values, manual reselection and analysis blocking; verify actual 40-to-50 mm STEP axial references and archives.",
+      "evidence": "src/cad-update.js; src/cad-update-state.js; src/cad-update-ui.js; tests/cad-update.test.mjs"
     },
     {
       "id": "CAD3",
