@@ -777,7 +777,7 @@
     },
     "src/progress.json": {
       "before": "5778fd6da4c048b5dcd64f1f54137c50c86cff51bced1bd3c933fb4c82c29779",
-      "after": "6d70b4b17e0e9685416e3d59e81922b25b5f32cd3656fb31f78679d91cd9430f"
+      "after": "a6fee972475f7ee435458b68c48e6d2a7b2eb0b580215ae4075298c568c0ccd5"
     },
     "scripts/studio-mcp.mjs": {
       "before": "55b54e71d2f2aa75547c9cfad6515f672a6dfffc1a4c3482c5ed8b571110548f",
@@ -801,5 +801,6 @@
     "tests/mcp-typed-operation-schema.test.mjs": "46f6da4cf5cc96c9ef58a2a40ba5161cd7b24e011abf02e090685d426bc49dc4"
   },
   "verificationScope": "897-test full suite preceded explicit argument-schema metadata,Skill routing correction,EOF-only formatting and pending-gate fixture updates. The final30 target and12 progress/docs checks cover those follow-ups. No final899-test full run is claimed; PR CI will verify the final checkout.",
-  "finalSkillVerification": "Nine installed/repository files hash-match after routing correction and EOF-only reference cleanup; UI metadata/server registration unchanged."
+  "finalSkillVerification": "Nine installed/repository files hash-match after routing correction and EOF-only reference cleanup; UI metadata/server registration unchanged.",
+  "postBuildTextClarification": "Corrected progress acceptance unit label from65KiB to64KiB (65536bytes);runtime limit unchanged. Final PR CI builds the updated label."
 }
