@@ -35,3 +35,5 @@
 公開run 38647110282のpublic/gmsh/gmsh.mjs欠落とmain保護APIの404（Branch not protected）は未解決観測として記録した。作業ブランチ・PR・必須CI・main保護を今後の検証条件として扱い、設定済み/公開成功とは宣言しない。次の作業は公開CI復旧と証跡の照合である。
 
 その後、main保護を設定し、PR・最新mainへの追従・GitHub Actions verify成功を管理者にも必須とした。必須の人的承認数は0で、独立した人のレビュー完了は意味しない。[API再取得の証跡](evidence/2026-10-15-main-protection.json)を保存した。公開成功と残る公開gateは未確認のままとする。
+
+公開進捗の取得は、配信manifest→進捗→manifest再取得の版・バイト数・SHA-256照合を通したsnapshotだけ採用する実装へ変更した。raw mainの新しい時刻を優先する経路を廃止し、履歴release.versionと現在配信candidateを分ける。取得失敗・不一致・dev環境のmanifest欠落では前回表示を保持する。publicationMilestoneも本体validatorで参照・範囲・順序・上限、完了証跡のcandidate/manifest一致を検査する。宣言の構造整合であり、validator自身が外部CIの実在や成功を保証するものではない。
