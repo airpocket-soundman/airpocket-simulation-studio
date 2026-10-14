@@ -1,6 +1,7 @@
 import {validateFluidDomain} from './fluid-domain.js';
 
 export function validateStokesStudy(study){
+ if(study?.stokesVelocityElement!==undefined&&!['P1','P2'].includes(study.stokesVelocityElement))throw Error('Stokes velocity element must be P1 or P2');
  if(!study||study.kind!=='creepingFlow'||!Number.isFinite(study.dynamicViscosity)||study.dynamicViscosity<=0||!Number.isFinite(study.fluidDensity)||study.fluidDensity<=0||!Array.isArray(study.freeStreamVelocity)||study.freeStreamVelocity.length!==3||!study.freeStreamVelocity.every(Number.isFinite)||!Number.isFinite(Math.hypot(...study.freeStreamVelocity))||Math.hypot(...study.freeStreamVelocity)<=0)throw Error('Stokes study requires positive viscosity and density and a finite nonzero free-stream velocity');
  if(study.referenceLengthMm!==undefined&&(!Number.isFinite(study.referenceLengthMm)||study.referenceLengthMm<=0))throw Error('Stokes reference length must be positive in mm');
  if(study.referenceLengthMm!==undefined){const re=study.fluidDensity*Math.hypot(...study.freeStreamVelocity)*study.referenceLengthMm*.001/study.dynamicViscosity;if(!Number.isFinite(re)||re>.1+1e-12)throw Error('Stokes prototype requires Reynolds number <= 0.1');}

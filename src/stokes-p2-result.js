@@ -1,0 +1,42 @@
+import {elementGeometry} from './fem-core.js';
+import {outwardSurfaceNormals} from './surface-loads.js';
+import {meshComponents} from './components.js';
+import {tet10Shape} from './stokes-p2-core.js';
+import {tet10Edges} from './stokes-interpolation.js';
+export function validateStokesP2Result(mesh,r,input,boundary){
+ const n=mesh.nodes.length/3,count=mesh.tetrahedra.length,p=r.stokes,study=input.study,L=boundary.referenceLengthMm*.001,U=Math.hypot(...study.freeStreamVelocity),mu=study.dynamicViscosity,rho=study.fluidDensity,forceScale=mu*U*L,pressureScale=mu*U/L;
+ const vector=(v,k)=>Array.isArray(v)&&v.length===k&&v.every(Number.isFinite),close=(a,b,scale=1)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=1e-12*Math.abs(scale)+2e-7*Math.max(Math.abs(a),Math.abs(b)),same=(a,b,scale)=>vector(a,b.length)&&a.every((v,i)=>close(v,b[i],scale));
+ if((study.stokesVelocityElement??'P1')!=='P2'||p.velocityElement!=='P2'||p.pressureElement!=='P1'||p.model!=='steady-creeping-flow'||p.stabilization!=='none'||p.stressSampling!=='cell centroid'||p.linearSolver!=='equilibrated ILU(0) restarted GMRES'||p.inertiaIncluded!==false||p.dynamicViscosity!==mu||p.density!==rho||!same(p.referenceVelocity,study.freeStreamVelocity,U)||!close(p.referenceLengthMm,boundary.referenceLengthMm,L*1000)||JSON.stringify(p.bodyFaceTags)!==JSON.stringify(boundary.bodyFaceTags)||p.pressureGauge?.node!==boundary.pressureGauge.node||p.pressureGauge?.valuePa!==0||!close(p.reynoldsNumber,rho*U*L/mu)||p.reynoldsNumber>.1+1e-12)throw Error('Saved Taylor-Hood metadata does not match its input');
+ if(!vector(r.edgeNodes,r.edgeNodes?.length)||r.edgeNodes.length%3||!vector(r.edgeVelocity,r.edgeNodes.length)||!Array.isArray(r.cellVelocityNodeIds)||r.cellVelocityNodeIds.length!==count||!Number.isFinite(r.residual)||r.residual<0||r.residual>1e-8||!Number.isInteger(r.iterations)||r.iterations<0||r.iterations>3000)throw Error('Invalid saved Taylor-Hood fields or convergence');
+ const edges=new Map(),ends=[],cells=[],faceKey=nodes=>nodes.slice().sort((a,b)=>a-b).join(','),edgeKey=(a,b)=>a<b?a+','+b:b+','+a,adjacent=new Map();
+ for(let e=0;e<count;e++){
+  const nodes=mesh.tetrahedra[e];if(!Array.isArray(nodes)||nodes.length!==4||new Set(nodes).size!==4||!nodes.every(i=>Number.isInteger(i)&&i>=0&&i<n))throw Error('Invalid saved Taylor-Hood tetrahedron');const ids=nodes.slice();
+  for(const [a,b]of tet10Edges){const key=edgeKey(nodes[a],nodes[b]);if(!edges.has(key)){edges.set(key,n+ends.length);ends.push([nodes[a],nodes[b]]);}ids.push(edges.get(key));}
+  if(JSON.stringify(ids)!==JSON.stringify(r.cellVelocityNodeIds[e]))throw Error('Saved Taylor-Hood edge topology mismatch');
+  cells.push({nodes,ids,geometry:elementGeometry(mesh,nodes)});for(let opposite=0;opposite<4;opposite++){const key=faceKey(nodes.filter((_,j)=>j!==opposite));if(adjacent.get(key)===-1)throw Error('Nonmanifold saved Taylor-Hood mesh');adjacent.set(key,adjacent.has(key)?-1:e);}
+ }
+ const nv=n+ends.length;if(nv>12000||3*nv+n>40000||r.edgeNodes.length!==3*ends.length||p.virtualVelocityNodes!==nv)throw Error('Invalid saved Taylor-Hood virtual-node count');
+ ends.forEach(([a,b],i)=>{for(let k=0;k<3;k++)if(!close(r.edgeNodes[3*i+k],(mesh.nodes[3*a+k]+mesh.nodes[3*b+k])/2,L*1000))throw Error('Saved Taylor-Hood midpoint coordinates mismatch');});
+ const components=meshComponents(mesh);if(components.length!==1||components[0].length!==n)throw Error('Saved Taylor-Hood mesh must be connected without unused nodes');
+ const all=[...r.velocity,...r.edgeVelocity],speeds=Array.from({length:nv},(_,i)=>Math.hypot(...all.slice(3*i,3*i+3))),maxSpeed=Math.max(...speeds);let bound=maxSpeed;ends.forEach(([a,b],i)=>{bound=Math.max(bound,Math.hypot(...[0,1,2].map(k=>2*r.edgeVelocity[3*i+k]-(r.velocity[3*a+k]+r.velocity[3*b+k])/2)));});
+ if(!same(r.speed,speeds.slice(0,n),U)||!close(r.maxSpeedMs,maxSpeed,U)||!close(r.velocityUpperBoundMs,bound,U)||!close(p.maxReynoldsNumber,rho*maxSpeed*L/mu)||!close(p.maxReynoldsBoundNumber,rho*bound*L/mu)||p.maxReynoldsBoundNumber>.1+1e-12||!close(r.minPressurePa,Math.min(...r.pressure),pressureScale)||!close(r.maxPressurePa,Math.max(...r.pressure),pressureScale)||!close(r.pressure[boundary.pressureGauge.node],0,pressureScale))throw Error('Invalid saved Taylor-Hood extrema, bound or gauge');
+ for(const [node,velocity]of boundary.velocity)if(!same(all.slice(3*node,3*node+3),velocity,U))throw Error('Saved Taylor-Hood corner boundary velocity mismatch');
+ const internal=Array(3*nv).fill(0),pressureWeak=Array(n).fill(0),qa=(5+3*Math.sqrt(5))/20,qb=(5-Math.sqrt(5))/20,quadrature=Array.from({length:4},(_,i)=>Array.from({length:4},(_,j)=>i===j?qa:qb));let volume=0,div2=0,integratedDiv=0;
+ function state(cell,lambda){const shape=tet10Shape(lambda,cell.geometry.grad),gradient=Array.from({length:3},(_,a)=>Array.from({length:3},(_,b)=>cell.ids.reduce((sum,node,j)=>sum+all[3*node+a]*shape.gradients[j][b],0))),pressure=cell.nodes.reduce((sum,node,j)=>sum+lambda[j]*r.pressure[node],0),tensor=gradient.map((row,a)=>row.map((v,b)=>mu*(v+gradient[b][a])-(a===b?pressure:0)));return {shape,tensor,div:gradient[0][0]+gradient[1][1]+gradient[2][2]};}
+ cells.forEach((cell,i)=>{
+  const center=state(cell,[.25,.25,.25,.25]),s=center.tensor,stress=[s[0][0],s[1][1],s[2][2],s[0][1],s[1][2],s[0][2]];if(!same(r.stresses[i],stress,pressureScale)||!close(r.divergence[i],center.div,U/L))throw Error('Saved Taylor-Hood centroid stress or divergence mismatch');volume+=cell.geometry.volume;integratedDiv+=center.div*cell.geometry.volume;
+  for(const lambda of quadrature){const q=state(cell,lambda),weight=cell.geometry.volume/4;div2+=q.div*q.div*weight;for(let j=0;j<10;j++)for(let k=0;k<3;k++)internal[3*cell.ids[j]+k]+=weight*q.tensor[k].reduce((sum,v,b)=>sum+v*q.shape.gradients[j][b],0);cell.nodes.forEach((node,j)=>pressureWeak[node]+=weight*lambda[j]*q.div);}
+ });
+ const normals=outwardSurfaceNormals(mesh),surface=new Set(),boundaryNodes=new Set(),bodyNodes=new Set(),bodyTags=new Set(boundary.bodyFaceTags),drag=[0,0,0],bodyReaction=[0,0,0],outerReaction=[0,0,0];let flux=0,absoluteFlux=0;
+ mesh.surface.forEach((face,i)=>{
+  const key=faceKey(face.nodes),e=adjacent.get(key);if(surface.has(key)||!(e>=0))throw Error('Invalid saved Taylor-Hood boundary surface');surface.add(key);const mids=[[0,1],[0,2],[1,2]].map(([a,b])=>edges.get(edgeKey(face.nodes[a],face.nodes[b]))),body=bodyTags.has(face.faceTag);
+  for(const node of [...face.nodes,...mids]){boundaryNodes.add(node);if(body)bodyNodes.add(node);if(node>=n&&!same(all.slice(3*node,3*node+3),body?[0,0,0]:study.freeStreamVelocity,U))throw Error('Saved Taylor-Hood midpoint boundary velocity mismatch');}
+  const [a,b,c]=face.nodes.map(node=>mesh.nodes.slice(3*node,3*node+3).map(v=>v*.001)),u=b.map((v,k)=>v-a[k]),v=c.map((q,k)=>q-a[k]),area=Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0])/2,normal=normals[i],average=[0,1,2].map(k=>mids.reduce((sum,node)=>sum+all[3*node+k]/3,0)),f=average.reduce((sum,v,k)=>sum+v*normal[k],0)*area;flux+=f;absoluteFlux+=Math.abs(f);
+  if(body){const q=state(cells[e],cells[e].nodes.map(node=>face.nodes.includes(node)?1/3:0));for(let k=0;k<3;k++)drag[k]-=q.tensor[k].reduce((sum,v,j)=>sum+v*normal[j],0)*area;}
+ });
+ if(surface.size!==[...adjacent.values()].filter(i=>i>=0).length)throw Error('Incomplete saved Taylor-Hood surface');
+ for(let node=0;node<nv;node++)for(let k=0;k<3;k++){const force=internal[3*node+k];if(boundaryNodes.has(node)){if(bodyNodes.has(node))bodyReaction[k]-=force;else outerReaction[k]+=force;}else if(Math.abs(force)>1e-6*forceScale)throw Error('Saved Taylor-Hood field violates the interior momentum equation');}
+ for(let node=0;node<n;node++)if(node!==boundary.pressureGauge.node&&Math.abs(pressureWeak[node])>1e-6*U*L*L)throw Error('Saved Taylor-Hood field violates weak incompressibility');
+ if(!same(r.dragN,drag,forceScale)||!same(r.reactionDragN,bodyReaction,forceScale)||!same(r.outerReactionN,outerReaction,forceScale)||!same(r.forceBalanceErrorN,outerReaction.map((v,k)=>v-bodyReaction[k]),forceScale))throw Error('Saved Taylor-Hood physical force mismatch');
+ if(!close(r.fluxM3s,flux,U*L*L)||!close(r.absoluteFluxM3s,absoluteFlux,U*L*L)||!close(r.relativeFluxError,absoluteFlux?Math.abs(flux)/absoluteFlux:0)||!close(r.integratedDivergenceM3s,integratedDiv,U*L*L)||!close(r.rmsDivergencePerSecond,Math.sqrt(div2/volume),U/L))throw Error('Saved Taylor-Hood physical diagnostics mismatch');
+}

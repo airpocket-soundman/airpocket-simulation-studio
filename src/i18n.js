@@ -1,6 +1,7 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '速度要素':'Velocity element','P1/P1 · 安定化':'P1/P1 · stabilized','二次補間の速度上界':'Quadratic velocity bound','節点最大流速':'Maximum nodal speed',
 "Stokes流":"Stokes flow",
 "定常Stokes流":"Steady Stokes flow",
 "最小圧力":"Minimum pressure",

@@ -2,6 +2,7 @@ import {stokesBoundary} from './stokes-study.js';
 import {elementGeometry} from './fem-core.js';
 import {outwardSurfaceNormals} from './surface-loads.js';
 import {meshComponents} from './components.js';
+import {validateStokesP2Result} from './stokes-p2-result.js';
 
 export function validateStokesResult(mesh,result,input,calculation){
  const expected=input?.study?.kind==='creepingFlow',present=result?.kind==='stokes';
@@ -13,6 +14,8 @@ export function validateStokesResult(mesh,result,input,calculation){
  if(typeof mesh.sourceHash!=='string'||!/^[a-f0-9]{64}$/.test(mesh.sourceHash)||input.meshes?.some(display=>display.kind==='gmsh-surface'&&display.sourceHash!==mesh.sourceHash))throw Error('Saved Stokes display fingerprint does not match its fluid mesh');
  const close=(a,b,scale=1)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=1e-12*Math.abs(scale)+2e-7*Math.max(Math.abs(a),Math.abs(b));
  const sameVector=(a,b,scale)=>vector(a,b.length)&&a.every((v,i)=>close(v,b[i],scale));
+ if(p.velocityElement==='P2'){validateStokesP2Result(mesh,result,input,boundary);return;}
+ if((study.stokesVelocityElement??'P1')!=='P1'||result.edgeNodes!==undefined||result.edgeVelocity!==undefined||result.cellVelocityNodeIds!==undefined)throw Error('Saved Stokes element does not match its input');
  if(p.model!=='steady-creeping-flow'||p.velocityElement!=='P1'||p.pressureElement!=='P1'||p.stabilization!=='PSPG h^2/(12 mu)'||p.linearSolver!=='equilibrated ILU(0) restarted GMRES'||p.inertiaIncluded!==false||p.dynamicViscosity!==mu||p.density!==rho||!sameVector(p.referenceVelocity,study.freeStreamVelocity,U)||!close(p.referenceLengthMm,boundary.referenceLengthMm,boundary.referenceLengthMm)||JSON.stringify(p.bodyFaceTags)!==JSON.stringify(boundary.bodyFaceTags)||p.pressureGauge?.node!==boundary.pressureGauge.node||p.pressureGauge?.valuePa!==0||!close(p.reynoldsNumber,rho*U*L/mu)||p.reynoldsNumber>.1+1e-12)throw Error('Saved Stokes metadata does not match its input');
  for(const [node,velocity] of boundary.velocity)if(!sameVector(result.velocity.slice(3*node,3*node+3),velocity,U))throw Error('Saved Stokes velocity does not match its boundary');
  if(!close(result.pressure[boundary.pressureGauge.node],0,mu*U/L))throw Error('Saved Stokes pressure gauge mismatch');

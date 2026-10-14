@@ -53,7 +53,7 @@ Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar 
 
 `runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
 
-After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 216 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 219 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
 
 ### Browser regression recipe
 
@@ -77,6 +77,6 @@ This recipe verifies the current in-app browser. It does not establish cross-bro
 
 The transient acoustic distribution check verifies arrival time, pressure amplitude and archives using the deployed Worker. Unit tests verify WAV bandwidth filtering and physical duration.
 
-The browser recipe now has 30 checks, including polymer comparison selection, preliminary source status, JP/EN labels and five engineering-polymer solves, plus transient traces/time controls/WAV UI, natural modes, saved-mode exterior sound and a large four-case JSON roundtrip. Large open export text is read through scoped DOM values rather than requesting the entire accessibility tree.
+The browser recipe now has 31 checks, including polymer comparison selection, preliminary source status, JP/EN labels and five engineering-polymer solves, plus transient traces/time controls/WAV UI, natural modes, saved-mode exterior sound and a large four-case JSON roundtrip. Large open export text is read through scoped DOM values rather than requesting the entire accessibility tree.
 
 The public v0.37 run passed all 22 browser checks, including finite-box Stokes, PNG/WebM and four animation types with restored view settings. MCP tests verify clean CPU Worker execution, protocol initialization/listing and refusal to overwrite saved output.

@@ -42,7 +42,7 @@ export function startServer(){
   if(message.jsonrpc!=='2.0'||typeof message.method!=='string'){send({jsonrpc:'2.0',id:hasId?message.id:null,error:{code:-32600,message:'Invalid request'}});return;}
   try{
    let result;
-   if(message.method==='initialize'){initialized=true;result={protocolVersion:['2025-11-25','2025-06-18','2025-03-26','2024-11-05'].includes(message.params?.protocolVersion)?message.params.protocolVersion:'2025-11-25',capabilities:{tools:{}},serverInfo:{name:'airpocket-simulation-studio',version:'0.39.0'}};}
+   if(message.method==='initialize'){initialized=true;result={protocolVersion:['2025-11-25','2025-06-18','2025-03-26','2024-11-05'].includes(message.params?.protocolVersion)?message.params.protocolVersion:'2025-11-25',capabilities:{tools:{}},serverInfo:{name:'airpocket-simulation-studio',version:'0.40.0'}};}
    else if(message.method==='notifications/initialized'){if(initialized)ready=true;return;}
    else if(message.method==='ping')result={};
    else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});
