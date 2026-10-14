@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T11:53:17.288Z",
+  "updatedAt": "2026-10-14T12:04:35.186Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1467,6 +1467,22 @@
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
       "evidence": "scripts/check-published.mjs; docs/testing.md"
+    },
+    {
+      "id": "CADUPDATEAPI1",
+      "title": "CAD更新をLLMから版付きで照合・適用する",
+      "titleEn": "Revisioned CAD update preview/application for the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "AGENTEDIT1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "入力・置換版を照合してSTEP更新をプレビュー/適用。最大50条件の要約、未解決領域の再選択、根拠再確認を維持。保存ファイル向けMCP2ツールと接続2操作。",
+      "detailEn": "Preview/apply STEP replacement using input/replacement revisions, compact50-condition pages, unresolved-region reselection and provenance reset. Two saved-file MCP tools and two connector methods.",
+      "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実画面/公開HTTPSは未確認。",
+      "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser/public HTTPS remain unverified.",
+      "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [

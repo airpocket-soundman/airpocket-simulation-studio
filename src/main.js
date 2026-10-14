@@ -1,3 +1,4 @@
+import {createCadUpdateOperations,validateBrowserCadReplacement} from './cad-update-operations.js';
 import {createResultAssessmentApi} from './result-assessment-api.js';
 import {createCaseArchiveTransfer} from './case-archive-transfer.js';
 import {createNamedResultViews} from './named-result-views.js';
@@ -451,6 +452,8 @@ const materialCatalog=installMaterialCatalog({api,language:()=>language,translat
 
 cadUpdateUi=installCadUpdate({api,readStep:readStepUpdate,getRevision:()=>projectRevision,getSnapshot:()=>{const p=getProject();for(const key of ['meshes','sourceModel','selection','planarRegion','cylindricalRegion'])delete p[key];return JSON.stringify(p);},isBusy:()=>!$('cancel-run').disabled||$('model').disabled,onImportBusy:busy=>{$('model').disabled=busy;},language:()=>language,translate:addTranslations,status});
 
+window.cadUpdateApi=createCadUpdateOperations({studio:api,validateReplacement:validateBrowserCadReplacement,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+
 fractureUi=installFracture({api,getAnalysis:()=>lastAnalysis,language:()=>language,translate:addTranslations,status,loadReference:analysisExample});
 window.analysisApi.evaluateFracture=options=>fractureUi.evaluate(options);
 window.resultAssessmentApi=createResultAssessmentApi({getAnalysis:()=>lastAnalysis,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive(),commit:next=>{
@@ -463,4 +466,4 @@ window.resultAssessmentApi=createResultAssessmentApi({getAnalysis:()=>lastAnalys
 
 window.printImportApi=installPrintImport({language:()=>language,translate:addTranslations,status,isBusy:()=>!$('cancel-run').disabled||$('model').disabled});
 
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});

@@ -1,3 +1,4 @@
+import {createCadUpdateOperations} from '../src/cad-update-operations.js';
 import {inspectProjectGeometry} from '../src/geometry-inspection.js';
 import {createBrowserBridge} from './browser-bridge.mjs';
 import {browserMethods} from '../src/browser-session.js';
@@ -10,8 +11,8 @@ import {createResultAssessmentApi} from '../src/result-assessment-api.js';
 import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 // MCP 2025-11-25 stdio transport; stdout contains JSON-RPC messages only.
 import {createInterface} from 'node:readline';
-import {readFile,writeFile,stat} from 'node:fs/promises';
-import {resolve,isAbsolute} from 'node:path';
+import {readFile,writeFile,stat,realpath,lstat} from 'node:fs/promises';
+import {resolve,isAbsolute,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createStudioApi} from '../src/studio-api.js';
 import {createCaseStore} from '../src/cases.js';
@@ -22,6 +23,8 @@ const pathSchema={type:'string',minLength:1,description:'Absolute local JSON fil
 const jobService=createHeadlessJobService();
 let browserBridge;
 const toolList=[
+ {name:'studio_preview_cad_update',description:'Preview STEP CAD replacement without modifying files. Requires the current project revision. Replacement is an absolute STEP/STP (OCCT normalizes to mm) or saved STEP project JSON. Returns replacement revision and bounded condition reports (maximum 50), never full geometry.',inputSchema:object({path:pathSchema,replacementPath:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:50}},['path','replacementPath','expectedRevision'])},
+ {name:'studio_apply_cad_update',description:'Apply a reviewed STEP CAD replacement using exact input and replacement revisions, preserving physical setup and requiring confirmation of old provenance. Unmatched conditions remain pending and block analysis. Exclusively publishes a distinct new JSON; never overwrites input, replacement or an existing output.',inputSchema:object({path:pathSchema,replacementPath:pathSchema,outputPath:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},expectedReplacementRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'}},['path','replacementPath','outputPath','expectedRevision','expectedReplacementRevision'])},
  {name:'studio_assess_result',description:'Evaluate fatigue or Mode-I fracture screening from a saved structural elastic analysis using its recorded material evidence and explicit options. Requires the exact result revision; publishes a distinct new analysis JSON without overwriting files. Does not infer missing material data or claim failure probability.',inputSchema:object({path:pathSchema,outputPath:pathSchema,expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},kind:{enum:['fatigue','fracture']},options:{type:'object'}},['path','outputPath','expectedResultRevision','kind','options'])},
  {name:'studio_assessment',description:'Read validated fatigue/fracture screening metadata (or available:false with its result revision before evaluation) and a bounded element page (default 50, maximum 200) from a saved analysis. Optional exact result revision prevents reading a different version. Does not write files.',inputSchema:object({path:pathSchema,kind:{enum:['fatigue','fracture']},expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:0,maximum:200}},['path','kind'])},
  {name:'studio_import_project',description:'Import STEP/STP with real OCCT unit normalization to mm, or outward closed convex STL with explicit scaleToMm, and publish a new project JSON. Preserves source bytes and CAD face mappings. Never replaces source or an existing output.',inputSchema:object({path:pathSchema,outputPath:pathSchema,scaleToMm:{type:'number',exclusiveMinimum:0},name:{type:'string',minLength:1}},['path','outputPath'])},
@@ -42,7 +45,7 @@ const toolList=[
  {name:'studio_analyze',description:'Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.',inputSchema:object({path:pathSchema,outputPath:pathSchema,operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']}},['path','outputPath'])},
  {name:'studio_probe',description:'Measure a saved analysis at a point in mm. Returns physical units; no extrapolation outside the mesh.',inputSchema:object({path:pathSchema,point:{type:'array',items:{type:'number'},minItems:3,maxItems:3},elementIndex:{type:'integer',minimum:0},modeIndex:{type:'integer',minimum:0}},['path','point'])},
  {name:'studio_validate_cases',description:'Validate saved cases including physical result metadata and return comparison metrics.',inputSchema:object({path:pathSchema},['path'])}
-].map(t=>({...t,annotations:{readOnlyHint:!['studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
+].map(t=>({...t,annotations:{readOnlyHint:!['studio_apply_cad_update','studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_apply_cad_update','studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
 async function jsonFile(path){if(typeof path!=='string'||!isAbsolute(path))throw Error('An absolute local file path is required');const file=resolve(path);if((await stat(file)).size>100000000)throw Error('JSON file exceeds 100 MB');return JSON.parse(await readFile(file,'utf8'));}
 const summary=summarizeAnalysis;
 export async function callStudioTool(name,args={}){
@@ -50,6 +53,28 @@ export async function callStudioTool(name,args={}){
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
  if(name==='studio_browser_sessions')return {sessions:browserBridge.list()};
  if(name==='studio_browser_call'){if(!Object.hasOwn(browserMethods,args.method)||typeof args.sessionId!=='string')throw Error('Invalid browser operation');return browserBridge.call(args.sessionId,args.method,args.args||{},browserMethods[args.method]);}
+ if(name==='studio_preview_cad_update'||name==='studio_apply_cad_update'){
+  for(const key of ['path','replacementPath',...(name==='studio_apply_cad_update'?['outputPath']:[])])if(typeof args[key]!=='string'||!isAbsolute(args[key]))throw Error('Use distinct absolute CAD update paths');
+  const inputPath=resolve(args.path),replacementPath=resolve(args.replacementPath),inputStat=await stat(inputPath),replacementStat=await stat(replacementPath);
+  if((await realpath(inputPath)).toLowerCase()===(await realpath(replacementPath)).toLowerCase()||(inputStat.ino===replacementStat.ino&&inputStat.dev===replacementStat.dev))throw Error('CAD input and replacement paths must be distinct, including aliases');
+  if(name==='studio_apply_cad_update'){
+   if([inputPath,replacementPath].some(path=>path.toLowerCase()===resolve(args.outputPath).toLowerCase()))throw Error('CAD output must be distinct from input and replacement');
+   try{await lstat(resolve(args.outputPath));throw Error('CAD output already exists');}catch(error){if(error.code!=='ENOENT')throw error;}
+  }
+  const extension=extname(replacementPath).toLowerCase();
+  if(!['.step','.stp','.json'].includes(extension))throw Error('CAD replacement requires STEP/STP or a saved STEP project JSON');
+  const replacement=extension==='.json'?await jsonFile(replacementPath):await importProjectFile(replacementPath);
+  if(replacement.sourceModel?.kind!=='step')throw Error('CAD replacement requires a STEP project');
+  // Inspect revisions describe the saved JSON exactly. Validation must not add
+  // optional defaults (such as selection) before checking that input revision.
+  let current=await jsonFile(inputPath);const validatorStudio=createStudioApi();validatorStudio.loadProject(current);
+  const studio={exportProject:()=>structuredClone(current),loadProject(next){validatorStudio.loadProject(next);current=validatorStudio.exportProject();}};
+  const operations=createCadUpdateOperations({studio,isBusy:()=>false});
+  const command={expectedRevision:args.expectedRevision,replacement};
+  if(name==='studio_preview_cad_update')return operations.preview({...command,...(args.offset!==undefined?{offset:args.offset}:{}),...(args.limit!==undefined?{limit:args.limit}:{})});
+  const response=await operations.apply({...command,expectedReplacementRevision:args.expectedReplacementRevision});
+  const publication=await publishJson(resolve(args.outputPath),studio.exportProject());return {...response,outputPath:resolve(args.outputPath),...publication};
+ }
  if(name==='studio_assess_result'||name==='studio_assessment'){
   if(name==='studio_assess_result'&&!Object.hasOwn(args,'options'))throw Error('Explicit assessment options are required');
   if(name==='studio_assess_result'&&(typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||typeof args.path!=='string'||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase()))throw Error('Use distinct absolute assessment input and output paths');

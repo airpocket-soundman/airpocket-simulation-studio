@@ -153,3 +153,15 @@ The full suite passed 415 of 418 tests, with three skips and zero failures at co
 Existing output/input overwrite, stale revisions, omitted settings, unknown options, oversized pages and tampered stored assessments are refused. Source changes, busy state and revocation prevent commit. Real-browser and public-HTTPS assessment rendering remain unverified; Node/MCP numerical and persistence evidence does not establish live UI behavior.
 
 Build passed. The first local-distribution check, concurrent with the full suite, stopped in Node v24.11.1/V8 with fatal `jit_page_->allocations_.erase(addr) == 1`. An isolated rerun passed all26 checks in29.07 seconds. Solver and checker sources were unchanged; root cause remains unresolved, tracked as RUNTIMEWASM1 for failed-state capture and reproducibility. Specialist SKILL validation passed.
+
+## 2026-10-14: revision-bound CAD update API/MCP
+
+The full suite passed426 of429 tests with three skips and zero failures at concurrency four; the final browser-input validation subset also passed all eight tests. Default MCP has22 tools; optional pairing has24 tools/44 methods. Reports contain at most50 compact condition summaries, not triangle arrays or complete replacement geometry.
+
+Real stdio MCP imports an actual STEP with OCCT, checks both revisions and publishes a distinct updated JSON. Material/condition values are retained and provenance becomes unconfirmed. Quantitative analysis refuses INPUT_UNCONFIRMED. The synthetic regression then explicitly records unconfirmed assumptions for every required input, runs an actual WASM exploratory solve, and verifies0.04 mm displacement and provisional status. No human confirmation record is invented. Renumbered JSON faces and moved geometry are correspondence/unresolved-condition fixtures, not numerical evidence for modified real STEP files.
+
+Legacy JSON lacking selection now accepts the raw revision advertised by studio_inspect_project; the published output revision matches its JSON. Aliased/hardlinked paths, existing output, stale input/replacement revisions and invalid pagination are refused. Unresolved changed-geometry conditions prevent analysis.
+
+Live JSON replacements validate Float32 coordinates, cad kind, retained mesh properties and optional string name, refusing silent rounding/property loss before application. A browser-storage adapter regression verifies the committed revision. New CAD methods remain unverified in real-browser/public-HTTPS operation; saved-file real MCP/WASM evidence is distinct. Specialist SKILL and build validation passed.
+
+All26 local-distribution checks also passed against the latest build in an isolated30.76-second run.
