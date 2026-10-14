@@ -1,0 +1,1455 @@
+{
+  "environment": "Actual local IAB/native browser Workers and stdio MCP/HTTP. Models and explicit material/boundary inputs created using semantic APIs. Load-step artifacts inspected after execution settled; no pre-terminal delivery timing guarantee.",
+  "runs": [
+    {
+      "solver": "plasticity",
+      "properties": {
+        "youngModulus": 200000000000,
+        "poissonRatio": 0.3,
+        "plasticity": {
+          "model": "j2-isotropic",
+          "yieldStress": 250000000,
+          "hardeningModulus": 1000000000
+        }
+      },
+      "targetDisplacementMm": 0.006,
+      "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+      "selectedObservation": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "supported": true,
+        "profileId": "plasticity-cpu",
+        "profile": {
+          "id": "plasticity-cpu",
+          "models": [
+            "plasticity"
+          ],
+          "methods": [
+            "pcg",
+            "pcg-strict",
+            "wasm-pcg"
+          ],
+          "events": [
+            {
+              "stage": "preparation",
+              "cadence": "after module initialization",
+              "metrics": []
+            },
+            {
+              "stage": "mesh",
+              "cadence": "after each generated mesh",
+              "metrics": [
+                {
+                  "name": "nodeCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "elementCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "volumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minVolumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minQuality",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "qualityHistogram",
+                  "unit": "count"
+                }
+              ]
+            },
+            {
+              "stage": "progress",
+              "cadence": "worker text progress converted by the client",
+              "metrics": []
+            },
+            {
+              "stage": "load-step",
+              "kind": "plasticity",
+              "cadence": "each converged load step only",
+              "metrics": [
+                {
+                  "name": "loadFraction",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "residual",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "maxEquivalentPlasticStrain",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "newtonIterations",
+                  "unit": "count"
+                },
+                {
+                  "name": "elasticEnergyJ",
+                  "unit": "J"
+                },
+                {
+                  "name": "hardeningEnergyJ",
+                  "unit": "J"
+                },
+                {
+                  "name": "plasticDissipationJ",
+                  "unit": "J"
+                }
+              ]
+            }
+          ],
+          "textProgress": true,
+          "fields": [
+            {
+              "kind": "structuralDisplacement",
+              "name": "displacement",
+              "unit": "mm",
+              "valueType": "vector3",
+              "components": [
+                "x",
+                "y",
+                "z"
+              ],
+              "loadFactorUnit": "dimensionless",
+              "cadence": "each converged load step when includeFields is requested; load factor is not physical time"
+            }
+          ],
+          "limitations": [
+            "Declaration of implemented observation paths only; not execution permission or physical validation",
+            "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+          ]
+        },
+        "reasons": [],
+        "adaptive": {
+          "enabled": false,
+          "structuredRoundEvents": false,
+          "meshPerRound": false,
+          "textProgressOnly": false
+        },
+        "fieldRetention": {
+          "requested": true,
+          "available": true,
+          "scalarFieldsSupported": false,
+          "vectorFieldsSupported": true,
+          "meshSupported": true,
+          "meshAvailable": true,
+          "maxBytes": 64000000,
+          "eventRetention": 256,
+          "availabilityIsGuarantee": false
+        },
+        "declarationOnly": true,
+        "physicalAccuracyVerified": false
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+        "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791992358126,
+        "updatedAt": 1791992358711,
+        "lastSequence": 15,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "elastic",
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "volumeMm3": 2.0000000000000004,
+            "minVolumeMm3": 0.009765624999999943,
+            "minQuality": 0.5324119267619757,
+            "qualityHistogram": [
+              0,
+              0,
+              1,
+              56,
+              34
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 4,
+            "retainedBytes": 6001,
+            "storageLimited": false,
+            "sharedBytes": 6001,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+        "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+        "provisional": true,
+        "artifacts": [
+          {
+            "artifactId": "0001",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 2629,
+            "sha256": "f40822675202d278e91db3d81c4070e56517697c58d83e85bee56e129323659c",
+            "kind": "mesh",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0002",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "4da1b6e4c9eec13fe034b7aa29f34d3859c30bae634a5caaa6a7d63955d9c058",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0003",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1110,
+            "sha256": "201b0981add08aa183fce859c8762a6e88662deb52e36d682e5c41c5481fb1bf",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0004",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "ce2611356e4b8865bf72da0c8a4de1a2a29db65fa4d57cf9cf410d56275bbbff",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          }
+        ],
+        "total": 4,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "snapshots": [
+        {
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "artifact": {
+            "artifactId": "0002",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "4da1b6e4c9eec13fe034b7aa29f34d3859c30bae634a5caaa6a7d63955d9c058",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "plasticity",
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.003
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.0030000000000000014
+            ],
+            "magnitudeMm": 0.0030000000000000014,
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.003
+              ]
+            ]
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "artifact": {
+            "artifactId": "0003",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1110,
+            "sha256": "201b0981add08aa183fce859c8762a6e88662deb52e36d682e5c41c5481fb1bf",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "plasticity",
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 1,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.006
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.006000000000000003
+            ],
+            "magnitudeMm": 0.006000000000000003,
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 1,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.006
+              ]
+            ]
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "artifact": {
+            "artifactId": "0004",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "ce2611356e4b8865bf72da0c8a4de1a2a29db65fa4d57cf9cf410d56275bbbff",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "plasticity",
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.003
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.0030000000000000014
+            ],
+            "magnitudeMm": 0.0030000000000000014,
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.003
+              ]
+            ]
+          }
+        }
+      ],
+      "finalPoint": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:e2ecdcd95f4a36dfd1907870c02da87ce42f601a761ed590779e410975752248",
+        "kind": "elastic",
+        "display": {
+          "field": "displacement",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          0.5,
+          0.5,
+          2
+        ],
+        "element": 8,
+        "weights": [
+          0.45833731029875135,
+          0.006935827686041396,
+          0.5347268620152077,
+          0
+        ],
+        "displacementMm": [
+          0,
+          0,
+          0.0030000000000000014
+        ],
+        "magnitudeMm": 0.0030000000000000014,
+        "vonMisesPa": 20143480.813997716,
+        "equivalentPlasticStrain": 0.0009127115831397305,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      },
+      "loadStepEvents": [
+        {
+          "stage": "load-step",
+          "kind": "plasticity",
+          "step": 1,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 1,
+            "loadFraction": 0.5,
+            "newtonIterations": 2,
+            "residual": 5.272368677737711e-13,
+            "maxEquivalentPlasticStrain": 0,
+            "elasticEnergyJ": 0.0006057692307692308,
+            "hardeningEnergyJ": 0,
+            "plasticDissipationJ": 0
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0002",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "4da1b6e4c9eec13fe034b7aa29f34d3859c30bae634a5caaa6a7d63955d9c058",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "plasticity",
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "sequence": 8,
+          "elapsedMs": 526,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "load-step",
+          "kind": "plasticity",
+          "step": 2,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 2,
+            "loadFraction": 1,
+            "newtonIterations": 4,
+            "residual": 3.705907744347845e-15,
+            "maxEquivalentPlasticStrain": 0.0009127115831397573,
+            "elasticEnergyJ": 0.0017728144849473494,
+            "hardeningEnergyJ": 8.330424339974282e-07,
+            "plasticDissipationJ": 0.0004563557915698638
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0003",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1110,
+            "sha256": "201b0981add08aa183fce859c8762a6e88662deb52e36d682e5c41c5481fb1bf",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "plasticity",
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 1,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "sequence": 10,
+          "elapsedMs": 558,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "load-step",
+          "kind": "plasticity",
+          "step": 3,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 3,
+            "loadFraction": 0.5,
+            "newtonIterations": 3,
+            "residual": 1.7590598975858551e-12,
+            "maxEquivalentPlasticStrain": 0.0009127115831397573,
+            "elasticEnergyJ": 0.00037675829255030146,
+            "hardeningEnergyJ": 8.330424339974282e-07,
+            "plasticDissipationJ": 0.0004563557915698638
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0004",
+            "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+            "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+            "bytes": 1131,
+            "sha256": "ce2611356e4b8865bf72da0c8a4de1a2a29db65fa4d57cf9cf410d56275bbbff",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "plasticity",
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 0.5,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "e4518230-c61c-4a57-bc5c-3132e071ec15",
+          "inputRevision": "sha256:de7b410a1ca45630b1339be77812e0937f250222ba43ec0587387fd245f325c0",
+          "sequence": 12,
+          "elapsedMs": 578,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        }
+      ]
+    },
+    {
+      "solver": "hyperelastic",
+      "properties": {
+        "hyperelastic": {
+          "model": "neo-hookean-log",
+          "shearModulus": 500000,
+          "bulkModulus": 2000000
+        }
+      },
+      "targetDisplacementMm": 0.2,
+      "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+      "selectedObservation": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "supported": true,
+        "profileId": "hyperelastic-cpu",
+        "profile": {
+          "id": "hyperelastic-cpu",
+          "models": [
+            "hyperelastic"
+          ],
+          "methods": [
+            "pcg",
+            "pcg-strict",
+            "wasm-pcg"
+          ],
+          "events": [
+            {
+              "stage": "preparation",
+              "cadence": "after module initialization",
+              "metrics": []
+            },
+            {
+              "stage": "mesh",
+              "cadence": "after each generated mesh",
+              "metrics": [
+                {
+                  "name": "nodeCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "elementCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "volumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minVolumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minQuality",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "qualityHistogram",
+                  "unit": "count"
+                }
+              ]
+            },
+            {
+              "stage": "progress",
+              "cadence": "worker text progress converted by the client",
+              "metrics": []
+            },
+            {
+              "stage": "load-step",
+              "kind": "hyperelastic",
+              "cadence": "each converged load step only",
+              "metrics": [
+                {
+                  "name": "loadFraction",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "residual",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "minJ",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "newtonIterations",
+                  "unit": "count"
+                },
+                {
+                  "name": "energyJ",
+                  "unit": "J"
+                }
+              ]
+            }
+          ],
+          "textProgress": true,
+          "fields": [
+            {
+              "kind": "structuralDisplacement",
+              "name": "displacement",
+              "unit": "mm",
+              "valueType": "vector3",
+              "components": [
+                "x",
+                "y",
+                "z"
+              ],
+              "loadFactorUnit": "dimensionless",
+              "cadence": "each converged load step when includeFields is requested; load factor is not physical time"
+            }
+          ],
+          "limitations": [
+            "Declaration of implemented observation paths only; not execution permission or physical validation",
+            "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+          ]
+        },
+        "reasons": [],
+        "adaptive": {
+          "enabled": false,
+          "structuredRoundEvents": false,
+          "meshPerRound": false,
+          "textProgressOnly": false
+        },
+        "fieldRetention": {
+          "requested": true,
+          "available": true,
+          "scalarFieldsSupported": false,
+          "vectorFieldsSupported": true,
+          "meshSupported": true,
+          "meshAvailable": true,
+          "maxBytes": 64000000,
+          "eventRetention": 256,
+          "availabilityIsGuarantee": false
+        },
+        "declarationOnly": true,
+        "physicalAccuracyVerified": false
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+        "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791992369833,
+        "updatedAt": 1791992370357,
+        "lastSequence": 14,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "elastic",
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "volumeMm3": 2.0000000000000004,
+            "minVolumeMm3": 0.009765624999999943,
+            "minQuality": 0.5324119267619757,
+            "qualityHistogram": [
+              0,
+              0,
+              1,
+              56,
+              34
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 4,
+            "retainedBytes": 6269,
+            "storageLimited": false,
+            "sharedBytes": 6269,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+        "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+        "provisional": true,
+        "artifacts": [
+          {
+            "artifactId": "0001",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 2629,
+            "sha256": "a17afc6879142750b1149810d28fe478604d34819423b2889ff2535d9a3635d4",
+            "kind": "mesh",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0002",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1290,
+            "sha256": "7a3ecdf896ea8dea406951fc87dcba09c75816a79cf087f38f8cc6d217800b8c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0003",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1280,
+            "sha256": "f31387a4aab30d327d5fefb2f80f85ef6813bd9645a5f5c2b4f38b806f030608",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          {
+            "artifactId": "0004",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1070,
+            "sha256": "b21de413c6bbcfa961f43136a792a0d63f6ba3224c80ec24cbc619b54dedda5c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          }
+        ],
+        "total": 4,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "snapshots": [
+        {
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "artifact": {
+            "artifactId": "0002",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1290,
+            "sha256": "7a3ecdf896ea8dea406951fc87dcba09c75816a79cf087f38f8cc6d217800b8c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "hyperelastic",
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.3333333333333333,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.06666666666666667
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.0666666666666667
+            ],
+            "magnitudeMm": 0.0666666666666667,
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.3333333333333333,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.06666666666666667
+              ]
+            ]
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "artifact": {
+            "artifactId": "0003",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1280,
+            "sha256": "f31387a4aab30d327d5fefb2f80f85ef6813bd9645a5f5c2b4f38b806f030608",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "hyperelastic",
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 0.6666666666666666,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.13333333333333333
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.1333333333333334
+            ],
+            "magnitudeMm": 0.1333333333333334,
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 0.6666666666666666,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.13333333333333333
+              ]
+            ]
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "artifact": {
+            "artifactId": "0004",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1070,
+            "sha256": "b21de413c6bbcfa961f43136a792a0d63f6ba3224c80ec24cbc619b54dedda5c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "mesh": {
+            "nodeCount": 44,
+            "elementCount": 91,
+            "boundsMm": [
+              0,
+              0,
+              0,
+              1,
+              1,
+              2
+            ],
+            "bodyIdentifiersAvailable": false,
+            "bodyCount": null
+          },
+          "provisional": true,
+          "field": {
+            "kind": "structuralDisplacement",
+            "name": "displacement",
+            "unit": "mm",
+            "solver": "hyperelastic",
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 1,
+            "minimumMagnitudeMm": 0,
+            "maximumMagnitudeMm": 0.2
+          },
+          "measurement": {
+            "point": [
+              0.5,
+              0.5,
+              2
+            ],
+            "element": 8,
+            "weights": [
+              0.45833731029875135,
+              0.006935827686041396,
+              0.5347268620152077,
+              0
+            ],
+            "displacementMm": [
+              0,
+              0,
+              0.2000000000000001
+            ],
+            "magnitudeMm": 0.2000000000000001,
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 1,
+            "unit": "mm",
+            "field": "displacement"
+          },
+          "page": {
+            "offset": 0,
+            "count": 2,
+            "total": 44,
+            "nextOffset": 2,
+            "hasMore": true,
+            "nodesMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                2
+              ]
+            ],
+            "displacementMm": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0.2
+              ]
+            ]
+          }
+        }
+      ],
+      "finalPoint": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:c2b07bc289e47612b5fdd4f3a9e79e8dc0508d4f1adff73c52b2e8c8776da79a",
+        "kind": "elastic",
+        "display": {
+          "field": "displacement",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          0.5,
+          0.5,
+          2
+        ],
+        "element": 8,
+        "weights": [
+          0.45833731029875135,
+          0.006935827686041396,
+          0.5347268620152077,
+          0
+        ],
+        "displacementMm": [
+          0,
+          0,
+          0.2000000000000001
+        ],
+        "magnitudeMm": 0.2000000000000001,
+        "vonMisesPa": 95454.54527733292,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      },
+      "loadStepEvents": [
+        {
+          "stage": "load-step",
+          "kind": "hyperelastic",
+          "step": 1,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 1,
+            "loadFraction": 0.3333333333333333,
+            "newtonIterations": 3,
+            "residual": 7.030961582136378e-09,
+            "minJ": 1.033333332951575,
+            "energyJ": 2.89102020050326e-06
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0002",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1290,
+            "sha256": "7a3ecdf896ea8dea406951fc87dcba09c75816a79cf087f38f8cc6d217800b8c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "hyperelastic",
+            "step": 1,
+            "steps": 3,
+            "loadFactor": 0.3333333333333333,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "sequence": 7,
+          "elapsedMs": 493,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "load-step",
+          "kind": "hyperelastic",
+          "step": 2,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 2,
+            "loadFraction": 0.6666666666666666,
+            "newtonIterations": 3,
+            "residual": 2.4696507655070063e-09,
+            "minJ": 1.066666666385887,
+            "energyJ": 1.1292402269025609e-05
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0003",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1280,
+            "sha256": "f31387a4aab30d327d5fefb2f80f85ef6813bd9645a5f5c2b4f38b806f030608",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "hyperelastic",
+            "step": 2,
+            "steps": 3,
+            "loadFactor": 0.6666666666666666,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "sequence": 9,
+          "elapsedMs": 507,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "load-step",
+          "kind": "hyperelastic",
+          "step": 3,
+          "steps": 3,
+          "converged": true,
+          "metrics": {
+            "step": 3,
+            "loadFraction": 1,
+            "newtonIterations": 3,
+            "residual": 1.160364085112008e-09,
+            "minJ": 1.0999999997932193,
+            "energyJ": 2.482987081956302e-05
+          },
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0004",
+            "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+            "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+            "bytes": 1070,
+            "sha256": "b21de413c6bbcfa961f43136a792a0d63f6ba3224c80ec24cbc619b54dedda5c",
+            "kind": "structuralDisplacement",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "fieldSummary": {
+            "kind": "structuralDisplacement",
+            "solver": "hyperelastic",
+            "step": 3,
+            "steps": 3,
+            "loadFactor": 1,
+            "nodeCount": 44
+          },
+          "fieldAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "747bfd9d-205a-46dc-bb3e-bcbed6faf594",
+          "inputRevision": "sha256:07d3c959d96e6a33d5397a83dbf8f85799043deaa1521524d33b5eafed506f6e",
+          "sequence": 11,
+          "elapsedMs": 521,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "runtime": "Node24.11.1",
+    "fullSuite": {
+      "tests": 655,
+      "passed": 652,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 78010.5187
+    },
+    "newTests": 18,
+    "knownV8FailureResolved": false,
+    "scope": "Two real browser WASM solves; artifacts inspected after execution settled. Does not establish pre-terminal delivery timing, stress fields, physical accuracy or overall convergence from an intermediate state. An initial QA batch omitted re-selection after adding a condition and was atomically refused; the QA sequence was corrected before these solves.",
+    "distributionChecks": 26,
+    "distributionSeconds": 28.07,
+    "buildPassed": true,
+    "skillValid": true
+  }
+}

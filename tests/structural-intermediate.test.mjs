@@ -1,0 +1,16 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {inspectIntermediate} from '../src/intermediate-results.js';
+const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]};
+const field=()=>({kind:'structuralDisplacement',solver:'plasticity',step:2,steps:3,loadFactor:.5,displacement:[0,0,0,1,0,0,0,2,0,0,0,3],units:{displacement:'mm'}});
+test('structural load-step summary, bounded vectors and point interpolation remain provisional without time/stress',()=>{
+ const f=field(),r=inspectIntermediate({field:f},mesh,{point:[.25,.25,.25],limit:2,offset:1});assert.equal(r.provisional,true);assert.deepEqual(r.field,{kind:f.kind,name:'displacement',unit:'mm',solver:'plasticity',step:2,steps:3,loadFactor:.5,minimumMagnitudeMm:0,maximumMagnitudeMm:3});assert.deepEqual(r.page.displacementMm,[[1,0,0],[0,2,0]]);assert.equal(r.page.values,undefined);assert.deepEqual(r.measurement.displacementMm,[.25,.5,.75]);assert.equal(r.measurement.magnitudeMm,Math.hypot(.25,.5,.75));for(const key of ['time','timeUnit','vonMisesPa'])assert.equal(r.measurement[key],undefined);r.page.displacementMm[0][0]=99;assert.equal(f.displacement[3],1);
+});
+test('unloading load factors and hyperelastic steps carry their actual scalar factor',()=>{for(const solver of ['plasticity','hyperelastic'])for(const loadFactor of [0,.1,1]){const r=inspectIntermediate({field:{...field(),solver,loadFactor}},mesh);assert.equal(r.field.loadFactor,loadFactor);assert.equal(r.field.solver,solver);}});
+test('structural fields strictly reject bad schema, units, steps, vectors and magnitude overflow',()=>{
+ for(const patch of [{time:0},{stress:[]},{solver:'pcg'},{step:0},{step:4},{step:1.1},{steps:31},{steps:0},{loadFactor:-1},{loadFactor:Infinity},{loadFactor:1.01},{units:{displacement:'m'}},{units:{displacement:'mm',time:'s'}},{displacement:[0,0,0]},{displacement:Array(12).fill(NaN)},{displacement:Array(12).fill(Number.MAX_VALUE)}])assert.throws(()=>inspectIntermediate({field:{...field(),...patch}},mesh));
+});
+test('structural interface samples require explicit body/element and retain body pages',()=>{
+ const two={nodes:[...mesh.nodes,...mesh.nodes],tetrahedra:[[0,1,2,3],[4,5,6,7]],nodeBodies:[0,0,0,0,1,1,1,1]},f={...field(),displacement:[...Array(12).fill(1),...Array(12).fill(2)]},point=[.1,.1,.1];assert.throws(()=>inspectIntermediate({field:f},two,{point}),/multiple bodies/);for(const options of [{bodyIndex:1},{elementIndex:1}]){const r=inspectIntermediate({field:f},two,{point,...options,offset:4,limit:1});assert.equal(r.measurement.bodyIndex,1);assert.ok(r.measurement.displacementMm.every(v=>Math.abs(v-2)<1e-12));assert.deepEqual(r.page.nodeBodies,[1]);}assert.throws(()=>inspectIntermediate({field:field()},mesh,{bodyIndex:0,point}),/body identifiers/);assert.throws(()=>inspectIntermediate({field:field()},mesh,{elementIndex:0}),/measurement point/);
+});
+test('existing thermal scalar fields retain values and seconds',()=>{const r=inspectIntermediate({field:{kind:'thermal',time:2,temperature:[20,21,22,23],units:{temperature:'degC'}}},mesh,{point:[0,0,0],limit:1});assert.deepEqual(r.page.values,[20]);assert.equal(r.page.displacementMm,undefined);assert.equal(r.measurement.value,20);assert.equal(r.measurement.time,2);});

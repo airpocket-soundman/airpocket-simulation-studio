@@ -9,6 +9,7 @@ export async function analyzeProject(project,options={},operation='elastic',runt
  if(!Number.isFinite(settings.size)||settings.size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(settings.method))throw Error('Invalid CPU analysis settings');
  if(runtime.signal?.aborted)throw Error('Calculation cancelled');
  const analysisAssessment=requireAnalysisPreflight(input,settings,{target:'node',operation:operation==='mesh'?'mesh':'solve'});
+ if(runtime.observeFields!==undefined&&typeof runtime.observeFields!=='boolean')throw Error('Invalid observation field flag');
  const timeoutMs=runtime.timeoutMs??120000;
  if(!Number.isFinite(timeoutMs)||timeoutMs<=0||timeoutMs>120000)throw Error('Invalid analysis timeout');
  return new Promise((resolve,reject)=>{
@@ -34,6 +35,6 @@ export async function analyzeProject(project,options={},operation='elastic',runt
   runtime.signal?.addEventListener('abort',cancel,{once:true});
   // The host may abort while creating the Worker, before the listener exists.
   if(runtime.signal?.aborted){cancel();return;}
-  try{worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);worker.postMessage({project:input,source:input.sourceModel,operation,options:settings,observe:runtime.observe===true});}catch(error){finish(error);}
+  try{worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);worker.postMessage({project:input,source:input.sourceModel,operation,options:settings,observe:runtime.observe===true,observeFields:runtime.observeFields===true});}catch(error){finish(error);}
  });
 }

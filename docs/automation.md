@@ -47,7 +47,7 @@
 
 ブラウザの`analysisApi.startJob`、`getJob`、`jobEvents`、`cancelJob`、`getJobResult`、`releaseJob`も同じライフサイクルを使います。`startJob`の`inputRevision`と`requestId`は呼出側が渡します。ブラウザのイベントは通常は要約のみです。includeFields:trueでは下記のメモリ内成果物を保持します。下記の接続モードで、このAPIをライブMCPへ公開できます。
 
-`studio_job_artifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`はイベントにある登録済み`artifactId`から中間成果物を取得します。任意パスは受け付けず、ハッシュ・ジョブ入力版・対応メッシュを照合します。既定は要約のみ。現行の場は熱の温度と過渡音響の圧力スカラーです。これらは`point:[x,y,z]`（mm）の補間、または`offset`と`limit`（最大200）のノード/値ページを必要に応じて取得できます。メッシュ単独では座標ページを取得でき、点補間には場が必要です。解放済みジョブの登録は利用できません。最終保存の`job.final:true`は保存完了を表し、仮定があれば`job.provisional:true`を維持します。最終保存と非暫定・物理検証済みを同一視しないでください。
+`studio_job_artifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`はイベントにある登録済み`artifactId`から中間成果物を取得します。任意パスは受け付けず、ハッシュ・ジョブ入力版・対応メッシュを照合します。既定は要約のみ。現行の場は熱の温度・過渡音響の圧力スカラーと、塑性/超弾性の荷重ステップ変位ベクトルです。これらは`point:[x,y,z]`（mm）の補間、または`offset`と`limit`（最大200）のノード/値ページを必要に応じて取得できます。メッシュ単独では座標ページを取得でき、点補間には場が必要です。解放済みジョブの登録は利用できません。最終保存の`job.final:true`は保存完了を表し、仮定があれば`job.provisional:true`を維持します。最終保存と非暫定・物理検証済みを同一視しないでください。
 
 例: `studio_analyze`へ`{"path":"D:/work/project.json","outputPath":"D:/work/result.json","size":5,"method":"wasm-pcg"}`を渡します。`studio_probe`の`point`はmm、結果は各解析の物理単位です。UIから保存した入力JSONを使い、材料の出典と有効範囲を確認してください。
 
@@ -82,7 +82,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ### ブラウザの途中の場を取得する
 
-接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと対応する熱/過渡音響の節点スカラー場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。
+接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと熱/過渡音響スカラー場・塑性/超弾性ステップ変位場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。
 
 取得時にSHA-256・入力版・対応メッシュを検査し、物理時刻（秒）・単位・provisional:trueを返します。再メッシュは新しいメッシュ参照へ切り替え、過去の場は元のメッシュと結び付けたまま保持します。既定64,000,000バイトの直列化データ予算は全ブラウザジョブで共有し、上限では要約と計算を続行。実ヒープ使用量の上限ではありません。観測が不正な場合はobservation-errorを返し、最終解析結果の判定と区別します。releaseJob/closeJobsで解放し、ページ終了で消失します。ファイルへの永続保存・全ソルバーの全反復場は提供しません。
 
@@ -273,7 +273,7 @@ MFEM・WebGPU・channelFlow・Stokesなど数値反復observerのない経路は
 
 各profileは`id/models/methods/events/textProgress/fields/limitations`を持ち、eventsはstage・任意solver・cadence・metrics(name/unit)、fieldsはkind/name/unit/timeUnit/cadenceを宣言します。selectedObservationはschemaVersion、target/operation/supported、profileIdとprofile、reasons、adaptive、fieldRetentionを返し、declarationOnly:true・physicalAccuracyVerified:falseです。fieldRetentionはrequested/available/maxBytes:64000000/eventRetention:256を含みます。adaptiveはenabled/structuredRoundEvents:false/meshPerRound/textProgressOnlyを返します。acousticSweepとadaptiveSolveはonObserveを受けないため、構造化frequency-step/adaptive-round数値イベントを宣言しません。
 
-カタログはブラウザ13プロファイル、Node12（WebGPUを除外）。共通eventsはpreparation/mesh/progressを宣言し、progressはWorker文字列をクライアントが変換するstageです。fieldRetentionはscalarFieldsSupported/meshSupported/meshAvailable/availabilityIsGuarantee:falseも含みます。availableはスカラー場の保持要求が対応経路と一致することだけを示し、取得保証ではありません。数値場のないCPU経路でもmeshAvailable:trueになり得ます。診断MCPはincludeFields:boolean、preflightはadaptive/includeFieldsを受け付けます。不正な診断optionsはisError、preflightは構造化診断とselectedObservation.supported:falseを返します。保存analysisAssessment形式は変更しません。
+カタログはブラウザ13プロファイル、Node12（WebGPUを除外）。共通eventsはpreparation/mesh/progressを宣言し、progressはWorker文字列をクライアントが変換するstageです。fieldRetentionはscalarFieldsSupported/meshSupported/meshAvailable/availabilityIsGuarantee:falseも含みます。availableはスカラーまたはベクトル場の保持要求が対応経路と一致することだけを示し、取得保証ではありません。数値場のないCPU経路でもmeshAvailable:trueになり得ます。診断MCPはincludeFields:boolean、preflightはadaptive/includeFieldsを受け付けます。不正な診断optionsはisError、preflightは構造化診断とselectedObservation.supported:falseを返します。保存analysisAssessment形式は変更しません。
 
 ## Node実行環境の読取メタデータ
 
@@ -328,3 +328,11 @@ sourceとその祖先`/study`の既存根拠entryは、場の数値が同じで�
 有限な各三角形でも符号付き体積の全体集計が数値範囲を超える場合は拒否し、InfinityをJSONのnullへ変換して返しません。
 
 ページを結合するときはrevisionだけでなくmeshIndexとtoleranceMmも同一に固定してください。初回に返ったtoleranceMmを後続呼出へ明示すると再現できます。許容差を変えると同じ入力版でも問題集合が変わるため、revision一致だけでは検査条件の一致を保証しません。
+
+## 非線形構造の荷重ステップ変位場
+
+塑性・超弾性の収束した荷重ステップは、includeFields:trueのときだけ`kind:"structuralDisplacement"`の変位場を観測・転送します。保持offでは新しい変位ベクトルの生成・転送を行わず、最終resultの数値は変えません。fieldRetention.availableはスカラーまたはベクトル場の保持適格性を示し、scalarFieldsSupportedとvectorFieldsSupportedを別に返します。取得保証ではありません。
+
+field要約はsolver:"plasticity"|"hyperelastic"、step/steps、実際のloadFactor（除荷を含む0〜1）、minimumMagnitudeMm/maximumMagnitudeMmとdisplacement/mmを返します。stepは物理時刻ではなく、timeを含めません。ページの変位は`displacementMm:[[x,y,z],...]`で、既存スカラーpage.valuesとは別です。pointの測定はdisplacementMm・magnitudeMm・step/steps/loadFactorを返します。応力・内部Newton残差を含まず、ステップ収束はジョブ全体の最終収束・数値精度・物理妥当性を保証しません。中間成果物は常にprovisionalです。
+
+既存のnodeBodiesとbodyIndex/elementIndexの曖昧点拒否、入力/メッシュ/ハッシュ照合、共有64 MB・256イベント保持、解放条件を維持します。形式・単位・3Nベクトル・step範囲・変位の大きさの有限性を検査し、不正なtime/応力項目や数値オーバーフローを拒否します。

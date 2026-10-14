@@ -43,7 +43,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
      onEvent(summary);
     }).catch(error=>{writeError??=error;});
    };
-   const output=await analyzeProject(project,options,operation,{signal,observe:true,onEvent:observe});
+   const output=await analyzeProject(project,options,operation,{signal,observe:true,observeFields:includeFields,onEvent:observe});
    await chain;if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
    beginCommit();
    const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.analysisAssessment.provisional};

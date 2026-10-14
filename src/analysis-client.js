@@ -15,7 +15,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
   // Native browser terminate returns void; host adapters may return a cleanup promise.
   Promise.resolve(termination).then(()=>settle(error),cleanupFailed);
  }
- function start(operation,options={},snapshot,onEvent,signal,jobId){
+ function start(operation,options={},snapshot,onEvent,signal,jobId,observeFields=false){
  if(active)return Promise.reject(Error('A calculation is already running'));
  let project,settings,analysisAssessment;try{if(signal?.aborted)throw Error('Calculation cancelled');project=structuredClone(snapshot??getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');analysisAssessment=requireAnalysisPreflight(project,settings,{target:'browser',operation:operation==='mesh'?'mesh':'solve'});}catch(e){return Promise.reject(e);}
  return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}const job={worker,project,operation,options:settings,resolve,reject,signal,jobId,analysisAssessment};active=job;
@@ -24,7 +24,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  worker.onerror=e=>finish(job,Error(e.message||'Worker failed'));
  worker.onmessage=({data})=>{if(active!==job||job.finishing)return;try{if(data.event){onEvent?.(data.event);return;}if(data.progress){onProgress(data.progress);onEvent?.({stage:'progress',message:data.progress,provisional:true});return;}finish(job,data.error?Error(data.error):null,data.result);}catch(error){finish(job,error);}};
  if(signal?.aborted){job.abort();return;}
- try{worker.postMessage({operation,project,source:project.sourceModel,options:structuredClone(job.options),base:baseUrl(),observe:!!onEvent});}catch(e){finish(job,e);}
+ try{worker.postMessage({operation,project,source:project.sourceModel,options:structuredClone(job.options),base:baseUrl(),observe:!!onEvent,observeFields});}catch(e){finish(job,e);}
  });
  }
  const results=new Map(),artifacts=createBrowserIntermediateStore({maxBytes:runtime.maxIntermediateBytes??64_000_000});
@@ -33,10 +33,10 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
   const emitObservation=(event,retained)=>{
    const {mesh,field,...summary}=event;
    if(retained?.limited&&!reportedLimit){reportedLimit=true;onEvent({stage:'observation-limit',provisional:true,message:'Browser intermediate storage limit reached; summaries continue',limitBytes:retained.limitBytes});}
-   onEvent({...summary,...(retained?.artifact?{artifact:retained.artifact}:{}),...(field?{fieldSummary:{kind:field.kind,time:field.time,nodeCount:field.temperature?.length??field.pressure?.length},fieldAvailable:!!retained?.artifact}:{}),...(mesh?{meshAvailable:!!retained?.artifact}:{})});
+   onEvent({...summary,...(retained?.artifact?{artifact:retained.artifact}:{}),...(field?{fieldSummary:{kind:field.kind,...(field.time!==undefined?{time:field.time}:{}),...(field.step!==undefined?{solver:field.solver,step:field.step,steps:field.steps,loadFactor:field.loadFactor}:{}),nodeCount:field.displacement?field.displacement.length/3:field.temperature?.length??field.pressure?.length},fieldAvailable:!!retained?.artifact}:{}),...(mesh?{meshAvailable:!!retained?.artifact}:{})});
   };
   const observe=event=>{if(!context.includeFields){emitObservation(event);return;}chain=chain.then(async()=>{if(signal.aborted)return;let retained;try{retained=await artifacts.capture(jobId,inputRevision,event,()=>!signal.aborted);}catch(error){onEvent({stage:'observation-error',provisional:true,message:error.message});}if(!signal.aborted)emitObservation(event,retained);});};
-  try{const output=await start(operation,options,project,observe,signal,jobId);await chain;if(signal.aborted)throw Error('Calculation cancelled');results.set(jobId,output);return {kind:output.result?.kind,mesh:output.mesh?.summary,resultAvailable:true,analysisAssessment:output.analysisAssessment,intermediate:artifacts.summary(jobId)};}finally{await chain;}
+  try{const output=await start(operation,options,project,observe,signal,jobId,context.includeFields);await chain;if(signal.aborted)throw Error('Calculation cancelled');results.set(jobId,output);return {kind:output.result?.kind,mesh:output.mesh?.summary,resultAvailable:true,analysisAssessment:output.analysisAssessment,intermediate:artifacts.summary(jobId)};}finally{await chain;}
  }});
  return {generateMesh:options=>start('mesh',options),analyze:options=>start('elastic',options),cancel:()=>{if(active?.jobId)jobs.cancel(active.jobId);else if(active)finish(active,Error('Calculation cancelled'));},
   startJob({operation='solve',options={},inputRevision,requestId,includeFields=false,origin='api'}={}){if(!['solve','mesh'].includes(operation)||typeof includeFields!=='boolean'||!['gui','api'].includes(origin))throw Error('Invalid analysis operation or includeFields');return jobs.start({project:getProject(),options,operation:operation==='mesh'?'mesh':'elastic',inputRevision,requestId,context:{includeFields,origin}});},

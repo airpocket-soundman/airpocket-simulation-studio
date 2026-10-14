@@ -10,7 +10,7 @@ test('timeouts, nonconvergence and memory/start failures release worker resource
 test('browser job API shares the lifecycle and freezes input, retains compact observations and ignores cancelled replies',async()=>{
  const h=harness(),job=h.api.startJob({inputRevision:'browser:1',requestId:'first'});
  h.project.name='edited';await new Promise(resolve=>setImmediate(resolve));
- assert.equal(h.workers[0].input.project.name,'original');assert.equal(h.workers[0].input.observe,true);
+ assert.equal(h.workers[0].input.project.name,'original');assert.equal(h.workers[0].input.observe,true);assert.equal(h.workers[0].input.observeFields,false);
  h.workers[0].send({event:{stage:'mesh',metrics:{nodeCount:4},mesh:{nodes:[1,2,3]}}});
  h.workers[0].send({event:{stage:'time-step',provisional:true,field:{kind:'thermal',time:1,temperature:[20,30,40,50]}}});
  const events=h.api.jobEvents(job.jobId).events;assert.equal(events.find(e=>e.stage==='mesh').meshAvailable,false);const field=events.find(e=>e.stage==='time-step');assert.equal(field.fieldAvailable,false);assert.equal(field.fieldSummary.nodeCount,4);assert.equal(field.field,undefined);assert.equal(field.inputRevision,'browser:1');
@@ -21,7 +21,7 @@ test('browser job API shares the lifecycle and freezes input, retains compact ob
 });
 
 test('browser jobs retain optional time fields, expose artifact probes, and report malformed observations without losing final output',async()=>{
- const h=harness(),job=h.api.startJob({inputRevision:'browser:fields',requestId:'fields',includeFields:true});await new Promise(resolve=>setImmediate(resolve));
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:fields',requestId:'fields',includeFields:true});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.workers[0].input.observeFields,true);
  const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],summary:{nodeCount:4}};
  h.workers[0].send({event:{stage:'mesh',mesh}});
  h.workers[0].send({event:{stage:'time-step',field:{kind:'thermal',time:1,temperature:[20,30,40,50],units:{temperature:'degC'}}}});

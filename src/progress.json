@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T15:29:53.917134Z",
+  "updatedAt": "2026-10-14T15:42:32.861159Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1782,6 +1782,23 @@
       "acceptance": "実MCPで240件の問題を200+40件のページで取得し元JSONバイト不変。実ブラウザで閉立方体1000mm³、不備サンプルの問題7枚とGUI診断一致、2件ずつ取得・選択・古い版拒否を確認。新6試験を含む最終全体637中634成功・3skip（Node24.11.1、74.77秒）。有限体積合算回帰も成功。ビルド・配信物26項目27.94秒・SKILL成功。自己交差/正確CAD/最大容量は未検証、既知Node24V8停止は未解決。",
       "acceptanceEn": "Real MCP retrieves240problems in200+40pages without changing source JSON bytes. Actual browser verifies a1000mm3closed cube, seven defect triangles matching GUI diagnostics, two-item pages/selection and stale-revision refusal. Final full suite:634passed/3skipped of637 including six new tests onNode24.11.1 (74.77s),including aggregate-volume overflow refusal. Build,26distribution checks27.94s andSKILL pass. Self-intersections,exact CAD and maximum scale remain unverified; known Node24V8 failure remains unresolved.",
       "evidence": "src/surface-inspection.js; src/project-surface-inspection.js; src/studio-api.js; scripts/studio-mcp.mjs; tests/project-surface-inspection.test.mjs; tests/mcp-surface-inspection.test.mjs; docs/evidence/2026-10-15-browser-surface-inspection.json; docs/testing.md"
+    },
+    {
+      "id": "NONLINEARFIELDS1",
+      "title": "塑性・超弾性の収束荷重段階ごとの中間変位場をLLMへ返す",
+      "titleEn": "Return provisional displacement fields from converged plastic and hyperelastic load steps",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "OBSERVATIONPROFILES1",
+        "BROWSERFIELDS1",
+        "AGENTJOBS1"
+      ],
+      "detail": "includeFieldsを有効にした場合のみ、収束荷重段階の独立したmm変位場を生成・保持。scalar/vector観測能力を分け、荷重倍率とstep、最大200節点の変位ページ・部品指定点補間を既存成果物経路へ接続する。物理時刻・応力・全体収束保証は付与しない。",
+      "detailEn": "Only when includeFields is enabled, generate and retain detached millimeter displacement fields for converged load steps. Separate scalar/vector observation support and connect step/load-factor metadata, up to200-node vector pages and body-aware interpolation to existing artifacts without inventing physical time, stress or overall convergence guarantees.",
+      "acceptance": "新18試験を含む全体655件中652成功・3skip（Node24.11.1、78.01秒）。実MCP/Node Worker6ジョブでoptin/out・点値と最終値一致・ハッシュ改変/解放後拒否を確認。実ブラウザ2WASMジョブで塑性倍率0.5/1/0.5の先端0.003/0.006/0.003mmと超弾性3段階の0.0667/0.1333/0.2mmを取得。ビルド・配信物26項目28.07秒・SKILL成功。終端後取得の実証であり、終端前受信タイミング・物理精度・既知Node24V8停止の根治は保証しない。",
+      "acceptanceEn": "Full suite:652passed/3skipped of655 including18new tests onNode24.11.1 (78.01s). Six real MCP/NodeWorker jobs verify opt-in/out, point-versus-final agreement and tamper/release refusal. Two actual browser WASM jobs retrieve plastic factors0.5/1/0.5 with tip0.003/0.006/0.003mm and three hyperelastic steps0.0667/0.1333/0.2mm. Build,26distribution checks28.07s andSKILL pass. Artifacts were read after settlement; preterminal delivery timing,physical accuracy and known Node24V8 resolution are not established.",
+      "evidence": "src/plasticity-core.js; src/hyperelastic-core.js; src/intermediate-results.js; src/analysis-client.js; src/analysis.worker.js; src/observation-profiles.js; scripts/analysis-job-service.mjs; scripts/headless-analysis.mjs; tests/plasticity-observation-fields.test.mjs; tests/hyperelastic-observation-fields.test.mjs; tests/structural-intermediate.test.mjs; tests/nonlinear-observation-profiles.test.mjs; tests/nonlinear-intermediate-pipeline.test.mjs; docs/evidence/2026-10-15-browser-nonlinear-fields.json; docs/testing.md"
     }
   ],
   "solvers": [

@@ -19,7 +19,8 @@ export function neoHookean(F,h,{tangent=true}={}){
  return {J,energy:mu/2*(F.flat().reduce((s,v)=>s+v*v,0)-3)-mu*log+lambda/2*log*log,P,sigma,A};
 }
 
-export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve}={}){
+export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve,observeFields=false}={}){
+ if(typeof observeFields!=='boolean')throw Error('observeFields must be a boolean');
  const h=properties.hyperelastic;validateHyperelastic(h);if(!h)throw Error('Hyperelastic parameters required');
  if(!['pcg','pcg-strict','wasm-pcg'].includes(method))throw Error('Hyperelastic analysis currently supports Airpocket CPU solvers only');
  if(!Number.isInteger(loadSteps)||loadSteps<1||loadSteps>30||!Number.isInteger(maxNewtonIterations)||maxNewtonIterations<1||maxNewtonIterations>50)throw Error('Invalid nonlinear iteration settings');
@@ -47,7 +48,7 @@ export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',ma
    let accepted=false;for(let attempt=0;attempt<20;attempt++){const alpha=2**(-attempt),trial=Float64Array.from(u,(v,i)=>v+alpha*correction.solution[i]);try{const candidate=assemble(trial,scale,false);if(candidate.norm<state.norm*(1-1e-4*alpha)){u.set(trial);accepted=true;break;}}catch(e){if(!e.message.includes('Inverted or collapsed'))throw e;}}
    if(!accepted)throw Error('Hyperelastic Newton line search failed; reduce the load or increase load steps');totalNewton++;
   }
-  if(!converged)throw Error('Hyperelastic Newton iteration limit reached; no converged result returned');onObserve?.({stage:'load-step',kind:'hyperelastic',step,steps:loadSteps,converged:true,metrics:history.at(-1)});onProgress('Hyperelastic load step '+step+'/'+loadSteps+' converged');
+  if(!converged)throw Error('Hyperelastic Newton iteration limit reached; no converged result returned');onObserve?.({stage:'load-step',kind:'hyperelastic',step,steps:loadSteps,converged:true,metrics:history.at(-1),...(observeFields?{field:{kind:'structuralDisplacement',solver:'hyperelastic',step,steps:loadSteps,loadFactor:scale,displacement:Array.from(toGlobal(u,bases),v=>v*1000),units:{displacement:'mm'}}}:{})});onProgress('Hyperelastic load step '+step+'/'+loadSteps+' converged');
  }
  state=assemble(u,1,false);const global=toGlobal(u,bases),stresses=state.states.map(s=>[s.sigma[0][0],s.sigma[1][1],s.sigma[2][2],s.sigma[0][1],s.sigma[1][2],s.sigma[0][2]]),strains=state.states.map(s=>{const C=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>s.F.reduce((sum,r)=>sum+r[i]*r[j],0)));return [(C[0][0]-1)/2,(C[1][1]-1)/2,(C[2][2]-1)/2,C[0][1],C[1][2],C[0][2]];}),vonMises=stresses.map(s=>Math.sqrt(.5*((s[0]-s[1])**2+(s[1]-s[2])**2+(s[2]-s[0])**2)+3*(s[3]**2+s[4]**2+s[5]**2))),localReaction=Float64Array.from(state.residual,(v,i)=>fixed.has(i)?v:0),globalReaction=toGlobal(localReaction,bases),reaction=[0,0,0],applied=[0,0,0],constraintReactions=[];
  for(let node=0;node<n/3;node++){for(let k=0;k<3;k++){reaction[k]+=globalReaction[node*3+k];applied[k]+=external[node*3+k];}if([0,1,2].some(k=>fixed.has(node*3+k)))constraintReactions.push({node,force:Array.from(globalReaction.slice(node*3,node*3+3))});}

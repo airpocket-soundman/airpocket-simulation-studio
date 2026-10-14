@@ -26,7 +26,7 @@ export function j2Return(strain6,properties,previousState={}, {tangent=true}={})
 }
 function strainMatrix(grad){const B=Array.from({length:6},()=>Array(12).fill(0));grad.forEach(([x,y,z],a)=>{const i=3*a;B[0][i]=x;B[1][i+1]=y;B[2][i+2]=z;B[3][i]=y;B[3][i+1]=x;B[4][i+1]=z;B[4][i+2]=y;B[5][i]=z;B[5][i+2]=x;});return B;}
 export function solvePlasticity(mesh,properties,boundary,options={}){
- const {method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps:requestedSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve}=options;constants(properties);
+ const {method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps:requestedSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve,observeFields=false}=options;if(typeof observeFields!=='boolean')throw Error('Invalid plasticity observeFields setting');constants(properties);
  const requestedFractions=options.loadFractions;
  if(requestedFractions!==undefined&&(!Array.isArray(requestedFractions)||requestedFractions.length<1||requestedFractions.length>30||!requestedFractions.every(v=>Number.isFinite(v)&&v>=0&&v<=1)||!(requestedFractions[0]>0)||!(requestedFractions.at(-1)>0)||!requestedFractions.includes(1)))throw Error('Invalid plasticity load fractions: require 1–30 values in [0,1], positive first and last values, and a peak of 1');
  if(requestedFractions!==undefined&&options.loadSteps!==undefined&&options.loadSteps!==requestedFractions.length)throw Error('Plasticity load steps must match the load fractions length');
@@ -60,7 +60,7 @@ export function solvePlasticity(mesh,properties,boundary,options={}){
  const rhs=Float64Array.from(state.residual,(v,i)=>fixed.has(i)?0:-v),correction=pcg(n,state.entries,rhs,zero,{tolerance:1e-10,maxIterations:2500,matvecFactory});totalCG+=correction.iterations;let accepted=false;
  for(let attempt=0;attempt<20;attempt++){const alpha=2**(-attempt),trial=Float64Array.from(u,(v,i)=>v+alpha*correction.solution[i]),candidate=assemble(trial,scale,false);if(candidate.norm<state.norm*(1-1e-4*alpha)){u.set(trial);accepted=true;break;}}
  if(!accepted)throw Error('Plasticity Newton line search failed; reduce load or increase load steps');totalNewton++;}
- if(!converged)throw Error('Plasticity Newton iteration limit reached; no converged result returned');checkSmallStrain(state.states);committed=state.states;committedReference=state.reference;onObserve?.({stage:'load-step',kind:'plasticity',step,steps:loadSteps,converged:true,metrics:history.at(-1)});onProgress('Plasticity load step '+step+'/'+loadSteps+' converged');}
+ if(!converged)throw Error('Plasticity Newton iteration limit reached; no converged result returned');checkSmallStrain(state.states);committed=state.states;committedReference=state.reference;onObserve?.({stage:'load-step',kind:'plasticity',step,steps:loadSteps,converged:true,metrics:history.at(-1),...(observeFields?{field:{kind:'structuralDisplacement',solver:'plasticity',step,steps:loadSteps,loadFactor:scale,displacement:Array.from(toGlobal(u,bases),v=>v*1000),units:{displacement:'mm'}}}:{})});onProgress('Plasticity load step '+step+'/'+loadSteps+' converged');}
  // Preserve the converged final state rather than performing another constitutive update.
  const global=toGlobal(u,bases),stresses=state.states.map(s=>s.stress),strains=state.states.map(s=>s.strain);
  const maxPrincipalStrain=checkSmallStrain(state.states);

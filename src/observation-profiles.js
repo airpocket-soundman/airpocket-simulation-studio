@@ -100,7 +100,7 @@ const definitions=[
     ]
    }
   ],
-  []
+  [{kind:'structuralDisplacement',name:'displacement',unit:'mm',valueType:'vector3',components:['x','y','z'],loadFactorUnit:'dimensionless',cadence:'each converged load step when includeFields is requested; load factor is not physical time'}]
  ],
  [
   "hyperelastic-cpu",
@@ -136,7 +136,7 @@ const definitions=[
     ]
    }
   ],
-  []
+  [{kind:'structuralDisplacement',name:'displacement',unit:'mm',valueType:'vector3',components:['x','y','z'],loadFactorUnit:'dimensionless',cadence:'each converged load step when includeFields is requested; load factor is not physical time'}]
  ],
  [
   "thermal-steady",
@@ -403,6 +403,6 @@ export function resolveObservationProfile(project,options={},target='browser',op
   }else if(kind==='channelFlow')id='channel-flow';
   else if(kind==='creepingFlow')id='stokes';
  }
- const profile=reasons.length?null:profiles.find(p=>p.id===id)??null,supported=!!profile,requested=options.includeFields===true,scalarFieldsSupported=supported&&profile.fields.length>0;
- return {schemaVersion:1,target,operation,supported,profileId:profile?.id??null,profile,reasons,adaptive:{enabled:options.adaptive===true,structuredRoundEvents:false,meshPerRound:supported&&operation==='solve'&&options.adaptive===true,textProgressOnly:supported&&operation==='solve'&&options.adaptive===true},fieldRetention:{requested,available:requested&&scalarFieldsSupported,scalarFieldsSupported,meshSupported:supported,meshAvailable:requested&&supported,maxBytes:64000000,eventRetention:256,availabilityIsGuarantee:false},declarationOnly:true,physicalAccuracyVerified:false};
+ const profile=reasons.length?null:profiles.find(p=>p.id===id)??null,supported=!!profile,requested=options.includeFields===true,scalarFieldsSupported=supported&&profile.fields.some(field=>field.valueType!=='vector3'),vectorFieldsSupported=supported&&profile.fields.some(field=>field.valueType==='vector3');
+ return {schemaVersion:1,target,operation,supported,profileId:profile?.id??null,profile,reasons,adaptive:{enabled:options.adaptive===true,structuredRoundEvents:false,meshPerRound:supported&&operation==='solve'&&options.adaptive===true,textProgressOnly:supported&&operation==='solve'&&options.adaptive===true},fieldRetention:{requested,available:requested&&(scalarFieldsSupported||vectorFieldsSupported),scalarFieldsSupported,vectorFieldsSupported,meshSupported:supported,meshAvailable:requested&&supported,maxBytes:64000000,eventRetention:256,availabilityIsGuarantee:false},declarationOnly:true,physicalAccuracyVerified:false};
 }
