@@ -1,0 +1,111 @@
+{
+  "inputBytes": 658111,
+  "inputSha256": "sha256:b77e36dee86d5742e18e631b06e62c4634efe11b31076300a44c6ec4d2bfb7a0",
+  "uploadChunks": 11,
+  "result": {
+    "loaded": true,
+    "revision": "sha256:27e0f0167de2a79cdb105dff57ba05492f811f9a56e7259abab68aa6c1c95984",
+    "filename": "分割転送-reference.gcode",
+    "kind": "gcode",
+    "unit": "mm",
+    "views": [
+      {
+        "viewId": "plate:0",
+        "segmentCount": 4002,
+        "layerCount": 2,
+        "part": null
+      }
+    ],
+    "settings": {
+      "viewId": "plate:0",
+      "allLayers": true,
+      "layerIndex": 0
+    },
+    "warnings": [],
+    "warningCount": 0,
+    "provenance": "Imported printing data; commands are interpreted, never executed. Material strength and printer effects are not inferred."
+  },
+  "view": {
+    "loaded": true,
+    "revision": "sha256:27e0f0167de2a79cdb105dff57ba05492f811f9a56e7259abab68aa6c1c95984",
+    "filename": "分割転送-reference.gcode",
+    "kind": "gcode",
+    "unit": "mm",
+    "views": [
+      {
+        "viewId": "plate:0",
+        "segmentCount": 4002,
+        "layerCount": 2,
+        "part": null
+      }
+    ],
+    "settings": {
+      "viewId": "plate:0",
+      "allLayers": false,
+      "layerIndex": 1
+    },
+    "warnings": [],
+    "warningCount": 0,
+    "provenance": "Imported printing data; commands are interpreted, never executed. Material strength and printer effects are not inferred."
+  },
+  "layer": {
+    "revision": "sha256:27e0f0167de2a79cdb105dff57ba05492f811f9a56e7259abab68aa6c1c95984",
+    "viewId": "plate:0",
+    "kind": "segments",
+    "unit": "mm",
+    "offset": 0,
+    "limit": 1,
+    "total": 1,
+    "items": [
+      {
+        "from": [
+          1,
+          0,
+          0.4
+        ],
+        "to": [
+          1,
+          10,
+          0.4
+        ],
+        "extrusionMm": 1,
+        "lengthMm": 10,
+        "feedMmMin": 600,
+        "tool": 0,
+        "feature": "外壁",
+        "layerNumber": 2,
+        "lineNumber": 26010,
+        "conditionalDepth": 0,
+        "index": 4001,
+        "layerIndex": 1,
+        "layerKey": "layer:2"
+      }
+    ],
+    "nextOffset": null
+  },
+  "export": {
+    "transferId": "eb7cb735-b6e1-4212-8e36-04ecbbedfb97",
+    "direction": "export",
+    "totalBytes": 664735,
+    "sha256": "sha256:30b7829f516674f1ec1814b1ebfb69eee235df054cc80eeae1db23892d825679",
+    "maxChunkBytes": 65536,
+    "revision": "sha256:27e0f0167de2a79cdb105dff57ba05492f811f9a56e7259abab68aa6c1c95984",
+    "readChunks": 11,
+    "verifiedSha256": "sha256:30b7829f516674f1ec1814b1ebfb69eee235df054cc80eeae1db23892d825679",
+    "segmentCount": 4002,
+    "layerCount": 2
+  },
+  "environment": "Actual Codex in-app browser at http://127.0.0.1:5174, existing WebGL print UI, real stdio MCP and HTTP polling; synthetic G-code, no hardware execution.",
+  "gitBase": "41b1e396e1c8251ca81d8f2a5e9f438bdb238dc4",
+  "languageSwitch": "English Layer 2 -> Japanese 層 2; selected layer index1 retained.",
+  "scope": "658111 input bytes and664735 export bytes tested, not maximum50MB import or100MB export, public HTTPS or measured peak heap.",
+  "inputCharacters": 306107,
+  "inputFixture": {
+    "commentLine": "; 日本語の経路注記\n",
+    "commentRepeats": 22000,
+    "header": "G21\nG90\nM83\nG0 X0 Y0 Z.2\n; layer_number: 1\n; FEATURE: 外壁\nG1 X10 E1 F600\n",
+    "alternatingSegments": 4000,
+    "segmentTemplate": "G1 X{1 for odd i, 2 for even i} E.01 F600\n",
+    "tail": "G0 Z.4\n; layer_number: 2\nG1 Y10 E1\n"
+  }
+}

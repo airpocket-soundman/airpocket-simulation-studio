@@ -1,3 +1,4 @@
+import {createPrintTransfer} from './print-transfer.js';
 import {createGuiAnalysisJobs} from './gui-analysis-jobs.js';
 import {createPrintOperations} from './print-operations.js';
 import {createCadUpdateOperations,validateBrowserCadReplacement} from './cad-update-operations.js';
@@ -470,4 +471,5 @@ window.resultAssessmentApi=createResultAssessmentApi({getAnalysis:()=>lastAnalys
 window.printImportApi=installPrintImport({language:()=>language,translate:addTranslations,status,isBusy:()=>!$('cancel-run').disabled||$('model').disabled});
 
 window.printOperations=createPrintOperations({...window.printImportApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||$('print-file').disabled||visualExport.isActive()});
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,prints:window.printOperations,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+window.printTransfer=createPrintTransfer({prints:window.printOperations});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,prints:window.printOperations,printTransfers:window.printTransfer,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});

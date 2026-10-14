@@ -1490,8 +1490,8 @@
       "titleEn": "Expose printing data through shared API and MCP",
       "status": "checking",
       "category": "API",
-      "detail": "3MF/G-code読込、版照合、最大200件の形状・層ページ、表示切替と失敗時復元を実装。通常24ツール・接続26ツール/48操作。実画面/公開HTTPSと大きなライブ入力の分割転送を残す。",
-      "detailEn": "Implement 3MF/G-code import, revision checks, at most 200 geometry/layer rows, display settings and rollback. Default 24 tools, paired 26 tools/48 methods. Real-browser/public HTTPS validation and large live-input chunking remain.",
+      "detail": "3MF/G-code読込、版照合、最大200件の形状・層ページ、表示切替と失敗時復元を実装。分割転送はPRINTTRANSFER1で追加。通常24ツール・接続26ツール/55操作。実画面の全経路と公開HTTPSを残す。",
+      "detailEn": "Implement3MF/G-code import, revision checks, up to200 geometry/layer rows, display settings and rollback. PRINTTRANSFER1 adds chunk transfer. Default24/paired26tools with55methods. All real-browser routes/public HTTPS remain pending.",
       "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md",
       "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は未解決、実画面/公開HTTPSは未確認。強度推定・機器制御は含まない。",
       "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser/public HTTPS unverified. No strength inference or hardware control."
@@ -1526,6 +1526,21 @@
       "evidence": "src/studio-api.js; src/material-catalog-ui.js; tests/material-catalog-operations.test.mjs; tests/mcp-catalog-apply.test.mjs; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/testing.md",
       "acceptance": "実MCPで保存・版競合・原子的失敗・材料根拠失効と非材料根拠保持を検証。実ローカル画面で必須範囲入力、日英表示、保存JSONと共通物性の一致を確認。公開画面の新操作は未確認。 最終対象29成功・全体459中456成功/3スキップ、ビルド成功。 最終配信物26項目成功（28.31秒）。",
       "acceptanceEn": "Real MCP verifies publication, revision/atomicity failures and invalidation of material confirmations while retaining other provenance. Actual local UI verifies required scope, JP/EN and exported/shared material equality. New public UI remains unverified. Final29 related tests passed; full suite456 passed/three skipped of459; build passed. Final26 distribution checks passed in28.31seconds."
+    },
+    {
+      "id": "PRINTTRANSFER1",
+      "title": "LLM向け印刷データの分割読込・書出し",
+      "titleEn": "Chunked print import and export for the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "PRINTAPI1"
+      ],
+      "detail": "6操作で元3MF/G-codeを64KiB以下のチャンク転送しSHA-256・入力版を照合後に一括適用。GUI版1JSONの分割書出しも提供。元50MB/書出100MB・共有保持100MB4枠、既存パーサ制限は維持。55ライブ操作。",
+      "detailEn": "Six operations transfer raw3MF/G-code in chunks up to64KiB, then verify SHA-256 and input revision before applying. Export full GUIversion1JSON in bounded pages.50MB input/100MB export,100MB shared retention/four transfers; parser limits remain.55 live methods.",
+      "acceptance": "全体470中467成功・3スキップ、ビルドと配信物26項目成功。実ローカルブラウザ/MCPで658111bytesを11分割読込し4002経路2層、664735bytesを11分割書出してハッシュ一致。実3MFの分割解析はNode試験。最大容量・ピークヒープ・公開HTTPSは未確認。",
+      "acceptanceEn": "Full suite467 passed/three skipped of470; build and26 distribution checks passed. Actual local browser/MCP uploaded658111bytes in11 chunks, yielding4002segments/two layers, and exported664735bytes in11 verified pages. Real3MF split parsing tested inNode. Maximum sizes, peak heap and public HTTPS remain unverified.",
+      "evidence": "src/print-transfer.js; tests/print-transfer.test.mjs; tests/mcp-print-transfer-protocol.test.mjs; docs/evidence/2026-10-14-print-transfer.json; docs/testing.md"
     }
   ],
   "solvers": [

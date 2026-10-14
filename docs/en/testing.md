@@ -203,3 +203,17 @@ The final contract resets existing evidence for `/material`, `/materialPropertie
 The initial full suite reported 458 tests: 454 passed, three skipped and one failed. The failure was missing Japanese/English reciprocal links in the WASM investigation documents; both document tests passed after link repair. Build passed. The final evidence change was verified by the runs below.
 
 After the final provenance fix, all29 related tests passed; the full suite passed456 of459 with three skips and zero failures at concurrency four in67.31seconds. The final build also passed. All26 local-distribution checks passed against the final build in an isolated28.31-second run.
+
+## 2026-10-14: chunked live print-data transfers
+
+Six connector operations add chunked original G-code/3MF import and version 1 GUI JSON export. Tool counts remain 24 default/26 connected; the connector has 55 methods. Final targets passed 18 core tests (ten transfer and eight print) plus one real MCP protocol test. The full suite passed 467 of 470 tests, with three skips and zero failures, at concurrency four in 70.61 seconds. Build passed; all 26 latest distribution checks passed in 29.82 seconds.
+
+Core tests cover revision/byte/hash/UTF-8 checks, sequential chunks and identical immediate chunk replay, retention, release/expiry and existing atomic import. A real stdio MCP/HTTP protocol test with a simulated browser handles Japanese input exceeding 500,000 characters and exports 4,000 lines across multiple pages. A valid-triangle 3MF in a noncompressed ZIP exceeding 65,536 bytes was also parsed in Node unit tests; this does not establish actual-browser handling of that 3MF.
+
+The local Codex in-app browser (http://127.0.0.1:5174) and real MCP imported 658,111 bytes in 11 chunks, yielding 4,002 segments and two layers. Selecting layerIndex:1 showed Z=0.4; English Layer 2 and Japanese layer 2 retained the same index. The complete 664,735-byte GUI JSON was read in 11 pages, verified against its full hash and released. Saved evidence includes the [machine-readable record](../evidence/2026-10-14-print-transfer.json) and [UI screenshot](../evidence/2026-10-14-print-transfer.jpg).
+
+This evidence does not cover maximum-size 50 MB input/100 MB retention load tests or peak-heap measurement. Public HTTPS connectivity remains unverified and is distinct from local actual-browser confirmation.
+
+The 50,000,000-byte transfer limit does not relax parser limits: G-code remains capped at 25,000,000 characters and 200,000 segments; existing 3MF ZIP/triangle and other limits still apply. Actual-browser evidence at 658,111 bytes is not maximum-capacity verification.
+
+After the full run, the protocol test was strengthened to624,106 characters/1,504,110bytes and passed in isolation. Actual MCP refused inline importPrint at the500,000-character limit without loading data, then accepted the same source through23 chunks. Product code was unchanged by this stronger test.

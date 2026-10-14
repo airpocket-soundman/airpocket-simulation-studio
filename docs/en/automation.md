@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 49 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 55 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -161,7 +161,7 @@ Live replacement JSON requires canonical imported STEP display meshes: each mesh
 
 The shared browser API is `window.printOperations.inspect/import/get/set/export`. Connected MCP requires inspect scope for `printInspect` and `getPrintData`, edit for `importPrint`, and view for `setPrintView`. Unloaded inspection returns `revision:null`. Once loaded, the revision hashes the complete version 1 GUI-export snapshot; compact views include `geometry` or `plate:N` identifiers and layer counts. Layer indices are independent of display language.
 
-`importPrint({expectedRevision,format,filename,text?,base64?})` accepts `format:"gcode"` with text or `format:"3mf"` with base64. Supply null as expectedRevision when unloaded, otherwise the latest revision. Invalid input, stale revisions, busy state and expired commands preserve previous data. The entire live command must fit the 500,000-character JSON limit; chunked large live print inputs are unsupported.
+`importPrint({expectedRevision,format,filename,text?,base64?})` accepts `format:"gcode"` with text or `format:"3mf"` with base64. Supply null as expectedRevision when unloaded, otherwise the latest revision. Invalid input, stale revisions, busy state and expired commands preserve previous data. The entire live command must fit the 500,000-character JSON limit; use the chunked transfer below for large live print inputs.
 
 `getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})` returns bounded `kind:"segments"|"triangles"` pages with at most 200 items. `setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})` changes only preview settings and leaves the document revision unchanged. Retrieve full saved data through the shared export method or saved-file path.
 
@@ -180,3 +180,15 @@ Disconnect cancels only jobs started by that session; GUI jobs continue. Page-ex
 `studioApi.applyCatalogMaterial({id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,allowExperimental:false,applicability})` accepts one object and applies installed catalog reference values to the input. Obtain id and expectedCatalogVersion from `studio_material_catalog`. Supply poissonRatio explicitly and accept the isotropic approximation with `isotropicApproximation:true`. Record applicability to the intended molding process, temperature, direction and other conditions in a nonempty applicability string; the GUI also requires this input. Experimental formulations require explicit `allowExperimental:true` (default false).
 
 For saved-file MCP, use `studio_edit_project` with `operations:[{method:"applyCatalogMaterial",args:[{id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,applicability}]}]`. Connected `edit` supports the same operation among its 18 methods and requires the usual input revision. The snapshot preserves catalog sources, measurement conditions, missing fields and applicability. Application resets existing provenance for `/material`, `/materialProperties` and their child pointers to `unconfirmed`, with `assumption:null` and confirmation removed, even when numerical values are unchanged. Previous source, value, rationale and applicability remain for reconfirmation. Other provenance and analysisIntent remain unchanged; no new confirmed evidence is generated. It inherits existing replacement behavior for nonlinear material presets; inspect the resulting material model and required inputs after applying.
+
+## Chunked live transfer for large print inputs
+
+Inspect-scoped `printTransferExport({expectedRevision})` retains a frozen JSON transfer of the full version 1 GUI export. It returns compact transferId, direction, totalBytes, sha256, maxChunkBytes:65536 and revision metadata. Inspect-scoped `printTransferRead({transferId,offset,length})` reads at most 65,536 bytes per call. Concatenate all bytes, verify SHA-256, then decode UTF-8 JSON. Complete arrays are not included in one oversized reply. Export JSON is limited to 100,000,000 bytes.
+
+Edit-scoped `printTransferImport({expectedRevision,format,filename,totalBytes,sha256})` reserves a transfer for original G-code/3MF bytes, up to 50,000,000 bytes. Use null as expectedRevision when unloaded, otherwise the current revision. Send sequential `printTransferWrite({transferId,offset,data})` calls with base64 chunks of at most 65,536 decoded bytes. Edit-scoped `printTransferCommit({transferId})` verifies total bytes, hash and G-code UTF-8, then uses existing printOperations.import. Commit rechecks revision, busy state and expiry; invalid input preserves previous print data.
+
+Inspect-scoped `printTransferRelease({transferId})` frees retention. All transfers share a 100,000,000-byte budget and four transfer slots. This is a retained-buffer budget, not a peak-heap ceiling covering JSON/parsing/cloning. Disconnect releases transfers owned by that session; page exit loses them. The 500,000-character command limit remains; chunks fit within it. This adds no solver, material physics or device control.
+
+Shared transfer API: `window.printTransfer.beginExport/read/beginImport/write/commit/release`. Write accepts replay of the immediately previous chunk with the same offset and data. Completed or failed imports retain their slots until release; free them when no longer needed. See the [test record](testing.md) for local actual-browser scope. Maximum capacity, peak heap and public HTTPS remain unverified.
+
+Transfer size limits do not relax parser restrictions: G-code retains the 25,000,000-character/200,000-segment caps, and existing 3MF ZIP/triangle and other caps remain in force.

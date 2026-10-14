@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは49操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは55操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -161,7 +161,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ブラウザ共通APIは`window.printOperations.inspect/import/get/set/export`です。接続MCPでは`printInspect`と`getPrintData`がinspect、`importPrint`がedit、`setPrintView`がview権限を要します。未読込のinspectは`revision:null`を返します。読込後の版はGUIのversion 1書出全体のハッシュで、要約には`geometry`、`plate:N`のviewIdと層数を含みます。層番号の添字は表示言語から独立しています。
 
-`importPrint({expectedRevision,format,filename,text?,base64?})`のformatは`gcode`または`3mf`です。前者はtext、後者はbase64を渡します。expectedRevisionは未読込時null、既読込時は直前の版を指定します。不正入力・古い版・処理中・期限切れは既存データを保持して拒否します。ライブ命令全体はJSON 500,000文字以内で、大きな印刷入力の分割転送は未対応です。
+`importPrint({expectedRevision,format,filename,text?,base64?})`のformatは`gcode`または`3mf`です。前者はtext、後者はbase64を渡します。expectedRevisionは未読込時null、既読込時は直前の版を指定します。不正入力・古い版・処理中・期限切れは既存データを保持して拒否します。ライブ命令全体はJSON 500,000文字以内で、大きな印刷入力には下記の分割転送を使います。
 
 `getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})`は`kind:"segments"|"triangles"`の有限ページを返し、limitの上限は200です。`setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})`はプレビューだけを変更し、文書版は変更しません。保存する全データは共通APIのexportまたは保存ファイル経路を使って取得します。
 
@@ -180,3 +180,15 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 `studioApi.applyCatalogMaterial({id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,allowExperimental:false,applicability})`は1つのオブジェクトを受け取り、同梱カタログの参照値を入力へ適用します。`id`と`expectedCatalogVersion`は`studio_material_catalog`で取得した値を使います。`poissonRatio`は呼出側が明示し、`isotropicApproximation:true`で等方近似を明示的に受け入れます。`applicability`には対象の成形・温度・方向などへの適用条件を空でない文字列で記録します。GUIでもこの入力が必須です。実験配合には`allowExperimental:true`の明示が必要で、既定falseです。
 
 保存ファイルMCPでは`studio_edit_project`の`operations:[{method:"applyCatalogMaterial",args:[{id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,applicability}]}]`を使います。接続MCPの`edit`でも同じ18操作の1つとして使用でき、通常の入力版照合を要します。カタログの出典、測定条件、欠測項目、適用条件のスナップショットを保持します。適用時は`/material`・`/materialProperties`とその子Pointerの既存根拠を、数値が同じ場合も`unconfirmed`へ戻し、`assumption:null`としてconfirmationを解除します。旧source・value・rationale・applicabilityは再確認用に保持します。その他の根拠とanalysisIntentは維持し、新しい確認済み根拠は生成しません。既存の非線形材料プリセットを置き換える既存挙動も伴うため、適用後の材料モデルと必要入力を確認してください。
+
+## 大きな印刷入力のライブ分割転送
+
+確認権限の`printTransferExport({expectedRevision})`は、GUIのversion 1書出全体を固定したJSON転送として保持します。応答は`transferId`、`direction`、`totalBytes`、`sha256`、`maxChunkBytes:65536`、`revision`の小さなメタデータです。`printTransferRead({transferId,offset,length})`も確認権限で、lengthは最大65,536バイト。取得した全バイトを結合し、SHA-256を照合してからUTF-8 JSONを読みます。全配列を1回の大きな応答には含めません。書出JSONは100,000,000バイト以下です。
+
+編集権限の`printTransferImport({expectedRevision,format,filename,totalBytes,sha256})`で元のG-code/3MFバイトを取り込む枠を作ります。expectedRevisionは未読込時null、既読込時は現在の版。totalBytesは最大50,000,000バイトです。`printTransferWrite({transferId,offset,data})`へ最大65,536バイトのbase64を先頭から順番に送り、`printTransferCommit({transferId})`で全体のバイト数・ハッシュとG-codeのUTF-8を検査して既存のprintOperations.importへ渡します。確定は編集権限で、版・busy・失効を再確認し、不正な入力では旧データを維持します。
+
+`printTransferRelease({transferId})`は確認権限で保持を解放します。全転送で合計100,000,000バイト・最大4件の保持枠を共有します。この値は転送バッファの予算であり、JSON/パース/複製を含めたピークヒープの上限ではありません。接続解除でその接続の転送を解放し、ページ終了で失われます。500,000文字の命令上限は維持され、各チャンクはその中で扱います。ソルバー・物性・装置制御の機能追加ではありません。
+
+共通転送APIは`window.printTransfer.beginExport/read/beginImport/write/commit/release`です。writeは直前のチャンクと同じoffset・dataの再送を受理します。確定済み・失敗した転送も解放まで保持枠を占有するため、不要時にreleaseしてください。ローカル実ブラウザでの検証範囲は[検証記録](testing.md)を参照。最大容量・ピークヒープ・公開HTTPSは未確認です。
+
+転送上限はパーサの対応範囲を広げません。G-codeは既存の25,000,000文字・200,000区間上限、3MFは既存のZIP・三角形等の上限を引き続き適用します。

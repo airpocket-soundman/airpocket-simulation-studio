@@ -6,7 +6,7 @@
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
-| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（49操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
+| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（55操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities | studio_capabilities | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 静的等方線形構造以外の必須入力契約、メッシュ後検査との統合 |
@@ -25,9 +25,9 @@
 | CAD更新 | cadUpdateApi.preview/apply（入力・置換版照合）、studioApiの既存操作 | studio_preview_cad_update / studio_apply_cad_update、ライブpreviewCadUpdate / applyCadUpdate | 大きなCADのライブ分割転送、更新後の領域再選択と根拠再確認 |
 | 材料カタログ | studioApi.applyCatalogMaterial、適用条件必須のカタログUI | studio_material_catalog、studio_edit_project/接続editのapplyCatalogMaterial | 全材料モデルの適用条件・根拠契約の拡充 |
 | 疲労・破壊評価 | resultAssessmentApi.evaluate/get | studio_assess_result/studio_assessment、接続モードevaluateAssessment/getAssessment | 対応物理範囲の拡張、実画面の検証 |
-| 3MF/G-code | printOperationsのinspect/import/get/set/exportとUI | studio_import_print/studio_inspect_print、接続printInspect/importPrint/getPrintData/setPrintView | 大きなライブ入力の分割転送、積層・インフィル物性との解析連携 |
+| 3MF/G-code | printOperationsのinspect/import/get/set/export、printTransfer分割転送とUI | studio_import_print/studio_inspect_print、接続printInspect/importPrint/getPrintData/setPrintViewとprintTransferの6操作 | 積層・インフィル物性との解析連携 |
 
-専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの49操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
+専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの55操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
 
 P0は実装中。全行の操作細分化、必要入力/有効範囲、単位付き診断、日英操作対応表、画面での確認は残作業。
 
