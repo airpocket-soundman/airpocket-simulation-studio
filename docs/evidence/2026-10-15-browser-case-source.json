@@ -1,0 +1,362 @@
+{
+  "environment": "Actual local IAB/native browser Workers, saved thermal case and stdio MCP/HTTP. Explicit structural properties and roller supports; temperature source applied by saved case ID/revision.",
+  "beforeRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:77c822bc3659a41be9abab39e5244526a93a819374502d1261c653eed84ef3fd",
+    "summary": {
+      "loaded": true,
+      "name": "LLM thermal source bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "thermal": {
+    "schemaVersion": 1,
+    "revision": "sha256:d496403704de6dfbba4a1db3451bbcf8366e867760b4b963a4c54ad26b5edd8f",
+    "summary": {
+      "loaded": true,
+      "name": "LLM thermal source bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    }
+  },
+  "thermalJob": {
+    "schemaVersion": 1,
+    "jobId": "902e0bf0-7a0e-4825-8cff-aff9de9ece80",
+    "inputRevision": "sha256:d496403704de6dfbba4a1db3451bbcf8366e867760b4b963a4c54ad26b5edd8f",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791991250306,
+    "updatedAt": 1791991250833,
+    "lastSequence": 9,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "thermal",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "volumeMm3": 3999.9999999999986,
+        "minVolumeMm3": 5.06098404245161,
+        "minQuality": 0.3632115694761907,
+        "qualityHistogram": [
+          0,
+          2,
+          11,
+          82,
+          123
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 2,
+        "retainedBytes": 6719,
+        "storageLimited": false,
+        "sharedBytes": 6719,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "saved": {
+    "caseId": "50c0bbc4-7af5-4a4f-b029-aed47560e86d",
+    "revision": "sha256:2cdeec38732cd0811ce8f63b9162a3cec615bc3878a5c8457e0aab3ff255528d",
+    "name": "Thermal source 60 C",
+    "kind": "thermal",
+    "metrics": [
+      {
+        "key": "minTemperature",
+        "unit": "°C",
+        "value": 59.99999982868148
+      },
+      {
+        "key": "maxTemperature",
+        "unit": "°C",
+        "value": 60.00000014606398
+      }
+    ],
+    "analysisAssessment": {
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false
+    }
+  },
+  "configured": {
+    "schemaVersion": 1,
+    "revision": "sha256:e73a324065498eb498b63100164fb63d1c9a767cfb132ea15b9ea3b67b3071fb",
+    "summary": {
+      "loaded": true,
+      "name": "LLM thermal source bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 3,
+      "material": "金属"
+    }
+  },
+  "applied": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:e73a324065498eb498b63100164fb63d1c9a767cfb132ea15b9ea3b67b3071fb",
+    "revision": "sha256:9a0f638f4150c347e33952e7b3a03f3278f32a731f253c7415a26a34df1301e9",
+    "summary": {
+      "loaded": true,
+      "name": "LLM thermal source bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 3,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    },
+    "kind": "temperature",
+    "applied": true,
+    "sourceCase": {
+      "caseId": "50c0bbc4-7af5-4a4f-b029-aed47560e86d",
+      "revision": "sha256:2cdeec38732cd0811ce8f63b9162a3cec615bc3878a5c8457e0aab3ff255528d",
+      "name": "Thermal source 60 C",
+      "kind": "thermal"
+    }
+  },
+  "coupledJob": {
+    "schemaVersion": 1,
+    "jobId": "77f22b0b-9a50-4c09-ba19-71e3dd361302",
+    "inputRevision": "sha256:9a0f638f4150c347e33952e7b3a03f3278f32a731f253c7415a26a34df1301e9",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791991256628,
+    "updatedAt": 1791991257162,
+    "lastSequence": 12,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "elastic",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "volumeMm3": 3999.9999999999986,
+        "minVolumeMm3": 5.06098404245161,
+        "minQuality": 0.3632115694761907,
+        "qualityHistogram": [
+          0,
+          2,
+          11,
+          82,
+          123
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 1,
+        "retainedBytes": 5010,
+        "storageLimited": false,
+        "sharedBytes": 11729,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "result": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:24fb9dd3736e1c2c497e6fa1138e9a928451476ca86ef9f275b7fef8969fe346",
+    "kind": "elastic",
+    "fields": [
+      {
+        "id": "displacement",
+        "unit": "mm"
+      },
+      {
+        "id": "stress",
+        "unit": "MPa"
+      }
+    ],
+    "state": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61.00000000000001,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 0,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "frames": [],
+    "modes": []
+  },
+  "measurement": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:24fb9dd3736e1c2c497e6fa1138e9a928451476ca86ef9f275b7fef8969fe346",
+    "kind": "elastic",
+    "display": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null
+    },
+    "point": [
+      5,
+      5,
+      40
+    ],
+    "element": 117,
+    "weights": [
+      0.44755244755244794,
+      0.5524475524475525,
+      1.1102230246251565e-16,
+      0
+    ],
+    "displacementMm": [
+      0.001999999995100101,
+      0.0020000000037492657,
+      0.016000000003499108
+    ],
+    "magnitudeMm": 0.016248076812575972,
+    "vonMisesPa": 0.002700300942522319,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    }
+  },
+  "referenceScenario": {
+    "barBoundsMm": [
+      0,
+      0,
+      0,
+      10,
+      10,
+      40
+    ],
+    "thermalBoundaryTemperatureC": 60,
+    "referenceTemperatureC": 20,
+    "youngModulusPa": 1000000000.0,
+    "poissonRatio": 0,
+    "expansionPerKelvin": 1e-05,
+    "rollerSupports": [
+      {
+        "axis": 0,
+        "positionMm": 0,
+        "direction": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "axis": 1,
+        "positionMm": 0,
+        "direction": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "axis": 2,
+        "positionMm": 0,
+        "direction": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "expectedTipDisplacementMm": [
+      0.002,
+      0.002,
+      0.016
+    ]
+  },
+  "validation": {
+    "runtime": "Node24.11.1",
+    "fullSuite": {
+      "tests": 631,
+      "passed": 628,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 75516.6458
+    },
+    "newTests": 13,
+    "skillValid": true,
+    "knownV8FailureResolved": false,
+    "modalProtocolEvidence": "The separate real MCP test uses validated synthetic saved modal fields; this browser record demonstrates actual thermal-to-structural solves, not modal acoustic numerical accuracy.",
+    "distributionChecks": 26,
+    "distributionSeconds": 27.94,
+    "buildPassed": true
+  }
+}

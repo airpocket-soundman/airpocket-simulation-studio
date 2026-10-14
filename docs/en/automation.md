@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 77 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 79 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -302,3 +302,15 @@ As new inputs, preparation sets study.kind:"fluidDomain" and clears material pro
 Run startJob mesh with the updated input revision and wait for success plus executionSettled. Pass expectedRevision/jobId to shared fluidDomainApi.applyMesh or edit-scoped applyFluidDomainMesh. It validates input revision, canonical input, source fingerprint and mesh, applying a sourceHash-tagged gmsh-surface as display input. Study remains fluidDomain; no fluid properties/analysis type are inferred. Compact domainSelection includes at most100 ports/truncated, wall count and channel metadata. Read the new revision after application.
 
 Internal port IDs0/1/2 are X/Y/Z minimum,3/4/5 maximum. Existing axis-aligned box-face and one seed-connected-region restrictions remain. This adds no general3D flow, arbitrary caps, boundary layers or turbulence. See [external](fluid-domains.md) and [internal](internal-fluid.md) domain contracts.
+
+## Apply saved cases as temperature/vibration sources
+
+Shared window.caseSourceApi.apply({expectedRevision,caseId,caseRevision,kind,modeIndex?,amplitudeMm?,phaseDeg?}) and edit-scoped applyCaseSource check both current input revision and the saved case revision from caseList. Kind is temperature/vibration. Source snapshots and candidates are validated before final synchronous comparison/commit; no implicit case substitution or physics inference occurs.
+
+Temperature requires explicitly configured current study.kind:structural and thermalStress:true, exact saved/current solid identity and contact nodeBodies validation. Vibration requires acoustic/exteriorRadiation:true, no transient/sweep, current fluidDomain.solid matching the saved box solid, and current frequency matching the selected mode. Explicitly supply all three modeIndex/amplitudeMm/phaseDeg values and obey existing amplitude bounds. Conflicting pressure boundaries are refused. Modal shape does not determine physical response amplitude.
+
+window.caseSourceApi.clear({expectedRevision,kind})/connected clearCaseSource remove only the requested source, preserving other physics/numbers/conditions. Existing material evidence continues ordinary value-snapshot checking; no automatic confirmation/promotion occurs. These share existing GUI thermal/modal coupling, adding no solver.
+
+Existing provenance entries for the source and ancestor /study become unconfirmed with assumption:null and confirmation removed, even if field numbers match: a different source cannot inherit old confirmation. Other evidence/analysisIntent remain. Sources store caseReference:{schemaVersion:1,caseId,revision}; the revision content hash supports tracing, but runtime caseId does not guarantee persistent lookup after reload. Nonlegacy required-evidence contracts for thermal/modal coupling remain unsupported and existing limited preflight refusal remains. Successful application does not guarantee quantitative validity.
+
+Temperature sources require nodeBodies for multiple-box solids as well as contact; legacy cases without IDs are refused. Vibration-source boundary conflicts include manual impedance as well as pressure conditions.

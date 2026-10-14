@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T15:14:54.311582Z",
+  "updatedAt": "2026-10-14T15:22:07.322177Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1749,6 +1749,23 @@
       "acceptance": "新8試験を含む全体618件中615成功・3skip（Node24.11.1、74.65秒）。実MCP外部箱/内部管の2meshjobで適用とポート2面・軸1を確認。実ブラウザで176節点494要素・差引き体積7000mm³、入力版と表示を確認。ビルド・配信物26項目27.75秒・SKILL成功。メッシュのみで一般流体ソルバー追加ではない。公開HTTPS・最大規模は未検証、既知Node24/V8停止は未解決。",
       "acceptanceEn": "Full suite:615passed/3skipped of618 including eight new tests on Node24.11.1 (74.65s). Two real MCP mesh jobs verify exterior box and internal tube application, two ports and axis1. Actual browser verifies176nodes/494elements,7000mm3 subtraction volume, input revision and display. Build,26distribution checks27.75s andSKILL pass. Mesh preparation is not a new general fluid solver. Public HTTPS and maximum scale remain unverified; known Node24/V8 failure remains unresolved.",
       "evidence": "src/fluid-domain-operations.js; src/main.js; src/browser-session.js; tests/fluid-domain-operations.test.mjs; tests/browser-fluid-domain-session.test.mjs; tests/mcp-fluid-domain.test.mjs; docs/evidence/2026-10-15-browser-fluid-domain.json; docs/testing.md"
+    },
+    {
+      "id": "CASESOURCEAPI1",
+      "title": "保存ケースの温度場・固有モードを連成源としてLLMから設定する",
+      "titleEn": "Apply saved thermal fields and modal shapes as coupling sources through LLM APIs",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "CASEOPS1",
+        "BROWSERBRIDGE1",
+        "FLUIDDOMAINAPI1"
+      ],
+      "detail": "入力と保存ケースの版を照合し、既存物理設定に温度場/固有モードを適用・解除する共有APIとlive編集2操作を追加。最終同期ケース失効確認、形状・body情報・周波数・振幅を検査し、出典caseReferenceを保存。物理設定は推測しない。",
+      "detailEn": "Add shared APIs and two live edit methods for applying or clearing saved thermal/modal sources with dual input/case revisions, a final synchronous source lease assertion, geometry/body/frequency/amplitude validation and persisted caseReference. Do not infer physical settings.",
+      "acceptance": "実MCPで熱/振動の適用・解除と版/権限/物理条件拒否を確認。実ブラウザで60°C熱場保存→明示した構造条件→連成温度場適用→WASM熱膨張の先端0.016000000003499108mm（参照0.016）を確認。新13試験を含む全体631件中628成功・3skip（Node24.11.1、75.52秒）。ビルド・配信物26項目27.94秒・SKILL成功。固有音源MCPは検証済み合成場であり数値精度の主張ではない。定量根拠契約/公開HTTPS/既知Node24V8停止は未完。",
+      "acceptanceEn": "Real MCP verifies thermal/modal apply and clear plus revision,scope and physical-condition refusal. Actual browser saves a60Cthermal field, applies it to explicitly configured structure and verifies WASM tip expansion0.016000000003499108mm (reference0.016). Full suite:628passed/3skipped of631 including13new tests onNode24.11.1 (75.52s). Build,26distribution checks27.94s andSKILL pass. Modal MCP uses validated synthetic fields and does not establish numerical accuracy. Quantitative provenance contracts,public HTTPS and knownNode24V8 failure remain incomplete.",
+      "evidence": "src/case-source-operations.js; src/case-operations.js; src/main.js; tests/case-source-operations.test.mjs; tests/case-source-reader.test.mjs; tests/browser-case-source-session.test.mjs; tests/mcp-case-source.test.mjs; docs/evidence/2026-10-15-browser-case-source.json; docs/testing.md"
     }
   ],
   "solvers": [

@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは77操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは79操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -302,3 +302,15 @@ knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/seve
 更新された入力版でstartJobのmeshを実行し、成功かつexecutionSettledを確認後、`window.fluidDomainApi.applyMesh({expectedRevision,jobId})`または編集権限の`applyFluidDomainMesh`へ渡します。入力版とcanonical入力、source fingerprint、meshを検証し、sourceHash付きgmsh-surfaceを表示入力へ適用。studyはfluidDomainを維持し、流体物性や解析種別を自動推定しません。応答のdomainSelectionはports最大100件/truncated、壁件数とchannelなどの有界な要約です。反映後は新しい入力版を取得してください。
 
 内部ポート番号は0/1/2がX/Y/Z最小、3/4/5が最大です。軸平行の箱面と単一のseed連結領域という既存制限を維持します。一般3D流体・任意方向の開口蓋・境界層・乱流の追加ではありません。詳細は[外部領域](fluid-domains.md)と[内部領域](internal-fluid.md)を参照。
+
+## 保存ケースを温度・振動の連成源へ設定
+
+共有`window.caseSourceApi.apply({expectedRevision,caseId,caseRevision,kind,modeIndex?,amplitudeMm?,phaseDeg?})`と編集権限の`applyCaseSource`は、現在入力とcaseListで読んだ保存ケースの両版を照合します。kindはtemperature/vibration。保存元を固定して候補を検証し、最終同期照合後にだけ適用します。別ケースへの暗黙の置換や物理条件の推測は行いません。
+
+温度源は現在study.kind:structuralかつthermalStress:trueを明示しておく必要があります。熱ケースのsolidと現在solidは完全一致し、接触メッシュのnodeBodiesも検証します。振動源は現在acoustic・exteriorRadiation:true、非過渡・非sweep、fluidDomain.solidが保存した直方体solidと一致し、現在周波数が選択モードの周波数と一致する必要があります。modeIndex/amplitudeMm/phaseDegの3値を全て明示し、既存振幅制限に従います。音圧境界との競合は拒否します。固有モードから実応答振幅を推定しません。
+
+`window.caseSourceApi.clear({expectedRevision,kind})`と接続`clearCaseSource`は指定したsourceだけを除去し、studyの他の数値・物理設定・条件は維持します。既存の物性根拠は従来の値スナップショット照合のままで、自動確認や昇格を行いません。既存GUIの熱/モード連成を共通化する機能で、新しいソルバーではありません。
+
+sourceとその祖先`/study`の既存根拠entryは、場の数値が同じでも出典が変わるためunconfirmedへ戻し、assumption:null・confirmation除去とします。他の根拠とanalysisIntentは保持します。source内に`caseReference:{schemaVersion:1,caseId,revision}`を保存し、revisionは内容ハッシュで追跡します。caseIdは実行時IDで、再読込後の永続lookupを保証しません。熱/モード連成のnonlegacy必須根拠契約は未対応のため、既存preflightのlimited拒否を維持します。適用成功は定量妥当性の保証ではありません。
+
+温度源は接触だけでなく複数boxesのsolidでもnodeBodiesを必要とし、部品IDのない旧ケースを拒否します。振動源の境界競合には手動音圧だけでなくインピーダンス条件も含みます。

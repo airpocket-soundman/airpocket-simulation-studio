@@ -51,6 +51,16 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
  }
  return Object.freeze({
   list:()=>exclusive(async()=>{const state=await snapshot();return {schemaVersion:1,archiveRevision:state.archiveRevision,cases:state.cases};}),
+  // Host-only source lease. The assertion never crosses the browser/MCP wire.
+  readSource:(reference,{guard=()=>true}={})=>exclusive(async()=>{
+   guardCommand(guard);
+   const request=JSON.parse(canonicalJson(reference));
+   if(!request||typeof request!=='object'||Array.isArray(request)||Object.keys(request).some(key=>!['caseId','expectedRevision'].includes(key)))throw error('CASE_REFERENCE_INVALID','Supply only caseId and expectedRevision');
+   const state=await snapshot();guardCommand(guard);const index=resolve(state,request);
+   const output=JSON.parse(JSON.stringify(prepareCaseView(state.archive.cases[index])));
+   const assertCurrent=()=>{guardCommand(guard);unchanged(state);if(signature!==state.signature||identities[index]!==state.ids[index])throw error('CASE_REVISION_CONFLICT','Case identity changed; list cases again');};
+   assertCurrent();return {caseId:state.ids[index],revision:state.cases[index].revision,name:state.cases[index].name,output,assertCurrent};
+  }),
   exportArchive:()=>exclusive(async()=>{const state=await snapshot();return {schemaVersion:1,archiveRevision:state.archiveRevision,archive:state.archive};}),
   importArchive:({archive,expectedArchiveRevision}={}, {guard=()=>true}={})=>exclusive(async()=>{
    guardCommand(guard);available();

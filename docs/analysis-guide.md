@@ -111,3 +111,5 @@ API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', 
 接触界面の座標をAPIで測定する場合は analysisApi.probe(point,{bodyIndex:0}) のように部品を指定します。複数の部品に属する点で部品指定がない場合は、曖昧な値を返さず拒否します。画面では選択した面の部品を追跡し、測定に部品番号を表示します。
 
 [内部領域のCAD抽出と端面ポート](internal-fluid.md)。箱のX/Y/Z平面で開口を閉じ、指定点を含むCAD体積を取り出せます。一般3D流体の計算と任意方向の開口閉鎖は未対応です。
+
+保存熱ケースを熱応力源へ使うAPIはwindow.caseSourceApi.apply（接続applyCaseSource、kind:temperature）。現在の構造・thermalStress設定とsolid一致を先に確認し、入力版とケース版を指定する。clearはsourceだけを除去し、他の設定を維持する。[契約](automation.md)参照。

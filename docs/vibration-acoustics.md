@@ -21,3 +21,7 @@
 共通APIの `study.vibrationSource` に `name`、`modeIndex`（0から）、`mesh:{nodes,tetrahedra}`（mm）、`bounds:[x,y,z,dx,dy,dz]`（mm）、`displacement`（最大1 mmに正規化した全体座標のモード）、`frequencyHz`、`amplitudeMm`、`phaseDeg` を保存。`study.kind:'acoustic'`、`exteriorRadiation:true`、`frequency` は源と同じにします。結果の `coupling` に転送面数・面積・最大法線速度・振幅・位相、`velocityInputPowerW` に供給パワーを保存します。
 
 自動テストは管内平面波の音圧・位相、反対面の法線と正味流量、位相180°での符号反転、JS/WASM一致、供給／放射パワー、欠損・変更形状拒否、実際に計算した構造モードからのWorker連成・保存復元を確認します。参照: [COMSOLのAcoustic–Structure Interactionモデル](https://doc.comsol.com/6.4/doc/com.comsol.help.models.sme.acoustic_structure/acoustic_structure.html)。本アプリでは記載された連成のうち構造→音の一方向だけを実装しています。
+
+## API/MCPの明示設定経路
+
+window.caseSourceApi.apply/接続applyCaseSourceは保存ケースの版を照合して振動源を設定します。現在の外部音響領域と周波数は先に明示設定し、modeIndex・amplitudeMm・phaseDegを全指定してください。GUIの一括作成と異なり領域や周波数を推測しません。[操作契約](automation.md)に対象形状・競合条件とclearの範囲を示します。

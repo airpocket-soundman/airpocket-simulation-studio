@@ -21,3 +21,7 @@ Structural source limits: 2,000 nodes and 8,000 tetrahedra, one unchanged box so
 Save `study.vibrationSource` with `name`, zero-based `modeIndex`, `mesh:{nodes,tetrahedra}` (mm), `bounds:[x,y,z,dx,dy,dz]` (mm), global `displacement` normalized to maximum 1 mm, `frequencyHz`, `amplitudeMm` and `phaseDeg`. Use `study.kind:'acoustic'`, `exteriorRadiation:true`, and matching `frequency`. Result `coupling` retains face count/area, maximum normal velocity, amplitude and phase; `velocityInputPowerW` retains source power.
 
 Tests cover matched-plane-wave pressure/phase, opposing normals and net flux, 180° phase sign reversal, JS/WASM agreement, source/radiated power, missing/changed geometry rejection, and a computed structural mode through the real Worker/archive path. Reference: [COMSOL Acoustic–Structure Interaction model](https://doc.comsol.com/6.4/doc/com.comsol.help.models.sme.acoustic_structure/acoustic_structure.html). This app currently implements only the structure-to-sound direction.
+
+## Explicit API/MCP configuration
+
+window.caseSourceApi.apply/connected applyCaseSource check the saved-case revision before setting vibration source. Explicitly configure the current exterior acoustic domain/frequency first and provide modeIndex/amplitudeMm/phaseDeg. Unlike GUI all-in-one setup, this route infers neither domain nor frequency. See the [operation contract](automation.md) for shape/conflict requirements and clear scope.
