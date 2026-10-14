@@ -52,3 +52,5 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 非legacyの必須入力契約は静的等方・等方固有振動・静的直交異方構造と熱/音響/限定流体を対象とします。固有振動は明示した均一温度で弾性温度表を補間できます。モード数・反復上限は明示必須の数値設定で、物理根拠は要求しません。材料・境界・適用条件の根拠は[契約](automation.md)を参照。legacy挙動とcompletePreflight:falseは維持します。
 
 温度評価・熱応力・小ひずみJ2・圧縮性Neo-Hookeanも非legacy根拠契約の対象です。温度sourceはcaseReferenceの有無によらずmesh/temperatureの値根拠が必要で、元結果の暫定状態が伝播します。荷重履歴と数値設定、対応CPU制限、場snapshotのサイズと真正性の限界は[契約](automation.md)を参照してください。
+
+実行失敗はWorker/共有ホスト/GUIラッパー/ジョブ/MCPでfailure schema1（最大16,384 UTF-8バイト）を保持します。型付き拘束・境界診断と汎用stage fallbackを区別します。job.error.failure、executionError.failure、直接MCP structuredContent.error.failure、任意のdiagnostic eventに対応しますが、到着や原因修復・物理精度は保証しません。従来message/JOB_* codeを維持。profile13/12・ツール27/29・ライブ80操作は変更しません。[仕様](automation.md)を参照してください。

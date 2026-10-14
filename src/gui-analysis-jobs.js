@@ -1,3 +1,4 @@
+import {restoreAnalysisError} from './analysis-failure.js';
 import {getProjectRevision,canonicalJson} from './project-revision.js';
 const terminal=new Set(['succeeded','failed','cancelled','timed_out']);
 // GUI presentation remains the caller's responsibility. This adapter registers the same
@@ -14,7 +15,7 @@ export function createGuiAnalysisJobs({analysis,getProject,onJob=()=>{}}={}){
    const snapshot=structuredClone(getProject()),settings=structuredClone(options),serialized=canonicalJson(snapshot),inputRevision=await getProjectRevision(snapshot);
    if(request.cancelled)throw Error('Calculation cancelled');if(canonicalJson(getProject())!==serialized)throw Error('Inputs changed before calculation; run again');
    prune();const job=analysis.startJob({operation,options:settings,includeFields,inputRevision,origin:'gui'});request.jobId=job.jobId;owned.push(job.jobId);let previous=-1;
-   for(;;){const state=analysis.getJob(job.jobId);if(state.lastSequence!==previous){notify(state);previous=state.lastSequence;}if(terminal.has(state.state)&&state.executionSettled===true){if(state.state!=='succeeded')throw Error(state.error?.message??'Calculation '+state.state);if(canonicalJson(getProject())!==serialized)throw Error('Inputs changed during calculation; run again');return analysis.getJobResult(job.jobId);}await new Promise(resolve=>setTimeout(resolve,10));}
+   for(;;){const state=analysis.getJob(job.jobId);if(state.lastSequence!==previous){notify(state);previous=state.lastSequence;}if(terminal.has(state.state)&&state.executionSettled===true){if(state.state!=='succeeded')throw restoreAnalysisError(state.error?.message??'Calculation '+state.state,state.error?.failure);if(canonicalJson(getProject())!==serialized)throw Error('Inputs changed during calculation; run again');return analysis.getJobResult(job.jobId);}await new Promise(resolve=>setTimeout(resolve,10));}
   }catch(error){if(request.jobId){try{const state=analysis.getJob(request.jobId);if(!terminal.has(state.state))analysis.cancelJob(request.jobId);}catch{/* The host may already have released the job. */}}throw error;
   }finally{if(active===request)active=null;}
  },

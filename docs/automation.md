@@ -430,3 +430,13 @@ quantitative/exploratoryの`temperature-dependent-isotropic-structure`は、静�
 両非線形契約は全境界/局所座標/選択定義、明示した重力意図、必要時の密度・加速度、存在する材料依存/温度適用範囲と評価温度を根拠対象にします。CPU pcg/pcg-strict/wasm-pcgのみで、adaptive・modal・熱応力・直交異方性・弾性温度表・速度依存・疲労/破壊評価は対象外です。異なるruntime物理値やsolver直指定のloadSteps/loadFractions/境界等を拒否し、保存入力を編集する経路を使います。J2の主ひずみ絶対値≤0.02、Neo-Hookeanの正Jacobian、拘束rank・収束・メッシュ依存性・物理精度は後検証です。
 
 これらの追加はlegacyや保存assessment形式を変更しません。quantitativeは確認済み根拠、exploratoryは明示値と仮定・適用理由を必要とし、暫定状態を維持します。`completePreflight:false`は根拠の真偽・適用性や数値/物理精度が保証されないことを引き続き示します。
+
+## 実行失敗の構造化診断
+
+Workerが捕捉した実行失敗には、従来のmessageを維持して`failure:{schemaVersion:1,code,stage,message,diagnostics}`を追加します。各診断はcode/severity/stage/target/message/evidence/suggestions/requiresUserIntentを持ちます。failure全体は最大16,384 UTF-8バイトで、message・根拠・提案・診断数にも上限があります。stack/causeや任意Errorオブジェクトは転送せず、無効な受信metadataは破棄して従来messageを残します。
+
+拘束不足・競合や境界転送の一部はcoreで付与した型付きcode・対象Pointer・有界根拠を返します。その他はpreparation/mesh/boundary-transfer/constraints/temperature-transfer/material-evaluation/solve/postprocess/unknownのstageに応じた汎用codeです。stage fallbackは原因の特定や修正の証明ではありません。suggestionsは調査案であり、自動で支持を加える・荷重面を変える・物性を推測する権限ではありません。
+
+非同期ジョブは既存の`error.code`（JOB_FAILED/JOB_CANCELLED/JOB_TIMEOUT）とmessageを維持し、取得できた診断を`error.failure`へ保持します。中止・timeout後の実行拒否は`executionError.failure`へ保持し、既存のJOB_EXECUTION_REJECTED_AFTER_TERMINALを変えません。cleanupのAggregateErrorでは取得できる最初のprimary診断を保持し、cleanupをソルバー原因へ置き換えません。直接MCP失敗は`isError:true`と従来textに加えて`structuredContent.error.failure`を返します。GUIラッパーもmetadataを保持しますが、すべての失敗が型付き診断を持つわけではありません。
+
+観測要求時は捕捉Worker失敗を`stage:"diagnostic"`、failure、converged:false、provisional:trueのeventで終端error前に通知します。ただし中止・通信断・callback例外・retention等で取得は保証されません。profile宣言だけからeventの到着を断定せず、job状態と残る診断を確認してください。失敗した解析は最終解析JSONを保存しませんが、既に生成したメッシュや中間成果物は残り得ます。診断対応は根本原因の修正完了・数値収束・物理精度の証明ではありません。13ブラウザ/12 Node profile、27通常/29接続MCPツール、ライブ80操作は変更しません。

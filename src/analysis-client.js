@@ -1,3 +1,4 @@
+import {restoreAnalysisError,getAnalysisFailure} from './analysis-failure.js';
 import {requireAnalysisPreflight} from './analysis-preflight.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {createAnalysisJobs} from './analysis-jobs.js';
@@ -22,7 +23,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  if(!jobId)job.timer=setTimeout(()=>finish(job,Error(`Calculation exceeded ${timeoutMs/1000} seconds`)),timeoutMs);
  job.abort=()=>finish(job,Error('Calculation cancelled'));signal?.addEventListener('abort',job.abort,{once:true});
  worker.onerror=e=>finish(job,Error(e.message||'Worker failed'));
- worker.onmessage=({data})=>{if(active!==job||job.finishing)return;try{if(data.event){onEvent?.(data.event);return;}if(data.progress){onProgress(data.progress);onEvent?.({stage:'progress',message:data.progress,provisional:true});return;}finish(job,data.error?Error(data.error):null,data.result);}catch(error){finish(job,error);}};
+ worker.onmessage=({data})=>{if(active!==job||job.finishing)return;try{if(data.event){if(data.event.stage==='diagnostic'){const failure=getAnalysisFailure({analysisFailure:data.event.failure});if(failure)onEvent?.({stage:'diagnostic',failure,converged:false,provisional:true});}else onEvent?.(data.event);return;}if(data.progress){onProgress(data.progress);onEvent?.({stage:'progress',message:data.progress,provisional:true});return;}finish(job,data.error?restoreAnalysisError(data.error,data.failure):null,data.result);}catch(error){finish(job,error);}};
  if(signal?.aborted){job.abort();return;}
  try{worker.postMessage({operation,project,source:project.sourceModel,options:structuredClone(job.options),base:baseUrl(),observe:!!onEvent,observeFields});}catch(e){finish(job,e);}
  });

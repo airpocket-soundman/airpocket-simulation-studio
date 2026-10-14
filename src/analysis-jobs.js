@@ -1,7 +1,9 @@
+import {getAnalysisFailure} from './analysis-failure.js';
 import {canonicalJson} from './project-revision.js';
 // Runtime-independent lifecycle. Hosts must settle execute only after their cleanup.
 // executionSettled/resourceState report promise settlement, not independent proof
 // that an operating-system thread or native allocation has been released.
+const failureMetadata=error=>{const failure=getAnalysisFailure(error);return failure?{failure}:{};};
 const terminal=new Set(['succeeded','failed','cancelled','timed_out']);
 export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(),now=()=>Date.now(),maxJobs=32,maxEvents=256,timeoutMs=120000}={}){
  if(typeof execute!=='function'||!Number.isInteger(maxJobs)||maxJobs<1||!Number.isInteger(maxEvents)||maxEvents<2||!Number.isFinite(timeoutMs)||timeoutMs<=0)throw Error('Invalid job runtime');
@@ -13,7 +15,7 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
   job.events.push(event);if(job.events.length>maxEvents)job.events.shift();return event;
  }
  function view(job){return {schemaVersion:1,jobId:job.id,inputRevision:job.inputRevision,state:job.state,executionSettled:job.executionSettled,resourceState:job.executionSettled?'settled':'pending',releaseAllowed:terminal.has(job.state)&&job.executionSettled,operation:job.operation,origin:job.origin,startedAt:job.startedAt,updatedAt:job.updatedAt,lastSequence:job.sequence,firstAvailableSequence:job.events[0]?.sequence??0,...(job.result!==undefined?{result:copy(job.result)}:{}),...(job.error?{error:copy(job.error)}:{}),...(job.executionError?{executionError:copy(job.executionError)}:{})};}
- function end(job,state,error){if(terminal.has(job.state))return;job.state=state;job.updatedAt=now();clearTimeout(job.timer);if(error)job.error={code:state==='timed_out'?'JOB_TIMEOUT':state==='cancelled'?'JOB_CANCELLED':'JOB_FAILED',message:error?.message??String(error)};emit(job,'state',{state,...(job.error?{error:job.error}:{})});}
+ function end(job,state,error){if(terminal.has(job.state))return;job.state=state;job.updatedAt=now();clearTimeout(job.timer);if(error)job.error={code:state==='timed_out'?'JOB_TIMEOUT':state==='cancelled'?'JOB_CANCELLED':'JOB_FAILED',message:error?.message??String(error),...failureMetadata(error)};emit(job,'state',{state,...(job.error?{error:job.error}:{})});}
  function start({project,options={},operation='elastic',inputRevision,requestId,context={}}={}){
   if(context.origin!==undefined&&!['gui','api'].includes(context.origin))throw Error('Invalid job origin');
   if(!project||typeof project!=='object'||!['mesh','elastic'].includes(operation)||typeof inputRevision!=='string'||!inputRevision||requestId!==undefined&&(typeof requestId!=='string'||!requestId||requestId.length>200))throw Error('Invalid job input');
@@ -37,7 +39,7 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
     onEvent:event=>{if(job.state==='running'){job.updatedAt=now();emit(job,'progress',event);}},
     beginCommit:()=>{if(job.state!=='running')throw Error('Job is no longer running');job.state='saving';job.updatedAt=now();clearTimeout(job.timer);emit(job,'state',{state:'saving'});}
    });
-  }).then(result=>{if(job.state==='running'||job.state==='saving'){job.result=copy(result);end(job,'succeeded');}}).catch(error=>{if(!terminal.has(job.state))end(job,'failed',error);else if(job.state==='cancelled'||job.state==='timed_out'){job.executionError={code:'JOB_EXECUTION_REJECTED_AFTER_TERMINAL',message:error?.message??String(error),...(typeof error?.code==='string'?{sourceCode:error.code}:{})};job.updatedAt=now();emit(job,'execution-error',{executionError:job.executionError});}}).finally(()=>{job.executionSettled=true;job.updatedAt=now();emit(job,'resource-state',{state:job.state});});
+  }).then(result=>{if(job.state==='running'||job.state==='saving'){job.result=copy(result);end(job,'succeeded');}}).catch(error=>{if(!terminal.has(job.state))end(job,'failed',error);else if(job.state==='cancelled'||job.state==='timed_out'){job.executionError={code:'JOB_EXECUTION_REJECTED_AFTER_TERMINAL',message:error?.message??String(error),...(typeof error?.code==='string'?{sourceCode:error.code}:{}),...failureMetadata(error)};job.updatedAt=now();emit(job,'execution-error',{executionError:job.executionError});}}).finally(()=>{job.executionSettled=true;job.updatedAt=now();emit(job,'resource-state',{state:job.state});});
   return view(job);
  }
  return Object.freeze({

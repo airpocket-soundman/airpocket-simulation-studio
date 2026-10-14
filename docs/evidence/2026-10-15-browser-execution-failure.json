@@ -1,0 +1,1761 @@
+{
+  "environment": "Actual GUI solve button and native browser Worker/WASM,observed by live stdio MCP/HTTP;synthetic exploratory inputs,not measured calibration",
+  "setup": {
+    "p": {
+      "version": 1,
+      "name": "Imported model",
+      "material": "金属",
+      "materialProperties": {
+        "youngModulus": 1000000000,
+        "poissonRatio": 0
+      },
+      "study": {
+        "kind": "structural",
+        "gravityEnabled": false,
+        "materialTemperature": 20,
+        "thermalStress": false,
+        "modalAnalysis": false
+      },
+      "sourceModel": {
+        "kind": "box",
+        "bounds": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          40
+        ]
+      },
+      "meshes": [
+        {
+          "positions": [
+            10,
+            10,
+            40,
+            10,
+            0,
+            40,
+            10,
+            10,
+            0,
+            10,
+            0,
+            40,
+            10,
+            0,
+            0,
+            10,
+            10,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            40,
+            0,
+            0,
+            0,
+            0,
+            0,
+            40,
+            0,
+            10,
+            40,
+            0,
+            10,
+            0,
+            0,
+            10,
+            40,
+            10,
+            10,
+            0,
+            0,
+            10,
+            40,
+            10,
+            10,
+            40,
+            10,
+            10,
+            0,
+            0,
+            0,
+            40,
+            0,
+            0,
+            0,
+            10,
+            0,
+            40,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            10,
+            0,
+            40,
+            0,
+            10,
+            40,
+            0,
+            0,
+            40,
+            10,
+            10,
+            40,
+            0,
+            0,
+            40,
+            10,
+            0,
+            40,
+            10,
+            10,
+            40,
+            10,
+            10,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10,
+            0,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            10,
+            0
+          ],
+          "faceIds": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            5,
+            5
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "type": "displacement",
+          "value": 0,
+          "direction": [
+            0,
+            0,
+            1
+          ],
+          "regions": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ]
+            }
+          ]
+        }
+      ],
+      "selection": [
+        []
+      ],
+      "analysisIntent": {
+        "mode": "exploratory"
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "structural",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/study/gravityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/materialProperties/youngModulus",
+            "value": 1000000000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/materialProperties/poissonRatio",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "displacement",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/conditions/0/direction",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit synthetic physical reference",
+            "applicability": "Existing limited CPU model,not measured calibration",
+            "status": "unconfirmed",
+            "assumption": "Synthetic unverified reference assumption"
+          }
+        ]
+      }
+    },
+    "documented": {
+      "schemaVersion": 1,
+      "revision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+      "summary": {
+        "loaded": true,
+        "name": "Intentional underconstraint reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 1,
+        "material": "金属"
+      }
+    },
+    "preflight": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "selectedObservation": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "supported": true,
+        "profileId": "elastic-cpu",
+        "profile": {
+          "id": "elastic-cpu",
+          "models": [
+            "linear-elastic",
+            "orthotropic"
+          ],
+          "methods": [
+            "pcg",
+            "pcg-strict",
+            "wasm-pcg"
+          ],
+          "events": [
+            {
+              "stage": "preparation",
+              "cadence": "after module initialization",
+              "metrics": []
+            },
+            {
+              "stage": "mesh",
+              "cadence": "after each generated mesh",
+              "metrics": [
+                {
+                  "name": "nodeCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "elementCount",
+                  "unit": "count"
+                },
+                {
+                  "name": "volumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minVolumeMm3",
+                  "unit": "mm^3"
+                },
+                {
+                  "name": "minQuality",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "qualityHistogram",
+                  "unit": "count"
+                }
+              ]
+            },
+            {
+              "stage": "progress",
+              "cadence": "worker text progress converted by the client",
+              "metrics": []
+            },
+            {
+              "stage": "diagnostic",
+              "when": "execution-failure",
+              "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+              "metrics": [],
+              "failureSchemaVersion": 1
+            },
+            {
+              "stage": "iteration",
+              "solver": "pcg",
+              "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+              "metrics": [
+                {
+                  "name": "residual",
+                  "unit": "dimensionless"
+                },
+                {
+                  "name": "tolerance",
+                  "unit": "dimensionless"
+                }
+              ]
+            }
+          ],
+          "textProgress": true,
+          "fields": [],
+          "limitations": [
+            "Declaration of implemented observation paths only; not execution permission or physical validation",
+            "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+          ]
+        },
+        "reasons": [],
+        "adaptive": {
+          "enabled": false,
+          "structuredRoundEvents": false,
+          "meshPerRound": false,
+          "textProgressOnly": false
+        },
+        "fieldRetention": {
+          "requested": false,
+          "available": false,
+          "scalarFieldsSupported": false,
+          "vectorFieldsSupported": false,
+          "meshSupported": true,
+          "meshAvailable": false,
+          "maxBytes": 64000000,
+          "eventRetention": 256,
+          "availabilityIsGuarantee": false
+        },
+        "declarationOnly": true,
+        "physicalAccuracyVerified": false
+      },
+      "mode": "exploratory",
+      "allowed": true,
+      "provisional": true,
+      "completePreflight": false,
+      "requiredInputContract": "temperature-dependent-isotropic-structure",
+      "requiredPointers": [
+        "/study/kind",
+        "/study/gravityEnabled",
+        "/study/thermalStress",
+        "/materialProperties/youngModulus",
+        "/materialProperties/poissonRatio",
+        "/study/materialTemperature",
+        "/conditions/0/type",
+        "/conditions/0/value",
+        "/conditions/0/direction",
+        "/conditions/0/regions"
+      ],
+      "units": {
+        "geometry": "mm",
+        "youngModulus": "Pa",
+        "force": "N",
+        "temperature": "degC",
+        "velocity": "m/s",
+        "pressure": "Pa",
+        "displacement": "mm",
+        "density": "kg/m3",
+        "gravity": "m/s2",
+        "poissonRatio": "1",
+        "expansion": "1/K",
+        "referenceTemperature": "degC",
+        "materialTemperature": "degC",
+        "temperatureMin": "degC",
+        "temperatureMax": "degC"
+      },
+      "diagnostics": [],
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "inputProvenance": {
+      "schemaVersion": 1,
+      "entries": [
+        {
+          "pointer": "/study/kind",
+          "value": "structural",
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/study/gravityEnabled",
+          "value": false,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/study/thermalStress",
+          "value": false,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/materialProperties/youngModulus",
+          "value": 1000000000,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/materialProperties/poissonRatio",
+          "value": 0,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/study/materialTemperature",
+          "value": 20,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/conditions/0/type",
+          "value": "displacement",
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/conditions/0/value",
+          "value": 0,
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/conditions/0/direction",
+          "value": [
+            0,
+            0,
+            1
+          ],
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        },
+        {
+          "pointer": "/conditions/0/regions",
+          "value": [
+            {
+              "mesh": 0,
+              "triangles": [
+                10,
+                11
+              ]
+            }
+          ],
+          "source": {
+            "kind": "agent-proposal"
+          },
+          "rationale": "Intentional negative reference with only axial support",
+          "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+          "status": "unconfirmed",
+          "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+        }
+      ]
+    }
+  },
+  "failed": {
+    "state": {
+      "schemaVersion": 1,
+      "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+      "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+      "state": "failed",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "gui",
+      "startedAt": 1792015032630,
+      "updatedAt": 1792015033103,
+      "lastSequence": 9,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_FAILED",
+        "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+        "failure": {
+          "schemaVersion": 1,
+          "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+          "stage": "constraints",
+          "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+          "diagnostics": [
+            {
+              "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+              "severity": "error",
+              "stage": "constraints",
+              "target": "/conditions",
+              "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+              "evidence": {
+                "componentIndex": 0,
+                "nodeCount": 94,
+                "rank": 3,
+                "requiredRank": 6
+              },
+              "suggestions": [
+                "Review the intended supports and coordinate directions; preserve the physical constraints rather than adding artificial restraints"
+              ],
+              "requiresUserIntent": true
+            }
+          ]
+        }
+      }
+    },
+    "events": {
+      "schemaVersion": 1,
+      "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+      "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+      "state": "failed",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "gui",
+      "startedAt": 1792015032630,
+      "updatedAt": 1792015033103,
+      "lastSequence": 9,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_FAILED",
+        "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+        "failure": {
+          "schemaVersion": 1,
+          "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+          "stage": "constraints",
+          "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+          "diagnostics": [
+            {
+              "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+              "severity": "error",
+              "stage": "constraints",
+              "target": "/conditions",
+              "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+              "evidence": {
+                "componentIndex": 0,
+                "nodeCount": 94,
+                "rank": 3,
+                "requiredRank": 6
+              },
+              "suggestions": [
+                "Review the intended supports and coordinate directions; preserve the physical constraints rather than adding artificial restraints"
+              ],
+              "requiresUserIntent": true
+            }
+          ]
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 2,
+          "elapsedMs": 149,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 3,
+          "elapsedMs": 152,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0001",
+            "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+            "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+            "bytes": 5073,
+            "sha256": "b8def5e0864ebffb4d2f5a671561bf526c82829b5b4ca22467487ee3252a24dd",
+            "kind": "mesh",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "meshAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 4,
+          "elapsedMs": 465,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 5,
+          "elapsedMs": 469,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving linear elasticity…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 6,
+          "elapsedMs": 472,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "diagnostic",
+          "failure": {
+            "schemaVersion": 1,
+            "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+            "stage": "constraints",
+            "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+            "diagnostics": [
+              {
+                "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+                "severity": "error",
+                "stage": "constraints",
+                "target": "/conditions",
+                "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+                "evidence": {
+                  "componentIndex": 0,
+                  "nodeCount": 94,
+                  "rank": 3,
+                  "requiredRank": 6
+                },
+                "suggestions": [
+                  "Review the intended supports and coordinate directions; preserve the physical constraints rather than adding artificial restraints"
+                ],
+                "requiresUserIntent": true
+              }
+            ]
+          },
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 7,
+          "elapsedMs": 473,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "failed",
+          "error": {
+            "code": "JOB_FAILED",
+            "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+            "failure": {
+              "schemaVersion": 1,
+              "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+              "stage": "constraints",
+              "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+              "diagnostics": [
+                {
+                  "code": "ANALYSIS_CONSTRAINT_RIGID_BODY_MODE",
+                  "severity": "error",
+                  "stage": "constraints",
+                  "target": "/conditions",
+                  "message": "Insufficient constraints: rigid motion remains on a disconnected solid (collinear or directional supports)",
+                  "evidence": {
+                    "componentIndex": 0,
+                    "nodeCount": 94,
+                    "rank": 3,
+                    "requiredRank": 6
+                  },
+                  "suggestions": [
+                    "Review the intended supports and coordinate directions; preserve the physical constraints rather than adding artificial restraints"
+                  ],
+                  "requiresUserIntent": true
+                }
+              ]
+            }
+          },
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 8,
+          "elapsedMs": 473,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "failed",
+          "schemaVersion": 1,
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "sequence": 9,
+          "elapsedMs": 473,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "truncated": false,
+      "nextSequence": 9,
+      "hasMore": false
+    },
+    "catalog": {
+      "schemaVersion": 1,
+      "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+      "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+      "provisional": true,
+      "artifacts": [
+        {
+          "artifactId": "0001",
+          "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+          "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+          "bytes": 5073,
+          "sha256": "b8def5e0864ebffb4d2f5a671561bf526c82829b5b4ca22467487ee3252a24dd",
+          "kind": "mesh",
+          "provisional": true,
+          "storage": "browser-memory"
+        }
+      ],
+      "total": 1,
+      "nextOffset": null,
+      "jobState": "failed"
+    },
+    "artifact": {
+      "schemaVersion": 1,
+      "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+      "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+      "artifact": {
+        "artifactId": "0001",
+        "jobId": "f9a76d87-ad38-4cb2-ba82-2f401c0b6254",
+        "inputRevision": "sha256:636f17d1e02bab9db60019e7481202fe2349376120519cd7afd3e9c047ab875f",
+        "bytes": 5073,
+        "sha256": "b8def5e0864ebffb4d2f5a671561bf526c82829b5b4ca22467487ee3252a24dd",
+        "kind": "mesh",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "boundsMm": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          40
+        ],
+        "bodyIdentifiersAvailable": false,
+        "bodyCount": null
+      },
+      "provisional": true,
+      "page": {
+        "offset": 0,
+        "count": 1,
+        "total": 94,
+        "nextOffset": 1,
+        "hasMore": true,
+        "nodesMm": [
+          [
+            0,
+            0,
+            40
+          ]
+        ]
+      }
+    }
+  },
+  "repaired": {
+    "configured": {
+      "p": {
+        "version": 1,
+        "name": "Imported model",
+        "material": "金属",
+        "materialProperties": {
+          "youngModulus": 1000000000,
+          "poissonRatio": 0
+        },
+        "study": {
+          "kind": "structural",
+          "gravityEnabled": false,
+          "materialTemperature": 20,
+          "thermalStress": false,
+          "modalAnalysis": false
+        },
+        "sourceModel": {
+          "kind": "box",
+          "bounds": [
+            0,
+            0,
+            0,
+            10,
+            10,
+            40
+          ]
+        },
+        "meshes": [
+          {
+            "positions": [
+              10,
+              10,
+              40,
+              10,
+              0,
+              40,
+              10,
+              10,
+              0,
+              10,
+              0,
+              40,
+              10,
+              0,
+              0,
+              10,
+              10,
+              0,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10,
+              40,
+              0,
+              0,
+              0,
+              0,
+              0,
+              40,
+              0,
+              10,
+              40,
+              0,
+              10,
+              0,
+              0,
+              10,
+              40,
+              10,
+              10,
+              0,
+              0,
+              10,
+              40,
+              10,
+              10,
+              40,
+              10,
+              10,
+              0,
+              0,
+              0,
+              40,
+              0,
+              0,
+              0,
+              10,
+              0,
+              40,
+              0,
+              0,
+              0,
+              10,
+              0,
+              0,
+              10,
+              0,
+              40,
+              0,
+              10,
+              40,
+              0,
+              0,
+              40,
+              10,
+              10,
+              40,
+              0,
+              0,
+              40,
+              10,
+              0,
+              40,
+              10,
+              10,
+              40,
+              10,
+              10,
+              0,
+              10,
+              0,
+              0,
+              0,
+              10,
+              0,
+              10,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10,
+              0
+            ],
+            "faceIds": [
+              0,
+              0,
+              1,
+              1,
+              2,
+              2,
+              3,
+              3,
+              4,
+              4,
+              5,
+              5
+            ]
+          }
+        ],
+        "conditions": [
+          {
+            "type": "fixed",
+            "value": 0,
+            "direction": [
+              1,
+              0,
+              0
+            ],
+            "regions": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ]
+          },
+          {
+            "type": "force",
+            "value": 100,
+            "direction": [
+              0,
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  8,
+                  9
+                ]
+              }
+            ]
+          }
+        ],
+        "selection": [
+          []
+        ],
+        "analysisIntent": {
+          "mode": "exploratory"
+        },
+        "inputProvenance": {
+          "schemaVersion": 1,
+          "entries": [
+            {
+              "pointer": "/study/kind",
+              "value": "structural",
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/study/gravityEnabled",
+              "value": false,
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/materialProperties/youngModulus",
+              "value": 1000000000,
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/materialProperties/poissonRatio",
+              "value": 0,
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/0/type",
+              "value": "fixed",
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/0/value",
+              "value": 0,
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/0/direction",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/0/regions",
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    10,
+                    11
+                  ]
+                }
+              ],
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/1/type",
+              "value": "force",
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/1/value",
+              "value": 100,
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/1/direction",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            },
+            {
+              "pointer": "/conditions/1/regions",
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    8,
+                    9
+                  ]
+                }
+              ],
+              "source": {
+                "kind": "agent-proposal"
+              },
+              "rationale": "Explicit synthetic physical reference",
+              "applicability": "Existing limited CPU model,not measured calibration",
+              "status": "unconfirmed",
+              "assumption": "Synthetic unverified reference assumption"
+            }
+          ]
+        }
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:a0539dc44769ed0423d77e853db91364d3ec9d9916f55bdf3774e081a2f756dc",
+        "summary": {
+          "loaded": true,
+          "name": "Intentional underconstraint reference",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 2,
+          "material": "金属"
+        }
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "temperature-dependent-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/study/thermalStress",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "expansion": "1/K",
+          "referenceTemperature": "degC",
+          "materialTemperature": "degC",
+          "temperatureMin": "degC",
+          "temperatureMax": "degC"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "structural",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/study/gravityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/study/thermalStress",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/materialProperties/youngModulus",
+            "value": 1000000000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/materialProperties/poissonRatio",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/study/materialTemperature",
+            "value": 20,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "fixed",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/0/direction",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/1/type",
+            "value": "force",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/1/value",
+            "value": 100,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/1/direction",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          },
+          {
+            "pointer": "/conditions/1/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  8,
+                  9
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Separately declared fixed-base/100N axial comparison model",
+            "applicability": "Synthetic small-strain reference,not measured or user-confirmed",
+            "status": "unconfirmed",
+            "assumption": "Explicit QA model;supports/loads are not inferred from a user design"
+          }
+        ]
+      }
+    },
+    "state": {
+      "schemaVersion": 1,
+      "jobId": "615d1df8-f06a-4b87-bf4c-4651f1b7098b",
+      "inputRevision": "sha256:a0539dc44769ed0423d77e853db91364d3ec9d9916f55bdf3774e081a2f756dc",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "elastic",
+      "origin": "api",
+      "startedAt": 1792015152764,
+      "updatedAt": 1792015153226,
+      "lastSequence": 14,
+      "firstAvailableSequence": 1,
+      "result": {
+        "kind": "elastic",
+        "mesh": {
+          "nodeCount": 94,
+          "elementCount": 218,
+          "volumeMm3": 3999.9999999999977,
+          "minVolumeMm3": 6.0397097262876045,
+          "minQuality": 0.3471214125206645,
+          "qualityHistogram": [
+            0,
+            2,
+            9,
+            86,
+            121
+          ]
+        },
+        "resultAvailable": true,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "intermediate": {
+          "retainedArtifacts": 0,
+          "retainedBytes": 0,
+          "storageLimited": false,
+          "sharedBytes": 5073,
+          "maxBytes": 64000000
+        }
+      }
+    },
+    "measurement": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:3331ffed292f4c9ff9cf4fb8d4b01aff80d8b26ca680ffc5c4ed3f4b808bafd7",
+      "kind": "elastic",
+      "display": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null
+      },
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 4,
+      "weights": [
+        0.4955120306152899,
+        0.004487969384709967,
+        0.49076473928685793,
+        0.009235260713141957
+      ],
+      "displacementMm": [
+        4.185168580945959e-13,
+        -6.175405094496179e-13,
+        0.020000000000125907
+      ],
+      "magnitudeMm": 0.020000000000125907,
+      "vonMisesPa": 1000000.0002519211,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      }
+    }
+  },
+  "automaticRepair": false,
+  "physicalAccuracyVerified": false,
+  "limitations": [
+    "Diagnostic identifies the implemented numerical/transfer check,not source authenticity or general physical accuracy.",
+    "Events were polled after settlement;preterminal delivery timing is not established.",
+    "The second model uses separately declared QA supports and loads;it is not an inferred repair of user physics."
+  ]
+}

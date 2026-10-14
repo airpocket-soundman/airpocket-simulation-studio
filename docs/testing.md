@@ -447,3 +447,13 @@ Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗g
 最終Node v24.11.1/V8 13.6.233.10-node.28/win32/x64全体試験は801件中798成功・3スキップ・失敗0（99,539.381 ms）。[生ログ・source/依存物/実行ファイルSHA](evidence/2026-10-15-advanced-structural-full.json)を保存。既存ソルバーの数値・停止条件・legacy/assessment schema1は維持する。実測校正、メッシュ依存性、転送後の拘束/領域確認、全機能の根拠適用性、既知Node24/V8障害の根治は未証明。進捗文書の更新は全体試験後に別検証する。
 
 ビルド2.80秒成功、既定Node24によるローカル配信物26項目は28.20秒ですべて成功。専門SKILLと日英文書/進捗5件も成功。全体実行後のsource hash差分はsrc/progress.jsonとビルド生成publicコピーだけで、production/testコード差分はない。
+
+## 2026-10-15: 実行失敗診断の伝播と状態保持
+
+対象試験33件が成功。実MCPで6つの失敗シナリオ、直接MCPの失敗応答、続いて別途明示した有効モデルの成功を確認した。既存message/JOB_*を維持し、有界failure schema1をWorker・ホスト・ジョブ・MCPへ伝播する。型付き拘束/境界診断と汎用stage fallback、無効metadata破棄、cleanupと中止後の状態保持を対象とし、すべてのソルバー原因の分類や修正を証明するものではない。
+
+実GUIの解析ボタンとWorker/WASMでも拘束不足rank 3/6の失敗を確認し、MCPから対応する診断を取得した。次に固定底面・軸方向100 Nを別途明示した比較モデルを実行し、成功と点測定を確認した。これはQA用に別宣言したモデルであり、利用者の意図した物理条件を推測して修復した証拠ではない。[機械可読GUI記録](evidence/2026-10-15-browser-execution-failure.json)、[失敗画面](evidence/2026-10-15-browser-execution-failure.jpg)、[比較モデルの成功画面](evidence/2026-10-15-browser-execution-repaired.jpg)、[全体の検証記録](evidence/2026-10-15-execution-failure-full.json)を参照。
+
+diagnostic eventは取得できる場合の途中観測であり、終端前の配信を保証しない。失敗後も生成済みメッシュ/中間成果物は残り得るが、失敗した解析の最終JSONは保存しない。`completePhysicalValidation:false`を維持し、P0/P1の診断伝達の限定範囲を確認したものとする。物理妥当性・根本原因の修正・メッシュ独立性やP0〜P6全体の完了を意味しない。
+
+最終Node v24.11.1 / V8 13.6.233.10-node.28 / win32 x64の全体試験は823件中820成功・3スキップ・失敗0（101,723.5468 ms）。初回は成功時のみを想定した既存MFEMプロファイル試験1件が条件付き診断宣言を拒否したため、試験を修正した。[初回記録](evidence/2026-10-15-execution-failure-first-full.json)も保存し、修正後の全体結果と区別する。ビルド2.71秒、ローカル配信物26項目、専門SKILL検証、日英文書/進捗5件が成功。全体実行後のsource hash差分はsrc/progress.jsonとビルド生成publicコピーのみ。既知Node24/V8障害の根治は証明していない。

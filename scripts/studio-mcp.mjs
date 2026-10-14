@@ -1,3 +1,4 @@
+import {getAnalysisFailure} from '../src/analysis-failure.js';
 import {inspectNodeRuntime} from './node-runtime-info.mjs';
 import {verifyMeasurementArchive} from '../src/measurement-verification.js';
 import {prepareCaseView} from '../src/case-view.js';
@@ -180,7 +181,7 @@ export function startServer(){
    else if(message.method==='ping')result={};
    else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});
    else if(message.method==='tools/list')result={tools:toolList};
-   else if(message.method==='tools/call'){try{const value=await callStudioTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){result={isError:true,content:[{type:'text',text:error.message}],...(error.code?{structuredContent:{error:{code:error.code,message:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{})}}}:{})};}}
+   else if(message.method==='tools/call'){try{const value=await callStudioTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
    else if(message.method.startsWith('notifications/'))return;
    else throw Object.assign(Error('Method not found'),{code:-32601});
    if(hasId)send({jsonrpc:'2.0',id:message.id,result});

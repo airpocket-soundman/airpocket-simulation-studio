@@ -17,7 +17,7 @@ test('worker branch matrix selects numerical versus text-only paths without load
  ];
  for(const [p,o,id]of cases){const selected=resolve(p,o);assert.equal(selected.profileId,id);assert.equal(selected.supported,true);assert.deepEqual(selected.profile.events.slice(0,3).map(e=>e.stage),['preparation','mesh','progress']);}
  const source=await readFile(new URL('../src/observation-profiles.js',import.meta.url),'utf8');assert.doesNotMatch(source,/^import\s/m);
- for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.map(e=>e.stage),['preparation','mesh','progress']);
+ for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>e.when!=='execution-failure').map(e=>e.stage),['preparation','mesh','progress']);
 });
 test('unsupported combinations and malformed selectors never advertise fields',()=>{
  const cases=[ [project(),{method:4}], [project(),{adaptive:'yes'}], [project('thermal'),{includeFields:'yes'}],

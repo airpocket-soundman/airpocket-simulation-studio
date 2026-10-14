@@ -139,3 +139,9 @@ quantitative/exploratoryは等方固有振動と静的直交異方構造にも�
 J2塑性はE/nu・降伏応力・正の等方硬化係数・試験条件、物理的な荷重履歴を根拠登録します。plasticLoadFractionsは除荷・再負荷も表せます。省略時の単調載荷ステップ数も明示して根拠登録します。Neo-Hookeanはmu/Kと試験条件・存在する校正曲線を登録し、2/3≤K/mu≤20の圧縮性モデルに限ります。Neo-Hookeanのpressure/normalTractionは未対応です。Newton上限とNeo-Hookean増分数は数値設定です。
 
 非線形はCPUのpcg/pcg-strict/wasm-pcgのみで、adaptive・modal・熱応力・直交異方性・弾性温度表・速度依存や疲労/破壊評価を組み合わせません。runtime設定で物理入力を差し替えず、元projectと根拠を更新します。quantitativeの確認済み根拠、exploratoryの明示した値と仮定・暫定状態、legacy互換とcompletePreflight:falseは維持します。拘束rank、熱場転送、J2小ひずみ限界、Neo-Hookean正Jacobian、収束・メッシュ依存性・物理精度は別に確認してください。[契約の詳細](automation.md)を参照してください。
+
+## 失敗した解析の調べ方
+
+実行失敗のmessageに加えてfailure schema1のcode/stageと診断のtarget/evidence/suggestionsを取得できます。非同期ジョブはerror.failure、中止後の実行拒否はexecutionError.failure、直接MCP失敗はstructuredContent.error.failureを確認します。従来のJOB_*状態codeは変えません。有効なmetadataだけを最大16,384バイトで扱い、stack/causeは含みません。
+
+拘束・境界の一部には具体的な型付きcodeがあり、その他のstage fallbackは失敗した段階の手掛かりです。原因や修復を断定せず、意図した支持・領域・物性を確認してください。診断を消すために別の荷重面や架空の物性へ変更しません。diagnostic eventは観測要求時に終端前に通知されますが、到着は保証されません。最終解析JSONは保存されなくても、既存のメッシュ・中間成果物は残り得ます。診断が返ったこと自体は根本原因の修正や物理妥当性の証明ではありません。[診断契約](automation.md)を参照してください。

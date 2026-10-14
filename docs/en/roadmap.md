@@ -81,3 +81,9 @@ Research and improvement have not started; no product ranking or interface appro
 4. Check state preservation after invalid input/failure/cancellation, resource cleanup, Japanese/English text and links; attach evidence to progress tasks.
 
 See the [documentation consistency review](development-review.md) for findings and remaining decisions.
+
+## 2026-10-15: Bounded P0/P1 execution-failure diagnostic increment
+
+Added bounded failure schema1 transport from Worker through hosts, jobs, GUI wrappers and MCP while preserving legacy messages/JOB_* codes. Verification covered 33 targeted tests, six real MCP failure scenarios, a direct failure response and subsequent success of an explicitly declared valid model. The real GUI reproduced insufficient constraints at rank 3/6 and ran a separately declared fixed-base/100 N comparison model. See [testing](testing.md) and the [overall record](../evidence/2026-10-15-execution-failure-full.json).
+
+This is a bounded increment in P0/P1 information for diagnostic and repair decisions. Stage fallbacks do not prove root causes, and comparison-model success does not prove repair of intended user physics. completePhysicalValidation:false and subsequent mesh/boundary/convergence/source-applicability checks remain. The full P0–P6 plan and existing remaining tasks are incomplete; phase completion gates are unchanged.

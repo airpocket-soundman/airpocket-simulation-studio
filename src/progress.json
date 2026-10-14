@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T21:46:29.826384Z",
+  "updatedAt": "2026-10-14T22:03:48.220719Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1911,6 +1911,23 @@
       "acceptance": "新33/対象43件成功、全体801件中798成功・3skip。実MCP8strict/legacy4、熱source連成3、J2除荷strict/legacy2、実ブラウザ4ジョブを確認。保存/点測定/途中変位/暫定性/入力不変と場改変stale・runtime矛盾拒否を検証。根拠真正性/物理精度/V8根治は保証しない。",
       "acceptanceEn": "33new/43target tests pass;full801:798passed/3skipped. Real MCP8strict/4legacy,thermal-source coupling3,J2 unloading2strict/legacy and four real browser jobs checked. Saved cases/probes/intermediate displacement/provisional status/input identity retained;payload staleness/runtime conflicts refused. No source-authenticity,physical-accuracy or V8-resolution guarantees.",
       "evidence": "src/thermal-stress-input-contract.js; src/nonlinear-input-contract.js; tests/mcp-advanced-structural-provenance.test.mjs; tests/advanced-structural-source-execution.test.mjs; docs/evidence/2026-10-15-browser-advanced-structural-contract.json; docs/evidence/2026-10-15-advanced-structural-full.json; docs/testing.md"
+    },
+    {
+      "id": "EXECUTIONDIAGNOSTICS1",
+      "title": "実行失敗の構造化診断をLLMへ返す",
+      "titleEn": "Return structured execution failure diagnostics to user LLMs",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1",
+        "OBSERVATIONPROFILES1"
+      ],
+      "detail": "拘束・境界の既存検査とWorker失敗段階を有界schema1でAPI・ジョブ・GUI・MCPへ伝え、専門SKILLから確認できるようにする。",
+      "detailEn": "Expose existing constraint/boundary checks and Worker failure stages as bounded schema1 through hosts,jobs,GUI and MCP,documented for specialist SKILL use.",
+      "acceptance": "新22件・対象33件と観測統合1件成功。全体823件中820成功・3skip。実MCP6失敗/direct応答・実GUI拘束rank3/6・別宣言100N比較モデル成功を確認。旧エラー/中止/期限切れ/cleanup/入力不変を維持。全物理検査・推測修復・V8根治は未達。",
+      "acceptanceEn": "22new,33target and one observation integration test pass;full823:820passed/3skipped. Real MCP six failures/direct response,GUI rank3/6 and separately declared100N comparison success checked. Legacy messages,cancel/timeout,cleanup and input identity retained. Complete physical validation,inferred repair and V8 resolution remain unproven.",
+      "evidence": "src/analysis-failure.js; tests/mcp-execution-failure.test.mjs; tests/analysis-host-failure.test.mjs; docs/evidence/2026-10-15-execution-failure-full.json; docs/evidence/2026-10-15-execution-failure-first-full.json; docs/evidence/2026-10-15-browser-execution-failure.json; docs/testing.md"
     }
   ],
   "solvers": [
