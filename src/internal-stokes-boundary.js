@@ -47,5 +47,3 @@ export function internalStokesBoundary(mesh,source,settings={}){
  const boundaryVelocityAtPoint=p=>{if(!vector(p))throw Error('Invalid internal boundary point');for(const t of traces){const axis=t.plane%3;if(Math.abs(p[axis]-t.points[0][axis])>1e-7)continue;const w=p.map((v,k)=>v-t.points[0][k]),wu=dot(w,t.u),wv=dot(w,t.v),den=t.uu*t.vv-t.uv*t.uv,a=(t.vv*wu-t.uv*wv)/den,b=(t.uu*wv-t.uv*wu)/den;if(a>=-1e-8&&b>=-1e-8&&a+b<=1+1e-8)return [0,1,2].map(k=>(1-a-b)*t.values[0][k]+a*t.values[1][k]+b*t.values[2][k]);}throw Error('Point is not on a declared internal port');};
  return {boundary:{velocity,bodyFaceTags:[...wallTags].sort((a,b)=>a-b),pressureGauge:{...gauge}},solverOptions:{referenceLengthMm,referenceVelocity:[maxSpeedMs,0,0],boundaryVelocityAtPoint},diagnostics:{portFluxes:[...fluxes].map(([plane,outwardFlowM3s])=>({plane,outwardFlowM3s})),netFlowM3s,absoluteFlowM3s,relativeFlowImbalance,reynoldsNumber,maxSpeedMs},scope:structuredClone(internalStokesScope)};
 }
-
-

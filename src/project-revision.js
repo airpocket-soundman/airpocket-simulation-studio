@@ -23,4 +23,3 @@ export async function getProjectRevision(project) {
   const digest=await globalThis.crypto.subtle.digest('SHA-256',bytes);
   return 'sha256:'+Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
 }
-

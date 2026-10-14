@@ -50,4 +50,3 @@ test('real MCP process supports incremental job polling, retry identities, cance
   const replacement=await mcp.call('studio_start_analysis',{path,outputPath:join(dir,'replacement.json'),requestId:'solve-retry',size:.1});assert.notEqual(replacement.jobId,started.jobId);await mcp.call('studio_cancel_job',{jobId:replacement.jobId});await mcp.call('studio_release_job',{jobId:replacement.jobId});
  }finally{await mcp.close();await rm(dir,{recursive:true,force:true});}
 });
-
