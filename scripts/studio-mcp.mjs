@@ -6,6 +6,7 @@ import {preflightProject} from '../src/analysis-preflight.js';
 import {createHeadlessJobService,summarizeAnalysis} from './analysis-job-service.mjs';
 import {getProjectRevision,applyProjectOperations} from '../src/project-operations.js';
 import {publishJson} from './json-artifacts.mjs';
+import {createResultAssessmentApi} from '../src/result-assessment-api.js';
 import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 // MCP 2025-11-25 stdio transport; stdout contains JSON-RPC messages only.
 import {createInterface} from 'node:readline';
@@ -21,6 +22,8 @@ const pathSchema={type:'string',minLength:1,description:'Absolute local JSON fil
 const jobService=createHeadlessJobService();
 let browserBridge;
 const toolList=[
+ {name:'studio_assess_result',description:'Evaluate fatigue or Mode-I fracture screening from a saved structural elastic analysis using its recorded material evidence and explicit options. Requires the exact result revision; publishes a distinct new analysis JSON without overwriting files. Does not infer missing material data or claim failure probability.',inputSchema:object({path:pathSchema,outputPath:pathSchema,expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},kind:{enum:['fatigue','fracture']},options:{type:'object'}},['path','outputPath','expectedResultRevision','kind','options'])},
+ {name:'studio_assessment',description:'Read validated fatigue/fracture screening metadata (or available:false with its result revision before evaluation) and a bounded element page (default 50, maximum 200) from a saved analysis. Optional exact result revision prevents reading a different version. Does not write files.',inputSchema:object({path:pathSchema,kind:{enum:['fatigue','fracture']},expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:0,maximum:200}},['path','kind'])},
  {name:'studio_import_project',description:'Import STEP/STP with real OCCT unit normalization to mm, or outward closed convex STL with explicit scaleToMm, and publish a new project JSON. Preserves source bytes and CAD face mappings. Never replaces source or an existing output.',inputSchema:object({path:pathSchema,outputPath:pathSchema,scaleToMm:{type:'number',exclusiveMinimum:0},name:{type:'string',minLength:1}},['path','outputPath'])},
  {name:'studio_create_builtin_project',description:'Create a new project with an explicit built-in source: box(bounds), boxes(boxes), fixed cylinder(kind only), sphere(center/radius), tube(center/axis/innerRadius/outerRadius/length), using mm. No material values or boundary conditions are invented.',inputSchema:object({source:{type:'object'},outputPath:pathSchema,name:{type:'string',minLength:1}},['source','outputPath'])},
  {name:'studio_preflight_project',description:'Inspect physical input, unit, execution and provenance diagnostics without running solvers. Strict quantitative/exploratory provenance currently covers static isotropic linear structure. Returns required input pointers and remaining mesh/constraint/accuracy checks; allowed is not a physical accuracy guarantee.',inputSchema:object({path:pathSchema,method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},operation:{enum:['solve','mesh']},mode:{enum:['legacy','quantitative','exploratory']}},['path'])},
@@ -39,7 +42,7 @@ const toolList=[
  {name:'studio_analyze',description:'Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.',inputSchema:object({path:pathSchema,outputPath:pathSchema,operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']}},['path','outputPath'])},
  {name:'studio_probe',description:'Measure a saved analysis at a point in mm. Returns physical units; no extrapolation outside the mesh.',inputSchema:object({path:pathSchema,point:{type:'array',items:{type:'number'},minItems:3,maxItems:3},elementIndex:{type:'integer',minimum:0},modeIndex:{type:'integer',minimum:0}},['path','point'])},
  {name:'studio_validate_cases',description:'Validate saved cases including physical result metadata and return comparison metrics.',inputSchema:object({path:pathSchema},['path'])}
-].map(t=>({...t,annotations:{readOnlyHint:!['studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
+].map(t=>({...t,annotations:{readOnlyHint:!['studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
 async function jsonFile(path){if(typeof path!=='string'||!isAbsolute(path))throw Error('An absolute local file path is required');const file=resolve(path);if((await stat(file)).size>100000000)throw Error('JSON file exceeds 100 MB');return JSON.parse(await readFile(file,'utf8'));}
 const summary=summarizeAnalysis;
 export async function callStudioTool(name,args={}){
@@ -47,6 +50,16 @@ export async function callStudioTool(name,args={}){
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
  if(name==='studio_browser_sessions')return {sessions:browserBridge.list()};
  if(name==='studio_browser_call'){if(!Object.hasOwn(browserMethods,args.method)||typeof args.sessionId!=='string')throw Error('Invalid browser operation');return browserBridge.call(args.sessionId,args.method,args.args||{},browserMethods[args.method]);}
+ if(name==='studio_assess_result'||name==='studio_assessment'){
+  if(name==='studio_assess_result'&&!Object.hasOwn(args,'options'))throw Error('Explicit assessment options are required');
+  if(name==='studio_assess_result'&&(typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||typeof args.path!=='string'||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase()))throw Error('Use distinct absolute assessment input and output paths');
+  let output=await jsonFile(args.path);const store=createCaseStore();store.add('Assessment validation',output);
+  const api=createResultAssessmentApi({getAnalysis:()=>output,commit:next=>{output=next;}});
+  const command=Object.fromEntries(Object.entries(args).filter(([key])=>!['path','outputPath'].includes(key)));
+  if(name==='studio_assessment')return api.get(command);
+  const response=await api.evaluate(command),publication=await publishJson(resolve(args.outputPath),output);
+  return {...response,outputPath:resolve(args.outputPath),...publication};
+ }
  if(['studio_import_project','studio_create_builtin_project'].includes(name)){
   if(typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||args.name!==undefined&&(typeof args.name!=='string'||!args.name.trim()))throw Error('Invalid project import destination or name');
   if(name==='studio_import_project'&&(typeof args.path!=='string'||!isAbsolute(args.path)||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase()))throw Error('Use distinct absolute input and output paths');

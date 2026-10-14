@@ -4,7 +4,7 @@
 
 `npm run mcp` starts a local stdio MCP server implementing the [2025-11-25 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
 
-Eighteen tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_job_artifact`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
+Twenty tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})` normalizes STEP/STP to mm through OCCT and saves a new input JSON retaining original STEP data and CAD-face mappings. STL requires a positive explicit `scaleToMm` and follows the current outward, closed, convex single-shell and size restrictions. The input-file limit is 50 MiB. `studio_create_builtin_project({source,outputPath,name?})` creates mm-based `box` (bounds), `boxes` (boxes), fixed-size `cylinder` (kind only), `sphere` (center/radius), or `tube` (center/axis/innerRadius/outerRadius/length). It does not invent material values, supports or loads.
 
@@ -67,7 +67,7 @@ Default MCP works with saved JSON; connector mode also invokes permitted browser
 
 ## Temporary local connector (initial implementation)
 
-Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 18 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 20 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
 
 The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 40 methods (18 default tools, 20 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 42 methods (20 default tools, 22 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -132,3 +132,15 @@ Before importing, read caseList's archiveRevision and compute the UTF-8 JSON byt
 Export/read/release require inspect scope; begin-import/write/commit require edit scope. Shared API: window.caseArchiveTransfer.beginExport/read/beginImport/write/commit/release. Retention is shared across transfers: 100,000,000 bytes and at most four transfers. Incomplete, invalid, hash-mismatched, stale or expired imports are refused while preserving existing cases. Release unwanted or failed staging with `caseArchiveRelease({transferId})`. Page exit loses unsaved transfers; disconnect discards imports owned by that connection. This API provides neither filesystem operations nor arbitrary browser code execution.
 
 The 100,000,000-byte limit bounds retained transfer buffers, not browser heap usage during JSON parsing, copying or validation. Completed imports retain their slot and bytes until release so commit retries do not apply the archive twice.
+
+## Versioned fatigue and fracture assessment
+
+`studio_assess_result({path,outputPath,expectedResultRevision,kind,options})` validates a saved analysis JSON and exclusively creates a new complete analysis JSON containing the `kind:"fatigue"|"fracture"` assessment. Existing destinations are refused. `studio_assessment({path,kind,expectedResultRevision?,offset?,limit?})` reads summary, provenance, units, limitations and element data without writing; pages default to 50 elements and are limited to 200. For saved results, first call `studio_assessment({path,kind})` and supply its `resultRevision` as `expectedResultRevision` when evaluating. An eligible structural linear-elastic result without that assessment returns `available:false`, its current revision and an empty element page. Stored assessments return `available:true`.
+
+Browser callers use `window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})` and `get({kind,expectedResultRevision?,offset:0,limit:50})`. Connector `evaluateAssessment` requires analyze scope; `getAssessment` requires inspect scope. Evaluation returns previous/new result revisions, summary, material provenance, limitations and element count. Inputs, displacements and physical stresses stay unchanged, but the output revision changes because it includes the assessment and calculation settings. Read the new revision before applying saved views or reusing old result references.
+
+Material data comes only from the original saved input's `materialProperties.fatigueData` or `fractureData`. Never infer missing S-N curves, strengths or toughness from names or an LLM guess. Saved assessments are numerically revalidated against their original input; a valid assessment of the other kind is preserved.
+
+Fatigue options are `minLoadFactor`, `maxLoadFactor`, `appliedCycles` and `meanStressCorrection:"none"|"goodman"`. This is proportional uniaxial isotropic linear-elastic stress-life screening within measured S-N bounds, without extrapolation, variable-amplitude history or multiaxial evaluation. Miner damage is deterministic usage, not failure probability.
+
+Fracture options are `flawSizeRangeMm`, `geometryFactorRange`, `geometrySource`, unit-vector `crackNormal:[x,y,z]`, `residualNormalStressRangePa` and `stressAssumption`. This is mode-I linear-elastic screening using uncracked nominal stress. Mixed-mode shear, crack growth, fatigue crack propagation and remaining-life prediction are unsupported. Ranges are deterministic bounds, not confidence intervals. Both assessments reject unsupported results including thermal stress, plasticity, hyperelasticity and orthotropy. API availability does not certify arbitrary models' physical validity or live rendering.

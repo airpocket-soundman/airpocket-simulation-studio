@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T11:44:55.314Z",
+  "updatedAt": "2026-10-14T11:53:17.288Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1438,6 +1438,35 @@
       "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。Node接続アダプターでの検証であり実画面・公開HTTPS・大規模性能測定は未完了。",
       "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser, public HTTPS and large-case performance remain unverified.",
       "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "ASSESSMENTAPI1",
+      "title": "疲労・破壊評価をLLMから版付きで操作する",
+      "titleEn": "Revision-bound fatigue and fracture assessment for the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "RESULTCONTROL1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "元の材料データと応力から疲労/Mode-I評価を原子的に追加。結果版・暫定情報・出典・単位・制約と最大200要素のページを返す。保存結果向けMCP2ツール、接続2操作。",
+      "detailEn": "Atomically append fatigue/Mode-I screening from original material evidence and stresses. Return revision/status/provenance/units/limitations and up to200 elements. Two saved-result MCP tools and two connector methods.",
+      "acceptance": "全体418件中415成功・3スキップ。実MCPと実WASMで疲労寿命1e6cycles/損傷0.1とK参照式、両評価保持、上書き/旧版/省略設定拒否を確認。実画面・公開HTTPSの評価表示は未確認。",
+      "acceptanceEn": "415 passed, three skipped of418. Real MCP/WASM verified fatigue1e6cycles/damage0.1, K reference formula, both-assessment preservation and overwrite/stale/omitted-option refusal. Browser/public HTTPS rendering remains unverified.",
+      "evidence": "src/result-assessment-api.js; tests/result-assessment-api.test.mjs; tests/mcp-assessment.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "RUNTIMEWASM1",
+      "title": "配信物検証中のWASMランタイム停止を捕捉する",
+      "titleEn": "Capture intermittent WASM runtime termination during distribution checks",
+      "status": "queued",
+      "category": "基盤",
+      "depends": [],
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved.",
+      "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
+      "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
+      "evidence": "scripts/check-published.mjs; docs/testing.md"
     }
   ],
   "solvers": [

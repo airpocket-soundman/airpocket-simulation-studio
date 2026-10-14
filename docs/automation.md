@@ -4,7 +4,7 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-18ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_job_artifact`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+20ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -67,7 +67,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の18ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の20ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは40操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは42操作を公開します（通常20ツール、接続モード22ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -132,3 +132,15 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 書出・読取・解放は確認権限、取込開始・書込・確定は編集権限を要します。共通APIは`window.caseArchiveTransfer.beginExport/read/beginImport/write/commit/release`です。共通の保持上限は100,000,000バイト、同時転送は最大4件。不完全・不正・ハッシュ不一致・版競合・期限切れの取込は既存ケースを維持して拒否します。不要・失敗した転送は`caseArchiveRelease({transferId})`で解放してください。ページ終了で未保存転送を失い、接続解除ではその接続の取込を破棄します。ファイルシステム操作や任意のブラウザコード実行は提供しません。
 
 100,000,000バイトは保持する転送バッファの合計上限であり、JSON解析・複製・検証を含むブラウザのヒープ上限ではありません。確定済み取込も再送時の重複適用を避けるため、解放するまで転送枠とバイトを保持します。
+
+## 疲労・破壊評価の版付きAPI
+
+`studio_assess_result({path,outputPath,expectedResultRevision,kind,options})`は保存済み解析JSONを検証し、`kind:"fatigue"|"fracture"`の評価を追加した完全な解析JSONを新規パスへ保存します。既存出力の上書きは拒否します。`studio_assessment({path,kind,expectedResultRevision?,offset?,limit?})`は読取専用で、評価の要約・出典・単位・制限と要素別データを返します。ページは既定50、最大200要素です。保存結果ではまず`studio_assessment({path,kind})`を呼び、返された`resultRevision`を評価時の`expectedResultRevision`へ渡します。対象となる構造線形弾性結果にまだ評価がない場合も、`available:false`、現在の結果版、空の要素ページを返します。保存済み評価がある場合は`available:true`です。
+
+ブラウザでは`window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})`と`get({kind,expectedResultRevision?,offset:0,limit:50})`を使います。MCP接続の`evaluateAssessment`はanalyze権限、`getAssessment`はinspect権限です。評価応答には変更前・変更後の結果版、要約、材料出典、制限、要素数が含まれます。入力・変位・応力配列は変更しませんが、評価と計算設定を含む出力全体の版は変わります。保存ビューや古い結果版の参照を適用する前に、新しい版を取得してください。
+
+材料データは元の保存入力の`materialProperties.fatigueData`または`fractureData`だけを使用します。欠けたS-N曲線・強度・破壊靱性を名前やLLMの推測で補いません。既存評価も元入力から数値を再計算して検証し、別種の有効な評価を保持します。
+
+疲労optionsは`minLoadFactor`、`maxLoadFactor`、`appliedCycles`、`meanStressCorrection:"none"|"goodman"`です。比例単軸の等方線形弾性応力に対する測定S-N範囲内のスクリーニングで、範囲外外挿・変動振幅履歴・多軸評価は対応しません。Miner損傷は決定論的な使用率で、破損確率ではありません。
+
+破壊optionsは`flawSizeRangeMm`、`geometryFactorRange`、`geometrySource`、単位ベクトル`crackNormal:[x,y,z]`、`residualNormalStressRangePa`、`stressAssumption`です。未亀裂の公称応力によるモードI線形破壊力学のスクリーニングで、混合モードのせん断、亀裂進展、疲労亀裂進展、余寿命予測は対応しません。区間は決定論的な上下限で、信頼区間ではありません。両評価とも熱応力・塑性・超弾性・直交異方性など対応外の結果は拒否します。APIの実装は任意モデルの物理妥当性や実画面での検証を保証しません。

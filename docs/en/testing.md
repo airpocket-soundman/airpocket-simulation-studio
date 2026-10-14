@@ -143,3 +143,13 @@ The full suite passed 403 of 406 tests, with three skips and zero failures at co
 Unit tests cover incomplete input, invalid base64/hash/UTF-8/JSON, byte/count budgets, chunk retries, commit deduplication, release/disconnect/expiry and final busy/revision checks before replacement. Retained-buffer limits are not peak browser heap limits.
 
 This protocol test uses a Node-hosted semantic adapter and is not real-browser UI evidence. Computer Use stopped because it could not verify the current URL, so real-browser archive transfer remains unverified. Public HTTPS pairing, browser UI integration and large-case performance measurements remain open.
+
+## 2026-10-14: revision-bound fatigue/fracture API and MCP
+
+The full suite passed 415 of 418 tests, with three skips and zero failures at concurrency four. The final assessment API/MCP/session subset also passed all 12 tests. Default MCP has 20 tools; optional pairing has 22 tools/42 methods. Eligible unassessed structural results expose available:false plus the result revision before evaluation.
+
+`tests/mcp-assessment.test.mjs` uses real stdio MCP and an actual WASM axial solve. Explicit synthetic S-N reference data yields 1e6 cycles and damage0.1; mode-I intensity agrees with sigma*sqrt(pi*a). Adding fracture assessment preserves existing fatigue, inputs and stresses. Tests verify provenance, original provisional/remaining-check metadata, units/limitations and pages up to200 elements. Synthetic references are not measured material design data.
+
+Existing output/input overwrite, stale revisions, omitted settings, unknown options, oversized pages and tampered stored assessments are refused. Source changes, busy state and revocation prevent commit. Real-browser and public-HTTPS assessment rendering remain unverified; Node/MCP numerical and persistence evidence does not establish live UI behavior.
+
+Build passed. The first local-distribution check, concurrent with the full suite, stopped in Node v24.11.1/V8 with fatal `jit_page_->allocations_.erase(addr) == 1`. An isolated rerun passed all26 checks in29.07 seconds. Solver and checker sources were unchanged; root cause remains unresolved, tracked as RUNTIMEWASM1 for failed-state capture and reproducibility. Specialist SKILL validation passed.

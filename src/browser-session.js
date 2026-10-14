@@ -1,10 +1,10 @@
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
 import {canonicalJson} from './project-revision.js';
 
-export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view',namedViewList:'inspect',namedViewExport:'inspect',namedViewSave:'view',namedViewApply:'view',namedViewRemove:'view',namedViewImport:'view',caseArchiveExport:'inspect',caseArchiveRead:'inspect',caseArchiveImport:'edit',caseArchiveWrite:'edit',caseArchiveCommit:'edit',caseArchiveRelease:'inspect'});
+export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view',namedViewList:'inspect',namedViewExport:'inspect',namedViewSave:'view',namedViewApply:'view',namedViewRemove:'view',namedViewImport:'view',caseArchiveExport:'inspect',caseArchiveRead:'inspect',caseArchiveImport:'edit',caseArchiveWrite:'edit',caseArchiveCommit:'edit',caseArchiveRelease:'inspect',getAssessment:'inspect',evaluateAssessment:'analyze'});
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,getResult,probe,showResult,isBusy=()=>false}) {
+export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,assessments,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const busy=()=>isBusy()||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}});
  return {
@@ -52,6 +52,8 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='caseArchiveImport'){if(!caseArchives)throw Error('Case archive transfer unavailable');const result=await caseArchives.beginImport(args,{guard:valid});if(!valid()){caseArchives.release({transferId:result.transferId});throw Error('Case archive command expired');}ownedImports.add(result.transferId);return result;}
    if(method==='caseArchiveWrite')return caseArchives.write(args,{guard:valid});
    if(method==='caseArchiveCommit'){if(!caseArchives||busy()||editing)throw Error('Case archive unavailable or browser busy');editing=true;try{return await caseArchives.commit(args,{guard:valid});}finally{editing=false;}}
+   if(method==='getAssessment'){if(!assessments)throw Error('Assessment API unavailable');return assessments.get(args);}
+   if(method==='evaluateAssessment'){if(!assessments||busy()||editing)throw Error('Assessment unavailable or browser busy');editing=true;try{return await assessments.evaluate(args,{guard:valid});}finally{editing=false;}}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
