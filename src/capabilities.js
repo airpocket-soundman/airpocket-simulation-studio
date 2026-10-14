@@ -1,10 +1,12 @@
 import {getObservationProfiles,resolveObservationProfile} from './observation-profiles.js';
 // Small metadata only: importing this module must not initialize CAD or solvers.
 const cpuMethods=['pcg','pcg-strict','wasm-pcg'];
-export function getCapabilities({target='browser'}={}){
+export function getCapabilities({target='browser',analysisIsolation='worker'}={}){
  if(!['browser','node'].includes(target))throw Error('Unknown execution target');
+ if(!['worker','process'].includes(analysisIsolation)||target==='browser'&&analysisIsolation!=='worker')throw Error('Invalid target analysis isolation');
  return {
   schemaVersion:1,target,execution:'local-wasm-and-javascript',nativeMachineCode:false,
+  executionIsolation:{mode:analysisIsolation,availableModes:target==='node'?['worker','process']:['worker'],selection:target==='node'?'host-startup':'browser-worker',automaticFallback:false,rootFixProven:false,...(target==='node'?{processFailureEvent:{stage:'runtime-failure',solver:'node-process',requiresMode:'process',boundedStderr:true}}:{})},
   runtimeDetectionRequired:target==='browser'?['crossOriginIsolated','webgpu-adapter']:[],
   units:{geometry:'mm',youngModulus:'Pa',force:'N',temperature:'degC',velocity:'m/s',pressure:'Pa'},
   engines:[

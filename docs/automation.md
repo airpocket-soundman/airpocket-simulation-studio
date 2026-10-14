@@ -392,3 +392,13 @@ final-check/true-relativeは既存の元の無次元full systemの自由方程�
 両残差は消去後右辺ノルムに対する再帰更新残差で無次元です。独立に再計算したtrue residualではなく、Stokesのfinal-checkと区別してください。convergedはその数値条件だけを示し、後続の放射/測定/流路Re・Mach等の検査失敗やジョブ失敗はあり得ます。物理精度・保存完了・メッシュ独立性の保証ではありません。イベントは256件保持の上限とcursor gapを考慮し、終端状態も確認します。
 
 非有限の残差・許容差は通知を省略し、不正値を正常値やJSON nullとして返しません。sweep completeもmetricsのresidual/iterations/peakPressurePa/splDbが全て有限の場合だけ通知します。計算・停止条件や元のエラーは変更せず、通知がなくてもジョブ終端の失敗を確認してください。
+
+## 任意のNode解析プロセス分離
+
+MCP起動時に`node scripts/studio-mcp.mjs --analysis-isolation=process`を明示すると、各保存入力ジョブを同じNode実行ファイルの子プロセスで実行します。既定は従来のworker分離のままです。ブラウザのnative Workerや既定runtimeは変更しません。ツール27/接続29・80操作も不変です。
+
+プロセス分離はジョブの異常終了を子に封じ込め、MCPホストを維持するための任意経路です。再試行せず、失敗はcode:ANALYSIS_PROCESS_EXITのruntime-failureイベントに制限付きstderr末尾とハッシュを残します。終了処理はprocess closeを待ちます。実行ファイルやshellをwire引数で指定する機能はありません。V8自体の修正や全モデルの互換性・物理精度の保証ではなく、失敗した入力/出力/成果物を確認して新要求として再実行してください。
+
+現在の封じ込め試験はcontrolled exit86を使い、実際のV8 native fatalを再現した試験ではありません。親プロセス切断時の子の終了はbest effortで、同期native処理中はdisconnectハンドラが遅れるため即時終了を保証しません。
+
+子のstdout/stderrは各先頭64 KiBまで転送し、診断末尾はUTF-8で4,096 byte以内、SHA-256とbyte数はstderr全体を対象にします。これは保持量の上限であり子のheap上限ではありません。結果メッセージ受信だけでは保存せず、子の終了を確認してから親が最終結果を公開します。実行方式はcapabilities.executionIsolation、process保存結果はcalculation.execution.isolationから確認できます。

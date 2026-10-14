@@ -58,6 +58,7 @@ Prioritize LLM integration while developing independent modules against shared c
 
 - AGENTEDIT1: atomic saved-input edits and revision checks, preceding full P1 STEP/provenance support.
 - AGENTJOBS1: Node CPU jobs and intermediate-result pipelines, preceding P3 live-browser MCP and restart recovery.
+- PROCESSISOLATION1: Optional same-executable Node child isolation preserves intermediate APIs/MCP and waits for close after failures,cancellation and timeouts. Validate containment separately from V8 root-cause resolution.
 - CFDINTERNAL1: internal creeping-flow velocity-boundary adapter and P1/P2 references; general flow and UI/Worker integration remain unfinished.
 - NATIVEPROOF1: Linux CI verified real host MFEM against the same C++ compiled to WASM, using five fixed-bar fixtures and eight invalid inputs. Arbitrary saved projects and a production native backend remain unsupported.
 

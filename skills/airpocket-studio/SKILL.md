@@ -284,3 +284,9 @@ Use existing jobEvents. acoustic-frequency exposes iteration/solver:bicgstab/kin
 Residuals are dimensionless recurrence norms relative to the eliminated RHS, not independent true checks. Cadence is first/every25/convergence (BiCGStab also iteration limit); acoustic zero RHS emits iteration0, channel emits none. No physical-time axis or pressure/velocity field arrays are added. Check terminal state and later radiation/probe/Re/Mach validation; converged alone does not establish success or physical accuracy. Profiles remain13 browser/12 Node; these routes keep fields empty.
 
 Nonfinite residuals/tolerances are omitted from telemetry, not normalized into valid numbers or JSON null. Sweep complete also requires finite residual/iterations/peakPressurePa/splDb metrics before notification. Computation, stopping rules and original errors remain unchanged; inspect terminal job failures even when no event is emitted.
+
+## Optional isolated Node jobs
+
+An operator may explicitly start studio-mcp with --analysis-isolation=process. It runs one same-executable Node child per saved-input job, with no retries, bounded stderr-tail/hash runtime-failure events and cleanup after process close. Default worker isolation and browser Workers remain unchanged. Do not pass arbitrary executable/shell options on the wire or claim a V8 root fix. Inspect published artifacts after a failed job before creating a new request/output.
+
+Process-isolation failure events use code:ANALYSIS_PROCESS_EXIT. Controlled exit86 tests establish containment behavior, not reproduction/resolution of a V8 native fatal. Parent-disconnect cleanup is best effort; synchronous native work may delay child exit.

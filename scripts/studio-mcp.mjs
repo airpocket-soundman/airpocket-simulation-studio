@@ -29,7 +29,12 @@ import {sampleResult} from '../src/probe.js';
 import {analyzeProject} from './headless-analysis.mjs';
 import {catalogVersion,catalogEntries,catalogEntry} from '../src/material-catalog.js';
 const pathSchema={type:'string',minLength:1,description:'Absolute local JSON file path'},object=(properties,required=[])=>({type:'object',properties,required,additionalProperties:false});
-const jobService=createHeadlessJobService();
+let analysisIsolation='worker',jobService=createHeadlessJobService(),executionConfigurationLocked=false;
+// Trusted host startup only. No MCP tool accepts a process factory or executable.
+export function configureAnalysisExecution({isolation='worker',createProcessWorker}={}){
+ if(executionConfigurationLocked)throw Error('Analysis execution configuration is locked');
+ const service=createHeadlessJobService({isolation,...(createProcessWorker!==undefined?{createProcessWorker}:{})});analysisIsolation=isolation;jobService=service;
+}
 let browserBridge;
 const toolList=[
  {name:'studio_job_artifacts',description:'List registered provisional intermediate artifact metadata with bounded pagination (default 50, maximum 100), independently of event retention. Does not read or verify files; select an artifactId and use studio_job_artifact for hash-verified contents. Empty pages are not job completion.',inputSchema:object({jobId:{type:'string',minLength:1},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:100}},['jobId'])},
@@ -43,7 +48,7 @@ const toolList=[
  {name:'studio_assessment',description:'Read validated fatigue/fracture screening metadata (or available:false with its result revision before evaluation) and a bounded element page (default 50, maximum 200) from a saved analysis. Optional exact result revision prevents reading a different version. Does not write files.',inputSchema:object({path:pathSchema,kind:{enum:['fatigue','fracture']},expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:0,maximum:200}},['path','kind'])},
  {name:'studio_import_project',description:'Import STEP/STP with real OCCT unit normalization to mm, or outward closed convex STL with explicit scaleToMm, and publish a new project JSON. Preserves source bytes and CAD face mappings. Never replaces source or an existing output.',inputSchema:object({path:pathSchema,outputPath:pathSchema,scaleToMm:{type:'number',exclusiveMinimum:0},name:{type:'string',minLength:1}},['path','outputPath'])},
  {name:'studio_create_builtin_project',description:'Create a new project with an explicit built-in source: box(bounds), boxes(boxes), fixed cylinder(kind only), sphere(center/radius), tube(center/axis/innerRadius/outerRadius/length), using mm. No material values or boundary conditions are invented.',inputSchema:object({source:{type:'object'},outputPath:pathSchema,name:{type:'string',minLength:1}},['source','outputPath'])},
- {name:'studio_preflight_project',description:'Inspect physical input, unit, execution, provenance and selected observation declarations without running solvers. Strict quantitative/exploratory provenance currently covers static isotropic linear structure. Returns required input pointers and remaining mesh/constraint/accuracy checks; allowed is not a physical accuracy guarantee. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.',inputSchema:object({path:pathSchema,method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},adaptive:{type:'boolean'},includeFields:{type:'boolean'},operation:{enum:['solve','mesh']},mode:{enum:['legacy','quantitative','exploratory']}},['path'])},
+ {name:'studio_preflight_project',description:'Inspect physical input, unit, execution, provenance and selected observation declarations without running solvers. Strict quantitative/exploratory provenance covers static isotropic linear structure, thermal conduction, acoustics and limited channel/exterior Stokes flow; other structural model combinations remain limited. Returns required input pointers and remaining mesh/constraint/accuracy checks; allowed is not a physical accuracy guarantee. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.',inputSchema:object({path:pathSchema,method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},adaptive:{type:'boolean'},includeFields:{type:'boolean'},operation:{enum:['solve','mesh']},mode:{enum:['legacy','quantitative','exploratory']}},['path'])},
  {name:'studio_job_artifact',description:'Read a registered provisional mesh/scalar-time-field/nonlinear-load-step displacement artifact by jobId and artifactId. Verifies hashes and input/mesh identity; ambiguous multi-body interface points require bodyIndex or elementIndex. Returns compact statistics, optional point interpolation or a bounded node/value page (limit <= 200, default summary only). Nonlinear displacement pages contain vectors in mm and step/loadFactor, not physical time or stress. Does not accept arbitrary file paths or treat intermediate values as final.',inputSchema:object({jobId:{type:'string',minLength:1},artifactId:{type:'string',minLength:1},bodyIndex:{type:'integer',minimum:0},elementIndex:{type:'integer',minimum:0},point:{type:'array',items:{type:'number'},minItems:3,maxItems:3},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:0,maximum:200}},['jobId','artifactId'])},
  {name:'studio_edit_project',description:'Atomically apply semantic setup operations to saved JSON and publish a new outputPath. Requires the revision from studio_inspect_project; stale revisions and unsupported methods are rejected. Never alters the input or an open browser. Returns a compact summary, not the full model.',inputSchema:object({path:pathSchema,outputPath:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},operations:{type:'array',minItems:1,maxItems:100,items:object({method:{enum:['selectTriangles','selectCadFace','selectPlanarRegion','selectCylindricalRegion','clearSelection','addCondition','removeCondition','selectCondition','replaceConditionRegion','reapplyConditionRegion','setMaterial','setMaterialProperties','setMaterialPreset','applyCatalogMaterial','setStudy','setMeshSettings','setInputProvenance','setAnalysisIntent']},args:{type:'array'}},['method','args'])}},['path','outputPath','expectedRevision','operations'])},
  {name:'studio_start_analysis',description:'Start a local CPU analysis job and immediately return its job ID and frozen input revision. Poll studio_job_events for bounded intermediate summaries. requestId makes retries idempotent while the job is retained. Optional includeFields writes provisional meshes, scalar time fields and supported converged nonlinear load-step displacement fields beside outputPath. Does not change the browser.',inputSchema:object({path:pathSchema,outputPath:pathSchema,requestId:{type:'string',minLength:1,maxLength:200},operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},adaptive:{type:'boolean'},includeFields:{type:'boolean'}},['path','outputPath','requestId'])},
@@ -63,6 +68,7 @@ const toolList=[
 async function jsonFile(path){if(typeof path!=='string'||!isAbsolute(path))throw Error('An absolute local file path is required');const file=resolve(path);if((await stat(file)).size>100000000)throw Error('JSON file exceeds 100 MB');return JSON.parse(await readFile(file,'utf8'));}
 const summary=summarizeAnalysis;
 export async function callStudioTool(name,args={}){
+ executionConfigurationLocked=true;
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
  if(name==='studio_import_print'){
@@ -134,7 +140,7 @@ export async function callStudioTool(name,args={}){
  if(name==='studio_job_events')return jobService.events(args.jobId,{...(args.afterSequence!==undefined?{afterSequence:args.afterSequence}:{}),...(args.limit!==undefined?{limit:args.limit}:{})});
  if(name==='studio_cancel_job')return jobService.cancel(args.jobId);
  if(name==='studio_release_job')return jobService.release(args.jobId);
- if(name==='studio_capabilities')return {...getCapabilities({target:'node'}),runtime:inspectNodeRuntime()};
+ if(name==='studio_capabilities')return {...getCapabilities({target:'node',analysisIsolation}),runtime:inspectNodeRuntime()};
  if(name==='studio_diagnose_execution'){const api=createStudioApi();api.loadProject(await jsonFile(args.path));return {...diagnoseExecution(api.exportProject(),{...(args.method!==undefined?{method:args.method}:{}),...(args.adaptive!==undefined?{adaptive:args.adaptive}:{}),...(args.includeFields!==undefined?{includeFields:args.includeFields}:{})},'node'),runtime:inspectNodeRuntime()};}
  if(name==='studio_progress')return JSON.parse(await readFile(new URL('../src/progress.json',import.meta.url),'utf8'));
  if(name==='studio_material_catalog'){if(args.id!==undefined)return {version:catalogVersion,material:catalogEntry(args.id)};const materials=catalogEntries(args);return {version:catalogVersion,count:materials.length,materials};}
@@ -145,11 +151,14 @@ export async function callStudioTool(name,args={}){
  if(name==='studio_probe'){const output=await jsonFile(args.path);const store=createCaseStore();store.add('Probe validation',output);const measurement=sampleResult(output.mesh,output.result,args.point,{bodyIndex:args.bodyIndex,elementIndex:args.elementIndex,modeIndex:args.modeIndex}),assessment=output.analysisAssessment??output.result.analysisAssessment;return {...measurement,...(assessment===undefined?{}:{analysisAssessment:assessment})};}
  if(typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||resolve(args.path)===resolve(args.outputPath))throw Error('Use a distinct absolute analysis outputPath');
  if(args.operation!==undefined&&!['solve','mesh'].includes(args.operation))throw Error('Unknown operation');
- const output=await analyzeProject(await jsonFile(args.path),{...(args.size!==undefined?{size:args.size}:{}),...(args.method!==undefined?{method:args.method}:{})},args.operation==='mesh'?'mesh':'elastic');
+ const output=await analyzeProject(await jsonFile(args.path),{...(args.size!==undefined?{size:args.size}:{}),...(args.method!==undefined?{method:args.method}:{})},args.operation==='mesh'?'mesh':'elastic',{isolation:analysisIsolation});
  await writeFile(resolve(args.outputPath),JSON.stringify(output)+'\n',{flag:'wx'});return {...summary(output),outputPath:resolve(args.outputPath)};
 }
 const send=message=>process.stdout.write(JSON.stringify(message)+'\n');
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+ const isolationArgs=process.argv.slice(2).filter(arg=>arg==='--analysis-isolation'||arg.startsWith('--analysis-isolation='));
+ if(isolationArgs.length>1||isolationArgs.length===1&&!['worker','process'].includes(isolationArgs[0].slice('--analysis-isolation='.length)))throw Error('Use one --analysis-isolation=worker|process');
+ if(isolationArgs.length){configureAnalysisExecution({isolation:isolationArgs[0].slice('--analysis-isolation='.length)});}
  const originArg=process.argv.slice(2).find(arg=>arg.startsWith('--browser-origin='));
  if(originArg){browserBridge=await createBrowserBridge({origin:originArg.slice('--browser-origin='.length)});toolList.push(
   {name:'studio_browser_sessions',description:'List browser sessions explicitly paired with this temporary loopback connector, including granted scopes. No filesystem or shell is exposed through the browser transport.',inputSchema:object({}),annotations:{readOnlyHint:true,openWorldHint:false}},
@@ -158,6 +167,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  startServer();
 }
 export function startServer(){
+ executionConfigurationLocked=true;
  let initialized=false,ready=false,queue=Promise.resolve();const input=createInterface({input:process.stdin,crlfDelay:Infinity});
  input.on('line',line=>{queue=queue.then(async()=>{
   let message;try{if(line.length>1000000)throw Error();message=JSON.parse(line);}catch{send({jsonrpc:'2.0',id:null,error:{code:-32700,message:'Invalid JSON-RPC message'}});return;}

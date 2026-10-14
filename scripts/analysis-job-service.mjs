@@ -11,7 +11,9 @@ import {inspectIntermediate} from '../src/intermediate-results.js';
 export function summarizeAnalysis({mesh,result}){
  return {mesh:mesh.summary,kind:result?.kind,engine:result?.engine,residual:result?.residual,iterations:result?.iterations,maxDisplacementMm:result?.maxDisplacementMm,maxVonMisesPa:result?.maxVonMisesPa,minTemperature:result?.minTemperature,maxTemperature:result?.maxTemperature,maxSpeedMs:result?.maxSpeedMs,reactionDragN:result?.reactionDragN,stokes:result?.stokes,modeFrequenciesHz:result?.modes?.map(m=>m.frequencyHz),analysisAssessment:result?.analysisAssessment};
 }
-export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=256,maxArtifactBytes=64_000_000}={}){
+export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=256,maxArtifactBytes=64_000_000,isolation='worker',createProcessWorker}={}){
+ if(!['worker','process'].includes(isolation)||createProcessWorker!==undefined&&typeof createProcessWorker!=='function')throw Error('Invalid analysis isolation configuration');
+ if(createProcessWorker!==undefined&&isolation!=='process')throw Error('Process worker factory requires process isolation');
  const destinations=new Map(),artifacts=new Map();
  const jobs=createAnalysisJobs({id:randomUUID,timeoutMs,maxJobs,maxEvents,execute:async({project,options,operation,context,inputRevision,jobId,signal,onEvent,beginCommit})=>{
   const {outputPath,includeFields}=context,key=process.platform==='win32'?outputPath.toLowerCase():outputPath;
@@ -43,7 +45,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
      onEvent(summary);
     }).catch(error=>{writeError??=error;});
    };
-   const output=await analyzeProject(project,options,operation,{signal,observe:true,observeFields:includeFields,onEvent:observe});
+   const output=await analyzeProject(project,options,operation,{signal,observe:true,observeFields:includeFields,onEvent:observe,isolation,...(createProcessWorker?{createProcessWorker}:{})});
    await chain;if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
    beginCommit();
    const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.analysisAssessment.provisional};

@@ -409,3 +409,15 @@ BiCGStabのs-check/r-check/zero-rhs、sweepのfrequency-step start/complete、ch
 別portable Node26の全体比較は719件中716成功・失敗0・3スキップ（219,476.5307 ms）で成功した。[実行ファイルhash・runtime・source hash・生ログの比較記録](evidence/2026-10-15-wave-channel-node26-comparison.json)を保存し、Node24失敗時とのsourceDriftは空配列だった。Node24の単独診断は3件中3成功、fresh process1回である。件数は各runtimeの実記録どおりに示し、Node24の718とNode26の719を揃えていない。
 
 Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗gateは未解消。タスクはcheckingを維持し、全体を一括でgreenとは扱わない。ビルドは2.72秒で成功。既定Node24によるローカル配信物検査26項目は28.04秒ですべて成功し、専門SKILLの検証も成功した。これらの成功で全体試験の失敗gateは解消されない。
+
+## 2026-10-15: 任意Node解析プロセス分離
+
+明示CLI opt-in、同じNode実行ファイルの1ジョブ1子、native fatalの封じ込め・MCP継続、再試行なし・有界runtime失敗情報、process close後の終了確定が対象。既定worker/ブラウザ/ツール数は維持する。最終検証結果は下記のとおりで、V8根治とは扱わない。
+
+最終候補はNode v24.11.1/V8 13.6.233.10-node.28/win32/x64。新規22件を含む全体741件中738成功・3スキップ・失敗0（103,354.4179 ms）。[実行ファイル・実際に解決した依存物のSHA-256と全体生ログ](evidence/2026-10-15-process-isolation-full.json)を保存。レビュー修正前の全体738件/735成功と740件/737成功も各3スキップ・失敗0であり、終了直後の競合2件と異常signal1件の追加後に最終試験を実施した。
+
+[実MCP証跡](evidence/2026-10-15-process-isolation.json)はcontrolled exit86の失敗、最終出力非作成、settled後のrelease、同一セッションのpingと別要求の実熱解析成功を確認する。これは実V8 fatalの再現ではない。通常processモードの実熱解析・mesh、既定Workerとの温度/メッシュ一致、途中温度場/点測定、実子のcancel/timeout/close待機、合成result後異常終了の公開拒否もテストした。
+
+依存追跡付き診断をfresh process1回・analysis-jobs/concurrency1で実行し3件成功（[記録](evidence/2026-10-15-process-isolation-runtime-provenance.json)）。loadedAssetsは解決したローカル依存物と別のpublicコピーを区別し、loaderを実行せずhash化する。実ロードtraceや将来のファイル不変性・runtime安全性の証明ではない。既知Node24/V8問題の根治と過去の失敗gateは未解決を維持する。最終production/testソースは全体試験中固定し、進捗文書は後から更新して別途検証した。
+
+ビルドは2.72秒、既定Node24によるローカル配信物26項目は29.08秒ですべて成功。専門SKILLと日英文書/進捗5件も成功した。全体検証後のsource hash差分はsrc/progress.jsonとビルド生成したpublic/progress.jsonだけで、production/testコード差分はない。

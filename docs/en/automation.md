@@ -392,3 +392,13 @@ Channel iterations carry stage:iteration, solver:pcg, kind:channelFlow, residual
 Both dimensionless residuals use the recursively updated residual divided by the eliminated right-hand-side norm. They are not independently recomputed true residuals and differ from Stokes final-check. converged indicates only that numerical condition: later radiation/probe/channel Re or Mach checks can still fail the job. It does not establish physical accuracy, persistence or mesh independence. Respect the256-event retention limit/cursor gaps and inspect terminal state.
 
 Nonfinite residuals/tolerances are omitted from telemetry, not normalized into valid numbers or JSON null. Sweep complete also requires finite residual/iterations/peakPressurePa/splDb metrics before notification. Computation, stopping rules and original errors remain unchanged; inspect terminal job failures even when no event is emitted.
+
+## Optional Node analysis process isolation
+
+Explicitly start MCP with `node scripts/studio-mcp.mjs --analysis-isolation=process` to run each saved-input job in a child process using the same Node executable. Default isolation remains worker. Browser native Workers and default runtime are unchanged; counts remain27 default/29 paired tools and80 methods.
+
+This opt-in isolates abnormal job exit in its child while keeping the MCP host alive. It never retries. Failures expose a runtime-failure event with code:ANALYSIS_PROCESS_EXIT and bounded stderr tail/hash; cleanup awaits process close. Wire arguments cannot select arbitrary executables/shells. This is not a V8 root fix or a guarantee of model compatibility/physical accuracy. Inspect inputs/outputs/artifacts before rerunning as a new request.
+
+Current containment tests use controlled exit86, not reproduction of an actual V8 native fatal. Child termination on parent disconnect is best effort: synchronous native work can delay the disconnect handler, so immediate exit is not guaranteed.
+
+Child stdout/stderr forwarding retains at most the first64 KiB of each stream. Diagnostic stderr tails are at most4,096 UTF-8 bytes; SHA-256 and byte count cover the whole stderr stream. These are retention bounds,not child-heap limits. A result message alone does not authorize publication:the parent waits for child termination before publishing. Inspect capabilities.executionIsolation and saved calculation.execution.isolation for the selected mode.

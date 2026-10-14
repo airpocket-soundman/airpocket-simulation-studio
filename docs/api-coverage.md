@@ -46,3 +46,5 @@ P0は実装中。全行の操作細分化、必要入力/有効範囲、単位�
 Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/residualKindで前処理実測・推定・最終数値検査を区別する。途中場は追加しない。
 
 調和音響・sweepのBiCGStab残差とfrequency-step開始/完了、channel PCG残差は既存jobEventsで取得できる。profileは13/12件、ツール/ライブ操作数は不変。両経路はfieldsなしで、再帰残差収束を物理精度やジョブ成功と同一視しない。
+
+保存入力ジョブには起動時--analysis-isolation=processの任意子プロセス分離経路を追加。既定workerとブラウザ経路は維持し、runtime失敗の封じ込めはV8根治と区別する。

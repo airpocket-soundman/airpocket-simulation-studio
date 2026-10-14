@@ -10,10 +10,11 @@ export function inspectNodeRuntime(identity=process){
   diagnostics:observed?[{
    code:'NODE_WASM_ALLOCATION_FATAL_OBSERVED',severity:'warning',status:'unresolved',
    message:'A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.',
-   evidence:['docs/evidence/2026-10-14-observation-profiles-v8-failure.json'],
+   evidence:['docs/evidence/2026-10-14-observation-profiles-v8-failure.json','docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json'],
    suggestions:[
     'Inspect the recorded evidence and its limits.',
     'Consider the already verified browser path or an explicit runtime comparison.',
+    'For headless jobs, explicitly selecting process isolation can contain a child exit without fixing V8.',
     'Do not automatically change the runtime or environment.'
    ]
   }]:[],

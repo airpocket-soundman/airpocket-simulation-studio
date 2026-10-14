@@ -405,3 +405,15 @@ One diagnostic fresh-process rerun of that file on the same Node24 at concurrenc
 The separate portable Node26 full-suite comparison passed716 of719 tests with zero failures and three skips in219,476.5307 ms. The [comparison record](../evidence/2026-10-15-wave-channel-node26-comparison.json) preserves executable hash, runtime identity, source hashes and raw log; sourceDrift against the Node24 failure is empty. The Node24 isolated diagnostic passed three of three tests in one fresh-process run. Counts follow each runtime’s actual report:718 on Node24 and719 on Node26.
 
 Node26 is a separate-runtime comparison, not resolution of the default Node24 failed gate. The task remains checking; there is no combined all-green result. Build passed in2.72 seconds. All26 local distribution checks passed on the default Node24 in28.04 seconds; specialist SKILL validation also passed. These successes do not resolve the failed full-suite gate.
+
+## 2026-10-15: optional Node analysis process isolation
+
+Targets include explicit CLI opt-in,one same-executable child per job,native-fatal containment/MCP survival,no retries,bounded runtime diagnostics and process-close settlement. Defaults/browser/tool counts remain unchanged. Final validation follows;this is not V8 resolution.
+
+The final candidate ran on Node v24.11.1/V8 13.6.233.10-node.28/win32/x64:741 tests,738 passed,three skipped,zero failed in103,354.4179 ms,including22 new tests. [Executable/resolved dependency SHA-256 and raw full log](../evidence/2026-10-15-process-isolation-full.json) are retained. Earlier pre-review full runs passed738/735 and740/737 with three skips each; the final run includes two post-result lifecycle regressions and one unexpected-signal regression.
+
+[Real MCP evidence](../evidence/2026-10-15-process-isolation.json) covers controlled exit86,no final output,release after settlement,ping survival and a distinct real thermal request succeeding in the same session. This does not reproduce an actual V8 fatal. Tests also cover process thermal/mesh requests,matching default-Worker thermal values/mesh,intermediate temperature fields/probes,real-child cancellation/timeout/close waiting and synthetic post-result abnormal termination blocking publication.
+
+One fresh analysis-jobs diagnostic with concurrency1 passed three tests using [resolved dependency provenance](../evidence/2026-10-15-process-isolation-runtime-provenance.json). loadedAssets distinguish resolved local dependencies from public copies and are hashed without executing the loader. This is not load tracing,future immutability or runtime safety evidence. The intermittent Node24 V8 root cause and historical failed gate remain unresolved. Production/test sources were frozen during the final full run; progress documentation was updated afterward and validated separately.
+
+Build passed in2.72 seconds;all26 local distribution checks passed on the default Node24 in29.08 seconds. Specialist SKILL validation and five documentation/progress tests passed. Post-run source-hash drift is limited to src/progress.json and its build-generated public/progress.json copy;production/test code did not drift.

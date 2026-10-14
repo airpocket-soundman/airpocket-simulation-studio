@@ -46,3 +46,5 @@ Surface inspection is available through connected inspectSurface/studio_inspect_
 Structured P1/P2 Stokes GMRES residuals use existing jobEvents with phase/residualKind distinguishing measured preconditioned, estimated and final numerical checks; no intermediate fields are added.
 
 Harmonic/sweep BiCGStab residuals and frequency-step start/complete, plus channel PCG residuals, use existing jobEvents. Profile counts remain13/12 and tool/live-operation counts are unchanged. Neither path adds field arrays; recurrence convergence is not physical accuracy or job success.
+
+Saved-input jobs add an opt-in --analysis-isolation=process child-process route. Default worker/browser paths remain;runtime-failure containment is distinct from V8 root-cause resolution.

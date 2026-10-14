@@ -79,3 +79,11 @@ HEAD f7a2ea8を基準とする今回の初回全体試験は584件中580成功�
 既存[再発証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)のfinalCoverageRunへ2回目の失敗を追記した。公式QA portable Node26.10.0の最終ソース全体比較は584件中581成功・3スキップ、V8fatalなし（試験175,036.3216 ms、壁時計176,762 ms）。[生記録](evidence/2026-10-14-observation-profiles-node26-full.json)と、追加helperを含む照合済みソースSHAを保存した。これは性能ベンチマークや上流修正との原因一致の証明ではない。既定Nodeは変更しない。比較や再試行が成功しても、Node24で観測した失敗や原因未解決を取り消さない。
 
 MCPのstudio_capabilities/diagnose_execution/preflight_projectのruntimeから、node/v8/platform/archの機械報告と既知実測環境への警告を取得できる。完全一致だけobserved-risk、他はnot-assessedで、根治・互換性の保証ではない。純studioApiのportable能力とは分離する。
+
+## 2026-10-15: 上流確認と任意プロセス分離の範囲
+
+確認日2026-10-15。[Node公式issue66366](https://github.com/nodejs/node/issues/66366)は類似のWASM wrapper解放競合を報告し、[V8公式9b8ca54d5a](https://github.com/v8/v8/commit/9b8ca54d5a)はdying wrapperの参照追加をatomicに扱う修正を説明する。[Node v24.22.0公式ソース](https://raw.githubusercontent.com/nodejs/node/v24.22.0/deps/v8/src/wasm/wasm-import-wrapper-cache.cc)のMaybeGetはAddRef後にis_dyingを調べる順序のまま。これはソース上の事実で、本リポジトリの全fatalが同じ根本原因という同定は仮説である。過去の別runtime成功や単独成功を原因解決と読み替えない。
+
+任意のMCP起動`--analysis-isolation=process`は同じNode子プロセス内へ解析を分け、子の異常終了時もホストを維持する失敗封じ込めを追加する。既定workerは変更せず、再試行・runtime自動切替・任意実行ファイルのwire指定は行わない。runtime-failureの有界stderr/hashを確認し、process close後の資源終了を待つ。最終検証は[試験記録](testing.md)と[実行証跡](evidence/2026-10-15-process-isolation-full.json)を参照。V8根治や全モデル互換性の証明ではない。
+
+この経路のruntime-failureはcode:ANALYSIS_PROCESS_EXITを返します。検証に使うcontrolled exit86は実V8 fatalの再現ではなく、根治の証拠でもありません。親disconnect時の子終了はbest effortで、同期native処理によりハンドラが遅れる場合があります。
