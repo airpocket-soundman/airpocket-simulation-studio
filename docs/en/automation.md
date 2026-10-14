@@ -171,7 +171,7 @@ Parser warnings and references are preserved. Print coordinates are not automati
 
 The four GUI mesh/solve entry routes use `guiAnalysisJobs.run` and the shared `analysisApi.startJob`. Inputs are cloned and frozen to a SHA-256 revision at start; completion checks the current input revision before applying results. GUI jobs enable `includeFields:true` for supported intermediate fields. Legacy `analysisApi.analyze/generateMesh` remain direct execution APIs for compatibility.
 
-The inspect-scoped connector method `listJobs({offset:0,limit:50})` (maximum limit 100) returns `{jobs,total,nextOffset}`. It lists retained GUI/API jobs as compact metadata with `origin:"gui"|"api"`, without full result arrays. The shared API is `analysisApi.listJobs`. Use returned IDs with existing `jobStatus`, `jobEvents` and `jobArtifact` to read state and intermediate results. GUI history retains the latest eight jobs; the next GUI start releases the oldest terminal GUI job. This cleanup never releases MCP jobs.
+The inspect-scoped connector method `listJobs({offset:0,limit:50})` (maximum limit 100) returns `{jobs,total,nextOffset}`. It lists retained GUI/API jobs as compact metadata with `origin:"gui"|"api"`, without full result arrays. The shared API is `analysisApi.listJobs`. Use returned IDs with existing `jobStatus`, `jobEvents` and `jobArtifact` to read state and intermediate results. GUI history retains the latest eight jobs; the next GUI start releases the oldest terminal, execution-settled GUI job. This cleanup never releases MCP jobs.
 
 Disconnect cancels only jobs started by that session; GUI jobs continue. Page-exit/restart recovery is unsupported. Local in-app-browser structural and thermal GUI jobs were verified with real Worker/WASM and MCP ([test record](testing.md)); this does not cover every GUI route or public HTTPS connectivity.
 
@@ -232,3 +232,13 @@ v2 validation/export/import recomputes every bundled measurement from the case m
 A v2 host importing v1 returns measurementsCleared:true and the effective v2 revision including empty history. v2 count metadata includes measurementCount. See the [test record](testing.md) for local actual-UI v1 clearing, v2 restoration and identical export bytes.
 
 Read-only caseBundleExport() freezes the current snapshot and returns its revision; it does not condition export on an expectedArchiveRevision argument. Import still requires expectedArchiveRevision and commit-time CAS checks.
+
+## Job terminal state and execution-resource settlement
+
+Existing status/list/event records include executionSettled and resourceState:"pending"|"settled". Cancel/timeout may report terminal request state first; terminal with executionSettled:false still requires waiting for execution settlement. A resource-state event is emitted in the execute chain finally. Release requires both terminal state and executionSettled:true; pending jobs retain their slot and requestId idempotency.
+
+Internal drain() awaits a snapshot of currently pending jobs, excluding later starts. close() retains synchronous cancellation. These add no MCP methods; observe existing status/events/list. Combined with headless Worker termination waiting, this defines resource ownership, not resolution of the V8 crash.
+
+Each view/list/event also reports releaseAllowed, true only for terminal plus settled execution. settled means executor Promise completion: adapters must settle after their own cleanup. Browser Worker.terminate() returning void does not confirm OS-thread exit. Core cannot distinguish normal Abort rejection from cleanup failure after terminal; preserve the original cancel/timeout error and report executionError:{code:"JOB_EXECUTION_REJECTED_AFTER_TERMINAL",message} separately. Service drain/closeAsync and normal-MCP-EOF waiting are added while synchronous close remains compatible.
+
+Browser analysis-client keeps active ownership and ignores late replies until void terminate completes or its thenable settles; abort is rechecked after Worker creation. Shared analysisApi.isBusy()/drainJobs()/closeJobsAsync() are added, and connector mutations check global analysis busy state. No wire methods are added. GUI run waits for terminal plus executionSettled; eight-entry history cleanup selects only releaseAllowed jobs.

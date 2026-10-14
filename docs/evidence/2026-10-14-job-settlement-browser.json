@@ -1,0 +1,348 @@
+{
+  "environment": "Actual local in-app browser, GUI volume meshing, native browser Worker and real stdio MCP/HTTP. Browser terminate returns void; no OS thread-exit proof.",
+  "running": {
+    "state": "running",
+    "schemaVersion": 1,
+    "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+    "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "sequence": 1,
+    "elapsedMs": 0,
+    "type": "state",
+    "executionSettled": false,
+    "resourceState": "pending",
+    "releaseAllowed": false
+  },
+  "cancelResponse": {
+    "state": "cancelled",
+    "error": {
+      "code": "JOB_CANCELLED",
+      "message": "Calculation cancelled"
+    },
+    "schemaVersion": 1,
+    "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+    "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "sequence": 4,
+    "elapsedMs": 294,
+    "type": "state",
+    "executionSettled": false,
+    "resourceState": "pending",
+    "releaseAllowed": false
+  },
+  "cancelled": {
+    "state": {
+      "schemaVersion": 1,
+      "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+      "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "state": "cancelled",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "mesh",
+      "origin": "gui",
+      "startedAt": 1791986228450,
+      "updatedAt": 1791986228745,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_CANCELLED",
+        "message": "Calculation cancelled"
+      },
+      "executionError": {
+        "code": "JOB_EXECUTION_REJECTED_AFTER_TERMINAL",
+        "message": "Calculation cancelled"
+      }
+    },
+    "events": {
+      "schemaVersion": 1,
+      "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+      "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "state": "cancelled",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "mesh",
+      "origin": "gui",
+      "startedAt": 1791986228450,
+      "updatedAt": 1791986228745,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1,
+      "error": {
+        "code": "JOB_CANCELLED",
+        "message": "Calculation cancelled"
+      },
+      "executionError": {
+        "code": "JOB_EXECUTION_REJECTED_AFTER_TERMINAL",
+        "message": "Calculation cancelled"
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 2,
+          "elapsedMs": 144,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 3,
+          "elapsedMs": 147,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "cancelled",
+          "error": {
+            "code": "JOB_CANCELLED",
+            "message": "Calculation cancelled"
+          },
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 4,
+          "elapsedMs": 294,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "executionError": {
+            "code": "JOB_EXECUTION_REJECTED_AFTER_TERMINAL",
+            "message": "Calculation cancelled"
+          },
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 5,
+          "elapsedMs": 295,
+          "type": "execution-error",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "cancelled",
+          "schemaVersion": 1,
+          "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 6,
+          "elapsedMs": 295,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "truncated": false,
+      "nextSequence": 6,
+      "hasMore": false
+    }
+  },
+  "release": {
+    "jobId": "e9f5dd92-0e65-4402-86cb-e211bde33b89",
+    "released": true
+  },
+  "success": {
+    "state": {
+      "schemaVersion": 1,
+      "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+      "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "mesh",
+      "origin": "gui",
+      "startedAt": 1791986280321,
+      "updatedAt": 1791986281275,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1
+    },
+    "events": {
+      "schemaVersion": 1,
+      "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+      "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "state": "succeeded",
+      "executionSettled": true,
+      "resourceState": "settled",
+      "releaseAllowed": true,
+      "operation": "mesh",
+      "origin": "gui",
+      "startedAt": 1791986280321,
+      "updatedAt": 1791986281275,
+      "lastSequence": 6,
+      "firstAvailableSequence": 1,
+      "result": {
+        "mesh": {
+          "nodeCount": 3480,
+          "elementCount": 16248,
+          "volumeMm3": 27050.96289299665,
+          "minVolumeMm3": 0.46531070035305366,
+          "minQuality": 0.2979319644701571,
+          "qualityHistogram": [
+            0,
+            262,
+            910,
+            3876,
+            11200
+          ]
+        },
+        "resultAvailable": true,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "intermediate": {
+          "retainedArtifacts": 1,
+          "retainedBytes": 538539,
+          "storageLimited": false,
+          "sharedBytes": 1615617,
+          "maxBytes": 64000000
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 2,
+          "elapsedMs": 137,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 3,
+          "elapsedMs": 140,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 3480,
+            "elementCount": 16248,
+            "volumeMm3": 27050.96289299665,
+            "minVolumeMm3": 0.46531070035305366,
+            "minQuality": 0.2979319644701571,
+            "qualityHistogram": [
+              0,
+              262,
+              910,
+              3876,
+              11200
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "artifact": {
+            "artifactId": "0001",
+            "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+            "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+            "bytes": 538539,
+            "sha256": "5d0aa718c305fb0702999fac34c0dff58b56fd44ebd2e048281c93a2d77307f8",
+            "kind": "mesh",
+            "provisional": true,
+            "storage": "browser-memory"
+          },
+          "meshAvailable": true,
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 4,
+          "elapsedMs": 949,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 5,
+          "elapsedMs": 954,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "103ba072-e75a-4e2f-9560-992035074e3f",
+          "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+          "sequence": 6,
+          "elapsedMs": 954,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "truncated": false,
+      "nextSequence": 6,
+      "hasMore": false
+    }
+  }
+}

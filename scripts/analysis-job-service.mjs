@@ -78,7 +78,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const inspected=inspectIntermediate(snapshot,meshRecord.snapshot.mesh,options);jobs.get(jobId);
    return {schemaVersion:1,jobId,inputRevision:job.inputRevision,jobState:job.state,artifactId,artifact:{...record},...inspected};
   },
-  get:jobs.get,events:jobs.events,cancel:jobs.cancel,
-  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);return result;},close:jobs.close
+  get:jobs.get,events:jobs.events,cancel:jobs.cancel,drain:jobs.drain,
+  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);return result;},close:jobs.close,async closeAsync(){jobs.close();return jobs.drain();}
  });
 }

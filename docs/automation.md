@@ -171,7 +171,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共通の`analysisApi.startJob`を使用します。開始時に入力を複製しSHA-256で版を固定し、完了時は現在の入力版と照合して適用します。GUIジョブは`includeFields:true`で対応する中間場を保持します。旧`analysisApi.analyze/generateMesh`は直接実行の互換APIとして残ります。
 
-確認権限の接続操作`listJobs({offset:0,limit:50})`（limit上限100）は`{jobs,total,nextOffset}`を返します。GUIとAPIの保持中ジョブを`origin:"gui"|"api"`付きの小さなメタデータとして列挙し、完全な結果配列を含みません。共有APIは`analysisApi.listJobs`です。返されたIDに既存の`jobStatus`、`jobEvents`、`jobArtifact`を使用して状態・中間結果を読み取ります。GUIの履歴表示は直近8件を保持し、次のGUI開始時に最も古い終了済みGUIジョブを解放します。MCP側のジョブをこの整理で解放しません。
+確認権限の接続操作`listJobs({offset:0,limit:50})`（limit上限100）は`{jobs,total,nextOffset}`を返します。GUIとAPIの保持中ジョブを`origin:"gui"|"api"`付きの小さなメタデータとして列挙し、完全な結果配列を含みません。共有APIは`analysisApi.listJobs`です。返されたIDに既存の`jobStatus`、`jobEvents`、`jobArtifact`を使用して状態・中間結果を読み取ります。GUIの履歴表示は直近8件を保持し、次のGUI開始時に最も古い終了済みかつ実行終了確認済みのGUIジョブを解放します。MCP側のジョブをこの整理で解放しません。
 
 接続解除で中止するのはその接続が開始したジョブのみで、GUIジョブは継続します。ページ終了・再起動後の復元は提供しません。ローカルのアプリ内ブラウザで構造・熱GUIジョブを実Worker/WASMとMCPから確認しました（[検証記録](testing.md)）。全GUI経路と公開HTTPS接続を確認した記録ではありません。
 
@@ -232,3 +232,13 @@ v2の検証・書出・取込は、同梱した全測定履歴を対応する表
 v2ホストのv1取込応答は`measurementsCleared:true`と、空履歴を含む実効v2の版を返します。v2の件数要約にはmeasurementCountを含みます。ローカル実画面でv1履歴クリア・v2再取込・書出バイト一致を確認した範囲は[検証記録](testing.md)を参照してください。
 
 `caseBundleExport()`は読取専用で現在のスナップショットを固定し、その版を返します。呼出時expectedArchiveRevisionによる版の条件指定は行いません。取込開始のexpectedArchiveRevisionと確定時のCAS検査は必須のままです。
+
+## ジョブ状態と実行資源の終了確認
+
+既存のstatus・一覧・イベントに`executionSettled`と`resourceState:"pending"|"settled"`を追加します。cancel/timeoutは要求の終端状態を先に返せるため、stateがterminalでもexecutionSettled:falseなら実行終了を待つ必要があります。executeチェーンのfinallyで`resource-state`イベントを発行します。解放はterminalかつexecutionSettled:trueの場合だけ可能で、pendingの間は保持枠とrequestIdの冪等性を維持します。
+
+内部`drain()`は呼出時点でpendingのジョブだけをスナップショットとして待ち、後から開始したジョブを含めません。`close()`は同期的な取消を維持します。これらは新しいMCP操作を追加せず、既存の状態・イベント・一覧から観測します。headlessのWorker終了待機と組み合わせた資源契約であり、V8クラッシュの根治を意味しません。
+
+各view/list/eventは`releaseAllowed`も返し、terminalかつexecutionSettledのときだけtrueです。resourceStateのsettledはexecutor Promiseの終了を示します。executorは自己cleanup後に確定する契約ですが、ブラウザWorker.terminate()がvoidの場合はOSスレッド終了を確認した意味ではありません。終端後の拒否は通常Abortとcleanup異常をcoreで識別できないため、元の取消/期限切れerrorを維持し、`executionError:{code:"JOB_EXECUTION_REJECTED_AFTER_TERMINAL",message}`へ別記します。サービスのdrain/closeAsyncとMCP正常EOFの終了待機を追加し、同期closeは互換維持します。
+
+ブラウザのanalysis-clientは終了要求後もactiveと遅着応答無視を維持し、terminateのvoid完了またはthenableの確定後に解きます。Worker作成後にもabortを再確認します。共通`analysisApi.isBusy()/drainJobs()/closeJobsAsync()`を追加し、接続の変更系は全体のisBusyも検査します。新しいwire操作は追加しません。GUIのrunはterminalかつexecutionSettledまで待ち、直近8件の整理はreleaseAllowedのジョブだけを対象にします。

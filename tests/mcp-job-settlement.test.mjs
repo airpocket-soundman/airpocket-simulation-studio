@@ -1,0 +1,31 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {createInterface} from 'node:readline';
+import {mkdtemp,writeFile,readFile,rm,stat} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createProjectFromBuiltin} from '../src/project-import.js';
+import {createHeadlessJobService} from '../scripts/analysis-job-service.mjs';
+test('real MCP cancellation is terminal before settlement, refuses premature release and retains resource events',async t=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-job-settle-')),child=spawn(process.execPath,['scripts/studio-mcp.mjs'],{cwd:new URL('../',import.meta.url),stdio:['pipe','pipe','pipe']}),lines=createInterface({input:child.stdout}),pending=new Map();let serial=0,stderr='';child.stderr.on('data',v=>stderr+=v);
+ lines.on('line',line=>{const message=JSON.parse(line);pending.get(message.id)?.(message);});
+ t.after(async()=>{child.stdin.end();if(child.exitCode===null&&child.signalCode===null){const timer=setTimeout(()=>child.kill(),2000);await new Promise(resolve=>child.once('exit',resolve));clearTimeout(timer);}lines.close();await rm(dir,{recursive:true,force:true});});
+ const encoded=(method,params)=>{const id=++serial;let line=JSON.stringify({jsonrpc:'2.0',id,method,params})+'\n';const promise=new Promise((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('MCP timeout '+stderr));},10000);pending.set(id,message=>{clearTimeout(timer);pending.delete(id);resolve(message);});});return {line,promise};},rpc=(method,params)=>{const request=encoded(method,params);child.stdin.write(request.line);return request.promise;};
+ const call=async(name,args)=>{const response=await rpc('tools/call',{name,arguments:args});assert.equal(response.error,undefined);return response.result;},value=result=>{assert.notEqual(result.isError,true,result.content?.[0]?.text);return result.structuredContent.value;};
+ await rpc('initialize',{protocolVersion:'2025-11-25'});child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
+ const path=join(dir,'input.json'),outputPath=join(dir,'cancelled.json'),original=JSON.stringify(createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,10,10,40]}}));await writeFile(path,original);
+ const started=value(await call('studio_start_analysis',{path,outputPath,requestId:'cancel-resource',operation:'mesh'}));assert.equal(started.executionSettled,false);assert.equal(started.resourceState,'pending');assert.equal(started.releaseAllowed,false);
+ // Both commands enter one stdin chunk, before any Worker exit I/O callback.
+ const cancel=encoded('tools/call',{name:'studio_cancel_job',arguments:{jobId:started.jobId}}),release=encoded('tools/call',{name:'studio_release_job',arguments:{jobId:started.jobId}});child.stdin.write(cancel.line+release.line);const cancellation=value((await cancel.promise).result),premature=(await release.promise).result;assert.equal(cancellation.state,'cancelled');assert.equal(cancellation.executionSettled,false);assert.equal(cancellation.releaseAllowed,false);assert.equal(premature.isError,true);assert.match(premature.content[0].text,/settle|execution|resource/i);
+ let done;const deadline=Date.now()+10000;do{done=value(await call('studio_job_status',{jobId:started.jobId}));assert.ok(Date.now()<deadline);if(!done.executionSettled)await new Promise(resolve=>setTimeout(resolve,5));}while(!done.executionSettled);
+ assert.equal(done.state,'cancelled');assert.equal(done.resourceState,'settled');assert.equal(done.releaseAllowed,true);assert.equal(done.error.code,'JOB_CANCELLED');assert.equal(done.result,undefined);
+ const events=value(await call('studio_job_events',{jobId:started.jobId}));assert.ok(events.events.some(event=>event.type==='resource-state'&&event.resourceState==='settled'));assert.equal(events.executionSettled,true);await assert.rejects(stat(outputPath),{code:'ENOENT'});assert.equal(await readFile(path,'utf8'),original);assert.equal(value(await call('studio_release_job',{jobId:started.jobId})).released,true);assert.equal((await call('studio_job_status',{jobId:started.jobId})).isError,true);
+ const eofPath=join(dir,'eof.json');value(await call('studio_start_analysis',{path,outputPath:eofPath,requestId:'eof-close',operation:'mesh'}));const exited=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('MCP EOF shutdown timed out')),10000);child.once('exit',(code,signal)=>{clearTimeout(timer);resolve({code,signal});});});child.stdin.end();assert.deepEqual(await exited,{code:0,signal:null});await assert.rejects(stat(eofPath),{code:'ENOENT'});assert.equal(await readFile(path,'utf8'),original);
+});
+test('real headless timeout drain and closeAsync preserve input and never publish cancelled results',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-job-drain-')),service=createHeadlessJobService({timeoutMs:1});
+ try{const path=join(dir,'input.json'),outputPath=join(dir,'timeout.json'),original=JSON.stringify(createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,10,10,40]}}));await writeFile(path,original);const job=await service.start({path,outputPath,requestId:'short',operation:'mesh'});const deadline=Date.now()+10000;while(service.get(job.jobId).state==='running'){assert.ok(Date.now()<deadline);await new Promise(resolve=>setTimeout(resolve,2));}const draining=await service.drain();assert.equal(draining.drained,true);const done=service.get(job.jobId);assert.equal(done.state,'timed_out');assert.equal(done.executionSettled,true);assert.equal(done.resourceState,'settled');assert.equal(done.releaseAllowed,true);assert.equal(done.result,undefined);await assert.rejects(stat(outputPath),{code:'ENOENT'});assert.equal(await readFile(path,'utf8'),original);
+ const second=await service.start({path,outputPath:join(dir,'close.json'),requestId:'close',operation:'mesh'});await service.closeAsync();assert.equal(service.get(second.jobId).state,'cancelled');assert.equal(service.get(second.jobId).executionSettled,true);await assert.rejects(stat(join(dir,'close.json')),{code:'ENOENT'});
+ }finally{await service.closeAsync();await rm(dir,{recursive:true,force:true});}
+});

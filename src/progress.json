@@ -1617,9 +1617,25 @@
       ],
       "detail": "headless解析の成功・失敗・取消・時間切れでterminate完了後だけPromiseを確定。終了処理失敗と元エラーを保持し、遅延応答と二重確定を防止。診断CLIに対象・並列数・別Node・親子環境・ソース指紋・途中記録を追加。共有ジョブの取消terminal先行は別の制約として残す。",
       "detailEn": "Headless success/failure/cancel/timeout promises settle only after termination. Preserve cleanup and original errors; prevent late replies and duplicate settlements. Diagnostic CLI gains targets/concurrency/runtime identity/source fingerprints/checkpoints. Shared-job cancellation may still become terminal before cleanup ends.",
-      "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブ取消terminal先行は残す。ビルド・配信物26項目・SKILL成功。",
-      "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. Shared-job early cancellation terminal remains. Build,26distribution checks andSKILL passed.",
+      "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブの取消と終了追跡はJOBSETTLEMENT1で追加。ビルド・配信物26項目・SKILL成功。",
+      "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. JOBSETTLEMENT1 adds shared-job cancellation and settlement tracking. Build,26distribution checks andSKILL passed.",
       "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json"
+    },
+    {
+      "id": "JOBSETTLEMENT1",
+      "title": "取消・時間切れと実行終了を分けてLLMへ返す",
+      "titleEn": "Expose execution settlement separately from cancelled and timed-out states",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "HEADLESSLIFECYCLE1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "共通ジョブへexecutionSettled/resourceState/releaseAllowedと終了eventを追加。終端でもpending中の登録解除を拒否し、元取消理由と後続rejectを分離。drain/closeAsync・stdioEOF待機・Browser非同期terminate・GUI待機とprune・別session busyを連携。settledはPromise確定でOS解放の独立証明ではない。",
+      "detailEn": "Add executionSettled/resourceState/releaseAllowed and settlement events. Refuse releasing pending executions after terminal cancellation; retain original reason and later rejection separately. Integrate drain/closeAsync/stdioEOF, browser termination, GUI wait/pruning and cross-session busy. Settled describes promise completion, not independent OS release proof.",
+      "acceptance": "新規15試験を含む全556件中553成功・3スキップ（67.82秒）。実画面でGUI取消のpending→settled、MCP解除、再メッシュ3480節点/16248要素を確認。ビルド・配信物26項目（28.46秒）・SKILL検証成功。OS終了の直接証明ではなく、既知V8問題の根治も未証明。",
+      "acceptanceEn": "553 passed and three skipped of556, including15new checks (67.82s). Actual GUI cancellation pending→settled, MCP release and remeshing3480nodes/16248elements verified. Build,26distribution checks (28.46s) andSKILL validation passed. Not direct OS-exit proof; known V8 root fix remains unproven.",
+      "evidence": "src/analysis-jobs.js; src/analysis-client.js; src/gui-analysis-jobs.js; src/browser-session.js; scripts/analysis-job-service.mjs; tests/analysis-jobs.test.mjs; tests/browser-job-settlement.test.mjs; tests/mcp-job-settlement.test.mjs; docs/evidence/2026-10-14-job-settlement-browser.json; docs/testing.md"
     }
   ],
   "solvers": [

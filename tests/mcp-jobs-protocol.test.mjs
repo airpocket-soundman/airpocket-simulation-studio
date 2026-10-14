@@ -25,6 +25,7 @@ function server(){
 test('real MCP process supports incremental job polling, retry identities, cancellation and release',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'studio-mcp-jobs-')),mcp=server();
  try{
+  const waitForRelease=async jobId=>{const deadline=Date.now()+20000;for(;;){const status=await mcp.call('studio_job_status',{jobId});if(status.executionSettled&&status.releaseAllowed){assert.equal(status.resourceState,'settled');return status;}assert.ok(Date.now()<deadline,'Job execution did not settle before release');await new Promise(resolve=>setTimeout(resolve,10));}};
   const path=join(dir,'project.json'),outputPath=join(dir,'result.json');await writeFile(path,JSON.stringify(project()));
   const initialized=await mcp.request('initialize',{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'job-protocol-test',version:'1'}});assert.equal(initialized.result.protocolVersion,'2025-11-25');mcp.notify();
   const args={path,outputPath,requestId:'solve-retry',includeFields:true},started=await mcp.call('studio_start_analysis',args);assert.equal(started.state,'running');
@@ -36,17 +37,17 @@ test('real MCP process supports incremental job polling, retry identities, cance
    const page=await mcp.call('studio_job_events',{jobId:started.jobId,afterSequence:cursor,limit:2});
    for(const event of page.events){assert.ok(event.sequence>cursor);assert.equal(event.jobId,started.jobId);assert.equal(event.inputRevision,started.inputRevision);cursor=event.sequence;events.push(event);}
    assert.equal(page.nextSequence,cursor);state=page.state;
-   if(['succeeded','failed','cancelled','timed_out'].includes(state)&&!page.hasMore)break;
+   if(['succeeded','failed','cancelled','timed_out'].includes(state)&&page.executionSettled===true&&page.releaseAllowed===true&&!page.hasMore)break;
    await new Promise(resolve=>setTimeout(resolve,10));
   }
-  assert.equal(state,'succeeded');assert.ok(events.some(e=>e.stage==='mesh'&&e.provisional));assert.ok(events.some(e=>e.stage==='iteration'&&e.provisional));assert.equal(events.at(-1).state,'succeeded');
+  assert.equal(state,'succeeded');assert.ok(events.some(e=>e.stage==='mesh'&&e.provisional));assert.ok(events.some(e=>e.stage==='iteration'&&e.provisional));assert.equal(events.at(-1).state,'succeeded');assert.equal(events.at(-1).type,'resource-state');assert.equal(events.at(-1).executionSettled,true);assert.equal(events.at(-1).releaseAllowed,true);
   const status=await mcp.call('studio_job_status',{jobId:started.jobId}),saved=JSON.parse(await readFile(outputPath,'utf8'));assert.equal(saved.job.jobId,started.jobId);assert.equal(saved.job.inputRevision,started.inputRevision);assert.equal(saved.job.provisional,false);assert.ok(Math.abs(status.result.maxDisplacementMm-.04)<1e-8);assert.equal(status.result.maxDisplacementMm,saved.result.maxDisplacementMm);
   const empty=await mcp.call('studio_job_events',{jobId:started.jobId,afterSequence:cursor});assert.deepEqual(empty.events,[]);assert.equal(empty.nextSequence,cursor);
   assert.equal((await mcp.call('studio_start_analysis',args)).jobId,started.jobId);assert.equal((await mcp.call('studio_cancel_job',{jobId:started.jobId})).cancelled,false);
   assert.equal((await mcp.call('studio_release_job',{jobId:started.jobId})).released,true);assert.equal((await mcp.raw('studio_job_status',{jobId:started.jobId})).result.isError,true);assert.ok(await stat(outputPath));
   const cancelledPath=join(dir,'cancelled.json'),cancelled=await mcp.call('studio_start_analysis',{path,outputPath:cancelledPath,requestId:'cancel-job',size:.1});
   assert.equal((await mcp.call('studio_cancel_job',{jobId:cancelled.jobId})).cancelled,true);assert.equal((await mcp.call('studio_job_status',{jobId:cancelled.jobId})).state,'cancelled');assert.equal((await mcp.call('studio_cancel_job',{jobId:cancelled.jobId})).cancelled,false);
-  await mcp.call('studio_release_job',{jobId:cancelled.jobId});await assert.rejects(stat(cancelledPath),{code:'ENOENT'});
-  const replacement=await mcp.call('studio_start_analysis',{path,outputPath:join(dir,'replacement.json'),requestId:'solve-retry',size:.1});assert.notEqual(replacement.jobId,started.jobId);await mcp.call('studio_cancel_job',{jobId:replacement.jobId});await mcp.call('studio_release_job',{jobId:replacement.jobId});
+  assert.equal((await waitForRelease(cancelled.jobId)).state,'cancelled');await mcp.call('studio_release_job',{jobId:cancelled.jobId});await assert.rejects(stat(cancelledPath),{code:'ENOENT'});
+  const replacement=await mcp.call('studio_start_analysis',{path,outputPath:join(dir,'replacement.json'),requestId:'solve-retry',size:.1});assert.notEqual(replacement.jobId,started.jobId);await mcp.call('studio_cancel_job',{jobId:replacement.jobId});assert.equal((await waitForRelease(replacement.jobId)).state,'cancelled');await mcp.call('studio_release_job',{jobId:replacement.jobId});
  }finally{await mcp.close();await rm(dir,{recursive:true,force:true});}
 });

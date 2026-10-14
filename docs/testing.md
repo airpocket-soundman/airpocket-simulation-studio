@@ -279,3 +279,15 @@ sourceFingerprintは`f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e86359
 [比較要約](evidence/2026-10-14-runtime-comparison.json)、[Node24全記録](evidence/2026-10-14-runtime-node24-full.json)、[Node26全記録](evidence/2026-10-14-runtime-node26-full.json)を保存。[FakeWorkerによる修正前後比較](evidence/2026-10-14-headless-worker-ownership.json)は旧settledBeforeExit:true、新false、terminateCallsは両者1で、終了待機の資源契約を決定論的に示す。native WASM停止の再現試験ではない。
 
 新規のライフサイクル12件と診断CLI6件の計18件、および実処理を含む関連10件が成功。ビルド・ローカル配信物26項目（27.87秒）・SKILL検証成功。
+
+## 2026-10-14: ジョブ実行終了の追跡
+
+executionSettled/resourceStateとresource-stateイベント、terminalと資源終了の区別、pending中の解放拒否・保持枠/冪等性、drainの現在pendingスナップショット待機が対象。最終実装と試験は確認中。V8根治とは別の資源所有権の契約である。
+
+最終契約はresourceState:pending|settledとreleaseAllowedで、releasedは用いない。settledはexecutor Promiseの確定を示し、voidのブラウザterminateをOS終了確認とは扱わない。終端後rejectのexecutionErrorは元cancel/timeoutと別に記録し、Abortかcleanup異常かを断定しない。サービスdrain/closeAsyncとMCP正常EOF待機も対象。
+
+新規対象15件（browser settlement6・core7・MCP2）の検証範囲は、void/非同期terminate、終了中active保持・遅着無視、Worker作成時abort、GUI待機/安全な履歴整理、cancel/timeout後の保持枠・冪等性とreleaseAllowed、drain/closeAsync/正常EOF待機。最終レビューと実画面確認を完了。
+
+ブラウザ対象6件は、上記に加えてfalsy値5種によるcleanup拒否を失敗として保持すること、全体pending時の新規export拒否と既存exportの再送維持を確認。ローカルのCodexアプリ内ブラウザで円柱・mesh size2のGUIメッシュを開始してGUI取消し、実MCPでexecutionSettled:true/resourceState:settled/releaseAllowed:trueを確認した。取消イベント自体はfalse/pendingで、resource-stateは1回だけ。MCP releaseが成功し、続くGUI再メッシュは3,480節点・16,248四面体で成功した。
+
+[機械可読記録](evidence/2026-10-14-job-settlement-browser.json)と[画面](evidence/2026-10-14-job-settlement-browser.jpg)を保存。最初の短いメッシュは一覧取得から取消要求までに成功済みとなったため、取消成功の証拠に数えずGUI取消で再確認した。native Workerを早期に止めた確認であり、OS終了の直接確認や取消前のWASM算術開始を証明しない。全体試験は556件中553成功・3スキップ（67.82秒）。旧MCP試験の即時解除を終了待機へ更新した。ビルド・配信物26項目（28.46秒）・SKILL検証成功。既知V8停止は今回非再現で、根治の証明ではない。

@@ -63,3 +63,7 @@ sourceFingerprintは`f5baf41cf567a5adb08d84229b84a44f2c0018abb1dfff2aa88d6e86359
 [比較要約](evidence/2026-10-14-runtime-comparison.json)、[Node24全記録](evidence/2026-10-14-runtime-node24-full.json)、[Node26全記録](evidence/2026-10-14-runtime-node26-full.json)を保存。[FakeWorkerによる修正前後比較](evidence/2026-10-14-headless-worker-ownership.json)は旧settledBeforeExit:true、新false、terminateCallsは両者1で、終了待機の資源契約を決定論的に示す。native WASM停止の再現試験ではない。
 
 新規のライフサイクル12件と診断CLI6件の計18件、および実処理を含む関連10件が成功。ビルド・ローカル配信物26項目（27.87秒）・SKILL検証成功。
+
+共有ジョブのterminal先行に対し、executionSettled/resourceStateとresource-stateイベントでexecuteチェーンの終了を別に追跡する変更を準備中。解放はterminalかつ実行終了時のみとし、drainは現在pendingのみを待つ。最終検証待ちで、V8根治は引き続き未証明。
+
+状態名はpending/settled、解放可否はreleaseAllowedへ精密化。executorの自己cleanup後のPromise確定を追跡し、ブラウザvoid terminateのOS終了を主張しない。終端後rejectはexecutionErrorへ別記するが通常Abortとcleanup異常を区別しない。同期close互換を維持し、drain/closeAsync・正常MCP EOFは終了待機する契約。

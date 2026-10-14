@@ -63,3 +63,7 @@ All comparisons used the ownership repair; there is no pre-change full-suite con
 Saved evidence includes the [comparison summary](../evidence/2026-10-14-runtime-comparison.json), [Node24 report](../evidence/2026-10-14-runtime-node24-full.json) and [Node26 report](../evidence/2026-10-14-runtime-node26-full.json). The [deterministic FakeWorker before/after record](../evidence/2026-10-14-headless-worker-ownership.json) shows old settledBeforeExit:true versus new false, with terminateCalls:1 in both. It proves the exit-wait ownership contract, not native WASM crash reproduction.
 
 All 18 new targets passed (12 lifecycle and six diagnostic CLI tests), as did ten real related tests. Build,26 local-distribution checks (27.87seconds) and SKILL validation passed.
+
+A follow-up tracks execute-chain settlement separately from early terminal state using executionSettled/resourceState and resource-state events. Release requires terminal plus settled execution; drain waits for currently pending executions only. Final verification is pending; V8 resolution remains unproven.
+
+State naming is pending/settled with releaseAllowed for retention release. This tracks executor completion after adapter cleanup, not browser OS-thread exit. Terminal-late rejection is separate executionError without distinguishing Abort from cleanup failure. Synchronous close stays compatible; drain/closeAsync and normal MCP EOF await settlement.

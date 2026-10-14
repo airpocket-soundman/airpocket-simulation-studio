@@ -6,7 +6,8 @@ export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',
 // Invoke only named semantic operations. No arbitrary window method or code path.
 export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
- const busy=()=>isBusy()||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}});
+ const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
+ const busy=()=>isBusy()||executionBusy();
  return {
   async call(method,args={},{expiresAt=Infinity}={}){
    const invocationEpoch=epoch;
@@ -40,7 +41,7 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='getResultView'){if(!resultView)throw Error('Result view API unavailable');return resultView.get(args);}
    if(method==='setResultView'){if(!resultView||busy()||editing)throw Error('Result view unavailable or browser busy');return resultView.set(args,{guard:valid});}
    if(method==='exportCapabilities'){if(!exports)throw Error('Export API unavailable');return exports.capabilities();}
-   if(method==='startExport'){if(!exports||editing||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}}))throw Error('Export unavailable or browser busy');editing=true;try{const job=await exports.start(args,{guard:valid});ownedExports.add(job.jobId);return job;}finally{editing=false;}}
+   if(method==='startExport'){if(!exports||editing||executionBusy())throw Error('Export unavailable or browser busy');editing=true;try{const job=await exports.start(args,{guard:valid});ownedExports.add(job.jobId);return job;}finally{editing=false;}}
    if(method==='exportStatus')return exports.status(args);
    if(method==='exportArtifact')return exports.artifact(args);
    if(method==='cancelExport')return exports.cancel(args);

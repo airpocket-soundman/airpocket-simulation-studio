@@ -15,7 +15,7 @@
 | 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、selectCadFace、applyOperations | studio_edit_project（18種、根拠・intent・表示面ID選択を含む、revision競合検出） | 全物理モデルの根拠・入力契約、選択・設定操作の残りの網羅性確認 |
 | 体積メッシュ・解析 | guiAnalysisJobs.run、analysisApi.startJob/listJobs/getJob/getJobResult/releaseJob（旧generateMesh/analyzeも互換維持） | studio_analyze、studio_start_analysis/studio_job_status/studio_release_job（CPU・保存JSON） | 公開HTTPS接続・再起動後のジョブ復元 |
 | 中間情報 | analysisApi.jobEvents/getJobArtifact（任意のブラウザ内場保持） | studio_job_events、studio_job_artifact（登録済み成果物のハッシュ照合・要約・点補間・最大200ノード/値のページ） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
-| 中止 | analysisApi.cancel/cancelJob | studio_cancel_job（runningのみ、saving不可） | 接続モードのcancelJobを提供。ローカルGUI監視を確認、公開接続を継続 |
+| 中止 | analysisApi.cancel/cancelJob/isBusy/drainJobs/closeJobsAsync | studio_cancel_job（runningのみ、saving不可） | 接続モードのcancelJobを提供。ローカルGUI監視を確認、公開接続を継続 |
 | 点測定 | analysisApi.probe、resultViewApi.probe、window.measurementApi（版・表示状態を固定した履歴） | studio_probe、接続probeとmeasurementの7操作、studio_verify_measurements | 履歴GUI・結果種の検証拡充 |
 | ケース・比較 | caseApi/caseOperations/caseArchiveTransfer（ID・内容版・根拠照合・分割転送・v2測定同梱） | studio_validate_cases、接続モードのcaseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove、caseArchiveExport/caseArchiveRead/caseArchiveImport/caseArchiveWrite/caseArchiveCommit/caseArchiveRelease、caseBundleListと分割転送6操作、studio_validate_case_bundle | 結果間の対応付け・名前付きビューの拡張 |
 | 断面・部品表示 | viewApi | 接続モードのgetView/setView | ビュー設定・レイヤー・カメラの共通契約 |
