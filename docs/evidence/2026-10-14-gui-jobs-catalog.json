@@ -1,0 +1,686 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-14",
+  "gitBase": "b3e77adc4a6b27255359fb79c59d21f728fc6335",
+  "environment": "Codex in-app browser, local Vite http://127.0.0.1:5174, real browser Worker and Airpocket WASM CPU, actual stdio MCP/HTTP connector",
+  "scope": "Synthetic reference inputs, not real material calibration. Local connection succeeded; public HTTPS pairing failed with Failed to fetch. No security settings changed.",
+  "structural": {
+    "job": {
+      "schemaVersion": 1,
+      "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+      "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+      "state": "succeeded",
+      "operation": "elastic",
+      "origin": "gui",
+      "startedAt": 1791980542699,
+      "updatedAt": 1791980543442,
+      "lastSequence": 14,
+      "firstAvailableSequence": 1
+    },
+    "events": [
+      {
+        "state": "running",
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 1,
+        "elapsedMs": 0,
+        "type": "state"
+      },
+      {
+        "stage": "preparation",
+        "message": "Simulation modules loaded",
+        "converged": null,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 2,
+        "elapsedMs": 189,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Generating volume mesh…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 3,
+        "elapsedMs": 193,
+        "type": "progress"
+      },
+      {
+        "stage": "mesh",
+        "metrics": {
+          "nodeCount": 171,
+          "elementCount": 428,
+          "volumeMm3": 4000.0000000000005,
+          "minVolumeMm3": 2.6453042357857037,
+          "minQuality": 0.6324255109997388,
+          "qualityHistogram": [
+            0,
+            0,
+            0,
+            191,
+            237
+          ]
+        },
+        "converged": null,
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0001",
+          "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+          "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+          "bytes": 11891,
+          "sha256": "b2febd5ece3e6768cf45e3b292c6a59de6c0590e0e4b84ca2ee4d432da6be047",
+          "kind": "mesh",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "meshAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 4,
+        "elapsedMs": 685,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Transferring boundary regions…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 5,
+        "elapsedMs": 689,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Solving linear elasticity…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 6,
+        "elapsedMs": 693,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 1,
+        "residual": 1.2301389110255039,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 7,
+        "elapsedMs": 720,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 25,
+        "residual": 0.001723730388405957,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 8,
+        "elapsedMs": 723,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 50,
+        "residual": 3.7843922486812914e-05,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 9,
+        "elapsedMs": 728,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 75,
+        "residual": 4.0146698303084564e-05,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 10,
+        "elapsedMs": 731,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 100,
+        "residual": 1.95113538306304e-05,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 11,
+        "elapsedMs": 734,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 125,
+        "residual": 4.1070184312344315e-07,
+        "tolerance": 1e-08,
+        "converged": false,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 12,
+        "elapsedMs": 736,
+        "type": "progress"
+      },
+      {
+        "stage": "iteration",
+        "solver": "pcg",
+        "iteration": 132,
+        "residual": 7.1005473620928005e-09,
+        "tolerance": 1e-08,
+        "converged": true,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 13,
+        "elapsedMs": 737,
+        "type": "progress"
+      },
+      {
+        "state": "succeeded",
+        "schemaVersion": 1,
+        "jobId": "58580c9d-1210-46f8-8276-88d16c9fda1f",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "sequence": 14,
+        "elapsedMs": 743,
+        "type": "state"
+      }
+    ],
+    "probe": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:be6e2481fcf7a9344f5a63ce151a26c125b37204eed2116fea43017c8a4089b9",
+      "kind": "elastic",
+      "display": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null
+      },
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "element": 158,
+      "weights": [
+        -4.440892098500626e-16,
+        0.5005865574720816,
+        0.4994134425279184,
+        0
+      ],
+      "displacementMm": [
+        1.3812181241744085e-12,
+        2.496925609531012e-12,
+        0.03999999999944816
+      ],
+      "magnitudeMm": 0.03999999999944816,
+      "vonMisesPa": 999999.9999830347,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      }
+    },
+    "screenshot": "2026-10-14-gui-structural.jpg"
+  },
+  "thermal": {
+    "job": {
+      "schemaVersion": 1,
+      "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+      "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+      "state": "succeeded",
+      "operation": "elastic",
+      "origin": "gui",
+      "startedAt": 1791980646011,
+      "updatedAt": 1791980646502,
+      "lastSequence": 10,
+      "firstAvailableSequence": 1
+    },
+    "timeStepSeconds": 10,
+    "steps": 3,
+    "events": [
+      {
+        "state": "running",
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 1,
+        "elapsedMs": 0,
+        "type": "state"
+      },
+      {
+        "stage": "preparation",
+        "message": "Simulation modules loaded",
+        "converged": null,
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 2,
+        "elapsedMs": 121,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Generating volume mesh…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 3,
+        "elapsedMs": 125,
+        "type": "progress"
+      },
+      {
+        "stage": "mesh",
+        "metrics": {
+          "nodeCount": 171,
+          "elementCount": 428,
+          "volumeMm3": 4000.0000000000005,
+          "minVolumeMm3": 2.6453042357857037,
+          "minQuality": 0.6324255109997388,
+          "qualityHistogram": [
+            0,
+            0,
+            0,
+            191,
+            237
+          ]
+        },
+        "converged": null,
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0001",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 11891,
+          "sha256": "7e7178c94ef601846431c3edef465df8f517df49de7e55c616251a9fd6b37122",
+          "kind": "mesh",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "meshAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 4,
+        "elapsedMs": 468,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Transferring boundary regions…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 5,
+        "elapsedMs": 471,
+        "type": "progress"
+      },
+      {
+        "stage": "progress",
+        "message": "Solving heat conduction…",
+        "provisional": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 6,
+        "elapsedMs": 475,
+        "type": "progress"
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 1,
+        "steps": 3,
+        "time": 10,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 10,
+          "minTemperature": 20,
+          "maxTemperature": 100,
+          "storedEnergyJ": 38.544076272195596,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 3.60428210261525e-09
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0002",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 2918,
+          "sha256": "bcd5bd6505b6483d67e371cc4a894b1f8f1f16f8628a849823c65a90c8c0f083",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 10,
+          "nodeCount": 171
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 7,
+        "elapsedMs": 489,
+        "type": "progress"
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 2,
+        "steps": 3,
+        "time": 20,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 20,
+          "minTemperature": 20,
+          "maxTemperature": 100,
+          "storedEnergyJ": 16.626518973589434,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 3.4681502356585484e-09
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0003",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 2922,
+          "sha256": "de60fec32bc7881cae930a60105346d6d7995b61fabaae001db4638276867288",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 20,
+          "nodeCount": 171
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 8,
+        "elapsedMs": 489,
+        "type": "progress"
+      },
+      {
+        "stage": "time-step",
+        "kind": "thermal",
+        "step": 3,
+        "steps": 3,
+        "time": 30,
+        "timeUnit": "s",
+        "converged": true,
+        "metrics": {
+          "time": 30,
+          "minTemperature": 20,
+          "maxTemperature": 100,
+          "storedEnergyJ": 12.876049369102821,
+          "radiationHeatW": 0,
+          "nonlinearIterations": 0,
+          "convectionHeatW": 0,
+          "residual": 3.3258138084742355e-09
+        },
+        "provisional": true,
+        "artifact": {
+          "artifactId": "0004",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 2912,
+          "sha256": "f46374942db603cd1a710dc6d9f880318337d8087346daf38a18d15a6b66bec3",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "fieldSummary": {
+          "kind": "thermal",
+          "time": 30,
+          "nodeCount": 171
+        },
+        "fieldAvailable": true,
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 9,
+        "elapsedMs": 490,
+        "type": "progress"
+      },
+      {
+        "state": "succeeded",
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "sequence": 10,
+        "elapsedMs": 491,
+        "type": "state"
+      }
+    ],
+    "probes": [
+      {
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "artifact": {
+          "artifactId": "0002",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 2918,
+          "sha256": "bcd5bd6505b6483d67e371cc4a894b1f8f1f16f8628a849823c65a90c8c0f083",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "mesh": {
+          "nodeCount": 171,
+          "elementCount": 428,
+          "boundsMm": [
+            0,
+            0,
+            0,
+            10,
+            10,
+            40
+          ]
+        },
+        "provisional": true,
+        "field": {
+          "kind": "thermal",
+          "name": "temperature",
+          "unit": "degC",
+          "time": 10,
+          "timeUnit": "s",
+          "minimum": 20,
+          "maximum": 100
+        },
+        "measurement": {
+          "point": [
+            5,
+            5,
+            20
+          ],
+          "element": 4,
+          "weights": [
+            0.0473118844132544,
+            0.04731188441325418,
+            0.08865274894305841,
+            0.8167234822304326
+          ],
+          "time": 10,
+          "value": 21.08744876473551,
+          "field": "temperature",
+          "unit": "degC",
+          "timeUnit": "s"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+        "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+        "artifact": {
+          "artifactId": "0004",
+          "jobId": "6466dd84-5914-4b37-a7dc-40ed3287423f",
+          "inputRevision": "sha256:f42c8616c0865eb15fdda309c755bfb05ecdf7c009c974825380126b626992da",
+          "bytes": 2912,
+          "sha256": "f46374942db603cd1a710dc6d9f880318337d8087346daf38a18d15a6b66bec3",
+          "kind": "thermal",
+          "provisional": true,
+          "storage": "browser-memory"
+        },
+        "mesh": {
+          "nodeCount": 171,
+          "elementCount": 428,
+          "boundsMm": [
+            0,
+            0,
+            0,
+            10,
+            10,
+            40
+          ]
+        },
+        "provisional": true,
+        "field": {
+          "kind": "thermal",
+          "name": "temperature",
+          "unit": "degC",
+          "time": 30,
+          "timeUnit": "s",
+          "minimum": 20,
+          "maximum": 100
+        },
+        "measurement": {
+          "point": [
+            5,
+            5,
+            20
+          ],
+          "element": 4,
+          "weights": [
+            0.0473118844132544,
+            0.04731188441325418,
+            0.08865274894305841,
+            0.8167234822304326
+          ],
+          "time": 30,
+          "value": 26.132058877604514,
+          "field": "temperature",
+          "unit": "degC",
+          "timeUnit": "s"
+        }
+      }
+    ],
+    "screenshot": "2026-10-14-gui-thermal.jpg"
+  },
+  "catalog": {
+    "selection": {
+      "version": 1,
+      "id": "rtp-105-cc",
+      "catalogVersion": "2026-10-14.2",
+      "grade": "RTP 105 CC",
+      "manufacturer": "RTP Company",
+      "polymer": "PP",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30,
+        "basis": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pp-0060-rtp-105-cc.pdf/",
+        "document": "pp-0060-rtp-105-cc.pdf",
+        "revision": "28 Oct 2014",
+        "retrievedAt": "2026-10-14",
+        "sha256": "7f2ada7cf7dd30cdd6fb43aaa9b4db3506586659f5e0498ad415273e82895c80",
+        "hashKind": "pdf"
+      },
+      "approximation": "isotropic-linear",
+      "poissonRatioOrigin": "user-assumption",
+      "appliedProperties": {
+        "youngModulus": 5999000000,
+        "density": 1120,
+        "strength": 75000000,
+        "poissonRatio": 0.35
+      },
+      "overrides": {},
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "applicability": "室温での静的比較のための仮定。配向とクリープは未評価。実製品の設計値ではない。"
+    },
+    "guiEqualsSharedFactory": true,
+    "blankApplicabilityRefused": true,
+    "japaneseAndEnglishLabelsVerified": true,
+    "screenshot": "2026-10-14-catalog-apply.jpg"
+  },
+  "connectionDiagnostics": {
+    "publicHttpsPairing": "Failed to fetch",
+    "localPairing": "succeeded",
+    "sameSessionLanguageSwitch": {
+      "sessionId": "070f981a-403b-4445-9a38-5fe21313f692",
+      "english": "Connected",
+      "japanese": "接続中"
+    },
+    "stoppedConnectorHelp": "Localized JP/EN help observed after stopping the test connector. No browser security/permission settings changed.",
+    "cause": "Undetermined. Public-to-loopback local-network policy is a candidate, not proven."
+  }
+}

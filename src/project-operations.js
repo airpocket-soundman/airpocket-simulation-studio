@@ -11,7 +11,7 @@ const selectors={
   selectPlanarRegion:[integer,object],selectCylindricalRegion:[integer,object],
   clearSelection:[],addCondition:[object],removeCondition:[integer],selectCondition:[integer],
   replaceConditionRegion:[integer],reapplyConditionRegion:[integer],
-  setMaterial:[string],setMaterialProperties:[object],setMaterialPreset:[string,object],
+  applyCatalogMaterial:[object],setMaterial:[string],setMaterialProperties:[object],setMaterialPreset:[string,object],
   setStudy:[object],setMeshSettings:[object],setInputProvenance:[object],setAnalysisIntent:[object]
 };
 

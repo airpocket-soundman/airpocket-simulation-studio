@@ -13,11 +13,13 @@ export function catalogEntries({family='',filler='',contentPercent,search='',inc
 }
 export function catalogEntry(id){const m=catalog.materials.find(m=>m.id===id);if(!m)throw Error('Unknown material catalog entry');return structuredClone(m);}
 export function catalogFamilies(){return [...new Set(catalog.materials.map(m=>m.family))];}
-export function createCatalogMaterial(id,{poissonRatio,isotropicApproximation=false,allowExperimental=false}={}){
+export function createCatalogMaterial(id,{poissonRatio,isotropicApproximation=false,allowExperimental=false,applicability}={}){
+ if(typeof isotropicApproximation!=='boolean'||typeof allowExperimental!=='boolean')throw Error('Catalog approximation and experimental choices must be booleans');if(applicability!==undefined&&(typeof applicability!=='string'||!applicability.trim()||applicability.length>2000))throw Error('Record catalog material applicability in up to 2000 characters');
  const m=catalogEntry(id);if(!isotropicApproximation)throw Error('Confirm the isotropic linear approximation before using specimen data');
  if(m.kind==='experimental'&&!allowExperimental)throw Error('Experimental formulations require explicit selection');
  if(!Number.isFinite(poissonRatio)||poissonRatio<=-1||poissonRatio>=.5)throw Error('Specify a user-assumed Poisson ratio between -1 and 0.5');
  const p={youngModulus:m.properties.tensileModulus?.value??null,density:m.properties.density?.value??null,strength:m.properties.tensileStrength?.value??null,poissonRatio,grade:m.grade,source:m.manufacturer+' | '+m.source.url+' | '+m.source.revision+' | checked '+m.source.retrievedAt,notes:'Catalog '+m.id+'; '+m.polymer+'; '+m.filler.type+' '+m.filler.contentPercent+'% ('+m.filler.basis+'). Tensile modulus: '+(m.properties.tensileModulus?.method||'not published')+'. Typical specimen values; not a failure model. Isotropic linear approximation; Poisson ratio '+poissonRatio+' is a user assumption. Temperature/rate/directional dependence, creep and nonlinear behavior are not calibrated. '+(m.kind==='experimental'?'Experimental formulation, not a commercial grade. ':'')+m.notes};
  p.catalogSelection={version:1,id:m.id,catalogVersion,grade:m.grade,manufacturer:m.manufacturer,polymer:m.polymer,kind:m.kind,filler:structuredClone(m.filler),source:structuredClone(m.source),approximation:'isotropic-linear',poissonRatioOrigin:'user-assumption',appliedProperties:Object.fromEntries(['youngModulus','density','strength','poissonRatio'].map(key=>[key,p[key]])),overrides:{}};
+ if(applicability!==undefined)Object.assign(p.catalogSelection,{conditions:structuredClone(m.conditions),missing:structuredClone(m.missing),applicability:applicability.trim()});
  return validateMaterialProperties(p);
 }

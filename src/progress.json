@@ -1507,9 +1507,25 @@
       ],
       "detail": "画面4経路を共通ジョブへ接続。入力SHA・CAS、中間場、履歴8件とGUI分のみの解放、最大100件のlistJobsを実装。49ライブ操作。直接analyze/generateMesh APIの互換経路は維持。",
       "detailEn": "Connect four GUI paths to common jobs with input SHA/CAS, retained intermediate fields, eight GUI history entries, GUI-only pruning and listJobs pages up to100.49 live methods; preserve legacy direct analyze/generateMesh APIs.",
-      "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md",
-      "acceptance": "実MCP/HTTPと共有クライアントでGUI由来ジョブ発見・中間温度35°C・切断後継続を確認。Workerは模擬実装。実画面/公開HTTPSは未確認。 全体448中445成功・3スキップ。最後の完了時照合追加後は関連16成功。ビルド・配信物26項目成功。",
-      "acceptanceEn": "Real MCP/HTTP and shared client verify GUI-origin discovery, intermediate35°C probe and continued execution after disconnect. Worker is simulated. Real browser/public HTTPS remain unverified. Full suite445 passed/three skipped of448; final completion-check change passed16 related tests. Build and26 local-distribution checks passed."
+      "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md; docs/evidence/2026-10-14-gui-jobs-catalog.json",
+      "acceptance": "共通API・実MCP/HTTPの模擬Worker試験に加え、実ローカルアプリ内ブラウザ/Worker/WASM/MCPで構造変位0.04mm・171節点/428要素と、熱10/20/30秒の暫定場・点測定を確認。切断継続・完了時入力照合・保持/解放の回帰も検証。全GUI経路と公開HTTPSは未確認。",
+      "acceptanceEn": "In addition to shared API/real MCP/HTTP tests with simulated Workers, actual local in-app browser/Worker/WASM/MCP verified structural0.04mm/171nodes/428elements and provisional thermal fields/probes at10/20/30s. Regression covers disconnect continuity, completion input checks and retention/release. All GUI routes/public HTTPS remain unverified."
+    },
+    {
+      "id": "CATALOGAPPLY1",
+      "title": "材料カタログの仮定と適用条件を共通操作へ統合",
+      "titleEn": "Apply catalog materials with explicit assumptions and applicability",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "applyCatalogMaterialをGUI・共通API・保存MCP/ライブ編集の18番目の操作へ統合。カタログ版・Poisson仮定・等方近似・適用条件・実験配合選択を検証し、出典/測定条件/欠測を保存。数値一致でも旧材料根拠を未確認へ戻す。",
+      "detailEn": "Integrate applyCatalogMaterial into GUI/shared API and saved/live edit as the18th semantic operation. Validate catalog revision, explicit Poisson/isotropic assumptions, applicability and experimental opt-in; retain sources/test conditions/missing data. Invalidate old material confirmations even when values match.",
+      "evidence": "src/studio-api.js; src/material-catalog-ui.js; tests/material-catalog-operations.test.mjs; tests/mcp-catalog-apply.test.mjs; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/testing.md",
+      "acceptance": "実MCPで保存・版競合・原子的失敗・材料根拠失効と非材料根拠保持を検証。実ローカル画面で必須範囲入力、日英表示、保存JSONと共通物性の一致を確認。公開画面の新操作は未確認。 最終対象29成功・全体459中456成功/3スキップ、ビルド成功。 最終配信物26項目成功（28.31秒）。",
+      "acceptanceEn": "Real MCP verifies publication, revision/atomicity failures and invalidation of material confirmations while retaining other provenance. Actual local UI verifies required scope, JP/EN and exported/shared material equality. New public UI remains unverified. Final29 related tests passed; full suite456 passed/three skipped of459; build passed. Final26 distribution checks passed in28.31seconds."
     }
   ],
   "solvers": [

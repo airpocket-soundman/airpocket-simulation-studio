@@ -185,3 +185,21 @@ The full suite passed 445 of 448 tests with three skips and zero failures at con
 Real stdio MCP, real HTTP, the shared connector client and a simulated Worker verify GUI origin/input-revision discovery, a provisional thermal frame probe of 35 °C, inspect scope, continued GUI execution after disconnect and completion retention. Core tests cover cancellation during pending SHA computation, input comparison, Worker cancellation, late replies, pruning eight GUI entries without releasing API jobs, the overall 32-job limit and refusal of invalid list pages. Simulated Worker values are not evidence of real solver accuracy. The new routes remain unverified in an actual browser UI and over public HTTPS.
 
 The [WASM runtime investigation](wasm-runtime-investigation.md) records 36 successful tests across 12 fresh processes, plus three successful tests from one investigation-script run. These use different source revisions and are not combined as one test population. Failure to reproduce the known V8 stop does not establish its cause or resolution.
+
+## 2026-10-14: shared catalog-application API
+
+Version-bound catalog application is exposed through the shared API and the eighteenth saved/connected MCP edit operation. All 28 targeted tests passed; final full-suite, build and latest distribution-check results are not yet included.
+
+The Codex in-app browser opened local Vite (http://127.0.0.1:5174), using a real browser Worker, Airpocket WASM CPU and real stdio MCP/HTTP connector. The structural reference used 171 nodes and 428 tetrahedra with minimum quality 0.632. At [5,5,40], displacement was 0.03999999999944816 mm and von Mises stress 999999.999983 Pa; the UI showed 0.040000 mm. listJobs retained GUI origin, input hash and 14 events including intermediate mesh/iteration information.
+
+The thermal GUI ran three steps at 10-second intervals and exposed fields at 10/20/30 seconds. At [5,5,20], measured intermediate temperatures were 21.08744876473551 °C at 10 seconds and 26.132058877604514 °C at 30 seconds, retaining provisional:true. These are reference-input execution checks, not real-material calibration.
+
+Catalog UI refused missing applicability in Japanese. Applying RTP105CC with explicit Poisson ratio 0.35 and applicability produced a read-only exported JSON matching all createCatalogMaterial properties, including conditions, missing fields and sources, without fabricated confirmation evidence. Switching Japanese/English labels preserved the same connected session ID. Stopping the connector displayed the new network guidance in both languages.
+
+Saved evidence includes the [machine-readable record](../evidence/2026-10-14-gui-jobs-catalog.json), [structural UI](../evidence/2026-10-14-gui-structural.jpg), [thermal UI](../evidence/2026-10-14-gui-thermal.jpg) and [catalog UI](../evidence/2026-10-14-catalog-apply.jpg). Sources were b3e77ad plus this change. This verifies local connectivity; actual public-HTTPS-to-loopback pairing still failed with Failed to fetch. Browser security settings were unchanged.
+
+The final contract resets existing evidence for `/material`, `/materialProperties` and child pointers to unconfirmed, clears assumptions to null and removes confirmation, even when numerical values match. Previous source/value/rationale/applicability, unrelated evidence and analysisIntent remain; no new confirmed evidence is generated. The GUI check above used an input without existing evidence and does not prove this added reconfirmation contract.
+
+The initial full suite reported 458 tests: 454 passed, three skipped and one failed. The failure was missing Japanese/English reciprocal links in the WASM investigation documents; both document tests passed after link repair. Build passed. The final evidence change was verified by the runs below.
+
+After the final provenance fix, all29 related tests passed; the full suite passed456 of459 with three skips and zero failures at concurrency four in67.31seconds. The final build also passed. All26 local-distribution checks passed against the final build in an isolated28.31-second run.

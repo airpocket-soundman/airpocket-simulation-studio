@@ -1,5 +1,7 @@
 # Node 24 / WASM 終了時クラッシュ調査
 
+[English](en/wasm-runtime-investigation.md)
+
 確認日: 2026-10-14。状態: 未解決。
 
 全体試験のローカルログ `.qa/print-api-full.log` では、`tests/analysis-job-service.test.mjs` の最初の2試験成功後、`jit_page_->allocations_.erase(addr) == 1` のV8 fatal CHECKで試験プロセスが終了した。スタックに `ThreadIsolation::UnregisterWasmAllocation` がある。3番目は取消・期限切れ・成果物制限の試験だが、直接の引き金は未特定。他ファイルも並列実行されていた。

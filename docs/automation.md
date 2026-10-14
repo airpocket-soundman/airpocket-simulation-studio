@@ -14,9 +14,9 @@
 
 `studio_inspect_project({path})`が返す`revision`を`expectedRevision`として、`studio_edit_project({path,outputPath,expectedRevision,operations:[{method,args}]})`へ渡します。1〜100操作を作業用コピーに一括適用し、すべて成功した場合だけ新規`outputPath`に保存します。古い版・未対応操作・不正入力は拒否し、元入力と既存出力は上書きしません。戻り値は新旧revisionと保存先・要約を含みます。検査revisionは入力JSONのキー順に依存しないハッシュで、ジョブの正規化入力`inputRevision`と同一とは限りません。
 
-対応methodは`selectTriangles`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`setStudy`、`setMeshSettings`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
+対応methodは`selectTriangles`、`selectCadFace`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`applyCatalogMaterial`、`setStudy`、`setMeshSettings`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
 
-追加の`selectCadFace`を含め計17メソッドです。例: `operations:[{"method":"selectCadFace","args":[0,2]}]`。CAD更新では既存根拠entryを`unconfirmed`・`assumption:null`へ戻し、confirmationを削除します。更新後は領域と根拠を再確認してください。
+追加の`selectCadFace`と`applyCatalogMaterial`を含め計18メソッドです。例: `operations:[{"method":"selectCadFace","args":[0,2]}]`。CAD更新では既存根拠entryを`unconfirmed`・`assumption:null`へ戻し、confirmationを削除します。更新後は領域と根拠を再確認してください。
 
 ブラウザでは`await studioApi.getRevision()`と`await studioApi.applyOperations(operations,{expectedRevision})`を使います。検証完了後に一度だけ反映し、処理中に入力が変更された場合も競合として拒否します。MCPの保存入力編集は開いているブラウザを変更しません。
 
@@ -74,11 +74,11 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 `studio_browser_call({sessionId,method,args})` の対応操作:
 
 - 確認: `inspect`（revision・操作一覧）、`geometry`（面ページ）、`preflight`、`jobStatus`、`jobEvents`、`jobArtifact`、`probe`（表示結果の点値・暫定評価）。
-- 編集: `edit({expectedRevision,operations})`。同じ17操作を原子的に適用。版不一致・途中の入力変更・実行中・接続解除を拒否。
+- 編集: `edit({expectedRevision,operations})`。同じ18操作を原子的に適用。版不一致・途中の入力変更・実行中・接続解除を拒否。
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
 - 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は下記の出力ジョブを使います。
 
-命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブの実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
+命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
 ### ブラウザの途中の場を取得する
 
@@ -173,4 +173,10 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 
 確認権限の接続操作`listJobs({offset:0,limit:50})`（limit上限100）は`{jobs,total,nextOffset}`を返します。GUIとAPIの保持中ジョブを`origin:"gui"|"api"`付きの小さなメタデータとして列挙し、完全な結果配列を含みません。共有APIは`analysisApi.listJobs`です。返されたIDに既存の`jobStatus`、`jobEvents`、`jobArtifact`を使用して状態・中間結果を読み取ります。GUIの履歴表示は直近8件を保持し、次のGUI開始時に最も古い終了済みGUIジョブを解放します。MCP側のジョブをこの整理で解放しません。
 
-接続解除で中止するのはその接続が開始したジョブのみで、GUIジョブは継続します。ページ終了・再起動後の復元は提供しません。この共通経路の実装は実ブラウザ画面や公開HTTPSでの動作確認を意味しません。
+接続解除で中止するのはその接続が開始したジョブのみで、GUIジョブは継続します。ページ終了・再起動後の復元は提供しません。ローカルのアプリ内ブラウザで構造・熱GUIジョブを実Worker/WASMとMCPから確認しました（[検証記録](testing.md)）。全GUI経路と公開HTTPS接続を確認した記録ではありません。
+
+## 材料カタログの版付き適用
+
+`studioApi.applyCatalogMaterial({id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,allowExperimental:false,applicability})`は1つのオブジェクトを受け取り、同梱カタログの参照値を入力へ適用します。`id`と`expectedCatalogVersion`は`studio_material_catalog`で取得した値を使います。`poissonRatio`は呼出側が明示し、`isotropicApproximation:true`で等方近似を明示的に受け入れます。`applicability`には対象の成形・温度・方向などへの適用条件を空でない文字列で記録します。GUIでもこの入力が必須です。実験配合には`allowExperimental:true`の明示が必要で、既定falseです。
+
+保存ファイルMCPでは`studio_edit_project`の`operations:[{method:"applyCatalogMaterial",args:[{id,expectedCatalogVersion,poissonRatio,isotropicApproximation:true,applicability}]}]`を使います。接続MCPの`edit`でも同じ18操作の1つとして使用でき、通常の入力版照合を要します。カタログの出典、測定条件、欠測項目、適用条件のスナップショットを保持します。適用時は`/material`・`/materialProperties`とその子Pointerの既存根拠を、数値が同じ場合も`unconfirmed`へ戻し、`assumption:null`としてconfirmationを解除します。旧source・value・rationale・applicabilityは再確認用に保持します。その他の根拠とanalysisIntentは維持し、新しい確認済み根拠は生成しません。既存の非線形材料プリセットを置き換える既存挙動も伴うため、適用後の材料モデルと必要入力を確認してください。

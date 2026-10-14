@@ -1,5 +1,7 @@
 # Node 24 / WASM teardown crash investigation
 
+[日本語](../wasm-runtime-investigation.md)
+
 Checked: 2026-10-14. Status: unresolved.
 
 The local full-suite log `.qa/print-api-full.log` shows the first two tests in `tests/analysis-job-service.test.mjs` passing before the fatal V8 CHECK `jit_page_->allocations_.erase(addr) == 1` terminated its test process. The stack includes `ThreadIsolation::UnregisterWasmAllocation`. The third test covers cancellation, timeout and artifact limits; the exact trigger is unknown. Other files ran concurrently.
