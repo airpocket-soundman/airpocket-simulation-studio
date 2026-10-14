@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T09:44:26.729Z",
+  "updatedAt": "2026-10-14T10:14:07.567Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1161,7 +1161,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "一時loopback接続と許可付き13操作を実MCP/Chromeで検証。入力版・原子的編集・実Worker・途中イベント・結果表示/点測定を共有。公開HTTPS接続・再起動復元・GUIジョブ監視は継続。"
+      "lastUpdate": "ブラウザ中間メッシュ/熱/音圧場を任意保持し、MCPからハッシュ検証・点測定・ページ取得可能。遅延応答での接続喪失と開始時の入力版照合を修正。公開HTTPS・再起動復元・GUI監視は継続。"
     },
     {
       "id": "P4",
@@ -1330,7 +1330,37 @@
       "detailEn": "Temporary loopback with Origin/Host/Bearer checks; explicit inspect/edit/analyze/view grants expose 13 semantic MCP operations. Disconnect cancels connection-owned jobs.",
       "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。公開HTTPS接続と全GUIジョブ統合は残る。",
       "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Public HTTPS and full GUI job integration remain pending.",
-      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md"
+      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md",
+      "lastUpdate": "jobArtifactを加え14操作。ブラウザ途中温度の時刻・点値・最終場との一致・解放を実MCPで確認。"
+    },
+    {
+      "id": "BROWSERFIELDS1",
+      "title": "ブラウザ途中場をLLMへ返す",
+      "titleEn": "Return browser intermediate fields to the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "BROWSERBRIDGE1",
+        "AGENTJOBS1"
+      ],
+      "detail": "includeFieldsで中間メッシュと熱/過渡音響スカラーを保持。SHA-256・入力版・メッシュを照合し、要約・点値・最大200節点ページを取得。共有64 MB直列化予算、解放、上限時の要約継続。",
+      "detailEn": "Optional mesh and thermal/transient-acoustic scalar retention, hash/input/mesh checks and summary/point/pages up to 200 nodes. Shared 64 MB serialized budget, release and summary continuation at limits.",
+      "acceptance": "並列数4の全体330件中327成功・3スキップ。追加音圧テスト成功。実MCP/Chromeで1秒20.002566 °C、3秒20.027339 °C、最終点値との一致・解放後拒否を確認。再起動永続化・全ソルバー場とヒープ上限は対象外。",
+      "acceptanceEn": "Full suite at concurrency four: 327 passed, three skipped; added acoustic test passed separately. Real MCP/Chrome verified one-second 20.002566 degC and three-second 20.027339 degC, final-probe agreement and rejection after release. Restart persistence, all-solver fields and a heap ceiling are outside scope.",
+      "evidence": "src/browser-intermediate-store.js; tests/browser-intermediate-store.test.mjs; tests/analysis-client.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "NUMERICREFERENCE1",
+      "title": "非線形参照のまれな失敗を捕捉・再現する",
+      "titleEn": "Capture and reproduce intermittent nonlinear reference failure",
+      "status": "queued",
+      "category": "基盤",
+      "depends": [],
+      "detail": "力制御Neo-Hookean棒の全体テストで一度Newton line search失敗。個別40回は成功。生成メッシュ・反復状態・実行条件を捕捉し、原因と修正を検証する。",
+      "detailEn": "A force-controlled Neo-Hookean bar failed once in the full suite; 40 isolated generated references passed. Capture failed mesh/iterations/environment and verify the cause and correction.",
+      "acceptance": "失敗入力を固定して再現し、変位・反力・独立伸長解・残差と不正入力拒否を維持して修正を検証。",
+      "acceptanceEn": "Reproduce a frozen failing input and verify displacement, reaction, independent stretch, residual and invalid-input refusal after correction.",
+      "evidence": "tests/hyperelastic.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [

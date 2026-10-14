@@ -26,11 +26,12 @@ test('jobs freeze input, retry idempotently, guard identities and page bounded e
  manager.close();
 });
 
-test('cancellation and timeout are terminal, abort execution and ignore late results',async()=>{
+test('cancellation and timeout are terminal, abort execution and ignore late results',async t=>{
+ t.mock.timers.enable({apis:['setTimeout']});
  const calls=[];const manager=createAnalysisJobs({timeoutMs:25,execute:input=>{calls.push(input);return new Promise(resolve=>input.late=resolve);}});
  const a=manager.start({project:{},inputRevision:'a'});await nextTurn();assert.equal(manager.cancel(a.jobId).cancelled,true);assert.equal(calls[0].signal.aborted,true);
  const seq=manager.get(a.jobId).lastSequence;calls[0].onEvent({stage:'late'});calls[0].late({wrong:true});await nextTurn();assert.equal(manager.get(a.jobId).lastSequence,seq);assert.equal(manager.get(a.jobId).state,'cancelled');
- const b=manager.start({project:{},inputRevision:'b'});await new Promise(resolve=>setTimeout(resolve,40));assert.equal(manager.get(b.jobId).state,'timed_out');assert.equal(calls[1].signal.aborted,true);calls[1].late({wrong:true});
+ const b=manager.start({project:{},inputRevision:'b'});await nextTurn();t.mock.timers.tick(40);assert.equal(manager.get(b.jobId).state,'timed_out');assert.equal(calls[1].signal.aborted,true);calls[1].late({wrong:true});
  const c=manager.start({project:{},inputRevision:'c'});await nextTurn();manager.close();assert.equal(manager.get(c.jobId).state,'cancelled');calls[2].late({});
 });
 

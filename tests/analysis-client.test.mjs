@@ -19,3 +19,16 @@ test('browser job API shares the lifecycle and freezes input, retains compact ob
  h.api.releaseJob(job.jobId);assert.throws(()=>h.api.getJob(job.jobId),/Unknown job/);
  const next=h.api.startJob({inputRevision:'browser:2'});await new Promise(resolve=>setImmediate(resolve));h.api.cancel();await new Promise(resolve=>setImmediate(resolve));assert.equal(h.api.getJob(next.jobId).state,'cancelled');h.workers[1].send({result:{wrong:true}});assert.equal(h.api.getJob(next.jobId).state,'cancelled');assert.throws(()=>h.api.getJobResult(next.jobId),/not available/);h.api.closeJobs();
 });
+
+test('browser jobs retain optional time fields, expose artifact probes, and report malformed observations without losing final output',async()=>{
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:fields',requestId:'fields',includeFields:true});await new Promise(resolve=>setImmediate(resolve));
+ const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],summary:{nodeCount:4}};
+ h.workers[0].send({event:{stage:'mesh',mesh}});
+ h.workers[0].send({event:{stage:'time-step',field:{kind:'thermal',time:1,temperature:[20,30,40,50],units:{temperature:'degC'}}}});
+ h.workers[0].send({event:{stage:'time-step',field:{kind:'thermal',time:2,temperature:[20],units:{temperature:'degC'}}}});
+ h.workers[0].send({result:{mesh,result:{kind:'thermal',temperature:[20,30,40,50]}}});
+ for(let n=0;n<100&&h.api.getJob(job.jobId).state==='running';n++)await new Promise(resolve=>setTimeout(resolve,2));
+ assert.equal(h.api.getJob(job.jobId).state,'succeeded');const events=h.api.jobEvents(job.jobId).events,frame=events.find(e=>e.fieldAvailable);assert.ok(frame.artifact);assert.equal(frame.field,undefined);assert.ok(events.some(e=>e.stage==='observation-error'));
+ const point=await h.api.getJobArtifact(job.jobId,frame.artifact.artifactId,{point:[.25,.25,.25]});assert.equal(point.measurement.value,35);assert.equal(h.api.getJob(job.jobId).result.intermediate.retainedArtifacts,2);
+ h.api.releaseJob(job.jobId);await assert.rejects(async()=>h.api.getJobArtifact(job.jobId,frame.artifact.artifactId),/Unknown job/);h.api.closeJobs();
+});

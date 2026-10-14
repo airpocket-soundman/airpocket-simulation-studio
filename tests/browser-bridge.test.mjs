@@ -9,7 +9,7 @@ import {createInterface} from 'node:readline';
 
 const origin='http://127.0.0.1:5174';
 test('loopback bridge authenticates, scopes, expires, times out and revokes in-flight commands',async t=>{
- let time=1000;const bridge=await createBrowserBridge({origin,now:()=>time,ttlMs:1000,timeoutMs:25});t.after(()=>bridge.close());
+ let time=1000;const bridge=await createBrowserBridge({origin,now:()=>time,ttlMs:1000,timeoutMs:2000});t.after(()=>bridge.close());
  const req=async(path,token,body,from=origin)=>{const r=await fetch(bridge.endpoint+path,{method:body===undefined?'GET':'POST',headers:{Origin:from,Authorization:'Bearer '+token,'Content-Type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});return {status:r.status,value:await r.json()};};
  assert.equal((await req('/pair',bridge.pairingToken,{scopes:['inspect']},'http://evil.example')).status,403);
  assert.equal((await req('/pair','wrong',{scopes:['inspect']})).status,401);
@@ -35,8 +35,18 @@ test('browser session applies semantic revision-checked edits and refuses a revo
  await assert.rejects(session.call('edit',{expectedRevision:inspection.revision,operations:[{method:'clearSelection',args:[]}]}),/revision conflict/);
  const editing=session.call('edit',{expectedRevision:revision,operations:[{method:'setMaterial',args:['樹脂']}]});session.disconnect();await assert.rejects(editing,/revoked/);
  assert.equal(studio.exportProject().material,'金属');
- await session.call('startJob',{inputRevision:revision,requestId:'r1'});assert.equal((await session.call('startJob',{requestId:'r1',inputRevision:revision})).jobId,'j1');await assert.rejects(session.call('startJob',{inputRevision:revision,requestId:'r1',options:{size:1}}),/conflicts/);await assert.rejects(session.call('edit',{expectedRevision:revision,operations:[]}),/busy/);session.disconnect();assert.deepEqual(calls,['j1']);
+ await assert.rejects(session.call('startJob',{inputRevision:'stale',requestId:'stale'}),/revision conflict/);await session.call('startJob',{inputRevision:revision,requestId:'r1'});assert.equal((await session.call('startJob',{requestId:'r1',inputRevision:revision})).jobId,'j1');await assert.rejects(session.call('startJob',{inputRevision:revision,requestId:'r1',options:{size:1}}),/conflicts/);await assert.rejects(session.call('edit',{expectedRevision:revision,operations:[]}),/busy/);session.disconnect();assert.deepEqual(calls,['j1']);
  await assert.rejects(session.call('eval',{code:'arbitrary'}),/Unknown browser method/);
+ await assert.rejects(session.call('setView',{opacity:.5},{expiresAt:Date.now()-1}),/expired/);
+});
+
+test('late browser replies do not disconnect the client or prevent subsequent observations',async t=>{
+ const bridge=await createBrowserBridge({origin,timeoutMs:1500});t.after(()=>bridge.close());let finish,entered;
+ const gate=new Promise(resolve=>finish=resolve),started=new Promise(resolve=>entered=resolve);let first=true,disconnects=0;
+ const fetcher=(url,opts)=>fetch(url,{...opts,headers:{...opts.headers,Origin:origin}});
+ const client=connectBrowserSession({endpoint:bridge.endpoint,pairingToken:bridge.pairingToken,scopes:['inspect'],session:{async call(){if(first){first=false;entered();await gate;}return {ok:true};},disconnect(){disconnects++;}},fetcher,intervalMs:2});t.after(()=>client.stop());const {sessionId}=await client.ready;
+ const expired=assert.rejects(bridge.call(sessionId,'inspect'),{code:'BROWSER_COMMAND_TIMEOUT'});await started;await expired;finish();
+ assert.deepEqual(await bridge.call(sessionId,'inspect'),{ok:true});assert.equal(disconnects,0);client.stop();
 });
 
 test('real HTTP polling client enforces browser scopes and stops connection-owned jobs',async t=>{

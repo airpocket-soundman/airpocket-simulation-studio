@@ -23,8 +23,8 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
     const id=randomUUID(),secret=randomBytes(32).toString('base64url');sessions.set(id,{id,secret,scopes:[...new Set(body.scopes)],touched:now(),commands:new Map()});return send(200,{sessionId:id,token:secret,expiresAfterIdleMs:ttlMs});
    }
    const s=[...sessions.values()].find(x=>x.secret===token);if(!s)return send(401,{error:'Session expired or revoked'});s.touched=now();
-   if(req.url==='/poll'&&req.method==='GET'){const commands=[...s.commands.values()].filter(c=>!c.delivered);commands.forEach(c=>c.delivered=true);return send(200,{commands:commands.map(({id,method,args})=>({id,method,args}))});}
-   if(req.url==='/reply'&&req.method==='POST'){const c=s.commands.get(body.id);if(!c)return send(409,{error:'Unknown or expired command'});clearTimeout(c.timer);s.commands.delete(c.id);if(body.error)c.reject(fail(String(body.error.message||'Browser operation failed'),String(body.error.code||'BROWSER_OPERATION_FAILED')));else c.resolve(body.value);return send(200,{ok:true});}
+   if(req.url==='/poll'&&req.method==='GET'){const commands=[...s.commands.values()].filter(c=>!c.delivered&&now()<c.expiresAt);commands.forEach(c=>c.delivered=true);return send(200,{commands:commands.map(({id,method,args,expiresAt})=>({id,method,args,expiresAt}))});}
+   if(req.url==='/reply'&&req.method==='POST'){const c=s.commands.get(body.id);if(!c)return send(200,{ok:true,accepted:false,reason:'Command expired or was already completed'});clearTimeout(c.timer);s.commands.delete(c.id);if(body.error)c.reject(fail(String(body.error.message||'Browser operation failed'),String(body.error.code||'BROWSER_OPERATION_FAILED')));else c.resolve(body.value);return send(200,{ok:true,accepted:true});}
    if(req.url==='/disconnect'&&req.method==='POST'){remove(s.id,'Browser disconnected');return send(200,{ok:true});}
    send(404,{error:'Unknown bridge route'});
   }catch(error){if(!res.headersSent)send(400,{error:error.message});else res.destroy();}
@@ -40,7 +40,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
    if(!s.scopes.includes(scope))return Promise.reject(fail('Browser permission scope refused','BROWSER_SCOPE_REFUSED'));
    if(s.commands.size>=16)return Promise.reject(fail('Browser command limit reached'));
    if(JSON.stringify(args).length>500000)return Promise.reject(fail('Command exceeds size limit'));
-   return new Promise((resolve,reject)=>{const id=randomUUID(),timer=setTimeout(()=>{s.commands.delete(id);reject(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'));},timeoutMs);s.commands.set(id,{id,method,args,resolve,reject,timer,delivered:false});});
+   return new Promise((resolve,reject)=>{const id=randomUUID(),timer=setTimeout(()=>{s.commands.delete(id);reject(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'));},timeoutMs);s.commands.set(id,{id,method,args,resolve,reject,timer,delivered:false,expiresAt:now()+timeoutMs});});
   },
   async close(){closed=true;clearInterval(sweep);for(const id of sessions.keys())remove(id,'Bridge stopped');await new Promise(resolve=>server.close(resolve));}
  };

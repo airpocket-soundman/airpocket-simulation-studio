@@ -95,3 +95,11 @@ For this working tree, `npm test` completed 281 tests: 279 passed, two skipped, 
 - The same fixed-bar C++ proof passed two additional WASM development tests. Output identifies `wasm-development-check`. Host machine-code execution remains unverified without host C++ standard-library headers; see `native/native-proof/README.md`.
 
 The specialist SKILL passed `quick_validate.py`. Numerical/lifecycle checks do not establish LLM completion rates, real-GPU/rendering behavior or physical accuracy.
+
+## 2026-10-14: browser intermediate artifacts and late connector replies
+
+The complete suite with `node --test --test-concurrency=4 tests/*.test.mjs` passed 327 tests with three environment-dependent skips (330 total). The added acoustic unit/time test also passed separately. Real Chrome and stdio MCP verified a transient thermal reference with 94 nodes, 218 tetrahedra and three steps: retain one mesh/three temperature fields; verify hashes, input and mesh identity; read bounded pages; display the saved result; refuse reads after release.
+
+At [5,5,20] mm, the intermediate temperature was 20.002566084871628 degC at one second and 20.027338600398892 degC at three seconds. The last sample matched the final result probe while intermediate artifacts remained provisional. No heat flux is invented from intermediate temperatures. Tests cover budgets, release, remeshing, units, revision conflicts and late replies; expired undispatched commands are refused, and late replies no longer disconnect the session.
+
+One default-concurrency full run failed in the existing force-controlled Neo-Hookean bar's Newton line search. Forty isolated generated references did not reproduce it; the cause remains unresolved, tracked as NUMERICREFERENCE1 for failed-mesh/state capture and reproducibility. Solver tolerances were not changed. The 25 ms cancel/timeout test race now uses a controlled clock rather than wall-time scheduling.
