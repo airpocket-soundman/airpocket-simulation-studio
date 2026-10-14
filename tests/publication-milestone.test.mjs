@@ -1,0 +1,7 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {validateProgress} from '../src/progress.js';
+const progress=()=>JSON.parse(readFileSync(new URL('../src/progress.json',import.meta.url)));
+test('publication gates reference existing tasks without promoting future solver work into publication',()=>{const p=validateProgress(progress()),m=p.publicationMilestone,ids=new Set(p.tasks.map(t=>t.id));assert.equal(m.schemaVersion,1);assert.equal(m.status,'pending');assert.equal(m.taskStatusDoesNotCloseGate,true);const gates=m.gates,used=new Set(gates.flatMap(g=>g.taskIds));assert.deepEqual(gates.map(g=>g.order),[0,1,2,3,4,5]);assert.equal(new Set(gates.map(g=>g.id)).size,gates.length);for(const id of [...used,...m.futureTaskIds,...m.supportOnlyTaskIds])assert.ok(ids.has(id),id);for(const id of m.futureTaskIds)assert.ok(!used.has(id),id);assert.ok(m.futureTaskIds.includes('CFD1'));assert.deepEqual(m.supportOnlyTaskIds,['P2','P6','PERF1']);});
+test('historical task completion cannot silently close pending publication evidence gates',()=>{const p=progress(),m=p.publicationMilestone;for(const id of new Set(m.gates.flatMap(g=>g.taskIds))){const task=p.tasks.find(t=>t.id===id);task.status='released';task.evidence='historical-local-proof';}validateProgress(p);assert.ok(m.gates.every(g=>g.status==='pending'));assert.equal(m.status,'pending');assert.equal(m.gates[0].observations.find(v=>v.kind==='branch-protection').detail.includes('not protected'),true);});

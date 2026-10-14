@@ -1,6 +1,7 @@
 import {canonicalJson as canonical,getProjectRevision} from './project-revision.js';
 export {getProjectRevision} from './project-revision.js';
 import {createStudioApi} from './studio-api.js';
+import {summarizeProjectChanges} from './project-change-summary.js';
 
 const plain=value=>value!==null&&typeof value==='object'&&(Object.getPrototypeOf(value)===Object.prototype||Object.getPrototypeOf(value)===null);
 const integer=value=>Number.isInteger(value)&&value>=0;
@@ -19,13 +20,15 @@ const selectors={
  * expectedRevision refers to the exact input, before loadProject normalization.
  * No persistence, solving, or externally visible mutation occurs here.
  */
-export async function applyProjectOperations(project,operations,{expectedRevision}={}) {
+export async function applyProjectOperations(project,operations,{expectedRevision,expectedResultingRevision}={}, {normalizeProject}={}) {
   // Snapshot before the first await so callers cannot change data mid-transaction.
   canonical(project);canonical(operations);
   project=structuredClone(project);operations=structuredClone(operations);
+  if(normalizeProject!==undefined&&(typeof normalizeProject!=='function'||normalizeProject.constructor?.name==='AsyncFunction'))throw TypeError('Project normalization must be synchronous.');
   const previousRevision=await getProjectRevision(project);
   if(expectedRevision!==undefined&&typeof expectedRevision!=='string')throw new TypeError('expectedRevision must be a string.');
   if(expectedRevision!==undefined&&expectedRevision!==previousRevision)throw Error('Project revision conflict.');
+  if(expectedResultingRevision!==undefined&&(typeof expectedResultingRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(expectedResultingRevision)))throw new TypeError('expectedResultingRevision must be a SHA-256 revision.');
   if(!Array.isArray(operations))throw new TypeError('operations must be an array.');
   // Validate the complete command envelope before running any command.
   for(const operation of operations) {
@@ -36,6 +39,14 @@ export async function applyProjectOperations(project,operations,{expectedRevisio
   }
   const api=createStudioApi();api.loadProject(project);
   const results=operations.map(({method,args})=>api[method](...structuredClone(args)));
-  const output=api.exportProject();
-  return {schemaVersion:1,project:output,previousRevision,revision:await getProjectRevision(output),results};
+  let output=api.exportProject(),normalization,commitProject;
+  if(normalizeProject){
+   const unnormalized=output;commitProject=unnormalized;const unnormalizedRevision=await getProjectRevision(unnormalized),prepared=normalizeProject(structuredClone(unnormalized));
+   if(prepared&&typeof prepared.then==='function'){Promise.resolve(prepared).catch(()=>{});throw TypeError('Project normalization must be synchronous.');}
+   const validated=createStudioApi();validated.loadProject(JSON.parse(canonical(prepared)));output=validated.exportProject();
+   const changedPointers=summarizeProjectChanges(unnormalized,output);normalization={applied:true,previousRevision:unnormalizedRevision,changedPointers,requiresReview:changedPointers.total>0,note:'Host serialization changes are included in the resulting revision; review them before applying.'};
+  }
+  const revision=await getProjectRevision(output);
+  if(expectedResultingRevision!==undefined&&expectedResultingRevision!==revision)throw Object.assign(Error('Resulting project revision does not match the reviewed preview.'),{code:'EDIT_PREVIEW_REVISION_CONFLICT'});
+  return {schemaVersion:1,project:output,previousRevision,revision,results,...(normalization?{normalization:{...normalization,revision},commitProject}:{})};
 }

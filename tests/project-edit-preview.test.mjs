@@ -1,0 +1,43 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {previewProjectOperations as preview} from '../src/project-edit-preview.js';
+import {applyProjectOperations,getProjectRevision} from '../src/project-operations.js';
+import {preflightProject} from '../src/analysis-preflight.js';
+const model=()=>({version:1,name:'two triangles',material:'金属',meshes:[{positions:[0,0,0,2,0,0,0,2,0,10,0,0,12,0,0,10,2,0],faceIds:[0,1]}],conditions:[],sourceModel:{kind:'box',bounds:[0,0,0,12,2,2]}});
+const op=(method,...args)=>({method,args});
+const config=async(p,extra={})=>({expectedRevision:await getProjectRevision(p),...extra});
+test('preview uses actual edits and returns matching revisions with no mutation or candidate payload',async()=>{
+ const p=model(),commands=[op('selectTriangles',0,[0]),op('addCondition',{type:'fixed'})],before=structuredClone(p),oldCommands=structuredClone(commands),settings=await config(p),r=await preview(p,commands,settings),actual=await applyProjectOperations(p,commands,{expectedRevision:settings.expectedRevision});
+ assert.deepEqual(p,before);assert.deepEqual(commands,oldCommands);assert.equal(r.previousRevision,settings.expectedRevision);assert.equal(r.revision,actual.revision);assert.equal(r.operationCount,2);assert.equal(r.summary.conditionCount,1);assert.ok(r.changedPointers.pointers.includes('/conditions'));assert.ok(r.changedPointers.pointers.includes('/selection'));assert.equal(r.project,undefined);assert.equal(r.operations,undefined);assert.equal(r.results,undefined);assert.equal(r.schemaVersion,1);
+ r.summary.name='Changed reply';r.changedPointers.pointers.push('changed');r.preflight.diagnostics.length=0;assert.deepEqual(p,before);assert.equal((await preview(p,commands,settings)).summary.name,'two triangles');
+ await preview(p,commands,{...settings,expectedResultingRevision:r.revision});await assert.rejects(preview(p,commands,{...settings,expectedResultingRevision:'sha256:'+'0'.repeat(64)}),{code:'EDIT_PREVIEW_REVISION_CONFLICT'});
+});
+test('valid semantic edits preview physical failure without running a solver or inventing missing material',async()=>{
+ const p=model(),commands=[op('setStudy',{kind:'structural',gravityEnabled:false}),op('setAnalysisIntent',{mode:'quantitative'})],r=await preview(p,commands,await config(p));assert.equal(r.preflight.allowed,false);assert.equal(r.preflight.completePreflight,false);assert.ok(r.preflight.diagnostics.some(d=>d.code==='MATERIAL_REQUIRED'));assert.ok(r.preflight.diagnostics.some(d=>d.code==='STRUCTURAL_SUPPORT_MISSING'));assert.equal(p.materialProperties,undefined);assert.equal(p.analysisIntent,undefined);
+ const mesh=await preview(p,[],await config(p,{operation:'mesh',target:'node',mode:'legacy'}));assert.equal(mesh.preflight.operation,'mesh');assert.equal(mesh.preflight.target,'node');
+});
+test('input, operations and runtime options are frozen before asynchronous revision work',async()=>{
+ const p=model(),commands=[op('setStudy',{kind:'structural',gravityEnabled:false})],settings=await config(p,{options:{method:'pcg'},mode:'legacy'}),before=structuredClone(p),oldCommands=structuredClone(commands),pending=preview(p,commands,settings);p.name='Concurrent';commands[0].args[0].kind='thermal';settings.options.method='invalid';const r=await pending,actual=await applyProjectOperations(before,oldCommands,{expectedRevision:settings.expectedRevision});assert.equal(r.revision,actual.revision);assert.equal(r.summary.name,'two triangles');assert.ok(!r.preflight.diagnostics.some(d=>d.code==='METHOD_UNSUPPORTED'));
+});
+test('invalid revisions, context, commands and lossy inputs fail without partial edits or getter invocation',async()=>{
+ const p=model(),before=structuredClone(p),valid=await config(p);
+ for(const invalid of [{},{...valid,expectedRevision:null},{...valid,expectedRevision:'sha256:bad'},{...valid,expectedResultingRevision:null},{...valid,target:'other'},{...valid,operation:'elastic'},{...valid,mode:'other'},{...valid,options:[]},{...valid,options:null},{...valid,unknown:true}])await assert.rejects(preview(p,[],invalid));
+ await assert.rejects(preview(p,[op('setMaterial','樹脂'),op('constructor')],valid));await assert.rejects(preview(p,[],{...valid,expectedRevision:'sha256:'+'0'.repeat(64)}),/revision conflict/i);await assert.rejects(preview({...p,bad:NaN},[],valid));assert.deepEqual(p,before);
+ let reads=0;const configuration={...valid};Object.defineProperty(configuration,'mode',{enumerable:true,get(){reads++;return 'legacy';}});await assert.rejects(preview(p,[],configuration));assert.equal(reads,0);
+});
+test('normalization changes and escaped sorted JSON pointers are reported; arrays stay whole',async()=>{
+ const p=model();p.materialProperties={'z~tail':1,'a/path':2};const r=await preview(p,[op('setMaterialProperties',{'z~tail':3,'a/path':4})],await config(p));const paths=r.changedPointers.pointers;assert.ok(paths.includes('/materialProperties/a~1path'));assert.ok(paths.includes('/materialProperties/z~0tail'));assert.ok(paths.indexOf('/materialProperties/a~1path')<paths.indexOf('/materialProperties/z~0tail'));assert.ok(paths.includes('/selection'));
+ const large=model();large.meshes[0].positions=Array.from({length:90000},(_,i)=>[0,0,0,2,0,0,0,2,0][i%9]);large.meshes[0].faceIds=Array(10000).fill(0);large.selection=[Array.from({length:10000},(_,i)=>i)];const r2=await preview(large,[op('clearSelection')],await config(large));assert.deepEqual(r2.changedPointers.pointers,['/selection']);assert.ok(JSON.stringify(r2).length<15000);
+});
+test('changed pointers, physical diagnostic evidence and report lists have explicit bounded omissions',async()=>{
+ const p=model();p.materialProperties=Object.fromEntries(Array.from({length:130},(_,i)=>['property'+String(i).padStart(3,'0'),i]));const changed=await preview(p,[op('setMaterialProperties',{})],await config(p));assert.equal(changed.changedPointers.total,131);assert.equal(changed.changedPointers.pointers.length,100);assert.equal(changed.changedPointers.truncated,true);assert.equal(changed.changedPointers.maxPointers,100);
+ const q=model();q.study={kind:'structural',gravityEnabled:false};q.analysisIntent={mode:'quantitative'};q.materialProperties={youngModulus:1e9,poissonRatio:.3};q.conditions=Array.from({length:80},()=>({type:'fixed',value:0,direction:[0,0,1],regions:[{mesh:0,triangles:[0,1]}]}));const actual=preflightProject(q,{}, {mode:'quantitative'}),r=await preview(q,[],await config(q));assert.equal(r.preflight.allowed,actual.allowed);assert.equal(r.preflight.provisional,actual.provisional);assert.equal(r.preflight.diagnostics.length,50);assert.equal(r.preflight.requiredPointers.length,100);assert.equal(r.preflight.reportPage.diagnosticsTotal,actual.diagnostics.length);assert.equal(r.preflight.reportPage.requiredPointersTotal,actual.requiredPointers.length);assert.equal(r.preflight.reportPage.diagnosticsTruncated,true);assert.equal(r.preflight.reportPage.requiredPointersTruncated,true);const regions=r.preflight.diagnostics.find(d=>d.target==='/conditions/0/regions');assert.deepEqual(regions.evidence.value,{type:'array',length:1,omitted:true});assert.ok(new TextEncoder().encode(JSON.stringify(r)).length<=65536);
+});
+test('oversized response rejects with a stable code and never mutates the source',async()=>{
+ const p=model();p.name='界'.repeat(30000);const before=structuredClone(p);await assert.rejects(preview(p,[],await config(p)),e=>e.code==='EDIT_PREVIEW_RESPONSE_LIMIT');assert.deepEqual(p,before);
+});
+test('large thermal-source provenance evidence never returns mesh or temperature arrays',async()=>{
+ const p=model();p.study={kind:'structural',thermalStress:true,temperature:40,referenceTemperature:20,gravityEnabled:false,temperatureSource:{name:'Saved thermal source',mesh:{nodes:Array.from({length:12000},(_,i)=>[0,0,0,1,0,0,0,1,0,0,0,1][i%12]),tetrahedra:[[0,1,2,3]]},temperature:Array(4000).fill(40)}};p.materialProperties={youngModulus:1e9,poissonRatio:.3,expansion:1e-5};p.analysisIntent={mode:'quantitative'};
+ const r=await preview(p,[],await config(p)),mesh=r.preflight.diagnostics.find(d=>d.target==='/study/temperatureSource/mesh'),field=r.preflight.diagnostics.find(d=>d.target==='/study/temperatureSource/temperature');
+ assert.deepEqual(mesh.evidence.value.nodes,{type:'array',length:12000,omitted:true});assert.deepEqual(mesh.evidence.value.tetrahedra,{type:'array',length:1,omitted:true});assert.deepEqual(field.evidence.value,{type:'array',length:4000,omitted:true});assert.equal(r.preflight.allowed,false);assert.ok(new TextEncoder().encode(JSON.stringify(r)).length<=65536);assert.ok(!JSON.stringify(r).includes('"temperature":[40,'));assert.equal(p.study.temperatureSource.temperature.length,4000);
+});

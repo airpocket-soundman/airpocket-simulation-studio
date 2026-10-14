@@ -1,0 +1,825 @@
+{
+  "environment": "Actual local browser with native Worker/WASM and live stdio MCP/HTTP;explicit synthetic axial QA references,not measured calibration.",
+  "initial": {
+    "schemaVersion": 1,
+    "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "project": {
+      "loaded": true,
+      "name": "曲面サンプル · Ø24 × 60 mm",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "methods": {
+      "inspect": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "previewEdit": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "caseList": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:12a02fbb1c259923ed68c10d048d291e5b182a35d883610f18c331f3a55e08b0",
+    "summary": {
+      "loaded": true,
+      "name": "Reviewed next-step axial reference",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "nonIdempotentUnitRoundtrip": {
+    "preview": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:12a02fbb1c259923ed68c10d048d291e5b182a35d883610f18c331f3a55e08b0",
+      "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "operationCount": 1,
+      "changedPointers": {
+        "pointers": [
+          "/study/acousticDuration",
+          "/study/referenceLengthMm"
+        ],
+        "total": 2,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [
+          {
+            "code": "STRUCTURAL_SUPPORT_MISSING",
+            "severity": "error",
+            "target": "/conditions",
+            "message": "No fixed or displacement support was specified",
+            "evidence": {
+              "supportCount": 0
+            },
+            "suggestions": [
+              "Specify intended supports; do not add artificial constraints only to make the solve converge"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "MATERIAL_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/youngModulus",
+            "message": "Required explicit material value is missing",
+            "evidence": {
+              "key": "youngModulus",
+              "unit": "Pa"
+            },
+            "suggestions": [
+              "Obtain the material value and its source, or record an explicit exploratory assumption"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "MATERIAL_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/poissonRatio",
+            "message": "Required explicit material value is missing",
+            "evidence": {
+              "key": "poissonRatio",
+              "unit": "1"
+            },
+            "suggestions": [
+              "Obtain the material value and its source, or record an explicit exploratory assumption"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 3,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 4,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:498974f7b63da7837190984e26fb94659900f84411f3b34373c6285cbd560691",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticDuration",
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 43,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4"
+      }
+    },
+    "committed": {
+      "schemaVersion": 1,
+      "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:498974f7b63da7837190984e26fb94659900f84411f3b34373c6285cbd560691",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticDuration",
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 43,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4"
+      }
+    }
+  },
+  "setup": {
+    "preview": {
+      "schemaVersion": 1,
+      "previousRevision": "sha256:96ae30d244327cda90dbcb25e71a8f828c8ddba378c8e661eee9763fc37d65a4",
+      "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "operationCount": 6,
+      "changedPointers": {
+        "pointers": [
+          "/conditions",
+          "/materialProperties/poissonRatio",
+          "/materialProperties/youngModulus",
+          "/study/acousticDuration"
+        ],
+        "total": 4,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "diagnostic",
+                "when": "execution-failure",
+                "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+                "metrics": [],
+                "failureSchemaVersion": 1
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "legacy",
+        "allowed": true,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-isotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "reportPage": {
+          "diagnosticsTotal": 0,
+          "diagnosticsTruncated": false,
+          "requiredPointersTotal": 12,
+          "requiredPointersTruncated": false
+        }
+      },
+      "limitations": [
+        "Read-only preview; no live input, file or solver state is changed.",
+        "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+        "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+        "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+        "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+      ],
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:e05da47b0b3163a55d2425db41a1b2a6e390849c6b2415c9cdf8538531357eb3",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 42,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8"
+      }
+    },
+    "applied": {
+      "schemaVersion": 1,
+      "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8",
+      "summary": {
+        "loaded": true,
+        "name": "Reviewed next-step axial reference",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 2,
+        "material": "金属"
+      },
+      "normalization": {
+        "applied": true,
+        "previousRevision": "sha256:e05da47b0b3163a55d2425db41a1b2a6e390849c6b2415c9cdf8538531357eb3",
+        "changedPointers": {
+          "pointers": [
+            "/study/acousticTimeStep",
+            "/study/acousticTransient",
+            "/study/airDensity",
+            "/study/dampingRate",
+            "/study/directivityAxis",
+            "/study/directivityDistanceMm",
+            "/study/directivityEnabled",
+            "/study/directivityPoints",
+            "/study/dynamicViscosity",
+            "/study/exteriorRadiation",
+            "/study/flowAxis",
+            "/study/fluidDensity",
+            "/study/fluidSoundSpeed",
+            "/study/freeStreamVelocity",
+            "/study/frequency",
+            "/study/gravity",
+            "/study/initialTemperature",
+            "/study/lossFactor",
+            "/study/materialTemperature",
+            "/study/maxNewtonIterations",
+            "/study/maxRadiationIterations",
+            "/study/modalAnalysis",
+            "/study/modalIterations",
+            "/study/modeCount",
+            "/study/nonlinearLoadSteps",
+            "/study/pressureDropPa",
+            "/study/pulseWidth",
+            "/study/receiverPoint",
+            "/study/referencePressurePa",
+            "/study/referenceTemperature",
+            "/study/soundSpeed",
+            "/study/steps",
+            "/study/stokesVelocityElement",
+            "/study/sweep",
+            "/study/sweepCount",
+            "/study/sweepEnd",
+            "/study/sweepStart",
+            "/study/temperature",
+            "/study/thermalStress",
+            "/study/timeStep",
+            "/study/transient",
+            "/study/volumetricSource"
+          ],
+          "total": 42,
+          "truncated": false,
+          "maxPointers": 100
+        },
+        "requiresReview": true,
+        "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+        "revision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8"
+      }
+    }
+  },
+  "observedFailure": {
+    "source": "Observed QA driver assertion output from live session83257;not a complete original job archive",
+    "state": "failed",
+    "error": {
+      "code": "JOB_FAILED",
+      "message": "Maximum call stack size exceeded",
+      "failure": {
+        "schemaVersion": 1,
+        "code": "ANALYSIS_MESH_FAILED",
+        "stage": "mesh",
+        "message": "Maximum call stack size exceeded",
+        "diagnostics": [
+          {
+            "code": "ANALYSIS_MESH_FAILED",
+            "severity": "error",
+            "stage": "mesh",
+            "target": "/",
+            "message": "Maximum call stack size exceeded",
+            "evidence": {},
+            "suggestions": [],
+            "requiresUserIntent": true
+          }
+        ]
+      }
+    },
+    "request": {
+      "size": 0.6,
+      "method": "wasm-pcg",
+      "inputRevision": "sha256:cb6039192c69d49b823152309165fd0ae35bebb65358ad7cde94027512a4d1a8"
+    },
+    "preFixMeshCoreSha256": "8530f64bd1416e7f788b11550cc7fa352dc38badcc383636abc68e56060bf606",
+    "originalJobIdCaptured": false,
+    "fullOriginalJobArchiveAvailable": false,
+    "limitation": "Vite HMR reloaded the page after the mesh fix before the complete original retained job could be exported. Only observed failure fields,setup and running screenshot are retained."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T22:48:41.708580+00:00",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38647110282",
+  "failureExtract": [
+    "deploy\tRun npm test\t2026-10-14T22:25:08.8973886Z ✖ actual resolved runtime assets and Node executable agree with independently read bytes (189.252905ms)",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5088452Z ℹ tests 840",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5089267Z ℹ pass 836",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5089513Z ℹ fail 1",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5090027Z ℹ skipped 3",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5103007Z ✖ actual resolved runtime assets and Node executable agree with independently read bytes (189.252905ms)",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5104618Z   Error: ENOENT: no such file or directory, realpath '/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/public/gmsh/gmsh.mjs'",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5113826Z     code: 'ENOENT',",
+    "deploy\tRun npm test\t2026-10-14T22:25:23.5115252Z     path: '/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/public/gmsh/gmsh.mjs'"
+  ],
+  "mainProtection": {
+    "message": "Branch not protected",
+    "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+    "status": "404"
+  },
+  "changes": [
+    "Prepare copied CAD/runtime files before test provenance inspection",
+    "Run verification for ordinary pull requests",
+    "Verify deployed HEAD/assets after deployment and save evidence",
+    "Create annotated release-<commit> tag only after deployed verification passes"
+  ],
+  "githubExecutionVerified": false
+}
