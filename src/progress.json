@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T09:28:38.328Z",
+  "updatedAt": "2026-10-14T09:30:07.015Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1311,8 +1311,8 @@
       ],
       "detail": "MCP18ツール、原子的編集17操作。STEP/STL/組込み形状、面ID選択、根拠・仮定、限定線形静解析preflight、暫定ラベルの保存検証、中間成果物の要約・点値・ページ取得を実装。",
       "detailEn": "18 MCP tools and 17 atomic edit operations cover imports, builtins, face IDs, provenance, assumptions, limited linear-static preflight, persisted provisional labels and bounded intermediate reads.",
-      "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目成功。追加した暫定ラベルの実画面確認は残る。全物理preflightとライブ接続は対象外。",
-      "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks and 13 browser import/restore checks passed. New provisional-label browser verification remains pending; all-physics preflight and live transport are outside scope.",
+      "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。",
+      "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs"
     }
   ],
