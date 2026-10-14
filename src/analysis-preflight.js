@@ -1,3 +1,5 @@
+import {inspectAcousticInputContract} from './acoustic-input-contract.js';
+import {inspectFluidInputContract} from './fluid-input-contract.js';
 import {inspectThermalInputContract} from './thermal-input-contract.js';
 import {resolveObservationProfile} from './observation-profiles.js';
 import {diagnoseExecution,getCapabilities} from './capabilities.js';
@@ -9,7 +11,7 @@ import {inspectInputProvenance} from './input-provenance.js';
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressure:'Pa',density:'kg/m3',gravity:'m/s2',poissonRatio:'1'};
 /** No mutation or solver initialization. Strict required-input/provenance contract
- * covers static isotropic linear structure and explicit thermal conduction inputs. A successful report
+ * covers static isotropic linear structure and explicit thermal, acoustic and limited fluid inputs. A successful report
  * still requires boundary transfer, rigid-body and mesh-quality checks after meshing.
  * Legacy projects need no new provenance, but still need actual material values.
  */
@@ -23,7 +25,10 @@ export function preflightProject(project,options={}, {target='browser',operation
  if(!validMode||project.analysisIntent!==undefined&&(!object(project.analysisIntent)||!['quantitative','exploratory'].includes(project.analysisIntent.mode)))add('ANALYSIS_INTENT_INVALID','/analysisIntent','Invalid analysis intent',{intent:project.analysisIntent,mode:selectedMode},['Choose quantitative or exploratory mode']);
  const effectiveMode=validMode?selectedMode:'quantitative';
  const thermalContract=operation==='solve'&&project.study?.kind==='thermal'&&effectiveMode!=='legacy'?inspectThermalInputContract(project,options,{mode:effectiveMode}):null;
- const inputUnits={...units,...(thermalContract?.units??{})};
+ const acousticContract=operation==='solve'&&project.study?.kind==='acoustic'&&effectiveMode!=='legacy'?inspectAcousticInputContract(project,options,{mode:effectiveMode}):null;
+ const fluidContract=operation==='solve'&&['channelFlow','creepingFlow'].includes(project.study?.kind)&&effectiveMode!=='legacy'?inspectFluidInputContract(project,options,{mode:effectiveMode}):null;
+ const physicalContract=thermalContract??acousticContract??fluidContract;
+ const inputUnits={...units,...(physicalContract?.units??{})};
  try{diagnostics.push(...diagnoseExecution(operation==='mesh'?{study:{kind:'structural'}}:project,options,target).diagnostics);}catch(error){add('EXECUTION_OPTIONS_INVALID','/options','Invalid execution options',{message:error.message},['Use the selected target capability contract']);}
  try{validateProject(project);}catch(error){add('PROJECT_INVALID','/','Project validation failed',{message:error.message},['Repair the indicated saved input; preserve intended physics']);}
  try{validateMaterialProperties(project.materialProperties??{});}catch(error){add('MATERIAL_INVALID','/materialProperties','Material validation failed',{message:error.message},['Correct material values and their documented applicable ranges']);}
@@ -51,11 +56,11 @@ export function preflightProject(project,options={}, {target='browser',operation
   if(!conditions.some(condition=>['fixed','displacement'].includes(condition?.type)&&!condition.cadUpdateRequired&&condition.regions?.length))add('STRUCTURAL_SUPPORT_MISSING','/conditions','No fixed or displacement support was specified',{supportCount:0},['Specify intended supports; do not add artificial constraints only to make the solve converge']);
   for(const key of ['youngModulus','poissonRatio',...(usesGravity?['density']:[])])if(material[key]===undefined||material[key]===null)add('MATERIAL_REQUIRED','/materialProperties/'+key,'Required explicit material value is missing',{key,unit:units[key]},['Obtain the material value and its source, or record an explicit exploratory assumption']);
   if(effectiveMode!=='legacy'&&typeof study.gravityEnabled!=='boolean')add('GRAVITY_INTENT_REQUIRED','/study/gravityEnabled','Explicit gravity setting required',{value:study.gravityEnabled??null},['Record whether gravity is included in the intended physical model']);
- }else if(thermalContract){requiredPointers.push(...thermalContract.requiredPointers);diagnostics.push(...thermalContract.diagnostics);}
+ }else if(physicalContract){requiredPointers.push(...physicalContract.requiredPointers);diagnostics.push(...physicalContract.diagnostics);}
  else if(operation==='solve')add('PREFLIGHT_CONTRACT_LIMITED','/study','Required-input provenance contract is not implemented for this study/material combination',{kind:study.kind??'structural'},['Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run'],effectiveMode==='legacy'?'warning':'error');
  let provenance;
  try{provenance=inspectInputProvenance(project,project.inputProvenance,{mode:effectiveMode,requiredPointers:effectiveMode==='legacy'?[]:requiredPointers});diagnostics.push(...provenance.diagnostics);}catch(error){add('PROVENANCE_INVALID','/inputProvenance','Provenance could not be inspected',{message:error.message},['Use JSON input and repair the provenance contract']);}
- return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':thermalContract?'thermal-conduction':supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
+ return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':physicalContract?physicalContract.contract:supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
 }
 
 export function requireAnalysisPreflight(project,options={},runtime={}){

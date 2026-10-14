@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T16:03:41.593587Z",
+  "updatedAt": "2026-10-14T16:13:25.090386Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1816,6 +1816,23 @@
       "acceptance": "新19試験を含むNode24.11.1全体674件中671成功・3skip（83.53秒）。実MCP7ジョブと実IAB熱1ジョブで必須根拠/明示仮定、runtime上書き拒否、3時刻場と最終28.298613153037422°C・暫定ラベル/input版不変を確認。連成sourceAssessment暫定OR・旧source互換・不正metadata拒否も検証。ビルド2.67秒・SKILL成功、配信物26項目28.39秒すべて成功。物理精度・既知Node24V8停止の根治は保証しない。",
       "acceptanceEn": "Full Node24.11.1 suite:671passed/3skipped of674 including19new tests (83.53s). Seven real MCP jobs and one actual IAB thermal job verify evidence/assumptions, runtime override refusal, three fields/final28.298613153037422degC and provisional labeling/unchanged input revision. Coupling source-assessment provisional OR, old-source compatibility and invalid metadata refusal are covered. Build2.67s/SKILL pass; all26distribution checks28.39s pass. Physical accuracy/known Node24V8 resolution are not guaranteed.",
       "evidence": "src/analysis-preflight.js; src/source-assessment.js; src/case-source-operations.js; src/capabilities.js; tests/thermal-preflight.test.mjs; tests/source-assessment.test.mjs; tests/mcp-thermal-provenance.test.mjs; docs/evidence/2026-10-15-browser-thermal-provenance.json; docs/testing.md"
+    },
+    {
+      "id": "WAVEFLUIDPROVENANCE1",
+      "title": "音響・限定流体の明示入力と根拠契約",
+      "titleEn": "Explicit acoustic and limited-flow inputs/evidence contracts",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P1",
+        "AGENTINPUT1",
+        "THERMALPROVENANCE1"
+      ],
+      "detail": "acoustic-wave、fully-developed-channel-flow、external-creeping-stokes-flowのnonlegacy物理値・境界・元形状の根拠を要求。異なるruntime物理指定・無視される音響source指定を拒否し、legacy互換と保存assessmentを維持。",
+      "detailEn": "Require nonlegacy acoustic/channel/exterior-Stokes physical, boundary and source-geometry evidence; reject differing runtime physics and ignored acoustic source options while preserving legacy/saved assessments.",
+      "acceptance": "新23件を含むNode24.11.1全体697件中694成功・3skip（85.71秒）。実ブラウザ2/MCP4/headless分岐4の計10実ジョブで明示根拠・仮定・runtime拒否・保存/暫定判定と追加物理経路を検証。過渡最終点-1.0557616546423643Paとchannel速度0.00005579846498232953m/s/圧0.0005Paを確認。旧metadata互換・assessment改変拒否も成功。ビルド4.49秒・配信物26項目27.79秒・SKILL検証すべて成功。物理精度・既知V8根治は保証しない。",
+      "acceptanceEn": "Full Node24.11.1 suite:694passed/3skipped of697 including23new tests (85.71s). Ten real jobs(two browser/four MCP/four branch headless) verify evidence/assumptions/runtime refusal/saved provisional status and additional routes. Transient final point-1.0557616546423643Pa and channel speed0.00005579846498232953m/s/pressure0.0005Pa checked. Old metadata compatibility/tampered assessment refusal pass. Build4.49s/all26distribution27.79s/SKILL pass. Physical accuracy/known V8 resolution are not guaranteed.",
+      "evidence": "src/acoustic-input-contract.js; src/fluid-input-contract.js; src/analysis-preflight.js; scripts/studio-mcp.mjs; docs/testing.md"
     }
   ],
   "solvers": [

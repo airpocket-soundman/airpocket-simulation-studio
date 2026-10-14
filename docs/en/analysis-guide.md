@@ -117,3 +117,5 @@ Saved thermal cases can be applied through window.caseSourceApi.apply/connected 
 LLM surface inspection uses connected inspectSurface or saved MCP studio_inspect_project.surfaceInspection. Problem triangles are paged and scoped to the returned input revision; passing closed-edge topology does not establish shape validity or volume meshing. See the [contract](automation.md).
 
 Quantitative/exploratory conduction requires explicit k, steady/transient intent, volumetric source and all thermal-boundary evidence. Transient adds rho/cp/dt/steps/initial temperature. Runtime physical settings must match saved study; legacy/saved-assessment compatibility remains. See [thermal evidence contract](automation.md) and preflight.requiredPointers.
+
+Acoustic-wave, fully-developed channel and exterior Stokes support quantitative/exploratory evidence contracts. Inspect requiredPointers for active settings/boundaries/original geometry; avoid ignored runtime sources or differing physical overrides. Legacy compatibility and postmesh checks remain. See the [contract](automation.md).

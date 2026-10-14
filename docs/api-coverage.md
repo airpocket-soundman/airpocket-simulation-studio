@@ -9,7 +9,7 @@
 | ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（80操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
-| 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 静的等方線形構造・熱伝導以外の必須入力契約、メッシュ後検査との統合 |
+| 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 構造/熱/音響/限定流体の残りの必須入力契約、メッシュ後検査との統合 |
 | 保存入力の検査・復元 | studioApi.loadProject/exportProject/getSummary/getRevision/applyOperations、builtinProjectApi.create | studio_inspect_project（検査・revision・寸法要約・最大50面ページ）、studio_edit_project（原子的編集・新規保存）、studio_create_builtin_project、接続createBuiltinProject（組込み形状） | 操作細分化と全作成経路の網羅性確認 |
 | STEP/STL取込 | UI/CAD Worker、project-import、inputImportApi/Transfer | studio_import_project（保存JSON）、接続inputImportBegin/Write/Commit/Release（STEP/STL） | 対応形状の範囲拡大・大容量実測 |
 | 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、selectCadFace、applyOperations | studio_edit_project（18種、根拠・intent・表示面ID選択を含む、revision競合検出） | 全物理モデルの根拠・入力契約、選択・設定操作の残りの網羅性確認 |

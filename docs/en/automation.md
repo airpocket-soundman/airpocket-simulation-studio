@@ -352,3 +352,21 @@ Thermal units are degC, conductivity W/(m·K), specificHeat J/(kg·K), density k
 Temperature/vibration sources copy available schema1 sourceAssessment. When coupling is active, sourceAssessment.provisional:true is OR-propagated to current preflight/saved-result provisional status, including legacy destinations, so explicit upstream assumptions cannot disappear. Mode, existing allowed, schemaVersion1 and remainingChecks stay compatible. Existing GUI thermal-case/modal-source actions use the same helper. Old sources without metadata remain supported; invalid sourceAssessment is refused by validators. This preserves provisional lineage, not quantitative confirmation.
 
 heatPower boundary type/value/regions also require evidence; its unit is W. Saved-result validation refuses deleting source assessment metadata to erase inherited provisional status.
+
+## Nonlegacy required inputs/evidence for limited flow
+
+Quantitative/exploratory fully-developed-channel-flow and external-creeping-stokes-flow require study.kind/dynamicViscosity/fluidDensity, explicitly empty conditions and sourceModel.kind. Channel additionally needs flowAxis/pressureDropPa/fluidSoundSpeed and supported straight-channel geometry. Box uses bounds; fixed cylinder uses Y-axis1; internal CAD domains use enclosure/mode/seedPoint/portPlanes and compact original-solid dimensions.
+
+Stokes requires freeStreamVelocity/referenceLengthMm/stokesVelocityElement(P1|P2), exterior box enclosure and original-solid dimensions. Full STEP data are not duplicated into evidence. Re≤0.1 is checked before execution; reference-length lower bounds against CAD bbox and boundary consistency also require postmesh checks. The separate internal-Stokes adapter is not connected and is explicitly unsupported.
+
+Differing runtime kind/dynamicViscosity/fluidDensity/fluidSoundSpeed/pressureDropPa/flowAxis/freeStreamVelocity/referenceLengthMm/stokesVelocityElement are refused as FLUID_RUNTIME_OVERRIDE; equal values are accepted. Missing nonlegacy inputs cannot be supplied by implicit solver defaults or assumptions alone. Legacy contract-helper requiredPointers/diagnostics remain empty; overall preflight retains its existing PREFLIGHT_CONTRACT_LIMITED warning. Channel CAD recognition/Re/Mach/flow balance and Stokes boundaries/mesh dependence/physical accuracy remain subsequent checks, not guaranteed by allowed. Units are Pa·s,kg/m³,m/s,Pa and mm.
+
+## Nonlegacy acoustic-wave inputs/evidence
+
+acoustic-wave requires study.kind and explicit acousticTransient/sweep/exteriorRadiation/directivityEnabled booleans, plus frequency/soundSpeed/airDensity/lossFactor. Harmonic acoustics needs referencePressurePa; transient needs acousticDuration/pulseWidth/acousticTimeStep/dampingRate/receiverPoint, with0 explicitly selecting automatic time stepping. Sweep needs sweepStart/End/Count and receiver; directivity needs axis/points/distance; exterior radiation records its spherical enclosure.
+
+Boundary type/value/regions, present CAD patches, explicit impedance reactance and any table require evidence. Vibration sources require scalar settings and caseReference identity when available; old sources without references need mesh/displacement-array evidence with duplication cost. Present sourceAssessment also requires evidence. This does not authenticate sources or postmesh boundary coverage.
+
+Differing runtime physical values are refused. initialPressure/radiationBoundary/normalVelocity, ignored by the current public route, are always refused. Legacy contract helpers remain empty; overall preflight retains its existing PREFLIGHT_CONTRACT_LIMITED warning. Missing nonlegacy medium/boundary/time/frequency inputs are not filled by defaults or assumptions alone; preflight.allowed/confirmed evidence do not guarantee numerical/physical accuracy.
+
+studio_probe additively returns verified saved analysisAssessment when available. Old metadata-free outputs have no extra assessment; point values alone do not establish confirmation/nonprovisional status.

@@ -367,3 +367,17 @@ quantitative/exploratory熱伝導の明示物性/時間/境界値と根拠、run
 同バッチで連成元sourceAssessmentの暫定性継承を追加。探索熱の仮定がlegacy熱応力等で消えないよう、有効sourceのprovisionalを派生判定へOR伝播する。GUI/API共有、旧source互換、不正metadata拒否と保存結果検査を検証した。
 
 最終Node v24.11.1全体試験は674件中671成功・3スキップ・失敗0（83,531.7619 ms）。新規19件（core6・integration4・MCP3・helper3・lineage preflight3）、実MCP7ジョブと実ブラウザ熱1ジョブを確認した。途中でsourceAssessmentの空remainingChecks拒否を補強しpure6件を再実行して成功（総件数不変）。ビルド・専門SKILL検証は成功。ビルド2.67秒、配信物26項目も28.39秒ですべて成功。既知V8停止の根治・物理精度は証明しない。
+
+## 2026-10-15: 音響・流体の明示入力と根拠契約
+
+音響と限定流体のnonlegacy必須入力・根拠、runtime物理値の異なる指定の拒否、legacy互換とsource適用性の制限が対象。物性・境界・時間/周波数の不足を仮定や既定値で埋めない。最終契約・全体試験・実証結果は確認中。
+
+新規対象はpure13・integration5・MCP1・追加分岐4の計23件。実MCP4ジョブ（調和/過渡音響・channel・Stokes）で保存往復・古い根拠拒否・過渡最終場と点値一致を確認。ブラウザ実証と最終全体結果は下記に記録した。studio_probeは検証済み保存assessmentを存在時だけ追加返却する。
+
+ローカルCodexアプリ内ブラウザの実Worker/WASM2ジョブを確認。10×10×40 mm箱の過渡音響は明示agent仮定、frequency1,000 Hz・duration0.0025秒・pulseWidth0.0002秒・dt自動0で、最終frame55/time0.0025の点[5,5,20]が-1.0557616546423643 Paとなり、最終保持場と一致した。2×2×4 mm箱channelはΔp0.001 Pa・μ0.001 Pa·s・ρ1,000 kg/m³・音速1,500 m/s・axis2で、点[1,1,2]のvz0.00005579846498232953 m/sとp0.0004999999999999998 Paを確認。
+
+根拠なし・不一致runtime拒否、GUI暫定表示と入力版不変も確認し、[機械可読記録](evidence/2026-10-15-browser-wave-fluid-provenance.json)と[画面](evidence/2026-10-15-browser-wave-fluid-provenance.jpg)を保存。初回QAは表示frame0を最終場と比較して失敗し、APIで最終frameを明示して成功した。製品不具合ではない。Node QAの帯域不足や既定50件ページも手順を修正した。追加分岐4件も成功し、全体最終結果は下記に記録した。仮想参照入力で物理精度・出典真偽・V8根治を証明しない。
+
+追加分岐4件の実headless4ジョブは2周波数sweep、外部放射の合成モードtraceとfar-field12点/暫定性継承、P2 Stokes、内部CAD管channelを確認。モードtraceは合成6Tetで、固有値計算精度の証拠ではない。全体実行中の変更はstudio_probe説明へのassessment追記のみで、実行コードは変えていない。
+
+最終Node v24.11.1全体試験は697件中694成功・3スキップ・失敗0（85,712.6862 ms）、新規23件。実ブラウザ2・MCP4・追加headless4の計10実ジョブを確認。旧metadataなしのstudio_probe互換と改変assessment拒否も含む。ビルド4.49秒、配信物26項目27.79秒ですべて成功。専門SKILL検証も成功。既知Node24/V8停止の根治を示す結果ではない。
