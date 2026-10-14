@@ -1,3 +1,7 @@
+import {createPrintOperations} from '../src/print-operations.js';
+import {parsePrint3mf} from '../src/print-3mf.js';
+import {parsePrintGcode} from '../src/print-gcode.js';
+import {DOMParser as NodeDOMParser} from '@xmldom/xmldom';
 import {createCadUpdateOperations} from '../src/cad-update-operations.js';
 import {inspectProjectGeometry} from '../src/geometry-inspection.js';
 import {createBrowserBridge} from './browser-bridge.mjs';
@@ -12,7 +16,7 @@ import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 // MCP 2025-11-25 stdio transport; stdout contains JSON-RPC messages only.
 import {createInterface} from 'node:readline';
 import {readFile,writeFile,stat,realpath,lstat} from 'node:fs/promises';
-import {resolve,isAbsolute,extname} from 'node:path';
+import {resolve,isAbsolute,extname,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createStudioApi} from '../src/studio-api.js';
 import {createCaseStore} from '../src/cases.js';
@@ -23,6 +27,8 @@ const pathSchema={type:'string',minLength:1,description:'Absolute local JSON fil
 const jobService=createHeadlessJobService();
 let browserBridge;
 const toolList=[
+ {name:'studio_import_print',description:'Read a local 3MF or linear G-code file up to 50,000,000 bytes and exclusively publish a distinct new parsed print JSON. Interprets geometry and possible deposition paths without sending commands to hardware or inferring strength. Returns compact revisioned metadata, not geometry arrays.',inputSchema:object({path:pathSchema,outputPath:pathSchema},['path','outputPath'])},
+ {name:'studio_inspect_print',description:'Validate a saved parsed print JSON and return compact metadata or a bounded segments/triangles page (maximum 200). Coordinates use mm; layerIndex is a zero-based layer filter. Optional exact revision prevents stale reads.',inputSchema:object({path:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},viewId:{type:'string'},kind:{enum:['segments','triangles']},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:200},layerIndex:{type:'integer',minimum:0}},['path'])},
  {name:'studio_preview_cad_update',description:'Preview STEP CAD replacement without modifying files. Requires the current project revision. Replacement is an absolute STEP/STP (OCCT normalizes to mm) or saved STEP project JSON. Returns replacement revision and bounded condition reports (maximum 50), never full geometry.',inputSchema:object({path:pathSchema,replacementPath:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:50}},['path','replacementPath','expectedRevision'])},
  {name:'studio_apply_cad_update',description:'Apply a reviewed STEP CAD replacement using exact input and replacement revisions, preserving physical setup and requiring confirmation of old provenance. Unmatched conditions remain pending and block analysis. Exclusively publishes a distinct new JSON; never overwrites input, replacement or an existing output.',inputSchema:object({path:pathSchema,replacementPath:pathSchema,outputPath:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},expectedReplacementRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'}},['path','replacementPath','outputPath','expectedRevision','expectedReplacementRevision'])},
  {name:'studio_assess_result',description:'Evaluate fatigue or Mode-I fracture screening from a saved structural elastic analysis using its recorded material evidence and explicit options. Requires the exact result revision; publishes a distinct new analysis JSON without overwriting files. Does not infer missing material data or claim failure probability.',inputSchema:object({path:pathSchema,outputPath:pathSchema,expectedResultRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},kind:{enum:['fatigue','fracture']},options:{type:'object'}},['path','outputPath','expectedResultRevision','kind','options'])},
@@ -45,12 +51,29 @@ const toolList=[
  {name:'studio_analyze',description:'Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.',inputSchema:object({path:pathSchema,outputPath:pathSchema,operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']}},['path','outputPath'])},
  {name:'studio_probe',description:'Measure a saved analysis at a point in mm. Returns physical units; no extrapolation outside the mesh.',inputSchema:object({path:pathSchema,point:{type:'array',items:{type:'number'},minItems:3,maxItems:3},elementIndex:{type:'integer',minimum:0},modeIndex:{type:'integer',minimum:0}},['path','point'])},
  {name:'studio_validate_cases',description:'Validate saved cases including physical result metadata and return comparison metrics.',inputSchema:object({path:pathSchema},['path'])}
-].map(t=>({...t,annotations:{readOnlyHint:!['studio_apply_cad_update','studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_apply_cad_update','studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
+].map(t=>({...t,annotations:{readOnlyHint:!['studio_import_print','studio_apply_cad_update','studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_import_print','studio_apply_cad_update','studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
 async function jsonFile(path){if(typeof path!=='string'||!isAbsolute(path))throw Error('An absolute local file path is required');const file=resolve(path);if((await stat(file)).size>100000000)throw Error('JSON file exceeds 100 MB');return JSON.parse(await readFile(file,'utf8'));}
 const summary=summarizeAnalysis;
 export async function callStudioTool(name,args={}){
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
+ if(name==='studio_import_print'){
+  if(typeof args.path!=='string'||!isAbsolute(args.path)||typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase())throw Error('Use distinct absolute print input and output paths');
+  const input=resolve(args.path),info=await stat(input),extension=extname(input).toLowerCase();
+  if(!info.isFile()||info.size>50000000)throw Error('Print input must be a file up to 50,000,000 bytes');
+  if(!['.3mf','.gcode'].includes(extension))throw Error('Print import requires .3mf or .gcode');
+  try{await lstat(resolve(args.outputPath));throw Error('Print output already exists');}catch(error){if(error.code!=='ENOENT')throw error;}
+  const bytes=await readFile(input);if(bytes.length>50000000)throw Error('Print input exceeds 50,000,000 bytes');
+  const data=extension==='.3mf'?parsePrint3mf(bytes,{parseXml:text=>new NodeDOMParser({onError:(_level,message)=>{throw Error(message);}}).parseFromString(text,'application/xml')}):parsePrintGcode(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+  const snapshot={version:1,filename:basename(input),data},api=createPrintOperations({getSnapshot:()=>snapshot,getView:()=>({viewId:snapshot.data.geometries?.length?'geometry':'plate:0',allLayers:true,layerIndex:0}),isBusy:()=>false});
+  const inspection=await api.inspect(),publication=await publishJson(resolve(args.outputPath),snapshot);return {...inspection,outputPath:resolve(args.outputPath),...publication};
+ }
+ if(name==='studio_inspect_print'){
+  const snapshot=await jsonFile(args.path),api=createPrintOperations({getSnapshot:()=>snapshot,getView:()=>({viewId:snapshot.data.geometries?.length?'geometry':'plate:0',allLayers:true,layerIndex:0}),isBusy:()=>false}),command=Object.fromEntries(Object.entries(args).filter(([key])=>key!=='path'));
+  const inspection=await api.inspect();if(args.expectedRevision!==undefined&&args.expectedRevision!==inspection.revision)throw Error('Print revision conflict');
+  if(args.kind===undefined){if(['viewId','offset','limit','layerIndex'].some(key=>args[key]!==undefined))throw Error('Print page arguments require kind');return inspection;}
+  return api.get({...command,expectedRevision:inspection.revision});
+ }
  if(name==='studio_browser_sessions')return {sessions:browserBridge.list()};
  if(name==='studio_browser_call'){if(!Object.hasOwn(browserMethods,args.method)||typeof args.sessionId!=='string')throw Error('Invalid browser operation');return browserBridge.call(args.sessionId,args.method,args.args||{},browserMethods[args.method]);}
  if(name==='studio_preview_cad_update'||name==='studio_apply_cad_update'){

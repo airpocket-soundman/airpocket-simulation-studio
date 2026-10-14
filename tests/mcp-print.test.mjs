@@ -1,0 +1,42 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {mkdtemp,readFile,writeFile,rm,stat,open} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createInterface} from 'node:readline';
+import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
+import {getProjectRevision} from '../src/project-operations.js';
+const gcode='G21\nG90\nM83\nG0 X0 Y0 Z.2\n; layer_number: 1\n; FEATURE: Outer wall\nG1 X10 E1 F600\nG1 Y10 E1\nG0 Z.4\n; layer_number: 2\nG1 X0 E1';
+const rels='<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="r1" Target="/3D/3dmodel.model" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>';
+const model='<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="inch"><resources><object id="1"><mesh><vertices><vertex x="0" y="0" z="0"/><vertex x="1" y="0" z="0"/><vertex x="0" y="1" z="0"/></vertices><triangles><triangle v1="0" v2="1" v3="2"/></triangles></mesh></object></resources><build><item objectid="1"/></build></model>';
+test('real MCP imports print sources exclusively and reads validated revisioned bounded physical pages',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-print-')),child=spawn(process.execPath,['scripts/studio-mcp.mjs'],{cwd:new URL('../',import.meta.url),stdio:['pipe','pipe','pipe']}),lines=createInterface({input:child.stdout}),pending=new Map();let id=0,stderr='';child.stderr.on('data',v=>stderr+=v);
+ lines.on('line',line=>{const m=JSON.parse(line);pending.get(m.id)?.(m);});
+ const request=(method,params)=>new Promise((resolve,reject)=>{const key=++id,timer=setTimeout(()=>{pending.delete(key);reject(Error('MCP timeout '+stderr));},30000);pending.set(key,m=>{clearTimeout(timer);pending.delete(key);resolve(m);});child.stdin.write(JSON.stringify({jsonrpc:'2.0',id:key,method,params})+'\n');});
+ const call=async(name,args)=>{const r=await request('tools/call',{name,arguments:args});assert.equal(r.error,undefined);return r.result;};
+ const value=r=>{assert.notEqual(r.isError,true,r.content?.[0]?.text);return r.structuredContent.value;};
+ try{
+  await request('initialize',{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'print-test',version:'1'}});
+  child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
+  const tools=(await request('tools/list')).result.tools;assert.equal(tools.find(t=>t.name==='studio_import_print').annotations.readOnlyHint,false);assert.equal(tools.find(t=>t.name==='studio_inspect_print').annotations.readOnlyHint,true);
+  const source=join(dir,'paths.gcode'),outputPath=join(dir,'paths.json');await writeFile(source,gcode);
+  const imported=value(await call('studio_import_print',{path:source,outputPath})),saved=JSON.parse(await readFile(outputPath,'utf8'));
+  assert.equal(saved.version,1);assert.equal(saved.filename,'paths.gcode');assert.equal(saved.data.segmentCount,3);assert.equal(saved.data.layerCount,2);assert.equal(saved.data.segments[0].feedMmMin,600);assert.equal(saved.data.unit,'mm');assert.equal(await readFile(source,'utf8'),gcode);
+  assert.equal(imported.revision,await getProjectRevision(saved));assert.equal(imported.data,undefined);assert.equal(imported.segments,undefined);
+  const inspected=value(await call('studio_inspect_print',{path:outputPath,expectedRevision:imported.revision}));assert.equal(inspected.revision,imported.revision);
+  const viewId=inspected.views.find(v=>v.kind==='gcode'||v.kind==='segments'||v.segmentCount>0)?.viewId??inspected.views[0].viewId;
+  const page=value(await call('studio_inspect_print',{path:outputPath,expectedRevision:imported.revision,viewId,kind:'segments',offset:1,limit:1}));assert.equal(page.items.length,1);assert.deepEqual(page.items[0].to,[10,10,.2]);
+  const filtered=value(await call('studio_inspect_print',{path:outputPath,viewId,kind:'segments',layerIndex:1,limit:200}));assert.equal(filtered.items.length,1);assert.equal(filtered.items[0].to[2],.4);
+  for(const extra of [{limit:201},{offset:-1},{limit:1.1},{expectedRevision:'sha256:'+'0'.repeat(64)},{kind:'triangles'},{viewId:'missing'},{layerIndex:100}])assert.equal((await call('studio_inspect_print',{path:outputPath,viewId,kind:'segments',...extra})).isError,true,JSON.stringify(extra));
+  assert.equal((await call('studio_inspect_print',{path:outputPath,expectedRevision:'sha256:'+'0'.repeat(64)})).isError,true);
+  for(const destination of [source,outputPath])assert.equal((await call('studio_import_print',{path:source,outputPath:destination})).isError,true);
+  const archive=join(dir,'model.3mf'),archiveOutput=join(dir,'model.json');await writeFile(archive,zipSync(Object.fromEntries(Object.entries({'_rels/.rels':rels,'3D/3dmodel.model':model,'Metadata/plate_1.gcode':gcode}).map(([k,v])=>[k,strToU8(v)]))));
+  const three=value(await call('studio_import_print',{path:archive,outputPath:archiveOutput})),parsed=JSON.parse(await readFile(archiveOutput,'utf8'));assert.equal(parsed.data.triangleCount,1);assert.equal(parsed.data.geometries[0].positions[3],25.4);assert.equal(three.revision,await getProjectRevision(parsed));
+  const geometry=three.views.find(v=>v.triangleCount>0),triangles=value(await call('studio_inspect_print',{path:archiveOutput,viewId:geometry.viewId,kind:'triangles',limit:1}));assert.equal(triangles.items.length,1);
+  const invalid=join(dir,'invalid.json');await writeFile(invalid,JSON.stringify({...saved,data:{...saved.data,segments:[{...saved.data.segments[0],to:[null,0,0]}]}}));assert.equal((await call('studio_inspect_print',{path:invalid})).isError,true);
+  const broken=join(dir,'broken.3mf'),badOut=join(dir,'bad.json');await writeFile(broken,'invalid');assert.equal((await call('studio_import_print',{path:broken,outputPath:badOut})).isError,true);await assert.rejects(stat(badOut),{code:'ENOENT'});
+  const large=join(dir,'large.gcode'),file=await open(large,'w');try{await file.truncate(50000001);}finally{await file.close();}assert.equal((await call('studio_import_print',{path:large,outputPath:join(dir,'large.json')})).isError,true);
+  assert.equal((await call('studio_import_print',{path:'relative.gcode',outputPath:badOut})).isError,true);
+ }finally{child.kill();lines.close();await rm(dir,{recursive:true,force:true});}
+});

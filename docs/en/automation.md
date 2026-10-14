@@ -4,7 +4,7 @@
 
 `npm run mcp` starts a local stdio MCP server implementing the [2025-11-25 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
 
-Twenty-two tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
+Twenty-four tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})` normalizes STEP/STP to mm through OCCT and saves a new input JSON retaining original STEP data and CAD-face mappings. STL requires a positive explicit `scaleToMm` and follows the current outward, closed, convex single-shell and size restrictions. The input-file limit is 50 MiB. `studio_create_builtin_project({source,outputPath,name?})` creates mm-based `box` (bounds), `boxes` (boxes), fixed-size `cylinder` (kind only), `sphere` (center/radius), or `tube` (center/axis/innerRadius/outerRadius/length). It does not invent material values, supports or loads.
 
@@ -67,7 +67,7 @@ Default MCP works with saved JSON; connector mode also invokes permitted browser
 
 ## Temporary local connector (initial implementation)
 
-Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 22 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 24 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
 
 The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 44 methods (22 default tools, 24 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 48 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -154,3 +154,15 @@ After reviewing, pass both revisions to `studio_apply_cad_update({path,replaceme
 Shared browser API: `window.cadUpdateApi.preview({expectedRevision,replacement,offset:0,limit:50})` and `apply({expectedRevision,replacement,expectedReplacementRevision})`, where `replacement` is an already imported STEP project JSON. Connector `previewCadUpdate` requires inspect scope; `applyCadUpdate` requires edit scope. Preview preserves current inputs; commit checks input/replacement hashes, conflicts and permission state. Live commands retain the existing 500,000 JSON-character limit; chunked live CAD transfer is unsupported. Use the saved-file MCP flow above for larger STEP files. API availability does not imply matching accuracy for arbitrary CAD or completed live-rendering verification.
 
 Live replacement JSON requires canonical imported STEP display meshes: each mesh has `kind:"cad"`, only `positions`, `faceIds`, `kind` and optional nonempty `sourceHash` keys, and every position must be exactly representable as Float32. Noncanonical meshes are rejected rather than silently rounding coordinates or dropping additional metadata. This restriction does not apply to the saved-JSON MCP flow. Prefer an actual STEP file path for engineering updates.
+
+## 3MF/G-code import and layer-data APIs
+
+`studio_import_print({path,outputPath})` reads an original `.3mf` or `.gcode` file and exclusively saves `{version:1,filename,data}`, matching GUI export, to a distinct new JSON path. It returns a revision and compact summary. Inputs and existing outputs are not overwritten. Original input is limited to 50,000,000 bytes. `studio_inspect_print({path,expectedRevision?,viewId?,kind?,offset?,limit?,layerIndex?})` inspects that saved JSON and returns a summary or array page.
+
+The shared browser API is `window.printOperations.inspect/import/get/set/export`. Connected MCP requires inspect scope for `printInspect` and `getPrintData`, edit for `importPrint`, and view for `setPrintView`. Unloaded inspection returns `revision:null`. Once loaded, the revision hashes the complete version 1 GUI-export snapshot; compact views include `geometry` or `plate:N` identifiers and layer counts. Layer indices are independent of display language.
+
+`importPrint({expectedRevision,format,filename,text?,base64?})` accepts `format:"gcode"` with text or `format:"3mf"` with base64. Supply null as expectedRevision when unloaded, otherwise the latest revision. Invalid input, stale revisions, busy state and expired commands preserve previous data. The entire live command must fit the 500,000-character JSON limit; chunked large live print inputs are unsupported.
+
+`getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})` returns bounded `kind:"segments"|"triangles"` pages with at most 200 items. `setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})` changes only preview settings and leaves the document revision unchanged. Retrieve full saved data through the shared export method or saved-file path.
+
+Parser warnings and references are preserved. Print coordinates are not automatically registered to the CAE model. Import does not execute G-code, control devices, or establish strength or infill material properties. Arc extrusion and unsupported commands are rejected according to existing parser restrictions.

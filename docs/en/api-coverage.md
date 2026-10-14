@@ -6,7 +6,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
-| Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (44 scoped methods) | Public HTTPS connectivity, reconnection and GUI job monitoring |
+| Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (48 scoped methods) | Public HTTPS connectivity, reconnection and GUI job monitoring |
 | Capabilities | studioApi.getCapabilities | studio_capabilities | Extend required inputs, validity limits and all combinations |
 | Execution-combination diagnostics | studioApi.diagnoseExecution | studio_diagnose_execution | Extend structured diagnostics to units, required values, constraints and mesh |
 | Preflight and provenance | studioApi.preflight/setInputProvenance/setAnalysisIntent, analysis execution gate | studio_preflight_project, studio_edit_project (evidence and intent persistence) | Required-input contracts beyond static isotropic linear structure; integration with post-mesh checks |
@@ -25,9 +25,9 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 | CAD updates | cadUpdateApi.preview/apply (input/replacement revisions), existing studioApi operations | studio_preview_cad_update / studio_apply_cad_update; live previewCadUpdate / applyCadUpdate | Chunked live transfer for large CAD; region reselection and evidence reconfirmation after updates |
 | Material catalog | Catalog UI and shared data | studio_material_catalog | Shared application operations including assumptions and applicability |
 | Fatigue and fracture evaluation | resultAssessmentApi.evaluate/get | studio_assess_result/studio_assessment and connector evaluateAssessment/getAssessment | Extend physical scope and verify live rendering |
-| 3MF/G-code | printImportApi and UI | Unsupported | Shared import, layer-selection and export contracts |
+| 3MF/G-code | printOperations inspect/import/get/set/export and UI | studio_import_print/studio_inspect_print; connected printInspect/importPrint/getPrintData/setPrintView | Chunked large live inputs; analysis using layer/infill properties |
 
-The specialized SKILL at `skills/airpocket-studio/SKILL.md` describes current capabilities, diagnostics, sources and limits. Update it alongside new operations and validate successful examples as well as rejection/repair paths. Current MCP can retrieve intermediate summaries and optional mesh/time-field files for saved-input CPU jobs, and optional connector mode exposes 44 permitted browser operations. Retention is within the same Node process, with defaults of 32 jobs and 256 events per job. See the [operation specification](automation.md) for cursor-gap reporting, retained-request `requestId` idempotency, provisional labels, cancellation restrictions during saving and the 64 MB field-storage limit. Do not present target specifications as available operations.
+The specialized SKILL at `skills/airpocket-studio/SKILL.md` describes current capabilities, diagnostics, sources and limits. Update it alongside new operations and validate successful examples as well as rejection/repair paths. Current MCP can retrieve intermediate summaries and optional mesh/time-field files for saved-input CPU jobs, and optional connector mode exposes 48 permitted browser operations. Retention is within the same Node process, with defaults of 32 jobs and 256 events per job. See the [operation specification](automation.md) for cursor-gap reporting, retained-request `requestId` idempotency, provisional labels, cancellation restrictions during saving and the 64 MB field-storage limit. Do not present target specifications as available operations.
 
 P0 is in progress. Remaining work includes breaking every row down into individual operations, required inputs/validity limits, diagnostics with units, Japanese/English operation mappings and visual verification.
 

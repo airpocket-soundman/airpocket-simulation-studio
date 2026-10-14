@@ -4,7 +4,7 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-22ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+24ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -67,7 +67,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の22ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の24ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは44操作を公開します（通常22ツール、接続モード24ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは48操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -154,3 +154,15 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 ブラウザ共通APIは`window.cadUpdateApi.preview({expectedRevision,replacement,offset:0,limit:50})`と`apply({expectedRevision,replacement,expectedReplacementRevision})`です。`replacement`には取込済みSTEPプロジェクトJSONを渡します。接続MCPの`previewCadUpdate`は確認（inspect）、`applyCadUpdate`は編集（edit）許可を要します。プレビューは現在の入力を変更せず、確定時に入力・置換ハッシュと競合・許可状態を照合します。ライブ命令は既存のJSON 500,000文字上限に従い、CAD専用の分割転送は未対応です。大きなSTEPは上記保存ファイル用MCP経路を使ってください。APIの提供は任意CADでの照合や実画面検証の完了を意味しません。
 
 ライブの置換JSONは正規の取込済みSTEP表示メッシュを必要とします。各メッシュは`kind:"cad"`で、キーは`positions`・`faceIds`・`kind`と任意の空でない`sourceHash`に限り、全座標はFloat32で正確に表現可能でなければなりません。非正規メッシュは座標の丸めや余分なメタデータの削除で補正せず拒否します。この制限は保存JSON用のMCP経路には適用しません。工学用途の更新では実際のSTEPファイルパスを使う経路を優先してください。
+
+## 3MF/G-codeの取込と層データAPI
+
+`studio_import_print({path,outputPath})`は元の`.3mf`または`.gcode`を読み、GUI書出と同じ`{version:1,filename,data}`を別の新規JSONへ排他的に保存し、版とコンパクトな要約を返します。入力と既存出力は上書きしません。元入力は50,000,000バイト以下です。`studio_inspect_print({path,expectedRevision?,viewId?,kind?,offset?,limit?,layerIndex?})`はこの保存JSONを確認し、要約または配列のページを返します。
+
+ブラウザ共通APIは`window.printOperations.inspect/import/get/set/export`です。接続MCPでは`printInspect`と`getPrintData`がinspect、`importPrint`がedit、`setPrintView`がview権限を要します。未読込のinspectは`revision:null`を返します。読込後の版はGUIのversion 1書出全体のハッシュで、要約には`geometry`、`plate:N`のviewIdと層数を含みます。層番号の添字は表示言語から独立しています。
+
+`importPrint({expectedRevision,format,filename,text?,base64?})`のformatは`gcode`または`3mf`です。前者はtext、後者はbase64を渡します。expectedRevisionは未読込時null、既読込時は直前の版を指定します。不正入力・古い版・処理中・期限切れは既存データを保持して拒否します。ライブ命令全体はJSON 500,000文字以内で、大きな印刷入力の分割転送は未対応です。
+
+`getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})`は`kind:"segments"|"triangles"`の有限ページを返し、limitの上限は200です。`setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})`はプレビューだけを変更し、文書版は変更しません。保存する全データは共通APIのexportまたは保存ファイル経路を使って取得します。
+
+パーサの警告・参照情報を保持し、CAEモデルへの座標系の自動位置合わせは行いません。G-codeを装置へ送信・実行せず、読込だけから強度やインフィルの物性を推定しません。円弧押出や未対応コマンドは既存パーサの制限に従って拒否されます。

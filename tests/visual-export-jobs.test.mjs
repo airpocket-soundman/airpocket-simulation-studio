@@ -5,7 +5,8 @@ import {createVisualExportJobs} from '../src/visual-export-jobs.js';
 const revision='sha256:'+'a'.repeat(64);
 const args=(requestId='one')=>({requestId,expectedResultRevision:revision,format:'png',view:{field:'temperature',camera:{position:[1,2,3]}}});
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
-async function terminal(api,job){for(let i=0;i<100;i++){const state=api.status(job);if(state.state!=='running')return state;await tick();}throw Error('Export did not terminate');}
+// Digest completion uses the worker pool; event-loop turn counts are not timeouts under load.
+async function terminal(api,job){const deadline=performance.now()+5000;for(;;){const state=api.status(job);if(state.state!=='running')return state;if(performance.now()>=deadline)throw Error('Export did not terminate within 5 seconds');await new Promise(resolve=>setTimeout(resolve,5));}}
 
 test('PNG artifact has real bytes, digest, bounded pages and detached view',async()=>{
  const bytes=new Uint8Array(70000).map((_,i)=>i%251);let received;

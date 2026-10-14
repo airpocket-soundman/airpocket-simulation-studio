@@ -1462,8 +1462,8 @@
       "status": "queued",
       "category": "基盤",
       "depends": [],
-      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。",
-      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved.",
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
       "evidence": "scripts/check-published.mjs; docs/testing.md"
@@ -1483,6 +1483,18 @@
       "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実画面/公開HTTPSは未確認。",
       "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser/public HTTPS remain unverified.",
       "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "PRINTAPI1",
+      "title": "印刷データを共有API・MCPへ公開",
+      "titleEn": "Expose printing data through shared API and MCP",
+      "status": "checking",
+      "category": "API",
+      "detail": "3MF/G-code読込、版照合、最大200件の形状・層ページ、表示切替と失敗時復元を実装。通常24ツール・接続26ツール/48操作。実画面/公開HTTPSと大きなライブ入力の分割転送を残す。",
+      "detailEn": "Implement 3MF/G-code import, revision checks, at most 200 geometry/layer rows, display settings and rollback. Default 24 tools, paired 26 tools/48 methods. Real-browser/public HTTPS validation and large live-input chunking remain.",
+      "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md",
+      "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は未解決、実画面/公開HTTPSは未確認。強度推定・機器制御は含まない。",
+      "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser/public HTTPS unverified. No strength inference or hardware control."
     }
   ],
   "solvers": [
