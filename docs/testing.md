@@ -381,3 +381,13 @@ quantitative/exploratory熱伝導の明示物性/時間/境界値と根拠、run
 追加分岐4件の実headless4ジョブは2周波数sweep、外部放射の合成モードtraceとfar-field12点/暫定性継承、P2 Stokes、内部CAD管channelを確認。モードtraceは合成6Tetで、固有値計算精度の証拠ではない。全体実行中の変更はstudio_probe説明へのassessment追記のみで、実行コードは変えていない。
 
 最終Node v24.11.1全体試験は697件中694成功・3スキップ・失敗0（85,712.6862 ms）、新規23件。実ブラウザ2・MCP4・追加headless4の計10実ジョブを確認。旧metadataなしのstudio_probe互換と改変assessment拒否も含む。ビルド4.49秒、配信物26項目27.79秒ですべて成功。専門SKILL検証も成功。既知Node24/V8停止の根治を示す結果ではない。
+
+## 2026-10-15: Stokes GMRES構造化残差
+
+restart実測・Arnoldi推定・final自由方程式検査の3phaseとP1/P2通知、zero RHS・observer opt-out/例外、既存数値結果不変を対象。場配列は追加せず既存jobEventsを使う。最終試験・実証結果は確認中。
+
+新規対象8件（core3・MCP2・pipeline3）、実MCP2・browser client2・opt-out headless1・実IAB2の計7実ジョブを検証。実IABのP1はスカラー6イベント・iteration15・final true-relative2.15779906301883e-11/tolerance1e-8、点[2,0,0]速度6.0244564983003884e-5 m/s・圧力-0.0021749733344103737 Pa。P2は8イベント・iteration31・final1.393631893908131e-10、速度7.049517758404265e-5 m/s・圧力-0.002632656760704991 Paを確認した。
+
+明示的な仮想agent仮定・GUI暫定表示・入力版不変・includeFields:falseで成果物0件を確認。[機械可読記録](evidence/2026-10-15-browser-stokes-observation.json)と[画面](evidence/2026-10-15-browser-stokes-observation.jpg)を保存。pollはsettled後で、終端前受領タイミングの保証ではない。全体試験の最終結果は下記に記録する。
+
+同一凍結ソースのNode v24.11.1全体試験は705件中702成功・3スキップ・失敗0（85,556.7625 ms）、新規8件。初回IAB画面はカメラが近く全面緑となったため、[12,8,14]・target原点へ修正して2ジョブを再実行・撮影し、全体表示を目視確認した。残差・測定値は同一。検証対象の7ジョブとは別のQA再実行として記録する。ビルドは2.65秒で成功、配信物26項目も27.79秒ですべて成功。専門SKILL検証も成功。

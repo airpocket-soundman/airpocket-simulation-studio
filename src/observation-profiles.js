@@ -304,7 +304,11 @@ const definitions=[
   [
    "creepingFlow"
   ],
-  [],
+  [
+   {stage:'iteration',solver:'stokes-gmres',velocityElements:['P1','P2'],phase:'restart-check',residualKind:'preconditioned-relative',cadence:'each GMRES restart check including iteration zero; skipped for zero right-hand side',metrics:[{name:'residual',unit:'dimensionless'},{name:'tolerance',unit:'dimensionless'}],residualBasis:'equilibrated, left-ILU(0)-preconditioned reduced system'},
+   {stage:'iteration',solver:'stokes-gmres',velocityElements:['P1','P2'],phase:'arnoldi-estimate',residualKind:'preconditioned-relative-estimate',cadence:'iteration 1, each multiple of 10 iterations, and inner-loop termination',metrics:[{name:'residual',unit:'dimensionless'},{name:'tolerance',unit:'dimensionless'}],residualBasis:'Givens/Arnoldi estimate for the equilibrated, left-ILU(0)-preconditioned reduced system'},
+   {stage:'iteration',solver:'stokes-gmres',velocityElements:['P1','P2'],phase:'final-check',residualKind:'true-relative',cadence:'once after the final original-system residual passes; iteration zero is possible',metrics:[{name:'residual',unit:'dimensionless'},{name:'tolerance',unit:'dimensionless'}],residualBasis:'original nondimensional full-system free-equation residual divided by the norm of raw reduced right-hand side'}
+  ],
   []
  ],
  [
@@ -369,7 +373,7 @@ const common=[
 const clone=value=>JSON.parse(JSON.stringify(value));
 export function getObservationProfiles({target='browser'}={}){
  if(!['browser','node'].includes(target))throw Error('Unknown execution target');
- return definitions.filter(([id])=>target==='browser'||id!=='elastic-webgpu').map(([id,models,events,fields])=>({id,models,methods:id==='mesh'?[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])]:id==='elastic-mfem'?['mfem-wasm']:id==='elastic-webgpu'?['webgpu-pcg']:[...cpuMethods],events:clone([...common,...events]),textProgress:true,fields:clone(fields),limitations:['Declaration of implemented observation paths only; not execution permission or physical validation','Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them',...(events.length?[]:['No structured numerical iteration events']),...(id==='acoustic-frequency'?['Frequency sweeps emit text progress, not structured frequency-step events']:[])]}));
+ return definitions.filter(([id])=>target==='browser'||id!=='elastic-webgpu').map(([id,models,events,fields])=>({id,models,methods:id==='mesh'?[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])]:id==='elastic-mfem'?['mfem-wasm']:id==='elastic-webgpu'?['webgpu-pcg']:[...cpuMethods],events:clone([...common,...events]),textProgress:true,fields:clone(fields),limitations:['Declaration of implemented observation paths only; not execution permission or physical validation','Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them',...(events.length?[]:['No structured numerical iteration events']),...(id==='acoustic-frequency'?['Frequency sweeps emit text progress, not structured frequency-step events']:[]),...(id==='stokes'?['Arnoldi estimates and restart residuals use a preconditioned system; only final-check reports the checked original-system relative residual','A converged numerical residual does not establish physical accuracy, flow balance or mesh independence','No intermediate Stokes velocity or pressure field arrays are retained']:[])]}));
 }
 export function resolveObservationProfile(project,options={},target='browser',operation='solve'){
  const profiles=getObservationProfiles({target});

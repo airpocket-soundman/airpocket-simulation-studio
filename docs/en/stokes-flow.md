@@ -41,3 +41,11 @@ Probes evaluate ten-node quadratic velocity and four-corner linear pressure. Eac
 P2 retains limits of 2000 base vertices and 8000 tetrahedra, plus 12000 velocity nodes and 40000 degrees of freedom. JS/WASM CPU GMRES is supported; GPU, MFEM, inertia and turbulence remain unsupported. Archive validation independently reconstructs midpoint topology, boundary values, gauges, extrema/bounds, stresses, divergence, forces and fluxes, and checks interior momentum/weak incompressibility. Legacy P1 archives remain supported.
 
 The refined analytical-boundary sphere test has reaction drag error 1.77%, surface drag error 8.20% and nodal pressure error 9.81%. This differs from the uniform finite-box UI boundary and is not an accuracy guarantee for that UI. Continue comparing mesh and enclosure sizes.
+
+## Structured Stokes GMRES residual observations
+
+P1/P2 Stokes emit stage:"iteration", solver:"stokes-gmres", velocityElement, iteration/residual/tolerance/converged and phase/residualKind. All residuals are dimensionless; no intermediate velocity/pressure arrays are supplied. Existing jobEvents carry provisional observations.
+
+restart-check/preconditioned-relative is measured at the GMRES outer-loop start, including initial iteration0, on the equilibrated left-ILU0-preconditioned reduced system. arnoldi-estimate/preconditioned-relative-estimate estimates that system's residual, emitted at the first inner iteration, each10th iteration and before tolerance/happy/limit/restart-end breaks without duplicates. Do not interpret it as the original momentum-equation residual.
+
+final-check/true-relative follows the existing numerical check of original nondimensional full-system free-equation residual normalized by rawRhs norm at tolerance1e-8. Zero RHS may skip GMRES but still emits final-check iteration0. Each converged refers only to that residual criterion; later regime checks can still fail. It guarantees neither successful job completion nor flow balance, mesh independence or physical accuracy.

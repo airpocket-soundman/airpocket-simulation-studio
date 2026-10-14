@@ -377,3 +377,13 @@ Missing-evidence/differing-runtime refusal, provisional GUI labeling and unchang
 Four additional real headless jobs cover two-frequency sweep, exterior synthetic-modal trace/far-field12 samples/inherited provisional status, P2 Stokes and internal CAD-tube channel. The modal trace uses six synthetic tetrahedra, not modal eigenvalue-accuracy evidence. Only studio_probe description was updated to mention assessment during the full run; execution code was unchanged.
 
 The final Node v24.11.1 suite passed694 of697 tests with three skips and zero failures in85,712.6862 ms, including23new tests. Ten real jobs cover two browser, four MCP and four additional headless runs. Old metadata-free studio_probe compatibility and tampered-assessment refusal also passed. Build passed in4.49 seconds; all26 distribution checks passed in27.79 seconds. Specialist SKILL validation passed. This does not establish resolution of the known Node24/V8 stop.
+
+## 2026-10-15: structured Stokes GMRES residuals
+
+Targets include measured restart/Arnoldi estimate/final free-equation phases for P1/P2, zero RHS, observer opt-out/errors and unchanged numerical results. Existing jobEvents carry observations; no field arrays are added. Final tests/evidence remain under verification.
+
+Eight new targets cover three core, two MCP and three pipeline tests. Seven real jobs include two MCP, two browser-client, one opt-out headless and two actual IAB runs. IAB P1 produced six scalar events,iteration15,final true-relative2.15779906301883e-11/tolerance1e-8 and at[2,0,0] speed6.0244564983003884e-5 m/s,pressure-0.0021749733344103737 Pa. P2 produced eight events,iteration31,final1.393631893908131e-10,speed7.049517758404265e-5 m/s,pressure-0.002632656760704991 Pa.
+
+Explicit virtual agent assumptions,provisional GUI labels,unchanged input revision and zero artifacts with includeFields:false were verified. See the [machine-readable record](../evidence/2026-10-15-browser-stokes-observation.json) and [screenshot](../evidence/2026-10-15-browser-stokes-observation.jpg). Polling occurred after settlement,not proof of preterminal delivery timing. Final full-suite results are recorded below.
+
+With unchanged frozen sources,Node v24.11.1 passed702 of705 tests with three skips and zero failures in85,556.7625 ms,including eight new tests. Initial IAB screenshots had an overly close camera/full green view; two jobs were rerun with camera[12,8,14]/origin target and recaptured with verified overall views; residuals/probes matched. These are QA reruns,separate from the seven targeted jobs. Build passed in2.65 seconds;all26 distribution checks passed in27.79 seconds;specialist SKILL validation passed.

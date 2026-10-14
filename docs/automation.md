@@ -269,7 +269,7 @@ v2ホストのv1取込応答は`measurementsCleared:true`と、空履歴を含�
 
 `capabilities.observation.profiles`はソルバー・モデル・実行method別に実装済みの中間観測を宣言し、`diagnoseExecution`とpreflightの`selectedObservation`で選択結果を確認できます。線形CPU PCGの反復、固有値残差、塑性/超弾性の荷重ステップ、熱の定常time0と過渡温度、過渡音響の間引いた圧力などを区別します。内部Newton残差や全反復の場を公開する宣言ではありません。
 
-MFEM・WebGPU・channelFlow・Stokesなど数値反復observerのない経路はstage/textの進行情報に限ります。周波数sweepも実際のsourceと実装経路に従います。反復ゼロなら対応イベントが出ない場合があります。場が対応してもincludeFields保持off、共有64 MB予算、観測/計算失敗などにより取得は保証しません。観測宣言は実行可能性・物理妥当性とは別で、診断/preflightのallowedと必要入力・検証を引き続き確認してください。
+MFEM・WebGPU・channelFlowなど数値反復observerのない経路はstage/textの進行情報に限ります。周波数sweepも実際のsourceと実装経路に従います。反復ゼロなら対応イベントが出ない場合があります。場が対応してもincludeFields保持off、共有64 MB予算、観測/計算失敗などにより取得は保証しません。観測宣言は実行可能性・物理妥当性とは別で、診断/preflightのallowedと必要入力・検証を引き続き確認してください。
 
 各profileは`id/models/methods/events/textProgress/fields/limitations`を持ち、eventsはstage・任意solver・cadence・metrics(name/unit)、fieldsはkind/name/unit/timeUnit/cadenceを宣言します。selectedObservationはschemaVersion、target/operation/supported、profileIdとprofile、reasons、adaptive、fieldRetentionを返し、declarationOnly:true・physicalAccuracyVerified:falseです。fieldRetentionはrequested/available/maxBytes:64000000/eventRetention:256を含みます。adaptiveはenabled/structuredRoundEvents:false/meshPerRound/textProgressOnlyを返します。acousticSweepとadaptiveSolveはonObserveを受けないため、構造化frequency-step/adaptive-round数値イベントを宣言しません。
 
@@ -370,3 +370,11 @@ runtimeのkind/dynamicViscosity/fluidDensity/fluidSoundSpeed/pressureDropPa/flow
 異なるruntime物理値は拒否し、現公開経路で無視されるinitialPressure/radiationBoundary/normalVelocityは常に拒否します。legacyの契約helperは空で互換維持し、preflight全体の従来PREFLIGHT_CONTRACT_LIMITED警告も維持します。nonlegacyの不足物性・境界・時間/周波数は既定や仮定だけでは埋めません。preflight.allowedや確認済み根拠は数値/物理精度の保証ではありません。
 
 studio_probeは保存結果を検証したanalysisAssessmentがある場合に追加で返します。metadataなしの旧保存結果には追加せず、点値だけで確認済み/非暫定を推測しません。
+
+## Stokes GMRESの構造化反復残差
+
+P1/P2 Stokesは`stage:"iteration",solver:"stokes-gmres"`、velocityElement、iteration/residual/tolerance/convergedとphase/residualKindを返します。残差は全て無次元で、途中の速度・圧力場配列は提供しません。既存のjobEvents経路を使い、中間値は常にprovisionalです。
+
+restart-check/preconditioned-relativeはGMRES外側ループの先頭（初期iteration0を含む）で測定する、平衡化・左ILU0前処理された縮約系の相対残差。arnoldi-estimate/preconditioned-relative-estimateは同じ系のArnoldi推定で、最初のinner iteration・10反復ごと・許容差/happy break/上限/再開区切り直前に重複なく通知します。推定値を元の運動量式残差と読み替えないでください。
+
+final-check/true-relativeは既存の元の無次元full systemの自由方程式残差をrawRhsノルムで正規化した数値検査が1e-8を満たした後の通知です。zero RHSでGMRESを省略してもiteration0のfinal-checkはあります。各convergedはその残差条件のみを示し、後続のregime検査等で失敗することがあります。ジョブ終端の成功、流量収支・メッシュ独立性・実物精度を保証しません。

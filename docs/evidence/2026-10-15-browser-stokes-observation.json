@@ -1,0 +1,1685 @@
+{
+  "environment": "Actual local IAB/browser Worker/WASM over real stdio MCP and loopback HTTP. All inputs are virtual explicit agent assumptions; no physical accuracy claim.",
+  "runs": [
+    {
+      "velocityElement": "P1",
+      "study": {
+        "kind": "creepingFlow",
+        "dynamicViscosity": 0.01,
+        "fluidDensity": 1.2,
+        "freeStreamVelocity": [
+          0.0001,
+          0,
+          0
+        ],
+        "referenceLengthMm": 2,
+        "stokesVelocityElement": "P1"
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "creepingFlow",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/dynamicViscosity",
+            "value": 0.01,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/fluidDensity",
+            "value": 1.2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions",
+            "value": [],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/kind",
+            "value": "fluidDomain",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/enclosure",
+            "value": [
+              -3,
+              -3,
+              -3,
+              6,
+              6,
+              6
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/kind",
+            "value": "sphere",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/center",
+            "value": [
+              0,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/radius",
+            "value": 1,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/freeStreamVelocity",
+            "value": [
+              0.0001,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/referenceLengthMm",
+            "value": 2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/stokesVelocityElement",
+            "value": "P1",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          }
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "stokes",
+          "profile": {
+            "id": "stokes",
+            "models": [
+              "creepingFlow"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "restart-check",
+                "residualKind": "preconditioned-relative",
+                "cadence": "each GMRES restart check including iteration zero; skipped for zero right-hand side",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "equilibrated, left-ILU(0)-preconditioned reduced system"
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "arnoldi-estimate",
+                "residualKind": "preconditioned-relative-estimate",
+                "cadence": "iteration 1, each multiple of 10 iterations, and inner-loop termination",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "Givens/Arnoldi estimate for the equilibrated, left-ILU(0)-preconditioned reduced system"
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "final-check",
+                "residualKind": "true-relative",
+                "cadence": "once after the final original-system residual passes; iteration zero is possible",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "original nondimensional full-system free-equation residual divided by the norm of raw reduced right-hand side"
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them",
+              "Arnoldi estimates and restart residuals use a preconditioned system; only final-check reports the checked original-system relative residual",
+              "A converged numerical residual does not establish physical accuracy, flow balance or mesh independence",
+              "No intermediate Stokes velocity or pressure field arrays are retained"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "external-creeping-stokes-flow",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/dynamicViscosity",
+          "/study/fluidDensity",
+          "/conditions",
+          "/sourceModel/kind",
+          "/sourceModel/enclosure",
+          "/sourceModel/solid/kind",
+          "/sourceModel/solid/center",
+          "/sourceModel/solid/radius",
+          "/study/freeStreamVelocity",
+          "/study/referenceLengthMm",
+          "/study/stokesVelocityElement"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "dynamicViscosity": "Pa*s",
+          "fluidDensity": "kg/m3",
+          "fluidSoundSpeed": "m/s",
+          "pressureDropPa": "Pa",
+          "freeStreamVelocity": "m/s",
+          "referenceLengthMm": "mm"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+        "summary": {
+          "loaded": true,
+          "name": "Stokes P1 observations",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 0,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+        "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791995160192,
+        "updatedAt": 1791995160760,
+        "lastSequence": 15,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "stokes",
+          "mesh": {
+            "nodeCount": 110,
+            "elementCount": 351,
+            "volumeMm3": 213.1506566909108,
+            "minVolumeMm3": 0.08219544420778983,
+            "minQuality": 0.3146913236534821,
+            "qualityHistogram": [
+              0,
+              14,
+              44,
+              85,
+              208
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 2,
+          "elapsedMs": 172,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 3,
+          "elapsedMs": 172,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 110,
+            "elementCount": 351,
+            "volumeMm3": 213.1506566909108,
+            "minVolumeMm3": 0.08219544420778983,
+            "minQuality": 0.3146913236534821,
+            "qualityHistogram": [
+              0,
+              14,
+              44,
+              85,
+              208
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "meshAvailable": false,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 4,
+          "elapsedMs": 508,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 5,
+          "elapsedMs": 508,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving three-dimensional creeping Stokes flow…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 6,
+          "elapsedMs": 512,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 0,
+          "phase": "restart-check",
+          "residualKind": "preconditioned-relative",
+          "residual": 1,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 7,
+          "elapsedMs": 554,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 1,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 0.09781304472065827,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 8,
+          "elapsedMs": 555,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 10,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 1.513134206778769e-06,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 9,
+          "elapsedMs": 557,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 15,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 2.809662303041404e-11,
+          "tolerance": 1e-10,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 10,
+          "elapsedMs": 558,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Stokes GMRES 15 iterations",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 11,
+          "elapsedMs": 558,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 15,
+          "phase": "restart-check",
+          "residualKind": "preconditioned-relative",
+          "residual": 2.8096568137025953e-11,
+          "tolerance": 1e-10,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 12,
+          "elapsedMs": 561,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P1",
+          "iteration": 15,
+          "phase": "final-check",
+          "residualKind": "true-relative",
+          "residual": 2.15779906301883e-11,
+          "tolerance": 1e-08,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 13,
+          "elapsedMs": 561,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 14,
+          "elapsedMs": 568,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+          "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+          "sequence": 15,
+          "elapsedMs": 568,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "f4c16571-35a6-49dc-8f1d-ac43693ff6ea",
+        "inputRevision": "sha256:fd5acf39ee908a4088aebd838dda85aa2d147c80421dfa6996c9caf7472c15b6",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "view": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:0470dc3ae165122c52a69f9af789c90217b41009c77815003d9de7e3a69ecb69",
+        "kind": "stokes",
+        "fields": [
+          {
+            "id": "speed",
+            "unit": "m/s"
+          },
+          {
+            "id": "fluidPressure",
+            "unit": "Pa gauge"
+          }
+        ],
+        "state": {
+          "field": "speed",
+          "modeIndex": null,
+          "frameIndex": null,
+          "deformScale": 1,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true,
+          "colorRange": null,
+          "camera": {
+            "position": [
+              12,
+              8,
+              14
+            ],
+            "target": [
+              0,
+              0,
+              0
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          }
+        },
+        "modeCount": 0,
+        "frameCount": 0,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "frames": [],
+        "modes": []
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:0470dc3ae165122c52a69f9af789c90217b41009c77815003d9de7e3a69ecb69",
+        "kind": "stokes",
+        "display": {
+          "field": "speed",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          2,
+          0,
+          0
+        ],
+        "element": 74,
+        "weights": [
+          0.35580619318495943,
+          0.30631545521218406,
+          0.13548616584789763,
+          0.20239218575495888
+        ],
+        "velocityMs": [
+          6.021118484451725e-05,
+          1.5029519666640267e-06,
+          1.3273902955251393e-06
+        ],
+        "speedMs": 6.0244564983003884e-05,
+        "pressurePa": -0.0021749733344103737,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    },
+    {
+      "velocityElement": "P2",
+      "study": {
+        "kind": "creepingFlow",
+        "dynamicViscosity": 0.01,
+        "fluidDensity": 1.2,
+        "freeStreamVelocity": [
+          0.0001,
+          0,
+          0
+        ],
+        "referenceLengthMm": 2,
+        "stokesVelocityElement": "P2"
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "creepingFlow",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/dynamicViscosity",
+            "value": 0.01,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/fluidDensity",
+            "value": 1.2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions",
+            "value": [],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/kind",
+            "value": "fluidDomain",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/enclosure",
+            "value": [
+              -3,
+              -3,
+              -3,
+              6,
+              6,
+              6
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/kind",
+            "value": "sphere",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/center",
+            "value": [
+              0,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/sourceModel/solid/radius",
+            "value": 1,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/freeStreamVelocity",
+            "value": [
+              0.0001,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/referenceLengthMm",
+            "value": 2,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/stokesVelocityElement",
+            "value": "P2",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Virtual Stokes observation fixture",
+            "applicability": "Finite box creeping flow only",
+            "status": "unconfirmed",
+            "assumption": "Explicit reference-only physical inputs, not measured or user-confirmed"
+          }
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "stokes",
+          "profile": {
+            "id": "stokes",
+            "models": [
+              "creepingFlow"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "restart-check",
+                "residualKind": "preconditioned-relative",
+                "cadence": "each GMRES restart check including iteration zero; skipped for zero right-hand side",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "equilibrated, left-ILU(0)-preconditioned reduced system"
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "arnoldi-estimate",
+                "residualKind": "preconditioned-relative-estimate",
+                "cadence": "iteration 1, each multiple of 10 iterations, and inner-loop termination",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "Givens/Arnoldi estimate for the equilibrated, left-ILU(0)-preconditioned reduced system"
+              },
+              {
+                "stage": "iteration",
+                "solver": "stokes-gmres",
+                "velocityElements": [
+                  "P1",
+                  "P2"
+                ],
+                "phase": "final-check",
+                "residualKind": "true-relative",
+                "cadence": "once after the final original-system residual passes; iteration zero is possible",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ],
+                "residualBasis": "original nondimensional full-system free-equation residual divided by the norm of raw reduced right-hand side"
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them",
+              "Arnoldi estimates and restart residuals use a preconditioned system; only final-check reports the checked original-system relative residual",
+              "A converged numerical residual does not establish physical accuracy, flow balance or mesh independence",
+              "No intermediate Stokes velocity or pressure field arrays are retained"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "external-creeping-stokes-flow",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/dynamicViscosity",
+          "/study/fluidDensity",
+          "/conditions",
+          "/sourceModel/kind",
+          "/sourceModel/enclosure",
+          "/sourceModel/solid/kind",
+          "/sourceModel/solid/center",
+          "/sourceModel/solid/radius",
+          "/study/freeStreamVelocity",
+          "/study/referenceLengthMm",
+          "/study/stokesVelocityElement"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "dynamicViscosity": "Pa*s",
+          "fluidDensity": "kg/m3",
+          "fluidSoundSpeed": "m/s",
+          "pressureDropPa": "Pa",
+          "freeStreamVelocity": "m/s",
+          "referenceLengthMm": "mm"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+        "summary": {
+          "loaded": true,
+          "name": "Stokes P2 observations",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 0,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+        "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1791995174452,
+        "updatedAt": 1791995175189,
+        "lastSequence": 17,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "stokes",
+          "mesh": {
+            "nodeCount": 110,
+            "elementCount": 351,
+            "volumeMm3": 213.1506566909108,
+            "minVolumeMm3": 0.08219544420778983,
+            "minQuality": 0.3146913236534821,
+            "qualityHistogram": [
+              0,
+              14,
+              44,
+              85,
+              208
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "events": [
+        {
+          "state": "running",
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 1,
+          "elapsedMs": 0,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "preparation",
+          "message": "Simulation modules loaded",
+          "converged": null,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 2,
+          "elapsedMs": 135,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Generating volume mesh…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 3,
+          "elapsedMs": 135,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "mesh",
+          "metrics": {
+            "nodeCount": 110,
+            "elementCount": 351,
+            "volumeMm3": 213.1506566909108,
+            "minVolumeMm3": 0.08219544420778983,
+            "minQuality": 0.3146913236534821,
+            "qualityHistogram": [
+              0,
+              14,
+              44,
+              85,
+              208
+            ]
+          },
+          "converged": null,
+          "provisional": true,
+          "meshAvailable": false,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 4,
+          "elapsedMs": 480,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Transferring boundary regions…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 5,
+          "elapsedMs": 480,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Solving three-dimensional creeping Stokes flow…",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 6,
+          "elapsedMs": 483,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 0,
+          "phase": "restart-check",
+          "residualKind": "preconditioned-relative",
+          "residual": 1,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 7,
+          "elapsedMs": 659,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 1,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 0.4297476000084924,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 8,
+          "elapsedMs": 660,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 10,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 0.0008510314168373032,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 9,
+          "elapsedMs": 683,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 20,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 7.599926416970374e-06,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 10,
+          "elapsedMs": 692,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 30,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 2.4520004094228596e-10,
+          "tolerance": 1e-10,
+          "converged": false,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 11,
+          "elapsedMs": 702,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 31,
+          "phase": "arnoldi-estimate",
+          "residualKind": "preconditioned-relative-estimate",
+          "residual": 9.508971846037127e-11,
+          "tolerance": 1e-10,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 12,
+          "elapsedMs": 703,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "progress",
+          "message": "Stokes GMRES 31 iterations",
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 13,
+          "elapsedMs": 705,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 31,
+          "phase": "restart-check",
+          "residualKind": "preconditioned-relative",
+          "residual": 9.508969614120611e-11,
+          "tolerance": 1e-10,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 14,
+          "elapsedMs": 708,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "stage": "iteration",
+          "solver": "stokes-gmres",
+          "velocityElement": "P2",
+          "iteration": 31,
+          "phase": "final-check",
+          "residualKind": "true-relative",
+          "residual": 1.393631893908131e-10,
+          "tolerance": 1e-08,
+          "converged": true,
+          "provisional": true,
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 15,
+          "elapsedMs": 708,
+          "type": "progress",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 16,
+          "elapsedMs": 737,
+          "type": "state",
+          "executionSettled": false,
+          "resourceState": "pending",
+          "releaseAllowed": false
+        },
+        {
+          "state": "succeeded",
+          "schemaVersion": 1,
+          "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+          "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+          "sequence": 17,
+          "elapsedMs": 737,
+          "type": "resource-state",
+          "executionSettled": true,
+          "resourceState": "settled",
+          "releaseAllowed": true
+        }
+      ],
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "e4c61e8f-00a5-4a0d-bf4a-372a44e8f959",
+        "inputRevision": "sha256:77b4406308db3e0411a86e348e5c65e6781efeb3517b8e8a3ead48f43eb8be6c",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "view": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:4c222f1ad34fbc5b76ce597a57fc633cbe950e0358596a502328e094acc4435a",
+        "kind": "stokes",
+        "fields": [
+          {
+            "id": "speed",
+            "unit": "m/s"
+          },
+          {
+            "id": "fluidPressure",
+            "unit": "Pa gauge"
+          }
+        ],
+        "state": {
+          "field": "speed",
+          "modeIndex": null,
+          "frameIndex": null,
+          "deformScale": 1,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true,
+          "colorRange": null,
+          "camera": {
+            "position": [
+              12,
+              8,
+              14
+            ],
+            "target": [
+              0,
+              0,
+              0
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          }
+        },
+        "modeCount": 0,
+        "frameCount": 0,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "frames": [],
+        "modes": []
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:4c222f1ad34fbc5b76ce597a57fc633cbe950e0358596a502328e094acc4435a",
+        "kind": "stokes",
+        "display": {
+          "field": "speed",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          2,
+          0,
+          0
+        ],
+        "element": 74,
+        "weights": [
+          0.35580619318495943,
+          0.30631545521218406,
+          0.13548616584789763,
+          0.20239218575495888
+        ],
+        "velocityMs": [
+          7.049318204171897e-05,
+          2.021422391643974e-08,
+          5.300373797493411e-07
+        ],
+        "speedMs": 7.049517758404265e-05,
+        "pressurePa": -0.002632656760704991,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    }
+  ],
+  "validation": {
+    "runtime": "Node v24.11.1",
+    "fullSuite": {
+      "tests": 705,
+      "passed": 702,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 85556.7625
+    },
+    "newTests": 8,
+    "targetRealJobs": 7,
+    "additionalRecaptureQaJobs": 2,
+    "recaptureValuesUnchanged": true,
+    "build": {
+      "passed": true,
+      "durationSeconds": 2.65
+    },
+    "distribution": {
+      "passed": 26,
+      "durationSeconds": 27.79
+    },
+    "limitations": "Postsettlement polling; no preterminal timing/physical accuracy or known V8 root-fix guarantee.",
+    "skillValid": true
+  }
+}

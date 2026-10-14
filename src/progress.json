@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T16:13:25.090386Z",
+  "updatedAt": "2026-10-14T16:24:23.838717Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1833,6 +1833,22 @@
       "acceptance": "新23件を含むNode24.11.1全体697件中694成功・3skip（85.71秒）。実ブラウザ2/MCP4/headless分岐4の計10実ジョブで明示根拠・仮定・runtime拒否・保存/暫定判定と追加物理経路を検証。過渡最終点-1.0557616546423643Paとchannel速度0.00005579846498232953m/s/圧0.0005Paを確認。旧metadata互換・assessment改変拒否も成功。ビルド4.49秒・配信物26項目27.79秒・SKILL検証すべて成功。物理精度・既知V8根治は保証しない。",
       "acceptanceEn": "Full Node24.11.1 suite:694passed/3skipped of697 including23new tests (85.71s). Ten real jobs(two browser/four MCP/four branch headless) verify evidence/assumptions/runtime refusal/saved provisional status and additional routes. Transient final point-1.0557616546423643Pa and channel speed0.00005579846498232953m/s/pressure0.0005Pa checked. Old metadata compatibility/tampered assessment refusal pass. Build4.49s/all26distribution27.79s/SKILL pass. Physical accuracy/known V8 resolution are not guaranteed.",
       "evidence": "src/acoustic-input-contract.js; src/fluid-input-contract.js; src/analysis-preflight.js; scripts/studio-mcp.mjs; docs/testing.md"
+    },
+    {
+      "id": "STOKESOBS1",
+      "title": "Stokes GMRES残差を構造化してLLMへ返す",
+      "titleEn": "Expose structured Stokes GMRES residual observations to LLMs",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "OBSERVATIONPROFILES1"
+      ],
+      "detail": "P1/P2のrestart前処理実測・Arnoldi推定・final元方程式数値検査をphase/residualKindで区別し、既存ジョブイベントに接続。途中場や物理精度保証は追加しない。",
+      "detailEn": "Distinguish P1/P2 measured preconditioned restart, Arnoldi estimate and final original-equation numerical checks by phase/residualKind through existing job events,without intermediate fields or physical accuracy guarantees.",
+      "acceptance": "新8件・実7ジョブと実IAB P1/P2の残差/点値・暫定表示・input版不変・includeFieldsfalse成果物0を確認。Node24.11.1全体705件中702成功・3skip（85.56秒）。ビルド2.65秒成功、再撮影2QAジョブも同値で全体画面確認。配信物26項目27.79秒・SKILL検証成功。終端後pollの証拠であり前受領timing/物理精度/既知V8根治を保証しない。",
+      "acceptanceEn": "Eight new tests/seven real jobs and IAB P1/P2 residuals/probes/provisional labels/unchanged input/zero artifacts with includeFieldsfalse checked. Node24.11.1 full705:702passed/3skipped(85.56s);build2.65s passed;two QA recapture jobs matched with overall views;all26distribution27.79s/SKILL pass. Postsettlement polling does not guarantee preterminal timing,physical accuracy or known V8 resolution.",
+      "evidence": "src/stokes-core.js; src/stokes-p2-core.js; src/observation-profiles.js; docs/evidence/2026-10-15-browser-stokes-observation.json; docs/testing.md"
     }
   ],
   "solvers": [

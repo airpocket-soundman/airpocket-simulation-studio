@@ -42,3 +42,5 @@ P0は実装中。全行の操作細分化、必要入力/有効範囲、単位�
 保存熱/固有ケースの連成源はcaseSourceApi.apply/clearと接続applyCaseSource/clearCaseSourceで版・物理条件を照合する。領域や実振幅の推測は行わない。
 
 表面検査は接続inspectSurfaceとstudio_inspect_project.surfaceInspectionで、版付き・全問題添字ページを取得できる。厳密CAD・自己交差・自動修復は範囲外。
+
+Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/residualKindで前処理実測・推定・最終数値検査を区別する。途中場は追加しない。

@@ -41,3 +41,11 @@ P2の点測定は10節点の二次形状関数、圧力は4頂点の一次形状
 P2の上限は元の2000頂点・8000四面体に加え、速度節点12000と自由度40000です。CPUのJS/WASM GMRESを使用し、GPU・MFEM・一般慣性流・乱流は未対応です。保存復元では中間節点座標・接続・境界速度・圧力基準・速度上界・応力・発散・反力・流量を再評価し、内部の運動量式と弱い非圧縮条件も照合します。元のP1保存ファイルは変更なしで読み込めます。
 
 細分化した解析外境界の球試験では反力抗力誤差1.77%、表面積分抗力8.20%、節点圧力9.81%でした。一様速度の有限外箱UIとは境界条件が異なり、その精度保証値ではありません。メッシュと外箱寸法を変えた比較は引き続き必要です。
+
+## Stokes GMRESの構造化反復残差
+
+P1/P2 Stokesは`stage:"iteration",solver:"stokes-gmres"`、velocityElement、iteration/residual/tolerance/convergedとphase/residualKindを返します。残差は全て無次元で、途中の速度・圧力場配列は提供しません。既存のjobEvents経路を使い、中間値は常にprovisionalです。
+
+restart-check/preconditioned-relativeはGMRES外側ループの先頭（初期iteration0を含む）で測定する、平衡化・左ILU0前処理された縮約系の相対残差。arnoldi-estimate/preconditioned-relative-estimateは同じ系のArnoldi推定で、最初のinner iteration・10反復ごと・許容差/happy break/上限/再開区切り直前に重複なく通知します。推定値を元の運動量式残差と読み替えないでください。
+
+final-check/true-relativeは既存の元の無次元full systemの自由方程式残差をrawRhsノルムで正規化した数値検査が1e-8を満たした後の通知です。zero RHSでGMRESを省略してもiteration0のfinal-checkはあります。各convergedはその残差条件のみを示し、後続のregime検査等で失敗することがあります。ジョブ終端の成功、流量収支・メッシュ独立性・実物精度を保証しません。

@@ -203,7 +203,7 @@ The shared browser entry is window.builtinProjectApi.create({expectedRevision,so
 
 ## Select an observation-capable route
 
-Inspect capabilities.observation.profiles and diagnoseExecution/preflight selectedObservation before requesting intermediate data. Profiles describe implemented solver/model/method observations, not physical validity or execution support: inspect allowed separately. CPU linear PCG iterations, modal residuals, nonlinear load steps and thermal/transient-acoustic fields differ; no internal Newton residuals/every-iteration fields are implied. MFEM/WebGPU/channelFlow/Stokes paths can offer stage/text only. Zero iterations may emit no event. Supported fields still depend on includeFields, shared64 MB retention, successful observations and execution.
+Inspect capabilities.observation.profiles and diagnoseExecution/preflight selectedObservation before requesting intermediate data. Profiles describe implemented solver/model/method observations, not physical validity or execution support: inspect allowed separately. CPU linear PCG iterations, modal residuals, nonlinear load steps and thermal/transient-acoustic fields differ; no internal Newton residuals/every-iteration fields are implied. MFEM/WebGPU/channelFlow paths can offer stage/text only. Zero iterations may emit no event. Supported fields still depend on includeFields, shared64 MB retention, successful observations and execution.
 
 selectedObservation includes supported/profileId/profile/reasons, adaptive flags and fieldRetention(requested/available/maxBytes64000000/eventRetention256), with declarationOnly:true/physicalAccuracyVerified:false. acousticSweep/adaptiveSolve do not accept onObserve: do not promise structured frequency-step or adaptive-round numerical events.
 
@@ -270,3 +270,9 @@ fully-developed-channel-flow requires mu/rho/c/pressureDrop/axis and supported s
 studio_probe returns verified saved analysisAssessment when available; old absent-metadata outputs remain unchanged. Report its mode/provisional limits rather than inferring confirmation from point values.
 
 Fluid runtime kind must also match saved study. Legacy empty-contract behavior refers to contract helpers; overall preflight still emits its existing PREFLIGHT_CONTRACT_LIMITED warning for these legacy disciplines.
+
+## Interpret Stokes GMRES observations
+
+Read iteration events with solver:stokes-gmres/velocityElement:P1|P2 and phase/residualKind. restart-check/preconditioned-relative measures the equilibrated left-ILU0 reduced system at outer-loop starts including0. arnoldi-estimate/preconditioned-relative-estimate is an estimate at first/each10th/break-before inner iterations. final-check/true-relative is the original nondimensional full-system free-equation residual divided by rawRhs norm after its1e-8 numerical check. All are dimensionless; no intermediate field arrays are added.
+
+converged applies only to the named residual criterion. Later regime checks/job completion can still fail; preserve provisional labels and do not infer physical accuracy, flow balance or mesh independence. Zero-RHS skip still emits final-check at0.
