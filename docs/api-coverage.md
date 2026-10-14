@@ -7,7 +7,7 @@
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
 | 操作契約の発見 | studioApi.getBrowserOperationContracts | studio_browser_contracts（session不要・最大10件/65,536 UTF-8バイト） | nested適用性・物理検証は実adapterで維持 |
-| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（81操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
+| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（82操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 編集候補のプレビュー | studioApi.previewOperations | studio_preview_edit、inspect権限previewEdit | nested物理検証・全P0/P1/P3は継続 |
@@ -29,7 +29,7 @@
 | 疲労・破壊評価 | resultAssessmentApi.evaluate/get | studio_assess_result/studio_assessment、接続モードevaluateAssessment/getAssessment | 対応物理範囲の拡張、実画面の検証 |
 | 3MF/G-code | printOperationsのinspect/import/get/set/export、printTransfer分割転送とUI | studio_import_print/studio_inspect_print、接続printInspect/importPrint/getPrintData/setPrintViewとprintTransferの6操作 | 積層・インフィル物性との解析連携 |
 
-専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの81操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
+専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの82操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
 
 P0は実装中。全行の操作細分化、必要入力/有効範囲、単位付き診断、日英操作対応表、画面での確認は残作業。
 
@@ -62,3 +62,5 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 編集プレビューは入力を変えずに変更Pointer（最大100）と候補版・preflightを返し、ファイル保存・解析を行いません。edit/studio_edit_projectの任意expectedResultingRevisionで確認候補との一致を要求できます。通常29/接続31ツール・ライブ81操作。preflight.allowed:falseも診断結果として返し、計算中の設定案検査は実行中ジョブを変更しません。[手順](automation.md)を参照してください。以前の件数は各追加時の記録です。
 
 プレビューは完全検査のallowed/provisionalを保ち、診断50件・根拠Pointer100件へ縮約し省略総数を明示します。返却value JSONは65,536 UTF-8バイトまで。ブラウザのnormalization.requiresReview時はGUI共用表現変換を確認し、最終候補版だけを確定してください。Node保存入力の候補版とは異なる場合があります。
+
+入力値の検査はstudioApi.inspectInput/ライブinspectInput（inspect権限）とstudio_inspect_projectのsection opt-inに対応。section内Pointerと入力版で物性・study・条件・根拠・選択・source・mesh等を最大50 object/200 array・文字列UTF-16 unitsずつ取得し、nested payloadはcount/canonical-JSON hashへ要約します。応答valueは65,536 UTF-8バイト上限。既知単位のみ返し、旧section無しの無制限study応答とは混載しません。通常29/接続31ツール・ライブ82操作。CAS例と互換制限は[仕様](automation.md)を参照してください。

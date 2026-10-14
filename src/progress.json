@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T23:04:28.625414Z",
+  "updatedAt": "2026-10-14T23:21:52.847386Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2075,22 +2075,24 @@
       "id": "PUBLISHEDPROGRESS1",
       "title": "公開manifestと一致した進捗だけを表示",
       "titleEn": "Display only progress verified against the publication manifest",
-      "status": "checking",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P0"
       ],
       "detail": "配信manifestと進捗の版・バイト数・SHA-256を取得前後で照合。raw main混在を廃止し、公開履歴と配信候補を区別、不一致時は前回表示を保持する。",
       "detailEn": "Verify stable manifest revision,bytes and SHA-256 before adopting progress. Remove raw-main mixing,separate history from published candidate,and retain the previous display on failure.",
-      "acceptance": "専用7件成功。上限・途中切替・rollback・不正JSON/UTF8・hash不一致を検証。実ブラウザの新表示/公開後の照合を残す。既定Node24全体は既知V8fatal、同ソースNode26比較884中881成功・3skip。",
-      "acceptanceEn": "Seven dedicated checks pass for bounds,deployment changes,rollback,invalid JSON/UTF8 and hash mismatch. New browser presentation and deployed adoption remain pending. DefaultNode24 full hit the known V8fatal;same-sourceNode26 comparison881passed/3skipped of884.",
-      "evidence": "src/published-progress.js; src/board.js; tests/published-progress.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md"
+      "acceptance": "専用7件成功。公開a446dc5でmanifestの版・bytes・SHA256一致を実ブラウザ日英表示で確認。dirtyローカルでは未照合のまま初期記録を保持。公開26項目・tag成功。任意の将来配信を保証しない。",
+      "acceptanceEn": "Seven dedicated checks pass. Actual published a446dc5 board adopts matching manifest revision,bytes and SHA256 in JP/EN;dirty local build retains unverified initial data. Public26checks/tag pass. No guarantee for arbitrary future deployments.",
+      "evidence": "src/published-progress.js; src/board.js; tests/published-progress.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md; docs/evidence/2026-10-15-publication-a446dc5.json; docs/evidence/2026-10-15-published-progress-browser.json",
+      "lastUpdate": "a446dc5の公開CI・26配信物・注釈付きtagと実公開ボードの日英版照合成功を確認。Windows既知V8問題は別タスクで未解決。",
+      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved."
     },
     {
       "id": "PUBLICATIONGATES1",
       "title": "公開ゲートの参照と完了証跡を本体検証",
       "titleEn": "Validate publication gate references and completion evidence",
-      "status": "checking",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P0"
@@ -2099,7 +2101,57 @@
       "detailEn": "Keep legacy progress compatibility while validating scope,order,references,bounds and matching candidate/manifest/evidence declarations. Declaration consistency is not independent remote-CI authentication.",
       "acceptance": "専用7件とprogress/docsを含む12件成功。参照先taskのreleasedだけではgateを閉じず、欠落/矛盾した完了証跡を拒否。公開gateはpendingを維持。既定runtimeのV8問題と公開後照合を残す。",
       "acceptanceEn": "Seven dedicated and twelve combined progress/docs checks pass. Released task flags cannot close gates;missing or conflicting completed evidence is rejected. Publication gates stay pending;default-runtime V8 issue and deployed verification remain open.",
-      "evidence": "src/publication-milestone.js; src/progress.js; tests/publication-milestone.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md"
+      "evidence": "src/publication-milestone.js; src/progress.js; tests/publication-milestone.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md; docs/evidence/2026-10-15-publication-a446dc5.json; docs/evidence/2026-10-15-published-progress-browser.json",
+      "lastUpdate": "a446dc5の公開CI・26配信物・注釈付きtagと実公開ボードの日英版照合成功を確認。Windows既知V8問題は別タスクで未解決。",
+      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved."
+    },
+    {
+      "id": "INPUTINSPECTION1",
+      "title": "版付きページで既存入力をLLMへ返す",
+      "titleEn": "Read existing input through revisioned bounded pages",
+      "status": "ready",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1",
+        "P3"
+      ],
+      "detail": "材料・条件・解析設定・根拠・選択・ソースをJSON Pointerで読取。大配列/文字列の長さとcanonical hashを返し、明示ページだけを取得する。",
+      "detailEn": "Inspect material,conditions,study,provenance,selection and sources through JSON Pointers;describe large data with canonical hashes and retrieve explicit bounded pages.",
+      "acceptance": "新13件、全体897中894成功・3skip。共有read→preview/edit→再読、実stdio/HTTP、busy時read・失効/stale/権限/64KiB・source保持を検証。新ライブ操作の実GUI/公開HTTPS一巡とP1全体は未検証。",
+      "acceptanceEn": "13new checks;full897:894passed/3skipped. Shared read→preview/edit→reread,real stdio/HTTP,busy reads,expiry/stale/scopes/64KiB and source identity verified. New live GUI/public-HTTPS end-to-end and full P1 remain unverified.",
+      "evidence": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json"
+    },
+    {
+      "id": "SKILLROUTING1",
+      "title": "専門Skillを用途別参照へ分割し配布版を同期",
+      "titleEn": "Route specialist Skill details progressively and synchronize distribution",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "長い入口を用途別8参照へ移し、入力だけの作業で全ロードマップ/全catalogを取得しない。登録toolの実在とSDK経路を区別する。",
+      "detailEn": "Split the long entry into eight workflow references;avoid full roadmap/catalog retrieval for input-only work and distinguish registered tools from explicit SDK fallback.",
+      "acceptance": "repo/installed9files hash一致、UI設定/登録不変。synthetic150N previewで100N根拠との矛盾を検出しsource保持・未適用/未解析。SDK知識を補っておりSkill単独や全一巡の証明ではない。",
+      "acceptanceEn": "Nine repository/installed files hash-match;UI metadata/server registration unchanged. Synthetic150N preview detects stale100N evidence,preserves source,and does not apply/solve. SDK knowledge supplemented execution;not proof of Skill-only or complete end-to-end behavior.",
+      "evidence": "skills/airpocket-studio/SKILL.md; docs/evidence/2026-10-15-skill-synchronization.json; docs/evidence/2026-10-15-skill-forward-input-preview.json"
+    },
+    {
+      "id": "MCPARGUMENTTYPES1",
+      "title": "MCP位置引数のJSON型を明示する",
+      "titleEn": "Declare semantic MCP positional argument JSON types",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0"
+      ],
+      "detail": "保存/ライブのedit・previewで数値・record・配列を共有schemaに明示。実行時の意味・拒否条件は維持する。",
+      "detailEn": "Share explicit number,record and nested-array schemas across saved/live edit and preview while preserving runtime semantics and refusals.",
+      "acceptance": "追加2/最終対象30件成功。実MCP/ライブで150N案と同領域適用、不正位置型拒否を検証。全体897は型宣言変更前。実登録SDKの型生成改善は再登録後の確認を残す。",
+      "acceptanceEn": "Two new/thirty final targeted checks pass,including real MCP/live150N preview/same-region commit and invalid positional types. Full897 preceded declaration changes. Generated registered-SDK projection still requires refreshed-registration verification.",
+      "evidence": "src/semantic-operation-schema.js; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json"
     }
   ],
   "solvers": [
@@ -2160,7 +2212,7 @@
       {
         "id": "publication-infrastructure",
         "order": 0,
-        "status": "pending",
+        "status": "complete",
         "taskIds": [
           "RUNTIMEWASM1",
           "P0",
@@ -2188,7 +2240,21 @@
             "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/blob/103065f1300ab078588102be0eb41343f637c1c2/docs/evidence/2026-10-15-main-protection.json",
             "detail": "Subsequently enabled and read back: PRs,up-to-date GitHub Actions verify,including admins;zero mandatory human approvals. Earlier404 retained as historical observation."
           }
-        ]
+        ],
+        "evidence": {
+          "verified": true,
+          "result": "passed",
+          "checkedAt": "2026-10-14T23:21:52.847386Z",
+          "candidateRevision": "a446dc515fce99bc03dde6ae96f7860ecf7716c9",
+          "manifestRevision": "a446dc515fce99bc03dde6ae96f7860ecf7716c9",
+          "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38652541295",
+          "releaseTag": "release-a446dc515fce99bc03dde6ae96f7860ecf7716c9",
+          "artifacts": [
+            "docs/evidence/2026-10-15-publication-a446dc5.json",
+            "docs/evidence/2026-10-15-published-progress-browser.json",
+            "docs/evidence/2026-10-15-main-protection.json"
+          ]
+        }
       },
       {
         "id": "existing-input-contracts",
@@ -2198,7 +2264,9 @@
           "P0",
           "P1",
           "BROWSERCONTRACTS1",
-          "AGENTINPUT1"
+          "AGENTINPUT1",
+          "INPUTINSPECTION1",
+          "MCPARGUMENTTYPES1"
         ],
         "acceptance": "Operation-level GUI/API/MCP/Skill coverage and success/refusal/repair paths for publication scope."
       },
@@ -2251,7 +2319,8 @@
           "P1",
           "P3",
           "P4",
-          "AGENTINPUT1"
+          "AGENTINPUT1",
+          "SKILLROUTING1"
         ],
         "acceptance": "Synchronize distributed/repository Skill; reproduce pair/import/setup/preflight/solve/observe/compare/export/reconfigure through MCP without computer use."
       }
@@ -2286,7 +2355,8 @@
     "notes": [
       "Gate statuses require matching publication evidence independently of task statuses.",
       "P2/P6 are prioritized only as required for this workflow; full rewrites/native products are not publication prerequisites.",
-      "Existing task statuses and historical release records are unchanged."
+      "Existing task statuses and historical release records are unchanged.",
+      "Completed gate evidence is candidate-specific. Reverify all completed gates against the same final publication candidate before closing the milestone; later builds are not automatically certified."
     ]
   }
 }
