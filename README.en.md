@@ -8,7 +8,7 @@ v0.42 supports STEP/built-in and single closed convex STL volume meshes, linear 
 
 Fatigue evaluation requires measured fully reversed (stress ratio −1) S–N amplitude data with test conditions and provenance. It supports tensile-mean Goodman correction and a single constant-amplitude Miner usage factor, without life extrapolation beyond the registered curve. Material names or tensile strength alone do not generate numeric life.
 
-Stokes flow is a CPU GMRES prototype for external box domains at Re≤0.1, up to 2000 nodes and 8000 tetrahedra. Supply viscosity and density; outer velocity is uniform and the solid is no-slip. Inertia and turbulence are excluded. Finite-box drag differs from exact unbounded-sphere drag. v0.42 passed 232 source tests, 26 deployed runtime checks and 38 public browser checks.
+Stokes flow is a CPU GMRES prototype for external box domains at Re≤0.1, up to 2000 nodes and 8000 tetrahedra. Supply viscosity and density; outer velocity is uniform and the solid is no-slip. Inertia and turbulence are excluded. Finite-box drag differs from exact unbounded-sphere drag. v0.43 passed 242 source tests, 26 deployed runtime checks and 42 public browser checks.
 
 - [App](https://airpocket-soundman.github.io/airpocket-simulation-studio/?lang=en)
 - [Live development board](https://airpocket-soundman.github.io/airpocket-simulation-studio/development.html?lang=en)

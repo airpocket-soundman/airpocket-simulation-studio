@@ -53,7 +53,7 @@ Checks cover Airpocket/MFEM structure, radiation, finite-strain rubber, laminar 
 
 `runtime-manifest.json` records version, commit, lengths and SHA-256 hashes. Results go to `.qa/published-report.json`; `.qa/published-reference.step` is generated for browser checks. Failures replace earlier success reports. Project/case comparison helpers use local source; deployed calculation workers are the actual published bundles.
 
-After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 232 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
+After `npm run build`, use `npm run test:published -- --local` to verify generated distribution files. CI runs the 242 source tests, builds, checks the distribution and publishes only after these pass. Node self/fetch/CAD adapters do not establish browser isolation, rendering or actual WebGPU operation.
 
 ### Browser regression recipe
 
@@ -82,3 +82,5 @@ The browser recipe now has 38 checks, including polymer comparison selection, pr
 The public v0.42 run passed all 38 browser checks, including STEP update reconciliation, retained unresolved values, project roundtrips and real STEP reanalysis after region repair, including finite-box Stokes, PNG/WebM and four animation types with restored view settings. MCP tests verify clean CPU Worker execution, protocol initialization/listing and refusal to overwrite saved output.
 
 Brittle fracture tests cover analytical mode-I bounds, closure, crack-plane rotation, parameter sensitivity, temperature scope, real WASM and recomputed archive fields. The browser recipe includes three fracture checks.
+
+Public v0.43 passed all 42 browser checks, including four 3MF/G-code import, layer preview, export and atomic-refusal/language checks. Generate their fixtures with `node scripts/print-fixtures.mjs`.

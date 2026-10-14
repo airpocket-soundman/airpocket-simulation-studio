@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T07:32:38.451Z",
+  "updatedAt": "2026-10-14T07:53:47.250Z",
   "release": {
-    "version": "v0.42",
+    "version": "v0.43",
     "date": "2026-10-14",
-    "testCount": 232,
-    "description": "欠陥・靱性・残留応力の上下限、表面状態・試験温度を使う脆性材料のモードI LEFM評価を追加。金属J2塑性/除荷・単軸S–N疲労と材料別モデルの接続を総合確認。232テスト・配信物26項目・公開画面38項目が成功。き裂進展・破壊確率・塑性疲労・混合モードは未対応。",
-    "descriptionEn": "Added mode-I brittle-material LEFM screening with flaw/toughness/residual-stress bounds, surface state and test temperature. Verified J2 plasticity/unloading, uniaxial S–N fatigue and material-specific model integration. Passed 232 tests, 26 public runtime checks and 38 public browser checks. Crack propagation/probability, plastic fatigue and mixed modes remain unsupported."
+    "testCount": 242,
+    "description": "3MF/ZIP64の形状・単位・部品変換、Bambu設定とG-code押出経路を読込。層表示・JSON書出し・不正データ拒否を追加。242テスト・公開配信物26項目・公開画面42項目が成功。積層/インフィルの構造解析への接続・押出円弧・機器動作の再現は未対応。",
+    "descriptionEn": "Import 3MF/ZIP64 geometry, units and component transforms, Bambu settings and G-code deposition paths. Add layer previews, JSON export and invalid-data refusal. Passed 242 tests, 26 public runtime checks and 42 public browser checks. Layer/infill structural integration, extruding arcs and printer-motion simulation remain unsupported."
   },
   "tasks": [
     {
@@ -809,12 +809,12 @@
         "SOLVER1"
       ],
       "optional": true,
-      "status": "checking",
+      "status": "released",
       "titleEn": "Import Bambu slicing data",
       "detailEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths.",
       "acceptanceEn": "Final optional phase. Inspect 3MF/G-code contents and extract geometry, manufacturing settings and extrusion paths.",
-      "lastUpdate": "3MF/ZIP64の形状・単位・部品変換、Bambu設定とG-codeの押出経路を抽出。層ごとの確認ビュー・書出し・不正データの拒否を実装。公式校正3MFと参照ファイルで確認。公開検証待ち。",
-      "lastUpdateEn": "Extract 3MF/ZIP64 geometry, units and component transforms, Bambu settings and G-code deposition paths. Add layer preview/export and invalid-data refusal. Verify official calibration 3MF and synthetic fixtures; deployed verification remains.",
+      "lastUpdate": "公開v0.43で1形状・12三角形・2層・12経路の参照を確認。形状/設定/部品変換の抽出、層表示、JSON書出し、押出円弧拒否と既存データ保持、日英表示が成功。公式の通常ZIPとZIP64校正3MFもローカルで確認。",
+      "lastUpdateEn": "Verified public v0.43 synthetic one-mesh/12-triangle/two-layer/12-path reference, geometry/settings/transforms, layer previews, exports, extruding-arc refusal with retained prior data, and languages. Also locally verified official stored-ZIP and ZIP64 Bambu calibration projects.",
       "evidence": "src/print-3mf.js; src/print-gcode.js; src/print-zip.js; src/print-ui.js; tests/print-import.test.mjs"
     },
     {
