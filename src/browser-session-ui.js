@@ -1,10 +1,10 @@
 import {createBrowserSession,connectBrowserSession} from './browser-session.js';
 
-export function installBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,getResult,probe,showResult,isBusy,translate,language=()=> 'ja'}) {
+export function installBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,getResult,probe,showResult,isBusy,translate,language=()=> 'ja'}) {
  const root=document.createElement('section');root.id='agent-connection';
  root.innerHTML='<details><summary>自分のLLMに接続する</summary><p>ローカル接続プログラムの接続情報を入力し、共有する操作を選んでください。切断すると接続経由の計算と出力を中止します。</p><label>接続先<input id="agent-endpoint" type="url" placeholder="http://127.0.0.1:12345"></label><label>接続コード<input id="agent-token" type="password" autocomplete="off"></label><label><input type="checkbox" data-agent-scope="inspect" checked>入力・結果の確認</label><label><input type="checkbox" data-agent-scope="edit">入力・保存ケースの編集</label><label><input type="checkbox" data-agent-scope="analyze">計算・結果の表示と保存</label><label><input type="checkbox" data-agent-scope="view">表示・画像動画出力</label><button id="agent-connect">選んだ操作を許可して接続</button><button id="agent-disconnect" disabled>接続を解除</button><p id="agent-state" role="status">未接続</p></details>';
  document.querySelector('aside').append(root);let connection;
- const session=createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,getResult,probe,showResult,isBusy});
+ const session=createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,getResult,probe,showResult,isBusy});
  const fields=[...root.querySelectorAll('input')],connect=root.querySelector('#agent-connect'),disconnect=root.querySelector('#agent-disconnect'),state=root.querySelector('#agent-state');
  const onState=value=>{const active=value.state==='connected';fields.forEach(f=>f.disabled=active);connect.disabled=active;disconnect.disabled=!active;state.textContent=active?(language()==='en'?'Connected: ':'接続中: ')+value.sessionId:(value.message||(language()==='en'?'Disconnected':'未接続'));};
  connect.onclick=async()=>{connect.disabled=true;try{const scopes=[...root.querySelectorAll('[data-agent-scope]:checked')].map(e=>e.dataset.agentScope);connection=connectBrowserSession({endpoint:root.querySelector('#agent-endpoint').value,pairingToken:root.querySelector('#agent-token').value,scopes,session,onState});await connection.ready;root.querySelector('#agent-token').value='';}catch(error){connection?.stop();onState({state:'disconnected',message:error.message});}};

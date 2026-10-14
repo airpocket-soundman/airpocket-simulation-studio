@@ -6,7 +6,7 @@
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
-| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（34操作、許可範囲付き） | 公開HTTPS接続・再接続・GUIジョブ監視の統合 |
+| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（40操作、許可範囲付き） | 公開HTTPS接続・再接続・GUIジョブ監視の統合 |
 | 対応能力 | studioApi.getCapabilities | studio_capabilities | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 静的等方線形構造以外の必須入力契約、メッシュ後検査との統合 |
@@ -17,7 +17,7 @@
 | 中間情報 | analysisApi.jobEvents/getJobArtifact（任意のブラウザ内場保持） | studio_job_events、studio_job_artifact（登録済み成果物のハッシュ照合・要約・点補間・最大200ノード/値のページ） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
 | 中止 | analysisApi.cancel/cancelJob | studio_cancel_job（runningのみ、saving不可） | 接続モードのcancelJobを提供。GUIジョブ監視の統合を継続 |
 | 点測定 | analysisApi.probe、resultViewApi.probe（結果版・表示時刻/モード付き） | studio_probe、接続モードのprobe | 測定履歴と固定結果参照の永続化 |
-| ケース・比較 | caseApi/caseOperations（ID・内容版・根拠照合） | studio_validate_cases、接続モードのcaseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove | ケース集のライブ入出力、名前付きビューのケース同梱 |
+| ケース・比較 | caseApi/caseOperations/caseArchiveTransfer（ID・内容版・根拠照合・分割転送） | studio_validate_cases、接続モードのcaseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove、caseArchiveExport/caseArchiveRead/caseArchiveImport/caseArchiveWrite/caseArchiveCommit/caseArchiveRelease | 名前付きビューのケース同梱 |
 | 断面・部品表示 | viewApi | 接続モードのgetView/setView | ビュー設定・レイヤー・カメラの共通契約 |
 | 結果表示・時刻・モード・カメラ | resultViewApi.get/set/probe、固定色範囲・表示レイヤー | 接続モードのgetResultView/setResultView/probe | 熱の保存時刻場、異なる結果へのビュー同期 |
 | 名前付きビュー | namedViewApi.list/save/apply/remove/export/import | 接続モードのnamedViewList/namedViewSave/namedViewApply/namedViewRemove/namedViewExport/namedViewImport | ケース集への同梱、異なる結果への適用 |
@@ -27,7 +27,7 @@
 | 疲労・破壊評価 | analysisApi.evaluateFatigue/evaluateFracture | 専用操作は未対応 | 評価入力と結果の共通契約 |
 | 3MF/G-code | printImportApiとUI | 未対応 | 取込・層選択・出力の共通契約 |
 
-専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの34操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
+専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの40操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
 
 P0は実装中。全行の操作細分化、必要入力/有効範囲、単位付き診断、日英操作対応表、画面での確認は残作業。
 

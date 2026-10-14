@@ -1,5 +1,6 @@
 import {canonicalJson,getProjectRevision} from './project-revision.js';
 import {prepareCaseView} from './case-view.js';
+import {createCaseStore} from './cases.js';
 
 const error=(code,message)=>Object.assign(Error(message),{code});
 /** Runtime-only identity adapter; the existing version-1 archive stays unchanged.
@@ -20,19 +21,21 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
  const guardCommand=guard=>{if(typeof guard!=='function')throw TypeError('Case command guard must be a function');if(!guard())throw error('CASE_COMMAND_EXPIRED','Case command expired or connection was revoked');};
  async function exclusive(action){if(active)throw error('CASE_OPERATION_BUSY','Another case operation is in progress');active=true;try{return await action();}finally{active=false;}}
  function unchanged(snapshot){if(current()!==snapshot.signature)throw error('CASE_REVISION_CONFLICT','Case collection changed; list cases again');}
+ function rows(archive,ids,revisions,comparison){
+  return archive.cases.map((saved,index)=>{
+   const assessment=saved.output.analysisAssessment;
+   return {caseId:ids[index],revision:revisions[index],name:saved.name,kind:comparison[index].kind,metrics:structuredClone(comparison[index].metrics),...(assessment?{analysisAssessment:{mode:assessment.mode,provisional:assessment.provisional,completePreflight:assessment.completePreflight}}:{})};
+  });
+ }
  async function snapshot(){
   const archive=store.export(),serialized=canonicalJson(archive);
   if(archive?.version!==1||!Array.isArray(archive.cases))throw error('CASE_ARCHIVE_INVALID','Expected the existing version-1 case archive');
   const ids=signature===serialized?identities.slice():archive.cases.map(()=>newId());
-  const revisions=await Promise.all(archive.cases.map(saved=>getProjectRevision(saved)));
+  const [archiveRevision,...revisions]=await Promise.all([getProjectRevision(archive),...archive.cases.map(saved=>getProjectRevision(saved))]);
   if(current()!==serialized)throw error('CASE_REVISION_CONFLICT','Case collection changed during inspection');
   signature=serialized;identities=ids;
   const comparison=store.compare();
-  const cases=archive.cases.map((saved,index)=>{
-   const assessment=saved.output.analysisAssessment;
-   return {caseId:ids[index],revision:revisions[index],name:saved.name,kind:comparison[index].kind,metrics:structuredClone(comparison[index].metrics),...(assessment?{analysisAssessment:{mode:assessment.mode,provisional:assessment.provisional,completePreflight:assessment.completePreflight}}:{})};
-  });
-  return {archive,signature:serialized,ids,cases};
+  return {archive,archiveRevision,signature:serialized,ids,cases:rows(archive,ids,revisions,comparison)};
  }
  function resolve(snapshot,{caseId,expectedRevision}={}){
   if(typeof caseId!=='string'||typeof expectedRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(expectedRevision))throw error('CASE_REFERENCE_INVALID','Supply caseId and expectedRevision from list');
@@ -47,7 +50,28 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
   if(result&&typeof result.then==='function'){Promise.resolve(result).catch(()=>{});throw error('CASE_CALLBACK_ASYNC','Case host callbacks must be synchronous');}
  }
  return Object.freeze({
-  list:()=>exclusive(async()=>({schemaVersion:1,cases:(await snapshot()).cases})),
+  list:()=>exclusive(async()=>{const state=await snapshot();return {schemaVersion:1,archiveRevision:state.archiveRevision,cases:state.cases};}),
+  exportArchive:()=>exclusive(async()=>{const state=await snapshot();return {schemaVersion:1,archiveRevision:state.archiveRevision,archive:state.archive};}),
+  importArchive:({archive,expectedArchiveRevision}={}, {guard=()=>true}={})=>exclusive(async()=>{
+   guardCommand(guard);available();
+   if(typeof expectedArchiveRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(expectedArchiveRevision))throw error('CASE_REFERENCE_INVALID','Supply expectedArchiveRevision from list');
+   const initial=current();
+   let serialized;
+   try{serialized=canonicalJson(archive);}catch(cause){throw error('CASE_ARCHIVE_INVALID','Case archive must contain plain JSON data');}
+   if(new TextEncoder().encode(serialized).byteLength>100000000)throw error('CASE_ARCHIVE_TOO_LARGE','Case archive exceeds 100000000 UTF-8 bytes');
+   const temporary=createCaseStore();
+   try{temporary.import(JSON.parse(serialized));for(const saved of temporary.list())prepareCaseView(saved);}catch(cause){throw error('CASE_ARCHIVE_INVALID',cause.message);}
+   const next=temporary.export(),nextSignature=canonicalJson(next);
+   const [previousRevision,archiveRevision,...revisions]=await Promise.all([getProjectRevision(JSON.parse(initial)),getProjectRevision(next),...next.cases.map(saved=>getProjectRevision(saved))]);
+   guardCommand(guard);
+   if(previousRevision!==expectedArchiveRevision||current()!==initial)throw error('CASE_REVISION_CONFLICT','Case collection changed; list cases again');
+   // Prepare every fallible response component before the atomic store replacement.
+   const ids=next.cases.map(()=>newId()),cases=rows(next,ids,revisions,temporary.compare());
+   const response={schemaVersion:1,archiveRevision,cases,imported:true};
+   if(current()!==initial)throw error('CASE_REVISION_CONFLICT','Case collection changed; list cases again');
+   available();guardCommand(guard);store.import(next);signature=nextSignature;identities=ids;
+   return response;
+  }),
   saveCurrent:({name,expectedResultRevision}={}, {guard=()=>true}={})=>exclusive(async()=>{
    guardCommand(guard);available();
    if(!getAnalysis||typeof store.add!=='function')throw error('CASE_OPERATION_UNAVAILABLE','The host does not support saving the current result');

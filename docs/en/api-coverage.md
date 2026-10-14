@@ -6,7 +6,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
-| Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (34 scoped methods) | Public HTTPS connectivity, reconnection and GUI job monitoring |
+| Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (40 scoped methods) | Public HTTPS connectivity, reconnection and GUI job monitoring |
 | Capabilities | studioApi.getCapabilities | studio_capabilities | Extend required inputs, validity limits and all combinations |
 | Execution-combination diagnostics | studioApi.diagnoseExecution | studio_diagnose_execution | Extend structured diagnostics to units, required values, constraints and mesh |
 | Preflight and provenance | studioApi.preflight/setInputProvenance/setAnalysisIntent, analysis execution gate | studio_preflight_project, studio_edit_project (evidence and intent persistence) | Required-input contracts beyond static isotropic linear structure; integration with post-mesh checks |
@@ -17,7 +17,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 | Intermediate observations | analysisApi.jobEvents/getJobArtifact (optional browser-memory fields) | studio_job_events, studio_job_artifact (registered artifact hash verification, summaries, point interpolation and pages of up to 200 nodes/values) | Extend solver observation coverage; finish operation breakdown and delivery contracts |
 | Cancellation | analysisApi.cancel/cancelJob | studio_cancel_job (running only; unavailable during saving) | Connector cancelJob available; complete GUI job monitoring |
 | Point measurements | analysisApi.probe, resultViewApi.probe (revision/selected frame/mode) | studio_probe and connector probe | Persistent measurement history and fixed-result references |
-| Cases and comparison | caseApi/caseOperations (IDs, content revisions and assessment checks) | studio_validate_cases and connector caseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove | Live case-archive import/export and bundled named views |
+| Cases and comparison | caseApi/caseOperations/caseArchiveTransfer (IDs, content revisions, assessment checks and chunked transfers) | studio_validate_cases and connector caseList/caseSave/caseView/caseRestoreInput/caseRename/caseRemove and caseArchiveExport/caseArchiveRead/caseArchiveImport/caseArchiveWrite/caseArchiveCommit/caseArchiveRelease | Bundled named views |
 | Sections and part visibility | viewApi | Connector getView/setView | Shared view-setting, layer and camera contracts |
 | Results, time, modes and camera | resultViewApi.get/set/probe, fixed colors and layers | Connector getResultView/setResultView/probe | Thermal stored frames and view synchronization across different results |
 | Named views | namedViewApi.list/save/apply/remove/export/import | Connector namedViewList/namedViewSave/namedViewApply/namedViewRemove/namedViewExport/namedViewImport | Case-archive bundling and application to different results |
@@ -27,7 +27,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 | Fatigue and fracture evaluation | analysisApi.evaluateFatigue/evaluateFracture | Dedicated operations unsupported | Shared evaluation-input and result contracts |
 | 3MF/G-code | printImportApi and UI | Unsupported | Shared import, layer-selection and export contracts |
 
-The specialized SKILL at `skills/airpocket-studio/SKILL.md` describes current capabilities, diagnostics, sources and limits. Update it alongside new operations and validate successful examples as well as rejection/repair paths. Current MCP can retrieve intermediate summaries and optional mesh/time-field files for saved-input CPU jobs, and optional connector mode exposes 34 permitted browser operations. Retention is within the same Node process, with defaults of 32 jobs and 256 events per job. See the [operation specification](automation.md) for cursor-gap reporting, retained-request `requestId` idempotency, provisional labels, cancellation restrictions during saving and the 64 MB field-storage limit. Do not present target specifications as available operations.
+The specialized SKILL at `skills/airpocket-studio/SKILL.md` describes current capabilities, diagnostics, sources and limits. Update it alongside new operations and validate successful examples as well as rejection/repair paths. Current MCP can retrieve intermediate summaries and optional mesh/time-field files for saved-input CPU jobs, and optional connector mode exposes 40 permitted browser operations. Retention is within the same Node process, with defaults of 32 jobs and 256 events per job. See the [operation specification](automation.md) for cursor-gap reporting, retained-request `requestId` idempotency, provisional labels, cancellation restrictions during saving and the 64 MB field-storage limit. Do not present target specifications as available operations.
 
 P0 is in progress. Remaining work includes breaking every row down into individual operations, required inputs/validity limits, diagnostics with units, Japanese/English operation mappings and visual verification.
 

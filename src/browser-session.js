@@ -1,11 +1,11 @@
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
 import {canonicalJson} from './project-revision.js';
 
-export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view',namedViewList:'inspect',namedViewExport:'inspect',namedViewSave:'view',namedViewApply:'view',namedViewRemove:'view',namedViewImport:'view'});
+export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view',namedViewList:'inspect',namedViewExport:'inspect',namedViewSave:'view',namedViewApply:'view',namedViewRemove:'view',namedViewImport:'view',caseArchiveExport:'inspect',caseArchiveRead:'inspect',caseArchiveImport:'edit',caseArchiveWrite:'edit',caseArchiveCommit:'edit',caseArchiveRelease:'inspect'});
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,getResult,probe,showResult,isBusy=()=>false}) {
- const ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
+export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,getResult,probe,showResult,isBusy=()=>false}) {
+ const ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const busy=()=>isBusy()||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}});
  return {
   async call(method,args={},{expiresAt=Infinity}={}){
@@ -46,10 +46,16 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='releaseExport'){const result=exports.release(args);ownedExports.delete(args.jobId);return result;}
    if(method==='namedViewList'||method==='namedViewExport'){if(!namedViews)throw Error('Named view API unavailable');return namedViews[method==='namedViewList'?'list':'export']();}
    if(method.startsWith('namedView')){const operations={namedViewSave:'save',namedViewApply:'apply',namedViewRemove:'remove',namedViewImport:'import'};if(!namedViews||busy()||editing)throw Error('Named views unavailable or browser busy');editing=true;try{return await namedViews[operations[method]](args,{guard:valid});}finally{editing=false;}}
+   if(method==='caseArchiveExport'){if(!caseArchives)throw Error('Case archive transfer unavailable');return caseArchives.beginExport(args,{guard:valid});}
+   if(method==='caseArchiveRead')return caseArchives.read(args);
+   if(method==='caseArchiveRelease'){const result=caseArchives.release(args);ownedImports.delete(args.transferId);return result;}
+   if(method==='caseArchiveImport'){if(!caseArchives)throw Error('Case archive transfer unavailable');const result=await caseArchives.beginImport(args,{guard:valid});if(!valid()){caseArchives.release({transferId:result.transferId});throw Error('Case archive command expired');}ownedImports.add(result.transferId);return result;}
+   if(method==='caseArchiveWrite')return caseArchives.write(args,{guard:valid});
+   if(method==='caseArchiveCommit'){if(!caseArchives||busy()||editing)throw Error('Case archive unavailable or browser busy');editing=true;try{return await caseArchives.commit(args,{guard:valid});}finally{editing=false;}}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
-  disconnect(){epoch++;for(const jobId of ownedExports){try{exports.cancel({jobId});}catch{/* terminal or released */}}ownedExports.clear();for(const jobId of owned){try{analysis.cancelJob(jobId);}catch{/* terminal or released */}}owned.clear();requests.clear();}
+  disconnect(){epoch++;for(const transferId of ownedImports){try{caseArchives.release({transferId});}catch{/* released */}}ownedImports.clear();for(const jobId of ownedExports){try{exports.cancel({jobId});}catch{/* terminal or released */}}ownedExports.clear();for(const jobId of owned){try{analysis.cancelJob(jobId);}catch{/* terminal or released */}}owned.clear();requests.clear();}
  };
 }
 

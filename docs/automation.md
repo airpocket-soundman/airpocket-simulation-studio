@@ -94,13 +94,13 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 過渡音響は保存された時刻だけを選択し、未保存時刻は拒否します。熱の最終結果から途中場を表示する機能は未対応。固有モードは正規化形状で、実際の動的応答ではありません。`probe({point,expectedResultRevision?,options?})`は表示中の保存時刻/モードを測定し、結果版・選択状態・根拠評価を返します。変形表示倍率は物理値を変更しません。共通APIは`window.resultViewApi.get/set/probe`です。ビュー設定はJSONで取得・再適用できますが、ケース集に自動保存しません。
 
-ケースは`caseList()`の`caseId`と`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
+ケースは`caseList()`の`archiveRevision`と各ケースの`caseId`・`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
 
-共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力と、ケース集への名前付きビュー同梱は継続課題です。
+共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力は以下の分割転送APIを使用します。ケース集への名前付きビュー同梱は継続課題です。
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは34操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは40操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -122,3 +122,13 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 `namedViewApply({viewId,expectedRevision,expectedResultRevision})`は保存時と同じ結果版だけに適用します。異なる計算結果への同期プリセットではありません。`namedViewRemove({viewId,expectedRevision})`で削除します。競合時は一覧と表示結果を読み直し、古い版をそのまま再送しないでください。
 
 `namedViewExport()`は`{version:1,views:[{id,name,resultRevision,result,setup}]}`のJSONを返します。明示的に保存し、`namedViewImport({archive,expectedArchiveRevision})`で再取込すると持ち運べます。取込は現在のビュー一覧全体を置き換えます。未知キー、非有限値、不正なカメラ・範囲・形式、重複IDは拒否します。適用の途中失敗では以前の状態への復元を試みます。自動localStorage保存やケース集への同梱は行いません。ページを閉じる前に必要なビューを明示的に書き出してください。
+
+## ケース集の分割入出力
+
+接続モードの`caseArchiveExport({})`は`transferId`、`archiveRevision`、`totalBytes`、`sha256`、`maxChunkBytes`を返します。`caseArchiveRead({transferId,offset,length})`でbase64の`data`と`nextOffset`を取得し、`nextOffset:null`が終端です。全バイトを組み立ててSHA-256を照合してから、許可された保存先へ保存します。物理結果を省略・切り詰めない既存version 1ケース集JSONです。名前付きビューは別途書き出します。
+
+取込前に`caseList()`の`archiveRevision`を取得し、UTF-8 JSONのバイト数とSHA-256を計算します。`sha256`と版は`sha256:`に続く小文字64桁の16進数です。`caseArchiveImport({expectedArchiveRevision,totalBytes,sha256})`で転送を作成し、`caseArchiveWrite({transferId,offset,data})`へbase64を順に送ります。1チャンクは復号後最大65,536バイトです。全体送信後、`caseArchiveCommit({transferId})`で完全性・ハッシュ・UTF-8・JSON・ケース内容を検証し、版が一致した場合だけケース集全体を置き換えます。最大8ケースで、取込後は既存の実行時caseIdが失効するため`caseList()`を再取得します。
+
+書出・読取・解放は確認権限、取込開始・書込・確定は編集権限を要します。共通APIは`window.caseArchiveTransfer.beginExport/read/beginImport/write/commit/release`です。共通の保持上限は100,000,000バイト、同時転送は最大4件。不完全・不正・ハッシュ不一致・版競合・期限切れの取込は既存ケースを維持して拒否します。不要・失敗した転送は`caseArchiveRelease({transferId})`で解放してください。ページ終了で未保存転送を失い、接続解除ではその接続の取込を破棄します。ファイルシステム操作や任意のブラウザコード実行は提供しません。
+
+100,000,000バイトは保持する転送バッファの合計上限であり、JSON解析・複製・検証を含むブラウザのヒープ上限ではありません。確定済み取込も再送時の重複適用を避けるため、解放するまで転送枠とバイトを保持します。

@@ -133,3 +133,13 @@ The full suite passed 386 of 389 tests, with three skips and zero failures at co
 Real Chrome and stdio MCP saved a thermal view with a fixed 20–100 degC range, surface wire, camera [80,60,80], target [5,5,20], 35-degree field of view, Z=20 mm section and 0.7 opacity. After changing these settings, restoration exactly matched both complete result/setup snapshots. The separate view JSON was 1,146 bytes and contained no physical arrays or model.
 
 GUI save also succeeded. Reload cleared the in-memory list; importing the saved case and separate view JSON through visible file labels restored the view. Reconnected MCP confirmed the same result revision and all settings. MCP remove/import/export reproduced the original JSON exactly. Invalid camera data and applying to a different result revision were refused; Japanese/English restore/remove controls were verified. Automatic persistence, bundling views with cases and synchronized application across different results remain unsupported.
+
+## 2026-10-14: chunked case archives and atomic import
+
+The full suite passed 403 of 406 tests, with three skips and zero failures at concurrency four. Build, 26 local-distribution checks and specialist SKILL validation passed. Archives retain the existing version-1 JSON format; caseList now exposes an archive SHA-256 revision.
+
+`tests/mcp-case-archive-protocol.test.mjs` connects a real stdio MCP process and HTTP loopback to the shared session/case-operation/transfer modules. A synthetic Japanese-text case archive larger than 65,536 bytes roundtrips through bounded pages with exact byte count, SHA-256 and JSON agreement. After removing its case, chunked import restores arrays with fresh IDs. Stale archive revisions, corrupt result arrays, read-only import and reads after release are refused.
+
+Unit tests cover incomplete input, invalid base64/hash/UTF-8/JSON, byte/count budgets, chunk retries, commit deduplication, release/disconnect/expiry and final busy/revision checks before replacement. Retained-buffer limits are not peak browser heap limits.
+
+This protocol test uses a Node-hosted semantic adapter and is not real-browser UI evidence. Computer Use stopped because it could not verify the current URL, so real-browser archive transfer remains unverified. Public HTTPS pairing, browser UI integration and large-case performance measurements remain open.

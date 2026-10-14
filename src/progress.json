@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T11:36:51.525Z",
+  "updatedAt": "2026-10-14T11:44:55.314Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1422,6 +1422,22 @@
       "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。自動永続化・ケース同梱・異なる結果の同期は残す。",
       "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. Automatic persistence, case bundling and cross-result synchronization remain unfinished.",
       "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "CASEARCHIVE1",
+      "title": "ケース集をLLMから分割入出力する",
+      "titleEn": "Transfer full case archives through the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "CASEOPS1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "既存version1ケース集を最大64 KiBのbase64ページで転送。全体SHA-256・一覧版・全ケース検証後に原子的置換。合計100,000,000バイト/4転送、切断時の取込破棄、確定再送を重複適用しない。",
+      "detailEn": "Full version1 case JSON via base64 pages up to64 KiB; whole-hash/archive-revision/all-case validation before atomic replacement. Shared100000000-byte/four-transfer retention, disconnect cleanup and idempotent commit retries.",
+      "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。Node接続アダプターでの検証であり実画面・公開HTTPS・大規模性能測定は未完了。",
+      "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser, public HTTPS and large-case performance remain unverified.",
+      "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [

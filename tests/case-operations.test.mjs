@@ -77,3 +77,45 @@ test('saveCurrent refuses external store or displayed-output changes during hash
   await assert.rejects(pending,{code:change==='store'?'CASE_REVISION_CONFLICT':'CASE_RESULT_REVISION_CONFLICT'});assert.equal(store.compare().length,change==='store'?1:2);
  }
 });
+
+test('archive export is a hashed independent snapshot and never changes display',async()=>{
+ let called=0;const {api,store}=setup({view:()=>called++,loadProject:()=>called++});
+ const before=store.export(),listed=await api.list(),exported=await api.exportArchive();
+ assert.equal(exported.archiveRevision,await getProjectRevision(before));assert.equal(listed.archiveRevision,exported.archiveRevision);assert.deepEqual(exported.archive,before);
+ exported.archive.cases[0].name='Changed copy';assert.deepEqual(store.export(),before);assert.equal(called,0);
+});
+
+test('archive replacement invalidates all old IDs and returns stable new compact references',async()=>{
+ const {api,store}=setup(),before=await api.list(),archive=store.export();archive.cases[0].name='Imported';
+ const imported=await api.importArchive({archive,expectedArchiveRevision:before.archiveRevision});
+ assert.equal(imported.imported,true);assert.equal(imported.archiveRevision,await getProjectRevision(archive));assert.equal(imported.cases[0].name,'Imported');
+ assert.ok(imported.cases.every(row=>!before.cases.some(old=>old.caseId===row.caseId)));assert.deepEqual((await api.list()).cases,imported.cases);
+ await assert.rejects(api.remove(reference(before.cases[1])),{code:'CASE_UNKNOWN'});
+ assert.equal(imported.cases[0].output,undefined);
+});
+
+test('invalid archives and stale archive revision leave the entire collection unchanged',async()=>{
+ const {api,store}=setup(),before=store.export(),listed=await api.list();
+ const badFields=structuredClone(before);badFields.cases[1].output.result.displacement.pop();
+ const tooMany={version:1,cases:Array.from({length:9},()=>before.cases[0])};
+ for(const archive of [null,{version:2,cases:[]},tooMany,badFields,{version:1,cases:[{name:'Bad',output:{}}]}]){
+  await assert.rejects(api.importArchive({archive,expectedArchiveRevision:listed.archiveRevision}),{code:'CASE_ARCHIVE_INVALID'});assert.deepEqual(store.export(),before);assert.deepEqual(await api.list(),listed);
+ }
+ await assert.rejects(api.importArchive({archive:before,expectedArchiveRevision:'sha256:'+'0'.repeat(64)}),{code:'CASE_REVISION_CONFLICT'});assert.deepEqual(store.export(),before);
+});
+
+test('archive import rechecks guard, host busy and collection changes after hashing',async()=>{
+ for(const change of ['expiry','busy','collection']){
+  let valid=true,busy=false;const {api,store}=setup({isBusy:()=>busy}),listed=await api.list(),before=store.export();
+  const pending=api.importArchive({archive:{version:1,cases:[]},expectedArchiveRevision:listed.archiveRevision},{guard:()=>valid});
+  if(change==='expiry')valid=false;else if(change==='busy')busy=true;else store.remove(0);
+  await assert.rejects(pending,{code:{expiry:'CASE_COMMAND_EXPIRED',busy:'CASE_HOST_BUSY',collection:'CASE_REVISION_CONFLICT'}[change]});
+  assert.deepEqual(store.export(),change==='collection'?{version:1,cases:[before.cases[1]]}:before);
+ }
+});
+
+test('archive import is exclusive and checks guard immediately before commit',async()=>{
+ const {api,store}=setup(),listed=await api.list(),before=store.export();let checks=0;
+ const pending=api.importArchive({archive:{version:1,cases:[]},expectedArchiveRevision:listed.archiveRevision},{guard:()=>++checks<3});
+ await assert.rejects(api.exportArchive(),{code:'CASE_OPERATION_BUSY'});await assert.rejects(pending,{code:'CASE_COMMAND_EXPIRED'});assert.equal(checks,3);assert.deepEqual(store.export(),before);
+});
