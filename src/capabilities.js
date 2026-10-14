@@ -1,0 +1,35 @@
+// Small metadata only: importing this module must not initialize CAD or solvers.
+const cpuMethods=['pcg','pcg-strict','wasm-pcg'];
+export function getCapabilities({target='browser'}={}){
+ if(!['browser','node'].includes(target))throw Error('Unknown execution target');
+ return {
+  schemaVersion:1,target,execution:'local-wasm-and-javascript',nativeMachineCode:false,
+  runtimeDetectionRequired:target==='browser'?['crossOriginIsolated','webgpu-adapter']:[],
+  units:{geometry:'mm',youngModulus:'Pa',force:'N',temperature:'degC',velocity:'m/s',pressure:'Pa'},
+  engines:[
+   {id:'airpocket',status:'implemented',methods:[...cpuMethods,...(target==='browser'?['webgpu-pcg']:[])],element:'Tet4',studies:['structural','thermal','acoustic','channelFlow','creepingFlow'],limits:['WebGPU only for isotropic linear structure, with CPU correction','Channel flow is fully developed only','Stokes is steady finite-box flow at Re <= 0.1','Nonlinear, modal and orthotropic models require CPU and have additional restrictions']},
+   {id:'mfem',version:'4.10',status:'implemented',methods:['mfem-wasm'],element:'Tet4',studies:['structural'],material:'linear-isotropic',limits:['No modal, plastic, hyperelastic or orthotropic analysis']}
+  ],
+  candidates:['CalculiX','Elmer','Code_Aster','OpenFOAM'].map(id=>({id,status:'candidate',executable:false})),
+  operations:{projectInspection:true,projectEditing:true,mesh:true,solve:true,probe:true,caseValidation:true,liveBrowserMcp:false,mcpProjectCreation:false,mcpVisualExport:false},
+  diagnostics:{schemaVersion:1,coverage:'execution-combinations-only',completePreflight:false},
+  note:'Implemented scope is not universal physical validation. Geometry, boundary, material, mesh and runtime validation still apply.'
+ };
+}
+const issue=(code,target,message,evidence,suggestions)=>({code,severity:'error',target,message,evidence,suggestions,requiresUserIntent:false});
+export function diagnoseExecution(project,options={},target='browser'){
+ getCapabilities({target});
+ if(!options||typeof options!=='object'||Array.isArray(options)||options.adaptive!==undefined&&typeof options.adaptive!=='boolean'||options.method!==undefined&&typeof options.method!=='string')throw Error('Invalid execution diagnostic options');
+ const diagnostics=[],method=options.method??'wasm-pcg',kind=project?.study?.kind??'structural',study=project?.study??{},material=project?.materialProperties??{};
+ const methods=[...cpuMethods,'mfem-wasm',...(target==='browser'?['webgpu-pcg']:[])];
+ if(!methods.includes(method))diagnostics.push(issue('EXECUTION_METHOD_UNSUPPORTED','options.method','Execution method is unavailable for this target',{method,target},methods));
+ if(!['structural','thermal','acoustic','channelFlow','creepingFlow','fluidDomain'].includes(kind))diagnostics.push(issue('STUDY_UNSUPPORTED','study.kind','Unknown study kind',{kind},['Select a supported study']));
+ if(kind==='fluidDomain')diagnostics.push(issue('DOMAIN_MESH_ONLY','study.kind','Fluid domain preparation does not solve general flow',{kind},['Generate a mesh or select a supported physical model']));
+ if(['mfem-wasm','webgpu-pcg'].includes(method)&&kind!=='structural')diagnostics.push(issue('ENGINE_STUDY_UNSUPPORTED','options.method','This method supports structural analysis only',{method,kind},cpuMethods));
+ for(const [model,blocked] of [['orthotropic',kind!=='structural'||study.modalAnalysis||study.thermalStress||!cpuMethods.includes(method)],['plasticity',kind!=='structural'||study.modalAnalysis||study.thermalStress||options.adaptive||!cpuMethods.includes(method)],['hyperelastic',kind!=='structural'||study.modalAnalysis||study.thermalStress||options.adaptive||!cpuMethods.includes(method)]]){
+  if(material[model]&&blocked)diagnostics.push(issue('MATERIAL_COMBINATION_UNSUPPORTED','materialProperties.'+model,'Material model is incompatible with this execution configuration',{model,method,kind,modal:!!study.modalAnalysis,thermalStress:!!study.thermalStress,adaptive:!!options.adaptive},['Use the documented CPU structural configuration; preserve the intended material model']));
+ }
+ if(study.modalAnalysis&&!cpuMethods.includes(method))diagnostics.push(issue('MODAL_METHOD_UNSUPPORTED','options.method','Modal analysis requires an Airpocket CPU method',{method},cpuMethods));
+ if(options.adaptive&&kind!=='structural')diagnostics.push(issue('ADAPTIVE_STUDY_UNSUPPORTED','options.adaptive','Adaptive refinement supports structure only',{kind},['Disable adaptive refinement']));
+ return {schemaVersion:1,completePreflight:false,diagnostics};
+}

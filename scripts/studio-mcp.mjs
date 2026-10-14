@@ -1,3 +1,4 @@
+import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 // MCP 2025-11-25 stdio transport; stdout contains JSON-RPC messages only.
 import {createInterface} from 'node:readline';
 import {readFile,writeFile,stat} from 'node:fs/promises';
@@ -10,6 +11,8 @@ import {analyzeProject} from './headless-analysis.mjs';
 import {catalogVersion,catalogEntries,catalogEntry} from '../src/material-catalog.js';
 const pathSchema={type:'string',minLength:1,description:'Absolute local JSON file path'},object=(properties,required=[])=>({type:'object',properties,required,additionalProperties:false});
 const toolList=[
+ {name:'studio_capabilities',description:'Read actual target-specific engine capabilities and candidate status without loading solver modules. This is not a complete physical preflight.',inputSchema:object({})},
+ {name:'studio_diagnose_execution',description:'Read stable diagnostics for unsupported execution combinations in a saved project. Geometry, units, constraints and material completeness still require full validation.',inputSchema:object({path:pathSchema,method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},adaptive:{type:'boolean'}},['path'])},
  {name:'studio_material_catalog',description:'Read preinstalled primary-source polymer property data. Filter grades by family, filler and content; experimental formulations are separate. Poisson ratio is unpublished and must be treated as a user assumption, not manufacturer data.',inputSchema:object({id:{type:'string'},family:{type:'string'},filler:{enum:['unfilled','glassFiber','longGlassFiber','glassBead','talc']},contentPercent:{type:'number',minimum:0,maximum:100},search:{type:'string'},includeExperimental:{type:'boolean'}})},
  {name:'studio_progress',description:'Read released and outstanding features, including solver limits.',inputSchema:object({})},
  {name:'studio_inspect_project',description:'Validate a saved project and summarize its geometry, study and conditions.',inputSchema:object({path:pathSchema},['path'])},
@@ -22,6 +25,8 @@ function summary(output){const {mesh,result}=output;return {mesh:mesh.summary,ki
 export async function callStudioTool(name,args={}){
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
+ if(name==='studio_capabilities')return getCapabilities({target:'node'});
+ if(name==='studio_diagnose_execution'){const api=createStudioApi();api.loadProject(await jsonFile(args.path));return diagnoseExecution(api.exportProject(),{...(args.method!==undefined?{method:args.method}:{}),...(args.adaptive!==undefined?{adaptive:args.adaptive}:{})},'node');}
  if(name==='studio_progress')return JSON.parse(await readFile(new URL('../src/progress.json',import.meta.url),'utf8'));
  if(name==='studio_material_catalog'){if(args.id!==undefined)return {version:catalogVersion,material:catalogEntry(args.id)};const materials=catalogEntries(args);return {version:catalogVersion,count:materials.length,materials};}
  if(name==='studio_inspect_project'){const api=createStudioApi();api.loadProject(await jsonFile(args.path));return {...api.getSummary(),study:api.exportProject().study};}

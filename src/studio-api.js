@@ -1,3 +1,4 @@
+import {getCapabilities,diagnoseExecution} from './capabilities.js';
 import {cylinderPatchArea} from './cylindrical-cad.js';
 import {planCadUpdate} from './cad-update.js';
 import {planarTriangles,planarArea} from './planar-region.js';
@@ -23,6 +24,8 @@ export function createStudioApi(adapter) {
   function summary(){const p=read();if(!p)return {loaded:false};let area=0,count=0;p.selection.forEach((s,i)=>{for(const t of new Set(s)){area+=areaOfTriangle(p.meshes[i].positions,t);count++;}});if(p.planarRegion&&count)area=planarArea(p.planarRegion);if(p.cylindricalRegion?.exactCad&&count)area=cylinderPatchArea(p.cylindricalRegion);return {loaded:true,name:p.name,meshCount:p.meshes.length,selectedTriangles:count,selectedAreaMm2:area,conditionCount:p.conditions.length,...(p.conditions.some(c=>c.cadUpdateRequired)?{unresolvedCadConditions:p.conditions.filter(c=>c.cadUpdateRequired).length}:{}),material:p.material};}
   return Object.freeze({
     version:1,
+    getCapabilities,
+    diagnoseExecution:(options={},target='browser')=>diagnoseExecution(current(),options,target),
     frameFromEuler,
     getSummary:summary,
     inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},

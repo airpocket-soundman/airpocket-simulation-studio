@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T07:53:47.250Z",
+  "updatedAt": "2026-10-14T08:41:16.569125+00:00",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1103,6 +1103,109 @@
       "acceptance": "一次資料と値・単位・規格を照合。暫定版と未掲載条件を明示し、比較選択・日英・保存・公開版を検証。",
       "acceptanceEn": "Verify primary values, units, standards, preliminary labels and missing conditions, comparison selection, JP/EN, archives and deployment.",
       "evidence": "src/polymer-catalog.json; tests/material-catalog.test.mjs; docs/polymer-library.md"
+    },
+    {
+      "id": "P0",
+      "title": "対応能力・操作対応表・構造化診断",
+      "titleEn": "Capabilities, operation matrix and structured diagnostics",
+      "status": "building",
+      "category": "共通",
+      "depends": [],
+      "detail": "docs/roadmap.mdの同名計画を参照。P0は能力取得と実行組合せ診断を実装中。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md",
+      "lastUpdate": "対応能力取得と実行組合せ診断をAPI/MCPに追加。255テストとビルド成功。操作細分化・完全な事前診断・画面確認は未完了。"
+    },
+    {
+      "id": "P1",
+      "title": "解析入力の共通操作と根拠・事前検査",
+      "titleEn": "Shared input operations, provenance and preflight",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "P2",
+      "title": "必要時取得・実行準備・性能計測",
+      "titleEn": "On-demand preparation and performance measurements",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP2の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P2 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "P3",
+      "title": "共通ジョブとブラウザセッション接続",
+      "titleEn": "Shared jobs and live browser sessions",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "P4",
+      "title": "ビューア操作・再現可能な出力API",
+      "titleEn": "Viewer operations and reproducible export APIs",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "P5",
+      "title": "ブラケット3案のCAD設計反復",
+      "titleEn": "Three-bracket CAD iteration",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP5の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P5 and common completion gates in docs/en/roadmap.md; retain evidence."
+    },
+    {
+      "id": "P6",
+      "title": "WASM・ネイティブ共通コア実証",
+      "titleEn": "Shared WASM/native core proof",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence."
     }
   ],
   "solvers": [

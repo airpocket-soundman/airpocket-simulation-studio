@@ -4,6 +4,16 @@
 
 Updated 2026-10-14. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
 
+## Highest-priority product principle (confirmed 2026-10-14)
+
+The primary differentiator is that the user's own LLM can freely compose all application functions through a specialist SKILL to perform analysis and design iteration. The product does not assume a proprietary AI or an AI subscription operated by this application. Users choose their LLM, contract and execution environment; the application supplies shared APIs, MCP, specialist skills, validation and traceable results.
+
+Full API/MCP coverage, continuous specialist-SKILL development and a pipeline delivering intermediate results to the LLM have highest priority. Expose preparation, mesh quality, iterations/residuals, completed time steps and provisional measurements with job IDs/input revisions, compact summaries and detailed artifact references. Declare solver limitations when intermediate fields are unavailable. Observation and preparation of subsequent settings must not mutate a running snapshot.
+
+New GUI features include semantic APIs, MCP operations, observable state/diagnostics, SKILL guidance and verification scenarios in the same work item. Skills teach supported scope, units, physical assumptions, repair and provisional/final distinctions without silently changing models or engines. Acceptance measures API coverage, MCP-only task completion, intermediate observation/reconfiguration and reproducible SKILL-driven examples.
+
+Start with P0/P1, then prioritize P3 intermediate-result/shared-job pipelines and API/MCP coverage of existing functions in P4. Include specialist-SKILL updates and scenario verification in every stage. P2 supports this path as necessary. Additional visualizations, physics models and printing extensions follow; separate new P4 visuals from API/MCP coverage of existing features.
+
 ## Baseline and tracking
 
 The published baseline is v0.43. Its recorded verification is 242 tests, 26 runtime checks and 42 browser checks; these were not rerun for this documentation review. Reuse STEP/regions, shared APIs, volume meshes, Airpocket structural/thermal/limited-flow/acoustic/modal analysis, MFEM linear-structural WASM, cases, PNG/WebM and saved-JSON MCP. Scope restrictions remain in the analysis guide and discipline documents.

@@ -4,6 +4,14 @@
 
 Date: 2026-10-14. This is product direction and proposed requirements, not a declaration of implemented capabilities. See the analysis guide and progress data for released scope.
 
+## Highest-priority product principle (confirmed 2026-10-14)
+
+The primary differentiator is that the user's own LLM can freely compose all application functions through a specialist SKILL to perform analysis and design iteration. The product does not assume a proprietary AI or an AI subscription operated by this application. Users choose their LLM, contract and execution environment; the application supplies shared APIs, MCP, specialist skills, validation and traceable results.
+
+Full API/MCP coverage, continuous specialist-SKILL development and a pipeline delivering intermediate results to the LLM have highest priority. Expose preparation, mesh quality, iterations/residuals, completed time steps and provisional measurements with job IDs/input revisions, compact summaries and detailed artifact references. Declare solver limitations when intermediate fields are unavailable. Observation and preparation of subsequent settings must not mutate a running snapshot.
+
+New GUI features include semantic APIs, MCP operations, observable state/diagnostics, SKILL guidance and verification scenarios in the same work item. Skills teach supported scope, units, physical assumptions, repair and provisional/final distinctions without silently changing models or engines. Acceptance measures API coverage, MCP-only task completion, intermediate observation/reconfiguration and reproducible SKILL-driven examples.
+
 ## Users and workflow
 
 Target users include designers, developers and learners who want their own LLM agent to help set up CAE, use their local CPU/GPU, and compare design alternatives. The browser provides an installation-free entry point. Agent connectivity without additional installation is also a goal; its transport remains undecided. Native execution requires installation. Data shared with an external LLM may leave the device even when computation is local.
