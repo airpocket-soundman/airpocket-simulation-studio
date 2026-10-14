@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {inputOperationContracts as contracts} from '../src/browser-operation-input-contracts.js';
-const names=['inspect','geometry','inspectSurface','createBuiltinProject','prepareFluidDomain','applyFluidDomainMesh','applyCaseSource','clearCaseSource','inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease','preflight','previewEdit','edit','previewCadUpdate','applyCadUpdate'];
+const names=['inspect','inspectInput','geometry','inspectSurface','createBuiltinProject','prepareFluidDomain','applyFluidDomainMesh','applyCaseSource','clearCaseSource','inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease','preflight','previewEdit','edit','previewCadUpdate','applyCadUpdate'];
 test('input-operation discovery is finite JSON with exact seventeen operation coverage and explicit metadata',()=>{
  assert.deepEqual(Object.keys(contracts).sort(),names.sort());const plain=JSON.parse(JSON.stringify(contracts));assert.deepEqual(plain,contracts);
  for(const [name,c]of Object.entries(contracts)){assert.equal(typeof c.description,'string',name);assert.ok(c.description.length);assert.equal(c.inputSchema.$schema,'https://json-schema.org/draft/2020-12/schema');assert.equal(c.inputSchema.type,'object');for(const key of ['sideEffects','revisionFields','limitations'])assert.ok(Array.isArray(c[key])&&c[key].every(v=>typeof v==='string'),name+' '+key);assert.ok(c.units&&typeof c.units==='object');for(const key of c.inputSchema.required)assert.ok(Object.hasOwn(c.inputSchema.properties,key),name+' '+key);for(const key of c.revisionFields)assert.ok(Object.hasOwn(c.inputSchema.properties,key),name+' '+key);}
@@ -12,6 +12,6 @@ test('discovery preserves source/revision distinctions and concrete transfer/pag
 });
 test('schemas do not falsely advertise closed envelopes or complete nested physical validation',()=>{
  for(const name of ['inspect','preflight','previewEdit','edit','previewCadUpdate','applyCadUpdate'])assert.equal(contracts[name].inputSchema.additionalProperties,undefined,name);
- for(const name of ['geometry','inspectSurface','createBuiltinProject','prepareFluidDomain','applyFluidDomainMesh','applyCaseSource','clearCaseSource','inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease'])assert.equal(contracts[name].inputSchema.additionalProperties,false,name);
+ for(const name of ['inspectInput','geometry','inspectSurface','createBuiltinProject','prepareFluidDomain','applyFluidDomainMesh','applyCaseSource','clearCaseSource','inputImportBegin','inputImportWrite','inputImportCommit','inputImportRelease'])assert.equal(contracts[name].inputSchema.additionalProperties,false,name);
  assert.equal(contracts.edit.inputSchema.properties.operations.maxItems,undefined);assert.equal(contracts.edit.inputSchema.properties.operations.items.additionalProperties,false);assert.equal(contracts.edit.inputSchema.properties.operations.items.properties.args.type,'array');assert.match(contracts.previewCadUpdate.inputSchema.properties.replacement.description,/runtime-only/);assert.match(contracts.preflight.inputSchema.properties.options.description,/not a complete options schema/);
 });

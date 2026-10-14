@@ -1,4 +1,5 @@
 import {getBrowserOperationContracts} from './browser-operation-contracts.js';
+import {inspectProjectInput} from './project-input-inspection.js';
 import {inspectProjectSurface} from './project-surface-inspection.js';
 import {catalogVersion,createCatalogMaterial} from './material-catalog.js';
 import {getCapabilities,diagnoseExecution} from './capabilities.js';
@@ -46,6 +47,7 @@ export function createStudioApi(adapter) {
     inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},
     async inspectGeometrySummary(options={}){const snapshot=current();const {inspectProjectGeometry}=await import('./geometry-inspection.js');return inspectProjectGeometry(snapshot,options);},
     exportProject:()=>current(),
+    async inspectInput(options={}){const snapshot=current(),serialized=JSON.stringify(snapshot),result=await inspectProjectInput(snapshot,options);if(JSON.stringify(current())!==serialized)throw Object.assign(Error('Project changed during input inspection.'),{code:'INPUT_INSPECTION_STALE'});return result;},
     previewCadUpdate(replacement){const {reports,matched,pending}=planCadUpdate(current(),replacement);return {reports,matched,pending};},
     applyCadUpdate(replacement){const result=planCadUpdate(current(),replacement);write(result.project,'load');return {reports:result.reports,matched:result.matched,pending:result.pending};},
     loadProject(project){const p=clone(project);p.selection??=p.meshes?.map(()=>[]);return write(p,'load');},

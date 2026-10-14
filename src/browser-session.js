@@ -1,3 +1,4 @@
+import {inspectProjectInput} from './project-input-inspection.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
 import {canonicalJson} from './project-revision.js';
@@ -22,6 +23,11 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(!args||typeof args!=='object'||Array.isArray(args))throw Error('Arguments must be an object');
    const project=()=>studio.exportProject();
    if(method==='inspect'){const snapshot=project(),revision=await getProjectRevision(snapshot);if(JSON.stringify(project())!==JSON.stringify(snapshot))throw Error('Project revision conflict');return {schemaVersion:1,revision,project:studio.getSummary(),liveBrowserMcp:true,methods:browserMethods,operationContracts:{schemaVersion:1,api:'getBrowserOperationContracts',mcp:'studio_browser_contracts'}};}
+   if(method==='inspectInput'){
+    const snapshot=project(),response=typeof studio.inspectInput==='function'?await studio.inspectInput(args):await inspectProjectInput(snapshot,args);
+    if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during input inspection'),{code:'INPUT_INSPECTION_STALE'});
+    return response;
+   }
    if(method==='inputImportBegin'){if(!inputImports)throw Error('Input import transfer unavailable');const result=await inputImports.beginImport(args,{guard:valid});if(!valid()){inputImports.release({transferId:result.transferId});throw Error('Input import command expired');}ownedInputTransfers.add(result.transferId);return result;}
    if(['inputImportWrite','inputImportCommit','inputImportRelease'].includes(method)){
     if(!inputImports)throw Error('Input import transfer unavailable');if(!ownedInputTransfers.has(args.transferId))throw Error('Input import transfer is not owned by this session');
