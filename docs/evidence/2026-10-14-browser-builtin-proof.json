@@ -1,0 +1,186 @@
+{
+  "environment": "Actual local IAB/native browser Worker + stdio MCP/HTTP. No model file upload or GUI sample selection; browser project created and configured through semantic MCP.",
+  "beforeRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:781399e05147b52c03515869f58f535d05199e827e8ca0930323e26a058159d5",
+    "summary": {
+      "loaded": true,
+      "name": "LLM-created tensile bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "stale": "[{\"type\":\"text\",\"text\":\"Project revision conflict\"}]",
+  "invalid": "[{\"type\":\"text\",\"text\":\"Invalid box dimensions.\"}]",
+  "edited": {
+    "schemaVersion": 1,
+    "revision": "sha256:56c1cbf38b71c88d7a8e9eb3ff90eadeab9eb8b314efcde09a332d078f08730f",
+    "summary": {
+      "loaded": true,
+      "name": "LLM-created tensile bar",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    }
+  },
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "80edc07a-bcca-41e3-a1f3-4d40a0324089",
+    "inputRevision": "sha256:56c1cbf38b71c88d7a8e9eb3ff90eadeab9eb8b314efcde09a332d078f08730f",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791988042076,
+    "updatedAt": 1791988042510,
+    "lastSequence": 14,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "elastic",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "volumeMm3": 3999.9999999999977,
+        "minVolumeMm3": 6.0397097262876045,
+        "minQuality": 0.3471214125206645,
+        "qualityHistogram": [
+          0,
+          2,
+          9,
+          86,
+          121
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 0,
+        "retainedBytes": 0,
+        "storageLimited": false,
+        "sharedBytes": 0,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "result": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:af1c3083c8fac2fd978b3f63b237e28a338914b232f118e58f8f3a1e7d4e4c7a",
+    "kind": "elastic",
+    "fields": [
+      {
+        "id": "displacement",
+        "unit": "mm"
+      },
+      {
+        "id": "stress",
+        "unit": "MPa"
+      }
+    ],
+    "state": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61.00000000000001,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 0,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "frames": [],
+    "modes": []
+  },
+  "measurement": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:af1c3083c8fac2fd978b3f63b237e28a338914b232f118e58f8f3a1e7d4e4c7a",
+    "kind": "elastic",
+    "display": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null
+    },
+    "point": [
+      5,
+      5,
+      40
+    ],
+    "element": 113,
+    "weights": [
+      0.5524475524475521,
+      0,
+      0.4475524475524475,
+      0
+    ],
+    "displacementMm": [
+      8.831405212140507e-14,
+      8.940845575873236e-13,
+      0.04000000000143204
+    ],
+    "magnitudeMm": 0.04000000000143204,
+    "vonMisesPa": 999999.9993423241,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    }
+  }
+}

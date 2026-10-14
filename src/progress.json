@@ -1666,6 +1666,39 @@
       "acceptance": "新5試験を含む566件中563成功・3スキップ（71.05秒）。合成60/50°C界面・実stdio100/20°C界面の未指定拒否/明示選択、保存ハッシュと旧形式を検証。実ブラウザ124節点/288要素、3×1秒過渡熱の界面19.9971034/20.0013336°Cを部品別取得し要素選択も一致。ビルド・配信物26項目（28.48秒）・SKILL成功。定常参照値との一致や物理精度の保証ではない。",
       "acceptanceEn": "563 passed and three skipped of566 including five new tests (71.05s). Synthetic60/50degC and real stdio100/20degC interfaces verify ambiguity refusal/selectors, hashes and legacy compatibility. Actual browser124nodes/288elements,3x1s transient interface19.9971034/20.0013336degC resolved by body and matching element. Build,26distribution checks28.48s andSKILL pass. Not a steady-reference match or physical accuracy guarantee.",
       "evidence": "src/analysis.worker.js; src/intermediate-results.js; src/browser-session.js; scripts/studio-mcp.mjs; tests/intermediate-body.test.mjs; tests/mcp-intermediate-body.test.mjs; docs/evidence/2026-10-14-intermediate-body-browser.json; docs/testing.md"
+    },
+    {
+      "id": "BROWSERBUILTIN1",
+      "title": "LLMからライブブラウザへ組込み形状の新規入力を作る",
+      "titleEn": "Create built-in input geometry in the live browser through LLM operations",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "BROWSERBRIDGE1",
+        "AGENTINPUT1",
+        "AGENTEDIT1"
+      ],
+      "detail": "共通builtinProjectApi.createと編集権限のcreateBuiltinProjectを追加。既存factoryのbox/boxes/cylinder/sphere/tubeをmmで作成し、条件・物性・旧モデル状態を継承しない。現在入力版・busy・期限・失効・最終CASを確認し、ブラウザ保存形式と返却版をcommit前に正規化する。",
+      "detailEn": "Add builtinProjectApi.create and edit-scoped live createBuiltinProject. Reuse existing mm box/boxes/cylinder/sphere/tube factories without inheriting conditions, material properties or old model state. Verify revision, busy, expiry, revocation and final CAS; normalize browser serialization and calculate its revision before committing.",
+      "acceptance": "新10試験を含む576件中573成功・3スキップ（69.71秒）。5形状、版/CAS・権限・busy・失効・不正入力、正規化失敗時の非commitを検証。実stdio/HTTPと実ブラウザで10×10×40 mm角柱をAPI作成し、設定・実解析・先端測定0.04000000000143204 mmまで完了。返却版と次のinspect一致、旧版・不正寸法拒否を確認。ビルド・配信物26項目（27.94秒）・SKILL成功。STEPライブ取込と一般CAD作成は別課題。",
+      "acceptanceEn": "573 passed and three skipped of576 including ten new tests (69.71s). Five shapes, revision/CAS, grants/busy/revocation/invalid inputs and normalization failures without commit verified. Real stdio/HTTP and actual browser create a10x10x40mm bar, configure/solve and measure0.04000000000143204mm at its tip. Returned revision matches subsequent inspect; stale revisions/invalid dimensions refused. Build,26distribution checks27.94s andSKILL pass. Live STEP import and general CAD creation remain separate.",
+      "evidence": "src/builtin-project-operations.js; src/browser-builtin-project.js; src/browser-session.js; src/browser-session-ui.js; src/main.js; tests/builtin-project-operations.test.mjs; tests/browser-builtin-project.test.mjs; tests/mcp-browser-builtin.test.mjs; docs/evidence/2026-10-14-browser-builtin-proof.json; docs/testing.md"
+    },
+    {
+      "id": "OBSERVATIONPROFILES1",
+      "title": "ソルバー別の中間観測能力を機械取得する",
+      "titleEn": "Expose machine-readable solver-specific observation capabilities",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "AGENTJOBS1"
+      ],
+      "detail": "現capabilities.observationは全体metricsのみで選択model/method別の時刻場保存可否を判別できない。実solver配線を元にprofile表と選択profile診断を追加し、反復/場の未対応理由、間引き、保持制約を明示する。",
+      "detailEn": "Current aggregate observation metrics do not resolve field availability by model/method. Derive observation profiles and selected-profile diagnostics from actual solver wiring, with unsupported metrics/fields, cadence and retention limits.",
+      "acceptance": "各対応モデル・methodの実イベントと宣言profileを照合し、未対応場や内部反復を誤って公開しない。保持on/off・容量制限・間引きを区別する。未実装。",
+      "acceptanceEn": "Compare real events against declared profiles for supported models/methods; do not advertise unavailable fields or internal iterations. Distinguish retention enabled/disabled, byte limits and sampling cadence. Not implemented.",
+      "evidence": "src/capabilities.js; src/analysis.worker.js; docs/agent-operation.md"
     }
   ],
   "solvers": [

@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは70操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは71操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -256,3 +256,11 @@ v2ホストのv1取込応答は`measurementsCleared:true`と、空履歴を含�
 部品IDを保持しない旧中間メッシュへbody指定はできません。欠けたnodeBodiesを自動復元・推定しません。版・メッシュ・ハッシュと既存の点補間検証を維持し、明示選択は物理的な接合条件の正しさを保証しません。
 
 中間メッシュ要約は`bodyIdentifiersAvailable:boolean`と`bodyCount:number|null`を返します。旧IDなしメッシュのbodyCountは不明としてnull。節点ページのnodeBodiesはIDを保持する場合だけ含みます。
+
+## ライブ入力の組込み形状作成
+
+編集権限の`createBuiltinProject({expectedRevision,source,name?})`は現在の入力版を照合し、保存MCPのstudio_create_builtin_projectと同じ形状契約で新入力を作成します。mm指定のbox(bounds)、boxes（最大10、重複なし）、固定cylinder（半径12 mm・Y方向長さ60 mm）、sphere(center/radius)、tube(center/axis/innerRadius/outerRadius/length)に対応します。
+
+作成候補と新しい版の計算を適用前に完了し、busy・期限切れ・許可失効・入力の途中変更は拒否します。conditionsは空配列、materialPropertiesは空オブジェクトの新入力で、既存条件や物性を黙って継承しません。通常の入力読込と同じく現在の結果を無効化します。既存ケース・ビュー・測定・印刷データの履歴を変更する操作ではありません。材料・支持・荷重などを設定し、必要な根拠とpreflightを確認してから解析してください。
+
+ブラウザ共通APIは`window.builtinProjectApi.create({expectedRevision,source,name?})`です。接続MCPはこの同じアダプターを使用します。

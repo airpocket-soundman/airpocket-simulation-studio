@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 70 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 71 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -256,3 +256,11 @@ Intermediate meshes retain available nodeBodies and include nodeBodies in node p
 Body selection is unavailable for legacy intermediate meshes without body IDs. Missing nodeBodies are not reconstructed or inferred. Existing revision/mesh/hash/interpolation checks remain; explicit selection does not establish correct physical interface conditions.
 
 Intermediate mesh summaries expose bodyIdentifiersAvailable:boolean and bodyCount:number|null; legacy missing IDs mean unknown bodyCount:null. Node pages include nodeBodies only when IDs exist.
+
+## Create built-in geometry in live inputs
+
+Edit-scoped `createBuiltinProject({expectedRevision,source,name?})` checks the current input revision and creates new inputs using the same geometry contract as saved-file studio_create_builtin_project. Shapes in mm are box(bounds), boxes (up to10, nonoverlapping), fixed cylinder (12 mm radius, 60 mm along Y), sphere(center/radius) and tube(center/axis/innerRadius/outerRadius/length).
+
+Candidate creation and new-revision computation finish before commit. Busy, expired/revoked commands and intervening input changes are refused. New conditions are [] and materialProperties is {}; previous loads/materials are not silently inherited. Current results are invalidated like a normal input load. Existing case/view/measurement/print histories are not modified. Set intended materials/supports/loads and check evidence/preflight before solving.
+
+Shared browser API: `window.builtinProjectApi.create({expectedRevision,source,name?})`. Connected MCP uses the same adapter.
