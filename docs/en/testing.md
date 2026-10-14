@@ -495,3 +495,9 @@ Added one ESM file using existing Node24 and three browser-only tools, sharing s
 Full suite:904 tests,901 passed,3 skipped,0 failed,129.44s. Read-only contract annotations changed after that run began; a final targeted12 passed separately. Another12 docs/progress/gate checks passed after task registration. Build succeeded; connector70,942 bytes;26 local distribution checks passed in70.07s. The local manifest is dirty and does not establish public distribution. [Evidence](../evidence/2026-10-15-browser-connector.json) retains source/log hashes and log tails.
 
 Prior PR revision8a486ff passed all three publication jobs in run38654646686,26 public checks and annotated release-tag target verification. That publication does not include this connector. Actual public HTTPS pairing,bundled runtime,restart recovery and the full P0-P6 scope remain incomplete.
+
+## 2026-10-15: Intermediate connectivity and execution cleanup
+
+Added bounded element connectivity pages for the exact retained intermediate mesh through shared APIs,browser adapter and real stdio MCP. Legacy analyze/generateMesh now participate in drain/close settlement, with late-reply,asynchronous-termination and cleanup-failure regressions. Thermal/transient-acoustic Workers suppress unrequested observation arrays while retaining summaries and identical final values.
+
+Full913:910passed,3skipped,0failed,132.24s. Targeted integration23,solver/Worker29 and post-registration docs/progress/gates12 passed. Build and26 local distribution checks passed(59.67s). See [verification](../evidence/2026-10-15-intermediate-lifecycle.json) and [Skill synchronization](../evidence/2026-10-15-skill-minimal-connector.json). Ten matching files and validator success do not establish Skill-only end-to-end behavior. Actual public HTTPS,pending-queue/heap limits,restart recovery and full P0-P6 remain incomplete.

@@ -488,3 +488,13 @@ For example, inspect {path,section:"conditions",limit:20}, then {path,section:"c
 Legacy studio_inspect_project without section preserves its old shape, potentially including huge study/source arrays; it is not bounded. pointer/offset/limit/expectedRevision require section, and section mode cannot mix meshIndex/faceOffset/faceLimit/surfaceInspection. Older registered servers may lack this extension; discover actual tools and deliberately use the local repository fallback only when needed. Counts remain 29/31 tools, with 82 live operations including inspectInput.
 
 Edit/preview positional arguments share explicit JSON schemas for numbers,booleans,null,records and common nested arrays. Method-specific positional/physical validation remains runtime-owned. If an existing client projects an old args:string[] declaration,do not stringify numbers or records to fit it;refresh the registered schema or deliberately use the documented local callStudioTool path. Improved host projection is not yet verified and is distinct from successful raw MCP contracts.
+
+## Retrieve intermediate mesh connectivity
+
+Use `pageKind:"elements",offset:0,limit:200` with `studio_job_artifact` or live `jobArtifact` to retrieve tetrahedral connectivity for the same intermediate mesh. The page includes kind/offset/count/total/nextOffset/hasMore/tetrahedra and optional elementBodies. Each tetrahedron uses four global node indices; element identity is offset+i. Node-page identity is also offset+i, allowing reconstruction from the same artifact's coordinates/connectivity. Never substitute a later adaptive final mesh for an intermediate field.
+
+The default pageKind remains nodes; default limit0 returns summary only. Element offsets use element count and pages are capped at200. Reject elements combined with point/bodyIndex/elementIndex measurements. Preserve hash/input/mesh identity checks and provisional status; retrieval does not establish physical validity.
+
+Shared analysisApi.drainJobs also waits for legacy analyze/generateMesh executions present at invocation without cancellation. closeJobs requests their cancellation; closeJobsAsync waits for Worker termination. Returned jobIds identify registered jobs only; direct executions do not acquire invented IDs.
+
+With `includeFields:false`, thermal/transient-acoustic intermediate field arrays are not generated/transferred by the Worker; time/metric summaries remain. Final results and stored snapshots are separate. Direct solver observation defaults remain compatible; explicit observeFields:false suppresses only observation fields. The64MB budget covers retained observation JSON, not pending event queues or peak heap.

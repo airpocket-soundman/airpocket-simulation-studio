@@ -2169,6 +2169,23 @@
       "acceptance": "単体隔離起動・契約・認証・権限・失効・切断・EOF終了を確認。公開配布物と実HTTPS接続の確認を残し、Node同梱版や再起動復旧とは区別する。",
       "acceptanceEn": "Verify isolated single-file startup,contracts,authentication,scopes,expiry,disconnect and EOF cleanup. Public artifact/actual HTTPS verification remains; distinguish runtime bundling and restart recovery.",
       "evidence": "scripts/studio-browser-mcp.mjs; scripts/build-browser-connector.mjs; tests/browser-only-mcp.test.mjs; tests/browser-connector-bundle.test.mjs; docs/evidence/2026-10-15-browser-connector.json"
+    },
+    {
+      "id": "P3OBSERVATIONLIFECYCLE1",
+      "title": "中間接続取得と全解析入口の終了処理を揃える",
+      "titleEn": "Align intermediate connectivity and cleanup across analysis entries",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "BROWSERFIELDS1",
+        "BROWSERCONTRACTS1"
+      ],
+      "detail": "要素接続の有界取得、旧直接解析の終了待機、場を要求しない熱/過渡音響の配列生成/転送抑制。",
+      "detailEn": "Bounded element connectivity, legacy direct execution settlement and suppression of unrequested thermal/transient-acoustic observation fields.",
+      "acceptance": "同じ中間メッシュの節点/要素から再構成し、版・ハッシュと測定を照合。非同期終了・遅着応答・取消/待機を検証。場有無で最終結果不変を実Workerで確認。公開HTTPS/再起動復旧/全P3は未完了。",
+      "acceptanceEn": "Reconstruct the same intermediate mesh from node/element pages with identity and measurement checks; verify asynchronous termination,late replies,cancellation/drain and unchanged final results in real Workers. Public HTTPS,restart recovery and full P3 remain open.",
+      "evidence": "src/intermediate-results.js; src/analysis-client.js; src/analysis.worker.js; docs/evidence/2026-10-15-intermediate-lifecycle.json"
     }
   ],
   "solvers": [
@@ -2297,7 +2314,8 @@
           "GUIJOBS1",
           "AGENTJOBS1",
           "BROWSERFIELDS1",
-          "BROWSERCONNECTOR1"
+          "BROWSERCONNECTOR1",
+          "P3OBSERVATIONLIFECYCLE1"
         ],
         "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
       },

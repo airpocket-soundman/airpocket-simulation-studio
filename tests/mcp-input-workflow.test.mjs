@@ -27,6 +27,9 @@ test('MCP creates a project, edits physical setup, blocks unconfirmed quantitati
   const store=createCaseStore();store.add('Exploratory bar',saved);const tampered=structuredClone(saved);tampered.result.analysisAssessment.provisional=false;assert.throws(()=>store.add('False confirmation',tampered),/assessment/);assert.equal(store.list().length,1);const stripped=structuredClone(saved);delete stripped.analysisAssessment;delete stripped.result.analysisAssessment;assert.throws(()=>validateSavedAssessment(stripped),/assessment/);
   const events=await callStudioTool('studio_job_events',{jobId,limit:100}),mesh=events.events.find(e=>e.stage==='mesh');assert.ok(mesh.artifact.artifactId);
   const artifact=await callStudioTool('studio_job_artifact',{jobId,artifactId:mesh.artifact.artifactId,limit:2});assert.equal(artifact.page.count,2);assert.equal(artifact.provisional,true);assert.equal(artifact.inputRevision,started.inputRevision);
+  const elements=await callStudioTool('studio_job_artifact',{jobId,artifactId:mesh.artifact.artifactId,pageKind:'elements',offset:0,limit:2});assert.equal(elements.page.kind,'elements');assert.equal(elements.page.count,2);assert.deepEqual(elements.page.tetrahedra,saved.mesh.tetrahedra.slice(0,2));
+  for(const selector of [{point:[0,0,0]},{bodyIndex:0},{elementIndex:0}])await assert.rejects(callStudioTool('studio_job_artifact',{jobId,artifactId:mesh.artifact.artifactId,pageKind:'elements',limit:1,...selector}),/cannot include measurement selectors/);
+  await assert.rejects(callStudioTool('studio_job_artifact',{jobId,artifactId:mesh.artifact.artifactId,pageKind:'faces'}));
   await writeFile(mesh.artifact.path,'tampered');await assert.rejects(callStudioTool('studio_job_artifact',{jobId,artifactId:mesh.artifact.artifactId}),e=>e.code==='INTERMEDIATE_INTEGRITY_FAILED');
  }finally{if(jobId)await callStudioTool('studio_release_job',{jobId});await rm(dir,{recursive:true,force:true});}
 });

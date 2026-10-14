@@ -8,10 +8,12 @@ function meshInfo(mesh){
  return {nodeCount:count,elementCount:mesh.tetrahedra.length,boundsMm:bounds,bodyIdentifiersAvailable:hasBodies,bodyCount:hasBodies?new Set(mesh.nodeBodies).size:null};
 }
 // Retained nodal snapshots remain provisional, including converged load steps.
-export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0,bodyIndex,elementIndex}={}){
+export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0,bodyIndex,elementIndex,pageKind='nodes'}={}){
+ if(!['nodes','elements'].includes(pageKind))throw Error('Invalid intermediate page kind');
+ if(pageKind==='elements'&&(point!==undefined||bodyIndex!==undefined||elementIndex!==undefined))throw Error('Intermediate element pages cannot include measurement selectors');
  if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<0||limit>200)throw Error('Invalid intermediate page');
  for(const selector of [bodyIndex,elementIndex])if(selector!==undefined&&(!Number.isSafeInteger(selector)||selector<0))throw Error('Invalid intermediate measurement selector');if((bodyIndex!==undefined||elementIndex!==undefined)&&point===undefined)throw Error('Intermediate selectors require a measurement point');
- const info=meshInfo(mesh);if(bodyIndex!==undefined&&!info.bodyIdentifiersAvailable)throw Error('Intermediate body selection requires body identifiers');if(bodyIndex!==undefined&&!mesh.nodeBodies.includes(bodyIndex))throw Error('Unknown intermediate body identifier');if(elementIndex!==undefined&&elementIndex>=mesh.tetrahedra.length)throw Error('Invalid intermediate element index');if(offset>info.nodeCount)throw Error('Intermediate offset exceeds node count');
+ const info=meshInfo(mesh);if(bodyIndex!==undefined&&!info.bodyIdentifiersAvailable)throw Error('Intermediate body selection requires body identifiers');if(bodyIndex!==undefined&&!mesh.nodeBodies.includes(bodyIndex))throw Error('Unknown intermediate body identifier');if(elementIndex!==undefined&&elementIndex>=mesh.tetrahedra.length)throw Error('Invalid intermediate element index');if(offset>(pageKind==='elements'?info.elementCount:info.nodeCount))throw Error('Intermediate offset exceeds '+(pageKind==='elements'?'element':'node')+' count');
  const out={mesh:info,provisional:true};
  const field=snapshot.field;
  let values,vectors,name,unit;
@@ -39,7 +41,10 @@ export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0,bodyIn
   out.measurement={...sample,value:pressurePa,field:name,unit,timeUnit:'s'};
   }
  }
- if(limit){
+ if(limit&&pageKind==='elements'){
+  const end=Math.min(offset+limit,info.elementCount);
+  out.page={kind:'elements',offset,count:end-offset,total:info.elementCount,nextOffset:end,hasMore:end<info.elementCount,tetrahedra:mesh.tetrahedra.slice(offset,end).map(t=>[...t]),...(mesh.nodeBodies!==undefined?{elementBodies:mesh.tetrahedra.slice(offset,end).map(t=>mesh.nodeBodies[t[0]])}:{})};
+ }else if(limit){
   const end=Math.min(offset+limit,info.nodeCount);
   out.page={offset,count:end-offset,total:info.nodeCount,nextOffset:end,hasMore:end<info.nodeCount,nodesMm:Array.from({length:end-offset},(_,i)=>mesh.nodes.slice(3*(offset+i),3*(offset+i)+3)),...(values?{values:values.slice(offset,end)}:{}),...(vectors?{displacementMm:Array.from({length:end-offset},(_,i)=>vectors.slice(3*(offset+i),3*(offset+i)+3))}:{}),...(mesh.nodeBodies!==undefined?{nodeBodies:mesh.nodeBodies.slice(offset,end)}:{})};
  }
