@@ -291,3 +291,7 @@ executionSettled/resourceStateとresource-stateイベント、terminalと資源�
 ブラウザ対象6件は、上記に加えてfalsy値5種によるcleanup拒否を失敗として保持すること、全体pending時の新規export拒否と既存exportの再送維持を確認。ローカルのCodexアプリ内ブラウザで円柱・mesh size2のGUIメッシュを開始してGUI取消し、実MCPでexecutionSettled:true/resourceState:settled/releaseAllowed:trueを確認した。取消イベント自体はfalse/pendingで、resource-stateは1回だけ。MCP releaseが成功し、続くGUI再メッシュは3,480節点・16,248四面体で成功した。
 
 [機械可読記録](evidence/2026-10-14-job-settlement-browser.json)と[画面](evidence/2026-10-14-job-settlement-browser.jpg)を保存。最初の短いメッシュは一覧取得から取消要求までに成功済みとなったため、取消成功の証拠に数えずGUI取消で再確認した。native Workerを早期に止めた確認であり、OS終了の直接確認や取消前のWASM算術開始を証明しない。全体試験は556件中553成功・3スキップ（67.82秒）。旧MCP試験の即時解除を終了待機へ更新した。ビルド・配信物26項目（28.46秒）・SKILL検証成功。既知V8停止は今回非再現で、根治の証明ではない。
+
+## 2026-10-14: 保持成果物カタログ
+
+イベント切詰め後の成果物再発見と最大100件ページ、一覧はメタデータのみ・再ハッシュなし、取得時の既存検証、release後拒否を対象とする。通常27/接続29ツール・接続70操作。新規5件を含む561件中558成功・3スキップ（73.75秒）。300進捗で元参照が消えた後の再発見と35°C点測定、実stdio過渡熱の5成果物ページと改ざん時の取得拒否を確認。ビルド・配信物26項目（29.60秒）・SKILL成功。実ブラウザでも構造サンプル94節点/218要素を計算し、一覧→成果物2節点取得→結果表示→解除後の一覧拒否を確認した。[記録](evidence/2026-10-14-artifact-catalog-browser.json)と[画面](evidence/2026-10-14-artifact-catalog-browser.jpg)。短い実画面例でイベント切詰めは起こしていない。

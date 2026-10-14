@@ -1,0 +1,137 @@
+{
+  "environment": "Actual local IAB + native browser Worker + stdio MCP/HTTP. Metadata listing then existing integrity-checked artifact read. No browser event truncation induced in this short structural solve.",
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+    "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791987057412,
+    "updatedAt": 1791987057913,
+    "lastSequence": 14,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "elastic",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "volumeMm3": 3999.9999999999977,
+        "minVolumeMm3": 6.0397097262876045,
+        "minQuality": 0.3471214125206645,
+        "qualityHistogram": [
+          0,
+          2,
+          9,
+          86,
+          121
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 1,
+        "retainedBytes": 5073,
+        "storageLimited": false,
+        "sharedBytes": 5073,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "catalog": {
+    "schemaVersion": 1,
+    "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+    "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+    "provisional": true,
+    "artifacts": [
+      {
+        "artifactId": "0001",
+        "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+        "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+        "bytes": 5073,
+        "sha256": "20a40e9e8439100610b7bccaae3a3bdbd74d81defed27a08ac6c7f4d277eb53d",
+        "kind": "mesh",
+        "provisional": true,
+        "storage": "browser-memory"
+      }
+    ],
+    "total": 1,
+    "nextOffset": null,
+    "jobState": "succeeded"
+  },
+  "artifact": {
+    "schemaVersion": 1,
+    "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+    "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+    "artifact": {
+      "artifactId": "0001",
+      "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+      "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+      "bytes": 5073,
+      "sha256": "20a40e9e8439100610b7bccaae3a3bdbd74d81defed27a08ac6c7f4d277eb53d",
+      "kind": "mesh",
+      "provisional": true,
+      "storage": "browser-memory"
+    },
+    "mesh": {
+      "nodeCount": 94,
+      "elementCount": 218,
+      "boundsMm": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ]
+    },
+    "provisional": true,
+    "page": {
+      "offset": 0,
+      "count": 2,
+      "total": 94,
+      "nextOffset": 2,
+      "hasMore": true,
+      "nodesMm": [
+        [
+          0,
+          0,
+          40
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "end": {
+    "schemaVersion": 1,
+    "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+    "inputRevision": "sha256:a28ff7d09263f245d519a0bf8a758efe30faf28e9f79e0cc2d36b828ff7558bd",
+    "provisional": true,
+    "artifacts": [],
+    "total": 1,
+    "nextOffset": null,
+    "jobState": "succeeded"
+  },
+  "release": {
+    "jobId": "cf58dfee-8299-4b19-8403-13f7870ce4ff",
+    "released": true
+  },
+  "releasedCatalogRejected": true
+}

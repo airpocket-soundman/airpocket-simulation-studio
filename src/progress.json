@@ -1636,6 +1636,36 @@
       "acceptance": "新規15試験を含む全556件中553成功・3スキップ（67.82秒）。実画面でGUI取消のpending→settled、MCP解除、再メッシュ3480節点/16248要素を確認。ビルド・配信物26項目（28.46秒）・SKILL検証成功。OS終了の直接証明ではなく、既知V8問題の根治も未証明。",
       "acceptanceEn": "553 passed and three skipped of556, including15new checks (67.82s). Actual GUI cancellation pending→settled, MCP release and remeshing3480nodes/16248elements verified. Build,26distribution checks (28.46s) andSKILL validation passed. Not direct OS-exit proof; known V8 root fix remains unproven.",
       "evidence": "src/analysis-jobs.js; src/analysis-client.js; src/gui-analysis-jobs.js; src/browser-session.js; scripts/analysis-job-service.mjs; tests/analysis-jobs.test.mjs; tests/browser-job-settlement.test.mjs; tests/mcp-job-settlement.test.mjs; docs/evidence/2026-10-14-job-settlement-browser.json; docs/testing.md"
+    },
+    {
+      "id": "ARTIFACTCATALOG1",
+      "title": "中間イベント消失後も保持成果物を再発見する",
+      "titleEn": "Rediscover retained artifacts after intermediate events expire",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "JOBSETTLEMENT1"
+      ],
+      "detail": "保持成果物の登録metadataを最大100件ずつ取得する共通API・保存JSON用MCP・接続inspect操作を追加。場内容は既存取得時にハッシュ照合。空一覧は完了や未生成の証明ではなく、プロセス終了越し復元は未対応。",
+      "detailEn": "Add bounded registered metadata catalogs to browser API, saved-input MCP and live inspect operations. Existing content retrieval verifies hashes. Empty catalogs do not prove completion; restoration across process exit remains unsupported.",
+      "acceptance": "新5件を含む561件中558成功・3スキップ（73.75秒）。300イベント後の再発見と35°C点測定、実stdio過渡熱5成果物のページ/改ざん拒否、実ブラウザ一覧→取得→表示→解除後拒否を確認。ビルド・配信物26項目29.60秒・SKILL成功。",
+      "acceptanceEn": "558 passed and three skipped of561 including five new checks (73.75s). Rediscovery after300events and35degC measurement, real stdio thermal catalog paging/tamper refusal and actual browser listing/retrieval/display/released refusal verified. Build,26distribution checks29.60s andSKILL pass.",
+      "evidence": "src/browser-intermediate-store.js; src/analysis-client.js; src/browser-session.js; scripts/analysis-job-service.mjs; scripts/studio-mcp.mjs; tests/browser-artifact-catalog.test.mjs; tests/mcp-artifact-catalog.test.mjs; docs/evidence/2026-10-14-artifact-catalog-browser.json; docs/testing.md"
+    },
+    {
+      "id": "INTERMEDIATEBODY1",
+      "title": "中間点測定で部品界面の曖昧さを検出する",
+      "titleEn": "Detect ambiguous body interfaces in intermediate point measurements",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "ARTIFACTCATALOG1"
+      ],
+      "detail": "中間メッシュのnodeBodies保持と点測定bodyIndex/elementIndex指定を共通API/MCPへ伝播する。最終probeと同じく曖昧界面を黙って先頭要素へ割り当てない。",
+      "detailEn": "Preserve intermediate mesh nodeBodies and propagate bodyIndex/elementIndex selectors through API and MCP. Match final-probe ambiguity rejection instead of silently choosing the first element.",
+      "acceptance": "一致座標で温度差を持つ複数部品を使い、未指定時の曖昧点拒否・明示選択・旧単一部品互換性・実Workerのmetadata伝播を検証する。未実装。",
+      "acceptanceEn": "Verify ambiguous-point refusal, explicit selectors, existing single-body compatibility and real Worker metadata propagation with coincident nodes at different body temperatures. Not implemented.",
+      "evidence": "src/analysis.worker.js; src/intermediate-results.js; src/probe.js"
     }
   ],
   "solvers": [

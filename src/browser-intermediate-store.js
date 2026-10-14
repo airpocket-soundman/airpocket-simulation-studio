@@ -38,6 +38,12 @@ export function createBrowserIntermediateStore({maxBytes=64_000_000,hash=sha256}
    if(jobs.get(jobId)!==job)throw Error('Browser artifact was released during retrieval');
    return {schemaVersion:1,jobId,inputRevision:job.inputRevision,artifact:structuredClone(record.ref),...inspectIntermediate(snapshot,mesh,options)};
   },
+  // Catalogue only registered references; integrity is authenticated by read().
+  list(jobId,args={}){
+   if(!args||typeof args!=='object'||Array.isArray(args)||![Object.prototype,null].includes(Object.getPrototypeOf(args))||Reflect.ownKeys(args).some(key=>typeof key!=='string'||!['offset','limit'].includes(key)||!Object.getOwnPropertyDescriptor(args,key).enumerable||!('value' in Object.getOwnPropertyDescriptor(args,key))))throw Error('Invalid browser artifact catalogue page');
+   const {offset=0,limit=50}=args,job=jobs.get(jobId),total=job?.records.size??0;if(!Number.isSafeInteger(offset)||offset<0||offset>total||!Number.isInteger(limit)||limit<1||limit>100)throw Error('Invalid browser artifact catalogue page');
+   const artifacts=job?[...job.records.values()].slice(offset,offset+limit).map(record=>structuredClone(record.ref)):[];return {schemaVersion:1,jobId,inputRevision:job?.inputRevision??null,provisional:true,artifacts,total,nextOffset:offset+limit<total?offset+limit:null};
+  },
   summary(jobId){const job=jobs.get(jobId);return {retainedArtifacts:job?.records.size||0,retainedBytes:job?[...job.records.values()].reduce((n,r)=>n+r.ref.bytes,0):0,storageLimited:job?.limited||false,sharedBytes:usedBytes,maxBytes};},
   release(jobId){const job=jobs.get(jobId);if(job)for(const r of job.records.values())usedBytes-=r.ref.bytes;jobs.delete(jobId);},
   clear(){jobs.clear();usedBytes=0;}

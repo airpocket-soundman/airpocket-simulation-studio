@@ -2,9 +2,9 @@
 
 [日本語](../automation.md)
 
-`npm run mcp` starts a local stdio MCP server implementing the [2025-11-26 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
+`npm run mcp` starts a local stdio MCP server implementing the [2025-11-27 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
 
-Twenty-six tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_validate_case_bundle`, `studio_verify_measurements`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
+Twenty-seven tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_validate_case_bundle`, `studio_verify_measurements`, `studio_job_artifact`, `studio_job_artifacts`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})` normalizes STEP/STP to mm through OCCT and saves a new input JSON retaining original STEP data and CAD-face mappings. STL requires a positive explicit `scaleToMm` and follows the current outward, closed, convex single-shell and size restrictions. The input-file limit is 50 MiB. `studio_create_builtin_project({source,outputPath,name?})` creates mm-based `box` (bounds), `boxes` (boxes), fixed-size `cylinder` (kind only), `sphere` (center/radius), or `tube` (center/axis/innerRadius/outerRadius/length). It does not invent material values, supports or loads.
 
@@ -67,7 +67,7 @@ Default MCP works with saved JSON; connector mode also invokes permitted browser
 
 ## Temporary local connector (initial implementation)
 
-Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 26 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 27 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
 
 The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 69 methods (26 default tools, 28 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 70 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -242,3 +242,9 @@ Internal drain() awaits a snapshot of currently pending jobs, excluding later st
 Each view/list/event also reports releaseAllowed, true only for terminal plus settled execution. settled means executor Promise completion: adapters must settle after their own cleanup. Browser Worker.terminate() returning void does not confirm OS-thread exit. Core cannot distinguish normal Abort rejection from cleanup failure after terminal; preserve the original cancel/timeout error and report executionError:{code:"JOB_EXECUTION_REJECTED_AFTER_TERMINAL",message} separately. Service drain/closeAsync and normal-MCP-EOF waiting are added while synchronous close remains compatible.
 
 Browser analysis-client keeps active ownership and ignores late replies until void terminate completes or its thenable settles; abort is rechecked after Worker creation. Shared analysisApi.isBusy()/drainJobs()/closeJobsAsync() are added, and connector mutations check global analysis busy state. No wire methods are added. GUI run waits for terminal plus executionSettled; eight-entry history cleanup selects only releaseAllowed jobs.
+
+## Artifact catalog independent of event retention
+
+`studio_job_artifacts({jobId,offset:0,limit:50})` lists registered artifact metadata for a retained job. Limit is at most100; replies include a page and total/nextOffset without field arrays. Node service listArtifacts, shared browser analysisApi.listJobArtifacts and inspect-scoped connected `jobArtifacts({jobId,offset:0,limit:50})` expose the catalog.
+
+When events are truncated, rediscover artifactId through the catalog, then retrieve through existing studio_job_artifact/jobArtifact. Listing does not rehash files; existing retrieval verifies hashes, revisions and mesh identity. Listing/retrieval after release is refused. Same-process job/memory retention limits remain; this does not add persistent restart recovery.

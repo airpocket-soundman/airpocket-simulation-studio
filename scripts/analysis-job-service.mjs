@@ -72,6 +72,12 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const project=api.exportProject();
    return jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolve(outputPath),includeFields}});
   },
+  listArtifacts(jobId,args={}){
+   const job=jobs.get(jobId);if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['offset','limit'].includes(key)))throw Error('Invalid artifact catalog page');
+   const {offset=0,limit=50}=args,records=[...(artifacts.get(jobId)?.values()??[])];
+   if(!Number.isSafeInteger(offset)||offset<0||offset>records.length||!Number.isInteger(limit)||limit<1||limit>100)throw Error('Invalid artifact catalog page');
+   return {schemaVersion:1,jobId,inputRevision:job.inputRevision,jobState:job.state,provisional:true,artifacts:structuredClone(records.slice(offset,offset+limit)),total:records.length,nextOffset:offset+limit<records.length?offset+limit:null};
+  },
   async artifact(jobId,artifactId,options={}){
    const {job,record,snapshot}=await readArtifact(jobId,artifactId),meshRecord=record.kind==='mesh'?{record,snapshot}:await readArtifact(jobId,record.meshArtifactId);
    if(!meshRecord.snapshot.mesh||snapshot.field&&(snapshot.meshArtifact?.artifactId!==meshRecord.record.artifactId||snapshot.meshArtifact?.sha256!==meshRecord.record.sha256))throw Error('Intermediate field mesh reference is inconsistent');

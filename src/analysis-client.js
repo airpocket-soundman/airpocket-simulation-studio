@@ -43,6 +43,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
   isBusy:()=>active!==null||jobs.list().jobs.some(job=>!job.executionSettled),drainJobs:jobs.drain,
   listJobs:jobs.list,getJob:jobs.get,jobEvents:jobs.events,cancelJob:jobs.cancel,
   getJobResult(jobId){const job=jobs.get(jobId);if(job.state!=='succeeded'||!results.has(jobId))throw Error('Job result is not available');return structuredClone(results.get(jobId));},
+  listJobArtifacts(jobId,args={}){const job=jobs.get(jobId);return {...artifacts.list(jobId,args),inputRevision:job.inputRevision,jobState:job.state};},
   getJobArtifact(jobId,artifactId,options={}){jobs.get(jobId);return artifacts.read(jobId,artifactId,options);},
   releaseJob(jobId){const result=jobs.release(jobId);results.delete(jobId);artifacts.release(jobId);return result;},closeJobs(){jobs.close();results.clear();artifacts.clear();},
   async closeJobsAsync(){const ids=jobs.list({limit:100}).jobs.map(job=>job.jobId);jobs.close();const drained=await jobs.drain();for(const jobId of ids){results.delete(jobId);artifacts.release(jobId);}return drained;}
