@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T23:35:23.413752+00:00",
+  "updatedAt": "2026-10-14T09:00:00+09:00",
   "release": {
     "version": "v0.38",
     "date": "2026-10-14",
@@ -1070,6 +1070,21 @@
       "detailEn": "Bundle 61 entries centered on PP, HDPE/LDPE and ABS. Distinguish sources, standards, missing values, user assumptions and overrides; verify selection, solving, archives and MCP lookup.",
       "acceptance": "公式PDFの値と単位、含有率の区別、未掲載値を推定しないこと、等方近似とポアソン比の明示、保存・日英UI・公開版を検証。",
       "acceptanceEn": "Verify official values/units, filler contents, no invented missing data, explicit isotropy/Poisson assumptions, archives, JP/EN UI and deployment.",
+      "evidence": "src/polymer-catalog.json; tests/material-catalog.test.mjs; docs/polymer-library.md"
+    },
+    {
+      "id": "MATCAT2",
+      "title": "エンジニアリング樹脂と比較選択を拡充",
+      "titleEn": "Expand engineering polymers and comparison selection",
+      "status": "checking",
+      "category": "材料",
+      "depends": [
+        "MATCAT1"
+      ],
+      "detail": "PBT・PET・PA6・PEEK・PC/ABSの30件を追加し計91件。比較行から選択、暫定資料の表示、ISO密度換算、5樹脂の解析・出典保存を検証。",
+      "detailEn": "Add 30 PBT/PET/PA6/PEEK/PC/ABS records for 91 total, row selection, preliminary-source labels, ISO density conversion and five-family solve/archive references.",
+      "acceptance": "一次資料と値・単位・規格を照合。暫定版と未掲載条件を明示し、比較選択・日英・保存・公開版を検証。",
+      "acceptanceEn": "Verify primary values, units, standards, preliminary labels and missing conditions, comparison selection, JP/EN, archives and deployment.",
       "evidence": "src/polymer-catalog.json; tests/material-catalog.test.mjs; docs/polymer-library.md"
     }
   ],

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "2026-10-14.1",
+  "version": "2026-10-14.2",
   "retrievedAt": "2026-10-14",
   "description": "Factual property summary from primary published sources. Full source documents are linked, not redistributed.",
   "materials": [
@@ -3623,6 +3623,1866 @@
         "specificHeat"
       ],
       "notes": "Density is specified at 23 degC. Modulus test temperature/rate and conditioning are not listed. Typical injection-molding grade values."
+    },
+    {
+      "id": "rtp-1000",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1000",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "unfilled",
+        "contentPercent": 0,
+        "basis": "none"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 2758000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 59000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 2758000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 83000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1310.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0010-rtp-1000.pdf/",
+        "document": "pbt-0010-rtp-1000.pdf",
+        "revision": "28 Mar 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "17d4781c4a741c4bfb8be2d36211c4ad099e761749ef9a3541ee54c1faa7ce35",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1001",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1001",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 10.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 4826000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 79000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 4137000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 131000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1380.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0020-rtp-1001.pdf/",
+        "document": "pbt-0020-rtp-1001.pdf",
+        "revision": "7 Jul 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "5238633fbd2ece1284c474df57e18fd89cd3c010c01f47fe1fc388d5afcc6a74",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1002",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1002",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 15.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 5516000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 93000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 4826000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 145000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1410.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0030-rtp-1002.pdf/",
+        "document": "pbt-0030-rtp-1002.pdf",
+        "revision": "7 Jul 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "f990d03f40da3a5965079b874ba7d51063b6b866ded3322c653c3fdc0b18ed0f",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1003",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1003",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 20.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 6895000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 103000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 5516000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 159000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1450.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0040-rtp-1003.pdf/",
+        "document": "pbt-0040-rtp-1003.pdf",
+        "revision": "7 Jul 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "57dda7a9c8ff8fab92860ff25768a577d3096d39122e119bb33fda4febeb10cc",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1005",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1005",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 9653000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 124000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 8964000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 190000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1530.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0050-rtp-1005.pdf/",
+        "document": "pbt-0050-rtp-1005.pdf",
+        "revision": "20 May 2015",
+        "retrievedAt": "2026-10-14",
+        "sha256": "f7c4a1fabc59caa5813b21a35ad261b63e0ca1886aa2c27d73bb2ef770f56e52",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1007",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1007",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 40.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 13100000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 138000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 11722000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 214000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1630.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0060-rtp-1007.pdf/",
+        "document": "pbt-0060-rtp-1007.pdf",
+        "revision": "15 Feb 2006",
+        "retrievedAt": "2026-10-14",
+        "sha256": "29a86699b4e107b0ed397c386eb6ec5e736069d93197389acb18bf859ac5d804",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1009",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1009",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 50.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 15169000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 138000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 13790000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 221000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1720.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0080-rtp-1009.pdf/",
+        "document": "pbt-0080-rtp-1009.pdf",
+        "revision": "8 Nov 2007",
+        "retrievedAt": "2026-10-14",
+        "sha256": "ad290217c20d497a8be3e60d5e116a3abe0d0b2a0ee82fe5abe95e5dac80178e",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-81005",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 81005",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 10342000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 138000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 9653000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 214000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1530.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0090-vlf-81005.pdf/",
+        "document": "pbt-0090-vlf-81005.pdf",
+        "revision": "2 Mar 2018",
+        "retrievedAt": "2026-10-14",
+        "sha256": "dc6af9211369e320adf8b841c0290b9085090a134fb9d0e46a303b6589a47b1c",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-81007",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 81007",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 40.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 13100000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 145000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 12411000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 221000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1630.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0100-vlf-81007.pdf/",
+        "document": "pbt-0100-vlf-81007.pdf",
+        "revision": "2 Mar 2018",
+        "retrievedAt": "2026-10-14",
+        "sha256": "d5d3871c6db57a2528f62b4ac8dd8ef48fffadb4d77c483ea8173cb01f9940af",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-81009",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 81009",
+      "family": "PBT",
+      "polymer": "PBT",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 50.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 16203000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 115000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 14755000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 180000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1720.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pbt-0110-vlf-81009.pdf/",
+        "document": "pbt-0110-vlf-81009.pdf",
+        "revision": "26 Apr 2019",
+        "retrievedAt": "2026-10-14",
+        "sha256": "35d546fd0b3d653e42a280497755befc35db9c09489ba51976a2d2cb5268cc58",
+        "hashKind": "pdf",
+        "status": "preliminary"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows. Manufacturer labels this source a preliminary datasheet."
+    },
+    {
+      "id": "rtp-1105-blk",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1105 BLK",
+      "family": "PET",
+      "polymer": "PET",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 11032000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 152000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 9653000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 221000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1560.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pet-0005-rtp-1105-blk.pdf/",
+        "document": "pet-0005-rtp-1105-blk.pdf",
+        "revision": "24 Feb 2006",
+        "retrievedAt": "2026-10-14",
+        "sha256": "08389111a56d40d1966ddacd53f7508b76e5ce40ac96aaf819d4fe3d608c0276",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-1108-blk",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 1108 BLK",
+      "family": "PET",
+      "polymer": "PET",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 45.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 16548000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 179000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 13790000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 265000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1680.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pet-0010-rtp-1108-blk.pdf/",
+        "document": "pet-0010-rtp-1108-blk.pdf",
+        "revision": "23 Oct 2006",
+        "retrievedAt": "2026-10-14",
+        "sha256": "8fafc5698fcb2a1d905970647b1b6bb92da26e6113a3a141d5de5c3ff97836a3",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-202-a-rc-hs-black",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 202 A RC HS Black",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 15.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 5500000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "tensileStrength": {
+          "value": 130000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "flexuralModulus": {
+          "value": 5000000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "flexuralStrength": {
+          "value": 200000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "density": {
+          "value": 1220.0,
+          "unit": "kg/m3",
+          "method": "ISO 1183",
+          "origin": "g-per-cm3-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0030-rtp-202-a-rc-hs.pdf/",
+        "document": "pa-6-0030-rtp-202-a-rc-hs.pdf",
+        "revision": "2 Apr 2020",
+        "retrievedAt": "2026-10-14",
+        "sha256": "28a346fc87ff38c98a6efe7efdb7957a0fbf185de3d2a304efc056d571f4b0fc",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-205-a-rc-hs-black",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 205 A RC HS Black",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 9800000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "tensileStrength": {
+          "value": 180000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "flexuralModulus": {
+          "value": 9000000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "flexuralStrength": {
+          "value": 250000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "density": {
+          "value": 1350.0,
+          "unit": "kg/m3",
+          "method": "ISO 1183",
+          "origin": "g-per-cm3-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0040-rtp-205-a-rc-hs.pdf/",
+        "document": "pa-6-0040-rtp-205-a-rc-hs.pdf",
+        "revision": "7 Dec 2010",
+        "retrievedAt": "2026-10-14",
+        "sha256": "2b4a47b125700154892c67b4c27878807f7d82b456125b9fd07a7a6d6ccd66be",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-206-a-rc-hs-black",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 206 A RC HS Black",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 35.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 12000000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "tensileStrength": {
+          "value": 190000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "flexuralModulus": {
+          "value": 9800000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "flexuralStrength": {
+          "value": 260000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "density": {
+          "value": 1400.0,
+          "unit": "kg/m3",
+          "method": "ISO 1183",
+          "origin": "g-per-cm3-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0050-rtp-206-a-rc-hs.pdf/",
+        "document": "pa-6-0050-rtp-206-a-rc-hs.pdf",
+        "revision": "17 Dec 2010",
+        "retrievedAt": "2026-10-14",
+        "sha256": "e190ddd278453a80e40cc20d07cd013fa0c456972274ab7697d59052a7cab9da",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-207-a-rc-hs-black",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 207 A RC HS Black",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 40.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 13000000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "tensileStrength": {
+          "value": 200000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "flexuralModulus": {
+          "value": 11000000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "flexuralStrength": {
+          "value": 270000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "density": {
+          "value": 1460.0,
+          "unit": "kg/m3",
+          "method": "ISO 1183",
+          "origin": "g-per-cm3-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0060-rtp-207-a-rc-hs-black.pdf/",
+        "document": "pa-6-0060-rtp-207-a-rc-hs-black.pdf",
+        "revision": "7 Dec 2010",
+        "retrievedAt": "2026-10-14",
+        "sha256": "af80f77363488dcf73af7e1bc4e7595e46dd47daaafa0588a0d3a787d7fd213c",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-208-a-rc-hs-black",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 208 A RC HS Black",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 45.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 14000000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "tensileStrength": {
+          "value": 205000000.0,
+          "unit": "Pa",
+          "method": "ISO 527"
+        },
+        "flexuralModulus": {
+          "value": 12000000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "flexuralStrength": {
+          "value": 275000000.0,
+          "unit": "Pa",
+          "method": "ISO 178"
+        },
+        "density": {
+          "value": 1520.0,
+          "unit": "kg/m3",
+          "method": "ISO 1183",
+          "origin": "g-per-cm3-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0070-rtp-208-a-rc-hs.pdf/",
+        "document": "pa-6-0070-rtp-208-a-rc-hs.pdf",
+        "revision": "25 Jan 2011",
+        "retrievedAt": "2026-10-14",
+        "sha256": "9bfa19ceba98f4b0fc3f81fcc09cd3398b81a9941cb5dc55695e0ef91c71badd",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-200-a",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 200 A",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "unfilled",
+        "contentPercent": 0,
+        "basis": "none"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 2758000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 76000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 2965000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 110000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1130.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0080-rtp-200-a.pdf/",
+        "document": "pa-6-0080-rtp-200-a.pdf",
+        "revision": "10 May 2013",
+        "retrievedAt": "2026-10-14",
+        "sha256": "a6eebd80663e71273c765e60f4b392df1c293cffddd218699337d129f0df2f72",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-80207-a",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 80207 A",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 40.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 13100000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 207000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 11722000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 317000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1450.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0090-vlf-80207-a.pdf/",
+        "document": "pa-6-0090-vlf-80207-a.pdf",
+        "revision": "28 Dec 2004",
+        "retrievedAt": "2026-10-14",
+        "sha256": "b3f2477568a9f6d7600dab5f8bec44d28fc8696d853f673e9a061fc2de28716a",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-80209-a",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 80209 A",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 50.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 17927000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 228000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 16548000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 331000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1560.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0100-vlf-80209-a.pdf/",
+        "document": "pa-6-0100-vlf-80209-a.pdf",
+        "revision": "4 May 2006",
+        "retrievedAt": "2026-10-14",
+        "sha256": "409a3229071226f6288363a73d47a59ad31649353114ddb9c867bd95a9b10864",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "vlf-80211-a",
+      "manufacturer": "RTP Company",
+      "grade": "VLF 80211 A",
+      "family": "PA6",
+      "polymer": "PA6",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "longGlassFiber",
+        "contentPercent": 60.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 21374000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 228000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 20685000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 352000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1690.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pa-6-0110-vlf-80211-a.pdf/",
+        "document": "pa-6-0110-vlf-80211-a.pdf",
+        "revision": "24 Aug 2018",
+        "retrievedAt": "2026-10-14",
+        "sha256": "d23865623a45446d8cac11940de9435cc3da64f7882a145904b5a71cf8e6f64e",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2200-lf",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2200 LF",
+      "family": "PEEK",
+      "polymer": "PEEK",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "unfilled",
+        "contentPercent": 0,
+        "basis": "none"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 3792000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 93000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 3792000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 145000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1300.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/peek-0010-rtp-2200-lf.pdf/",
+        "document": "peek-0010-rtp-2200-lf.pdf",
+        "revision": "27 Sep 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "d84cc654cc8be2430423a616b817cf1241500b1e35967402f773102b2070a578",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2201-lf",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2201 LF",
+      "family": "PEEK",
+      "polymer": "PEEK",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 10.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 6206000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 124000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 5516000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 193000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1370.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/peek-0020-rtp-2201-lf.pdf/",
+        "document": "peek-0020-rtp-2201-lf.pdf",
+        "revision": "2 Feb 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "b0197a5dbea1bd7c1f99f4c3ecdfba1bc49e4e70bdb6bdb4e624b7c4500a25ff",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2203-lf",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2203 LF",
+      "family": "PEEK",
+      "polymer": "PEEK",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 20.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 8964000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 152000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 8274000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 228000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1440.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/peek-0040-rtp-2203-lf.pdf/",
+        "document": "peek-0040-rtp-2203-lf.pdf",
+        "revision": "2 Feb 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "86fde3ce43a9ed7be5ba05ca1ac9617381ac1953d39e6f4657c1a58a1327dd05",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2205-lf",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2205 LF",
+      "family": "PEEK",
+      "polymer": "PEEK",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 11722000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 172000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 11032000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 255000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1520.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/peek-0070-rtp-2205-lf.pdf/",
+        "document": "peek-0070-rtp-2205-lf.pdf",
+        "revision": "2 Feb 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "7db098670d67783de3dd751b2fcb8c3c7170a60baa73803214d269f218c818b8",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2207-lf",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2207 LF",
+      "family": "PEEK",
+      "polymer": "PEEK",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 40.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 15169000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 186000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 13790000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 290000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1610.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/peek-0090-rtp-2207-lf.pdf/",
+        "document": "peek-0090-rtp-2207-lf.pdf",
+        "revision": "2 Feb 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "1fdedbafc50b601dbba3ee1db2af3080c676230956c1de11ae121ee81f25348e",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2500-a",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2500 A",
+      "family": "PC/ABS",
+      "polymer": "PC/ABS",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "unfilled",
+        "contentPercent": 0,
+        "basis": "none"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 2758000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 61000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 2758000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 100000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1150.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pc-abs-0010-rtp-2500-a.pdf/",
+        "document": "pc-abs-0010-rtp-2500-a.pdf",
+        "revision": "11 Oct 2019",
+        "retrievedAt": "2026-10-14",
+        "sha256": "6123618b06f14bcf99a13c43a79405a6d44ac3e63ac3dcb5a6c5ff5783c0f994",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2501",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2501",
+      "family": "PC/ABS",
+      "polymer": "PC/ABS",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 10.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 4137000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 79000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 4137000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 131000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1210.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pc-abs-0020-rtp-2501.pdf/",
+        "document": "pc-abs-0020-rtp-2501.pdf",
+        "revision": "3 Dec 2014",
+        "retrievedAt": "2026-10-14",
+        "sha256": "21a458b8c209d1e13755d2a7532cd2c97c3fd08852a48400cd6ae9967790f99e",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2503",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2503",
+      "family": "PC/ABS",
+      "polymer": "PC/ABS",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 20.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 6895000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 103000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 6550000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 165000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1290.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pc-abs-0030-rtp-2503.pdf/",
+        "document": "pc-abs-0030-rtp-2503.pdf",
+        "revision": "11 Jul 2005",
+        "retrievedAt": "2026-10-14",
+        "sha256": "63e5124320722166b9060aaef56c80594019af73df01f74f713c519de9b04e80",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
+    },
+    {
+      "id": "rtp-2505",
+      "manufacturer": "RTP Company",
+      "grade": "RTP 2505",
+      "family": "PC/ABS",
+      "polymer": "PC/ABS",
+      "kind": "manufacturer-tds",
+      "filler": {
+        "type": "glassFiber",
+        "contentPercent": 30.0,
+        "basis": "not-stated"
+      },
+      "properties": {
+        "tensileModulus": {
+          "value": 9998000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "tensileStrength": {
+          "value": 117000000.0,
+          "unit": "Pa",
+          "method": "ASTM D638"
+        },
+        "flexuralModulus": {
+          "value": 8964000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "flexuralStrength": {
+          "value": 172000000.0,
+          "unit": "Pa",
+          "method": "ASTM D790"
+        },
+        "density": {
+          "value": 1370.0,
+          "unit": "kg/m3",
+          "method": "ASTM D792",
+          "origin": "specific-gravity-times-1000"
+        }
+      },
+      "conditions": {
+        "specimen": "injection-molded",
+        "temperatureC": null,
+        "rateMmMin": null,
+        "conditioning": "not-stated"
+      },
+      "source": {
+        "url": "https://www.rtpcompany.com/mp-files/pc-abs-0040-rtp-2505.pdf/",
+        "document": "pc-abs-0040-rtp-2505.pdf",
+        "revision": "4 Oct 2016",
+        "retrievedAt": "2026-10-14",
+        "sha256": "70753745120db9f5de2693e96e54db1453ac3517e3753eb8736593673a115b7f",
+        "hashKind": "pdf",
+        "status": "typical"
+      },
+      "missing": [
+        "poissonRatio",
+        "conductivity",
+        "specificHeat"
+      ],
+      "notes": "Typical molded specimen values. Temperature, rate, directional values and conditioning are not stated in these property rows."
     }
   ]
 }

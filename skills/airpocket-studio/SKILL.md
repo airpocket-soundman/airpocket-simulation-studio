@@ -17,4 +17,4 @@ Use documented browser tools for live visual operations. MCP operates on saved l
 
 Read `docs/automation.md` and `docs/visual-export.md` in the checkout for setup and limits. Preserve material provenance. Do not infer measured S-N curves or strengths from names. Distinguish solver residuals from physical accuracy and finite-box Stokes drag from infinite-domain sphere references.
 
-- `studio_material_catalog`: search 61 preinstalled polymer references by family/filler/content or retrieve by id. Read `docs/polymer-library.md`; distinguish published tensile modulus from flexural modulus, user-assumed Poisson ratio, missing data and experimental formulations. Do not present the displayed 0.35 as a published measurement.
+- `studio_material_catalog`: search 91 preinstalled polymer references by family/filler/content or retrieve by id. Read `docs/polymer-library.md`; distinguish published tensile modulus from flexural modulus, user-assumed Poisson ratio, missing data and experimental formulations. Do not present the displayed 0.35 as a published measurement.
