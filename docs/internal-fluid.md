@@ -29,3 +29,7 @@ OCCのCAD差分を使い、流体を元の部品の単純な外接箱として�
 結果の `mesh.domainSelection` に `ports`、`cadVolumeMm3`、認識した `channel` を保存。ケース集の読込では端面・形状・元の設定の一致を検査します。UI経由とAPI経由で同じメッシュ・ソルバーを使います。
 
 参照: [Gmsh公式API — isInside / OCC / getBoundary](https://gmsh.info/doc/texinfo/)。境界層メッシュ、任意の開口閉鎖、一般3D流体と共役熱伝達は別タスクです。
+
+## 明示設定を保つAPI経路
+
+window.fluidDomainApi.prepareでmode:internalと箱・seed・portPlanesを指定し、meshジョブの成功とexecutionSettledを確認してapplyMeshで表示surfaceを適用します。既存domainの元solidも再利用できます。GUIサンプルの自動層流切替と異なり、このAPIはstudy.kind:fluidDomainを維持し、物性・条件・選択・根拠・intentをクリアします。channel認識の要約だけを根拠に流量計算へ自動昇格しません。[操作契約](automation.md)に版・メッシュ照合の詳細を示します。

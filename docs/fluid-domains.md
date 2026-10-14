@@ -15,3 +15,7 @@ STEPまたは内蔵部品を読み込み、「部品から囲いまでの余白�
 球形の外部空気領域は[外部音響](exterior-acoustics.md)でも利用できます。一般3D流れは引き続き未対応です。
 
 [内部領域のCAD抽出と端面ポート](internal-fluid.md)。箱のX/Y/Z平面で開口を閉じ、指定点を含むCAD体積を取り出せます。一般3D流体の計算と任意方向の開口閉鎖は未対応です。
+
+## 版付き共通API/MCP
+
+共有window.fluidDomainApi.prepareと接続prepareFluidDomainでsourceを準備し、startJobのmeshを実行してから成功・executionSettledを確認しapplyMesh/applyFluidDomainMeshでsurfaceを表示入力へ反映できます。新入力の物性・条件・選択・根拠・intentはクリアし、studyはfluidDomainのままです。既存GUIの一括サンプル設定とは別に、流体・音響の物性や条件は明示的に設定してください。[操作契約](automation.md)を参照。

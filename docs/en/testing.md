@@ -315,3 +315,13 @@ Under Node v24.11.1, the full suite passed607 of610 tests with three skips and z
 Real MCP imported STEP exceeding64 KiB across multiple chunks through actual OCCT and verified explicit STL scale25.4. The local Codex in-app browser imported a15,416-byte STEP, yielding10×10×40 mm,12 triangles and six faces. Returned input revision matched inspect; repeated commit returned identical results. Saved evidence includes the [machine-readable record](../evidence/2026-10-15-browser-input-import.json) and [screenshot](../evidence/2026-10-15-browser-input-import.jpg).
 
 The first UI check lost/reset its session during test-driven reload; pairing/import succeeded after the full suite ended. This is not treated as an application import defect or pre-success evidence. The known Node24/V8 fatal remains unresolved; this passing suite does not prove resolution. Arbitrary50 MiB STEP, maximum retention, peak heap and public HTTPS are outside this evidence.
+
+## 2026-10-15: shared fluid-domain API/MCP
+
+Under Node v24.11.1, the full suite passed615 of618 tests with three skips and zero failures in74,651.3248 ms. Eight new targets cover six core, one session and one real MCP test. Counts remain27/29 tools with77 live methods. Build passed; all26 distribution checks passed in27.75 seconds. Specialist SKILL validation also passed.
+
+Real MCP completed two actual mesh jobs: a1 mm solid with1 mm exterior padding in a3 mm box, and an internal tube (outer radius3, inner2, length8 mm; enclosure[-3,-4,-3,6,8,6], origin seed, ports1/4). Internal metadata had two ports/channel axis1 and retained study.kind:fluidDomain. Material/flow settings were not inferred.
+
+The local Codex in-app browser used a10 mm cube with5 mm padding/20 mm enclosure, yielding176 nodes,494 tetrahedra and7,000.000000000008 mm³. Applying the successful execution-settled mesh created a sourceHash-tagged surface; returned/next-inspect revisions, display name and fluidDomain kind matched. Saved evidence includes the [machine-readable record](../evidence/2026-10-15-browser-fluid-domain.json) and [screenshot](../evidence/2026-10-15-browser-fluid-domain.jpg).
+
+After the full run, main-only completion/volume/mesh-summary display was added and checked by syntax validation and an actual IAB rerun. Numerical core was unchanged, but the full-suite result does not include that final display addition. Known Node24/V8 failure remains unresolved; passing does not prove resolution. Public HTTPS, general3D flow accuracy, every shape and maximum capacity are outside this evidence.

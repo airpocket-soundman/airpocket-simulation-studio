@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T15:07:19.454723Z",
+  "updatedAt": "2026-10-14T15:14:54.311582Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1732,6 +1732,23 @@
       "acceptance": "新22試験を含む全体610件中607成功・3skip（Node24.11.1、84.61秒）。実MCPで複数chunk STEP/OCCTと25.4倍STL、実ブラウザでSTEP10×10×40mmと版一致・再確定を確認。ビルド・配信物26項目29.40秒・SKILL成功。50MiB/100MB stagingはピークヒープや15秒完了保証ではない。既知Node24 V8停止は未解決。",
       "acceptanceEn": "Full suite:607passed/3skipped of610 including22new tests on Node24.11.1 (84.61s). Real MCP covers multi-chunk STEP/OCCT and25.4-scaled STL; actual browser verifies10x10x40mm STEP, revision agreement and repeated commit. Build,26distribution checks29.40s andSKILL pass. Staging limits are not peak-heap or15-second completion guarantees. Known Node24 V8 fatal remains unresolved.",
       "evidence": "src/input-import-operations.js; src/input-import-transfer.js; src/cad-import-client.js; src/browser-session.js; tests/input-import-operations.test.mjs; tests/input-import-transfer.test.mjs; tests/cad-import-client.test.mjs; tests/browser-input-import-session.test.mjs; tests/mcp-input-import.test.mjs; docs/evidence/2026-10-15-browser-input-import.json; docs/testing.md"
+    },
+    {
+      "id": "FLUIDDOMAINAPI1",
+      "title": "LLMから流体領域を準備しメッシュ結果を入力へ適用する",
+      "titleEn": "Prepare fluid domains and apply completed mesh jobs through LLM APIs",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "BROWSERBUILTIN1",
+        "BROWSERBRIDGE1",
+        "GUIJOBS1"
+      ],
+      "detail": "外部箱/球と明示した内部領域の共通準備API、版と元CADと終了済みmeshjobを照合するsurface適用APIを追加。live編集2操作を公開し、ポート情報を返す。解析モデル・物性を自動選択しない。",
+      "detailEn": "Expose shared preparation for exterior boxes/spheres and explicit internal domains, plus surface application gated by input revision, original CAD and settled mesh jobs. Add two live edit methods and port metadata without automatically selecting physics or material values.",
+      "acceptance": "新8試験を含む全体618件中615成功・3skip（Node24.11.1、74.65秒）。実MCP外部箱/内部管の2meshjobで適用とポート2面・軸1を確認。実ブラウザで176節点494要素・差引き体積7000mm³、入力版と表示を確認。ビルド・配信物26項目27.75秒・SKILL成功。メッシュのみで一般流体ソルバー追加ではない。公開HTTPS・最大規模は未検証、既知Node24/V8停止は未解決。",
+      "acceptanceEn": "Full suite:615passed/3skipped of618 including eight new tests on Node24.11.1 (74.65s). Two real MCP mesh jobs verify exterior box and internal tube application, two ports and axis1. Actual browser verifies176nodes/494elements,7000mm3 subtraction volume, input revision and display. Build,26distribution checks27.75s andSKILL pass. Mesh preparation is not a new general fluid solver. Public HTTPS and maximum scale remain unverified; known Node24/V8 failure remains unresolved.",
+      "evidence": "src/fluid-domain-operations.js; src/main.js; src/browser-session.js; tests/fluid-domain-operations.test.mjs; tests/browser-fluid-domain-session.test.mjs; tests/mcp-fluid-domain.test.mjs; docs/evidence/2026-10-15-browser-fluid-domain.json; docs/testing.md"
     }
   ],
   "solvers": [

@@ -1,0 +1,179 @@
+{
+  "environment": "Actual local IAB/native browser Worker and stdio MCP/HTTP. Built-in solid prepared as exterior fluid domain, meshed and applied using semantic APIs.",
+  "beforeRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+  "created": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+    "revision": "sha256:9d1f0a023efd91207752a02d062d11af99519d5077d19ecf49975ae59c11395d",
+    "summary": {
+      "loaded": true,
+      "name": "LLM solid box",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    }
+  },
+  "prepared": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:9d1f0a023efd91207752a02d062d11af99519d5077d19ecf49975ae59c11395d",
+    "revision": "sha256:b177f587daf82b925afbdf0543fa1276f59e4fdf6b52d84b34fe6e06985961f3",
+    "summary": {
+      "loaded": true,
+      "name": "LLM exterior fluid domain",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    },
+    "prepared": true,
+    "meshGenerated": false,
+    "studyKind": "fluidDomain"
+  },
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "95416855-b610-4618-9652-6283df1c5ecc",
+    "inputRevision": "sha256:b177f587daf82b925afbdf0543fa1276f59e4fdf6b52d84b34fe6e06985961f3",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "mesh",
+    "origin": "api",
+    "startedAt": 1791990849705,
+    "updatedAt": 1791990850193,
+    "lastSequence": 6,
+    "firstAvailableSequence": 1,
+    "result": {
+      "mesh": {
+        "nodeCount": 176,
+        "elementCount": 494,
+        "volumeMm3": 7000.000000000008,
+        "minVolumeMm3": 4.818016275033545,
+        "minQuality": 0.36965833860884634,
+        "qualityHistogram": [
+          0,
+          1,
+          10,
+          106,
+          377
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 1,
+        "retainedBytes": 12361,
+        "storageLimited": false,
+        "sharedBytes": 12361,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "applied": {
+    "schemaVersion": 1,
+    "previousRevision": "sha256:b177f587daf82b925afbdf0543fa1276f59e4fdf6b52d84b34fe6e06985961f3",
+    "revision": "sha256:2fe99fe55da776fb552cfb7fea2b93abfa32c0db074b88628f472adac5e1b60f",
+    "summary": {
+      "loaded": true,
+      "name": "LLM exterior fluid domain",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "units": {
+      "geometry": "mm"
+    },
+    "applied": true,
+    "jobId": "95416855-b610-4618-9652-6283df1c5ecc",
+    "meshSummary": {
+      "nodeCount": 176,
+      "elementCount": 494,
+      "volumeMm3": 7000.000000000008,
+      "minVolumeMm3": 4.818016275033545,
+      "minQuality": 0.36965833860884634,
+      "qualityHistogram": [
+        0,
+        1,
+        10,
+        106,
+        377
+      ]
+    },
+    "domainSelection": {
+      "mode": "exterior",
+      "portCount": 0,
+      "ports": [],
+      "portsTruncated": false,
+      "wallFaceCount": 12
+    },
+    "studyKind": "fluidDomain"
+  },
+  "geometry": {
+    "schemaVersion": 1,
+    "units": {
+      "coordinates": "mm",
+      "area": "mm2"
+    },
+    "basis": "display-tessellation",
+    "meshCount": 1,
+    "triangleCount": 344,
+    "faceCount": 12,
+    "boundsMm": {
+      "min": [
+        -5,
+        -5,
+        -5
+      ],
+      "max": [
+        15,
+        15,
+        15
+      ],
+      "size": [
+        20,
+        20,
+        20
+      ]
+    },
+    "faceIdentityScope": "display-mesh-revision",
+    "persistentCadFaceIds": false,
+    "facePagesRequireMeshIndex": true
+  },
+  "validation": {
+    "runtime": "Node24.11.1",
+    "fullSuite": {
+      "tests": 618,
+      "passed": 615,
+      "skipped": 3,
+      "failed": 0,
+      "durationMs": 74651.3248
+    },
+    "newTests": 8,
+    "distributionChecks": 26,
+    "distributionSeconds": 27.75,
+    "skillValid": true,
+    "knownV8FailureResolved": false,
+    "postSuitePresentationChange": "Main-only completion status and mesh summary display were added after the full numerical suite; syntax and actual browser mesh workflow were verified again."
+  }
+}

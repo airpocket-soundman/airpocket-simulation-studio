@@ -15,3 +15,7 @@ Browser API: `await analysisApi.createExteriorDomain(paddingMm)` and `await anal
 Spherical exterior air domains also support [radiation acoustics](exterior-acoustics.md). General 3D flow remains unsupported.
 
 [Internal CAD extraction and cap ports](internal-fluid.md) uses X/Y/Z box planes and a seed-selected CAD volume. General 3D flow and arbitrarily oriented caps remain unsupported.
+
+## Revision-bound shared API/MCP
+
+Use shared window.fluidDomainApi.prepare/connected prepareFluidDomain, run startJob mesh, then after success plus executionSettled apply the surface through applyMesh/applyFluidDomainMesh. New inputs clear properties/conditions/selection/provenance/intent and retain fluidDomain study. Unlike existing all-in-one GUI examples, configure fluid/acoustic properties and conditions explicitly. See the [operation contract](automation.md).

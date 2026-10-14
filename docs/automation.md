@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは75操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは77操作を公開します（通常27ツール、接続モード29ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -292,3 +292,13 @@ knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/seve
 候補を事前検証し、ブラウザの正規化と新入力版計算を済ませてからCASで適用します。既存の物性・条件は継承せず、通常の新規入力と同じく現在結果を無効化します。ケース・ビュー・測定・印刷の別ストアは維持します。入力変更・busy・失効・release・切断により遅いパース結果の確定を拒否します。
 
 接続の取込transferは所有する接続だけが利用でき、他sessionからの利用は拒否します。命令期限は15秒で、任意の50 MiB STEPがその時間内に完了する保証はありません。取消中はCAD Workerの終了処理までlockを保持し、void terminateはOSスレッド終了の証明とは扱いません。
+
+## 流体領域の準備とメッシュの表示適用
+
+共有`window.fluidDomainApi.prepare(args)`と編集権限の`prepareFluidDomain`は`{expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,name?}`を受け取ります。modeはexterior/internal。外部は元solidから作り、enclosure:"box"|"sphere"とpaddingMmで囲いを指定します。内部は明示したenclosure:[x,y,z,dx,dy,dz]、seedPoint:[x,y,z]、portPlanesを使い、既存domainから元solidを取り出すこともできます。座標はmm。元形状はSTEPまたは対応組込みsolidで、STLは対象外です。
+
+新しい入力としてstudy.kind:"fluidDomain"を設定し、物性・条件・選択・根拠・解析intentをクリアします。元設定を流体へ推測で移しません。通常の新入力と同様に現在結果を無効化し、別保存の履歴は維持します。現在の入力版・busy・失効を検査します。
+
+更新された入力版でstartJobのmeshを実行し、成功かつexecutionSettledを確認後、`window.fluidDomainApi.applyMesh({expectedRevision,jobId})`または編集権限の`applyFluidDomainMesh`へ渡します。入力版とcanonical入力、source fingerprint、meshを検証し、sourceHash付きgmsh-surfaceを表示入力へ適用。studyはfluidDomainを維持し、流体物性や解析種別を自動推定しません。応答のdomainSelectionはports最大100件/truncated、壁件数とchannelなどの有界な要約です。反映後は新しい入力版を取得してください。
+
+内部ポート番号は0/1/2がX/Y/Z最小、3/4/5が最大です。軸平行の箱面と単一のseed連結領域という既存制限を維持します。一般3D流体・任意方向の開口蓋・境界層・乱流の追加ではありません。詳細は[外部領域](fluid-domains.md)と[内部領域](internal-fluid.md)を参照。

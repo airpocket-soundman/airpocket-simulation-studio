@@ -29,3 +29,7 @@ Use `sourceModel: {kind:'fluidDomain', mode:'internal', solid: originalCAD, encl
 `mesh.domainSelection` retains `ports`, `cadVolumeMm3` and recognized `channel`. Archive imports check ports/geometry against input. UI and API share the same mesh/solver.
 
 Reference: [Gmsh official API — isInside / OCC / getBoundary](https://gmsh.info/doc/texinfo/). Boundary layers, arbitrary caps, general 3D flow and conjugate heat transfer are separate tasks.
+
+## Explicit-configuration API route
+
+Call window.fluidDomainApi.prepare with mode:internal and explicit box/seed/portPlanes, run mesh to success plus executionSettled, then applyMesh to display its surface. Existing domains may reuse their original solid. Unlike automatic channel switching in GUI examples, this API keeps study.kind:fluidDomain and clears properties/conditions/selection/provenance/intent. Channel summary metadata alone does not automatically enable flow solving. See the [operation contract](automation.md) for revision/mesh checks.

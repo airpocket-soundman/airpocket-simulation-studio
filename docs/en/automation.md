@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 75 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 77 methods (27 default tools, 29 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -292,3 +292,13 @@ Each file is capped at50 MiB; staging retains at most100,000,000 bytes/four tran
 Candidate validation, browser normalization and new input-revision computation precede CAS commit. Previous material/conditions are not inherited; current results are invalidated like new input loading. Separate case/view/measurement/print stores remain. Intervening inputs, busy state, revocation/expiry, release or disconnect prevent late parser results from committing.
 
 Only the owning session may use its import transfers; other sessions are refused. The command deadline is15 seconds, without guaranteeing arbitrary50 MiB STEP completes within it. Cancellation retains the lock through CAD Worker termination handling; void terminate is not proof of OS-thread exit.
+
+## Prepare fluid domains and apply mesh surfaces
+
+Shared window.fluidDomainApi.prepare(args) and edit-scoped prepareFluidDomain accept {expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,name?}. Mode is exterior/internal. Exterior requires an original solid with enclosure:"box"|"sphere" and paddingMm. Internal uses explicit enclosure:[x,y,z,dx,dy,dz], seedPoint:[x,y,z] and portPlanes, and may unwrap an existing domain to its original solid. Coordinates are mm. Sources are STEP or supported built-in solids, excluding STL.
+
+As new inputs, preparation sets study.kind:"fluidDomain" and clears material properties, conditions, selection, provenance and analysis intent. Old physics are not guessed into fluid settings. Current results are invalidated like other new inputs; separate histories remain. Current revision, busy state and revocation/expiry are checked.
+
+Run startJob mesh with the updated input revision and wait for success plus executionSettled. Pass expectedRevision/jobId to shared fluidDomainApi.applyMesh or edit-scoped applyFluidDomainMesh. It validates input revision, canonical input, source fingerprint and mesh, applying a sourceHash-tagged gmsh-surface as display input. Study remains fluidDomain; no fluid properties/analysis type are inferred. Compact domainSelection includes at most100 ports/truncated, wall count and channel metadata. Read the new revision after application.
+
+Internal port IDs0/1/2 are X/Y/Z minimum,3/4/5 maximum. Existing axis-aligned box-face and one seed-connected-region restrictions remain. This adds no general3D flow, arbitrary caps, boundary layers or turbulence. See [external](fluid-domains.md) and [internal](internal-fluid.md) domain contracts.
