@@ -96,11 +96,11 @@ Acoustic time selection uses stored frames only; unavailable times are refused. 
 
 Use caseList's caseId/revision for `caseView`, `caseRestoreInput`, `caseRemove` with `{caseId,expectedRevision}`, or `caseRename` with an additional name. `caseSave({name,expectedResultRevision})` stores the current displayed result (eight-case limit). Shared API: window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove. IDs are page-local and become invalid when an external archive change is observed; rename updates content revision.
 
-Inspect scope permits lists/probes/view reads, view scope changes result settings, analyze scope saves results, and edit scope renames/removes/restores/views cases. Viewing a case restores its saved input, so it requires edit permission. Revocation, deadlines, intervening changes and calculation/playback conflicts are rechecked before committing. Live case-archive import/export and persisted named views remain pending.
+Inspect scope permits lists/probes/view reads, view scope changes result settings, analyze scope saves results, and edit scope renames/removes/restores/views cases. Viewing a case restores its saved input, so it requires edit permission. Revocation, deadlines, intervening changes and calculation/playback conflicts are rechecked before committing. Live case-archive import/export and bundling named views into case archives remain pending.
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 28 methods (18 default tools, 20 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 34 methods (18 default tools, 20 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -111,3 +111,14 @@ Use `cancelExport({jobId})` to stop and `releaseExport({jobId})` to free retaine
 Capabilities/status/artifact reads require inspect scope; start/cancel/release require view scope. Video requests 24 fps through real-time recording, not deterministic fixed-frame export. Time playback supports stored transient-acoustic frames only; video duration and physical time differ. Deformation animation cycles display scale and does not solve a loading history.
 
 Real-time recording requests 24 fps but does not guarantee frame counts; background tabs and load can drop frames. Deterministic fixed-frame export remains unimplemented.
+
+
+## Portable named views
+
+Shared API: `window.namedViewApi.list/save/apply/remove/export/import`. The GUI named-view panel also saves, restores, removes and imports/exports JSON. Connector methods `namedViewList` and `namedViewExport` require inspect scope; `namedViewSave`, `namedViewApply`, `namedViewRemove` and `namedViewImport` require view scope. Removing a named view removes display settings, separately from removing an analysis case.
+
+First read `namedViewList()` for `archiveRevision` and `views` containing `viewId/revision/name/resultRevision`, and `getResultView()` for the current result revision. `namedViewSave({name,expectedResultRevision,expectedArchiveRevision})` captures result settings, camera and setup including clipping/parts. It uses field-defined display units and retains fixed ranges and selected frame/mode, without physical field arrays or model data. Names have 1–100 characters; the archive holds at most 16 views.
+
+Apply with `namedViewApply({viewId,expectedRevision,expectedResultRevision})`. Only the exact saved result revision is supported; these are not synchronization presets for different results. Remove with `namedViewRemove({viewId,expectedRevision})`. After a conflict, reread the list and displayed result rather than replaying stale revisions.
+
+`namedViewExport()` returns JSON `{version:1,views:[{id,name,resultRevision,result,setup}]}`. Save it explicitly and use `namedViewImport({archive,expectedArchiveRevision})` to transfer it back, replacing the entire current view list. Unknown keys, nonfinite numbers, invalid cameras/ranges/schema and duplicate IDs are rejected. A failed application attempts to restore the previous state. There is no automatic localStorage persistence or case-archive bundling; export required views explicitly before closing the page.

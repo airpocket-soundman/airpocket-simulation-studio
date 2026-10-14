@@ -1,3 +1,5 @@
+import {createNamedResultViews} from './named-result-views.js';
+import {installNamedViewUi} from './named-view-ui.js';
 import {createVisualExportJobs} from './visual-export-jobs.js';
 import {createResultViewApi,resultFields,displayRange,colorFraction} from './result-view-api.js';
 import {createCaseOperations} from './case-operations.js';
@@ -435,6 +437,10 @@ for(const id of ['color-fixed','color-min','color-max'])$(id).onchange=async()=>
 let exportPreparedAnalysis;
 const visualExportJobs=createVisualExportJobs({prepare:async()=>{if(!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Viewer is busy');const output=lastAnalysis,view=await window.resultViewApi.get();if(lastAnalysis!==output||!$('cancel-run').disabled||$('model').disabled||visualExport.isActive())throw Error('Displayed result changed or viewer busy');exportPreparedAnalysis=output;return {resultRevision:view.resultRevision,view:{result:view.state,setup:window.viewApi.get(),language}};},render:args=>{if(lastAnalysis!==exportPreparedAnalysis)throw Error('Displayed result changed before export');return visualExport.render(args);}});
 window.visualExportApi=Object.freeze({...visualExportJobs,capabilities:()=>({...visualExport.capabilities(),maxArtifactBytes:32*1024*1024,maxArtifactChunkBytes:65536})});
+const namedViews=createNamedResultViews({resultView:window.resultViewApi,setupView:window.viewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+let namedViewUi;
+window.namedViewApi=Object.freeze(Object.fromEntries(['list','save','apply','remove','export','import'].map(method=>[method,async(...args)=>{const value=await namedViews[method](...args);if(['save','remove','import'].includes(method))await namedViewUi?.refresh().catch(error=>status(error.message));return value;}] )));
+namedViewUi=installNamedViewUi({api:window.namedViewApi,resultView:window.resultViewApi,translate:addTranslations,language:()=>language});
 window.caseOperations=createCaseOperations({store:window.caseApi,getAnalysis:()=>lastAnalysis,view:viewCase,loadProject:project=>api.loadProject(project),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()});
 
 
@@ -447,4 +453,4 @@ window.analysisApi.evaluateFracture=options=>fractureUi.evaluate(options);
 
 window.printImportApi=installPrintImport({language:()=>language,translate:addTranslations,status,isBusy:()=>!$('cancel-run').disabled||$('model').disabled});
 
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});

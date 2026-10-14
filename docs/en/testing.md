@@ -125,3 +125,11 @@ A one-second orbit WebM contained 8,795 verified bytes. ffprobe reported VP9, 13
 Cancelling an active 15-second export restored the exact pre-export result view/camera/layers. Cancelled artifacts and released jobs refused retrieval. Unit tests cover non-downloading PNG/WebM returns, render/recorder errors, cancellation restoration, stream cleanup, disconnect controls, revisions/idempotence/expiry, retention budgets, 64 KiB paging/SHA-256 and disconnect during preparation. The optional connector now has 28 methods; default saved-file MCP capabilities remain distinct. Public HTTPS pairing, MP4/GIF, deterministic fixed-frame output and persistent export storage remain unfinished.
 
 The final full suite passed 370 of 373 tests, with three skips and zero failures at concurrency four. Build, 26 distribution checks and specialist SKILL validation also passed.
+
+## 2026-10-14: named result-view persistence and restoration
+
+The full suite passed 386 of 389 tests, with three skips and zero failures at concurrency four. Build, 26 local-distribution checks and specialist SKILL validation passed. Tests cover schemas, revisions, serialization, expiry, atomic invalid import, failed-apply restoration and derived camera arithmetic overflow.
+
+Real Chrome and stdio MCP saved a thermal view with a fixed 20–100 degC range, surface wire, camera [80,60,80], target [5,5,20], 35-degree field of view, Z=20 mm section and 0.7 opacity. After changing these settings, restoration exactly matched both complete result/setup snapshots. The separate view JSON was 1,146 bytes and contained no physical arrays or model.
+
+GUI save also succeeded. Reload cleared the in-memory list; importing the saved case and separate view JSON through visible file labels restored the view. Reconnected MCP confirmed the same result revision and all settings. MCP remove/import/export reproduced the original JSON exactly. Invalid camera data and applying to a different result revision were refused; Japanese/English restore/remove controls were verified. Automatic persistence, bundling views with cases and synchronized application across different results remain unsupported.

@@ -10,7 +10,7 @@ const vector=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 function cameraSettings(value){
  if(!value||Object.keys(value).some(k=>!['position','target','up','fov'].includes(k))||!vector(value.position)||!vector(value.target)||!vector(value.up)||!Number.isFinite(value.fov)||value.fov<=0||value.fov>=180)throw Error('Invalid camera settings');
  const direction=value.target.map((v,i)=>v-value.position[i]),length=Math.hypot(...direction),up=Math.hypot(...value.up),cross=[direction[1]*value.up[2]-direction[2]*value.up[1],direction[2]*value.up[0]-direction[0]*value.up[2],direction[0]*value.up[1]-direction[1]*value.up[0]];
- if(length<=1e-9||up<=1e-9||Math.hypot(...cross)<=length*up*1e-9)throw Error('Camera direction and up vector are degenerate');return value;
+ if(![...direction,length,up,...cross,Math.hypot(...cross)].every(Number.isFinite)||length<=1e-9||up<=1e-9||Math.hypot(...cross)<=length*up*1e-9)throw Error('Camera direction and up vector are degenerate');return value;
 }
 function validate(settings,result){
  const fields=resultFields(result).map(f=>f.id);if(!fields.includes(settings.field))throw Error('Field is unavailable for this result');

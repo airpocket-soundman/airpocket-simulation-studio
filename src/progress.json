@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T10:50:31.540Z",
+  "updatedAt": "2026-10-14T11:36:51.525Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1407,6 +1407,21 @@
       "acceptance": "全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化・公開HTTPS接続は未完了。",
       "acceptanceEn": "370 passed, three skipped of373. Real MCP/Chrome verified hashed PNG77944 bytes/two pages, WebM8795 bytes, cancellation restoration and artifact refusal. Background one-second video had two frames. Fixed-frame export, MP4/GIF, persistence and public HTTPS pairing remain unfinished.",
       "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "NAMEDVIEWS1",
+      "title": "結果版に結び付けた名前付きビューの保存",
+      "titleEn": "Save named views bound to result revisions",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "RESULTCONTROL1"
+      ],
+      "detail": "カメラ・表示量・色範囲・時刻/モード・レイヤー・断面を専用JSONで保存/読込。最大16件、内容版と一覧版を照合。GUIと任意MCP接続34操作で使用。",
+      "detailEn": "Portable JSON snapshots of camera/field/range/time/mode/layers/section. Up to16 entries, item/archive revision checks, GUI and optional34-method MCP connector.",
+      "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。自動永続化・ケース同梱・異なる結果の同期は残す。",
+      "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. Automatic persistence, case bundling and cross-result synchronization remain unfinished.",
+      "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md"
     }
   ],
   "solvers": [

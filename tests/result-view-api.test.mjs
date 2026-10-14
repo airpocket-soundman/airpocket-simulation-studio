@@ -62,3 +62,5 @@ test('display probes use selected stored acoustic frames and modal shapes with e
  const modal={kind:'modal',modes:[{frequencyHz:10,displacement:Array(12).fill(1)},{frequencyHz:20,displacement:Array(12).fill(2)}]};assert.equal(sampleDisplayedResult(mesh,modal,point,{}, {modeIndex:1}).frequencyHz,20);assert.equal(sampleDisplayedResult(mesh,modal,point,{modeIndex:0},{modeIndex:1}).frequencyHz,10);
  assert.throws(()=>sampleDisplayedResult(mesh,sound,point,{}, {frameIndex:99}),/frame/);
 });
+
+ test('finite camera coordinates with overflowing derived geometry are refused atomically',async()=>{const h=harness(),s=await h.api.get(),before=h.state;await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{camera:{position:[1e308,1e308,1e308],target:[-1e308,-1e308,-1e308],up:[0,1,0],fov:40}}}),/degenerate/);assert.deepEqual(h.state,before);});

@@ -96,11 +96,11 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ケースは`caseList()`の`caseId`と`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
 
-共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力と名前付きビューの永続化は継続課題です。
+共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力と、ケース集への名前付きビュー同梱は継続課題です。
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは28操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは34操作を公開します（通常18ツール、接続モード20ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -111,3 +111,14 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 共有範囲は能力・状態・成果物取得が確認（inspect）、開始・取消・解放が表示（view）です。動画は実時間の24 fps録画で、固定フレームの決定的な書き出しではありません。time再生は保存された過渡音響フレームに限り、動画の再生秒数と物理時刻は別です。変形アニメーションは表示倍率の周期変化で、負荷履歴の解析結果ではありません。
 
 実時間録画は24 fpsを要求するがフレーム数を保証しない。背景タブや高負荷で欠落し得る。固定フレーム・決定的な動画出力は未対応。
+
+
+## 名前付きビューの持ち運び
+
+共通APIは`window.namedViewApi.list/save/apply/remove/export/import`です。GUIの名前付きビューパネルでも保存・復元・削除・JSON入出力を行います。接続MCPでは`namedViewList`と`namedViewExport`が確認（inspect）、`namedViewSave`、`namedViewApply`、`namedViewRemove`、`namedViewImport`が表示（view）許可です。名前付きビューの削除は表示設定の削除であり、解析ケースの削除とは別操作です。
+
+まず`namedViewList()`で`archiveRevision`と`views`の`viewId/revision/name/resultRevision`を取得し、`getResultView()`で表示中の結果版を確認します。`namedViewSave({name,expectedResultRevision,expectedArchiveRevision})`は結果設定とカメラ、断面・部品等のsetupを保存します。fieldで定まる表示単位を使い、固定色範囲・選択フレーム/モードを保持しますが、物理場配列やモデルは含みません。名前は1〜100文字、最大16件です。
+
+`namedViewApply({viewId,expectedRevision,expectedResultRevision})`は保存時と同じ結果版だけに適用します。異なる計算結果への同期プリセットではありません。`namedViewRemove({viewId,expectedRevision})`で削除します。競合時は一覧と表示結果を読み直し、古い版をそのまま再送しないでください。
+
+`namedViewExport()`は`{version:1,views:[{id,name,resultRevision,result,setup}]}`のJSONを返します。明示的に保存し、`namedViewImport({archive,expectedArchiveRevision})`で再取込すると持ち運べます。取込は現在のビュー一覧全体を置き換えます。未知キー、非有限値、不正なカメラ・範囲・形式、重複IDは拒否します。適用の途中失敗では以前の状態への復元を試みます。自動localStorage保存やケース集への同梱は行いません。ページを閉じる前に必要なビューを明示的に書き出してください。

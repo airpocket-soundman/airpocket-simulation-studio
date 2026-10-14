@@ -1,10 +1,10 @@
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
 import {canonicalJson} from './project-revision.js';
 
-export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view'});
+export const browserMethods=Object.freeze({inspect:'inspect',geometry:'inspect',preflight:'inspect',jobStatus:'inspect',jobEvents:'inspect',jobArtifact:'inspect',probe:'inspect',edit:'edit',startJob:'analyze',cancelJob:'analyze',releaseJob:'analyze',showJob:'analyze',getView:'view',setView:'view',getResultView:'inspect',setResultView:'view',caseList:'inspect',caseView:'edit',caseRestoreInput:'edit',caseRename:'edit',caseRemove:'edit',caseSave:'analyze',exportCapabilities:'inspect',startExport:'view',exportStatus:'inspect',exportArtifact:'inspect',cancelExport:'view',releaseExport:'view',namedViewList:'inspect',namedViewExport:'inspect',namedViewSave:'view',namedViewApply:'view',namedViewRemove:'view',namedViewImport:'view'});
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,view,resultView,cases,exports,getResult,probe,showResult,isBusy=()=>false}) {
+export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const busy=()=>isBusy()||[...owned].some(id=>{try{return ['queued','running','saving'].includes(analysis.getJob(id).state);}catch{return false;}});
  return {
@@ -44,6 +44,8 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='exportArtifact')return exports.artifact(args);
    if(method==='cancelExport')return exports.cancel(args);
    if(method==='releaseExport'){const result=exports.release(args);ownedExports.delete(args.jobId);return result;}
+   if(method==='namedViewList'||method==='namedViewExport'){if(!namedViews)throw Error('Named view API unavailable');return namedViews[method==='namedViewList'?'list':'export']();}
+   if(method.startsWith('namedView')){const operations={namedViewSave:'save',namedViewApply:'apply',namedViewRemove:'remove',namedViewImport:'import'};if(!namedViews||busy()||editing)throw Error('Named views unavailable or browser busy');editing=true;try{return await namedViews[operations[method]](args,{guard:valid});}finally{editing=false;}}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
