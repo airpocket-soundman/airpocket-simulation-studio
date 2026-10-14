@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T05:22:45.788839+00:00",
+  "updatedAt": "2026-10-14T05:45:27.131Z",
   "release": {
-    "version": "v0.40",
+    "version": "v0.41",
     "date": "2026-10-14",
-    "testCount": 219,
-    "description": "Stokesの二次速度・一次圧力P2/P1をWorker・保存・点測定・断面へ統合。中間節点と物理場・反力・流量・速度上界の保存照合を追加。219テスト・公開配信物24項目・公開画面31項目が成功。慣性流・乱流・二次CAD幾何適合は未対応。",
-    "descriptionEn": "Integrated P2/P1 Taylor–Hood Stokes with Worker, archives, quadratic probes and sections. Validate midpoint topology, physical fields, forces, fluxes and continuous velocity bounds. Passed 219 source tests, 24 public runtime checks and 31 public browser checks. Inertia, turbulence and quadratic CAD geometry remain unsupported."
+    "testCount": 226,
+    "description": "STEP更新を事前照合し、一致する面へ条件を引き継ぐ。消失・重複・再現できない部分領域は値を保持して再選択を要求し、未解決中の解析を拒否。226テスト・公開配信物25項目・公開画面35項目が成功。永続CAD ID・一般曲面の再分割追跡は未対応。",
+    "descriptionEn": "Preview STEP updates and transfer conditions to uniquely matched faces. Retain values and require reselection for missing, ambiguous or unreproducible regions; block unresolved analyses. Passed 226 source tests, 25 public runtime checks and 35 public browser checks. Persistent CAD IDs and general curved retessellation tracking remain unsupported."
   },
   "tasks": [
     {
@@ -356,14 +356,14 @@
       "id": "CAD2",
       "title": "CAD更新時に面参照を照合",
       "category": "3D",
-      "status": "checking",
+      "status": "released",
       "detail": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "acceptance": "STEP再構築とCAD面参照の照合。面が消えた場合は再選択を要求。",
       "titleEn": "Reconcile face references after CAD updates",
       "detailEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
       "acceptanceEn": "Reconstruct STEP and match CAD references; request reselection when referenced faces disappear.",
-      "lastUpdate": "STEP更新の事前照合と適用、再分割・面番号/部品順変更、未解決条件の値保存・再選択・解析拒否を追加。実STEPの40→50 mm引張と保存復元を検証。",
-      "lastUpdateEn": "Add STEP update preview/application, retessellation and face/part reordering, retained unresolved values, manual reselection and analysis blocking; verify actual 40-to-50 mm STEP axial references and archives.",
+      "lastUpdate": "公開v0.41で事前照合・適用、未解決条件の保存復元と解析停止、再選択後の実STEP 40→50 mm棒の0.05 mm基準値を確認。226テスト・配信物25項目・公開画面35項目が成功。",
+      "lastUpdateEn": "Verified public v0.41 preview/application, unresolved project roundtrip and analysis blocking, and the 0.05 mm reference after reselecting a 40-to-50 mm real STEP bar. Passed 226 tests, 25 runtime checks and 35 public browser checks.",
       "evidence": "src/cad-update.js; src/cad-update-state.js; src/cad-update-ui.js; tests/cad-update.test.mjs"
     },
     {

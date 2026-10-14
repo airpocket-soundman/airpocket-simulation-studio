@@ -79,4 +79,4 @@ The transient acoustic distribution check verifies arrival time, pressure amplit
 
 The browser recipe now has 35 checks, including polymer comparison selection, preliminary source status, JP/EN labels and five engineering-polymer solves, plus transient traces/time controls/WAV UI, natural modes, saved-mode exterior sound and a large four-case JSON roundtrip. Large open export text is read through scoped DOM values rather than requesting the entire accessibility tree.
 
-The public v0.37 run passed all 22 browser checks, including finite-box Stokes, PNG/WebM and four animation types with restored view settings. MCP tests verify clean CPU Worker execution, protocol initialization/listing and refusal to overwrite saved output.
+The public v0.41 run passed all 35 browser checks, including STEP update reconciliation, retained unresolved values, project roundtrips and real STEP reanalysis after region repair, including finite-box Stokes, PNG/WebM and four animation types with restored view settings. MCP tests verify clean CPU Worker execution, protocol initialization/listing and refusal to overwrite saved output.
