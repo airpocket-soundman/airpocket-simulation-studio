@@ -43,3 +43,9 @@ test('real STEP worker solves matched CAD conditions with conserved load and arc
  const p=project(),updated=planCadUpdate(p,replacement([refine(box())])).project,output=await analyzeProject(updated,{size:4});assert.ok(Math.abs(output.result.maxDisplacementMm/.04-1)<1e-7);assert.ok(Math.abs(output.result.reaction[2]+100)<1e-5);assert.ok(output.boundary.reports.every(r=>r.relativeAreaError<1e-7));const store=createCaseStore();store.add('Updated CAD',output);const restored=createCaseStore();restored.import(JSON.parse(JSON.stringify(store.export())));assert.deepEqual(prepareCaseView(restored.list()[0]).input,updated);
  const bad=store.export();const pending=structuredClone(updated.conditions[1]);pending.regions=[];pending.cadUpdateRequired={version:1,reason:'missing-face',previousAreaMm2:100,faces:[{mesh:0,faceId:4}]};bad.cases[0].output.input.conditions[1]=pending;assert.throws(()=>restored.import(bad),/Resolve CAD/);
 });
+
+test('CAD replacement requires fresh confirmation of recorded physical intent',()=>{
+ const p=project();p.inputProvenance={schemaVersion:1,entries:[{pointer:'/materialProperties/youngModulus',value:1e9,source:{kind:'agent-proposal'},rationale:'Reference value',applicability:'Original design only',status:'confirmed',assumption:'Nominal modulus',confirmation:{by:'user',note:'Confirmed for old design'}}]};
+ const updated=planCadUpdate(p,{sourceModel:structuredClone(source),meshes:[refine(box())]}).project;
+ assert.equal(p.inputProvenance.entries[0].status,'confirmed');assert.equal(updated.inputProvenance.entries[0].status,'unconfirmed');assert.equal(updated.inputProvenance.entries[0].assumption,null);assert.equal(updated.inputProvenance.entries[0].confirmation,undefined);
+});

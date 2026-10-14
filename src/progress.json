@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T08:58:15.125436+00:00",
+  "updatedAt": "2026-10-14T09:28:38.328Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1131,7 +1131,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "先行モジュールAGENTEDIT1で保存入力の原子的編集・SHA-256版確認を実装。STEP入力作成と根拠スキーマは未完了。"
+      "lastUpdate": "STEP/STL/組込み形状作成、CAD面ID選択、入力根拠と限定静解析preflightを実装・検証。全物理・全GUI操作のAPI化と失敗後の結果保持は継続。"
     },
     {
       "id": "P2",
@@ -1161,7 +1161,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "先行モジュールAGENTJOBS1でNode非同期ジョブ・中間イベント/場成果物を実装。ブラウザ接続、再起動越し復元、GUI状態との統合は未完了。"
+      "lastUpdate": "MCPの登録済み中間成果物をハッシュ検証し、要約・点値・最大200節点で取得可能。ライブブラウザ接続と再起動復元は継続。"
     },
     {
       "id": "P4",
@@ -1208,7 +1208,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "独立ターゲットNATIVEPROOF1を準備。同じC++のWASM数値検証は成功、ホスト用C++標準ライブラリ不足でネイティブ実行未確認。"
+      "lastUpdate": "NATIVEPROOF1のLinuxホスト実行とWASM比較が成功。固定棒5条件・不正入力8件の範囲であり、P6全体は未完了。"
     },
     {
       "id": "UIRESEARCH1",
@@ -1290,14 +1290,30 @@
       "id": "NATIVEPROOF1",
       "title": "MFEMのホスト実行契約を最小例題で実証",
       "titleEn": "Prove the MFEM host execution contract on a small reference",
-      "status": "building",
+      "status": "ready",
       "category": "基盤",
       "depends": [],
-      "detail": "独立CMake/CLIを準備し既存C++をWASMで数値検証。ホスト用標準ライブラリ未準備のためネイティブ実行は未確認。",
-      "detailEn": "Prepare independent CMake/CLI and verify existing C++ under WASM; host execution remains unverified without a host C++ standard library.",
+      "detail": "Linux CIで実ホストMFEMとWASMを5条件で比較。棒の変位・反力・残差と不正入力8件を確認。任意保存入力や製品ネイティブバックエンドは未対応。",
+      "detailEn": "Linux CI verified real host MFEM against WASM for five bar fixtures and eight invalid inputs; arbitrary saved projects and production native backend remain unsupported.",
       "acceptance": "実ホスト機械語で棒の変位・反力・残差・不正入力を検証しWASM結果と比較。専用狭範囲CLIは全プロジェクトAPI対応と区別。",
       "acceptanceEn": "Run real host machine code, verify bar displacement/reaction/residual/invalid input and compare with WASM; distinguish the narrow fixture CLI from a full project API.",
-      "evidence": "native/native-proof/README.md; native/native-proof/main.cpp; tests/native-proof.test.mjs"
+      "evidence": "native/native-proof/README.md; scripts/check-native-proof.mjs; https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38540608025"
+    },
+    {
+      "id": "AGENTINPUT1",
+      "title": "LLMから入力作成・根拠検査・中間結果取得",
+      "titleEn": "Create grounded inputs and retrieve intermediate results through LLM tools",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "API1",
+        "MCP1"
+      ],
+      "detail": "MCP18ツール、原子的編集17操作。STEP/STL/組込み形状、面ID選択、根拠・仮定、限定線形静解析preflight、暫定ラベルの保存検証、中間成果物の要約・点値・ページ取得を実装。",
+      "detailEn": "18 MCP tools and 17 atomic edit operations cover imports, builtins, face IDs, provenance, assumptions, limited linear-static preflight, persisted provisional labels and bounded intermediate reads.",
+      "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目成功。追加した暫定ラベルの実画面確認は残る。全物理preflightとライブ接続は対象外。",
+      "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks and 13 browser import/restore checks passed. New provisional-label browser verification remains pending; all-physics preflight and live transport are outside scope.",
+      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs"
     }
   ],
   "solvers": [

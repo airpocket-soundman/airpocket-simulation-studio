@@ -1,4 +1,5 @@
 import {validateOrthotropicResult} from './orthotropic-result.js';
+import {validateSavedAssessment} from './analysis-preflight.js';
 import {validatePlasticResult} from './plasticity-result.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {validateStokesResult} from './stokes-result.js';
@@ -12,6 +13,7 @@ import {validateComputeMetadata} from './cases.js';
 import {inspectMesh} from './mesh-core.js';
 export function prepareCaseView(saved){
  const output=structuredClone(saved?.output),mesh=output?.mesh,r=output?.result;
+ validateSavedAssessment(output);
  requireResolvedCadConditions(output?.input??{});
  validateStokesResult(mesh,r,output?.input,output?.calculation);
  validateStlMesh(mesh,output?.input,output?.calculation);

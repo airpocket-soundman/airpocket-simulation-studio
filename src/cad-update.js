@@ -57,5 +57,6 @@ export function planCadUpdate(project,replacement){
   else c.regions=[...regions].map(([mesh,triangles])=>({mesh,triangles:[...triangles].sort((a,b)=>a-b)}));
   reports.push({index,type:c.type,status:reason?'needs-reselection':'matched',reason:reason??null,previousAreaMm2,regions:structuredClone(c.regions),faces:refs});return c;
  });
+ if(output.inputProvenance?.entries){for(const entry of output.inputProvenance.entries){entry.status='unconfirmed';entry.assumption=null;delete entry.confirmation;}}
  validateProject(output);return {project:output,reports,matched:reports.filter(r=>r.status==='matched').length,pending:reports.filter(r=>r.status!=='matched').length};
 }

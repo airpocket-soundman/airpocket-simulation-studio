@@ -59,7 +59,7 @@ Prioritize LLM integration while developing independent modules against shared c
 - AGENTEDIT1: atomic saved-input edits and revision checks, preceding full P1 STEP/provenance support.
 - AGENTJOBS1: Node CPU jobs and intermediate-result pipelines, preceding P3 live-browser MCP and restart recovery.
 - CFDINTERNAL1: internal creeping-flow velocity-boundary adapter and P1/P2 references; general flow and UI/Worker integration remain unfinished.
-- NATIVEPROOF1: independent MFEM host target. The same C++ passed WASM numerical checks; real native execution remains unverified because host standard-library headers are unavailable.
+- NATIVEPROOF1: Linux CI verified real host MFEM against the same C++ compiled to WASM, using five fixed-bar fixtures and eight invalid inputs. Arbitrary saved projects and a production native backend remain unsupported.
 
 Solver work owns adapters/reference cases, fluid work owns independent domain/boundary/numerical/mesh modules, and integration work owns shared API/MCP/diagnostic/result contracts. Separate edits, then verify save compatibility, shared APIs and browser execution together. Preliminary research must not delay prioritized LLM functionality.
 

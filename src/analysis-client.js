@@ -1,3 +1,4 @@
+import {requireAnalysisPreflight} from './analysis-preflight.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {createAnalysisJobs} from './analysis-jobs.js';
 export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
@@ -5,11 +6,11 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  const isIsolated=runtime.isIsolated||(()=>globalThis.crossOriginIsolated);
  const baseUrl=runtime.baseUrl||(()=>new URL(import.meta.env?.BASE_URL||'/',location.href).href),timeoutMs=runtime.timeoutMs??120000;
  let active=null;
- function finish(job,error,result){if(active!==job)return;active=null;clearTimeout(job.timer);job.signal?.removeEventListener('abort',job.abort);job.worker.terminate();error?job.reject(error):job.resolve({...result,input:job.project,calculation:{operation:job.operation,options:job.options}});}
+ function finish(job,error,result){if(active!==job)return;active=null;clearTimeout(job.timer);job.signal?.removeEventListener('abort',job.abort);job.worker.terminate();error?job.reject(error):job.resolve({...result,...(result.result?{result:{...result.result,analysisAssessment:job.analysisAssessment}}:{}),analysisAssessment:job.analysisAssessment,input:job.project,calculation:{operation:job.operation,options:job.options}});}
  function start(operation,options={},snapshot,onEvent,signal,jobId){
  if(active)return Promise.reject(Error('A calculation is already running'));
- let project,settings;try{if(signal?.aborted)throw Error('Calculation cancelled');project=structuredClone(snapshot??getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');}catch(e){return Promise.reject(e);}
- return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}const job={worker,project,operation,options:settings,resolve,reject,signal,jobId};active=job;
+ let project,settings,analysisAssessment;try{if(signal?.aborted)throw Error('Calculation cancelled');project=structuredClone(snapshot??getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');analysisAssessment=requireAnalysisPreflight(project,settings,{target:'browser',operation:operation==='mesh'?'mesh':'solve'});}catch(e){return Promise.reject(e);}
+ return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}const job={worker,project,operation,options:settings,resolve,reject,signal,jobId,analysisAssessment};active=job;
  if(!jobId)job.timer=setTimeout(()=>finish(job,Error(`Calculation exceeded ${timeoutMs/1000} seconds`)),timeoutMs);
  job.abort=()=>finish(job,Error('Calculation cancelled'));signal?.addEventListener('abort',job.abort,{once:true});
  worker.onerror=e=>finish(job,Error(e.message||'Worker failed'));

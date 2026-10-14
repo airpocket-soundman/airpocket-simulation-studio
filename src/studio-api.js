@@ -1,4 +1,6 @@
 import {getCapabilities,diagnoseExecution} from './capabilities.js';
+import {validateInputProvenance} from './input-provenance.js';
+import {preflightProject} from './analysis-preflight.js';
 import {cylinderPatchArea} from './cylindrical-cad.js';
 import {planCadUpdate} from './cad-update.js';
 import {planarTriangles,planarArea} from './planar-region.js';
@@ -14,6 +16,8 @@ export function createStudioApi(adapter) {
   const clone=p=>structuredClone(p);
   function check(p){
     validateProject(p);
+    if(p.inputProvenance!==undefined)validateInputProvenance(p.inputProvenance);
+    if(p.analysisIntent!==undefined&&(!p.analysisIntent||typeof p.analysisIntent!=='object'||Array.isArray(p.analysisIntent)||Object.keys(p.analysisIntent).some(k=>k!=='mode')||!['quantitative','exploratory'].includes(p.analysisIntent.mode)))throw Error('Invalid analysis intent');
     if(!Array.isArray(p.selection)||p.selection.length!==p.meshes.length||!p.selection.every((s,i)=>Array.isArray(s)&&s.every(t=>Number.isInteger(t)&&t>=0&&t<p.meshes[i].faceIds.length)))throw Error('選択データが不正です。');
     return p;
   }
@@ -26,15 +30,20 @@ export function createStudioApi(adapter) {
     version:1,
     getCapabilities,
     diagnoseExecution:(options={},target='browser')=>diagnoseExecution(current(),options,target),
+    preflight:(options={},runtime={})=>preflightProject(current(),options,runtime),
+    setInputProvenance(document){const p=current();p.inputProvenance=clone(document);return write(p,'provenance');},
+    setAnalysisIntent(intent){const p=current();p.analysisIntent=clone(intent);return write(p,'analysisIntent');},
     async getRevision(){const snapshot=current();const {getProjectRevision}=await import('./project-operations.js');return getProjectRevision(snapshot);},
     async applyOperations(operations,options={}){const snapshot=current(),commands=clone(operations),editOptions=clone(options);const {applyProjectOperations}=await import('./project-operations.js');const result=await applyProjectOperations(snapshot,commands,editOptions);if(JSON.stringify(current())!==JSON.stringify(snapshot))throw Error('Project revision conflict.');const updated=write(result.project,'batch');return {schemaVersion:result.schemaVersion,previousRevision:result.previousRevision,revision:result.revision,results:result.results,summary:updated};},
     frameFromEuler,
     getSummary:summary,
     inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},
+    async inspectGeometrySummary(options={}){const snapshot=current();const {inspectProjectGeometry}=await import('./geometry-inspection.js');return inspectProjectGeometry(snapshot,options);},
     exportProject:()=>current(),
     previewCadUpdate(replacement){const {reports,matched,pending}=planCadUpdate(current(),replacement);return {reports,matched,pending};},
     applyCadUpdate(replacement){const result=planCadUpdate(current(),replacement);write(result.project,'load');return {reports:result.reports,matched:result.matched,pending:result.pending};},
     loadProject(project){const p=clone(project);p.selection??=p.meshes?.map(()=>[]);return write(p,'load');},
+    selectCadFace(mesh,faceId){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh]||!Number.isInteger(faceId)||faceId<0)throw Error('Invalid CAD face selection');const triangles=p.meshes[mesh].faceIds.flatMap((id,i)=>id===faceId?[i]:[]);if(!triangles.length)throw Error('Unknown face in the current display mesh');p.selection=p.meshes.map(()=>[]);p.selection[mesh]=triangles;delete p.planarRegion;delete p.cylindricalRegion;return write(p,'selection');},
     selectTriangles(mesh,triangles,{replace=true,erase=false}={}){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh]||!Array.isArray(triangles))throw Error('選択対象が不正です。');if(!triangles.every(t=>Number.isInteger(t)&&t>=0&&t<p.meshes[mesh].faceIds.length))throw Error('三角形番号が不正です。');if(replace)p.selection=p.meshes.map(()=>[]);const s=new Set(p.selection[mesh]);triangles.forEach(t=>erase?s.delete(t):s.add(t));p.selection[mesh]=[...s];delete p.planarRegion;if(p.cylindricalRegion?.exactCad)delete p.cylindricalRegion;return write(p,'selection');},
     selectPlanarRegion(mesh,spec){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh])throw Error('Invalid planar mesh');const triangles=planarTriangles(p.meshes[mesh].positions,spec);p.selection=p.meshes.map(()=>[]);p.selection[mesh]=triangles;p.planarRegion={...clone(spec),mesh};delete p.cylindricalRegion;return write(p,'selection');},
     selectCylindricalRegion(mesh,spec){const p=current();if(!Number.isInteger(mesh)||!p.meshes[mesh])throw Error('Invalid cylindrical mesh');delete p.planarRegion;const triangles=cylindricalTriangles(p.meshes[mesh].positions,spec);p.selection=p.meshes.map(()=>[]);p.selection[mesh]=triangles;p.cylindricalRegion={...clone(spec),mesh};return write(p,'selection');},

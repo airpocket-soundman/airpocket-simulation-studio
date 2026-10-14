@@ -7,12 +7,12 @@ const integer=value=>Number.isInteger(value)&&value>=0;
 const object=plain;
 const string=value=>typeof value==='string';
 const selectors={
-  selectTriangles:[integer,value=>Array.isArray(value)&&value.every(integer),object],
+  selectTriangles:[integer,value=>Array.isArray(value)&&value.every(integer),object],selectCadFace:[integer,integer],
   selectPlanarRegion:[integer,object],selectCylindricalRegion:[integer,object],
   clearSelection:[],addCondition:[object],removeCondition:[integer],selectCondition:[integer],
   replaceConditionRegion:[integer],reapplyConditionRegion:[integer],
   setMaterial:[string],setMaterialProperties:[object],setMaterialPreset:[string,object],
-  setStudy:[object],setMeshSettings:[object]
+  setStudy:[object],setMeshSettings:[object],setInputProvenance:[object],setAnalysisIntent:[object]
 };
 
 /** Apply {method, args} commands atomically to saved project JSON.

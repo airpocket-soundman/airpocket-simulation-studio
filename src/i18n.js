@@ -1,6 +1,9 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+ '暫定解析：明示した仮定を含みます。':'Provisional analysis: explicit assumptions are included.',
+ '入力設定の根拠を確認済みです。':'Input provenance confirmed.',
+ '従来入力：設定全体の根拠は未記録です。':'Legacy input: full setup provenance is not recorded.',
  '速度要素':'Velocity element','P1/P1 · 安定化':'P1/P1 · stabilized','二次補間の速度上界':'Quadratic velocity bound','節点最大流速':'Maximum nodal speed',
 "Stokes流":"Stokes flow",
 "定常Stokes流":"Steady Stokes flow",

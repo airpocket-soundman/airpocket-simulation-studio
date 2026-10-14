@@ -8,14 +8,15 @@
 |---|---|---|---|
 | 対応能力 | studioApi.getCapabilities | studio_capabilities | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
-| 保存入力の検査・復元 | studioApi.loadProject/exportProject/getSummary/getRevision/applyOperations | studio_inspect_project（検査・revision）、studio_edit_project（既存保存入力の原子的編集・新規保存） | MCPからの新規モデル作成・STEP取込 |
-| STEP/STL取込 | UIとCAD Worker | 未対応 | ファイル/バイト入力の共通操作 |
-| 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、applyOperations | studio_edit_project（14種の選択・条件・材料・study・メッシュ設定操作、revision競合検出） | 完全な根拠スキーマ、選択・設定操作の残りの網羅性確認 |
+| 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 静的等方線形構造以外の必須入力契約、メッシュ後検査との統合 |
+| 保存入力の検査・復元 | studioApi.loadProject/exportProject/getSummary/getRevision/applyOperations | studio_inspect_project（検査・revision・寸法要約・最大50面ページ）、studio_edit_project（原子的編集・新規保存）、studio_create_builtin_project（組込み形状） | 操作細分化と全作成経路の網羅性確認 |
+| STEP/STL取込 | UI/CAD Worker、project-import共通作成関数 | studio_import_project（STEP/STP、明示単位倍率付きSTL、新規JSON保存） | ブラウザ側の共通取込経路拡充、対応形状の範囲拡大 |
+| 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、selectCadFace、applyOperations | studio_edit_project（17種、根拠・intent・表示面ID選択を含む、revision競合検出） | 全物理モデルの根拠・入力契約、選択・設定操作の残りの網羅性確認 |
 | 体積メッシュ・解析 | analysisApi.generateMesh/analyze、startJob/getJob/getJobResult/releaseJob | studio_analyze、studio_start_analysis/studio_job_status/studio_release_job（CPU・保存JSON） | ライブブラウザ接続、再起動後のジョブ復元 |
-| 中間情報 | analysisApi.jobEvents（要約のみ） | studio_job_events（ジョブID・入力版・連番・暫定ラベル、任意のメッシュ/時刻場成果物参照） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
+| 中間情報 | analysisApi.jobEvents（要約のみ） | studio_job_events、studio_job_artifact（登録済み成果物のハッシュ照合・要約・点補間・最大200ノード/値のページ） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
 | 中止 | analysisApi.cancel/cancelJob | studio_cancel_job（runningのみ、saving不可） | ライブブラウザのMCP中止 |
 | 点測定 | analysisApi.probe | studio_probe（保存結果） | ライブ結果版・暫定値との対応 |
-| ケース・比較 | caseApi | studio_validate_cases（保存ケース検査・比較） | MCPの保存・復元・追加・削除・表示 |
+| ケース・比較 | caseApi（保存入力とassessmentのmode/暫定状態も照合） | studio_validate_cases（保存ケース検査・比較、偽の非暫定化を拒否） | MCPの保存・復元・追加・削除・表示 |
 | 断面・部品表示 | viewApi | 未対応 | ビュー設定・レイヤー・カメラの共通契約 |
 | 時刻・モード選択 | UI | 未対応 | 結果版付きの意味的操作 |
 | PNG/WebM・アニメーション | visual-exportのUI処理 | 未対応 | 出力APIとジョブ・中止・成果物取得 |
@@ -27,3 +28,5 @@
 専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、開いているブラウザには接続しない。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
 
 P0は実装中。全行の操作細分化、必要入力/有効範囲、単位付き診断、日英操作対応表、画面での確認は残作業。
+
+面IDは表示メッシュのSHA-256版に限定され、STEP/STLとも永続CAD IDではない。CAD更新後の既存根拠は未確認へ戻し、仮定と確認記録を解除して再確認する。

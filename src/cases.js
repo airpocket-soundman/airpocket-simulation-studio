@@ -1,4 +1,5 @@
 import {validateOrthotropicResult} from './orthotropic-result.js';
+import {validateSavedAssessment} from './analysis-preflight.js';
 import {validatePlasticResult} from './plasticity-result.js';
 import {validateStokesResult} from './stokes-result.js';
 import {validateFractureResult} from './fracture-core.js';
@@ -15,6 +16,7 @@ export function createCaseStore(){
  function validate(c){
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
+  validateSavedAssessment(c.output);
   requireResolvedCadConditions(c.output.input);
   validateStokesResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
   validateStlMesh(c.output?.mesh,c.output?.input,c.output?.calculation);
