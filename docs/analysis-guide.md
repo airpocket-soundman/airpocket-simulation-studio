@@ -131,3 +131,11 @@ quantitative/exploratoryは等方固有振動と静的直交異方構造にも�
 静的直交異方構造は3方向のYoung/shear moduli、cyclic Poisson ratios、右手正規直交の材料軸、source/testConditions、境界・重力設定を根拠付きで指定します。重力時の密度/加速度、温度範囲がある場合の評価温度も必要です。速度依存や等方温度表・熱応力・固有振動・非線形材料は対応しません。CPUのpcg/pcg-strict/wasm-pcgで利用し、adaptiveは対応経路で使用できます。
 
 実行時optionsで保存済み物理値を置き換えず、入力を編集して根拠を更新してください。quantitativeは確認済み根拠、exploratoryは明示値と仮定を必要とし、後者は暫定です。legacyの挙動は変えません。completePreflight:falseであり、メッシュ後の境界転送、拘束rank・剛体モード、質量、収束・メッシュ依存性・物理精度の確認は残ります。詳細は[必須入力と根拠の契約](automation.md)を参照してください。
+
+## 温度評価・熱応力・非線形構造の根拠
+
+静的等方構造で材料温度範囲・dependence・materialTemperatureを使う場合は、明示した均一評価温度と材料・境界の根拠が必要です。熱応力はexpansion、temperature、referenceTemperatureを明示します。保存熱場を使う場合もsource.mesh/temperatureの根拠は省けず、caseReferenceは追加の出典同定です。場のsnapshotを根拠へ複製するので保存・転送サイズが増え、元ケースの真正性を認証した扱いにはなりません。元熱場の暫定状態は派生解析にも残ります。非一様熱場と弾性温度表は併用しません。
+
+J2塑性はE/nu・降伏応力・正の等方硬化係数・試験条件、物理的な荷重履歴を根拠登録します。plasticLoadFractionsは除荷・再負荷も表せます。省略時の単調載荷ステップ数も明示して根拠登録します。Neo-Hookeanはmu/Kと試験条件・存在する校正曲線を登録し、2/3≤K/mu≤20の圧縮性モデルに限ります。Neo-Hookeanのpressure/normalTractionは未対応です。Newton上限とNeo-Hookean増分数は数値設定です。
+
+非線形はCPUのpcg/pcg-strict/wasm-pcgのみで、adaptive・modal・熱応力・直交異方性・弾性温度表・速度依存や疲労/破壊評価を組み合わせません。runtime設定で物理入力を差し替えず、元projectと根拠を更新します。quantitativeの確認済み根拠、exploratoryの明示した値と仮定・暫定状態、legacy互換とcompletePreflight:falseは維持します。拘束rank、熱場転送、J2小ひずみ限界、Neo-Hookean正Jacobian、収束・メッシュ依存性・物理精度は別に確認してください。[契約の詳細](automation.md)を参照してください。

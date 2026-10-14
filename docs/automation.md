@@ -311,7 +311,7 @@ knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/seve
 
 `window.caseSourceApi.clear({expectedRevision,kind})`と接続`clearCaseSource`は指定したsourceだけを除去し、studyの他の数値・物理設定・条件は維持します。既存の物性根拠は従来の値スナップショット照合のままで、自動確認や昇格を行いません。既存GUIの熱/モード連成を共通化する機能で、新しいソルバーではありません。
 
-sourceとその祖先`/study`の既存根拠entryは、場の数値が同じでも出典が変わるためunconfirmedへ戻し、assumption:null・confirmation除去とします。他の根拠とanalysisIntentは保持します。source内に`caseReference:{schemaVersion:1,caseId,revision}`を保存し、revisionは内容ハッシュで追跡します。caseIdは実行時IDで、再読込後の永続lookupを保証しません。熱/モード連成のnonlegacy必須根拠契約は未対応のため、既存preflightのlimited拒否を維持します。適用成功は定量妥当性の保証ではありません。
+sourceとその祖先`/study`の既存根拠entryは、場の数値が同じでも出典が変わるためunconfirmedへ戻し、assumption:null・confirmation除去とします。他の根拠とanalysisIntentは保持します。source内に`caseReference:{schemaVersion:1,caseId,revision}`を保存し、revisionは内容ハッシュで追跡します。caseIdは実行時IDで、再読込後の永続lookupを保証しません。保存熱場を使う構造熱応力は下記のnonlegacy根拠契約に対応します。モード音響連成は別の適用制限に従います。適用成功は定量妥当性の保証ではありません。
 
 温度源は接触だけでなく複数boxesのsolidでもnodeBodiesを必要とし、部品IDのない旧ケースを拒否します。振動源の境界競合には手動音圧だけでなくインピーダンス条件も含みます。
 
@@ -343,7 +343,7 @@ quantitative/exploratoryの熱伝導は`thermal-conduction`契約を使います
 
 quantitativeは必須根拠の確認済み状態、exploratoryは明示した値と仮定を要求し暫定とします。未入力値を仮定だけで補うことはできません。runtimeのtransient/volumetricSource/timeStep/steps/initialTemperatureは保存studyと同値の場合だけ受け付け、不一致の物理上書きを拒否します。放射反復の初期seedや数値反復上限は新しい必須根拠に含めません。
 
-legacy熱入力は従来のrequiredPointers:[]・requiredInputContract:"unsupported"・limited警告を維持し、既存allowedとschema1保存assessmentの互換性を保ちます。capabilities.preflight.requiredInputContractsは静的等方構造、等方固有振動、静的直交異方構造、熱伝導、音響、対応する限定流体の契約を一覧化します。元sourceModel全体の新しい根拠登録は要求せず、CADの真偽認証は行いません。completePreflight:falseとremainingChecksは維持し、出典適用性・品質・境界転送・収束・メッシュ依存性・物理精度の確認は残ります。
+legacy熱入力は従来のrequiredPointers:[]・requiredInputContract:"unsupported"・limited警告を維持し、既存allowedとschema1保存assessmentの互換性を保ちます。capabilities.preflight.requiredInputContractsは静的等方構造、等方固有振動、静的直交異方構造、温度評価・熱応力、J2・Neo-Hookean構造、熱伝導、音響、対応する限定流体の契約を一覧化します。元sourceModel全体の新しい根拠登録は要求せず、CADの真偽認証は行いません。completePreflight:falseとremainingChecksは維持し、出典適用性・品質・境界転送・収束・メッシュ依存性・物理精度の確認は残ります。
 
 熱の単位は温度degC、conductivity W/(m·K)、specificHeat J/(kg·K)、密度kg/m³、volumetricSource W/m³、heatFlux W/m²、対流/接触conductance W/(m²·K)、timeStep秒です。自動の単位変換・物性推測を行いません。
 
@@ -415,4 +415,18 @@ quantitative/exploratoryの`modal-isotropic-structure`は、CPUの等方線形�
 
 実行時の物理値は保存入力の代わりになりません。modalのstudy指定は保存値と同じ場合だけ許可し、runtime材料・荷重・境界の注入は拒否します。orthotropicも異なるstudy/材料/conditionsを拒否し、solver用boundary/fixed/forces等の直接指定は空でも拒否します。`null`で未設定の物理入力を上書きすることも認めません。根拠付きprojectを編集し、再検査してください。
 
-未測定値は値と適用理由を明示したexploratory仮定として扱い、暫定状態を維持します。quantitativeは必要根拠の確認済み状態を要求します。欠落値を仮定だけで埋めることはできません。legacyの既存挙動と保存assessment互換は維持し、新契約helperはlegacyで根拠を要求しません。熱応力・非線形構造など、まだ実装していない契約は引き続きlimitedです。常に`completePreflight:false`であり、メッシュ品質、境界転送、拘束rank・剛体モード、質量、収束、メッシュ依存性、資料の適用性と物理精度は後検証に残ります。
+未測定値は値と適用理由を明示したexploratory仮定として扱い、暫定状態を維持します。quantitativeは必要根拠の確認済み状態を要求します。欠落値を仮定だけで埋めることはできません。legacyの既存挙動と保存assessment互換は維持し、新契約helperはlegacyで根拠を要求しません。未対応の物理・材料の組合せは引き続きlimitedです。常に`completePreflight:false`であり、メッシュ品質、境界転送、拘束rank・剛体モード、質量、収束、メッシュ依存性、資料の適用性と物理精度は後検証に残ります。
+
+## 静的温度評価・熱応力・非線形構造のnonlegacy契約
+
+quantitative/exploratoryの`temperature-dependent-isotropic-structure`は、静的等方構造でmaterialTemperature、材料temperatureMin/Max、dependenceを使う経路にも適用します。均一の`study.materialTemperature`を明示し、E/nuまたは弾性温度表、存在するdependence各項目と温度範囲、全境界・重力設定を根拠登録します。表の範囲内補間だけに対応し、速度依存や正の最小ひずみ速度は拒否します。
+
+`thermal-stress-isotropic-structure`は`study.thermalStress:true`、有限のexpansion（負・零も可）、絶対零度以上のtemperature/referenceTemperatureを明示します。保存temperatureSourceがある場合は転送場を使用しますが、保存形式上のstudy.temperatureも必要です。sourceのname、mesh、temperatureはcaseReferenceの有無に関係なく根拠対象で、存在するcaseReference/sourceAssessmentも追加対象です。caseReferenceは出典の補助同定で、場の真正性を認証しません。根拠には場配列の値snapshotも複製するため、プロジェクト・転送サイズが増えます。sourceAssessment.provisional:trueは派生解析にも伝播し、確認済みの受取側根拠で解除できません。複数部品/接触のbody同定、転送範囲と領域外ノードは後検証です。非一様場と弾性温度表は併用できません。熱応力の疲労/破壊評価は拒否します。対応するCPU、MFEM/WebGPU構造経路を利用しますが、target別能力と観測対応を別途確認してください。
+
+`small-strain-j2-structure`はE/nu、plasticity.model/yieldStress/hardeningModulus/testConditionsを明示し、正の降伏応力・硬化係数と−1<nu<0.49を要求します。塑性荷重履歴`study.plasticLoadFractions`は物理根拠対象です。1–30値、各[0,1]、最初/最後>0、最大1で除荷・再負荷を表現でき、nonlinearLoadStepsがあれば長さを一致させます。履歴を省く単調載荷は明示したnonlinearLoadSteps（1–30）に根拠を要求します。Newton反復上限は数値設定で物理根拠不要です。
+
+`finite-strain-neo-hookean-structure`はhyperelastic.model/shearModulus/bulkModulus/testConditionsと存在するtestCurveを根拠登録します。mu>0、2/3≤K/mu≤20の圧縮性モデルで、近非圧縮性には対応しません。非線形増分数とNewton反復上限は数値設定であり、省略時は既存の10増分/30反復を使います。Neo-Hookeanは死荷重force・固定・強制変位・重力だけに対応し、pressure/normalTractionを拒否します。
+
+両非線形契約は全境界/局所座標/選択定義、明示した重力意図、必要時の密度・加速度、存在する材料依存/温度適用範囲と評価温度を根拠対象にします。CPU pcg/pcg-strict/wasm-pcgのみで、adaptive・modal・熱応力・直交異方性・弾性温度表・速度依存・疲労/破壊評価は対象外です。異なるruntime物理値やsolver直指定のloadSteps/loadFractions/境界等を拒否し、保存入力を編集する経路を使います。J2の主ひずみ絶対値≤0.02、Neo-Hookeanの正Jacobian、拘束rank・収束・メッシュ依存性・物理精度は後検証です。
+
+これらの追加はlegacyや保存assessment形式を変更しません。quantitativeは確認済み根拠、exploratoryは明示値と仮定・適用理由を必要とし、暫定状態を維持します。`completePreflight:false`は根拠の真偽・適用性や数値/物理精度が保証されないことを引き続き示します。

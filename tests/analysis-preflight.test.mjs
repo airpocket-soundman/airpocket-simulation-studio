@@ -35,7 +35,7 @@ test('gravity requires density and acceleration; invalid intent and options are 
 });
 test('unresolved CAD and unsupported study contracts are honest about scope',()=>{
  const p=project();p.conditions[0].cadUpdateRequired={};assert.ok(preflightProject(p).diagnostics.some(d=>d.code==='CAD_REGIONS_UNRESOLVED'));
- const acoustic=project();acoustic.study={kind:'structural',thermalStress:true,temperature:30,referenceTemperature:20};acoustic.analysisIntent={mode:'quantitative'};const result=preflightProject(acoustic,{}, {target:'node'});assert.equal(result.allowed,false);assert.equal(result.requiredInputContract,'unsupported');assert.ok(result.diagnostics.some(d=>d.code==='PREFLIGHT_CONTRACT_LIMITED'));
+ const acoustic=project();acoustic.study={kind:'fluidDomain'};acoustic.analysisIntent={mode:'quantitative'};const result=preflightProject(acoustic,{}, {target:'node'});assert.equal(result.allowed,false);assert.equal(result.requiredInputContract,'unsupported');assert.ok(result.diagnostics.some(d=>d.code==='PREFLIGHT_CONTRACT_LIMITED'));
 });
 test('mesh-only does not require solve materials or supports',()=>{
  const p=project();p.conditions=[];p.materialProperties={};p.analysisIntent={mode:'quantitative'};const result=preflightProject(p,{}, {operation:'mesh'});assert.equal(result.allowed,true);assert.deepEqual(result.requiredPointers,[]);assert.equal(result.requiredInputContract,'mesh-only');

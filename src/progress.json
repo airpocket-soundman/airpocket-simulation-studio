@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T21:34:07.848107Z",
+  "updatedAt": "2026-10-14T21:46:29.826384Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1131,7 +1131,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "STEP/STL・根拠・限定preflightに加え、再実行失敗/中止時の前回結果保持を実ブラウザで確認。全物理契約は継続。"
+      "lastUpdate": "既存構造モデルの温度評価/熱応力/J2/Neo-Hookeanを根拠契約へ追加。source payload改変と上流暫定性を追跡。物理資料の適用性・メッシュ後検査・評価機能等を継続し、P1全体の完了とはしない。"
     },
     {
       "id": "P2",
@@ -1895,6 +1895,22 @@
       "acceptance": "新27件、対象37件成功。全体768件中765成功・3skip。実MCP4 strict+legacy2、Worker温度表/重力のstrict/legacy4、最終実ブラウザ3ジョブを確認。古い根拠・runtime矛盾・改変拒否、保存復元・点測定・暫定性・入力版不変を維持。メッシュ後検査/物理精度/V8根治は未保証。",
       "acceptanceEn": "27new/37target tests pass;full768:765passed/3skipped. Real MCP4strict+2legacy,Worker table/gravity4strict/legacy and three final browser jobs checked. Stale evidence/runtime conflicts/tampering rejected;saved cases,probes,provisional state and input identity retained. Post-mesh checks,physical accuracy and V8 resolution remain unproven.",
       "evidence": "src/modal-input-contract.js; src/orthotropic-input-contract.js; tests/mcp-structural-model-provenance.test.mjs; docs/evidence/2026-10-15-browser-structural-contract.json; docs/evidence/2026-10-15-structural-model-full.json; docs/testing.md"
+    },
+    {
+      "id": "ADVANCEDSTRUCTURALPROVENANCE1",
+      "title": "温度評価・熱応力・J2・Neo-Hookeanの根拠契約",
+      "titleEn": "Provenance for temperature evaluation,thermal stress,J2 and Neo-Hookean structure",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P1",
+        "STRUCTURALPROVENANCE1"
+      ],
+      "detail": "温度/熱膨張/温度場payload・塑性負荷履歴・非線形材料を実CPU等の対応範囲で明示根拠へ結び、上流暫定性を保持する。数値設定と物理履歴を区別する。",
+      "detailEn": "Bind temperature/expansion/source payload,plastic load history and nonlinear materials to explicit evidence within implemented methods,preserving upstream provisional status and separating numerics from physical history.",
+      "acceptance": "新33/対象43件成功、全体801件中798成功・3skip。実MCP8strict/legacy4、熱source連成3、J2除荷strict/legacy2、実ブラウザ4ジョブを確認。保存/点測定/途中変位/暫定性/入力不変と場改変stale・runtime矛盾拒否を検証。根拠真正性/物理精度/V8根治は保証しない。",
+      "acceptanceEn": "33new/43target tests pass;full801:798passed/3skipped. Real MCP8strict/4legacy,thermal-source coupling3,J2 unloading2strict/legacy and four real browser jobs checked. Saved cases/probes/intermediate displacement/provisional status/input identity retained;payload staleness/runtime conflicts refused. No source-authenticity,physical-accuracy or V8-resolution guarantees.",
+      "evidence": "src/thermal-stress-input-contract.js; src/nonlinear-input-contract.js; tests/mcp-advanced-structural-provenance.test.mjs; tests/advanced-structural-source-execution.test.mjs; docs/evidence/2026-10-15-browser-advanced-structural-contract.json; docs/evidence/2026-10-15-advanced-structural-full.json; docs/testing.md"
     }
   ],
   "solvers": [

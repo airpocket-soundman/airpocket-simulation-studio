@@ -1,3 +1,5 @@
+import {inspectThermalStressInputContract} from './thermal-stress-input-contract.js';
+import {inspectNonlinearInputContract} from './nonlinear-input-contract.js';
 import {inspectModalInputContract} from './modal-input-contract.js';
 import {inspectOrthotropicInputContract} from './orthotropic-input-contract.js';
 import {inspectAcousticInputContract} from './acoustic-input-contract.js';
@@ -13,7 +15,7 @@ import {inspectInputProvenance} from './input-provenance.js';
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressure:'Pa',density:'kg/m3',gravity:'m/s2',poissonRatio:'1'};
 /** No mutation or solver initialization. Strict required-input/provenance contract
- * covers explicit static/modal/orthotropic structure, thermal, acoustic and limited fluid inputs. A successful report
+ * covers explicit structural models, thermal, acoustic and limited fluid inputs. A successful report
  * still requires boundary transfer, rigid-body and mesh-quality checks after meshing.
  * Legacy projects need no new provenance, but still need actual material values.
  */
@@ -32,7 +34,10 @@ export function preflightProject(project,options={}, {target='browser',operation
  const structuralKind=(project.study?.kind??'structural')==='structural';
  const modalContract=operation==='solve'&&structuralKind&&project.study?.modalAnalysis&&effectiveMode!=='legacy'?inspectModalInputContract(project,options,{mode:effectiveMode}):null;
  const orthotropicContract=operation==='solve'&&structuralKind&&project.materialProperties?.orthotropic&&!project.study?.modalAnalysis&&effectiveMode!=='legacy'?inspectOrthotropicInputContract(project,options,{mode:effectiveMode}):null;
- const physicalContract=modalContract??orthotropicContract??thermalContract??acousticContract??fluidContract;
+ const nonlinearContract=operation==='solve'&&structuralKind&&(project.materialProperties?.plasticity||project.materialProperties?.hyperelastic)&&!project.study?.modalAnalysis&&!project.materialProperties?.orthotropic&&effectiveMode!=='legacy'?inspectNonlinearInputContract(project,options,{mode:effectiveMode}):null;
+ const temperatureEvaluation=project.study?.thermalStress||project.study?.materialTemperature!==undefined||['dependence','temperatureMin','temperatureMax'].some(key=>project.materialProperties?.[key]!==undefined);
+ const thermoelasticContract=operation==='solve'&&structuralKind&&temperatureEvaluation&&!project.study?.modalAnalysis&&!project.materialProperties?.orthotropic&&!nonlinearContract&&effectiveMode!=='legacy'?inspectThermalStressInputContract(project,options,{mode:effectiveMode}):null;
+ const physicalContract=modalContract??orthotropicContract??nonlinearContract??thermoelasticContract??thermalContract??acousticContract??fluidContract;
  const inputUnits={...units,...(physicalContract?.units??{})};
  try{diagnostics.push(...diagnoseExecution(operation==='mesh'?{study:{kind:'structural'}}:project,options,target).diagnostics);}catch(error){add('EXECUTION_OPTIONS_INVALID','/options','Invalid execution options',{message:error.message},['Use the selected target capability contract']);}
  try{validateProject(project);}catch(error){add('PROJECT_INVALID','/','Project validation failed',{message:error.message},['Repair the indicated saved input; preserve intended physics']);}
@@ -46,7 +51,7 @@ export function preflightProject(project,options={}, {target='browser',operation
  if(options.size!==undefined&&(!Number.isFinite(options.size)||options.size<=0))add('MESH_SIZE_INVALID','/options/size','Mesh size must be positive millimetres',{value:options.size,unit:'mm'},['Provide a positive mesh size in mm']);
  const study=object(project.study)?project.study:{},material=object(project.materialProperties)?project.materialProperties:{},conditions=Array.isArray(project.conditions)?project.conditions:[];
  const inheritedProvisional=operation==='solve'&&((study.kind==='structural'&&study.thermalStress===true&&study.temperatureSource?.sourceAssessment?.provisional===true)||(study.kind==='acoustic'&&study.vibrationSource?.sourceAssessment?.provisional===true));
- const supported=(study.kind??'structural')==='structural'&&!study.modalAnalysis&&!study.thermalStress&&!material.orthotropic&&!material.plasticity&&!material.hyperelastic&&!material.dependence?.elasticTemperatureTable;
+ const supported=(study.kind??'structural')==='structural'&&!study.modalAnalysis&&!study.thermalStress&&!material.orthotropic&&!material.plasticity&&!material.hyperelastic&&!material.dependence?.elasticTemperatureTable&&!thermoelasticContract;
  if(operation==='solve'&&supported){
   const usesGravity=study.gravityEnabled!==false&&(effectiveMode==='legacy'?Array.isArray(study.gravity)&&study.gravity.some(v=>v!==0):study.gravityEnabled===true);
   requiredPointers.push('/study/kind','/study/gravityEnabled','/materialProperties/youngModulus','/materialProperties/poissonRatio');

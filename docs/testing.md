@@ -435,3 +435,15 @@ Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗g
 ビルド2.68秒成功、既定Node24のローカル配信物26項目は28.01秒ですべて成功。専門SKILLと日英文書/進捗5件も成功。最終整形前のsource hash差分は進捗JSONとビルド生成したpublicコピーだけで、production/testコード差分はない。P1/P3/P4/P6は部分実装に合わせbuildingへ整合し、各段階全体の完了条件は維持した。
 
 最終diff検査でorthotropic helper末尾の余分な空行を除去した。末尾改行以外のbyte同一を確認し、専用9件を再検証。全体実行時SHAと整形後SHAを上記記録へ併記した。
+
+## 2026-10-15: 温度評価・熱応力・非線形構造の根拠契約
+
+非legacyのtemperature-dependent-isotropic-structure/thermal-stress-isotropic-structure/small-strain-j2-structure/finite-strain-neo-hookean-structureを共通preflight・能力取得・MCPへ接続した。静的温度評価と材料適用範囲も新契約を通し、旧静的分岐による検査の迂回を防ぐ。熱源はケース参照に加えて実mesh/temperature snapshotを常時要求し、参照が不変でも場編集をstaleとして拒否する。上流sourceAssessmentの暫定性はquantitative受取側にも残る。
+
+新規33件（温度契約10、非線形契約10、統合preflight9、実MCP1、source/実行3）を追加し、既存10件を含む対象43件が成功。実MCPは4モデル×quantitative/exploratoryの8ジョブを実行し、既定Workerのlegacy4ジョブと数値を照合した。ケース保存復元・点測定・古い根拠/改変拒否・入力版不変・途中変位の最終点値一致を確認。別Worker検証は実exploratory熱ケース→正式caseSource操作→quantitative熱応力の暫定性とlegacy数値一致（3ジョブ）、J2除荷履歴[.25,.5,.75,1,.6]のstrict/legacy2ジョブを確認した。除荷の上端z変位は0.072 mmで、横方向収縮もある変位ノルムと区別した。最初のQA assertionは両者を混同したため、物理的に指定されたz成分を検査するよう修正した。
+
+実アプリ内ブラウザ4ジョブも成功。[機械可読記録](evidence/2026-10-15-browser-advanced-structural-contract.json)と[画面](evidence/2026-10-15-browser-advanced-structural-contract.jpg)を保存。明示agent仮定の暫定表示、入力版不変、欠落根拠/無視runtime拒否、イベント・成果物取得を確認した。点[5,5,20]の変位ノルムは、熱応力0、温度依存0.013333333333640746 mm、J2 0.06064575409699448 mm、Neo-Hookean 4.000000004314161 mm。後2者は各5増分の変位場を保持し最終点値と一致、前2者はincludeFields:falseで成果物0。一様完全拘束の熱応力は法線応力−600000 Paで、von Mises≈0を無応力とは扱わない。pollはsettled後であり終端前配信timingの証拠ではない。
+
+最終Node v24.11.1/V8 13.6.233.10-node.28/win32/x64全体試験は801件中798成功・3スキップ・失敗0（99,539.381 ms）。[生ログ・source/依存物/実行ファイルSHA](evidence/2026-10-15-advanced-structural-full.json)を保存。既存ソルバーの数値・停止条件・legacy/assessment schema1は維持する。実測校正、メッシュ依存性、転送後の拘束/領域確認、全機能の根拠適用性、既知Node24/V8障害の根治は未証明。進捗文書の更新は全体試験後に別検証する。
+
+ビルド2.80秒成功、既定Node24によるローカル配信物26項目は28.20秒ですべて成功。専門SKILLと日英文書/進捗5件も成功。全体実行後のsource hash差分はsrc/progress.jsonとビルド生成publicコピーだけで、production/testコード差分はない。
