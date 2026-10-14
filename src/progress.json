@@ -1699,6 +1699,22 @@
       "acceptance": "13観測profile（Node12）と選択診断を実装。新8試験、実MCP7解析と既存Worker22試験の観測照合、実ブラウザ3時刻温度場を確認。Node24全体はV8 fatalが2回再発（単独は成功）、間の同ソース再試行は581成功/3skip。最終ソースのNode26全体584中581成功・3skip（175.04秒）。ビルド・配信物26項目27.53秒・SKILL成功。Node24根治/実GPU動作/物理精度は証明しない。",
       "acceptanceEn": "Implemented13profiles (12onNode) and selection diagnostics. Eight new tests, seven real MCP analyses,22existing Worker tests with observation assertions and actual browser three-time thermal fields verified. Node24 full suites reproduced V8fatal twice; isolated tests pass and an intervening unchanged-source retry passed581/skipped3. Final-source Node26 full suite:581passed/3skipped of584 (175.04s). Build,26distribution checks27.53s andSKILL pass. No Node24 root fix, real-GPU or physical-accuracy claim.",
       "evidence": "src/observation-profiles.js; src/capabilities.js; src/analysis-preflight.js; scripts/studio-mcp.mjs; tests/observation-profiles.test.mjs; tests/preflight-observation-profiles.test.mjs; tests/mcp-observation-profiles.test.mjs; docs/evidence/2026-10-14-observation-profiles-browser.json; docs/testing.md"
+    },
+    {
+      "id": "NODERUNTIMEINFO1",
+      "title": "LLMへ実際のNode環境と既知停止の該当状況を返す",
+      "titleEn": "Report actual Node identity and matching known runtime failures to LLM clients",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "RUNTIMEWASM1"
+      ],
+      "detail": "能力取得・実行診断・事前検査のMCPにNode/V8/platform/archだけのruntime報告を追加。記録済み完全一致環境の未解決warningと他環境の未評価を区別し、物理診断・allowed・保存assessment・実行制御・既定環境を変更しない。",
+      "detailEn": "Add allowlisted Node/V8/platform/arch runtime reports to capability,diagnostic and preflight MCP reads. Distinguish exact recorded unresolved-risk identities from unassessed runtimes without changing physical diagnostics,allowed,saved assessments,execution controls or defaults.",
+      "acceptance": "新4件を含む関連25試験をNode24.11.1と26.10.0で各25成功（2.27秒/11.41秒）。両環境の実stdio3読取で環境一致・入力不変・allowed維持と未評価/警告を確認。ビルド・配信物26項目（27.75秒）・SKILL成功。全体数値試験の再実行ではなく、既知V8停止の根治や未知環境の安全を証明しない。",
+      "acceptanceEn": "All25targeted tests including four new tests pass on Node24.11.1 and26.10.0 (2.27s/11.41s). Real stdio three-tool reports on both runtimes verify identities,unchanged inputs/allowed and risk-versus-unassessed status. Build,26distribution checks27.75s andSKILL pass. Not a rerun of the full numerical suite or proof of V8 resolution/unknown-runtime safety.",
+      "evidence": "scripts/node-runtime-info.mjs; scripts/studio-mcp.mjs; tests/node-runtime-info.test.mjs; tests/mcp-runtime-info.test.mjs; tests/capabilities.test.mjs; docs/evidence/2026-10-14-runtime-info-node24.json; docs/evidence/2026-10-14-runtime-info-node26.json; docs/testing.md"
     }
   ],
   "solvers": [

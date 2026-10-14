@@ -307,3 +307,7 @@ nodeBodiesの保持・ページ取得、bodyIndex/elementIndexを指定した中
 ## 2026-10-14: ソルバー別中間観測プロファイル
 
 観測profilesとdiagnoseExecution/preflight.selectedObservationの機械可読な選択を追加する。実装済み観測と実行可否・物理妥当性を区別し、保持条件やゼロ反復を取得保証としない。27/29ツール・71操作は不変。新8試験を追加。実stdioの7解析（CPU線形、定常/過渡熱、過渡/周波数音響、流路、MFEM）と、既存Worker22試験へ追加したメッシュ/固有振動/塑性/超弾性/Stokes/WebGPUのCPUフォールバック・適応解析の観測照合が成功し、13profileを実経路で確認した。実GPUの検証ではない。実ブラウザでも選択thermal-transient、3時刻のイベントと保存場、26.715924632310557°Cの点取得を確認し、MFEM熱の未対応選択を拒否した。[記録](evidence/2026-10-14-observation-profiles-browser.json)と[画面](evidence/2026-10-14-observation-profiles-browser.jpg)。Node24全体は既知V8停止を2回再捕捉、間の同ソース再試行は584中581成功・3スキップ。最終ソースNode26全体は同584中581成功・3スキップ（175.04秒）。[失敗証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)と[比較生記録](evidence/2026-10-14-observation-profiles-node26-full.json)を保存し、根治扱いしない。ビルド・配信物26項目（27.53秒）・SKILL成功。
+
+## 2026-10-14: MCPのNode runtime読取報告
+
+3つの読取MCPのトップレベルruntime、4値allowlistとnull、不一致環境のnot-assessed・実測完全一致のみobserved-riskを対象とする。実行path等の送信や実行制御・既定変更・物理allowed/保存assessment変更は行わない。27/29ツール・71操作は不変。新4件を含む関連25試験をNode24.11.1（2,274.3868 ms）と26.10.0（11,410.0885 ms）で各25成功。実stdioの3読取toolが同じ実identityを返し、入力と既存の判定結果が不変であることを確認。[Node24の報告](evidence/2026-10-14-runtime-info-node24.json)はobserved-riskでもpreflight.allowed:true、[Node26の報告](evidence/2026-10-14-runtime-info-node26.json)はnot-assessedかつcompatibilityVerified:falseを保持した。これは既知停止の根治や未評価環境の安全保証ではない。今回の変更範囲に対する試験で、全体数値試験は再実行していない。ビルド・配信物26項目（27.75秒）・SKILL成功。

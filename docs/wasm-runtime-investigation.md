@@ -77,3 +77,5 @@ HEAD f7a2ea8を基準とする今回の初回全体試験は584件中580成功�
 観測照合を既存Worker試験3ファイルへ追加した後の最終Node24実行でも、既存`analysis-job-service.test.mjs`が同じfatalで停止した。報告件数は583件中579成功・1失敗・3スキップ（70,992.8209 ms）。途中プロセス停止により通常の全体件数より減っており、試験を削減した結果ではない。productionソースはこの再実行のために変更していない。同ファイルの単独再試行3件は1,660.2976 msで成功したが、再現性と根本原因は未解決。
 
 既存[再発証拠](evidence/2026-10-14-observation-profiles-v8-failure.json)のfinalCoverageRunへ2回目の失敗を追記した。公式QA portable Node26.10.0の最終ソース全体比較は584件中581成功・3スキップ、V8fatalなし（試験175,036.3216 ms、壁時計176,762 ms）。[生記録](evidence/2026-10-14-observation-profiles-node26-full.json)と、追加helperを含む照合済みソースSHAを保存した。これは性能ベンチマークや上流修正との原因一致の証明ではない。既定Nodeは変更しない。比較や再試行が成功しても、Node24で観測した失敗や原因未解決を取り消さない。
+
+MCPのstudio_capabilities/diagnose_execution/preflight_projectのruntimeから、node/v8/platform/archの機械報告と既知実測環境への警告を取得できる。完全一致だけobserved-risk、他はnot-assessedで、根治・互換性の保証ではない。純studioApiのportable能力とは分離する。

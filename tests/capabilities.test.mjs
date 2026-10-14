@@ -5,7 +5,7 @@ import {createStudioApi} from '../src/studio-api.js';
 import {callStudioTool} from '../scripts/studio-mcp.mjs';
 test('discovery separates host support, candidates and unavailable live MCP',async()=>{
  const node=await callStudioTool('studio_capabilities');
- assert.deepEqual(node,getCapabilities({target:'node'}));
+ const {runtime,...staticCapabilities}=node;assert.deepEqual(staticCapabilities,getCapabilities({target:'node'}));assert.equal(runtime.node,process.version);assert.equal(runtime.v8,process.versions.v8);assert.equal(runtime.platform,process.platform);assert.equal(runtime.arch,process.arch);
  assert.ok(!node.engines[0].methods.includes('webgpu-pcg'));
  assert.ok(createStudioApi().getCapabilities().engines[0].methods.includes('webgpu-pcg'));
  assert.equal(node.nativeMachineCode,false);assert.equal(node.operations.liveBrowserMcp,false);

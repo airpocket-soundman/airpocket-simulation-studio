@@ -1,0 +1,88 @@
+{
+  "transport": "Real MCP stdio read-only tools; no analysis or WASM initialization requested.",
+  "capabilitiesRuntime": {
+    "schemaVersion": 1,
+    "kind": "node",
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64",
+    "knownIssueAssessment": "observed-risk",
+    "diagnostics": [
+      {
+        "code": "NODE_WASM_ALLOCATION_FATAL_OBSERVED",
+        "severity": "warning",
+        "status": "unresolved",
+        "message": "A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.",
+        "evidence": [
+          "docs/evidence/2026-10-14-observation-profiles-v8-failure.json"
+        ],
+        "suggestions": [
+          "Inspect the recorded evidence and its limits.",
+          "Consider the already verified browser path or an explicit runtime comparison.",
+          "Do not automatically change the runtime or environment."
+        ]
+      }
+    ],
+    "compatibilityVerified": false,
+    "rootFixProven": false
+  },
+  "diagnosticRuntime": {
+    "schemaVersion": 1,
+    "kind": "node",
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64",
+    "knownIssueAssessment": "observed-risk",
+    "diagnostics": [
+      {
+        "code": "NODE_WASM_ALLOCATION_FATAL_OBSERVED",
+        "severity": "warning",
+        "status": "unresolved",
+        "message": "A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.",
+        "evidence": [
+          "docs/evidence/2026-10-14-observation-profiles-v8-failure.json"
+        ],
+        "suggestions": [
+          "Inspect the recorded evidence and its limits.",
+          "Consider the already verified browser path or an explicit runtime comparison.",
+          "Do not automatically change the runtime or environment."
+        ]
+      }
+    ],
+    "compatibilityVerified": false,
+    "rootFixProven": false
+  },
+  "preflightRuntime": {
+    "schemaVersion": 1,
+    "kind": "node",
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64",
+    "knownIssueAssessment": "observed-risk",
+    "diagnostics": [
+      {
+        "code": "NODE_WASM_ALLOCATION_FATAL_OBSERVED",
+        "severity": "warning",
+        "status": "unresolved",
+        "message": "A fatal V8 WASM allocation failure was observed for this exact runtime identity. This metadata does not predict whether an individual operation will fail.",
+        "evidence": [
+          "docs/evidence/2026-10-14-observation-profiles-v8-failure.json"
+        ],
+        "suggestions": [
+          "Inspect the recorded evidence and its limits.",
+          "Consider the already verified browser path or an explicit runtime comparison.",
+          "Do not automatically change the runtime or environment."
+        ]
+      }
+    ],
+    "compatibilityVerified": false,
+    "rootFixProven": false
+  },
+  "preflightAllowed": true,
+  "inputDiagnostics": [],
+  "inputUnchanged": true,
+  "defaultRuntimeChanged": false
+}
