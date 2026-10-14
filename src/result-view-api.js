@@ -12,7 +12,7 @@ function cameraSettings(value){
  const direction=value.target.map((v,i)=>v-value.position[i]),length=Math.hypot(...direction),up=Math.hypot(...value.up),cross=[direction[1]*value.up[2]-direction[2]*value.up[1],direction[2]*value.up[0]-direction[0]*value.up[2],direction[0]*value.up[1]-direction[1]*value.up[0]];
  if(![...direction,length,up,...cross,Math.hypot(...cross)].every(Number.isFinite)||length<=1e-9||up<=1e-9||Math.hypot(...cross)<=length*up*1e-9)throw Error('Camera direction and up vector are degenerate');return value;
 }
-function validate(settings,result){
+export function validateResultViewSettings(settings,result){
  const fields=resultFields(result).map(f=>f.id);if(!fields.includes(settings.field))throw Error('Field is unavailable for this result');
  if(!Number.isFinite(settings.deformScale)||settings.deformScale<0)throw Error('Deformation scale must be finite and nonnegative');
  for(const key of ['surface','surfaceWire','volumeWire','section'])if(typeof settings[key]!=='boolean')throw Error('Invalid result layer setting');
@@ -27,7 +27,7 @@ function validate(settings,result){
 export function createResultViewApi(adapter){
  async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),revision=await getProjectRevision(JSON.parse(serialized));if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision};}
  const unchanged=({output,serialized})=>adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
- function read(output){const s=structuredClone(adapter.get());return validate({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
+ function read(output){const s=structuredClone(adapter.get());return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
  function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){
@@ -47,7 +47,7 @@ export function createResultViewApi(adapter){
    if(patch.camera)next.camera={...previous.camera,...patch.camera};
    if(patch.field!==undefined&&patch.field!==previous.field&&!Object.hasOwn(patch,'colorRange'))next.colorRange=null;
    if(patch.timeSeconds!==undefined){if(patch.frameIndex!==undefined||!Number.isFinite(patch.timeSeconds)||c.output.result.kind!=='acousticTransient')throw Error('Specify one stored acoustic time or frame index');const index=c.output.result.snapshots.findIndex(f=>Math.abs(f.time-patch.timeSeconds)<=Math.max(1e-12,Math.abs(f.time)*1e-10));if(index<0)throw Error('No stored acoustic frame at requested physical time');next.frameIndex=index;}
-   validate(next,c.output.result);
+   validateResultViewSettings(next,c.output.result);
    if(!unchanged(c)||adapter.isBusy?.()||!guard())throw Error('Displayed result changed, viewer busy or command expired');
    try{adapter.set(structuredClone(next));}catch(error){try{adapter.set(previous);}catch(rollback){throw new AggregateError([error,rollback],'Viewer update and restoration failed');}throw error;}
    return summary(c,read(c.output));

@@ -1419,8 +1419,8 @@
       ],
       "detail": "カメラ・表示量・色範囲・時刻/モード・レイヤー・断面を専用JSONで保存/読込。最大16件、内容版と一覧版を照合。GUIと任意MCP接続34操作で使用。",
       "detailEn": "Portable JSON snapshots of camera/field/range/time/mode/layers/section. Up to16 entries, item/archive revision checks, GUI and optional34-method MCP connector.",
-      "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。自動永続化・ケース同梱・異なる結果の同期は残す。",
-      "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. Automatic persistence, case bundling and cross-result synchronization remain unfinished.",
+      "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。ケース同梱はCASEVIEWBUNDLE1で追加。自動永続化・異なる結果の同期は残す。",
+      "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. CASEVIEWBUNDLE1 adds case bundling. Automatic persistence and cross-result synchronization remain unfinished.",
       "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md"
     },
     {
@@ -1541,6 +1541,22 @@
       "acceptance": "全体470中467成功・3スキップ、ビルドと配信物26項目成功。実ローカルブラウザ/MCPで658111bytesを11分割読込し4002経路2層、664735bytesを11分割書出してハッシュ一致。実3MFの分割解析はNode試験。最大容量・ピークヒープ・公開HTTPSは未確認。",
       "acceptanceEn": "Full suite467 passed/three skipped of470; build and26 distribution checks passed. Actual local browser/MCP uploaded658111bytes in11 chunks, yielding4002segments/two layers, and exported664735bytes in11 verified pages. Real3MF split parsing tested inNode. Maximum sizes, peak heap and public HTTPS remain unverified.",
       "evidence": "src/print-transfer.js; tests/print-transfer.test.mjs; tests/mcp-print-transfer-protocol.test.mjs; docs/evidence/2026-10-14-print-transfer.json; docs/testing.md"
+    },
+    {
+      "id": "CASEVIEWBUNDLE1",
+      "title": "ケースと結果版付きビューを一体保存・復元",
+      "titleEn": "Save and restore linked cases and result views together",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "NAMEDVIEWS1",
+        "CASEARCHIVE1"
+      ],
+      "detail": "既存単体形式を維持したcase-view-bundleを追加。ケース表示用の正規化結果SHA・表示量/時刻/モード/setupを照合し、両一覧を一括取込。現在入力へ自動適用せず、孤立ビューや版の自動修正を拒否。GUI・共通API・MCP25/27ツール・62ライブ操作。",
+      "detailEn": "Add case-view-bundle while preserving separate formats. Validate display-prepared result SHA, fields/frames/modes/setup and atomically replace both archives without automatic current-input changes or orphan/revision remapping. GUI/shared API/MCP25/27tools and62live methods.",
+      "acceptance": "全体484中481成功・3スキップ。実ローカルIAB/Worker/WASM/MCPで208374bytesのGUI/MCP一致、0件から1ケース1ビューへ読込、全表示設定と0.04mm点値を復元。旧ケース/固有/過渡の文脈拒否は単体試験。ビルド・配信物26項目成功。公開HTTPS・最大容量・全結果種の実画面は未確認。",
+      "acceptanceEn": "481passed/three skipped of484. Actual local IAB/Worker/WASM/MCP verifies208374byte GUI/MCP equality, empty-to-one case/view import, complete display restoration and0.04mm probe. Legacy/modal/transient context refusal covered by unit tests. Build and26distribution checks passed. Public HTTPS, maximum sizes and every result kind inUI remain unverified.",
+      "evidence": "src/case-view-bundle.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-bundle-proof.json; docs/testing.md"
     }
   ],
   "solvers": [

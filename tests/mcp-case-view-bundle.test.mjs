@@ -1,0 +1,30 @@
+import {prepareCaseView} from '../src/case-view.js';
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {mkdtemp,readFile,writeFile,rm,readdir} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createInterface} from 'node:readline';
+import {getProjectRevision} from '../src/project-revision.js';
+const output=()=>({input:{version:1,meshes:[{positions:[0,0,0,1,0,0,0,1,0],faceIds:[0]}],conditions:[]},calculation:{operation:'elastic',options:{size:5,method:'pcg',adaptive:false,maxRounds:3}},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],surface:[{nodes:[0,1,2]}]},result:{kind:'elastic',maxDisplacementMm:.04,maxVonMisesPa:1e6,displacement:Array(12).fill(0),magnitudes:Array(4).fill(0),vonMises:[0]}});
+test('real MCP validates portable case/view bundle links using existing saved-result validation without returning full archives or writing files',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-case-bundle-')),child=spawn(process.execPath,['scripts/studio-mcp.mjs'],{cwd:new URL('../',import.meta.url),stdio:['pipe','pipe','pipe']}),lines=createInterface({input:child.stdout}),pending=new Map();let id=0,stderr='';child.stderr.on('data',v=>stderr+=v);
+ lines.on('line',line=>{const message=JSON.parse(line);pending.get(message.id)?.(message);});
+ const rpc=(method,params)=>new Promise((resolve,reject)=>{const key=++id,timer=setTimeout(()=>{pending.delete(key);reject(Error('MCP timeout '+stderr));},10000);pending.set(key,message=>{clearTimeout(timer);pending.delete(key);resolve(message);});child.stdin.write(JSON.stringify({jsonrpc:'2.0',id:key,method,params})+'\n');});
+ const call=async args=>{const response=await rpc('tools/call',{name:'studio_validate_case_bundle',arguments:args});assert.equal(response.error,undefined);return response.result;},value=result=>{assert.notEqual(result.isError,true,result.content?.[0]?.text);return result.structuredContent.value;};
+ try{
+  await rpc('initialize',{protocolVersion:'2025-11-25'});child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');const tools=(await rpc('tools/list',{})).result.tools;assert.equal(tools.length,25);assert.equal(tools.find(t=>t.name==='studio_validate_case_bundle').annotations.readOnlyHint,true);
+  const analysis=output(),resultRevision=await getProjectRevision(JSON.parse(JSON.stringify(prepareCaseView({name:'Reference',output:analysis})))),view={id:'reference',name:'日本語の表示',resultRevision,result:{field:'stress',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:false,colorRange:{field:'stress',minimum:0,maximum:1},camera:{position:[5,5,5],target:[0,0,0],up:[0,1,0],fov:40}},setup:{clipEnabled:false,flip:false,axis:0,position:0,opacity:1,meshCount:1,hiddenParts:[]}},bundle={version:1,kind:'case-view-bundle',caseArchive:{version:1,cases:[{name:'Reference',output:analysis}]},namedViewArchive:{version:1,views:[view]}};
+  const path=join(dir,'bundle.json'),json=JSON.stringify(bundle);await writeFile(path,json);const before=await readdir(dir),validated=value(await call({path}));assert.equal(validated.revision,await getProjectRevision(bundle));assert.equal(validated.caseCount,1);assert.equal(validated.viewCount,1);assert.equal(validated.matches[0].viewId,'reference');assert.equal(validated.matches[0].resultRevision,resultRevision);assert.deepEqual(validated.matches[0].caseIndexes,[0]);assert.equal(validated.caseArchive,undefined);assert.equal(validated.namedViewArchive,undefined);assert.ok(JSON.stringify(validated).length<2000);assert.deepEqual(await readdir(dir),before);assert.equal(await readFile(path,'utf8'),json);
+  const corruptions=[b=>b.namedViewArchive.views[0].resultRevision='sha256:'+'0'.repeat(64),b=>b.namedViewArchive.views[0].result.field='temperature',b=>b.namedViewArchive.views[0].result.frameIndex=0,b=>b.namedViewArchive.views[0].result.modeIndex=0,b=>b.namedViewArchive.views[0].setup.meshCount=2,b=>b.namedViewArchive.views[0].setup.hiddenParts=[1],b=>b.caseArchive.cases[0].output.result.displacement.pop(),b=>b.caseArchive.cases[0].output.mesh.tetrahedra[0][3]=99,b=>b.caseArchive.cases[0].output.result.maxDisplacementMm=-1,b=>b.namedViewArchive.views.push(structuredClone(b.namedViewArchive.views[0])),b=>b.kind='other',async b=>{b.namedViewArchive.views[0].resultRevision=await getProjectRevision(b.caseArchive.cases[0].output);}];
+  for(let index=0;index<corruptions.length;index++){
+   const bad=structuredClone(bundle);await corruptions[index](bad);
+   // Re-link when preparation permits it; damaged arrays/mesh may already fail saved-result validation.
+   if(index>=6&&index<=8){try{bad.namedViewArchive.views[0].resultRevision=await getProjectRevision(JSON.parse(JSON.stringify(prepareCaseView(bad.caseArchive.cases[0]))));}catch{/* Existing saved-result validation must reject this damage before linking. */}}
+   const badPath=join(dir,'bad-'+index+'.json');await writeFile(badPath,JSON.stringify(bad));const files=await readdir(dir);assert.equal((await call({path:badPath})).isError,true,'corruption '+index);assert.deepEqual(await readdir(dir),files);
+  }
+  assert.equal((await call({path:'relative.json'})).isError,true);assert.equal((await call({path,unknown:true})).isError,true);
+  const empty={version:1,kind:'case-view-bundle',caseArchive:{version:1,cases:[]},namedViewArchive:{version:1,views:[]}},emptyPath=join(dir,'empty.json');await writeFile(emptyPath,JSON.stringify(empty));const emptySummary=value(await call({path:emptyPath}));assert.equal(emptySummary.caseCount,0);assert.equal(emptySummary.viewCount,0);
+ }finally{child.kill();lines.close();await rm(dir,{recursive:true,force:true});}
+});

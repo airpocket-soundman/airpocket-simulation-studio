@@ -1,0 +1,249 @@
+{
+  "environment": "Actual local in-app browser, browser Worker/Airpocket WASM, real stdio MCP and HTTP",
+  "before": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "caseCount": 1,
+    "viewCount": 1
+  },
+  "exportInfo": {
+    "transferId": "dbcc2e54-ddce-48b6-9e21-0f8bfbdc372a",
+    "direction": "export",
+    "archiveRevision": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "totalBytes": 208374,
+    "sha256": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "maxChunkBytes": 65536
+  },
+  "readPages": 4,
+  "validation": {
+    "schemaVersion": 1,
+    "revision": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "caseCount": 1,
+    "viewCount": 1,
+    "matches": [
+      {
+        "viewId": "5499fec0-b718-4e28-a498-b2b4c74c2471",
+        "name": "Bundle fixed reference view",
+        "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+        "caseIndexes": [
+          0
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "kind": "elastic",
+      "fields": [
+        {
+          "id": "displacement",
+          "unit": "mm"
+        },
+        {
+          "id": "stress",
+          "unit": "MPa"
+        }
+      ],
+      "state": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 25,
+        "surface": true,
+        "surfaceWire": true,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": {
+          "field": "displacement",
+          "minimum": 0,
+          "maximum": 0.05
+        },
+        "camera": {
+          "position": [
+            80,
+            60,
+            80
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ],
+          "fov": 35
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 0,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "frames": [],
+      "modes": []
+    },
+    "setup": {
+      "clipEnabled": true,
+      "axis": 2,
+      "position": 20,
+      "flip": false,
+      "opacity": 0.7,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  },
+  "empty": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:28a6ea34c661beb55b166f920446c5ff829ccbbfd171e88058cf990f4b46d322",
+    "caseCount": 0,
+    "viewCount": 0
+  },
+  "restored": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "caseCount": 1,
+    "viewCount": 1,
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "kind": "elastic",
+      "fields": [
+        {
+          "id": "displacement",
+          "unit": "mm"
+        },
+        {
+          "id": "stress",
+          "unit": "MPa"
+        }
+      ],
+      "state": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 25,
+        "surface": true,
+        "surfaceWire": true,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": {
+          "field": "displacement",
+          "maximum": 0.05,
+          "minimum": 0
+        },
+        "camera": {
+          "position": [
+            80,
+            60,
+            80
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            0,
+            1
+          ],
+          "fov": 35
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 0,
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "frames": [],
+      "modes": []
+    },
+    "setup": {
+      "clipEnabled": true,
+      "axis": 2,
+      "position": 20,
+      "flip": false,
+      "opacity": 0.7,
+      "meshCount": 1,
+      "hiddenParts": []
+    },
+    "probe": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:fe7673d1c1767563c3f35b66a5c4d4c21fa3b118584e3b37812500be52b17a06",
+      "kind": "elastic",
+      "display": {
+        "field": "displacement",
+        "modeIndex": null,
+        "frameIndex": null
+      },
+      "point": [
+        5,
+        5,
+        40
+      ],
+      "element": 158,
+      "weights": [
+        -4.440892098500626e-16,
+        0.5005865574720816,
+        0.4994134425279184,
+        0
+      ],
+      "displacementMm": [
+        1.3812181241744085e-12,
+        2.496925609531012e-12,
+        0.03999999999944816
+      ],
+      "magnitudeMm": 0.03999999999944816,
+      "vonMisesPa": 999999.9999830347,
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      }
+    }
+  },
+  "gitBase": "965fc366adfa95440e42aa4c51cb3eb49e6400a3",
+  "guiDownload": {
+    "bytes": 208374,
+    "equalsMcpExport": true,
+    "sha256": "sha256:991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9"
+  },
+  "guiImport": {
+    "clearedFirst": true,
+    "japaneseStatus": "1 ケース・1 ビューを読み込みました。",
+    "englishStatus": "Imported 1 cases and 1 views.",
+    "activeCylinderUnchangedByImport": true,
+    "displayedCaseByButton": true,
+    "restoredViewByButton": true,
+    "deformationScale": 25,
+    "viewStatus": "View restored."
+  },
+  "limits": "Actual local IAB test only. Public HTTPS, maximum100MB and all physical-result kinds not verified by this browser test."
+}

@@ -1,3 +1,5 @@
+import {createCaseViewBundle} from './case-view-bundle.js';
+import {installCaseBundleUi} from './case-bundle-ui.js';
 import {createPrintTransfer} from './print-transfer.js';
 import {createGuiAnalysisJobs} from './gui-analysis-jobs.js';
 import {createPrintOperations} from './print-operations.js';
@@ -450,6 +452,10 @@ window.namedViewApi=Object.freeze(Object.fromEntries(['list','save','apply','rem
 namedViewUi=installNamedViewUi({api:window.namedViewApi,resultView:window.resultViewApi,translate:addTranslations,language:()=>language});
 window.caseOperations=createCaseOperations({store:window.caseApi,getAnalysis:()=>lastAnalysis,view:viewCase,loadProject:project=>api.loadProject(project),isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 window.caseArchiveTransfer=createCaseArchiveTransfer({cases:window.caseOperations});
+const caseBundle=createCaseViewBundle({store:caseStore,namedViews,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+window.caseBundleApi=Object.freeze({...caseBundle,async importArchive(...args){const result=await caseBundle.importArchive(...args);try{renderCases();await namedViewUi.refresh();}catch(error){status(error.message);return {...result,presentationWarning:error.message};}return result;}});
+window.caseBundleTransfer=createCaseArchiveTransfer({cases:window.caseBundleApi});
+installCaseBundleUi({api:window.caseBundleApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive(),translate:addTranslations,language:()=>language,status});
 
 
 const materialCatalog=installMaterialCatalog({api,language:()=>language,translate:addTranslations,status});
@@ -472,4 +478,4 @@ window.printImportApi=installPrintImport({language:()=>language,translate:addTra
 
 window.printOperations=createPrintOperations({...window.printImportApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||$('print-file').disabled||visualExport.isActive()});
 window.printTransfer=createPrintTransfer({prints:window.printOperations});
-installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,prints:window.printOperations,printTransfers:window.printTransfer,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+installBrowserSession({studio:api,analysis,view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,prints:window.printOperations,printTransfers:window.printTransfer,caseBundles:window.caseBundleApi,caseBundleTransfers:window.caseBundleTransfer,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});

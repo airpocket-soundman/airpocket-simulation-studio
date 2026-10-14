@@ -4,7 +4,7 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-24ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+25ツール: `studio_capabilities`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_job_artifact`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -67,7 +67,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の24ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の25ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -96,11 +96,11 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ケースは`caseList()`の`archiveRevision`と各ケースの`caseId`・`revision`を使用します。`caseView`、`caseRestoreInput`、`caseRemove`へ`{caseId,expectedRevision}`を、`caseRename`には追加で`name`を渡します。`caseSave({name,expectedResultRevision})`は現在の表示結果を最大8件の保存枠へ追加します。共通APIは`window.caseOperations.list/saveCurrent/view/restoreInput/rename/remove`です。caseIdはページ内だけで有効で、外部からケース集を変更すると古いIDは失効します。改名後も内容revisionを更新してから次の操作へ進みます。
 
-共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力は以下の分割転送APIを使用します。ケース集への名前付きビュー同梱は継続課題です。
+共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力は以下の分割転送APIを使用します。ケースと名前付きビューの一体保存には下記のbundle形式を使用します。
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは55操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは62操作を公開します（通常25ツール、接続モード27ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -121,7 +121,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 `namedViewApply({viewId,expectedRevision,expectedResultRevision})`は保存時と同じ結果版だけに適用します。異なる計算結果への同期プリセットではありません。`namedViewRemove({viewId,expectedRevision})`で削除します。競合時は一覧と表示結果を読み直し、古い版をそのまま再送しないでください。
 
-`namedViewExport()`は`{version:1,views:[{id,name,resultRevision,result,setup}]}`のJSONを返します。明示的に保存し、`namedViewImport({archive,expectedArchiveRevision})`で再取込すると持ち運べます。取込は現在のビュー一覧全体を置き換えます。未知キー、非有限値、不正なカメラ・範囲・形式、重複IDは拒否します。適用の途中失敗では以前の状態への復元を試みます。自動localStorage保存やケース集への同梱は行いません。ページを閉じる前に必要なビューを明示的に書き出してください。
+`namedViewExport()`は`{version:1,views:[{id,name,resultRevision,result,setup}]}`のJSONを返します。明示的に保存し、`namedViewImport({archive,expectedArchiveRevision})`で再取込すると持ち運べます。取込は現在のビュー一覧全体を置き換えます。未知キー、非有限値、不正なカメラ・範囲・形式、重複IDは拒否します。適用の途中失敗では以前の状態への復元を試みます。自動localStorage保存は行いません。ケース同梱には下記のbundle形式を使います。ページを閉じる前に必要なビューを明示的に書き出してください。
 
 ## ケース集の分割入出力
 
@@ -192,3 +192,17 @@ GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共�
 共通転送APIは`window.printTransfer.beginExport/read/beginImport/write/commit/release`です。writeは直前のチャンクと同じoffset・dataの再送を受理します。確定済み・失敗した転送も解放まで保持枠を占有するため、不要時にreleaseしてください。ローカル実ブラウザでの検証範囲は[検証記録](testing.md)を参照。最大容量・ピークヒープ・公開HTTPSは未確認です。
 
 転送上限はパーサの対応範囲を広げません。G-codeは既存の25,000,000文字・200,000区間上限、3MFは既存のZIP・三角形等の上限を引き続き適用します。
+
+## ケースと名前付きビューの一体保存
+
+別形式の`{version:1,kind:"case-view-bundle",caseArchive:{version:1,cases},namedViewArchive:{version:1,views}}`でケース集と名前付きビューを一緒に保存します。既存のケース単独・ビュー単独形式は維持します。`studio_validate_case_bundle({path})`は読取専用でケースの物理結果とビューの参照を検証し、件数と版の要約を返します。
+
+接続の`caseBundleList()`は確認権限で`archiveRevision`とケース/ビュー件数を返します。確認権限の`caseBundleExport({expectedArchiveRevision})`、`caseBundleRead({transferId,offset,length})`、`caseBundleRelease({transferId})`と、編集権限の`caseBundleImport({expectedArchiveRevision,totalBytes,sha256})`、`caseBundleWrite({transferId,offset,data})`、`caseBundleCommit({transferId})`はケース集転送と同じ引数・分割契約を使用します。bundle転送内で合計100,000,000バイト・最大4枠を共有します。これは保持バッファ予算で、ピークヒープの上限ではありません。
+
+各ビューのresultRevisionは同梱ケースを`prepareCaseView`で表示用に正規化したoutput全体のSHA-256と一致する必要があります。旧ケースでは表示時にmesh.summaryを再計算するため、生の保存JSONのハッシュとは異なることがあります。保存ケースの物理データを書き換えたり、指定ビューの版を自動で対応付け直したりしません。生JSONの版だけを参照する旧ビューは拒否し、ケースを表示して名前付きビューを保存し直してください。対応する結果がないビューは書出を拒否し、対応するケースを保存するかビューを削除して修復します。自動で孤立ビューを捨てません。不正な表示量・モード・フレーム・setupのメッシュ数も拒否します。
+
+取込はハッシュ・現在の両アーカイブの版・入力スナップショットを検査してから、ケースとビューを同期的に一括確定します。現在の入力・表示への自動適用は行いません。名前付きビューIDは維持し、実行時ケースIDは内容変更により再発行される場合があるためcaseListで取得し直します。別結果への対応付けや版の置換は行いません。GUIにも一体形式専用の書出・取込操作を追加します。
+
+共有APIは`window.caseBundleApi.list/exportArchive/importArchive`、分割転送は`window.caseBundleTransfer`（既存caseArchiveTransferと同じbeginExport/read/beginImport/write/commit/release）です。GUIの専用操作は`installCaseBundleUi`で組み込みます。
+
+ローカル実ブラウザ・実WASM・実MCPで、GUIダウンロードとMCP分割書出の同一性、GUI再取込、ケースと表示設定の復元を確認しました（[検証記録](testing.md)）。公開HTTPS・最大容量・全結果種の実GUI確認は含みません。

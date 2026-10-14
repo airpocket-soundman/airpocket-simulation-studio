@@ -217,3 +217,15 @@ This evidence does not cover maximum-size 50 MB input/100 MB retention load test
 The 50,000,000-byte transfer limit does not relax parser limits: G-code remains capped at 25,000,000 characters and 200,000 segments; existing 3MF ZIP/triangle and other limits still apply. Actual-browser evidence at 658,111 bytes is not maximum-capacity verification.
 
 After the full run, the protocol test was strengthened to624,106 characters/1,504,110bytes and passed in isolation. Actual MCP refused inline importPrint at the500,000-character limit without loading data, then accepted the same source through23 chunks. Product code was unchanged by this stronger test.
+
+## 2026-10-14: combined case and named-view bundles
+
+Tool counts are 25 default/27 connected, with 62 connector methods. The full suite passed 481 of 484 tests, with three skips and zero failures, at concurrency four in 72.46 seconds. Twelve bundle-core plus 20 existing named/result tests passed (32 total), as did two new MCP tests using the display-prepared SHA contract. The final build and all26 local-distribution checks also passed (28.41seconds).
+
+References use SHA-256 of JSON-normalized display-prepared output from prepareCaseView(saved), not raw saved JSON. Legacy mesh.summary differences do not trigger automatic view remapping or physical archive changes. Resave views referring only to a raw revision after displaying the case. Contextual modal/transient checks are covered by unit tests, not actual UI verification of every result kind.
+
+The local Codex in-app browser and real WASM produced a structural reference with 171 nodes and 428 elements; real MCP saved its case and named view. Settings included displacement range 0–0.05 mm, deformation scale 25, wire display, camera position [80,60,80], target [5,5,20], up [0,0,1], fov35, a Z=20 section and opacity0.7. The 208,374-byte bundle was exported in four MCP pages and matched the actual GUI download byte-for-byte and by SHA-256.
+
+After clearing both lists to zero, a GUI file chooser imported the downloaded file and restored one case/one view with the same composite revision. MCP caseView/namedViewApply restored all settings by deepEqual and a 0.03999999999944816 mm point displacement. After UI reload to the default cylinder, importing the same file left current cylinder inputs unchanged; GUI 3D display and view restoration recovered deformation scale 25. Japanese/English state and labels were checked.
+
+Saved evidence includes the [reference bundle](../evidence/2026-10-14-case-view-bundle.json), [proof record](../evidence/2026-10-14-case-view-bundle-proof.json) and [UI screenshot](../evidence/2026-10-14-case-view-bundle.jpg). Bundle physics came from synthetic reference inputs computed by real WASM, not real-material calibration. Public HTTPS, 100 MB limit load tests and actual GUI coverage of every result kind remain unverified.

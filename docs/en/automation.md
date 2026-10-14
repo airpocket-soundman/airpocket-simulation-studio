@@ -4,7 +4,7 @@
 
 `npm run mcp` starts a local stdio MCP server implementing the [2025-11-25 tools specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx), with no new library dependency. Run `npm ci` and `npm run build` first to prepare WASM assets.
 
-Twenty-four tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
+Twenty-five tools: `studio_capabilities`, `studio_diagnose_execution`, `studio_material_catalog`, `studio_progress`, `studio_inspect_project`, `studio_edit_project`, `studio_import_project`, `studio_create_builtin_project`, `studio_preflight_project`, `studio_analyze`, `studio_probe`, `studio_validate_cases`, `studio_validate_case_bundle`, `studio_job_artifact`, `studio_assess_result`, `studio_assessment`, `studio_preview_cad_update`, `studio_apply_cad_update`, `studio_import_print`, `studio_inspect_print`, and the five job operations below. Use absolute local JSON paths. Analysis writes the complete result to a new `outputPath` and returns metrics. Input and existing outputs are not overwritten. The same browser CPU Worker runs in an isolated Node worker with a 120-second computation limit. Airpocket CPU and MFEM are supported; WebGPU is excluded.
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})` normalizes STEP/STP to mm through OCCT and saves a new input JSON retaining original STEP data and CAD-face mappings. STL requires a positive explicit `scaleToMm` and follows the current outward, closed, convex single-shell and size restrictions. The input-file limit is 50 MiB. `studio_create_builtin_project({source,outputPath,name?})` creates mm-based `box` (bounds), `boxes` (boxes), fixed-size `cylinder` (kind only), `sphere` (center/radius), or `tube` (center/axis/innerRadius/outerRadius/length). It does not invent material values, supports or loads.
 
@@ -67,7 +67,7 @@ Default MCP works with saved JSON; connector mode also invokes permitted browser
 
 ## Temporary local connector (initial implementation)
 
-Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 24 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
+Run `node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` with the page's exact origin. The 25 default tools gain `studio_browser_sessions` and `studio_browser_call`. Details appear on stderr; stdout stays MCP-only. In **Connect your own LLM**, enter the endpoint/code, select inspect/edit/analyze/view scopes, and explicitly connect. Only inspect is selected by default. Never publish the code or store it in URLs/projects.
 
 The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. Sessions expire after ten minutes without browser polls; process termination loses all sessions. Disconnect cancels jobs started by that connection. Reconnection requires a new grant and does not restore running jobs.
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 55 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 62 methods (25 default tools, 27 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -121,7 +121,7 @@ First read `namedViewList()` for `archiveRevision` and `views` containing `viewI
 
 Apply with `namedViewApply({viewId,expectedRevision,expectedResultRevision})`. Only the exact saved result revision is supported; these are not synchronization presets for different results. Remove with `namedViewRemove({viewId,expectedRevision})`. After a conflict, reread the list and displayed result rather than replaying stale revisions.
 
-`namedViewExport()` returns JSON `{version:1,views:[{id,name,resultRevision,result,setup}]}`. Save it explicitly and use `namedViewImport({archive,expectedArchiveRevision})` to transfer it back, replacing the entire current view list. Unknown keys, nonfinite numbers, invalid cameras/ranges/schema and duplicate IDs are rejected. A failed application attempts to restore the previous state. There is no automatic localStorage persistence or case-archive bundling; export required views explicitly before closing the page.
+`namedViewExport()` returns JSON `{version:1,views:[{id,name,resultRevision,result,setup}]}`. Save it explicitly and use `namedViewImport({archive,expectedArchiveRevision})` to transfer it back, replacing the entire current view list. Unknown keys, nonfinite numbers, invalid cameras/ranges/schema and duplicate IDs are rejected. A failed application attempts to restore the previous state. There is no automatic localStorage persistence; use the combined bundle below or export required views explicitly before closing the page.
 
 ## Chunked case-archive transfers
 
@@ -192,3 +192,17 @@ Inspect-scoped `printTransferRelease({transferId})` frees retention. All transfe
 Shared transfer API: `window.printTransfer.beginExport/read/beginImport/write/commit/release`. Write accepts replay of the immediately previous chunk with the same offset and data. Completed or failed imports retain their slots until release; free them when no longer needed. See the [test record](testing.md) for local actual-browser scope. Maximum capacity, peak heap and public HTTPS remain unverified.
 
 Transfer size limits do not relax parser restrictions: G-code retains the 25,000,000-character/200,000-segment caps, and existing 3MF ZIP/triangle and other caps remain in force.
+
+## Combined case and named-view bundles
+
+The separate format `{version:1,kind:"case-view-bundle",caseArchive:{version:1,cases},namedViewArchive:{version:1,views}}` saves both archives together. Existing case-only and view-only formats remain supported. Read-only `studio_validate_case_bundle({path})` validates physical case results and linked views, returning compact counts/revision metadata.
+
+Inspect-scoped `caseBundleList()` returns archiveRevision and case/view counts. Inspect-scoped `caseBundleExport({expectedArchiveRevision})`, `caseBundleRead({transferId,offset,length})` and `caseBundleRelease({transferId})`, plus edit-scoped `caseBundleImport({expectedArchiveRevision,totalBytes,sha256})`, `caseBundleWrite({transferId,offset,data})` and `caseBundleCommit({transferId})`, reuse case-archive transfer arguments/chunk contracts. Bundle transfers share 100,000,000 retained bytes and four slots; this is not a peak-heap ceiling.
+
+Each named view resultRevision must exactly match the SHA-256 of the JSON-normalized, display-prepared output from `prepareCaseView(saved)`. Legacy cases may recompute mesh.summary for rendering, making this revision differ from raw stored JSON. Physical case archives remain unchanged and supplied views are never remapped. Reject legacy views referring only to the differing raw hash; display the case and resave the named view to repair it. Orphan views refuse export: save the associated case or remove the view first. They are never silently dropped. Unsupported fields/modes/frames or mismatched setup mesh counts are rejected.
+
+Import verifies hashes, both current archive revisions and snapshots before synchronously committing both archives atomically. It does not apply a view or change current inputs. Named-view IDs remain stable; runtime case IDs may regenerate when contents change, so relist cases afterward. Cross-result mapping/revision substitution is unsupported. Separate GUI controls import/export the combined format.
+
+Shared API: `window.caseBundleApi.list/exportArchive/importArchive`; chunk transfer uses `window.caseBundleTransfer` with the existing caseArchiveTransfer beginExport/read/beginImport/write/commit/release contract. Dedicated GUI controls are installed by `installCaseBundleUi`.
+
+Local actual-browser/real-WASM/real-MCP checks verified identical GUI download and MCP chunk export, GUI reimport and case/view restoration ([test record](testing.md)). Public HTTPS, maximum capacity and actual GUI coverage of every result kind are not established.
