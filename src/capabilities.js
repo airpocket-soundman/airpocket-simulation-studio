@@ -11,7 +11,8 @@ export function getCapabilities({target='browser'}={}){
    {id:'mfem',version:'4.10',status:'implemented',methods:['mfem-wasm'],element:'Tet4',studies:['structural'],material:'linear-isotropic',limits:['No modal, plastic, hyperelastic or orthotropic analysis']}
   ],
   candidates:['CalculiX','Elmer','Code_Aster','OpenFOAM'].map(id=>({id,status:'candidate',executable:false})),
-  operations:{projectInspection:true,projectEditing:true,mesh:true,solve:true,probe:true,caseValidation:true,liveBrowserMcp:false,mcpProjectCreation:false,mcpVisualExport:false},
+  operations:{projectInspection:true,projectEditing:true,atomicProjectEditing:true,mesh:true,solve:true,probe:true,caseValidation:true,jobs:true,intermediateEvents:true,liveBrowserMcp:false,mcpProjectCreation:false,mcpProjectEditing:true,mcpJobs:true,mcpVisualExport:false},
+  observation:{schemaVersion:1,jobLifetime:'current-process-or-browser-session',inputRevision:'sha256',eventCursor:'sequence',eventRetention:256,jobRetention:32,provisional:true,intermediateFields:target==='node'?'optional-artifacts':'not-retained',maxIntermediateBytes:target==='node'?64_000_000:0,metrics:['mesh-quality','pcg-residual','modal-residual','nonlinear-load-step','thermal-time-step','acoustic-time-step'],limitations:['No native machine-code or live-browser MCP connection','Some solvers report stage progress only','Intermediate snapshots do not establish final convergence or physical accuracy','Cancellation is unavailable during final file publication']},
   diagnostics:{schemaVersion:1,coverage:'execution-combinations-only',completePreflight:false},
   note:'Implemented scope is not universal physical validation. Geometry, boundary, material, mesh and runtime validation still apply.'
  };

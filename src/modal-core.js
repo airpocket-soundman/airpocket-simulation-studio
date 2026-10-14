@@ -9,7 +9,7 @@ function symmetricEigen(matrix){
  return a.map((r,i)=>({value:r[i],vector:v.map(row=>row[i])})).sort((a,b)=>a.value-b.value);
 }
 
-export function solveModal(mesh,properties,boundary,{modeCount=2,maxIterations=60,matvecFactory,onProgress=()=>{}}={}){
+export function solveModal(mesh,properties,boundary,{modeCount=2,maxIterations=60,matvecFactory,onProgress=()=>{},onObserve}={}){
  if(!Number.isInteger(modeCount)||modeCount<1||modeCount>6||!Number.isInteger(maxIterations)||maxIterations<1||maxIterations>100)throw Error('Invalid modal iteration settings');
  if(properties.orthotropic)throw Error('Orthotropic modal analysis is not yet validated');
  if(properties.hyperelastic||!(properties.density>0)||!Number.isFinite(properties.density))throw Error('Modal analysis requires linear elasticity and positive density');
@@ -24,7 +24,7 @@ export function solveModal(mesh,properties,boundary,{modeCount=2,maxIterations=6
  for(let iter=1;iter<=maxIterations;iter++){q=orthonormalize(q.map(x=>{const rhs=Float64Array.from(x,(v,i)=>v*mass[i]),r=pcg(n,entries,rhs,fixed,{tolerance:1e-10,matvecFactory:()=>apply});linearIterations+=r.iterations;return r.solution;}));
  const reduced=Array.from({length:count},()=>Array(count).fill(0));for(let i=0;i<count;i++){const kq=apply(q[i]);for(let j=0;j<count;j++)reduced[j][i]=q[j].reduce((s,v,k)=>s+v*kq[k],0);}for(let i=0;i<count;i++)for(let j=0;j<i;j++)reduced[i][j]=reduced[j][i]=(reduced[i][j]+reduced[j][i])/2;
  eigen=symmetricEigen(reduced);q=eigen.map(e=>Float64Array.from({length:n},(_,i)=>e.vector.reduce((s,v,j)=>s+v*q[j][i],0)));
- residuals=q.slice(0,modeCount).map((x,a)=>{const kx=apply(x);let err=0,scale=0;for(let i=0;i<n;i++)if(!fixed.has(i)){const m=eigen[a].value*mass[i]*x[i];err+=(kx[i]-m)**2;scale+=m*m;}return Math.sqrt(err/scale);});iterations=iter;onProgress(`Modal subspace ${iter}: ${Math.max(...residuals).toExponential(2)}`);if(residuals.every(v=>Number.isFinite(v)&&v<=1e-5))break;
+ residuals=q.slice(0,modeCount).map((x,a)=>{const kx=apply(x);let err=0,scale=0;for(let i=0;i<n;i++)if(!fixed.has(i)){const m=eigen[a].value*mass[i]*x[i];err+=(kx[i]-m)**2;scale+=m*m;}return Math.sqrt(err/scale);});iterations=iter;onObserve?.({stage:'iteration',solver:'modal-subspace',iteration:iter,residuals:[...residuals],tolerance:1e-5,converged:residuals.every(v=>Number.isFinite(v)&&v<=1e-5)});onProgress(`Modal subspace ${iter}: ${Math.max(...residuals).toExponential(2)}`);if(residuals.every(v=>Number.isFinite(v)&&v<=1e-5))break;
  }
  if(!residuals.every(v=>Number.isFinite(v)&&v<=1e-5)||eigen.slice(0,modeCount).some(e=>!Number.isFinite(e.value)||e.value<=0))throw Error('Modal subspace did not converge; no unverified modes returned');
  const modes=q.slice(0,modeCount).map((x,i)=>{const global=toGlobal(x,bases),max=Math.max(...Array.from({length:n/3},(_,i)=>Math.hypot(...global.slice(3*i,3*i+3)))),displacement=Array.from(global,v=>v/max),magnitudes=Array.from({length:n/3},(_,i)=>Math.hypot(...displacement.slice(3*i,3*i+3)));return {frequencyHz:Math.sqrt(eigen[i].value)/(2*Math.PI),eigenvalue:eigen[i].value,residual:residuals[i],displacement,magnitudes};});

@@ -26,6 +26,8 @@ export function createStudioApi(adapter) {
     version:1,
     getCapabilities,
     diagnoseExecution:(options={},target='browser')=>diagnoseExecution(current(),options,target),
+    async getRevision(){const snapshot=current();const {getProjectRevision}=await import('./project-operations.js');return getProjectRevision(snapshot);},
+    async applyOperations(operations,options={}){const snapshot=current(),commands=clone(operations),editOptions=clone(options);const {applyProjectOperations}=await import('./project-operations.js');const result=await applyProjectOperations(snapshot,commands,editOptions);if(JSON.stringify(current())!==JSON.stringify(snapshot))throw Error('Project revision conflict.');const updated=write(result.project,'batch');return {schemaVersion:result.schemaVersion,previousRevision:result.previousRevision,revision:result.revision,results:result.results,summary:updated};},
     frameFromEuler,
     getSummary:summary,
     inspectGeometry(options){const p=current();return p.meshes.map((m,mesh)=>({mesh,...inspectSurface(m.positions,options)}));},

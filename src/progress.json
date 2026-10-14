@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T08:42:10.512631+00:00",
+  "updatedAt": "2026-10-14T08:58:15.125436+00:00",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -218,7 +218,7 @@
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
       "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
-      "lastUpdate": "十分発達した流路はCFDCHAN1として公開。一般3Dの入口出口・速度圧力連成・形状対応と質量保存は残作業。",
+      "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
       "lastUpdateEn": "Fully developed channels released as CFDCHAN1. General 3D inlet/outlet, velocity-pressure coupling, geometry support and mass conservation remain outstanding."
     },
     {
@@ -1116,7 +1116,7 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md",
-      "lastUpdate": "対応能力取得と実行組合せ診断をAPI/MCPに追加。255テストとビルド成功。操作細分化・完全な事前診断・画面確認は未完了。"
+      "lastUpdate": "能力取得をジョブ・原子的編集・中間情報の制限へ拡張。完全な事前診断と全操作の詳細スキーマは残作業。"
     },
     {
       "id": "P1",
@@ -1130,7 +1130,8 @@
       "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
-      "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence."
+      "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "先行モジュールAGENTEDIT1で保存入力の原子的編集・SHA-256版確認を実装。STEP入力作成と根拠スキーマは未完了。"
     },
     {
       "id": "P2",
@@ -1159,7 +1160,8 @@
       "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
-      "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence."
+      "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "先行モジュールAGENTJOBS1でNode非同期ジョブ・中間イベント/場成果物を実装。ブラウザ接続、再起動越し復元、GUI状態との統合は未完了。"
     },
     {
       "id": "P4",
@@ -1205,7 +1207,8 @@
       "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
-      "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence."
+      "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "独立ターゲットNATIVEPROOF1を準備。同じC++のWASM数値検証は成功、ホスト用C++標準ライブラリ不足でネイティブ実行未確認。"
     },
     {
       "id": "UIRESEARCH1",
@@ -1237,6 +1240,64 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions."
+    },
+    {
+      "id": "AGENTEDIT1",
+      "title": "保存入力をMCPから原子的に編集",
+      "titleEn": "Atomically edit saved input through MCP",
+      "status": "ready",
+      "category": "共通",
+      "depends": [
+        "API1",
+        "MCP1"
+      ],
+      "detail": "意味的操作のallowlist、一括成功時だけ新規保存、改訂競合、元入力/既存出力の保持を実装。",
+      "detailEn": "Semantic allowlisted batches, revision checks and new-file publication preserve input and existing output.",
+      "acceptance": "実プロセスの解析と併用でき、変更途中の失敗・古い版・不正操作を拒否。保存形式の互換性を維持。",
+      "acceptanceEn": "Reject partial failures, stale revisions and invalid operations while preserving save compatibility.",
+      "evidence": "src/project-operations.js; src/project-revision.js; tests/project-operations.test.mjs; tests/mcp-project-edit.test.mjs"
+    },
+    {
+      "id": "AGENTJOBS1",
+      "title": "LLMへジョブ状態と中間結果を返す",
+      "titleEn": "Expose jobs and intermediate results to LLMs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "API1",
+        "MCP1"
+      ],
+      "detail": "CPUの開始・差分イベント・状態・中止・解放、入力版と暫定場成果物を実装。ブラウザ共通APIは要約を取得し、ライブMCP接続は未対応。",
+      "detailEn": "Implement CPU start/events/status/cancel/release, frozen revisions and provisional field artifacts; browser shared APIs expose summaries, without live MCP transport.",
+      "acceptance": "実Worker・MCPで冪等性・中止・旧応答拒否・上限・保存排他と熱時刻場一致を確認。ブラウザでの実Worker操作も確認する。",
+      "acceptanceEn": "Verify real Worker/MCP idempotency, cancellation, stale replies, bounds, exclusive publication and thermal time fields; verify browser Worker operations separately.",
+      "evidence": "src/analysis-jobs.js; scripts/analysis-job-service.mjs; tests/analysis-job-service.test.mjs; tests/mcp-jobs-protocol.test.mjs; tests/analysis-client.test.mjs"
+    },
+    {
+      "id": "CFDINTERNAL1",
+      "title": "内部Stokes流の境界アダプターを検証",
+      "titleEn": "Verify an internal Stokes boundary adapter",
+      "status": "ready",
+      "category": "流体",
+      "depends": [],
+      "detail": "明示ポート速度・壁no-slip・流量収支・Re<=0.1を検査。独立モジュール段階でUI/Worker/保存studyへ未接続。",
+      "detailEn": "Validate explicit port velocities, no-slip walls, flux balance and Re<=0.1; independent module, not yet integrated into UI/Worker/saved study.",
+      "acceptance": "実円管P1/P2のPoiseuille圧損、細分化傾向、流束/発散収支と不正・未対応条件の拒否。",
+      "acceptanceEn": "Verify real-pipe P1/P2 Poiseuille pressure loss, refinement, flux/divergence balance and refusal of invalid/unsupported conditions.",
+      "evidence": "src/internal-stokes-boundary.js; tests/internal-stokes-boundary.test.mjs"
+    },
+    {
+      "id": "NATIVEPROOF1",
+      "title": "MFEMのホスト実行契約を最小例題で実証",
+      "titleEn": "Prove the MFEM host execution contract on a small reference",
+      "status": "building",
+      "category": "基盤",
+      "depends": [],
+      "detail": "独立CMake/CLIを準備し既存C++をWASMで数値検証。ホスト用標準ライブラリ未準備のためネイティブ実行は未確認。",
+      "detailEn": "Prepare independent CMake/CLI and verify existing C++ under WASM; host execution remains unverified without a host C++ standard library.",
+      "acceptance": "実ホスト機械語で棒の変位・反力・残差・不正入力を検証しWASM結果と比較。専用狭範囲CLIは全プロジェクトAPI対応と区別。",
+      "acceptanceEn": "Run real host machine code, verify bar displacement/reaction/residual/invalid input and compare with WASM; distinguish the narrow fixture CLI from a full project API.",
+      "evidence": "native/native-proof/README.md; native/native-proof/main.cpp; tests/native-proof.test.mjs"
     }
   ],
   "solvers": [

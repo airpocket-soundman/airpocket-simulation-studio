@@ -5,14 +5,14 @@ import {meshComponents} from './components.js';
 export function invert(a){const n=a.length,m=a.map((r,i)=>[...r,...Array.from({length:n},(_,j)=>i===j?1:0)]);for(let k=0;k<n;k++){let p=k;for(let i=k+1;i<n;i++)if(Math.abs(m[i][k])>Math.abs(m[p][k]))p=i;if(Math.abs(m[p][k])<1e-20)throw Error('Singular element');[m[k],m[p]]=[m[p],m[k]];const d=m[k][k];for(let j=0;j<2*n;j++)m[k][j]/=d;for(let i=0;i<n;i++)if(i!==k){const q=m[i][k];for(let j=0;j<2*n;j++)m[i][j]-=q*m[k][j];}}return m.map(r=>r.slice(n));}
 export function elementGeometry(mesh,t){const p=t.map(i=>mesh.nodes.slice(i*3,i*3+3).map(v=>v*.001));const inv=invert(p.map(v=>[1,...v]));return {grad:t.map((_,i)=>[inv[1][i],inv[2][i],inv[3][i]]),volume:Math.abs(tetraVolume(mesh.nodes,t))*1e-9};}
 function dot(a,b){let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s;}
-export function pcg(n,entries,rhs,dirichlet,{tolerance=1e-8,maxIterations=2500,matvecFactory}={}){
+export function pcg(n,entries,rhs,dirichlet,{tolerance=1e-8,maxIterations=2500,matvecFactory,onObserve}={}){
  const mask=new Uint8Array(n),g=new Float64Array(n),diagonal=new Float64Array(n);for(const [i,v]of dirichlet){mask[i]=1;g[i]=v;}
  const apply=matvecFactory?matvecFactory(entries,n):x=>{const y=new Float64Array(n);for(const {ids,k}of entries)for(let i=0;i<ids.length;i++)for(let j=0;j<ids.length;j++)y[ids[i]]+=k[i*ids.length+j]*x[ids[j]];return y;};
  for(const {ids,k}of entries)ids.forEach((id,i)=>diagonal[id]+=k[i*ids.length+i]);
  const kg=apply(g),b=Float64Array.from(rhs,(v,i)=>mask[i]?0:v-kg[i]),x=new Float64Array(n),r=b.slice(),z=Float64Array.from(r,(v,i)=>mask[i]?0:v/diagonal[i]);
  for(let i=0;i<n;i++)if(!mask[i]&&(!(diagonal[i]>0)||!Number.isFinite(z[i])))throw Error('Disconnected or invalid mesh');
  const norm=Math.sqrt(dot(b,b));if(norm===0)return {solution:g,iterations:0,residual:0,apply};let p=z.slice(),rz=dot(r,z),residual=1,iteration=0;
- for(;iteration<maxIterations;iteration++){const ap=apply(p);for(let i=0;i<n;i++)if(mask[i])ap[i]=0;const pap=dot(p,ap);if(!(pap>0)||!Number.isFinite(pap))throw Error('Unconstrained or ill-conditioned system');const alpha=rz/pap;for(let i=0;i<n;i++){x[i]+=alpha*p[i];r[i]-=alpha*ap[i];}residual=Math.sqrt(dot(r,r))/norm;if(residual<tolerance)break;for(let i=0;i<n;i++)z[i]=mask[i]?0:r[i]/diagonal[i];const next=dot(r,z),beta=next/rz;for(let i=0;i<n;i++)p[i]=z[i]+beta*p[i];rz=next;}
+ for(;iteration<maxIterations;iteration++){const ap=apply(p);for(let i=0;i<n;i++)if(mask[i])ap[i]=0;const pap=dot(p,ap);if(!(pap>0)||!Number.isFinite(pap))throw Error('Unconstrained or ill-conditioned system');const alpha=rz/pap;for(let i=0;i<n;i++){x[i]+=alpha*p[i];r[i]-=alpha*ap[i];}residual=Math.sqrt(dot(r,r))/norm;if(iteration===0||(iteration+1)%25===0||residual<tolerance)onObserve?.({stage:'iteration',solver:'pcg',iteration:iteration+1,residual,tolerance,converged:residual<tolerance});if(residual<tolerance)break;for(let i=0;i<n;i++)z[i]=mask[i]?0:r[i]/diagonal[i];const next=dot(r,z),beta=next/rz;for(let i=0;i<n;i++)p[i]=z[i]+beta*p[i];rz=next;}
  if(residual>=tolerance||!Number.isFinite(residual))throw Error('Solver did not converge');return {solution:Float64Array.from(x,(v,i)=>v+g[i]),iterations:iteration+1,residual,apply};
 }
 function elasticity(E,nu){const lambda=E*nu/((1+nu)*(1-2*nu)),mu=E/(2*(1+nu)),d=Array.from({length:6},()=>Array(6).fill(0));for(let i=0;i<3;i++)for(let j=0;j<3;j++)d[i][j]=lambda+(i===j?2*mu:0);for(let i=3;i<6;i++)d[i][i]=mu;return d;}
@@ -40,4 +40,4 @@ export function prepareElasticSystem(mesh,properties,boundary,{temperature,refer
  }};
 }
 
-export function solveElastic(mesh,properties,boundary,options={}){const system=prepareElasticSystem(mesh,properties,boundary,options);return system.finish(pcg(system.n,system.entries,system.rhs,system.dirichlet,{tolerance:options.method==='pcg-strict'?1e-10:1e-8,matvecFactory:options.matvecFactory}));}
+export function solveElastic(mesh,properties,boundary,options={}){const system=prepareElasticSystem(mesh,properties,boundary,options);return system.finish(pcg(system.n,system.entries,system.rhs,system.dirichlet,{tolerance:options.method==='pcg-strict'?1e-10:1e-8,matvecFactory:options.matvecFactory,onObserve:options.onObserve}));}

@@ -84,3 +84,14 @@ The public v0.42 run passed all 38 browser checks, including STEP update reconci
 Brittle fracture tests cover analytical mode-I bounds, closure, crack-plane rotation, parameter sensitivity, temperature scope, real WASM and recomputed archive fields. The browser recipe includes three fracture checks.
 
 Public v0.43 passed all 42 browser checks, including four 3MF/G-code import, layer preview, export and atomic-refusal/language checks. Generate their fixtures with `node scripts/print-fixtures.mjs`.
+
+### 2026-10-14 agent iteration infrastructure and independent modules
+
+For this working tree, `npm test` completed 281 tests: 279 passed, two skipped, zero failed. The skips are optional host-native proof tests without a configured executable, not evidence of native success. Build and 26 local-distribution checks also passed. This does not verify newly deployed browser interactions or live-browser MCP.
+
+- Analysis-job, service and real-process MCP tests verify frozen inputs/revisions, incremental events, retries, cancellation/release, stale replies, timeouts, exclusive output and storage limits. Thermal time fields match mesh references and final history. Browser lifecycle tests use replacement Workers; real browser interaction remains to be verified.
+- Project-operation/MCP-edit tests verify atomic batches, SHA-256 revisions, input/existing-output preservation and rejection of invalid operations, partial failures and conflicts.
+- The independent internal-Stokes boundary tests run real P1/P2 solvers against port/wall conditions, flux/divergence balance, pipe pressure loss and refinement trends. One P2 loss is about 0.388 Pa against 0.4 Pa; coarse P1 errors remain substantial. UI/Worker/saved-study integration is unfinished.
+- The same fixed-bar C++ proof passed two additional WASM development tests. Output identifies `wasm-development-check`. Host machine-code execution remains unverified without host C++ standard-library headers; see `native/native-proof/README.md`.
+
+The specialist SKILL passed `quick_validate.py`. Numerical/lifecycle checks do not establish LLM completion rates, real-GPU/rendering behavior or physical accuracy.

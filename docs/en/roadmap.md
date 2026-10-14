@@ -52,6 +52,17 @@ Keep existing limited coupling/material/fatigue/fracture support separate from C
 
 CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not prerequisites for P0–P5. Add streamlines, particles and isosurfaces in viewer-specification order; visualization does not add a physical solver model.
 
+## Parallel development by module
+
+Prioritize LLM integration while developing independent modules against shared contracts. Track module evidence and missing integration separately from completion of an entire plan.
+
+- AGENTEDIT1: atomic saved-input edits and revision checks, preceding full P1 STEP/provenance support.
+- AGENTJOBS1: Node CPU jobs and intermediate-result pipelines, preceding P3 live-browser MCP and restart recovery.
+- CFDINTERNAL1: internal creeping-flow velocity-boundary adapter and P1/P2 references; general flow and UI/Worker integration remain unfinished.
+- NATIVEPROOF1: independent MFEM host target. The same C++ passed WASM numerical checks; real native execution remains unverified because host standard-library headers are unavailable.
+
+Solver work owns adapters/reference cases, fluid work owns independent domain/boundary/numerical/mesh modules, and integration work owns shared API/MCP/diagnostic/result contracts. Separate edits, then verify save compatibility, shared APIs and browser execution together. Preliminary research must not delay prioritized LLM functionality.
+
 ## Follow-up: CAE interface research and improvement
 
 Prioritize LLM functionality: P0/P1, the P3 intermediate-result pipeline, API/MCP coverage of existing features in P4, and specialist-SKILL development throughout. Track interface work after these tasks.

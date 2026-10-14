@@ -84,3 +84,14 @@ await run.next(); // 1段階ずつ実行。done=trueのvalueが全体レポー�
 脆性破壊評価は、モードI参照式、圧縮閉口、き裂法線の回転、入力感度、温度範囲、実WASMと保存評価の再計算を検証します。画面レシピに脆性破壊評価3項目を追加。
 
 公開v0.43で画面42項目が成功。3MF/G-codeの読込、層表示、書出し、不正データの拒否・日英表示の4項目を追加。参照ファイルは `node scripts/print-fixtures.mjs` で生成できます。
+
+### 2026-10-14 エージェント反復基盤と独立モジュール
+
+今回の作業ツリーで`npm test`は281件中279成功、2件skip、失敗0。skipはホスト実行ファイルを指定していない任意のネイティブ実証テストであり、ネイティブ版成功数には含めない。ビルドとローカル配信物26項目も成功。公開サイトの新しい画面操作・ライブMCP接続を検証した記録ではない。
+
+- `tests/analysis-jobs.test.mjs`、`analysis-job-service.test.mjs`、`mcp-jobs-protocol.test.mjs`: 実CPU WorkerとMCPプロセスで、開始・入力固定・差分イベント・版・再送・中止・解放・旧応答・タイムアウト・保存排他・容量上限を検証。非定常熱の各温度場を対応メッシュと最終履歴へ照合。ブラウザ共通APIのライフサイクルはWorker代替のテストで確認し、実ブラウザの操作確認は残す。
+- `tests/project-operations.test.mjs`、`mcp-project-edit.test.mjs`: 原子的編集、SHA-256版確認、入力/既存出力保持、不正操作・途中失敗・競合の拒否を検証。
+- `tests/internal-stokes-boundary.test.mjs`: 独立境界モジュールを実P1/P2ソルバーで検証。ポート速度・壁条件・流束/発散収支、円管圧損の参照と細分化傾向を確認。P2圧損の一例は参照0.4 Paに対し約0.388 Pa。粗いP1には大きな誤差が残り、UI/Worker/保存studyへは未接続。
+- `native/native-proof/README.md`と`tests/native-proof.test.mjs`: 固定棒の同一C++をWASMで実行する追加2テストが成功。出力は`wasm-development-check`。ホスト用C++標準ライブラリ未準備のため、機械語版は未確認。
+
+専門SKILLは`quick_validate.py`で検証済み。数値・ライフサイクルのテストと、LLMによる全機能の完遂率・実GPU/描画・物理精度の検証は区別する。
