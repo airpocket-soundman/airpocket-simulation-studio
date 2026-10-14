@@ -12,6 +12,12 @@ Full API/MCP coverage, continuous specialist-SKILL development and a pipeline de
 
 New GUI features include semantic APIs, MCP operations, observable state/diagnostics, SKILL guidance and verification scenarios in the same work item. Skills teach supported scope, units, physical assumptions, repair and provisional/final distinctions without silently changing models or engines. Acceptance measures API coverage, MCP-only task completion, intermediate observation/reconfiguration and reproducible SKILL-driven examples.
 
+## Near-term publication milestone (2026-10-15)
+
+Complete existing inputs/outputs and agent operation before adding physics disciplines. Prioritize publication recovery, inputs/diagnostics, intermediate observations, saved final results/comparison and reproducible views/image/video exports. Synchronize distributed Skills, machine-readable operation contracts and success/repair examples with each stage. Publication requires an end-to-end workflow in the ordinary browser with the user's own LLM and no computer use.
+
+Do not require all intermediate fields; explicitly declare retrieval capabilities, units, revisions, provisional status and limits. Keep new CFD, contact, printing/measurement and SolidCraft integration as later plans. Track publication work separately from future extensions. The [roadmap](roadmap.md) defines order and concrete acceptance gates.
+
 ## Users and workflow
 
 Target users include designers, developers and learners who want their own LLM agent to help set up CAE, use their local CPU/GPU, and compare design alternatives. The browser provides an installation-free entry point. Agent connectivity without additional installation is also a goal; its transport remains undecided. Native execution requires installation. Data shared with an external LLM may leave the device even when computation is local.
@@ -30,7 +36,9 @@ Separate candidate, implemented and validated solver adapters. Keep common and s
 
 Provide goal-oriented workflows for strength, temperature and resonance questions, including necessary questions, supported scope, initial mesh, refinement criteria and interpretation. Distinguish valid inputs, convergence and physical accuracy.
 
-The current MCP works on saved local JSON rather than live browser state. Proposed live sessions expose inspection, edits, run/cancel and results through the shared API. Consider a local companion transport first and a relay transport for installation-free agent access. Define authorization, sharing, expiry, disconnect/reconnect and browser-close behavior. Freeze run inputs and reject stale results.
+Default MCP operates on saved local JSON. The optional local connector implements permitted live-browser inspection, edits, execution/cancellation and result retrieval through shared APIs. Public HTTPS connectivity and complete workflow verification remain pending; distinguish implementation from verified public scope. See [operation specifications](automation.md) for current operations. The preferred transport is an agent-launched temporary local script or portable executable serving MCP/CLI and browser communication. Keep commands and large results local without requiring an external relay, manual installation, administrator access, a permanent service or desktop interaction. Agent execution/registration and browser permissions remain environment-dependent.
+
+Prefer a version-pinned, hash-verified minimal script using an available runtime, with a portable executable fallback. Cache downloads. Bind to loopback, authenticate sessions, check Origins and define shutdown/disconnect/idle behavior. Also evaluate serving the app and API from the same temporary localhost origin, comparing it with public HTTPS-to-localhost connectivity on actual browsers. Do not bypass browser or agent permissions. Existing uv ephemeral execution is an option, not a runtime-free solution. Extensions require installation and central relays add operational/transfer costs, so neither is the default. Define authorization, sharing, expiry, disconnect/reconnect and browser-close behavior. Freeze run inputs and reject stale results.
 
 ## Modular WASM and native execution
 

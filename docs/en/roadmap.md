@@ -4,7 +4,41 @@
 
 Updated 2026-10-14. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
 
-## Highest-priority product principle (confirmed 2026-10-14)
+## First priority for the next solver (2026-10-15)
+
+The first solver addition targets ordinary-speed airflow around complex fixed solids such as a rough cow, with velocity and pressure fields. Use low-Mach incompressible viscous Navier–Stokes with inertia, beyond existing Re <= 0.1 Stokes. Ordinary wind can have high Reynolds numbers at object scale; assess required steady/unsteady and turbulence scope rather than assuming laminar flow meets the use case.
+
+Existing I/O, API/MCP/Skill and publication work retains priority. This external-flow solver comes first among solver additions; additional structural models, Mach-2 shocks and meshfree methods follow. Research can proceed, but this priority change does not declare any unverified solver supported.
+
+1. Evaluate existing OSS first; pin version, runtime/distribution requirements, wall/far-field boundaries, meshing, input, cancellation and result contracts. Do not require custom development or WASM porting first; establish a native baseline.
+2. Validate simple reference geometries for velocity, pressure, drag, mass balance and domain/mesh/time-step dependence. Declare the unsteady/turbulence scope needed at the selected Reynolds numbers.
+3. Import a rough closed cow solid, verify leg gaps and near-wall mesh resolution, and connect shared inputs, intermediate observations, final results and visualization/export.
+4. Retrieve velocity vectors, pressure maps, sections and point measurements through API/MCP. Provide physical-time movies only from computed time histories. Start unverified SolidCraft integration with STEP exchange.
+
+See the [CFD plan](compressible-cfd-plan.md) for the subsequent compressible work.
+
+## Priorities before publication (revised 2026-10-15)
+
+Prioritize inputs, observations, result retrieval, views/exports and LLM documentation for existing capabilities over additional physics or solvers. The publication milestone is an end-to-end workflow using the user's ordinary browser and own LLM, from input through saved results and revised settings without computer use. These are future acceptance gates, not claims of shipped capability.
+
+| Order | Plans | Priority work | Acceptance |
+|---|---|---|---|
+| 0 | Publication foundation | Repair failed publication and reconcile candidate, deployed assets and progress revisions | Required CI and public-environment checks succeed; retain a release tag and verification evidence |
+| 1 | P0/P1 | Close existing input, capability, unit, provenance, unconfirmed-input and structured-diagnostic gaps | Record GUI/API/MCP/Skill coverage per operation; verify success, refusal and repair paths |
+| 2 | P3 | Complete shared jobs, observations, cancellation/settlement/release and ordinary-browser connectivity | Associate stages, residuals and supported fields with input revisions; expose units, provisional status, sampling, retention limits and unavailable observations. Verify public HTTPS connectivity in the actual environment |
+| 3 | P3/P4 | Align final-result retrieval, storage, restoration and comparison | Trace quantities, units, input/result revisions, meshes, settings, engine versions and assumptions; verify chunked retrieval, integrity and remeasurement after storage |
+| 4 | P4 | Complete camera/color/time-range controls, view restoration and reproducible image/video export | Preserve PNG/WebM; declare capabilities and limits for fixed frames, MP4/GIF and comparison videos. Unsupported requests return reasons and verified alternatives. Manually converted external videos do not count as product support |
+| 5 | Across P0–P4 | Align LLM Skill, operation contracts, runnable examples, repair examples and public verification | Synchronize distributed and repository Skills; reproduce pairing, import, setup, preflight, solve, observation, comparison, export and revised settings through MCP alone |
+
+Documentation and verification in order 5 accompany every change rather than waiting until the end. Do not require every iteration field from every solver. Require an explicit contract for available/unavailable observations, physical versus presentation time and provisional versus final results. Numerical convergence remains distinct from physical validity.
+
+Prioritize P2/P6 only where acquisition, performance, compatibility or stability supports this workflow. A full rewrite or general native product is not a publication prerequisite. Keep P5 SolidCraft integration, general/compressible/meshfree CFD, contact/additional coupling, printing analysis/test equipment and new streamline/particle visuals in the later backlog. Preserve research without delaying publication work.
+
+Track the current publication milestone separately from future extensions, including unfinished, verification-pending and publication-pending items. Adding or splitting tasks must not automatically expand the milestone. Close verification items against acceptance evidence; documentation changes alone do not justify released status.
+
+Develop with small commits and frequent pushes to working branches. Review PR diffs, appropriate tests, API/MCP/Skill and bilingual documentation, and necessary browser behavior before merging into main. Plan branch protection and required CI without claiming they are already configured. Successful deployment is distinct from progress JSON updates.
+
+## Highest-priority product principle (confirmed 2026-10-14; order revised 2026-10-15)
 
 The primary differentiator is that the user's own LLM can freely compose all application functions through a specialist SKILL to perform analysis and design iteration. The product does not assume a proprietary AI or an AI subscription operated by this application. Users choose their LLM, contract and execution environment; the application supplies shared APIs, MCP, specialist skills, validation and traceable results.
 
@@ -20,7 +54,7 @@ The published baseline is v0.43. Its recorded verification is 242 tests, 26 runt
 
 `src/progress.json` tracks existing tasks and release evidence. Early task descriptions retain historical scope and are not a complete current capability list. P0–P6 below are registered planning identifiers in progress JSON. Register implementation tasks with dependencies, acceptance criteria and evidence when work starts; a plan alone does not justify released status.
 
-Keep REG2 and PRINT2 in progress. Reuse unresolved-region rejection in P1. Finish a bounded save/refusal/regression checkpoint for the orthotropic foundation; prioritize P0–P2 over further printing extensions. Orthotropic infrastructure does not complete printed-part analysis.
+Keep REG2 and PRINT2 in progress. Reuse unresolved-region rejection in P1. Finish a bounded save/refusal/regression checkpoint for the orthotropic foundation; prioritize the publication priorities 0–5 above over further printing extensions. Orthotropic infrastructure does not complete printed-part analysis.
 
 ## Priorities and dependencies
 
@@ -93,3 +127,9 @@ This is a bounded increment in P0/P1 information for diagnostic and repair decis
 Added session-free discovery of all 80 operation contracts through default MCP and preserved direct browser exception failure metadata through HTTP/MCP. Verification covered 28 targeted tests, real MCP and local GUI catalog retrieval/input creation/invalid-frame refusal/unchanged input revision/explicitly corrected editing/scope refusal. See [testing](testing.md), [GUI evidence](../evidence/2026-10-15-browser-operation-contracts.json), [screen](../evidence/2026-10-15-browser-operation-contracts.jpg) and [overall record](../evidence/2026-10-15-operation-contracts-full.json).
 
 No solver was run in GUI verification. This completes only the bounded P0/P3 increment: complete nested physical schemas, public HTTPS, cross-restart job recovery and the full P0–P6 plan remain unfinished. Discovery does not grant access or certify physical validity; existing completion gates remain unchanged.
+
+## 2026-10-15: Bounded P1/P3 edit-candidate increment
+
+Read-only preview adds candidate revisions, changed pointers, compact preflight and explicit normalization; expectedResultingRevision binds commit to the actual saved host representation. Checks include 30 new tests, old/new agreement across 24 GUI study states and real GUI preview of 150 N while a 100 N job remained running, with original input/snapshot unchanged and commit only after completion. Two explicitly declared analyses succeeded at center 0.02/0.03 mm and maximum 0.04/0.06 mm. See [testing](testing.md), [GUI evidence](../evidence/2026-10-15-browser-edit-preview.json), [screen](../evidence/2026-10-15-browser-edit-preview.jpg) and [overall record](../evidence/2026-10-15-edit-preview-full.json).
+
+Keep initial size 0.6 stack overflow and HMR-blocked complete export separate from the main successful evidence. After correction the 30,000-element limit remains and rejects that fine candidate. This adds no user-facing UI feature or general physical-accuracy guarantee. Full P1/P3, public HTTPS, cross-restart jobs, all P0–P6 and resolution of the known V8 issue remain incomplete; completion gates are unchanged.

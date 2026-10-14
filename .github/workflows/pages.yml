@@ -2,20 +2,16 @@ name: Publish application
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
-  pages: write
-  id-token: write
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  deploy:
+  verify:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,13 +25,95 @@ jobs:
         with:
           path: .native-cache
           key: ${{ runner.os }}-mfem-v1-${{ hashFiles('native/**', 'scripts/setup-native.py', 'scripts/build-native.py') }}
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
-      - run: npm run test:published -- --local
-      - uses: actions/configure-pages@v5
+      - name: Install dependencies
+        shell: bash
+        run: |
+          mkdir -p .qa
+          npm ci 2>&1 | tee .qa/ci-install.log
+      - name: Run prepared tests
+        shell: bash
+        run: npm test 2>&1 | tee .qa/ci-tests.log
+      - name: Build application
+        shell: bash
+        run: npm run build 2>&1 | tee .qa/ci-build.log
+      - name: Verify local published assets
+        shell: bash
+        run: npm run test:published -- --local 2>&1 | tee .qa/ci-local-published.log
+      - name: Retain verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            .qa/ci-*.log
+            .qa/published-report.json
+            .qa/*-evidence.json
       - uses: actions/upload-pages-artifact@v3
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         with:
           path: dist
+  deploy:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
       - id: deployment
         uses: actions/deploy-pages@v4
+  verify-published:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install verification dependencies
+        shell: bash
+        run: |
+          mkdir -p .qa
+          npm ci 2>&1 | tee .qa/ci-published-install.log
+      - name: Verify the deployed commit and runtime
+        shell: bash
+        run: npm run test:published 2>&1 | tee .qa/ci-published.log
+      - name: Retain deployed runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            .qa/ci-published*.log
+            .qa/published-report.json
+      - name: Tag the verified published commit
+        shell: bash
+        run: |
+          release_tag="release-$GITHUB_SHA"
+          if git ls-remote --exit-code --tags origin "refs/tags/$release_tag" >/dev/null; then
+            git fetch --no-tags origin "refs/tags/$release_tag:refs/tags/$release_tag"
+            test "$(git cat-file -t "refs/tags/$release_tag")" = tag
+            test "$(git rev-parse "refs/tags/$release_tag^{}")" = "$GITHUB_SHA"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$release_tag" "$GITHUB_SHA" -m "Published runtime verified for $GITHUB_SHA"
+            git push origin "refs/tags/$release_tag"
+          fi

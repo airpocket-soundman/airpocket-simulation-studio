@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T22:19:56.037717Z",
+  "updatedAt": "2026-10-14T22:49:31.467020Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -213,11 +213,11 @@
       "title": "流体領域を作り、流れを解析",
       "status": "queued",
       "category": "流体",
-      "detail": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
-      "acceptance": "まず単相・非圧縮・層流。OpenFOAM等の移植可能性を確認。質量収支と管の圧力損失を検証。",
+      "detail": "公開基盤と既存入出力・API/MCP/Skill整備の後、新規ソルバー内では通常風速の固定ソリッド周囲の外部流れを優先する。慣性を含む低Mach非圧縮粘性Navier–Stokesを既存OSSからネイティブ参照問題で評価し、対象Reに応じた非定常・乱流の必要性を確認する。",
+      "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。",
       "titleEn": "Create fluid regions and simulate flow",
-      "detailEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
-      "acceptanceEn": "Start with incompressible single-phase laminar flow; verify mass balance and pipe pressure drop after browser port validation.",
+      "detailEn": "After publication infrastructure and existing I/O/API/MCP/Skill work, prioritize ordinary-speed external airflow around fixed solids among new solvers. Evaluate existing OSS low-Mach incompressible viscous Navier–Stokes with inertia on native reference cases; assess unsteady/turbulence needs at the target Reynolds numbers.",
+      "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work.",
       "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
       "lastUpdateEn": "Fully developed channels released as CFDCHAN1. General 3D inlet/outlet, velocity-pressure coupling, geometry support and mass conservation remain outstanding."
     },
@@ -1316,6 +1316,28 @@
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs"
     },
     {
+      "id": "VIEWCOMPARE",
+      "title": "複数ケースを並べて同期表示と動画出力",
+      "titleEn": "Synchronized side-by-side case viewer and video export",
+      "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
+      "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
+      "acceptance": "二条件を左右に配置し、共通色範囲・倍率・時間同期を確認。MCP/APIで配置と書き出しを操作し、再読込・中止後の状態保持を検証。",
+      "acceptanceEn": "Verify paired cases with shared ranges/scales and synchronized time; expose layout/export through MCP/API and validate reload/cancellation state.",
+      "status": "queued",
+      "category": "結果表示"
+    },
+    {
+      "id": "VIEWTIME",
+      "title": "熱と音響の時間履歴を滑らかに表示",
+      "titleEn": "Smooth thermal and acoustic history playback",
+      "detail": "熱の節点温度履歴と音響の保存フレーム密度を設定可能にし、固定色範囲と物理時刻で再生。計算刻み・保存刻み・表示補間を区別。",
+      "detailEn": "Store nodal thermal history and configurable acoustic frames; use fixed ranges and physical time, distinguishing solve steps, saved steps and display interpolation.",
+      "acceptance": "熱の伝播と音圧移動を参照場で確認し、時間刻みと保存密度を記録。保存復元・メモリ上限・API時間操作・固定フレーム出力を検証。",
+      "acceptanceEn": "Verify heat and pressure propagation, record solve/storage resolution and validate persistence, memory budgets, API time control and fixed-frame export.",
+      "status": "queued",
+      "category": "結果表示"
+    },
+    {
       "id": "BROWSERBRIDGE1",
       "title": "自分のLLMを許可付きブラウザセッションへ接続",
       "titleEn": "Connect the user LLM to a scoped browser session",
@@ -1332,6 +1354,42 @@
       "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Public HTTPS and full GUI job integration remain pending.",
       "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md",
       "lastUpdate": "jobArtifactを加え14操作。ブラウザ途中温度の時刻・点値・最終場との一致・解放を実MCPで確認。"
+    },
+    {
+      "id": "PRINTMEASURE1",
+      "title": "自作可能な引張・圧縮試験機の設計と販売仕様",
+      "titleEn": "Design DIY-capable tensile/compression equipment and sales specification",
+      "detail": "荷重・変位計測、治具、校正、装置剛性補正、装置側停止と共通ログ形式を設計する。販売方式は別途決定。",
+      "detailEn": "Design force/displacement sensing, fixtures, calibration, compliance correction, device stopping and shared logs; decide sales separately.",
+      "status": "queued",
+      "category": "3Dプリント",
+      "optional": true,
+      "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
+    },
+    {
+      "id": "PRINTMEASURE2",
+      "title": "測定用試験片とBambuプロジェクトを出力",
+      "titleEn": "Export measurement specimens and Bambu projects",
+      "detail": "形状・方向・インフィル・壁・層高さを指定した版付きプロジェクトを提供。温度等は利用者が設定してBambuでスライスし、採用設定を照合する。",
+      "detailEn": "Provide versioned geometry/orientation/infill/wall/layer projects; users choose temperatures and slice, then reconcile actual settings.",
+      "status": "queued",
+      "category": "3Dプリント",
+      "optional": true,
+      "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
+    },
+    {
+      "id": "PRINTMEASURE3",
+      "title": "実測曲線からCAEパラメータを同定して検証",
+      "titleEn": "Identify and validate CAE parameters from measured curves",
+      "detail": "校正付き引張・圧縮ログを取り込み、方向・造形条件別のパラメータと未同定値を記録。独立片で検証し利用者の材料へ登録。定数の公開は既定にしない。",
+      "detailEn": "Import calibrated axial logs; retain direction/process parameters and unidentified values, validate independent specimens and register user materials without default publication.",
+      "status": "queued",
+      "category": "3Dプリント",
+      "optional": true,
+      "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
     },
     {
       "id": "BROWSERFIELDS1",
@@ -1483,6 +1541,39 @@
       "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実画面/公開HTTPSは未確認。",
       "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser/public HTTPS remain unverified.",
       "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md"
+    },
+    {
+      "id": "CFDRESEARCH1",
+      "title": "圧縮性CFDのOSS候補とネイティブ/WASM構成を調査",
+      "titleEn": "Research compressible CFD candidates and native/WASM configurations",
+      "detail": "SU2、OpenFOAM系、HiSA、Eilmerの固定版、依存、入出力、中間結果、停止・再開、配布条件を調査する。今回は実装・試験計算を行わない。",
+      "detailEn": "Research pinned versions, dependencies, I/O, observations, cancellation/restart and redistribution for SU2/OpenFOAM/HiSA/Eilmer; no implementation or simulation in this stage.",
+      "status": "queued",
+      "category": "流体",
+      "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
+    },
+    {
+      "id": "CFDRESEARCH2",
+      "title": "埋め込み境界とメッシュフリーの適性を比較",
+      "titleEn": "Compare embedded-boundary and meshfree suitability",
+      "detail": "AMReX/PeleC、PySPH、Spheral等の複雑壁・流入流出・衝撃波の成立性と移植負担を調査し、基準問題と採否条件を定義。",
+      "detailEn": "Research complex walls, boundaries, shocks and portability for AMReX/PeleC/PySPH/Spheral and define common benchmarks/selection gates.",
+      "status": "queued",
+      "category": "流体",
+      "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
+    },
+    {
+      "id": "CFDRESEARCH3",
+      "title": "既存資産を再利用する自作圧縮性ソルバーの段階計画",
+      "titleEn": "Plan a reusable staged custom compressible solver",
+      "detail": "既存OSSで不足する要件を具体化してから自作を判断。1D Eulerから保存・正値性・境界を検証し、2D・形状方式・3Dへ進む計画を作る。",
+      "detailEn": "Identify unmet requirements before deciding to build; plan 1D Euler conservation/positivity/boundaries, then 2D, geometry methods and 3D.",
+      "status": "queued",
+      "category": "流体",
+      "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
     },
     {
       "id": "PRINTAPI1",
@@ -1945,6 +2036,40 @@
       "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gate未達。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
       "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0.",
       "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md"
+    },
+    {
+      "id": "EDITPREVIEW1",
+      "title": "解析中に次の変更案を検査し確認した候補版だけを適用",
+      "titleEn": "Preview next edits during analysis and commit only the reviewed candidate",
+      "status": "ready",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1",
+        "P3",
+        "BROWSERCONTRACTS1"
+      ],
+      "detail": "変更案の非破壊適用・有界preflight・変更Pointer・候補版をAPI/MCPへ返す。GUIと共有する正規化後の版を確定前に照合し、単位変換を二重適用しない。",
+      "detailEn": "Return read-only candidate edits,compact preflight,changed pointers and revision through API/MCP. Bind the actual shared GUI-normalized revision before committing,without double unit conversion.",
+      "acceptance": "新30件・対象59件成功。全体872件中869成功・3skip。実ブラウザの100N job実行前後running中に150N案を検査、入力版不変、完了後のみ確認版を適用し次解析成功。中央変位.02/.03mm、最大.04/.06mm。legacy根拠未記録/completePreflight:false保持。物理精度一般化/全P1-P3/V8根治は未達。",
+      "acceptanceEn": "30new/59target pass;full872:869passed/3skipped. Actual browser100N job stayed running before/after150N preview,input unchanged;reviewed edit applied only after settlement and next solve succeeded. Midpoint.02/.03mm,max.04/.06mm. Legacy/no-complete-preflight labels retained. No general physical-accuracy,full P1-P3 or V8-resolution claim.",
+      "evidence": "src/project-edit-preview.js; src/project-operations.js; src/browser-study-state.js; tests/browser-edit-preview.test.mjs; tests/mcp-edit-preview.test.mjs; docs/evidence/2026-10-15-browser-edit-preview.json; docs/evidence/2026-10-15-edit-preview-full.json; docs/testing.md"
+    },
+    {
+      "id": "MESHARRAYLIMIT1",
+      "title": "大配列メッシュのstack overflowを避け既存上限を明示拒否",
+      "titleEn": "Avoid mesh array argument overflow and report existing element limits",
+      "status": "ready",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "MESH1"
+      ],
+      "detail": "要素タグ・assembly配列の一括引数展開と品質最小spreadをループへ置換し、配列追加前に既存要素上限を確認する。",
+      "detailEn": "Replace bulk argument spread for element tags,assembly arrays and quality minima with loops,and check existing element limits before appending.",
+      "acceptance": "専用4件成功。150000要素fakeGmshの拒否/finalizeと許容設定でのタグ順・接続・品質、assembly累計上限を検証。実GUI同size0.6はstack overflowから既存上限拒否へ変化。上限30000・数値式・対応規模は拡張しない。初回job完全archive未取得を明示。",
+      "acceptanceEn": "Four dedicated tests verify150000-element fakeGmsh refusal/finalize,ordering/connectivity/quality under permitted settings,and assembly limits. Same real-browser size0.6 now returns the existing element-limit rejection. Default30000,numerics and supported scale are unchanged. Complete first failed job archive was not captured.",
+      "evidence": "src/mesh-core.js; tests/mesh-array-limits.test.mjs; docs/evidence/2026-10-15-browser-edit-preview-first-attempt.json; docs/evidence/2026-10-15-browser-edit-preview.json; docs/testing.md"
     }
   ],
   "solvers": [
@@ -1993,5 +2118,133 @@
       "外部箱の低Reynolds数粘性流 / finite-box creeping flow",
       "CPU/WASM GMRES · Re<=0.1 · 2000 nodes / 8000 tetrahedra"
     ]
-  ]
+  ],
+  "publicationMilestone": {
+    "schemaVersion": 1,
+    "id": "existing-agent-workflow",
+    "revisedAt": "2026-10-15",
+    "status": "pending",
+    "scope": "Existing-capability workflow in the ordinary browser with the user LLM, without computer use; future extensions do not automatically expand this milestone.",
+    "taskStatusDoesNotCloseGate": true,
+    "gates": [
+      {
+        "id": "publication-infrastructure",
+        "order": 0,
+        "status": "pending",
+        "taskIds": [
+          "RUNTIMEWASM1",
+          "P0"
+        ],
+        "acceptance": "Required CI and deployed candidate/artifact/progress revisions match; release tag and evidence retained. Branch protection and required checks must be verified.",
+        "observations": [
+          {
+            "kind": "deployment-failure",
+            "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38647110282",
+            "detail": "Missing public/gmsh/gmsh.mjs observed; recovery not yet verified."
+          },
+          {
+            "kind": "branch-protection",
+            "detail": "main protection API returned 404 Branch not protected; protection is planned, not configured."
+          }
+        ]
+      },
+      {
+        "id": "existing-input-contracts",
+        "order": 1,
+        "status": "pending",
+        "taskIds": [
+          "P0",
+          "P1",
+          "BROWSERCONTRACTS1",
+          "AGENTINPUT1"
+        ],
+        "acceptance": "Operation-level GUI/API/MCP/Skill coverage and success/refusal/repair paths for publication scope."
+      },
+      {
+        "id": "ordinary-browser-https",
+        "order": 2,
+        "status": "pending",
+        "taskIds": [
+          "P3",
+          "BROWSERBRIDGE1",
+          "GUIJOBS1",
+          "AGENTJOBS1",
+          "BROWSERFIELDS1"
+        ],
+        "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
+      },
+      {
+        "id": "saved-results-comparison",
+        "order": 3,
+        "status": "pending",
+        "taskIds": [
+          "P4",
+          "CASEOPS1",
+          "CASEARCHIVE1",
+          "CASEVIEWBUNDLE1",
+          "CASEMEASUREMENTBUNDLE1",
+          "MEASUREMENTVERIFY1",
+          "VIEWCOMPARE"
+        ],
+        "acceptance": "Retrieve, verify, save, restore, compare and remeasure results while retaining input/result/mesh/calculation/engine/assumption identity."
+      },
+      {
+        "id": "reproducible-view-export",
+        "order": 4,
+        "status": "pending",
+        "taskIds": [
+          "P4",
+          "RESULTCONTROL1",
+          "NAMEDVIEWS1",
+          "BROWSEREXPORT1"
+        ],
+        "acceptance": "Restore views and declare fixed-frame/MP4/GIF/comparison-video capabilities or verified alternatives; external manual production does not count as product support."
+      },
+      {
+        "id": "skill-end-to-end",
+        "order": 5,
+        "status": "pending",
+        "taskIds": [
+          "P0",
+          "P1",
+          "P3",
+          "P4",
+          "AGENTINPUT1"
+        ],
+        "acceptance": "Synchronize distributed/repository Skill; reproduce pair/import/setup/preflight/solve/observe/compare/export/reconfigure through MCP without computer use."
+      }
+    ],
+    "futureTaskIds": [
+      "P5",
+      "CFD1",
+      "CFD2",
+      "CFD3",
+      "CFDMESH1",
+      "CFDPORT1",
+      "CFDINTERNAL1",
+      "CFDRESEARCH1",
+      "CFDRESEARCH2",
+      "CFDRESEARCH3",
+      "COUPLE1",
+      "COUPLE3",
+      "COUPLE4B",
+      "COUPLE5",
+      "CONTACT1",
+      "FAIL1",
+      "PRINT2",
+      "PRINTMEASURE1",
+      "PRINTMEASURE2",
+      "PRINTMEASURE3"
+    ],
+    "supportOnlyTaskIds": [
+      "P2",
+      "P6",
+      "PERF1"
+    ],
+    "notes": [
+      "Gate statuses require matching publication evidence independently of task statuses.",
+      "P2/P6 are prioritized only as required for this workflow; full rewrites/native products are not publication prerequisites.",
+      "Existing task statuses and historical release records are unchanged."
+    ]
+  }
 }
