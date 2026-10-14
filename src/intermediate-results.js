@@ -2,14 +2,16 @@ import {sampleResult} from './probe.js';
 
 function meshInfo(mesh){
  if(!mesh||!Array.isArray(mesh.nodes)||mesh.nodes.length<12||mesh.nodes.length%3||!mesh.nodes.every(Number.isFinite)||!Array.isArray(mesh.tetrahedra)||!mesh.tetrahedra.length||mesh.tetrahedra.some(t=>!Array.isArray(t)||t.length!==4||new Set(t).size!==4||t.some(i=>!Number.isInteger(i)||i<0||3*i>=mesh.nodes.length)))throw Error('Invalid intermediate mesh');
- const count=mesh.nodes.length/3,bounds=[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
+ const count=mesh.nodes.length/3,hasBodies=mesh.nodeBodies!==undefined;if(hasBodies&&(!Array.isArray(mesh.nodeBodies)||mesh.nodeBodies.length!==count||!Array.from(mesh.nodeBodies).every(value=>Number.isSafeInteger(value)&&value>=0)||mesh.tetrahedra.some(t=>t.some(index=>mesh.nodeBodies[index]!==mesh.nodeBodies[t[0]]))))throw Error('Invalid intermediate body identifiers or mixed-body tetrahedron');
+ const bounds=[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
  for(let i=0;i<count;i++)for(let k=0;k<3;k++){bounds[k]=Math.min(bounds[k],mesh.nodes[3*i+k]);bounds[k+3]=Math.max(bounds[k+3],mesh.nodes[3*i+k]);}
- return {nodeCount:count,elementCount:mesh.tetrahedra.length,boundsMm:bounds};
+ return {nodeCount:count,elementCount:mesh.tetrahedra.length,boundsMm:bounds,bodyIdentifiersAvailable:hasBodies,bodyCount:hasBodies?new Set(mesh.nodeBodies).size:null};
 }
 // Nodal scalar snapshots are provisional and need not contain final fluxes or convergence.
-export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0}={}){
+export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0,bodyIndex,elementIndex}={}){
  if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<0||limit>200)throw Error('Invalid intermediate page');
- const info=meshInfo(mesh);if(offset>info.nodeCount)throw Error('Intermediate offset exceeds node count');
+ for(const selector of [bodyIndex,elementIndex])if(selector!==undefined&&(!Number.isSafeInteger(selector)||selector<0))throw Error('Invalid intermediate measurement selector');if((bodyIndex!==undefined||elementIndex!==undefined)&&point===undefined)throw Error('Intermediate selectors require a measurement point');
+ const info=meshInfo(mesh);if(bodyIndex!==undefined&&!info.bodyIdentifiersAvailable)throw Error('Intermediate body selection requires body identifiers');if(bodyIndex!==undefined&&!mesh.nodeBodies.includes(bodyIndex))throw Error('Unknown intermediate body identifier');if(elementIndex!==undefined&&elementIndex>=mesh.tetrahedra.length)throw Error('Invalid intermediate element index');if(offset>info.nodeCount)throw Error('Intermediate offset exceeds node count');
  const out={mesh:info,provisional:true};
  const field=snapshot.field;
  let values,name,unit;
@@ -22,12 +24,12 @@ export function inspectIntermediate(snapshot,mesh,{point,offset=0,limit=0}={}){
  }
  if(point!==undefined){
   if(!values)throw Error('A scalar field is required for intermediate measurement');
-  const {pressurePa,...sample}=sampleResult(mesh,{kind:'acousticTransient',pressure:values,time:field.time},point);
+  const {pressurePa,...sample}=sampleResult(mesh,{kind:'acousticTransient',pressure:values,time:field.time},point,{bodyIndex,elementIndex});
   out.measurement={...sample,value:pressurePa,field:name,unit,timeUnit:'s'};
  }
  if(limit){
   const end=Math.min(offset+limit,info.nodeCount);
-  out.page={offset,count:end-offset,total:info.nodeCount,nextOffset:end,hasMore:end<info.nodeCount,nodesMm:Array.from({length:end-offset},(_,i)=>mesh.nodes.slice(3*(offset+i),3*(offset+i)+3)),...(values?{values:values.slice(offset,end)}:{})};
+  out.page={offset,count:end-offset,total:info.nodeCount,nextOffset:end,hasMore:end<info.nodeCount,nodesMm:Array.from({length:end-offset},(_,i)=>mesh.nodes.slice(3*(offset+i),3*(offset+i)+3)),...(values?{values:values.slice(offset,end)}:{}),...(mesh.nodeBodies!==undefined?{nodeBodies:mesh.nodeBodies.slice(offset,end)}:{})};
  }
  return out;
 }

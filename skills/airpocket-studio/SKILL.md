@@ -15,7 +15,7 @@ Specialize the user's own LLM as a CAE agent; this application does not supply a
 - `studio_preflight_project({path,method?,operation?,mode?})`: obtain required pointers and repair diagnostics before execution. `completePreflight:false` preserves the need for post-mesh and physical validation. Execution is gated by the same inspection.
 - `studio_analyze`: same CPU Worker as the browser. Supply absolute `path` and a new `outputPath`, mesh `size` in mm and optional CPU `method`. Existing outputs are refused. The response contains metrics; the file contains mesh, input, result and calculation settings. Node execution does not verify browser/GPU behavior.
 - `studio_start_analysis`, `studio_job_status`, `studio_job_events`, `studio_cancel_job`, `studio_release_job`: asynchronous CPU jobs with frozen input, bounded observations and optional provisional field artifacts. Use these for monitoring rather than blocking `studio_analyze`. See the workflow below.
-- `studio_job_artifact({jobId,artifactId,point?,offset?,limit?})`: inspect a registered intermediate artifact with hash/input/mesh checks. Default to summaries; request point interpolation in mm or pages of up to 200 nodes/values when needed. It does not accept arbitrary paths, and released jobs lose their artifact registration.
+- `studio_job_artifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`: inspect a registered intermediate artifact with hash/input/mesh checks. Default to summaries; request point interpolation in mm or pages of up to 200 nodes/values when needed. It does not accept arbitrary paths, and released jobs lose their artifact registration.
 - `studio_probe`: measure a saved analysis at `point:[x,y,z]` in mm. Fields carry physical units; outside points are refused. Specify the element to disambiguate multiple bodies. Saved results are validated first.
 - `studio_validate_cases`: validate case archives and return comparison metrics.
 
@@ -51,7 +51,7 @@ Use `studio_browser_sessions` to identify the paired session, then `studio_brows
 
 Disconnect cancels connection-owned jobs. Restart recovery is unsupported; optional browser field retention is described below. Public HTTPS-to-loopback connectivity/permissions remain unverified. Commands time out after 15 seconds: inspect before retrying mutations. See `docs/automation.md` for scopes and contracts.
 
-With `includeFields:true` on a browser startJob, read `artifact.artifactId` from jobEvents and call `jobArtifact({jobId,artifactId,point?,offset?,limit?})`. Keep pages <=200; request summary/point instead of downloading complete arrays. Mesh/field hashes, input revision, units and seconds are checked; intermediate values always remain provisional even after the job succeeds. Default shared serialized retention is 64 MB, not a heap-memory guarantee. Limits preserve summaries; malformed observations emit observation-error. Release terminal jobs to free memory. Thermal and transient-acoustic scalar fields are supported; other solvers may provide stage/iteration summaries only.
+With `includeFields:true` on a browser startJob, read `artifact.artifactId` from jobEvents and call `jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`. Keep pages <=200; request summary/point instead of downloading complete arrays. Mesh/field hashes, input revision, units and seconds are checked; intermediate values always remain provisional even after the job succeeds. Default shared serialized retention is 64 MB, not a heap-memory guarantee. Limits preserve summaries; malformed observations emit observation-error. Release retained jobs only when releaseAllowed:true (terminal and executionSettled:true) to return their retention allocation. Thermal and transient-acoustic scalar fields are supported; other solvers may provide stage/iteration summaries only.
 
 ## Result views and saved cases
 
@@ -188,3 +188,9 @@ Cancellation can race completion: cancelled:false or terminal success does not m
 ## Discover retained artifacts
 
 Before fetching an intermediate artifact, use studio_job_artifacts({jobId,offset:0,limit:50}) or inspect-scoped live jobArtifacts with the same page arguments (maximum100). Node service listArtifacts and browser analysisApi.listJobArtifacts return metadata only, total and nextOffset. Select an artifactId, then retrieve using existing studio_job_artifact/jobArtifact validation. This rediscovery works even after relevant events are truncated. Catalog listing does not rehash files; retrieval performs existing hash/revision/mesh checks. Released jobs are unavailable, and same-process retention does not provide persistent restart recovery.
+
+## Select a body for intermediate samples
+
+Intermediate jobArtifact/studio_job_artifact point reads accept bodyIndex or elementIndex with point; node pages retain available nodeBodies. If an interface point touches multiple bodies, an unspecified sample is ambiguous and refused: select the intended body/element explicitly. Final studio_probe also supports bodyIndex. Legacy meshes lacking body IDs cannot accept body selection; do not infer or reconstruct missing nodeBodies. Existing hash/mesh/revision checks remain.
+
+Intermediate mesh summaries expose bodyIdentifiersAvailable:boolean and bodyCount:number|null; legacy missing IDs mean unknown bodyCount:null. Node pages include nodeBodies only when IDs exist.

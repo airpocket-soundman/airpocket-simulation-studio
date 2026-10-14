@@ -1656,16 +1656,16 @@
       "id": "INTERMEDIATEBODY1",
       "title": "中間点測定で部品界面の曖昧さを検出する",
       "titleEn": "Detect ambiguous body interfaces in intermediate point measurements",
-      "status": "queued",
+      "status": "released",
       "category": "共通",
       "depends": [
         "ARTIFACTCATALOG1"
       ],
-      "detail": "中間メッシュのnodeBodies保持と点測定bodyIndex/elementIndex指定を共通API/MCPへ伝播する。最終probeと同じく曖昧界面を黙って先頭要素へ割り当てない。",
-      "detailEn": "Preserve intermediate mesh nodeBodies and propagate bodyIndex/elementIndex selectors through API and MCP. Match final-probe ambiguity rejection instead of silently choosing the first element.",
-      "acceptance": "一致座標で温度差を持つ複数部品を使い、未指定時の曖昧点拒否・明示選択・旧単一部品互換性・実Workerのmetadata伝播を検証する。未実装。",
-      "acceptanceEn": "Verify ambiguous-point refusal, explicit selectors, existing single-body compatibility and real Worker metadata propagation with coincident nodes at different body temperatures. Not implemented.",
-      "evidence": "src/analysis.worker.js; src/intermediate-results.js; src/probe.js"
+      "detail": "中間メッシュのnodeBodies保持・検証と部品情報/節点ページを追加。bodyIndex/elementIndexを中間共通API・MCPへ伝播し、最終studio_probeのbody指定も補完。旧IDなしメッシュは部品を推定しない。",
+      "detailEn": "Preserve and validate intermediate nodeBodies, expose body metadata and nodal pages, propagate bodyIndex/elementIndex through API/MCP and add missing body selection to final studio_probe. Do not infer identities in legacy meshes.",
+      "acceptance": "新5試験を含む566件中563成功・3スキップ（71.05秒）。合成60/50°C界面・実stdio100/20°C界面の未指定拒否/明示選択、保存ハッシュと旧形式を検証。実ブラウザ124節点/288要素、3×1秒過渡熱の界面19.9971034/20.0013336°Cを部品別取得し要素選択も一致。ビルド・配信物26項目（28.48秒）・SKILL成功。定常参照値との一致や物理精度の保証ではない。",
+      "acceptanceEn": "563 passed and three skipped of566 including five new tests (71.05s). Synthetic60/50degC and real stdio100/20degC interfaces verify ambiguity refusal/selectors, hashes and legacy compatibility. Actual browser124nodes/288elements,3x1s transient interface19.9971034/20.0013336degC resolved by body and matching element. Build,26distribution checks28.48s andSKILL pass. Not a steady-reference match or physical accuracy guarantee.",
+      "evidence": "src/analysis.worker.js; src/intermediate-results.js; src/browser-session.js; scripts/studio-mcp.mjs; tests/intermediate-body.test.mjs; tests/mcp-intermediate-body.test.mjs; docs/evidence/2026-10-14-intermediate-body-browser.json; docs/testing.md"
     }
   ],
   "solvers": [

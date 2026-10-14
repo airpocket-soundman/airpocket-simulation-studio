@@ -47,7 +47,7 @@ Events carry `jobId`, `inputRevision`, and `sequence`; intermediate snapshots ca
 
 Browser `analysisApi.startJob`, `getJob`, `jobEvents`, `cancelJob`, `getJobResult`, and `releaseJob` use the same lifecycle. Callers supply `inputRevision` and `requestId` to `startJob`. Browser events contain summaries by default; includeFields:true retains the in-memory artifacts described below. The optional connector below exposes these APIs through live MCP.
 
-`studio_job_artifact({jobId,artifactId,point?,offset?,limit?})` retrieves an intermediate artifact registered under the `artifactId` from an event. It accepts no arbitrary path and verifies hashes, job input revision and associated mesh. The default response is a summary. Current fields are thermal temperature and transient-acoustic pressure scalars. For these, request interpolation at `point:[x,y,z]` in mm, or a node/value page using `offset` and `limit` (maximum 200), only when needed. Mesh-only artifacts provide coordinate pages; point interpolation requires a field. Registration is unavailable after job release. Final saved `job.final:true` means publication completed; assumed inputs can still retain `job.provisional:true`. Final publication does not mean non-provisional or physically validated results.
+`studio_job_artifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})` retrieves an intermediate artifact registered under the `artifactId` from an event. It accepts no arbitrary path and verifies hashes, job input revision and associated mesh. The default response is a summary. Current fields are thermal temperature and transient-acoustic pressure scalars. For these, request interpolation at `point:[x,y,z]` in mm, or a node/value page using `offset` and `limit` (maximum 200), only when needed. Mesh-only artifacts provide coordinate pages; point interpolation requires a field. Registration is unavailable after job release. Final saved `job.final:true` means publication completed; assumed inputs can still retain `job.provisional:true`. Final publication does not mean non-provisional or physically validated results.
 
 Call `studio_analyze` with `{"path":"D:/work/project.json","outputPath":"D:/work/result.json","size":5,"method":"wasm-pcg"}`. Probe `point` coordinates are mm; fields carry physical units. Use UI-saved projects and documented material properties within their valid scope.
 
@@ -82,7 +82,7 @@ At most 16 commands are pending, with a 15-second reply timeout. A timeout does 
 
 ### Browser intermediate fields
 
-Use `startJob` with `includeFields:true` to retain intermediate meshes and thermal/transient-acoustic nodal scalar fields in browser memory. Pass an `artifact.artifactId` from jobEvents to `jobArtifact({jobId,artifactId,point?,offset?,limit?})`, or use shared `analysisApi.getJobArtifact(jobId,artifactId,options)`. The default returns summaries only; pages contain at most 200 nodes. Point measurements require a field artifact.
+Use `startJob` with `includeFields:true` to retain intermediate meshes and thermal/transient-acoustic nodal scalar fields in browser memory. Pass an `artifact.artifactId` from jobEvents to `jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`, or use shared `analysisApi.getJobArtifact(jobId,artifactId,options)`. The default returns summaries only; pages contain at most 200 nodes. Point measurements require a field artifact.
 
 Reads verify SHA-256, input revision and mesh identity, returning physical seconds, units and provisional:true. Remeshing changes subsequent mesh references while old fields keep their original mesh. All browser jobs share a default 64,000,000-byte serialized-data budget; this is not a heap-memory ceiling. Limits retain summaries and computation. Invalid observations produce observation-error without asserting that the final solve is invalid. releaseJob/closeJobs free artifacts; page exit loses them. Persistent files and every iteration field from all solvers are unsupported.
 
@@ -248,3 +248,11 @@ Browser analysis-client keeps active ownership and ignores late replies until vo
 `studio_job_artifacts({jobId,offset:0,limit:50})` lists registered artifact metadata for a retained job. Limit is at most100; replies include a page and total/nextOffset without field arrays. Node service listArtifacts, shared browser analysisApi.listJobArtifacts and inspect-scoped connected `jobArtifacts({jobId,offset:0,limit:50})` expose the catalog.
 
 When events are truncated, rediscover artifactId through the catalog, then retrieve through existing studio_job_artifact/jobArtifact. Listing does not rehash files; existing retrieval verifies hashes, revisions and mesh identity. Listing/retrieval after release is refused. Same-process job/memory retention limits remain; this does not add persistent restart recovery.
+
+## Body-aware point sampling of intermediate fields
+
+Intermediate meshes retain available nodeBodies and include nodeBodies in node pages. Point reads through studio_job_artifact and connected jobArtifact accept optional bodyIndex/elementIndex with point. Unspecified points at a multi-body interface are refused as ambiguous, like final-result probing; explicitly select a body or element. Final studio_probe also accepts bodyIndex.
+
+Body selection is unavailable for legacy intermediate meshes without body IDs. Missing nodeBodies are not reconstructed or inferred. Existing revision/mesh/hash/interpolation checks remain; explicit selection does not establish correct physical interface conditions.
+
+Intermediate mesh summaries expose bodyIdentifiersAvailable:boolean and bodyCount:number|null; legacy missing IDs mean unknown bodyCount:null. Node pages include nodeBodies only when IDs exist.

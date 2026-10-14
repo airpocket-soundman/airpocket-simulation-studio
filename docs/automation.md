@@ -47,7 +47,7 @@
 
 ブラウザの`analysisApi.startJob`、`getJob`、`jobEvents`、`cancelJob`、`getJobResult`、`releaseJob`も同じライフサイクルを使います。`startJob`の`inputRevision`と`requestId`は呼出側が渡します。ブラウザのイベントは通常は要約のみです。includeFields:trueでは下記のメモリ内成果物を保持します。下記の接続モードで、このAPIをライブMCPへ公開できます。
 
-`studio_job_artifact({jobId,artifactId,point?,offset?,limit?})`はイベントにある登録済み`artifactId`から中間成果物を取得します。任意パスは受け付けず、ハッシュ・ジョブ入力版・対応メッシュを照合します。既定は要約のみ。現行の場は熱の温度と過渡音響の圧力スカラーです。これらは`point:[x,y,z]`（mm）の補間、または`offset`と`limit`（最大200）のノード/値ページを必要に応じて取得できます。メッシュ単独では座標ページを取得でき、点補間には場が必要です。解放済みジョブの登録は利用できません。最終保存の`job.final:true`は保存完了を表し、仮定があれば`job.provisional:true`を維持します。最終保存と非暫定・物理検証済みを同一視しないでください。
+`studio_job_artifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})`はイベントにある登録済み`artifactId`から中間成果物を取得します。任意パスは受け付けず、ハッシュ・ジョブ入力版・対応メッシュを照合します。既定は要約のみ。現行の場は熱の温度と過渡音響の圧力スカラーです。これらは`point:[x,y,z]`（mm）の補間、または`offset`と`limit`（最大200）のノード/値ページを必要に応じて取得できます。メッシュ単独では座標ページを取得でき、点補間には場が必要です。解放済みジョブの登録は利用できません。最終保存の`job.final:true`は保存完了を表し、仮定があれば`job.provisional:true`を維持します。最終保存と非暫定・物理検証済みを同一視しないでください。
 
 例: `studio_analyze`へ`{"path":"D:/work/project.json","outputPath":"D:/work/result.json","size":5,"method":"wasm-pcg"}`を渡します。`studio_probe`の`point`はmm、結果は各解析の物理単位です。UIから保存した入力JSONを使い、材料の出典と有効範囲を確認してください。
 
@@ -82,7 +82,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ### ブラウザの途中の場を取得する
 
-接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと対応する熱/過渡音響の節点スカラー場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。
+接続モードで `startJob` に `includeFields:true` を指定すると、中間メッシュと対応する熱/過渡音響の節点スカラー場をブラウザのメモリ内に保持します。`jobEvents` の `artifact.artifactId` を、`jobArtifact({jobId,artifactId,point?,bodyIndex?,elementIndex?,offset?,limit?})` または共通APIの `analysisApi.getJobArtifact(jobId,artifactId,options)` へ渡します。既定は要約のみ。ページ上限は200節点で、点測定には場を含む成果物が必要です。
 
 取得時にSHA-256・入力版・対応メッシュを検査し、物理時刻（秒）・単位・provisional:trueを返します。再メッシュは新しいメッシュ参照へ切り替え、過去の場は元のメッシュと結び付けたまま保持します。既定64,000,000バイトの直列化データ予算は全ブラウザジョブで共有し、上限では要約と計算を続行。実ヒープ使用量の上限ではありません。観測が不正な場合はobservation-errorを返し、最終解析結果の判定と区別します。releaseJob/closeJobsで解放し、ページ終了で消失します。ファイルへの永続保存・全ソルバーの全反復場は提供しません。
 
@@ -248,3 +248,11 @@ v2ホストのv1取込応答は`measurementsCleared:true`と、空履歴を含�
 `studio_job_artifacts({jobId,offset:0,limit:50})`は保持中ジョブの登録済み成果物メタデータを列挙します。limitは最大100、応答はページとtotal/nextOffsetを含み、場の配列本体は含めません。NodeサービスのlistArtifacts、ブラウザ共通`analysisApi.listJobArtifacts`と、確認権限の接続`jobArtifacts({jobId,offset:0,limit:50})`でも同じ一覧を取得します。
 
 イベントが切り詰められても、カタログから必要なartifactIdを再発見し、既存のstudio_job_artifact/jobArtifactで取得できます。一覧はファイルの再ハッシュを行わず、取得時に既存のハッシュ・版・メッシュ等の検証を実行します。release後の一覧・取得は拒否します。同一プロセス内のジョブ・メモリ保持上限は維持され、再起動からの永続復元を提供する機能ではありません。
+
+## 中間場の部品境界を指定した点測定
+
+中間メッシュは利用可能なnodeBodiesを保持し、節点ページにもnodeBodiesを含めます。`studio_job_artifact`と接続`jobArtifact`の点取得は`bodyIndex`・`elementIndex`を任意指定できます。これらはpointと併用し、複数部品の界面で未指定の点は最終結果のprobeと同じく曖昧として拒否します。bodyまたはelementを明示して対象を選んでください。最終`studio_probe`もbodyIndexを受け付けます。
+
+部品IDを保持しない旧中間メッシュへbody指定はできません。欠けたnodeBodiesを自動復元・推定しません。版・メッシュ・ハッシュと既存の点補間検証を維持し、明示選択は物理的な接合条件の正しさを保証しません。
+
+中間メッシュ要約は`bodyIdentifiersAvailable:boolean`と`bodyCount:number|null`を返します。旧IDなしメッシュのbodyCountは不明としてnull。節点ページのnodeBodiesはIDを保持する場合だけ含みます。

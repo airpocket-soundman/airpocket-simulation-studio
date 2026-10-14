@@ -1,0 +1,310 @@
+{
+  "environment": "Actual local IAB + native browser Worker + stdio MCP/HTTP; contact heat reference converted explicitly to three transient steps.",
+  "state": {
+    "schemaVersion": 1,
+    "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+    "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+    "state": "succeeded",
+    "executionSettled": true,
+    "resourceState": "settled",
+    "releaseAllowed": true,
+    "operation": "elastic",
+    "origin": "api",
+    "startedAt": 1791987410426,
+    "updatedAt": 1791987410879,
+    "lastSequence": 11,
+    "firstAvailableSequence": 1,
+    "result": {
+      "kind": "thermal",
+      "mesh": {
+        "nodeCount": 124,
+        "elementCount": 288,
+        "volumeMm3": 3999.9999999999977,
+        "minVolumeMm3": 5.0154237158105515,
+        "minQuality": 0.3276479686715249,
+        "qualityHistogram": [
+          0,
+          2,
+          8,
+          74,
+          204
+        ]
+      },
+      "resultAvailable": true,
+      "analysisAssessment": {
+        "schemaVersion": 1,
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "intermediate": {
+        "retainedArtifacts": 4,
+        "retainedBytes": 14311,
+        "storageLimited": false,
+        "sharedBytes": 14311,
+        "maxBytes": 64000000
+      }
+    }
+  },
+  "catalog": {
+    "schemaVersion": 1,
+    "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+    "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+    "provisional": true,
+    "artifacts": [
+      {
+        "artifactId": "0001",
+        "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+        "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+        "bytes": 7401,
+        "sha256": "ac17c31aa08c28c6ad77a81fe7d3232ee22f9f4b65e0ce07e15eded0de24759f",
+        "kind": "mesh",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0002",
+        "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+        "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+        "bytes": 2309,
+        "sha256": "102994a917d30f10046249180711fc3698461c3497900a6369ddbf3ecc999896",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0003",
+        "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+        "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+        "bytes": 2304,
+        "sha256": "b643ea262b912d1018fcdfaea34dc29c94b0353b7c56cd5e5e29642052e0df11",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      },
+      {
+        "artifactId": "0004",
+        "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+        "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+        "bytes": 2297,
+        "sha256": "b9cae2341be2e8fc509b22e87b882ac6f33b5c536148adb75cf41570db074476",
+        "kind": "thermal",
+        "provisional": true,
+        "storage": "browser-memory"
+      }
+    ],
+    "total": 4,
+    "nextOffset": null,
+    "jobState": "succeeded"
+  },
+  "ambiguous": "[{\"type\":\"text\",\"text\":\"Probe point belongs to multiple bodies; specify bodyIndex\"}]",
+  "body0": {
+    "schemaVersion": 1,
+    "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+    "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+    "artifact": {
+      "artifactId": "0004",
+      "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+      "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+      "bytes": 2297,
+      "sha256": "b9cae2341be2e8fc509b22e87b882ac6f33b5c536148adb75cf41570db074476",
+      "kind": "thermal",
+      "provisional": true,
+      "storage": "browser-memory"
+    },
+    "mesh": {
+      "nodeCount": 124,
+      "elementCount": 288,
+      "boundsMm": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ],
+      "bodyIdentifiersAvailable": true,
+      "bodyCount": 2
+    },
+    "provisional": true,
+    "field": {
+      "kind": "thermal",
+      "name": "temperature",
+      "unit": "degC",
+      "time": 3,
+      "timeUnit": "s",
+      "minimum": 19.89722602583739,
+      "maximum": 100
+    },
+    "measurement": {
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 62,
+      "weights": [
+        0,
+        0.4475524475524475,
+        0.5524475524475521,
+        0
+      ],
+      "time": 3,
+      "bodyIndex": 0,
+      "value": 19.997103400756696,
+      "field": "temperature",
+      "unit": "degC",
+      "timeUnit": "s"
+    },
+    "page": {
+      "offset": 0,
+      "count": 2,
+      "total": 124,
+      "nextOffset": 2,
+      "hasMore": true,
+      "nodesMm": [
+        [
+          0,
+          0,
+          20
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "values": [
+        20.012511038596124,
+        100
+      ],
+      "nodeBodies": [
+        0,
+        0
+      ]
+    }
+  },
+  "body1": {
+    "schemaVersion": 1,
+    "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+    "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+    "artifact": {
+      "artifactId": "0004",
+      "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+      "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+      "bytes": 2297,
+      "sha256": "b9cae2341be2e8fc509b22e87b882ac6f33b5c536148adb75cf41570db074476",
+      "kind": "thermal",
+      "provisional": true,
+      "storage": "browser-memory"
+    },
+    "mesh": {
+      "nodeCount": 124,
+      "elementCount": 288,
+      "boundsMm": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ],
+      "bodyIdentifiersAvailable": true,
+      "bodyCount": 2
+    },
+    "provisional": true,
+    "field": {
+      "kind": "thermal",
+      "name": "temperature",
+      "unit": "degC",
+      "time": 3,
+      "timeUnit": "s",
+      "minimum": 19.89722602583739,
+      "maximum": 100
+    },
+    "measurement": {
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 200,
+      "weights": [
+        0.5524475524475521,
+        0.4475524475524475,
+        0,
+        0
+      ],
+      "time": 3,
+      "bodyIndex": 1,
+      "value": 20.0013335616658,
+      "field": "temperature",
+      "unit": "degC",
+      "timeUnit": "s"
+    }
+  },
+  "element": {
+    "schemaVersion": 1,
+    "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+    "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+    "artifact": {
+      "artifactId": "0004",
+      "jobId": "6b6b83bd-a75f-4e72-af74-2afd3a2276ee",
+      "inputRevision": "sha256:7db0db1ef039089065674b061deffebece675581b4bd6d99c2a1bfcddb70e90f",
+      "bytes": 2297,
+      "sha256": "b9cae2341be2e8fc509b22e87b882ac6f33b5c536148adb75cf41570db074476",
+      "kind": "thermal",
+      "provisional": true,
+      "storage": "browser-memory"
+    },
+    "mesh": {
+      "nodeCount": 124,
+      "elementCount": 288,
+      "boundsMm": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ],
+      "bodyIdentifiersAvailable": true,
+      "bodyCount": 2
+    },
+    "provisional": true,
+    "field": {
+      "kind": "thermal",
+      "name": "temperature",
+      "unit": "degC",
+      "time": 3,
+      "timeUnit": "s",
+      "minimum": 19.89722602583739,
+      "maximum": 100
+    },
+    "measurement": {
+      "point": [
+        5,
+        5,
+        20
+      ],
+      "element": 200,
+      "weights": [
+        0.5524475524475521,
+        0.4475524475524475,
+        0,
+        0
+      ],
+      "time": 3,
+      "bodyIndex": 1,
+      "value": 20.0013335616658,
+      "field": "temperature",
+      "unit": "degC",
+      "timeUnit": "s"
+    }
+  }
+}

@@ -28,7 +28,7 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='jobStatus')return analysis.getJob(args.jobId);
    if(method==='jobEvents')return analysis.jobEvents(args.jobId,args);
    if(method==='jobArtifacts'){const {jobId,...query}=args;return analysis.listJobArtifacts(jobId,query);}
-   if(method==='jobArtifact')return analysis.getJobArtifact(args.jobId,args.artifactId,{point:args.point,offset:args.offset,limit:args.limit});
+   if(method==='jobArtifact')return analysis.getJobArtifact(args.jobId,args.artifactId,{point:args.point,offset:args.offset,limit:args.limit,...(args.bodyIndex!==undefined?{bodyIndex:args.bodyIndex}:{}),...(args.elementIndex!==undefined?{elementIndex:args.elementIndex}:{})});
    if(method==='cancelJob')return analysis.cancelJob(args.jobId);
    if(method==='releaseJob'){const result=analysis.releaseJob(args.jobId);owned.delete(args.jobId);for(const [id,r]of requests)if(r.jobId===args.jobId)requests.delete(id);return result;}
    if(method==='showJob'){
