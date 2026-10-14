@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T21:18:05.486273Z",
+  "updatedAt": "2026-10-14T21:34:07.848107Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1122,7 +1122,7 @@
       "id": "P1",
       "title": "解析入力の共通操作と根拠・事前検査",
       "titleEn": "Shared input operations, provenance and preflight",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P0"
@@ -1151,7 +1151,7 @@
       "id": "P3",
       "title": "共通ジョブとブラウザセッション接続",
       "titleEn": "Shared jobs and live browser sessions",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P0",
@@ -1167,7 +1167,7 @@
       "id": "P4",
       "title": "ビューア操作・再現可能な出力API",
       "titleEn": "Viewer operations and reproducible export APIs",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P0"
@@ -1198,7 +1198,7 @@
       "id": "P6",
       "title": "WASM・ネイティブ共通コア実証",
       "titleEn": "Shared WASM/native core proof",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P0",
@@ -1880,6 +1880,21 @@
       "acceptance": "全体741件中738成功・3skip、新22件。実MCP controlled exit86後もping/別熱解析成功、cancel/timeoutのclose待機、result後異常終了/signalの公開拒否を確認。依存物/実行ファイルSHAと生ログ保存。V8根治未証明。",
       "acceptanceEn": "Full741:738passed/3skipped,22new. Real MCP survives controlled exit86 and runs a distinct thermal job;cancel/timeout await close;post-result abnormal exit/signals block publication. Dependency/executable hashes and raw logs retained;V8 resolution unproven.",
       "evidence": "scripts/analysis-process-worker.mjs; scripts/wasm-runtime-provenance.mjs; docs/evidence/2026-10-15-process-isolation.json; docs/evidence/2026-10-15-process-isolation-full.json; docs/testing.md"
+    },
+    {
+      "id": "STRUCTURALPROVENANCE1",
+      "title": "等方固有振動・静的直交異方構造の明示入力と根拠契約",
+      "titleEn": "Explicit input and provenance for isotropic modes and static orthotropic structure",
+      "status": "released",
+      "category": "共通",
+      "depends": [
+        "P1"
+      ],
+      "detail": "物性・材料軸・境界・適用条件をrequiredPointersへ結び、modal温度表とorthotropic重力も既存CPU範囲で検証。数値設定と物理根拠を区別する。",
+      "detailEn": "Bind material,axes,boundary and applicability evidence to requiredPointers,including modal temperature tables and orthotropic gravity within existing CPU scope;distinguish numerical settings from physical evidence.",
+      "acceptance": "新27件、対象37件成功。全体768件中765成功・3skip。実MCP4 strict+legacy2、Worker温度表/重力のstrict/legacy4、最終実ブラウザ3ジョブを確認。古い根拠・runtime矛盾・改変拒否、保存復元・点測定・暫定性・入力版不変を維持。メッシュ後検査/物理精度/V8根治は未保証。",
+      "acceptanceEn": "27new/37target tests pass;full768:765passed/3skipped. Real MCP4strict+2legacy,Worker table/gravity4strict/legacy and three final browser jobs checked. Stale evidence/runtime conflicts/tampering rejected;saved cases,probes,provisional state and input identity retained. Post-mesh checks,physical accuracy and V8 resolution remain unproven.",
+      "evidence": "src/modal-input-contract.js; src/orthotropic-input-contract.js; tests/mcp-structural-model-provenance.test.mjs; docs/evidence/2026-10-15-browser-structural-contract.json; docs/evidence/2026-10-15-structural-model-full.json; docs/testing.md"
     }
   ],
   "solvers": [

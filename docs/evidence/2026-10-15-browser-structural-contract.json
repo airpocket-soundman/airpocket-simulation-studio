@@ -1,0 +1,4000 @@
+{
+  "environment": "Actual local IAB/native browser Worker/WASM with real stdio MCP/HTTP; synthetic exploratory agent proposals,not measured or user-confirmed",
+  "runs": [
+    {
+      "kind": "modal",
+      "study": {
+        "kind": "structural",
+        "gravityEnabled": false,
+        "modalAnalysis": true,
+        "modeCount": 1,
+        "modalIterations": 60,
+        "thermalStress": false,
+        "materialTemperature": 20
+      },
+      "material": {
+        "youngModulus": 1000000000,
+        "poissonRatio": 0,
+        "density": 1000
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "structural",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/modalAnalysis",
+            "value": true,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/gravityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/density",
+            "value": 1000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/youngModulus",
+            "value": 1000000000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/poissonRatio",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/materialTemperature",
+            "value": 20,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "fixed",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/direction",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          }
+        ]
+      },
+      "missing": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/kind",
+            "evidence": {
+              "value": "structural"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/modalAnalysis",
+            "evidence": {
+              "value": true
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/gravityEnabled",
+            "evidence": {
+              "value": false
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/density",
+            "evidence": {
+              "value": 1000
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/youngModulus",
+            "evidence": {
+              "value": 1000000000
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/poissonRatio",
+            "evidence": {
+              "value": 0
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/materialTemperature",
+            "evidence": {
+              "value": 20
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/type",
+            "evidence": {
+              "value": "fixed"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/value",
+            "evidence": {
+              "value": 0
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/direction",
+            "evidence": {
+              "value": [
+                1,
+                0,
+                0
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/regions",
+            "evidence": {
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    10,
+                    11
+                  ]
+                }
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "override": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/youngModulus",
+          "/materialProperties/poissonRatio",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [
+          {
+            "code": "MODAL_RUNTIME_OVERRIDE",
+            "severity": "error",
+            "target": "/options/boundary",
+            "message": "This runtime physical input is not supported by modal analysis",
+            "evidence": {},
+            "suggestions": [
+              "Specify the intended modal model and record physical sources or explicit exploratory assumptions"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+        "summary": {
+          "loaded": true,
+          "name": "Exploratory modal evidence",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 1,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+        "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013404007,
+        "updatedAt": 1792013404517,
+        "lastSequence": 18,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "modal",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+        "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "events": {
+        "schemaVersion": 1,
+        "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+        "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013404007,
+        "updatedAt": 1792013404517,
+        "lastSequence": 18,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "modal",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        },
+        "events": [
+          {
+            "state": "running",
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 1,
+            "elapsedMs": 0,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "preparation",
+            "message": "Simulation modules loaded",
+            "converged": null,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 2,
+            "elapsedMs": 128,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Generating volume mesh…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 3,
+            "elapsedMs": 129,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "mesh",
+            "metrics": {
+              "nodeCount": 94,
+              "elementCount": 218,
+              "volumeMm3": 3999.9999999999977,
+              "minVolumeMm3": 6.0397097262876045,
+              "minQuality": 0.3471214125206645,
+              "qualityHistogram": [
+                0,
+                2,
+                9,
+                86,
+                121
+              ]
+            },
+            "converged": null,
+            "provisional": true,
+            "meshAvailable": false,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 4,
+            "elapsedMs": 402,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Transferring boundary regions…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 5,
+            "elapsedMs": 402,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Solving linear elasticity…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 6,
+            "elapsedMs": 424,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 1,
+            "residuals": [
+              7.204696966514672
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 7,
+            "elapsedMs": 446,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 1: 7.20e+0",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 8,
+            "elapsedMs": 446,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 2,
+            "residuals": [
+              0.05147160917939229
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 9,
+            "elapsedMs": 460,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 2: 5.15e-2",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 10,
+            "elapsedMs": 460,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 3,
+            "residuals": [
+              0.0018966564969501813
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 11,
+            "elapsedMs": 474,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 3: 1.90e-3",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 12,
+            "elapsedMs": 475,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 4,
+            "residuals": [
+              7.15755179853769e-05
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 13,
+            "elapsedMs": 489,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 4: 7.16e-5",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 14,
+            "elapsedMs": 489,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 5,
+            "residuals": [
+              2.655188744947148e-06
+            ],
+            "tolerance": 1e-05,
+            "converged": true,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 15,
+            "elapsedMs": 506,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 5: 2.66e-6",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 16,
+            "elapsedMs": 507,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 17,
+            "elapsedMs": 510,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "6ec88657-d9b7-4037-bcc1-9aa7f5d10286",
+            "inputRevision": "sha256:0ad2570d3b794ab160e92d81b679725f8f2d81039c67cdc9c1e76c14569406cf",
+            "sequence": 18,
+            "elapsedMs": 510,
+            "type": "resource-state",
+            "executionSettled": true,
+            "resourceState": "settled",
+            "releaseAllowed": true
+          }
+        ],
+        "truncated": false,
+        "nextSequence": 18,
+        "hasMore": false
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:4c0c27c075d91936130b1beaefdcfb75cb6eb8a5de2f5fc61c10ea3535586bcb",
+        "kind": "modal",
+        "display": {
+          "field": "displacement",
+          "modeIndex": 0,
+          "frameIndex": null
+        },
+        "point": [
+          5,
+          5,
+          20
+        ],
+        "element": 4,
+        "weights": [
+          0.4955120306152899,
+          0.004487969384709967,
+          0.49076473928685793,
+          0.009235260713141957
+        ],
+        "displacementMm": [
+          -0.3420173625173232,
+          0.14695809950825195,
+          -0.001561013255394993
+        ],
+        "magnitudeMm": 0.37225662658543346,
+        "frequencyHz": 1192.4176392003972,
+        "normalization": "maximum modal displacement = 1 mm",
+        "modeInterpretation": "normalized-shape-not-dynamic-response",
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "modalTemperature",
+      "study": {
+        "kind": "structural",
+        "gravityEnabled": false,
+        "modalAnalysis": true,
+        "modeCount": 1,
+        "modalIterations": 60,
+        "materialTemperature": 40,
+        "thermalStress": false
+      },
+      "material": {
+        "density": 1000,
+        "dependence": {
+          "elasticTemperatureTable": [
+            {
+              "temperature": 20,
+              "youngModulus": 1000000000,
+              "poissonRatio": 0
+            },
+            {
+              "temperature": 60,
+              "youngModulus": 2000000000,
+              "poissonRatio": 0
+            }
+          ],
+          "testConditions": "Synthetic uniform-temperature eigenproblem;not measured"
+        }
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "structural",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/modalAnalysis",
+            "value": true,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/gravityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/density",
+            "value": 1000,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/dependence/elasticTemperatureTable",
+            "value": [
+              {
+                "temperature": 20,
+                "youngModulus": 1000000000,
+                "poissonRatio": 0
+              },
+              {
+                "temperature": 60,
+                "youngModulus": 2000000000,
+                "poissonRatio": 0
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/materialTemperature",
+            "value": 40,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/dependence",
+            "value": {
+              "elasticTemperatureTable": [
+                {
+                  "temperature": 20,
+                  "youngModulus": 1000000000,
+                  "poissonRatio": 0
+                },
+                {
+                  "temperature": 60,
+                  "youngModulus": 2000000000,
+                  "poissonRatio": 0
+                }
+              ],
+              "testConditions": "Synthetic uniform-temperature eigenproblem;not measured"
+            },
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "fixed",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/direction",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          }
+        ]
+      },
+      "missing": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/dependence/elasticTemperatureTable",
+          "/study/materialTemperature",
+          "/materialProperties/dependence",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/kind",
+            "evidence": {
+              "value": "structural"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/modalAnalysis",
+            "evidence": {
+              "value": true
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/gravityEnabled",
+            "evidence": {
+              "value": false
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/density",
+            "evidence": {
+              "value": 1000
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/dependence/elasticTemperatureTable",
+            "evidence": {
+              "value": [
+                {
+                  "temperature": 20,
+                  "youngModulus": 1000000000,
+                  "poissonRatio": 0
+                },
+                {
+                  "temperature": 60,
+                  "youngModulus": 2000000000,
+                  "poissonRatio": 0
+                }
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/materialTemperature",
+            "evidence": {
+              "value": 40
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/dependence",
+            "evidence": {
+              "value": {
+                "elasticTemperatureTable": [
+                  {
+                    "temperature": 20,
+                    "youngModulus": 1000000000,
+                    "poissonRatio": 0
+                  },
+                  {
+                    "temperature": 60,
+                    "youngModulus": 2000000000,
+                    "poissonRatio": 0
+                  }
+                ],
+                "testConditions": "Synthetic uniform-temperature eigenproblem;not measured"
+              }
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/type",
+            "evidence": {
+              "value": "fixed"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/value",
+            "evidence": {
+              "value": 0
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/direction",
+            "evidence": {
+              "value": [
+                1,
+                0,
+                0
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/regions",
+            "evidence": {
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    10,
+                    11
+                  ]
+                }
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/dependence/elasticTemperatureTable",
+          "/study/materialTemperature",
+          "/materialProperties/dependence",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "override": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "modal-cpu",
+          "profile": {
+            "id": "modal-cpu",
+            "models": [
+              "modal"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "modal-subspace",
+                "cadence": "each subspace iteration",
+                "metrics": [
+                  {
+                    "name": "residuals",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "modal-isotropic-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/modalAnalysis",
+          "/study/gravityEnabled",
+          "/materialProperties/density",
+          "/materialProperties/dependence/elasticTemperatureTable",
+          "/study/materialTemperature",
+          "/materialProperties/dependence",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "materialTemperature": "degC",
+          "frequency": "Hz"
+        },
+        "diagnostics": [
+          {
+            "code": "MODAL_RUNTIME_OVERRIDE",
+            "severity": "error",
+            "target": "/options/boundary",
+            "message": "This runtime physical input is not supported by modal analysis",
+            "evidence": {},
+            "suggestions": [
+              "Specify the intended modal model and record physical sources or explicit exploratory assumptions"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+        "summary": {
+          "loaded": true,
+          "name": "Exploratory modalTemperature evidence",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 1,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+        "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013415704,
+        "updatedAt": 1792013416204,
+        "lastSequence": 18,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "modal",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+        "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "events": {
+        "schemaVersion": 1,
+        "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+        "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013415704,
+        "updatedAt": 1792013416204,
+        "lastSequence": 18,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "modal",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        },
+        "events": [
+          {
+            "state": "running",
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 1,
+            "elapsedMs": 0,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "preparation",
+            "message": "Simulation modules loaded",
+            "converged": null,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 2,
+            "elapsedMs": 133,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Generating volume mesh…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 3,
+            "elapsedMs": 134,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "mesh",
+            "metrics": {
+              "nodeCount": 94,
+              "elementCount": 218,
+              "volumeMm3": 3999.9999999999977,
+              "minVolumeMm3": 6.0397097262876045,
+              "minQuality": 0.3471214125206645,
+              "qualityHistogram": [
+                0,
+                2,
+                9,
+                86,
+                121
+              ]
+            },
+            "converged": null,
+            "provisional": true,
+            "meshAvailable": false,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 4,
+            "elapsedMs": 390,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Transferring boundary regions…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 5,
+            "elapsedMs": 390,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Solving linear elasticity…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 6,
+            "elapsedMs": 395,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 1,
+            "residuals": [
+              7.204696966515631
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 7,
+            "elapsedMs": 434,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 1: 7.20e+0",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 8,
+            "elapsedMs": 434,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 2,
+            "residuals": [
+              0.051471609179534535
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 9,
+            "elapsedMs": 448,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 2: 5.15e-2",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 10,
+            "elapsedMs": 448,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 3,
+            "residuals": [
+              0.001896656496800433
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 11,
+            "elapsedMs": 465,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 3: 1.90e-3",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 12,
+            "elapsedMs": 465,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 4,
+            "residuals": [
+              7.15755179111576e-05
+            ],
+            "tolerance": 1e-05,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 13,
+            "elapsedMs": 476,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 4: 7.16e-5",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 14,
+            "elapsedMs": 476,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "modal-subspace",
+            "iteration": 5,
+            "residuals": [
+              2.6551887848669454e-06
+            ],
+            "tolerance": 1e-05,
+            "converged": true,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 15,
+            "elapsedMs": 496,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Modal subspace 5: 2.66e-6",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 16,
+            "elapsedMs": 497,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 17,
+            "elapsedMs": 500,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "d97768a5-1de6-4e62-b3ae-0cabe995d69e",
+            "inputRevision": "sha256:aff95ad6c64d4700910b44258ea210002846f15d0aaa3055f9f8e91d49ef5113",
+            "sequence": 18,
+            "elapsedMs": 500,
+            "type": "resource-state",
+            "executionSettled": true,
+            "resourceState": "settled",
+            "releaseAllowed": true
+          }
+        ],
+        "truncated": false,
+        "nextSequence": 18,
+        "hasMore": false
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:ab4b24a757f4509c91b95c02d2f7a5af171449d5f6179618a7abec1ef0c70b7d",
+        "kind": "modal",
+        "display": {
+          "field": "displacement",
+          "modeIndex": 0,
+          "frameIndex": null
+        },
+        "point": [
+          5,
+          5,
+          20
+        ],
+        "element": 4,
+        "weights": [
+          0.4955120306152899,
+          0.004487969384709967,
+          0.49076473928685793,
+          0.009235260713141957
+        ],
+        "displacementMm": [
+          -0.34201736251727793,
+          0.146958099508367,
+          -0.0015610132553969837
+        ],
+        "magnitudeMm": 0.37225662658543734,
+        "frequencyHz": 1460.407388167562,
+        "normalization": "maximum modal displacement = 1 mm",
+        "modeInterpretation": "normalized-shape-not-dynamic-response",
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "orthotropic",
+      "study": {
+        "kind": "structural",
+        "gravityEnabled": false,
+        "thermalStress": false,
+        "materialTemperature": 20,
+        "modalAnalysis": false
+      },
+      "material": {
+        "orthotropic": {
+          "model": "linear-orthotropic",
+          "youngModuliPa": [
+            1000000000,
+            2000000000,
+            3000000000
+          ],
+          "poissonRatios": [
+            0,
+            0,
+            0
+          ],
+          "shearModuliPa": [
+            400000000,
+            500000000,
+            600000000
+          ],
+          "axes": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ],
+          "source": "Synthetic axial reference, not measured material data",
+          "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios"
+        }
+      },
+      "inputProvenance": {
+        "schemaVersion": 1,
+        "entries": [
+          {
+            "pointer": "/study/kind",
+            "value": "structural",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/gravityEnabled",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/modalAnalysis",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/thermalStress",
+            "value": false,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/model",
+            "value": "linear-orthotropic",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/youngModuliPa",
+            "value": [
+              1000000000,
+              2000000000,
+              3000000000
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/poissonRatios",
+            "value": [
+              0,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/shearModuliPa",
+            "value": [
+              400000000,
+              500000000,
+              600000000
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/axes",
+            "value": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/source",
+            "value": "Synthetic axial reference, not measured material data",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/materialProperties/orthotropic/testConditions",
+            "value": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/study/materialTemperature",
+            "value": 20,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/type",
+            "value": "fixed",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/value",
+            "value": 0,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/direction",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/0/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/1/type",
+            "value": "force",
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/1/value",
+            "value": 100,
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/1/direction",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          },
+          {
+            "pointer": "/conditions/1/regions",
+            "value": [
+              {
+                "mesh": 0,
+                "triangles": [
+                  8,
+                  9
+                ]
+              }
+            ],
+            "source": {
+              "kind": "agent-proposal"
+            },
+            "rationale": "Explicit virtual structural reference",
+            "applicability": "Limited CPU linear reference model",
+            "status": "unconfirmed",
+            "assumption": "Synthetic input;not measured or user-confirmed"
+          }
+        ]
+      },
+      "missing": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": false,
+        "completePreflight": false,
+        "requiredInputContract": "static-orthotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/study/modalAnalysis",
+          "/study/thermalStress",
+          "/materialProperties/orthotropic/model",
+          "/materialProperties/orthotropic/youngModuliPa",
+          "/materialProperties/orthotropic/poissonRatios",
+          "/materialProperties/orthotropic/shearModuliPa",
+          "/materialProperties/orthotropic/axes",
+          "/materialProperties/orthotropic/source",
+          "/materialProperties/orthotropic/testConditions",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "youngModuliPa": "Pa",
+          "shearModuliPa": "Pa",
+          "poissonRatios": "1",
+          "axes": "1",
+          "materialTemperature": "degC",
+          "strainRateMin": "1/s",
+          "strainRateMax": "1/s"
+        },
+        "diagnostics": [
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/kind",
+            "evidence": {
+              "value": "structural"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/gravityEnabled",
+            "evidence": {
+              "value": false
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/modalAnalysis",
+            "evidence": {
+              "value": false
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/thermalStress",
+            "evidence": {
+              "value": false
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/model",
+            "evidence": {
+              "value": "linear-orthotropic"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/youngModuliPa",
+            "evidence": {
+              "value": [
+                1000000000,
+                2000000000,
+                3000000000
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/poissonRatios",
+            "evidence": {
+              "value": [
+                0,
+                0,
+                0
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/shearModuliPa",
+            "evidence": {
+              "value": [
+                400000000,
+                500000000,
+                600000000
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/axes",
+            "evidence": {
+              "value": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/source",
+            "evidence": {
+              "value": "Synthetic axial reference, not measured material data"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/materialProperties/orthotropic/testConditions",
+            "evidence": {
+              "value": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/study/materialTemperature",
+            "evidence": {
+              "value": 20
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/type",
+            "evidence": {
+              "value": "fixed"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/value",
+            "evidence": {
+              "value": 0
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/direction",
+            "evidence": {
+              "value": [
+                1,
+                0,
+                0
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/0/regions",
+            "evidence": {
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    10,
+                    11
+                  ]
+                }
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/1/type",
+            "evidence": {
+              "value": "force"
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/1/value",
+            "evidence": {
+              "value": 100
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/1/direction",
+            "evidence": {
+              "value": [
+                0,
+                0,
+                1
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          },
+          {
+            "code": "PROVENANCE_REQUIRED",
+            "severity": "error",
+            "target": "/conditions/1/regions",
+            "evidence": {
+              "value": [
+                {
+                  "mesh": 0,
+                  "triangles": [
+                    8,
+                    9
+                  ]
+                }
+              ]
+            },
+            "suggestions": [
+              "Record source, rationale, applicability and confirmation for this required input"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "preflight": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": true,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "static-orthotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/study/modalAnalysis",
+          "/study/thermalStress",
+          "/materialProperties/orthotropic/model",
+          "/materialProperties/orthotropic/youngModuliPa",
+          "/materialProperties/orthotropic/poissonRatios",
+          "/materialProperties/orthotropic/shearModuliPa",
+          "/materialProperties/orthotropic/axes",
+          "/materialProperties/orthotropic/source",
+          "/materialProperties/orthotropic/testConditions",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "youngModuliPa": "Pa",
+          "shearModuliPa": "Pa",
+          "poissonRatios": "1",
+          "axes": "1",
+          "materialTemperature": "degC",
+          "strainRateMin": "1/s",
+          "strainRateMax": "1/s"
+        },
+        "diagnostics": [],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "override": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "operation": "solve",
+        "selectedObservation": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "operation": "solve",
+          "supported": true,
+          "profileId": "elastic-cpu",
+          "profile": {
+            "id": "elastic-cpu",
+            "models": [
+              "linear-elastic",
+              "orthotropic"
+            ],
+            "methods": [
+              "pcg",
+              "pcg-strict",
+              "wasm-pcg"
+            ],
+            "events": [
+              {
+                "stage": "preparation",
+                "cadence": "after module initialization",
+                "metrics": []
+              },
+              {
+                "stage": "mesh",
+                "cadence": "after each generated mesh",
+                "metrics": [
+                  {
+                    "name": "nodeCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "elementCount",
+                    "unit": "count"
+                  },
+                  {
+                    "name": "volumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minVolumeMm3",
+                    "unit": "mm^3"
+                  },
+                  {
+                    "name": "minQuality",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "qualityHistogram",
+                    "unit": "count"
+                  }
+                ]
+              },
+              {
+                "stage": "progress",
+                "cadence": "worker text progress converted by the client",
+                "metrics": []
+              },
+              {
+                "stage": "iteration",
+                "solver": "pcg",
+                "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+                "metrics": [
+                  {
+                    "name": "residual",
+                    "unit": "dimensionless"
+                  },
+                  {
+                    "name": "tolerance",
+                    "unit": "dimensionless"
+                  }
+                ]
+              }
+            ],
+            "textProgress": true,
+            "fields": [],
+            "limitations": [
+              "Declaration of implemented observation paths only; not execution permission or physical validation",
+              "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+            ]
+          },
+          "reasons": [],
+          "adaptive": {
+            "enabled": false,
+            "structuredRoundEvents": false,
+            "meshPerRound": false,
+            "textProgressOnly": false
+          },
+          "fieldRetention": {
+            "requested": false,
+            "available": false,
+            "scalarFieldsSupported": false,
+            "vectorFieldsSupported": false,
+            "meshSupported": true,
+            "meshAvailable": false,
+            "maxBytes": 64000000,
+            "eventRetention": 256,
+            "availabilityIsGuarantee": false
+          },
+          "declarationOnly": true,
+          "physicalAccuracyVerified": false
+        },
+        "mode": "exploratory",
+        "allowed": false,
+        "provisional": true,
+        "completePreflight": false,
+        "requiredInputContract": "static-orthotropic-linear-structure",
+        "requiredPointers": [
+          "/study/kind",
+          "/study/gravityEnabled",
+          "/study/modalAnalysis",
+          "/study/thermalStress",
+          "/materialProperties/orthotropic/model",
+          "/materialProperties/orthotropic/youngModuliPa",
+          "/materialProperties/orthotropic/poissonRatios",
+          "/materialProperties/orthotropic/shearModuliPa",
+          "/materialProperties/orthotropic/axes",
+          "/materialProperties/orthotropic/source",
+          "/materialProperties/orthotropic/testConditions",
+          "/study/materialTemperature",
+          "/conditions/0/type",
+          "/conditions/0/value",
+          "/conditions/0/direction",
+          "/conditions/0/regions",
+          "/conditions/1/type",
+          "/conditions/1/value",
+          "/conditions/1/direction",
+          "/conditions/1/regions"
+        ],
+        "units": {
+          "geometry": "mm",
+          "youngModulus": "Pa",
+          "force": "N",
+          "temperature": "degC",
+          "velocity": "m/s",
+          "pressure": "Pa",
+          "displacement": "mm",
+          "density": "kg/m3",
+          "gravity": "m/s2",
+          "poissonRatio": "1",
+          "youngModuliPa": "Pa",
+          "shearModuliPa": "Pa",
+          "poissonRatios": "1",
+          "axes": "1",
+          "materialTemperature": "degC",
+          "strainRateMin": "1/s",
+          "strainRateMax": "1/s"
+        },
+        "diagnostics": [
+          {
+            "code": "ORTHOTROPIC_RUNTIME_OVERRIDE",
+            "severity": "error",
+            "target": "/options/boundary",
+            "message": "Runtime boundary records are ignored; edit the provenance-bearing project conditions",
+            "evidence": {
+              "projectPointer": "/conditions"
+            },
+            "suggestions": [
+              "Provide the intended orthotropic physical inputs and record their source or explicit exploratory assumption"
+            ],
+            "requiresUserIntent": true
+          }
+        ],
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ]
+      },
+      "documented": {
+        "schemaVersion": 1,
+        "revision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+        "summary": {
+          "loaded": true,
+          "name": "Exploratory orthotropic evidence",
+          "meshCount": 1,
+          "selectedTriangles": 0,
+          "selectedAreaMm2": 0,
+          "conditionCount": 2,
+          "material": "金属"
+        }
+      },
+      "state": {
+        "schemaVersion": 1,
+        "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+        "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013427323,
+        "updatedAt": 1792013427773,
+        "lastSequence": 14,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "elastic",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        }
+      },
+      "catalog": {
+        "schemaVersion": 1,
+        "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+        "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+        "provisional": true,
+        "artifacts": [],
+        "total": 0,
+        "nextOffset": null,
+        "jobState": "succeeded"
+      },
+      "events": {
+        "schemaVersion": 1,
+        "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+        "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+        "state": "succeeded",
+        "executionSettled": true,
+        "resourceState": "settled",
+        "releaseAllowed": true,
+        "operation": "elastic",
+        "origin": "api",
+        "startedAt": 1792013427323,
+        "updatedAt": 1792013427773,
+        "lastSequence": 14,
+        "firstAvailableSequence": 1,
+        "result": {
+          "kind": "elastic",
+          "mesh": {
+            "nodeCount": 94,
+            "elementCount": 218,
+            "volumeMm3": 3999.9999999999977,
+            "minVolumeMm3": 6.0397097262876045,
+            "minQuality": 0.3471214125206645,
+            "qualityHistogram": [
+              0,
+              2,
+              9,
+              86,
+              121
+            ]
+          },
+          "resultAvailable": true,
+          "analysisAssessment": {
+            "schemaVersion": 1,
+            "mode": "exploratory",
+            "provisional": true,
+            "completePreflight": false,
+            "remainingChecks": [
+              "Mesh quality and element validity after generation",
+              "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+              "Source applicability, convergence, mesh dependence and physical accuracy"
+            ]
+          },
+          "intermediate": {
+            "retainedArtifacts": 0,
+            "retainedBytes": 0,
+            "storageLimited": false,
+            "sharedBytes": 0,
+            "maxBytes": 64000000
+          }
+        },
+        "events": [
+          {
+            "state": "running",
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 1,
+            "elapsedMs": 0,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "preparation",
+            "message": "Simulation modules loaded",
+            "converged": null,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 2,
+            "elapsedMs": 131,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Generating volume mesh…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 3,
+            "elapsedMs": 132,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "mesh",
+            "metrics": {
+              "nodeCount": 94,
+              "elementCount": 218,
+              "volumeMm3": 3999.9999999999977,
+              "minVolumeMm3": 6.0397097262876045,
+              "minQuality": 0.3471214125206645,
+              "qualityHistogram": [
+                0,
+                2,
+                9,
+                86,
+                121
+              ]
+            },
+            "converged": null,
+            "provisional": true,
+            "meshAvailable": false,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 4,
+            "elapsedMs": 408,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Transferring boundary regions…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 5,
+            "elapsedMs": 408,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "progress",
+            "message": "Solving linear elasticity…",
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 6,
+            "elapsedMs": 413,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 1,
+            "residual": 1.0471099195161506,
+            "tolerance": 1e-08,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 7,
+            "elapsedMs": 432,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 25,
+            "residual": 0.005206991317898525,
+            "tolerance": 1e-08,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 8,
+            "elapsedMs": 449,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 50,
+            "residual": 0.0003849120487358599,
+            "tolerance": 1e-08,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 9,
+            "elapsedMs": 449,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 75,
+            "residual": 7.210829783353402e-05,
+            "tolerance": 1e-08,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 10,
+            "elapsedMs": 449,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 100,
+            "residual": 2.0894958129114658e-08,
+            "tolerance": 1e-08,
+            "converged": false,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 11,
+            "elapsedMs": 449,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "iteration": 102,
+            "residual": 5.3901623682787405e-09,
+            "tolerance": 1e-08,
+            "converged": true,
+            "provisional": true,
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 12,
+            "elapsedMs": 449,
+            "type": "progress",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 13,
+            "elapsedMs": 450,
+            "type": "state",
+            "executionSettled": false,
+            "resourceState": "pending",
+            "releaseAllowed": false
+          },
+          {
+            "state": "succeeded",
+            "schemaVersion": 1,
+            "jobId": "fcb420c7-6c4e-42b6-af8b-f1a53b45ccf4",
+            "inputRevision": "sha256:4c845837fbeb0c9a7bb4b6cbdc4bdb52ca148af672be21f60920b4cc8388ebd1",
+            "sequence": 14,
+            "elapsedMs": 450,
+            "type": "resource-state",
+            "executionSettled": true,
+            "resourceState": "settled",
+            "releaseAllowed": true
+          }
+        ],
+        "truncated": false,
+        "nextSequence": 14,
+        "hasMore": false
+      },
+      "measurement": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:965be98734416c31a3effaf41ed241d3023c6994904ab68222e418ff7d1cdb9b",
+        "kind": "elastic",
+        "display": {
+          "field": "displacement",
+          "modeIndex": null,
+          "frameIndex": null
+        },
+        "point": [
+          5,
+          5,
+          20
+        ],
+        "element": 4,
+        "weights": [
+          0.4955120306152899,
+          0.004487969384709967,
+          0.49076473928685793,
+          0.009235260713141957
+        ],
+        "displacementMm": [
+          6.054229703296494e-14,
+          5.677886148808028e-13,
+          0.0066666666662532304
+        ],
+        "magnitudeMm": 0.0066666666662532304,
+        "vonMisesPa": 999999.9998547176,
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic explicit exploratory inputs;not measured calibration or physical accuracy evidence.",
+    "Events were polled after settlement;no guarantee of preterminal delivery timing.",
+    "An earlier QA run completed two modal jobs before a development hot reload disconnected the browser;the final three runs were repeated after source stabilization.",
+    "The initial QA fixture missed GUI-serialized optional study fields and was corrected before starting those validation jobs."
+  ]
+}

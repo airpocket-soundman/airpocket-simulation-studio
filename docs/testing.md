@@ -421,3 +421,17 @@ Node26の成功は別runtimeでの比較結果であり、既定Node24の失敗g
 依存追跡付き診断をfresh process1回・analysis-jobs/concurrency1で実行し3件成功（[記録](evidence/2026-10-15-process-isolation-runtime-provenance.json)）。loadedAssetsは解決したローカル依存物と別のpublicコピーを区別し、loaderを実行せずhash化する。実ロードtraceや将来のファイル不変性・runtime安全性の証明ではない。既知Node24/V8問題の根治と過去の失敗gateは未解決を維持する。最終production/testソースは全体試験中固定し、進捗文書は後から更新して別途検証した。
 
 ビルドは2.72秒、既定Node24によるローカル配信物26項目は29.08秒ですべて成功。専門SKILLと日英文書/進捗5件も成功した。全体検証後のsource hash差分はsrc/progress.jsonとビルド生成したpublic/progress.jsonだけで、production/testコード差分はない。
+
+## 2026-10-15: 固有振動・直交異方構造の根拠契約
+
+非legacyのmodal-isotropic-structure/static-orthotropic-linear-structureを共通preflight・能力取得・MCPへ接続した。物理値・境界・適用条件の根拠、古い根拠、単位、物理runtime入力の無視、局所座標不正、数値設定の明示を検証。legacy数値と保存assessment schema1は維持する。新規27件（modal8、orthotropic9、統合preflight6、実MCP1、実行/境界3）を追加し、既存10件を含む対象37件は成功した。
+
+実MCPはprocess分離でquantitative/exploratoryの2モデル計4ジョブを実行し、既定Workerのlegacy2ジョブと数値結果を一致照合した。保存・ケース集復元・点測定・中間反復・暫定性・改変拒否・入力版不変・includeFields:falseで成果物0を確認。別Worker検証は温度表modalと重力orthotropicの各strict/legacy計4ジョブを照合した。温度表では基準E/nuなしの40°C評価が1.5e9 Paへ補間される。
+
+実アプリ内ブラウザの最終3ジョブは通常modal1192.4176392003972 Hz、温度表modal1460.407388167562 Hz、orthotropicの点[5,5,20]変位0.0066666666662532304 mmを確認。明示agent仮定の暫定ラベル、変わらない入力版、反復イベント、場成果物0も検証した。[機械可読記録](evidence/2026-10-15-browser-structural-contract.json)と[画面](evidence/2026-10-15-browser-structural-contract.jpg)を保存。初回QAはGUIが保存するoptional study項目を参照fixtureへ追加して修正し、ソースhot reloadで切断される前のmodal2成功ジョブとは別に、ソース安定後の3ジョブを記録した。pollはsettled後であり、終端前配信timingの保証ではない。モードは最大変位1 mmの正規化形状であり動的振幅ではない。
+
+最終Node v24.11.1/V8 13.6.233.10-node.28/win32/x64の全体試験は768件中765成功・3スキップ・失敗0（93,984.0661 ms）。[生ログ・ソース/依存物/実行ファイルSHA](evidence/2026-10-15-structural-model-full.json)を保存した。メッシュ独立性、実測校正、全物理モデルの根拠契約、既知Node24/V8停止の根治を証明しない。全体実行中のproduction/testソースは固定し、進捗文書更新を後から別検証する。
+
+ビルド2.68秒成功、既定Node24のローカル配信物26項目は28.01秒ですべて成功。専門SKILLと日英文書/進捗5件も成功。最終整形前のsource hash差分は進捗JSONとビルド生成したpublicコピーだけで、production/testコード差分はない。P1/P3/P4/P6は部分実装に合わせbuildingへ整合し、各段階全体の完了条件は維持した。
+
+最終diff検査でorthotropic helper末尾の余分な空行を除去した。末尾改行以外のbyte同一を確認し、専用9件を再検証。全体実行時SHAと整形後SHAを上記記録へ併記した。

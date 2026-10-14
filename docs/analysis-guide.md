@@ -123,3 +123,11 @@ API: `analysisApi.loadFlowExample()`、`studioApi.setStudy({kind:'channelFlow', 
 Stokesの反復進捗はphase/residualKindで前処理残差の実測・Arnoldi推定・最終の元方程式数値検査を区別する。convergedを流量収支や物理精度・ジョブ成功と同一視しない。[Stokes仕様](stokes-flow.md)を参照。
 
 調和音響と周波数スイープではBiCGStab、十分発達流路ではPCGのスカラー残差をjobEventsから確認できます。音響はfrequencyHz/solvePhaseとfrequency-stepのstart/completeで解析対象を識別します。再帰残差のconvergedだけでジョブ成功や物理精度を判定せず、後段の検査と終端状態を確認してください。途中の圧力・速度場や物理時間は追加されません。[取得仕様](automation.md)を参照。
+
+## 固有振動・直交異方構造の解析前検査
+
+quantitative/exploratoryは等方固有振動と静的直交異方構造にも対応します。`preflight.requiredPointers`で対象入力を取得し、根拠を登録して再検査してください。固有振動はstudy.kind/modalAnalysis/gravityEnabled:false、正の密度、等方弾性定数、零変位支持を明示します。modeCount（1–6）とmodalIterations（1–100）も明示必須ですが、物理根拠は不要です。根拠を記録した温度依存弾性表と均一materialTemperatureからの範囲内補間も使えます。非零荷重・強制変位、重力、熱初期応力、非線形・直交異方材料、adaptive、MFEM/WebGPUは対象外です。正規化モードの1 mmは実際の振動振幅ではありません。
+
+静的直交異方構造は3方向のYoung/shear moduli、cyclic Poisson ratios、右手正規直交の材料軸、source/testConditions、境界・重力設定を根拠付きで指定します。重力時の密度/加速度、温度範囲がある場合の評価温度も必要です。速度依存や等方温度表・熱応力・固有振動・非線形材料は対応しません。CPUのpcg/pcg-strict/wasm-pcgで利用し、adaptiveは対応経路で使用できます。
+
+実行時optionsで保存済み物理値を置き換えず、入力を編集して根拠を更新してください。quantitativeは確認済み根拠、exploratoryは明示値と仮定を必要とし、後者は暫定です。legacyの挙動は変えません。completePreflight:falseであり、メッシュ後の境界転送、拘束rank・剛体モード、質量、収束・メッシュ依存性・物理精度の確認は残ります。詳細は[必須入力と根拠の契約](automation.md)を参照してください。

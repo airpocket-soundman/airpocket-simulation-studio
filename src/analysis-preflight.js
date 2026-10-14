@@ -1,3 +1,5 @@
+import {inspectModalInputContract} from './modal-input-contract.js';
+import {inspectOrthotropicInputContract} from './orthotropic-input-contract.js';
 import {inspectAcousticInputContract} from './acoustic-input-contract.js';
 import {inspectFluidInputContract} from './fluid-input-contract.js';
 import {inspectThermalInputContract} from './thermal-input-contract.js';
@@ -11,7 +13,7 @@ import {inspectInputProvenance} from './input-provenance.js';
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressure:'Pa',density:'kg/m3',gravity:'m/s2',poissonRatio:'1'};
 /** No mutation or solver initialization. Strict required-input/provenance contract
- * covers static isotropic linear structure and explicit thermal, acoustic and limited fluid inputs. A successful report
+ * covers explicit static/modal/orthotropic structure, thermal, acoustic and limited fluid inputs. A successful report
  * still requires boundary transfer, rigid-body and mesh-quality checks after meshing.
  * Legacy projects need no new provenance, but still need actual material values.
  */
@@ -27,7 +29,10 @@ export function preflightProject(project,options={}, {target='browser',operation
  const thermalContract=operation==='solve'&&project.study?.kind==='thermal'&&effectiveMode!=='legacy'?inspectThermalInputContract(project,options,{mode:effectiveMode}):null;
  const acousticContract=operation==='solve'&&project.study?.kind==='acoustic'&&effectiveMode!=='legacy'?inspectAcousticInputContract(project,options,{mode:effectiveMode}):null;
  const fluidContract=operation==='solve'&&['channelFlow','creepingFlow'].includes(project.study?.kind)&&effectiveMode!=='legacy'?inspectFluidInputContract(project,options,{mode:effectiveMode}):null;
- const physicalContract=thermalContract??acousticContract??fluidContract;
+ const structuralKind=(project.study?.kind??'structural')==='structural';
+ const modalContract=operation==='solve'&&structuralKind&&project.study?.modalAnalysis&&effectiveMode!=='legacy'?inspectModalInputContract(project,options,{mode:effectiveMode}):null;
+ const orthotropicContract=operation==='solve'&&structuralKind&&project.materialProperties?.orthotropic&&!project.study?.modalAnalysis&&effectiveMode!=='legacy'?inspectOrthotropicInputContract(project,options,{mode:effectiveMode}):null;
+ const physicalContract=modalContract??orthotropicContract??thermalContract??acousticContract??fluidContract;
  const inputUnits={...units,...(physicalContract?.units??{})};
  try{diagnostics.push(...diagnoseExecution(operation==='mesh'?{study:{kind:'structural'}}:project,options,target).diagnostics);}catch(error){add('EXECUTION_OPTIONS_INVALID','/options','Invalid execution options',{message:error.message},['Use the selected target capability contract']);}
  try{validateProject(project);}catch(error){add('PROJECT_INVALID','/','Project validation failed',{message:error.message},['Repair the indicated saved input; preserve intended physics']);}

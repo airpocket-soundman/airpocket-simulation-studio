@@ -34,7 +34,7 @@ Keep REG2 and PRINT2 in progress. Reuse unresolved-region rejection in P1. Finis
 | P5 Integrated design iteration | SolidCraft STEP exchange and three bracket thickness alternatives with design/input revision tracking | P1–P4 | Complete questioning, setup, solve, repair, CAD changes, remeshing, comparison and video export through MCP. Never silently remap missing/split/ambiguous regions; record common conditions/ranges and per-case convergence |
 | P6 Shared core and native proof | Modular validation/units/diagnostics and WASM/native machine-code linear-structural contract proof | P0/P1; not required to complete P5 | Match supported input/diagnostic/result schemas and compare references, tolerances and balances. Node-hosted WASM does not count as a native machine-code build |
 
-Start with the P0 operation matrix, capability schema and diagnostic contract, then apply them to P1 single-part linear structure before expanding to every feature. Dates, owners and performance thresholds are unset.
+Partial implementations exist for P0 capabilities/diagnostics,P1 input/provenance,P3 shared jobs/optional browser connection,P4 existing viewer/export APIs and P6 fixed-bar native comparisons. These stages remain incomplete;building means work has started. P1 now covers static isotropic/orthotropic structure,isotropic modes,thermal,acoustic and limited flow,with thermal-stress/nonlinear provenance contracts still pending. Continue P3/P4 recovery,complete operation coverage and reproducible-output gates. Dates,owners and performance thresholds remain unset.
 
 ## Decision gates
 

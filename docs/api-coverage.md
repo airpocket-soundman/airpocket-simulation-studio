@@ -9,7 +9,7 @@
 | ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（80操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
-| 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 構造/熱/音響/限定流体の残りの必須入力契約、メッシュ後検査との統合 |
+| 解析前検査・根拠 | studioApi.preflight/setInputProvenance/setAnalysisIntent、analysis実行ゲート | studio_preflight_project、studio_edit_project（根拠とintentの保存） | 熱応力・非線形構造などの残りの必須入力契約、メッシュ後検査との統合 |
 | 保存入力の検査・復元 | studioApi.loadProject/exportProject/getSummary/getRevision/applyOperations、builtinProjectApi.create | studio_inspect_project（検査・revision・寸法要約・最大50面ページ）、studio_edit_project（原子的編集・新規保存）、studio_create_builtin_project、接続createBuiltinProject（組込み形状） | 操作細分化と全作成経路の網羅性確認 |
 | STEP/STL取込 | UI/CAD Worker、project-import、inputImportApi/Transfer | studio_import_project（保存JSON）、接続inputImportBegin/Write/Commit/Release（STEP/STL） | 対応形状の範囲拡大・大容量実測 |
 | 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、selectCadFace、applyOperations | studio_edit_project（18種、根拠・intent・表示面ID選択を含む、revision競合検出） | 全物理モデルの根拠・入力契約、選択・設定操作の残りの網羅性確認 |
@@ -48,3 +48,5 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 調和音響・sweepのBiCGStab残差とfrequency-step開始/完了、channel PCG残差は既存jobEventsで取得できる。profileは13/12件、ツール/ライブ操作数は不変。両経路はfieldsなしで、再帰残差収束を物理精度やジョブ成功と同一視しない。
 
 保存入力ジョブには起動時--analysis-isolation=processの任意子プロセス分離経路を追加。既定workerとブラウザ経路は維持し、runtime失敗の封じ込めはV8根治と区別する。
+
+非legacyの必須入力契約は静的等方・等方固有振動・静的直交異方構造と熱/音響/限定流体を対象とします。固有振動は明示した均一温度で弾性温度表を補間できます。モード数・反復上限は明示必須の数値設定で、物理根拠は要求しません。材料・境界・適用条件の根拠は[契約](automation.md)を参照。legacy挙動とcompletePreflight:falseは維持します。

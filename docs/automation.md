@@ -343,7 +343,7 @@ quantitative/exploratoryの熱伝導は`thermal-conduction`契約を使います
 
 quantitativeは必須根拠の確認済み状態、exploratoryは明示した値と仮定を要求し暫定とします。未入力値を仮定だけで補うことはできません。runtimeのtransient/volumetricSource/timeStep/steps/initialTemperatureは保存studyと同値の場合だけ受け付け、不一致の物理上書きを拒否します。放射反復の初期seedや数値反復上限は新しい必須根拠に含めません。
 
-legacy熱入力は従来のrequiredPointers:[]・requiredInputContract:"unsupported"・limited警告を維持し、既存allowedとschema1保存assessmentの互換性を保ちます。capabilities.preflight.requiredInputContractsは静的等方構造と熱伝導を一覧化します。元sourceModel全体の新しい根拠登録は要求せず、CADの真偽認証は行いません。completePreflight:falseとremainingChecksは維持し、出典適用性・品質・境界転送・収束・メッシュ依存性・物理精度の確認は残ります。
+legacy熱入力は従来のrequiredPointers:[]・requiredInputContract:"unsupported"・limited警告を維持し、既存allowedとschema1保存assessmentの互換性を保ちます。capabilities.preflight.requiredInputContractsは静的等方構造、等方固有振動、静的直交異方構造、熱伝導、音響、対応する限定流体の契約を一覧化します。元sourceModel全体の新しい根拠登録は要求せず、CADの真偽認証は行いません。completePreflight:falseとremainingChecksは維持し、出典適用性・品質・境界転送・収束・メッシュ依存性・物理精度の確認は残ります。
 
 熱の単位は温度degC、conductivity W/(m·K)、specificHeat J/(kg·K)、密度kg/m³、volumetricSource W/m³、heatFlux W/m²、対流/接触conductance W/(m²·K)、timeStep秒です。自動の単位変換・物性推測を行いません。
 
@@ -402,3 +402,17 @@ MCP起動時に`node scripts/studio-mcp.mjs --analysis-isolation=process`を明�
 現在の封じ込め試験はcontrolled exit86を使い、実際のV8 native fatalを再現した試験ではありません。親プロセス切断時の子の終了はbest effortで、同期native処理中はdisconnectハンドラが遅れるため即時終了を保証しません。
 
 子のstdout/stderrは各先頭64 KiBまで転送し、診断末尾はUTF-8で4,096 byte以内、SHA-256とbyte数はstderr全体を対象にします。これは保持量の上限であり子のheap上限ではありません。結果メッセージ受信だけでは保存せず、子の終了を確認してから親が最終結果を公開します。実行方式はcapabilities.executionIsolation、process保存結果はcalculation.execution.isolationから確認できます。
+
+## 等方固有振動・静的直交異方構造の必須入力と根拠
+
+quantitative/exploratoryの`modal-isotropic-structure`は、CPUの等方線形弾性・lumped Tet4質量の固有値問題を対象とします。`study.kind:"structural"`、`modalAnalysis:true`、`gravityEnabled:false`、正のdensityを明示し、温度表を使わないときはyoungModulusとpoissonRatio（−1より大きく0.49未満）の根拠を登録します。`modeCount`（1–6）と`modalIterations`（1–100）は保存studyへ明示必須ですが、数値設定なので物理根拠の必須Pointerには含みません。
+
+`dependence.elasticTemperatureTable`による等方剛性の補間も対応します。2–100行の温度順の表とdependence全体に根拠を登録し、`study.materialTemperature`を明示してください。温度は均一で、表の範囲内だけを線形補間し外挿しません。この場合、独立した基準youngModulus/poissonRatioは必須ではありません。温度有効範囲がある場合や評価温度を指定する場合も、その値・範囲を根拠登録します。熱応力や熱による初期応力を含む固有値解析ではありません。
+
+固有振動はfixedまたは零変位の支持を必要とし、force/pressure/normalTractionは厳密に零だけを許可します。全条件のtype/value/direction/regionsと存在するframe/planarRegion/cylindricalRegionが根拠対象です。fixedのvalue/directionは保存形式の有限値として保持しますが、ソルバーは全方向零固定として扱います。重力・非零荷重・非零強制変位・塑性・超弾性・直交異方性・adaptive・MFEM/WebGPUは対象外です。モード形状は最大変位1 mmの任意正規化で、動的応答振幅や疲労荷重ではありません。
+
+`static-orthotropic-linear-structure`はCPUの静的直交異方線形弾性です。`materialProperties.orthotropic`のmodel、youngModuliPa、poissonRatios、shearModuliPa、右手正規直交axes、source、testConditionsをすべて明示して根拠登録します。定数・軸・コンプライアンスの妥当性を検査し、等方定数で補いません。study.kindとgravityEnabled、全構造境界のtype/value/direction/regionsと存在する選択・局所座標定義が必須です。重力有効時はgravityと正のdensity、材料の温度範囲がある場合や温度を指定する場合はmaterialTemperatureと登録範囲も必要です。dependenceがあればその根拠も登録します。速度依存構成則や正の最小ひずみ速度、等方温度表、熱応力、固有振動、非線形材料、MFEM/WebGPUは拒否します。対応CPU経路のadaptiveは利用できます。
+
+実行時の物理値は保存入力の代わりになりません。modalのstudy指定は保存値と同じ場合だけ許可し、runtime材料・荷重・境界の注入は拒否します。orthotropicも異なるstudy/材料/conditionsを拒否し、solver用boundary/fixed/forces等の直接指定は空でも拒否します。`null`で未設定の物理入力を上書きすることも認めません。根拠付きprojectを編集し、再検査してください。
+
+未測定値は値と適用理由を明示したexploratory仮定として扱い、暫定状態を維持します。quantitativeは必要根拠の確認済み状態を要求します。欠落値を仮定だけで埋めることはできません。legacyの既存挙動と保存assessment互換は維持し、新契約helperはlegacyで根拠を要求しません。熱応力・非線形構造など、まだ実装していない契約は引き続きlimitedです。常に`completePreflight:false`であり、メッシュ品質、境界転送、拘束rank・剛体モード、質量、収束、メッシュ依存性、資料の適用性と物理精度は後検証に残ります。
