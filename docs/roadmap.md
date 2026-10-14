@@ -135,3 +135,5 @@ GUI検証ではソルバーを実行していない。P0/P3の今回範囲だけ
 読取専用previewに候補版・変更Pointer・compact preflightと明示normalizationを追加し、expectedResultingRevisionで実際に保存されるホスト表現へ結び付けた。新規30試験とGUI study24状態の旧/新一致、実GUIのrunning中150 N案プレビュー・100 N元入力/snapshot不変・完了後確定を確認した。別宣言の2解析は中央0.02/0.03 mm、最大0.04/0.06 mmで成功した。[検証](testing.md)、[GUI記録](evidence/2026-10-15-browser-edit-preview.json)、[画面](evidence/2026-10-15-browser-edit-preview.jpg)、[全体記録](evidence/2026-10-15-edit-preview-full.json)を参照。
 
 初回size 0.6のstack overflowとHMRによる完全export未取得は主成功記録と区別して残す。修正後も要素上限30,000は維持し、この細かい候補は上限で拒否する。UI新機能や一般の物理精度保証ではない。P1/P3全体、公開HTTPS、再起動越しジョブ、全P0〜P6と既知V8問題の根治は未完了とし、完了条件は縮小しない。
+
+公開run [38651016310](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38651016310)で103065fのverify・deploy・verify-publishedが成功し、26公開配信物検証と注釈付きreleaseタグを確認した。[公開記録](evidence/2026-10-15-publication-103065f.json)を参照。続くPUBLISHEDPROGRESS1/PUBLICATIONGATES1は、配信manifestと進捗の照合、公開gateの本体検証を担当する。既定Node24の既知V8停止が再発しておりcheckingを保持する。公開HTTPS接続、実ブラウザでの進捗成功側照合、他の公開gateは未完了。
