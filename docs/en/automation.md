@@ -78,7 +78,7 @@ The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. 
 - Analysis: `startJob({inputRevision,requestId,operation,options})`, `cancelJob({jobId})`, `releaseJob({jobId})`, `showJob({jobId,name})`. Showing a solved result creates a case only when its input revision matches; mesh-only display is unsupported.
 - View: `getView`/`setView` expose section/opacity/part settings; result cameras use the result-view API below; image/video export uses the jobs described below.
 
-At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, complete GUI job monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
+At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, actual GUI job monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
 
 ### Browser intermediate fields
 
@@ -100,7 +100,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 48 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 49 methods (24 default tools, 26 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 
@@ -166,3 +166,11 @@ The shared browser API is `window.printOperations.inspect/import/get/set/export`
 `getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})` returns bounded `kind:"segments"|"triangles"` pages with at most 200 items. `setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})` changes only preview settings and leaves the document revision unchanged. Retrieve full saved data through the shared export method or saved-file path.
 
 Parser warnings and references are preserved. Print coordinates are not automatically registered to the CAE model. Import does not execute G-code, control devices, or establish strength or infill material properties. Arc extrusion and unsupported commands are rejected according to existing parser restrictions.
+
+## Monitoring GUI mesh and analysis jobs
+
+The four GUI mesh/solve entry routes use `guiAnalysisJobs.run` and the shared `analysisApi.startJob`. Inputs are cloned and frozen to a SHA-256 revision at start; completion checks the current input revision before applying results. GUI jobs enable `includeFields:true` for supported intermediate fields. Legacy `analysisApi.analyze/generateMesh` remain direct execution APIs for compatibility.
+
+The inspect-scoped connector method `listJobs({offset:0,limit:50})` (maximum limit 100) returns `{jobs,total,nextOffset}`. It lists retained GUI/API jobs as compact metadata with `origin:"gui"|"api"`, without full result arrays. The shared API is `analysisApi.listJobs`. Use returned IDs with existing `jobStatus`, `jobEvents` and `jobArtifact` to read state and intermediate results. GUI history retains the latest eight jobs; the next GUI start releases the oldest terminal GUI job. This cleanup never releases MCP jobs.
+
+Disconnect cancels only jobs started by that session; GUI jobs continue. Page-exit/restart recovery is unsupported. Implementing the shared route does not establish actual-browser or public-HTTPS behavior.

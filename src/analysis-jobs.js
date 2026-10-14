@@ -10,9 +10,10 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
   const event={...copy(data),schemaVersion:1,jobId:job.id,inputRevision:job.inputRevision,sequence:++job.sequence,elapsedMs:Math.max(0,now()-job.startedAt),type};
   job.events.push(event);if(job.events.length>maxEvents)job.events.shift();return event;
  }
- function view(job){return {schemaVersion:1,jobId:job.id,inputRevision:job.inputRevision,state:job.state,operation:job.operation,startedAt:job.startedAt,updatedAt:job.updatedAt,lastSequence:job.sequence,firstAvailableSequence:job.events[0]?.sequence??0,...(job.result!==undefined?{result:copy(job.result)}:{}),...(job.error?{error:copy(job.error)}:{})};}
+ function view(job){return {schemaVersion:1,jobId:job.id,inputRevision:job.inputRevision,state:job.state,operation:job.operation,origin:job.origin,startedAt:job.startedAt,updatedAt:job.updatedAt,lastSequence:job.sequence,firstAvailableSequence:job.events[0]?.sequence??0,...(job.result!==undefined?{result:copy(job.result)}:{}),...(job.error?{error:copy(job.error)}:{})};}
  function end(job,state,error){if(terminal.has(job.state))return;job.state=state;job.updatedAt=now();clearTimeout(job.timer);if(error)job.error={code:state==='timed_out'?'JOB_TIMEOUT':state==='cancelled'?'JOB_CANCELLED':'JOB_FAILED',message:error.message};emit(job,'state',{state,...(job.error?{error:job.error}:{})});}
  function start({project,options={},operation='elastic',inputRevision,requestId,context={}}={}){
+  if(context.origin!==undefined&&!['gui','api'].includes(context.origin))throw Error('Invalid job origin');
   if(!project||typeof project!=='object'||!['mesh','elastic'].includes(operation)||typeof inputRevision!=='string'||!inputRevision||requestId!==undefined&&(typeof requestId!=='string'||!requestId||requestId.length>200))throw Error('Invalid job input');
   // Clone before touching registry state: unserializable options must not leak a job.
   const input=copy({project,options,operation,inputRevision,context});
@@ -23,7 +24,7 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
   // Keep request identities until explicitly released, instead of silently executing old retries.
   if(jobs.size>=maxJobs)throw Error('Job retention limit reached; release a terminal job before starting another');
   const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate job ID');
-  const job={id:jobId,inputRevision,state:'running',operation,startedAt:now(),updatedAt:now(),events:[],sequence:0,controller:new AbortController(),fingerprint,requestId};
+  const job={id:jobId,inputRevision,state:'running',operation,origin:context.origin??'api',startedAt:now(),updatedAt:now(),events:[],sequence:0,controller:new AbortController(),fingerprint,requestId};
   jobs.set(job.id,job);if(requestId)requests.set(requestId,job.id);
   emit(job,'state',{state:'running'});
   job.timer=setTimeout(()=>{if(job.state==='running'){end(job,'timed_out',Error('Analysis exceeded '+timeoutMs/1000+' seconds'));job.controller.abort();}},timeoutMs);
@@ -40,6 +41,7 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
  return Object.freeze({
   start,
   get:jobId=>view(find(jobId)),
+  list(args={}){if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['offset','limit'].includes(key)))throw Error('Invalid job list page');const {offset=0,limit=50}=args;if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>100)throw Error('Invalid job list page');const values=[...jobs.values()].slice(offset,offset+limit).map(job=>{return view({...job,result:undefined});});return {jobs:values,total:jobs.size,nextOffset:offset+limit<jobs.size?offset+limit:null};},
   events(jobId,{afterSequence=0,limit=50}={}){
    const job=find(jobId);if(!Number.isSafeInteger(afterSequence)||afterSequence<0||afterSequence>job.sequence||!Number.isInteger(limit)||limit<1||limit>100)throw Error('Invalid job event cursor or limit');
    const events=job.events.filter(e=>e.sequence>afterSequence).slice(0,limit);

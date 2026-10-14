@@ -1,0 +1,32 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {createInterface} from 'node:readline';
+import {createAnalysisClient} from '../src/analysis-client.js';
+import {createGuiAnalysisJobs} from '../src/gui-analysis-jobs.js';
+import {createBrowserSession,connectBrowserSession} from '../src/browser-session.js';
+import {createProjectFromBuiltin} from '../src/project-import.js';
+import {getProjectRevision} from '../src/project-revision.js';
+
+test('real MCP discovers and observes a GUI-origin job through HTTP without owning its lifetime',async t=>{
+ const origin='http://127.0.0.1:5174',child=spawn(process.execPath,['scripts/studio-mcp.mjs','--browser-origin='+origin],{cwd:new URL('../',import.meta.url),stdio:['pipe','pipe','pipe']}),lines=createInterface({input:child.stdout}),pending=new Map();let serial=0,stderr='',connection;
+ t.after(async()=>{connection?.stop();child.stdin.end();if(child.exitCode===null){const timer=setTimeout(()=>child.kill(),2000);await new Promise(resolve=>child.once('exit',resolve));clearTimeout(timer);}lines.close();});
+ lines.on('line',line=>{const message=JSON.parse(line);pending.get(message.id)?.(message);});
+ const details=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Connector timeout '+stderr)),5000);child.stderr.on('data',data=>{stderr+=data;const match=stderr.match(/Browser connector: (.+)\n/);if(match){clearTimeout(timer);resolve(JSON.parse(match[1]));}});});
+ const rpc=(method,params)=>new Promise((resolve,reject)=>{const id=++serial,timer=setTimeout(()=>{pending.delete(id);reject(Error('MCP timeout '+stderr));},5000);pending.set(id,message=>{clearTimeout(timer);pending.delete(id);resolve(message);});child.stdin.write(JSON.stringify({jsonrpc:'2.0',id,method,params})+'\n');});
+ await rpc('initialize',{protocolVersion:'2025-11-25'});child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
+ const project=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,1,1,1]}});
+ let worker;const analysis=createAnalysisClient(()=>project,()=>{},{createWorker:()=>worker={terminate(){},postMessage(){},send(data){this.onmessage({data});}},isIsolated:()=>true,baseUrl:()=>'/test/'}),gui=createGuiAnalysisJobs({analysis,getProject:()=>project});t.after(()=>analysis.closeJobs());
+ const running=gui.run({operation:'mesh'});running.catch(()=>{});t.after(()=>gui.cancel());
+ const session=createBrowserSession({analysis}),fetcher=(url,opts)=>fetch(url,{...opts,headers:{...opts.headers,Origin:origin}});
+ connection=connectBrowserSession({...details,scopes:['inspect'],session,fetcher,intervalMs:2});const paired=await connection.ready;
+ const call=async(method,args={})=>{const response=await rpc('tools/call',{name:'studio_browser_call',arguments:{sessionId:paired.sessionId,method,args}});assert.notEqual(response.result.isError,true,response.result.content?.[0]?.text);return response.result.structuredContent.value;};
+ let list;const admissionDeadline=Date.now()+5000;do{list=await call('listJobs',{limit:1});assert.ok(Date.now()<admissionDeadline);if(!list.total)await new Promise(resolve=>setTimeout(resolve,5));}while(!list.total);assert.equal(list.total,1);const job=list.jobs[0];assert.equal(job.origin,'gui');assert.equal(job.inputRevision,await getProjectRevision(project));assert.equal(job.result,undefined);
+ const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],summary:{nodeCount:4}};
+ worker.send({event:{stage:'mesh',mesh}});worker.send({event:{stage:'time-step',provisional:true,field:{kind:'thermal',time:1,temperature:[20,30,40,50],units:{temperature:'degC'}}}});
+ let events,frame;const deadline=Date.now()+5000;do{events=await call('jobEvents',{jobId:job.jobId});frame=events.events.find(e=>e.fieldAvailable);assert.ok(Date.now()<deadline);}while(!frame);
+ assert.equal(frame.inputRevision,job.inputRevision);assert.equal(frame.provisional,true);
+ const measured=await call('jobArtifact',{jobId:job.jobId,artifactId:frame.artifact.artifactId,point:[.25,.25,.25]});assert.equal(measured.measurement.value,35);
+ connection.stop();assert.equal(analysis.getJob(job.jobId).state,'running');
+ worker.send({result:{mesh}});const result=await running;assert.deepEqual(result.input,project);assert.equal(analysis.getJob(job.jobId).state,'succeeded');
+});

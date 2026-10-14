@@ -1459,14 +1459,14 @@
       "id": "RUNTIMEWASM1",
       "title": "配信物検証中のWASMランタイム停止を捕捉する",
       "titleEn": "Capture intermittent WASM runtime termination during distribution checks",
-      "status": "queued",
+      "status": "checking",
       "category": "基盤",
       "depends": [],
-      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。",
-      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed.",
+      "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。",
+      "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
-      "evidence": "scripts/check-published.mjs; docs/testing.md"
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md"
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1495,6 +1495,21 @@
       "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md",
       "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は未解決、実画面/公開HTTPSは未確認。強度推定・機器制御は含まない。",
       "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser/public HTTPS unverified. No strength inference or hardware control."
+    },
+    {
+      "id": "GUIJOBS1",
+      "title": "GUI開始の解析をLLMから監視する",
+      "titleEn": "Observe GUI-started analysis through the user LLM",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3"
+      ],
+      "detail": "画面4経路を共通ジョブへ接続。入力SHA・CAS、中間場、履歴8件とGUI分のみの解放、最大100件のlistJobsを実装。49ライブ操作。直接analyze/generateMesh APIの互換経路は維持。",
+      "detailEn": "Connect four GUI paths to common jobs with input SHA/CAS, retained intermediate fields, eight GUI history entries, GUI-only pruning and listJobs pages up to100.49 live methods; preserve legacy direct analyze/generateMesh APIs.",
+      "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md",
+      "acceptance": "実MCP/HTTPと共有クライアントでGUI由来ジョブ発見・中間温度35°C・切断後継続を確認。Workerは模擬実装。実画面/公開HTTPSは未確認。 全体448中445成功・3スキップ。最後の完了時照合追加後は関連16成功。ビルド・配信物26項目成功。",
+      "acceptanceEn": "Real MCP/HTTP and shared client verify GUI-origin discovery, intermediate35°C probe and continued execution after disconnect. Worker is simulated. Real browser/public HTTPS remain unverified. Full suite445 passed/three skipped of448; final completion-check change passed16 related tests. Build and26 local-distribution checks passed."
     }
   ],
   "solvers": [

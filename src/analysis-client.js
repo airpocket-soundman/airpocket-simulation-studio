@@ -31,8 +31,8 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
   try{const output=await start(operation,options,project,observe,signal,jobId);await chain;if(signal.aborted)throw Error('Calculation cancelled');results.set(jobId,output);return {kind:output.result?.kind,mesh:output.mesh?.summary,resultAvailable:true,analysisAssessment:output.analysisAssessment,intermediate:artifacts.summary(jobId)};}finally{await chain;}
  }});
  return {generateMesh:options=>start('mesh',options),analyze:options=>start('elastic',options),cancel:()=>{if(active?.jobId)jobs.cancel(active.jobId);else if(active)finish(active,Error('Calculation cancelled'));},
-  startJob({operation='solve',options={},inputRevision,requestId,includeFields=false}={}){if(!['solve','mesh'].includes(operation)||typeof includeFields!=='boolean')throw Error('Invalid analysis operation or includeFields');return jobs.start({project:getProject(),options,operation:operation==='mesh'?'mesh':'elastic',inputRevision,requestId,context:{includeFields}});},
-  getJob:jobs.get,jobEvents:jobs.events,cancelJob:jobs.cancel,
+  startJob({operation='solve',options={},inputRevision,requestId,includeFields=false,origin='api'}={}){if(!['solve','mesh'].includes(operation)||typeof includeFields!=='boolean'||!['gui','api'].includes(origin))throw Error('Invalid analysis operation or includeFields');return jobs.start({project:getProject(),options,operation:operation==='mesh'?'mesh':'elastic',inputRevision,requestId,context:{includeFields,origin}});},
+  listJobs:jobs.list,getJob:jobs.get,jobEvents:jobs.events,cancelJob:jobs.cancel,
   getJobResult(jobId){const job=jobs.get(jobId);if(job.state!=='succeeded'||!results.has(jobId))throw Error('Job result is not available');return structuredClone(results.get(jobId));},
   getJobArtifact(jobId,artifactId,options={}){jobs.get(jobId);return artifacts.read(jobId,artifactId,options);},
   releaseJob(jobId){const result=jobs.release(jobId);results.delete(jobId);artifacts.release(jobId);return result;},closeJobs(){jobs.close();results.clear();artifacts.clear();}

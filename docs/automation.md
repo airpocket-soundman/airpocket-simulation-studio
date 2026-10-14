@@ -78,7 +78,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
 - 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は下記の出力ジョブを使います。
 
-命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIとの全ジョブ表示統合、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
+命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブの実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
 ### ブラウザの途中の場を取得する
 
@@ -100,7 +100,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは48操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは49操作を公開します（通常24ツール、接続モード26ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -166,3 +166,11 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 `getPrintData({expectedRevision,viewId?,kind,offset:0,limit:200,layerIndex?})`は`kind:"segments"|"triangles"`の有限ページを返し、limitの上限は200です。`setPrintView({expectedRevision,settings:{viewId,allLayers,layerIndex}})`はプレビューだけを変更し、文書版は変更しません。保存する全データは共通APIのexportまたは保存ファイル経路を使って取得します。
 
 パーサの警告・参照情報を保持し、CAEモデルへの座標系の自動位置合わせは行いません。G-codeを装置へ送信・実行せず、読込だけから強度やインフィルの物性を推定しません。円弧押出や未対応コマンドは既存パーサの制限に従って拒否されます。
+
+## GUIから開始したメッシュ・解析ジョブの監視
+
+GUIの4つのメッシュ・解析開始経路は`guiAnalysisJobs.run`から共通の`analysisApi.startJob`を使用します。開始時に入力を複製しSHA-256で版を固定し、完了時は現在の入力版と照合して適用します。GUIジョブは`includeFields:true`で対応する中間場を保持します。旧`analysisApi.analyze/generateMesh`は直接実行の互換APIとして残ります。
+
+確認権限の接続操作`listJobs({offset:0,limit:50})`（limit上限100）は`{jobs,total,nextOffset}`を返します。GUIとAPIの保持中ジョブを`origin:"gui"|"api"`付きの小さなメタデータとして列挙し、完全な結果配列を含みません。共有APIは`analysisApi.listJobs`です。返されたIDに既存の`jobStatus`、`jobEvents`、`jobArtifact`を使用して状態・中間結果を読み取ります。GUIの履歴表示は直近8件を保持し、次のGUI開始時に最も古い終了済みGUIジョブを解放します。MCP側のジョブをこの整理で解放しません。
+
+接続解除で中止するのはその接続が開始したジョブのみで、GUIジョブは継続します。ページ終了・再起動後の復元は提供しません。この共通経路の実装は実ブラウザ画面や公開HTTPSでの動作確認を意味しません。
