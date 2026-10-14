@@ -33,3 +33,5 @@
 進捗JSONへpublicationMilestone schema1を追加し、既存タスクを参照する公開gateとfutureTaskIds、supportOnlyTaskIdsを分けた。公開復旧/HTTPS/結果保存比較/出力代替/Skill一巡は独立したpending gateで追跡し、タスク追加を重複させない。参照タスクがreleasedでも、公開候補と一致する証跡がなければgateを閉じない。既存タスクのstatus・過去release実績は変更していない。
 
 公開run 38647110282のpublic/gmsh/gmsh.mjs欠落とmain保護APIの404（Branch not protected）は未解決観測として記録した。作業ブランチ・PR・必須CI・main保護を今後の検証条件として扱い、設定済み/公開成功とは宣言しない。次の作業は公開CI復旧と証跡の照合である。
+
+その後、main保護を設定し、PR・最新mainへの追従・GitHub Actions verify成功を管理者にも必須とした。必須の人的承認数は0で、独立した人のレビュー完了は意味しない。[API再取得の証跡](evidence/2026-10-15-main-protection.json)を保存した。公開成功と残る公開gateは未確認のままとする。

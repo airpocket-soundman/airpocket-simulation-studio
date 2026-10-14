@@ -36,7 +36,7 @@ Prioritize P2/P6 only where acquisition, performance, compatibility or stability
 
 Track the current publication milestone separately from future extensions, including unfinished, verification-pending and publication-pending items. Adding or splitting tasks must not automatically expand the milestone. Close verification items against acceptance evidence; documentation changes alone do not justify released status.
 
-Develop with small commits and frequent pushes to working branches. Review PR diffs, appropriate tests, API/MCP/Skill and bilingual documentation, and necessary browser behavior before merging into main. Plan branch protection and required CI without claiming they are already configured. Successful deployment is distinct from progress JSON updates.
+Develop with small commits and frequent pushes to working branches. Review PR diffs, appropriate tests, API/MCP/Skill and bilingual documentation, and necessary browser behavior before merging into main. Main protection requires PRs, an up-to-date branch and the GitHub Actions `verify` check, including administrators. These settings were read back through the API; see [protection evidence](../evidence/2026-10-15-main-protection.json). Successful deployment is distinct from progress JSON updates.
 
 ## Highest-priority product principle (confirmed 2026-10-14; order revised 2026-10-15)
 
