@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T08:15:34.489Z",
+  "updatedAt": "2026-10-15T08:17:54.121Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -2231,7 +2231,7 @@
       "id": "INPUTINSPECTION1",
       "title": "版付きページで既存入力をLLMへ返す",
       "titleEn": "Read existing input through revisioned bounded pages",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P0",
@@ -2243,8 +2243,8 @@
       "acceptance": "新13件、全体897中894成功・3skip。共有read→preview/edit→再読、実stdio/HTTP、busy時read・失効/stale/権限/64KiB・source保持を検証。新ライブ操作の実GUI/公開HTTPS一巡とP1全体は未検証。",
       "acceptanceEn": "13new checks;full897:894passed/3skipped. Shared read→preview/edit→reread,real stdio/HTTP,busy reads,expiry/stale/scopes/64KiB and source identity verified. New live GUI/public-HTTPS end-to-end and full P1 remain unverified.",
       "evidence": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-release-status-audit-c.json; docs/evidence/2026-10-15-browser-input-view-proof.json",
-      "lastUpdate": "2026-10-15 実Chromeの解析ジョブが前後ともrunning/未settledの間に入力ページを取得し、idle応答との厳密一致と入力版不変を確認。新GUI操作のstale/ページ上限/権限拒否一巡は未完了のため検証中を維持。",
-      "lastUpdateEn": "2026-10-15: real Chrome input page read bracketed by running/unsettled solve states matched the idle response exactly and preserved input revision. Live GUI stale/page-limit/scope refusals remain unverified; stays checking."
+      "lastUpdate": "2026-10-15 実Chrome/MCPで解析中のread、idleとの厳密一致、入力版不変、stale拒否、ページ境界拒否、2ページ往復を確認。inspectのみの再接続でread成功・edit/startJob/setView権限拒否も確認。接続解除・QA停止済み。公開HTTPSの独立検証はPUBLICHTTPS1で追跡する。",
+      "lastUpdateEn": "2026-10-15 real Chrome/MCP verified reads bracketed by a running solve, exact idle equality, unchanged input revision, stale/page-bound refusal and two-page traversal. An inspect-only reconnection allowed reads and refused edit/startJob/setView. QA disconnected and stopped. Independent public HTTPS verification remains under PUBLICHTTPS1."
     },
     {
       "id": "SKILLROUTING1",

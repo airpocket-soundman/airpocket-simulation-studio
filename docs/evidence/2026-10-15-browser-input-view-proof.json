@@ -389,6 +389,30 @@
       "operation": "elastic",
       "startedAt": 1792052083244,
       "updatedAt": 1792052088058
+    },
+    "liveScopes": {
+      "schemaVersion": 1,
+      "date": "2026-10-15T08:17:23.251Z",
+      "scopes": [
+        "inspect"
+      ],
+      "inspectInputAllowed": true,
+      "refusals": [
+        {
+          "method": "edit",
+          "error": "Browser permission scope refused"
+        },
+        {
+          "method": "startJob",
+          "error": "Browser permission scope refused"
+        },
+        {
+          "method": "setView",
+          "error": "Browser permission scope refused"
+        }
+      ],
+      "inputRevisionUnchanged": true,
+      "responseBytes": 1207
     }
   },
   "limitations": [
@@ -398,5 +422,12 @@
     "Canonical JSON revision is not original source-file identity.",
     "Older runtime does not verify new Worker transport.",
     "Relevant source files match after CRLF to LF normalization; not a byte-identical full runtime claim."
-  ]
+  ],
+  "cleanup": {
+    "uiDisconnected": true,
+    "pairedSessionsVerifiedZero": true,
+    "ownedHelperStopped": true,
+    "ownedViteStopped": true,
+    "publicConnectorUnchanged": true
+  }
 }
