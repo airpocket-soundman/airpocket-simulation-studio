@@ -1,5 +1,7 @@
 # Claude 引き継ぎ資料(2026-10-15)
 
+[English](en/claude-handoff-2026-10-15.md)
+
 ## 0. 目的
 
 ユーザーの依頼により、Codex での開発はここでいったん区切り、以後は Claude が引き継ぐ。Codex 側の開発は続行しない。

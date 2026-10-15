@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T03:11:42.378Z",
+  "updatedAt": "2026-10-15T03:23:44.957Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1109,12 +1109,14 @@
       "title": "上位優先: モジュール境界と並列開発基盤",
       "titleEn": "Upper priority: module boundaries and parallel development",
       "category": "開発基盤",
-      "status": "queued",
+      "status": "building",
       "detail": "TypeScriptの共通契約、画面と状態の分離、分野別実行アダプター、依存規則と独立テストを整備。公開障害修正を先行し、既存API/MCP整備と合わせて追加物理モデルより優先。全面React/WASM移行は公開前提にしない。",
       "detailEn": "Establish TypeScript contracts, separate UI/state and discipline execution adapters, dependency rules and independent tests. After incident recovery, prioritize alongside existing API/MCP work over additional physics. Full React/WASM migration is not a publication prerequisite.",
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
-      "depends": []
+      "depends": [],
+      "lastUpdate": "第1〜3スライス: 依存方向チェック(165ファイル/3件許可リスト)とTS宣言契約、分野別ソルバーアダプター登録(5分野・出力同一確認)、保存ケース一覧UIの分離を実装。MOD1全体は未完了(React/WASM移行・他画面の分離・GUI/API/MCP同等の網羅回帰は未実施)。",
+      "evidence": "scripts/check-module-boundaries.mjs; src/module-layers.json; src/contracts/; src/solver-adapters/; src/ui/case-list-ui.js; tests/module-boundaries.test.mjs; tests/contracts.test.mjs; tests/solver-adapter-registry.test.mjs; tests/ui-case-list.test.mjs; docs/module-boundaries.md; docs/solver-adapters.md; docs/ui-state-separation.md"
     },
     {
       "id": "P0",
