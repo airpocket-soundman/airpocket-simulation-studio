@@ -4,7 +4,7 @@ import {getAnalysisFailure,analysisError} from './analysis-failure.js';
 
 const unsupported=(project)=>{
  const study=project.study??{},material=project.materialProperties??{};
- return (study.kind!==undefined&&study.kind!=='structural')||study.modalAnalysis===true||study.thermalStress===true||study.materialTemperature!==undefined||Boolean(material.orthotropic||material.plasticity||material.hyperelastic||material.dependence?.elasticTemperatureTable);
+ return (study.kind!==undefined&&study.kind!=='structural')||study.modalAnalysis===true||study.thermalStress===true||(study.materialTemperature!==undefined&&material.dependence!=null)||Boolean(material.orthotropic||material.plasticity||material.hyperelastic||material.dependence?.elasticTemperatureTable);
 };
 const rejected=(code,message,target,evidence={})=>({schemaVersion:1,allowed:false,completePreflight:false,diagnostics:[{code,severity:'error',stage:'boundary-transfer',target,message,evidence,suggestions:['Inspect the exact saved input and retained mesh-only job, then retry with a successful settled job for the current revision'],requiresUserIntent:true}],reports:[],remainingChecks:['Constraint rank and rigid-body modes have not been checked.','Solver convergence and physical accuracy have not been checked.']});
 

@@ -29,6 +29,13 @@ test('shared boundary-transfer report is read-only, exact-revision-bound, and ke
  const transferFailure=await preflightMeshBoundaryTransfer({project:input,job,output:{...output,input,mesh:{nodes:[],surface:[]}},expectedRevision:revision});assert.equal(transferFailure.allowed,false);assert.equal(transferFailure.diagnostics[0].stage,'boundary-transfer');assert.equal(transferFailure.diagnostics[0].code,'ANALYSIS_BOUNDARY_REGION_TRANSFER');
 });
 
+test('GUI-style input with the default materialTemperature is inspected; a temperature-dependent material is still refused',async()=>{
+ // The live page always exports study.materialTemperature (default 20); only a temperature-dependent material makes it relevant.
+ const input=project();input.study.materialTemperature=20;const unloaded=structuredClone(input);unloaded.conditions=[];const revision=await getProjectRevision(unloaded),output={input:unloaded,mesh:{nodes:[0,0,0],surface:[]}},job={jobId:'mesh-gui',inputRevision:revision,state:'succeeded',executionSettled:true,operation:'mesh'};
+ const allowed=await preflightMeshBoundaryTransfer({project:unloaded,job,output,expectedRevision:revision});assert.equal(allowed.allowed,true);assert.equal(allowed.completePreflight,false);
+ const dependent=structuredClone(unloaded);dependent.materialProperties.dependence={elasticTemperatureTable:[[20,1e9],[80,9e8]]};const depRevision=await getProjectRevision(dependent),refused=await preflightMeshBoundaryTransfer({project:dependent,job:{...job,inputRevision:depRevision},output:{...output,input:dependent},expectedRevision:depRevision});assert.equal(refused.allowed,false);assert.equal(refused.diagnostics[0].code,'ANALYSIS_MESH_PREFLIGHT_MODEL_UNSUPPORTED');
+});
+
 test('stdio MCP and live browser contract inspect one successful settled real mesh-only job without changing saved or live input',async t=>{
  const directory=await mkdtemp(join(tmpdir(),'studio-boundary-preflight-')),inputPath=join(directory,'input.json'),outputPath=join(directory,'mesh.json'),input=project(),original=JSON.stringify(input);await writeFile(inputPath,original);
  try{
