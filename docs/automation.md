@@ -153,7 +153,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 `studio_assess_result({path,outputPath,expectedResultRevision,kind,options})`は保存済み解析JSONを検証し、`kind:"fatigue"|"fracture"`の評価を追加した完全な解析JSONを新規パスへ保存します。既存出力の上書きは拒否します。`studio_assessment({path,kind,expectedResultRevision?,offset?,limit?})`は読取専用で、評価の要約・出典・単位・制限と要素別データを返します。ページは既定50、最大200要素です。保存結果ではまず`studio_assessment({path,kind})`を呼び、返された`resultRevision`を評価時の`expectedResultRevision`へ渡します。対象となる構造線形弾性結果にまだ評価がない場合も、`available:false`、現在の結果版、空の要素ページを返します。保存済み評価がある場合は`available:true`です。
 
-ブラウザでは`window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})`と`get({kind,expectedResultRevision?,offset:0,limit:50})`を使います。MCP接続の`evaluateAssessment`はanalyze権限、`getAssessment`はinspect権限です。評価応答には変更前・変更後の結果版、要約、材料出典、制限、要素数が含まれます。入力・変位・応力配列は変更しませんが、評価と計算設定を含む出力全体の版は変わります。保存ビューや古い結果版の参照を適用する前に、新しい版を取得してください。
+ブラウザでは`window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})`と`get({kind,expectedResultRevision?,offset:0,limit:50})`を使います。MCP接続の`evaluateAssessment`はanalyze権限、`getAssessment`はinspect権限です。MCP`studio_assess_result`は`options`必須で出力パスの上書きも拒否しますが、ブラウザ側`evaluate`は現行結果版で同じkindを再評価すると保存済み評価を置換し(上書き拒否はなし)、疲労の`options`省略は既定値(minLoadFactor0・maxLoadFactor1・meanStressCorrection none・appliedCycles1)で受理します。古い結果版は拒否します。評価応答には変更前・変更後の結果版、要約、材料出典、制限、要素数が含まれます。入力・変位・応力配列は変更しませんが、評価と計算設定を含む出力全体の版は変わります。保存ビューや古い結果版の参照を適用する前に、新しい版を取得してください。
 
 材料データは元の保存入力の`materialProperties.fatigueData`または`fractureData`だけを使用します。欠けたS-N曲線・強度・破壊靱性を名前やLLMの推測で補いません。既存評価も元入力から数値を再計算して検証し、別種の有効な評価を保持します。
 
