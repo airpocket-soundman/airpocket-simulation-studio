@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T01:35:31.896040Z",
+  "updatedAt": "2026-10-15T02:13:09.7342596+00:00",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1103,6 +1103,18 @@
       "acceptance": "一次資料と値・単位・規格を照合。暫定版と未掲載条件を明示し、比較選択・日英・保存・公開版を検証。",
       "acceptanceEn": "Verify primary values, units, standards, preliminary labels and missing conditions, comparison selection, JP/EN, archives and deployment.",
       "evidence": "src/polymer-catalog.json; tests/material-catalog.test.mjs; docs/polymer-library.md"
+    },
+    {
+      "id": "MOD1",
+      "title": "上位優先: モジュール境界と並列開発基盤",
+      "titleEn": "Upper priority: module boundaries and parallel development",
+      "category": "開発基盤",
+      "status": "queued",
+      "detail": "TypeScriptの共通契約、画面と状態の分離、分野別実行アダプター、依存規則と独立テストを整備。公開障害修正を先行し、既存API/MCP整備と合わせて追加物理モデルより優先。全面React/WASM移行は公開前提にしない。",
+      "detailEn": "Establish TypeScript contracts, separate UI/state and discipline execution adapters, dependency rules and independent tests. After incident recovery, prioritize alongside existing API/MCP work over additional physics. Full React/WASM migration is not a publication prerequisite.",
+      "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
+      "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
+      "depends": []
     },
     {
       "id": "P0",
@@ -2340,6 +2352,24 @@
       "acceptance": "同一配信候補の版・bytes・SHAを照合し、欠落を補完しない。推定根拠・未知・主観幅を明示。履歴/推定/MCPの拒否と互換性、実画面の日英・キーボード・狭幅、CI/公開配信を検証。",
       "acceptanceEn": "Verify candidate revision/bytes/SHA without filling missing history. Expose rubric, unknowns and subjective scenarios. Verify history/estimate/MCP refusal and compatibility, JP/EN keyboard/narrow UI and CI/deployment.",
       "evidence": "docs/progress-dashboard.md;src/product-estimate.js;tests/progress-history.test.mjs;tests/progress-insights-mcp.test.mjs"
+    },
+    {
+      "id": "CASECOMPARISON1",
+      "title": "保存ケースを同一点・生値で読取専用比較",
+      "titleEn": "Read-only comparison of saved cases at the same point",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P4",
+        "CASEARCHIVE1",
+        "RUNTIMEIDENTITY1",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "共通モジュールsrc/case-comparison.js、ブラウザ操作caseCompare、MCP studio_compare_casesを追加。既存の保存ケース1〜8件を同一グローバル点で生値（元単位）のまま比較し、モード/フレームは明示指定。実行時にlease/guardの鮮度を再確認し、応答は64KiB以下に制限。UIと保存データは変更しない。",
+      "detailEn": "Add shared module src/case-comparison.js, browser caseCompare and MCP studio_compare_cases. Compare 1–8 existing saved cases at the same global point using raw values in original units, with explicit mode/frame. Recheck lease/guard freshness and bound responses to 64 KiB. UI and stored data are unchanged.",
+      "acceptance": "1〜8件・同一グローバル点・生値/単位・明示モード/フレームの比較、非互換理由、未知/破損/失効の全体拒否、lease鮮度再確認、64KiB上限を検証。全体スイートと公開QAは未完了で、物理精度・同入力性・別メッシュ間の対応は保証しない。",
+      "acceptanceEn": "Verify 1–8 cases at one global point with raw values/units and explicit mode/frame, incompatibility reasons, whole-request rejection of unknown/corrupt/stale inputs, lease freshness rechecks and the 64 KiB bound. Full-suite and published QA remain incomplete; no claim of physical accuracy, equal inputs or cross-mesh correspondence.",
+      "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs"
     }
   ],
   "solvers": [

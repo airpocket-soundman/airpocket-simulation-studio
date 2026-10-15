@@ -4,7 +4,9 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-29ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+30ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+
+現行の入口は通常30/接続32 MCPツール、86ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -562,3 +564,19 @@ bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のp
 ### 開発状況の任意取得
 
 studio_progress({includeEstimate:true,includeHistory:true})で、元のprogressと主観推定・Git履歴を分離して返します。省略/falseは従来の応答形を維持。履歴はHEADと入力bytesの不一致・Git不在・容量超過を利用不可として明示し、2MB応答上限を適用。ローカルcheckoutの履歴であり公開候補の合格証明ではありません。[算定方法](progress-dashboard.md)。
+
+## 保存ケースの読取専用比較（今回の検証記録は保留）
+
+共通 `createCaseComparisonApi({cases}).compare(request, {guard})` と接続ブラウザの `caseCompare`（inspect権限）は、保存ケースを読み、入力・表示・時刻・履歴を変更しません。`caseList` で得たcaseIdとrevisionを、1〜8件の異なるケースの `references:[{caseId,expectedRevision,field,modeIndex?,frameIndex?,bodyIndex?,elementIndex?}]` に指定します。`point` は同じ全体座標系のmm単位3成分です。省略時はメタデータ比較だけで数値差分を返しません。bodyIndex/elementIndexはpoint指定時だけ使用し、ケースごとの局所番号です。別メッシュ間で同じ番号が同じ部品を意味するとは限りません。
+
+fieldは displacement / stress / plasticStrain / temperature / heatFlux / instantPressure / pressure / spl / phase / speed / fluidPressure。モードはmodeIndex、過渡結果は保存済みframeIndexを明示します。現在表示や最終フレームへの暗黙選択、時間補間、位置合わせは行いません。モード変位は最大1mmに正規化した形状で、動的応答ではなく数値差分の対象外です。
+
+各行はcase/input/result revision、kind、selection、計算・メッシュ情報、保存時runtimeIdentityとassessmentの記録状況を返します。旧結果の未記録identityを現在のmanifestで埋めません。`selection.displayUnit` は表示単位、`measurement.units` と `comparison.deltas[].units` は生の値の単位です。応力はPa（MPaではない）、塑性ひずみは比率1（%ではない）。他もmm、degC、W/m2、Pa、dB、rad、m/sを値に対応するunitsで確認します。
+
+過渡結果の比較は保存された物理時刻の完全一致のみを条件とし、補間も許容誤差もありません。不一致は `different-time` で差分を返しません。SPL同士で `referencePressurePa` が異なる場合は `different-reference-pressure` となり差分を返しません。一方、Paの生圧力（instantPressure/pressure/fluidPressure）は基準圧が異なっても比較できます。
+
+数値差分は最初のケースを基準に「対象−基準」、ベクトルは成分ごとです。kind/field/unit/time/frequencyの不一致、周波数未記録、モード形状、測定不可などでは理由を返し、差分を作りません。同じ入力・物理精度の証明ではありません。有効な選択部品の外側や部品の曖昧さは行単位のunavailable、存在しない部品・不正selector・破損ケースは全体拒否です。読取leaseやguardの失効も全体を拒否します。
+
+MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で、bundle v1/v2は対象外です。references省略時はpathだけを渡し、`cases` の `saved-case:0` 等のスナップショット内ID、case revision、archiveRevisionとsourceの生bytes/SHA-256を取得します。比較にはこのarchiveRevisionをexpectedArchiveRevisionとして指定し、上のreferencesと任意pointを渡します。IDだけを別archiveに流用しません。応答前にも元ファイルのhashを再確認し、変化は拒否します。ファイル書込・ソルバー起動はありません。
+
+応答のJSON値全体はUTF-8で65536bytes以下です。超過時は参照数を減らします。MCPのtext/structuredContentによる重複やHTTP/JSON-RPCの包装込みwire全体の64KiB保証ではありません。今回の検証件数・実ブラウザ・公開完了は検証待ちとし、P0〜P6全体の完了を宣言しません。
