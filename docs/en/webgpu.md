@@ -10,6 +10,6 @@ An actual Intel GPU verified 0.04 mm / 100 N, pressure/gravity 0.040008 mm / 100
 
 The small prescribed-displacement example took 723.7 ms through the GPU path versus 49.2 ms on WASM CPU. Setup, transfer and correction mean speedup is not guaranteed; WASM CPU remains default. Thermal, acoustic and fluid GPU paths are unsupported and unselectable. Broader browser/model-size performance characterization remains PERF1 work.
 
-`analysisApi.checkGpuEnvironment()` reports availability, hardware/software adapter and buffer limits. `analysisApi.analyze({method:'webgpu-pcg'})` executes the same path. Node tests verify CSR packing, float32 approximation, CPU correction/fallback and the canonical worker fallback. Actual WGSL compute was checked separately in the browser; Node tests are not hardware GPU verification.
+`analysisApi.checkGpuEnvironment()` reports availability, hardware/software adapter and buffer limits. A paired browser also exposes the same live browser probe as the inspect-scoped `checkGpuEnvironment` operation. Its runtime observation is separate from the operation declaration and must not be confused with Node GPU capability. `analysisApi.analyze({method:'webgpu-pcg'})` executes the same path. Node tests verify CSR packing, float32 approximation, CPU correction/fallback and the canonical worker fallback. Actual WGSL compute was checked separately in the browser; Node tests are not hardware GPU verification.
 
 API reference: [W3C WebGPU specification](https://www.w3.org/TR/webgpu/).

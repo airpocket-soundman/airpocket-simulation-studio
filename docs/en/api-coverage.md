@@ -4,7 +4,7 @@
 
 As of 2026-10-14. The main differentiator is enabling the user's own LLM to operate every feature through a specialized SKILL. Closing the gaps below has the highest priority. This is an initial inventory by feature group; coverage of individual operations has not yet been measured.
 
-Current entry points have 31 default/33 connected MCP tools and 87 browser operations; the minimal connector has three tools. Preserve historical counts below. Current comparison validation, actual-browser and publication completion remain pending.
+Current entry points have 31 default/33 connected MCP tools and 88 browser operations; the minimal connector has three tools. Preserve historical counts below. Current comparison validation, actual-browser and publication completion remain pending.
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
@@ -59,7 +59,7 @@ Nonlegacy evidence contracts also cover static temperature evaluation, thermal s
 
 Worker/shared hosts/GUI wrappers/jobs/MCP preserve bounded failure schema1 metadata (maximum 16,384 UTF-8 bytes), distinguishing typed constraint/boundary diagnostics from generic stage fallbacks. Paths include job.error.failure, executionError.failure, direct MCP structuredContent.error.failure and optional diagnostic events, without delivery/root-cause-repair/physical-accuracy guarantees. Legacy messages/JOB_* codes and counts (13/12 profiles, 27/29 tools, 80 live methods) remain. See [specification](automation.md).
 
-Current counts are 28 default/30 connector MCP tools and 80 live operations. studio_browser_contracts accepts method/scope/offset/limit to discover schema1 argument envelopes, revisions, units, effects and limitations before pairing. declarationOnly grants no permission and does not guarantee complete JSON Schema validation or adapter availability. Direct thrown-operation failures retain failure metadata through the HTTP bridge, using the existing jobStatus diagnostic format. See [workflow](automation.md). Earlier 27/29 counts record the scope when those increments were added.
+Current counts are 31 default/33 connector MCP tools and 88 live operations. studio_browser_contracts accepts method/scope/offset/limit to discover schema1 argument envelopes, revisions, units, effects and limitations before pairing. declarationOnly grants no permission and does not guarantee complete JSON Schema validation or adapter availability. Direct thrown-operation failures retain failure metadata through the HTTP bridge, using the existing jobStatus diagnostic format. See [workflow](automation.md). Earlier 27/29 counts record the scope when those increments were added.
 
 Edit preview returns changed pointers (maximum 100), candidate revision and preflight without changing input, saving files or running a solver. Optional expectedResultingRevision on edit/studio_edit_project requires the committed candidate to match the reviewed revision. Counts are 29 default/31 connector tools and 81 live operations. preflight.allowed:false still returns diagnostics; inspecting next settings during computation does not change the active job. See [workflow](automation.md); earlier counts record previous increments.
 

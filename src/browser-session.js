@@ -32,6 +32,16 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
     if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during input inspection'),{code:'INPUT_INSPECTION_STALE'});
     return response;
    }
+   if(method==='checkGpuEnvironment'){
+    if(Reflect.ownKeys(args).length)throw Error('checkGpuEnvironment takes no arguments');
+    if(typeof analysis?.checkGpuEnvironment!=='function')throw Error('Browser GPU environment inspection unavailable');
+    const inputBefore=studio?.exportProject?JSON.stringify(studio.exportProject()):undefined;
+    const resultBefore=getResult?JSON.stringify(getResult()):undefined;
+    const diagnostic=await analysis.checkGpuEnvironment();
+    if(!diagnostic||typeof diagnostic!=='object'||Array.isArray(diagnostic))throw Error('Invalid browser GPU environment diagnostic');
+    if(!valid()||inputBefore!==undefined&&JSON.stringify(studio.exportProject())!==inputBefore||resultBefore!==undefined&&JSON.stringify(getResult())!==resultBefore)throw Error('Browser GPU inspection expired or browser state changed');
+    return {schemaVersion:1,target:'browser',declaredCapability:{operation:'checkGpuEnvironment',declarationOnly:true},observation:structuredClone(diagnostic)};
+   }
    if(method==='inputImportBegin'){if(!inputImports)throw Error('Input import transfer unavailable');const result=await inputImports.beginImport(args,{guard:valid});if(!valid()){inputImports.release({transferId:result.transferId});throw Error('Input import command expired');}ownedInputTransfers.add(result.transferId);return result;}
    if(['inputImportWrite','inputImportCommit','inputImportRelease'].includes(method)){
     if(!inputImports)throw Error('Input import transfer unavailable');if(!ownedInputTransfers.has(args.transferId))throw Error('Input import transfer is not owned by this session');

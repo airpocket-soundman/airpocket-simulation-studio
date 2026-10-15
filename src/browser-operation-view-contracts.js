@@ -11,6 +11,7 @@ const archive=object('Validated archive JSON; detailed nested shape, identities,
 const selectors={type:'object',properties:{bodyIndex:integer(),elementIndex:integer()},additionalProperties:false};
 const identity={measurementId:string,expectedRevision:revision};
 export const viewOperationContracts={
+ checkGpuEnvironment:contract('Probe the current browser session for an actual WebGPU adapter and device. The response separates this operation declaration from the current browser observation; it does not report Node capabilities.',{},[],{strict:true,limits:['Inspect scope only; takes no arguments and does not change project or result data.','Device availability is observed at call time and is not promised by declaration or capability discovery. The temporary device is destroyed before the response.']}),
  getView:contract('Read setup clipping, opacity and hidden parts.'),
  setView:contract('Patch setup view settings.',{clipEnabled:{type:'boolean'},flip:{type:'boolean'},axis:integer(0,2),position:{type:'number'},opacity:{type:'number',minimum:.1,maximum:1},meshCount:integer(),hiddenParts:{type:'array',items:integer()}},[],{effects:['Changes setup clipping, opacity and part visibility.'],units:{position:'mm'},limits:['meshCount is read-only: if supplied it must equal the current count; hidden part indices must be below it.']}),
  getResultView:contract('Read displayed result identity, settings and bounded frame/mode metadata.',{frameOffset:integer(),frameLimit:{...integer(0,50),default:20},modeOffset:integer(),modeLimit:{...integer(0,50),default:20}}),

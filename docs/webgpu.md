@@ -10,6 +10,6 @@ Intelの実GPUで、0.04 mm・反力100 N、圧力重力0.040008 mm・100.04 N�
 
 今回の小さな指定変位例ではGPU経路723.7 ms、WASM CPU49.2 msでした。デバイス準備・転送・CPU補正があるため、速くなる保証はありません。既定はWASM CPUです。熱、音響、流体のGPU経路は未対応で、選択できません。別ブラウザやモデル規模全体の性能調査はPERF1の残作業です。
 
-`analysisApi.checkGpuEnvironment()`で使用可否、実GPU/ソフトウェア代替とデータ上限を確認できます。`analysisApi.analyze({method:'webgpu-pcg'})`で同じ計算経路を実行できます。Nodeの回帰テストではCSR、float32近似、CPU補正、CPU切替、実ワーカーの切替経路を検証します。実WGSL演算はブラウザのGPUで別途確認しました。Nodeテストで実GPUを検証したとは扱いません。
+`analysisApi.checkGpuEnvironment()`で使用可否、実GPU/ソフトウェア代替とデータ上限を確認できます。ペア済みブラウザはinspectスコープの`checkGpuEnvironment`操作でも同じブラウザ診断を実行できます。返却値は実行時観測で、操作の宣言とは別です。NodeのGPU能力とは混同しません。`analysisApi.analyze({method:'webgpu-pcg'})`で同じ計算経路を実行できます。Nodeの回帰テストではCSR、float32近似、CPU補正、CPU切替、実ワーカーの切替経路を検証します。実WGSL演算はブラウザのGPUで別途確認しました。Nodeテストで実GPUを検証したとは扱いません。
 
 API参照: [W3C WebGPU仕様](https://www.w3.org/TR/webgpu/)。
