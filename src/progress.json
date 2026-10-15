@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T12:29:41.474Z",
+  "updatedAt": "2026-10-15T12:58:19.762Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -2533,7 +2533,7 @@
       "id": "PUBLICHTTPS1",
       "title": "公開HTTPSページからローカル接続を実ブラウザで確認",
       "titleEn": "Verify the local connection from the published HTTPS page in a real browser",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "BROWSERCONNECTOR1",
@@ -2544,8 +2544,8 @@
       "acceptance": "通常のChromeで公開ページから許可済みスコープ(確認のみ)で接続でき、確認用の操作が成功し、切断でセッションが終了する。失敗時は到達不能/拒否/ブラウザ権限のどれかを診断カウンターで区別して記録する。結果は日付・ブラウザ版・公開リビジョン付きの証跡に残す。編集・解析への権限拡大は行わない。",
       "acceptanceEn": "In regular Chrome, the published page connects with the granted scope (inspect only), an inspection operation succeeds and disconnect ends the session. On failure, unreachable vs refused vs browser-permission is distinguished via the diagnostics counters and recorded. Results are stored as evidence with date, browser version and published revision. No scope escalation to edit or analysis.",
       "evidence": "docs/evidence/2026-10-15-public-https-inspect-failure.json; docs/evidence/2026-10-15-public-https-reconnect-user-report.json; scripts/browser-bridge.mjs; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-public-https-connection.json",
-      "lastUpdate": "2026-10-15 利用者の通常Chromeで公開ページから確認専用で接続でき、inspect/caseList成功・edit拒否・解除でセッション0件・コネクタ停止まで確認(カウンター: ペアリング成功2・拒否0・切断2)。未了: Chromeバージョン未記録、ページは古いキャッシュ版(操作86件)で最新操作は未実行、最初の失敗の原因設定は未報告。検証中を維持。",
-      "lastUpdateEn": "2026-10-15 In the owner's regular Chrome the published page connected with inspect-only scope; inspect/caseList succeeded, edit was refused, disconnect left 0 sessions and the connector was stopped (counters: pairSuccess 2, refusals 0, disconnects 2). Open: Chrome version not recorded, the page was an older cached build (86 operations) so the newest operations were not run, and the setting that fixed the first failure was not reported. Stays checking."
+      "lastUpdate": "2026-10-15 利用者の通常Chrome 155.0.8059.41(Windows 11 25H2)で公開ページから確認専用で接続でき、inspect/caseList成功・edit拒否・解除でセッション0件を確認。証跡に日付・ブラウザ版・確認時点の公開リビジョン(2c19007)を記録。注意: ページは古いキャッシュ版(操作86件)で最新操作は公開ページ上では未実行、最初の失敗が通るようになった設定は未報告。受け入れ条件は満たすため検証済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
+      "lastUpdateEn": "2026-10-15 In the owner's regular Chrome 155.0.8059.41 (Windows 11 25H2) the published page connected with inspect-only scope; inspect/caseList succeeded, edit was refused and disconnect left 0 sessions. Evidence records date, browser version and the published revision at check time (2c19007). Caveats: the page was an older cached build (86 operations) so the newest operations were not run on the published page, and the setting that fixed the first failure was not reported. Acceptance is met; moved to ready. The publication-milestone gate is not closed by task status."
     },
     {
       "id": "MESHBOUNDARYPREFLIGHT1",
