@@ -596,3 +596,9 @@ MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で�
 不足は`ASSESSMENT_INPUT_REQUIRED`、不正値は`ASSESSMENT_INPUT_INVALID`、対象外の構造モデルは`ASSESSMENT_MODEL_UNSUPPORTED`として対象ポインタを返します。破壊靭性の登録温度範囲を外れる評価温度は`ASSESSMENT_TEMPERATURE_OUT_OF_RANGE`です。適合する温度依存の線形等方材は一律に除外しません。quantitative/exploratoryでは材料評価データも既存の根拠・仮定検査に含めます。ソルバーや評価を実行せず、入力ファイルを変更しません。成功しても、解析後の応力状態・弾性範囲・メッシュ・拘束・収束・物理妥当性を保証しません。
 
 選択領域の局所細分化は `addSelectedMeshRefinements({size,radius,baseSize})` をedit/previewのargsに渡します。単位はmm、sizeはbaseSizeの15〜100%。GUIと同じ選択三角形重心を最大80件追加し、保存全体160件まで。既存設定と選択を保持し、空選択・不正値・容量超過・版競合では入力を変更しません。baseSizeは後続ジョブの全体サイズを自動変更しません。
+
+### GPU環境確認とメッシュ境界検査
+
+ブラウザ操作 `checkGpuEnvironment`（inspect権限、引数なし）は、接続中のブラウザセッションで実際のWebGPUアダプタとデバイスを取得できるか呼出し時に確認します。一時デバイスは応答前に破棄され、プロジェクトや結果は変更しません。宣言や機能探索はデバイスの利用可否を約束せず、Nodeの能力も報告しません。
+
+ブラウザ操作 `meshBoundaryPreflight({jobId,inputRevision})`（MCPでは `studio_preflight_mesh_boundaries({path,jobId,inputRevision})`）は、成功して実行が完了したmesh-onlyジョブが保持する正確なメッシュに対し、境界条件の転写を検査します。入力リビジョンの一致が必要で、メッシャーもソルバーも再実行せず、対象は静的線形構造入力のみです。`completePreflight` は常にfalseで、拘束の階数・剛体モード・収束・物理精度は未検査のままです。

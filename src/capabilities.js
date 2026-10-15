@@ -1,6 +1,7 @@
 import {jobEventPayloadLimits} from './job-event-payload.js';
 import {observationQueueDefaults} from './job-observation-queue.js';
 import {browserMethods} from './browser-operation-names.js';
+import {diagnoseCombinationRules} from './execution-combination-rules.js';
 import {getObservationProfiles,resolveObservationProfile} from './observation-profiles.js';
 // Small metadata only: importing this module must not initialize CAD or solvers.
 const cpuMethods=['pcg','pcg-strict','wasm-pcg'];
@@ -40,5 +41,6 @@ export function diagnoseExecution(project,options={},target='browser'){
  }
  if(study.modalAnalysis&&!cpuMethods.includes(method))diagnostics.push(issue('MODAL_METHOD_UNSUPPORTED','options.method','Modal analysis requires an Airpocket CPU method',{method},cpuMethods));
  if(options.adaptive&&kind!=='structural')diagnostics.push(issue('ADAPTIVE_STUDY_UNSUPPORTED','options.adaptive','Adaptive refinement supports structure only',{kind},['Disable adaptive refinement']));
+ diagnostics.push(...diagnoseCombinationRules(project,{...options,method},issue));
  return {schemaVersion:1,completePreflight:false,diagnostics,selectedObservation:resolveObservationProfile(project,options,target)};
 }
