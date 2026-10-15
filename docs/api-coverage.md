@@ -4,7 +4,7 @@
 
 2026-10-14時点。最大の差別化要因はユーザーのLLMが専門SKILLから全機能を扱えること。以下の不足を最優先で解消する。対応は機能群単位の初期棚卸しであり、全操作の網羅率は未測定。
 
-現行の入口は通常31/接続33 MCPツール・87ブラウザ操作、単体connectorは3ツール。後続の過去件数は当時の記録として保持する。今回比較の検証・実ブラウザ・公開完了は保留。
+現行の入口は通常31/接続33 MCPツール・88ブラウザ操作、単体connectorは3ツール。後続の過去件数は当時の記録として保持する。今回比較の検証・実ブラウザ・公開完了は保留。
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
@@ -31,7 +31,7 @@
 | 疲労・破壊評価 | resultAssessmentApi.evaluate/get | studio_assess_result/studio_assessment、接続モードevaluateAssessment/getAssessment | 対応物理範囲の拡張、実画面の検証 |
 | 3MF/G-code | printOperationsのinspect/import/get/set/export、printTransfer分割転送とUI | studio_import_print/studio_inspect_print、接続printInspect/importPrint/getPrintData/setPrintViewとprintTransferの6操作 | 積層・インフィル物性との解析連携 |
 
-専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの82操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
+専門SKILLは`skills/airpocket-studio/SKILL.md`で現行能力・診断・出典・制限を案内する。新しい操作の追加と同時にSKILLを更新し、例題の成功経路と拒否・修復経路を検証する。現MCPは保存入力のCPUジョブについて中間要約と任意のメッシュ/時刻場ファイルを取得できるが、接続モードでは許可されたブラウザの87操作も扱う。保持は同一Nodeプロセス内、既定32ジョブ・各256イベント。カーソルの欠落通知、`requestId`の保持中冪等性、暫定ラベル、保存中の中止不可、場保存64 MB上限は[操作仕様](automation.md)を参照。目標仕様を現行操作として案内しない。
 
 P0は実装中。全行の操作細分化、必要入力/有効範囲、単位付き診断、日英操作対応表、画面での確認は残作業。
 
@@ -59,7 +59,7 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 
 実行失敗はWorker/共有ホスト/GUIラッパー/ジョブ/MCPでfailure schema1（最大16,384 UTF-8バイト）を保持します。型付き拘束・境界診断と汎用stage fallbackを区別します。job.error.failure、executionError.failure、直接MCP structuredContent.error.failure、任意のdiagnostic eventに対応しますが、到着や原因修復・物理精度は保証しません。従来message/JOB_* codeを維持。profile13/12・ツール27/29・ライブ80操作は変更しません。[仕様](automation.md)を参照してください。
 
-現行は通常28・接続30 MCPツール、ライブ80操作です。studio_browser_contractsでmethod/scope/offset/limitを指定し、schema1の宣言と引数envelope・版・単位・副作用・制限を接続前に取得できます。declarationOnlyであり権限付与・完全JSON Schema検証・adapter利用可能性の保証ではありません。直接操作throwのfailureもHTTP bridge経由で保持し、既存jobStatusと同じ診断形式を維持します。手順は[仕様](automation.md)を参照してください。以前の27/29は当時の追加範囲を示す記録です。
+現行は通常30・接続32 MCPツール、ライブ87操作です。studio_browser_contractsでmethod/scope/offset/limitを指定し、schema1の宣言と引数envelope・版・単位・副作用・制限を接続前に取得できます。declarationOnlyであり権限付与・完全JSON Schema検証・adapter利用可能性の保証ではありません。直接操作throwのfailureもHTTP bridge経由で保持し、既存jobStatusと同じ診断形式を維持します。手順は[仕様](automation.md)を参照してください。以前の27/29は当時の追加範囲を示す記録です。
 
 編集プレビューは入力を変えずに変更Pointer（最大100）と候補版・preflightを返し、ファイル保存・解析を行いません。edit/studio_edit_projectの任意expectedResultingRevisionで確認候補との一致を要求できます。通常29/接続31ツール・ライブ81操作。preflight.allowed:falseも診断結果として返し、計算中の設定案検査は実行中ジョブを変更しません。[手順](automation.md)を参照してください。以前の件数は各追加時の記録です。
 
