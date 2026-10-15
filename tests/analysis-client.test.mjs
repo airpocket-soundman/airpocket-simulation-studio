@@ -20,6 +20,21 @@ test('browser job API shares the lifecycle and freezes input, retains compact ob
  const next=h.api.startJob({inputRevision:'browser:2'});await new Promise(resolve=>setImmediate(resolve));h.api.cancel();await new Promise(resolve=>setImmediate(resolve));assert.equal(h.api.getJob(next.jobId).state,'cancelled');h.workers[1].send({result:{wrong:true}});assert.equal(h.api.getJob(next.jobId).state,'cancelled');assert.throws(()=>h.api.getJobResult(next.jobId),/not available/);h.api.closeJobs();
 });
 
+test('API job progress stays in its job events while GUI job progress reaches the presentation callback',async()=>{
+ const h=harness(),apiJob=h.api.startJob({inputRevision:'browser:api-progress',origin:'api'});
+ await new Promise(resolve=>setImmediate(resolve));h.workers[0].send({progress:'Solving linear elasticity…'});
+ assert.deepEqual(h.progress,[]);
+ assert.ok(h.api.jobEvents(apiJob.jobId).events.some(event=>event.type==='progress'&&event.stage==='progress'&&event.message==='Solving linear elasticity…'));
+ h.workers[0].send({result:{mesh:{summary:{nodeCount:4}},result:{kind:'elastic'}}});await h.api.drainJobs();
+ const settled=h.api.getJob(apiJob.jobId);assert.equal(settled.state,'succeeded');assert.equal(settled.executionSettled,true);
+
+ const guiJob=h.api.startJob({inputRevision:'browser:gui-progress',origin:'gui'});await new Promise(resolve=>setImmediate(resolve));
+ h.workers[1].send({progress:'Solving linear elasticity…'});assert.deepEqual(h.progress,['Solving linear elasticity…']);
+ assert.ok(h.api.jobEvents(guiJob.jobId).events.some(event=>event.type==='progress'&&event.message==='Solving linear elasticity…'));
+ h.workers[1].send({result:{mesh:{summary:{nodeCount:4}},result:{kind:'elastic'}}});await h.api.drainJobs();
+ assert.equal(h.api.getJob(guiJob.jobId).executionSettled,true);h.api.closeJobs();
+});
+
 test('browser jobs retain optional time fields, expose artifact probes, and report malformed observations without losing final output',async()=>{
  const h=harness(),job=h.api.startJob({inputRevision:'browser:fields',requestId:'fields',includeFields:true});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.workers[0].input.observeFields,true);
  const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],summary:{nodeCount:4}};

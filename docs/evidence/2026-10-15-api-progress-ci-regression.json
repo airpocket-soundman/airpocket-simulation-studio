@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15T08:30:09.214Z",
+  "revision": "733c16eed284b0687045c1db482da0a32360c13e",
+  "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38705501050",
+  "result": {
+    "tests": 1155,
+    "passed": 1151,
+    "failed": 1,
+    "skipped": 3
+  },
+  "failure": {
+    "file": "tests/analysis-host-failure.test.mjs",
+    "test": "host progress observer exceptions terminate once and ignore subsequent Worker diagnostics",
+    "expected": "Observer refused",
+    "actual": "Late failure"
+  },
+  "reasonJa": "APIジョブではGUI進捗observerを呼ばない新仕様と、既存テストのAPI origin既定が矛盾した。",
+  "reasonEn": "The old observer-failure test used default API origin, which intentionally no longer invokes the GUI progress observer.",
+  "correction": "Set explicit GUI origin in the existing test, preserving every observer-error, cleanup and late-diagnostic assertion. API suppression and progress event assertions remain covered independently.",
+  "failedLogSha256": "461dc40777682a906842a7f26f2ae11dfa72402e00175fe56e3aea3c4565330f",
+  "limitations": [
+    "This failed full CI result is preserved; the corrected full CI must pass before merge."
+  ]
+}
