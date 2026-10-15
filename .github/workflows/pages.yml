@@ -50,6 +50,7 @@ jobs:
           path: |
             .qa/ci-*.log
             .qa/published-report.json
+            .qa/published-checkpoints-*.jsonl
             .qa/*-evidence.json
       - uses: actions/upload-pages-artifact@v3
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -103,6 +104,7 @@ jobs:
           path: |
             .qa/ci-published*.log
             .qa/published-report.json
+            .qa/published-checkpoints-*.jsonl
       - name: Tag the verified published commit
         shell: bash
         run: |

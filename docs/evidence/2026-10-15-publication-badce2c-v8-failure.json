@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-15",
+  "revision": "badce2c0704385616af5c2dcc76898df85f833cb",
+  "run": 38663202965,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38663202965",
+  "status": "failed",
+  "step": "Verify local published assets",
+  "exitCode": 133,
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "linux",
+    "arch": "x64",
+    "v8": null,
+    "identityEvidence": "setup-node log reports Node version and Linux-x64 cache; full V8 version was not retained"
+  },
+  "signature": "jit_page_->allocations_.erase(addr) == 1",
+  "lastSuccessfulCheck": "project-and-case-roundtrips",
+  "nextCheck": "published-cad-reader-and-step-mesher",
+  "passedNamedChecks": [
+    "structural-airpocket-and-mfem",
+    "closed-convex-stl-volume-structure-and-archive",
+    "preinstalled-polymer-catalog-axial-reference-and-provenance",
+    "engineering-polymer-five-family-axial-references",
+    "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+    "uniaxial-sn-fatigue-life-goodman-and-archive",
+    "thermal-radiation",
+    "rubber-finite-strain",
+    "laminar-channel-flow",
+    "three-dimensional-creeping-stokes-flow-and-archive",
+    "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+    "exterior-radiation-and-far-field",
+    "transient-acoustic-wave-and-archive",
+    "modal-frequencies-and-archive",
+    "modal-to-exterior-acoustic-power",
+    "internal-cad-channel-and-port-archive",
+    "exact-planar-cad-patch-and-archive",
+    "exact-cylindrical-cad-patch-and-reaction",
+    "j2-plasticity-free-contraction-and-archive",
+    "j2-plasticity-elastic-unloading-and-archive",
+    "failure-and-restart",
+    "project-and-case-roundtrips"
+  ],
+  "jobs": {
+    "verify": "failure",
+    "deploy": "skipped",
+    "verify-published": "skipped"
+  },
+  "scope": [
+    "Manifest integrity plus passed named checks; failed run does not prove all26 checks.",
+    "Exact internal phase among parent Gmsh fixture generation and CAD/analysis worker requests is undetermined.",
+    "Queue/event normalization code is not executed by this direct compiled-Worker checker.",
+    "Same fatal signature as prior observations is not proof of identical application root cause."
+  ],
+  "officialRelatedIssue": "https://github.com/nodejs/node/issues/66366",
+  "files": {
+    ".qa\\publication-badce2c-failed.log": {
+      "bytes": 6731,
+      "sha256": "6985bae7ee0d93d13cdabf32a39c89a597c0d0e4e6caad8ff3620fb9f133ac12"
+    },
+    ".qa\\publication-badce2c-ci.log": {
+      "bytes": 205767,
+      "sha256": "7fafca690bf46deafb73e7b80e4e8c4a1957effd425c217cf5f59b57b9a91d7d"
+    },
+    ".qa\\publication-badce2c-failed\\ci-local-published.log": {
+      "bytes": 1905,
+      "sha256": "a2672e4213c1688e05c6a8d55bf6c14744c51e7a6094be4efc4b6b7a01e031bd"
+    }
+  }
+}

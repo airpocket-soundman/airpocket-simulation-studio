@@ -544,3 +544,17 @@ Independently of the 64 MB retained store, pending mesh/field processing default
 `observationSequence` records source order. Summaries/diagnostics bypass asynchronous storage and may precede older field publication. latestPolicy is last-accepted-snapshot, not replacement with the latest rejected field. Rejected meshes prevent subsequent fields binding to an old mesh. accepted/latestCompleted mean queue admission/consumer completion, not successful artifact retention; verify artifact references and integrity separately. Cancellation releases waiting payloads and drain waits for in-flight work.
 
 The conservative structural estimate does not bound total JS heap, Worker postMessage queues or arbitrary event-ring payload bytes. Report dropped observations and limits rather than claiming complete intermediate fields.
+
+## Job event payload and page byte limits
+
+Defaults: 32,768 UTF-8 bytes per event, 1,048,576 retained event bytes and 256 events per job, and 65,536 bytes for the entire jobEvents JSON value. Events are returned whole; fewer events than requested is valid, so follow nextSequence/hasMore. Count/byte eviction removes oldest entries and remains detectable through firstAvailableSequence/truncated. eventRetention reports effective budgets/current retained count/bytes; eventPageBytes reports actual JSON-value bytes.
+
+Oversized or unsafe observations (cycles, non-finite numbers, accessors, etc.) become same-sequence `observation-event-gap` events with `payloadOmitted:true` and `gap.reason`. Getters are not invoked; missing physics is not filled with zero/null. Gaps do not mean solver failure or convergence. Ordinary small metrics and valid structured primary failures remain available. Oversized status summaries expose summaryOmissions; error messages are capped at 2,048 UTF-16 code units with messageTruncated/originalMessageLength. Cancellation, settlement and release semantics remain unchanged.
+
+Capabilities observation.eventPayload declares defaults and scope. Internal startup budgets must fit valid failures/envelopes; tiny values are rejected. The 64 KiB limit covers jobEvents JSON values, not transport envelopes. MCP duplicates values in text/structuredContent, so complete JSON-RPC/HTTP wire payloads can exceed 64 KiB. Worker transport and total JS heap remain outside this guarantee. Retrieve complete final results through dedicated jobResultExport/Read chunked transfers; do not reconstruct them from event summaries.
+
+### Child-process execution for distribution verification
+
+`check-published` uses the same Node executable to run hash-verified distributed analysis/CAD modules and fixed STEP reference generation in child-process main threads. It preserves all 26 checks and numerical assertions, accepting a received result only after close 0 without a signal or observed native fatal. Checkpoints record checks and child execution; failures retain preceding partial results.
+
+This isolation belongs to the publication verification script. It changes neither actual browser Workers nor default MCP execution architecture. It adds no Node switch, GC-setting change, skip, automatic retry or fallback. The known native fatal on Linux Node24.21.0/main badce2c is preserved, without a root-fix claim. Post-change full suite passed 977 of 980 tests with 3 skips and zero failures; build and all 26 local checks passed. Publication CI remains separately pending. See [testing](testing.md) and [WASM runtime investigation](wasm-runtime-investigation.md) for evidence and scope limits.

@@ -4,6 +4,11 @@ import {readFile} from 'node:fs/promises';
 import {getObservationProfiles,resolveObservationProfile as resolve} from '../src/observation-profiles.js';
 import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 const project=(kind='structural',study={},material={})=>({study:{kind,...study},materialProperties:material,conditions:[]});
+test('all targets declare optional event gaps independently of field queue limits and solver convergence',()=>{
+ for(const target of ['browser','node'])for(const profile of getObservationProfiles({target})){
+  const gap=profile.events.find(event=>event.stage==='observation-event-gap');assert.ok(gap,profile.id);assert.equal(gap.optional,true);assert.equal(gap.provisional,true);assert.equal(gap.payloadOmitted,true);assert.equal(gap.workerTransportBounded,false);assert.deepEqual(gap.requiredFields,['gap.reason']);assert.ok(gap.gapReasons.includes('accessor'));assert.ok(gap.gapReasons.includes('bytes'));assert.ok(gap.limitations.some(value=>value.includes('missing telemetry')));
+ }
+});
 test('worker branch matrix selects numerical versus text-only paths without loading solvers',async()=>{
  const cases=[
  [project(),{},'elastic-cpu'],[project('structural',{}, {orthotropic:{}}),{},'elastic-cpu'],
@@ -17,7 +22,7 @@ test('worker branch matrix selects numerical versus text-only paths without load
  ];
  for(const [p,o,id]of cases){const selected=resolve(p,o);assert.equal(selected.profileId,id);assert.equal(selected.supported,true);assert.deepEqual(selected.profile.events.slice(0,3).map(e=>e.stage),['preparation','mesh','progress']);}
  const source=await readFile(new URL('../src/observation-profiles.js',import.meta.url),'utf8');assert.doesNotMatch(source,/^import\s/m);
- for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>!['execution-failure','pending-payload-limit'].includes(e.when)).map(e=>e.stage),['preparation','mesh','progress']);
+ for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>!['execution-failure','pending-payload-limit','job-event-payload-omission'].includes(e.when)).map(e=>e.stage),['preparation','mesh','progress']);
 });
 test('unsupported combinations and malformed selectors never advertise fields',()=>{
  const cases=[ [project(),{method:4}], [project(),{adaptive:'yes'}], [project('thermal'),{includeFields:'yes'}],
