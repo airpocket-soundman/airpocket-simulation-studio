@@ -36,7 +36,7 @@ export async function createNativeFlowHost({origin,executable,meshPath,outputRoo
      job.result={input:approvedInput,metadata,frames,displayedFrame:frames.at(-1).index,volume,surface,summary:summarizeSu2Result(volume,surface)};
      const bytes=Buffer.from(JSON.stringify(job.result));job.resultSha256=createHash('sha256').update(bytes).digest('hex');job.resultBytes=bytes.length;
      await writeFile(resolve(directory,'studio-flow-result.json'),bytes);job.status='completed';job.metadata=metadata;
-    }catch(error){job.status=error.code==='SU2_CANCELLED'?'cancelled':'failed';job.error={code:error.code??'NATIVE_FLOW_FAILED',message:error.message,logTail:error.logTail};}finally{job.settled=true;active=null;}})();
+    }catch(error){job.status=error.code==='SU2_CANCELLED'?'cancelled':'failed';job.error={code:error.code??'NATIVE_FLOW_FAILED',message:error.message,logTail:error.logTail,...(error.diagnostics?{diagnostics:error.diagnostics}:{})};}finally{job.settled=true;active=null;}})();
     return send(202,{jobId});
    }
    const fm=url.pathname.match(/^\/jobs\/([a-f0-9-]+)\/frames\/(\d+)$/);if(fm&&req.method==='GET')return send(200,await readFrame(fm[1],Number(fm[2])));

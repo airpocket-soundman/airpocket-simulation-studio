@@ -37,3 +37,29 @@ SU2設定の根拠: https://github.com/su2code/SU2/blob/v8.5.0/config_template.c
 次の優先は壁面近傍メッシュと壁面処理の適合確認。時間刻み半減・メッシュ独立性・発達した後流の検証は未実施。証跡: `docs/evidence/2026-10-15-cow-urans-sensitivity.json` と同日の比較PNG。
 
 出典: https://su2code.github.io/tutorials/Inc_Turbulent_Bend/
+
+## 壁面メッシュ・壁面処理の試験（2026-10-15）
+
+標準壁関数の反復調整で改善しなかったため、元の牛STEPを変えずに壁面に沿った層を作成した。角の付け根で局所細分化と押し出し方向の制御が必要だった。通常のスムージング法線では一部が逆向きとなったため、各頂点で隣接面の外向き法線との内積が正になる方向を明示し、Gmshのベクトルviewで押し出した。
+
+最終レシピはGmsh 4.14.1、最初の層3 µm、10層、成長率1.6、層全体約0.545 mm、全四面体。固定の牛形状に合わせた実験スクリプトであり、一般STEPの自動メッシュAPIではない。`scripts/experimental/mesh-cow-boundary-layer.py` の `--step`、`--output-directory` を指定して新規ディレクトリへ生成する。Gmshを別フォルダに配置した場合は `--gmsh-python-path` を使う。環境の自動インストールはしない。元STEPはこのPRには同梱しておらず、証跡にSHAを記録する。
+
+生成後は必ず `scripts/experimental/check-cow-layer-direction.py --step ... --mesh-directory ...` も実行する。全要素の正のJacobianに加え、全壁面の隣接要素が一意かつ空気側にあることを確認する。反転要素がないだけでは不十分。曲面CADの内外判定だけでは三角形の弦による近似誤差と押し出し方向を混同するため、最終方向検査では壁面三角形の平面法線をCAD外向き法線で向き付ける。体積全体の交差検査やメッシュ独立性の認定ではない。
+
+既存の明示入力に以下を追加した。
+
+- `wallTreatment: resolved-no-slip`：SAを壁まで解き、標準壁関数は使わない。既定設定の変更ではない。
+- `spatialOrder: 1|2`：1でMUSCLなし、2は従来設定。起動試験は1であり二次精度の検証ではない。
+- `gradientMethod: GREEN_GAUSS|WEIGHTED_LEAST_SQUARES`。薄い層の試験では後者。
+
+壁関数なしの結果には `SU2_WALL_RESOLUTION_UNVERIFIED` を残す。従来の壁関数警告が出なくても品質合格とは扱わない。発散終了は `SU2_NUMERICAL_DIVERGENCE` と修正候補を構造化し、ホストのAPI/MCP状態に伝播する。
+
+`summary.wallYPlus` に無次元の範囲・中央値・95%点・1/5超の節点数を追加。MCPの `studio_native_flow_result` は `field: yPlus` を表面からページ取得できる（domain省略時はsurface、volumeは拒否）。既存GUIの表示切替は圧力・速度のまま。y+比較PNGは保存VTUを使った診断用の別描画である。
+
+同じ物理条件で、一次精度・壁関数なし・CFL 0.1・各時刻12反復・2時刻（SU2時刻0〜0.02秒）の起動を試験。最初の層30 µmではy+最大約3.08、3 µmでは最大約0.88。ただし未収束の起動時点での診断値であり、発達した流れでも維持される保証はない。外側境界層や後流の空間解像度も未検証。過渡精度・二次精度・各時刻の収束・メッシュ独立性は引き続き受入条件。
+
+参考: https://gmsh.info/doc/texinfo/#gmsh_002fmodel_002fgeo_002fextrudeBoundaryLayer
+
+追試: 同じ3 µmメッシュでCFL 5・60反復へ変更した2時刻試験も終了したが、最大風速約56.9 m/s、体積圧力範囲約−7362〜＋4309 Paとなり、今回の5 m/sケースの採用条件には達しない。残差低下や低いy+だけを合格判定に使わず、この試行は不採用とする。CFL 0.1・12反復の最大風速は約5.75 m/sだが、こちらも未収束の起動試験。公称3 µmは押し出し変位の長さであり、角部の壁面法線方向距離はそれより小さくなる。
+
+入力説明文の監査: 実験入力のprovenance.meshに古い層数・間隔・CFLの文章が継承されていた。実際のメッシュSHAと設定ファイルを照合し、docs/evidence/2026-10-15-cow-wall-resolution.jsonに試行ごとの訂正を保存。凍結済み入力・設定・VTUは変更していない。今後の入力作成では、過去の説明文を継承せずメッシュ情報とSHAから記録する。
