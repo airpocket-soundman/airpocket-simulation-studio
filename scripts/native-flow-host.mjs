@@ -29,13 +29,17 @@ export async function createNativeFlowHost({origin,executable,meshPath,outputRoo
     const directory=resolve(outputRoot,jobId);
     job.promise=(async()=>{try{
      const metadata=await runSu2Native({executable,meshPath,outputDirectory:directory,input:approvedInput,timeoutMs:900000,signal:controller.signal,onObservation:event=>{job.events.push(event);if(job.events.length>256)job.events.shift();}});
-     const volume=parseSu2Vtu(await readFile(resolve(directory,'flow.vtu'))),surface=parseSu2Vtu(await readFile(resolve(directory,'surface_flow.vtu')));
-     job.result={input:approvedInput,metadata,volume,surface,summary:summarizeSu2Result(volume,surface)};
+     const volumes=metadata.artifacts.filter(a=>/^flow(?:_\d+)?\.vtu$/.test(a.name));
+     const frames=volumes.map((a,index)=>{const m=a.name.match(/_(\d+)\.vtu$/),timeIndex=m?Number(m[1]):null;return {index,timeIndex,timeSeconds:timeIndex===null?null:timeIndex*approvedInput.timeStepSeconds,volume:a,surface:metadata.artifacts.find(b=>b.name===a.name.replace('flow','surface_flow'))};});
+     if(frames.some(f=>!f.surface))throw Error('Missing paired time surface');job.directory=directory;job.frames=frames;
+     const last=frames.at(-1),volume=parseSu2Vtu(await readFile(resolve(directory,last.volume.name))),surface=parseSu2Vtu(await readFile(resolve(directory,last.surface.name)));
+     job.result={input:approvedInput,metadata,frames,displayedFrame:frames.at(-1).index,volume,surface,summary:summarizeSu2Result(volume,surface)};
      const bytes=Buffer.from(JSON.stringify(job.result));job.resultSha256=createHash('sha256').update(bytes).digest('hex');job.resultBytes=bytes.length;
      await writeFile(resolve(directory,'studio-flow-result.json'),bytes);job.status='completed';job.metadata=metadata;
     }catch(error){job.status=error.code==='SU2_CANCELLED'?'cancelled':'failed';job.error={code:error.code??'NATIVE_FLOW_FAILED',message:error.message,logTail:error.logTail};}finally{job.settled=true;active=null;}})();
     return send(202,{jobId});
    }
+   const fm=url.pathname.match(/^\/jobs\/([a-f0-9-]+)\/frames\/(\d+)$/);if(fm&&req.method==='GET')return send(200,await readFrame(fm[1],Number(fm[2])));
    const match=url.pathname.match(/^\/jobs\/([a-f0-9-]+)(\/result|\/cancel|\/release)?$/);if(!match) return send(404,{error:'Unknown native route'});
    const job=jobs.get(match[1]);if(!job)return send(404,{error:'Unknown native job'});
    if(match[2]==='/release'&&req.method==='POST'){if(!job.settled)throw Error('Wait for native execution settlement before release');jobs.delete(job.jobId);for(const [key,id] of requests)if(id===job.jobId)requests.delete(key);return send(200,{jobId:job.jobId,released:true,filesDeleted:false});}
@@ -46,7 +50,8 @@ export async function createNativeFlowHost({origin,executable,meshPath,outputRoo
   }catch(error){if(!res.headersSent)send(400,{error:error.message});else res.destroy();}
  });
  await new Promise((res,rej)=>{server.once('error',rej);server.listen(port,'127.0.0.1',res);});
- return {endpoint:`http://127.0.0.1:${server.address().port}`,token,async close(){for(const j of jobs.values())if(!j.settled)j.controller.abort();await Promise.allSettled([...jobs.values()].map(j=>j.promise));await new Promise(r=>server.close(r));},jobs};
+ async function readFrame(id,index){const job=jobs.get(id);if(!job?.settled||job.status!=='completed'||!Number.isSafeInteger(index)||!job.frames[index])throw Error('Settled registered frame required');const frame=job.frames[index],parsed={};for(const domain of ['volume','surface']){const artifact=frame[domain],bytes=await readFile(resolve(job.directory,artifact.name));if(bytes.length!==artifact.bytes||`sha256:${createHash('sha256').update(bytes).digest('hex')}`!==artifact.sha256)throw Error('Frame artifact integrity mismatch');parsed[domain]=parseSu2Vtu(bytes);}return {input:approvedInput,metadata:job.metadata,frame,frames:job.frames,displayedFrame:index,...parsed,summary:summarizeSu2Result(parsed.volume,parsed.surface)};}
+ return {readFrame,endpoint:`http://127.0.0.1:${server.address().port}`,token,async close(){for(const j of jobs.values())if(!j.settled)j.controller.abort();await Promise.allSettled([...jobs.values()].map(j=>j.promise));await new Promise(r=>server.close(r));},jobs};
 }
 
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){

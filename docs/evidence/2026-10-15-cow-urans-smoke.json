@@ -1,0 +1,293 @@
+{
+  "date": "2026-10-15",
+  "purpose": "Experimental URANS transport and physical-time frame selection, not validated wake dynamics",
+  "input": {
+    "schemaVersion": 1,
+    "kind": "unsteady-incompressible-rans-sa",
+    "meshUnits": "m",
+    "densityKgM3": 1.204,
+    "dynamicViscosityPaS": 0.0000181,
+    "velocityMps": [
+      -5,
+      0,
+      0
+    ],
+    "wallMarker": "cow",
+    "farfieldMarker": "farfield",
+    "turbulenceModel": "SA",
+    "wallTreatment": "standard-wall-function",
+    "turbulentViscosityRatio": 10,
+    "cflNumber": 5,
+    "multigridLevels": 0,
+    "maxIterations": 12,
+    "residualLog10Target": -5,
+    "provenance": {
+      "mode": "exploratory",
+      "authorization": "User confirmed 20 C air, 5 m/s head-to-tail, no ground",
+      "airProperties": "Assumed representative constant properties at 20 C",
+      "turbulence": "SA eddy-viscosity model, freestream nu factor 10 is an explicit exploratory assumption",
+      "mesh": "Coarse tetrahedral mesh, no prism layers or mesh convergence verification"
+    },
+    "timeStepSeconds": 0.02,
+    "timeSteps": 6,
+    "outputEvery": 1
+  },
+  "mesh": {
+    "nodes": 7716,
+    "tetrahedra": 37455,
+    "boundaryLayers": false
+  },
+  "frames": [
+    {
+      "index": 0,
+      "timeIndex": 0,
+      "timeSeconds": 0,
+      "volume": {
+        "name": "flow_00000.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:6e4b481fe8b5ea0cc4b10275e489326dffb3fd78092f766219c9c6684528c5f8"
+      },
+      "surface": {
+        "name": "surface_flow_00000.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:f1df0b3d81fea9ccb462f08cdba89ed1c537b6e3758ba198f5ac7b400a0b6a65"
+      }
+    },
+    {
+      "index": 1,
+      "timeIndex": 1,
+      "timeSeconds": 0.02,
+      "volume": {
+        "name": "flow_00001.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:d4c1a5468ad7b5defe63ea38d3be5993f8f295f8d52dd34efbff29212f736b3d"
+      },
+      "surface": {
+        "name": "surface_flow_00001.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:15cc39c2da6d662ccc8b1326e6f1f4533618a12a4534685467cfbbdca64ef8f4"
+      }
+    },
+    {
+      "index": 2,
+      "timeIndex": 2,
+      "timeSeconds": 0.04,
+      "volume": {
+        "name": "flow_00002.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:8220cc6cdc6f5f259e8f3f58467aca905bd12dbd6474ba4c05e92baadff45b6e"
+      },
+      "surface": {
+        "name": "surface_flow_00002.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:3c4fde7ddc3e79702e868b80144eb3796f346bb5b57c90aac0d3268295b5e6f2"
+      }
+    },
+    {
+      "index": 3,
+      "timeIndex": 3,
+      "timeSeconds": 0.06,
+      "volume": {
+        "name": "flow_00003.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:88612c3a4756d649e94b446058d252e4054f1dae00404a8fd2f15f09690d0497"
+      },
+      "surface": {
+        "name": "surface_flow_00003.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:00125d64fe380698a5330492ad9c3ee34f510b053de23aaabb8e3f4a71042b16"
+      }
+    },
+    {
+      "index": 4,
+      "timeIndex": 4,
+      "timeSeconds": 0.08,
+      "volume": {
+        "name": "flow_00004.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:9702a1aed053d4220831e85b5afec15312ffb94d9876f8a189325244e42c29b5"
+      },
+      "surface": {
+        "name": "surface_flow_00004.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:cac2f995fd91e07306fce23417f08bfa10ba87bf741293c5c5a12a5734d4254e"
+      }
+    },
+    {
+      "index": 5,
+      "timeIndex": 5,
+      "timeSeconds": 0.1,
+      "volume": {
+        "name": "flow_00005.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:072c180240e22c2760d8847b67674e970c16f20ffa7bac911b7d0467fbb68d66"
+      },
+      "surface": {
+        "name": "surface_flow_00005.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:29fee962eb91e2ee8f78f449561f61627491d2f93e8be8330c7028afd4eca4a4"
+      }
+    }
+  ],
+  "metadata": {
+    "schemaVersion": 1,
+    "solver": "SU2",
+    "expectedVersion": "8.5.0",
+    "inputRevision": "sha256:11e5fcfa2dee05c0a610540fe936556ec55d73a016887d3df4297adf7eb6efcc",
+    "executionSettled": true,
+    "pressureCriterionMet": false,
+    "allReportedResidualsMet": false,
+    "numericallyConverged": false,
+    "residualChecks": [
+      {
+        "name": "rms[P]",
+        "value": -2.919027009,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[U]",
+        "value": -2.175544681,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[V]",
+        "value": -2.570475835,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[W]",
+        "value": -2.5792744,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[nu]",
+        "value": -4.566032214,
+        "target": -5,
+        "met": false
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+        "severity": "warning",
+        "occurrences": 143,
+        "lastAffectedPoints": 215,
+        "maximumAffectedPoints": 482,
+        "message": "Wall-function y+ computation did not converge at some points.",
+        "suggestions": [
+          "Inspect the wall y+ distribution and near-wall mesh.",
+          "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+          "Do not use this result as a validated drag or pressure prediction."
+        ]
+      }
+    ],
+    "physicalValidationComplete": false,
+    "convergenceCriterion": "All five residual fields are stopping criteria within each physical time step; final assessment alone does not certify earlier steps.",
+    "provisional": true,
+    "temporal": {
+      "timeStepSeconds": 0.02,
+      "requestedSteps": 6,
+      "outputEvery": 1,
+      "startup": "uniform-initial-flow",
+      "lastTimeIndex": 5,
+      "allTimeStepsConverged": false,
+      "warning": "Final residual checks do not certify convergence of every physical time step."
+    },
+    "history": {
+      "Time_Iter": 5,
+      "Outer_Iter": 0,
+      "Inner_Iter": 11,
+      "Cur_Time": 0.1,
+      "rms[P]": -2.919027009,
+      "rms[U]": -2.175544681,
+      "rms[V]": -2.570475835,
+      "rms[W]": -2.5792744,
+      "rms[nu]": -4.566032214
+    },
+    "artifacts": [
+      {
+        "name": "flow_00000.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:6e4b481fe8b5ea0cc4b10275e489326dffb3fd78092f766219c9c6684528c5f8"
+      },
+      {
+        "name": "flow_00001.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:d4c1a5468ad7b5defe63ea38d3be5993f8f295f8d52dd34efbff29212f736b3d"
+      },
+      {
+        "name": "flow_00002.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:8220cc6cdc6f5f259e8f3f58467aca905bd12dbd6474ba4c05e92baadff45b6e"
+      },
+      {
+        "name": "flow_00003.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:88612c3a4756d649e94b446058d252e4054f1dae00404a8fd2f15f09690d0497"
+      },
+      {
+        "name": "flow_00004.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:9702a1aed053d4220831e85b5afec15312ffb94d9876f8a189325244e42c29b5"
+      },
+      {
+        "name": "flow_00005.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:072c180240e22c2760d8847b67674e970c16f20ffa7bac911b7d0467fbb68d66"
+      },
+      {
+        "name": "surface_flow_00000.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:f1df0b3d81fea9ccb462f08cdba89ed1c537b6e3758ba198f5ac7b400a0b6a65"
+      },
+      {
+        "name": "surface_flow_00001.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:15cc39c2da6d662ccc8b1326e6f1f4533618a12a4534685467cfbbdca64ef8f4"
+      },
+      {
+        "name": "surface_flow_00002.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:3c4fde7ddc3e79702e868b80144eb3796f346bb5b57c90aac0d3268295b5e6f2"
+      },
+      {
+        "name": "surface_flow_00003.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:00125d64fe380698a5330492ad9c3ee34f510b053de23aaabb8e3f4a71042b16"
+      },
+      {
+        "name": "surface_flow_00004.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:cac2f995fd91e07306fce23417f08bfa10ba87bf741293c5c5a12a5734d4254e"
+      },
+      {
+        "name": "surface_flow_00005.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:29fee962eb91e2ee8f78f449561f61627491d2f93e8be8330c7028afd4eca4a4"
+      },
+      {
+        "name": "history.csv",
+        "bytes": 1071,
+        "sha256": "sha256:6612dfd2229d531513da1bbe61ed0a92f02f1e241c470244d5f62ccd2719f0d9"
+      }
+    ]
+  },
+  "equivalence": true,
+  "checks": [
+    "MCP start/status/frame page",
+    "real Studio main page connect/getResult/showFrame/capture",
+    "direct and hosted VTU/history hashes"
+  ],
+  "limitations": [
+    "6 steps with 12 inner iterations each: insufficient for physical interpretation",
+    "Uniform initial flow; startup only, SU2 Cur_Time 0..0.10 s",
+    "Wall warnings remain; velocity and turbulence residual targets not met",
+    "40-inner-iteration pilot was terminated at 180 s, after 9 output frames",
+    "Steady base PR #7 is unmerged; this branch is stacked on it",
+    "Live in-progress field retrieval, vorticity/streamlines, browser video export and WebGPU CFD are not implemented"
+  ]
+}

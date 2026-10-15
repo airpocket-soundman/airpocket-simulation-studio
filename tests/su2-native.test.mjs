@@ -19,3 +19,9 @@ test('incomplete history cannot be interpreted as convergence',()=>{
  assert.deepEqual(parseSu2History('"Inner_Iter","rms[P]"\n10,-6.2\n'),{Inner_Iter:10,'rms[P]':-6.2});
  assert.equal(su2Capabilities().browserWasm,false);assert.equal(su2Capabilities().physicalValidationComplete,false);
 });
+
+test('URANS uses physical time and all inner residuals with bounded outputs',()=>{
+ const u={...input,kind:'unsteady-incompressible-rans-sa',turbulenceModel:'SA',wallTreatment:'standard-wall-function',freestreamNuFactor:10,maxIterations:40,timeStepSeconds:.01,timeSteps:20,outputEvery:2};
+ const c=buildSu2Config(u);assert.match(c,/TIME_DOMAIN= YES/);assert.match(c,/TIME_MARCHING= DUAL_TIME_STEPPING-2ND_ORDER/);assert.match(c,/INNER_ITER= 40/);assert.match(c,/TIME_ITER= 20/);assert.doesNotMatch(c,/^ITER=/m);assert.match(c,/CONV_FIELD= \(RMS_PRESSURE, RMS_VELOCITY-X, RMS_VELOCITY-Y, RMS_VELOCITY-Z, RMS_NU_TILDE\)/);assert.match(c,/OUTPUT_WRT_FREQ= 2/);
+ for(const patch of [{timeStepSeconds:0},{timeStepSeconds:NaN},{timeSteps:201},{outputEvery:0},{timeSteps:100,outputEvery:1},{maxIterations:501}])assert.throws(()=>buildSu2Config({...u,...patch}),e=>e.code==='SU2_TIME_SETTINGS');
+});

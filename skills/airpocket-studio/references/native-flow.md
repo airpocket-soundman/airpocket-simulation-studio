@@ -33,3 +33,7 @@ Browser API `nativeFlowApi` supports explicit connect, start/status/cancel/relea
 - Pressure-only termination is not complete convergence. The initial cow case met the pressure stop criterion but failed other residual targets and wall treatment; classify it as provisional and not quantitatively validated.
 - `NATIVE_FLOW_RESULT_UNAVAILABLE`: get status; wait for successful terminal settlement before reading. `NATIVE_FLOW_PAGE`: use returned counts and valid bounds. `NATIVE_FLOW_REQUEST_REFUSED`: inspect state/input; never broaden paths or alter approved physics silently.
 - Compare input revisions, mesh and complete fields/hashes for reproduction. Exact direct/Studio/MCP agreement establishes path reproducibility, not accuracy or drag prediction.
+
+## Experimental saved physical-time frames
+
+See `docs/su2-urans.md` / `docs/en/su2-urans.md`. On the URANS branch, startup-approved `unsteady-incompressible-rans-sa` accepts explicit timeStepSeconds/timeSteps/outputEvery; maxIterations means inner iterations. Discover tool schemas: optional frame in studio_native_flow_result selects a zero-based saved frame. Read the frame manifest first, preserve seconds and provisional diagnostics. Only completed settled jobs expose frames; these are not live intermediate fields. Uniform-flow startup and coarse wall mesh have not passed physical validation. Do not label the smoke GIF as developed vortex shedding. No WebGPU CFD or in-browser GIF export is implemented.
