@@ -351,6 +351,44 @@
           ]
         }
       }
+    },
+    "liveRefusals": {
+      "schemaVersion": 1,
+      "date": "2026-10-15T08:16:10.244Z",
+      "outcomes": [
+        {
+          "label": "stale revision",
+          "rejected": true,
+          "error": "Input revision differs from the inspected version"
+        },
+        {
+          "label": "page limit above 200",
+          "rejected": true,
+          "error": "Invalid section, revision or page"
+        },
+        {
+          "label": "negative offset",
+          "rejected": true,
+          "error": "Invalid section, revision or page"
+        }
+      ],
+      "pagination": {
+        "total": 2,
+        "firstPointer": "/conditions/0",
+        "secondPointer": "/conditions/1",
+        "bytes": [
+          1207,
+          1210
+        ]
+      },
+      "revisionUnchanged": true
+    },
+    "busyJobTerminal": {
+      "state": "succeeded",
+      "executionSettled": true,
+      "operation": "elastic",
+      "startedAt": 1792052083244,
+      "updatedAt": 1792052088058
     }
   },
   "limitations": [
