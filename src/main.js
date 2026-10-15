@@ -1,5 +1,6 @@
 import {createCaseListUi} from './ui/case-list-ui.js';
 import {createStatusUi} from './ui/status-ui.js';
+import {createFatigueUi} from './ui/fatigue-ui.js';
 import {createJobResultTransfer} from './job-result-transfer.js';
 import {browserStudyControls,serializeBrowserStudy,applyBrowserStudy,normalizeBrowserProjectEdit} from './browser-study-state.js';
 import {copySourceAssessment} from './source-assessment.js';
@@ -70,6 +71,7 @@ document.querySelector('#app').innerHTML=`
 
 addTranslations(errorTranslations);
 const $=id=>document.getElementById(id), status=createStatusUi({$,localizeStatus});
+const {renderFatigueMaterial,readFatigueMaterial,renderFatigueResult}=createFatigueUi({$,getMaterialProperties:()=>materialProperties,getLanguage:()=>language});
 const renderer=new THREE.WebGLRenderer({canvas:$('canvas'),antialias:true,alpha:true}); renderer.localClippingEnabled=true;renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(40,1,.01,100000);
 const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;
@@ -396,10 +398,6 @@ function plasticUnloadExample(){
 }
 $('plastic-unload-demo').onclick=plasticUnloadExample;window.analysisApi.loadPlasticUnloadExample=plasticUnloadExample;
 
-function renderFatigueMaterial(){
- const f=materialProperties.fatigueData;$('fatigue-enabled').checked=!!f;$('fatigue-curve').value=f?JSON.stringify(f.snCurve,null,2):'';$('fatigue-ultimate').value=f?f.ultimateStrengthPa/1e6:400;$('fatigue-yield').value=f?f.yieldStressPa/1e6:250;$('fatigue-source').value=f?.source||'';$('fatigue-test-conditions').value=f?.testConditions||'';
-}
-function readFatigueMaterial(){return {model:'stress-life',stressRatio:-1,snCurve:JSON.parse($('fatigue-curve').value),ultimateStrengthPa:Number($('fatigue-ultimate').value)*1e6,yieldStressPa:Number($('fatigue-yield').value)*1e6,source:$('fatigue-source').value,testConditions:$('fatigue-test-conditions').value};}
 function fatigueOptions(){return {minLoadFactor:Number($('fatigue-min-factor').value),maxLoadFactor:Number($('fatigue-max-factor').value),appliedCycles:Number($('fatigue-cycles').value),meanStressCorrection:$('fatigue-correction').value};}
 function evaluateDisplayedFatigue(options=fatigueOptions()){
  if(!lastAnalysis?.result)throw Error('Run a linear structural analysis before fatigue evaluation');
@@ -409,13 +407,6 @@ function evaluateDisplayedFatigue(options=fatigueOptions()){
 }
 window.analysisApi.evaluateFatigue=evaluateDisplayedFatigue;
 $('fatigue-evaluate').onclick=()=>{try{evaluateDisplayedFatigue();}catch(error){$('fatigue-summary').replaceChildren();status(error.message);}};
-function renderFatigueResult(f){
- const root=$('fatigue-summary');root.replaceChildren();if(!f)return;$('fatigue-min-factor').value=f.minLoadFactor;$('fatigue-max-factor').value=f.maxLoadFactor;$('fatigue-cycles').value=f.appliedCycles;$('fatigue-correction').value=f.meanStressCorrection;
- const text=document.createElement('p');text.textContent=(language==='en'?'Shortest fatigue life: ':'最短疲労寿命: ')+(f.minLifeCycles===null?(language==='en'?'Zero amplitude (life undefined)':'振幅0（寿命未定義）'):f.minLifeCycles.toPrecision(6)+' cycles')+' / '+(language==='en'?'Maximum damage: ':'最大損傷: ')+f.maxDamage.toPrecision(6)+' / '+(language==='en'?'Maximum stress amplitude: ':'最大応力振幅: ')+(Math.max(...f.stressAmplitudePa)/1e6).toPrecision(6)+' MPa';root.append(text);
- const settings=document.createElement('p');settings.textContent=(language==='en'?'Load factors: ':'荷重倍率: ')+f.minLoadFactor+' → '+f.maxLoadFactor+' / '+f.appliedCycles+' cycles / '+(language==='en'?'Mean stress correction: ':'平均応力補正: ')+f.meanStressCorrection+' / '+(language==='en'?'Maximum corrected amplitude: ':'最大補正振幅: ')+(Math.max(...f.correctedAmplitudePa)/1e6).toPrecision(6)+' MPa';root.append(settings);
- const provenance=document.createElement('p');provenance.textContent=(language==='en'?'S-N source: ':'S-N出典: ')+f.fatigueData.source+' / '+(language==='en'?'Test conditions: ':'試験条件: ')+f.fatigueData.testConditions;root.append(provenance);
- const note=document.createElement('p');note.textContent=language==='en'?'Constant-amplitude stress-life estimate using the registered R = −1 data. No fatigue crack or fracture simulation.':'登録したR=−1のS-Nデータによる一定振幅の評価です。疲労き裂や破壊のシミュレーションではありません。';root.append(note);
-}
 function fatigueExample(){
  analysisExample();api.setMaterialProperties({...getProject().materialProperties,fatigueData:{model:'stress-life',stressRatio:-1,snCurve:[{stressAmplitudePa:1e7,cycles:1e4},{stressAmplitudePa:1e6,cycles:1e6},{stressAmplitudePa:1e5,cycles:1e8}],ultimateStrengthPa:400e6,yieldStressPa:250e6,source:'Synthetic reference data only; not a certified material curve',testConditions:'Synthetic fully reversed uniaxial loading, R = -1; no surface or size correction'}});
  api.setStudy({...getProject().study,kind:'structural',modalAnalysis:false,thermalStress:false,gravityEnabled:false});$('adaptive-run').checked=false;$('solver').value='wasm-pcg';$('fatigue-min-factor').value=-1;$('fatigue-max-factor').value=1;$('fatigue-cycles').value=1e5;$('fatigue-correction').value='none';

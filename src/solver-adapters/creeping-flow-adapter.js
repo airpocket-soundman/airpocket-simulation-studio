@@ -2,7 +2,12 @@
 import {solveStokes} from '../stokes-core.js';
 import {solveStokesP2} from '../stokes-p2-core.js';
 import {stokesBoundary} from '../stokes-study.js';
-export const creepingFlowAdapter={kind:"creepingFlow",progressMessage:"Solving three-dimensional creeping Stokes flow…",async execute(ctx){const {data,mesh,boundary,progress,observe,matvecFactory,loadMfem,setStage}=ctx;
+import {validateProject} from '../regions.js';
+import {validateStokesStudy} from '../stokes-study.js';
+import {validateLoaded,validateStudyFeatures,validateConditionTypes,rejectAdaptiveAndGpuForNonStructural} from './validation.js';
+export const creepingFlowAdapter={kind:"creepingFlow",progressMessage:"Solving three-dimensional creeping Stokes flow…",
+ validate({phase,data}){if(phase==='pre-load'){validateProject(data.project);validateStokesStudy(data.project.study);if(!['wasm-pcg','pcg','pcg-strict'].includes(data.options.method))throw Error('Stokes supports Airpocket CPU solvers only');}else if(phase==='loaded')validateLoaded(data);else if(phase==='configured'){validateStudyFeatures(data);validateConditionTypes(data,null);rejectAdaptiveAndGpuForNonStructural(data);}},
+ async execute(ctx){const {data,mesh,boundary,progress,observe,matvecFactory,loadMfem,setStage}=ctx;
  let result;
  const b=stokesBoundary(mesh,data.source,data.project.study);result=(data.project.study.stokesVelocityElement==='P2'?solveStokesP2:solveStokes)(mesh,{dynamicViscosity:data.project.study.dynamicViscosity,density:data.project.study.fluidDensity},b,{matvecFactory,referenceLengthMm:b.referenceLengthMm,referenceVelocity:data.project.study.freeStreamVelocity,onProgress:progress,onObserve:observe});
  return result;
