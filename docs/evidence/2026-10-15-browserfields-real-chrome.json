@@ -1,0 +1,271 @@
+{
+ "task": "BROWSERFIELDS1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome (extension, real Chrome tab)",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "e2e90e8 (codex/evidence-chrome = origin/main), local vite dev server",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio, loopback HTTP polling; all four scopes (inspect/edit/analyze/view) granted for the local test session"
+ },
+ "scenario": "Local dev server; #thermal-demo clicked in page (20->100 degC bar, 10x10x40 mm reference sample); transient study (3 steps, dt 1 s, T0 20 degC) set through connector edit setStudy; job started with connector startJob (solve, includeFields true, wasm-pcg, size 5), NOT with the #solve-run button; then jobArtifacts/jobArtifact/showJob/probe/releaseJob.",
+ "measurements": [
+  {
+   "point": [
+    5,
+    5,
+    20
+   ],
+   "element": 4,
+   "weights": [
+    0.4955120306152899,
+    0.004487969384709967,
+    0.49076473928685793,
+    0.009235260713141957
+   ],
+   "time": 1,
+   "value": 20.002566084871628,
+   "field": "temperature",
+   "unit": "degC",
+   "timeUnit": "s"
+  },
+  {
+   "point": [
+    5,
+    5,
+    20
+   ],
+   "element": 4,
+   "weights": [
+    0.4955120306152899,
+    0.004487969384709967,
+    0.49076473928685793,
+    0.009235260713141957
+   ],
+   "time": 2,
+   "value": 20.010638960572276,
+   "field": "temperature",
+   "unit": "degC",
+   "timeUnit": "s"
+  },
+  {
+   "point": [
+    5,
+    5,
+    20
+   ],
+   "element": 4,
+   "weights": [
+    0.4955120306152899,
+    0.004487969384709967,
+    0.49076473928685793,
+    0.009235260713141957
+   ],
+   "time": 3,
+   "value": 20.027338600398892,
+   "field": "temperature",
+   "unit": "degC",
+   "timeUnit": "s"
+  }
+ ],
+ "finalProbeTemperature": 20.027338600398892,
+ "checks": [
+  {
+   "name": "Browser transient thermal job started over connector with includeFields=true and settled",
+   "passed": true,
+   "detail": "jobId 607b1590-db75-4c24-9ed8-8ee076c42f7a; mesh 94 nodes / 218 elements; intermediate {\"retainedArtifacts\":4,\"retainedBytes\":10292,\"storageLimited\":false,\"sharedBytes\":10292,\"maxBytes\":64000000,\"queue\":{\"maxEvents\":8,\"maxBytes\":8000000,\"pendingEvents\":0,\"pendingBytes\":0,\"peakEvents\":1,\"peakBytes\":28302,\"accepted\":4,\"dropped\":0,\"droppedMeshes\":0,\"droppedFields\":0,\"consumerErrors\":0,\"notificationErrors\":0,\"latestAcceptedSequence\":8,\"latestCompletedSequence\":8,\"latestPolicy\":\"last-accepted-snapshot\",\"byteBasis\":\"conservative-structural-estimate\",\"includesInFlight\":true}}"
+  },
+  {
+   "name": "Catalog lists 1 mesh + 3 thermal artifacts with sha256 and sizes",
+   "passed": true,
+   "detail": "0001:mesh:5073B:00936e744f44, 0002:thermal:1748B:2fc72fd63086, 0003:thermal:1743B:b5f18306c8f1, 0004:thermal:1728B:7e13719048a4"
+  },
+  {
+   "name": "Point value at [5,5,20] at t=1 s is 20.002566",
+   "passed": true,
+   "detail": "t=1: 20.002566084871628"
+  },
+  {
+   "name": "Point value at [5,5,20] at t=2 s recorded",
+   "passed": true,
+   "detail": "t=2: 20.010638960572276"
+  },
+  {
+   "name": "Point value at [5,5,20] at t=3 s is 20.027339",
+   "passed": true,
+   "detail": "t=3: 20.027338600398892"
+  },
+  {
+   "name": "Final intermediate point equals the final displayed probe exactly",
+   "passed": true,
+   "detail": "artifact t=3 20.027338600398892 vs probe temperature 20.027338600398892"
+  },
+  {
+   "name": "Node pages up to 200 retrieved (offset 0 limit 200 -> 94 of 94; offset 90 -> 4 nodes)",
+   "passed": true,
+   "detail": "page total 94 for each thermal artifact"
+  },
+  {
+   "name": "Page limit 201 refused",
+   "passed": true,
+   "detail": "Invalid intermediate page"
+  },
+  {
+   "name": "Unknown artifact id refused",
+   "passed": true,
+   "detail": "Unknown intermediate artifact for this browser job"
+  },
+  {
+   "name": "Unknown job id refused",
+   "passed": true,
+   "detail": "Unknown job: 00000000-0000-4000-8000-000000000000"
+  },
+  {
+   "name": "After releaseJob, artifact read and catalog are refused",
+   "passed": true,
+   "detail": "Unknown job: 607b1590-db75-4c24-9ed8-8ee076c42f7a"
+  }
+ ],
+ "notVerified": [
+  "The job was started over the connector, not with the in-page #solve-run button.",
+  "Caller-side re-hash of artifact bytes was not performed; sha256 values are as reported by the browser.",
+  "The 64 MB shared budget and summary-continuation at limits were not exercised in Chrome.",
+  "Restart persistence, all-solver fields and a heap ceiling remain out of scope.",
+  "The 1 s and 3 s point values match the numbers quoted in the board acceptance; the board text came from a different earlier run, and no explanation of the agreement was investigated here.",
+  "Public HTTPS site / published build was not opened or tested; only http://127.0.0.1:5174 (local vite dev server).",
+  "Physical inputs are the built-in reference sample (not measured data); results are provisional reference values, not validated accuracy.",
+  "One Chrome profile on one machine; no other browsers, no mobile, no cross-origin pairing.",
+  "Page was driven through its connection UI and in-page button .click() calls via javascript_tool, not by real pointer events."
+ ],
+ "calls": [
+  {
+   "name": "inspect",
+   "method": "inspect",
+   "ok": true
+  },
+  {
+   "name": "preflight",
+   "method": "preflight",
+   "ok": true
+  },
+  {
+   "name": "startJob includeFields",
+   "method": "startJob",
+   "ok": true
+  },
+  {
+   "name": "jobArtifacts",
+   "method": "jobArtifacts",
+   "ok": true
+  },
+  {
+   "name": "summary 0001 mesh",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "summary 0002 thermal",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "point 0002",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page 0..200 0002",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page offset 90 0002",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "summary 0003 thermal",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "point 0003",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page 0..200 0003",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page offset 90 0003",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "summary 0004 thermal",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "point 0004",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page 0..200 0004",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "nodes page offset 90 0004",
+   "method": "jobArtifact",
+   "ok": true
+  },
+  {
+   "name": "reject limit 201",
+   "method": "jobArtifact",
+   "ok": false,
+   "error": "Invalid intermediate page"
+  },
+  {
+   "name": "reject unknown artifact",
+   "method": "jobArtifact",
+   "ok": false,
+   "error": "Unknown intermediate artifact for this browser job"
+  },
+  {
+   "name": "reject wrong job",
+   "method": "jobArtifact",
+   "ok": false,
+   "error": "Unknown job: 00000000-0000-4000-8000-000000000000"
+  },
+  {
+   "name": "show job result",
+   "method": "showJob",
+   "ok": true
+  },
+  {
+   "name": "final probe (displayed)",
+   "method": "probe",
+   "ok": true
+  },
+  {
+   "name": "release job",
+   "method": "releaseJob",
+   "ok": true
+  },
+  {
+   "name": "artifact after release (must be rejected)",
+   "method": "jobArtifact",
+   "ok": false,
+   "error": "Unknown job: 607b1590-db75-4c24-9ed8-8ee076c42f7a"
+  },
+  {
+   "name": "catalog after release",
+   "method": "jobArtifacts",
+   "ok": false,
+   "error": "Unknown job: 607b1590-db75-4c24-9ed8-8ee076c42f7a"
+  }
+ ]
+}
