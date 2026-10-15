@@ -2,7 +2,7 @@
 
 [日本語](../ui-state-separation.md)
 
-MOD1 is not complete. Only the saved-case list UI was separated from main.js. No React (or other framework) migration is claimed.
+MOD1 is not complete. The slices below separate parts of the UI from main.js. Its large template and full lifecycle are still together, and no React (or other framework) migration is claimed.
 
 ## What moved
 `src/ui/case-list-ui.js` (`createCaseListUi`) now owns, with unchanged behavior:
@@ -56,5 +56,17 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 
 `$` and `browserStudyControls` are injected; the module does not import main.js. 3D selection, `lastAnalysis`, jobs and the worker are untouched.
 `tests/ui-study-form.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
+
+## Slice 8: discipline controls
+`src/ui/discipline-controls-ui.js` (`createDisciplineControlsUi`) now owns discipline-specific visibility and control availability updates. Behavior is unchanged.
+
+- Shows the `[data-physics]` elements for the selected discipline and opens visible flow/Stokes `details` sections.
+- When a run is not active, enables or disables the run button based on fluid-domain mesh-only mode and unresolved CAD conditions.
+- Enables plastic load fractions only for structural plasticity and sets nonlinear step count to the number of entered load fractions.
+- Disables WebGPU/MFEM for unsupported disciplines or nonlinear/modal structural settings, and falls back to `wasm-pcg` if one of those solvers is already selected.
+- Disables and clears adaptive analysis for non-structural, nonlinear, modal or STL cases.
+
+The module receives the `$`, `querySelector` and `querySelectorAll` DOM functions, plus a `getState()` getter for the changing discipline, conditions, material, source model, run state and solver selection. It reads that state on every update and does not import main.js. main.js creates the updater and calls it from the existing update flow.
+`tests/discipline-controls-ui.test.mjs` adds four independent fake-DOM tests. Real Chrome on localhost also verified solver fallback when selecting thermal, opening flow settings, and disabling MFEM/WebGPU/adaptation for modal analysis; see the [source-snapshot evidence](../evidence/2026-10-15-mod1-discipline-ui-chrome.json). This does not verify analysis execution, every combination or public HTTPS pairing.
 
 Japanese: [../ui-state-separation.md](../ui-state-separation.md)

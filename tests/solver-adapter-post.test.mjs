@@ -316,5 +316,5 @@ test('post-processing (boundary transfer skip, assessments, temperature range) k
 });
 test('only discipline-specific adapters expose skipsBoundaryTransfer/postprocess',async()=>{
  const {getSolverAdapter,solverAdapterKinds}=await import('../src/solver-adapters/index.js');
- for(const k of solverAdapterKinds){const a=getSolverAdapter(k);assert.equal(a.skipsBoundaryTransfer,['creepingFlow','channelFlow'].includes(k)?true:undefined,k+' skipsBoundaryTransfer');assert.equal(typeof a.postprocess,k==='thermal'?'function':'undefined',k+' postprocess');}
+ for(const k of solverAdapterKinds){const a=getSolverAdapter(k);assert.equal(a.skipsBoundaryTransfer,['creepingFlow','channelFlow'].includes(k)?true:undefined,k+' skipsBoundaryTransfer');assert.equal(typeof a.postprocess,['thermal','structural'].includes(k)?'function':'undefined',k+' postprocess');}
 });
