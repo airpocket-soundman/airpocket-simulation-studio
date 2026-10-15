@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-16",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38814312964",
+  "headSha": "6429eeb73f0a1805301747287ba17795c05a100d",
+  "version": "0.44.0",
+  "jobs": [
+    {"name": "verify", "conclusion": "success", "jobId": 116695025028},
+    {"name": "deploy", "conclusion": "success", "jobId": 116697285250},
+    {"name": "verify-published", "conclusion": "success", "jobId": 116697391287}
+  ],
+  "verifyPublished": {
+    "passLines": 27,
+    "failLines": 0
+  },
+  "publishedManifest": {
+    "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/runtime-manifest.json",
+    "version": "0.44.0",
+    "revision": "6429eeb73f0a1805301747287ba17795c05a100d"
+  },
+  "tag": "release-6429eeb73f0a1805301747287ba17795c05a100d",
+  "tasksMovedToReleasedByThisRecord": ["SELECTEDREFINEMENT1", "MESHBOUNDARYPREFLIGHT1"],
+  "note": "Both tasks were merged to main in PR 40 (the full required CI verify passed on that head) and are part of this published candidate. Real-Chrome localhost evidence: docs/evidence/2026-10-15-input-operations-real-chrome.json (which also records a defect found and fixed before merge). MESHBOUNDARYPREFLIGHT1 reports boundary transfer only; a separate rigid-body/constraint-rank check is a later addition and is not claimed here. The publication-milestone gate is not closed by task status.",
+  "notVerified": [
+    "This record proves that the CI-verified candidate was deployed and passed the 27 published checks; it does not prove the V8 root cause is fixed (RUNTIMEWASM1).",
+    "Behavior on the published page itself was not exercised for these two operations."
+  ]
+}
