@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T12:58:19.762Z",
+  "updatedAt": "2026-10-15T13:52:56.736Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1777,7 +1777,7 @@
       "id": "HEADLESSLIFECYCLE1",
       "title": "解析APIの応答前にWorker終了を待機する",
       "titleEn": "Wait for Worker termination before settling headless analysis",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "RUNTIMEWASM1"
@@ -1786,9 +1786,9 @@
       "detailEn": "Headless success/failure/cancel/timeout promises settle only after termination. Preserve cleanup and original errors; prevent late replies and duplicate settlements. Diagnostic CLI gains targets/concurrency/runtime identity/source fingerprints/checkpoints. Shared-job cancellation may still become terminal before cleanup ends.",
       "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブの取消と終了追跡はJOBSETTLEMENT1で追加。ビルド・配信物26項目・SKILL成功。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。 既定Node24の全体ゲートは、利用者決定(2026-10-15・方針B)により「必須CI verifyのNode 24成功」で判定し、手元Windows Node 24.11.1の断続的V8 fatal(nodejs/node#66366)は既知問題として記録する。V8根治の証明ではない(RUNTIMEWASM1)。",
       "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. JOBSETTLEMENT1 adds shared-job cancellation and settlement tracking. Build,26distribution checks andSKILL passed. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
-      "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-15-node24-gate-policy.json",
-      "lastUpdate": "2026-10-15 方針B: 既定Node24ゲートは必須CI verifyのNode 24成功で判定(main 28回中25成功・失敗1・取消2、PR headは毎回verify成功)。V8 fatalの根治は未証明で別項目。検証済みへ。",
-      "lastUpdateEn": "2026-10-15 option B: the default Node 24 gate is judged by the required CI verify on Node 24 (28 main runs: 25 passed, 1 failed, 2 cancelled; PR heads passed verify every time). V8 root fix remains unproven and tracked separately. Moved to ready."
+      "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-8ea074a.json",
+      "lastUpdate": "2026-10-15 公開候補8ea074a(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。方針Bに基づくゲート判定。公開済みへ。V8根治は未証明で別項目。",
+      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately."
     },
     {
       "id": "JOBSETTLEMENT1",
@@ -2051,7 +2051,7 @@
       "id": "WAVECHANNELOBS1",
       "title": "周波数音響・掃引・流路の反復残差をLLMへ返す",
       "titleEn": "Expose harmonic/sweep acoustic and channel iteration observations to LLMs",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P3",
@@ -2059,11 +2059,11 @@
       ],
       "detail": "BiCGStabとchannel PCGの再帰相対残差、音響掃引の開始/完了を構造化し既存jobEventsへ接続。phase/solvePhase/周波数とresidualKindを宣言し独立true残差や途中場と区別する。",
       "detailEn": "Expose BiCGStab/channel-PCG recurrence residuals and acoustic sweep start/completion through existing jobEvents,declaring phase/solvePhase/frequency/residualKind without claiming independent true residuals or intermediate fields.",
-      "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。",
-      "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees.",
+      "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。 既定Node24ゲートは利用者決定(方針B)により必須CI verifyのNode 24成功で判定する(docs/evidence/2026-10-15-node24-gate-policy.json)。V8根治の証明ではない。",
+      "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees. The default Node 24 gate is judged, by the owner decision (option B), as the required CI verify passing on Node 24 (docs/evidence/2026-10-15-node24-gate-policy.json); not proof of a V8 root fix.",
       "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json; docs/evidence/2026-10-15-node24-gate-policy.json",
-      "lastUpdate": "2026-10-15 方針B(既定Node24ゲートはCI verifyのNode 24成功で判定)を適用すると主要ゲート条件は満たされる見込み。ただし本項目の再監査は未実施のため、修正中から検証中へ戻して再判定待ち。",
-      "lastUpdateEn": "2026-10-15 option B (the default Node 24 gate is judged by CI verify on Node 24) would satisfy the main gate clause; a re-audit of this task has not been done, so it moves from fixing back to checking pending re-judgment."
+      "lastUpdate": "2026-10-15 再判定: 関連15試験(音響・流路観測、wave-fluid系、MCP provenance)が成功。ゲート条件は方針B(CI verifyのNode 24成功)で満たす。実ブラウザ証跡(browser-wave-channel-observation)は既存。物理精度・終端前timing・V8根治は対象外。検証済みへ。",
+      "lastUpdateEn": "2026-10-15 re-judged: the 15 related tests (acoustic/channel observation, wave-fluid, MCP provenance) pass. The gate clause is met under option B (CI verify on Node 24). Real-browser evidence (browser-wave-channel-observation) already exists. Physical accuracy, pre-termination timing and the V8 root fix are out of scope. Moved to ready."
     },
     {
       "id": "PROCESSISOLATION1",
@@ -2140,7 +2140,7 @@
       "id": "BROWSERCONTRACTS1",
       "title": "全ライブ操作の契約を必要時にLLMへ返す",
       "titleEn": "Discover all live operation contracts on demand",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P0",
@@ -2151,9 +2151,9 @@
       "detailEn": "Discover schemas,scopes,revision fields,units,effects and limitations for all80live operations through shared API and session-free MCP,in pages of at most10/64KiB. Preserve validated thrown failure metadata across HTTP.",
       "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gateは方針Bで判定する(必須CI verifyのNode 24成功、手元の断続的V8 fatalは既知問題として記録: docs/evidence/2026-10-15-node24-gate-policy.json)。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
       "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
-      "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs; docs/evidence/2026-10-15-node24-gate-policy.json",
-      "lastUpdate": "2026-10-15 方針B: 既定runtime gateは必須CI verifyのNode 24成功で判定。実ブラウザ80契約→作成→拒否→修正と対象テストは成功済み。検証済みへ。V8根治は別項目。",
-      "lastUpdateEn": "2026-10-15 option B: the default runtime gate is judged by the required CI verify on Node 24. Real-browser 80-contract flow and targeted tests already passed. Moved to ready. V8 root fix tracked separately."
+      "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-8ea074a.json",
+      "lastUpdate": "2026-10-15 公開候補8ea074a(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。方針Bに基づくゲート判定。公開済みへ。V8根治は未証明で別項目。",
+      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately."
     },
     {
       "id": "EDITPREVIEW1",
