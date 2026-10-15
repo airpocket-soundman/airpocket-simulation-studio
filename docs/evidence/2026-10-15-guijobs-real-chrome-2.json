@@ -1,0 +1,70 @@
+{
+  "task": "GUIJOBS1",
+  "status": "passed-local-dev",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server",
+    "tab": "new tab in own tab group"
+  },
+  "scenario": "GUI paths exercised with in-page clicks and observed through connector listJobs/jobStatus after each step: runAnalysis (mesh-run/solve-run) for structural, thermal, acoustic and channel-flow demos; createExteriorDomain (#exterior-demo/#exterior-create); internalFluidExample (#internal-fluid-demo); createInternalDomain (#internal-create, which failed on the bar model).",
+  "checks": [
+    {
+      "name": "Structural route: demo -> #mesh-run -> #solve-run produce gui-origin mesh and solve jobs visible in listJobs/jobStatus",
+      "passed": true,
+      "detail": "baseline listJobs total 6; last status result.kind elastic 171 nodes / 428 elements, executionSettled true"
+    },
+    {
+      "name": "Thermal route: #thermal-demo -> mesh -> solve",
+      "passed": true,
+      "detail": "job ec96aa3c-956e-46cc-ac74-d9f9f429ae30 state succeeded result.kind thermal, 171 nodes / 428 elements; operation field reads \"elastic\""
+    },
+    {
+      "name": "Acoustic route: #acoustic-demo -> mesh -> solve",
+      "passed": true,
+      "detail": "job 567d76d5-8600-45eb-a3b5-0e64b01e8761 result.kind acoustic, 171 nodes / 428 elements"
+    },
+    {
+      "name": "Channel-flow route: #flow-demo -> mesh -> solve",
+      "passed": true,
+      "detail": "job 8c4757e8-e089-4aa5-a8c5-bada6a659df7 result.kind channelFlow, 1260 nodes / 5211 elements"
+    },
+    {
+      "name": "Internal-fluid-domain route (#internal-fluid-demo -> guiAnalysis mesh job)",
+      "passed": true,
+      "detail": "mesh job 5909a4cd-ccc3-443b-bb34-180ea0e3d00d 1773 nodes / 7470 elements, minQuality 0.3040955300334278"
+    },
+    {
+      "name": "Exterior-fluid-domain route (#exterior-demo and #exterior-create) produced gui mesh jobs",
+      "passed": true,
+      "detail": "listJobs after the exterior and internal-create clicks: mesh:succeeded, elastic:succeeded, mesh:succeeded, elastic:succeeded, mesh:succeeded, mesh:succeeded, mesh:succeeded, mesh:failed"
+    },
+    {
+      "name": "Failed GUI job is observable: #internal-create on the axial-bar demo fails because the seed is inside the solid",
+      "passed": true,
+      "detail": "jobStatus state failed, executionSettled true, error.code JOB_FAILED, message \"Internal fluid seed is inside the solid or on its boundary\", failure.code ANALYSIS_MESH_FAILED"
+    },
+    {
+      "name": "GUI history retention: listJobs never exceeds 8 gui jobs after 20+ GUI jobs; oldest are pruned",
+      "passed": true,
+      "detail": "totals per snapshot: baseline=6, thermal=8, acoustic=8, flow=8, internal-fluid-demo=8, after-exterior-internal=8"
+    },
+    {
+      "name": "All listed GUI jobs had origin \"gui\", executionSettled true and releaseAllowed true",
+      "passed": true,
+      "detail": "final listJobs page of 8"
+    }
+  ],
+  "observations": [
+    "The code has four guiAnalysis.run call sites: runAnalysis, createExteriorDomain, createInternalDomain, internalFluidExample; all four were clicked. #internal-create exercised only a failure case; the success case of the internal route is #internal-fluid-demo (same internal-domain pipeline).",
+    "Thermal and acoustic solve jobs report operation \"elastic\" while result.kind is thermal/acoustic."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Disconnect continuity and completion-time input comparison in Chrome",
+    "listJobs pagination beyond 8 entries",
+    "Intermediate-field retention/release and thermal 10/20/30 s fields in this run"
+  ]
+}

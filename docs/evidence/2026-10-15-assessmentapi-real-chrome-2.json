@@ -1,0 +1,92 @@
+{
+  "task": "ASSESSMENTAPI1",
+  "status": "partial",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server",
+    "tab": "new tab in own tab group"
+  },
+  "scenario": "#fatigue-demo -> #mesh-run -> #solve-run; connector getAssessment/evaluateAssessment; #fatigue-evaluate click; registered fracture toughness through #fracture-* inputs; re-meshed and re-solved; connector evaluate fatigue then fracture; #fracture-evaluate click.",
+  "checks": [
+    {
+      "name": "Fatigue demo + mesh + solve in the GUI, then connector getAssessment(fatigue) before evaluation",
+      "passed": true,
+      "detail": "before evaluation: {\"available\":false}"
+    },
+    {
+      "name": "Connector evaluateAssessment(fatigue, min -1, max 1, 1e5 cycles, none) returns life 1e6 cycles and damage 0.1",
+      "passed": true,
+      "detail": "{\"model\":\"stress-life\",\"minLoadFactor\":-1,\"maxLoadFactor\":1,\"meanStressCorrection\":\"none\",\"appliedCycles\":100000,\"minLifeCycles\":999999.9965183046,\"maxDamage\":0.10000000034816954} elementCount 428; units {\"stress\":\"Pa\",\"life\":\"cycles\",\"damage\":\"dimensionless\"}; provenance source \"Synthetic reference data only; not a certified material curve\""
+    },
+    {
+      "name": "Fatigue page: 428 elements, limit 5 returns 5, limit 201 refused",
+      "passed": true,
+      "detail": "limit 201: Invalid assessment page or revision"
+    },
+    {
+      "name": "Stale expectedResultRevision refused",
+      "passed": true,
+      "detail": "Displayed result revision conflict"
+    },
+    {
+      "name": "Result revision changes after evaluate (assessment metadata is part of the revision)",
+      "passed": true,
+      "detail": "before sha256:81565d2f214d after sha256:b7410bc55cb8"
+    },
+    {
+      "name": "GUI #fatigue-evaluate (min -1, max 1, 100000 cycles, none) displays shortest life 1.00000e+6 cycles, max damage 0.100000, max amplitude 1.00000 MPa, S-N source and test conditions",
+      "passed": true,
+      "detail": "Text read from #fatigue-summary after a real click. Matches the connector values."
+    },
+    {
+      "name": "Fracture toughness registered through GUI (#fracture-register, 0.02-0.03 MPa sqrt(m)); connector evaluate fatigue then fracture on the same result keeps both",
+      "passed": true,
+      "detail": "fatigue and fracture getAssessment both available at revision sha256:42efb9b7f8ab"
+    },
+    {
+      "name": "Fracture K reference: sigma 1 MPa, a 0.1-0.4 mm, Y=1 gives K 17724.5-35449.1 Pa sqrt(m) (sigma*sqrt(pi*a))",
+      "passed": true,
+      "detail": "{\"index\":400,\"normalStressPa\":999999.9998223643,\"intensityRangePaSqrtM\":[17724.53850590665,35449.0770118133],\"utilizationRange\":[0.5908179501968883,1.772453850590665],\"criticalFlawRangeMm\":[0.12732395451875084,0.28647889766718937],\"classification\":\"uncertain\"} summary {\"model\":\"lefm-mode-i\",\"options\":{\"flawSizeRangeMm\":[0.1,0.4],\"geometryFactorRange\":[1,1],\"geometrySource\":\"Infinite centre crack Y=1; synthetic dimensions\",\"crackNormal\":[0,0,1],\"residualNormalStressRangePa\":[0,0],\"stressAssumption\":\"Synthetic uniform uncracked axial stress\"},\"maxUtilizationRange\":[0.5908179513303619,1.7724538539910857],\"counts\":{\"below-toughness\":0,\"uncertain\":428,\"reaches-toughness\":0}}"
+    },
+    {
+      "name": "Fracture page offset 400 limit 200 returns the last 28 of 428 elements",
+      "passed": true,
+      "detail": "elements 28"
+    },
+    {
+      "name": "GUI #fracture-evaluate displays KI/KIC range 0.590818 -> 1.77245 and 0/428/0 classification counts, with toughness source and flaw basis",
+      "passed": true,
+      "detail": "Matches summary.maxUtilizationRange [0.5908179513303619, 1.7724538539910857] and counts uncertain 428 from the connector."
+    },
+    {
+      "name": "Unknown option key refused",
+      "passed": true,
+      "detail": "Invalid assessment options"
+    },
+    {
+      "name": "Fracture evaluate on a result without registered fracture data refused",
+      "passed": false,
+      "detail": "Not isolated: the attempt used a stale revision, so the refusal was \"Displayed result revision conflict\", not the missing-data check."
+    },
+    {
+      "name": "Second evaluate with identical options and omitted options refused (progress.json wording: overwrite/omitted-option refusal)",
+      "passed": false,
+      "detail": "Observed acceptance: re-evaluation replaced the stored assessment; omitted options were accepted with defaults."
+    }
+  ],
+  "observations": [
+    "Re-evaluating fatigue at the current revision with identical options was accepted (second evaluateAssessment succeeded and replaced the stored fatigue assessment); it was not refused as an overwrite.",
+    "evaluateAssessment(fatigue) with options omitted was accepted using defaults (minLoadFactor 0, maxLoadFactor 1, appliedCycles 1, life 3999999.99, damage 2.5e-7); it was not refused. This differs from the progress.json wording and should be reconciled by the owner of ASSESSMENTAPI1 (the real-MCP test may cover a different omission).",
+    "After connector evaluateAssessment the GUI summary panels (#fatigue-summary, #fracture-summary) stayed empty until the GUI evaluate button was clicked; the connector result is not rendered in the GUI panel on its own.",
+    "Fatigue summary panel innerText is empty while its details element is closed; textContent shows it."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Refusal of fracture evaluation without registered toughness in Chrome",
+    "Refusal of overwrite/omitted-option as worded in progress.json (observed behaviour is acceptance)",
+    "Mixed-mode, residual-stress or non-structural inputs"
+  ]
+}

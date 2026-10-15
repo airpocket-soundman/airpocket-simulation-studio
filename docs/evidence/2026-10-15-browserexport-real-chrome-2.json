@@ -1,0 +1,78 @@
+{
+  "task": "BROWSEREXPORT1",
+  "status": "partial",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server",
+    "tab": "new tab in own tab group"
+  },
+  "scenario": "Fatigue/fracture elastic result displayed; connector exportCapabilities, startExport png and webm with polling, paged exportArtifact with SHA-256 verification, cancelExport mid-run, releaseExport.",
+  "checks": [
+    {
+      "name": "exportCapabilities reports png/webm true, mp4/gif false, 32 MiB, 64 KiB chunks, 24 fps realtime, frameCountGuaranteed false",
+      "passed": true,
+      "detail": "{\"schemaVersion\":1,\"png\":true,\"webm\":true,\"mp4\":false,\"gif\":false,\"animations\":[\"orbit\",\"deformation\",\"time\",\"slice\"],\"timeSelection\":\"stored-acoustic-frames-only\",\"recording\":\"realtime\",\"targetFrameRate\":24,\"frameCountGuaranteed\":false,\"maxSeconds\":15,\"maxArtifactBytes\":33554432,\"maxArtifactChunkBytes\":65536}"
+    },
+    {
+      "name": "PNG export via startExport/exportStatus/exportArtifact: 2 pages, assembled bytes equal declared totalBytes, SHA-256 equal to declared",
+      "passed": true,
+      "detail": "bytes 105846 pages 2 sha256 0c895355258e1d9bba5dfda0b594bbecaac8346e715606f7245cd7a6f447ed6d PNG signature 89504e470d0a1a0a0000000d49484452"
+    },
+    {
+      "name": "WebM (orbit, 2 s) export: assembled bytes equal declared, SHA-256 equal, EBML header",
+      "passed": true,
+      "detail": "bytes 12505 pages 1 sha256 3b1b91d4f5451ccdea96117d98b37b8f70519624a49aefa12885ea2a5be0e589 mime video/webm;codecs=vp9"
+    },
+    {
+      "name": "WebM 1 s foreground export is hash-consistent but essentially empty",
+      "passed": true,
+      "detail": "bytes 110 sha256 34625a59ca017ae414573bcb4a21464514f695d9806955fa676098939005795c; byte scan found 0 Matroska Cluster elements, i.e. no video frames (the 2 s file has 2 Clusters). The 1 s case does not produce a usable video here."
+    },
+    {
+      "name": "WebM 1 s with a second tab opened: same artifact bytes and hash",
+      "passed": true,
+      "detail": "bytes 110; document.visibilityState of the app tab stayed \"visible\" the whole time, so true background-tab throttling was NOT reproduced"
+    },
+    {
+      "name": "cancelExport on a running 12 s WebM: state cancelled, artifact refused, result view and setup view restored exactly",
+      "passed": true,
+      "detail": "progress at cancel {\"fraction\":0.3183370833336764}; camera moved during export to [-24.7241668057,41,99.6773111225] and was restored to [61,41,84]; artifact error \"Visual export artifact is unavailable\""
+    },
+    {
+      "name": "releaseExport releases each finished job",
+      "passed": true,
+      "detail": "released:true for png, webm and the 1 s jobs"
+    }
+  ],
+  "artifacts": {
+    "png": {
+      "bytes": 105846,
+      "sha256": "0c895355258e1d9bba5dfda0b594bbecaac8346e715606f7245cd7a6f447ed6d"
+    },
+    "webm2s": {
+      "bytes": 12505,
+      "sha256": "3b1b91d4f5451ccdea96117d98b37b8f70519624a49aefa12885ea2a5be0e589"
+    },
+    "webm1sForeground": {
+      "bytes": 110,
+      "sha256": "34625a59ca017ae414573bcb4a21464514f695d9806955fa676098939005795c"
+    },
+    "webm1sSecondTabOpen": {
+      "bytes": 110,
+      "sha256": "34625a59ca017ae414573bcb4a21464514f695d9806955fa676098939005795c"
+    }
+  },
+  "observations": [
+    "The job state name is \"completed\" (not \"succeeded\"); artifact metadata is under artifact.{mimeType,name,totalBytes,sha256,maxChunkBytes}.",
+    "Artifact bytes are not committed to the repository; only sizes and hashes are recorded."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Genuine background-tab or minimised-window behaviour (the tool kept the app tab visible)",
+    "Fixed-frame export, MP4/GIF, persistence (declared unfinished)",
+    "Time/slice/deformation animations and acoustic stored-frame export"
+  ]
+}
