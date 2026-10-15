@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-10-15",
+  "auditRevision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+  "publicVerification": {
+    "version": "0.44.0",
+    "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7",
+    "workflowRun": 38699217923,
+    "workflowUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38699217923",
+    "conclusion": "success",
+    "jobs": { "verify": "success", "deploy": "success", "verify-published": "success" },
+    "tests": { "total": 1137, "passed": 1134, "failed": 0, "skipped": 3 },
+    "publishedReport": {
+      "status": "passed",
+      "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7",
+      "checks": 28,
+      "sha256": "8882fa9d45e876bbc03435bc140b4571949834c1675719ef9098e6b791c3e677",
+      "progressHistoryCandidate": "passed"
+    },
+    "artifactNames": [
+      "published-verification-38699217923-1",
+      "verification-38699217923-1",
+      "github-pages"
+    ]
+  },
+  "statusSnapshots": {
+    "publishedV044Evidence": {
+      "sourceRevision": "5c6747624994a12f5dc3c61882dea2049d692839",
+      "released": 83,
+      "ready": 27,
+      "evidence": "docs/evidence/2026-10-15-v044-publication.json"
+    },
+    "auditedMain": {
+      "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+      "released": 83,
+      "ready": 28,
+      "checking": 16,
+      "queued": 25,
+      "building": 9,
+      "fixing": 1,
+      "taskCount": 162,
+      "note": "PR #33 moved SKILLROUTING1 from checking to ready after public revision cf1e165; its source status is not yet represented by that deployed revision."
+    },
+    "recommendation": "Promoting the nine audited tasks on current main would change source counts to 92 released and 19 ready. The currently published progress snapshot remains at 83 released until a later progress update is deployed."
+  },
+  "auditMethod": {
+    "checks": [
+      "Read each current acceptance and evidence reference in src/progress.json.",
+      "Verified each listed evidence file and associated tests exist in the audited tree.",
+      "Checked implementation commits are ancestors of public revision cf1e165.",
+      "Confirmed the exact published workflow for cf1e165 completed verify, deploy and verify-published successfully."
+    ],
+    "publicScopeRule": "PUBLICHTTPS1 is tracked independently; its unresolved pairing is not imposed on tasks whose own acceptance and evidence do not require published-HTTPS pairing.",
+    "decisionMeaning": "promote-to-released is an audit recommendation for the root to apply in progress.json; this file does not update task statuses."
+  },
+  "tasks": [
+    {
+      "id": "RUNTIMEIDENTITY1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "db69d7c76e244ce76b43a0c9eb4e0227a0ae3c69",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/runtime-identity.js",
+        "scripts/source-build-identity.mjs",
+        "tests/runtime-identity.test.mjs",
+        "tests/source-build-identity.test.mjs",
+        "tests/headless-runtime-identity.test.mjs",
+        "tests/browser-runtime-identity.test.mjs",
+        "tests/cases.test.mjs",
+        "tests/case-operations.test.mjs",
+        "tests/case-view.test.mjs",
+        "docs/evidence/2026-10-15-runtime-identity.json",
+        "docs/evidence/2026-10-15-runtime-identity-browser.json",
+        "docs/evidence/2026-10-15-runtime-identity-browser-case.json"
+      ],
+      "proofSummary": "Legacy identity remains unstamped; malformed identity is refused; save/restore/list, Node thread/process and real browser Worker paths are covered; kernel/Gmsh/MFEM hashes and identity preservation across display are evidenced. Latest published verify suite passes.",
+      "limits": [
+        "GPU fallback is covered by injected-Worker tests, not a physical GPU run.",
+        "Runtime identity is not a signature, execution attestation or physical-accuracy claim."
+      ],
+      "reason": "The task's listed compatibility, refusal, archive, runtime-path and asset-hash conditions are evidenced. Public HTTPS pairing is separately tracked and is not an acceptance condition here."
+    },
+    {
+      "id": "CONNECTIONDIAGNOSTICS1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "e59f59d58bb5dbd9ace0bef3fa6897300be73993",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/browser-connection-diagnostics.js",
+        "tests/browser-connection-diagnostics.test.mjs",
+        "tests/browser-connection-errors.test.mjs",
+        "tests/browser-bridge-diagnostics.test.mjs",
+        "docs/evidence/2026-10-15-browser-diagnostics.json",
+        "docs/evidence/2026-10-15-connection-diagnostics-local.jpg"
+      ],
+      "proofSummary": "Origin/Host, authentication and scope separation, response/deadline limits, stale-response handling, bilingual diagnostics and real stdio compatibility are covered by tests; local UI health reachability is evidenced. Latest published verify suite passes.",
+      "limits": [
+        "Published HTTPS pairing remains unverified and is tracked by PUBLICHTTPS1."
+      ],
+      "reason": "The task-specific local diagnostic and protocol acceptance is evidenced. The unresolved public pairing belongs to the independent PUBLICHTTPS1 task and must not block this status."
+    },
+    {
+      "id": "PROVENANCECONTRACT1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "72d277ed331867df9be14da94c41964d36180063",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/evidence-operation-schema.js",
+        "tests/evidence-operation-schema.test.mjs",
+        "tests/mcp-evidence-operation-schema.test.mjs",
+        "tests/mcp-typed-operation-schema.test.mjs",
+        "tests/mcp-input-workflow.test.mjs",
+        "tests/project-edit-preview.test.mjs",
+        "docs/evidence/2026-10-15-agent-contract-validation.json"
+      ],
+      "proofSummary": "Real stdio contract discovery, valid diagnosis repair, malformed/stale provenance refusal without source mutation, page bounds and MCP compatibility are covered. Latest public verify ran the complete test suite successfully.",
+      "limits": [
+        "The recorded default-Windows Node 24 full-suite V8 fatal remains a platform/runtime limitation; it is not evidence of this task's feature failing and is not declared fixed."
+      ],
+      "reason": "Task acceptance is directly covered and the exact deployed source revision passes CI; no full-suite clause exists in this task's acceptance."
+    },
+    {
+      "id": "CASEARCHIVEVALIDATION1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "db69d7c76e244ce76b43a0c9eb4e0227a0ae3c69",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/cases.js",
+        "tests/mcp-saved-case-validation.test.mjs",
+        "docs/evidence/2026-10-15-agent-contract-validation.json"
+      ],
+      "proofSummary": "Actual stdio validation accepts legacy and identity-bearing archives; rejects malformed fields, mesh connectivity and runtime identity; verifies source archive bytes remain unchanged.",
+      "limits": [
+        "No physical result is recomputed by archive validation; this is outside the acceptance."
+      ],
+      "reason": "Each stated archive compatibility, refusal and source-preservation clause has direct MCP test coverage included in the public revision."
+    },
+    {
+      "id": "OBSERVATIONQUEUE1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "72d277ed331867df9be14da94c41964d36180063",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/job-observation-queue.js",
+        "src/analysis-client.js",
+        "tests/job-observation-queue.test.mjs",
+        "docs/evidence/2026-10-15-agent-contract-validation.json",
+        "docs/evidence/2026-10-15-job-event-bounds.json"
+      ],
+      "proofSummary": "Slow consumers, oversize/drop accounting, cancellation/drain/close, final-result invariance and visible limits are tested; the worker observation host queue is explicitly bounded by its own documented policy.",
+      "limits": [
+        "Whole Worker transport backpressure and total JavaScript heap bounds remain outside this task's acceptance."
+      ],
+      "reason": "The task explicitly excludes whole Worker transport/heap guarantees; its host-side queue contract and tests are satisfied."
+    },
+    {
+      "id": "PLANARROTATION1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "72d277ed331867df9be14da94c41964d36180063",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/main.js",
+        "src/planar-region.js",
+        "tests/planar-rotation-contract.test.mjs",
+        "tests/oblique-planar.test.mjs",
+        "tests/planar-region.test.mjs",
+        "docs/evidence/2026-10-15-agent-contract-validation.json"
+      ],
+      "proofSummary": "The production GUI selection handler uses planarRegionFromEuler; tests verify that helper's matching frame, API persistence, real stdio MCP refusal without mutation and preview/commit preservation, plus legacy unrotated axial regions. Published runtime checks also pass exact planar and oblique planar patch cases.",
+      "limits": [
+        "The automated integration test uses the production geometry helper and actual API/MCP path rather than a pointer-driven browser click-through; no broader UI/physical-accuracy claim is made."
+      ],
+      "reason": "The saved GUI descriptor path is represented by the same production helper used by the GUI, while the API/MCP and legacy-region clauses have direct tests."
+    },
+    {
+      "id": "JOBEVENTBYTES1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "1d47ce9ef113546daef10abeb5de842c54789352",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/job-event-payload.js",
+        "src/analysis-jobs.js",
+        "tests/job-event-payload.test.mjs",
+        "tests/analysis-jobs-event-bytes.test.mjs",
+        "tests/mcp-job-event-bytes.test.mjs",
+        "docs/evidence/2026-10-15-job-event-bounds.json"
+      ],
+      "proofSummary": "Structured failures and ordinary metrics, safe property handling, oversize gaps, byte eviction, cursors, cancellation/terminal invariance and actual stdio/HTTP/API JSON-value limits are tested and measured. Latest CI full suite passes.",
+      "limits": [
+        "The measured bound applies to the jobEvents JSON value, not JSON-RPC wrappers, Worker transport or total JavaScript heap."
+      ],
+      "reason": "All specified event payload, retention, cursor, lifecycle and API/MCP value-size conditions are evidenced; excluded wrapper and Worker limits remain explicitly excluded."
+    },
+    {
+      "id": "DEVINSIGHTS1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "9a093609a1dc3845344cd85514667d24a9de2560",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "docs/progress-dashboard.md",
+        "src/product-estimate.js",
+        "src/progress-history.js",
+        "tests/progress-history.test.mjs",
+        "tests/progress-insights-mcp.test.mjs",
+        "tests/published-progress.test.mjs",
+        "tests/published-history.test.mjs",
+        "docs/evidence/2026-10-15-progress-dashboard.json",
+        "docs/evidence/2026-10-15-progress-dashboard-ja.png",
+        "docs/evidence/2026-10-15-progress-dashboard-en.png",
+        "docs/evidence/2026-10-15-progress-dashboard-narrow.png"
+      ],
+      "proofSummary": "Revision/history matching, missing-data preservation, estimate/unknown/subjective ranges, MCP refusal/compatibility and real-browser JP/EN keyboard/narrow layout are evidenced. The exact public verification for cf1 reports progress-history-candidate passed.",
+      "limits": [
+        "Completion remains a subjective fixed-weight estimate; unknown acceptance criteria and P0-P6 work are not declared complete."
+      ],
+      "reason": "Task-specific UI, data-integrity and publication checks are all covered, including deployment and the published-history runtime check."
+    },
+    {
+      "id": "CASECOMPARISON1",
+      "currentStatus": "ready",
+      "decision": "promote-to-released",
+      "implementationRevision": "a24aaed5b10cb34e26c565115c5c7179ff05bcea",
+      "includedInPublicRevision": true,
+      "acceptanceEvidence": [
+        "src/case-comparison.js",
+        "tests/case-comparison.test.mjs",
+        "tests/browser-case-comparison.test.mjs",
+        "tests/mcp-case-comparison.test.mjs",
+        "docs/evidence/2026-10-15-case-comparison-local-runtime.json",
+        "docs/evidence/2026-10-15-case-comparison-browser-qa.json"
+      ],
+      "proofSummary": "One-to-eight case rules, common global-point sampling, raw values/units, explicit frames, incompatibility diagnostics, whole-request refusal, lease checks and 64 KiB bound are covered by API/browser/MCP tests. Real Chrome localhost QA is recorded; public verify-published reports saved-case-comparison-and-point-remeasurement passed.",
+      "limits": [
+        "Browser QA compared identical inputs and does not establish physical accuracy, equal-input independence or cross-mesh correspondence."
+      ],
+      "reason": "The exact task acceptance and public runtime gate are evidenced. Published HTTPS pairing is a separate task; the actual comparison runtime check passed."
+    }
+  ],
+  "overallDecision": {
+    "promoteToReleased": 9,
+    "hold": 0,
+    "summary": "All nine audited ready tasks have acceptance-aligned evidence, their implementation commits are included in public revision cf1e165, and the exact public workflow completed verify/deploy/verify-published successfully. No candidate is held for the independent PUBLICHTTPS1 condition.",
+    "notClaimed": [
+      "No progress.json status was changed by this audit.",
+      "The audit itself has not been deployed; a subsequent progress update and deployment are required for the public released count to rise.",
+      "Historical local Node 24 V8 fatals are not declared fixed by a successful Linux publication run.",
+      "No extra acceptance criterion or physical-validity claim is inferred."
+    ]
+  }
+}
