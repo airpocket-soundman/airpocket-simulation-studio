@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T13:52:56.736Z",
+  "updatedAt": "2026-10-15T14:17:56.153Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1382,7 +1382,7 @@
       "id": "BROWSERBRIDGE1",
       "title": "自分のLLMを許可付きブラウザセッションへ接続",
       "titleEn": "Connect the user LLM to a scoped browser session",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "API1",
@@ -1391,11 +1391,11 @@
       ],
       "detail": "Origin/Host/Bearer検査付き一時loopback。確認/編集/計算/表示を選んで許可し、13意味的操作をMCPへ公開。切断は接続経由の計算を中止。",
       "detailEn": "Temporary loopback with Origin/Host/Bearer checks; explicit inspect/edit/analyze/view grants expose 13 semantic MCP operations. Disconnect cancels connection-owned jobs.",
-      "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。全GUIジョブ統合は残る。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Full GUI job integration remains pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md; tests/browser-bridge-diagnostics.test.mjs",
-      "lastUpdate": "2026-10-15 再々判定: 全GUIジョブ統合は実Chrome証跡guijobs-real-chrome-2で充足。切断継続の実Chrome確認と、編集/Worker解析/表示変更の専用実ブラウザ証跡が未保存のためchecking維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: full GUI job integration now covered by real-Chrome guijobs-real-chrome-2. Stays checking: real-Chrome disconnect continuity and a dedicated committed real-browser file for edit/Worker solve/view change are missing. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。全GUIジョブ統合は実Chrome(localhost、2026-10-15)で確認(guijobs-real-chrome-2)。切断時に接続由来のジョブは77msで取消され、GUI開始のジョブは継続して成功、確認専用セッションはedit/startJob/setResultViewを拒否。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Full GUI job integration remains pending. Published-HTTPS verification is tracked in PUBLICHTTPS1. All GUI job routes were confirmed in real Chrome on localhost (2026-10-15, guijobs-real-chrome-2). On disconnect a connector-started job was cancelled within 77 ms while a GUI-started job kept running and succeeded; an inspect-only session was refused edit, startJob and setResultView.",
+      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-browserbridge-real-chrome-5.json; docs/evidence/2026-10-15-guijobs-real-chrome-2.json",
+      "lastUpdate": "2026-10-15 実Chrome(localhost)で版照合edit→startJob→イベント→showJob→setResultView→DOM表示(0.04mm)、切断時の接続由来ジョブ取消(77ms)とGUIジョブ継続、確認専用セッションの拒否を7/7確認。公開HTTPSはPUBLICHTTPS1で検証済み(確認専用)。検証済みへ。",
+      "lastUpdateEn": "2026-10-15 Real Chrome (localhost): revision-checked edit → startJob → events → showJob → setResultView → DOM (0.04 mm), connector job cancelled on disconnect (77 ms) while the GUI job continued, inspect-only session refused: 7/7. Published HTTPS is covered by PUBLICHTTPS1 (inspect only). Moved to ready."
     },
     {
       "id": "PRINTMEASURE1",
@@ -1468,18 +1468,18 @@
       "id": "RESULTCONTROL1",
       "title": "LLMが結果表示と測定を同じ状態で操作する",
       "titleEn": "Let the LLM control and sample the displayed result",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "BROWSERBRIDGE1"
       ],
       "detail": "結果版を照合し、表示量・保存時刻・モード・レイヤー・固定範囲・カメラを取得/変更。点測定は表示フレーム/モードを使用。",
       "detailEn": "Versioned field, stored time/mode, layer, fixed-range and camera reads/updates. Probes use the displayed frame/mode.",
-      "acceptance": "実MCP/Chromeで固定範囲・カメラ再適用・表示量測定・不正版拒否を確認(証跡あり)。時刻/モード測定と日英凡例の実Chrome確認が残る。名前付き永続ビューとPNG/WebM出力は別タスク(NAMEDVIEWS1/BROWSEREXPORT1)で確認済み。公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "Real MCP/Chrome verified range/camera replay, displayed-field probe and revision refusal (evidence committed). Real-Chrome verification of stored time/mode probes and localized legends remains. Named persisted views and PNG/WebM export are verified under NAMEDVIEWS1/BROWSEREXPORT1. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/evidence/2026-10-15-resultcontrol-real-chrome.json",
-      "lastUpdate": "2026-10-15 再監査: 関連11ファイル63件成功、実Chrome 11/11(固定範囲/カメラ/不正版拒否/表示量測定)。名前付きビューと PNG/WebM は別タスクで実Chrome確認済み。時刻/モード測定と日英凡例の実Chrome証跡は未コミットのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: 11 related files, 63 pass; real Chrome 11/11 (range/camera/stale refusal/displayed-field probe). Named views and PNG/WebM now verified in real Chrome under other tasks. Real-Chrome evidence for stored time/mode probes and JA/EN legends is not committed, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "実MCP/Chromeで固定範囲・カメラ再適用・表示量測定・不正版拒否を確認(証跡あり)。時刻/モード測定(過渡音響61フレームの0/10/30/60、モーダル2モード)と固定範囲の日英凡例は実Chrome(localhost、2026-10-15)で確認。保存時刻外・範囲外のframe/modeは拒否され補間しない。凡例の単位語(instantaneous、normalized mode)は日英とも英語。名前付き永続ビューとPNG/WebM出力は別タスク(NAMEDVIEWS1/BROWSEREXPORT1)で確認済み。公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "acceptanceEn": "Real MCP/Chrome verified range/camera replay, displayed-field probe and revision refusal (evidence committed). Real-Chrome verification of stored time/mode probes and localized legends remains. Named persisted views and PNG/WebM export are verified under NAMEDVIEWS1/BROWSEREXPORT1. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. Stored time and mode probes (transient acoustic frames 0/10/30/60 of 61, two modal modes) and the fixed-range legend in Japanese and English were confirmed in real Chrome on localhost (2026-10-15); off-stored-time and out-of-range frame/mode are refused with no interpolation. Unit words such as \"instantaneous\" and \"normalized mode\" are English in both locales.",
+      "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/evidence/2026-10-15-resultcontrol-real-chrome.json; docs/evidence/2026-10-15-resultcontrol-real-chrome-5.json",
+      "lastUpdate": "2026-10-15 実Chromeで時刻/モード測定(frame 0/10/30/60、モード2件、範囲外・補間なし拒否)と日英の固定範囲凡例を7/7確認。注意: 単位語は日英とも英語。モーダルのデモ後に過渡音響デモを解くと失敗する現象を観測(別途調査中)。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-15 Real Chrome confirmed stored time/mode probes (frames 0/10/30/60, two modes, out-of-range and no-interpolation refusals) and the JA/EN fixed-range legends: 7/7. Caveat: unit words are English in both locales. A failure when solving the transient acoustic demo after the modal demo was observed (being investigated separately). Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "CASEOPS1",
@@ -1547,9 +1547,9 @@
       "detailEn": "Full version1 case JSON via base64 pages up to64 KiB; whole-hash/archive-revision/all-case validation before atomic replacement. Shared100000000-byte/four-transfer retention, disconnect cleanup and idempotent commit retries.",
       "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。Node接続アダプターでの検証であり実画面・大規模性能測定は未完了。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser and large-case performance remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md; tests/browser-case-archive-session.test.mjs",
-      "lastUpdate": "2026-10-15 再監査: 関連テスト成功。実Chromeでのケース集往復と大規模性能の証跡なしのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: related tests pass. No real-Chrome archive round-trip or large-case performance evidence, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md; tests/browser-case-archive-session.test.mjs; docs/evidence/2026-10-15-casearchive-real-chrome-5.json",
+      "lastUpdate": "2026-10-15 実Chromeで2ケース(1,426,548バイト・22分割)の書出し→再読込→取込を7/7確認(ハッシュ一致、archiveRevision・ケース版同一、再書出しはJSONとして完全一致でバイト列は別、誤ハッシュ・古い版は拒否)。大規模ケースの性能測定は未実施(Node側容量測定のみ)のため検証中を維持。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-15 Real Chrome confirmed an export of two cases (1,426,548 bytes, 22 chunks) → reload → import: 7/7 (hash match, same archiveRevision and case revisions, re-export deeply equal as JSON with different raw bytes, wrong hash and stale revision refused). Large-case performance was not measured (Node-side capacity only), so it stays checking. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "ASSESSMENTAPI1",
@@ -1588,7 +1588,7 @@
       "id": "CADUPDATEAPI1",
       "title": "CAD更新をLLMから版付きで照合・適用する",
       "titleEn": "Revisioned CAD update preview/application for the user LLM",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "AGENTEDIT1",
@@ -1596,11 +1596,11 @@
       ],
       "detail": "入力・置換版を照合してSTEP更新をプレビュー/適用。最大50条件の要約、未解決領域の再選択、根拠再確認を維持。保存ファイル向けMCP2ツールと接続2操作。",
       "detailEn": "Preview/apply STEP replacement using input/replacement revisions, compact50-condition pages, unresolved-region reselection and provenance reset. Two saved-file MCP tools and two connector methods.",
-      "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実画面は未確認。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser remains unverified. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md; tests/browser-cad-update-session.test.mjs",
-      "lastUpdate": "2026-10-15: cad-update-operations, mcp-cad-update and browser-cad-update-session tests pass; real-screen check still unverified. ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15: cad-update-operations, mcp-cad-update and browser-cad-update-session tests pass; real-screen check still unverified. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実Chrome(localhost、2026-10-15)で実STEP(10x10x40箱)の取込→previewCadUpdate(一致2、面を移動すると保留1)→applyCadUpdate(適用後の最大zが50、再適用・旧版・非Float32・kind欠落は拒否)→未解決領域のままの解析開始は拒否を確認。GUIボタン操作と出所リセットは未確認。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser remains unverified. Published-HTTPS verification is tracked in PUBLICHTTPS1. Real Chrome on localhost (2026-10-15): STEP import, previewCadUpdate (2 matched; one pending when a face moves), applyCadUpdate (max z 50 afterwards; replay, stale revisions, non-Float32 positions and a missing kind refused) and a refused analysis start while regions are unresolved. The GUI button flow and provenance reset were not exercised.",
+      "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md; tests/browser-cad-update-session.test.mjs; docs/evidence/2026-10-15-cadupdate-real-chrome-5.json",
+      "lastUpdate": "2026-10-15 実Chromeで接続経由のCAD更新(プレビュー・適用・拒否各種・未解決領域での解析拒否)を9/9確認。注意: GUIボタン操作と出所リセットは未確認、置換プロジェクトにkind:\"cad\"の手動付加が必要だった(studio_import_projectの出力に欠落)。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-15 Real Chrome confirmed the connector CAD update path (preview, apply, refusals, refused analysis with unresolved regions): 9/9. Caveats: the GUI button flow and provenance reset were not exercised; kind:\"cad\" had to be added by hand to the replacement project (missing from studio_import_project output). Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "CFDRESEARCH1",

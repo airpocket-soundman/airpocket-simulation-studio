@@ -1,0 +1,53 @@
+{
+ "task": "CASEARCHIVE1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "8ea074ae981c470a4e47e0868057afe3384c490a",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; scopes inspect/edit/analyze/view; own new tab"
+ },
+ "checks": [
+  {
+   "name": "Save two Japanese-named cases through the connector (caseSave)",
+   "passed": true,
+   "detail": "\"ev5 過渡音場 A\" (acousticTransient, from #transient-acoustic-demo + #solve-run) and \"ev5 固有振動 B\" (modal); caseList archiveRevision sha256:9762af21... with 2 cases"
+  },
+  {
+   "name": "caseArchiveExport read in 22 chunks of up to 65,536 bytes; assembled hash matches declared hash",
+   "passed": true,
+   "detail": "totalBytes 1,426,548; declared sha256:bb14c506abe7a31fb0bd2bd0aafdad75fbe321200e45bb4f519f916b257c958d equals the SHA-256 of the assembled bytes; archive keys version,cases; each case {name,output}; transfer released"
+  },
+  {
+   "name": "Page reload empties the in-page case list (cases are not persisted across reload)",
+   "passed": true,
+   "detail": "after navigating to /?lang=ja and re-pairing, caseList returned 0 cases with the empty-collection archiveRevision sha256:95f1436c..."
+  },
+  {
+   "name": "caseArchiveImport + chunked Write + Commit restores both cases after reload",
+   "passed": true,
+   "detail": "begin with expectedArchiveRevision from caseList, totalBytes and sha256; 22 chunks written; commit returned 2 cases with the same names/kinds; archiveRevision after import sha256:9762af21... equals the pre-reload value and per-case revisions are identical (bd19c6a0..., b88682dc...); caseIds were reissued (64903b21->e23a4889, 7535382a->08d3cdc7)"
+  },
+  {
+   "name": "Idempotent commit retry",
+   "passed": true,
+   "detail": "a second caseArchiveCommit on the same transferId returned ok with the same archiveRevision and case list; the list still held 2 cases"
+  },
+  {
+   "name": "Round-trip JSON equality of the re-exported archive",
+   "passed": true,
+   "detail": "parsed JSON of the re-export is deeply equal to the original (0 differing paths, Japanese names intact). The raw bytes are NOT identical: same length 1,426,548 but different object key order (re-export sha256:2c353297... vs original sha256:bb14c506...), so byte/hash equality of the file does not hold, only semantic equality and equal archiveRevision/case revisions"
+  },
+  {
+   "name": "Refusal paths leave the case list unchanged",
+   "passed": true,
+   "detail": "wrong declared sha256 -> commit \"Archive import hash mismatch\"; stale expectedArchiveRevision is accepted at begin but commit failed \"Case collection changed; list cases again\"; caseList caseIds and archiveRevision unchanged after both"
+  }
+ ],
+ "notVerified": [
+  "Published HTTPS page (PUBLICHTTPS1) - localhost only",
+  "Large-archive performance: only a 1.4 MB archive of two cases was transferred; the 100 MB / four-transfer limits were not exercised",
+  "Disconnect cleanup of an in-progress import in real Chrome was not exercised here",
+  "Case persistence across reload is not provided by the app; the round trip relies on the archive file"
+ ]
+}
