@@ -2,11 +2,11 @@
   "version": 1,
   "updatedAt": "2026-10-15T06:03:29.205Z",
   "release": {
-    "version": "v0.43",
-    "date": "2026-10-14",
-    "testCount": 242,
-    "description": "3MF/ZIP64の形状・単位・部品変換、Bambu設定とG-code押出経路を読込。層表示・JSON書出し・不正データ拒否を追加。242テスト・公開配信物26項目・公開画面42項目が成功。積層/インフィルの構造解析への接続・押出円弧・機器動作の再現は未対応。",
-    "descriptionEn": "Import 3MF/ZIP64 geometry, units and component transforms, Bambu settings and G-code deposition paths. Add layer previews, JSON export and invalid-data refusal. Passed 242 tests, 26 public runtime checks and 42 public browser checks. Layer/infill structural integration, extruding arcs and printer-motion simulation remain unsupported."
+    "version": "v0.44",
+    "date": "2026-10-15",
+    "testCount": 1112,
+    "description": "保存済みケース比較(画面・MCP studio_compare_cases)、Originが許可リストと完全一致するHost拒否403応答へのCORSヘッダー付与(他Originは許可しない)、タイムアウト時delivered表示、名前付き結果ビューの正確な復元、短尺WebM修正、3.25MB超3MF読込修正、性能・容量の測定スクリプト、MOD1初期分(境界検査、検証/生成/適応/後処理フックを持つソルバーアダプタ登録、UI分割)、評価APIの文言・契約修正、PERF1 Nodeハーネス、CAE UI調査文書、ボード監査を追加。テスト記録(.qa/full10.log): 1112件中1109 pass、3 skip、0 fail。未達: 公開HTTPSでの接続は未検証(PUBLICHTTPS1保留)、Node 24の断続的V8異常終了は未解決で原因候補はnodejs/node#66366と同根の可能性があるが未確認、MOD1は未完でReact/WASM移行なし。背景タブでの書出し停止は既知の未対処事象で、発生頻度・影響の定量測定も未実施。",
+    "descriptionEn": "Adds saved-case comparison (browser and MCP studio_compare_cases), CORS headers on 403 Host-rejection responses only when Origin exactly matches the allowlist (other Origins remain disallowed), delivered flag on timeouts, exact restore of named result views, a short-clip WebM fix, a fix for 3MF import above 3.25 MB, performance and capacity measurement scripts, first MOD1 slices (boundary check, solver-adapter registry with validate/build/adaptive/postprocess hooks, UI splits), assessment API wording/contract fixes, the PERF1 Node harness, a CAE UI research document and a board audit. Test record (.qa/full10.log): 1,109 passed, 3 skipped, 0 failed (1,112 total). Not done: connection from the published HTTPS site is unverified (PUBLICHTTPS1 pending); the intermittent Node 24 V8 fatal is unresolved, and a possible relationship to nodejs/node#66366 is unconfirmed; MOD1 is incomplete with no React/WASM migration. Background-tab export stalls are a known, unaddressed issue, and their frequency and impact have not been measured."
   },
   "tasks": [
     {
