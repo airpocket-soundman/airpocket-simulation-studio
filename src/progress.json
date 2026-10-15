@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T14:34:33.407Z",
+  "updatedAt": "2026-10-15T21:57:40.136Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -713,8 +713,9 @@
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
       "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "lastUpdate": "Node側計測ハーネス scripts/perf-measure.mjs を追加(7ケース、cold/warm、ピークRSS、環境・revision記録)。ブラウザ・WebGPU・転送量・冷キャッシュ・メモリ上限・取消は未計測で、PERF1は未完了。数値は測定値であり対応規模の保証ではない。",
-      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md"
+      "lastUpdate": "2026-10-15 Node側計測に取消の応答時間を追加(中断点2種、最終状態、プロセス解放、ピークRSS。n=1で構造2.4ms/51.7ms、熱2.7ms/64.1ms、すべて取消)。ブラウザのメモリ・時間・取消応答は未計測で、計画は docs/perf-browser-plan.md(実装なし)。実装中を維持。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md",
+      "lastUpdateEn": "2026-10-15 Added cancel-latency measurement to the Node harness (two cancel points, final state, process release, peak RSS; n=1: structural 2.4 ms / 51.7 ms, thermal 2.7 ms / 64.1 ms, all cancelled). Browser memory, time and cancel response are not measured; the plan is docs/perf-browser-plan.md (not implemented). Stays building."
     },
     {
       "id": "ADAPT1",
@@ -1145,7 +1146,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md",
-      "lastUpdate": "能力取得をジョブ・原子的編集・中間情報の制限へ拡張。完全な事前診断と全操作の詳細スキーマは残作業。"
+      "lastUpdate": "2026-10-15 getCapabilitiesに組み合わせの機械可読一覧(共有規則表から生成)、GUI/API/MCP/Skill対応表(docs/operation-correspondence.md、名前のみテストで固定。GUI列は名前検索による暫定)、互換性方針(docs/compatibility-policy.md)、diagnoseExecutionとワーカーの規則一致を追加。残り: GUI列の人手確認、全物理の事前検査(P1)。実装中を維持。",
+      "lastUpdateEn": "2026-10-15 Added a machine-readable combinations list in getCapabilities (generated from the shared rule table), the GUI/API/MCP/Skill correspondence table (docs/operation-correspondence.md; names pinned by test, GUI column provisional from a name search), a compatibility policy (docs/compatibility-policy.md) and rule parity between diagnoseExecution and the worker. Remaining: manual review of the GUI column and all-physics preflight (P1). Stays building."
     },
     {
       "id": "P1",
@@ -1160,7 +1162,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "既存構造モデルの温度評価/熱応力/J2/Neo-Hookeanを根拠契約へ追加。source payload改変と上流暫定性を追跡。物理資料の適用性・メッシュ後検査・評価機能等を継続し、P1全体の完了とはしない。"
+      "lastUpdate": "2026-10-15 単位の桁の警告と物理別の事前検査カバレッジ表示を追加。全物理の事前検査・拘束rank・GUI確認とSkill単独の一巡は未完了。実装中を維持。",
+      "lastUpdateEn": "2026-10-15 Added unit-magnitude warnings and per-physics preflight coverage reporting. All-physics preflight, constraint rank, GUI confirmation and a Skill-only full loop remain. Stays building."
     },
     {
       "id": "P2",
@@ -1190,7 +1193,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "ブラウザ中間メッシュ/熱/音圧場を任意保持し、MCPからハッシュ検証・点測定・ページ取得可能。遅延応答での接続喪失と開始時の入力版照合を修正。公開HTTPS・再起動復元・GUI監視は継続。"
+      "lastUpdate": "2026-10-15 公開HTTPSページから確認専用で接続(PUBLICHTTPS1)、再起動後の復元(--job-store、interrupted状態、既定は無効)、タイムアウトのdelivered表示を追加。残り: 再起動後のrequestId冪等性、実MCPホストでの再起動確認、公開HTTPSでの編集・解析権限。実装中を維持。",
+      "lastUpdateEn": "2026-10-15 Added an inspect-only connection from the published HTTPS page (PUBLICHTTPS1), restart recovery (--job-store, interrupted state, off by default) and the delivered flag on timeouts. Remaining: requestId idempotency across restarts, restart confirmation in a real MCP host, edit/analyze scopes from the published page. Stays building."
     },
     {
       "id": "P4",
@@ -1353,8 +1357,8 @@
       "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-15: 構造・熱・音響・限定流体の既存preflight契約を再確認し、要求された疲労/破壊評価の材料・オプション・温度範囲を検査する候補を追加。共有APIと実stdio MCPで不足/正常/入力不変を検証。評価の数式は不変、解析後の応力適合性・境界/拘束・物理妥当性の確認は引き続き必要。今回候補の全体CIは継続、checking維持。",
-      "lastUpdateEn": "2026-10-15: rechecked existing structural/thermal/acoustic/limited-fluid preflight contracts and added candidate checks for requested fatigue/fracture material data, options and temperature range. Shared API and real stdio MCP verify missing/valid inputs and source invariance. Assessment equations are unchanged; post-solve stress applicability, boundary/constraint and physical validation remain necessary. Full CI for this candidate is pending; stays checking."
+      "lastUpdate": "2026-10-15 熱・音響の事前検査の既存コード13件をテストで固定し、物理別のphysicsCoverage(実装済み/残り)と単位の桁の警告(UNIT_MAGNITUDE_SUSPECT、警告のみ)を追加(37320b0で公開)。全物理の事前検査は未完了: メッシュ後の検査(連結成分の拘束、波長あたり要素数、拘束rank)と、流体・直交異方性・非線形・モーダルの桁規則が残る。検証中を維持。",
+      "lastUpdateEn": "2026-10-15 Pinned 13 existing thermal/acoustic preflight codes with tests and added per-physics physicsCoverage (implemented/remaining) and unit-magnitude warnings (UNIT_MAGNITUDE_SUSPECT, warning only); published at 37320b0. All-physics preflight is not complete: post-mesh checks (connected-component anchoring, elements per wavelength, constraint rank) and magnitude rules for fluid, orthotropic, nonlinear and modal inputs remain. Stays checking."
     },
     {
       "id": "VIEWCOMPARE",
