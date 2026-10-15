@@ -12,6 +12,24 @@ function request(value){
 function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical(value[k])).join(',')+'}';return JSON.stringify(value);}
 function base64(bytes){let text='';for(let i=0;i<bytes.length;i++)text+=String.fromCharCode(bytes[i]);return btoa(text);}
 
+const TARGET_FPS=24,MAX_MANIFEST_BYTES=4096,RESULT_SETTINGS=['field','modeIndex','frameIndex','timeSeconds','deformScale'];
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+function vector(v){return Array.isArray(v)&&v.length===3&&v.every(finite)?v.slice():undefined;}
+function pngSize(bytes){const sig=[137,80,78,71,13,10,26,10];if(bytes.length<24||sig.some((v,i)=>bytes[i]!==v))return undefined;const dv=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),width=dv.getUint32(16),height=dv.getUint32(20);return width>0&&height>0?{width,height}:undefined;}
+// Only facts this module already holds: frozen request/view, artifact bytes and MIME type. Nothing is inferred from pixels or invented.
+function buildManifest(job,mimeType,bytes,sha256){
+ const {format,animation,seconds,expectedResultRevision}=job.request,result=job.view?.result&&typeof job.view.result==='object'?job.view.result:{},picked={};
+ for(const key of RESULT_SETTINGS)if(typeof result[key]==='string'&&result[key].length<=64||finite(result[key]))picked[key]=result[key];
+ if(result.camera&&typeof result.camera==='object'){const camera={};for(const key of ['position','target','up'])if(vector(result.camera[key]))camera[key]=vector(result.camera[key]);if(finite(result.camera.fov))camera.fov=result.camera.fov;if(Object.keys(camera).length)picked.camera=camera;}
+ const size=format==='png'?pngSize(bytes):undefined,container=format==='png'?'png':'webm',codec=(/codecs=([^;]+)/.exec(mimeType)||[])[1];
+ const manifest={schemaVersion:1,resultRevision:expectedResultRevision,format,container,mimeType,...(codec?{codec}:{}),sha256,totalBytes:bytes.length,
+  view:picked,...(size?{resolution:size}:{}),
+  scale:{units:{time:'second'},...(finite(picked.deformScale)?{deformScale:picked.deformScale,deformScaleKind:'visualization multiplier'}:{})}};
+ if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
+ else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
+ if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
+ return manifest;
+}
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
 export function createVisualExportJobs({render,prepare,maxBytes=32*1024*1024,maxJobs=4,id=()=>crypto.randomUUID()}={}){
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
@@ -33,7 +51,7 @@ export function createVisualExportJobs({render,prepare,maxBytes=32*1024*1024,max
    try{
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
     if(job.state!=='running'||!jobs.has(job.jobId))return;
-    job.metadata={mimeType:blob.type,name:`result-${job.jobId}.${job.request.format}`,totalBytes:bytes.length,sha256:'sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join(''),maxChunkBytes:CHUNK};job.progress={fraction:1};job.state='completed';
+    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');job.metadata={mimeType:blob.type,name:`result-${job.jobId}.${job.request.format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest:buildManifest(job,blob.type,bytes,sha256)};job.progress={fraction:1};job.state='completed';
    }finally{if(job.state!=='completed'&&job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}}
   })();
  }

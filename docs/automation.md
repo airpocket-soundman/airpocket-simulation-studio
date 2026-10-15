@@ -116,7 +116,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
