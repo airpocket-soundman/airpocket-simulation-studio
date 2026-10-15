@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T03:36:37.395Z",
+  "updatedAt": "2026-10-15T03:48:04.257Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1115,8 +1115,8 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "独立検査で境界チェッカーの見逃し(コメント直後import・テンプレート動的import・Worker URL・DOM検出)を修正しトークナイザー化、許可リスト8件(理由付き)。アダプターは旧ワーカーと出力同一をテストで固定。MOD1全体は未完了。",
-      "evidence": "scripts/check-module-boundaries.mjs; src/module-layers.json; src/contracts/; src/solver-adapters/; src/ui/case-list-ui.js; tests/module-boundaries.test.mjs; tests/contracts.test.mjs; tests/solver-adapter-registry.test.mjs; tests/ui-case-list.test.mjs; docs/module-boundaries.md; docs/solver-adapters.md; docs/ui-state-separation.md"
+      "lastUpdate": "第4スライス: 状態表示(status-ui)を分離、analysis-clientのlocation依存をbaseUrl注入に置換(許可リスト7件)。保存ケース一覧に続く2画面要素のみで、MOD1全体は未完了。",
+      "evidence": "src/ui/status-ui.js; tests/ui-status.test.mjs; src/analysis-client.js; src/module-layers.json"
     },
     {
       "id": "P0",

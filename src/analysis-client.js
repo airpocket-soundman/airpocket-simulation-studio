@@ -13,7 +13,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  const identityHost=createRuntimeIdentity({target:host.target,isolation:host.isolation});
  const createWorker=runtime.createWorker||(()=>new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'}));
  const isIsolated=runtime.isIsolated||(()=>globalThis.crossOriginIsolated);
- const baseUrl=runtime.baseUrl||(()=>new URL(import.meta.env?.BASE_URL||'/',location.href).href),timeoutMs=runtime.timeoutMs??120000;
+ const baseUrl=runtime.baseUrl||(()=>{throw new Error('analysis client requires runtime.baseUrl (a function returning the asset base URL)');}),timeoutMs=runtime.timeoutMs??120000;
  let active=null;
  function finish(job,error,result){
   if(active!==job||job.finishing)return;job.finishing=true;clearTimeout(job.timer);job.signal?.removeEventListener('abort',job.abort);

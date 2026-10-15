@@ -33,9 +33,8 @@ Current allowlist (pre-existing violations and deliberate exceptions, recorded w
 1. `project-import.js` -> `three`, `three/addons/loaders/STLLoader.js` (operations layer uses three.js for STL loading).
 2. `print-zip.js` -> `three/addons/libs/fflate.module.js` (3MF zip uses the fflate bundled with three).
 3. `analysis-client.js` -> `analysis.worker.js` (edge) and `new Worker` (dom): the session starts the Web Worker via `new Worker(new URL(...))`. It is a process boundary; the worker layer is intentionally not in session's mayImport.
-4. `analysis-client.js` `location` (dom): the default baseUrl uses `location.href` (overridable via `runtime.baseUrl`). Follow-up: have main.js pass baseUrl in.
-5. `main.js` -> `cad.worker.js` (edge): ui starts the CAD worker by URL.
-6. `analysis.worker.js` `fetch()` (dom): the worker fetches its own WASM (worker-scope `fetch`, not DOM access).
+4. `main.js` -> `cad.worker.js` (edge): ui starts the CAD worker by URL.
+5. `analysis.worker.js` `fetch()` (dom): the worker fetches its own WASM (worker-scope `fetch`, not DOM access).
 
 Replacing 1-2 with a pure parser / direct dependency is follow-up work. A dom exception is given per global: `kind: "dom"`, `to: <global name>`.
 

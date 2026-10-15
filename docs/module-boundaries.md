@@ -33,9 +33,8 @@ English: [en/module-boundaries.md](en/module-boundaries.md)
 1. `project-import.js` -> `three`, `three/addons/loaders/STLLoader.js` (operations層がSTL読込にthree.jsを使用)。
 2. `print-zip.js` -> `three/addons/libs/fflate.module.js` (3MF用zipがthree同梱のfflateを利用)。
 3. `analysis-client.js` -> `analysis.worker.js` (edge) と `new Worker` (dom): session がWebWorkerを `new Worker(new URL(...))` で起動する。プロセス境界であり、worker層は session の mayImport に含めない。
-4. `analysis-client.js` の `location` (dom): 既定 baseUrl が `location.href` を使う(`runtime.baseUrl` で上書き可能)。main.js から baseUrl を渡す形にして解消する後続課題。
-5. `main.js` -> `cad.worker.js` (edge): ui がCAD workerを URL 読み込みで起動する。
-6. `analysis.worker.js` の `fetch()` (dom): worker が自身でWASMを取得する(workerスコープの `fetch` でありDOMアクセスではない)。
+4. `main.js` -> `cad.worker.js` (edge): ui がCAD workerを URL 読み込みで起動する。
+5. `analysis.worker.js` の `fetch()` (dom): worker が自身でWASMを取得する(workerスコープの `fetch` でありDOMアクセスではない)。
 
 1-2は純粋なパーサー/直接依存への置換が後続課題。dom許可は `kind: "dom"`, `to: <グローバル名>` で1つずつ指定する。
 
