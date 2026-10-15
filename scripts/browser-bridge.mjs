@@ -15,7 +15,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
   count('requests');
   const send=(status,value)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(value));};
   try{
-   if(req.headers.host!==`127.0.0.1:${server.address().port}`||req.headers.origin!==origin){count('originHostRefused');return send(403,{error:'Origin or host refused'});}
+   if(req.headers.host!==`127.0.0.1:${server.address().port}`||req.headers.origin!==origin){count('originHostRefused');if(req.headers.origin===origin){res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin');}return send(403,{error:'Origin or host refused'});}
    res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin');
    if(req.method==='OPTIONS'){count('preflights');res.setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS');res.setHeader('Access-Control-Allow-Headers','Authorization, Content-Type');return send(200,{});}
    if(req.url==='/health'&&req.method==='GET'){count('healthChecks');return send(200,{schemaVersion:1,kind:'airpocket-browser-bridge'});}

@@ -531,6 +531,8 @@ Counters record only traffic observed by this process. No increase cannot identi
 
 Browser requests specify `targetAddressSpace:"loopback"`; browser permission remains authoritative and support is not guaranteed. See the current [Local Network Access specification](https://wicg.github.io/local-network-access/) and [official Chrome explanation](https://developer.chrome.com/blog/local-network-access). This path does not depend on the paused legacy Private Network Access special preflight headers or unconditionally add `Access-Control-Allow-Private-Network`. Existing CORS, Origin/Host, Bearer and scope checks remain in place.
 
+When an Origin/Host check refuses a request, the bridge still returns a data-free 403. It adds `Access-Control-Allow-Origin` (with `Vary: Origin`) only when the request Origin exactly equals the configured Origin, so the page can report "refused (403)" instead of a generic network failure, for example on a Host mismatch. Other Origins get no CORS headers, and `*` is never used. The Origin, Host and Bearer checks are unchanged.
+
 ## Strict agent edits and saved-case validation
 
 `studio_validate_cases` validates every case through the actual restoration path before returning its existing comparison summary. Mismatched field/node counts, invalid tetrahedra/surfaces and inconsistent runtime identity are rejected. Valid legacy archives remain compatible and source files are unchanged. Validation does not establish physical accuracy or source authenticity.

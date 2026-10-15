@@ -531,6 +531,8 @@ MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来
 
 ブラウザ要求は `targetAddressSpace:"loopback"` を指定し、ローカル接続の権限判断をブラウザへ委ねます。これは権限付与や対応ブラウザの保証ではありません。現行の [Local Network Access仕様](https://wicg.github.io/local-network-access/) と [Chromeの公式解説](https://developer.chrome.com/blog/local-network-access) に沿い、保留された旧Private Network Accessの特別preflightヘッダーには依存しません。`Access-Control-Allow-Private-Network` を無条件に付けず、既存CORS・Origin/Host・Bearer・scope検査を維持します。
 
+Origin/Host検査で拒否した場合も、データを含まない403を返します。要求のOriginが設定済みOriginと完全一致するときだけ `Access-Control-Allow-Origin`（と `Vary: Origin`）を付け、ページに「接続できない」ではなく「拒否(403)」と表示できるようにします。他のOriginには付けず、`*` も使いません。Host不一致などの設定ミスの切り分け用で、検査自体は緩めません。
+
 ## エージェント編集と保存検証の厳密化
 
 `studio_validate_cases` は全ケースを実際の復元経路で検査してから従来形式の比較要約を返します。節点数と場配列の不一致、不正な四面体/表面、実行識別の矛盾を検証成功として返しません。有効な旧形式は保持し、元ファイルを書き換えません。この検証も物理精度や保存データの出所を証明するものではありません。

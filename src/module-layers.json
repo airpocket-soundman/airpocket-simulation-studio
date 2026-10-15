@@ -173,7 +173,7 @@
    ]
   },
   "session": {
-   "description": "Browser session / MCP bridge and analysis client orchestration (no DOM).",
+   "description": "Browser session / MCP bridge and analysis client orchestration. No DOM/UI access; browser globals (window., location, fetch, Worker) are forbidden except the allowlisted exceptions below.",
    "mayImport": [
     "contract",
     "domain",
@@ -279,6 +279,36 @@
    "from": "print-zip.js",
    "to": "three/addons/libs/fflate.module.js",
    "reason": "Pre-existing: 3MF zip writer borrows fflate bundled with three.js; replace with a direct fflate dependency or own zip writer."
+  },
+  {
+   "kind": "edge",
+   "from": "analysis-client.js",
+   "to": "analysis.worker.js",
+   "reason": "Intentional: the session client starts the analysis worker via new Worker(new URL(...,import.meta.url)); it is a runtime process boundary (messages only, no shared imports), not a code import. Worker layer is deliberately not in session mayImport."
+  },
+  {
+   "kind": "dom",
+   "from": "analysis-client.js",
+   "to": "new Worker",
+   "reason": "Intentional: analysis-client.js is the only session module that spawns the analysis Web Worker (createWorker, overridable in tests via runtime.createWorker)."
+  },
+  {
+   "kind": "dom",
+   "from": "analysis-client.js",
+   "to": "location",
+   "reason": "Pre-existing: default baseUrl uses location.href to resolve WASM asset URLs (overridable via runtime.baseUrl). Remove by having main.js pass baseUrl in."
+  },
+  {
+   "kind": "edge",
+   "from": "main.js",
+   "to": "cad.worker.js",
+   "reason": "Intentional: main.js starts the CAD worker via new Worker(new URL(...,import.meta.url)); a runtime process boundary, not a code import."
+  },
+  {
+   "kind": "dom",
+   "from": "analysis.worker.js",
+   "to": "fetch()",
+   "reason": "Intentional: the analysis worker fetches its WASM binaries (data.base + path) itself; fetch is available in worker scope and is not DOM access."
   }
  ]
 }
