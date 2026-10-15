@@ -1,0 +1,1535 @@
+{
+  "comparisons": [
+    {
+      "reference": "urans-smoke-01",
+      "variant": "urans-inner60-01",
+      "regionMetres": {
+        "x": [
+          -1.5,
+          1.8
+        ],
+        "y": [
+          -0.7,
+          0.7
+        ],
+        "z": [
+          0,
+          2
+        ]
+      },
+      "norm": "unweighted point samples, not volume-weighted",
+      "frames": [
+        {
+          "timeSeconds": 0,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 11.566228199507226,
+          "velocityVectorRmsDifferenceMps": 0.15078980082343935,
+          "pressureMaxDifferencePa": 32.45159912109375,
+          "velocityVectorMaxDifferenceMps": 0.41391674231065917
+        },
+        {
+          "timeSeconds": 0.02,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 16.269904744507368,
+          "velocityVectorRmsDifferenceMps": 0.059530234537847095,
+          "pressureMaxDifferencePa": 42.29979133605957,
+          "velocityVectorMaxDifferenceMps": 0.7742837641648174
+        },
+        {
+          "timeSeconds": 0.04,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 2.7861687584476793,
+          "velocityVectorRmsDifferenceMps": 0.0817514394611449,
+          "pressureMaxDifferencePa": 9.368462562561035,
+          "velocityVectorMaxDifferenceMps": 0.42838929779471474
+        },
+        {
+          "timeSeconds": 0.06,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 39.80105588257612,
+          "velocityVectorRmsDifferenceMps": 0.7746325440417342,
+          "pressureMaxDifferencePa": 956.3999044895172,
+          "velocityVectorMaxDifferenceMps": 38.2345682786979
+        },
+        {
+          "timeSeconds": 0.08,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 8.184228524828683,
+          "velocityVectorRmsDifferenceMps": 0.4362756577502689,
+          "pressureMaxDifferencePa": 155.03541207313538,
+          "velocityVectorMaxDifferenceMps": 14.095450645282302
+        },
+        {
+          "timeSeconds": 0.1,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 1.449566730699185,
+          "velocityVectorRmsDifferenceMps": 0.2951061518937222,
+          "pressureMaxDifferencePa": 12.075462341308594,
+          "velocityVectorMaxDifferenceMps": 5.23170641920407
+        }
+      ]
+    },
+    {
+      "reference": "urans-smoke-01",
+      "variant": "urans-wall-01",
+      "regionMetres": {
+        "x": [
+          -1.5,
+          1.8
+        ],
+        "y": [
+          -0.7,
+          0.7
+        ],
+        "z": [
+          0,
+          2
+        ]
+      },
+      "norm": "unweighted point samples, not volume-weighted",
+      "frames": [
+        {
+          "timeSeconds": 0,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.5667329106021503,
+          "velocityVectorRmsDifferenceMps": 0.01249957327910957,
+          "pressureMaxDifferencePa": 4.709230899810791,
+          "velocityVectorMaxDifferenceMps": 0.15058761337419868
+        },
+        {
+          "timeSeconds": 0.02,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.4785427260333616,
+          "velocityVectorRmsDifferenceMps": 0.0063083443693894275,
+          "pressureMaxDifferencePa": 2.3486061096191406,
+          "velocityVectorMaxDifferenceMps": 0.04001756301661016
+        },
+        {
+          "timeSeconds": 0.04,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.2638620300336481,
+          "velocityVectorRmsDifferenceMps": 0.0053873608583126925,
+          "pressureMaxDifferencePa": 0.6842620372772217,
+          "velocityVectorMaxDifferenceMps": 0.03342631246985122
+        },
+        {
+          "timeSeconds": 0.06,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 39.33618860075746,
+          "velocityVectorRmsDifferenceMps": 0.7743981004640211,
+          "pressureMaxDifferencePa": 955.9885883331299,
+          "velocityVectorMaxDifferenceMps": 38.21622568191559
+        },
+        {
+          "timeSeconds": 0.08,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 7.563213209508681,
+          "velocityVectorRmsDifferenceMps": 0.43802546852754354,
+          "pressureMaxDifferencePa": 155.3628613948822,
+          "velocityVectorMaxDifferenceMps": 14.093661610560282
+        },
+        {
+          "timeSeconds": 0.1,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 1.6961869325480354,
+          "velocityVectorRmsDifferenceMps": 0.2933899733053985,
+          "pressureMaxDifferencePa": 12.138791561126709,
+          "velocityVectorMaxDifferenceMps": 5.233905327656277
+        }
+      ]
+    },
+    {
+      "reference": "urans-smoke-01",
+      "variant": "urans-wall-max1000-01",
+      "regionMetres": {
+        "x": [
+          -1.5,
+          1.8
+        ],
+        "y": [
+          -0.7,
+          0.7
+        ],
+        "z": [
+          0,
+          2
+        ]
+      },
+      "norm": "unweighted point samples, not volume-weighted",
+      "frames": [
+        {
+          "timeSeconds": 0,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.5628300150540394,
+          "velocityVectorRmsDifferenceMps": 0.013186354076026268,
+          "pressureMaxDifferencePa": 4.9511284828186035,
+          "velocityVectorMaxDifferenceMps": 0.14523798614536945
+        },
+        {
+          "timeSeconds": 0.02,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.5295962412495688,
+          "velocityVectorRmsDifferenceMps": 0.005853032854068037,
+          "pressureMaxDifferencePa": 2.424650192260742,
+          "velocityVectorMaxDifferenceMps": 0.04801595233490652
+        },
+        {
+          "timeSeconds": 0.04,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 0.28935177640151183,
+          "velocityVectorRmsDifferenceMps": 0.0036788955489274705,
+          "pressureMaxDifferencePa": 0.6654590666294098,
+          "velocityVectorMaxDifferenceMps": 0.029108886846863663
+        },
+        {
+          "timeSeconds": 0.06,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 39.33724546052344,
+          "velocityVectorRmsDifferenceMps": 0.7742128289351304,
+          "pressureMaxDifferencePa": 955.9813606739044,
+          "velocityVectorMaxDifferenceMps": 38.21755915028101
+        },
+        {
+          "timeSeconds": 0.08,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 7.563043589444035,
+          "velocityVectorRmsDifferenceMps": 0.4371622424898225,
+          "pressureMaxDifferencePa": 155.35493230819702,
+          "velocityVectorMaxDifferenceMps": 14.094029709112343
+        },
+        {
+          "timeSeconds": 0.1,
+          "selectedPoints": 5681,
+          "pressureRmsDifferencePa": 1.6992701399869754,
+          "velocityVectorRmsDifferenceMps": 0.2919799809011957,
+          "pressureMaxDifferencePa": 12.139776229858398,
+          "velocityVectorMaxDifferenceMps": 5.232063558682495
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "name": "urans-smoke-01",
+      "metadata": {
+        "schemaVersion": 1,
+        "solver": "SU2",
+        "expectedVersion": "8.5.0",
+        "inputRevision": "sha256:11e5fcfa2dee05c0a610540fe936556ec55d73a016887d3df4297adf7eb6efcc",
+        "executionSettled": true,
+        "pressureCriterionMet": false,
+        "allReportedResidualsMet": false,
+        "numericallyConverged": false,
+        "residualChecks": [
+          {
+            "name": "rms[P]",
+            "value": -2.919027009,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[U]",
+            "value": -2.175544681,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[V]",
+            "value": -2.570475835,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[W]",
+            "value": -2.5792744,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[nu]",
+            "value": -4.566032214,
+            "target": -5,
+            "met": false
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+            "severity": "warning",
+            "occurrences": 143,
+            "lastAffectedPoints": 215,
+            "maximumAffectedPoints": 482,
+            "message": "Wall-function y+ computation did not converge at some points.",
+            "suggestions": [
+              "Inspect the wall y+ distribution and near-wall mesh.",
+              "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+              "Do not use this result as a validated drag or pressure prediction."
+            ]
+          }
+        ],
+        "physicalValidationComplete": false,
+        "convergenceCriterion": "SU2 stopping criterion: pressure residual only; adapter additionally checks all reported residuals and wall warnings",
+        "provisional": true,
+        "temporal": {
+          "timeStepSeconds": 0.02,
+          "requestedSteps": 6,
+          "outputEvery": 1,
+          "startup": "uniform-initial-flow",
+          "lastTimeIndex": 5,
+          "allTimeStepsConverged": false,
+          "warning": "Final residual checks do not certify convergence of every physical time step."
+        },
+        "history": {
+          "Time_Iter": 5,
+          "Outer_Iter": 0,
+          "Inner_Iter": 11,
+          "Cur_Time": 0.1,
+          "rms[P]": -2.919027009,
+          "rms[U]": -2.175544681,
+          "rms[V]": -2.570475835,
+          "rms[W]": -2.5792744,
+          "rms[nu]": -4.566032214
+        },
+        "artifacts": [
+          {
+            "name": "flow_00000.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:6e4b481fe8b5ea0cc4b10275e489326dffb3fd78092f766219c9c6684528c5f8"
+          },
+          {
+            "name": "flow_00001.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:d4c1a5468ad7b5defe63ea38d3be5993f8f295f8d52dd34efbff29212f736b3d"
+          },
+          {
+            "name": "flow_00002.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:8220cc6cdc6f5f259e8f3f58467aca905bd12dbd6474ba4c05e92baadff45b6e"
+          },
+          {
+            "name": "flow_00003.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:88612c3a4756d649e94b446058d252e4054f1dae00404a8fd2f15f09690d0497"
+          },
+          {
+            "name": "flow_00004.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:9702a1aed053d4220831e85b5afec15312ffb94d9876f8a189325244e42c29b5"
+          },
+          {
+            "name": "flow_00005.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:072c180240e22c2760d8847b67674e970c16f20ffa7bac911b7d0467fbb68d66"
+          },
+          {
+            "name": "surface_flow_00000.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:f1df0b3d81fea9ccb462f08cdba89ed1c537b6e3758ba198f5ac7b400a0b6a65"
+          },
+          {
+            "name": "surface_flow_00001.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:15cc39c2da6d662ccc8b1326e6f1f4533618a12a4534685467cfbbdca64ef8f4"
+          },
+          {
+            "name": "surface_flow_00002.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:3c4fde7ddc3e79702e868b80144eb3796f346bb5b57c90aac0d3268295b5e6f2"
+          },
+          {
+            "name": "surface_flow_00003.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:00125d64fe380698a5330492ad9c3ee34f510b053de23aaabb8e3f4a71042b16"
+          },
+          {
+            "name": "surface_flow_00004.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:cac2f995fd91e07306fce23417f08bfa10ba87bf741293c5c5a12a5734d4254e"
+          },
+          {
+            "name": "surface_flow_00005.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:29fee962eb91e2ee8f78f449561f61627491d2f93e8be8330c7028afd4eca4a4"
+          },
+          {
+            "name": "history.csv",
+            "bytes": 1071,
+            "sha256": "sha256:6612dfd2229d531513da1bbe61ed0a92f02f1e241c470244d5f62ccd2719f0d9"
+          }
+        ]
+      },
+      "frameRanges": [
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -135.07632446289062,
+            "maximum": 128.5970001220703
+          },
+          "surfacePressureRange": {
+            "minimum": -135.07632446289062,
+            "maximum": 128.5970001220703
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.437991348506095
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -52.73563766479492,
+            "maximum": 57.61312484741211
+          },
+          "surfacePressureRange": {
+            "minimum": -52.73563766479492,
+            "maximum": 57.61312484741211
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.8760200926829
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -48.63164138793945,
+            "maximum": 60.43879318237305
+          },
+          "surfacePressureRange": {
+            "minimum": -48.63164138793945,
+            "maximum": 60.43879318237305
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.813510737207464
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -692.311767578125,
+            "maximum": 954.1951293945312
+          },
+          "surfacePressureRange": {
+            "minimum": -692.311767578125,
+            "maximum": 485.46417236328125
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 39.28088656255795
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -157.79908752441406,
+            "maximum": 68.04505920410156
+          },
+          "surfacePressureRange": {
+            "minimum": -157.79908752441406,
+            "maximum": 68.04505920410156
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 15.055512190734198
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -32.750831604003906,
+            "maximum": 37.51917266845703
+          },
+          "surfacePressureRange": {
+            "minimum": -32.750831604003906,
+            "maximum": 37.51917266845703
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.696846873284041
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        }
+      ]
+    },
+    {
+      "name": "urans-inner60-01",
+      "metadata": {
+        "schemaVersion": 1,
+        "solver": "SU2",
+        "expectedVersion": "8.5.0",
+        "inputRevision": "sha256:a587038cc709ed7e3b8957a51b430b82c0abc24d531a9185f9d0cd64ea73514b",
+        "executionSettled": true,
+        "pressureCriterionMet": true,
+        "allReportedResidualsMet": false,
+        "numericallyConverged": false,
+        "residualChecks": [
+          {
+            "name": "rms[P]",
+            "value": -5.391850946,
+            "target": -5,
+            "met": true
+          },
+          {
+            "name": "rms[U]",
+            "value": -3.68034757,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[V]",
+            "value": -3.895410488,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[W]",
+            "value": -3.975026635,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[nu]",
+            "value": -4.628206724,
+            "target": -5,
+            "met": false
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+            "severity": "warning",
+            "occurrences": 719,
+            "lastAffectedPoints": 220,
+            "maximumAffectedPoints": 527,
+            "message": "Wall-function y+ computation did not converge at some points.",
+            "suggestions": [
+              "Inspect the wall y+ distribution and near-wall mesh.",
+              "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+              "Do not use this result as a validated drag or pressure prediction."
+            ]
+          },
+          {
+            "code": "SU2_TIME_CONVERGENCE_UNVERIFIED",
+            "severity": "warning",
+            "message": "Inner convergence across all physical steps has not been certified; this series is provisional.",
+            "suggestions": [
+              "Inspect residuals at every physical time step.",
+              "Refine wall treatment and test smaller time steps before interpreting wake dynamics."
+            ]
+          }
+        ],
+        "physicalValidationComplete": false,
+        "convergenceCriterion": "All five residual fields are stopping criteria within each physical time step; final assessment alone does not certify earlier steps.",
+        "provisional": true,
+        "temporal": {
+          "timeStepSeconds": 0.02,
+          "requestedSteps": 6,
+          "outputEvery": 1,
+          "startup": "uniform-initial-flow",
+          "lastTimeIndex": 5,
+          "allTimeStepsConverged": false,
+          "warning": "Final residual checks do not certify convergence of every physical time step."
+        },
+        "history": {
+          "Time_Iter": 5,
+          "Outer_Iter": 0,
+          "Inner_Iter": 59,
+          "Cur_Time": 0.1,
+          "rms[P]": -5.391850946,
+          "rms[U]": -3.68034757,
+          "rms[V]": -3.895410488,
+          "rms[W]": -3.975026635,
+          "rms[nu]": -4.628206724
+        },
+        "artifacts": [
+          {
+            "name": "flow_00000.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:7bd5bfb7e32b584d11f332bd8b2533b024563c8b89c2300df0d0730c3a44457c"
+          },
+          {
+            "name": "flow_00001.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:c87f201481c0e81deda21d3aeead65faa1697bba7955061ce9ae93d0a4e60516"
+          },
+          {
+            "name": "flow_00002.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:b5e04e44b21d8fa9e02cd0bf6c3446925d8cea58b9c3c99a02bdedc92160b203"
+          },
+          {
+            "name": "flow_00003.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:aaa61b92b474f017fc5beb7ad29a84346d41b8b4777f9871e3a5f97eea182d63"
+          },
+          {
+            "name": "flow_00004.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:aca201ef0106faec460028680d50620aaf8e4c7bf6bdccd8e31691c85be46f4e"
+          },
+          {
+            "name": "flow_00005.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:0b934ec4cd8c936059553d1b60bcba2f6f65c6a34e722ea7392810fe1c7d7984"
+          },
+          {
+            "name": "surface_flow_00000.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:86b3dcce55d08c439d724308063a6a39e6210e68eaae03b19a71559617693e17"
+          },
+          {
+            "name": "surface_flow_00001.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:9a1ef236cc3cbd16d683b6d303236d717c79dfea4517b12c02cfb713edbae589"
+          },
+          {
+            "name": "surface_flow_00002.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:6f1645099f399b17f794454030a4b695429e9f354bf55174de7d7543c2ed744f"
+          },
+          {
+            "name": "surface_flow_00003.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:0834ba6dbba68578fc9cddac4ace231465261c0301277209afa456f257d56305"
+          },
+          {
+            "name": "surface_flow_00004.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:4547d73cd910c44d42d049b61e83f17977f4e0891b5fe9d0949ab3706ad6065a"
+          },
+          {
+            "name": "surface_flow_00005.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:c1545607d5fa16d7edaee5fd5641364b669676ebbeb330c9b1aa27bef7487d14"
+          },
+          {
+            "name": "history.csv",
+            "bytes": 1071,
+            "sha256": "sha256:94fa1006665fc454856b12fa4fb303b07b5e1c5482910ac6d276d1ed2ca7dbdf"
+          }
+        ]
+      },
+      "frameRanges": [
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -152.85870361328125,
+            "maximum": 144.57369995117188
+          },
+          "surfacePressureRange": {
+            "minimum": -152.85870361328125,
+            "maximum": 144.57369995117188
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.724745195337795
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -58.693275451660156,
+            "maximum": 77.6076431274414
+          },
+          "surfacePressureRange": {
+            "minimum": -58.693275451660156,
+            "maximum": 77.6076431274414
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.982031281324406
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -46.509422302246094,
+            "maximum": 56.91737747192383
+          },
+          "surfacePressureRange": {
+            "minimum": -46.509422302246094,
+            "maximum": 56.91737747192383
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.594142821601509
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -38.96867370605469,
+            "maximum": 44.880550384521484
+          },
+          "surfacePressureRange": {
+            "minimum": -38.96867370605469,
+            "maximum": 44.880550384521484
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.13021724811806
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -34.18212127685547,
+            "maximum": 39.605472564697266
+          },
+          "surfacePressureRange": {
+            "minimum": -34.18212127685547,
+            "maximum": 39.605472564697266
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.755935342954571
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -32.73896026611328,
+            "maximum": 37.95663833618164
+          },
+          "surfacePressureRange": {
+            "minimum": -32.73896026611328,
+            "maximum": 37.95663833618164
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.492315392844862
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        }
+      ]
+    },
+    {
+      "name": "urans-wall-01",
+      "metadata": {
+        "schemaVersion": 1,
+        "solver": "SU2",
+        "expectedVersion": "8.5.0",
+        "inputRevision": "sha256:7edee2444daa00f4f32a46c255e08222179adfe0448aec4b96b5a8292e700053",
+        "executionSettled": true,
+        "pressureCriterionMet": false,
+        "allReportedResidualsMet": false,
+        "numericallyConverged": false,
+        "residualChecks": [
+          {
+            "name": "rms[P]",
+            "value": -3.288597639,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[U]",
+            "value": -2.526550164,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[V]",
+            "value": -3.003860097,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[W]",
+            "value": -3.073041811,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[nu]",
+            "value": -5.108578244,
+            "target": -5,
+            "met": true
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+            "severity": "warning",
+            "occurrences": 143,
+            "lastAffectedPoints": 1210,
+            "maximumAffectedPoints": 1701,
+            "message": "Wall-function y+ computation did not converge at some points.",
+            "suggestions": [
+              "Inspect the wall y+ distribution and near-wall mesh.",
+              "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+              "Do not use this result as a validated drag or pressure prediction."
+            ]
+          },
+          {
+            "code": "SU2_TIME_CONVERGENCE_UNVERIFIED",
+            "severity": "warning",
+            "message": "Inner convergence across all physical steps has not been certified; this series is provisional.",
+            "suggestions": [
+              "Inspect residuals at every physical time step.",
+              "Refine wall treatment and test smaller time steps before interpreting wake dynamics."
+            ]
+          }
+        ],
+        "physicalValidationComplete": false,
+        "convergenceCriterion": "All five residual fields are stopping criteria within each physical time step; final assessment alone does not certify earlier steps.",
+        "provisional": true,
+        "temporal": {
+          "timeStepSeconds": 0.02,
+          "requestedSteps": 6,
+          "outputEvery": 1,
+          "startup": "uniform-initial-flow",
+          "lastTimeIndex": 5,
+          "allTimeStepsConverged": false,
+          "warning": "Final residual checks do not certify convergence of every physical time step."
+        },
+        "history": {
+          "Time_Iter": 5,
+          "Outer_Iter": 0,
+          "Inner_Iter": 11,
+          "Cur_Time": 0.1,
+          "rms[P]": -3.288597639,
+          "rms[U]": -2.526550164,
+          "rms[V]": -3.003860097,
+          "rms[W]": -3.073041811,
+          "rms[nu]": -5.108578244
+        },
+        "artifacts": [
+          {
+            "name": "flow_00000.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:d619e39b3b7898e16661397d475e869b6405a19694271166f6a281fc43435400"
+          },
+          {
+            "name": "flow_00001.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:36087ac4f1e965ca52b2495492f5e2caeecda78b340f1d4e6aea720b2020e321"
+          },
+          {
+            "name": "flow_00002.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:7e82fab6a3177fd568a3571f2fdf05fece64749ea399922ff9a7053ebbc23589"
+          },
+          {
+            "name": "flow_00003.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:ce292fedc794ce672ce7d11ab08e7ac867d1aba9a4d078d657acec1aaad0a26f"
+          },
+          {
+            "name": "flow_00004.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:22ae343a0beab476f68c3d5b7bd47994553403503f97a3caadbd67833bd30f4b"
+          },
+          {
+            "name": "flow_00005.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:335782a13a985c4e67d0e9c52d357c6cb5cbc82da5af628794dea7bfac61ef64"
+          },
+          {
+            "name": "surface_flow_00000.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:ebc298dd35a4f9f8d29b7db6c479155bc9b8adb12fe1bb329c5fd04aaaf97e88"
+          },
+          {
+            "name": "surface_flow_00001.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:37f1be15438087bd96d5d97c2b02099f9e9a2e4a265b28ef594172f1ab9fa215"
+          },
+          {
+            "name": "surface_flow_00002.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:cfb4e66fa2d1947c5553cd534e5269c329f5abe3aea62a85418483650625de3a"
+          },
+          {
+            "name": "surface_flow_00003.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:c8107b84e8dd3deabef6e2a3c737c768a672b2b40b37c82db9d1005c201f5892"
+          },
+          {
+            "name": "surface_flow_00004.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:f21d4e52f382d96ad811d491ac021e66bd5e968e49470380840387b985d11950"
+          },
+          {
+            "name": "surface_flow_00005.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:88d9ef3f380533250ab1860726e230ebe6696410cc134e92c8224143a39e8df2"
+          },
+          {
+            "name": "history.csv",
+            "bytes": 1071,
+            "sha256": "sha256:c08026b4969d0f22f420982d4bedbd047e67a30c66025128dd87db3792d5ddc8"
+          }
+        ]
+      },
+      "frameRanges": [
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -132.76400756835938,
+            "maximum": 127.43189239501953
+          },
+          "surfacePressureRange": {
+            "minimum": -132.76400756835938,
+            "maximum": 127.43189239501953
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.397293115991552
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -53.05900573730469,
+            "maximum": 57.425193786621094
+          },
+          "surfacePressureRange": {
+            "minimum": -53.05900573730469,
+            "maximum": 57.425193786621094
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.871123259433318
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -48.554439544677734,
+            "maximum": 60.500057220458984
+          },
+          "surfacePressureRange": {
+            "minimum": -48.554439544677734,
+            "maximum": 60.500057220458984
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.826190710584331
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -48.65693664550781,
+            "maximum": 52.687095642089844
+          },
+          "surfacePressureRange": {
+            "minimum": -48.65693664550781,
+            "maximum": 52.687095642089844
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.354210153141978
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -37.023372650146484,
+            "maximum": 41.65925979614258
+          },
+          "surfacePressureRange": {
+            "minimum": -37.023372650146484,
+            "maximum": 41.65925979614258
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.838199727821378
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -32.652801513671875,
+            "maximum": 36.372276306152344
+          },
+          "surfacePressureRange": {
+            "minimum": -32.652801513671875,
+            "maximum": 36.372276306152344
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.467454993480262
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        }
+      ]
+    },
+    {
+      "name": "urans-wall-max1000-01",
+      "metadata": {
+        "schemaVersion": 1,
+        "solver": "SU2",
+        "expectedVersion": "8.5.0",
+        "inputRevision": "sha256:40368a1c4ed4e4622befe317bcef5bbb0834efc46dd3cf9d30ccb2a8a5996676",
+        "executionSettled": true,
+        "pressureCriterionMet": false,
+        "allReportedResidualsMet": false,
+        "numericallyConverged": false,
+        "residualChecks": [
+          {
+            "name": "rms[P]",
+            "value": -3.284801927,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[U]",
+            "value": -2.523434837,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[V]",
+            "value": -3.004236606,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[W]",
+            "value": -3.073778213,
+            "target": -5,
+            "met": false
+          },
+          {
+            "name": "rms[nu]",
+            "value": -4.731819661,
+            "target": -5,
+            "met": false
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+            "severity": "warning",
+            "occurrences": 143,
+            "lastAffectedPoints": 233,
+            "maximumAffectedPoints": 447,
+            "message": "Wall-function y+ computation did not converge at some points.",
+            "suggestions": [
+              "Inspect the wall y+ distribution and near-wall mesh.",
+              "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+              "Do not use this result as a validated drag or pressure prediction."
+            ]
+          },
+          {
+            "code": "SU2_TIME_CONVERGENCE_UNVERIFIED",
+            "severity": "warning",
+            "message": "Inner convergence across all physical steps has not been certified; this series is provisional.",
+            "suggestions": [
+              "Inspect residuals at every physical time step.",
+              "Refine wall treatment and test smaller time steps before interpreting wake dynamics."
+            ]
+          }
+        ],
+        "physicalValidationComplete": false,
+        "convergenceCriterion": "All five residual fields are stopping criteria within each physical time step; final assessment alone does not certify earlier steps.",
+        "provisional": true,
+        "temporal": {
+          "timeStepSeconds": 0.02,
+          "requestedSteps": 6,
+          "outputEvery": 1,
+          "startup": "uniform-initial-flow",
+          "lastTimeIndex": 5,
+          "allTimeStepsConverged": false,
+          "warning": "Final residual checks do not certify convergence of every physical time step."
+        },
+        "history": {
+          "Time_Iter": 5,
+          "Outer_Iter": 0,
+          "Inner_Iter": 11,
+          "Cur_Time": 0.1,
+          "rms[P]": -3.284801927,
+          "rms[U]": -2.523434837,
+          "rms[V]": -3.004236606,
+          "rms[W]": -3.073778213,
+          "rms[nu]": -4.731819661
+        },
+        "artifacts": [
+          {
+            "name": "flow_00000.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:138477d0fce0a64147a378cfa7d974d0c9c25213162b52196cd0b300d0f41d0a"
+          },
+          {
+            "name": "flow_00001.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:10c896e3364c752d695a29ceb2ca6fd362551ec315b5d0a025e278e386acf770"
+          },
+          {
+            "name": "flow_00002.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:dc1fb2f3da150d2a76e0ca5e8ceed20c9acc2f9217119989cc84a00b98b1a121"
+          },
+          {
+            "name": "flow_00003.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:5bb532790845c416450ee54c862684c9b6f20f9cee1101f7debf55020301be72"
+          },
+          {
+            "name": "flow_00004.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:8b71ae05d2cf2b968957be963397d5fac7c3e025d55e75430e11c0ac123f4280"
+          },
+          {
+            "name": "flow_00005.vtu",
+            "bytes": 1406072,
+            "sha256": "sha256:e57103c733e3553d6646a7a32bae833e16329936c71303b7d0bac697a3b4ddbc"
+          },
+          {
+            "name": "surface_flow_00000.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:9b175e611c869387eb5503cb164e6ace462d436fa352ce0b7c5e6c034206aaca"
+          },
+          {
+            "name": "surface_flow_00001.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:1ee00e604d3e98be719a7fc1b38e67d693d6b88bdf2451463fb9e64c79852b67"
+          },
+          {
+            "name": "surface_flow_00002.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:7828ca0af0bb6044e6c64e966cceae9a3b067e7a8d61cc5aa2ec02024b9b15a7"
+          },
+          {
+            "name": "surface_flow_00003.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:13f1d2a9dd2b2061737641f34af4eecec3136fd74546c095d9c70dc8b853996b"
+          },
+          {
+            "name": "surface_flow_00004.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:0dbf12693ad6cd1ff159f7d95a461e79a1e087ea19eb4359b811a8ea8511cf63"
+          },
+          {
+            "name": "surface_flow_00005.vtu",
+            "bytes": 245316,
+            "sha256": "sha256:8a613192de074db3039fc36a6cce1767805d81d60eb6370935f1ff1f53f70dfc"
+          },
+          {
+            "name": "history.csv",
+            "bytes": 1071,
+            "sha256": "sha256:6d26fd5776990cd3b6dbc3a579b48242424a0789b4905d9792c84edb037651d1"
+          }
+        ]
+      },
+      "frameRanges": [
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -132.93121337890625,
+            "maximum": 127.49974822998047
+          },
+          "surfacePressureRange": {
+            "minimum": -132.93121337890625,
+            "maximum": 127.49974822998047
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.3976879920394225
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -52.96485900878906,
+            "maximum": 57.36265563964844
+          },
+          "surfacePressureRange": {
+            "minimum": -52.96485900878906,
+            "maximum": 57.36265563964844
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.864113179289335
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -48.250465393066406,
+            "maximum": 60.295833587646484
+          },
+          "surfacePressureRange": {
+            "minimum": -48.250465393066406,
+            "maximum": 60.295833587646484
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.810867886949291
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -48.375648498535156,
+            "maximum": 52.364654541015625
+          },
+          "surfacePressureRange": {
+            "minimum": -48.375648498535156,
+            "maximum": 52.364654541015625
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 7.334240532674012
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -36.81212615966797,
+            "maximum": 41.201210021972656
+          },
+          "surfacePressureRange": {
+            "minimum": -36.81212615966797,
+            "maximum": 41.201210021972656
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.815519421222137
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        },
+        {
+          "schemaVersion": 1,
+          "coordinates": "m",
+          "pressure": "Pa (incompressible gauge)",
+          "velocity": "m/s",
+          "volumePoints": 7716,
+          "volumeCells": 37455,
+          "surfacePoints": 2133,
+          "surfaceCellCount": 4262,
+          "pressureRange": {
+            "minimum": -32.56950759887695,
+            "maximum": 36.26966857910156
+          },
+          "surfacePressureRange": {
+            "minimum": -32.56950759887695,
+            "maximum": 36.26966857910156
+          },
+          "speedRange": {
+            "minimum": 0,
+            "maximum": 6.443517162897423
+          },
+          "provisional": true,
+          "physicalAccuracyVerified": false
+        }
+      ]
+    }
+  ],
+  "physicalValidationComplete": false,
+  "date": "2026-10-15",
+  "conclusion": "12 inner iterations materially affect fields; 60 improves final pressure residual but does not achieve velocity convergence. Wall Newton tuning trials did not remove warnings and are not recommended defaults.",
+  "nextPriority": "Near-wall mesh and wall-treatment assessment before longer runs or temporal-accuracy claims",
+  "source": "https://su2code.github.io/tutorials/Inc_Turbulent_Bend/",
+  "inputs": {
+    "urans-inner60": {
+      "schemaVersion": 1,
+      "kind": "unsteady-incompressible-rans-sa",
+      "meshUnits": "m",
+      "densityKgM3": 1.204,
+      "dynamicViscosityPaS": 0.0000181,
+      "velocityMps": [
+        -5,
+        0,
+        0
+      ],
+      "wallMarker": "cow",
+      "farfieldMarker": "farfield",
+      "turbulenceModel": "SA",
+      "wallTreatment": "standard-wall-function",
+      "turbulentViscosityRatio": 10,
+      "cflNumber": 5,
+      "multigridLevels": 0,
+      "maxIterations": 60,
+      "residualLog10Target": -5,
+      "provenance": {
+        "mode": "exploratory",
+        "authorization": "User confirmed 20 C air, 5 m/s head-to-tail, no ground",
+        "airProperties": "Assumed representative constant properties at 20 C",
+        "turbulence": "SA eddy-viscosity model, freestream nu factor 10 is an explicit exploratory assumption",
+        "mesh": "Coarse tetrahedral mesh, no prism layers or mesh convergence verification",
+        "experiment": "Inner iteration sensitivity: 12 versus 60, identical physical dt/mesh and uniform startup. Not a validated solution."
+      },
+      "timeStepSeconds": 0.02,
+      "timeSteps": 6,
+      "outputEvery": 1
+    },
+    "urans-wall": {
+      "schemaVersion": 1,
+      "kind": "unsteady-incompressible-rans-sa",
+      "meshUnits": "m",
+      "densityKgM3": 1.204,
+      "dynamicViscosityPaS": 0.0000181,
+      "velocityMps": [
+        -5,
+        0,
+        0
+      ],
+      "wallMarker": "cow",
+      "farfieldMarker": "farfield",
+      "turbulenceModel": "SA",
+      "wallTreatment": "standard-wall-function",
+      "turbulentViscosityRatio": 10,
+      "cflNumber": 5,
+      "multigridLevels": 0,
+      "maxIterations": 12,
+      "residualLog10Target": -5,
+      "provenance": {
+        "mode": "exploratory",
+        "authorization": "User confirmed 20 C air, 5 m/s head-to-tail, no ground",
+        "airProperties": "Assumed representative constant properties at 20 C",
+        "turbulence": "SA eddy-viscosity model, freestream nu factor 10 is an explicit exploratory assumption",
+        "mesh": "Coarse tetrahedral mesh, no prism layers or mesh convergence verification",
+        "experiment": "Wall-function Newton iteration sensitivity only: 1000 iterations, relaxation .2. Same physical and flow-inner settings."
+      },
+      "timeStepSeconds": 0.02,
+      "timeSteps": 6,
+      "outputEvery": 1,
+      "wallModelNumerics": {
+        "maximumIterations": 1000,
+        "relaxationFactor": 0.2
+      }
+    },
+    "urans-wall-max1000": {
+      "schemaVersion": 1,
+      "kind": "unsteady-incompressible-rans-sa",
+      "meshUnits": "m",
+      "densityKgM3": 1.204,
+      "dynamicViscosityPaS": 0.0000181,
+      "velocityMps": [
+        -5,
+        0,
+        0
+      ],
+      "wallMarker": "cow",
+      "farfieldMarker": "farfield",
+      "turbulenceModel": "SA",
+      "wallTreatment": "standard-wall-function",
+      "turbulentViscosityRatio": 10,
+      "cflNumber": 5,
+      "multigridLevels": 0,
+      "maxIterations": 12,
+      "residualLog10Target": -5,
+      "provenance": {
+        "mode": "exploratory",
+        "authorization": "User confirmed 20 C air, 5 m/s head-to-tail, no ground",
+        "airProperties": "Assumed representative constant properties at 20 C",
+        "turbulence": "SA eddy-viscosity model, freestream nu factor 10 is an explicit exploratory assumption",
+        "mesh": "Coarse tetrahedral mesh, no prism layers or mesh convergence verification",
+        "experiment": "Wall-function Newton iteration sensitivity only: 1000 iterations, relaxation .5. Same physical and flow-inner settings."
+      },
+      "timeStepSeconds": 0.02,
+      "timeSteps": 6,
+      "outputEvery": 1,
+      "wallModelNumerics": {
+        "maximumIterations": 1000,
+        "relaxationFactor": 0.5
+      }
+    }
+  }
+}

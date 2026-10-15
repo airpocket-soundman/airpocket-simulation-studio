@@ -15,3 +15,11 @@ This is unvalidated startup, not developed wake dynamics: wall warnings and unre
 Not implemented: live in-progress field access, streamlines/vorticity/reverse-flow-specific views, browser MP4/GIF export, validated vortex shedding or GPU CFD.
 
 Primary configuration reference: https://github.com/su2code/SU2/blob/v8.5.0/config_template.cfg
+
+## Inner-iteration and wall-Newton sensitivity (2026-10-15)
+
+Same cow/mesh/dt=0.02 s, six steps: increasing inner budget 12→60 changes final pressure residual −2.919→−5.392 and worst velocity-component residual −2.176→−3.680. Velocity target −5 is unmet; final affected wall points 215→220. On 5681 nodes within x=[−1.5,1.8], y=[−0.7,0.7], z=[0,2] metres, pressure RMS difference is 1.450 Pa and vector-velocity RMS difference 0.295 m/s. These are unweighted nodal differences, not error against a known solution.
+
+Wall Newton max=1000 with relaxation 0.2 leaves 1210 affected points; relaxation 0.5 leaves 233. Neither removes warnings. These trials are not recommended or new defaults. The official tutorial identifies these as numerical options, not guaranteed remedies: https://su2code.github.io/tutorials/Inc_Turbulent_Bend/
+
+Optional startup-approved `wallModelNumerics: {maximumIterations, relaxationFactor}` accepts integer 200..2000 and finite 0.05..1, SA only. Capabilities declares ranges; unknown keys/invalid values are refused. No change to physical wall treatment or convergence tolerance. Prioritize near-wall mesh/treatment assessment next; half-time-step, mesh independence and developed wake validation remain unperformed. Evidence: `docs/evidence/2026-10-15-cow-urans-sensitivity.json` and comparison PNGs.
