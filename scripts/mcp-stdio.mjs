@@ -1,6 +1,6 @@
 import {createInterface} from 'node:readline';
 import {getAnalysisFailure} from '../src/analysis-failure.js';
-export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-simulation-studio',version='0.43.0',stdin=process.stdin,stdout=process.stdout,stderr=process.stderr}){
+export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-simulation-studio',version='0.44.0',stdin=process.stdin,stdout=process.stdout,stderr=process.stderr}){
  const send=message=>stdout.write(JSON.stringify(message)+'\n');
  let initialized=false,ready=false,queue=Promise.resolve();const input=createInterface({input:stdin,crlfDelay:Infinity});
  input.on('line',line=>{queue=queue.then(async()=>{
