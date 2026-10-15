@@ -4,7 +4,7 @@
 
 Date: 2026-10-14. Proposed product requirements: make results understandable, useful for design decisions and easy to communicate. Visualization does not establish support for an unimplemented analysis.
 
-Current features include surface results, surface/internal meshes, sections, probes, PNG/WebM and orbit/deformation/stored transient-acoustic/moving-section animations. Direct MP4/GIF, streamlines and particle animations remain unsupported.
+Current features include surface results, surface/internal meshes, sections, probes, PNG/WebM, fixed-frame PNG sequences (STORE ZIP with manifest.json, independent of real time) and orbit/deformation/stored transient-acoustic/moving-section animations. Direct MP4/GIF, streamlines and particle animations remain unsupported.
 
 ## Layers and interaction
 

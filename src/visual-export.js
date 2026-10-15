@@ -1,3 +1,4 @@
+import {FIXED_FRAME_LIMITS,FIXED_FRAME_ANIMATIONS,validateFrameCount,fixedFrameSchedule,buildStoreZip,sha256Hex,pickViewFields} from './visual-export-fixed-frame.js';
 // Capture the rendered view without changing the archived analysis fields.
 export function animationState(kind,phase,{scale=1,frames=1,min=0,max=1}={}){
  if(!['orbit','deformation','time','slice'].includes(kind)||!Number.isFinite(phase)||phase<0||phase>1||!Number.isFinite(scale)||scale<0||!Number.isInteger(frames)||frames<1||!Number.isFinite(min)||!Number.isFinite(max)||max<min)throw Error('Invalid animation settings');
@@ -82,14 +83,68 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(state.stop)throw Error('Export cancelled');if(record&&!blob)throw Error('Recording produced no data');return blob;
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
- async function render({format,animation,seconds,signal,onProgress=()=>{}}){
+
+ // Fixed-frame PNG sequence: frame i is rendered from the stored view state for index i of N; wall-clock time and tab throttling never enter the result.
+ async function renderSequence({animation='orbit',frames=FIXED_FRAME_LIMITS.defaultFrames,view={},expectedResultRevision,signal,onProgress=()=>{}}){
+  if(signal?.aborted)throw Error('Export cancelled');
+  validateFrameCount(frames);
+  if(typeof crypto==='undefined'||!crypto.subtle?.digest)throw Error('png-sequence export requires SHA-256 support');
+  if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
+  const output=getAnalysis(),result=output?.result,time=$('acoustic-time-frame');
+  if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
+  if(animation==='time'&&(result?.kind!=='acousticTransient'||!time||!result.snapshots?.length))throw Error('Time playback requires transient acoustic frames.');
+  if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
+  const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),min=coordinates.length?Math.min(...coordinates):0,max=coordinates.length?Math.max(...coordinates):1;
+  const saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value};
+  const schedule=fixedFrameSchedule({animation,frames,state:animationState,scale:Number(saved.scale),snapshotTimes:animation==='time'?result.snapshots.map(snapshot=>snapshot.time):[],min,max});
+  const state={stop:false};active=state;controls.enabled=false;controls.enableDamping=false;
+  const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
+  const offset=saved.position.clone().sub(saved.target),entries=[],records=[];let total=0,resolution;
+  try{
+   for(const step of schedule){
+    if(signal?.aborted||state.stop)throw Error('Export cancelled');
+    if(getAnalysis()!==output)throw Error('Displayed result changed during export');
+    if(animation==='orbit'){camera.position.copy(offset).applyAxisAngle({x:0,y:1,z:0},step.angleRadians).add(saved.target);camera.lookAt(saved.target);}
+    else if(animation==='deformation'){$('deform-scale').value=step.deformScale;redraw();}
+    else if(animation==='time'){time.value=step.snapshotIndex;time.dispatchEvent(new Event('input'));}
+    else{$('clip-enabled').checked=true;$('clip-position').value=step.slicePosition;$('clip-position').dispatchEvent(new Event('input'));}
+    message('固定フレーム '+(step.index+1)+'/'+frames,'Fixed frame '+(step.index+1)+'/'+frames);
+    const frame=capture(),width=frame.width,height=frame.height;
+    const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));
+    if(signal?.aborted||state.stop)throw Error('Export cancelled');
+    const bytes=new Uint8Array(await blob.arrayBuffer());
+    if(bytes.length>FIXED_FRAME_LIMITS.maxFrameBytes)throw Error('png-sequence frame '+step.index+' exceeds the '+FIXED_FRAME_LIMITS.maxFrameBytes+' byte frame cap');
+    total+=bytes.length;if(total>FIXED_FRAME_LIMITS.maxTotalBytes)throw Error('png-sequence exceeds the '+FIXED_FRAME_LIMITS.maxTotalBytes+' byte total cap; reduce frames');
+    if(resolution&&(resolution.width!==width||resolution.height!==height))throw Error('Canvas resolution changed during export');resolution={width,height};
+    const name='frame-'+String(step.index).padStart(4,'0')+'.png';entries.push({name,bytes});
+    records.push({...step,file:name,resultRevision:expectedResultRevision,width,height,bytes:bytes.length,sha256:'sha256:'+await sha256Hex(bytes),...(animation==='orbit'?{camera:{position:[camera.position.x,camera.position.y,camera.position.z]}}:{})});
+    if(signal?.aborted||state.stop)throw Error('Export cancelled');
+    onProgress({fraction:(step.index+1)/frames*.98});
+   }
+   const manifest={schemaVersion:1,kind:'airpocket-fixed-frame-png-sequence',resultRevision:expectedResultRevision,animation,frameCount:frames,resolution,
+    schedule:{basis:'fixed',timeBasis:animation==='time'?'stored acoustic frames':'frame index',phase:animation==='orbit'||animation==='deformation'?'index/frameCount':'index/(frameCount-1)',realtime:false,wallClockIndependent:true},
+    view:pickViewFields(view),scale:{units:{time:'second',angle:'radian'},...(animation==='deformation'?{deformScaleKind:'visualization multiplier'}:{})},frames:records};
+   const manifestBytes=new TextEncoder().encode(JSON.stringify(manifest,null,1));
+   if(signal?.aborted||state.stop)throw Error('Export cancelled');
+   const zip=buildStoreZip([{name:'manifest.json',bytes:manifestBytes},...entries]);onProgress({fraction:1});
+   return new Blob([zip],{type:'application/zip'});
+  }finally{
+   try{camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;
+    try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}}
+   catch(error){active=null;throw error;}
+  }
+ }
+ async function render({format,animation,seconds,frames,view,expectedResultRevision,signal,onProgress=()=>{}}){
   if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
   if(signal?.aborted)throw Error('Export cancelled');
+  if(format==='png-sequence')return renderSequence({animation,frames,view,expectedResultRevision,signal,onProgress});
   if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false});
   if(format!=='png')throw Error('Unsupported export format');
   const state={stop:false};active=state;const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
   try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
  }
- const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});return {schemaVersion:1,png:true,webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
+ const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
+ const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (per-frame resultRevision, phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
+ const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,capabilities,isActive:()=>active!==null};
 }
