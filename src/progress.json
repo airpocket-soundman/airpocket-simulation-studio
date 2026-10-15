@@ -211,15 +211,16 @@
     {
       "id": "CFD1",
       "title": "流体領域を作り、流れを解析",
-      "status": "queued",
+      "status": "building",
       "category": "流体",
-      "detail": "公開基盤と既存入出力・API/MCP/Skill整備の後、新規ソルバー内では通常風速の固定ソリッド周囲の外部流れを優先する。慣性を含む低Mach非圧縮粘性Navier–Stokesを既存OSSからネイティブ参照問題で評価し、対象Reに応じた非定常・乱流の必要性を確認する。",
+      "detail": "通常風速の外部流れを新規ソルバーの第一優先として着手。SU2 8.5.0の実験用ネイティブアダプターで公式円柱の実行、中間残差、結果ハッシュ、取消・時間切れを確認。独立精度検証、3D/境界層、乱流、共通結果・GUI・MCP接続と牛の解析は未完了。",
       "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。",
       "titleEn": "Create fluid regions and simulate flow",
-      "detailEn": "After publication infrastructure and existing I/O/API/MCP/Skill work, prioritize ordinary-speed external airflow around fixed solids among new solvers. Evaluate existing OSS low-Mach incompressible viscous Navier–Stokes with inertia on native reference cases; assess unsteady/turbulence needs at the target Reynolds numbers.",
+      "detailEn": "Started ordinary-speed external flow as the first new solver. Experimental SU2 8.5.0 native adapter runs the official cylinder, reports residuals/result hashes and verifies cancellation/timeouts. Independent accuracy, 3D/boundary layers, turbulence, shared results/GUI/MCP and cow analysis remain incomplete.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work.",
       "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
-      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete."
+      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete.",
+      "evidence": "docs/evidence/2026-10-15-su2-native.json"
     },
     {
       "id": "GPU1",
