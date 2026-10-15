@@ -1,3 +1,4 @@
+import {parseBrowserConnectorEndpoint} from './browser-connection-diagnostics.js';
 import {inspectProjectInput} from './project-input-inspection.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
@@ -122,9 +123,9 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
 }
 
 export function connectBrowserSession({endpoint,pairingToken,scopes,session,onState=()=>{},fetcher=fetch,intervalMs=750}) {
- const url=new URL(endpoint);if(url.protocol!=='http:'||url.hostname!=='127.0.0.1'||url.pathname!=='/'||url.search||url.hash)throw Error('Use an HTTP loopback endpoint');
+ const url=parseBrowserConnectorEndpoint(endpoint);
  let stopped=false,token,sessionId,timer;const controller=new AbortController();
- async function request(path,body,pair=false,requestSignal=controller.signal){const r=await fetcher(url.origin+path,{method:body===undefined?'GET':'POST',headers:{Authorization:'Bearer '+(pair?pairingToken:token),...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:requestSignal,credentials:'omit',cache:'no-store'});if(!r.ok)throw Error(`Browser bridge refused (${r.status})`);return r.json();}
+ async function request(path,body,pair=false,requestSignal=controller.signal){const r=await fetcher(url.origin+path,{method:body===undefined?'GET':'POST',headers:{Authorization:'Bearer '+(pair?pairingToken:token),...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:requestSignal,credentials:'omit',cache:'no-store',targetAddressSpace:'loopback'});if(!r.ok)throw Error(`Browser bridge refused (${r.status})`);return r.json();}
  async function poll(){if(stopped)return;try{const {commands}=await request('/poll');for(const command of commands){if(stopped)break;let reply={id:command.id};try{if(Date.now()>=command.expiresAt)throw Error('Browser command expired');if(!scopes.includes(browserMethods[command.method]))throw Error('Browser scope refused');reply.value=await session.call(command.method,command.args,{expiresAt:command.expiresAt});}catch(error){const failure=getAnalysisFailure(error);reply.error={message:error.message,code:error.code??failure?.code,...(failure?{failure}:{})};}if(!stopped)await request('/reply',reply);}if(!stopped)timer=setTimeout(poll,intervalMs);}catch(error){if(!stopped){stop();onState({state:'disconnected',message:error.message});}}}
  function stop(){if(stopped)return;stopped=true;clearTimeout(timer);session.disconnect();if(token)request('/disconnect',{},false,AbortSignal.timeout(2000)).catch(()=>{});controller.abort();onState({state:'disconnected'});}
  const ready=(async()=>{const paired=await request('/pair',{scopes},true);if(stopped)return;token=paired.token;sessionId=paired.sessionId;onState({state:'connected',sessionId,scopes});poll();return {sessionId,scopes};})();

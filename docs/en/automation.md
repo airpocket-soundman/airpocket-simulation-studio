@@ -518,3 +518,13 @@ Engine requestedMethod and actualEngine are distinct;actualEngine is the returne
 Identity/integrity records do not prove an atomic snapshot of every dynamic import,publisher signatures,environment attestation or physical accuracy. Actual public HTTPS,Skill-only end-to-end and full P0-P6 remain separate gates.
 
 Embedding adapters connecting the shared client to a Node Worker explicitly provide constructor-only runtime.identityHost(target/isolation). The default remains browser/web-worker;preflight follows the actual host. Project/options values with the same name are ignored. This is not a wire argument for users to relabel execution.
+
+## Diagnose reachability separately from authentication
+
+The connection UI reports local-network permission and bridge reachability separately. After checking the configured Origin and loopback Host, unauthenticated `GET /health` returns only `{schemaVersion:1,kind:"airpocket-browser-bridge"}`. Success does not verify the pairing code, establish a session, or grant scopes; the diagnostic result keeps `authenticated:false`. The probe sends no credentials, code or model, accepts at most 1,024 UTF-8 response bytes, and times out after five seconds. Timeout, unreachable and invalid-response results are not authentication failures.
+
+Call `studio_browser_sessions({diagnostics:true})` to add `diagnostics` alongside the existing `sessions` reply. Omission or `false` preserves the old shape. Diagnostics contain configured `origin` / `endpoint`, current `sessionCount`, and fixed counters for requests, preflights, health checks, pairing success/refusal, Origin/Host refusal, authentication refusal, disconnects, expiry, request errors, scope refusal and command timeouts. They retain no codes, Bearer tokens, incoming URLs/Origins/headers/bodies, models or individual session IDs. The ordinary sessions list still provides its existing IDs and granted scopes.
+
+Counters record only traffic observed by this process. No increase cannot identify a browser-permission, mixed-content, network or stopped-server cause. Check reachability and pairing separately; users still explicitly grant operation scopes.
+
+Browser requests specify `targetAddressSpace:"loopback"`; browser permission remains authoritative and support is not guaranteed. See the current [Local Network Access specification](https://wicg.github.io/local-network-access/) and [official Chrome explanation](https://developer.chrome.com/blog/local-network-access). This path does not depend on the paused legacy Private Network Access special preflight headers or unconditionally add `Access-Control-Allow-Private-Network`. Existing CORS, Origin/Host, Bearer and scope checks remain in place.

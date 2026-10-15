@@ -30,3 +30,7 @@ Draft 2020-12 schemas cover command envelopes/documented nested fields, not comp
 
 
 For bounded current-input values use inspect-scope `inspectInput`; read [saved-inputs.md](saved-inputs.md#bounded-input-inspection-prefer-over-legacy-full-study-replies) for section/pointer/revision/paging. This does not require edit scope and does not change input.
+
+## Connection diagnostics
+
+If pairing fails, use **Diagnose connection** without entering a code. The bounded GET `/health` probe sends no credentials and reports reachability separately from authentication; permission-query status is advisory and `denied` does not establish that the user refused a prompt. A successful health probe grants no scope and creates no session. Use `studio_browser_sessions({diagnostics:true})` for bounded bridge counters; omitted/false retains `{sessions}`. Zero requests means this bridge observed none, not a proven browser/network cause. Diagnostics retain only configured Origin/endpoint, counters and session count, never received URLs/Origins, headers, tokens or model data. Do not enable security bypass flags, silently grant browser permissions, or expand application scopes. Public HTTPS connectivity remains unverified; a failure against the older public UI is not a test of the new loopback fetch hint.
