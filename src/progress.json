@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T02:13:09.7342596+00:00",
+  "updatedAt": "2026-10-15T03:11:42.378Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2369,7 +2369,8 @@
       "detailEn": "Add shared module src/case-comparison.js, browser caseCompare and MCP studio_compare_cases. Compare 1–8 existing saved cases at the same global point using raw values in original units, with explicit mode/frame. Recheck lease/guard freshness and bound responses to 64 KiB. UI and stored data are unchanged.",
       "acceptance": "1〜8件・同一グローバル点・生値/単位・明示モード/フレームの比較、非互換理由、未知/破損/失効の全体拒否、lease鮮度再確認、64KiB上限を検証。全体スイートと公開QAは未完了で、物理精度・同入力性・別メッシュ間の対応は保証しない。",
       "acceptanceEn": "Verify 1–8 cases at one global point with raw values/units and explicit mode/frame, incompatibility reasons, whole-request rejection of unknown/corrupt/stale inputs, lease freshness rechecks and the 64 KiB bound. Full-suite and published QA remain incomplete; no claim of physical accuracy, equal inputs or cross-mesh correspondence.",
-      "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs"
+      "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs; docs/evidence/2026-10-15-case-comparison-local-runtime.json; docs/evidence/2026-10-15-case-comparison-browser-qa.json",
+      "lastUpdate": "実Chrome(localhost)で実Worker/WASMの保存ケース比較、接続済みcaseCompare(inspectのみ・編集拒否)、MCP studio_compare_casesを確認。公開HTTPS・物理精度・別メッシュは未確認。"
     }
   ],
   "solvers": [
