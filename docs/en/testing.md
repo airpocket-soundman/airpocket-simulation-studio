@@ -561,3 +561,9 @@ Default Node24 full suite: 977 of 980 passed, 3 skipped, zero failed (154.09 s).
 ## 2026-10-15: Development history and product estimate
 
 Reviewed Claude CLI implementation and fixed unknown intervals, Windows CRLF binding and historical-candidate credit. Full suite: 1011 tests, 1008 passed, 3 skipped, zero failures. Build and 27 distribution checks (26 original plus history) passed. Actual browser checks covered 151 points, JP/EN, 390px, legend, keyboard, table and rubric. Estimate 25%, subjective scenario range 16–42%. See [evidence](../evidence/2026-10-15-progress-dashboard.json) and [method](progress-dashboard.md). Feature publication CI remains separately pending. Publication infrastructure23e430e passed verify/deploy/verify-published and26checks; preserve failed badce2c.
+
+## 2026-10-15: User report of public HTTPS reconnect and Skill input preview
+
+The user reported reconnecting to the published HTTPS version successfully. This was not independently observed. Success of an inspect operation, session termination after disconnect, browser version and published revision remain unverified, so PUBLICHTTPS1 stays checking. No edit or analysis scope was granted. See the [user-report record](../evidence/2026-10-15-public-https-reconnect-user-report.json).
+
+All 11 repository/installed Skill files matched by byte count and SHA, and both validators passed. An in-repository stdio preview changed a synthetic axial load from 100 N to 150 N and returned `PROVENANCE_STALE` for `/conditions/1/value`, preserving the original input bytes. The candidate was previewed only; it was not applied or analyzed. Repository factories created the fixture, so this does not prove Skill-only or complete end-to-end behavior. The scoped SKILLROUTING1 acceptance is met and marked ready. See the [synchronization evidence](../evidence/2026-10-15-skill-synchronization-b.json) and [preview evidence](../evidence/2026-10-15-skill-forward-input-preview-b.json).

@@ -565,3 +565,9 @@ Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeId
 ## 2026-10-15: 開発の履歴・完成度の可視化
 
 Claude CLIの実装を独立レビューし、欠落区間・Windows改行・過去候補の加点を修正。全体1011件中1008成功・3skip・失敗0、buildと配信物27項目（元26＋履歴）が成功。151記録点と日英・390px・凡例・キー選択・表・算定根拠を実画面で確認。推定25%、主観シナリオ幅16〜42%。[証跡](evidence/2026-10-15-progress-dashboard.json)と[算定方法](progress-dashboard.md)。本機能の公開CIは別途記録する。公開基盤23e430eはverify/deploy/verify-publishedと26項目が成功し、失敗したbadce2cは保存する。
+
+## 2026-10-15: 公開HTTPS再接続の利用者報告とSkill入力preview
+
+利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。
+
+Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し、両validatorが成功した。実in-repo stdioのsynthetic 100 N→150 N previewは `/conditions/1/value` の古い根拠を `PROVENANCE_STALE` として示し、元入力bytesを保持した。変更はpreviewのみで適用・解析していない。fixture生成にrepository factoryを使ったためSkill単独/全一巡の証明ではないが、SKILLROUTING1の記載済み受け入れ範囲を満たしreadyへ更新した。[同期証跡](evidence/2026-10-15-skill-synchronization-b.json)、[preview証跡](evidence/2026-10-15-skill-forward-input-preview-b.json)。
