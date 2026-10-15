@@ -9,7 +9,7 @@ The per-discipline if/else chain inside `solve()` of `src/analysis.worker.js` (c
 - `src/solver-adapters/index.js`: the registry. `resolveSolverAdapter(study)` looks an adapter up by `study.kind`. An unregistered or missing kind still runs as structural, as before (`legacyDefaultKind='structural'`).
 - Adapters (each `{kind, progressMessage, execute(ctx)}`): `creeping-flow-adapter.js`, `channel-flow-adapter.js`, `acoustic-adapter.js`, `thermal-adapter.js`, `structural-adapter.js` (modal, plasticity, hyperelastic, MFEM, WebGPU and Tet4 PCG included).
 - Adapters may also define an optional `validate({phase,data})` hook (all five do). Discipline-specific pre-dispatch validation moved there (see below).
-- The worker keeps acceptance, generic validation, meshing, progress, failure stage, post-processing (fracture, fatigue, temperature-range checks) and result delivery.
+- The worker keeps acceptance, generic validation, meshing, progress, failure-stage management, a shared post-processing guard and result delivery. Fracture and fatigue evaluation now belongs to the structural adapter; the thermal adapter checks temperature ranges.
 - To add a discipline: add one adapter file and one entry in the `adapters` array of `index.js`.
 
 ## Deliberately unchanged
@@ -36,12 +36,12 @@ Shared guards live in `src/solver-adapters/validation.js`; each adapter's `valid
 
 - Optional hook `buildOptions({data})`: returns discipline-specific mesh options that the worker's `build()` spreads after `data.options`. Only creepingFlow implements it (caps `maxElements` at `min(8000, options.maxElements ?? 8000)`), at the same position and with the same value as the former `stokes?{...}:{}` branch.
 - Optional hook `adaptive({data,mesh,solve,progress,observe})`: invokes the adaptive refinement loop (including its default limits). Only structural implements it, because the indicators need structural stress/strain fields. Other disciplines never reach it since `validate` already rejects adaptive; as a guard the worker fails an adapter without `adaptive` with the same message ("Adaptive refinement currently supports structural analysis only").
-- Stays in the worker: the `build`/`solve` closures, the mesh-generation call, merging of cylindrical/planar CAD regions and user refinements, mesh observation, the `operation==='mesh'` vs adaptive branching, the fracture/fatigue assessment calls. These are shared orchestration or post-processing, and hooking them would risk behavior drift. (Boundary-transfer skipping and the thermal temperature-range check moved out in the post-processing slice below.)
+- Stays in the worker: the `build`/`solve` closures, the mesh-generation call, merging cylindrical/planar CAD regions and user refinements, mesh observation, the `operation==='mesh'` vs adaptive branching, and boundary-transfer skipping through the adapter's `skipsBoundaryTransfer` flag. These are shared orchestration responsibilities.
 - Pinned by `tests/solver-adapter-build.test.mjs` (22 cases recorded from the pre-move code: structural adaptive, thermal/other adaptive rejection, mesh-only, STL, fluidDomain, flow/Stokes build and element cap; includes a digest of all non-timing messages).
 
 ## Not done (MOD1 is not complete)
 
-- UI/state separation, TypeScript contracts and React/WASM migration are not part of this slice.
+- UI/state separation has advanced in part, but main.js's large template and full lifecycle remain together. TypeScript contracts and React/WASM migration are also incomplete.
 - The discipline-specific parts of `build` and the adaptive-loop call are adapterized (below). Mesh generation itself, progress, and the adaptive loop body (`src/adaptive.js`) stay shared.
 
 ## Tests
@@ -51,6 +51,6 @@ Shared guards live in `src/solver-adapters/validation.js`; each adapter's `valid
 ## Post-processing hooks (slice 9)
 
 - Optional flag `skipsBoundaryTransfer`: when `true` the worker still enters the `boundary-transfer` stage and emits the "Transferring boundary regions…" progress, but passes `{reports:[]}` instead of calling `transferConditions`. Set by `creepingFlow` and `channelFlow` (replaces the worker's `stokes||flow` test).
-- Optional hook `postprocess({data,result})`: called in the worker's `postprocess` stage after the generic fracture/fatigue assessments and before `result.performance` is set. Implemented only by `thermal` (material temperature-range check of the final field, the transient initial temperature and each history min/max; same errors as before).
-- Stays in the worker: the fracture/fatigue assessment calls and their `study.kind!=='structural'` guards. The guards reject every non-structural study (and thermal-stress/modal), so they are a shared assessment-support gate rather than one discipline's rule; moving them would force every other adapter to carry a rejecting hook (or a default) to keep the same error and ordering. Ordering is unchanged: fracture, fatigue, adapter `postprocess`, performance, delivery.
+- Optional hook `postprocess({data,result})`: called during the worker's `postprocess` stage after the shared assessment-eligibility guard and before `result.performance` is set. `structural` runs fracture evaluation followed by fatigue evaluation and rejects thermal-stress/modal studies. The evaluators still reject nonlinear results such as J2 plasticity and Neo-Hookean; their numerical algorithms are unchanged. `thermal` checks the final field, transient initial temperature and history min/max against material temperature limits.
+- Stays in the worker: `validateAssessmentDiscipline`, which rejects assessment requests for non-structural disciplines before the selected adapter hook. It preserves the legacy message and `postprocess` failure stage. Ordering is non-structural shared rejection, then for structural results fracture, fatigue, adapter postprocess, performance and delivery. Thermal-stress/modal rejection lives in the structural adapter.
 - Pinned by `tests/solver-adapter-post.test.mjs` (20 cases recorded from the pre-move code: flow/Stokes solves and their assessment guards, thermal steady/transient in/out of range, structural fracture/fatigue, acoustic; digest of all non-timing messages).

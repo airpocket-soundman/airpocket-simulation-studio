@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-10-15T06:59:48.633Z",
+  "origin": "http://127.0.0.1:5184",
+  "browser": "real Chrome",
+  "browserVersion": null,
+  "checks": [
+    {
+      "adaptiveDisabled": true,
+      "mfemDisabled": true,
+      "physics": "thermal",
+      "solver": "wasm-pcg",
+      "stage": "thermal"
+    },
+    {
+      "adaptiveDisabled": true,
+      "stage": "channelFlow",
+      "visibleDetailsOpen": true
+    },
+    {
+      "adaptiveDisabled": true,
+      "mfemDisabled": true,
+      "modal": true,
+      "physics": "structural",
+      "stage": "modal",
+      "webgpuDisabled": true
+    }
+  ],
+  "flowDetails": {
+    "allOpen": true,
+    "count": 1
+  },
+  "limitations": [
+    "UI control transitions only; no analysis run",
+    "Uncommitted source snapshot; no public HTTPS pairing proof"
+  ],
+  "sourceSnapshot": {
+    "src/main.js": {
+      "bytes": 159002,
+      "sha256": "f4350c48d2b4811644642435b6bd9e23111307502c4875f7d566efb292f56327",
+      "basis": "raw-worktree-utf8"
+    },
+    "src/ui/discipline-controls-ui.js": {
+      "bytes": 1621,
+      "sha256": "7ad97aea047809993f319af237a15aeba749f37ea2bba84baf449d836538b139",
+      "basis": "raw-worktree-utf8"
+    }
+  }
+}

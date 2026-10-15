@@ -9,6 +9,7 @@ import {validateVibrationStudy} from '../vibration-source.js';
 import {validateTransientAcousticStudy} from '../acoustic-transient.js';
 import {validateFarFieldStudy} from '../acoustic-far-field.js';
 import {validateMaterialProperties} from '../materials.js';
+import {analysisError} from '../analysis-failure.js';
 const gpuOrMfem=m=>['webgpu-pcg','mfem-wasm'].includes(m);
 export const structuralConditionTypes=['fixed','displacement','force','pressure','normalTraction'];
 const otherDisciplineMessage='Remove boundary conditions belonging to the other discipline or use the matching example';
@@ -23,6 +24,14 @@ export function validateStudyFeatures(data){
  if(data.operation!=='mesh'&&data.project.materialProperties?.plasticity&&(data.project.study?.modalAnalysis||data.options.adaptive||gpuOrMfem(data.options.method)||data.project.study?.thermalStress))throw Error('Plasticity supports CPU structure without adaptation, modal analysis or thermal stress');
  if(data.project.study?.modalAnalysis&&(data.project.study.kind!=='structural'||data.project.study.thermalStress||data.project.materialProperties?.hyperelastic||data.options.adaptive||gpuOrMfem(data.options.method)||data.project.study.gravityEnabled!==false&&data.project.study.gravity?.some(v=>v!==0)))throw Error('Modal prototype requires linear CPU structure, homogeneous supports and no gravity, thermal stress or adaptation');
  validateFarFieldStudy(data.project.study||{});validateTransientAcousticStudy(data.project.study||{});validateVibrationStudy(data.project.study||{});
+}
+// Assessments are structural-only. The worker calls this shared guard at the
+// postprocess boundary now that evaluation belongs to the selected adapter.
+// Tag the legacy stage so failure metadata remains stable.
+export function validateAssessmentDiscipline(data){
+ if(data.operation==='mesh'||data.project.study?.kind==='structural')return;
+ if(data.options.fractureAssessment!==undefined)throw analysisError('ANALYSIS_POSTPROCESS_FAILED','Fracture assessment requires linear structural analysis',{stage:'postprocess'});
+ if(data.options.fatigueAssessment!==undefined)throw analysisError('ANALYSIS_POSTPROCESS_FAILED','Fatigue assessment requires uniaxial elastic structure without thermal stress',{stage:'postprocess'});
 }
 // 'configured', last part for every non-structural discipline (after its boundary-condition check).
 export function rejectAdaptiveAndGpuForNonStructural(data){
