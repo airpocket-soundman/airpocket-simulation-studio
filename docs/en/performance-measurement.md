@@ -34,6 +34,22 @@ node scripts/perf-measure.mjs --list
 
 `.qa/` is git-ignored. The report carries `schemaVersion: 1` and `scope: "node-worker-wasm-cpu; not browser, not GPU, not network"`. A failed case records `status: "failed"` and `error`, and the exit code is 1. `tests/perf-measure.test.mjs` runs the smallest case and validates only the schema and required fields; it has no timing thresholds.
 
+## Browser-side measurement (`scripts/perf-browser.mjs`; implemented, real-browser run pending)
+
+Drives the real page on localhost through the stdio connector (`node scripts/studio-mcp.mjs --browser-origin=<origin>`). **Any origin other than localhost, 127.0.0.1 or [::1] is refused.** Results are measurements, not limits or guarantees. No real-browser values exist yet and PERF1 stays open.
+
+```
+node scripts/perf-browser.mjs [--origin http://127.0.0.1:5174] [--out .qa/perf-browser-report.json] [--repeats 3] [--cases structural-tiny,structural-medium,structural-fine] [--timeout-ms 300000] [--pair-timeout-ms 600000]
+node scripts/perf-browser.mjs --print-probe        # print the memory probe snippet
+node scripts/perf-browser.mjs --merge-memory <probe.json> --out .qa/perf-browser-report.json
+```
+
+Operator procedure: (1) Start the dev server, open `<origin>/?lang=en` in a dedicated profile and tab, and load the 10x10x40 mm block with the study for the physics being measured. (2) Optional memory: paste the `--print-probe` snippet into DevTools (`window.__perfProbe` records `measureUserAgentSpecificMemory` (cross-origin isolated only) or `performance.memory` every second). (3) Run the command in an interactive terminal. Enter the endpoint and pairing code shown there into the app connection UI and grant **only the inspect and analyze scopes**. The code is shown on the terminal only and is never written to a file, the report or a log (it is withheld when stdout is not a terminal). (4) Measurement starts automatically once a session appears; do not touch the page until it finishes. (5) Memory: afterwards save the output of `copy(__perfProbe.report())` to `.qa/probe.json` and merge it with `--merge-memory`. Without a probe the report's `memory` is `null` with `memoryReason` `probe-absent...` (explicitly not measured).
+
+Per case the script freezes the input revision and runs `startJob` (options.size = the case mesh size) once cold and `--repeats` times warm, waiting for `jobStatus` (`executionSettled`) to settle within the timeout. Phase times come from `jobEvents` receive times. Cancel requests `cancelJob` (a) after the first event and (b) at 50% of the median warm total, `--repeats` times each, and records the latency from the request to the observed settled state (terminal and `executionSettled`), including the polling granularity (`--poll-ms`, default 50 ms). It also records whether a re-run succeeds afterwards (`recoveredAfterCancel`). A job that never settles marks the case `failed` (`timedOut`) and the exit code is 1. Thermal and acoustic physics depend on the input loaded in the page and are not verified by the script: load the thermal setup before running `--cases thermal-steady`.
+
+The report has `schemaVersion: 1`, `scope: "browser via connector; localhost; real browser"`, the revision, the browser user agent (from the probe when inspect does not return it, otherwise `null`) and per-case `cold`/`warm`/`cancel`/`memory`. Times are host-observed through the connector, not in-page `performance.now()`. GPU, network, other browsers and memory limits are not measured. `tests/perf-browser.test.mjs` checks the schema, refusal, timeout handling and token non-leakage with a fake connector.
+
 ## Interpretation
 
 Report values are results for that environment and build at that time. Do not treat them as supported size limits, performance targets or guarantees; deciding supported sizes needs follow-up work that includes browser measurement. Do not write these numbers into documentation or the UI as guarantees.
