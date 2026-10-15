@@ -18,3 +18,12 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 
 ## Verification
 `tests/ui-case-list.test.mjs` checks rendering and wiring with a minimal fake DOM. Real-browser behavior still needs separate verification.
+
+## Fourth slice: status line
+`src/ui/status-ui.js` (`createStatusUi`) now owns the `status` function previously in main.js, with unchanged behavior:
+
+- Fixed Japanese labels (`STATUS_LABELS`) for 15 known messages (out-of-range temperature table, insufficient constraints, cancellation, per-analysis progress, etc.)
+- Anything else is delegated to the injected `localizeStatus` (`ui-errors.js`) and written to `#status` `textContent`
+
+`$` and `localizeStatus` are injected; the module does not import main.js. The label table is now a frozen constant instead of being rebuilt per call. The `language` (i18n) state, the conditions list, 3D selection and analysis execution did not move.
+`tests/ui-status.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.

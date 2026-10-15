@@ -219,6 +219,7 @@
     "named-view-ui.js",
     "print-ui.js",
     "ui/case-list-ui.js",
+    "ui/status-ui.js",
     "visual-export-jobs.js",
     "visual-export.js"
    ]
@@ -291,12 +292,6 @@
    "from": "analysis-client.js",
    "to": "new Worker",
    "reason": "Intentional: analysis-client.js is the only session module that spawns the analysis Web Worker (createWorker, overridable in tests via runtime.createWorker)."
-  },
-  {
-   "kind": "dom",
-   "from": "analysis-client.js",
-   "to": "location",
-   "reason": "Pre-existing: default baseUrl uses location.href to resolve WASM asset URLs (overridable via runtime.baseUrl). Remove by having main.js pass baseUrl in."
   },
   {
    "kind": "edge",

@@ -53,7 +53,7 @@ test('the real repository satisfies its module boundaries and the graph is what 
   assert.ok(graph['main.js'].local.includes('cad.worker.js'), 'worker started from main.js must create an edge');
   assert.ok(graph['solver-adapters/index.js'].local.length > 0, 'subdirectory file edges must resolve');
   assert.ok(graph['project-import.js'].external.includes('three'));
-  assert.ok(graph['analysis-client.js'].domHits.includes('location'));
+  assert.ok(!graph['analysis-client.js'].domHits.includes('location'), 'analysis-client.js must not use the location global (baseUrl is injected)');
   assert.ok(graph['main.js'].domHits.length > 0);
   for (const [name, def] of Object.entries(config.layers)) assert.ok(def.files.length > 0, name);
 });
