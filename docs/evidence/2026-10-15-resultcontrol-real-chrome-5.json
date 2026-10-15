@@ -1,0 +1,56 @@
+{
+ "task": "RESULTCONTROL1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "8ea074ae981c470a4e47e0868057afe3384c490a",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; scopes inspect/edit/analyze/view; examples loaded with #transient-acoustic-demo and #modal-demo and solved with #solve-run (GUI); probe point [5,5,20] mm"
+ },
+ "checks": [
+  {
+   "name": "Transient-acoustic example: setResultView frameIndex then probe uses the displayed stored frame",
+   "passed": true,
+   "detail": "61 stored frames. frame 0 t=0 s p=0 Pa; frame 10 t=0.000673527 s p=-0.00740929 Pa; frame 30 t=0.00202058 s p=0.000663793 Pa; frame 60 t=0.004 s p=2.59262e-11 Pa. probe.display.frameIndex and physicalTimeSeconds matched each setResultView and pressure values differed per frame"
+  },
+  {
+   "name": "probe ignores frameIndex supplied in options or at top level; the displayed frame decides",
+   "passed": true,
+   "detail": "with frame 60 displayed, probe options.frameIndex=5 and top-level frameIndex=5 both returned display.frameIndex 60 and p=2.59262e-11 Pa. There is no per-probe frame argument; probing another frame requires setResultView first (documented behaviour)"
+  },
+  {
+   "name": "Stored-time selection: exact stored time accepted, between-frame time and out-of-range frame refused",
+   "passed": true,
+   "detail": "setResultView timeSeconds equal to frames[15].timeSeconds selected frameIndex 15 (t=0.00101029 s); the midpoint between frames 10 and 11 failed \"No stored acoustic frame at requested physical time\"; frameIndex 61 failed \"Invalid stored acoustic frame index\"; timeSelection reported \"stored-frames-only\"; no interpolation. getResultView frames list is capped at 20 entries (frames 0-19)"
+  },
+  {
+   "name": "Stale resultRevision probe refused",
+   "passed": true,
+   "detail": "probe with a zero sha256 expectedResultRevision failed \"Displayed result revision conflict\""
+  },
+  {
+   "name": "Modal example: setResultView modeIndex then probe uses the displayed mode",
+   "passed": true,
+   "detail": "2 stored modes. mode 0: display.modeIndex 0, frequencyHz 277.914, magnitudeMm 0.102475, displacementMm [-0.0214,-0.1002,-7.7e-6]; mode 1: frequencyHz 278.666, magnitudeMm 0.102334, displacementMm [-0.1001,0.0215,-1.1e-4]; normalization \"maximum modal displacement = 1 mm\"; modeIndex 2 refused \"Invalid stored mode index\""
+  },
+  {
+   "name": "Fixed range applied and shown in the legend (JA)",
+   "passed": true,
+   "detail": "transient frame 30 colorRange instantPressure -1..1 -> #result-legend \"固定範囲 · -1.000 → 1.000 Pa · instantaneous\"; modal 0..0.5 -> \"固定範囲 · 0.000 → 0.5000 mm · normalized mode\"; auto range legend \"0.000 → 1.000 mm · normalized mode\""
+  },
+  {
+   "name": "Fixed range legend in EN (page loaded with ?lang=en)",
+   "passed": true,
+   "detail": "modal 0..0.5 -> \"Fixed range · 0.000 → 0.5000 mm · normalized mode\"; transient frame 30 -1..1 -> \"Fixed range · -1.000 → 1.000 Pa · instantaneous\". The unit/quantity words (instantaneous, normalized mode) are English in both locales; only the leading label is localized. Decimal precision differs between 1.000 and 0.5000"
+  }
+ ],
+ "observations": [
+  "In one EN session, loading #transient-acoustic-demo after #modal-demo and pressing #solve-run failed with \"Modal analysis requires linear elasticity and positive density\" (the modal setting persisted across the example switch); a fresh page load of the transient example solved normally (seq33). Not investigated further or classified as a defect."
+ ],
+ "notVerified": [
+  "Published HTTPS page (PUBLICHTTPS1) - localhost only",
+  "Modal case has only 2 stored modes, so a mode index above 1 was not probed",
+  "Legend text was read from #result-legend DOM text only, no screenshot comparison",
+  "Camera and named views not re-tested here"
+ ]
+}
