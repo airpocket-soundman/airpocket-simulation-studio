@@ -27,3 +27,9 @@ Specification of the “Progress history & estimate” view of the development b
 `tests/progress-history.test.mjs` (extraction, schema, bounds, real git), `tests/product-estimate.test.mjs` (rubric, arithmetic, scope), `tests/published-history.test.mjs` (candidate-pinned read and manifest). Built assets are checked by `progress-history-candidate` in `npm run test:published -- --local`. Rendering and interaction require a separate real-browser check.
 
 Review corrections: any skipped record disables connecting lines; show known points only, without forward-filling unknown intervals. Accept only Git CRLF conversion when binding exact displayed progress bytes to history; reject other uncommitted differences. Full gate credit requires verified/passed evidence matching the displayed candidate. Unknown acceptance requirements require a rubric revision linking evidence-bearing tasks before closure, preserving total weight 100. MCP studio_progress accepts optional includeEstimate/includeHistory while preserving its default response.
+
+## Publication-state reconciliation
+
+Successful CI or a merge to main does not automatically mark a task released. After publication, reconcile each task's own acceptance criteria and evidence with inclusion in the deployed revision. Promote verified tasks that satisfy those conditions in an evidence-backed PR. Keep items with unverified conditions, and partially implemented P0–P6/MOD1 plans, open. Do not duplicate requirements such as public pairing across every feature when they have explicitly been separated into their own task.
+
+A batch audit of delayed status updates may create a jump in the released-count history. That increase is a status correction at audit time, not the number of features implemented or development speed during the same interval. Preserve the actual Git history and record the decisions and original publication evidence in the audit.
