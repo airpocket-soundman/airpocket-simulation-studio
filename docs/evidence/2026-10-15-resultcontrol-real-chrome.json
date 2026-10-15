@@ -1,0 +1,489 @@
+{
+ "task": "RESULTCONTROL1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome (extension, real Chrome tab)",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "e2e90e8 (codex/evidence-chrome = origin/main), local vite dev server",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio, loopback HTTP polling; all four scopes (inspect/edit/analyze/view) granted for the local test session"
+ },
+ "scenario": "Local dev server; #analysis-demo, #mesh-run, #solve-run clicked in page and waited for idle (status \"analysis completed\", cancel-run disabled); then studio_browser_call getResultView/setResultView/probe through the real stdio MCP connector. Elastic axial bar reference, resultRevision sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859.",
+ "checks": [
+  {
+   "name": "Fixed colour range set via setResultView and reflected in the returned state",
+   "passed": true,
+   "detail": "colorRange {displacement, 0..0.05} returned."
+  },
+  {
+   "name": "Camera set via setResultView retained alongside the range",
+   "passed": true,
+   "detail": "camera returned: {\"position\":[80.00000000000001,60,100],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":35}. Requested x 80 came back as 80.00000000000001 (floating-point round trip, not exact)."
+  },
+  {
+   "name": "Changing field resets the fixed range to null",
+   "passed": true,
+   "detail": "field=stress -> colorRange null."
+  },
+  {
+   "name": "Fixed stress range 0..10 persists in subsequent getResultView",
+   "passed": true,
+   "detail": "Final state: {\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[80.00000000000001,60,100],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":35}}"
+  },
+  {
+   "name": "Page DOM reflects the connector-set state",
+   "passed": true,
+   "detail": "Read in the Chrome tab via javascript_tool: result-field=stress, color-fixed=true, color-min=0, color-max=10, legend \"Fixed range · 0.000 → 10.00 MPa · Nodal averaging\". The legend text was English while page status text was Japanese; Japanese/English legend localization was NOT compared."
+  },
+  {
+   "name": "probe at [5,5,10] uses the displayed field and is bound to the result revision",
+   "passed": true,
+   "detail": "display.field=stress; element 63; vonMisesPa=1000000.0000384211; displacement z mm=0.010000000000600048"
+  },
+  {
+   "name": "Stale result revision refused",
+   "passed": true,
+   "detail": "Displayed result revision conflict"
+  },
+  {
+   "name": "Invalid camera (fov 400) refused",
+   "passed": true,
+   "detail": "Invalid camera settings"
+  },
+  {
+   "name": "Range whose field mismatches the displayed field refused",
+   "passed": true,
+   "detail": "Invalid fixed color range or field unit mismatch"
+  },
+  {
+   "name": "Unknown settings key refused",
+   "passed": true,
+   "detail": "Invalid result view command"
+  },
+  {
+   "name": "Degenerate range (min == max) refused",
+   "passed": true,
+   "detail": "Invalid fixed color range or field unit mismatch"
+  }
+ ],
+ "notVerified": [
+  "Time-selected or modal-mode probes: the elastic demo has frameCount 0 and modeCount 0, so stored time/mode selection was not exercised in this Chrome run.",
+  "Japanese/English legend localization was not compared side by side.",
+  "Public HTTPS site / published build was not opened or tested; only http://127.0.0.1:5174 (local vite dev server).",
+  "Physical inputs are the built-in reference sample (not measured data); results are provisional reference values, not validated accuracy.",
+  "One Chrome profile on one machine; no other browsers, no mobile, no cross-origin pairing.",
+  "Page was driven through its connection UI and in-page button .click() calls via javascript_tool, not by real pointer events."
+ ],
+ "calls": [
+  {
+   "name": "read initial",
+   "method": "getResultView",
+   "ok": true,
+   "args": {},
+   "state": {
+    "field": "displacement",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": null,
+    "camera": {
+     "position": [
+      61.00000000000001,
+      41,
+      84
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 40
+    }
+   }
+  },
+  {
+   "name": "set fixed range",
+   "method": "setResultView",
+   "ok": true,
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "field": "displacement",
+     "colorRange": {
+      "field": "displacement",
+      "minimum": 0,
+      "maximum": 0.05
+     }
+    }
+   },
+   "state": {
+    "field": "displacement",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": {
+     "field": "displacement",
+     "minimum": 0,
+     "maximum": 0.05
+    },
+    "camera": {
+     "position": [
+      61.00000000000001,
+      41,
+      84
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 40
+    }
+   }
+  },
+  {
+   "name": "set camera",
+   "method": "setResultView",
+   "ok": true,
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "camera": {
+      "position": [
+       80,
+       60,
+       100
+      ],
+      "target": [
+       5,
+       5,
+       20
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ],
+      "fov": 35
+     }
+    }
+   },
+   "state": {
+    "field": "displacement",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": {
+     "field": "displacement",
+     "minimum": 0,
+     "maximum": 0.05
+    },
+    "camera": {
+     "position": [
+      80.00000000000001,
+      60,
+      100
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 35
+    }
+   }
+  },
+  {
+   "name": "set stress field (range resets)",
+   "method": "setResultView",
+   "ok": true,
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "field": "stress"
+    }
+   },
+   "state": {
+    "field": "stress",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": null,
+    "camera": {
+     "position": [
+      80.00000000000001,
+      60,
+      100
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 35
+    }
+   }
+  },
+  {
+   "name": "set stress fixed range",
+   "method": "setResultView",
+   "ok": true,
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "field": "stress",
+     "colorRange": {
+      "field": "stress",
+      "minimum": 0,
+      "maximum": 10
+     }
+    }
+   },
+   "state": {
+    "field": "stress",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": {
+     "field": "stress",
+     "minimum": 0,
+     "maximum": 10
+    },
+    "camera": {
+     "position": [
+      80.00000000000001,
+      60,
+      100
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 35
+    }
+   }
+  },
+  {
+   "name": "read after changes",
+   "method": "getResultView",
+   "ok": true,
+   "args": {},
+   "state": {
+    "field": "stress",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": {
+     "field": "stress",
+     "minimum": 0,
+     "maximum": 10
+    },
+    "camera": {
+     "position": [
+      80.00000000000001,
+      60,
+      100
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 35
+    }
+   }
+  },
+  {
+   "name": "probe displayed field",
+   "method": "probe",
+   "ok": true,
+   "args": {
+    "point": [
+     5,
+     5,
+     10
+    ],
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859"
+   }
+  },
+  {
+   "name": "reject stale revision",
+   "method": "setResultView",
+   "ok": false,
+   "error": "Displayed result revision conflict",
+   "args": {
+    "expectedResultRevision": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "settings": {
+     "deformScale": 2
+    }
+   }
+  },
+  {
+   "name": "reject invalid camera",
+   "method": "setResultView",
+   "ok": false,
+   "error": "Invalid camera settings",
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "camera": {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "target": [
+       0,
+       0,
+       0
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ],
+      "fov": 400
+     }
+    }
+   }
+  },
+  {
+   "name": "reject mismatched range field",
+   "method": "setResultView",
+   "ok": false,
+   "error": "Invalid fixed color range or field unit mismatch",
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "field": "stress",
+     "colorRange": {
+      "field": "displacement",
+      "minimum": 0,
+      "maximum": 1
+     }
+    }
+   }
+  },
+  {
+   "name": "reject unknown key",
+   "method": "setResultView",
+   "ok": false,
+   "error": "Invalid result view command",
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "bogus": 1
+    }
+   }
+  },
+  {
+   "name": "reject min>=max",
+   "method": "setResultView",
+   "ok": false,
+   "error": "Invalid fixed color range or field unit mismatch",
+   "args": {
+    "expectedResultRevision": "sha256:d582c1fe04f2250be8f4abcba4722077e457226e4e67009f141ba80bf7ad3859",
+    "settings": {
+     "colorRange": {
+      "field": "stress",
+      "minimum": 5,
+      "maximum": 5
+     }
+    }
+   }
+  },
+  {
+   "name": "read final",
+   "method": "getResultView",
+   "ok": true,
+   "args": {},
+   "state": {
+    "field": "stress",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": {
+     "field": "stress",
+     "minimum": 0,
+     "maximum": 10
+    },
+    "camera": {
+     "position": [
+      80.00000000000001,
+      60,
+      100
+     ],
+     "target": [
+      5,
+      5,
+      20
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "fov": 35
+    }
+   }
+  }
+ ]
+}
