@@ -18,7 +18,7 @@
 | STEP/STL取込 | UI/CAD Worker、project-import、inputImportApi/Transfer | studio_import_project（保存JSON）、接続inputImportBegin/Write/Commit/Release（STEP/STL） | 対応形状の範囲拡大・大容量実測 |
 | 領域・条件・材料・解析設定 | studioApiの選択・条件・材料・study操作、selectCadFace、applyOperations | studio_edit_project（18種、根拠・intent・表示面ID選択を含む、revision競合検出） | 全物理モデルの根拠・入力契約、選択・設定操作の残りの網羅性確認 |
 | 体積メッシュ・解析 | guiAnalysisJobs.run、analysisApi.startJob/listJobs/getJob/getJobResult/releaseJob（旧generateMesh/analyzeも互換維持） | studio_analyze、studio_start_analysis/studio_job_status/studio_release_job（CPU・保存JSON） | 公開HTTPS接続・再起動後のジョブ復元 |
-| 進捗・メッシュ境界検査 | （MCP専用・保存ファイル基準） | studio_progress（既定は従来形、includeEstimate/includeHistoryは任意）、studio_preflight_mesh_boundaries（成功したmesh-onlyジョブの保持メッシュ、静的線形構造のみ、completePreflightは常にfalse） | 拘束階数・剛体モード・収束・物理精度の検査 |
+| 進捗・メッシュ境界検査 | （MCP専用・保存ファイル基準） | studio_progress（既定は従来形、includeEstimate/includeHistoryは任意）、studio_preflight_mesh_boundaries（成功したmesh-onlyジョブの保持メッシュ、静的線形構造のみ、6剛体モードの追加rigidBody結果、completePreflightは常にfalse） | 収束・物理精度の検査（剛体モード検査は節点fixed/displacement拘束のみ） |
 | 中間情報 | analysisApi.jobEvents/listJobArtifacts/getJobArtifact（熱/音響スカラー・非線形ステップ変位の任意保持） | studio_job_events、studio_job_artifacts（メタデータ一覧）、studio_job_artifact（登録済み成果物のハッシュ照合・要約・部品指定点補間・nodeBodies付き最大200ノード/値のページ） | 全ソルバー観測範囲の拡充、操作細分化・配信契約の完成 |
 | 中止 | analysisApi.cancel/cancelJob/isBusy/drainJobs/closeJobsAsync | studio_cancel_job（runningのみ、saving不可） | 接続モードのcancelJobを提供。ローカルGUI監視を確認、公開接続を継続 |
 | 点測定 | analysisApi.probe、resultViewApi.probe、window.measurementApi（版・表示状態を固定した履歴） | studio_probe、接続probeとmeasurementの7操作、studio_verify_measurements | 履歴GUI・結果種の検証拡充 |

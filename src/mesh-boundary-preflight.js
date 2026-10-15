@@ -1,7 +1,9 @@
 import {transferConditions} from './boundaries.js';
 import {getProjectRevision,canonicalJson} from './project-revision.js';
+import {analyzeRigidBodyConstraints} from './constraint-rank.js';
 import {getAnalysisFailure,analysisError} from './analysis-failure.js';
 
+const REMAINING_AFTER_RIGID_BODY=['Solver convergence and physical accuracy have not been checked.','Rigid-body constraint rank covers nodal fixed/displacement supports only; spring or elastic supports are not modelled and are never counted as eliminating a mode.'];
 const unsupported=(project)=>{
  const study=project.study??{},material=project.materialProperties??{};
  return (study.kind!==undefined&&study.kind!=='structural')||study.modalAnalysis===true||study.thermalStress===true||(study.materialTemperature!==undefined&&material.dependence!=null)||Boolean(material.orthotropic||material.plasticity||material.hyperelastic||material.dependence?.elasticTemperatureTable);
@@ -29,7 +31,8 @@ export async function preflightMeshBoundaryTransfer({project,job,output,expected
  try{
   const transferred=transferConditions(projectSnapshot,outputSnapshot.mesh);
   if(!unchanged())return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_CHANGED','Input or retained mesh changed during boundary-transfer inspection','/');
-  return {schemaVersion:1,allowed:true,completePreflight:false,inputRevision:revision,jobId:job.jobId,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics:[],remainingChecks:['Constraint rank and rigid-body modes have not been checked.','Solver convergence and physical accuracy have not been checked.']};
+  const {diagnostics,...rigidBody}=analyzeRigidBodyConstraints({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred});
+  return {schemaVersion:1,allowed:true,completePreflight:false,inputRevision:revision,jobId:job.jobId,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics,rigidBody,remainingChecks:REMAINING_AFTER_RIGID_BODY};
  }catch(error){
   const failure=getAnalysisFailure(error);if(failure)return {...rejected(failure.code,failure.message,failure.diagnostics[0].target,failure.diagnostics[0].evidence),diagnostics:failure.diagnostics};
   const diagnostic=analysisError('ANALYSIS_MESH_PREFLIGHT_FAILED','Boundary transfer inspection failed',{stage:'boundary-transfer',target:'/conditions',evidence:{}});
