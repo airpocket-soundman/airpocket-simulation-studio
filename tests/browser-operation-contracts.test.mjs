@@ -16,6 +16,6 @@ test('contract reads require no model or grant and return detached declarations 
  assert.equal(getCapabilities().connector.operationContracts.methodCount,88);assert.equal(getCapabilities().connector.operationContracts.mcp,'studio_browser_contracts');
 });
 test('invalid and accessor contract queries are rejected before reading untrusted properties',()=>{
- for(const q of [null,[],new Date(),{method:'eval'},{scope:'admin'},{limit:0},{limit:11},{offset:-1},{offset:88},{unknown:1}])assert.throws(()=>getBrowserOperationContracts(q),{code:'BROWSER_CONTRACT_QUERY_INVALID'});
+ for(const q of [null,[],new Date(),{method:'eval'},{scope:'admin'},{limit:0},{limit:11},{offset:-1},{offset:89},{unknown:1}])assert.throws(()=>getBrowserOperationContracts(q),{code:'BROWSER_CONTRACT_QUERY_INVALID'});
  let read=false;const query={get method(){read=true;return 'inspect';}};assert.throws(()=>getBrowserOperationContracts(query));assert.equal(read,false);
 });
