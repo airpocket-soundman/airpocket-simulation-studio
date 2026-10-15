@@ -80,7 +80,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
 - 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は下記の出力ジョブを使います。
 
-命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
+命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。タイムアウトのエラー（code:BROWSER_COMMAND_TIMEOUT、messageは従来通り）は`delivered:true|false`を持ち、MCPでは`structuredContent.error.delivered`として返ります。`false`はブラウザが命令を一度も取得していないため再試行しても安全で、`true`は命令がページへ渡された後に返答がなかったため、再試行の前に必ず状態を取得してください。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
 ### 単体browser connector配布（配信物確認済み・実接続未検証）
 
