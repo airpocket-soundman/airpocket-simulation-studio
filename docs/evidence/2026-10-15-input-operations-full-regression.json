@@ -36,5 +36,28 @@
     "publication": "Not deployed; public remains 9f57d0f with 109 released tasks."
   },
   "summaryJa": "全体失敗を保存。件数契約の更新漏れとchild開始timeout、別のmain公開CIのnative heap破損を区別する。",
-  "summaryEn": "Preserve failures separately: stale exact-count assertions, child startup timeout, and native heap corruption in the separate main publication run."
+  "summaryEn": "Preserve failures separately: stale exact-count assertions, child startup timeout, and native heap corruption in the separate main publication run.",
+  "initialPrCI": {
+    "revision": "c1c431eab878bd532fe8eafa2d7da738d0c8dd89",
+    "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38706588775",
+    "tests": 1160,
+    "passed": 1143,
+    "failed": 14,
+    "cancelled": 0,
+    "skipped": 3,
+    "classification": "All 14 failures were strict tool/method count assertions; the locally cancelled child-startup test passed in this CI run.",
+    "logSha256": "71c807b9ae88c47a1413f8b96938ecff4db6b51222599a0e205d1e80dab15ee3"
+  },
+  "followup": {
+    "revision": "5b2844fdb1749edc04fdd3123235b913551876cd",
+    "tests": 34,
+    "passed": 34,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "durationMs": 11527.022,
+    "scope": "Changed strict-count files, document checks and analysis-process-worker tests, including the previously timed-out child startup case.",
+    "logSha256": "d888d3e44dec0373959477fd3a40e3f17b93c04e8f85d7a23cd0d808716ace92",
+    "limitations": "Targeted success does not establish that the prior timeout cause is fixed; corrected full suite/CI remains pending."
+  }
 }
