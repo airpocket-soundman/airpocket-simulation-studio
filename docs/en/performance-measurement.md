@@ -11,15 +11,16 @@ Japanese: [../performance-measurement.md](../performance-measurement.md)
 - Times (ms): total, Worker start to mesh start, meshing, boundary transfer, solve phase, solver kernel (solver-reported `solveMs`), and post-processing (solve phase minus solver kernel; includes result assembly and message cloning). Phase boundaries are approximations derived from host-side event arrival times.
 - Cold vs warm: each case runs in a dedicated child process; its first run is cold and the following `--repeats` runs (default 3) are warm, with median, min and max recorded. Warm runs still spawn a fresh Worker each time.
 - Peak RSS: the child process `process.resourceUsage().maxRSS` (whole-process peak including Node, the Worker and WASM memory).
+- Cancel response (`cancel` block, additive): by default for `structural-medium` and `thermal-steady`, and for every selected case with `--cancel` (`--no-cancel` disables it). In a dedicated child process, after a warm-up, an uncancelled warm run sets the baseline time; then cancellation is requested through the `AbortSignal` of `analyzeProject` at two points: (1) right after the first progress/observation event, and (2) at 50% of the median warm total time of that baseline. Each point is repeated `--repeats` times, and the latency from the cancel request to the settlement of the `analyzeProject` promise (which settles only after the Worker terminated) is recorded as median, min and max. The final state is one of `cancelled`, `completed-before-cancel` (lost the race) or `error`. `processReleased` records whether the child exits naturally (exit code 0, within the timeout); leftover handles would keep it alive and fail on timeout. The child's peak RSS is recorded too. The report stays schema version 1; only a `cancel` block is added per case.
 - Environment: Node and v8 versions, OS and architecture, CPU model and logical CPU count, total memory, git revision, branch and dirty flag.
 
 ## What is NOT measured
 
-- Browser (Chrome etc.) memory, runtime or cancellation latency; that is the core of PERF1 and needs separate measurement.
+- Browser (Chrome etc.) memory, runtime or cancellation latency; that is the core of PERF1 and needs separate measurement (plan: [perf-browser-plan.md](perf-browser-plan.md)). The `cancel` block covers Node Worker + AbortSignal only; browser cancel response is NOT measured.
 - WebGPU / GPU.
 - Network, transfer size, artifact size or connection conditions.
 - Browser cache cold/warm (here "cold" only means right after process start; disk and HTTP caches are not controlled).
-- Memory ceilings, out-of-memory behaviour, and analysis cancellation latency.
+- Memory ceilings and out-of-memory behaviour. Cancellation latency is measured on the Node side only, not in the browser.
 - Coverage of multiple machines; one run on one machine is not representative.
 
 ## How to run
@@ -27,6 +28,7 @@ Japanese: [../performance-measurement.md](../performance-measurement.md)
 ```
 node scripts/perf-measure.mjs                      # all cases, writes .qa/perf-report.json
 node scripts/perf-measure.mjs --out <file> --repeats 1 --cases structural-tiny,thermal-steady
+node scripts/perf-measure.mjs --cases structural-medium --cancel --repeats 5   # include cancel response
 node scripts/perf-measure.mjs --list
 ```
 
