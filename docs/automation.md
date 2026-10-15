@@ -558,3 +558,7 @@ bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のp
 `check-published`は、同じNode実行ファイルの子プロセスのmainで、ハッシュ照合済み配信analysis/CADモジュールと固定のSTEP参照生成を実行します。元の26検査・数値assertionを維持し、close 0・シグナルなし・観測されたnative fatalなしを確認してから受信結果を採用します。検査と子実行のチェックポイント、失敗前の部分記録を残します。
 
 これは公開検証スクリプトの分離方式であり、実ブラウザのWorkerやMCP既定実行方式を変更しません。Node切替、GC設定変更、skip、自動retry/fallbackは追加していません。Linux Node24.21.0/main badce2cでの既知native fatalを保持し、原因の根治を主張しません。今回変更後の全体980件中977成功・3skip・失敗0、buildとローカル26項目が成功。公開CIは別途記録します。詳細と適用限界は[試験記録](testing.md)と[WASM実行調査](wasm-runtime-investigation.md)を参照してください。
+
+### 開発状況の任意取得
+
+studio_progress({includeEstimate:true,includeHistory:true})で、元のprogressと主観推定・Git履歴を分離して返します。省略/falseは従来の応答形を維持。履歴はHEADと入力bytesの不一致・Git不在・容量超過を利用不可として明示し、2MB応答上限を適用。ローカルcheckoutの履歴であり公開候補の合格証明ではありません。[算定方法](progress-dashboard.md)。

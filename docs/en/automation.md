@@ -558,3 +558,7 @@ Capabilities observation.eventPayload declares defaults and scope. Internal star
 `check-published` uses the same Node executable to run hash-verified distributed analysis/CAD modules and fixed STEP reference generation in child-process main threads. It preserves all 26 checks and numerical assertions, accepting a received result only after close 0 without a signal or observed native fatal. Checkpoints record checks and child execution; failures retain preceding partial results.
 
 This isolation belongs to the publication verification script. It changes neither actual browser Workers nor default MCP execution architecture. It adds no Node switch, GC-setting change, skip, automatic retry or fallback. The known native fatal on Linux Node24.21.0/main badce2c is preserved, without a root-fix claim. Post-change full suite passed 977 of 980 tests with 3 skips and zero failures; build and all 26 local checks passed. Publication CI remains separately pending. See [testing](testing.md) and [WASM runtime investigation](wasm-runtime-investigation.md) for evidence and scope limits.
+
+### Optional development insights
+
+studio_progress({includeEstimate:true,includeHistory:true}) separates original progress, subjective estimate and Git history. Omitted/false flags preserve the default response. History declares unavailable on source/HEAD mismatch, missing Git or capacity limits, with a2MBresponse cap. Local checkout history is not proof of public-candidate acceptance. See [method](progress-dashboard.md).
