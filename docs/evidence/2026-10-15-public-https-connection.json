@@ -1,14 +1,17 @@
 {
-  "status": "partial",
+  "status": "passed-with-caveats",
   "scope": "Connection from the published HTTPS page https://airpocket-soundman.github.io/airpocket-simulation-studio/ in the owner's regular Chrome to a local connector (scripts/studio-mcp.mjs --browser-origin=https://airpocket-soundman.github.io, 127.0.0.1) with inspect scope only. The pairing code was typed by the owner; the assistant only issued inspect-scope calls and read connector diagnostics.",
   "checkedAt": "2026-10-15",
   "environment": {
     "browser": "Chrome (regular profile, operated by the owner)",
-    "browserVersion": "not recorded (chrome://version was not supplied)",
+    "browserVersion": "Google Chrome 155.0.8059.41 (official build, 64-bit, cohort Control), V8 15.5.35.20; supplied by the owner from chrome://version",
     "pageBuild": "older cached build: inspect reported 86 browser methods while main had 87-88, so the page did not yet include meshBoundaryPreflight/checkGpuEnvironment; the exact served revision is not recorded",
     "publishedRevisionAtCheck": "2c19007b70159aa983f774d7e2fb6fd8e07978c1 (v0.44.0)",
     "connectorOrigin": "https://airpocket-soundman.github.io",
-    "grantedScopes": ["inspect"]
+    "grantedScopes": [
+      "inspect"
+    ],
+    "os": "Windows 11 Version 25H2 (Build 26200.9711)"
   },
   "earlierAttempt": {
     "result": "failed",
@@ -42,7 +45,7 @@
     }
   ],
   "notVerified": [
-    "Chrome version (required by the PUBLICHTTPS1 acceptance) is not recorded.",
+    "The page build the owner loaded is not identified exactly: it exposed 86 operations (older than the published 2c19007 with 88), consistent with a cached earlier v0.44.0 build; only the published revision at check time is recorded.",
     "The exact published revision the page was running is not recorded; it was an older cached build, so the newest operations (meshBoundaryPreflight, checkGpuEnvironment) were not exercised from the published page (checkGpuEnvironment returned 'Invalid browser operation' on that build).",
     "The setting that made the connection work after the first failure was not reported, so the root cause of the first failure is unconfirmed.",
     "Edit, analyze and view scopes from the published page were intentionally not used (inspect only).",
