@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T01:21:08.008706Z",
+  "updatedAt": "2026-10-15T01:35:31.896040Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2328,6 +2328,18 @@
       "acceptance": "既存26配信物検証と数値条件を維持し、遅延異常・timeout・不正IPCを拒否。対象CIと公開candidateの証跡を記録。V8根治・実ブラウザ安定性とは区別する。",
       "acceptanceEn": "Preserve all 26 published checks and numerical assertions; reject late failure, timeout and malformed IPC. Record target CI and published-candidate evidence separately from a V8 root fix or browser stability.",
       "evidence": "scripts/published-process-runtime.mjs;tests/published-process-runtime.test.mjs;docs/evidence/2026-10-15-publication-process-isolation.json"
+    },
+    {
+      "id": "DEVINSIGHTS1",
+      "title": "ステータス件数の履歴と製品完成度の推定",
+      "titleEn": "Historical status counts and estimated product completion",
+      "status": "checking",
+      "category": "開発管理",
+      "detail": "Git実履歴の6状態グラフ、追加削除、表、日英と狭い画面。P0〜P6と残仕様の固定重みに基づく主観推定を観測値と分離。MCPから任意取得できる。",
+      "detailEn": "Six-status Git history chart, additions/removals, table and JP/EN responsive UI. Separate fixed-weight P0–P6/backlog estimates from observations; optional MCP retrieval.",
+      "acceptance": "同一配信候補の版・bytes・SHAを照合し、欠落を補完しない。推定根拠・未知・主観幅を明示。履歴/推定/MCPの拒否と互換性、実画面の日英・キーボード・狭幅、CI/公開配信を検証。",
+      "acceptanceEn": "Verify candidate revision/bytes/SHA without filling missing history. Expose rubric, unknowns and subjective scenarios. Verify history/estimate/MCP refusal and compatibility, JP/EN keyboard/narrow UI and CI/deployment.",
+      "evidence": "docs/progress-dashboard.md;src/product-estimate.js;tests/progress-history.test.mjs;tests/progress-insights-mcp.test.mjs"
     }
   ],
   "solvers": [
