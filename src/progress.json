@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T04:15:22.540Z",
+  "updatedAt": "2026-10-15T04:27:23.602Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -707,12 +707,14 @@
       "id": "PERF1",
       "title": "対応するモデル規模を測定",
       "category": "検証",
-      "status": "queued",
+      "status": "building",
       "detail": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
       "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits."
+      "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
+      "lastUpdate": "Node側計測ハーネス scripts/perf-measure.mjs を追加(7ケース、cold/warm、ピークRSS、環境・revision記録)。ブラウザ・WebGPU・転送量・冷キャッシュ・メモリ上限・取消は未計測で、PERF1は未完了。数値は測定値であり対応規模の保証ではない。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md"
     },
     {
       "id": "ADAPT1",
@@ -1239,7 +1241,9 @@
       "detail": "LLM向けAPI・MCP・専門SKILL・中間結果パイプラインを優先し、その後に既存CAEの代表的な操作フローを調査。対象候補はFreeCAD FEM、PrePoMax、SALOME/ParaView、商用CAEの公開資料。対象と版は調査時に確定する。",
       "detailEn": "After prioritized LLM functionality, study representative CAE workflows using public documentation or accessible applications; record selected products and versions at research time.",
       "acceptance": "形状取込、モデル/解析ツリー、領域選択、材料/条件、ジョブ監視、診断、結果/比較/出力を共通例題で比較。資料URL・版・確認日・観察と推測を記録。初心者の操作負担とエージェントとの協働を評価し、優先順位付き改善案と画面案を残す。",
-      "acceptanceEn": "Compare import, model/study trees, selection, materials/conditions, job monitoring, diagnostics and results/comparison/export with a common scenario. Record source URLs, versions, dates and observed versus inferred findings. Deliver ranked improvements and screen proposals for beginners and agent collaboration."
+      "acceptanceEn": "Compare import, model/study trees, selection, materials/conditions, job monitoring, diagnostics and results/comparison/export with a common scenario. Record source URLs, versions, dates and observed versus inferred findings. Deliver ranked improvements and screen proposals for beginners and agent collaboration.",
+      "lastUpdate": "既存CAEのUI調査文書 docs/ui-research.md を追加(8製品の表と9件の改善案、出典の取得可否を明記)。FreeCAD等は検索要約のみ・実機未操作で、受け入れ条件の検証とUIIMPROVE1は未着手。",
+      "evidence": "docs/ui-research.md; docs/en/ui-research.md"
     },
     {
       "id": "UIIMPROVE1",
