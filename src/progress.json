@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T21:57:40.136Z",
+  "updatedAt": "2026-10-15T22:27:01.316Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1489,18 +1489,18 @@
       "id": "CASEOPS1",
       "title": "保存ケースを版付きAPIで操作する",
       "titleEn": "Operate saved cases through revisioned APIs",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "BROWSERBRIDGE1"
       ],
       "detail": "ケースID・内容版を返し、保存・表示・入力復元・改名・削除を権限と期限付きで操作。既存保存形式を維持。",
       "detailEn": "Stable case IDs/content revisions with scoped, expiring save/view/restore-input/rename/remove operations. Preserve the existing archive format.",
-      "acceptance": "実MCP/Chromeで一連の操作と古い版の削除拒否を確認。14単体テスト成功。ケース集のライブ入出力と表示状態永続化は未対応。",
-      "acceptanceEn": "Real MCP/Chrome verified the lifecycle and stale-removal refusal; 14 unit tests passed. Live archive import/export and persisted display settings remain unfinished.",
-      "evidence": "src/case-operations.js; tests/case-operations.test.mjs; docs/testing.md",
-      "lastUpdate": "2026-10-15 再監査: case-operations単体成功。ケース集入出力・表示状態は実Chrome(namedviews-real-chrome)で別作業が証明済みの可能性が高いが、本タスクの受入文が未更新のため検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: case-operations tests pass. Live archive IO/display persistence is likely proven by other tasks' real-Chrome evidence (namedviews-real-chrome), but this task's acceptance text was not reconciled, so stays checking."
+      "acceptance": "実MCP/Chromeで一連の操作と古い版の削除拒否を確認。14単体テスト成功。ケース集のライブ入出力は実Chrome(localhost)で2ケース・1,426,548バイト・22分割の書出し→再読込→取込を確認(casearchive-real-chrome-5)。表示状態の永続化は名前付きビューの再読込復元(namedviews-real-chrome)とケース同梱(CASEVIEWBUNDLE1)で確認。大規模ケースの性能は未測定。",
+      "acceptanceEn": "Real MCP/Chrome verified the lifecycle and stale-removal refusal; 14 unit tests passed. Live archive import/export and persisted display settings remain unfinished. Live case-archive I/O was confirmed in real Chrome on localhost (two cases, 1,426,548 bytes, 22 chunks: export, reload, import; casearchive-real-chrome-5). Display-state persistence is covered by named-view restore after reload (namedviews-real-chrome) and the case bundle (CASEVIEWBUNDLE1). Large-case performance is unmeasured.",
+      "evidence": "src/case-operations.js; tests/case-operations.test.mjs; docs/testing.md; docs/evidence/2026-10-15-casearchive-real-chrome-5.json; docs/evidence/2026-10-15-namedviews-real-chrome-2.json",
+      "lastUpdate": "2026-10-16 受け入れ文を実証跡に合わせて更新(ライブ入出力と表示状態の永続化は他タスクの実Chrome証跡で確認済み)。大規模性能は未測定でCASEARCHIVE1側の条件。検証済みへ。",
+      "lastUpdateEn": "2026-10-16 acceptance reconciled with the real-Chrome evidence (live I/O and display-state persistence were confirmed by other tasks' evidence). Large-case performance is unmeasured and belongs to CASEARCHIVE1. Moved to ready."
     },
     {
       "id": "BROWSEREXPORT1",
@@ -2557,15 +2557,17 @@
       "titleEn": "Inspect boundary transfer against a retained mesh",
       "detail": "成功・終了済みmesh-onlyジョブと入力版を照合し、解析せず境界転送を検査するAPI/MCP。",
       "detailEn": "API/MCP checks boundary transfer without solving, against an exact-input successful settled mesh-only job.",
-      "acceptance": "保存stdio・live契約、出力改変拒否、入力版・非同期変更拒否、境界診断保持と入力不変を検証。静的線形構造のみ。拘束rank・剛体モード・収束・精度は未確認。全体CI・公開検証は未完了。",
-      "acceptanceEn": "Tests cover saved stdio/live contract, output tamper refusal, revision/asynchronous-change refusal, preserved boundary diagnostics and unchanged input. Static linear structure only; constraint rank, rigid modes, convergence and accuracy remain unchecked. Full CI and publication remain pending.",
-      "evidence": "src/mesh-boundary-preflight.js; tests/mesh-boundary-preflight.test.mjs; skills/airpocket-studio/references/jobs-observations.md",
-      "status": "checking",
+      "acceptance": "保存stdio・live契約、出力改変拒否、入力版・非同期変更拒否、境界診断保持と入力不変を検証。静的線形構造のみ。拘束rank・剛体モード・収束・精度は未確認。全体CI(PR 40の必須verify)と公開検証(27 PASS)は成功。実Chrome(localhost)で成功・終了済みmesh-onlyジョブに対しallowed:true・2条件の面積誤差0・古い版/未知ジョブ拒否・入力不変を確認(GUI入力の既定materialTemperature拒否の不具合を発見し修正済み)。",
+      "acceptanceEn": "Tests cover saved stdio/live contract, output tamper refusal, revision/asynchronous-change refusal, preserved boundary diagnostics and unchanged input. Static linear structure only; constraint rank, rigid modes, convergence and accuracy remain unchecked. Full CI and publication remain pending. Full CI (PR 40 required verify) and published verification (27 PASS) succeeded; real Chrome on localhost confirmed allowed:true for a settled mesh-only job, zero area error for two conditions, refusal of a stale revision and an unknown job, and unchanged input (a defect refusing GUI inputs with the default materialTemperature was found and fixed).",
+      "evidence": "src/mesh-boundary-preflight.js; tests/mesh-boundary-preflight.test.mjs; skills/airpocket-studio/references/jobs-observations.md; docs/evidence/2026-10-15-input-operations-real-chrome.json; docs/evidence/2026-10-16-publication-6429eeb.json",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P1",
         "MOD1"
-      ]
+      ],
+      "lastUpdate": "2026-10-16 PR 40でmain、公開候補6429eebで27 PASS。実Chromeで確認し不具合1件を修正済み。拘束rank・剛体モードは別途追加中で本項目の範囲外。公開済みへ。",
+      "lastUpdateEn": "2026-10-16 merged in PR 40; published candidate 6429eeb passed 27 checks; confirmed in real Chrome with one defect found and fixed. Constraint rank and rigid-body modes are a separate addition outside this task. Moved to released."
     },
     {
       "id": "SELECTEDREFINEMENT1",
@@ -2573,15 +2575,17 @@
       "titleEn": "Configure selection-based refinement through API/MCP",
       "detail": "GUIと同じ三角形重心helperで局所設定を生成し、preview/editと専門Skillから使う。",
       "detailEn": "Use the GUI triangle-centroid helper to generate refinement settings through preview/edit and specialist Skill guidance.",
-      "acceptance": "GUI同等・選択保持、1回80件/保存160件、全体サイズ比15〜100%、空選択・不正値・stale・権限失効時の不変、実stdio/paired MCPを検証。全体CI・公開検証は未完了。",
-      "acceptanceEn": "Tests cover GUI equivalence, selection preservation, 80 additions/160 stored, 15–100% base-size range, empty/invalid/stale/revoked refusal without mutation, and real stdio/paired MCP. Full CI and publication remain pending.",
-      "evidence": "src/studio-api.js; src/local-mesh.js; tests/selected-mesh-refinement.test.mjs; tests/mcp-selected-mesh-refinement.test.mjs",
-      "status": "checking",
+      "acceptance": "GUI同等・選択保持、1回80件/保存160件、全体サイズ比15〜100%、空選択・不正値・stale・権限失効時の不変、実stdio/paired MCPを検証。全体CI(PR 40の必須verify、1162件中1159成功・失敗0)と公開検証(27 PASS)は成功。実Chrome(localhost)でGUIの局所細分化(6件登録・不正値拒否)と接続経由のpreview/edit(12件、旧版拒否)を確認。",
+      "acceptanceEn": "Tests cover GUI equivalence, selection preservation, 80 additions/160 stored, 15–100% base-size range, empty/invalid/stale/revoked refusal without mutation, and real stdio/paired MCP. Full CI and publication remain pending. Full CI (PR 40 required verify: 1162 tests, 1159 pass, 0 fail) and published verification (27 PASS) succeeded; real Chrome on localhost confirmed GUI local refinement (6 registered, invalid size refused) and connector preview/edit (12, stale revision refused).",
+      "evidence": "src/studio-api.js; src/local-mesh.js; tests/selected-mesh-refinement.test.mjs; tests/mcp-selected-mesh-refinement.test.mjs; docs/evidence/2026-10-15-input-operations-real-chrome.json; docs/evidence/2026-10-16-publication-6429eeb.json",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P1",
         "MOD1"
-      ]
+      ],
+      "lastUpdate": "2026-10-16 PR 40(必須verify成功)でmain、公開候補6429eebで27 PASS。実ChromeでGUI/接続経由を確認。公開済みへ。",
+      "lastUpdateEn": "2026-10-16 merged in PR 40 (required verify passed); published candidate 6429eeb passed 27 checks; GUI and connector paths confirmed in real Chrome. Moved to released."
     }
   ],
   "solvers": [
