@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "at": "2026-10-15T06:37:02.354Z",
+  "origin": "http://127.0.0.1:5174",
+  "scopes": [
+    "inspect"
+  ],
+  "checks": [
+    {
+      "method": "inspect",
+      "received": true
+    },
+    {
+      "method": "preflight",
+      "received": true
+    }
+  ],
+  "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+  "limitations": [
+    "No edit/solve/view grants",
+    "Not published HTTPS connection proof"
+  ],
+  "testedRevision": "7e496f6701959642dc87af453c3aa9ce49484859",
+  "cleanup": {
+    "browserDisconnected": true,
+    "ownedBridgeStopped": true,
+    "pairingInfoRemoved": true
+  }
+}
