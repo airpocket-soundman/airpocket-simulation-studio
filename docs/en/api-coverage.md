@@ -10,7 +10,7 @@ Current entry points have 31 default/33 connected MCP tools and 88 browser opera
 |---|---|---|---|
 | Operation contract discovery | studioApi.getBrowserOperationContracts | studio_browser_contracts (no session; maximum 10 entries/65,536 UTF-8 bytes) | Nested applicability/physical validation stays in adapters |
 | Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (82 scoped methods) | Local GUI job monitoring verified; continue public HTTPS connectivity and reconnection |
-| Capabilities | studioApi.getCapabilities; diagnoseExecution/preflight.selectedObservation (profile selection) | studio_capabilities; selectedObservation in diagnosis/preflight and MCP-only runtime | Extend required inputs, validity limits and all combinations |
+| Capabilities | studioApi.getCapabilities (`combinations`: structured list of unsupported execution combinations derived from the shared rule table; id/code/phase/summary/applies/status); diagnoseExecution/preflight.selectedObservation (profile selection) | studio_capabilities; selectedObservation in diagnosis/preflight and MCP-only runtime | Extend required inputs, validity limits and all combinations |
 | Execution-combination diagnostics | studioApi.diagnoseExecution | studio_diagnose_execution | Extend structured diagnostics to units, required values, constraints and mesh |
 | Edit candidate preview | studioApi.previewOperations | studio_preview_edit; inspect-scope previewEdit | Nested physical validation and full P0/P1/P3 remain |
 | Preflight and provenance | studioApi.preflight/setInputProvenance/setAnalysisIntent, analysis execution gate | studio_preflight_project, studio_edit_project (evidence and intent persistence) | Remaining physical-combination contracts; integration with post-mesh checks |
@@ -34,7 +34,7 @@ Current entry points have 31 default/33 connected MCP tools and 88 browser opera
 
 The specialized SKILL at `skills/airpocket-studio/SKILL.md` describes current capabilities, diagnostics, sources and limits. Update it alongside new operations and validate successful examples as well as rejection/repair paths. Current MCP can retrieve intermediate summaries and optional mesh/time-field files for saved-input CPU jobs, and optional connector mode exposes 82 permitted browser operations. Retention is within the same Node process, with defaults of 32 jobs and 256 events per job. See the [operation specification](automation.md) for cursor-gap reporting, retained-request `requestId` idempotency, provisional labels, cancellation restrictions during saving and the 64 MB field-storage limit. Do not present target specifications as available operations.
 
-P0 is in progress. Remaining work includes breaking every row down into individual operations, required inputs/validity limits, diagnostics with units, Japanese/English operation mappings and visual verification.
+P0 is in progress. Remaining work includes breaking every row down into individual operations, required inputs/validity limits, diagnostics with units, and visual verification. The Japanese/English operation mapping is in [Operation correspondence](operation-correspondence.md) (every browser operation and MCP tool, checked by a test).
 
 Face IDs are scoped to the display mesh's SHA-256 revision, not persistent CAD IDs for either STEP or STL. CAD updates reset existing evidence to unconfirmed, clear assumptions and confirmation records, and require rechecking.
 

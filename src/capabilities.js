@@ -1,7 +1,7 @@
 import {jobEventPayloadLimits} from './job-event-payload.js';
 import {observationQueueDefaults} from './job-observation-queue.js';
 import {browserMethods} from './browser-operation-names.js';
-import {diagnoseCombinationRules} from './execution-combination-rules.js';
+import {diagnoseCombinationRules,describeCombinationRules} from './execution-combination-rules.js';
 import {getObservationProfiles,resolveObservationProfile} from './observation-profiles.js';
 // Small metadata only: importing this module must not initialize CAD or solvers.
 const cpuMethods=['pcg','pcg-strict','wasm-pcg'];
@@ -17,6 +17,7 @@ export function getCapabilities({target='browser',analysisIsolation='worker'}={}
    {id:'airpocket',status:'implemented',methods:[...cpuMethods,...(target==='browser'?['webgpu-pcg']:[])],element:'Tet4',studies:['structural','thermal','acoustic','channelFlow','creepingFlow'],limits:['WebGPU only for isotropic linear structure, with CPU correction','Channel flow is fully developed only','Stokes is steady finite-box flow at Re <= 0.1','Nonlinear, modal and orthotropic models require CPU and have additional restrictions']},
    {id:'mfem',version:'4.10',status:'implemented',methods:['mfem-wasm'],element:'Tet4',studies:['structural'],material:'linear-isotropic',limits:['No modal, plastic, hyperelastic or orthotropic analysis']}
   ],
+  combinations:describeCombinationRules(),
   candidates:['CalculiX','Elmer','Code_Aster','OpenFOAM'].map(id=>({id,status:'candidate',executable:false})),
   preflight:{requiredInputContracts:[{id:'static-isotropic-linear-structure',study:'structural',modes:['quantitative','exploratory']},{id:'thermal-conduction',study:'thermal',modes:['quantitative','exploratory'],legacyBehavior:'unchanged'},...['modal-isotropic-structure','static-orthotropic-linear-structure','thermal-stress-isotropic-structure','temperature-dependent-isotropic-structure','small-strain-j2-structure','finite-strain-neo-hookean-structure'].map(id=>({id,study:'structural',modes:['quantitative','exploratory'],legacyBehavior:'unchanged'})),...['acoustic-wave','fully-developed-channel-flow','external-creeping-stokes-flow'].map((id,i)=>({id,study:['acoustic','channelFlow','creepingFlow'][i],modes:['quantitative','exploratory'],legacyBehavior:'unchanged'}))],completePreflight:false},
   operations:{projectInspection:true,geometryInspection:true,projectEditing:true,atomicProjectEditing:true,projectEditPreview:true,reviewedEditRevision:true,provenance:true,preflight:true,mesh:true,solve:true,probe:true,caseValidation:true,jobs:true,intermediateEvents:true,liveBrowserMcp:false,mcpProjectCreation:true,mcpProjectImport:true,mcpProjectEditing:true,mcpJobs:true,mcpIntermediateArtifactRead:true,mcpVisualExport:false},
