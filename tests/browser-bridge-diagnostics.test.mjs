@@ -15,6 +15,17 @@ test('health probe requires exact allowed origin and loopback Host but no creden
  }finally{await bridge.close();}
 });
 
+test('Origin/Host refusal is 403 without data; CORS only for the exact allowed Origin',async()=>{
+ const bridge=await createBrowserBridge({origin});
+ const raw=(headers)=>new Promise((resolve,reject)=>{const req=request(bridge.endpoint+'/health',{headers},res=>{let b='';res.on('data',c=>b+=c);res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,body:b}));});req.on('error',reject);req.end();});
+ try{
+  const wrongOrigin=await fetch(bridge.endpoint+'/health',{headers:{Origin:'https://unknown-origin.example'}});assert.equal(wrongOrigin.status,403);assert.equal(wrongOrigin.headers.get('access-control-allow-origin'),null);
+  const wrongHost=await raw({Origin:origin,Host:'localhost'});assert.equal(wrongHost.status,403);assert.equal(wrongHost.headers['access-control-allow-origin'],origin);assert.match(wrongHost.headers.vary,/Origin/);assert.equal(wrongHost.headers['access-control-allow-private-network'],undefined);assert.deepEqual(JSON.parse(wrongHost.body),{error:'Origin or host refused'});assert.equal(wrongHost.body.includes('airpocket-browser-bridge'),false);
+  const ok=await fetch(bridge.endpoint+'/health',{headers:{Origin:origin}});assert.equal(ok.status,200);assert.equal(ok.headers.get('access-control-allow-origin'),origin);assert.deepEqual(await ok.json(),{schemaVersion:1,kind:'airpocket-browser-bridge'});
+  assert.equal(bridge.diagnostics().counters.originHostRefused,2);
+ }finally{await bridge.close();}
+});
+
 test('bounded bridge diagnostics contain detached counters and configured endpoints without incoming secrets or payloads',async()=>{
  let now=100;const bridge=await createBrowserBridge({origin,now:()=>now,ttlMs:1000,timeoutMs:10});
  const send=async(path,token,body)=>fetch(bridge.endpoint+path,{method:'POST',headers:{Origin:origin,Authorization:'Bearer '+token,'Content-Type':'application/json','X-Incoming-Secret':'header-secret-value'},body:JSON.stringify(body)});

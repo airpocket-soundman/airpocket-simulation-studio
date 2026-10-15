@@ -1,3 +1,4 @@
+import {createCaseComparisonApi} from './case-comparison.js';
 import {parseBrowserConnectorEndpoint} from './browser-connection-diagnostics.js';
 import {inspectProjectInput} from './project-input-inspection.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
@@ -14,6 +15,7 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
  const ownedResultTransfers=new Set(),ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
  const busy=()=>isBusy()||executionBusy();
+ const caseComparison=typeof cases?.readSource==='function'?createCaseComparisonApi({cases}):null;
  const builtins=builtinProjects??(studio?createBuiltinProjectOperations({studio,isBusy:busy}):null);
  return {
   async call(method,args={},{expiresAt=Infinity}={}){
@@ -115,6 +117,7 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='importPrint'||method==='setPrintView'){if(!prints||busy()||editing)throw Error('Print API unavailable or browser busy');editing=true;try{return await prints[method==='importPrint'?'import':'set'](args,{guard:valid});}finally{editing=false;}}
    if(method==='previewCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');const response=await cadUpdates.preview(args);if(!valid())throw Error('CAD preview command expired');return response;}
    if(method==='applyCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');editing=true;try{return await cadUpdates.apply(args,{guard:valid});}finally{editing=false;}}
+   if(method==='caseCompare'){if(!caseComparison)throw Error('Case comparison API unavailable');const result=await caseComparison.compare(args,{guard:valid});if(!valid())throw Object.assign(Error('Case comparison expired or connection was revoked'),{code:'CASE_COMMAND_EXPIRED'});return result;}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },

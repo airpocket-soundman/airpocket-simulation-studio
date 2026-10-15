@@ -1,0 +1,40 @@
+{
+  "status": "passed-local-dev",
+  "scope": "Local Vite dev server in the user's real Chrome (Claude in Chrome). Not the published HTTPS site. Verifies the saved-case comparison paths with a real browser Worker, Gmsh/WASM and the Airpocket Tet4 kernel.",
+  "version": "0.43.0",
+  "implementationRevision": "a24aaed5b10cb34e26c565115c5c7179ff05bcea",
+  "checkedAt": "2026-10-15",
+  "environment": {
+    "browser": "Chrome (Claude in Chrome)",
+    "origin": "http://127.0.0.1:5174",
+    "crossOriginIsolated": true,
+    "builtinBrowserPane": "Gmsh meshing stalled beyond 120 s in the Claude desktop built-in browser pane on both the dev server and the built dist; the same code completed in under 1 s in real Chrome. Treated as a pane limitation, cause not identified."
+  },
+  "checks": [
+    {
+      "name": "reference-structural-analysis",
+      "passed": true,
+      "detail": "171 nodes, 428 tetrahedra; max displacement 0.04 mm, max von Mises about 1.0e6 Pa; point [5,5,40] element 158"
+    },
+    {
+      "name": "shared-api-compare-on-real-saved-cases",
+      "passed": true,
+      "detail": "Same-point stress (Pa) and displacement (mm) deltas are zero for two saved results of the same input; elastic vs thermal reports different-kind/different-field/different-unit; stale revision and duplicate caseId are rejected as a whole; case list unchanged afterwards; response about 3.5 KB (limit 64 KiB)"
+    },
+    {
+      "name": "browser-operation-caseCompare-via-real-mcp-connector",
+      "passed": true,
+      "detail": "scripts/studio-mcp.mjs --browser-origin, UI connection with inspect scope only; caseList then caseCompare with and without point; stale and duplicate rejected; edit refused with scope error; archive revision unchanged after calls"
+    },
+    {
+      "name": "mcp-studio_compare_cases-on-exported-archive",
+      "passed": true,
+      "detail": "Archive exported from the same browser session (416276 bytes); listing returned snapshot-local IDs with case revisions identical to the browser; compare returned zero stress delta with source sha256/bytes; stale archive revision rejected; listing with point rejected"
+    }
+  ],
+  "notLimited": [
+    "Published HTTPS site and localhost connection from it are not verified.",
+    "The compared cases come from identical input, so only zero-difference results were exercised; no physical-accuracy or cross-mesh claim.",
+    "The browser operation was driven through a local stdio MCP process, not a registered LLM host."
+  ]
+}
