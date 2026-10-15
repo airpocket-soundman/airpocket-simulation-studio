@@ -43,7 +43,8 @@
 - `studio_cancel_job({jobId})`: 実行中Workerを中止。終端状態は変更せず、最終ファイル公開中の`saving`状態は中止できません。
 - `studio_release_job({jobId})`: 終端ジョブのメタデータ・イベント・`requestId`を解放。保存ファイルは残ります。解放後の同じ`requestId`は新規実行になり得ます。
 
-ジョブは同一MCP/Nodeプロセス内だけ保持し、再起動を越えた再接続や復元は未対応です。既定で最大32ジョブ・各256イベントを保持します。古いイベントが落ちると`truncated:true`と`firstAvailableSequence`を返します。欠落を推測で埋めず、状態と利用可能な成果物を確認してください。直接Nodeから呼ぶ場合も同一プロセスを維持します。`studio_analyze`は従来の最終応答型操作です。
+ジョブは既定では同一MCP/Nodeプロセス内だけ保持し、再起動を越えた再接続や復元は行いません。既定で最大32ジョブ・各256イベントを保持します。古いイベントが落ちると`truncated:true`と`firstAvailableSequence`を返します。欠落を推測で埋めず、状態と利用可能な成果物を確認してください。直接Nodeから呼ぶ場合も同一プロセスを維持します。`studio_analyze`は従来の最終応答型操作です。
+任意の`node scripts/studio-mcp.mjs --job-store=<絶対パスのディレクトリ>`（既定は無効で挙動は不変）を指定すると、ジョブごとに小さな記録（jobId・inputRevision・operation・requestId・state・時刻・短縮したエラー要約・結果ファイルのサイズとSHA-256）を一時ファイル+renameで原子的に書き、起動時に読み込みます。ディレクトリは明示的な絶対パスで`..`を含まず、無ければ空で作成します。記録は1件8192バイト、最大256件で、破損・超過・ファイル名不一致の記録は診断（標準エラー）を出して無視し、起動は失敗しません。結果本体・イベント・中間成果物・プロジェクト・出力パスは保存しないため、再起動後のジョブは`restored:true`・`resultAvailable:false`のメタデータのみで、イベントは空、成果物とメッシュ出力は取得できません（終端状態は記録どおり）。再起動時に`running`/`saving`だった記録は`state:'interrupted'`（`error.code:ANALYSIS_JOB_INTERRUPTED_BY_RESTART`、`executionSettled:true`、`releaseAllowed:true`）になり、再開も再実行もしません。`studio_release_job`は記録も削除します。再起動後のrequestId冪等性は保証しません。ツール27/接続29・80操作は不変です。
 
 イベントには`jobId`・`inputRevision`・`sequence`が付き、中間スナップショットは`provisional:true`です。メッシュ/品質、反復残差、対応解析の時刻場・適応段階等、実際に発生したイベントのみ取得できます。全ソルバーの全反復・全物理場を保証しません。`includeFields:true`では新規ディレクトリ`outputPath + ".intermediate"`に暫定メッシュ/時刻場JSONを保存し、イベントの成果物参照にパス・バイト数・SHA-256を含めます。場JSONには取得できた対応メッシュへの`meshArtifact`参照を含み、再メッシュで参照を更新します。既存ディレクトリは再利用しません。既定の合計上限64 MB（64,000,000バイト）以降は場保存を止め、`observation-limit`を通知して要約と解析を継続します。中止・失敗時も既に書いた暫定ファイルが残り得ます。`provisional:false`の最終保存結果でも物理精度・収束の確認は別途必要です。
 
