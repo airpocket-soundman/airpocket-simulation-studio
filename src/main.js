@@ -3,6 +3,7 @@ import {createStatusUi} from './ui/status-ui.js';
 import {createFatigueUi} from './ui/fatigue-ui.js';
 import {createMaterialFormUi} from './ui/material-form-ui.js';
 import {createStudyFormUi} from './ui/study-form-ui.js';
+import {createDisciplineControlsUi} from './ui/discipline-controls-ui.js';
 import {createJobResultTransfer} from './job-result-transfer.js';
 import {browserStudyControls,serializeBrowserStudy,applyBrowserStudy,normalizeBrowserProjectEdit} from './browser-study-state.js';
 import {copySourceAssessment} from './source-assessment.js';
@@ -76,6 +77,7 @@ const $=id=>document.getElementById(id), status=createStatusUi({$,localizeStatus
 const {renderFatigueMaterial,readFatigueMaterial,renderFatigueResult}=createFatigueUi({$,getMaterialProperties:()=>materialProperties,getLanguage:()=>language});
 const materialFormUi=createMaterialFormUi({$,materialFields,materialReadiness,readFatigueMaterial,getMaterialProperties:()=>materialProperties,getLanguage:()=>language});
 const {readBrowserStudyControls,writeBrowserStudyControls,restoreAdaptiveOptions,internalOptions,restoreInternalFields}=createStudyFormUi({$,browserStudyControls});
+const updateDisciplineControls=createDisciplineControlsUi({$,querySelector:selector=>document.querySelector(selector),querySelectorAll:selector=>document.querySelectorAll(selector),getState:()=>({kind:$('physics').value,conditions,materialProperties,sourceModel,running:!$('cancel-run').disabled,modalEnabled:$('modal-enabled').checked,solver:$('solver').value})});
 const renderer=new THREE.WebGLRenderer({canvas:$('canvas'),antialias:true,alpha:true}); renderer.localClippingEnabled=true;renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(40,1,.01,100000);
 const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;
@@ -313,7 +315,7 @@ async function createExteriorDomain(paddingMm=Number($('fluid-padding').value),a
 async function exteriorExample(){if(!$('cancel-run').disabled)throw Error('先に実行中の計算を中止してください。');const g=new THREE.BoxGeometry(10,10,10).toNonIndexed();g.translate(5,5,5);const d=geometryData(g);d.faceIds=d.faceIds.map((_,i)=>Math.floor(i/2));setModel([d],language==='en'?'Exterior domain reference':'外部流体領域の参照サンプル');g.dispose();sourceModel={kind:'box',bounds:[0,0,0,10,10,10]};$('mesh-size').value=6;return createExteriorDomain(10);}
 $('exterior-create').onclick=()=>createExteriorDomain().catch(e=>status(e.message));$('exterior-demo').onclick=()=>exteriorExample().catch(e=>status(e.message));window.analysisApi.createExteriorDomain=createExteriorDomain;window.analysisApi.loadExteriorExample=exteriorExample;
 
-function updateDisciplineVisibility(){if($('cancel-run').disabled)$('solve-run').disabled=$('physics').value==='fluidDomain'||conditions.some(c=>c.cadUpdateRequired);const kind=$('physics').value,plastic=kind==='structural'&&!!materialProperties.plasticity;$('plastic-load-fractions').disabled=!plastic;if(!plastic)$('plastic-load-fractions').value='';$('nonlinear-steps').disabled=plastic&&!!$('plastic-load-fractions').value.trim();if($('nonlinear-steps').disabled)$('nonlinear-steps').value=$('plastic-load-fractions').value.split(',').length;const hyper=kind==='structural'&&(!!materialProperties.hyperelastic||!!materialProperties.plasticity||$('modal-enabled').checked);for(const method of ['webgpu-pcg','mfem-wasm'])document.querySelector('#solver option[value="'+method+'"]').disabled=kind!=='structural'||hyper;if((kind!=='structural'||hyper)&&['webgpu-pcg','mfem-wasm'].includes($('solver').value))$('solver').value='wasm-pcg';$('adaptive-run').disabled=kind!=='structural'||hyper||sourceModel?.kind==='stl';if(kind!=='structural'||hyper||sourceModel?.kind==='stl')$('adaptive-run').checked=false;for(const el of document.querySelectorAll('[data-physics]')){el.hidden=!el.dataset.physics.split(' ').includes(kind);if(!el.hidden&&['channelFlow','creepingFlow'].includes(kind)&&el.tagName==='DETAILS')el.open=true;}}
+function updateDisciplineVisibility(){updateDisciplineControls();}
 updateDisciplineVisibility();
 
 $('gpu-check').onclick=async()=>{$('gpu-check').disabled=true;try{const info=await checkGpuEnvironment();$('gpu-environment').textContent=info.available?'WebGPUを利用できます: '+info.description+(info.isFallbackAdapter===true?'（ソフトウェア代替）':info.isFallbackAdapter===false?'（実GPU）':''):'WebGPUを利用できません: '+info.reason;}finally{$('gpu-check').disabled=false;}};

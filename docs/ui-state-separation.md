@@ -2,7 +2,7 @@
 
 [English](en/ui-state-separation.md)
 
-MOD1は未完了です。ここではmain.jsから保存ケース一覧のUIだけを分離しました。Reactなどへの移行は行っていません。
+MOD1は未完了です。以下の各スライスでmain.jsから一部のUI処理を分離しています。main.jsの巨大テンプレートと全ライフサイクルはまだまとまっており、Reactなどへの移行も行っていません。
 
 ## 移動したもの
 `src/ui/case-list-ui.js`（`createCaseListUi`）に次を移しました。挙動は変えていません。
@@ -56,5 +56,17 @@ MOD1は未完了です。ここではmain.jsから保存ケース一覧のUIだ�
 
 `$`と`browserStudyControls`は引数で受け取り、main.jsをimportしません。3D選択、`lastAnalysis`、ジョブ、ワーカーには触れていません。
 `tests/ui-study-form.test.mjs`が偽DOMで確認します。実ブラウザでの動作確認は別途必要です。
+
+## 第8スライス: 分野別コントロール
+`src/ui/discipline-controls-ui.js`（`createDisciplineControlsUi`）に、分野ごとの表示とコントロール可否の更新を移しました。挙動は変えていません。
+
+- 解析分野に対応する `[data-physics]` 要素の表示を切り替え、流体・Stokes の表示中の`details`を開く
+- 実行中でないときの解析ボタンを、流体領域メッシュ専用・未確定CAD条件に応じて有効化
+- 構造解析でのみ塑性荷重倍率を有効にし、入力された倍率数に非線形ステップ数を合わせる
+- 分野・材料モデル・モーダル設定に応じてWebGPU/MFEMを無効化し、選択済みの非対応ソルバーを`wasm-pcg`へ戻す
+- 非構造・非線形・モーダル・STLでは適応解析を無効化し、チェックを外す
+
+DOMの`$`/`querySelector`/`querySelectorAll`と、変化する分野・条件・材料・形状・実行状態・ソルバー情報を返す`getState()`を注入します。状態は更新のたびに取得し、モジュールはmain.jsをimportしません。main.jsはコントロール更新関数を組み立て、既存の更新処理から呼び出します。
+`tests/discipline-controls-ui.test.mjs`に偽DOMを使う独立した4テストを追加しました。実Chromeのlocalhost画面でも、熱への切替時のソルバー復帰、流体設定の展開、モーダル時のMFEM/WebGPU・適応無効化を確認しました。[ソースsnapshot付き証跡](evidence/2026-10-15-mod1-discipline-ui-chrome.json)を参照。解析実行・全組合せ・公開HTTPS接続の確認を意味しません。
 
 英語版: [en/ui-state-separation.md](en/ui-state-separation.md)

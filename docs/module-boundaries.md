@@ -43,7 +43,8 @@ English: [en/module-boundaries.md](en/module-boundaries.md)
 ```
 node scripts/check-module-boundaries.mjs          # 検査
 node scripts/check-module-boundaries.mjs --graph  # 解析したimportグラフを表示
-node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
+npm run check:contracts                           # 宣言とfixtureをTypeScriptで検査
+node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs tests/contracts-types.test.mjs
 ```
 
 ## ファイルの追加方法
@@ -52,9 +53,13 @@ node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
 2. `src/module-layers.json` の適切な `layers.<名前>.files` にパス(`src/`相対)を追加する。迷ったら、依存先の最上位レイヤーより上に置く。
 3. `node scripts/check-module-boundaries.mjs` を実行し、禁止エッジが出たら依存を直す。許可リストは最後の手段で、理由を必ず書く。
 
+## 独立した変更と統合
+
+UIの制御表示は `src/ui/discipline-controls-ui.js` が担当し、`src/main.js` は状態をgetterで渡して呼び出す。UI変更はこのモジュールと `tests/discipline-controls-ui.test.mjs` を中心に行い、main側には状態の注入・イベント接続だけを足す。分野固有のソルバー処理は `src/solver-adapters/<discipline>-adapter.js` に置き、共通の実行フローは `src/analysis.worker.js` がアダプターを呼び出す。例として温度範囲の後処理は `src/solver-adapters/thermal-adapter.js` にある。変更後は分類表を更新し、境界検査と関係する機能テストを実行する。共有の実行制御やまだアダプターへ移していない処理はworker側の責務として扱う。
+
 ## 共有型契約 (`src/contracts/*.d.ts`)
 
-`diagnostics.d.ts`(AnalysisFailure/AnalysisDiagnostic/JobErrorRecord)、`job.d.ts`(JobView/JobEvent/ページ)、`case.d.ts`(Revision/RuntimeIdentity/ケース一覧/比較応答)。いずれも既存実装から導出した宣言のみで、コンパイラ依存はない。`tests/contracts.test.mjs` が実際の実行時出力と宣言フィールドを照合し(必須欠落・未宣言フィールド・宣言型の違反を検出し、宣言された任意フィールドは実行時サンプルで1回は観測されるか `OPTIONAL_NOT_OBSERVED` に理由つきで列挙されていなければ失敗する。索引シグネチャを持つ型の余剰キーも `INDEXED_EXTRAS` に固定)、契約が黙ってずれないようにする。追加するときは実装に存在する形に限り、同時に照合テストを足す。
+`diagnostics.d.ts`(AnalysisFailure/AnalysisDiagnostic/JobErrorRecord)、`job.d.ts`(JobView/JobEvent/ページ)、`case.d.ts`(Revision/RuntimeIdentity/ケース一覧/比較応答)。`npm run check:contracts` はTypeScriptのstrict/noEmitコンパイラを使い、これらの宣言と `tests/fixtures/contracts-types.ts` の代表的な使用例を検査する。これは宣言ファイルとfixtureに限った検査で、JavaScript実装全体の型検査ではない。別途 `tests/contracts.test.mjs` が実際の実行時出力と宣言フィールドを照合し(必須欠落・未宣言フィールド・宣言型の違反を検出し、宣言された任意フィールドは実行時サンプルで1回は観測されるか `OPTIONAL_NOT_OBSERVED` に理由つきで列挙されていなければ失敗する。索引シグネチャを持つ型の余剰キーも `INDEXED_EXTRAS` に固定)、実行時と宣言のparityを確認する。追加するときは実装に存在する形に限り、fixtureと実行時照合テストを更新する。
 
 ## このチェックが扱わないこと
 
@@ -63,4 +68,4 @@ node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
 - フォルダ移動だけでは境界の達成にならない。分類表と依存方向の検査を通ることが条件。
 - 同一レイヤー内の循環、関数単位の責務、`globalThis[...]` や別名経由のグローバル参照、実行時に組み立てるspecifier(変数import、`${}` 入りテンプレート、`new Worker(variable)`)は検査しない。DOM検出はトークン化後のコードに対する名前付きパターンの近似で、網羅ではない。
 - トークナイザーは正規表現リテラルを直前トークンから推定する簡易実装で、極端な書き方(`)` 直後の正規表現など)では誤読しうる。実リポジトリ全体は独立オラクルテスト(相対 `.js` 文字列は全て認識済みimport)で確認している。
-- 型宣言はコンパイル検証されない。照合はフィールド名と、リテラル/プリミティブ/ユニオン/テンプレートリテラル/それらの配列の型のみ。オブジェクト・interface・`unknown` 型の中身、`CaseComparisonRow` などの索引シグネチャ値、観測されていない任意フィールド(`OPTIONAL_NOT_OBSERVED` 参照)の実形状は検証しない。
+- TypeScriptコンパイラ検査は `.d.ts` とfixtureに限られ、全JavaScriptの型安全性を保証しない。実行時parity照合はコンパイラとは別の検査で、フィールド名と、リテラル/プリミティブ/ユニオン/テンプレートリテラル/それらの配列の型のみを照合する。オブジェクト・interface・`unknown` 型の中身、`CaseComparisonRow` などの索引シグネチャ値、観測されていない任意フィールド(`OPTIONAL_NOT_OBSERVED` 参照)の実形状は検証しない。

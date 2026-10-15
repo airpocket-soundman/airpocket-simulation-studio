@@ -43,7 +43,8 @@ Replacing 1-2 with a pure parser / direct dependency is follow-up work. A dom ex
 ```
 node scripts/check-module-boundaries.mjs          # check
 node scripts/check-module-boundaries.mjs --graph  # print the parsed import graph
-node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
+npm run check:contracts                           # type-check declarations and fixture
+node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs tests/contracts-types.test.mjs
 ```
 
 ## Adding a file
@@ -52,9 +53,13 @@ node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
 2. Add its `src/`-relative path to `layers.<name>.files` in `src/module-layers.json`. When unsure, place it above the highest layer it depends on.
 3. Run `node scripts/check-module-boundaries.mjs`; fix forbidden edges. The allowlist is a last resort and needs a reason.
 
+## Independent changes and integration
+
+Discipline-specific control visibility belongs in `src/ui/discipline-controls-ui.js`; `src/main.js` supplies state through a getter and calls it. Make a UI change primarily in that module and `tests/discipline-controls-ui.test.mjs`, adding only state injection or event wiring in `main.js`. Discipline-specific solver behavior belongs in `src/solver-adapters/<discipline>-adapter.js`, while `src/analysis.worker.js` owns the shared execution flow and calls the adapter. For example, temperature-range postprocessing is in `src/solver-adapters/thermal-adapter.js`. After a change, update the layer table and run the boundary check and relevant feature tests. Shared execution control and behavior not yet moved into an adapter remain worker responsibilities.
+
 ## Shared type contract (`src/contracts/*.d.ts`)
 
-`diagnostics.d.ts` (AnalysisFailure/AnalysisDiagnostic/JobErrorRecord), `job.d.ts` (JobView/JobEvent/pages), `case.d.ts` (Revision/RuntimeIdentity/case list/comparison response). All are declarations derived from existing code; no compiler dependency. `tests/contracts.test.mjs` compares real runtime output with declared fields (missing required fields, undeclared fields and values violating the declared type fail; a declared optional field must be observed in at least one runtime sample or be listed with a reason in `OPTIONAL_NOT_OBSERVED`; extra keys on index-signature interfaces are pinned in `INDEXED_EXTRAS`) so the contract cannot drift silently. Add a shape only if it already exists in the implementation, together with its parity test.
+`diagnostics.d.ts` (AnalysisFailure/AnalysisDiagnostic/JobErrorRecord), `job.d.ts` (JobView/JobEvent/pages), `case.d.ts` (Revision/RuntimeIdentity/case list/comparison response). `npm run check:contracts` invokes the TypeScript compiler in strict/noEmit mode over these declarations and representative uses in `tests/fixtures/contracts-types.ts`. This check is limited to declarations and the fixture; it does not type-check the JavaScript implementation as a whole. Separately, `tests/contracts.test.mjs` compares real runtime output with declared fields (missing required fields, undeclared fields and values violating the declared type fail; a declared optional field must be observed in at least one runtime sample or be listed with a reason in `OPTIONAL_NOT_OBSERVED`; extra keys on index-signature interfaces are pinned in `INDEXED_EXTRAS`), checking runtime/declaration parity. Add a shape only if it already exists in the implementation, and update both the fixture and runtime parity test.
 
 ## What this does NOT cover
 
@@ -63,4 +68,4 @@ node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs
 - Moving folders alone does not count as a boundary; passing the classification table and direction check does.
 - Not checked: cycles inside one layer, function-level responsibilities, aliased or computed globals (`globalThis[...]`), runtime-computed specifiers (variable imports, templates with `${}`, `new Worker(variable)`). DOM detection is a set of named patterns over the comment/literal-stripped code, an approximation rather than a complete list.
 - The tokenizer guesses regex literals from the previous token; unusual code (e.g. a regex right after `)`) can be misread. The whole real repository is cross-checked by an independent oracle test (every relative `.js` string literal must be a recognised import).
-- Type declarations are not compiler-verified. Parity checks field names plus literal/primitive/union/template-literal types and arrays of them. It does not verify the contents of object, interface or `unknown` types, index-signature values (e.g. `CaseComparisonRow`), or the real shape of optional fields that no sample produces (see `OPTIONAL_NOT_OBSERVED`).
+- The TypeScript compiler check covers only `.d.ts` files and the fixture; it does not establish type safety for all JavaScript. Runtime parity is a separate check and compares field names plus literal/primitive/union/template-literal types and arrays of them. It does not verify the contents of object, interface or `unknown` types, index-signature values (e.g. `CaseComparisonRow`), or the real shape of optional fields that no sample produces (see `OPTIONAL_NOT_OBSERVED`).
