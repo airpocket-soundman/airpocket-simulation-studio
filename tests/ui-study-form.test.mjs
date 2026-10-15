@@ -29,3 +29,12 @@ test('internal fields round-trip through restore and options',()=>{
  assert.equal(nodes['internal-width-z'].value,6);assert.equal(nodes['internal-port-3'].checked,true);assert.equal(nodes['internal-port-1'].checked,false);
  assert.deepEqual(ui.internalOptions(),s);
 });
+
+test('study controls reset to the values captured at startup (fresh-load defaults)',()=>{
+ const {nodes,ui}=setup({a:{type:'checkbox'},b:{type:'number'}});
+ assert.throws(()=>ui.resetBrowserStudyControls(),/captured/);
+ nodes.a={checked:false};nodes.b={value:'2'};ui.captureInitialStudyControls();
+ nodes.a.checked=true;nodes.b.value='9';
+ ui.resetBrowserStudyControls();
+ assert.equal(nodes.a.checked,false);assert.equal(nodes.b.value,'2');
+});
