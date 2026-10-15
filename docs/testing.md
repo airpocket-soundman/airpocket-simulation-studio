@@ -505,3 +505,13 @@ P1/P3の候補検査・版照合・実行中非変更の限定確認であり、
 中間artifactへpageKind:elementsを追加し、同じ保持メッシュの節点と四面体接続を有界取得できるようにした。共有API・ブラウザadapter・実stdio MCPで接続ページと不正指定拒否を検証。旧analyze/generateMeshもdrain/closeの終了待機対象とし、遅着応答・非同期terminate・終了失敗の回帰を追加した。熱/過渡音響は場要求なしで観測配列を生成/転送せず、実Workerで最終結果の一致と要約継続を確認した。
 
 全体913件中910成功・3skip・失敗0（132.24秒）。統合対象23件、solver/Worker29件、登録後の文書/進捗/gate12件も成功。buildとローカル配信物26項目（59.67秒）が成功。[検証証跡](evidence/2026-10-15-intermediate-lifecycle.json)、[Skill同期](evidence/2026-10-15-skill-minimal-connector.json)を保存した。後者は10ファイルの一致とvalidator成功であり、Skill単独一巡の証明ではない。公開HTTPS接続、待機イベント/ヒープの上限、再起動復旧、P0〜P6全体は未完了。
+
+## 2026-10-15: 成功ジョブ結果の非表示取得と公開接続試験
+
+確認権限のjobResultExport/Read/Releaseを追加し、UI入力Bを保持したままjobAの完全出力をSHA256付き分割取得できるようにした。実Worker moduleからanalysis-clientへ保持した熱出力を含む検証と、セッション所有・期限・切断・解放・厳密JSON正規化を確認した。関連23件成功、buildとローカル配信物26項目（101.07秒）が成功。
+
+初回既定Node24全体921件は913成功・5失敗・3skip（195.14秒）。失敗は古い操作数82の期待値4件と既知V8 native fatal1件であり、成功扱いしない。期待値を85へ同期した最終対象13件は既定Node24で成功した。V8停止ファイルの単独成功は根治の証明ではない。[ログとソースの証跡](evidence/2026-10-15-job-result-export.json)を参照。
+
+公開0e53638の単体接続ファイルはmanifest版・bytes/SHA256と隔離起動・3ツール・EOF終了を確認した。ユーザー承認後の公開ページ確認専用接続は到達エラーでsession未作成となり、コードを消去し試験用MCPと待受を終了した。[公開ファイル](evidence/2026-10-15-public-browser-connector.json)、[失敗記録](evidence/2026-10-15-public-https-inspect-failure.json)、[画面](evidence/2026-10-15-public-https-inspect-failed.jpg)を参照。原因は未特定で、公開HTTPS gateを閉じない。保存後の全比較、engine版追跡、Skill単独一巡、P0〜P6全体も未完了。
+
+Node26.10.0の比較全体は921件中917成功・1失敗・3skip（373.93秒）。失敗はqueryNodeIdentity子プロセスの5秒spawn timeoutで、同じruntime再現suiteの単独6件は成功した。比較全体も未通過であり、既定環境のV8根治や全体成功の代替にはしない。最終差分の必須CIを別途確認する。

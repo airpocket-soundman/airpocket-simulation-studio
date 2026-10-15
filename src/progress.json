@@ -2168,7 +2168,9 @@
       "detailEn": "Temporary local connector with three tools using existing Node24; bind distribution bytes and SHA256 to the manifest revision and runtime requirement.",
       "acceptance": "単体隔離起動・契約・認証・権限・失効・切断・EOF終了を確認。公開配布物と実HTTPS接続の確認を残し、Node同梱版や再起動復旧とは区別する。",
       "acceptanceEn": "Verify isolated single-file startup,contracts,authentication,scopes,expiry,disconnect and EOF cleanup. Public artifact/actual HTTPS verification remains; distinguish runtime bundling and restart recovery.",
-      "evidence": "scripts/studio-browser-mcp.mjs; scripts/build-browser-connector.mjs; tests/browser-only-mcp.test.mjs; tests/browser-connector-bundle.test.mjs; docs/evidence/2026-10-15-browser-connector.json"
+      "evidence": "scripts/studio-browser-mcp.mjs; scripts/build-browser-connector.mjs; tests/browser-only-mcp.test.mjs; tests/browser-connector-bundle.test.mjs; docs/evidence/2026-10-15-browser-connector.json; docs/evidence/2026-10-15-public-browser-connector.json; docs/evidence/2026-10-15-public-https-inspect-failure.json",
+      "lastUpdate": "公開0e53638から70,942 bytesを取得し、manifest版・SHA256・隔離Node24起動・3ツール・EOF終了を確認。実HTTPS接続は未検証。 確認専用の実ブラウザ試験は到達エラーでsession未作成、原因未特定。",
+      "lastUpdateEn": "Downloaded70,942bytes from public0e53638,verified manifest revision/SHA256,isolated Node24 startup,three tools and EOF. Actual HTTPS pairing remains unverified. Approved inspect-only browser attempt failed before session creation;cause remains unidentified."
     },
     {
       "id": "P3OBSERVATIONLIFECYCLE1",
@@ -2186,6 +2188,23 @@
       "acceptance": "同じ中間メッシュの節点/要素から再構成し、版・ハッシュと測定を照合。非同期終了・遅着応答・取消/待機を検証。場有無で最終結果不変を実Workerで確認。公開HTTPS/再起動復旧/全P3は未完了。",
       "acceptanceEn": "Reconstruct the same intermediate mesh from node/element pages with identity and measurement checks; verify asynchronous termination,late replies,cancellation/drain and unchanged final results in real Workers. Public HTTPS,restart recovery and full P3 remain open.",
       "evidence": "src/intermediate-results.js; src/analysis-client.js; src/analysis.worker.js; docs/evidence/2026-10-15-intermediate-lifecycle.json"
+    },
+    {
+      "id": "JOBRESULTEXPORT1",
+      "title": "現在入力を変えず成功ジョブの完全結果を取得",
+      "titleEn": "Retrieve complete successful job output without changing current input",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "P4",
+        "BROWSERBRIDGE1"
+      ],
+      "detail": "確認権限でjobResultExport/Read/Release。元入力版を照合し、完全保持出力のbyte数・SHA256・base64分割取得とセッション所有を管理。",
+      "detailEn": "Inspect-scoped jobResultExport/Read/Release with original input-revision verification,complete output byte count/SHA256,base64 chunks and session ownership.",
+      "acceptance": "UI入力BのままjobAの保持出力を再構成・検証し、表示/編集せず、拒否/期限/切断/解放を確認。実Worker由来outputとJSON正規化を検証。公開HTTPS、保存後全比較とengine build identityは別条件。",
+      "acceptanceEn": "Reconstruct/verify jobA while UI inputB remains unchanged; verify refusals,expiry,disconnect/release and actual Worker-output JSON normalization. Public HTTPS,complete saved comparisons and engine build identity remain separate requirements.",
+      "evidence": "src/job-result-transfer.js; tests/job-result-transfer.test.mjs; tests/browser-job-result-transfer.test.mjs; docs/evidence/2026-10-15-job-result-export.json"
     }
   ],
   "solvers": [
@@ -2330,7 +2349,8 @@
           "CASEVIEWBUNDLE1",
           "CASEMEASUREMENTBUNDLE1",
           "MEASUREMENTVERIFY1",
-          "VIEWCOMPARE"
+          "VIEWCOMPARE",
+          "JOBRESULTEXPORT1"
         ],
         "acceptance": "Retrieve, verify, save, restore, compare and remeasure results while retaining input/result/mesh/calculation/engine/assumption identity."
       },
