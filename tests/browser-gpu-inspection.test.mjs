@@ -42,3 +42,10 @@ test('expired and revoked GPU inspection responses are rejected after the asynch
  await assert.rejects(session.call('checkGpuEnvironment',{}, {expiresAt:Date.now()-1}),/expired/);assert.equal(calls,0);
  const pending=session.call('checkGpuEnvironment');await new Promise(resolve=>setImmediate(resolve));assert.equal(calls,1);session.disconnect();resume({available:true,description:'late'});await assert.rejects(pending,/expired|changed/i);
 });
+
+test('the live page wires checkGpuEnvironment into the analysis object handed to the browser session',async()=>{
+ // Found in real Chrome: the connector answered "Browser GPU environment inspection unavailable" because only window.analysisApi (a copy) had the function.
+ const {readFile}=await import('node:fs/promises');const main=await readFile(new URL('../src/main.js',import.meta.url),'utf8');
+ assert.match(main,/analysis.checkGpuEnvironment=checkGpuEnvironment/);
+ assert.ok(main.indexOf('analysis.checkGpuEnvironment=checkGpuEnvironment')<main.indexOf('installBrowserSession({'),'wiring must precede the session installation');
+});
