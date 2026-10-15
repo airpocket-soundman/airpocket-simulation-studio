@@ -551,3 +551,13 @@ Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeId
 対象13件、全体968件中965成功・3skip・失敗0（171.53秒）。buildとローカル配信物26項目（57.72秒）も成功。実製品stdio/HTTP/adapterと制御executorで最大JSON値52,854 bytes、MCP JSONRPC行106,350 bytes、bridge reply body52,908 bytesを測定した。64KiBは値の上限であり通信全体とは違う。別途、全体試験で実solverのMCP観測とlifecycleも回帰した。合成イベント試験を物理精度の証明としない。[証跡](evidence/2026-10-15-job-event-bounds.json)を参照。
 
 前回PR #10はLinux Node24必須CIで956件中953成功・3skip・失敗0となり、badce2cへ取り込んだ。前回Windows/Node26の失敗記録を上書きせず、今回成功も既知V8問題の根治とは扱わない。配布/リポジトリSkill10ファイル一致と両validator成功を確認した。公開HTTPS・Worker transport全体・保存比較再測定API・Skill単独一巡・全P0〜P6は継続する。
+
+## 2026-10-15: 配信物検証のプロセス分離（ローカル検証済み）
+
+取り込み後のmain `badce2c0704385616af5c2dcc76898df85f833cb` は、[Linux Node v24.21.0の公開CI](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38663202965)で全体テスト・ビルドを通過した後、ローカル配信物検査が既知の`jit_page_->allocations_.erase(addr) == 1`でexit 133となった。22件の名前付き検査の成功後、`project-and-case-roundtrips`に続く区間で停止しており、26項目全体の成功・デプロイ成功とは扱わない。この失敗を前回PRの成功やWindowsの記録と区別して保持する。
+
+配信物検査用の実行方式だけを変更し、同じNode実行ファイルの子プロセスのmainで、ハッシュ照合済み配信analysis/CADモジュールとSTEP参照生成を実行する。元の26項目と数値・保存復元のassertionを維持し、親自身のGmsh初期化を除いた。受信結果はclose 0・シグナルなし・観測されたnative fatalなしまで暫定とし、要求前の応答、子の異常、期限切れを拒否する。同期チェックポイントと失敗時の部分記録を残す。
+
+制御fixtureは実子のsame-executable実行、バイナリーIPC、終了待機、結果後の非零終了、失敗伝達を検証する。物理ソルバーの精度やV8根治の証明ではない。ブラウザの実Worker、MCPの既定実行方式、サポートNode最低版は変更していない。Node切替、GC設定変更、skip、自動retry/fallbackは追加していない。
+
+今回変更後の既定Node24全体980件中977成功・3skip・失敗0（154.09秒）。buildとローカル配信物26項目（72.55秒、44 child）が成功。公開CIは別途記録する。原因の同定と上流修正との一致は未証明のままである。終了判定範囲と一次資料は[WASM実行調査](wasm-runtime-investigation.md)を参照。

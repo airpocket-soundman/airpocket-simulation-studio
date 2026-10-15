@@ -147,3 +147,5 @@ GUI検証ではソルバーを実行していない。P0/P3の今回範囲だけ
 後続P3にはWorker送信キュー自体の背圧とイベントringのpayload/page bytes制限が残る。現状の待機上限をJSヒープ全体の保証としない。P3公開HTTPS接続、P4比較・同一点再測定、Skill単独一巡と全P0〜P6の完了条件は維持する。
 
 JOBEVENTBYTES1はP3のイベント本文・保持・ページ容量を実装し、明示欠落通知とカーソル継続を検証する。OBSERVATIONQUEUE1の保存待機上限とは別で、Worker送信キュー自体の背圧は引き続き未完了。流体PR #7の作業中統合を勝手に完成扱いせず、共通API/MCP/Skillとの接続範囲を独立して確認する。
+
+PUBLICATIONISOLATION1は公開基盤の検証修復を優先し、同一Node child mainへ数値検証を分離する。全体980件中977成功・3skip・失敗0、ローカル26項目成功。元のLinux V8停止は保存し、根治や実ブラウザ安定性の証明とはしない。CI・公開candidateの確認は別途必要。
