@@ -1,0 +1,41 @@
+{
+  "status": "passed-local-dev",
+  "scope": "Real Chrome (Claude in Chrome) on http://127.0.0.1:5174 against the Vite dev server of branch codex/llm-input-operations; stdio connector scripts/studio-mcp.mjs with inspect+edit+analyze scopes. Not the published site.",
+  "checkedAt": "2026-10-15",
+  "baseRevisionBeforeFix": "35ad648",
+  "checks": [
+    {
+      "name": "gui-local-refinement-add",
+      "passed": true,
+      "detail": "Reference demo with 6 selected triangles, base size 4 mm: #local-mesh-add (size 2, radius 10) registered 6 refinements (one per selected triangle, first {center:[10,6.67,26.67],size:2,radius:10}); selection kept at 6 triangles; status message shown."
+    },
+    {
+      "name": "gui-local-refinement-invalid-size-refused",
+      "passed": true,
+      "detail": "Local size 8 (200% of base) refused with 'Local size must be 15–100% of baseSize'; refinement count stayed 6."
+    },
+    {
+      "name": "connector-previewEdit-edit-addSelectedMeshRefinements",
+      "passed": true,
+      "detail": "previewEdit and edit with {size:1,radius:10,baseSize:4} returned the same resulting revision; page state then had 12 refinements, selection and condition count unchanged; a repeated edit with the old revision was refused ('Project revision conflict')."
+    },
+    {
+      "name": "meshBoundaryPreflight-defect-found",
+      "passed": false,
+      "detail": "On the unfixed code the live meshBoundaryPreflight refused a successful settled mesh-only job of the GUI demo with ANALYSIS_MESH_PREFLIGHT_MODEL_UNSUPPORTED (limited to static linear structural inputs, kind structural). Cause: the GUI always exports study.materialTemperature (default 20) and the check treated any defined value as unsupported; unit tests used minimal fixtures and missed it."
+    },
+    {
+      "name": "meshBoundaryPreflight-after-fix",
+      "passed": true,
+      "detail": "After the fix (materialTemperature is relevant only with a material temperature dependence), the same flow returned allowed:true, completePreflight:false, reports for condition 0 (fixed, original 100 mm2, mapped 100 mm2, relative error 0) and condition 1 (force, 100 mm2 → 100 mm2, error 0), diagnostics []. A request with a wrong input revision returned ANALYSIS_MESH_PREFLIGHT_STALE_INPUT, an unknown jobId was refused, and the live input revision was unchanged afterwards."
+    }
+  ],
+  "regressionTest": "tests/mesh-boundary-preflight.test.mjs 'GUI-style input with the default materialTemperature is inspected; a temperature-dependent material is still refused' fails on the previous code and passes after the fix.",
+  "notVerified": [
+    "Published HTTPS site and connection from it (PUBLICHTTPS1).",
+    "The preflight reports boundary transfer only; constraint rank, rigid-body modes, convergence and physical accuracy are not checked (completePreflight stays false).",
+    "Real CAD (STEP) inputs and non-box geometry were not exercised; only the built-in axial-bar demo.",
+    "Disconnect/reconnect behavior during an in-flight inspection was not exercised.",
+    "Other browsers and operating systems."
+  ]
+}

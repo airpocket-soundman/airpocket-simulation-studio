@@ -4,9 +4,9 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-30ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+31ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_preflight_mesh_boundaries`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
-現行の入口は通常30/接続32 MCPツール、86ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
+現行の入口は通常31/接続33 MCPツール、87ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -16,7 +16,7 @@
 
 `studio_inspect_project({path})`が返す`revision`を`expectedRevision`として、`studio_edit_project({path,outputPath,expectedRevision,operations:[{method,args}]})`へ渡します。1〜100操作を作業用コピーに一括適用し、すべて成功した場合だけ新規`outputPath`に保存します。古い版・未対応操作・不正入力は拒否し、元入力と既存出力は上書きしません。戻り値は新旧revisionと保存先・要約を含みます。検査revisionは入力JSONのキー順に依存しないハッシュで、ジョブの正規化入力`inputRevision`と同一とは限りません。
 
-対応methodは`selectTriangles`、`selectCadFace`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`applyCatalogMaterial`、`setStudy`、`setMeshSettings`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
+対応methodは`selectTriangles`、`selectCadFace`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`applyCatalogMaterial`、`setStudy`、`setMeshSettings`、`addSelectedMeshRefinements`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
 
 追加の`selectCadFace`と`applyCatalogMaterial`を含め計18メソッドです。例: `operations:[{"method":"selectCadFace","args":[0,2]}]`。CAD更新では既存根拠entryを`unconfirmed`・`assumption:null`へ戻し、confirmationを削除します。更新後は領域と根拠を再確認してください。
 
@@ -594,3 +594,5 @@ MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で�
 `studio_preflight_project({path,fractureAssessment?,fatigueAssessment?,...})`は、共通APIの`preflight(options)`と同様に、solveで要求した破壊・疲労評価の材料データとオプションも検査します。評価未指定（または`undefined`）とmesh-onlyは従来どおりです。疲労の省略オプションには従来の既定値が適用されるため、意図した荷重倍率・回数・平均応力補正を明示してください。
 
 不足は`ASSESSMENT_INPUT_REQUIRED`、不正値は`ASSESSMENT_INPUT_INVALID`、対象外の構造モデルは`ASSESSMENT_MODEL_UNSUPPORTED`として対象ポインタを返します。破壊靭性の登録温度範囲を外れる評価温度は`ASSESSMENT_TEMPERATURE_OUT_OF_RANGE`です。適合する温度依存の線形等方材は一律に除外しません。quantitative/exploratoryでは材料評価データも既存の根拠・仮定検査に含めます。ソルバーや評価を実行せず、入力ファイルを変更しません。成功しても、解析後の応力状態・弾性範囲・メッシュ・拘束・収束・物理妥当性を保証しません。
+
+選択領域の局所細分化は `addSelectedMeshRefinements({size,radius,baseSize})` をedit/previewのargsに渡します。単位はmm、sizeはbaseSizeの15〜100%。GUIと同じ選択三角形重心を最大80件追加し、保存全体160件まで。既存設定と選択を保持し、空選択・不正値・容量超過・版競合では入力を変更しません。baseSizeは後続ジョブの全体サイズを自動変更しません。

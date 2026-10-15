@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T08:27:53.834Z",
+  "updatedAt": "2026-10-15T08:32:36.715Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -2546,6 +2546,38 @@
       "evidence": "docs/evidence/2026-10-15-public-https-inspect-failure.json; docs/evidence/2026-10-15-public-https-reconnect-user-report.json; scripts/browser-bridge.mjs; tests/browser-bridge-diagnostics.test.mjs",
       "lastUpdate": "2026-10-15 利用者報告: 公開HTTPS版へ確認専用で再接続できたとの申告あり。これは独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認。編集/解析へ権限を広げず、受け入れ条件未達のためchecking維持。",
       "lastUpdateEn": "2026-10-15 user report: the user says an inspect-only reconnect to the published HTTPS version succeeded. This is not an independent observation; success of an inspection operation, session termination after disconnect, browser version and published revision remain unverified. No edit/analysis scope was granted; acceptance is incomplete, so the task stays checking."
+    },
+    {
+      "id": "MESHBOUNDARYPREFLIGHT1",
+      "title": "実メッシュで境界条件の転送を事前確認",
+      "titleEn": "Inspect boundary transfer against a retained mesh",
+      "detail": "成功・終了済みmesh-onlyジョブと入力版を照合し、解析せず境界転送を検査するAPI/MCP。",
+      "detailEn": "API/MCP checks boundary transfer without solving, against an exact-input successful settled mesh-only job.",
+      "acceptance": "保存stdio・live契約、出力改変拒否、入力版・非同期変更拒否、境界診断保持と入力不変を検証。静的線形構造のみ。拘束rank・剛体モード・収束・精度は未確認。全体CI・公開検証は未完了。",
+      "acceptanceEn": "Tests cover saved stdio/live contract, output tamper refusal, revision/asynchronous-change refusal, preserved boundary diagnostics and unchanged input. Static linear structure only; constraint rank, rigid modes, convergence and accuracy remain unchecked. Full CI and publication remain pending.",
+      "evidence": "src/mesh-boundary-preflight.js; tests/mesh-boundary-preflight.test.mjs; skills/airpocket-studio/references/jobs-observations.md",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P1",
+        "MOD1"
+      ]
+    },
+    {
+      "id": "SELECTEDREFINEMENT1",
+      "title": "選択領域から局所細分化をAPI/MCPで設定",
+      "titleEn": "Configure selection-based refinement through API/MCP",
+      "detail": "GUIと同じ三角形重心helperで局所設定を生成し、preview/editと専門Skillから使う。",
+      "detailEn": "Use the GUI triangle-centroid helper to generate refinement settings through preview/edit and specialist Skill guidance.",
+      "acceptance": "GUI同等・選択保持、1回80件/保存160件、全体サイズ比15〜100%、空選択・不正値・stale・権限失効時の不変、実stdio/paired MCPを検証。全体CI・公開検証は未完了。",
+      "acceptanceEn": "Tests cover GUI equivalence, selection preservation, 80 additions/160 stored, 15–100% base-size range, empty/invalid/stale/revoked refusal without mutation, and real stdio/paired MCP. Full CI and publication remain pending.",
+      "evidence": "src/studio-api.js; src/local-mesh.js; tests/selected-mesh-refinement.test.mjs; tests/mcp-selected-mesh-refinement.test.mjs",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P1",
+        "MOD1"
+      ]
     }
   ],
   "solvers": [
