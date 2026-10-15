@@ -1,0 +1,195 @@
+{
+  "date": "2026-10-15",
+  "baseRevision": "18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+  "changes": [
+    "MCP provenance/intent positional schema discovery",
+    "All-case restoration validation for saved MCP archives",
+    "Reject planar rotation controls without matching frame",
+    "Bounded pending observation payload queues with explicit loss, source order and limits"
+  ],
+  "initialDefaultFull": {
+    "tests": 955,
+    "pass": 950,
+    "fail": 2,
+    "skip": 3,
+    "durationMs": 150329.914,
+    "failures": [
+      "Undeclared observation-queue-limit event",
+      "Test assumed last retained field equals final time"
+    ]
+  },
+  "correctedDefaultFull": {
+    "tests": 956,
+    "pass": 952,
+    "fail": 1,
+    "skip": 3,
+    "durationMs": 158051.9865,
+    "failure": "Known Windows Node24 V8 native fatal jit_page_->allocations_.erase(addr)==1 in mcp-advanced-structural-provenance",
+    "status": "failed"
+  },
+  "isolatedDefault": {
+    "tests": 1,
+    "pass": 1,
+    "durationMs": 16045.8648,
+    "rootFixProven": false
+  },
+  "build": "passed",
+  "localDistribution": {
+    "checks": 26,
+    "status": "passed",
+    "seconds": 67.78
+  },
+  "browserEvidence": "2026-10-15-agent-contract-browser.json",
+  "publicationEvidence": [
+    "2026-10-15-publication-51f84fc.json",
+    "2026-10-15-publication-18a416d.json"
+  ],
+  "limits": [
+    "Default Windows full suite has not passed for this final code.",
+    "Queue bounds exclude Worker transport and total JS heap; event-ring payload/page byte limits remain open.",
+    "Accepted/completed counts do not prove stored artifacts.",
+    "Public HTTPS pairing, saved comparative remeasurement API, Skill-only completion and all P0-P6 remain incomplete."
+  ],
+  "files": {
+    "src/job-observation-queue.js": {
+      "bytes": 5655,
+      "sha256": "daf5908fb4fb809b8b5ba5a129878516492c3bf3b245028b720c093c098082b4"
+    },
+    "src/analysis-client.js": {
+      "bytes": 10665,
+      "sha256": "955365186bcf6a3e622a6c7c3b9eee00080fe7ba33c2d3476431b9b667162f2b"
+    },
+    "scripts/analysis-job-service.mjs": {
+      "bytes": 9589,
+      "sha256": "ebe68b75b89e577e3be2efe985f91f7995d930425140453f719dd3bd5574f4f5"
+    },
+    "src/observation-profiles.js": {
+      "bytes": 16464,
+      "sha256": "d9405231fc6b79cf6c5db7fa1938667faf39c31d909eae0cc903c9ba2d41965f"
+    },
+    "src/evidence-operation-schema.js": {
+      "bytes": 2613,
+      "sha256": "069db34da00569b5460c22af385ca4a16851992e918ca40c937bf4d5216ca10d"
+    },
+    "src/browser-operation-input-contracts.js": {
+      "bytes": 18155,
+      "sha256": "437da21a1937c4c3c35edb9d5c243da36bc97c8dd2a80ab2f7fbd86889a53171"
+    },
+    "src/planar-region.js": {
+      "bytes": 5457,
+      "sha256": "525691215da08e45572718a36fc3a18c5c1dbbe8b19e3e2dfeabc8f4154da75b"
+    },
+    "scripts/studio-mcp.mjs": {
+      "bytes": 39844,
+      "sha256": "bb3ebbb7a6e34c073fcfdc84ac949210e237f4247b95f091d67aead7df15d695"
+    },
+    "src/capabilities.js": {
+      "bytes": 9676,
+      "sha256": "8d7f7cf05378310b4fa97b3188fa85e5b38e3d2257fbeea1f7775c884602090f"
+    },
+    ".qa/agent-contract-validation-full.log": {
+      "bytes": 104654,
+      "sha256": "220f6e30fa9ea638c06b9cf81b4a7fb0b977623018cc5d76c452c6bd55e1f522"
+    },
+    ".qa/agent-contract-validation-final-full.log": {
+      "bytes": 103377,
+      "sha256": "47a41d91914133d4cfeb82a48671c2158933188de0cd92280a12778ac0551f3a"
+    },
+    ".qa/agent-contract-validation-v8-isolated.log": {
+      "bytes": 242,
+      "sha256": "4ea9859fcc8e47ee65940fe970026eec3bb537c465a83038c6317de167e516b1"
+    },
+    ".qa/agent-contract-validation-final-build.log": {
+      "bytes": 2840,
+      "sha256": "5a581da191bab0e0d2a70b254c50271e7df5fe63f5ae306c87b586327ca32556"
+    },
+    ".qa/agent-contract-validation-final-local.log": {
+      "bytes": 1413,
+      "sha256": "4d210c6498374170bacc31aeb47366dc6f0a5c391a9e25c953ea3f4a0a036d43"
+    },
+    ".qa/agent-contract-validation-docs.log": {
+      "bytes": 1274,
+      "sha256": "a5be392f7c60c74fa6762b66e2572733b17fbc62ed18eea1405477a7dfbe856d"
+    },
+    "docs/evidence/2026-10-15-agent-contract-browser-case.json": {
+      "bytes": 67384,
+      "sha256": "8ef88881e9c7904e1c06e15431739d684bde3709b44b2aa1e49a232b85d170cc"
+    },
+    ".qa/agent-contract-validation-node26-full.log": {
+      "bytes": 105090,
+      "sha256": "2facd49235b3642eb0ada30554b888af3b4a0571314041e0726342f8465d4968"
+    },
+    ".qa/agent-contract-validation-node26-isolated.log": {
+      "bytes": 811,
+      "sha256": "d415030ffc5fbcf95af4838ced5a8632987ebf149adc9de4a91f2ddfbc454ba7"
+    }
+  },
+  "skill": {
+    "validators": "both passed",
+    "files": [
+      {
+        "path": "SKILL.md",
+        "sha256": "688e510a0299d801277bb01cf8312f20480e461b2ab7ecc1389a3d03656d3bc5",
+        "installedMatches": true
+      },
+      {
+        "path": "agents/openai.yaml",
+        "sha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1",
+        "installedMatches": true
+      },
+      {
+        "path": "references/browser-session.md",
+        "sha256": "e188c380518bc69ab503e5e4629e34dd936b6419303d421dc07f7577c524d743",
+        "installedMatches": true
+      },
+      {
+        "path": "references/case-archives-measurements.md",
+        "sha256": "fcd30b3a166b9b786faa32f9d3dd53f1bb68ca7fc59abd1a8a24f7fcf24572b2",
+        "installedMatches": true
+      },
+      {
+        "path": "references/geometry-imports.md",
+        "sha256": "8d1b794bf432bb9bbff40401d006d1d6969d0d8dd3ff361b04ea5a3556d9fbfb",
+        "installedMatches": true
+      },
+      {
+        "path": "references/jobs-observations.md",
+        "sha256": "cc28161fb78ef1b8b4ccbc01222b3d4cf5936d9eb54ff5394bd0c66f0d6d4e4e",
+        "installedMatches": true
+      },
+      {
+        "path": "references/physics-provenance.md",
+        "sha256": "e749b45617ced4da3c7b702aff6d17ee4eb6b19c5aa6209d03e805b220062d04",
+        "installedMatches": true
+      },
+      {
+        "path": "references/result-views.md",
+        "sha256": "27d19cb62992114aed43389857adf3da80a23ebd06920e0c532920242cc84473",
+        "installedMatches": true
+      },
+      {
+        "path": "references/runtime-diagnostics.md",
+        "sha256": "e8827bdc7baa6fef0256d7ceaf0c06cc78f91ce01938c320634e10d2e4382ff4",
+        "installedMatches": true
+      },
+      {
+        "path": "references/saved-inputs.md",
+        "sha256": "36b1c2e08649e00df65fc65d64a86e100569bc1fa95da4fae5181e30a21000f2",
+        "installedMatches": true
+      }
+    ]
+  },
+  "comparisonNode26": {
+    "node": "26.10.0",
+    "tests": 956,
+    "pass": 952,
+    "fail": 1,
+    "skip": 3,
+    "durationMs": 367058.1956,
+    "status": "failed",
+    "failure": "queryNodeIdentity actual selected child spawn timed out at 5000ms; not the default V8 native fatal",
+    "isolatedSuite": "6 passed",
+    "rootFixProven": false,
+    "runtimeSha256": "cea6ac365f9bb9586dafd2084d996e092e7d3e7d07ab52d1f76bf53d1fca9bc4"
+  }
+}

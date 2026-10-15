@@ -139,3 +139,9 @@ GUI検証ではソルバーを実行していない。P0/P3の今回範囲だけ
 公開run [38651016310](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38651016310)で103065fのverify・deploy・verify-publishedが成功し、26公開配信物検証と注釈付きreleaseタグを確認した。[公開記録](evidence/2026-10-15-publication-103065f.json)を参照。続くPUBLISHEDPROGRESS1/PUBLICATIONGATES1は、配信manifestと進捗の照合、公開gateの本体検証を担当する。既定Node24の既知V8停止が再発しておりcheckingを保持する。公開HTTPS接続、実ブラウザでの進捗成功側照合、他の公開gateは未完了。
 
 公開a446dc5のCI・26配信物・注釈付きtagと実ブラウザの日英版照合を確認し、公開ゲート0だけをcandidate固定の証跡で完了とした。残り5ゲートと全P0〜P6は未完了。[公開記録](evidence/2026-10-15-publication-a446dc5.json)、[ボード照合](evidence/2026-10-15-published-progress-browser.json)を参照。INPUTINSPECTION1は既存入力の有界読取、SKILLROUTING1は用途別参照と配布同期、MCPARGUMENTTYPES1は位置引数型を担当する。Skill実行評価はSDK知識を補った限定例であり、Skill単独の一巡や登録済みhostの型宣言更新は未確認とする。
+
+## 2026-10-15: 発見契約・保存検証・中間待機の修復
+
+根拠と解析intentの編集引数をMCP契約から発見できるようにし、保存ケースMCPを全ケースの復元検証へ接続した。平面領域のrotationDegreesだけが黙って無視される経路は、整合frameを必須として拒否する。中間結果は保持ストアとは別に保存待機の件数/推定bytesを制限し、間引き理由と元観測順序を取得可能にする。対象はPROVENANCECONTRACT1・CASEARCHIVEVALIDATION1・PLANARROTATION1・OBSERVATIONQUEUE1で、公開完了ではなく検証中として追跡する。
+
+後続P3にはWorker送信キュー自体の背圧とイベントringのpayload/page bytes制限が残る。現状の待機上限をJSヒープ全体の保証としない。P3公開HTTPS接続、P4比較・同一点再測定、Skill単独一巡と全P0〜P6の完了条件は維持する。
