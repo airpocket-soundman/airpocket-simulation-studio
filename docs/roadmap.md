@@ -157,9 +157,9 @@ GUI検証ではソルバーを実行していない。P0/P3の今回範囲だけ
 
 根拠と解析intentの編集引数をMCP契約から発見できるようにし、保存ケースMCPを全ケースの復元検証へ接続した。平面領域のrotationDegreesだけが黙って無視される経路は、整合frameを必須として拒否する。中間結果は保持ストアとは別に保存待機の件数/推定bytesを制限し、間引き理由と元観測順序を取得可能にする。対象はPROVENANCECONTRACT1・CASEARCHIVEVALIDATION1・PLANARROTATION1・OBSERVATIONQUEUE1で、公開完了ではなく検証中として追跡する。
 
-後続P3にはWorker送信キュー自体の背圧とイベントringのpayload/page bytes制限が残る。現状の待機上限をJSヒープ全体の保証としない。P3公開HTTPS接続、P4比較・同一点再測定、Skill単独一巡と全P0〜P6の完了条件は維持する。
+後続P3にはイベントringのpayload/page bytes制限が残る。Worker観測配送はprotocol-enabled jobのみin-flight8件/8,000,000 bytesと別outbox8件/8,000,000 bytes、合計16件/16,000,000 bytesに制限し、同solver/phase等のscalar iterationを集約、final-check/frequency-stepを優先する。progress/最終結果、legacy direct worker、JSヒープ全体は対象外。terminal drop集計は通常結果/報告errorでのみ送られ、取消・timeout・Worker異常終了時は欠落し得るため、最終drop総数は不明となる。現状の見積もり上限をJSヒープ全体の保証としない。P3公開HTTPS接続、P4比較・同一点再測定、Skill単独一巡と全P0〜P6の完了条件は維持する。
 
-JOBEVENTBYTES1はP3のイベント本文・保持・ページ容量を実装し、明示欠落通知とカーソル継続を検証する。OBSERVATIONQUEUE1の保存待機上限とは別で、Worker送信キュー自体の背圧は引き続き未完了。流体PR #7の作業中統合を勝手に完成扱いせず、共通API/MCP/Skillとの接続範囲を独立して確認する。
+JOBEVENTBYTES1はP3のイベント本文・保持・ページ容量を実装し、明示欠落通知とカーソル継続を検証する。Worker観測配送はprotocol-enabled job経路でin-flight8件/8,000,000 bytes+outbox8件/8,000,000 bytesと、通常結果/報告error前drain後のterminal drop summaryを実装し、OBSERVATIONQUEUE1とは別budgetとしている。iterationは同solver/phase等でcoalesceしfinal-check/frequency-stepを優先する。取消・timeout・Worker異常終了時にsummaryが欠ける場合の最終drop総数は不明。progress/最終結果、JSヒープ全体、legacy direct worker経路はこの上限外。流体PR #7の作業中統合を勝手に完成扱いせず、共通API/MCP/Skillとの接続範囲を独立して確認する。
 
 PUBLICATIONISOLATION1は公開基盤の検証修復を優先し、同一Node child mainへ数値検証を分離する。全体980件中977成功・3skip・失敗0、ローカル26項目成功。元のLinux V8停止は保存し、根治や実ブラウザ安定性の証明とはしない。CI・公開candidateの確認は別途必要。
 

@@ -566,6 +566,17 @@ Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeId
 
 Claude CLIの実装を独立レビューし、欠落区間・Windows改行・過去候補の加点を修正。全体1011件中1008成功・3skip・失敗0、buildと配信物27項目（元26＋履歴）が成功。151記録点と日英・390px・凡例・キー選択・表・算定根拠を実画面で確認。推定25%、主観シナリオ幅16〜42%。[証跡](evidence/2026-10-15-progress-dashboard.json)と[算定方法](progress-dashboard.md)。本機能の公開CIは別途記録する。公開基盤23e430eはverify/deploy/verify-publishedと26項目が成功し、失敗したbadce2cは保存する。
 
+## 2026-10-15: 評価オプションの事前検査と公開確認
+
+PR #32は、要求された破壊・疲労評価の材料データとオプションを解析前に検査し、MCP `studio_preflight_project`から同じ拒否・修復情報を返す。未指定時とメッシュのみの動作を維持する。後処理時の物理妥当性や応力場の検証を代替しない。
+
+統合候補071e05bのローカル全体試験は1135件中1132成功・3skip・失敗0。main `3ef460e173a3253fc5ad8c87f97191cfb28caf0b` のverify・deploy・verify-publishedが成功し、公開検証28項目、manifestと進捗のbytes/SHA、注釈付きreleaseタグを照合した。[公開証跡](evidence/2026-10-15-assessment-publication.json)。これはNodeによる配信物の実行確認であり、ブラウザ描画や公開接続の独立証明ではない。
+
+## 2026-10-15: Worker観測の送信上限（検証中）
+
+ACK待ちと送信待ちを各8件/8 MBに制限し、同期ソルバーを止めずにscalar iterationだけを集約する。通常の結果・報告エラーの前に配送を待ち、メッシュ世代と観測値の受理時コピーを維持する。取消・timeout・異常終了では終端集計が届かず、最終欠落数は不明となる。progress・最終結果・JSヒープ全体はこの容量保証の対象外。
+
+初期の即時drop方式は実Stokes P2のfinal-checkとsweep周波数イベントを失ったため採用せず、[失敗証跡](evidence/2026-10-15-worker-transport-initial-regression.json)を残した。修正版の関連77試験と、別途モジュール境界・共通型29試験が成功。全体回帰・実ブラウザ・今回候補の公開検証は未了で、P3全体の完了ではない。
 ## 2026-10-15: 公開HTTPS再接続の利用者報告とSkill入力preview
 
 利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。

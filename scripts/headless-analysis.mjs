@@ -37,10 +37,10 @@ export async function analyzeProject(project,options={},operation='elastic',runt
   };
   timer=setTimeout(()=>finish(Error('Analysis exceeded '+timeoutMs/1000+' seconds')),timeoutMs);
   worker.on('error',error=>finish(error));worker.on('exit',code=>{if(!finished)finish(Error('Analysis worker exited before completion: '+code));});
-  worker.on('message',message=>{if(finished)return;try{if(message.error)finish(restoreAnalysisError(message.error,message.failure));else if(message.result)finish(null,message.result);else if(message.event){if(message.event.stage==='diagnostic'){const failure=getAnalysisFailure({analysisFailure:message.event.failure});if(failure)runtime.onEvent?.({stage:'diagnostic',failure,converged:false,provisional:true});}else runtime.onEvent?.(message.event);}else if(message.progress)runtime.onEvent?.({stage:'progress',message:message.progress,provisional:true});}catch(error){finish(error);}});
+  worker.on('message',message=>{if(finished)return;try{if(message.error)finish(restoreAnalysisError(message.error,message.failure));else if(message.result)finish(null,message.result);else if(message.event){if(message.event.stage==='diagnostic'){const failure=getAnalysisFailure({analysisFailure:message.event.failure});if(failure)runtime.onEvent?.({stage:'diagnostic',failure,converged:false,provisional:true});}else runtime.onEvent?.(message.event);if(Number.isSafeInteger(message.observationAckId)&&!finished)worker.postMessage({type:'analysis-observation-ack-v1',id:message.observationAckId});}else if(message.progress)runtime.onEvent?.({stage:'progress',message:message.progress,provisional:true});}catch(error){finish(error);}});
   runtime.signal?.addEventListener('abort',cancel,{once:true});
   // The host may abort while creating the Worker, before the listener exists.
   if(runtime.signal?.aborted){cancel();return;}
-  try{worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);worker.postMessage({project:input,source:input.sourceModel,operation,options:settings,observe:runtime.observe===true,observeFields:runtime.observeFields===true});}catch(error){finish(error);}
+  try{worker.stdout.pipe(process.stderr);worker.stderr.pipe(process.stderr);worker.postMessage({project:input,source:input.sourceModel,operation,options:settings,observe:runtime.observe===true,observeFields:runtime.observeFields===true,...(runtime.observe===true?{observationTransportProtocol:1}:{})});}catch(error){finish(error);}
  });
 }

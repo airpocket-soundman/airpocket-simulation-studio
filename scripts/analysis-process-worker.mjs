@@ -3,6 +3,7 @@ import {EventEmitter} from 'node:events';
 import {PassThrough} from 'node:stream';
 import {createHash} from 'node:crypto';
 const entry=new URL('./headless-process.mjs',import.meta.url);
+const transportAck=data=>data&&typeof data==='object'&&data.type==='analysis-observation-ack-v1'&&Number.isSafeInteger(data.id);
 const cleanupError=cause=>Object.assign(Error('Analysis child cleanup failed: '+String(cause?.message??cause)),{code:'WORKER_CLEANUP_FAILED'});
 /** Same executable, one child per job. Output caps bound retained/logged bytes,
  * not the child's heap or the OS pipe. forkImpl is trusted test injection only. */
@@ -32,7 +33,7 @@ export function createAnalysisProcessWorker({forkImpl=fork,onRuntimeFailure=()=>
   }
   if(closeFailure)rejectTermination?.(closeFailure);else resolveTermination?.(exitCode);worker.emit('exit',exitCode);
  });
- worker.postMessage=data=>{if(sent||terminating||closed)throw Error('Analysis process accepts only one active request');sent=true;child.send(data,error=>{if(error&&!closed&&!terminating)worker.emit('error',error);});};
+ worker.postMessage=data=>{if(terminating||closed)throw Error('Analysis process is terminating');if(transportAck(data)){if(!sent)throw Error('Analysis observation ACK has no active request');child.send(data,error=>{if(error&&!closed&&!terminating)worker.emit('error',error);});return;}if(sent)throw Error('Analysis process accepts only one active request');sent=true;child.send(data,error=>{if(error&&!closed&&!terminating)worker.emit('error',error);});};
  worker.terminate=()=>{
   if(termination)return termination;
   terminating=true;termination=new Promise((resolve,reject)=>{resolveTermination=resolve;rejectTermination=reject;});

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "revision": "3ef460e173a3253fc5ad8c87f97191cfb28caf0b",
+  "version": "0.44.0",
+  "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38697764762",
+  "ci": {
+    "verify": "success",
+    "deploy": "success",
+    "verifyPublished": "success"
+  },
+  "report": {
+    "status": "passed",
+    "local": false,
+    "checkedAt": "2026-10-15T07:24:10.122Z",
+    "checks": 28,
+    "sha256": "6360d0b7f5011d3d436463d401334b28d959d8c457618a52a20ffa8fc830df08"
+  },
+  "publicManifest": {
+    "bytes": 3826,
+    "sha256": "13280f2a7f9699885fd0ca81e5cfdaecbc73029e614a1e82b0cccbdd96ab8a79",
+    "stableAcrossProgressFetch": true
+  },
+  "publicProgress": {
+    "bytes": 289699,
+    "sha256": "8b1c625166893f2c519a8d4c4c2dfcf82560a4193fafce2ff8003404f8cc09ba",
+    "matchesManifest": true
+  },
+  "releaseTag": {
+    "name": "release-3ef460e173a3253fc5ad8c87f97191cfb28caf0b",
+    "object": "ee3590c218bd686ad82ae9c7b8893fe0f888bd1e",
+    "peeledRevision": "3ef460e173a3253fc5ad8c87f97191cfb28caf0b"
+  },
+  "limitations": [
+    "Published runtime verification uses Node process isolation; it does not prove browser rendering, local-network pairing or physical accuracy.",
+    "The user reported public HTTPS pairing separately; inspect operation and disconnect acceptance remain unverified."
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "id": "release-status-audit-c",
+  "date": "2026-10-15",
+  "purpose": "Trace the current acceptance text for nine ready tasks to evidence and the published main candidate. This is a read-only audit record; it does not change task statuses.",
+  "auditedSource": {
+    "progressPath": "src/progress.json",
+    "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+    "publishedWorkflow": {
+      "runId": 38700153486,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38700153486",
+      "headSha": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+      "conclusion": "success",
+      "note": "Confirmed through GitHub Actions status for this exact main revision; this is not a separate statement from the user."
+    },
+    "pr36Workflow": {
+      "runId": 38701091294,
+      "statusAtAudit": "in_progress",
+      "note": "Not treated as published evidence; its head was left unchanged."
+    }
+  },
+  "decisions": [
+    {
+      "taskId": "AGENTJOBS1",
+      "currentStatus": "ready",
+      "currentAcceptance": "実Worker・MCPで冪等性・中止・旧応答拒否・上限・保存排他と熱時刻場一致を確認。ブラウザでの実Worker操作も確認する。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "proof": [
+        {
+          "path": "src/analysis-jobs.js; scripts/analysis-job-service.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "job lifecycle and input-versioned field handling"
+        },
+        {
+          "path": "tests/analysis-job-service.test.mjs; tests/mcp-jobs-protocol.test.mjs; tests/analysis-client.test.mjs; tests/gui-analysis-jobs.test.mjs; tests/job-observation-queue.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "idempotency, retry, cancellation, stale reply, limits, save exclusion, and field behavior"
+        },
+        {
+          "path": "docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/evidence/2026-10-14-job-settlement-browser.json; docs/evidence/2026-10-15-job-event-bounds.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "recorded browser Worker plus stdio/HTTP MCP and bounded observations"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible",
+      "remaining": "No acceptance proof remains. The older detail phrase saying live MCP is unsupported is stale relative to evidence/acceptance and should be corrected during status cleanup. Public HTTPS is explicitly delegated to PUBLICHTTPS1."
+    },
+    {
+      "taskId": "CFDINTERNAL1",
+      "currentStatus": "ready",
+      "currentAcceptance": "実円管P1/P2のPoiseuille圧損、細分化傾向、流束/発散収支と不正・未対応条件の拒否。",
+      "proof": [
+        {
+          "path": "src/internal-stokes-boundary.js; tests/internal-stokes-boundary.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "generated real pipe mesh, P1/P2 pressure-drop reference and refinement, flux/divergence balance, and invalid/unsupported inputs"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible",
+      "remaining": "The accepted scope is the independent solver module. UI/Worker/saved-study integration is explicitly described as unconnected and is not part of this task's acceptance."
+    },
+    {
+      "taskId": "NATIVEPROOF1",
+      "currentStatus": "ready",
+      "currentAcceptance": "実ホスト機械語で棒の変位・反力・残差・不正入力を検証しWASM結果と比較。専用狭範囲CLIは全プロジェクトAPI対応と区別。",
+      "proof": [
+        {
+          "path": "native/native-proof/README.md; scripts/check-native-proof.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "scoped native proof CLI and its host/WASM comparison"
+        },
+        {
+          "path": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38540608025",
+          "runId": 38540608025,
+          "supports": "successful host-and-wasm CI job with actual host executable parity"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible",
+      "remaining": "No acceptance proof remains. Arbitrary saved-project support and a product native backend are explicitly distinguished from this narrow proof and are not claimed."
+    },
+    {
+      "taskId": "BROWSERFIELDS1",
+      "currentStatus": "ready",
+      "currentAcceptance": "並列数4の全体330件中327成功・3スキップ。追加音圧テスト成功。実MCP/Chromeで1秒20.002566 °C、3秒20.027339 °C、最終点値との一致・解放後拒否を確認。再起動永続化・全ソルバー場とヒープ上限は対象外。",
+      "proof": [
+        {
+          "path": "docs/evidence/2026-10-15-browserfields-real-chrome.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "real Chrome/local connector job, 1 s and 3 s temperatures, final point equality, paging and release/refusal behavior"
+        },
+        {
+          "path": "src/browser-intermediate-store.js; tests/browser-intermediate-store.test.mjs; tests/analysis-client.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "shared store and client contract"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible",
+      "remaining": "The evidence explicitly says the 64 MB budget and summary continuation at limits were not exercised in Chrome. The current acceptance requires the stated real MCP/Chrome values, final-point match and release refusal, then explicitly excludes restart persistence, all-solver fields and a heap ceiling. The 64 MB Chrome-budget exercise is a limit/heap verification, not an additional acceptance criterion; this audit does not claim that it was tested. Other evidence limitations (connector-started job rather than the page solve button, one local Chrome profile, no real pointer events, and no published HTTPS) are recorded in notVerified; the acceptance requests a real Worker operation in browser and separately assigns published HTTPS to PUBLICHTTPS1, and does not prescribe the page button or pointer input."
+    },
+    {
+      "taskId": "PRINTTRANSFER1",
+      "currentStatus": "ready",
+      "currentAcceptance": "全体470中467成功・3スキップ、ビルドと配信物26項目成功。実ローカルブラウザ/MCPで658111bytesを11分割読込し4002経路2層、664735bytesを11分割書出してハッシュ一致。実3MFの分割解析はNode試験。最大容量・ピークヒープは未確認。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "proof": [
+        {
+          "path": "docs/evidence/2026-10-14-print-transfer.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "actual local browser/MCP 658111-byte read in 11 chunks and 664735-byte write in 11 chunks with hash agreement; 4002 paths and two layers"
+        },
+        {
+          "path": "tests/print-transfer.test.mjs; tests/mcp-print-transfer-protocol.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "transfer protocol and UI/MCP contracts"
+        },
+        {
+          "path": "docs/evidence/2026-10-15-print-transfer-capacity-node-after-fix.json; tests/print-base64-validation.test.mjs; tests/print-capacity.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "post-fix Node capacity, hash/revision and over-limit behavior, including 50 MB 3MF and 25 MB G-code"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible",
+      "remaining": "No acceptance proof remains for the stated moderate browser/MCP roundtrip and Node 3MF parsing. The acceptance itself says '最大容量・ピークヒープは未確認' (maximum capacity/peak heap unverified), so these are disclosed limits, not a release gate. The after-fix large-capacity measurement is Node-only and does not establish browser heap behavior. Published HTTPS is explicitly delegated to PUBLICHTTPS1."
+    },
+    {
+      "taskId": "PUBLICATIONISOLATION1",
+      "currentStatus": "ready",
+      "currentAcceptance": "既存26配信物検証と数値条件を維持し、遅延異常・timeout・不正IPCを拒否。対象CIと公開candidateの証跡を記録。V8根治・実ブラウザ安定性とは区別する。",
+      "proof": [
+        {
+          "path": "scripts/published-process-runtime.mjs; tests/published-process-runtime.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "child result remains provisional until clean close; tests reject late failure, timeout and malformed IPC"
+        },
+        {
+          "path": "docs/evidence/2026-10-15-publication-isolation-ci.json; docs/evidence/2026-10-15-publication-process-isolation.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "verify/deploy/verify-published history and published manifest checks"
+        },
+        {
+          "path": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38700153486",
+          "runId": 38700153486,
+          "supports": "successful publication and deployed-candidate check at current main 453cff45"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "eligible_with_documentation_reconciliation",
+      "remaining": "The task's acceptance still says 26 checks, while historical evidence reports 27 PASS lines. At revision 453cff45, scripts/check-published.mjs retains the baseline numerical checks and includes additional named checks; the current successful publication run covers that script. Keep the count discrepancy visible and reconcile the wording/evidence count during status cleanup. Do not claim that the 26-versus-27 discrepancy was resolved by this audit."
+    },
+    {
+      "taskId": "SKILLROUTING1",
+      "currentStatus": "ready",
+      "currentAcceptance": "repo/installed11files bytes/SHA一致、両validator成功。UI設定/登録不変。synthetic150N previewで100N根拠との矛盾を検出しsource保持・未適用/未解析。source factoryを使ったためSkill単独や全一巡の証明ではない。",
+      "proof": [
+        {
+          "path": "docs/evidence/2026-10-15-skill-synchronization-b.json; docs/evidence/2026-10-15-skill-forward-input-preview-b.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "11-file bytes/SHA equality and validators; synthetic 100 N to 150 N preview rejects stale provenance and preserves source without applying/analyzing"
+        },
+        {
+          "path": "skills/airpocket-studio/SKILL.md",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "repository Skill source"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success; PR #33 included)",
+      "decision": "eligible",
+      "remaining": "No remaining check for this task's stated synchronization and synthetic preview acceptance. The record explicitly does not claim Skill-only execution or a full workflow; broader end-to-end routing is tracked separately."
+    },
+    {
+      "taskId": "NAMEDVIEWS1",
+      "currentStatus": "ready",
+      "currentAcceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。ケース同梱はCASEVIEWBUNDLE1で追加。自動永続化・異なる結果の同期は残す。",
+      "proof": [
+        {
+          "path": "docs/evidence/2026-10-15-namedviews-real-chrome-2.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "post-canonicalization exact view restoration, delayed rendering, delete, cap and GUI panel"
+        },
+        {
+          "path": "docs/evidence/2026-10-15-namedviews-real-chrome.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "reload/import and case-bundle checks before canonicalization correction; exact JSON equality failed due camera-z one-ULP and key-order differences"
+        },
+        {
+          "path": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "implementation and automated session contracts"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "hold_acceptance_unverified",
+      "remaining": "The current acceptance explicitly requires all fields to match after reload and restoration of saved case plus view JSON. Evidence 2026-10-15-namedviews-real-chrome-2.json explicitly says that this path was not rerun after canonicalization; older pre-fix evidence does not prove exact post-fix restoration. Repeat the real Chrome/MCP reload and case-bundle export/import after the fix and record exact all-field equality."
+    },
+    {
+      "taskId": "INPUTINSPECTION1",
+      "currentStatus": "ready",
+      "currentAcceptance": "新13件、全体897中894成功・3skip。共有read→preview/edit→再読、実stdio/HTTP、busy時read・失効/stale/権限/64KiB・source保持を検証。新ライブ操作の実GUI/公開HTTPS一巡とP1全体は未検証。",
+      "proof": [
+        {
+          "path": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "shared read/preview-edit/reread contract, stdio/HTTP, busy reads, expiry/stale/scope/bounds and source preservation"
+        },
+        {
+          "path": "docs/evidence/2026-10-15-input-inspection-full.json",
+          "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+          "supports": "recorded unit/protocol proof; explicitly does not verify a live GUI operation"
+        }
+      ],
+      "publishedCandidate": "453cff45f98ec6c16fe0391d079fb2beca479a10 via workflow 38700153486 (success)",
+      "decision": "hold_acceptance_unverified",
+      "remaining": "Acceptance explicitly says the new live operation through the real GUI is unverified. Record one actual Chrome/browser-connector invocation against a loaded project, including returned revision/page/scope, a busy read, and source bytes/hash unchanged. Do not substitute the stdio/HTTP tests for this proof. Published HTTPS is explicitly delegated to PUBLICHTTPS1; the broader P1 workflow remains outside this item-specific check."
+    }
+  ],
+  "summary": {
+    "eligible": [
+      "AGENTJOBS1",
+      "CFDINTERNAL1",
+      "NATIVEPROOF1",
+      "BROWSERFIELDS1",
+      "PRINTTRANSFER1",
+      "SKILLROUTING1"
+    ],
+    "eligibleWithDocumentationReconciliation": [
+      "PUBLICATIONISOLATION1"
+    ],
+    "heldForAcceptanceProof": [
+      "NAMEDVIEWS1",
+      "INPUTINSPECTION1"
+    ],
+    "note": "No task status is changed by this audit. Published HTTPS is tracked separately by PUBLICHTTPS1; a successful generic publication run does not certify that independent HTTPS connection gate."
+  },
+  "publicationCountReconciliation": {
+    "revision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+    "workflow": 38700153486,
+    "reportChecks": 28,
+    "printedPassLines": 27,
+    "reportSha256": "d034c9b933b9d63ff7d429949c73970bc03a2df881b621a96e0d626327db4120",
+    "explanation": "The acceptance retains its historical 26-check baseline. The current report includes later history coverage and a separate asset-integrity entry, which is not printed as a PASS line. Count labels do not remove any baseline numerical conditions."
+  }
+}

@@ -547,9 +547,13 @@ Origin/Host検査で拒否した場合も、データを含まない403を返し
 
 保存ストア64MBの制限とは別に、中間mesh/fieldの保存待機を既定8件・8,000,000推定bytes（処理中1件を含む）へ制限します。clone/JSON化前に構造を見積もり、超過snapshotを保持せず、要約・診断と最終結果の計算を継続します。単一超過・件数/bytes超過・mesh欠落等の理由を `observation-queue-limit` / `observationQueue` で取得できます。browser完了情報の `intermediate.queue`、Nodeの `intermediateQueue` に件数・peak・上限・dropを返し、能力情報の `observation.pendingPayloadQueue` はhost既定値を宣言します。起動時設定で上限を変更でき、実ジョブの情報を優先します。
 
+protocolを有効にしたbrowser/headless jobでは、Workerからhostへの観測配送はin-flight 8件/8,000,000推定bytesと別outbox 8件/8,000,000推定bytesに制限します。最大合計は16件/16,000,000推定bytesで、hostがACKするとoutboxをFIFO送信します。同期ソルバーcallbackは待たず、outbox内の同じsolver/phase/step/frequencyのscalar iterationは最新値へ集約します。final-checkとfrequency-step start/completeはiterationより優先します。overflow時は理由付きでdropし、mesh世代をまたいでfieldを送信しません。通常resultまたは報告errorの直前にdrainし、最大1件・4,096推定bytesのdrop集計control eventを送ります。`observation-transport` のsequence、in-flight/outbox、peak、accepted/drop理由を確認してください。これはhost `observationQueue`、64MB保存ストア、JOBEVENTBYTES1の制限と別のbudgetで、legacy direct worker経路には適用しません。
+
+terminal集計は通常結果、またはWorkerが捕捉して報告するerrorの直前に送られます。取消・timeoutはWorkerを即時終了し、異常終了でも集計が届かないことがあります。terminal集計がない場合、最後のevent内の暫定metadataから最終drop数を推定せず、不明として扱います。取消時に集計を待たないのは既存の即時停止契約を維持するためです。
+
 `observationSequence` は元の観測順序です。要約・診断は保存待ちを迂回するため、古い場の保存通知より先着する場合があります。latestPolicyはlast-accepted-snapshotで、最後に拒否した場へ置き換えません。meshを受理できなければ後続fieldも保存せず、旧meshへ結び付けません。accepted/latestCompletedはqueue受付・consumer完了であって成果物保存成功ではなく、artifact参照と完全性を別途検査します。取消時は待機payloadを解放し、処理中の終了をdrainで待ちます。
 
-bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のpostMessage待機・イベントring内の任意payloadのbytesを上限保証しません。元の場をすべて取得できたと報告せず、drop/制限を結果と一緒に説明してください。
+Worker transportの推定bytesはmetadata込みの保守的なenvelope構造見積もりです。上記のWorker観測budgetはprogress通知、最終結果、JSヒープ総量、legacy direct worker経路を上限保証しません。またhost queueの見積もりはJSヒープ総量・イベントring内の任意payload bytesを上限保証しません。元の場をすべて取得できたと報告せず、drop/制限を結果と一緒に説明してください。
 
 ## ジョブイベント本文とページの容量
 

@@ -33,6 +33,27 @@ test('browser jobs retain optional time fields, expose artifact probes, and repo
  h.api.releaseJob(job.jobId);await assert.rejects(async()=>h.api.getJobArtifact(job.jobId,frame.artifact.artifactId),/Unknown job/);h.api.closeJobs();
 });
 
+test('browser job observation acknowledgements replenish worker credits without acknowledging terminal summaries',async()=>{
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:transport'});await new Promise(resolve=>setImmediate(resolve));const worker=h.workers[0];
+ assert.equal(worker.input.observationTransportProtocol,1);
+ worker.send({event:{stage:'iteration',metrics:{iteration:1}},observationAckId:17});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:17});
+ worker.send({event:{stage:'observation-transport',provisional:true,observationTransport:{accepted:1,dropped:0,terminal:true}}});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:17});
+ worker.send({result:{mesh:{summary:{nodeCount:4}}}});await h.api.drainJobs();assert.equal(h.api.getJob(job.jobId).state,'succeeded');h.api.closeJobs();
+});
+
+test('browser cancellation after an observation ACK ignores stale events and does not invent terminal drop totals',async()=>{
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:cancel-transport'});await new Promise(resolve=>setImmediate(resolve));const worker=h.workers[0];
+ worker.send({event:{stage:'iteration',metrics:{iteration:1},observationTransport:{sequence:1,dropped:0,terminal:false}},observationAckId:24});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:24});h.api.cancel();await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(h.api.getJob(job.jobId).state,'cancelled');const count=h.api.jobEvents(job.jobId).events.length;
+ worker.send({event:{stage:'iteration',metrics:{iteration:2}},observationAckId:25});
+ worker.send({event:{stage:'observation-transport',provisional:true,observationTransport:{terminal:true,dropped:999}}});
+ assert.equal(h.api.getJob(job.jobId).state,'cancelled');assert.equal(h.api.jobEvents(job.jobId).events.length,count);
+ assert.equal(h.api.jobEvents(job.jobId).events.some(event=>event.stage==='observation-transport'),false);h.api.closeJobs();
+});
+
 test('closing direct analysis and mesh calls waits for cleanup and ignores late results',async()=>{
  for(const method of ['analyze','generateMesh']){
   let completeCleanup,worker,terminations=0;const cleanup=new Promise(resolve=>{completeCleanup=resolve;});
