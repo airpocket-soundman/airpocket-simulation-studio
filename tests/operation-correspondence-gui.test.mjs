@@ -7,7 +7,7 @@ const sourceFiles=['index.html','src/main.js',...readdirSync('src/ui').map(f=>'s
 const source=sourceFiles.map(f=>readFileSync(f,'utf8')).join('\n');
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 // Element definitions: id="x" / id='x' / .id='x' / .id="x" in markup or DOM code, or a helper call field('x',...).
-const hasId=id=>new RegExp('(?:\\bid\\s*=\\s*[\'"]'+escape(id)+'[\'"]|\\.id\\s*=\\s*[\'"]'+escape(id)+'[\'"]|\\bfield\\(\\s*[\'"]'+escape(id)+'[\'"])').test(source);
+const hasId=id=>new RegExp('(?:\\bid\\s*=\\s*[\'"]'+escape(id)+'[\'"]|\\.id\\s*=\\s*[\'"]'+escape(id)+'[\'"]|\\bfield\\(\\s*[\'"]'+escape(id)+'[\'"]|\\bel\\(\\s*[\'"][A-Za-z0-9]+[\'"]\\s*,\\s*[\'"]'+escape(id)+'[\'"])').test(source);
 const guiCells=file=>readFileSync(file,'utf8').split('\n').filter(l=>l.startsWith('| `')).map(l=>({name:l.split('|')[1].trim(),cell:l.split('|')[4]}));
 const tokens=cell=>[...cell.matchAll(/`([^`]+)`/g)].map(m=>m[1]);
 for(const file of ['docs/operation-correspondence.md','docs/en/operation-correspondence.md'])test('every GUI element cited in the correspondence table exists in the source: '+file,()=>{
