@@ -14,6 +14,8 @@ import {inspectInputProvenance} from './input-provenance.js';
 import {validateFractureData,validateFractureOptions} from './fracture-core.js';
 import {validateFatigueData} from './fatigue-material.js';
 import {validateFatigueOptions} from './fatigue-core.js';
+import {inspectUnitMagnitude} from './preflight-unit-magnitude.js';
+import {physicsCoverage} from './preflight-physics-coverage.js';
 
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressure:'Pa',density:'kg/m3',gravity:'m/s2',poissonRatio:'1'};
@@ -97,9 +99,10 @@ export function preflightProject(project,options={}, {target='browser',operation
   if(effectiveMode!=='legacy'&&typeof study.gravityEnabled!=='boolean')add('GRAVITY_INTENT_REQUIRED','/study/gravityEnabled','Explicit gravity setting required',{value:study.gravityEnabled??null},['Record whether gravity is included in the intended physical model']);
  }else if(physicalContract){requiredPointers.push(...physicalContract.requiredPointers);diagnostics.push(...physicalContract.diagnostics);}
  else if(operation==='solve')add('PREFLIGHT_CONTRACT_LIMITED','/study','Required-input provenance contract is not implemented for this study/material combination',{kind:study.kind??'structural'},['Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run'],effectiveMode==='legacy'?'warning':'error');
+ if(operation==='solve')diagnostics.push(...inspectUnitMagnitude(project));
  let provenance;
  try{provenance=inspectInputProvenance(project,project.inputProvenance,{mode:effectiveMode,requiredPointers:effectiveMode==='legacy'?[]:requiredPointers});diagnostics.push(...provenance.diagnostics);}catch(error){add('PROVENANCE_INVALID','/inputProvenance','Provenance could not be inspected',{message:error.message},['Use JSON input and repair the provenance contract']);}
- return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':physicalContract?physicalContract.contract:supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
+ return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':physicalContract?physicalContract.contract:supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,physicsCoverage:physicsCoverage(operation==='solve'?physicalContract?.contract:undefined),remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
 }
 
 export function requireAnalysisPreflight(project,options={},runtime={}){
