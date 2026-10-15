@@ -561,3 +561,15 @@ Default Node24 full suite: 977 of 980 passed, 3 skipped, zero failed (154.09 s).
 ## 2026-10-15: Development history and product estimate
 
 Reviewed Claude CLI implementation and fixed unknown intervals, Windows CRLF binding and historical-candidate credit. Full suite: 1011 tests, 1008 passed, 3 skipped, zero failures. Build and 27 distribution checks (26 original plus history) passed. Actual browser checks covered 151 points, JP/EN, 390px, legend, keyboard, table and rubric. Estimate 25%, subjective scenario range 16–42%. See [evidence](../evidence/2026-10-15-progress-dashboard.json) and [method](progress-dashboard.md). Feature publication CI remains separately pending. Publication infrastructure23e430e passed verify/deploy/verify-published and26checks; preserve failed badce2c.
+
+## 2026-10-15: Assessment-option preflight and publication verification
+
+PR #32 validates requested fracture/fatigue material data and options before solving and exposes the same refusal and repair information through MCP `studio_preflight_project`. Omitted assessments and mesh-only behavior are preserved. This does not replace post-solve checks of physical applicability or stress fields.
+
+The local full suite on integration candidate 071e05b had 1132 passes, three skips and zero failures out of 1135 tests. Main `3ef460e173a3253fc5ad8c87f97191cfb28caf0b` passed verify, deploy and verify-published. All 28 published checks, manifest/progress bytes and SHA, and the annotated release tag were checked. See [publication evidence](../evidence/2026-10-15-assessment-publication.json). This verifies deployed assets through Node execution, not browser rendering or independent public-pairing acceptance.
+
+## 2026-10-15: Worker observation transport bounds (under verification)
+
+In-flight and outbox observations each have an eight-event/8 MB budget. Synchronous solvers do not wait; only scalar iterations may coalesce. Normal results and reported errors wait for delivery, preserving mesh generations and acceptance-time copies. Cancellation, timeout and abnormal termination may omit the final transport summary, leaving final loss totals unknown. Progress, final results and total JavaScript heap are outside this budget.
+
+The initial drop-only design lost real Stokes P2 final-check and sweep frequency events and was rejected; [failure evidence](../evidence/2026-10-15-worker-transport-initial-regression.json) is preserved. The revised targeted suite passed 77 tests; a separate module-boundary/shared-type run passed 29. Full regression, real-browser and candidate publication checks remain pending. P3 as a whole is incomplete.

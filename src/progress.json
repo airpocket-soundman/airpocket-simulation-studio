@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T07:07:33.101Z",
+  "updatedAt": "2026-10-15T07:34:44.000Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1129,9 +1129,9 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "追加スライス: 分野別UI制御をfresh-state/DOM注入モジュールへ分離。破壊・疲労評価を構造アダプターへ移し、共有拒否ゲートと後処理ステージを維持。限定宣言4ファイルとfixtureを実TypeScript strict/noEmitで検査。独立テスト・旧数値/メッセージ基準と実Chromeの熱/流体/モーダルUI切替を確認。全体回帰・CIは今回候補で継続。v0.44公開証跡は5c67476、MOD1全体と全面React/WASM移行は未完。",
+      "lastUpdate": "分野別UI制御と構造評価のアダプター移管はPR31で回帰・CI・実Chromeを確認。PR34で保存入力・材料・単位の限定共通型を追加し、5宣言ファイルとfixtureをTypeScript strict/noEmitで検査、runtime envelope・代表単位/材料の照合を実施してCI成功後マージ。完全なnested保存schemaや全JS型検査ではなく、MOD1全体と全面React/WASM移行は未完。",
       "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json",
-      "lastUpdateEn": "Additional slices: inject fresh state/DOM into discipline controls; move fracture/fatigue assessment to the structural adapter while preserving the shared rejection gate and postprocess stage. Check four declaration files plus fixtures with the real TypeScript strict/noEmit compiler. Independent tests, numerical/message baselines and real Chrome thermal/flow/modal UI transitions passed. Full regression/CI for this candidate remains pending. v0.44 publication evidence is 5c67476; MOD1 and full React/WASM migration remain incomplete."
+      "lastUpdateEn": "Discipline UI controls and structural assessment adapter moves passed regression, CI and real Chrome checks in PR31. PR34 adds limited saved-input/material/unit types: five declarations and fixtures pass TypeScript strict/noEmit, with runtime envelope and representative unit/material checks; merged after successful CI. This is not a complete nested saved schema or all-JavaScript type checking. MOD1 and full React/WASM migration remain incomplete."
     },
     {
       "id": "P0",
@@ -2504,6 +2504,21 @@
       "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs; docs/evidence/2026-10-15-case-comparison-local-runtime.json; docs/evidence/2026-10-15-case-comparison-browser-qa.json",
       "lastUpdate": "2026-10-15 再々監査: 比較3試験ファイル成功、実Chrome(localhost)証跡あり、全体スイートはCI verify(Node24)で毎回成功。ただしローカルNode24.11.1でV8 fatalが断続的に出る(nodejs/node#66366)。公開HTTPSはPUBLICHTTPS1。",
       "lastUpdateEn": "2026-10-15 re-audit: three comparison test files pass, real-Chrome localhost evidence exists, full suite passes in CI verify (Node 24). Local Node 24.11.1 intermittently hits the V8 fatal (nodejs/node#66366). Published HTTPS is PUBLICHTTPS1."
+    },
+    {
+      "id": "WORKERTRANSPORT1",
+      "title": "Worker観測メッセージの送信数・容量制限",
+      "titleEn": "Bound Worker observation messages in transit",
+      "status": "building",
+      "category": "共通",
+      "depends": ["P3", "OBSERVATIONQUEUE1"],
+      "detail": "Worker送信中と送信待ちoutboxの観測数・推定bytesを別々に制限する。同期ソルバーは待たせず、通常終端前に配送を待つ。間引き・scalar iteration集約を保存待機・保存容量とは別の統計としてMCPの観測能力に公開する。",
+      "detailEn": "Bound in-flight and outbox observation count and estimated bytes separately. Solver callbacks do not wait; normal terminals wait for delivery. Expose thinning and scalar-iteration coalescing separately from pending-storage and retained-artifact limits through MCP observation capabilities.",
+      "acceptance": "ブラウザ・Node thread/process経路で送信窓・メタデータ込み容量・重複/未知ACK・メッシュ欠落後の場拒否・通常終端統計・取消/旧応答・第二solve拒否を検証。固定終端control、強制終了時の集計不明、progress/最終結果の対象外範囲を機械宣言し、保持待機上限と混同しない。",
+      "acceptanceEn": "Verify sender windows, envelope bytes, duplicate/unknown ACKs, field rejection after mesh loss, normal terminal statistics, cancellation/stale replies and second-solve refusal across browser and Node thread/process hosts. Declare the separate fixed terminal control budget, unknown totals after hard termination and excluded progress/final-result paths; keep storage-queue limits distinct.",
+      "evidence": "src/worker-observation-transport.js; tests/worker-observation-transport.test.mjs; tests/stokes-observation-pipeline.test.mjs; tests/wave-channel-observation-pipeline.test.mjs; docs/evidence/2026-10-15-worker-transport-initial-regression.json",
+      "lastUpdate": "初期の即時dropのみ方式は実Stokes P2最終残差とsweep周波数イベントの回帰で不合格。失敗証跡を保存し、bounded outbox・終端drain方式へ修正して実回帰を再確認中。実ブラウザ・公開検証は未実施。",
+      "lastUpdateEn": "The initial drop-only design failed real Stokes P2 final-residual and sweep-frequency observation regressions. Failure evidence is preserved; a bounded outbox with terminal drain is being verified against those regressions. Real-browser and publication checks have not been performed."
     },
     {
       "id": "PUBLICHTTPS1",

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "baseRevision": "3ef460e173a3253fc5ad8c87f97191cfb28caf0b",
+  "dirty": true,
+  "sourceSnapshotRecorded": false,
+  "status": "failed-initial-transport-design",
+  "tests": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2
+  },
+  "failures": [
+    {
+      "test": "browser client forwards P2 Stokes scalar observations without requiring field retention",
+      "problem": "The final-check observation was lost after sender credits were exhausted."
+    },
+    {
+      "test": "browser client forwards sweep scalar numerical observations without field retention",
+      "problem": "Only three of four frequency-step events reached the host."
+    }
+  ],
+  "log": {
+    "path": ".qa/transport-real-observation-regression.log",
+    "bytes": 2670,
+    "sha256": "5d9f4519ee5de64ada25e53b67975a2c95bba2d67953d4ecb6dd0d37af901805"
+  },
+  "decision": "Replace immediate overflow dropping alone with a separately bounded sender outbox and normal-terminal drain; retain cancellation by hard termination.",
+  "limitations": [
+    "This is an uncommitted implementation experiment, not a deployed product revision.",
+    "The exact dirty source bytes were not frozen and are not reconstructable from this record alone.",
+    "Passing helper and lifecycle tests did not prove preservation of real solver observation sequences."
+  ]
+}
