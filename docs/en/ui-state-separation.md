@@ -46,3 +46,15 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 
 `$`, `document`, `materialFields`, `materialReadiness`, `readFatigueMaterial`, `getMaterialProperties` and `getLanguage` are injected; the module does not import main.js. Changing values are passed as getters. The fracture-UI refresh, dirty flag and discipline-visibility update in `renderMaterial`, plus the plastic-load-fraction cleanup, catalog reconcile and `api` calls in the save handler stay in main.js (call order preserved). 3D selection, analysis execution (`lastAnalysis`, `startJob`) and the worker are untouched.
 `tests/ui-material-form.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
+
+## Slice 7: study, adaptive and internal-domain forms
+`src/ui/study-form-ui.js` (`createStudyFormUi`) now holds five functions that only read and write input values. Behavior is unchanged.
+
+- `readBrowserStudyControls` / `writeBrowserStudyControls` (browser-study control fields; checkboxes use `checked`, others `value`)
+- `restoreAdaptiveOptions` (restores adaptive-mesh settings, including defaults and percent conversion)
+- `internalOptions` / `restoreInternalFields` (internal fluid domain enclosure, seed point and port planes)
+
+`$` and `browserStudyControls` are injected; the module does not import main.js. 3D selection, `lastAnalysis`, jobs and the worker are untouched.
+`tests/ui-study-form.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
+
+Japanese: [../ui-state-separation.md](../ui-state-separation.md)
