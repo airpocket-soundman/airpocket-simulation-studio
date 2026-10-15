@@ -9,6 +9,7 @@ import {browserMethods} from './browser-operation-names.js';
 export {browserMethods} from './browser-operation-names.js';
 import {getAnalysisFailure} from './analysis-failure.js';
 import {previewProjectOperations} from './project-edit-preview.js';
+import {preflightMeshBoundaryTransfer} from './mesh-boundary-preflight.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
 export function createBrowserSession({studio,analysis,jobResults,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
@@ -44,6 +45,12 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='applyCaseSource'||method==='clearCaseSource'){if(!caseSources||editing||busy())throw Error('Case source operations unavailable or browser busy');editing=true;try{return await caseSources[method==='applyCaseSource'?'apply':'clear'](args,{guard:valid});}finally{editing=false;}}
    if(method==='prepareFluidDomain'||method==='applyFluidDomainMesh'){if(!fluidDomains||editing||busy())throw Error('Fluid domain operations unavailable or browser busy');editing=true;try{return await fluidDomains[method==='prepareFluidDomain'?'prepare':'applyMesh'](args,{guard:valid});}finally{editing=false;}}
    if(method==='preflight')return studio.preflight(args.options||{},args.context||{});
+   if(method==='meshBoundaryPreflight'){
+    if(Object.keys(args).some(key=>!['jobId','inputRevision'].includes(key))||typeof args.jobId!=='string'||typeof args.inputRevision!=='string')throw Error('Invalid mesh boundary preflight arguments');
+    const snapshot=project(),job=analysis.getJob(args.jobId);let output=null;try{output=analysis.getJobResult(args.jobId);}catch{/* Non-successful jobs are reported as not ready by the shared inspector. */}const report=await preflightMeshBoundaryTransfer({project:snapshot,job,output,expectedRevision:args.inputRevision});
+    if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))return {...report,allowed:false,diagnostics:[{code:'ANALYSIS_MESH_PREFLIGHT_STALE_INPUT',severity:'error',stage:'boundary-transfer',target:'/',message:'Live input changed during boundary-transfer inspection',evidence:{},suggestions:['Inspect the current input revision and retry'],requiresUserIntent:true}],reports:[]};
+    return report;
+   }
    if(method==='previewEdit'){
     const snapshot=project(),previewOptions={expectedRevision:args.expectedRevision,options:args.options,operation:args.operation,mode:args.mode},response=typeof studio.previewOperations==='function'?await studio.previewOperations(args.operations,previewOptions):await previewProjectOperations(snapshot,args.operations,{...previewOptions,target:'browser'});
     if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during edit preview.'),{code:'EDIT_PREVIEW_STALE'});
