@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "audit": "Ready-item release eligibility audit A",
+  "auditRevision": "453cff45f98ec6c16fe0391d079fb2beca479a10",
+  "publishedRevision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7",
+  "publishedWorkflow": {
+    "name": "Publish application",
+    "run": 38699217923,
+    "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38699217923",
+    "conclusion": "success",
+    "jobs": {
+      "verify": "success (npm ci, npm test, build, local published-asset verification)",
+      "deploy": "success",
+      "verify-published": "success (deployed commit/runtime verification; verified release tag)",
+      "publishedTag": "release-cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"
+    },
+    "interpretation": "This establishes successful CI and publication at cf1e165. No historical test count is treated as a current requirement. For each row, the named implementation and test paths are present in the published commit tree. This does not claim that server-side MCP handlers execute inside the static Pages application."
+  },
+  "items": [
+    {
+      "id": "AGENTEDIT1",
+      "acceptance": "Semantic MCP edit batches work with the analysis workflow; partial/invalid batches and stale revisions are rejected atomically, without changing the saved input or existing output, while preserving compatible saved data.",
+      "proof": [
+        {"path": "src/project-operations.js", "revision": "34e9a31665e0d4fea041f79ae2babd7120b16d2b"},
+        {"path": "src/project-revision.js", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/project-operations.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/mcp-project-edit.test.mjs", "revision": "cb2440187d2ed86dcfc39f2de18fb3783f74d409"},
+        {"path": "tests/mcp-input-workflow.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "detail": "Includes editing a saved input and subsequently analyzing the resulting file."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "Atomicity, stale-revision refusal, original-file preservation and the edit-to-analysis path have dedicated tests; all were included in the successful main npm test run. Separate actual public HTTPS pairing is tracked by PUBLICHTTPS1 and is not part of this item's acceptance."
+    },
+    {
+      "id": "ASSESSMENTAPI1",
+      "acceptance": "Real MCP/WASM fatigue and fracture results, simultaneous retention, paging and refusals; real local Chrome connector results match the GUI evaluation display, with invalid/stale/missing-toughness requests rejected. The connector's same-revision replacement and omitted-option defaults are accepted behavior; public HTTPS is separate.",
+      "proof": [
+        {"path": "src/result-assessment-api.js", "revision": "3e739b5dce5cc1b72f7c1eb385f101e0065c830d"},
+        {"path": "tests/result-assessment-api.test.mjs", "revision": "3e9484cb8252c62ade09147901d042935abebe3c"},
+        {"path": "tests/mcp-assessment.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-15-assessmentapi-real-chrome-2.json", "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b", "detail": "Local Chrome/stdio MCP; fatigue life and damage, fracture reference, display agreement, pagination, stale revision and simultaneous assessments."},
+        {"path": "docs/evidence/2026-10-15-assessmentapi-real-chrome-3.json", "revision": "158150cbc7ed376a3cb9d66ddafdc76eb3aaf333", "detail": "Fresh-revision missing-toughness refusal, same-revision replacement, option defaults and stale revision."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The corrected real-Chrome evidence covers the acceptance after the earlier partial evidence; source and MCP tests are in the published commit and the publish workflow passed. HTTPS pairing, other browsers, mixed-mode/residual-stress and general physical validation remain separate/unclaimed."
+    },
+    {
+      "id": "GUIJOBS1",
+      "acceptance": "Common jobs expose GUI-origin work from all six structural, thermal, acoustic, channel-flow, internal-domain and exterior-domain routes; observable failures and bounded GUI history coexist with API jobs. Worker/MCP/API regression covers retention and completion behavior.",
+      "proof": [
+        {"path": "src/gui-analysis-jobs.js", "revision": "8d80ff5fdda57dea3ca4bfc56a1a6e22c059aa4a"},
+        {"path": "tests/gui-analysis-jobs.test.mjs", "revision": "b3e77adc4a6b27255359fb79c59d21f728fc6335"},
+        {"path": "tests/mcp-gui-jobs.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-15-guijobs-real-chrome-2.json", "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b", "detail": "Real local Chrome and stdio connector: all six routes, observable failed job, GUI-only eight-entry retention, settled/releasable job states."},
+        {"path": "docs/evidence/2026-10-14-gui-jobs-catalog.json", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The recorded real-local-browser route evidence and the job/MCP tests cover the stated scope; the deployed build and published verification passed. Disconnect continuity and intermediate field retention are covered by tests, not claimed as re-exercised in the browser run. HTTPS pairing is tracked separately."
+    },
+    {
+      "id": "CATALOGAPPLY1",
+      "acceptance": "Real MCP application checks catalog revision, explicit assumptions/applicability and experimental selection; failed/stale batches are atomic. Local GUI verifies required scope, JP/EN presentation and saved/shared material equality.",
+      "proof": [
+        {"path": "src/studio-api.js", "revision": "e474dae2aa54792e7900de9946d594aa6e858cc2"},
+        {"path": "tests/material-catalog-operations.test.mjs", "revision": "41b1e396e1c8251ca81d8f2a5e9f438bdb238dc4"},
+        {"path": "tests/mcp-catalog-apply.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "detail": "Spawns the actual studio-mcp stdio process; checks the advertised allowlist, saved result, stale revision, atomic refusal and preservation."},
+        {"path": "docs/evidence/2026-10-14-catalog-apply.jpg", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-14-gui-jobs-catalog.json", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The acceptance's real MCP and local GUI requirements have dedicated evidence and tests; the code is in the successfully published build. There is no separate live interaction with the public URL for this specific GUI action, but public-HTTPS pairing is not an outstanding requirement for this item."
+    },
+    {
+      "id": "MEASUREMENTVERIFY1",
+      "acceptance": "Recompute and compare saved measurement evidence against archived result fields through the API, read-only real MCP and live semantic adapter; preserve both archives and distinguish consistency from physical accuracy.",
+      "proof": [
+        {"path": "src/measurement-verification.js", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "src/measurement-verification-api.js", "revision": "042f0c1b5ebe3c911270c61def2c9243f9b79159"},
+        {"path": "tests/measurement-verification.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/measurement-verification-api.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/mcp-measurement-verification.test.mjs", "revision": "a24aaed5b10cb34e26c565115c5c7179ff05bcea", "detail": "Actual spawned stdio MCP; verifies replay match, tamper refusals and unchanged source archives."},
+        {"path": "docs/evidence/2026-10-14-measurement-verification.json", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "detail": "Real stdio MCP and Node-hosted live adapter reproduce one saved WASM temperature field/history measurement; physicalAccuracyVerified=false."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The saved-case replay, unchanged archives and read-only MCP requirements are verified. A new solve, real browser exercise and independent physical accuracy claim are expressly outside the accepted scope; no public HTTPS dependency is imposed."
+    },
+    {
+      "id": "EDITPREVIEW1",
+      "acceptance": "Preview changes non-destructively while a job is running; keep the input revision unchanged, then commit only the exact reviewed candidate after settlement and allow the next solve. Preserve explicit legacy/incomplete-preflight labels.",
+      "proof": [
+        {"path": "src/project-edit-preview.js", "revision": "34e9a31665e0d4fea041f79ae2babd7120b16d2b"},
+        {"path": "tests/project-edit-preview.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/browser-edit-preview.test.mjs", "revision": "34e9a31665e0d4fea041f79ae2babd7120b16d2b"},
+        {"path": "tests/mcp-edit-preview.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-15-browser-edit-preview.json", "revision": "b73f2de058d7a96acefc31d0deb1b1e8900d8cde", "detail": "Real local browser/Worker evidence: 100 N solve stays running across 150 N preview; input unchanged; reviewed candidate applied after completion; next solve succeeds."},
+        {"path": "docs/evidence/2026-10-15-edit-preview-full.json", "revision": "b73f2de058d7a96acefc31d0deb1b1e8900d8cde", "detail": "Recorded full test run before final clean CI; final source paths are included in the published commit."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "Actual local browser evidence meets the running-preview and post-settlement apply criteria, while dedicated tests cover exact revision binding and refusal. The later published CI passed on the final committed source. General physical accuracy, full P1-P3 and V8 root-cause resolution remain explicitly out of scope."
+    },
+    {
+      "id": "MESHARRAYLIMIT1",
+      "acceptance": "Large fake-Gmsh arrays preserve tag/connectivity/quality order within an explicit higher limit and refuse over-limit arrays before unsafe spread; actual GUI size 0.6 changes from stack overflow to the existing element-limit refusal without changing the default limit.",
+      "proof": [
+        {"path": "src/mesh-core.js", "revision": "34e9a31665e0d4fea041f79ae2babd7120b16d2b"},
+        {"path": "tests/mesh-array-limits.test.mjs", "revision": "34e9a31665e0d4fea041f79ae2babd7120b16d2b"},
+        {"path": "docs/evidence/2026-10-15-browser-edit-preview-first-attempt.json", "revision": "b73f2de058d7a96acefc31d0deb1b1e8900d8cde"},
+        {"path": "docs/evidence/2026-10-15-browser-edit-preview.json", "revision": "b73f2de058d7a96acefc31d0deb1b1e8900d8cde", "detail": "Real GUI same-size check returns the existing mesh element limit error instead of stack overflow; evidence explicitly notes the first complete job archive was not captured."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The four targeted tests and real GUI failure-mode comparison establish the narrow accepted behavior, and final main CI/build/deploy passed. The missing first-attempt full job archive, unchanged 30,000 default and unexpanded supported scale are documented limitations, not unmet acceptance criteria."
+    },
+    {
+      "id": "BROWSERCONNECTOR1",
+      "acceptance": "Isolated single-file browser MCP starts with existing Node 24, exposes three scoped tools and validates contracts, credentials, expiry, disconnect and EOF cleanup. Bundled Node/restart recovery and public HTTPS pairing are distinct scopes.",
+      "proof": [
+        {"path": "scripts/studio-browser-mcp.mjs", "revision": "e59f59d58bb5dbd9ace0bef3fa6897300be73993"},
+        {"path": "scripts/build-browser-connector.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/browser-only-mcp.test.mjs", "revision": "d18117e8e9683f233aa554825f2ab8ecf631ee99"},
+        {"path": "tests/browser-connector-bundle.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-15-browser-connector.json", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "detail": "Isolated local single-file startup, three tools and scoped authentication/lifecycle checks; synthetic local peer, not public HTTPS."},
+        {"path": "docs/evidence/2026-10-15-public-browser-connector.json", "revision": "0e536380e79acda0dde2bcdf28c778f4cf54ce60", "detail": "Actual public single-file download with manifest revision/bytes/SHA256, isolated startup/tool discovery and EOF; no browser pairing."}
+      ],
+      "deployedInclusion": {"decision": "connector-artifact-previously-publicly-downloaded; current-source-republished", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923, "note": "The cf1e165 publish run passed build and published asset verification; the public-download proof itself is at 0e53638 and must not be misrepresented as a cf1e165 pairing test."},
+      "decision": "release",
+      "reason": "The defined single-file local connector and lifecycle acceptance is covered by dedicated tests and a prior actual public artifact download; current code is in the successfully republished source. Public HTTPS pairing remains a separate PUBLICHTTPS1 gate and is not used to hold this local connector scope."
+    },
+    {
+      "id": "P3OBSERVATIONLIFECYCLE1",
+      "acceptance": "Bounded node/element connectivity pages reconstruct the same intermediate mesh and agree with saved measurements; asynchronous termination, late response, cancel/drain and field-request suppression preserve final results in real Workers.",
+      "proof": [
+        {"path": "src/intermediate-results.js", "revision": "4a89be6aa382227724be445aec1bd87497cb72f8"},
+        {"path": "tests/intermediate-results.test.mjs", "revision": "4a89be6aa382227724be445aec1bd87497cb72f8"},
+        {"path": "tests/analysis-client.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/browser-job-settlement.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/worker-pipeline.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "docs/evidence/2026-10-15-intermediate-lifecycle.json", "revision": "0e536380e79acda0dde2bcdf28c778f4cf54ce60", "detail": "Real Worker lifecycle and bounded connectivity evidence; explicitly does not claim restart recovery, full P3, peak heap bounds or public HTTPS."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "This narrow lifecycle slice meets its written acceptance and is included in the successful published build. Restart recovery and the broader P3 milestone remain unfinished and must stay separate; they do not negate this bounded slice."
+    },
+    {
+      "id": "JOBRESULTEXPORT1",
+      "acceptance": "Reconstruct and verify retained successful job A while current input B remains unchanged; enforce refusal, expiry, disconnect/release and exact byte count/SHA/chunking using Worker-derived JSON output. Saved-case comparisons and engine/WASM identity are separate requirements.",
+      "proof": [
+        {"path": "src/job-result-transfer.js", "revision": "db69d7c76e244ce76b43a0c9eb4e0227a0ae3c69"},
+        {"path": "tests/job-result-transfer.test.mjs", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7"},
+        {"path": "tests/browser-job-result-transfer.test.mjs", "revision": "7dc731944aa7bd41e4d063d70f054d7ff30e292a"},
+        {"path": "docs/evidence/2026-10-15-job-result-export.json", "revision": "09a9aaca3a59e0f193cc0f48031e20edfd23d9a8", "detail": "Evidence states Worker module output is retained through analysis-client in Node and explicitly distinguishes this from actual browser UI testing; local full runs failed, later clean published CI is the final suite proof."}
+      ],
+      "deployedInclusion": {"decision": "included-in-published-source-and-app-build", "revision": "cf1e165236ed0fb2e890c9d5e105c0a72d361ea7", "ci": 38699217923},
+      "decision": "release",
+      "reason": "The browser session test keeps input B unchanged while round-tripping immutable job A; the transfer and lifecycle tests cover limits and refusals, and Worker output is exercised through analysis-client in Node. The final clean main CI passed after the locally failed runs. No dedicated actual-browser transfer run is recorded, but it is not an acceptance requirement. Saved-case comparison and engine identity remain separate."
+    }
+  ]
+}
