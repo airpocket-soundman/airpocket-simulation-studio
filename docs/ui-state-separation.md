@@ -27,3 +27,12 @@ MOD1は未完了です。ここではmain.jsから保存ケース一覧のUIだ�
 
 `$`と`localizeStatus`は引数で受け取り、main.jsをimportしません。ラベル表は呼び出しごとの再生成をやめ、凍結した定数にしました。`language`（i18n）や条件一覧、3D選択、解析実行は移していません。
 `tests/ui-status.test.mjs`が偽DOMで確認します。実ブラウザでの動作確認は別途必要です。
+
+## 第5スライス: 疲労UI
+`src/ui/fatigue-ui.js`（`createFatigueUi`）に、疲労まわりの3関数を移しました。挙動は変えていません。
+
+- `renderFatigueMaterial`（材料フォームへの疲労データ反映）と`readFatigueMaterial`（フォームからの読み取り）
+- `renderFatigueResult`（疲労結果の要約パネルと荷重倍率などの入力欄の更新）
+
+`$`、`document`、`getMaterialProperties`、`getLanguage`は引数で受け取り、main.jsをimportしません。`materialProperties`と`language`は変化する値なので、値ではなく取得関数を渡し、呼び出しごとに読みます。main.jsは`renderMaterial`が早い段階で呼ばれるため、`status`の直後で生成します。`fatigueOptions`・`evaluateDisplayedFatigue`（`lastAnalysis`に触れる）、条件一覧、3D選択、解析実行は移していません。
+`tests/ui-fatigue.test.mjs`が偽DOMで確認します。実ブラウザでの動作確認は別途必要です。

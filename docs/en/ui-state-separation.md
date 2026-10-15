@@ -27,3 +27,12 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 
 `$` and `localizeStatus` are injected; the module does not import main.js. The label table is now a frozen constant instead of being rebuilt per call. The `language` (i18n) state, the conditions list, 3D selection and analysis execution did not move.
 `tests/ui-status.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
+
+## Fifth slice: fatigue UI
+`src/ui/fatigue-ui.js` (`createFatigueUi`) now holds three fatigue functions moved out of main.js. Behavior is unchanged.
+
+- `renderFatigueMaterial` (fills the material form from fatigue data) and `readFatigueMaterial` (reads it back)
+- `renderFatigueResult` (the fatigue summary panel and the load-factor/cycles/correction inputs)
+
+`$`, `document`, `getMaterialProperties` and `getLanguage` are injected; the module does not import main.js. `materialProperties` and `language` change over time, so getters are passed and read on every call. main.js creates the module right after `status` because `renderMaterial` runs early. `fatigueOptions` and `evaluateDisplayedFatigue` (which touch `lastAnalysis`), the conditions list, 3D selection and analysis execution stay in main.js.
+`tests/ui-fatigue.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
