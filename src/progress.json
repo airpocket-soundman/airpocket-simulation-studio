@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T01:04:31.610462Z",
+  "updatedAt": "2026-10-15T01:21:08.008706Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2316,6 +2316,18 @@
       "acceptance": "有効な構造化failureと通常metricsを保持し、getter未実行・過大/不正payload・bytesによるeviction・cursor継続・取消/終了不変・実API/MCPのJSON値容量を検証。RPC包装とWorker送信待機の上限とは区別する。",
       "acceptanceEn": "Preserve valid structured failures and ordinary metrics; verify no getter execution, oversized/unsafe data, byte eviction, cursor continuation, unchanged lifecycle and real API/MCP JSON-value bounds. Distinguish RPC wrappers and Worker transport.",
       "evidence": "docs/evidence/2026-10-15-job-event-bounds.json"
+    },
+    {
+      "id": "PUBLICATIONISOLATION1",
+      "title": "配信物の数値検証を独立プロセスへ分離",
+      "titleEn": "Isolate published numerical verification in child processes",
+      "status": "checking",
+      "category": "品質",
+      "detail": "Linux Node24.21.0でのV8異常終了を保持し、同一実行ファイルのchild mainで配信bundleを検証。結果受信だけで成功にせずcloseまで確認する。",
+      "detailEn": "Preserve the Linux Node24.21.0 V8 failure and verify published bundles in same-executable child main processes. Require successful close after a provisional result.",
+      "acceptance": "既存26配信物検証と数値条件を維持し、遅延異常・timeout・不正IPCを拒否。対象CIと公開candidateの証跡を記録。V8根治・実ブラウザ安定性とは区別する。",
+      "acceptanceEn": "Preserve all 26 published checks and numerical assertions; reject late failure, timeout and malformed IPC. Record target CI and published-candidate evidence separately from a V8 root fix or browser stability.",
+      "evidence": "scripts/published-process-runtime.mjs;tests/published-process-runtime.test.mjs;docs/evidence/2026-10-15-publication-process-isolation.json"
     }
   ],
   "solvers": [

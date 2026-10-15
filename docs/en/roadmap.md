@@ -145,3 +145,5 @@ Expose evidence/intent edit arguments through MCP discovery, validate every save
 Worker transport backpressure and event-ring payload/page byte limits remain P3 follow-ups; current queue limits do not bound total JavaScript heap. Preserve public HTTPS, saved comparison/same-point remeasurement, Skill-only end-to-end and all P0–P6 acceptance requirements.
 
 JOBEVENTBYTES1 implements P3 event payload/retention/page limits with explicit gaps and cursor continuation. This is separate from OBSERVATIONQUEUE1 pending-storage limits; Worker transport backpressure remains open. Track ongoing fluid PR #7 integration independently without treating its common API/MCP/Skill connections as complete.
+
+PUBLICATIONISOLATION1 prioritizes publication verification repair by isolating numerical checks in same-Node child main processes. Full suite: 980 tests, 977 passed, 3 skipped, zero failed; all 26 local checks passed. Preserve the original Linux V8 failure, without claiming a root fix or browser stability. CI and published-candidate evidence remain separate requirements.

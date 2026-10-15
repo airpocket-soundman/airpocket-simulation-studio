@@ -552,3 +552,9 @@ bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のp
 過大、循環参照、非有限数、accessor等の不正な観測は、同じsequenceの `observation-event-gap` / `payloadOmitted:true` / `gap.reason` へ置き換えます。getterは実行せず、欠けた物理値を0やnullへ補いません。これはソルバー失敗や数値収束の証明ではありません。小さな通常metricsと有効な構造化failureを保持し、statusの過大な要約はsummaryOmissions、error本文は最大2,048 UTF-16 code unitsとmessageTruncated/originalMessageLengthで明示します。終了状態・取消・解放の意味は変えません。
 
 能力情報のobservation.eventPayloadが既定上限と適用範囲を返します。内部registryの起動時budgetは有効なfailureとenvelopeを収める最小容量を要求し、極小指定を拒否します。64KiBはjobEvents JSON値の上限です。MCPはtext/structuredContentへ値を重複格納するため、JSON-RPCやHTTP包装込みの通信全体は64KiBを超え得ます。Worker送信待機やJSヒープ全体の上限保証とは別です。完全な最終結果はjobResultExport/Read等の専用分割経路を使い、イベント要約から再構築しません。
+
+### 配信物検証用の子プロセス実行
+
+`check-published`は、同じNode実行ファイルの子プロセスのmainで、ハッシュ照合済み配信analysis/CADモジュールと固定のSTEP参照生成を実行します。元の26検査・数値assertionを維持し、close 0・シグナルなし・観測されたnative fatalなしを確認してから受信結果を採用します。検査と子実行のチェックポイント、失敗前の部分記録を残します。
+
+これは公開検証スクリプトの分離方式であり、実ブラウザのWorkerやMCP既定実行方式を変更しません。Node切替、GC設定変更、skip、自動retry/fallbackは追加していません。Linux Node24.21.0/main badce2cでの既知native fatalを保持し、原因の根治を主張しません。今回変更後の全体980件中977成功・3skip・失敗0、buildとローカル26項目が成功。公開CIは別途記録します。詳細と適用限界は[試験記録](testing.md)と[WASM実行調査](wasm-runtime-investigation.md)を参照してください。
