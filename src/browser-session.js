@@ -9,8 +9,8 @@ import {getAnalysisFailure} from './analysis-failure.js';
 import {previewProjectOperations} from './project-edit-preview.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
- const ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
+export function createBrowserSession({studio,analysis,jobResults,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
+ const ownedResultTransfers=new Set(),ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
  const busy=()=>isBusy()||executionBusy();
  const builtins=builtinProjects??(studio?createBuiltinProjectOperations({studio,isBusy:busy}):null);
@@ -54,6 +54,18 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='listJobs')return analysis.listJobs(args);
    if(method==='jobStatus')return analysis.getJob(args.jobId);
    if(method==='jobEvents')return analysis.jobEvents(args.jobId,args);
+   if(method==='jobResultExport'){
+    if(!jobResults)throw Error('Job result transfer unavailable');
+    const result=await jobResults.beginExport(args,{guard:valid});
+    if(!valid()){try{jobResults.release({transferId:result.transferId});}catch{/* released */}throw Error('Job result command expired or connection revoked');}
+    ownedResultTransfers.add(result.transferId);return result;
+   }
+   if(method==='jobResultRead'||method==='jobResultRelease'){
+    if(!jobResults||!ownedResultTransfers.has(args.transferId))throw Error('Unknown or released session job result transfer');
+    const result=await jobResults[method==='jobResultRead'?'read':'release'](args,{guard:valid});
+    if(!valid())throw Error('Job result command expired or connection revoked');
+    if(method==='jobResultRelease')ownedResultTransfers.delete(args.transferId);return result;
+   }
    if(method==='jobArtifacts'){const {jobId,...query}=args;return analysis.listJobArtifacts(jobId,query);}
    if(method==='jobArtifact')return analysis.getJobArtifact(args.jobId,args.artifactId,{...(args.pageKind!==undefined?{pageKind:args.pageKind}:{}),point:args.point,offset:args.offset,limit:args.limit,...(args.bodyIndex!==undefined?{bodyIndex:args.bodyIndex}:{}),...(args.elementIndex!==undefined?{elementIndex:args.elementIndex}:{})});
    if(method==='cancelJob')return analysis.cancelJob(args.jobId);
@@ -105,7 +117,7 @@ export function createBrowserSession({studio,analysis,view,resultView,cases,expo
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
-  disconnect(){epoch++;for(const transferId of ownedInputTransfers){try{inputImports.release({transferId});}catch{/* released */}}ownedInputTransfers.clear();for(const transferId of ownedBundleTransfers){try{caseBundleTransfers.release({transferId});}catch{/* released */}}ownedBundleTransfers.clear();for(const transferId of ownedPrintTransfers){try{printTransfers.release({transferId});}catch{/* released */}}ownedPrintTransfers.clear();for(const transferId of ownedImports){try{caseArchives.release({transferId});}catch{/* released */}}ownedImports.clear();for(const jobId of ownedExports){try{exports.cancel({jobId});}catch{/* terminal or released */}}ownedExports.clear();for(const jobId of owned){try{analysis.cancelJob(jobId);}catch{/* terminal or released */}}owned.clear();requests.clear();}
+  disconnect(){epoch++;for(const transferId of ownedResultTransfers){try{jobResults.release({transferId});}catch{/* released */}}ownedResultTransfers.clear();jobResults?.disconnect?.();for(const transferId of ownedInputTransfers){try{inputImports.release({transferId});}catch{/* released */}}ownedInputTransfers.clear();for(const transferId of ownedBundleTransfers){try{caseBundleTransfers.release({transferId});}catch{/* released */}}ownedBundleTransfers.clear();for(const transferId of ownedPrintTransfers){try{printTransfers.release({transferId});}catch{/* released */}}ownedPrintTransfers.clear();for(const transferId of ownedImports){try{caseArchives.release({transferId});}catch{/* released */}}ownedImports.clear();for(const jobId of ownedExports){try{exports.cancel({jobId});}catch{/* terminal or released */}}ownedExports.clear();for(const jobId of owned){try{analysis.cancelJob(jobId);}catch{/* terminal or released */}}owned.clear();requests.clear();}
  };
 }
 

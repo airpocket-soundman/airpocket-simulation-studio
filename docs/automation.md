@@ -80,19 +80,19 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
-### 単体browser connector配布（実装済み・未公開）
+### 単体browser connector配布（配信物確認済み・実接続未検証）
 
 ブラウザ操作だけを使う軽量エントリは、ビルド時に `dist/assets/studio-browser-mcp.mjs` という単一ファイルになります。既存のNode 24が必要ですが、取得したファイルの実行にはリポジトリ、npm install、ネイティブソルバー、CAD/Gmsh/OCCTのローカル資産は不要です。Node自体を同梱した実行形式ではありません。ビルドには従来どおりリポジトリとnpm依存関係が必要です。
 
 配布時は、信頼する完全なコミットrevisionまたはreleaseタグを先に固定し、その版の `runtime-manifest.json` を取得します。manifestの `revision` が固定したコミットと一致し、`dirty:false` であることを確認してください。タグの場合は信頼するタグから完全なコミットへ解決します。同じ配布場所のmanifestとファイルだけの一致は、配布元の信頼性の保証にはなりません。
 
-manifestの任意フィールド `connector` は `{path:"assets/studio-browser-mcp.mjs",minimumNodeMajor:24,transport:"stdio"}` です。manifestのURLを基準に `connector.path` を解決し、取得したファイルのバイト長と生バイトのSHA-256を `files[connector.path].bytes` / `.sha256`（小文字16進数）と照合してから実行します。旧manifestにはconnectorが存在し得ないため、その場合はこの単体配布があると判断しません。公開された場合のパスは `/airpocket-simulation-studio/assets/studio-browser-mcp.mjs` です。
+manifestの任意フィールド `connector` は `{path:"assets/studio-browser-mcp.mjs",minimumNodeMajor:24,transport:"stdio"}` です。manifestのURLを基準に `connector.path` を解決し、取得したファイルのバイト長と生バイトのSHA-256を `files[connector.path].bytes` / `.sha256`（小文字16進数）と照合してから実行します。旧manifestにはconnectorが存在し得ないため、その場合はこの単体配布があると判断しません。公開パスは `/airpocket-simulation-studio/assets/studio-browser-mcp.mjs` です。
 
 MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https://airpocket-soundman.github.io` のように登録します。引数は実ページの正確なOrigin一つだけで、パスを含めません。公開ページのURL全体は `/airpocket-simulation-studio/` を含みますが、Originには含みません。stderrの `Browser connector:` にendpoint・origin・pairingTokenを出し、stdoutはJSON-RPC専用です。接続情報は上記のアプリ接続UIに入力し、必要なscopeだけを許可します。初期選択はinspectです。ローカル接続先の制限、Origin/Host/Bearer検査、期限切れの条件は既存接続と同じです。
 
 この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の29ツール／接続時31ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
 
-ソース実装と、単一ファイルだけを隔離ディレクトリへ置いたNode 24でのstdio・HTTP模擬ブラウザ接続・scope拒否・EOF終了のテストは完了しています。この配布物はまだ公開しておらず、公開HTTPSページと実ブラウザからの接続・ブラウザ権限は未検証です。
+ソース実装と、単一ファイルだけを隔離ディレクトリへ置いたNode 24でのstdio・HTTP模擬ブラウザ接続・scope拒否・EOF終了のテストは完了しています。公開0e53638のmanifest版・バイト数・SHA-256照合、取得ファイルだけの隔離起動・3ツール発見・EOF終了を確認しました。[公開ファイル検証](evidence/2026-10-15-public-browser-connector.json)を参照。確認専用の実HTTPS接続は到達エラーで失敗し、セッションは作成されませんでした。[試験記録](evidence/2026-10-15-public-https-inspect-failure.json)を参照。
 
 ### ブラウザの途中の場を取得する
 
@@ -498,3 +498,11 @@ sourceのSTEP等data文字列や大きい文字列も値をdescriptorへ展開�
 共通analysisApiのdrainJobsは呼出時点の旧analyze/generateMeshも終了まで待機し、取消しません。closeJobsはそれらも取消要求し、closeJobsAsyncはWorker終了確定まで待ちます。戻り値のjobIdsは登録ジョブのみで、旧直接実行にIDを作りません。
 
 `includeFields:false`では熱・過渡音響の中間場配列をWorker側で生成・転送せず、時刻・指標の要約は維持します。最終結果や保存用snapshotの保持は別です。直接solver APIの既定観測は維持し、明示したobserveFields:falseで中間場だけを抑制します。64 MBは格納済み観測JSONの予算で、待機イベントやピークヒープの上限ではありません。
+
+## 成功ジョブの完全結果を表示せず保存する
+
+確認権限の接続jobResultExport({jobId,inputRevision})は、succeededかつexecutionSettledのジョブからinput/calculation/mesh/boundary/resultを含む保持出力を読み取り、分割取得用snapshotを作ります。現在入力Bのまま入力Aの結果を取得でき、showJob・caseSave・入力復元は不要です。metadataのschemaVersion:1、format:analysis-output、jobId/inputRevision/kind、totalBytes/sha256/hashBasis:raw-utf8を確認します。
+
+jobResultRead({transferId,offset:0,length:65536})のbase64 dataを復号し、nextOffsetがnullになるまで取得します。全体のバイト長と生UTF-8 SHA256を照合してからJSONを解析・保存してください。既定は4転送・合計100 MB、chunk最大65,536 bytesです。jobResultReleaseで解放し、切断でも同セッションの転送は失効します。他セッションのtransferIdは拒否します。結果表示・ケース登録・入力変更・再解析を行うAPIではありません。
+
+出力に元から含まれる単位・仮定・暫定性と計算設定を保存します。過去の結果に欠けているengine build revisionやWASM hashを、現在の配信版から補って同一だとは主張しません。その追跡と保存後比較の全条件、実HTTPSは継続課題です。

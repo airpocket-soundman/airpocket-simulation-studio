@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-14T23:51:16.023575+00:00",
+  "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/",
+  "endpoint": "http://127.0.0.1:63727",
+  "authorization": "User explicitly approved QA connection code entry for inspect-only sample inspection; edit/analyze/view remained unchecked.",
+  "pageScript": "assets/app-Bm3OhYSF.js",
+  "result": "failed-before-session-creation",
+  "uiMessage": "Cannot reach the local connector. Check that it is running, that your browser or app permits local network access, and that the connection origin URL matches.",
+  "hostSessionsBefore": [],
+  "hostSessionsAfter": [],
+  "operationsPerformed": [],
+  "cleanup": {
+    "connectionCodeCleared": true,
+    "ttySession": 3958,
+    "programExited": true,
+    "exitCode": 1,
+    "listenPortAbsent": 63727,
+    "method": "TTY interrupt after Windows EOF key was not interpreted as EOF"
+  },
+  "screenshot": "2026-10-15-public-https-inspect-failed.jpg",
+  "screenshotSha256": "0d1c0bebdd4beb1bd1db7ddd5840a3ee7ffbaffae4775025e9172fa3d03b8d6d",
+  "limitations": [
+    "Failure does not identify the root cause: browser/app network policy,reachability and CORS remain candidates.",
+    "No browser permission prompt was observed or accepted; no browser protection was bypassed.",
+    "Host was an already-running full MCP process,not the newly downloaded minimal connector.",
+    "This failed attempt does not close the public-HTTPS gate or prove MCP-only end-to-end behavior."
+  ],
+  "browser": "Codex In-app Browser"
+}
