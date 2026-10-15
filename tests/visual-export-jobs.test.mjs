@@ -45,3 +45,19 @@ test('release keeps renderer exclusive until aborted renderer actually settles',
 test('disconnect during preparation prevents renderer start and concurrent retries share admission',async()=>{
  let complete,calls=0;const api=createVisualExportJobs({prepare:()=>new Promise(resolve=>complete=resolve),render:()=>{calls++;return new Blob(['x'],{type:'image/png'});}}),one=api.start(args()),retry=api.start(args());api.cancelAll();complete({resultRevision:revision,view:{field:'temperature'}});await assert.rejects(one,/expired/);await assert.rejects(retry,/expired/);assert.equal(calls,0);
 });
+
+function pngBytes(width,height){const b=new Uint8Array(40);b.set([137,80,78,71,13,10,26,10],0);const dv=new DataView(b.buffer);dv.setUint32(8,13);b.set([73,72,68,82],12);dv.setUint32(16,width);dv.setUint32(20,height);return b;}
+test('PNG artifact manifest carries only known fields, is bounded and leaves existing metadata unchanged',async()=>{
+ const bytes=pngBytes(320,240),view={result:{field:'temperature',frameIndex:3,timeSeconds:.25,deformScale:2,camera:{position:[1,2,3],target:[0,0,0],up:[0,1,0],fov:45},huge:'x'.repeat(10000)},setup:{x:1}};
+ const api=createVisualExportJobs({render:()=>new Blob([bytes],{type:'image/png'})}),job=await api.start({...args(),view}),done=await terminal(api,job),a=done.artifact,m=a.manifest;
+ assert.deepEqual(Object.keys(a).filter(k=>k!=='manifest').sort(),['maxChunkBytes','mimeType','name','sha256','totalBytes']);
+ assert.equal(m.resultRevision,revision);assert.equal(m.sha256,a.sha256);assert.equal(m.totalBytes,bytes.length);assert.equal(m.container,'png');assert.deepEqual(m.resolution,{width:320,height:240});
+ assert.equal(m.view.field,'temperature');assert.deepEqual(m.view.camera.position,[1,2,3]);assert.equal(m.view.huge,undefined);assert.equal(m.time.timeBasis,'single frame');assert.equal(m.time.physicalTimeSeconds,.25);assert.equal(m.scale.deformScale,2);
+ assert.ok(JSON.stringify(m).length<=4096);assert.equal(api.artifact(job).manifest.sha256,a.sha256);
+ const bad=createVisualExportJobs({render:()=>new Blob(['png'],{type:'image/png'})}),plain=await terminal(bad,await bad.start(args()));assert.equal(plain.artifact.manifest.resolution,undefined);
+});
+test('WebM manifest separates display duration from stored physical frames and does not invent resolution',async()=>{
+ const api=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm;codecs=vp9'})}),job=await api.start({...args(),format:'webm',animation:'time',seconds:7}),m=(await terminal(api,job)).artifact.manifest;
+ assert.equal(m.container,'webm');assert.equal(m.codec,'vp9');assert.equal(m.time.durationSeconds,7);assert.equal(m.time.timeBasis,'display time');assert.equal(m.time.frameSelection,'stored-acoustic-frames-only');assert.match(m.time.physicalTime,/physical time/);assert.equal(m.time.fps.target,24);assert.equal(m.time.fps.frameCountGuaranteed,false);assert.equal(m.resolution,undefined);
+ const orbit=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm'})}),o=(await terminal(orbit,await orbit.start({...args(),format:'webm'}))).artifact.manifest;assert.equal(o.codec,undefined);assert.equal(o.time.physicalTime,undefined);
+});

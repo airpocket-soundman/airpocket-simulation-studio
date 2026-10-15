@@ -116,7 +116,7 @@ Inspect scope permits lists/probes/view reads, view scope changes result setting
 
 ## PNG/WebM export jobs
 
-The optional connector exposes 82 methods (29 default tools, 31 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false.
+The optional connector exposes 82 methods (29 default tools, 31 connector tools). Call `exportCapabilities()` to inspect PNG/WebM and animation availability. WebM depends on the running browser's recording support. MP4/GIF are unsupported and reported as false, with `formats.mp4`/`formats.gif` carrying `{supported,reason,alternatives}` (alternatives: webm, png). Even if MediaRecorder reports MP4 recording, export is not implemented so `supported` stays false. Completed export artifact metadata includes a size-bounded `manifest` with result revision, display versus physical time, resolution (PNG), codec and SHA-256.
 
 Read the result revision with `getResultView`, then call `startExport({requestId,expectedResultRevision,format,animation,seconds})`. `format` is `png` or `webm`; `animation` is `orbit`, `deformation`, `time` or `slice`; `seconds` is an integer from 1 through 15 (default 5). Admission verifies the result revision and freezes a copy of result-view, camera, layer and section settings. Identical retained request IDs and arguments return the same job; changed arguments cause a conflict.
 

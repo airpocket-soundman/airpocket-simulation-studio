@@ -12,6 +12,19 @@ export async function hasVideoFrames(blob){
  return false;
 }
 
+const WEBM_TYPES=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+const MP4_TYPES=['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=avc1','video/mp4'];
+function safeSupported(recorder,type){try{return typeof recorder?.isTypeSupported==='function'&&recorder.isTypeSupported(type)===true;}catch{return false;}}
+// MP4 and GIF are never exported by this application. The MediaRecorder probe only explains why MP4 is refused;
+// it can never make `supported` true because no MP4 encoder or muxer path exists here.
+export function exportFormatCapabilities({mediaRecorder}={}){
+ const mp4Type=MP4_TYPES.find(type=>safeSupported(mediaRecorder,type)),alternatives=['webm','png'];
+ return {
+  mp4:{supported:false,browserRecorderSupport:!!mp4Type,...(mp4Type?{probedMimeType:mp4Type}:{}),reason:mp4Type?'MediaRecorder reports MP4 recording in this browser, but MP4 export is not implemented in this application':'MediaRecorder does not support the MP4 container in this browser',alternatives:[...alternatives]},
+  gif:{supported:false,reason:'GIF encoding is not implemented',alternatives:[...alternatives]}
+ };
+}
+
 export function installVisualExport({renderer,scene,camera,controls,getAnalysis,redraw,language,translate}){
  const $=id=>document.getElementById(id),host=document.createElement('details');
  host.innerHTML=`<summary>画像・アニメーションを保存</summary><label><input id="result-surface" type="checkbox" checked> 結果の表面を表示</label><label><input id="result-surface-wire" type="checkbox"> 結果の表面メッシュを表示</label><button id="view-png">表示中の画像をPNGで保存</button><label>アニメーションの種類<select id="animation-kind"><option value="orbit">モデルを一周</option><option value="deformation">変形を往復（表示用）</option><option value="time">過渡音響の時間変化</option><option value="slice">断面を移動</option></select></label><label>動画の長さ（秒）<input id="animation-seconds" type="number" value="4" min="1" max="15" step="1"></label><div class="row"><button id="animation-preview">再生</button><button id="animation-save">WebM動画で保存</button><button id="animation-stop" disabled>再生を止める</button></div><p>画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化は保存した過渡音響フレームを使い、動画時間は表示用に伸縮します。</p><p id="visual-export-status" role="status"></p><a id="visual-export-download" hidden></a>`;
@@ -43,7 +56,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   const time=$('acoustic-time-frame');
   if(kind==='time'&&(result?.kind!=='acousticTransient'||!time))throw Error(language()==='en'?'Time playback requires transient acoustic frames.':'時間変化には過渡音響の結果が必要です。');
   if(kind==='slice'&&!output?.mesh)throw Error(language()==='en'?'Generate a volume mesh first.':'先に体積メッシュを生成してください。');
-  const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(type=>typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(type));
+  const mime=WEBM_TYPES.find(type=>typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(type));
   if(record&&(!mime||!canvas.captureStream))throw Error(language()==='en'?'WebM recording is unavailable in this browser.':'このブラウザはWebM録画に対応していません。');
   const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value},state={stop:false};
   const abort=()=>{state.stop=true;};signal?.addEventListener('abort',abort,{once:true});
@@ -77,6 +90,6 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   const state={stop:false};active=state;const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
   try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
  }
- const capabilities=()=>({schemaVersion:1,png:true,webm:typeof MediaRecorder!=='undefined'&&!!canvas.captureStream&&['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].some(type=>MediaRecorder.isTypeSupported(type)),mp4:false,gif:false,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15});
+ const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});return {schemaVersion:1,png:true,webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,capabilities,isActive:()=>active!==null};
 }
