@@ -1,3 +1,7 @@
+import {createHash} from 'node:crypto';
+import {estimateProductCompletion} from '../src/product-estimate.js';
+import {collectProgressHistory,serializeProgressHistory} from './progress-history.mjs';
+import {MAX_HISTORY_BYTES} from '../src/progress-history.js';
 import {semanticOperationArgumentsSchema} from '../src/semantic-operation-schema.js';
 import {getBrowserOperationContracts} from '../src/browser-operation-contracts.js';
 import {startMcpStdio} from './mcp-stdio.mjs';
@@ -65,7 +69,7 @@ const toolList=[
  {name:'studio_capabilities',description:'Read actual target-specific engine capabilities, declared observation profiles and candidate status without loading solver modules. Observation declarations describe emitted diagnostics, not convergence or physical accuracy guarantees. This is not a complete physical preflight. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.',inputSchema:object({})},
  {name:'studio_diagnose_execution',description:'Read stable diagnostics for unsupported execution combinations and the selected observation profile for a saved project. The selected profile is a declaration, not evidence that a job emitted it. Geometry, units, constraints and material completeness still require full validation. Includes actual Node host metadata and observed-risk diagnostics, not runtime safety certification.',inputSchema:object({path:pathSchema,method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},adaptive:{type:'boolean'},includeFields:{type:'boolean'}},['path'])},
  {name:'studio_material_catalog',description:'Read preinstalled primary-source polymer property data. Filter grades by family, filler and content; experimental formulations are separate. Poisson ratio is unpublished and must be treated as a user assumption, not manufacturer data.',inputSchema:object({id:{type:'string'},family:{type:'string'},filler:{enum:['unfilled','glassFiber','longGlassFiber','glassBead','talc']},contentPercent:{type:'number',minimum:0,maximum:100},search:{type:'string'},includeExperimental:{type:'boolean'}})},
- {name:'studio_progress',description:'Read released and outstanding features, including solver limits.',inputSchema:object({})},
+ {name:'studio_progress',description:'Read progress in its original shape by default. Optional includeEstimate adds a judgment-based full-product estimate, not measured completion. Optional includeHistory adds bounded committed history with honest shallow/truncated/skipped scope only when its HEAD progress hash and bytes match the returned progress. Git failure or mismatch returns history unavailable; no arbitrary git arguments or paths.',inputSchema:object({includeEstimate:{type:'boolean',default:false},includeHistory:{type:'boolean',default:false}})},
  {name:'studio_inspect_project',description:'Legacy mode validates saved input and returns a compact mm geometry summary, study, conditions and revision. Legacy study may contain large arrays and is not a bounded input view. Prefer section mode for revisioned bounded input inspection; section mode returns only that response, without legacy study/geometry. Optional meshIndex returns paginated observed face geometry (at most 50); face IDs belong to a display-mesh revision, not persistent CAD identities. Optional surfaceInspection requests bounded display-triangle topology diagnostics; no CAD-exact geometry, self-intersection certification or repair is performed.',inputSchema:{...object({path:pathSchema,section:{enum:['project','study','material','conditions','provenance','selection','source','meshes','meshSettings','units','intent']},pointer:{type:'string',maxLength:2048,description:'Absolute escaped JSON Pointer within the selected section. Empty string is project root. Descend explicitly to inspect bounded values/pages rather than full arrays.'},expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},offset:{type:'integer',minimum:0,maximum:Number.MAX_SAFE_INTEGER},limit:{type:'integer',minimum:1,maximum:200,description:'Default 20; object pages have an additional maximum of 50. Arrays and explicit string pages allow at most 200.'},meshIndex:{type:'integer',minimum:0},faceOffset:{type:'integer',minimum:0},faceLimit:{type:'integer',minimum:1,maximum:50},surfaceInspection:object({meshIndex:{type:'integer',minimum:0},toleranceMm:{type:'number',exclusiveMinimum:0},problemOffset:{type:'integer',minimum:0},problemLimit:{type:'integer',minimum:1,maximum:200}},['meshIndex'])},['path']),dependentRequired:{pointer:['section'],offset:['section'],limit:['section'],expectedRevision:['section']},allOf:[{if:{required:['section']},then:{not:{anyOf:[{required:['meshIndex']},{required:['faceOffset']},{required:['faceLimit']},{required:['surfaceInspection']}]}}}]}},
  {name:'studio_analyze',description:'Compute a saved project locally with the same CPU Worker as the browser. Writes the full analysis to outputPath and returns a compact summary. Does not alter an open browser project.',inputSchema:object({path:pathSchema,outputPath:pathSchema,operation:{enum:['solve','mesh']},size:{type:'number',exclusiveMinimum:0},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']}},['path','outputPath'])},
  {name:'studio_probe',description:'Measure a saved analysis at a point in mm. Use bodyIndex or elementIndex to select ambiguous multi-body interface points. Returns physical units and the verified saved analysisAssessment when available; no extrapolation outside the mesh.',inputSchema:object({path:pathSchema,point:{type:'array',items:{type:'number'},minItems:3,maxItems:3},bodyIndex:{type:'integer',minimum:0},elementIndex:{type:'integer',minimum:0},modeIndex:{type:'integer',minimum:0}},['path','point'])},
@@ -73,6 +77,26 @@ const toolList=[
 ].map(t=>({...t,annotations:{readOnlyHint:!['studio_import_print','studio_apply_cad_update','studio_assess_result','studio_analyze','studio_start_analysis','studio_cancel_job','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),destructiveHint:false,idempotentHint:!['studio_import_print','studio_apply_cad_update','studio_assess_result','studio_analyze','studio_release_job','studio_edit_project','studio_import_project','studio_create_builtin_project'].includes(t.name),openWorldHint:false}}));
 async function jsonFile(path){if(typeof path!=='string'||!isAbsolute(path))throw Error('An absolute local file path is required');const file=resolve(path);if((await stat(file)).size>100000000)throw Error('JSON file exceeds 100 MB');return JSON.parse(await readFile(file,'utf8'));}
 const summary=summarizeAnalysis;
+// Dependencies are private host test seams, never tool arguments or executable options.
+export async function readProgressInsights(args={}, {readProgress=()=>readFile(new URL('../src/progress.json',import.meta.url)),collectHistory=collectProgressHistory}={}){
+ if(!args||typeof args!=='object'||Array.isArray(args)||Reflect.ownKeys(args).some(key=>!['includeEstimate','includeHistory'].includes(key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(args,key),'value')||typeof args[key]!=='boolean'))throw Error('Invalid progress insight arguments');
+ const bytes=Buffer.from(await readProgress()),progress=JSON.parse(bytes.toString('utf8'));
+ if(args.includeEstimate!==true&&args.includeHistory!==true)return progress;
+ const output={schemaVersion:1,progress};
+ if(args.includeEstimate===true)output.estimate=estimateProductCompletion(progress);
+ if(args.includeHistory===true){
+  try{
+   const serialized=serializeProgressHistory(await collectHistory({progressBytes:bytes})),content=JSON.parse(serialized.toString('utf8'));
+   const digest=createHash('sha256').update(bytes).digest('hex');
+   if(content.head.progressBytes!==bytes.length||content.head.progressSha256!==digest)output.history={status:'unavailable',reason:'working-progress-does-not-match-history-head'};
+   else output.history={status:'available',summary:{pointCount:content.points.length,skippedCount:content.skipped.length,head:content.head,completeness:content.completeness},content};
+  }catch(error){output.history={status:'unavailable',reason:error?.code==='PROGRESS_HISTORY_SOURCE_MISMATCH'?'working-progress-does-not-match-history-head':error?.code==='PROGRESS_HISTORY_BYTES'?'history-byte-limit':error?.code==='ENOENT'?'git-unavailable':'history-not-available'};}
+  if(Buffer.byteLength(JSON.stringify(output))>MAX_HISTORY_BYTES)output.history={status:'unavailable',reason:'history-response-byte-limit'};
+  if(Buffer.byteLength(JSON.stringify(output))>MAX_HISTORY_BYTES)throw Object.assign(Error('Progress insights exceed the 2 MB response limit'),{code:'PROGRESS_INSIGHTS_RESPONSE_LIMIT'});
+ }
+ return output;
+}
+
 export async function callStudioTool(name,args={}){
  executionConfigurationLocked=true;
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
@@ -155,7 +179,7 @@ export async function callStudioTool(name,args={}){
  if(name==='studio_release_job')return jobService.release(args.jobId);
  if(name==='studio_capabilities')return {...getCapabilities({target:'node',analysisIsolation}),runtime:inspectNodeRuntime()};
  if(name==='studio_diagnose_execution'){const api=createStudioApi();api.loadProject(await jsonFile(args.path));return {...diagnoseExecution(api.exportProject(),{...(args.method!==undefined?{method:args.method}:{}),...(args.adaptive!==undefined?{adaptive:args.adaptive}:{}),...(args.includeFields!==undefined?{includeFields:args.includeFields}:{})},'node'),runtime:inspectNodeRuntime()};}
- if(name==='studio_progress')return JSON.parse(await readFile(new URL('../src/progress.json',import.meta.url),'utf8'));
+ if(name==='studio_progress')return readProgressInsights(args);
  if(name==='studio_material_catalog'){if(args.id!==undefined)return {version:catalogVersion,material:catalogEntry(args.id)};const materials=catalogEntries(args);return {version:catalogVersion,count:materials.length,materials};}
  if(name==='studio_inspect_project'){
   const sectionMode=Object.hasOwn(args,'section'),sectionKeys=['pointer','offset','limit','expectedRevision'],geometryKeys=['meshIndex','faceOffset','faceLimit','surfaceInspection'];

@@ -22,6 +22,8 @@ Choose the smallest task-relevant read. Use `studio_progress` only when asked ab
 - [Physics and provenance](references/physics-provenance.md): fatigue/fracture limits and thermal/acoustic/fluid/modal/orthotropic/nonlinear input contracts. Read the applicable section before evaluating physical assumptions.
 - [Runtime and diagnostics](references/runtime-diagnostics.md): termination/recovery, optional process isolation, typed failures versus stage fallbacks, known Node/V8 risk and evidence limits.
 
+- [Development progress](references/development-progress.md): opt-in status history and weighted product estimate; use only for development/planning questions, never as engineering validation.
+
 ## Preserve engineering intent
 
 Do not invent missing material values, loads, supports or regions to make a model solve. Record measured sources versus explicit exploratory assumptions; LLM confidence is not evidence. Use requiredPointers from current preflight, preserve input/result revisions and provisional labels, and compare like-for-like cases. Successful preflight remains `completePreflight:false`; convergence does not establish physical accuracy.
