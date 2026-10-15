@@ -4,7 +4,7 @@
 
 As of 2026-10-14. The main differentiator is enabling the user's own LLM to operate every feature through a specialized SKILL. Closing the gaps below has the highest priority. This is an initial inventory by feature group; coverage of individual operations has not yet been measured.
 
-Current entry points have 31 default/33 connected MCP tools and 86 browser operations; the minimal connector has three tools. Preserve historical counts below. Current comparison validation, actual-browser and publication completion remain pending.
+Current entry points have 31 default/33 connected MCP tools and 87 browser operations; the minimal connector has three tools. Preserve historical counts below. Current comparison validation, actual-browser and publication completion remain pending.
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|

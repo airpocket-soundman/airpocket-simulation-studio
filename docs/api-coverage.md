@@ -4,12 +4,12 @@
 
 2026-10-14時点。最大の差別化要因はユーザーのLLMが専門SKILLから全機能を扱えること。以下の不足を最優先で解消する。対応は機能群単位の初期棚卸しであり、全操作の網羅率は未測定。
 
-現行の入口は通常31/接続33 MCPツール・86ブラウザ操作、単体connectorは3ツール。後続の過去件数は当時の記録として保持する。今回比較の検証・実ブラウザ・公開完了は保留。
+現行の入口は通常31/接続33 MCPツール・87ブラウザ操作、単体connectorは3ツール。後続の過去件数は当時の記録として保持する。今回比較の検証・実ブラウザ・公開完了は保留。
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
 | 操作契約の発見 | studioApi.getBrowserOperationContracts | studio_browser_contracts（session不要・最大10件/65,536 UTF-8バイト） | nested適用性・物理検証は実adapterで維持 |
-| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（86操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
+| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（87操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 編集候補のプレビュー | studioApi.previewOperations | studio_preview_edit、inspect権限previewEdit | nested物理検証・全P0/P1/P3は継続 |
