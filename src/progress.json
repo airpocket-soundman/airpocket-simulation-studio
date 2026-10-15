@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T22:27:01.316Z",
+  "updatedAt": "2026-10-15T23:05:23.233Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -713,9 +713,9 @@
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
       "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "lastUpdate": "2026-10-15 Node側計測に取消の応答時間を追加(中断点2種、最終状態、プロセス解放、ピークRSS。n=1で構造2.4ms/51.7ms、熱2.7ms/64.1ms、すべて取消)。ブラウザのメモリ・時間・取消応答は未計測で、計画は docs/perf-browser-plan.md(実装なし)。実装中を維持。",
+      "lastUpdate": "2026-10-15 Node側計測に取消の応答時間を追加(中断点2種、最終状態、プロセス解放、ピークRSS。n=1で構造2.4ms/51.7ms、熱2.7ms/64.1ms、すべて取消)。ブラウザのメモリ・時間・取消応答は未計測で、計画は docs/perf-browser-plan.md(実装なし)。実装中を維持。 2026-10-16追記: ブラウザ計測スクリプト scripts/perf-browser.mjs(コネクタ経由・localhost限定・接続コードをファイルに残さない)を実装(単体テスト7件、偽コネクタ)。実ブラウザでの実測は未実施。",
       "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md",
-      "lastUpdateEn": "2026-10-15 Added cancel-latency measurement to the Node harness (two cancel points, final state, process release, peak RSS; n=1: structural 2.4 ms / 51.7 ms, thermal 2.7 ms / 64.1 ms, all cancelled). Browser memory, time and cancel response are not measured; the plan is docs/perf-browser-plan.md (not implemented). Stays building."
+      "lastUpdateEn": "2026-10-15 Added cancel-latency measurement to the Node harness (two cancel points, final state, process release, peak RSS; n=1: structural 2.4 ms / 51.7 ms, thermal 2.7 ms / 64.1 ms, all cancelled). Browser memory, time and cancel response are not measured; the plan is docs/perf-browser-plan.md (not implemented). Stays building. Added 2026-10-16: browser measurement script scripts/perf-browser.mjs (connector-driven, localhost only, no pairing code in files) implemented with 7 unit tests against a fake connector; the real-browser run has not been done."
     },
     {
       "id": "ADAPT1",
@@ -1146,8 +1146,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md",
-      "lastUpdate": "2026-10-15 getCapabilitiesに組み合わせの機械可読一覧(共有規則表から生成)、GUI/API/MCP/Skill対応表(docs/operation-correspondence.md、名前のみテストで固定。GUI列は名前検索による暫定)、互換性方針(docs/compatibility-policy.md)、diagnoseExecutionとワーカーの規則一致を追加。残り: GUI列の人手確認、全物理の事前検査(P1)。実装中を維持。",
-      "lastUpdateEn": "2026-10-15 Added a machine-readable combinations list in getCapabilities (generated from the shared rule table), the GUI/API/MCP/Skill correspondence table (docs/operation-correspondence.md; names pinned by test, GUI column provisional from a name search), a compatibility policy (docs/compatibility-policy.md) and rule parity between diagnoseExecution and the worker. Remaining: manual review of the GUI column and all-physics preflight (P1). Stays building."
+      "lastUpdate": "2026-10-15 getCapabilitiesに組み合わせの機械可読一覧(共有規則表から生成)、GUI/API/MCP/Skill対応表(docs/operation-correspondence.md、名前のみテストで固定。GUI列は名前検索による暫定)、互換性方針(docs/compatibility-policy.md)、diagnoseExecutionとワーカーの規則一致を追加。残り: GUI列の人手確認、全物理の事前検査(P1)。実装中を維持。 2026-10-16追記: 対応表のGUI列をコードから再監査し(同一経路32・関連47・コネクタ専用42)、要素IDの実在をテストで検査。",
+      "lastUpdateEn": "2026-10-15 Added a machine-readable combinations list in getCapabilities (generated from the shared rule table), the GUI/API/MCP/Skill correspondence table (docs/operation-correspondence.md; names pinned by test, GUI column provisional from a name search), a compatibility policy (docs/compatibility-policy.md) and rule parity between diagnoseExecution and the worker. Remaining: manual review of the GUI column and all-physics preflight (P1). Stays building. Added 2026-10-16: the GUI column of the correspondence table was re-audited from the code (same path 32, related 47, connector only 42) and its element ids are checked by test."
     },
     {
       "id": "P1",
@@ -1357,8 +1357,8 @@
       "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-15 熱・音響の事前検査の既存コード13件をテストで固定し、物理別のphysicsCoverage(実装済み/残り)と単位の桁の警告(UNIT_MAGNITUDE_SUSPECT、警告のみ)を追加(37320b0で公開)。全物理の事前検査は未完了: メッシュ後の検査(連結成分の拘束、波長あたり要素数、拘束rank)と、流体・直交異方性・非線形・モーダルの桁規則が残る。検証中を維持。",
-      "lastUpdateEn": "2026-10-15 Pinned 13 existing thermal/acoustic preflight codes with tests and added per-physics physicsCoverage (implemented/remaining) and unit-magnitude warnings (UNIT_MAGNITUDE_SUSPECT, warning only); published at 37320b0. All-physics preflight is not complete: post-mesh checks (connected-component anchoring, elements per wavelength, constraint rank) and magnitude rules for fluid, orthotropic, nonlinear and modal inputs remain. Stays checking."
+      "lastUpdate": "2026-10-16 (更新) 熱・音響の事前検査の既存コード13件をテストで固定し、物理別のphysicsCoverage(実装済み/残り)と単位の桁の警告(UNIT_MAGNITUDE_SUSPECT、警告のみ)を追加(37320b0で公開)。全物理の事前検査は未完了: メッシュ後の検査(連結成分の拘束、波長あたり要素数、拘束rank)と、流体・直交異方性・非線形・モーダルの桁規則が残る。検証中を維持。 追記: 拘束rank・剛体モード検査は実メッシュ後の境界転送検査に追加済み(MESHBOUNDARYPREFLIGHT1)。残り: 連結成分の拘束、波長あたり要素数、流体・直交異方性・非線形・モーダルの桁規則、PREFLIGHT_CONTRACT_LIMITED。",
+      "lastUpdateEn": "2026-10-15 Pinned 13 existing thermal/acoustic preflight codes with tests and added per-physics physicsCoverage (implemented/remaining) and unit-magnitude warnings (UNIT_MAGNITUDE_SUSPECT, warning only); published at 37320b0. All-physics preflight is not complete: post-mesh checks (connected-component anchoring, elements per wavelength, constraint rank) and magnitude rules for fluid, orthotropic, nonlinear and modal inputs remain. Stays checking. Added: the constraint-rank / rigid-body check is part of the post-mesh boundary inspection (MESHBOUNDARYPREFLIGHT1). Remaining: connected-component anchoring, elements per wavelength, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, PREFLIGHT_CONTRACT_LIMITED."
     },
     {
       "id": "VIEWCOMPARE",
@@ -1727,7 +1727,7 @@
       "id": "MEASUREMENTHISTORY1",
       "title": "結果版に結び付く測定履歴をLLMから保存・再利用",
       "titleEn": "Retain and reuse result-bound point measurements through user LLMs",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "RESULTCONTROL1",
@@ -1735,11 +1735,11 @@
       ],
       "detail": "共通measurementApiとMCP6操作を追加。点・結果SHA・表示量/時刻/固有モード・測定値・暫定評価を保存。100件/300000 UTF8bytes、一覧/内容版を照合。履歴JSONのみ明示保存し、取込値は独立検証済みに昇格しない。",
       "detailEn": "Add shared measurementApi and six MCP methods. Retain point, result SHA, field/time/mode, values and provisional assessment. Enforce100 entries/300000 UTF8bytes and archive/item revisions. Explicit JSON persistence; imported values never become independently verified.",
-      "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。ケース同梱はCASEMEASUREMENTBUNDLE1で追加。履歴GUI・自動永続化は残す。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. Case bundling is added byCASEMEASUREMENTBUNDLE1. HistoryGUI and automatic persistence remain. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md",
-      "lastUpdate": "2026-10-15 再監査: 測定履歴系テスト成功。履歴GUIと自動永続化が残りchecking維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: measurement-history tests pass; history GUI and automatic persistence remain, so stays checking. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。ケース同梱はCASEMEASUREMENTBUNDLE1で追加。履歴GUI(#measurement-history)と結果版ごとのブラウザ内自動保存(IndexedDB、localStorage代替、100件/300,000バイト上限、検証付き読込)を追加し、実Chrome(localhost、2026-10-16)でGUI測定→保存→一覧→再読込後に同じ保存結果を表示すると復元されることを確認。再計算した結果は版が変わるため旧履歴は一覧に出ない。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. Case bundling is added byCASEMEASUREMENTBUNDLE1. HistoryGUI and automatic persistence remain. Published-HTTPS verification is tracked in PUBLICHTTPS1. The history GUI (#measurement-history) and per-result-revision automatic persistence in the browser (IndexedDB with localStorage fallback, 100 entries / 300,000 bytes, validated on load) were added; real Chrome on localhost (2026-10-16) confirmed GUI probe → save → list → restore after reload when the same stored result is displayed. A recomputed result has a new revision, so older history is not listed for it.",
+      "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md; docs/evidence/2026-10-16-measurement-history-gui-real-chrome.json; tests/ui-measurement-history.test.mjs",
+      "lastUpdate": "2026-10-16 履歴GUIと自動永続化を実装し、実ChromeでGUI測定→保存→再読込後の復元を確認(公開ab39d18に含まれる)。再計算では版が変わり履歴は戻らない点、localStorage代替・保存失敗・書出し/読込ボタンの実ブラウザ確認は未実施。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-16 Implemented the history GUI and automatic persistence; real Chrome confirmed GUI probe → save → restore after reload (included in published ab39d18). Caveats: a recomputed result has a new revision so history does not return; the localStorage fallback, storage failure and the export/import buttons were not exercised in a real browser. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "MEASUREMENTVERIFY1",
@@ -2566,8 +2566,8 @@
         "P1",
         "MOD1"
       ],
-      "lastUpdate": "2026-10-16 PR 40でmain、公開候補6429eebで27 PASS。実Chromeで確認し不具合1件を修正済み。拘束rank・剛体モードは別途追加中で本項目の範囲外。公開済みへ。",
-      "lastUpdateEn": "2026-10-16 merged in PR 40; published candidate 6429eeb passed 27 checks; confirmed in real Chrome with one defect found and fixed. Constraint rank and rigid-body modes are a separate addition outside this task. Moved to released."
+      "lastUpdate": "2026-10-16 PR 40でmain、公開候補6429eebで27 PASS。実Chromeで確認し不具合1件を修正済み。拘束rank・剛体モードは別途追加中で本項目の範囲外。公開済みへ。 2026-10-16追記: 拘束rank・剛体モードの検査(src/constraint-rank.js、rigidBodyフィールド、ANALYSIS_RIGID_BODY_MODE_FREE)を追加(ab39d18で公開)。節点の固定・変位拘束のみ対象、許容1e-6は保守的で未較正。",
+      "lastUpdateEn": "2026-10-16 merged in PR 40; published candidate 6429eeb passed 27 checks; confirmed in real Chrome with one defect found and fixed. Constraint rank and rigid-body modes are a separate addition outside this task. Moved to released. Added 2026-10-16: constraint-rank / rigid-body check (src/constraint-rank.js, rigidBody field, ANALYSIS_RIGID_BODY_MODE_FREE), published in ab39d18; covers nodal fixed/displacement supports only; the 1e-6 tolerance is conservative and uncalibrated."
     },
     {
       "id": "SELECTEDREFINEMENT1",
