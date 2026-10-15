@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T03:53:23.490Z",
+  "updatedAt": "2026-10-15T04:14:08.600Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1959,7 +1959,7 @@
       "id": "WAVECHANNELOBS1",
       "title": "周波数音響・掃引・流路の反復残差をLLMへ返す",
       "titleEn": "Expose harmonic/sweep acoustic and channel iteration observations to LLMs",
-      "status": "checking",
+      "status": "fixing",
       "category": "共通",
       "depends": [
         "P3",
@@ -1969,7 +1969,8 @@
       "detailEn": "Expose BiCGStab/channel-PCG recurrence residuals and acoustic sweep start/completion through existing jobEvents,declaring phase/solvePhase/frequency/residualKind without claiming independent true residuals or intermediate fields.",
       "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。",
       "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees.",
-      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json"
+      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json",
+      "lastUpdate": "2026-10-15独立監査: 受け入れ条件の既定Node24全体ゲートが未達(V8致命的停止、Node26成功は代替にならない)のため検証中から修正中へ戻す。RUNTIMEWASM1の根本原因が未解決である間は閉じない。"
     },
     {
       "id": "PROCESSISOLATION1",
@@ -2313,7 +2314,8 @@
       "detailEn": "Reject missing or inconsistent frames for explicit rotation controls; preserve coherent GUI planar descriptors.",
       "acceptance": "実API/MCPでframe無し回転拒否・元入力不変・GUI生成回転の保存保持、従来回転無し軸領域を検証。",
       "acceptanceEn": "Verify actual API/MCP rejection without mutation, saved GUI rotation preservation and legacy unrotated axial regions.",
-      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
+      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json; tests/planar-rotation-contract.test.mjs; tests/oblique-planar.test.mjs",
+      "lastUpdate": "2026-10-15独立監査: tests/planar-rotation-contract.test.mjs(2件)とoblique-planar(3件)が通る。証跡JSON自体の既定全体実行はV8致命的停止で未達のため、全体ゲート確認まで検証中を維持。"
     },
     {
       "id": "JOBEVENTBYTES1",
