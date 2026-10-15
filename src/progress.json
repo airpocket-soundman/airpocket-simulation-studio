@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T06:03:29.205Z",
+  "updatedAt": "2026-10-15T06:15:23.775Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1346,8 +1346,8 @@
       "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs",
-      "lastUpdate": "2026-10-15再監査: 関連試験が通る。全物理preflightは未実装のまま、全体件数も古いため検証中を維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: related tests pass. All-physics preflight still pending and the suite count is stale; remains checking. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 関連22件成功。全物理preflightが未実装のため検証中を維持(ライブ接続はPUBLICHTTPS1)。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: 22 related tests pass. All-physics preflight remains unimplemented, so stays checking (live transport is tracked in PUBLICHTTPS1). Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "VIEWCOMPARE",
@@ -1387,8 +1387,8 @@
       "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。全GUIジョブ統合は残る。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Full GUI job integration remains pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md; tests/browser-bridge-diagnostics.test.mjs",
-      "lastUpdate": "2026-10-15再判定: tests/browser-bridge.test.mjsを含む対象12件成功。公開HTTPSはPUBLICHTTPS1へ分離。実ブラウザ証跡ファイル未保存・全GUIジョブ統合の記述が残るためchecking維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: 12 related test files passed incl. browser-bridge.test.mjs. Public HTTPS split to PUBLICHTTPS1. Stays checking: no committed real-browser evidence file and full GUI job integration still stated open. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再々判定: 全GUIジョブ統合は実Chrome証跡guijobs-real-chrome-2で充足。切断継続の実Chrome確認と、編集/Worker解析/表示変更の専用実ブラウザ証跡が未保存のためchecking維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: full GUI job integration now covered by real-Chrome guijobs-real-chrome-2. Stays checking: real-Chrome disconnect continuity and a dedicated committed real-browser file for edit/Worker solve/view change are missing. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "PRINTMEASURE1",
@@ -1468,11 +1468,11 @@
       ],
       "detail": "結果版を照合し、表示量・保存時刻・モード・レイヤー・固定範囲・カメラを取得/変更。点測定は表示フレーム/モードを使用。",
       "detailEn": "Versioned field, stored time/mode, layer, fixed-range and camera reads/updates. Probes use the displayed frame/mode.",
-      "acceptance": "全体356件中353成功・3スキップ。実MCP/Chromeで固定範囲・カメラ再適用・時刻/モード測定・不正版拒否・日英凡例を確認。名前付き永続ビューとPNG/WebMのMCP化は残す。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "353 passed, three skipped of 356. Real MCP/Chrome verified range/camera replay, selected time/mode probes, revision refusal and localized legends. Named persisted views and MCP PNG/WebM remain pending. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
+      "acceptance": "実MCP/Chromeで固定範囲・カメラ再適用・表示量測定・不正版拒否を確認(証跡あり)。時刻/モード測定と日英凡例の実Chrome確認が残る。名前付き永続ビューとPNG/WebM出力は別タスク(NAMEDVIEWS1/BROWSEREXPORT1)で確認済み。公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "acceptanceEn": "Real MCP/Chrome verified range/camera replay, displayed-field probe and revision refusal (evidence committed). Real-Chrome verification of stored time/mode probes and localized legends remains. Named persisted views and PNG/WebM export are verified under NAMEDVIEWS1/BROWSEREXPORT1. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
       "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/evidence/2026-10-15-resultcontrol-real-chrome.json",
-      "lastUpdate": "2026-10-15 独立確認: 関連6ファイル38件成功、実Chrome+stdio MCPで固定範囲/カメラ/不正版拒否の記録あり。名前付き永続ビューとPNG/WebMのMCP化は未完了のためcheckingを維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: 6 related files, 38 pass; real Chrome + stdio MCP record for fixed range/camera/revision refusal. Named persisted views and MCP PNG/WebM remain unfinished, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 関連11ファイル63件成功、実Chrome 11/11(固定範囲/カメラ/不正版拒否/表示量測定)。名前付きビューと PNG/WebM は別タスクで実Chrome確認済み。時刻/モード測定と日英凡例の実Chrome証跡は未コミットのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: 11 related files, 63 pass; real Chrome 11/11 (range/camera/stale refusal/displayed-field probe). Named views and PNG/WebM now verified in real Chrome under other tasks. Real-Chrome evidence for stored time/mode probes and JA/EN legends is not committed, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "CASEOPS1",
@@ -1488,8 +1488,8 @@
       "acceptance": "実MCP/Chromeで一連の操作と古い版の削除拒否を確認。14単体テスト成功。ケース集のライブ入出力と表示状態永続化は未対応。",
       "acceptanceEn": "Real MCP/Chrome verified the lifecycle and stale-removal refusal; 14 unit tests passed. Live archive import/export and persisted display settings remain unfinished.",
       "evidence": "src/case-operations.js; tests/case-operations.test.mjs; docs/testing.md",
-      "lastUpdate": "2026-10-15再監査: case-operations単体は通る。ケース集ライブ入出力と表示状態永続化が未完のため検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: case-operations unit tests pass; live archive IO and persisted display settings still unfinished, so remains checking."
+      "lastUpdate": "2026-10-15 再監査: case-operations単体成功。ケース集入出力・表示状態は実Chrome(namedviews-real-chrome)で別作業が証明済みの可能性が高いが、本タスクの受入文が未更新のため検証中を維持。",
+      "lastUpdateEn": "2026-10-15 re-audit: case-operations tests pass. Live archive IO/display persistence is likely proven by other tasks' real-Chrome evidence (namedviews-real-chrome), but this task's acceptance text was not reconciled, so stays checking."
     },
     {
       "id": "BROWSEREXPORT1",
@@ -1541,8 +1541,8 @@
       "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。Node接続アダプターでの検証であり実画面・大規模性能測定は未完了。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser and large-case performance remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
       "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md; tests/browser-case-archive-session.test.mjs",
-      "lastUpdate": "2026-10-15 独立確認: 関連6ファイル38件成功(実stdio MCP/HTTP往復・拒否経路)。実画面での取込往復と大規模性能測定は証跡なしのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: 6 related files, 38 pass (real stdio MCP/HTTP round-trip, refusals). No real-screen archive round-trip or large-case performance evidence, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 関連テスト成功。実Chromeでのケース集往復と大規模性能の証跡なしのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: related tests pass. No real-Chrome archive round-trip or large-case performance evidence, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "ASSESSMENTAPI1",
@@ -1574,8 +1574,8 @@
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
       "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json",
-      "lastUpdate": "2026-10-15再判定: 受入文(原因検証・再試行成功は解決でない)が未達のためchecking維持。HTTPSと無関係。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: stays checking; acceptance (root-cause verification, retry success is not resolution) is unmet. Unrelated to HTTPS. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 原因検証が未達のためchecking維持。CIのNode24全体成功は根治の証明ではない。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: stays checking; root-cause verification is unmet. Passing CI on Node 24 does not prove a root fix. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1639,8 +1639,8 @@
       "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md; tests/print-import.test.mjs; tests/mcp-print-transfer-protocol.test.mjs; docs/evidence/2026-10-14-print-transfer.json",
       "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は未解決、実画面は未確認。強度推定・機器制御は含まない。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser unverified. No strength inference or hardware control. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "lastUpdate": "2026-10-15 独立確認: print-operations/mcp-print/browser-print-session等6ファイル32件成功。既知V8停止の未解決と実画面全経路の証跡不足によりchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: 6 print/case-bundle files, 32 pass. Known V8 fatal unresolved and no real-screen evidence for all print paths, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 印刷関連テスト成功、最大容量はNode証跡あり。実Chrome全経路の証跡なしのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: print tests pass; Node capacity evidence at documented max exists. No real-Chrome evidence for the print routes, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "GUIJOBS1",
@@ -1663,7 +1663,7 @@
       "id": "CATALOGAPPLY1",
       "title": "材料カタログの仮定と適用条件を共通操作へ統合",
       "titleEn": "Apply catalog materials with explicit assumptions and applicability",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P0",
@@ -1674,8 +1674,8 @@
       "evidence": "src/studio-api.js; src/material-catalog-ui.js; tests/material-catalog-operations.test.mjs; tests/mcp-catalog-apply.test.mjs; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/testing.md; docs/evidence/2026-10-14-catalog-apply.jpg; tests/material-catalog.test.mjs",
       "acceptance": "実MCPで保存・版競合・原子的失敗・材料根拠失効と非材料根拠保持を検証。実ローカル画面で必須範囲入力、日英表示、保存JSONと共通物性の一致を確認。公開画面の新操作は未確認。 最終対象29成功・全体459中456成功/3スキップ、ビルド成功。 最終配信物26項目成功（28.31秒）。",
       "acceptanceEn": "Real MCP verifies publication, revision/atomicity failures and invalidation of material confirmations while retaining other provenance. Actual local UI verifies required scope, JP/EN and exported/shared material equality. New public UI remains unverified. Final29 related tests passed; full suite456 passed/three skipped of459; build passed. Final26 distribution checks passed in28.31seconds.",
-      "lastUpdate": "2026-10-15再判定: mcp-catalog-apply・material-catalog-operations試験成功、実ローカル画面証跡(gui-jobs-catalog.json)あり。公開画面の新操作が未確認のためchecking維持(HTTPS接続条項そのものではない)。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: mcp-catalog-apply and material-catalog-operations passed; local real-UI evidence (gui-jobs-catalog.json) present. Stays checking because new public-UI operation is unverified (not itself the HTTPS-connection clause). Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再判定: 関連35件成功、実ローカル画面証跡あり。残る公開画面確認はPUBLICHTTPS1で追跡するため確認済みへ。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-judgment: 35 related tests pass with real local-UI evidence. The remaining public-screen check is tracked in PUBLICHTTPS1, so ready. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "PRINTTRANSFER1",
@@ -1727,8 +1727,8 @@
       "acceptance": "全体502中499成功・3スキップ。新18対象成功、299000bytes履歴の実MCP往復・743559bytes最大返信。実ローカルIAB/MCPで既存WASMケースの0.03999999999944816mmを保存/削除/再読込して全内容一致、旧一覧版を拒否。ビルド・配信物26項目・SKILL検証成功。ケース同梱はCASEMEASUREMENTBUNDLE1で追加。履歴GUI・自動永続化は残す。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "499passed/three skipped of502;18 new checks pass. RealMCP roundtrips299000byte archive with743559byte largest reply. Actual localIAB/MCP saves/removes/reimports existingWASM-case0.03999999999944816mm sample with complete equality and stale archive refusal. Build,26distribution checks andSKILL validation passed. Case bundling is added byCASEMEASUREMENTBUNDLE1. HistoryGUI and automatic persistence remain. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/measurement-history.js; tests/measurement-history.test.mjs; tests/measurement-result-integration.test.mjs; tests/browser-measurement-session.test.mjs; tests/mcp-measurement-history.test.mjs; docs/evidence/2026-10-14-measurement-history.json; docs/testing.md",
-      "lastUpdate": "2026-10-15再監査: measurement-history系4ファイルが通る。履歴GUIと自動永続化が残り検証中を維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: measurement-history test files pass; history GUI and automatic persistence remain, so remains checking. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 測定履歴系テスト成功。履歴GUIと自動永続化が残りchecking維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: measurement-history tests pass; history GUI and automatic persistence remain, so stays checking. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "MEASUREMENTVERIFY1",
@@ -1763,8 +1763,8 @@
       "acceptance": "新v2 core6件・関連35件・MCP2件成功。実IABで0/0/0→1/1/1取込、209414bytesのGUI/MCP4分割一致、v1で1/1/0→書出v2で1/1/1復元、円柱入力不変・保存結果/倍率25復元、日英を確認。初回全体は既知V8停止で1失敗。再試行523中520成功・3スキップ、ビルド・配信物26・SKILL成功。V8原因未解決。最大容量・全物理GUIは残す。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Six new core,35related and twoMCP tests pass. ActualIAB verifies0/0/0→1/1/1 import,209414byteGUI/MCP fourpage equality,v1→1/1/0 then exportedv2→1/1/1 restore, unchanged cylinder inputs, saved display/deform25 and JP/EN. Initial full suite had one knownV8 stop. Retry520passed/three skipped of523; build/26distribution/SKILL pass. V8 cause unresolved; maximum capacity and allphysicsGUI remain. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/case-view-bundle.js; src/measurement-history.js; src/named-result-views.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/testing.md; docs/evidence/2026-10-15-case-bundle-capacity-node.json; tests/case-bundle-capacity.test.mjs",
-      "lastUpdate": "2026-10-15 Node側で11種の結果(構造・熱・音響・モーダル・過渡音響・ストークス・流路・塑性・超弾性・疲労・破壊)を8ケース・16ビュー・100計測の最大構成で書出し→分割転送→取込→照合し、全件一致・超過拒否11件を確認(最大1.44MB、複製ケースのため物理的に別の結果ではない)。実画面での全結果種は未確認のため検証中を維持。公開HTTPSはPUBLICHTTPS1。",
-      "lastUpdateEn": "2026-10-15: in Node, 11 result kinds were exported, chunk-transferred, imported and verified at the maximum configuration (8 cases, 16 views, 100 measurements) with all matches and 11 over-limit refusals (largest 1.44 MB; cases are replicated outputs, not distinct physics). Real-UI coverage of every result kind is unverified, so it stays checking. Published HTTPS is tracked in PUBLICHTTPS1."
+      "lastUpdate": "2026-10-15 再監査: 関連21件成功、最大容量はNode側証跡あり。全結果種の実画面確認が未了のため検証中を維持。",
+      "lastUpdateEn": "2026-10-15 re-audit: 21 related tests pass; maximum capacity covered by Node-side evidence. Real-UI coverage of all result kinds is missing, so stays checking."
     },
     {
       "id": "HEADLESSLIFECYCLE1",
@@ -2145,8 +2145,8 @@
       "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gate未達。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
       "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0.",
       "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs",
-      "lastUpdate": "2026-10-15再判定: 契約関連試験(mcp-browser-contracts・browser-operation-*)成功。既定Node24全体gateは受入文どおり未達のためchecking維持。HTTPS条項なし。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: contract tests (mcp-browser-contracts, browser-operation-*) passed. Default Node24 full-suite gate stays open per acceptance text, so checking. No HTTPS clause. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再監査: 契約試験成功、実ブラウザ証跡あり。既定Node24全体gateはCIで成功だがローカルNode24で断続的V8 fatalあり。方針は所有者判断待ち。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-audit: contract tests pass, real-browser evidence exists. Default Node24 full gate passes in CI but local Node 24 intermittently hits the V8 fatal; policy awaits owner decision. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "EDITPREVIEW1",
@@ -2254,8 +2254,8 @@
       "acceptance": "repo/installed9files hash一致、UI設定/登録不変。synthetic150N previewで100N根拠との矛盾を検出しsource保持・未適用/未解析。SDK知識を補っておりSkill単独や全一巡の証明ではない。",
       "acceptanceEn": "Nine repository/installed files hash-match;UI metadata/server registration unchanged. Synthetic150N preview detects stale100N evidence,preserves source,and does not apply/solve. SDK knowledge supplemented execution;not proof of Skill-only or complete end-to-end behavior.",
       "evidence": "skills/airpocket-studio/SKILL.md; docs/evidence/2026-10-15-skill-synchronization.json; docs/evidence/2026-10-15-skill-forward-input-preview.json",
-      "lastUpdate": "2026-10-15: no HTTPS clause to waive; skill sync hashes and forward-input-preview evidence unchanged; Skill-only completion unproven.",
-      "lastUpdateEn": "2026-10-15: no HTTPS clause to waive; skill sync hashes and forward-input-preview evidence unchanged; Skill-only completion unproven."
+      "lastUpdate": "2026-10-15 再監査: repoと導入先のSKILL.mdは現在一致(42c964da)だが同期証跡のSHAが旧版(bba01f4a)のため更新が必要。Skill単独の完走も未証明で検証中を維持。",
+      "lastUpdateEn": "2026-10-15 re-audit: repo and installed SKILL.md now match (42c964da) but the synchronization evidence records an older SHA (bba01f4a) and needs refreshing; Skill-only completion remains unproven, so stays checking."
     },
     {
       "id": "MCPARGUMENTTYPES1",
@@ -2316,7 +2316,7 @@
       "id": "JOBRESULTEXPORT1",
       "title": "現在入力を変えず成功ジョブの完全結果を取得",
       "titleEn": "Retrieve complete successful job output without changing current input",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P3",
@@ -2328,8 +2328,8 @@
       "acceptance": "UI入力BのままjobAの保持出力を再構成・検証し、表示/編集せず、拒否/期限/切断/解放を確認。実Worker由来outputとJSON正規化を検証。保存後全比較とengine build identityは別条件。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Reconstruct/verify jobA while UI inputB remains unchanged; verify refusals,expiry,disconnect/release and actual Worker-output JSON normalization. Complete saved comparisons and engine build identity remain separate requirements. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/job-result-transfer.js; tests/job-result-transfer.test.mjs; tests/browser-job-result-transfer.test.mjs; docs/evidence/2026-10-15-job-result-export.json",
-      "lastUpdate": "2026-10-15: job-result-transfer and browser-job-result-transfer tests pass (Node); saved comparison, engine build identity and real-browser transfer unverified.",
-      "lastUpdateEn": "2026-10-15: job-result-transfer and browser-job-result-transfer tests pass (Node); saved comparison, engine build identity and real-browser transfer unverified."
+      "lastUpdate": "2026-10-15 再監査: job-result-transfer系テスト成功(Node、実Worker由来output・拒否/期限/切断/解放)。保存後全比較とengine build identityは受入文どおり別条件。実ブラウザ転送の専用証跡はないが受入条項に含まれない。",
+      "lastUpdateEn": "2026-10-15 re-audit: job-result-transfer tests pass (Node; Worker-derived output, refusals/expiry/disconnect/release). Saved comparisons and engine build identity are separate per acceptance. No dedicated real-browser transfer evidence, but the acceptance does not require it. Caveat: lastUpdate previously listed real-browser transfer as unverified; confirm the owner is content."
     },
     {
       "id": "RUNTIMEIDENTITY1",
@@ -2474,21 +2474,21 @@
       "id": "DEVINSIGHTS1",
       "title": "ステータス件数の履歴と製品完成度の推定",
       "titleEn": "Historical status counts and estimated product completion",
-      "status": "checking",
+      "status": "ready",
       "category": "開発管理",
       "detail": "Git実履歴の6状態グラフ、追加削除、表、日英と狭い画面。P0〜P6と残仕様の固定重みに基づく主観推定を観測値と分離。MCPから任意取得できる。",
       "detailEn": "Six-status Git history chart, additions/removals, table and JP/EN responsive UI. Separate fixed-weight P0–P6/backlog estimates from observations; optional MCP retrieval.",
       "acceptance": "同一配信候補の版・bytes・SHAを照合し、欠落を補完しない。推定根拠・未知・主観幅を明示。履歴/推定/MCPの拒否と互換性、実画面の日英・キーボード・狭幅、CI/公開配信を検証。",
       "acceptanceEn": "Verify candidate revision/bytes/SHA without filling missing history. Expose rubric, unknowns and subjective scenarios. Verify history/estimate/MCP refusal and compatibility, JP/EN keyboard/narrow UI and CI/deployment.",
       "evidence": "docs/progress-dashboard.md;src/product-estimate.js;tests/progress-history.test.mjs;tests/progress-insights-mcp.test.mjs;tests/published-progress.test.mjs;tests/published-history.test.mjs;docs/evidence/2026-10-15-progress-dashboard.json",
-      "lastUpdate": "2026-10-15 独立確認: progress-history/insights-mcp/published-progress等で成功(45+16件)、実画面の日英・キーボード・390px狭幅は記録あり。当該機能のCI実行は証跡なしのためchecking維持(公開配信の照合はPUBLICHTTPS1)。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: progress-history/insights-mcp/published-progress etc. pass (45 + 16); real-screen JP/EN, keyboard and 390px narrow recorded. No CI run evidence for this feature, so stays checking (published-delivery check goes to PUBLICHTTPS1). Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdate": "2026-10-15 再判定: 関連29件成功、実画面日英・キーボード・狭幅の証跡あり、全体試験はCI verifyで成功。公開配信の照合はPUBLICHTTPS1。なお手元Node24.11.1では断続的にV8 fatal(nodejs/node#66366)が出る。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
+      "lastUpdateEn": "2026-10-15 re-judgment: 29 related tests pass; real-screen JP/EN, keyboard and narrow evidence recorded; full suite green in CI verify. Published-delivery check is tracked in PUBLICHTTPS1. Note the intermittent local Node 24.11.1 V8 fatal (nodejs/node#66366). Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
     },
     {
       "id": "CASECOMPARISON1",
       "title": "保存ケースを同一点・生値で読取専用比較",
       "titleEn": "Read-only comparison of saved cases at the same point",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P4",
@@ -2498,11 +2498,11 @@
       ],
       "detail": "共通モジュールsrc/case-comparison.js、ブラウザ操作caseCompare、MCP studio_compare_casesを追加。既存の保存ケース1〜8件を同一グローバル点で生値（元単位）のまま比較し、モード/フレームは明示指定。実行時にlease/guardの鮮度を再確認し、応答は64KiB以下に制限。UIと保存データは変更しない。",
       "detailEn": "Add shared module src/case-comparison.js, browser caseCompare and MCP studio_compare_cases. Compare 1–8 existing saved cases at the same global point using raw values in original units, with explicit mode/frame. Recheck lease/guard freshness and bound responses to 64 KiB. UI and stored data are unchanged.",
-      "acceptance": "1〜8件・同一グローバル点・生値/単位・明示モード/フレームの比較、非互換理由、未知/破損/失効の全体拒否、lease鮮度再確認、64KiB上限を検証。全体スイートは未完了で、物理精度・同入力性・別メッシュ間の対応は保証しない。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "Verify 1–8 cases at one global point with raw values/units and explicit mode/frame, incompatibility reasons, whole-request rejection of unknown/corrupt/stale inputs, lease freshness rechecks and the 64 KiB bound. Full-suite remains incomplete; no claim of physical accuracy, equal inputs or cross-mesh correspondence. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
+      "acceptance": "1〜8件・同一グローバル点・生値/単位・明示モード/フレームの比較、非互換理由、未知/破損/失効の全体拒否、lease鮮度再確認、64KiB上限を検証。全体スイートはCI verifyで成功、実Chrome(localhost)で確認。物理精度・同入力性・別メッシュ間の対応は保証しない。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "Verify 1–8 cases at one global point with raw values/units and explicit mode/frame, incompatibility reasons, whole-request rejection of unknown/corrupt/stale inputs, lease freshness rechecks and the 64 KiB bound. Full suite passes in CI verify; real-Chrome localhost verified. No claim of physical accuracy, equal inputs or cross-mesh correspondence. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs; docs/evidence/2026-10-15-case-comparison-local-runtime.json; docs/evidence/2026-10-15-case-comparison-browser-qa.json",
-      "lastUpdate": "2026-10-15再監査: case-comparison系3ファイルが通り、実Chrome(localhost)証跡もある。全体スイート未完了のため検証中を維持。公開HTTPSはPUBLICHTTPS1へ分離。",
-      "lastUpdateEn": "2026-10-15 re-audit: three case-comparison test files pass and real-Chrome localhost evidence exists; full suite still incomplete so remains checking. Public HTTPS split to PUBLICHTTPS1."
+      "lastUpdate": "2026-10-15 再々監査: 比較3試験ファイル成功、実Chrome(localhost)証跡あり、全体スイートはCI verify(Node24)で毎回成功。ただしローカルNode24.11.1でV8 fatalが断続的に出る(nodejs/node#66366)。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-15 re-audit: three comparison test files pass, real-Chrome localhost evidence exists, full suite passes in CI verify (Node 24). Local Node 24.11.1 intermittently hits the V8 fatal (nodejs/node#66366). Published HTTPS is PUBLICHTTPS1."
     },
     {
       "id": "PUBLICHTTPS1",
