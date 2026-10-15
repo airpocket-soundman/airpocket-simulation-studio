@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15T08:15:18.022Z",
+  "summaryJa": "実Chromeで再読込・明示的ケース再取込後の保存ビュー全項目一致と、実解析中の入力ページ読取を確認。",
+  "summaryEn": "Real Chrome: all saved-view fields match after reload and explicit bundle reimport; bounded input read bracketed by a running solve.",
+  "runtimeSourceCommit": "a87982d948834dd03ea589a1c9f838e8d538ad70",
+  "publishedMainCommit": "a3b344c0692b5472b5c7058ed11f29833a869877",
+  "browser": "Chrome",
+  "browserVersion": null,
+  "relevantSourceHashes": [
+    {
+      "path": "src/named-view-ui.js",
+      "lfNormalizedSha256": "67884ac6c147e09db848c607820fe404f9683dd6850a7f3f7258e5e443e43c99",
+      "matchesPublishedMainAfterLFNormalization": true
+    },
+    {
+      "path": "src/named-result-views.js",
+      "lfNormalizedSha256": "e2f488896859f98c76645cbe57a18f1683e27a48e48a89466f68669b7084c2dd",
+      "matchesPublishedMainAfterLFNormalization": true
+    },
+    {
+      "path": "src/result-view-api.js",
+      "lfNormalizedSha256": "daf15313f6f03a931b58bdd86d4a4422b468e4d79d8f99d7b48992175bc22190",
+      "matchesPublishedMainAfterLFNormalization": true
+    },
+    {
+      "path": "src/case-bundle-ui.js",
+      "lfNormalizedSha256": "484e024cc019004dc8ab34480b94f0065ee73e6a5f23bcee140b28f2eeb705ce",
+      "matchesPublishedMainAfterLFNormalization": true
+    },
+    {
+      "path": "src/project-input-inspection.js",
+      "lfNormalizedSha256": "734c458107a437e3a0b11ddd2b3417fb83ad1cef7037b2332a1d6b11ab728627",
+      "matchesPublishedMainAfterLFNormalization": true
+    }
+  ],
+  "namedViews": {
+    "before": {
+      "schemaVersion": 1,
+      "phase": "before",
+      "date": "2026-10-15T08:06:48.463Z",
+      "target": "real Chrome on owned local synthetic page",
+      "fixture": {
+        "bytes": 108182,
+        "sha256": "sha256:0e50fd765c546786de7651b929a041d40f56feb8dcb3b46f91e3292427607c2a",
+        "synthetic": true,
+        "sourceFactoriesUsed": true
+      },
+      "freshPageCounts": {
+        "schemaVersion": 1,
+        "archiveRevision": "sha256:eb702a6fbf45e307819a9670a72945e7dab70f137e1817d4bc943ab48a9f5cdb",
+        "caseCount": 0,
+        "viewCount": 0,
+        "measurementCount": 0
+      },
+      "caseCount": 1,
+      "viewCount": 1,
+      "changedFromDefault": true,
+      "resultRevision": "sha256:06ede046709d1dd7d6fb26183f5ded7a86171c96e911927cc42b60c0b812aaed",
+      "result": {
+        "field": "stress",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1.25,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": {
+          "field": "stress",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "camera": {
+          "position": [
+            70,
+            50,
+            90
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 30
+        }
+      },
+      "setup": {
+        "clipEnabled": true,
+        "axis": 1,
+        "position": 5,
+        "flip": false,
+        "opacity": 0.7,
+        "meshCount": 1,
+        "hiddenParts": []
+      },
+      "namedView": {
+        "id": "synthetic-reload-view-1",
+        "name": "Synthetic reload check",
+        "result": {
+          "camera": {
+            "fov": 30,
+            "position": [
+              70,
+              50,
+              90
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "colorRange": {
+            "field": "stress",
+            "maximum": 10,
+            "minimum": 0
+          },
+          "deformScale": 1.25,
+          "field": "stress",
+          "frameIndex": null,
+          "modeIndex": null,
+          "section": true,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false
+        },
+        "resultRevision": "sha256:06ede046709d1dd7d6fb26183f5ded7a86171c96e911927cc42b60c0b812aaed",
+        "setup": {
+          "axis": 1,
+          "clipEnabled": true,
+          "flip": false,
+          "hiddenParts": [],
+          "meshCount": 1,
+          "opacity": 0.7,
+          "position": 5
+        }
+      },
+      "checks": {
+        "fullLiveResultStrictEqual": true,
+        "fullSetupStrictEqual": true,
+        "fullNamedViewJSONStringEqual": true,
+        "cameraZExactly90": true,
+        "clipInsideModel": true,
+        "bundleExportHashVerified": true,
+        "bundleJSONNormalizedRoundtripEqual": true
+      },
+      "export": {
+        "bytes": 108235,
+        "sha256": "sha256:995c04c4072910771d772e91887acbae8e06bc9ca8158dec260ca9bc24ebae6f",
+        "inputVersion": 1,
+        "outputVersion": 2,
+        "normalization": "GUI measurement adapter adds an empty measurement archive to legacy v1 input"
+      },
+      "limitations": [
+        "Local Chrome, not public HTTPS pairing.",
+        "Synthetic Node-solved fixture imported through actual browser MCP; no Skill-only or physical-accuracy claim."
+      ]
+    },
+    "after": {
+      "schemaVersion": 1,
+      "phase": "after",
+      "date": "2026-10-15T08:07:53.749Z",
+      "target": "real Chrome on owned local synthetic page",
+      "fixture": {
+        "bytes": 108182,
+        "sha256": "sha256:0e50fd765c546786de7651b929a041d40f56feb8dcb3b46f91e3292427607c2a",
+        "synthetic": true,
+        "sourceFactoriesUsed": true
+      },
+      "freshPageCounts": {
+        "schemaVersion": 1,
+        "archiveRevision": "sha256:eb702a6fbf45e307819a9670a72945e7dab70f137e1817d4bc943ab48a9f5cdb",
+        "caseCount": 0,
+        "viewCount": 0,
+        "measurementCount": 0
+      },
+      "caseCount": 1,
+      "viewCount": 1,
+      "changedFromDefault": true,
+      "resultRevision": "sha256:06ede046709d1dd7d6fb26183f5ded7a86171c96e911927cc42b60c0b812aaed",
+      "result": {
+        "field": "stress",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1.25,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": {
+          "field": "stress",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "camera": {
+          "position": [
+            70,
+            50,
+            90
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 30
+        }
+      },
+      "setup": {
+        "clipEnabled": true,
+        "axis": 1,
+        "position": 5,
+        "flip": false,
+        "opacity": 0.7,
+        "meshCount": 1,
+        "hiddenParts": []
+      },
+      "namedView": {
+        "id": "synthetic-reload-view-1",
+        "name": "Synthetic reload check",
+        "result": {
+          "camera": {
+            "fov": 30,
+            "position": [
+              70,
+              50,
+              90
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "colorRange": {
+            "field": "stress",
+            "maximum": 10,
+            "minimum": 0
+          },
+          "deformScale": 1.25,
+          "field": "stress",
+          "frameIndex": null,
+          "modeIndex": null,
+          "section": true,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false
+        },
+        "resultRevision": "sha256:06ede046709d1dd7d6fb26183f5ded7a86171c96e911927cc42b60c0b812aaed",
+        "setup": {
+          "axis": 1,
+          "clipEnabled": true,
+          "flip": false,
+          "hiddenParts": [],
+          "meshCount": 1,
+          "opacity": 0.7,
+          "position": 5
+        }
+      },
+      "checks": {
+        "fullLiveResultStrictEqual": true,
+        "fullSetupStrictEqual": true,
+        "fullNamedViewJSONStringEqual": true,
+        "cameraZExactly90": true,
+        "clipInsideModel": true,
+        "bundleExportHashVerified": true,
+        "bundleJSONNormalizedRoundtripEqual": true
+      },
+      "export": {
+        "bytes": 108235,
+        "sha256": "sha256:995c04c4072910771d772e91887acbae8e06bc9ca8158dec260ca9bc24ebae6f",
+        "inputVersion": 1,
+        "outputVersion": 2,
+        "normalization": "GUI measurement adapter adds an empty measurement archive to legacy v1 input"
+      },
+      "limitations": [
+        "Local Chrome, not public HTTPS pairing.",
+        "Synthetic Node-solved fixture imported through actual browser MCP; no Skill-only or physical-accuracy claim."
+      ]
+    },
+    "allFieldsEqualAcrossReload": true
+  },
+  "inputInspection": {
+    "busy": {
+      "schemaVersion": 1,
+      "date": "2026-10-15T08:14:46.226Z",
+      "target": "owned local real Chrome synthetic model",
+      "startState": "running",
+      "startSettled": false,
+      "endState": "running",
+      "endSettled": false,
+      "inputRevisionUnchanged": true,
+      "busyPageEqualIdle": true,
+      "page": {
+        "schemaVersion": 1,
+        "revision": "sha256:e44f1832e344809adf62bc21fb5b1440eb0f562d4962d2ab52cf5c1deeb4f2a0",
+        "section": "conditions",
+        "pointer": "/conditions",
+        "exists": true,
+        "units": {},
+        "limitations": [
+          "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+          "Hashes cover canonical JSON values, not original source-file bytes.",
+          "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+          "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+          "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+        ],
+        "descriptor": {
+          "pointer": "/conditions",
+          "type": "array",
+          "length": 2,
+          "omitted": true,
+          "sha256": "sha256:eb5e7499f244f7e8fd757846a73daec754b5b709501251f9835a853b320f43f0",
+          "hashBasis": "canonical-json"
+        },
+        "page": {
+          "offset": 0,
+          "limit": 1,
+          "total": 2,
+          "nextOffset": 1,
+          "entries": [
+            {
+              "pointer": "/conditions/0",
+              "type": "object",
+              "keyCount": 4,
+              "omitted": true,
+              "sha256": "sha256:0e863b302e67da44081d2e7a6743e407ec49daebfd72c65b1b91c11232896b00",
+              "hashBasis": "canonical-json"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Local synthetic QA, not public HTTPS pairing.",
+    "Explicit bundle reimport after reload; no automatic persistence claim.",
+    "Browser version unavailable.",
+    "Canonical JSON revision is not original source-file identity.",
+    "Older runtime does not verify new Worker transport.",
+    "Relevant source files match after CRLF to LF normalization; not a byte-identical full runtime claim."
+  ]
+}
