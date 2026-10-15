@@ -2,7 +2,7 @@
 
 English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 
-**これは計画であり、未実装である。** Node側の測定は[performance-measurement.md](performance-measurement.md)(`scripts/perf-measure.mjs`)にある。本書は、PERF1が求める「ブラウザでのメモリ・時間・中止応答」を測る`scripts/perf-browser.mjs`の設計を定める。実装前は、ブラウザの値について何も主張しない。得られる値は測定値であり、対応規模の上限や保証ではない。
+**状態: スクリプト実装済み、実ブラウザでの測定は未実施。** `scripts/perf-browser.mjs`(コネクター経由、テストは偽コネクター)は実装済みだが、実ブラウザの値はまだ無い。以下の「方式」はCDP/タブAPI前提の当初設計で、実装はstdioコネクター(`jobStatus`/`jobEvents`/`cancelJob`)経由に変更した(ページ内`performance.now()`ではなくホスト側の観測時刻、メモリはオペレーター貼付けの`window.__perfProbe`で任意取得)。使い方は[performance-measurement.md](performance-measurement.md)。旧記述: Node側の測定は[performance-measurement.md](performance-measurement.md)(`scripts/perf-measure.mjs`)にある。本書は、PERF1が求める「ブラウザでのメモリ・時間・中止応答」を測る`scripts/perf-browser.mjs`の設計を定める。実装前は、ブラウザの値について何も主張しない。得られる値は測定値であり、対応規模の上限や保証ではない。
 
 ## 目的と範囲
 

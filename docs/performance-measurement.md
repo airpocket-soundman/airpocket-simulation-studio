@@ -34,6 +34,22 @@ node scripts/perf-measure.mjs --list
 
 `.qa/`はgit管理外である。レポートは`schemaVersion: 1`、`scope: "node-worker-wasm-cpu; not browser, not GPU, not network"`を持つ。失敗したケースは`status: "failed"`と`error`を記録し、終了コードは1になる。テスト`tests/perf-measure.test.mjs`は最小ケースでスキーマと必須項目のみを検証し、時間の閾値は持たない。
 
+## ブラウザ側の測定 (`scripts/perf-browser.mjs`、実装済み・実ブラウザ測定は未実施)
+
+localhost上の実ページを、stdioコネクター(`node scripts/studio-mcp.mjs --browser-origin=<origin>`)経由で駆動する。**localhost、127.0.0.1、[::1]以外のoriginは拒否する。** 測定値であり上限や保証ではない。実ブラウザの値は未取得で、PERF1は未完了のままである。
+
+```
+node scripts/perf-browser.mjs [--origin http://127.0.0.1:5174] [--out .qa/perf-browser-report.json] [--repeats 3] [--cases structural-tiny,structural-medium,structural-fine] [--timeout-ms 300000] [--pair-timeout-ms 600000]
+node scripts/perf-browser.mjs --print-probe        # メモリ用プローブを表示
+node scripts/perf-browser.mjs --merge-memory <probe.json> --out .qa/perf-browser-report.json
+```
+
+手順(オペレーター): (1) 開発サーバーを起動し専用プロファイル・専用タブで`<origin>/?lang=en`を開き、10x10x40 mm直方体と測定する物理の設定を読み込む。(2) 任意のメモリ測定: DevToolsに`--print-probe`のスニペットを貼る(`window.__perfProbe`が1秒間隔で`measureUserAgentSpecificMemory`(クロスオリジン分離時のみ)または`performance.memory`を記録する)。(3) 対話端末で上記コマンドを実行する。端末に出るendpointとペアリングコードをアプリの接続UIに入力し、**inspectとanalyzeのscopeだけ**を許可する。コードは端末にのみ表示され、ファイル・レポート・ログには書かれない(stdoutが端末でない場合は表示しない)。(4) セッションが現れると自動で測定が始まる。完了までページを操作しない。(5) メモリ: 完了後に`copy(__perfProbe.report())`の内容を`.qa/probe.json`に保存し、`--merge-memory`で取り込む。プローブが無ければレポートの`memory`は`null`、`memoryReason`は`probe-absent...`となる(測定していないと明記する)。
+
+ケースごとに入力リビジョンを固定し、`startJob`(options.sizeはケースのメッシュサイズ)を冷間1回・温間`--repeats`回行い、`jobStatus`(`executionSettled`)がタイムアウト内に決着するのを待つ。段階時間は`jobEvents`の受信時刻から求める。中止は`cancelJob`を(a)最初のイベント後、(b)温間総時間の中央値の50%経過時点で各`--repeats`回要求し、要求から決着(終端状態かつ`executionSettled`)の観測までの遅延を記録する(ポーリング間隔`--poll-ms`、既定50 msの粒度を含む)。その後に再解析が成功するか(`recoveredAfterCancel`)も記録する。決着しないジョブはケースを`failed`(`timedOut`)とし、終了コードは1になる。物理の種類(熱・音響)はページに読み込まれた入力に依存し、スクリプトは検証しない: `--cases thermal-steady`は熱の設定を読み込んでから実行する。
+
+レポートは`schemaVersion: 1`、`scope: "browser via connector; localhost; real browser"`、リビジョン、ブラウザUA(inspectが返さない場合はプローブ由来、無ければ`null`)、ケースごとの`cold`/`warm`/`cancel`/`memory`を持つ。時間はホストが接続経由で観測した値でありページ内の`performance.now()`ではない。GPU・ネットワーク・他ブラウザ・メモリ上限は測定しない。テスト`tests/perf-browser.test.mjs`は偽コネクターでスキーマ・拒否・タイムアウト・トークン非出力を検証する。
+
 ## 解釈上の注意
 
 レポートの値は、その環境・その時点のビルドでの測定結果であり、対応規模の上限、性能目標、保証として扱わない。対応規模の決定にはブラウザ測定を含む後続作業が必要である。ここの数値をドキュメントや画面に保証として書かない。
