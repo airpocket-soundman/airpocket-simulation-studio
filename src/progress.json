@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T04:57:57.570Z",
+  "updatedAt": "2026-10-15T05:02:59.709Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1511,7 +1511,7 @@
       "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。ケース同梱はCASEVIEWBUNDLE1で追加。自動永続化・異なる結果の同期は残す。",
       "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. CASEVIEWBUNDLE1 adds case bundling. Automatic persistence and cross-result synchronization remain unfinished.",
       "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-namedviews-real-chrome.json",
-      "lastUpdate": "2026-10-15: named-result-views/browser-named-view-sessionの試験成功。実Chrome証跡(namedviews-real-chrome.json、status partial)で保存/適用/拒否/入出力/ケース同梱復元を確認したが、復元ビューの厳密一致は1 ULP差で失敗、不正カメラ・削除・日英・GUIパネルはChrome未確認。",
+      "lastUpdate": "2026-10-15実Chrome証跡で見つかった復元値の1ULPずれ(カメラz 89.99999999999999)をresult-view-apiで12桁正準化して修正(単体テストは修正前に失敗・修正後に成功を確認)。実Chromeでの再確認、GUIパネル・削除・16件上限・自動保存は未了のため検証中を維持。",
       "lastUpdateEn": "2026-10-15: named-result-views and browser-named-view-session tests pass; real-Chrome evidence (2026-10-15-namedviews-real-chrome.json, status partial) confirms save/apply/refusals/export-import/case-bundle restore, but strict equality of restored view failed by 1 ULP and invalid-camera, remove, localization and GUI panel were not exercised in Chrome."
     },
     {

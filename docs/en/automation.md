@@ -80,7 +80,7 @@ The server binds only 127.0.0.1 and checks Origin, Host and Bearer credentials. 
 - Analysis: `startJob({inputRevision,requestId,operation,options})`, `cancelJob({jobId})`, `releaseJob({jobId})`, `showJob({jobId,name})`. Showing a solved result creates a case only when its input revision matches; mesh-only display is unsupported.
 - View: `getView`/`setView` expose section/opacity/part settings; result cameras use the result-view API below; image/video export uses the jobs described below.
 
-At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, all GUI-route monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
+At most 16 commands are pending, with a 15-second reply timeout. A timeout does not prove non-execution: inspect before retrying mutations. Timeout errors (code BROWSER_COMMAND_TIMEOUT, message unchanged) carry `delivered:true|false`, exposed over MCP as `structuredContent.error.delivered`: `false` means the browser never fetched the command, so retrying is safe; `true` means it was handed to the page but no reply arrived, so inspect state before retrying. Local Chrome and real MCP verified edit→Worker solve→events→result display→0.04 mm probe→view change→disconnect. Restart recovery, all GUI-route monitoring and public HTTPS-to-loopback connectivity/permissions remain unverified.
 
 ### Single-file browser connector distribution (artifact verified, pairing unverified)
 

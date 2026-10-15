@@ -64,3 +64,12 @@ test('display probes use selected stored acoustic frames and modal shapes with e
 });
 
  test('finite camera coordinates with overflowing derived geometry are refused atomically',async()=>{const h=harness(),s=await h.api.get(),before=h.state;await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{camera:{position:[1e308,1e308,1e308],target:[-1e308,-1e308,-1e308],up:[0,1,0],fov:40}}}),/degenerate/);assert.deepEqual(h.state,before);});
+
+test('camera float drift and colorRange key order are canonicalized on read',async()=>{
+ const h=harness();
+ const drift={field:'temperature',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:true,colorRange:{maximum:10,field:'temperature',minimum:0},camera:{position:[70.00000000000001,50,89.99999999999999],target:[5,5,20.000000000000004],up:[0,1,0],fov:30}};
+ const api=createResultViewApi({getAnalysis:()=>h.output,get:()=>structuredClone(drift),set:()=>{}});
+ const s=(await api.get()).state;
+ assert.equal(JSON.stringify(s.camera),'{"position":[70,50,90],"target":[5,5,20],"up":[0,1,0],"fov":30}');
+ assert.equal(JSON.stringify(s.colorRange),'{"field":"temperature","minimum":0,"maximum":10}');
+});

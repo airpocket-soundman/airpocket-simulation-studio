@@ -47,7 +47,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
    if(!s.scopes.includes(scope)){count('scopeRefused');return Promise.reject(fail('Browser permission scope refused','BROWSER_SCOPE_REFUSED'));}
    if(s.commands.size>=16)return Promise.reject(fail('Browser command limit reached'));
    if(JSON.stringify(args).length>500000)return Promise.reject(fail('Command exceeds size limit'));
-   return new Promise((resolve,reject)=>{const id=randomUUID(),timer=setTimeout(()=>{s.commands.delete(id);count('commandTimeouts');reject(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'));},timeoutMs);s.commands.set(id,{id,method,args,resolve,reject,timer,delivered:false,expiresAt:now()+timeoutMs});});
+   return new Promise((resolve,reject)=>{const id=randomUUID(),command={id,method,args,resolve,reject,timer:null,delivered:false,expiresAt:now()+timeoutMs};command.timer=setTimeout(()=>{s.commands.delete(id);count('commandTimeouts');reject(Object.assign(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'),{delivered:command.delivered}));},timeoutMs);s.commands.set(id,command);});
   },
   async close(){closed=true;clearInterval(sweep);for(const id of sessions.keys())remove(id,'Bridge stopped');await new Promise(resolve=>server.close(resolve));}
  };

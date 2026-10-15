@@ -14,7 +14,7 @@ export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-
    else if(message.method==='ping')result={};
    else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});
    else if(message.method==='tools/list')result={tools};
-   else if(message.method==='tools/call'){try{const value=await callTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
+   else if(message.method==='tools/call'){try{const value=await callTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(typeof error.delivered==='boolean'?{delivered:error.delivered}:{}),...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
    else if(message.method.startsWith('notifications/'))return;
    else throw Object.assign(Error('Method not found'),{code:-32601});
    if(hasId)send({jsonrpc:'2.0',id:message.id,result});
