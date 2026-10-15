@@ -1,0 +1,69 @@
+{
+ "task": "CADUPDATEAPI1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "8ea074ae981c470a4e47e0868057afe3384c490a",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; scopes inspect/edit/analyze/view; own new tab",
+  "fixture": "tests/fixtures/cad-update-reference.step (15,832 bytes; 10x10x40 mm box, 6 faces)",
+  "supply": "no file chooser: the STEP bytes were sent to the page through the connector inputImportBegin/Write/Commit (OCCT WASM import in the page); the replacement project JSON came from the Node tool studio_import_project on the same STEP (positions already exact Float32) with kind:\"cad\" added to the mesh, passed as the previewCadUpdate/applyCadUpdate replacement argument"
+ },
+ "checks": [
+  {
+   "name": "Real STEP imported in the page via inputImport transfer (no file chooser)",
+   "passed": true,
+   "detail": "15,832 bytes with sha256 declared, one chunk, commit returned new revision sha256:22a16182... and a project named \"ev5 CAD update reference\" with 1 mesh"
+  },
+  {
+   "name": "Conditions created on CAD faces through edit (selectCadFace + addCondition)",
+   "passed": true,
+   "detail": "fixed on the z=0 face, force 100 N on the z=40 face; revision sha256:49b78899..."
+  },
+  {
+   "name": "previewCadUpdate with an identical STEP-derived replacement",
+   "passed": true,
+   "detail": "matched 2, pending 0; reports fixed/force status matched; replacementRevision sha256:420c4970...; schemaVersion 1; the input revision was unchanged after all previews"
+  },
+  {
+   "name": "previewCadUpdate with a changed replacement (top face moved from z=40 to z=50)",
+   "passed": true,
+   "detail": "matched 1, pending 1: fixed matched, force needs-reselection reason missing-face"
+  },
+  {
+   "name": "previewCadUpdate with renumbered face ids (+100) still matches by geometry",
+   "passed": true,
+   "detail": "matched 2, pending 0 (matching is geometric, not by face id)"
+  },
+  {
+   "name": "applyCadUpdate commits the previewed replacement with both revisions",
+   "passed": true,
+   "detail": "applied the z=50 replacement with expectedRevision sha256:49b78899... and expectedReplacementRevision sha256:e9f91992...; response previousRevision/revision sha256:73c17fcb...; in-page studioApi.exportProject() shows max z 50, fixed condition remapped to triangles [8,9], force condition regions []; replaying the same apply failed \"Project revision conflict.\""
+  },
+  {
+   "name": "Stale input revision, stale replacement revision refused",
+   "passed": true,
+   "detail": "applyCadUpdate with wrong expectedRevision -> \"Project revision conflict.\"; with wrong expectedReplacementRevision -> \"Replacement revision conflict.\"; project revision unchanged after both"
+  },
+  {
+   "name": "Browser replacement validation: non-Float32 positions and missing kind refused",
+   "passed": true,
+   "detail": "positions[0]=0.1 -> \"Browser CAD replacement positions must be exact finite Float32 values; no silent rounding is allowed.\"; mesh without kind -> \"Browser CAD replacement meshes require kind cad and only positions, faceIds, kind, sourceHash.\""
+  },
+  {
+   "name": "Unresolved region blocks calculation after the update",
+   "passed": true,
+   "detail": "startJob on the updated input started and then failed with \"Resolve CAD update regions before analysis\""
+  }
+ ],
+ "observations": [
+  "The Node studio_import_project output mesh has only positions and faceIds; the browser path additionally requires kind:\"cad\", which had to be added by hand to the replacement. Confirm whether that is intended for LLM callers.",
+  "Provenance reset (existing evidence entries returned to unconfirmed) was not checked because the test project had no inputProvenance entries."
+ ],
+ "notVerified": [
+  "Published HTTPS page (PUBLICHTTPS1) - localhost only",
+  "Only a 6-face box fixture was used; a complex STEP and the 500,000-character live command limit were not exercised",
+  "Provenance/assumption reset after apply (no entries existed)",
+  "The GUI CAD-update panel itself (button flow) was not clicked, only the connector methods and the page state"
+ ]
+}
