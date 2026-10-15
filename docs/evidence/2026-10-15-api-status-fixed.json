@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15T08:24:19.198Z",
+  "sourceRevision": "6d417169cb96bc1209a22f205eda5ec1ae8ac4e6",
+  "target": "real Chrome owned local synthetic page",
+  "job": {
+    "state": "succeeded",
+    "executionSettled": true,
+    "operation": "elastic"
+  },
+  "progressEvents": [
+    {
+      "type": "progress",
+      "message": "Simulation modules loaded",
+      "stage": "preparation"
+    },
+    {
+      "type": "progress",
+      "message": "Generating volume mesh…",
+      "stage": "progress"
+    },
+    {
+      "type": "progress",
+      "stage": "mesh"
+    },
+    {
+      "type": "progress",
+      "message": "Transferring boundary regions…",
+      "stage": "progress"
+    },
+    {
+      "type": "progress",
+      "message": "Solving linear elasticity…",
+      "stage": "progress"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "iteration"
+    },
+    {
+      "type": "progress",
+      "stage": "observation-transport"
+    }
+  ],
+  "displayedResultUnchanged": true,
+  "inputRevisionUnchanged": true,
+  "limitations": [
+    "Local synthetic QA, not public HTTPS or physical accuracy verification.",
+    "Browser version unavailable."
+  ],
+  "summaryJa": "実ChromeでAPI解析後も保存結果・入力・GUI状態表示が変わらず、ジョブ進捗が取得できることを確認。",
+  "summaryEn": "Real Chrome confirms an API solve preserves the saved result, input and GUI status while keeping job progress observable.",
+  "guiStatus": {
+    "before": "保存時の入力と結果を表示しています。",
+    "after": "保存時の入力と結果を表示しています。",
+    "equal": true
+  },
+  "cleanup": {
+    "pairedSessionsZero": true,
+    "ownedServicesStopped": true,
+    "privateConnectionFileRemoved": true,
+    "tabClosed": true
+  },
+  "screenshot": {
+    "path": "docs/evidence/2026-10-15-api-status-fixed.png",
+    "sha256": "99cb12f9624beea84484a38efc08e4bc3df9c85a7058788283d5bacdbf917f3c"
+  }
+}
