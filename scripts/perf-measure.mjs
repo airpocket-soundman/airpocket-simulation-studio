@@ -1,5 +1,5 @@
 // Node-side performance measurement harness (PERF1/P2). See docs/performance-measurement.md.
-// Usage: node scripts/perf-measure.mjs [--out <file>] [--repeats <n>] [--cases <id,id|all>] [--list]
+// Usage: node scripts/perf-measure.mjs [--out <file>] [--repeats <n>] [--cases <id,id|all>] [--cancel|--no-cancel] [--list]
 // Scope: Node worker_threads + WASM on CPU only. It says nothing about browsers, WebGPU, network or transfer size.
 import {execFileSync, spawnSync} from 'node:child_process';
 import {mkdirSync, writeFileSync} from 'node:fs';
@@ -78,6 +78,60 @@ async function runOnce(project, size) {
   };
 }
 
+// Cancellation: abort via the AbortSignal analyzeProject accepts (the Node counterpart of the Worker client's cancel).
+// Latency = abort() call to promise settlement; settlement happens only after worker.terminate() resolved.
+export const CANCEL_DEFAULT_CASES = ['structural-medium', 'thermal-steady'];
+export const CANCEL_STATES = ['cancelled', 'completed-before-cancel', 'error'];
+const CANCEL_EXIT_TIMEOUT_MS = 240000;
+async function cancelOnce(project, size, trigger, delayMs) {
+  const {analyzeProject} = await import('./headless-analysis.mjs');
+  const controller = new AbortController();
+  let abortedAt = null, firedAfterMs = null;
+  const t0 = performance.now();
+  const abort = () => { if (abortedAt === null) { abortedAt = performance.now(); firedAfterMs = abortedAt - t0; controller.abort(); } };
+  const timer = trigger === 'half-warm-total' ? setTimeout(abort, delayMs) : null;
+  let state, message = null;
+  try {
+    await analyzeProject(project, {size}, 'elastic', {observe: true, signal: controller.signal, onEvent: () => { if (trigger === 'first-event') abort(); }});
+    state = 'completed-before-cancel';
+  } catch (e) { message = e?.message ?? String(e); state = /Calculation cancelled/.test(message) ? 'cancelled' : 'error'; }
+  const settledAt = performance.now();
+  clearTimeout(timer);
+  return {trigger, state, requestedAfterMs: firedAfterMs, latencyMs: abortedAt === null ? null : settledAt - abortedAt, totalMs: settledAt - t0, ...(state === 'error' ? {error: message} : {})};
+}
+async function cancelChildMain(id, repeats) {
+  const c = CASES[id];
+  await runOnce(c.build(), c.size); // warm-up so baseline and cancel runs are warm
+  const base = [];
+  for (let i = 0; i < repeats; i++) base.push((await runOnce(c.build(), c.size)).totalMs);
+  const baselineMs = median(base), runs = [];
+  for (const trigger of ['first-event', 'half-warm-total']) for (let i = 0; i < repeats; i++) runs.push(await cancelOnce(c.build(), c.size, trigger, baselineMs / 2));
+  const usage = process.resourceUsage();
+  process.stdout.write('\nPERF_CANCEL ' + JSON.stringify({baselineWarmTotalMs: baselineMs, runs, maxRssKiB: usage.maxRSS}) + '\n');
+  // No process.exit: a clean natural exit is itself the release check (the parent enforces a timeout).
+}
+function summarizeCancel(runs, trigger) {
+  const rs = runs.filter(r => r.trigger === trigger), lat = rs.map(r => r.latencyMs).filter(Number.isFinite);
+  const states = {};
+  for (const r of rs) states[r.state] = (states[r.state] ?? 0) + 1;
+  return {n: rs.length, states, latencyMs: lat.length ? {median: r3(median(lat)), min: r3(Math.min(...lat)), max: r3(Math.max(...lat)), n: lat.length} : null,
+    requestedAfterMs: rs.length && rs.every(r => Number.isFinite(r.requestedAfterMs)) ? r3(median(rs.map(r => r.requestedAfterMs))) : null};
+}
+function measureCancel(id, repeats) {
+  const started = performance.now();
+  const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--child-cancel', id, '--repeats', String(repeats)], {cwd: REPO, encoding: 'utf8', maxBuffer: 1 << 28, timeout: CANCEL_EXIT_TIMEOUT_MS, stdio: ['ignore', 'pipe', 'pipe']});
+  const timedOut = child.error?.code === 'ETIMEDOUT';
+  const line = (child.stdout ?? '').split('\n').find(l => l.startsWith('PERF_CANCEL '));
+  const base = {note: 'Node-side only: AbortSignal on analyzeProject (worker_threads); browser cancel response is NOT measured', exitTimeoutMs: CANCEL_EXIT_TIMEOUT_MS};
+  if (!line) return {...base, status: 'failed', processReleased: false, error: (timedOut ? 'child did not exit within timeout' : (child.stderr ?? '').trim().split('\n').slice(-3).join(' | ')) || 'no result'};
+  const data = JSON.parse(line.slice('PERF_CANCEL '.length));
+  return {...base, status: 'ok', repeats, baselineWarmTotalMs: r3(data.baselineWarmTotalMs),
+    triggers: {'first-event': summarizeCancel(data.runs, 'first-event'), 'half-warm-total': {...summarizeCancel(data.runs, 'half-warm-total'), note: 'abort requested at 50% of the median warm total time measured earlier in this child'}},
+    runs: data.runs.map(r => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, typeof v === 'number' ? r3(v) : v]))),
+    processReleased: child.status === 0 && !timedOut, childExitCode: child.status, childWallMs: r3(performance.now() - started),
+    peakRssMiB: r3(data.maxRssKiB / 1024), peakRssNote: 'ru_maxrss of the dedicated cancel child process'};
+}
+
 // Child mode: one process per case so ru_maxrss is that case's peak. Prints one JSON line on stdout.
 async function childMain(id, repeats) {
   const c = CASES[id];
@@ -103,7 +157,7 @@ function summarize(runs) {
   return out;
 }
 
-export async function measure({cases = Object.keys(CASES), repeats = 3} = {}) {
+export async function measure({cases = Object.keys(CASES), repeats = 3, cancel = 'default'} = {}) {
   const results = [];
   for (const id of cases) {
     const c = CASES[id];
@@ -114,13 +168,15 @@ export async function measure({cases = Object.keys(CASES), repeats = 3} = {}) {
       continue;
     }
     const data = JSON.parse(line.slice('PERF_RESULT '.length));
+    const doCancel = cancel === 'all' || (cancel === 'default' && CANCEL_DEFAULT_CASES.includes(id));
     const rounded = data.runs.map(r => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, typeof v === 'number' ? r3(v) : v])));
     const cold = rounded[0], warm = rounded.slice(1);
     results.push({
       id, physics: c.physics, meshSize: c.size, status: 'ok', mesh: cold.mesh, resultKind: cold.resultKind, repeats,
       cold, warm: {runs: warm, summary: summarize(warm)},
       peakRssMiB: r3(data.maxRssKiB / 1024),
-      peakRssNote: 'process-wide ru_maxrss of a dedicated child process for this case (includes Node, worker thread and WASM memory)'
+      peakRssNote: 'process-wide ru_maxrss of a dedicated child process for this case (includes Node, worker thread and WASM memory)',
+      ...(doCancel ? {cancel: measureCancel(id, repeats)} : {})
     });
   }
   return {
@@ -130,6 +186,7 @@ export async function measure({cases = Object.keys(CASES), repeats = 3} = {}) {
     notes: [
       'Measurements, not support limits or guarantees.',
       'cold = first run in a fresh Node process; warm = later runs in the same process (each still spawns a new Worker).',
+      'cancel block (only for cancel-measured cases): Node-side AbortSignal cancellation; browser memory, time and cancel response are NOT measured.',
       'solverKernelMs is reported by the solver; postProcessingMs = solve phase minus solverKernelMs (includes result assembly and message cloning).'
     ],
     environment: {node: process.version, v8: process.versions.v8, platform: process.platform, arch: process.arch, osRelease: os.release(), cpuModel: os.cpus()[0]?.model ?? null, cpuCount: os.cpus().length, totalMemMiB: Math.round(os.totalmem() / 1048576)},
@@ -140,13 +197,16 @@ export async function measure({cases = Object.keys(CASES), repeats = 3} = {}) {
 }
 
 function parseArgs(argv) {
-  const o = {out: '.qa/perf-report.json', repeats: 3, cases: 'all', child: null, list: false};
+  const o = {out: '.qa/perf-report.json', repeats: 3, cases: 'all', child: null, childCancel: null, cancel: 'default', list: false};
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--out') o.out = argv[++i];
     else if (a === '--repeats') o.repeats = Number(argv[++i]);
     else if (a === '--cases') o.cases = argv[++i];
     else if (a === '--child') o.child = argv[++i];
+    else if (a === '--child-cancel') o.childCancel = argv[++i];
+    else if (a === '--cancel') o.cancel = 'all';
+    else if (a === '--no-cancel') o.cancel = 'none';
     else if (a === '--list') o.list = true;
     else throw Error('Unknown argument: ' + a);
   }
@@ -159,19 +219,22 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   try {
     const o = parseArgs(process.argv.slice(2));
     if (o.list) console.log(Object.keys(CASES).join('\n'));
-    else if (o.child) {
+    else if (o.childCancel) {
+      if (!CASES[o.childCancel]) throw Error('Unknown case: ' + o.childCancel);
+      await cancelChildMain(o.childCancel, o.repeats);
+    } else if (o.child) {
       if (!CASES[o.child]) throw Error('Unknown case: ' + o.child);
       await childMain(o.child, o.repeats);
     } else {
       const ids = o.cases === 'all' ? Object.keys(CASES) : o.cases.split(',');
       for (const id of ids) if (!CASES[id]) throw Error('Unknown case: ' + id);
-      const report = await measure({cases: ids, repeats: o.repeats});
+      const report = await measure({cases: ids, repeats: o.repeats, cancel: o.cancel});
       const out = path.resolve(o.out);
       mkdirSync(path.dirname(out), {recursive: true});
       writeFileSync(out, JSON.stringify(report, null, 2) + '\n');
-      for (const c of report.cases) console.log(c.id.padEnd(20), c.status === 'ok' ? `nodes ${c.mesh.nodes} elems ${c.mesh.elements} cold ${c.cold.totalMs} ms warm median ${c.warm.summary.totalMs?.median} ms peakRSS ${c.peakRssMiB} MiB` : 'FAILED ' + c.error);
+      for (const c of report.cases) console.log(c.id.padEnd(20), c.status === 'ok' ? `nodes ${c.mesh.nodes} elems ${c.mesh.elements} cold ${c.cold.totalMs} ms warm median ${c.warm.summary.totalMs?.median} ms peakRSS ${c.peakRssMiB} MiB` + (c.cancel ? ` | cancel ${c.cancel.status === 'ok' ? Object.entries(c.cancel.triggers).map(([t, v]) => `${t} ${v.latencyMs?.median} ms [${Object.keys(v.states)}]`).join('; ') + ' released=' + c.cancel.processReleased : 'FAILED ' + c.cancel.error}` : '') : 'FAILED ' + c.error);
       console.log('report:', out);
-      if (report.cases.some(c => c.status !== 'ok')) process.exitCode = 1;
+      if (report.cases.some(c => c.status !== 'ok' || (c.cancel && c.cancel.status !== 'ok'))) process.exitCode = 1;
     }
   } catch (error) { console.error(error.message); process.exitCode = 2; }
 }
