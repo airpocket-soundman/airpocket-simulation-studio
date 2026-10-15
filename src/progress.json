@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T14:17:56.153Z",
+  "updatedAt": "2026-10-15T14:34:33.407Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1382,7 +1382,7 @@
       "id": "BROWSERBRIDGE1",
       "title": "自分のLLMを許可付きブラウザセッションへ接続",
       "titleEn": "Connect the user LLM to a scoped browser session",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "API1",
@@ -1393,9 +1393,9 @@
       "detailEn": "Temporary loopback with Origin/Host/Bearer checks; explicit inspect/edit/analyze/view grants expose 13 semantic MCP operations. Disconnect cancels connection-owned jobs.",
       "acceptance": "全体320成功・3スキップ。実MCPとローカルChromeで版照合編集、Worker解析、イベント、保存ケース表示、0.04mm点値、表示変更、切断を確認。認証・失効・タイムアウト・権限拒否・競合・冪等再試行をテスト。全GUIジョブ統合は実Chrome(localhost、2026-10-15)で確認(guijobs-real-chrome-2)。切断時に接続由来のジョブは77msで取消され、GUI開始のジョブは継続して成功、確認専用セッションはedit/startJob/setResultViewを拒否。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "320 tests passed, three skipped. Real MCP/local Chrome verified revision edit, Worker solve, events, saved-case view, 0.04 mm probe, view change and disconnect. Tests cover authentication, expiry, timeout, scopes, conflicts and idempotent retries. Full GUI job integration remains pending. Published-HTTPS verification is tracked in PUBLICHTTPS1. All GUI job routes were confirmed in real Chrome on localhost (2026-10-15, guijobs-real-chrome-2). On disconnect a connector-started job was cancelled within 77 ms while a GUI-started job kept running and succeeded; an inspect-only session was refused edit, startJob and setResultView.",
-      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-browserbridge-real-chrome-5.json; docs/evidence/2026-10-15-guijobs-real-chrome-2.json",
-      "lastUpdate": "2026-10-15 実Chrome(localhost)で版照合edit→startJob→イベント→showJob→setResultView→DOM表示(0.04mm)、切断時の接続由来ジョブ取消(77ms)とGUIジョブ継続、確認専用セッションの拒否を7/7確認。公開HTTPSはPUBLICHTTPS1で検証済み(確認専用)。検証済みへ。",
-      "lastUpdateEn": "2026-10-15 Real Chrome (localhost): revision-checked edit → startJob → events → showJob → setResultView → DOM (0.04 mm), connector job cancelled on disconnect (77 ms) while the GUI job continued, inspect-only session refused: 7/7. Published HTTPS is covered by PUBLICHTTPS1 (inspect only). Moved to ready."
+      "evidence": "scripts/browser-bridge.mjs; src/browser-session.js; src/browser-session-ui.js; tests/browser-bridge.test.mjs; docs/automation.md; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-browserbridge-real-chrome-5.json; docs/evidence/2026-10-15-guijobs-real-chrome-2.json; docs/evidence/2026-10-15-publication-fe733ec.json",
+      "lastUpdate": "2026-10-15 公開候補fe733ec(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。実装は公開候補に含まれる。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
+      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status."
     },
     {
       "id": "PRINTMEASURE1",
@@ -1468,7 +1468,7 @@
       "id": "RESULTCONTROL1",
       "title": "LLMが結果表示と測定を同じ状態で操作する",
       "titleEn": "Let the LLM control and sample the displayed result",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "BROWSERBRIDGE1"
@@ -1477,9 +1477,9 @@
       "detailEn": "Versioned field, stored time/mode, layer, fixed-range and camera reads/updates. Probes use the displayed frame/mode.",
       "acceptance": "実MCP/Chromeで固定範囲・カメラ再適用・表示量測定・不正版拒否を確認(証跡あり)。時刻/モード測定(過渡音響61フレームの0/10/30/60、モーダル2モード)と固定範囲の日英凡例は実Chrome(localhost、2026-10-15)で確認。保存時刻外・範囲外のframe/modeは拒否され補間しない。凡例の単位語(instantaneous、normalized mode)は日英とも英語。名前付き永続ビューとPNG/WebM出力は別タスク(NAMEDVIEWS1/BROWSEREXPORT1)で確認済み。公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "Real MCP/Chrome verified range/camera replay, displayed-field probe and revision refusal (evidence committed). Real-Chrome verification of stored time/mode probes and localized legends remains. Named persisted views and PNG/WebM export are verified under NAMEDVIEWS1/BROWSEREXPORT1. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. Stored time and mode probes (transient acoustic frames 0/10/30/60 of 61, two modal modes) and the fixed-range legend in Japanese and English were confirmed in real Chrome on localhost (2026-10-15); off-stored-time and out-of-range frame/mode are refused with no interpolation. Unit words such as \"instantaneous\" and \"normalized mode\" are English in both locales.",
-      "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/evidence/2026-10-15-resultcontrol-real-chrome.json; docs/evidence/2026-10-15-resultcontrol-real-chrome-5.json",
-      "lastUpdate": "2026-10-15 実Chromeで時刻/モード測定(frame 0/10/30/60、モード2件、範囲外・補間なし拒否)と日英の固定範囲凡例を7/7確認。注意: 単位語は日英とも英語。モーダルのデモ後に過渡音響デモを解くと失敗する現象を観測(別途調査中)。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
-      "lastUpdateEn": "2026-10-15 Real Chrome confirmed stored time/mode probes (frames 0/10/30/60, two modes, out-of-range and no-interpolation refusals) and the JA/EN fixed-range legends: 7/7. Caveat: unit words are English in both locales. A failure when solving the transient acoustic demo after the modal demo was observed (being investigated separately). Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
+      "evidence": "src/result-view-api.js; tests/result-view-api.test.mjs; docs/testing.md; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/evidence/2026-10-15-resultcontrol-real-chrome.json; docs/evidence/2026-10-15-resultcontrol-real-chrome-5.json; docs/evidence/2026-10-15-publication-fe733ec.json",
+      "lastUpdate": "2026-10-15 公開候補fe733ec(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。実装は公開候補に含まれる。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
+      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status."
     },
     {
       "id": "CASEOPS1",
@@ -1588,7 +1588,7 @@
       "id": "CADUPDATEAPI1",
       "title": "CAD更新をLLMから版付きで照合・適用する",
       "titleEn": "Revisioned CAD update preview/application for the user LLM",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "AGENTEDIT1",
@@ -1598,9 +1598,9 @@
       "detailEn": "Preview/apply STEP replacement using input/replacement revisions, compact50-condition pages, unresolved-region reselection and provenance reset. Two saved-file MCP tools and two connector methods.",
       "acceptance": "全体429件中426成功・3スキップ。実MCP/STEP/WASMで適用・根拠未確認による定量拒否・明示仮定の探索解析0.04mmを確認。旧JSON版照合とブラウザFloat32格納の回帰成功。実Chrome(localhost、2026-10-15)で実STEP(10x10x40箱)の取込→previewCadUpdate(一致2、面を移動すると保留1)→applyCadUpdate(適用後の最大zが50、再適用・旧版・非Float32・kind欠落は拒否)→未解決領域のままの解析開始は拒否を確認。GUIボタン操作と出所リセットは未確認。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "426 passed, three skipped of429. Real MCP/STEP/WASM verifies application, unconfirmed-input quantitative refusal and explicitly assumed exploratory0.04mm reference. Legacy-JSON and browser-Float32 revision regressions pass; real browser remains unverified. Published-HTTPS verification is tracked in PUBLICHTTPS1. Real Chrome on localhost (2026-10-15): STEP import, previewCadUpdate (2 matched; one pending when a face moves), applyCadUpdate (max z 50 afterwards; replay, stale revisions, non-Float32 positions and a missing kind refused) and a refused analysis start while regions are unresolved. The GUI button flow and provenance reset were not exercised.",
-      "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md; tests/browser-cad-update-session.test.mjs; docs/evidence/2026-10-15-cadupdate-real-chrome-5.json",
-      "lastUpdate": "2026-10-15 実Chromeで接続経由のCAD更新(プレビュー・適用・拒否各種・未解決領域での解析拒否)を9/9確認。注意: GUIボタン操作と出所リセットは未確認、置換プロジェクトにkind:\"cad\"の手動付加が必要だった(studio_import_projectの出力に欠落)。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
-      "lastUpdateEn": "2026-10-15 Real Chrome confirmed the connector CAD update path (preview, apply, refusals, refused analysis with unresolved regions): 9/9. Caveats: the GUI button flow and provenance reset were not exercised; kind:\"cad\" had to be added by hand to the replacement project (missing from studio_import_project output). Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
+      "evidence": "src/cad-update-operations.js; tests/cad-update-operations.test.mjs; tests/mcp-cad-update.test.mjs; docs/testing.md; tests/browser-cad-update-session.test.mjs; docs/evidence/2026-10-15-cadupdate-real-chrome-5.json; docs/evidence/2026-10-15-publication-fe733ec.json",
+      "lastUpdate": "2026-10-15 公開候補fe733ec(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。実装は公開候補に含まれる。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
+      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status."
     },
     {
       "id": "CFDRESEARCH1",
@@ -2051,7 +2051,7 @@
       "id": "WAVECHANNELOBS1",
       "title": "周波数音響・掃引・流路の反復残差をLLMへ返す",
       "titleEn": "Expose harmonic/sweep acoustic and channel iteration observations to LLMs",
-      "status": "ready",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P3",
@@ -2061,9 +2061,9 @@
       "detailEn": "Expose BiCGStab/channel-PCG recurrence residuals and acoustic sweep start/completion through existing jobEvents,declaring phase/solvePhase/frequency/residualKind without claiming independent true residuals or intermediate fields.",
       "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。 既定Node24ゲートは利用者決定(方針B)により必須CI verifyのNode 24成功で判定する(docs/evidence/2026-10-15-node24-gate-policy.json)。V8根治の証明ではない。",
       "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees. The default Node 24 gate is judged, by the owner decision (option B), as the required CI verify passing on Node 24 (docs/evidence/2026-10-15-node24-gate-policy.json); not proof of a V8 root fix.",
-      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json; docs/evidence/2026-10-15-node24-gate-policy.json",
-      "lastUpdate": "2026-10-15 再判定: 関連15試験(音響・流路観測、wave-fluid系、MCP provenance)が成功。ゲート条件は方針B(CI verifyのNode 24成功)で満たす。実ブラウザ証跡(browser-wave-channel-observation)は既存。物理精度・終端前timing・V8根治は対象外。検証済みへ。",
-      "lastUpdateEn": "2026-10-15 re-judged: the 15 related tests (acoustic/channel observation, wave-fluid, MCP provenance) pass. The gate clause is met under option B (CI verify on Node 24). Real-browser evidence (browser-wave-channel-observation) already exists. Physical accuracy, pre-termination timing and the V8 root fix are out of scope. Moved to ready."
+      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-fe733ec.json",
+      "lastUpdate": "2026-10-15 公開候補fe733ec(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。実装は公開候補に含まれる。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
+      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status."
     },
     {
       "id": "PROCESSISOLATION1",
