@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "status": "partial",
+  "recordedAt": "2026-10-15T06:27:48.206Z",
+  "testedRevision": "7e496f6701959642dc87af453c3aa9ce49484859",
+  "tasks": [
+    "BROWSERBRIDGE1",
+    "RESULTCONTROL1",
+    "CADUPDATEAPI1",
+    "CASEARCHIVE1"
+  ],
+  "environment": {
+    "browser": "realChrome",
+    "origin": "http://127.0.0.1:5174",
+    "serving": "local Vite development server",
+    "worktree": "mod1-wt/airpocket-simulation-studio"
+  },
+  "provenance": {
+    "method": "Codex read-only audit of existing local logs; not a fresh scenario execution",
+    "sources": [
+      {
+        "name": "b1.json",
+        "bytes": 29395,
+        "sha256": "8da777aaabe6d96d07b3db66ec9bee2ef56cd028a28f65b58c27224807bba9af",
+        "availability": "hashed at preservation"
+      },
+      {
+        "name": "b1.out",
+        "bytes": 3063,
+        "sha256": "a6be7e2aab49c2dd52e6fba177caa8092bfadfc64d9858b07182cfc0ebfab588",
+        "availability": "hashed at preservation"
+      },
+      {
+        "name": "b1.mjs",
+        "bytes": 1698,
+        "sha256": "45681971fde223632abee5805ca4d372efcfbc930f1bfdccf88b0a751380208f",
+        "availability": "hashed at preservation"
+      },
+      {
+        "name": "b2.out",
+        "bytes": 575,
+        "sha256": "a8216ddc5e6ffa927e2db28bfb1eb70b28ab366e548391386ff769754c7d11ea",
+        "availability": "Later replacement hashed at preservation; differs from first audited failed attempt"
+      }
+    ],
+    "rawLogs": "Only file names, byte lengths and SHA-256 hashes are retained. No raw response or connection credential is copied. Scratch files may be changed by other work; missing sources are explicitly identified.",
+    "mutableBuffer": "out.json was inspected when it contained the failed fatigue response, then disappeared and was recreated during preservation. Its subsequent bytes describe a later response, so no hash is used as evidence for the earlier failure. b2.out also changed from an earlier failed attempt to a later succeeded retry; observations are separated."
+  },
+  "confirmed": [
+    {
+      "name": "Inspect and edit revision control",
+      "source": "b1.json",
+      "detail": "inspect succeeded; setMeshSettings edit succeeded; subsequent inspect returned the changed revision; an edit with the earlier revision was refused with Project revision conflict."
+    },
+    {
+      "name": "Preflight and channel-flow job",
+      "source": "b1.json",
+      "detail": "preflight and startJob succeeded; later jobEvents reported state succeeded, executionSettled true and releaseAllowed true. Applies only to the channelFlow job."
+    },
+    {
+      "name": "Display successful flow result",
+      "source": "b1.json",
+      "detail": "showJob succeeded and returned kind channelFlow."
+    },
+    {
+      "name": "Result-view deformation scale round trip",
+      "source": "b1.json",
+      "detail": "getResultView showed deformScale 1; setResultView requested 3; the following getResultView retained 3. Other result controls are not proved."
+    },
+    {
+      "name": "Later fatigue retry terminal state",
+      "source": "b2.out (later replacement inspected during preservation)",
+      "detail": "The current b2.out reports running at sequences 6 and 26, then succeeded at sequence 29 and mesh counts 4179 nodes / 18922 elements. It is a truncated console trace, not a full result or successful GUI display / point-measurement check. It supersedes neither the historical failure nor the missing runtime scenarios."
+    }
+  ],
+  "failures": [
+    {
+      "name": "Incorrect polling terminal-state detection",
+      "sources": [
+        "b1.mjs",
+        "b1.json",
+        "b1.out"
+      ],
+      "detail": "The driver checks completed/failed/cancelled but successful jobs report succeeded. Its final-status entry reports repeated timeouts, although later jobEvents confirms success and settlement. The polling check did not pass."
+    },
+    {
+      "name": "Fatigue sample solve failed",
+      "sources": [
+        "Earlier audit observation of b2.out and mutable out.json; original response snapshot unavailable"
+      ],
+      "detail": "The follow-up job ended failed and executionSettled true, with JOB_FAILED / ANALYSIS_MESH_FAILED at stage mesh: Element limit exceeded; increase mesh size. This is not evidence of successful fatigue analysis. The original b2.out was subsequently replaced; the retained hash refers to a later attempt and does not authenticate this earlier failure."
+    }
+  ],
+  "currentUiObservation": {
+    "source": "Separate observation supplied by parent Codex browser observer at resume",
+    "detail": "Fatigue input, an older saved flow result and an active connection were visible. These states do not prove successful fatigue analysis."
+  },
+  "notVerified": [
+    "CADUPDATEAPI1 runtime scenario",
+    "CASEARCHIVE1 archive round trip and restoration",
+    "Stored-time/frame controls",
+    "Modal result controls",
+    "Japanese/English behavior comparison",
+    "Disconnect and revocation behavior",
+    "Public HTTPS connection (PUBLICHTTPS1)",
+    "Cleanup of the driver, connector, Vite and browser session"
+  ],
+  "scopeLimits": [
+    "No progress status is changed by this record.",
+    "No public HTTPS test was performed for this audit.",
+    "The three previously identified processes were present during inspection; the auditor did not stop or control them.",
+    "The auditor performed no new analysis or GUI operation."
+  ],
+  "nextStep": "A single browser owner should preserve the flow evidence, inspect the current session, correct polling to recognize succeeded, and run missing scenarios on a bounded local fixture before recording completion."
+}
