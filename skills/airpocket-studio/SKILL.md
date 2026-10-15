@@ -13,7 +13,7 @@ Choose the smallest task-relevant read. Use `studio_progress` only when asked ab
 
 ## Load only the relevant workflow
 
-- [Saved inputs and editing](references/saved-inputs.md): bounded section/pointer inspection of saved/live input, edit/preview transactions, catalog application, provenance/preflight and local MCP setup/fallback.
+- [Saved inputs and editing](references/saved-inputs.md): bounded section/pointer inspection of saved/live input, edit/preview transactions, selection-based local mesh refinement, catalog application, provenance/preflight and local MCP setup/fallback.
 - [Browser session](references/browser-session.md): explicit pairing/scopes, GUI jobs, argument-contract discovery. Discovery alone grants no browser access.
 - [Geometry and imports](references/geometry-imports.md): STEP/STL and built-ins, CAD updates, print transfers, fluid domains, coupling sources and surface defects.
 - [Jobs and observations](references/jobs-observations.md): frozen input revisions, retained artifacts, bounded pages, body selectors, observation profiles, nonlinear fields, residual interpretation, and post-mesh boundary-transfer inspection.

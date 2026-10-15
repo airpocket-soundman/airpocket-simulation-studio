@@ -53,7 +53,7 @@ import {prepareCaseView} from './case-view.js';
 import {createCaseStore} from './cases.js';
 import {sampleResult,sampleDisplayedResult} from './probe.js';
 import {frameFromEuler} from './constraints.js';
-import {selectedRefinements} from './local-mesh.js';
+
 import {createAnalysisClient} from './analysis-client.js';
 import {installLanguage,language,addTranslations} from './i18n.js';
 import { materialFields,materialReadiness } from './materials.js';
@@ -244,7 +244,7 @@ $('convection-add').onclick=()=>{try{api.addCondition({type:'convection',value:N
 function convectionExample(){thermalExample();api.removeCondition(0);api.selectCondition(0);api.removeCondition(0);api.addCondition({type:'convection',value:100,ambientTemperature:20});const p=meshes[0].geometry.attributes.position.array,bottom=[];for(let t=0;t<p.length/9;t++)if([2,5,8].every(k=>p[t*9+k]===0))bottom.push(t);api.selectTriangles(0,bottom);api.addCondition({type:'temperature',value:100});modelName=language==='en'?'Convection reference sample':'対流放熱の参照サンプル';$('name').textContent=modelName;status('放熱サンプルを設定しました。先端温度の参照値は46.667 °Cです。');}
 $('convection-demo').onclick=convectionExample;window.analysisApi.loadConvectionExample=convectionExample;
 
-$('local-mesh-add').onclick=()=>{try{const size=Number($('local-mesh-size').value),radius=Number($('local-mesh-radius').value),base=Number($('mesh-size').value);if(size<base*.15||size>base)throw Error('局所サイズは全体の15〜100%にしてください。');api.setMeshSettings({refinements:[...meshSettings.refinements,...selectedRefinements(getProject(),{size,radius})]});status('局所メッシュ設定を登録しました。');}catch(e){status(e.message);}};
+$('local-mesh-add').onclick=()=>{try{const size=Number($('local-mesh-size').value),radius=Number($('local-mesh-radius').value),base=Number($('mesh-size').value);api.addSelectedMeshRefinements({size,radius,baseSize:base});status('局所メッシュ設定を登録しました。');}catch(e){status(e.message);}};
 $('local-mesh-clear').onclick=()=>api.setMeshSettings({refinements:[]});
 
 function cavityExample(){acousticExample();const g=new THREE.BoxGeometry(20,20,40).toNonIndexed();g.translate(10,10,20);const d=geometryData(g);d.faceIds=d.faceIds.map((_,i)=>Math.floor(i/2));setModel([d],language==='en'?'Pressure-driven rigid-wall cavity':'剛壁空洞（音圧駆動）');sourceModel={kind:'box',bounds:[0,0,0,20,20,40]};api.setStudy({...getProject().study,kind:'acoustic',frequency:2143.75,lossFactor:.02,sweep:false,sweepStart:1500,sweepEnd:2800,sweepCount:9,receiverPoint:[10,10,39]});const bottom=[];for(let t=0;t<d.positions.length/9;t++)if([2,5,8].every(k=>d.positions[t*9+k]===0))bottom.push(t);api.selectTriangles(0,bottom);api.addCondition({type:'acousticPressure',value:1});$('mesh-size').value=5;status('一面を1 Paで駆動、他の5面は剛壁。一次共鳴の参照周波数は2143.75 Hzです。');g.dispose();}
