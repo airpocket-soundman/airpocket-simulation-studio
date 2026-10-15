@@ -32,10 +32,17 @@ Shared guards live in `src/solver-adapters/validation.js`; each adapter's `valid
 - The exterior fluid-domain "meshing only" rejection: it spans `source.kind`, `study.kind` and `mode`, so it is not a single discipline's rule.
 - Fracture/fatigue assessment and the temperature-range checks (`postprocess` stage), meshing, the adaptive loop, progress, cancellation and result delivery.
 
+## build / adaptive loop moved (slice 7)
+
+- Optional hook `buildOptions({data})`: returns discipline-specific mesh options that the worker's `build()` spreads after `data.options`. Only creepingFlow implements it (caps `maxElements` at `min(8000, options.maxElements ?? 8000)`), at the same position and with the same value as the former `stokes?{...}:{}` branch.
+- Optional hook `adaptive({data,mesh,solve,progress,observe})`: invokes the adaptive refinement loop (including its default limits). Only structural implements it, because the indicators need structural stress/strain fields. Other disciplines never reach it since `validate` already rejects adaptive; as a guard the worker fails an adapter without `adaptive` with the same message ("Adaptive refinement currently supports structural analysis only").
+- Stays in the worker: the `build`/`solve` closures, the mesh-generation call, merging of cylindrical/planar CAD regions and user refinements, mesh observation, the `operation==='mesh'` vs adaptive branching, skipping boundary transfer for flow/Stokes (`boundary-transfer` stage) and the thermal temperature-range check. These are shared orchestration or post-processing, and hooking them would risk behavior drift.
+- Pinned by `tests/solver-adapter-build.test.mjs` (22 cases recorded from the pre-move code: structural adaptive, thermal/other adaptive rejection, mesh-only, STL, fluidDomain, flow/Stokes build and element cap; includes a digest of all non-timing messages).
+
 ## Not done (MOD1 is not complete)
 
 - UI/state separation, TypeScript contracts and React/WASM migration are not part of this slice.
-- Adapterizing `adaptiveSolve`/`build` is not started.
+- The discipline-specific parts of `build` and the adaptive-loop call are adapterized (below). Mesh generation itself, progress, and the adaptive loop body (`src/adaptive.js`) stay shared.
 
 ## Tests
 

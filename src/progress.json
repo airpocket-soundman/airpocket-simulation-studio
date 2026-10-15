@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T04:27:23.602Z",
+  "updatedAt": "2026-10-15T04:32:47.660Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1117,8 +1117,8 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "第5〜6スライス: 疲労UI(fatigue-ui)の分離、分野別の事前検証をアダプターのvalidateフックへ移動(39ケースの拒否メッセージ/段階を旧実装と同一に固定)。公開済みはPR14まで(第1〜3スライス)。MOD1全体は未完了(React/WASM移行・残る画面要素・GUI/API/MCP同等の網羅回帰は未実施)。",
-      "evidence": "src/ui/fatigue-ui.js; src/solver-adapters/validation.js; tests/solver-adapter-validation.test.mjs; tests/ui-fatigue.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md"
+      "lastUpdate": "第7〜8スライス: 材料フォームUI(material-form-ui)を分離、worker のメッシュ生成の分野別オプション(buildOptions)と適応細分化(adaptive)をアダプターフックへ移動(22ケースの旧実装出力を固定)。公開済みは第6スライスまで。MOD1全体は未完了(React/WASM移行、境界条件・3D選択・解析ライフサイクルの分離、GUI/API/MCP同等の網羅回帰は未実施)。",
+      "evidence": "src/ui/material-form-ui.js; tests/ui-material-form.test.mjs; tests/solver-adapter-build.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md"
     },
     {
       "id": "P0",

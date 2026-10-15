@@ -1,0 +1,19 @@
+// Material property form: field creation, form write (render) and form read.
+// Every dependency is injected; this module imports nothing.
+// Not moved: renderMaterial's fracture refresh, dirty flag and discipline visibility,
+// and the material-save handler's study cleanup, catalog reconcile and api calls (they stay in main.js).
+export function createMaterialFormUi({$,document:doc=globalThis.document,materialFields,materialReadiness,readFatigueMaterial,getMaterialProperties,getLanguage}){
+ function installFields(){
+  for(const f of materialFields){const label=doc.createElement('label');label.textContent=f.label+(f.unit?'（'+f.unit+'）':'');const input=doc.createElement('input');input.id='mat-'+f.key;input.type='number';input.step='any';input.placeholder='未入力';label.append(input);$('material-fields').append(label);}
+ }
+ function writeForm(){
+  const materialProperties=getMaterialProperties(),language=getLanguage();
+  const plastic=materialProperties.plasticity;$('plastic-enabled').checked=!!plastic;$('plastic-yield').value=plastic?plastic.yieldStress/1e6:250;$('plastic-hardening').value=plastic?plastic.hardeningModulus/1e6:1000;const h=materialProperties.hyperelastic;$('hyperelastic-enabled').checked=!!h;$('hyperelastic-mu').value=h?h.shearModulus/1e6:.5;$('hyperelastic-bulk').value=h?h.bulkModulus/1e6:2;$('hyperelastic-curve').value=h?.testCurve?JSON.stringify(h.testCurve):'';$('material-dependence').value=materialProperties.dependence?JSON.stringify(materialProperties.dependence,null,2):'';for(const f of materialFields)$('mat-'+f.key).value=materialProperties[f.key]==null?'':materialProperties[f.key]/f.scale;for(const k of ['grade','source','notes'])$('material-'+k).value=materialProperties[k]||(k==='notes'?(plastic?.testConditions||h?.testConditions):'')||'';const r=materialReadiness($('material').value,materialProperties);$('material-status').textContent=$('physics').value==='thermal'?(r.thermalMissing.length?'熱物性は不足しています。':'熱物性を登録済み。'):(r.linearElasticMissing.length?'線形弾性の物性は不足しています。':'線形弾性の基本物性を登録済み。')+' '+r.note+' 線形弾性のみ対応しています。';if(plastic)$('material-status').textContent='J2等方硬化の弾塑性を登録済み。微小ひずみのCPU解析を使用します。';if(materialProperties.orthotropic)$('material-status').textContent=language==='en'?'Orthotropic elasticity registered. Static linear CPU analysis only. Constants and material axes are retained in saved results.':'直交異方性を登録済み。静的・線形のCPU解析に対応。方向別の物性と材料軸を結果へ保存します。';if(h)$('material-status').textContent='圧縮性Neo-Hookeanモデルを登録済み。構造のCPU解析を使用します。';
+ }
+ function readForm(){
+  const materialProperties=getMaterialProperties();
+  const p={};if(materialProperties.orthotropic)p.orthotropic=structuredClone(materialProperties.orthotropic);if(materialProperties.fractureData)p.fractureData=structuredClone(materialProperties.fractureData);for(const f of materialFields){const v=$('mat-'+f.key).value;p[f.key]=v===''?null:Number(v)*f.scale;}for(const k of ['grade','source','notes'])p[k]=$('material-'+k).value;if($('fatigue-enabled').checked)p.fatigueData=readFatigueMaterial();if($('plastic-enabled').checked)p.plasticity={model:'j2-isotropic',yieldStress:Number($('plastic-yield').value)*1e6,hardeningModulus:Number($('plastic-hardening').value)*1e6,testConditions:$('material-notes').value};if($('hyperelastic-enabled').checked){p.hyperelastic={model:'neo-hookean-log',shearModulus:Number($('hyperelastic-mu').value)*1e6,bulkModulus:Number($('hyperelastic-bulk').value)*1e6,testConditions:$('material-notes').value};if($('hyperelastic-curve').value.trim())p.hyperelastic.testCurve=JSON.parse($('hyperelastic-curve').value);}if($('material-dependence').value.trim())p.dependence=JSON.parse($('material-dependence').value);
+  return p;
+ }
+ return Object.freeze({installFields,writeForm,readForm});
+}
