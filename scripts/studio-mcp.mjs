@@ -95,7 +95,7 @@ export async function callStudioTool(name,args={}){
   if(args.kind===undefined){if(['viewId','offset','limit','layerIndex'].some(key=>args[key]!==undefined))throw Error('Print page arguments require kind');return inspection;}
   return api.get({...command,expectedRevision:inspection.revision});
  }
- if(name==='studio_browser_sessions')return {sessions:browserBridge.list()};
+ if(name==='studio_browser_sessions'){if(args.diagnostics!==undefined&&typeof args.diagnostics!=='boolean')throw Error('Invalid diagnostics flag');return {sessions:browserBridge.list(),...(args.diagnostics===true?{diagnostics:browserBridge.diagnostics()}:{})};}
  if(name==='studio_browser_call'){if(!Object.hasOwn(browserMethods,args.method)||typeof args.sessionId!=='string')throw Error('Invalid browser operation');return browserBridge.call(args.sessionId,args.method,args.args||{},browserMethods[args.method]);}
  if(name==='studio_preview_cad_update'||name==='studio_apply_cad_update'){
   for(const key of ['path','replacementPath',...(name==='studio_apply_cad_update'?['outputPath']:[])])if(typeof args[key]!=='string'||!isAbsolute(args[key]))throw Error('Use distinct absolute CAD update paths');
@@ -179,7 +179,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  if(isolationArgs.length){configureAnalysisExecution({isolation:isolationArgs[0].slice('--analysis-isolation='.length)});}
  const originArg=process.argv.slice(2).find(arg=>arg.startsWith('--browser-origin='));
  if(originArg){browserBridge=await createBrowserBridge({origin:originArg.slice('--browser-origin='.length)});toolList.push(
-  {name:'studio_browser_sessions',description:'List browser sessions explicitly paired with this temporary loopback connector, including granted scopes. No filesystem or shell is exposed through the browser transport.',inputSchema:object({}),annotations:{readOnlyHint:true,openWorldHint:false}},
+  {name:'studio_browser_sessions',description:'List explicitly paired browser sessions and granted scopes. Optional diagnostics reports bounded transport counters; these do not establish a browser failure cause. No filesystem or shell is exposed through the browser transport.',inputSchema:object({diagnostics:{type:'boolean'}}),annotations:{readOnlyHint:true,openWorldHint:false}},
   {name:'studio_browser_call',description:'Invoke a named semantic operation in an explicitly paired browser. First use studio_browser_contracts with the method name to obtain its required arguments,revision fields,units,scope and side effects. inspect returns the current input revision. startJob freezes that revision; poll jobStatus/jobEvents and wait for executionSettled before release. Respect granted scopes. A timeout can occur after a mutation; inspect state before retrying. Disconnect cancels connection-owned running jobs. Browser optional adapters may be unavailable; declarations do not grant permissions.',inputSchema:object({sessionId:{type:'string'},method:{enum:Object.keys(browserMethods)},args:{type:'object'}},['sessionId','method']),annotations:{readOnlyHint:false,openWorldHint:false}}
  );process.stderr.write('Browser connector: '+JSON.stringify({endpoint:browserBridge.endpoint,origin:browserBridge.origin,pairingToken:browserBridge.pairingToken})+'\n');}
  startServer();

@@ -518,3 +518,13 @@ engineはrequestedMethodとactualEngineを分け、後者は結果engine名ま�
 この情報は識別・完全性を助ける記録です。コード採取から動的importまでの全ファイルの原子的snapshot、配布者署名、実行環境の認証、物理精度の証明ではありません。公開HTTPS・Skill単独一巡・全P0〜P6の完了は別条件です。
 
 共通クライアントをNode Workerへ接続する埋込みadapterは、constructorのhost専用runtime.identityHostで実target/isolationを明示します。既定はbrowser/web-workerのままで、preflightも実hostに合わせます。project/optionsに同名の値を置いても採用されません。これはwireで利用者が実行先を偽装する引数ではありません。
+
+## 接続の到達性と認証を分けて診断する
+
+接続画面の診断は、ブラウザのローカルネットワーク権限と接続先への到達性を別々に表示します。`GET /health` は設定済み Origin と loopback Host の検査後、認証なしで `{schemaVersion:1,kind:"airpocket-browser-bridge"}` だけを返します。成功しても接続コードの正しさ、ペアリング、共有権限やモデル操作の許可を証明せず、診断結果の `authenticated` は `false` のままです。ヘルス要求は資格情報・コード・モデルを送信せず、応答を最大1,024 UTF-8バイト、待機を5秒に制限します。期限切れ・到達不能・不正応答を認証失敗と同一視しません。
+
+MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来の `sessions` に `diagnostics` を追加して取得できます。省略または `false` なら従来の返答形です。診断は設定済み `origin` / `endpoint`、現在の `sessionCount`、要求・preflight・health・pair成功/拒否・Origin/Host拒否・認証拒否・切断・失効・要求エラー・scope拒否・timeoutの固定カウンタだけを返します。コード、Bearer token、受信URL/Origin/header/body、モデル、個別session IDは診断に記録しません。通常の `sessions` 一覧のIDと付与scopeは従来通りです。
+
+カウンタはこのプロセスへ到達した事実だけを示します。増加しない場合、ブラウザ権限、混在コンテンツ、ネットワーク、停止したサーバーなどの原因は断定できません。health到達とペアリングを順に確認し、必要なscopeは利用者が明示的に付与します。
+
+ブラウザ要求は `targetAddressSpace:"loopback"` を指定し、ローカル接続の権限判断をブラウザへ委ねます。これは権限付与や対応ブラウザの保証ではありません。現行の [Local Network Access仕様](https://wicg.github.io/local-network-access/) と [Chromeの公式解説](https://developer.chrome.com/blog/local-network-access) に沿い、保留された旧Private Network Accessの特別preflightヘッダーには依存しません。`Access-Control-Allow-Private-Network` を無条件に付けず、既存CORS・Origin/Host・Bearer・scope検査を維持します。

@@ -519,3 +519,9 @@ Added calculation.runtimeIdentity,freezing build identity at compilation/Worker 
 Initial934:923passed,8failed,3skipped. Fixed Node-injected browser-client adapters using constructor-only identityHost and actual-host preflight rather than removing/relabeling Node identity. Final targeted21 passed;full935:932passed,3skipped,0failed,148.87s. Save/restore-related36,build and26 local distribution checks(57.91s) passed. See [full evidence](../evidence/2026-10-15-runtime-identity.json). This does not establish resolution of the known intermittent Windows V8 issue.
 
 Actual browser GUI thermal example on a local dirty production build completed with171nodes/428elements and20–100degC. Visible saved JSON recorded browser/web-worker,build identity and observed kernel229bytes/Gmsh41,430,673bytes;hashes matched distributed files. Identity remained unchanged after case save/display. QA tab/server were closed. See [browser record](../evidence/2026-10-15-runtime-identity-browser.json),[archive](../evidence/2026-10-15-runtime-identity-browser-case.json),[screen](../evidence/2026-10-15-runtime-identity-browser.jpg) and [Skill sync](../evidence/2026-10-15-skill-runtime-identity.json). Public HTTPS,MCP-only end-to-end and full P0-P6 remain open.
+
+## 2026-10-15: Connection diagnostics
+
+Credential-free health probing and bounded, redacted MCP counters distinguish reachability from authentication. Nine new targeted tests passed; a real local production UI health probe succeeded without pairing. The approved inspect-only older public HTTPS UI retry failed with zero bridge requests and sessions; cause remains unknown and the new hint is not yet publicly validated. QA processes/tabs were closed. See [evidence](../evidence/2026-10-15-browser-diagnostics.json).
+
+944 tests: 941 passed, 3 skipped, 0 failed (186.75 s). Build and 26 local distribution checks passed (49.13 s). Repository/installed Skill: 10 file hashes match; both validators passed.

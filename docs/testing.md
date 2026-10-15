@@ -523,3 +523,9 @@ calculation.runtimeIdentityを追加し、Worker起動/コンパイル時にbuil
 初回934件は923成功・8失敗・3skip。実Node Workerをブラウザ用clientへ注入するadapterのhost不一致を修正し、identityを削除/偽browserへ変更せず、constructor専用identityHostとpreflightを実hostへ合わせた。最終21対象成功、全体935件中932成功・3skip・失敗0（148.87秒）。保存/復元等36件、buildとローカル配信物26項目（57.91秒）も成功。[全体証跡](evidence/2026-10-15-runtime-identity.json)を参照。既知のWindows V8問題の根治とは扱わない。
 
 実ブラウザでdirty本番ビルドをlocalhost配信し、GUIの熱サンプルを解析。171節点/428要素、20〜100°Cで完了し、visible JSONからbrowser/web-worker、build版、kernel229 bytes・Gmsh41,430,673 bytesのobserved hashを取得した。実配信ファイルのhashと照合し、ケース保存・再表示後にidentity不変を確認。QA tab/serverを終了した。[ブラウザ記録](evidence/2026-10-15-runtime-identity-browser.json)、[保存JSON](evidence/2026-10-15-runtime-identity-browser-case.json)、[画面](evidence/2026-10-15-runtime-identity-browser.jpg)、[Skill同期](evidence/2026-10-15-skill-runtime-identity.json)を参照。公開HTTPS/MCP単独一巡・全P0〜P6は未完了。
+
+## 2026-10-15: 接続の到達性診断
+
+認証コードを送らない1KiB/5秒上限のhealth照会、参考情報としての権限状態照会、任意指定の秘密を保持しないMCP受信カウンタを追加した。新規対象9件成功。実ローカル本番GUIでコードなしに診断窓口へ到達し、未接続を維持した。許可済みの確認専用公開HTTPS再試験は旧公開UIで到達エラーとなり、bridge受信0・session0だった。原因の特定や新hintの公開HTTPS成功とは扱わない。試験プログラムとタブは終了した。[証跡](evidence/2026-10-15-browser-diagnostics.json)を参照。
+
+944 tests: 941 passed, 3 skipped, 0 failed (186.75 s). Build and 26 local distribution checks passed (49.13 s). Repository/installed Skill: 10 file hashes match; both validators passed.

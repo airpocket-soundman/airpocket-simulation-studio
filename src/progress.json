@@ -2222,6 +2222,22 @@
       "acceptance": "旧形式互換・不正identity拒否・ケース保存/復元/一覧での保持、実Node thread/processとbrowser worker経路、kernel/Gmsh/MFEM hash、GPU fallback、別版で旧結果を開いても不変を検証。署名/環境認証/物理精度の証明とは区別。",
       "acceptanceEn": "Verify legacy compatibility,invalid identity refusal,preservation/discovery across case save/restore,Node thread/process and browser Worker paths,kernel/Gmsh/MFEM hashes,GPU fallback and no restamping on later restoration. Distinguish from signatures,environment attestation or physical accuracy.",
       "evidence": "src/runtime-identity.js; scripts/source-build-identity.mjs; tests/browser-runtime-identity.test.mjs; tests/headless-runtime-identity.test.mjs; docs/evidence/2026-10-15-runtime-identity.json"
+    },
+    {
+      "id": "CONNECTIONDIAGNOSTICS1",
+      "title": "接続の到達性と認証を区別して診断",
+      "titleEn": "Diagnose connector reachability separately from authentication",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P3"
+      ],
+      "detail": "認証コードなしの有界health診断、権限状態照会、秘密を保持しないMCPカウンタ、loopback address-space指定を追加。旧公開画面の再試験は受信0で失敗。",
+      "detailEn": "Add bounded credential-free health probe, advisory permission query, redacted MCP counters and loopback address-space hint. The older public UI retry failed with zero received requests.",
+      "acceptance": "Origin/Host・認証・scope維持、応答/時間上限・古い診断排除・日英UI・実stdio互換を検証。公開候補のHTTPS接続は別途成功を確認し、原因を推測で断定しない。",
+      "acceptanceEn": "Verify Origin/Host/auth/scope isolation, response/deadline bounds, stale response exclusion, bilingual UI and real stdio compatibility. Require separate successful public HTTPS candidate verification; do not infer a cause.",
+      "evidence": "src/browser-connection-diagnostics.js; tests/browser-connection-diagnostics.test.mjs; docs/evidence/2026-10-15-browser-diagnostics.json"
     }
   ],
   "solvers": [
@@ -2351,7 +2367,8 @@
           "AGENTJOBS1",
           "BROWSERFIELDS1",
           "BROWSERCONNECTOR1",
-          "P3OBSERVATIONLIFECYCLE1"
+          "P3OBSERVATIONLIFECYCLE1",
+          "CONNECTIONDIAGNOSTICS1"
         ],
         "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
       },

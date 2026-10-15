@@ -10,7 +10,7 @@ export async function createBrowserMcp({origin,...bridgeOptions}={}){
  const bridge=await createBrowserBridge({origin,...bridgeOptions});
  const toolList=[
   {name:'studio_browser_contracts',description:'Discover bounded browser operation contracts. Declarations grant no permission and do not prove adapter availability.',inputSchema:object({method:{enum:Object.keys(browserMethods)},scope:{enum:['inspect','edit','analyze','view']},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:10}}),annotations:{readOnlyHint:true,openWorldHint:false}},
-  {name:'studio_browser_sessions',description:'List explicitly paired browser sessions and granted scopes.',inputSchema:object({}),annotations:{readOnlyHint:true,openWorldHint:false}},
+  {name:'studio_browser_sessions',description:'List explicitly paired browser sessions and granted scopes. Optional diagnostics reports bounded transport counters; these do not establish a browser failure cause.',inputSchema:object({diagnostics:{type:'boolean'}}),annotations:{readOnlyHint:true,openWorldHint:false}},
   {name:'studio_browser_call',description:'Invoke a named operation in a paired browser within granted scopes. Discover its arguments with studio_browser_contracts. A timeout may follow a mutation; inspect before retrying.',inputSchema:object({sessionId:{type:'string',minLength:1},method:{enum:Object.keys(browserMethods)},args:{type:'object'}},['sessionId','method']),annotations:{readOnlyHint:false,openWorldHint:false}}
  ];
  async function callTool(name,args={}){
@@ -18,7 +18,7 @@ export async function createBrowserMcp({origin,...bridgeOptions}={}){
   if(!tool)throw Error('Unknown tool: '+name);
   if(!args||typeof args!=='object'||![Object.prototype,null].includes(Object.getPrototypeOf(args))||Reflect.ownKeys(args).some(key=>typeof key!=='string'||!Object.hasOwn(tool.inputSchema.properties,key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(args,key),'value'))||tool.inputSchema.required.some(key=>!Object.hasOwn(args,key)))throw Error('Invalid tool arguments');
   if(name==='studio_browser_contracts')return getBrowserOperationContracts(args);
-  if(name==='studio_browser_sessions')return {sessions:bridge.list()};
+  if(name==='studio_browser_sessions'){if(args.diagnostics!==undefined&&typeof args.diagnostics!=='boolean')throw Error('Invalid diagnostics flag');return {sessions:bridge.list(),...(args.diagnostics===true?{diagnostics:bridge.diagnostics()}:{})};}
   if(typeof args.sessionId!=='string'||!args.sessionId||typeof args.method!=='string'||!Object.hasOwn(browserMethods,args.method)||args.args!==undefined&&(!args.args||typeof args.args!=='object'||Array.isArray(args.args)))throw Error('Invalid browser operation');
   return bridge.call(args.sessionId,args.method,args.args??{},browserMethods[args.method]);
  }
