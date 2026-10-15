@@ -55,6 +55,7 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 保存入力ジョブには起動時--analysis-isolation=processの任意子プロセス分離経路を追加。既定workerとブラウザ経路は維持し、runtime失敗の封じ込めはV8根治と区別する。
 
 非legacyの必須入力契約は静的等方・等方固有振動・静的直交異方構造と熱/音響/限定流体を対象とします。固有振動は明示した均一温度で弾性温度表を補間できます。モード数・反復上限は明示必須の数値設定で、物理根拠は要求しません。材料・境界・適用条件の根拠は[契約](automation.md)を参照。legacy挙動とcompletePreflight:falseは維持します。
+単位の桁の警告: solve時のpreflightは、固定入力単位（Pa・kg/m3・W/(m*K)・J/(kg*K)・m/s・Hz・N）で妥当域外の0以外の有限値にwarning `UNIT_MAGNITUDE_SUSPECT`を返します（エラーではなく、値の変換・補正はしません。allowedは変わりません）。範囲（絶対値）: youngModulus 1e5〜1e13 Pa、density 0.01〜3e4、conductivity 0.005〜5000、specificHeat 10〜3e4、soundSpeed 50〜2e4、airDensity 0.01〜2e4、frequency 0.1〜1e7、referencePressurePa 1e-9〜1e6、条件値は force 1e-6〜1e9 N、pressure/normalTraction 1e-3〜1e11 Pa、heatFlux 1e-6〜1e9、convection 0.1〜1e6、acousticPressure 1e-9〜1e7。例: 210（GPaの値）は警告、2.1e11は警告なし。表は`src/preflight-unit-magnitude.js`が正本です。`preflight.physicsCoverage`は物理契約ごとの実装済み/未実装検査を列挙し、メッシュ後検査が未実装のためcompletePreflightは全物理でfalseです（熱: 連結成分の拘束、音響: 波長あたり要素数が残課題）。
 
 温度評価・熱応力・小ひずみJ2・圧縮性Neo-Hookeanも非legacy根拠契約の対象です。温度sourceはcaseReferenceの有無によらずmesh/temperatureの値根拠が必要で、元結果の暫定状態が伝播します。荷重履歴と数値設定、対応CPU制限、場snapshotのサイズと真正性の限界は[契約](automation.md)を参照してください。
 
