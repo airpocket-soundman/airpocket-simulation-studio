@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T07:56:13.487Z",
+  "updatedAt": "2026-10-15T08:17:54.121Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1520,7 +1520,7 @@
       "id": "NAMEDVIEWS1",
       "title": "結果版に結び付けた名前付きビューの保存",
       "titleEn": "Save named views bound to result revisions",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "RESULTCONTROL1"
@@ -1529,9 +1529,9 @@
       "detailEn": "Portable JSON snapshots of camera/field/range/time/mode/layers/section. Up to16 entries, item/archive revision checks, GUI and optional34-method MCP connector.",
       "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。ケース同梱はCASEVIEWBUNDLE1で追加。自動永続化・異なる結果の同期は残す。",
       "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. CASEVIEWBUNDLE1 adds case bundling. Automatic persistence and cross-result synchronization remain unfinished.",
-      "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-namedviews-real-chrome.json; docs/evidence/2026-10-15-release-status-audit-c.json",
-      "lastUpdate": "2026-10-15 公開状態監査: canonicalization修正後の実Chrome再読込・保存case/view bundle往復の全項目厳密一致が未確認のため、検証済みから検証中へ訂正。修正前の証跡だけでは今回の受け入れ条件を満たさない。",
-      "lastUpdateEn": "2026-10-15 publication audit: corrected ready to checking because required real-browser acceptance is unverified. The current acceptance explicitly requires all fields to match after reload and restoration of saved case plus view JSON. Evidence 2026-10-15-namedviews-real-chrome-2.json explicitly says that this path was not rerun after canonicalization; older pre-fix evidence does not prove exact post-fix restoration. Repeat the real Chrome/MCP reload and case-bundle export/import after the fix and record exact all-field equality."
+      "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-namedviews-real-chrome.json; docs/evidence/2026-10-15-release-status-audit-c.json; docs/evidence/2026-10-15-browser-input-view-proof.json",
+      "lastUpdate": "2026-10-15 canonicalization修正後、実Chromeで明示的な再読込とケース+ビュー再取込を実施。カメラZ=90、断面位置5mm、応力固定範囲0〜10MPaを含む結果表示・setup・保存ビュー全項目の厳密一致を確認。旧v1から空測定アーカイブ付きv2への正規化は別途照合。自動永続化・公開HTTPSは対象外。",
+      "lastUpdateEn": "2026-10-15: after canonicalization, real Chrome reload and explicit case/view reimport verified strict equality of complete result, setup and named-view snapshots, including camera Z=90, clip=5 mm and stress range 0–10 MPa. Legacy v1 normalization to v2 with an empty measurement archive was checked separately. Automatic persistence and public HTTPS are outside this proof."
     },
     {
       "id": "CASEARCHIVE1",
@@ -2231,7 +2231,7 @@
       "id": "INPUTINSPECTION1",
       "title": "版付きページで既存入力をLLMへ返す",
       "titleEn": "Read existing input through revisioned bounded pages",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P0",
@@ -2242,9 +2242,9 @@
       "detailEn": "Inspect material,conditions,study,provenance,selection and sources through JSON Pointers;describe large data with canonical hashes and retrieve explicit bounded pages.",
       "acceptance": "新13件、全体897中894成功・3skip。共有read→preview/edit→再読、実stdio/HTTP、busy時read・失効/stale/権限/64KiB・source保持を検証。新ライブ操作の実GUI/公開HTTPS一巡とP1全体は未検証。",
       "acceptanceEn": "13new checks;full897:894passed/3skipped. Shared read→preview/edit→reread,real stdio/HTTP,busy reads,expiry/stale/scopes/64KiB and source identity verified. New live GUI/public-HTTPS end-to-end and full P1 remain unverified.",
-      "evidence": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-release-status-audit-c.json",
-      "lastUpdate": "2026-10-15 公開状態監査: 新live inspectInputを実Chrome/コネクタで実行し、版・取得範囲・busy時の読取と元入力不変を確認する証跡が不足するため、検証済みから検証中へ訂正。stdio/HTTP試験を実GUI証明の代替にしない。",
-      "lastUpdateEn": "2026-10-15 publication audit: corrected ready to checking because required real-browser acceptance is unverified. Acceptance explicitly says the new live operation through the real GUI is unverified. Record one actual Chrome/browser-connector invocation against a loaded project, including returned revision/page/scope, a busy read, and source bytes/hash unchanged. Do not substitute the stdio/HTTP tests for this proof. Published HTTPS is explicitly delegated to PUBLICHTTPS1; the broader P1 workflow remains outside this item-specific check."
+      "evidence": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-release-status-audit-c.json; docs/evidence/2026-10-15-browser-input-view-proof.json",
+      "lastUpdate": "2026-10-15 実Chrome/MCPで解析中のread、idleとの厳密一致、入力版不変、stale拒否、ページ境界拒否、2ページ往復を確認。inspectのみの再接続でread成功・edit/startJob/setView権限拒否も確認。接続解除・QA停止済み。公開HTTPSの独立検証はPUBLICHTTPS1で追跡する。",
+      "lastUpdateEn": "2026-10-15 real Chrome/MCP verified reads bracketed by a running solve, exact idle equality, unchanged input revision, stale/page-bound refusal and two-page traversal. An inspect-only reconnection allowed reads and refused edit/startJob/setView. QA disconnected and stopped. Independent public HTTPS verification remains under PUBLICHTTPS1."
     },
     {
       "id": "SKILLROUTING1",
