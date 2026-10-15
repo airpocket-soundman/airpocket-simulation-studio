@@ -8,8 +8,9 @@ const failureMetadata=error=>{const failure=getAnalysisFailure(error);return fai
 const errorValue=(error,key)=>{try{const descriptor=error&&Object.getOwnPropertyDescriptor(error,key);return descriptor&&Object.hasOwn(descriptor,'value')?descriptor.value:undefined;}catch{return undefined;}};
 const errorMessage=error=>typeof errorValue(error,'message')==='string'?errorValue(error,'message'):typeof error==='string'?error:'Analysis failed';
 const terminal=new Set(['succeeded','failed','cancelled','timed_out']);
-export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(),now=()=>Date.now(),maxJobs=32,maxEvents=256,timeoutMs=120000,maxEventBytes=32768,maxRetainedEventBytes=1048576,maxEventPageBytes=65536,maxJobViewBytes=24576}={}){
+export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(),now=()=>Date.now(),maxJobs=32,maxEvents=256,timeoutMs=120000,maxEventBytes=32768,maxRetainedEventBytes=1048576,maxEventPageBytes=65536,maxJobViewBytes=24576,onRecord}={}){
  if(typeof execute!=='function'||!Number.isInteger(maxJobs)||maxJobs<1||!Number.isInteger(maxEvents)||maxEvents<2||maxEvents>256||!Number.isSafeInteger(maxEventBytes)||maxEventBytes<24576||maxEventBytes>jobEventPayloadLimits.eventBytes||!Number.isSafeInteger(maxJobViewBytes)||maxJobViewBytes!==jobEventPayloadLimits.viewBytes||!Number.isSafeInteger(maxRetainedEventBytes)||maxRetainedEventBytes<maxEventBytes||maxRetainedEventBytes>jobEventPayloadLimits.retainedBytes||!Number.isSafeInteger(maxEventPageBytes)||maxEventPageBytes<maxJobViewBytes+maxEventBytes+2048||maxEventPageBytes>jobEventPayloadLimits.pageBytes||!Number.isFinite(timeoutMs)||timeoutMs<=0)throw Error('Invalid job runtime');
+ if(onRecord!==undefined&&typeof onRecord!=='function')throw Error('Invalid job runtime');
  const jobs=new Map(),requests=new Map();
  const copy=value=>structuredClone(value);
  function find(jobId){const job=jobs.get(jobId);if(!job)throw Error('Unknown job: '+jobId);return job;}
@@ -20,6 +21,8 @@ export function createAnalysisJobs({execute,id=()=>globalThis.crypto.randomUUID(
   const snapshot=snapshotJobEvent(data,envelope,{maxBytes:maxEventBytes});
   job.events.push({event:snapshot.event,bytes:snapshot.bytes});job.eventBytes+=snapshot.bytes;
   while(job.events.length>maxEvents||job.eventBytes>maxRetainedEventBytes)job.eventBytes-=job.events.shift().bytes;
+  // Optional host persistence hook; failures never affect the job.
+  if(onRecord&&(type==='state'||type==='resource-state')){try{onRecord(view(job),{requestId:job.requestId});}catch{/* host reports its own diagnostics */}}
   return snapshot.event;
  }
  function view(job){return snapshotJobView({schemaVersion:1,jobId:job.id,inputRevision:job.inputRevision,state:job.state,executionSettled:job.executionSettled,resourceState:job.executionSettled?'settled':'pending',releaseAllowed:terminal.has(job.state)&&job.executionSettled,operation:job.operation,origin:job.origin,startedAt:job.startedAt,updatedAt:job.updatedAt,lastSequence:job.sequence,firstAvailableSequence:job.events[0]?.event.sequence??0,eventRetention:retention(job),...(job.result!==undefined?{result:job.result}:{}),...(job.error?{error:job.error}:{}),...(job.executionError?{executionError:job.executionError}:{})},{maxBytes:maxJobViewBytes});}

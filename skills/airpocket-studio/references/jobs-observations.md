@@ -6,6 +6,11 @@ Repository-version reference. Discover actual connected tools before using names
 
 Before fetching an intermediate artifact, use studio_job_artifacts({jobId,offset:0,limit:50}) or inspect-scoped live jobArtifacts with the same page arguments (maximum100). Node service listArtifacts and browser analysisApi.listJobArtifacts return metadata only, total and nextOffset. Select an artifactId, then retrieve using existing studio_job_artifact/jobArtifact validation. This rediscovery works even after relevant events are truncated. Catalog listing does not rehash files; retrieval performs existing hash/revision/mesh checks. Released jobs are unavailable, and same-process retention does not provide persistent restart recovery.
 
+
+## Restart recovery (opt-in, metadata only)
+
+Only when the MCP server was started with --job-store=<absolute directory> are small job records kept and reloaded. After a restart studio_job_status/studio_job_events/studio_cancel_job/studio_release_job work on restored:true metadata with resultAvailable:false: no result body, events, intermediate artifacts or mesh output are restored (re-run the job if you need them), terminal states keep their recorded state, and a job that was running or saving becomes state interrupted with error.code ANALYSIS_JOB_INTERRUPTED_BY_RESTART, executionSettled true and releaseAllowed true; it is never resumed or re-run. studio_release_job also deletes the record. requestId idempotency is not carried across a restart. Without the option nothing is persisted and unknown jobs are still reported as Unknown job. Tool and operation counts do not change.
+
 ## Select a body for intermediate samples
 
 Intermediate jobArtifact/studio_job_artifact point reads accept bodyIndex or elementIndex with point; node pages retain available nodeBodies. If an interface point touches multiple bodies, an unspecified sample is ambiguous and refused: select the intended body/element explicitly. Final studio_probe also supports bodyIndex. Legacy meshes lacking body IDs cannot accept body selection; do not infer or reconstruct missing nodeBodies. Existing hash/mesh/revision checks remain.
