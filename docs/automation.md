@@ -528,3 +528,19 @@ MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来
 カウンタはこのプロセスへ到達した事実だけを示します。増加しない場合、ブラウザ権限、混在コンテンツ、ネットワーク、停止したサーバーなどの原因は断定できません。health到達とペアリングを順に確認し、必要なscopeは利用者が明示的に付与します。
 
 ブラウザ要求は `targetAddressSpace:"loopback"` を指定し、ローカル接続の権限判断をブラウザへ委ねます。これは権限付与や対応ブラウザの保証ではありません。現行の [Local Network Access仕様](https://wicg.github.io/local-network-access/) と [Chromeの公式解説](https://developer.chrome.com/blog/local-network-access) に沿い、保留された旧Private Network Accessの特別preflightヘッダーには依存しません。`Access-Control-Allow-Private-Network` を無条件に付けず、既存CORS・Origin/Host・Bearer・scope検査を維持します。
+
+## エージェント編集と保存検証の厳密化
+
+`studio_validate_cases` は全ケースを実際の復元経路で検査してから従来形式の比較要約を返します。節点数と場配列の不一致、不正な四面体/表面、実行識別の矛盾を検証成功として返しません。有効な旧形式は保持し、元ファイルを書き換えません。この検証も物理精度や保存データの出所を証明するものではありません。
+
+`selectPlanarRegion` の `rotationDegrees` を明示する場合、整合する `frame:{origin,u,v}` が必要です。回転だけの指定はゼロ回転も含め拒否し、黙って軸平行領域へ置き換えません。GUIが生成した整合するframe+回転、frameのみの任意平面、回転を指定しない従来のaxis/positionは維持します。`min/max` はframe内のmm座標、角度はdegreeです。拒否時は選択・条件・入力版を変更しません。
+
+`studio_browser_contracts({method:"previewEdit"})` または `edit` から、`setInputProvenance` と `setAnalysisIntent` の具体的な位置引数schemaを取得できます。`operations[].args[0]` に根拠documentまたはintentを渡します。根拠はschemaVersion:1/entriesとし、pointer/value/source/rationale/applicability/assumption/statusを保持します。CAD/文書sourceにはreference/revisionが必要です。対象pointerの適用性、実入力との値一致、必須根拠と確認状態はpreflightで検査します。schema適合は資料の真実性や利用者の確認を意味しません。agent-proposalをLLMの判断だけでuser-confirmedへ変えず、実際の確認を取得してください。exploratoryの仮定付き実行はprovisionalを保持します。
+
+## 中間結果の保存待機上限
+
+保存ストア64MBの制限とは別に、中間mesh/fieldの保存待機を既定8件・8,000,000推定bytes（処理中1件を含む）へ制限します。clone/JSON化前に構造を見積もり、超過snapshotを保持せず、要約・診断と最終結果の計算を継続します。単一超過・件数/bytes超過・mesh欠落等の理由を `observation-queue-limit` / `observationQueue` で取得できます。browser完了情報の `intermediate.queue`、Nodeの `intermediateQueue` に件数・peak・上限・dropを返し、能力情報の `observation.pendingPayloadQueue` はhost既定値を宣言します。起動時設定で上限を変更でき、実ジョブの情報を優先します。
+
+`observationSequence` は元の観測順序です。要約・診断は保存待ちを迂回するため、古い場の保存通知より先着する場合があります。latestPolicyはlast-accepted-snapshotで、最後に拒否した場へ置き換えません。meshを受理できなければ後続fieldも保存せず、旧meshへ結び付けません。accepted/latestCompletedはqueue受付・consumer完了であって成果物保存成功ではなく、artifact参照と完全性を別途検査します。取消時は待機payloadを解放し、処理中の終了をdrainで待ちます。
+
+bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のpostMessage待機・イベントring内の任意payloadのbytesを上限保証しません。元の場をすべて取得できたと報告せず、drop/制限を結果と一緒に説明してください。

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T23:21:52.847386Z",
+  "updatedAt": "2026-10-15T00:54:36.489334Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2238,6 +2238,68 @@
       "acceptance": "Origin/Host・認証・scope維持、応答/時間上限・古い診断排除・日英UI・実stdio互換を検証。公開候補のHTTPS接続は別途成功を確認し、原因を推測で断定しない。",
       "acceptanceEn": "Verify Origin/Host/auth/scope isolation, response/deadline bounds, stale response exclusion, bilingual UI and real stdio compatibility. Require separate successful public HTTPS candidate verification; do not infer a cause.",
       "evidence": "src/browser-connection-diagnostics.js; tests/browser-connection-diagnostics.test.mjs; docs/evidence/2026-10-15-browser-diagnostics.json"
+    },
+    {
+      "id": "PROVENANCECONTRACT1",
+      "title": "根拠付き編集の引数をMCPから発見",
+      "titleEn": "Discover provenance edit argument schemas",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "edit/previewEditからsetInputProvenance/setAnalysisIntentの具体的な位置引数を発見し、既存物理入力・利用者確認の意味を保持する。",
+      "detailEn": "Expose concrete positional argument schemas for provenance and analysis intent without inventing physical inputs or user confirmation.",
+      "acceptance": "契約から有効編集を構築して診断を修復し、不正根拠・拒否時の入力版不変、ページ上限と実stdio互換を検証。",
+      "acceptanceEn": "Build a valid edit from discovered contracts, verify diagnosis repair and invalid provenance refusal without mutation, page budgets and real stdio compatibility.",
+      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
+    },
+    {
+      "id": "CASEARCHIVEVALIDATION1",
+      "title": "保存ケースMCPで復元時検証を実施",
+      "titleEn": "Validate saved MCP archives through restoration checks",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "P4"
+      ],
+      "detail": "studio_validate_casesが全ケースの場・メッシュ・実行識別を復元と同じ経路で検査する。",
+      "detailEn": "Validate every saved case field, mesh and runtime identity through the restoration path.",
+      "acceptance": "短い場/不正接続/不正identityを実stdioで拒否し、有効旧保存/識別付き保存の互換と元ファイル不変を検証。",
+      "acceptanceEn": "Reject malformed fields/connectivity/identity through real stdio; preserve legacy and identified valid outputs and source files.",
+      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
+    },
+    {
+      "id": "OBSERVATIONQUEUE1",
+      "title": "中間結果の非同期待機メモリを制限",
+      "titleEn": "Bound pending asynchronous observation payloads",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3"
+      ],
+      "detail": "保持ストアとは別に保存待機中のイベント数と推定bytesを制限し、超過時は場を間引いて要約を継続する。",
+      "detailEn": "Bound pending payload count and estimated bytes independently of retained stores; continue summaries when fields are dropped.",
+      "acceptance": "遅いconsumer・単一超過・cancel/drain/closeと最終結果不変を検証し、間引き数と制限を取得可能にする。Worker送信キュー全体のメモリ保証とは区別。",
+      "acceptanceEn": "Verify slow consumers, oversized items, cancellation/drain/close and unchanged final outputs; expose loss and limits. Do not claim bounds for the entire Worker transport queue.",
+      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
+    },
+    {
+      "id": "PLANARROTATION1",
+      "title": "平面領域の回転指定を黙って無視しない",
+      "titleEn": "Reject silently ignored planar rotation controls",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P1"
+      ],
+      "detail": "rotationDegreesとframeの不足/矛盾を拒否し、GUI生成の整合した回転平面を保持する。",
+      "detailEn": "Reject missing or inconsistent frames for explicit rotation controls; preserve coherent GUI planar descriptors.",
+      "acceptance": "実API/MCPでframe無し回転拒否・元入力不変・GUI生成回転の保存保持、従来回転無し軸領域を検証。",
+      "acceptanceEn": "Verify actual API/MCP rejection without mutation, saved GUI rotation preservation and legacy unrotated axial regions.",
+      "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
     }
   ],
   "solvers": [
@@ -2352,7 +2414,9 @@
           "BROWSERCONTRACTS1",
           "AGENTINPUT1",
           "INPUTINSPECTION1",
-          "MCPARGUMENTTYPES1"
+          "MCPARGUMENTTYPES1",
+          "PROVENANCECONTRACT1",
+          "PLANARROTATION1"
         ],
         "acceptance": "Operation-level GUI/API/MCP/Skill coverage and success/refusal/repair paths for publication scope."
       },
@@ -2368,7 +2432,8 @@
           "BROWSERFIELDS1",
           "BROWSERCONNECTOR1",
           "P3OBSERVATIONLIFECYCLE1",
-          "CONNECTIONDIAGNOSTICS1"
+          "CONNECTIONDIAGNOSTICS1",
+          "OBSERVATIONQUEUE1"
         ],
         "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
       },
@@ -2385,7 +2450,8 @@
           "MEASUREMENTVERIFY1",
           "VIEWCOMPARE",
           "JOBRESULTEXPORT1",
-          "RUNTIMEIDENTITY1"
+          "RUNTIMEIDENTITY1",
+          "CASEARCHIVEVALIDATION1"
         ],
         "acceptance": "Retrieve, verify, save, restore, compare and remeasure results while retaining input/result/mesh/calculation/engine/assumption identity."
       },

@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-15",
+  "run": 38660103164,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38660103164",
+  "revision": "51f84fc05bac90da13237ac14d1aa6d07c50be3e",
+  "jobs": {
+    "verify": "success",
+    "deploy": "success",
+    "verify-published": "success"
+  },
+  "tag": "release-51f84fc05bac90da13237ac14d1aa6d07c50be3e",
+  "tagPeeledRevision": "51f84fc05bac90da13237ac14d1aa6d07c50be3e",
+  "reportSha256": "65f50fb065f3f20f559b10866b939825007fdd648d8d84c6671995609593acc2",
+  "report": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "51f84fc05bac90da13237ac14d1aa6d07c50be3e",
+    "local": false,
+    "checkedAt": "2026-10-15T00:31:58.721Z",
+    "elapsedMs": 32765.601866,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 23,
+        "downloaded": 23
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 926.0299830000004
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 443.2739360000005
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 450.51306899999963
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 2197.2210970000006
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 475.7226190000001
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 1496.2461700000003
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 429.29647399999885
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 666.8312040000001
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 608.771557
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 2506.6628610000007
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 2029.7128229999998
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 1276.348332999998
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 606.7722450000001
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 1196.0023809999984
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 1976.5275919999985
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 1957.1821009999985
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 625.3797440000017
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 1461.5654070000019
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 806.7510379999985
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 1306.0731379999997
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 735.3858939999991
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 10.539938999998412
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 1090.8624789999994
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 1272.5225729999984
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 582.0681440000008
+      }
+    ],
+    "limitations": [
+      "Node workers execute deployed CAD/analysis assets; browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "limits": [
+    "Node distribution checks do not prove browser rendering, public HTTPS pairing or Skill-only completion.",
+    "The publication milestone candidate is not automatically promoted by this evidence."
+  ]
+}

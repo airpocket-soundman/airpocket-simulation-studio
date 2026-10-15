@@ -1,3 +1,4 @@
+import {createJobObservationQueue,validateObservationQueueLimits,observationQueueDefaults} from '../src/job-observation-queue.js';
 import {createHash,randomUUID} from 'node:crypto';
 import {readFile,writeFile,mkdir,stat} from 'node:fs/promises';
 import {resolve,isAbsolute,join} from 'node:path';
@@ -11,7 +12,8 @@ import {inspectIntermediate} from '../src/intermediate-results.js';
 export function summarizeAnalysis({mesh,result}){
  return {mesh:mesh.summary,kind:result?.kind,engine:result?.engine,residual:result?.residual,iterations:result?.iterations,maxDisplacementMm:result?.maxDisplacementMm,maxVonMisesPa:result?.maxVonMisesPa,minTemperature:result?.minTemperature,maxTemperature:result?.maxTemperature,maxSpeedMs:result?.maxSpeedMs,reactionDragN:result?.reactionDragN,stokes:result?.stokes,modeFrequenciesHz:result?.modes?.map(m=>m.frequencyHz),analysisAssessment:result?.analysisAssessment};
 }
-export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=256,maxArtifactBytes=64_000_000,isolation='worker',createProcessWorker}={}){
+export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=256,maxArtifactBytes=64_000_000,maxPendingObservationEvents=observationQueueDefaults.maxEvents,maxPendingObservationBytes=observationQueueDefaults.maxBytes,isolation='worker',createProcessWorker}={}){
+ validateObservationQueueLimits(maxPendingObservationEvents,maxPendingObservationBytes);
  if(!['worker','process'].includes(isolation)||createProcessWorker!==undefined&&typeof createProcessWorker!=='function')throw Error('Invalid analysis isolation configuration');
  if(createProcessWorker!==undefined&&isolation!=='process')throw Error('Process worker factory requires process isolation');
  const destinations=new Map(),artifacts=new Map();
@@ -19,14 +21,13 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
   const {outputPath,includeFields}=context,key=process.platform==='win32'?outputPath.toLowerCase():outputPath;
   if(destinations.has(key))throw Error('Analysis output is already reserved by another job');
   destinations.set(key,jobId);
-  let artifactDirectory,artifactBytes=0,artifactSequence=0,meshArtifact,writeError,artifactLimitReported=false,chain=Promise.resolve();
+  let artifactDirectory,artifactBytes=0,artifactSequence=0,meshArtifact,writeError,artifactLimitReported=false;
   const records=new Map();artifacts.set(jobId,records);
   try{
    try{await stat(outputPath);throw Error('Analysis output already exists');}catch(error){if(error.code!=='ENOENT')throw error;}
    if(signal.aborted)throw Error('Calculation cancelled');
    if(includeFields){artifactDirectory=outputPath+'.intermediate';await mkdir(artifactDirectory);}
-   const observe=event=>{
-    chain=chain.then(async()=>{
+   const queue=createJobObservationQueue({maxEvents:maxPendingObservationEvents,maxBytes:maxPendingObservationBytes,isActive:()=>!signal.aborted&&!writeError,consume:async(event,metadata)=>{
      if(signal.aborted||writeError)return;
      const {mesh,field,...summary}=event;
      if(mesh)meshArtifact=undefined; // A remesh invalidates the prior mesh reference.
@@ -42,16 +43,19 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
        summary.artifact=artifact;
       }else if(!artifactLimitReported){artifactLimitReported=true;onEvent({stage:'observation-limit',provisional:true,message:'Intermediate field storage limit reached; summaries continue',limitBytes:maxArtifactBytes});}
      }
-     onEvent(summary);
-    }).catch(error=>{writeError??=error;});
-   };
+     onEvent({...summary,...metadata});
+    },onError:error=>{writeError??=error;},onSummary:(event,metadata)=>onEvent({...event,...metadata}),onDrop:(event,metadata)=>{const {mesh,field,...summary}=event;onEvent({stage:'observation-queue-limit',provisional:true,observationQueue:metadata});onEvent({...summary,observationSequence:metadata.observationSequence,observationQueue:{dropped:true,reason:metadata.reason}});}});
+   const closeQueue=()=>queue.close();signal.addEventListener('abort',closeQueue,{once:true});
+   const observe=event=>{if(includeFields)queue.push(event);else{const {mesh,field,...summary}=event;onEvent(summary);}};
+   try{
    const output=await analyzeProject(project,options,operation,{signal,observe:true,observeFields:includeFields,onEvent:observe,isolation,...(createProcessWorker?{createProcessWorker}:{})});
-   await chain;if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
+   await queue.drain();if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
    beginCommit();
    const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.analysisAssessment.provisional};
    const publication=await publishJson(outputPath,{...output,job});
-   return {...summarizeAnalysis(output),...publication,outputPath,...(artifactDirectory?{artifactDirectory,intermediateBytes:artifactBytes,intermediateStorageLimited:artifactLimitReported}:{}),job};
-  }finally{await chain;destinations.delete(key);}
+   return {...summarizeAnalysis(output),intermediateQueue:queue.snapshot(),...publication,outputPath,...(artifactDirectory?{artifactDirectory,intermediateBytes:artifactBytes,intermediateStorageLimited:artifactLimitReported}:{}),job};
+   }finally{queue.close();await queue.drain();signal.removeEventListener('abort',closeQueue);}
+  }finally{destinations.delete(key);}
  }});
  async function readArtifact(jobId,artifactId){
   const job=jobs.get(jobId),record=artifacts.get(jobId)?.get(artifactId);

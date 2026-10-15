@@ -1,3 +1,4 @@
+import {createJobObservationQueue,validateObservationQueueLimits,observationQueueDefaults} from './job-observation-queue.js';
 import {createRuntimeIdentity,validateRuntimeIdentity} from './runtime-identity.js';
 import {restoreAnalysisError,getAnalysisFailure} from './analysis-failure.js';
 import {requireAnalysisPreflight} from './analysis-preflight.js';
@@ -5,6 +6,7 @@ import {requireResolvedCadConditions} from './cad-update-state.js';
 import {createAnalysisJobs} from './analysis-jobs.js';
 import {createBrowserIntermediateStore} from './browser-intermediate-store.js';
 export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
+ validateObservationQueueLimits(runtime.maxPendingObservationEvents===undefined?observationQueueDefaults.maxEvents:runtime.maxPendingObservationEvents,runtime.maxPendingObservationBytes===undefined?observationQueueDefaults.maxBytes:runtime.maxPendingObservationBytes);
  const hostDescriptor=Object.getOwnPropertyDescriptor(runtime,'identityHost');
  const host=hostDescriptor?hostDescriptor.value:{target:'browser',isolation:'web-worker'};
  if(hostDescriptor&&!Object.hasOwn(hostDescriptor,'value')||!host||typeof host!=='object'||![Object.prototype,null].includes(Object.getPrototypeOf(host))||Reflect.ownKeys(host).length!==2||Reflect.ownKeys(host).some(key=>!['target','isolation'].includes(key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(host,key),'value')))throw TypeError('Invalid runtime identity host');
@@ -35,14 +37,20 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  }
  const results=new Map(),artifacts=createBrowserIntermediateStore({maxBytes:runtime.maxIntermediateBytes??64_000_000});
  const jobs=createAnalysisJobs({timeoutMs,execute:async({project,options,operation,jobId,signal,onEvent,context,inputRevision})=>{
-  let chain=Promise.resolve(),reportedLimit=false;
+  let reportedLimit=false;
   const emitObservation=(event,retained)=>{
    const {mesh,field,...summary}=event;
    if(retained?.limited&&!reportedLimit){reportedLimit=true;onEvent({stage:'observation-limit',provisional:true,message:'Browser intermediate storage limit reached; summaries continue',limitBytes:retained.limitBytes});}
    onEvent({...summary,...(retained?.artifact?{artifact:retained.artifact}:{}),...(field?{fieldSummary:{kind:field.kind,...(field.time!==undefined?{time:field.time}:{}),...(field.step!==undefined?{solver:field.solver,step:field.step,steps:field.steps,loadFactor:field.loadFactor}:{}),nodeCount:field.displacement?field.displacement.length/3:field.temperature?.length??field.pressure?.length},fieldAvailable:!!retained?.artifact}:{}),...(mesh?{meshAvailable:!!retained?.artifact}:{})});
   };
-  const observe=event=>{if(!context.includeFields){emitObservation(event);return;}chain=chain.then(async()=>{if(signal.aborted)return;let retained;try{retained=await artifacts.capture(jobId,inputRevision,event,()=>!signal.aborted);}catch(error){onEvent({stage:'observation-error',provisional:true,message:error.message});}if(!signal.aborted)emitObservation(event,retained);});};
-  try{const output=await start(operation,options,project,observe,signal,jobId,context.includeFields);await chain;if(signal.aborted)throw Error('Calculation cancelled');results.set(jobId,output);return {kind:output.result?.kind,mesh:output.mesh?.summary,resultAvailable:true,analysisAssessment:output.analysisAssessment,intermediate:artifacts.summary(jobId)};}finally{await chain;}
+  const queue=createJobObservationQueue({maxEvents:runtime.maxPendingObservationEvents===undefined?observationQueueDefaults.maxEvents:runtime.maxPendingObservationEvents,maxBytes:runtime.maxPendingObservationBytes===undefined?observationQueueDefaults.maxBytes:runtime.maxPendingObservationBytes,isActive:()=>!signal.aborted,
+   consume:async(event,metadata)=>{let retained;try{retained=await artifacts.capture(jobId,inputRevision,event,()=>!signal.aborted);}catch(error){if(!signal.aborted)onEvent({stage:'observation-error',provisional:true,message:error.message,...metadata});}if(!signal.aborted)emitObservation({...event,...metadata},retained);},
+   onSummary:(event,metadata)=>emitObservation({...event,...metadata}),
+   onDrop:(event,metadata)=>{onEvent({stage:'observation-queue-limit',provisional:true,observationQueue:metadata});emitObservation({...event,observationSequence:metadata.observationSequence,observationQueue:{dropped:true,reason:metadata.reason}});}
+  });
+  const closeQueue=()=>queue.close();signal.addEventListener('abort',closeQueue,{once:true});
+  const observe=event=>{if(!context.includeFields){emitObservation(event);return;}queue.push(event);};
+  try{const output=await start(operation,options,project,observe,signal,jobId,context.includeFields);await queue.drain();if(signal.aborted)throw Error('Calculation cancelled');results.set(jobId,output);return {kind:output.result?.kind,mesh:output.mesh?.summary,resultAvailable:true,analysisAssessment:output.analysisAssessment,intermediate:{...artifacts.summary(jobId),queue:queue.snapshot()}};}finally{queue.close();await queue.drain();signal.removeEventListener('abort',closeQueue);}
  }});
  return {generateMesh:options=>start('mesh',options),analyze:options=>start('elastic',options),cancel:()=>{if(active?.jobId)jobs.cancel(active.jobId);else if(active)finish(active,Error('Calculation cancelled'));},
   startJob({operation='solve',options={},inputRevision,requestId,includeFields=false,origin='api'}={}){if(!['solve','mesh'].includes(operation)||typeof includeFields!=='boolean'||!['gui','api'].includes(origin))throw Error('Invalid analysis operation or includeFields');return jobs.start({project:getProject(),options,operation:operation==='mesh'?'mesh':'elastic',inputRevision,requestId,context:{includeFields,origin}});},

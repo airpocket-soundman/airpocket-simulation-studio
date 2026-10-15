@@ -17,7 +17,7 @@ test('worker branch matrix selects numerical versus text-only paths without load
  ];
  for(const [p,o,id]of cases){const selected=resolve(p,o);assert.equal(selected.profileId,id);assert.equal(selected.supported,true);assert.deepEqual(selected.profile.events.slice(0,3).map(e=>e.stage),['preparation','mesh','progress']);}
  const source=await readFile(new URL('../src/observation-profiles.js',import.meta.url),'utf8');assert.doesNotMatch(source,/^import\s/m);
- for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>e.when!=='execution-failure').map(e=>e.stage),['preparation','mesh','progress']);
+ for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>!['execution-failure','pending-payload-limit'].includes(e.when)).map(e=>e.stage),['preparation','mesh','progress']);
 });
 test('unsupported combinations and malformed selectors never advertise fields',()=>{
  const cases=[ [project(),{method:4}], [project(),{adaptive:'yes'}], [project('thermal'),{includeFields:'yes'}],
@@ -49,4 +49,14 @@ test('catalog, diagnostics and returned selections are independent JSON metadata
  const c=getCapabilities({target:'node'});assert.equal(c.observation.profiles.length,12);assert.ok(!c.observation.profiles.some(p=>p.id==='elastic-webgpu'));c.observation.profiles.length=0;assert.equal(getObservationProfiles({target:'node'}).length,12);
  assert.deepEqual(diagnoseExecution(p).selectedObservation,resolve(p));assert.throws(()=>diagnoseExecution(p,{includeFields:'yes'}),/options/);
  assert.deepEqual(JSON.parse(JSON.stringify(resolve(null))),resolve(null));
+});
+
+test('pending queue gap notifications are optional provisional host metadata with explicit required fields and budget basis',()=>{
+ for(const profile of getObservationProfiles()){
+  const declaration=profile.events.find(event=>event.stage==='observation-queue-limit');assert.ok(declaration);
+  assert.equal(declaration.when,'pending-payload-limit');assert.equal(declaration.optional,true);assert.equal(declaration.provisional,true);
+  assert.equal(declaration.pendingBasis,'in-flight-and-queued-full-payloads');assert.equal(declaration.byteBasis,'conservative-structural-estimate');assert.equal(declaration.storageBudgetSeparate,true);assert.equal(declaration.workerTransportBounded,false);
+  assert.equal(declaration.latestPolicy,'last-accepted-snapshot');assert.equal(declaration.acceptedIsStored,false);
+  assert.deepEqual(declaration.requiredFields,['observationQueue.reason','observationQueue.observationSequence','observationQueue.maxEvents','observationQueue.maxBytes','observationQueue.pendingEvents','observationQueue.pendingBytes','observationQueue.dropped','observationQueue.latestPolicy']);
+ }
 });

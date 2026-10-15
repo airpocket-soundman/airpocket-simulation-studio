@@ -366,7 +366,8 @@ const common=[
   "stage": "progress",
   "cadence": "worker text progress converted by the client",
   "metrics": []
- }
+ },
+ {stage:'observation-queue-limit',when:'pending-payload-limit',optional:true,provisional:true,pendingBasis:'in-flight-and-queued-full-payloads',byteBasis:'conservative-structural-estimate',storageBudgetSeparate:true,workerTransportBounded:false,requiredFields:['observationQueue.reason','observationQueue.observationSequence','observationQueue.maxEvents','observationQueue.maxBytes','observationQueue.pendingEvents','observationQueue.pendingBytes','observationQueue.dropped','observationQueue.latestPolicy'],cadence:'host notification when a full mesh or field payload is omitted by the bounded pending queue; scalar summaries continue with source observationSequence',metrics:[{name:'observationQueue.dropped',unit:'count'},{name:'observationQueue.droppedMeshes',unit:'count'},{name:'observationQueue.droppedFields',unit:'count'},{name:'observationQueue.pendingEvents',unit:'count'},{name:'observationQueue.pendingBytes',unit:'bytes'}],latestPolicy:'last-accepted-snapshot',acceptedIsStored:false}
 ];
 const clone=value=>JSON.parse(JSON.stringify(value));
 export function getObservationProfiles({target='browser'}={}){

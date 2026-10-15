@@ -525,3 +525,17 @@ Actual browser GUI thermal example on a local dirty production build completed w
 Credential-free health probing and bounded, redacted MCP counters distinguish reachability from authentication. Nine new targeted tests passed; a real local production UI health probe succeeded without pairing. The approved inspect-only older public HTTPS UI retry failed with zero bridge requests and sessions; cause remains unknown and the new hint is not yet publicly validated. QA processes/tabs were closed. See [evidence](../evidence/2026-10-15-browser-diagnostics.json).
 
 944 tests: 941 passed, 3 skipped, 0 failed (186.75 s). Build and 26 local distribution checks passed (49.13 s). Repository/installed Skill: 10 file hashes match; both validators passed.
+
+## 2026-10-15: Evidence edit discovery, saved restoration validation and pending payloads
+
+Real stdio tests build evidence/intent edits from discovered schemas, repair exploratory provenance diagnostics and reject unconfirmed quantitative inputs. Confirmations are explicit test fixtures, not proof of actual user confirmation. Tests reject every malformed saved case, unsupported planar rotation and mutation after refusal; controlled slow-consumer tests check pending limits, cancellation/drain and mesh association.
+
+The first full run was 955 tests: 950 passed, 2 failed, 3 skipped (150.33 s). Missing queue-event declarations and an old assumption that the last retained field is the final time caused failures. Declare queue events and compare every retained field with its exact saved-time frame; separately verify complete final pressure/frame/time. Preserve the initial failure record.
+
+Real local production GUI thermal analysis completed with 171 nodes/428 tetrahedra, 20–100°C, saved and redisplayed. Visible exported JSON passed restoration validation and center remeasurement yielded 59.9999999924°C. This GUI regression did not force overflow. See [browser record](../evidence/2026-10-15-agent-contract-browser.json) and [archive](../evidence/2026-10-15-agent-contract-browser-case.json).
+
+Published18a416d passed all three publication jobs, 26 runtime checks and release tag verification. Its hash-verified downloaded connector factory and actual public UI still failed health/inspect-only pairing with zero bridge requests and permission-query prompt; cause remains undetermined. Do not close the public HTTPS gate. See [publication QA](../evidence/2026-10-15-publication-18a416d.json). QA credentials/tabs/servers were cleaned up. Worker transport backpressure, event-ring byte limits, comparative remeasurement API, Skill-only completion and all P0–P6 requirements remain open.
+
+The corrected default Node24 full run had 956 tests: 952 passed, 1 failed, 3 skipped (158.05 s). mcp-advanced-structural-provenance exited with the known V8 jit_page allocation native fatal. Its isolated test passed (16.05 s), which does not prove default full success or a root fix. Build and 26 local distribution checks passed (67.78 s).
+
+Node26 comparison: 956 tests, 952 passed, 1 failed, 3 skipped (367.06 s). Actual selected-child queryNodeIdentity startup exceeded its 5-second timeout; the isolated six-test suite passed. The comparison full run also failed and does not substitute for default full success or a V8 root fix. See [full evidence](../evidence/2026-10-15-agent-contract-validation.json). All ten repository/installed Skill file hashes match; both validators passed.

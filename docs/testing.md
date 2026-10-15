@@ -529,3 +529,17 @@ calculation.runtimeIdentityを追加し、Worker起動/コンパイル時にbuil
 認証コードを送らない1KiB/5秒上限のhealth照会、参考情報としての権限状態照会、任意指定の秘密を保持しないMCP受信カウンタを追加した。新規対象9件成功。実ローカル本番GUIでコードなしに診断窓口へ到達し、未接続を維持した。許可済みの確認専用公開HTTPS再試験は旧公開UIで到達エラーとなり、bridge受信0・session0だった。原因の特定や新hintの公開HTTPS成功とは扱わない。試験プログラムとタブは終了した。[証跡](evidence/2026-10-15-browser-diagnostics.json)を参照。
 
 944 tests: 941 passed, 3 skipped, 0 failed (186.75 s). Build and 26 local distribution checks passed (49.13 s). Repository/installed Skill: 10 file hashes match; both validators passed.
+
+## 2026-10-15: 根拠編集・保存復元検証・中間待機
+
+MCPから根拠/intentの位置引数schemaを取得し、明示したfixtureの根拠でexploratory診断修復とquantitative未確認拒否を実stdioで確認した。実際の利用者確認を取得した証明ではない。全ケース復元検証、短い場/不正接続/identity拒否、回転frame無し拒否と元入力不変も検証した。中間payloadは既定8件/推定8MBで受理前に制限し、遅いconsumer・cancel/drain・旧meshへの誤結合防止を確認した。
+
+初回全体955件は950成功・2失敗・3skip（150.33秒）。新queue通知の未宣言と、最後の保持場を最終時刻と仮定した試験が失敗した。通知契約を追加し、すべての保持場を同時刻の完全保存frameと照合、最終pressure/frameと時刻の完全性も別途検査するよう修正した。初回失敗を成功へ読み替えない。
+
+実ブラウザのdirty本番buildで熱サンプルを実行し、171節点/428要素・20〜100°C、保存・再表示、画面から取得したJSONの復元検証と中央59.9999999924°Cの再測定を確認した。GUI例はqueue超過を強制しておらず、上限の証明は制御試験と区別する。[画面/測定記録](evidence/2026-10-15-agent-contract-browser.json)、[保存JSON](evidence/2026-10-15-agent-contract-browser-case.json)を参照。
+
+公開18a416dはverify/deploy/verify-publishedと26配信物/tag一致が成功した。同版から取得・hash照合した接続factoryで、公開実画面のhealthと確認専用pairは未到達・受信0、権限照会promptだった。原因は未特定で公開HTTPS gateを閉じない。[公開試験](evidence/2026-10-15-publication-18a416d.json)を参照。試験用コード・タブ・接続プログラム・ローカルpreviewを終了した。Worker transport全体の背圧、event ring bytes、比較/同一点再測定API、Skill単独一巡と全P0〜P6は継続する。
+
+修正後の既定Node24全体は956件中952成功・1失敗・3skip（158.05秒）。mcp-advanced-structural-provenanceが既知V8のjit_page allocation内部停止で終了した。停止ファイルの単独1件は成功（16.05秒）したが、既定全体成功や根治の証明ではない。buildとローカル配信物26項目は成功（67.78秒）。
+
+Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeIdentityの実子process起動が5秒timeoutで失敗し、同suiteの単独6件は成功した。比較全体も未通過であり、既定環境の全体成功やV8根治の代替にしない。[全体証跡](evidence/2026-10-15-agent-contract-validation.json)を参照。配布/リポジトリSkill10ファイルはhash一致、両validator成功。

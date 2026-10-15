@@ -528,3 +528,19 @@ Call `studio_browser_sessions({diagnostics:true})` to add `diagnostics` alongsid
 Counters record only traffic observed by this process. No increase cannot identify a browser-permission, mixed-content, network or stopped-server cause. Check reachability and pairing separately; users still explicitly grant operation scopes.
 
 Browser requests specify `targetAddressSpace:"loopback"`; browser permission remains authoritative and support is not guaranteed. See the current [Local Network Access specification](https://wicg.github.io/local-network-access/) and [official Chrome explanation](https://developer.chrome.com/blog/local-network-access). This path does not depend on the paused legacy Private Network Access special preflight headers or unconditionally add `Access-Control-Allow-Private-Network`. Existing CORS, Origin/Host, Bearer and scope checks remain in place.
+
+## Strict agent edits and saved-case validation
+
+`studio_validate_cases` validates every case through the actual restoration path before returning its existing comparison summary. Mismatched field/node counts, invalid tetrahedra/surfaces and inconsistent runtime identity are rejected. Valid legacy archives remain compatible and source files are unchanged. Validation does not establish physical accuracy or source authenticity.
+
+Explicit `rotationDegrees` in `selectPlanarRegion` requires a matching `frame:{origin,u,v}`. Rotation-only descriptors, including zero rotation, are rejected instead of silently selecting an axis-aligned region. Coherent GUI frame/rotation pairs, custom frames without controls and legacy axis/position descriptors without rotation remain supported. `min/max` are frame coordinates in mm and rotation controls are degrees. Rejection preserves selection, conditions and input revision.
+
+Discover concrete positional schemas for `setInputProvenance` and `setAnalysisIntent` through `studio_browser_contracts({method:"previewEdit"})` or `edit`. Put the provenance document or intent in `operations[].args[0]`. Provenance schemaVersion:1/entries records pointer/value/source/rationale/applicability/assumption/status; CAD/document sources require reference/revision. Preflight remains authoritative for pointer applicability, exact-value freshness, mandatory evidence and confirmation. Schema validity does not authenticate evidence or user confirmation. Never mark an agent proposal user-confirmed without actual user confirmation. Explicit exploratory assumptions retain provisional status.
+
+## Pending intermediate payload limits
+
+Independently of the 64 MB retained store, pending mesh/field processing defaults to eight events and 8,000,000 estimated bytes, including the active consumer. The host reserves structural estimates before cloning/serialization; excess snapshots are dropped while summaries, diagnostics and final calculation continue. Read reasons and counters in `observation-queue-limit` / `observationQueue`, browser completion `intermediate.queue`, or Node `intermediateQueue`. Capabilities `observation.pendingPayloadQueue` declares host defaults; startup overrides may differ, so use actual job metadata.
+
+`observationSequence` records source order. Summaries/diagnostics bypass asynchronous storage and may precede older field publication. latestPolicy is last-accepted-snapshot, not replacement with the latest rejected field. Rejected meshes prevent subsequent fields binding to an old mesh. accepted/latestCompleted mean queue admission/consumer completion, not successful artifact retention; verify artifact references and integrity separately. Cancellation releases waiting payloads and drain waits for in-flight work.
+
+The conservative structural estimate does not bound total JS heap, Worker postMessage queues or arbitrary event-ring payload bytes. Report dropped observations and limits rather than claiming complete intermediate fields.
