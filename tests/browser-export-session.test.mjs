@@ -20,3 +20,8 @@ test('disconnect invalidates an export that is still preparing before renderer a
  const pending=session.call('startExport',{requestId:'late'});session.disconnect();resume();
  await assert.rejects(pending,/expired export/);assert.equal(rendered,false);
 });
+
+test('exportCapabilities passes through structured mp4/gif entries without changing operation routing',async()=>{
+ const caps={png:true,mp4:false,gif:false,formats:{mp4:{supported:false,reason:'r',alternatives:['webm','png']},gif:{supported:false,reason:'g',alternatives:['webm','png']}}};
+ const session=createBrowserSession({exports:{capabilities:()=>caps}});assert.deepEqual(await session.call('exportCapabilities'),caps);assert.equal(browserMethods.exportCapabilities,'inspect');
+});

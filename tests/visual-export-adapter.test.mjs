@@ -78,3 +78,12 @@ test('WebM recorder that emits no chunks fails explicitly',async()=>{
 test('hasVideoFrames rejects empty and clusterless blobs',async()=>{
  assert.equal(await hasVideoFrames(new Blob([])),false);assert.equal(await hasVideoFrames(new Blob([new Uint8Array(110)])),false);assert.equal(await hasVideoFrames(new Blob([CLUSTER])),true);
 });
+
+test('capabilities keep legacy flags and add structured mp4/gif entries for both injected probe outcomes',()=>{
+ const f=fixture();try{
+  const caps=f.api.capabilities({mediaRecorder:{isTypeSupported:t=>t.startsWith('video/mp4')}}),none=f.api.capabilities({mediaRecorder:{isTypeSupported:()=>false}});
+  for(const c of [caps,none]){assert.equal(c.png,true);assert.equal(c.mp4,false);assert.equal(c.gif,false);assert.equal(c.schemaVersion,1);assert.equal(c.maxSeconds,15);assert.equal(c.formats.mp4.supported,false);assert.equal(c.formats.gif.supported,false);}
+  assert.equal(caps.formats.mp4.browserRecorderSupport,true);assert.equal(none.formats.mp4.browserRecorderSupport,false);assert.equal(none.webm,false);
+  assert.equal(f.api.capabilities().webm,true);
+ }finally{f.restore();}
+});
