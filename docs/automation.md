@@ -531,6 +531,8 @@ MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来
 
 ブラウザ要求は `targetAddressSpace:"loopback"` を指定し、ローカル接続の権限判断をブラウザへ委ねます。これは権限付与や対応ブラウザの保証ではありません。現行の [Local Network Access仕様](https://wicg.github.io/local-network-access/) と [Chromeの公式解説](https://developer.chrome.com/blog/local-network-access) に沿い、保留された旧Private Network Accessの特別preflightヘッダーには依存しません。`Access-Control-Allow-Private-Network` を無条件に付けず、既存CORS・Origin/Host・Bearer・scope検査を維持します。
 
+配信するCOI Service Workerは、`http://127.0.0.1`への要求を横取りせず、ページからの通常の通信としてブラウザに処理させます。Worker内からの再送では事前のローカル通信権限が必要となり、初回の許可確認を開始できない場合があるためです。これは権限確認やCORSの回避ではなく、接続元・コード・共有scopeの検査も引き続き必要です。通常のアプリ資産には従来の分離ヘッダー処理を維持します。公開HTTPSでのペアリング成功は別途実機検証が必要で、PUBLICHTTPS1は未完了です。
+
 Origin/Host検査で拒否した場合も、データを含まない403を返します。要求のOriginが設定済みOriginと完全一致するときだけ `Access-Control-Allow-Origin`（と `Vary: Origin`）を付け、ページに「接続できない」ではなく「拒否(403)」と表示できるようにします。他のOriginには付けず、`*` も使いません。Host不一致などの設定ミスの切り分け用で、検査自体は緩めません。
 
 ## エージェント編集と保存検証の厳密化

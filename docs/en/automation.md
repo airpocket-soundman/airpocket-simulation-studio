@@ -531,6 +531,8 @@ Counters record only traffic observed by this process. No increase cannot identi
 
 Browser requests specify `targetAddressSpace:"loopback"`; browser permission remains authoritative and support is not guaranteed. See the current [Local Network Access specification](https://wicg.github.io/local-network-access/) and [official Chrome explanation](https://developer.chrome.com/blog/local-network-access). This path does not depend on the paused legacy Private Network Access special preflight headers or unconditionally add `Access-Control-Allow-Private-Network`. Existing CORS, Origin/Host, Bearer and scope checks remain in place.
 
+The distributed COI Service Worker leaves requests to `http://127.0.0.1` unintercepted so the browser handles them as ordinary page requests. Reissuing them inside a worker can require prior local-network permission and prevent an initial permission prompt. This does not bypass permission or CORS checks; Origin, pairing-code and scope validation still apply. Ordinary application assets retain their existing isolation-header processing. Successful public HTTPS pairing still requires separate real-browser verification; PUBLICHTTPS1 remains open.
+
 When an Origin/Host check refuses a request, the bridge still returns a data-free 403. It adds `Access-Control-Allow-Origin` (with `Vary: Origin`) only when the request Origin exactly equals the configured Origin, so the page can report "refused (403)" instead of a generic network failure, for example on a Host mismatch. Other Origins get no CORS headers, and `*` is never used. The Origin, Host and Bearer checks are unchanged.
 
 ## Strict agent edits and saved-case validation
