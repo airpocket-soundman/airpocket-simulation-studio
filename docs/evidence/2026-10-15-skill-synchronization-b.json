@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "task": "Synchronize the single installed physics-provenance reference to its repository source",
+  "sourceRevision": "b6334c033469615b90931b222aba77fe0ccd4023",
+  "sourceSkillPath": "skills/airpocket-studio",
+  "installedTarget": "existing user skill directory: airpocket-studio",
+  "fileCount": 11,
+  "files": [
+    {
+      "path": "agents/openai.yaml",
+      "sourceBytes": 241,
+      "installedBytes": 241,
+      "sourceSha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1",
+      "installedSha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1",
+      "matches": true
+    },
+    {
+      "path": "references/browser-session.md",
+      "sourceBytes": 9252,
+      "installedBytes": 9252,
+      "sourceSha256": "e188c380518bc69ab503e5e4629e34dd936b6419303d421dc07f7577c524d743",
+      "installedSha256": "e188c380518bc69ab503e5e4629e34dd936b6419303d421dc07f7577c524d743",
+      "matches": true
+    },
+    {
+      "path": "references/case-archives-measurements.md",
+      "sourceBytes": 11612,
+      "installedBytes": 11612,
+      "sourceSha256": "5944a94e62fa2a52f06e82270d11b7d0ed0cced3189a00bc2e5ff253cfdd997f",
+      "installedSha256": "5944a94e62fa2a52f06e82270d11b7d0ed0cced3189a00bc2e5ff253cfdd997f",
+      "matches": true
+    },
+    {
+      "path": "references/development-progress.md",
+      "sourceBytes": 1457,
+      "installedBytes": 1457,
+      "sourceSha256": "bcb4ed43bca7c7127d18c60718604aede66af7937eec87c11b2fe5ff0ea31bc7",
+      "installedSha256": "bcb4ed43bca7c7127d18c60718604aede66af7937eec87c11b2fe5ff0ea31bc7",
+      "matches": true
+    },
+    {
+      "path": "references/geometry-imports.md",
+      "sourceBytes": 12090,
+      "installedBytes": 12090,
+      "sourceSha256": "8d1b794bf432bb9bbff40401d006d1d6969d0d8dd3ff361b04ea5a3556d9fbfb",
+      "installedSha256": "8d1b794bf432bb9bbff40401d006d1d6969d0d8dd3ff361b04ea5a3556d9fbfb",
+      "matches": true
+    },
+    {
+      "path": "references/jobs-observations.md",
+      "sourceBytes": 11945,
+      "installedBytes": 11945,
+      "sourceSha256": "2c7d0c353ede1250518c669e197009cb11b0dfe9a31b73ef12a123900db7246c",
+      "installedSha256": "2c7d0c353ede1250518c669e197009cb11b0dfe9a31b73ef12a123900db7246c",
+      "matches": true
+    },
+    {
+      "path": "references/physics-provenance.md",
+      "sourceBytes": 10192,
+      "installedBytes": 10192,
+      "sourceSha256": "97740f273a33a06ab27fe0eb53dc8f6251254ddf6dd6348b8f8ddec88ee4a85a",
+      "installedSha256": "97740f273a33a06ab27fe0eb53dc8f6251254ddf6dd6348b8f8ddec88ee4a85a",
+      "matches": true
+    },
+    {
+      "path": "references/result-views.md",
+      "sourceBytes": 5513,
+      "installedBytes": 5513,
+      "sourceSha256": "27d19cb62992114aed43389857adf3da80a23ebd06920e0c532920242cc84473",
+      "installedSha256": "27d19cb62992114aed43389857adf3da80a23ebd06920e0c532920242cc84473",
+      "matches": true
+    },
+    {
+      "path": "references/runtime-diagnostics.md",
+      "sourceBytes": 5605,
+      "installedBytes": 5605,
+      "sourceSha256": "c489ea36b0709204538681c04517f035516ae38b04098803bb6c485e9c1092c4",
+      "installedSha256": "c489ea36b0709204538681c04517f035516ae38b04098803bb6c485e9c1092c4",
+      "matches": true
+    },
+    {
+      "path": "references/saved-inputs.md",
+      "sourceBytes": 18371,
+      "installedBytes": 18371,
+      "sourceSha256": "36b1c2e08649e00df65fc65d64a86e100569bc1fa95da4fae5181e30a21000f2",
+      "installedSha256": "36b1c2e08649e00df65fc65d64a86e100569bc1fa95da4fae5181e30a21000f2",
+      "matches": true
+    },
+    {
+      "path": "SKILL.md",
+      "sourceBytes": 4755,
+      "installedBytes": 4755,
+      "sourceSha256": "42c964da67c51a2558a368859396edb581547f7bb9ef7c840ae67a726f9852d3",
+      "installedSha256": "42c964da67c51a2558a368859396edb581547f7bb9ef7c840ae67a726f9852d3",
+      "matches": true
+    }
+  ],
+  "backup": ".qa/backup/physics-provenance.md.before-skill-sync-2026-10-15",
+  "unchanged": {
+    "serverRegistration": {
+      "sha256": "cfbfc0c2fce5346438208b24617a08270131f30660ec9a8363f047098eefb5b9",
+      "scope": "No server registration or configuration was modified; this operation copied one installed reference file only.",
+      "unchanged": true,
+      "repositoryEntry": "scripts/studio-mcp.mjs"
+    },
+    "uiMetadata": {
+      "matches": true,
+      "path": "agents/openai.yaml",
+      "installedSha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1",
+      "sourceSha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1"
+    }
+  },
+  "behaviorBasis": {
+    "lines": [
+      24,
+      29
+    ],
+    "finding": "Omitted assessment options become {}; evaluate assigns the result for the requested kind, replacing that assessment at the current revision. The source note describes these supported semantics.",
+    "sourceReference": "skills/airpocket-studio/references/physics-provenance.md",
+    "apiReference": "src/result-assessment-api.js"
+  },
+  "validation": {
+    "validator": "skill-creator quick_validate.py",
+    "source": {
+      "status": "passed",
+      "output": "Skill is valid!"
+    },
+    "installed": {
+      "status": "passed",
+      "output": "Skill is valid!"
+    }
+  },
+  "limitations": [
+    "Synchronization evidence only; SKILLROUTING1 remains checking until its other acceptance conditions are independently satisfied.",
+    "No forward-preview revalidation was performed."
+  ]
+}

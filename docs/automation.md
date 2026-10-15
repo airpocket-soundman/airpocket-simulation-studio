@@ -584,3 +584,9 @@ fieldは displacement / stress / plasticStrain / temperature / heatFlux / instan
 MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で、bundle v1/v2は対象外です。references省略時はpathだけを渡し、`cases` の `saved-case:0` 等のスナップショット内ID、case revision、archiveRevisionとsourceの生bytes/SHA-256を取得します。比較にはこのarchiveRevisionをexpectedArchiveRevisionとして指定し、上のreferencesと任意pointを渡します。IDだけを別archiveに流用しません。応答前にも元ファイルのhashを再確認し、変化は拒否します。ファイル書込・ソルバー起動はありません。
 
 応答のJSON値全体はUTF-8で65536bytes以下です。超過時は参照数を減らします。MCPのtext/structuredContentによる重複やHTTP/JSON-RPCの包装込みwire全体の64KiB保証ではありません。今回の検証件数・実ブラウザ・公開完了は検証待ちとし、P0〜P6全体の完了を宣言しません。
+
+### 評価要求を含む解析前検査
+
+`studio_preflight_project({path,fractureAssessment?,fatigueAssessment?,...})`は、共通APIの`preflight(options)`と同様に、solveで要求した破壊・疲労評価の材料データとオプションも検査します。評価未指定（または`undefined`）とmesh-onlyは従来どおりです。疲労の省略オプションには従来の既定値が適用されるため、意図した荷重倍率・回数・平均応力補正を明示してください。
+
+不足は`ASSESSMENT_INPUT_REQUIRED`、不正値は`ASSESSMENT_INPUT_INVALID`、対象外の構造モデルは`ASSESSMENT_MODEL_UNSUPPORTED`として対象ポインタを返します。破壊靭性の登録温度範囲を外れる評価温度は`ASSESSMENT_TEMPERATURE_OUT_OF_RANGE`です。適合する温度依存の線形等方材は一律に除外しません。quantitative/exploratoryでは材料評価データも既存の根拠・仮定検査に含めます。ソルバーや評価を実行せず、入力ファイルを変更しません。成功しても、解析後の応力状態・弾性範囲・メッシュ・拘束・収束・物理妥当性を保証しません。
