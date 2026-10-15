@@ -150,7 +150,7 @@ The full suite passed 415 of 418 tests, with three skips and zero failures at co
 
 `tests/mcp-assessment.test.mjs` uses real stdio MCP and an actual WASM axial solve. Explicit synthetic S-N reference data yields 1e6 cycles and damage0.1; mode-I intensity agrees with sigma*sqrt(pi*a). Adding fracture assessment preserves existing fatigue, inputs and stresses. Tests verify provenance, original provisional/remaining-check metadata, units/limitations and pages up to200 elements. Synthetic references are not measured material design data.
 
-Existing output/input overwrite, stale revisions, omitted settings, unknown options, oversized pages and tampered stored assessments are refused. Source changes, busy state and revocation prevent commit. Real-browser and public-HTTPS assessment rendering remain unverified; Node/MCP numerical and persistence evidence does not establish live UI behavior.
+MCP `studio_assess_result` refuses existing output/input path overwrite and omitted options (saved-file path only). Browser connector `evaluateAssessment`/`resultAssessmentApi.evaluate` instead replaces the stored assessment on re-evaluation at the current revision and accepts omitted fatigue options with defaults (minLoadFactor0, maxLoadFactor1, appliedCycles1), as seen in real Chrome. Both paths refuse stale revisions, unknown options, oversized pages and tampered stored assessments are refused. Source changes, busy state and revocation prevent commit. Real-browser and public-HTTPS assessment rendering remain unverified; Node/MCP numerical and persistence evidence does not establish live UI behavior.
 
 Build passed. The first local-distribution check, concurrent with the full suite, stopped in Node v24.11.1/V8 with fatal `jit_page_->allocations_.erase(addr) == 1`. An isolated rerun passed all26 checks in29.07 seconds. Solver and checker sources were unchanged; root cause remains unresolved, tracked as RUNTIMEWASM1 for failed-state capture and reproducibility. Specialist SKILL validation passed.
 
@@ -561,3 +561,20 @@ Default Node24 full suite: 977 of 980 passed, 3 skipped, zero failed (154.09 s).
 ## 2026-10-15: Development history and product estimate
 
 Reviewed Claude CLI implementation and fixed unknown intervals, Windows CRLF binding and historical-candidate credit. Full suite: 1011 tests, 1008 passed, 3 skipped, zero failures. Build and 27 distribution checks (26 original plus history) passed. Actual browser checks covered 151 points, JP/EN, 390px, legend, keyboard, table and rubric. Estimate 25%, subjective scenario range 16–42%. See [evidence](../evidence/2026-10-15-progress-dashboard.json) and [method](progress-dashboard.md). Feature publication CI remains separately pending. Publication infrastructure23e430e passed verify/deploy/verify-published and26checks; preserve failed badce2c.
+
+## 2026-10-15: Assessment-option preflight and publication verification
+
+PR #32 validates requested fracture/fatigue material data and options before solving and exposes the same refusal and repair information through MCP `studio_preflight_project`. Omitted assessments and mesh-only behavior are preserved. This does not replace post-solve checks of physical applicability or stress fields.
+
+The local full suite on integration candidate 071e05b had 1132 passes, three skips and zero failures out of 1135 tests. Main `3ef460e173a3253fc5ad8c87f97191cfb28caf0b` passed verify, deploy and verify-published. All 28 published checks, manifest/progress bytes and SHA, and the annotated release tag were checked. See [publication evidence](../evidence/2026-10-15-assessment-publication.json). This verifies deployed assets through Node execution, not browser rendering or independent public-pairing acceptance.
+
+## 2026-10-15: Worker observation transport bounds (under verification)
+
+In-flight and outbox observations each have an eight-event/8 MB budget. Synchronous solvers do not wait; only scalar iterations may coalesce. Normal results and reported errors wait for delivery, preserving mesh generations and acceptance-time copies. Cancellation, timeout and abnormal termination may omit the final transport summary, leaving final loss totals unknown. Progress, final results and total JavaScript heap are outside this budget.
+
+The initial drop-only design lost real Stokes P2 final-check and sweep frequency events and was rejected; [failure evidence](../evidence/2026-10-15-worker-transport-initial-regression.json) is preserved. The revised targeted suite passed 77 tests; a separate module-boundary/shared-type run passed 29. Full regression, real-browser and candidate publication checks remain pending. P3 as a whole is incomplete.
+## 2026-10-15: User report of public HTTPS reconnect and Skill input preview
+
+The user reported reconnecting to the published HTTPS version successfully. This was not independently observed. Success of an inspect operation, session termination after disconnect, browser version and published revision remain unverified, so PUBLICHTTPS1 stays checking. No edit or analysis scope was granted. See the [user-report record](../evidence/2026-10-15-public-https-reconnect-user-report.json).
+
+All 11 repository/installed Skill files matched by byte count and SHA, and both validators passed. An in-repository stdio preview changed a synthetic axial load from 100 N to 150 N and returned `PROVENANCE_STALE` for `/conditions/1/value`, preserving the original input bytes. The candidate was previewed only; it was not applied or analyzed. Repository factories created the fixture, so this does not prove Skill-only or complete end-to-end behavior. The scoped SKILLROUTING1 acceptance is met and marked ready. See the [synchronization evidence](../evidence/2026-10-15-skill-synchronization-b.json) and [preview evidence](../evidence/2026-10-15-skill-forward-input-preview-b.json).

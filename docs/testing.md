@@ -156,7 +156,7 @@ NUMERICREFERENCE1の追加調査では、生成参照200回が成功し、既定
 
 `tests/mcp-assessment.test.mjs`は実stdio MCPと実WASM軸力解析を使用。明示した架空S-N参照データで寿命1e6 cycles・損傷0.1を確認し、Mode-I評価のK値をsigma*sqrt(pi*a)と照合。疲労評価に破壊評価を追加しても既存評価・入力・応力配列を保持。出典・元の暫定判定と残確認事項、単位・制約、最大200要素の取得を検証した。架空参照値は実材料の設計値ではない。
 
-既存出力/入力への上書き、古い結果版、設定省略、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
+MCP `studio_assess_result`は既存出力/入力パスへの上書きと設定(options)省略を拒否する(保存ファイル経路のみ)。ブラウザ接続`evaluateAssessment`/`resultAssessmentApi.evaluate`では同種の再評価は現行結果版で保存済み評価を置換し、疲労のoptions省略は既定値(minLoadFactor0・maxLoadFactor1・appliedCycles1)で受理する(実Chrome確認)。両経路とも古い結果版、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
 
 ビルド成功。配信物チェックは、全体テストと並行した初回にNode v24.11.1のV8で `jit_page_->allocations_.erase(addr) == 1` のFatal errorとなり停止した。単独再実行は26項目すべて成功（29.07秒）。ソルバーと検証スクリプトは変更しておらず、原因を解決した記録ではない。RUNTIMEWASM1で失敗条件・WASM終了時の状態捕捉と再現性を追跡する。専門SKILLも検証済み。
 
@@ -565,3 +565,20 @@ Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeId
 ## 2026-10-15: 開発の履歴・完成度の可視化
 
 Claude CLIの実装を独立レビューし、欠落区間・Windows改行・過去候補の加点を修正。全体1011件中1008成功・3skip・失敗0、buildと配信物27項目（元26＋履歴）が成功。151記録点と日英・390px・凡例・キー選択・表・算定根拠を実画面で確認。推定25%、主観シナリオ幅16〜42%。[証跡](evidence/2026-10-15-progress-dashboard.json)と[算定方法](progress-dashboard.md)。本機能の公開CIは別途記録する。公開基盤23e430eはverify/deploy/verify-publishedと26項目が成功し、失敗したbadce2cは保存する。
+
+## 2026-10-15: 評価オプションの事前検査と公開確認
+
+PR #32は、要求された破壊・疲労評価の材料データとオプションを解析前に検査し、MCP `studio_preflight_project`から同じ拒否・修復情報を返す。未指定時とメッシュのみの動作を維持する。後処理時の物理妥当性や応力場の検証を代替しない。
+
+統合候補071e05bのローカル全体試験は1135件中1132成功・3skip・失敗0。main `3ef460e173a3253fc5ad8c87f97191cfb28caf0b` のverify・deploy・verify-publishedが成功し、公開検証28項目、manifestと進捗のbytes/SHA、注釈付きreleaseタグを照合した。[公開証跡](evidence/2026-10-15-assessment-publication.json)。これはNodeによる配信物の実行確認であり、ブラウザ描画や公開接続の独立証明ではない。
+
+## 2026-10-15: Worker観測の送信上限（検証中）
+
+ACK待ちと送信待ちを各8件/8 MBに制限し、同期ソルバーを止めずにscalar iterationだけを集約する。通常の結果・報告エラーの前に配送を待ち、メッシュ世代と観測値の受理時コピーを維持する。取消・timeout・異常終了では終端集計が届かず、最終欠落数は不明となる。progress・最終結果・JSヒープ全体はこの容量保証の対象外。
+
+初期の即時drop方式は実Stokes P2のfinal-checkとsweep周波数イベントを失ったため採用せず、[失敗証跡](evidence/2026-10-15-worker-transport-initial-regression.json)を残した。修正版の関連77試験と、別途モジュール境界・共通型29試験が成功。全体回帰・実ブラウザ・今回候補の公開検証は未了で、P3全体の完了ではない。
+## 2026-10-15: 公開HTTPS再接続の利用者報告とSkill入力preview
+
+利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。
+
+Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し、両validatorが成功した。実in-repo stdioのsynthetic 100 N→150 N previewは `/conditions/1/value` の古い根拠を `PROVENANCE_STALE` として示し、元入力bytesを保持した。変更はpreviewのみで適用・解析していない。fixture生成にrepository factoryを使ったためSkill単独/全一巡の証明ではないが、SKILLROUTING1の記載済み受け入れ範囲を満たしreadyへ更新した。[同期証跡](evidence/2026-10-15-skill-synchronization-b.json)、[preview証跡](evidence/2026-10-15-skill-forward-input-preview-b.json)。

@@ -17,7 +17,7 @@ async function start(t,entry,connector=true){
  return {rpc,raw,call,details,origin};
 }
 
-for(const [entry,count]of [['scripts/studio-mcp.mjs',31],['scripts/studio-browser-mcp.mjs',3]])test(entry+' exposes opt-in redacted diagnostics through actual stdio after refusals and browser errors',async t=>{
+for(const [entry,count]of [['scripts/studio-mcp.mjs',33],['scripts/studio-browser-mcp.mjs',3]])test(entry+' exposes opt-in redacted diagnostics through actual stdio after refusals and browser errors',async t=>{
  const mcp=await start(t,entry),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,count);const declaration=tools.find(value=>value.name==='studio_browser_sessions');assert.deepEqual(declaration.inputSchema.properties.diagnostics,{type:'boolean'});assert.deepEqual(declaration.inputSchema.required,[]);
  assert.deepEqual(await mcp.call('studio_browser_sessions'),{sessions:[]});assert.deepEqual(await mcp.call('studio_browser_sessions',{diagnostics:false}),{sessions:[]});
  const baseline=(await mcp.call('studio_browser_sessions',{diagnostics:true})).diagnostics;
@@ -37,4 +37,4 @@ for(const [entry,count]of [['scripts/studio-mcp.mjs',31],['scripts/studio-browse
  for(const value of ['received-secret-token',1,null,{}]){const error=await mcp.raw('studio_browser_sessions',{diagnostics:value});assert.equal(error.result.isError,true);assert.equal(JSON.stringify(error).includes('received-secret-token'),false);}
 });
 
-test('default full MCP keeps 29 tools and does not enable browser diagnostics',async t=>{const mcp=await start(t,'scripts/studio-mcp.mjs',false),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,29);assert.equal(tools.some(value=>value.name==='studio_browser_sessions'),false);assert.equal((await mcp.raw('studio_browser_sessions',{diagnostics:true})).result.isError,true);});
+test('default full MCP keeps 31 tools and does not enable browser diagnostics',async t=>{const mcp=await start(t,'scripts/studio-mcp.mjs',false),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,31);assert.equal(tools.some(value=>value.name==='studio_browser_sessions'),false);assert.equal((await mcp.raw('studio_browser_sessions',{diagnostics:true})).result.isError,true);});

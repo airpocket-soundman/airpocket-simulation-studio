@@ -1,3 +1,4 @@
+import {createCaseComparisonApi} from './case-comparison.js';
 import {parseBrowserConnectorEndpoint} from './browser-connection-diagnostics.js';
 import {inspectProjectInput} from './project-input-inspection.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
@@ -8,12 +9,14 @@ import {browserMethods} from './browser-operation-names.js';
 export {browserMethods} from './browser-operation-names.js';
 import {getAnalysisFailure} from './analysis-failure.js';
 import {previewProjectOperations} from './project-edit-preview.js';
+import {preflightMeshBoundaryTransfer} from './mesh-boundary-preflight.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
 export function createBrowserSession({studio,analysis,jobResults,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedResultTransfers=new Set(),ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
  const busy=()=>isBusy()||executionBusy();
+ const caseComparison=typeof cases?.readSource==='function'?createCaseComparisonApi({cases}):null;
  const builtins=builtinProjects??(studio?createBuiltinProjectOperations({studio,isBusy:busy}):null);
  return {
   async call(method,args={},{expiresAt=Infinity}={}){
@@ -42,6 +45,12 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='applyCaseSource'||method==='clearCaseSource'){if(!caseSources||editing||busy())throw Error('Case source operations unavailable or browser busy');editing=true;try{return await caseSources[method==='applyCaseSource'?'apply':'clear'](args,{guard:valid});}finally{editing=false;}}
    if(method==='prepareFluidDomain'||method==='applyFluidDomainMesh'){if(!fluidDomains||editing||busy())throw Error('Fluid domain operations unavailable or browser busy');editing=true;try{return await fluidDomains[method==='prepareFluidDomain'?'prepare':'applyMesh'](args,{guard:valid});}finally{editing=false;}}
    if(method==='preflight')return studio.preflight(args.options||{},args.context||{});
+   if(method==='meshBoundaryPreflight'){
+    if(Object.keys(args).some(key=>!['jobId','inputRevision'].includes(key))||typeof args.jobId!=='string'||typeof args.inputRevision!=='string')throw Error('Invalid mesh boundary preflight arguments');
+    const snapshot=project(),job=analysis.getJob(args.jobId);let output=null;try{output=analysis.getJobResult(args.jobId);}catch{/* Non-successful jobs are reported as not ready by the shared inspector. */}const report=await preflightMeshBoundaryTransfer({project:snapshot,job,output,expectedRevision:args.inputRevision});
+    if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))return {...report,allowed:false,diagnostics:[{code:'ANALYSIS_MESH_PREFLIGHT_STALE_INPUT',severity:'error',stage:'boundary-transfer',target:'/',message:'Live input changed during boundary-transfer inspection',evidence:{},suggestions:['Inspect the current input revision and retry'],requiresUserIntent:true}],reports:[]};
+    return report;
+   }
    if(method==='previewEdit'){
     const snapshot=project(),previewOptions={expectedRevision:args.expectedRevision,options:args.options,operation:args.operation,mode:args.mode},response=typeof studio.previewOperations==='function'?await studio.previewOperations(args.operations,previewOptions):await previewProjectOperations(snapshot,args.operations,{...previewOptions,target:'browser'});
     if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during edit preview.'),{code:'EDIT_PREVIEW_STALE'});
@@ -115,6 +124,7 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='importPrint'||method==='setPrintView'){if(!prints||busy()||editing)throw Error('Print API unavailable or browser busy');editing=true;try{return await prints[method==='importPrint'?'import':'set'](args,{guard:valid});}finally{editing=false;}}
    if(method==='previewCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');const response=await cadUpdates.preview(args);if(!valid())throw Error('CAD preview command expired');return response;}
    if(method==='applyCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');editing=true;try{return await cadUpdates.apply(args,{guard:valid});}finally{editing=false;}}
+   if(method==='caseCompare'){if(!caseComparison)throw Error('Case comparison API unavailable');const result=await caseComparison.compare(args,{guard:valid});if(!valid())throw Object.assign(Error('Case comparison expired or connection was revoked'),{code:'CASE_COMMAND_EXPIRED'});return result;}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },

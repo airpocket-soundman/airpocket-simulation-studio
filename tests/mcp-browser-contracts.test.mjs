@@ -20,7 +20,7 @@ async function server(t,connected=false){
  return {rpc,raw,call,origin,details};
 }
 test('real stdio MCP discovers bounded contracts without enabling a browser connector',async t=>{
- const mcp=await server(t),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,29);assert.ok(!tools.some(tool=>tool.name==='studio_browser_call'));const tool=tools.find(tool=>tool.name==='studio_browser_contracts');assert.equal(tool.annotations.readOnlyHint,true);
+ const mcp=await server(t),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,31);assert.ok(!tools.some(tool=>tool.name==='studio_browser_call'));const tool=tools.find(tool=>tool.name==='studio_browser_contracts');assert.equal(tool.annotations.readOnlyHint,true);
  const page=await mcp.call('studio_browser_contracts',{method:'startJob'});assert.deepEqual(page,getBrowserOperationContracts({method:'startJob'}));assert.ok(page.operations[0].inputSchema.required.includes('requestId'));
  const bad=await mcp.raw('studio_browser_contracts',{limit:11});assert.equal(bad.result.isError,true);assert.equal(bad.result.structuredContent.error.code,'BROWSER_CONTRACT_QUERY_INVALID');assert.equal((await mcp.call('studio_capabilities')).connector.publicHttpsVerified,false);
 });

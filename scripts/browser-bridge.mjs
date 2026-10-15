@@ -15,7 +15,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
   count('requests');
   const send=(status,value)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(value));};
   try{
-   if(req.headers.host!==`127.0.0.1:${server.address().port}`||req.headers.origin!==origin){count('originHostRefused');return send(403,{error:'Origin or host refused'});}
+   if(req.headers.host!==`127.0.0.1:${server.address().port}`||req.headers.origin!==origin){count('originHostRefused');if(req.headers.origin===origin){res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin');}return send(403,{error:'Origin or host refused'});}
    res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin');
    if(req.method==='OPTIONS'){count('preflights');res.setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS');res.setHeader('Access-Control-Allow-Headers','Authorization, Content-Type');return send(200,{});}
    if(req.url==='/health'&&req.method==='GET'){count('healthChecks');return send(200,{schemaVersion:1,kind:'airpocket-browser-bridge'});}
@@ -47,7 +47,7 @@ export async function createBrowserBridge({origin,port=0,ttlMs=600000,timeoutMs=
    if(!s.scopes.includes(scope)){count('scopeRefused');return Promise.reject(fail('Browser permission scope refused','BROWSER_SCOPE_REFUSED'));}
    if(s.commands.size>=16)return Promise.reject(fail('Browser command limit reached'));
    if(JSON.stringify(args).length>500000)return Promise.reject(fail('Command exceeds size limit'));
-   return new Promise((resolve,reject)=>{const id=randomUUID(),timer=setTimeout(()=>{s.commands.delete(id);count('commandTimeouts');reject(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'));},timeoutMs);s.commands.set(id,{id,method,args,resolve,reject,timer,delivered:false,expiresAt:now()+timeoutMs});});
+   return new Promise((resolve,reject)=>{const id=randomUUID(),command={id,method,args,resolve,reject,timer:null,delivered:false,expiresAt:now()+timeoutMs};command.timer=setTimeout(()=>{s.commands.delete(id);count('commandTimeouts');reject(Object.assign(fail('Browser command timed out; inspect state before retrying','BROWSER_COMMAND_TIMEOUT'),{delivered:command.delivered}));},timeoutMs);s.commands.set(id,command);});
   },
   async close(){closed=true;clearInterval(sweep);for(const id of sessions.keys())remove(id,'Bridge stopped');await new Promise(resolve=>server.close(resolve));}
  };

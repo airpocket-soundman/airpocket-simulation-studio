@@ -16,7 +16,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
  validateObservationQueueLimits(maxPendingObservationEvents,maxPendingObservationBytes);
  if(!['worker','process'].includes(isolation)||createProcessWorker!==undefined&&typeof createProcessWorker!=='function')throw Error('Invalid analysis isolation configuration');
  if(createProcessWorker!==undefined&&isolation!=='process')throw Error('Process worker factory requires process isolation');
- const destinations=new Map(),artifacts=new Map();
+ const destinations=new Map(),artifacts=new Map(),outputPaths=new Map();
  const jobs=createAnalysisJobs({id:randomUUID,timeoutMs,maxJobs,maxEvents,execute:async({project,options,operation,context,inputRevision,jobId,signal,onEvent,beginCommit})=>{
   const {outputPath,includeFields}=context,key=process.platform==='win32'?outputPath.toLowerCase():outputPath;
   if(destinations.has(key))throw Error('Analysis output is already reserved by another job');
@@ -52,7 +52,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    await queue.drain();if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
    beginCommit();
    const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.analysisAssessment.provisional};
-   const publication=await publishJson(outputPath,{...output,job});
+   const publication=await publishJson(outputPath,{...output,job},{includeIntegrity:true});
    return {...summarizeAnalysis(output),intermediateQueue:queue.snapshot(),...publication,outputPath,...(artifactDirectory?{artifactDirectory,intermediateBytes:artifactBytes,intermediateStorageLimited:artifactLimitReported}:{}),job};
    }finally{queue.close();await queue.drain();signal.removeEventListener('abort',closeQueue);}
   }finally{destinations.delete(key);}
@@ -76,7 +76,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    if((await stat(path)).size>100_000_000)throw Error('JSON file exceeds 100 MB');
    const api=createStudioApi();api.loadProject(JSON.parse(await readFile(path,'utf8')));
    const project=api.exportProject();
-   return jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolve(outputPath),includeFields}});
+   const resolvedOutput=resolve(outputPath),job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolvedOutput,includeFields}});outputPaths.set(job.jobId,resolvedOutput);return job;
   },
   listArtifacts(jobId,args={}){
    const job=jobs.get(jobId);if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['offset','limit'].includes(key)))throw Error('Invalid artifact catalog page');
@@ -91,6 +91,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    return {schemaVersion:1,jobId,inputRevision:job.inputRevision,jobState:job.state,artifactId,artifact:{...record},...inspected};
   },
   get:jobs.get,events:jobs.events,cancel:jobs.cancel,drain:jobs.drain,
-  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);return result;},close:jobs.close,async closeAsync(){jobs.close();return jobs.drain();}
+  async meshOutput(jobId){const job=jobs.get(jobId),path=outputPaths.get(jobId);if(!path||job.state!=='succeeded'||job.executionSettled!==true||job.operation!=='mesh')throw Error('A successful, settled retained mesh-only job is required');if((await stat(path)).size>100_000_000)throw Error('Mesh output exceeds 100 MB');const bytes=await readFile(path);if(bytes.length!==job.result?.outputBytes||createHash('sha256').update(bytes).digest('hex')!==job.result?.outputSha256)throw Object.assign(Error('Mesh output integrity check failed'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});const output=JSON.parse(bytes.toString('utf8'));if(output.job?.jobId!==jobId||output.job?.inputRevision!==job.inputRevision)throw Object.assign(Error('Mesh output identity does not match its retained job'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});return output;},
+  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);outputPaths.delete(jobId);return result;},close:jobs.close,async closeAsync(){jobs.close();return jobs.drain();}
  });
 }

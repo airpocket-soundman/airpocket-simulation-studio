@@ -1,0 +1,316 @@
+{
+ "_comment": "Layer table for src/**/*.js (paths relative to src/). See docs/module-boundaries.md. Every src js file must appear in exactly one layer.",
+ "layers": {
+  "contract": {
+   "description": "Pure shared contracts/identities/schemas. Imports nothing from other layers.",
+   "mayImport": [],
+   "externals": [],
+   "assets": [
+    "../package.json"
+   ],
+   "dom": false,
+   "files": [
+    "analysis-failure.js",
+    "browser-connection-diagnostics.js",
+    "browser-connection-errors.js",
+    "browser-operation-archive-contracts.js",
+    "browser-operation-contracts.js",
+    "browser-operation-input-contracts.js",
+    "browser-operation-job-contracts.js",
+    "browser-operation-names.js",
+    "browser-operation-view-contracts.js",
+    "cad-update-state.js",
+    "catalog-provenance.js",
+    "evidence-operation-schema.js",
+    "input-provenance.js",
+    "job-event-payload.js",
+    "job-observation-queue.js",
+    "worker-observation-transport.js",
+    "observation-profiles.js",
+    "print-errors.js",
+    "project-revision.js",
+    "runtime-identity.js",
+    "semantic-operation-schema.js",
+    "source-assessment.js",
+    "source-identity.js",
+    "ui-errors.js",
+    "view-settings.js"
+   ]
+  },
+  "domain": {
+   "description": "Solvers, meshes, materials, regions and per-analysis input contracts. Pure computation; no UI/session/operation knowledge.",
+   "mayImport": [
+    "contract"
+   ],
+   "externals": [],
+   "assets": [],
+   "dom": false,
+   "files": [
+    "acoustic-audio.js",
+    "acoustic-core.js",
+    "acoustic-far-field.js",
+    "acoustic-impedance.js",
+    "acoustic-input-contract.js",
+    "acoustic-radiation.js",
+    "acoustic-sweep.js",
+    "acoustic-transient.js",
+    "adaptive.js",
+    "bicgstab.js",
+    "boundaries.js",
+    "cad-patches.js",
+    "cad-update.js",
+    "channel-flow.js",
+    "components.js",
+    "constraints.js",
+    "cylindrical-cad.js",
+    "cylindrical-region.js",
+    "fatigue-core.js",
+    "fatigue-material.js",
+    "fatigue-result.js",
+    "fem-core.js",
+    "fluid-domain.js",
+    "fluid-input-contract.js",
+    "fracture-core.js",
+    "gpu-environment.js",
+    "gpu-matvec.js",
+    "gpu-pcg.js",
+    "hyperelastic-core.js",
+    "hyperelastic-material.js",
+    "intermediate-results.js",
+    "internal-fluid.js",
+    "internal-stokes-boundary.js",
+    "local-mesh.js",
+    "material-dependence.js",
+    "materials.js",
+    "mesh-convergence.js",
+    "mesh-core.js",
+    "mfem-solver.js",
+    "modal-core.js",
+    "modal-input-contract.js",
+    "nonlinear-input-contract.js",
+    "orthotropic-input-contract.js",
+    "orthotropic-material.js",
+    "orthotropic-result.js",
+    "planar-region.js",
+    "plasticity-core.js",
+    "plasticity-material.js",
+    "plasticity-result.js",
+    "probe.js",
+    "regions.js",
+    "result-slice.js",
+    "solver-adapters/acoustic-adapter.js",
+    "solver-adapters/channel-flow-adapter.js",
+    "solver-adapters/creeping-flow-adapter.js",
+    "solver-adapters/index.js",
+    "solver-adapters/structural-adapter.js",
+    "solver-adapters/thermal-adapter.js",
+    "solver-adapters/validation.js",
+    "stl-source.js",
+    "stokes-core.js",
+    "stokes-interpolation.js",
+    "stokes-p2-core.js",
+    "stokes-p2-result.js",
+    "stokes-result.js",
+    "stokes-study.js",
+    "surface-inspection.js",
+    "surface-loads.js",
+    "temperature-transfer.js",
+    "thermal-contact.js",
+    "thermal-core.js",
+    "thermal-input-contract.js",
+    "thermal-radiation.js",
+    "thermal-stress-input-contract.js",
+    "vibration-source.js",
+    "wasm-matvec.js"
+   ]
+  },
+  "operations": {
+   "description": "Project/case/job operation API layer (studio-api, preflight, case store/comparison, transfers).",
+   "mayImport": [
+    "contract",
+    "domain"
+   ],
+   "externals": [],
+   "assets": [
+    "./polymer-catalog.json"
+   ],
+   "dom": false,
+   "files": [
+    "analysis-jobs.js",
+    "analysis-preflight.js",
+    "mesh-boundary-preflight.js",
+    "builtin-project-operations.js",
+    "cad-update-operations.js",
+    "capabilities.js",
+    "case-archive-transfer.js",
+    "case-comparison.js",
+    "case-operations.js",
+    "case-source-operations.js",
+    "case-view-bundle.js",
+    "case-view.js",
+    "cases.js",
+    "fluid-domain-operations.js",
+    "geometry-inspection.js",
+    "input-import-operations.js",
+    "input-import-transfer.js",
+    "job-result-transfer.js",
+    "material-catalog.js",
+    "measurement-history.js",
+    "measurement-verification-api.js",
+    "measurement-verification.js",
+    "named-result-views.js",
+    "print-3mf.js",
+    "print-gcode.js",
+    "print-operations.js",
+    "print-transfer.js",
+    "print-zip.js",
+    "project-change-summary.js",
+    "project-edit-preview.js",
+    "project-import.js",
+    "project-input-inspection.js",
+    "project-operations.js",
+    "project-surface-inspection.js",
+    "result-assessment-api.js",
+    "result-view-api.js",
+    "studio-api.js"
+   ]
+  },
+  "session": {
+   "description": "Browser session / MCP bridge and analysis client orchestration. No DOM/UI access; browser globals (window., location, fetch, Worker) are forbidden except the allowlisted exceptions below.",
+   "mayImport": [
+    "contract",
+    "domain",
+    "operations"
+   ],
+   "externals": [],
+   "assets": [],
+   "dom": false,
+   "files": [
+    "analysis-client.js",
+    "browser-builtin-project.js",
+    "browser-intermediate-store.js",
+    "browser-session.js",
+    "browser-study-state.js",
+    "cad-import-client.js",
+    "gui-analysis-jobs.js"
+   ]
+  },
+  "ui": {
+   "description": "DOM / three.js presentation and the main.js composition root.",
+   "mayImport": [
+    "contract",
+    "domain",
+    "operations",
+    "session"
+   ],
+   "externals": [
+    "three",
+    "three/addons/controls/OrbitControls.js"
+   ],
+   "assets": [
+    "./style.css"
+   ],
+   "dom": true,
+   "files": [
+    "browser-session-ui.js",
+    "cad-update-ui.js",
+    "case-bundle-ui.js",
+    "fracture-ui.js",
+    "i18n.js",
+    "main.js",
+    "material-catalog-ui.js",
+    "named-view-ui.js",
+    "print-ui.js",
+    "ui/case-list-ui.js",
+    "ui/discipline-controls-ui.js",
+    "ui/fatigue-ui.js",
+    "ui/material-form-ui.js",
+    "ui/status-ui.js",
+    "ui/study-form-ui.js",
+    "visual-export-jobs.js",
+    "visual-export.js"
+   ]
+  },
+  "dashboard": {
+   "description": "Progress board and publication dashboard (separate page).",
+   "mayImport": [
+    "contract",
+    "ui"
+   ],
+   "externals": [],
+   "assets": [
+    "*"
+   ],
+   "dom": true,
+   "files": [
+    "board-data.js",
+    "board-progress.js",
+    "board-strategy.js",
+    "board.js",
+    "product-estimate.js",
+    "progress-history.js",
+    "progress.js",
+    "publication-milestone.js",
+    "published-progress.js"
+   ]
+  },
+  "worker": {
+   "description": "Worker entry points. May import contract and domain only.",
+   "mayImport": [
+    "contract",
+    "domain"
+   ],
+   "externals": [],
+   "assets": [],
+   "dom": false,
+   "files": [
+    "analysis.worker.js",
+    "cad.worker.js"
+   ]
+  }
+ },
+ "allowlist": [
+  {
+   "kind": "external",
+   "from": "project-import.js",
+   "to": "three",
+   "reason": "Pre-existing: STL import uses three.js STLLoader/geometry inside the operations layer. Remove by moving STL parsing to a pure domain parser (MOD1 follow-up)."
+  },
+  {
+   "kind": "external",
+   "from": "project-import.js",
+   "to": "three/addons/loaders/STLLoader.js",
+   "reason": "Pre-existing: STLLoader dependency of project-import.js; same follow-up as the three import."
+  },
+  {
+   "kind": "external",
+   "from": "print-zip.js",
+   "to": "three/addons/libs/fflate.module.js",
+   "reason": "Pre-existing: 3MF zip writer borrows fflate bundled with three.js; replace with a direct fflate dependency or own zip writer."
+  },
+  {
+   "kind": "edge",
+   "from": "analysis-client.js",
+   "to": "analysis.worker.js",
+   "reason": "Intentional: the session client starts the analysis worker via new Worker(new URL(...,import.meta.url)); it is a runtime process boundary (messages only, no shared imports), not a code import. Worker layer is deliberately not in session mayImport."
+  },
+  {
+   "kind": "dom",
+   "from": "analysis-client.js",
+   "to": "new Worker",
+   "reason": "Intentional: analysis-client.js is the only session module that spawns the analysis Web Worker (createWorker, overridable in tests via runtime.createWorker)."
+  },
+  {
+   "kind": "edge",
+   "from": "main.js",
+   "to": "cad.worker.js",
+   "reason": "Intentional: main.js starts the CAD worker via new Worker(new URL(...,import.meta.url)); a runtime process boundary, not a code import."
+  },
+  {
+   "kind": "dom",
+   "from": "analysis.worker.js",
+   "to": "fetch()",
+   "reason": "Intentional: the analysis worker fetches its WASM binaries (data.base + path) itself; fetch is available in worker scope and is not DOM access."
+  }
+ ]
+}

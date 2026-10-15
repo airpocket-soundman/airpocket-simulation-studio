@@ -1,0 +1,212 @@
+{
+  "id": "PUBLICATIONISOLATION1",
+  "date": "2026-10-15",
+  "checkedAt": "2026-10-15T05:48:36.099Z",
+  "status": "partial",
+  "scope": "Target CI (verify, deploy, verify-published) and deployed-candidate evidence for isolated child-process numerical verification of the published bundle",
+  "isolationIntroducedIn": "a1494e2 (2026-10-15T10:21:37+09:00); ancestor of every cited head",
+  "mechanism": "scripts/check-published.mjs runs each deployed numerical task via runPublishedProcess (scripts/published-process-runtime.mjs): fork of same executable, one IPC request, result provisional until child close with code 0, timeout/malformed IPC/duplicate or late messages/native fatal diagnostics rejected. CI proves it in verify-published job after deploy.",
+  "ciLogNote": "CI logs print per-check PASS lines and a summary line only; the child-process phases are not printed. Isolation is evidenced by the check-published code path being the run command plus the pass/zero-fail result, not by dedicated isolation log lines.",
+  "checkCount": {
+    "perRunPassLines": 27,
+    "note": "27 PASS lines in both verify-local and deployed runs (the local report also lists deployed-asset-integrity; task acceptance text says 26 published checks, see notVerified)"
+  },
+  "runs": [
+    {
+      "runId": 38685524491,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38685524491",
+      "headSha": "8211d294e9613430fa8f78ddb0e4c55ffed83a86",
+      "branch": "main",
+      "workflow": "Publish application",
+      "createdAt": "2026-10-15T05:12:23Z",
+      "conclusion": "success",
+      "jobs": {
+        "verify": {
+          "id": 116259361086,
+          "conclusion": "success"
+        },
+        "deploy": {
+          "id": 116260803418,
+          "conclusion": "success"
+        },
+        "verify-published": {
+          "id": 116260864528,
+          "conclusion": "success"
+        }
+      },
+      "verifyLocalPublished": {
+        "passLines": 27,
+        "excerpt": "Local build 0.43.0 8211d29 verified in 38.47 s"
+      },
+      "verifyPublished": {
+        "step": "Verify the deployed commit and runtime",
+        "command": "npm run test:published (scripts/check-published.mjs; each deployed task runs through runPublishedProcess child)",
+        "passLines": 27,
+        "failLines": 0,
+        "excerpts": [
+          "PASS structural-airpocket-and-mfem",
+          "PASS taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "PASS progress-history-candidate",
+          "Deployed 0.43.0 8211d29 verified in 39.68 s"
+        ],
+        "elapsedSeconds": 39.68
+      },
+      "manifestRevisionMatchedHead": true,
+      "manifestMatchBasis": "check-published.mjs asserts deployed manifest.revision equals git HEAD when not --local (line 38); step passed and printed 8211d29"
+    },
+    {
+      "runId": 38684668942,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38684668942",
+      "headSha": "d9ac71b74b5a4edaaaa663be76f9aff8d3e687e3",
+      "branch": "main",
+      "workflow": "Publish application",
+      "createdAt": "2026-10-15T05:02:49Z",
+      "conclusion": "success",
+      "jobs": {
+        "verify": {
+          "id": 116256677477,
+          "conclusion": "success"
+        },
+        "deploy": {
+          "id": 116257805912,
+          "conclusion": "success"
+        },
+        "verify-published": {
+          "id": 116257863678,
+          "conclusion": "success"
+        }
+      },
+      "verifyLocalPublished": {
+        "passLines": 27,
+        "excerpt": "Local build 0.43.0 d9ac71b verified in 29.85 s"
+      },
+      "verifyPublished": {
+        "step": "Verify the deployed commit and runtime",
+        "command": "npm run test:published (scripts/check-published.mjs; each deployed task runs through runPublishedProcess child)",
+        "passLines": 27,
+        "failLines": 0,
+        "excerpts": [
+          "PASS structural-airpocket-and-mfem",
+          "PASS taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "PASS progress-history-candidate",
+          "Deployed 0.43.0 d9ac71b verified in 42.15 s"
+        ],
+        "elapsedSeconds": 42.15
+      },
+      "manifestRevisionMatchedHead": true,
+      "manifestMatchBasis": "check-published.mjs asserts deployed manifest.revision equals git HEAD when not --local (line 38); step passed and printed d9ac71b"
+    },
+    {
+      "runId": 38682609850,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38682609850",
+      "headSha": "e2e90e81a54fdbb3ef6a65e02e9ae2d84d322059",
+      "branch": "main",
+      "workflow": "Publish application",
+      "createdAt": "2026-10-15T04:39:29Z",
+      "conclusion": "success",
+      "jobs": {
+        "verify": {
+          "id": 116250299929,
+          "conclusion": "success"
+        },
+        "deploy": {
+          "id": 116251614103,
+          "conclusion": "success"
+        },
+        "verify-published": {
+          "id": 116251672648,
+          "conclusion": "success"
+        }
+      },
+      "verifyLocalPublished": {
+        "passLines": 27,
+        "excerpt": "Local build 0.43.0 e2e90e8 verified in 36.15 s"
+      },
+      "verifyPublished": {
+        "step": "Verify the deployed commit and runtime",
+        "command": "npm run test:published (scripts/check-published.mjs; each deployed task runs through runPublishedProcess child)",
+        "passLines": 27,
+        "failLines": 0,
+        "excerpts": [
+          "PASS structural-airpocket-and-mfem",
+          "PASS taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "PASS progress-history-candidate",
+          "Deployed 0.43.0 e2e90e8 verified in 28.29 s"
+        ],
+        "elapsedSeconds": 28.29
+      },
+      "manifestRevisionMatchedHead": true,
+      "manifestMatchBasis": "check-published.mjs asserts deployed manifest.revision equals git HEAD when not --local (line 38); step passed and printed e2e90e8"
+    },
+    {
+      "runId": 38682020758,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38682020758",
+      "headSha": "86500f69338f7f241b3018f6bd3284b926ec9f01",
+      "branch": "main",
+      "workflow": "Publish application",
+      "createdAt": "2026-10-15T04:32:44Z",
+      "conclusion": "success",
+      "jobs": {
+        "verify": {
+          "id": 116248459891,
+          "conclusion": "success"
+        },
+        "deploy": {
+          "id": 116249502944,
+          "conclusion": "success"
+        },
+        "verify-published": {
+          "id": 116249571591,
+          "conclusion": "success"
+        }
+      },
+      "verifyLocalPublished": {
+        "passLines": 27,
+        "excerpt": "Local build 0.43.0 86500f6 verified in 29.18 s"
+      },
+      "verifyPublished": {
+        "step": "Verify the deployed commit and runtime",
+        "command": "npm run test:published (scripts/check-published.mjs; each deployed task runs through runPublishedProcess child)",
+        "passLines": 27,
+        "failLines": 0,
+        "excerpts": [
+          "PASS structural-airpocket-and-mfem",
+          "PASS taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "PASS progress-history-candidate",
+          "Deployed 0.43.0 86500f6 verified in 40.41 s"
+        ],
+        "elapsedSeconds": 40.41
+      },
+      "manifestRevisionMatchedHead": true,
+      "manifestMatchBasis": "check-published.mjs asserts deployed manifest.revision equals git HEAD when not --local (line 38); step passed and printed 86500f6"
+    }
+  ],
+  "liveManifest": {
+    "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/runtime-manifest.json",
+    "fetchedAt": "2026-10-15T05:48:36.100Z",
+    "version": "0.43.0",
+    "revision": "b69ab11b196adfc0637ba70e2c4ec5b564decbd2",
+    "note": "Revision b69ab11 is deployed by run 38688236594 whose verify-published job was still in_progress at fetch time, so this live candidate is NOT yet CI-verified; earlier head 158150c run 38687710680 had verify-published cancelled (superseded). Cited runs are the verified ones."
+  },
+  "excludedRuns": [
+    {
+      "runId": 38687710680,
+      "headSha": "158150cbc7ed376a3cb9d66ddafdc76eb3aaf333",
+      "reason": "verify-published cancelled"
+    },
+    {
+      "runId": 38688236594,
+      "headSha": "b69ab11b196adfc0637ba70e2c4ec5b564decbd2",
+      "reason": "in progress at collection time"
+    }
+  ],
+  "notVerified": [
+    "Does not prove the Linux Node 24 V8 root cause is fixed; only that isolated child verification passes in these CI runs",
+    "Real browser stability is not covered (no browser used by check-published)",
+    "Rejection of late failure, timeout and malformed IPC is proven by tests/published-process-runtime.test.mjs, not by these CI logs",
+    "Per-phase child process telemetry (spawn/close/childPid) is not in CI logs",
+    "CI shows 27 PASS lines versus acceptance wording of 26 checks; count reconciliation not done here",
+    "Live candidate at b69ab11 not CI-verified at collection time",
+    "Evidence is from a limited set of consecutive runs; no flake-rate claim"
+  ]
+}

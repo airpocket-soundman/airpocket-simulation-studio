@@ -20,6 +20,21 @@ test('browser job API shares the lifecycle and freezes input, retains compact ob
  const next=h.api.startJob({inputRevision:'browser:2'});await new Promise(resolve=>setImmediate(resolve));h.api.cancel();await new Promise(resolve=>setImmediate(resolve));assert.equal(h.api.getJob(next.jobId).state,'cancelled');h.workers[1].send({result:{wrong:true}});assert.equal(h.api.getJob(next.jobId).state,'cancelled');assert.throws(()=>h.api.getJobResult(next.jobId),/not available/);h.api.closeJobs();
 });
 
+test('API job progress stays in its job events while GUI job progress reaches the presentation callback',async()=>{
+ const h=harness(),apiJob=h.api.startJob({inputRevision:'browser:api-progress',origin:'api'});
+ await new Promise(resolve=>setImmediate(resolve));h.workers[0].send({progress:'Solving linear elasticity…'});
+ assert.deepEqual(h.progress,[]);
+ assert.ok(h.api.jobEvents(apiJob.jobId).events.some(event=>event.type==='progress'&&event.stage==='progress'&&event.message==='Solving linear elasticity…'));
+ h.workers[0].send({result:{mesh:{summary:{nodeCount:4}},result:{kind:'elastic'}}});await h.api.drainJobs();
+ const settled=h.api.getJob(apiJob.jobId);assert.equal(settled.state,'succeeded');assert.equal(settled.executionSettled,true);
+
+ const guiJob=h.api.startJob({inputRevision:'browser:gui-progress',origin:'gui'});await new Promise(resolve=>setImmediate(resolve));
+ h.workers[1].send({progress:'Solving linear elasticity…'});assert.deepEqual(h.progress,['Solving linear elasticity…']);
+ assert.ok(h.api.jobEvents(guiJob.jobId).events.some(event=>event.type==='progress'&&event.message==='Solving linear elasticity…'));
+ h.workers[1].send({result:{mesh:{summary:{nodeCount:4}},result:{kind:'elastic'}}});await h.api.drainJobs();
+ assert.equal(h.api.getJob(guiJob.jobId).executionSettled,true);h.api.closeJobs();
+});
+
 test('browser jobs retain optional time fields, expose artifact probes, and report malformed observations without losing final output',async()=>{
  const h=harness(),job=h.api.startJob({inputRevision:'browser:fields',requestId:'fields',includeFields:true});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.workers[0].input.observeFields,true);
  const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],summary:{nodeCount:4}};
@@ -31,6 +46,27 @@ test('browser jobs retain optional time fields, expose artifact probes, and repo
  assert.equal(h.api.getJob(job.jobId).state,'succeeded');const events=h.api.jobEvents(job.jobId).events,frame=events.find(e=>e.fieldAvailable);assert.ok(frame.artifact);assert.equal(frame.field,undefined);assert.ok(events.some(e=>e.stage==='observation-error'));
  const point=await h.api.getJobArtifact(job.jobId,frame.artifact.artifactId,{point:[.25,.25,.25]});assert.equal(point.measurement.value,35);assert.equal(h.api.getJob(job.jobId).result.intermediate.retainedArtifacts,2);
  h.api.releaseJob(job.jobId);await assert.rejects(async()=>h.api.getJobArtifact(job.jobId,frame.artifact.artifactId),/Unknown job/);h.api.closeJobs();
+});
+
+test('browser job observation acknowledgements replenish worker credits without acknowledging terminal summaries',async()=>{
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:transport'});await new Promise(resolve=>setImmediate(resolve));const worker=h.workers[0];
+ assert.equal(worker.input.observationTransportProtocol,1);
+ worker.send({event:{stage:'iteration',metrics:{iteration:1}},observationAckId:17});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:17});
+ worker.send({event:{stage:'observation-transport',provisional:true,observationTransport:{accepted:1,dropped:0,terminal:true}}});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:17});
+ worker.send({result:{mesh:{summary:{nodeCount:4}}}});await h.api.drainJobs();assert.equal(h.api.getJob(job.jobId).state,'succeeded');h.api.closeJobs();
+});
+
+test('browser cancellation after an observation ACK ignores stale events and does not invent terminal drop totals',async()=>{
+ const h=harness(),job=h.api.startJob({inputRevision:'browser:cancel-transport'});await new Promise(resolve=>setImmediate(resolve));const worker=h.workers[0];
+ worker.send({event:{stage:'iteration',metrics:{iteration:1},observationTransport:{sequence:1,dropped:0,terminal:false}},observationAckId:24});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:24});h.api.cancel();await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(h.api.getJob(job.jobId).state,'cancelled');const count=h.api.jobEvents(job.jobId).events.length;
+ worker.send({event:{stage:'iteration',metrics:{iteration:2}},observationAckId:25});
+ worker.send({event:{stage:'observation-transport',provisional:true,observationTransport:{terminal:true,dropped:999}}});
+ assert.equal(h.api.getJob(job.jobId).state,'cancelled');assert.equal(h.api.jobEvents(job.jobId).events.length,count);
+ assert.equal(h.api.jobEvents(job.jobId).events.some(event=>event.stage==='observation-transport'),false);h.api.closeJobs();
 });
 
 test('closing direct analysis and mesh calls waits for cleanup and ignores late results',async()=>{

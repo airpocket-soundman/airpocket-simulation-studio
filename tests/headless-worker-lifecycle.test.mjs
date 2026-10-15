@@ -26,6 +26,24 @@ for(const kind of ['success','worker-error','worker-reported-error','abort','tim
  if(kind==='success'){const result=await h.promise;assert.equal(result.mesh.summary.synthetic,true);assert.equal(result.wrong,undefined);}else await assert.rejects(h.promise,kind==='worker-error'?error=>error===original:kind==='worker-reported-error'?/Native solver refused input/:kind==='abort'?/cancelled/:kind==='early-exit'?/17/:/exceeded/);
  assert.equal(h.worker.terminateCalls,1);assert.equal(h.settled,true);
 });
+
+test('headless job clients enable observation transport and ACK accepted events but not the terminal summary',async()=>{
+ const worker=new DeferredWorker(),events=[],promise=analyzeProject(input(),{},'mesh',{observe:true,onEvent:event=>events.push(event),createWorker:()=>worker});
+ assert.equal(worker.input.observationTransportProtocol,1);
+ worker.emit('message',{event:{stage:'mesh',metrics:{nodeCount:4}},observationAckId:8});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:8});assert.equal(events.length,1);
+ worker.emit('message',{event:{stage:'observation-transport',provisional:true,observationTransport:{terminal:true}}});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:8});
+ worker.emit('message',{result:{mesh:{summary:{nodeCount:4}}}});await worker.stopping;worker.complete();await promise;
+});
+test('headless cancellation after an observation ACK ignores stale events and reports terminal totals as unavailable',async()=>{
+ const worker=new DeferredWorker(),controller=new AbortController(),events=[],promise=analyzeProject(input(),{},'mesh',{observe:true,onEvent:event=>events.push(event),signal:controller.signal,createWorker:()=>worker});
+ assert.equal(worker.input.observationTransportProtocol,1);worker.emit('message',{event:{stage:'mesh',observationTransport:{sequence:1,dropped:0,terminal:false}},observationAckId:9});
+ assert.deepEqual(worker.input,{type:'analysis-observation-ack-v1',id:9});controller.abort();await worker.stopping;
+ worker.emit('message',{event:{stage:'mesh',observationTransport:{sequence:2,dropped:0}},observationAckId:10});
+ worker.emit('message',{event:{stage:'observation-transport',provisional:true,observationTransport:{terminal:true,dropped:99}}});
+ worker.complete();await assert.rejects(promise,/cancelled/);assert.equal(events.length,1);assert.equal(events.some(event=>event.stage==='observation-transport'),false);
+});
 test('postMessage failure rejects only after its Worker has stopped',async()=>{const worker=new DeferredWorker(),failure=Error('Cannot allocate message');worker.postError=failure;let settled=false;const promise=analyzeProject(input(),{},'mesh',{createWorker:()=>worker});promise.catch(()=>{settled=true;});await worker.stopping;assert.equal(settled,false);worker.complete();await assert.rejects(promise,error=>error===failure);assert.equal(worker.terminateCalls,1);});
 test('cleanup rejection never yields success and preserves an earlier engine failure',async()=>{for(const failed of [false,true]){const h=launch(),original=Error('Engine failed'),cleanup=Error('Termination rejected');if(failed)h.worker.emit('error',original);else h.worker.emit('message',{result:{mesh:{}}});await h.worker.stopping;h.worker.failCleanup(cleanup);await assert.rejects(h.promise,error=>failed?error instanceof AggregateError&&error.errors[0]===original&&error.errors[1]===cleanup&&error.message.includes(original.message)&&error.message.includes(cleanup.message):error===cleanup);assert.equal(h.worker.terminateCalls,1);}});
 test('synchronous cleanup failure rejects and cannot be replaced by late successful replies',async()=>{const h=launch(),cleanup=Error('Termination threw');h.worker.terminateError=cleanup;h.worker.emit('message',{result:{mesh:{}}});h.worker.emit('message',{result:{wrong:true}});await assert.rejects(h.promise,error=>error===cleanup);assert.equal(h.worker.terminateCalls,1);h.worker.complete();});

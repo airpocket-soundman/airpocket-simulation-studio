@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15T08:38:01.485Z",
+  "localFull": {
+    "revision": "c1c431eab878bd532fe8eafa2d7da738d0c8dd89",
+    "command": "npm test",
+    "exitCode": 1,
+    "tests": 1160,
+    "passed": 1142,
+    "failed": 14,
+    "cancelled": 1,
+    "skipped": 3,
+    "durationMs": 220716.9701,
+    "logSha256": "020fdae74973ea2929f1846e01c88820fe9e4a6c6bb8d1bfd4832dfbdfacea96",
+    "classification": {
+      "assertionFailures": "14 exact MCP tool/method counts require updates for one additional saved tool and browser operation; assertions remain strict.",
+      "cancelled": {
+        "test": "real child rejects invalid input without starting a solver and remains owned until terminated",
+        "file": "tests/analysis-process-worker.test.mjs",
+        "timeoutMs": 10000,
+        "cause": "Unproven; no timeout increase or skipped test."
+      }
+    }
+  },
+  "mainPublicationFailure": {
+    "revision": "6f195bf5f48ed4178c0a53db30e3ee7808502de9",
+    "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38706323710",
+    "tests": 1154,
+    "passed": 1150,
+    "failed": 1,
+    "skipped": 3,
+    "stderr": "corrupted size vs. prev_size",
+    "file": "tests/mcp-advanced-structural-provenance.test.mjs",
+    "logSha256": "780717869d48eafbec7fea717fc3c8ba1985961334e0061eafb1d28a9f21916f",
+    "cause": "Unknown native heap corruption; not attributed to the new API operations or equated with the separate Node/V8 issue.",
+    "publication": "Not deployed; public remains 9f57d0f with 109 released tasks."
+  },
+  "summaryJa": "全体失敗を保存。件数契約の更新漏れとchild開始timeout、別のmain公開CIのnative heap破損を区別する。",
+  "summaryEn": "Preserve failures separately: stale exact-count assertions, child startup timeout, and native heap corruption in the separate main publication run.",
+  "initialPrCI": {
+    "revision": "c1c431eab878bd532fe8eafa2d7da738d0c8dd89",
+    "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38706588775",
+    "tests": 1160,
+    "passed": 1143,
+    "failed": 14,
+    "cancelled": 0,
+    "skipped": 3,
+    "classification": "All 14 failures were strict tool/method count assertions; the locally cancelled child-startup test passed in this CI run.",
+    "logSha256": "71c807b9ae88c47a1413f8b96938ecff4db6b51222599a0e205d1e80dab15ee3"
+  },
+  "followup": {
+    "revision": "5b2844fdb1749edc04fdd3123235b913551876cd",
+    "tests": 34,
+    "passed": 34,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "durationMs": 11527.022,
+    "scope": "Changed strict-count files, document checks and analysis-process-worker tests, including the previously timed-out child startup case.",
+    "logSha256": "d888d3e44dec0373959477fd3a40e3f17b93c04e8f85d7a23cd0d808716ace92",
+    "limitations": "Targeted success does not establish that the prior timeout cause is fixed; corrected full suite/CI remains pending."
+  }
+}

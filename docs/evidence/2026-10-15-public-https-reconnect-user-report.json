@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceRevision": "3ef460e173a3253fc5ad8c87f97191cfb28caf0b",
+  "publicHttpsReconnect": {
+    "status": "success-reported-by-user",
+    "reportedSummary": "The user reported that reconnecting to the published HTTPS version succeeded.",
+    "source": "User report relayed in the task context",
+    "independentlyObserved": false,
+    "scope": "inspect-only",
+    "inspectionOperationSuccess": "not independently confirmed or described in the report",
+    "disconnectEndedSession": "not confirmed",
+    "browserVersion": null,
+    "publishedRevision": null,
+    "editOrAnalysisAttempted": false
+  },
+  "relatedEvidence": [
+    {
+      "path": "docs/evidence/2026-10-15-skill-synchronization-b.json",
+      "sha256": "2e0bae4275aaa420a945792b5dd53f3190b5a05993478c9f74c0db462c96ab65",
+      "scope": "Repository and installed Skill files synchronized and validated; 11 files matched."
+    },
+    {
+      "path": "docs/evidence/2026-10-15-skill-forward-input-preview-b.json",
+      "sha256": "aee0a6557a00633237dcdea3f60ba3408bf41feed1b9ae73cfd0d64c95665706",
+      "scope": "In-repository stdio preview detected stale 100 N provenance for a synthetic 150 N candidate; source bytes unchanged; no apply or solve."
+    }
+  ],
+  "limitations": [
+    "This file records a user report, not an independent connection or inspection result.",
+    "The inspection operation and session termination after disconnect remain unverified.",
+    "Browser version and the published page revision were not supplied.",
+    "No edit or analysis permission was requested or exercised."
+  ]
+}

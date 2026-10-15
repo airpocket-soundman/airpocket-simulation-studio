@@ -13,7 +13,7 @@ const selectors={
   clearSelection:[],addCondition:[object],removeCondition:[integer],selectCondition:[integer],
   replaceConditionRegion:[integer],reapplyConditionRegion:[integer],
   applyCatalogMaterial:[object],setMaterial:[string],setMaterialProperties:[object],setMaterialPreset:[string,object],
-  setStudy:[object],setMeshSettings:[object],setInputProvenance:[object],setAnalysisIntent:[object]
+  setStudy:[object],addSelectedMeshRefinements:[object],setMeshSettings:[object],setInputProvenance:[object],setAnalysisIntent:[object]
 };
 
 /** Apply {method, args} commands atomically to saved project JSON.

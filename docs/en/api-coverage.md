@@ -4,6 +4,8 @@
 
 As of 2026-10-14. The main differentiator is enabling the user's own LLM to operate every feature through a specialized SKILL. Closing the gaps below has the highest priority. This is an initial inventory by feature group; coverage of individual operations has not yet been measured.
 
+Current entry points have 31 default/33 connected MCP tools and 87 browser operations; the minimal connector has three tools. Preserve historical counts below. Current comparison validation, actual-browser and publication completion remain pending.
+
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
 | Operation contract discovery | studioApi.getBrowserOperationContracts | studio_browser_contracts (no session; maximum 10 entries/65,536 UTF-8 bytes) | Nested applicability/physical validation stays in adapters |
@@ -64,3 +66,11 @@ Edit preview returns changed pointers (maximum 100), candidate revision and pref
 Preview preserves full-inspection allowed/provisional while compacting diagnostics to 50 and evidence pointers to 100 with explicit totals/omission. Returned value JSON is capped at 65,536 UTF-8 bytes. Review GUI-shared representation changes when browser normalization.requiresReview is true and commit only the final candidate revision; Node saved-input candidates can differ.
 
 Input-value inspection uses studioApi.inspectInput/live inspectInput (inspect scope) and studio_inspect_project section opt-in. Section-scoped pointers and input revisions page material/study/boundary/evidence/selection/source/mesh inputs at maximum 50 object members or 200 array entries/string UTF-16 units; nested payloads become count/canonical-JSON-hash descriptors. Value replies are capped at 65,536 UTF-8 bytes and report only known units. Legacy no-section unbounded study replies are separate. Counts are 29/31 tools and 82 live methods. See [specification](automation.md) for CAS examples/compatibility limits.
+
+## Saved-case comparison increment (validation record pending)
+
+Shared `createCaseComparisonApi({cases}).compare`, browser inspect operation `caseCompare`, and MCP `studio_compare_cases` compare saved cases at the same optional global point in mm without changing display state. Pin revisions for 1–8 cases and explicitly select modes/stored frames. No deltas for normalized modal shapes or time interpolation are provided. Raw units include stress Pa and plastic strain ratio 1. Incompatible kind/field/unit/time/frequency yields no-delta reasons; corrupt cases, unknown bodies and stale leases/guards reject the batch.
+
+MCP accepts version-1 saved-case archives. A path-only call without references lists snapshot-local IDs and case/archive revisions; comparison requires expectedArchiveRevision and checks source hashes before and after reading. Bundles are unsupported. Shared and MCP response JSON values are bounded to 64 KiB, not the entire MCP wire envelope. Missing calculation runtimeIdentity is not reconstructed from today's environment. See [automation](automation.md). Current successful counts, actual-browser and publication completion remain pending; P0–P6 remain incomplete.
+
+Transient comparisons require exact equality of stored physical time (no interpolation, no tolerance). SPL comparisons with different `referencePressurePa` return `different-reference-pressure` and no delta; raw pressure in Pa can still be compared despite differing reference pressure.

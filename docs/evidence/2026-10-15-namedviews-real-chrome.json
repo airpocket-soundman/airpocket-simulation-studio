@@ -1,0 +1,387 @@
+{
+ "task": "NAMEDVIEWS1",
+ "status": "partial",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome (extension, real Chrome tab)",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "e2e90e8 (codex/evidence-chrome = origin/main), local vite dev server",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio, loopback HTTP polling; all four scopes (inspect/edit/analyze/view) granted for the local test session"
+ },
+ "scenario": "Local dev server; elastic demo run with in-page buttons; connector namedViewSave/Apply/Export; page reload (navigate) and reconnect, namedViewImport and apply; second round: caseSave + namedViewSave -> caseBundleExport (hash-checked pages) -> reload -> caseBundleImport -> caseView -> namedViewApply.",
+ "checks": [
+  {
+   "name": "Save named view bound to the result revision",
+   "passed": true,
+   "detail": "Saved \"evidence view A\"; archiveRevision after save sha256:13e993dc17531ff2786a92b2754b57e3ab00e477aa9de213d63756a3bfbf0d20"
+  },
+  {
+   "name": "Settings changed after save really differ from the saved view",
+   "passed": true,
+   "detail": "changed: field=displacement, deformScale=2, colorRange=null"
+  },
+  {
+   "name": "namedViewApply restores complete result view and setup view state in the same session",
+   "passed": true,
+   "detail": "getResultView.state and getView after apply are JSON-string-equal to those at save time."
+  },
+  {
+   "name": "Apply with foreign result revision refused",
+   "passed": true,
+   "detail": "Named view result revision conflict"
+  },
+  {
+   "name": "Apply with stale item revision refused",
+   "passed": true,
+   "detail": "Named view revision conflict"
+  },
+  {
+   "name": "namedViewExport JSON survives page reload via namedViewImport (export identical)",
+   "passed": true,
+   "detail": "Export taken after reload+import equals the pre-reload export exactly."
+  },
+  {
+   "name": "After reload and a RE-RUN of the demo, the imported view is refused (new result revision)",
+   "passed": true,
+   "detail": "Binding works as designed, but export/import alone cannot restore a view onto a recomputed result: saved resultRevision sha256:e0b4362a430ae4c5c896aa22974aa3ccc8554d6f27b3def19a241b699e51899f vs recomputed sha256:e0b4362a430ae4c5c896aa22974aa3ccc8554d6f27b3def19a241b699e51899f for identical inputs. Error: Named view result revision conflict"
+  },
+  {
+   "name": "Reload then saved case + view bundle (caseBundleExport/Import) restores result and applies the view",
+   "passed": true,
+   "detail": "Bundle 208871 bytes, SHA-256 matched export metadata; imported after reload without re-running (getResultView before import: \"No supported displayed result\"); caseView restored resultRevision sha256:e0b4362a430ae4c5c896aa22974aa3ccc8554d6f27b3def19a241b699e51899f equal to saved; namedViewApply accepted; setup view (clip/axis/position/opacity) exactly equal."
+  },
+  {
+   "name": "Result view state after reload + restore equals the saved state exactly",
+   "passed": false,
+   "detail": "Strict JSON equality FALSE: camera.position z saved 90 vs restored 89.99999999999999 (1 ULP) and key order differs in colorRange. Equal within 1e-9 relative tolerance: true. saved={\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[70.00000000000001,50,90],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":30}} applied={\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"maximum\":10,\"minimum\":0},\"camera\":{\"position\":[70.00000000000001,50,89.99999999999999],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":30}}"
+  }
+ ],
+ "findings": [
+  "Strict equality of the restored result view failed by one ULP on camera z; semantically equal within 1e-9 relative tolerance.",
+  "A page reload loses named views (no automatic persistence); restoring needs explicit export/import or a case bundle.",
+  "An imported named view cannot be applied to a freshly recomputed result because its result revision differs; the case-bundle path restores the original result and works.",
+  "The first caseBundleRelease call timed out (\"Browser command timed out; inspect state before retrying\"); a retry returned {released:true}. Cause not diagnosed."
+ ],
+ "notVerified": [
+  "GUI named-view panel (buttons) was not exercised; only the connector.",
+  "Invalid-camera refusal for named views, item remove and multi-view (16 max) behavior were not exercised in Chrome here.",
+  "Japanese/English localization of named-view UI not checked.",
+  "Public HTTPS site / published build was not opened or tested; only http://127.0.0.1:5174 (local vite dev server).",
+  "Physical inputs are the built-in reference sample (not measured data); results are provisional reference values, not validated accuracy.",
+  "One Chrome profile on one machine; no other browsers, no mobile, no cross-origin pairing.",
+  "Page was driven through its connection UI and in-page button .click() calls via javascript_tool, not by real pointer events."
+ ],
+ "bundle": {
+  "bytes": 208871,
+  "sha256": "d74996eda416bfe2ef47260de6a8a13100a52dde78a90f806abbfe9d4be6b14a",
+  "exportMeta": {
+   "transferId": "e8f83dfe-2ca2-482e-9099-689136616c2d",
+   "direction": "export",
+   "archiveRevision": "sha256:d74996eda416bfe2ef47260de6a8a13100a52dde78a90f806abbfe9d4be6b14a",
+   "totalBytes": 208871,
+   "sha256": "sha256:d74996eda416bfe2ef47260de6a8a13100a52dde78a90f806abbfe9d4be6b14a",
+   "maxChunkBytes": 65536
+  }
+ },
+ "calls": [
+  {
+   "name": "read result view",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "read setup view",
+   "method": "getView",
+   "ok": true
+  },
+  {
+   "name": "set setup view (clip, opacity)",
+   "method": "setView",
+   "ok": true
+  },
+  {
+   "name": "read setup view after set",
+   "method": "getView",
+   "ok": true
+  },
+  {
+   "name": "list named views (empty)",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "save named view",
+   "method": "namedViewSave",
+   "ok": true
+  },
+  {
+   "name": "list after save",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "read result view at save time",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "change result view",
+   "method": "setResultView",
+   "ok": true
+  },
+  {
+   "name": "change setup view",
+   "method": "setView",
+   "ok": true
+  },
+  {
+   "name": "read result view after change",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "apply named view",
+   "method": "namedViewApply",
+   "ok": true
+  },
+  {
+   "name": "read result view after apply",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "read setup view after apply",
+   "method": "getView",
+   "ok": true
+  },
+  {
+   "name": "reject apply with foreign result revision",
+   "method": "namedViewApply",
+   "ok": false,
+   "error": "Named view result revision conflict"
+  },
+  {
+   "name": "reject apply with stale item revision",
+   "method": "namedViewApply",
+   "ok": false,
+   "error": "Named view revision conflict"
+  },
+  {
+   "name": "export named views",
+   "method": "namedViewExport",
+   "ok": true
+  },
+  {
+   "name": "list named views after reload",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "read result view after reload+rerun",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "import exported archive",
+   "method": "namedViewImport",
+   "ok": true
+  },
+  {
+   "name": "list after import",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "read result view before apply",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "apply imported view",
+   "method": "namedViewApply",
+   "ok": false,
+   "error": "Named view result revision conflict"
+  },
+  {
+   "name": "read result view after apply",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "read setup view after apply",
+   "method": "getView",
+   "ok": true
+  },
+  {
+   "name": "export again",
+   "method": "namedViewExport",
+   "ok": true
+  },
+  {
+   "name": "list views",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "remove stale view evidence view A",
+   "method": "namedViewRemove",
+   "ok": true
+  },
+  {
+   "name": "read result view",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "set fixed range + camera",
+   "method": "setResultView",
+   "ok": true
+  },
+  {
+   "name": "set setup view",
+   "method": "setView",
+   "ok": true
+  },
+  {
+   "name": "save case",
+   "method": "caseSave",
+   "ok": true
+  },
+  {
+   "name": "list views before save",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "save named view",
+   "method": "namedViewSave",
+   "ok": true
+  },
+  {
+   "name": "read result view at save",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "read setup view at save",
+   "method": "getView",
+   "ok": true
+  },
+  {
+   "name": "case bundle export",
+   "method": "caseBundleExport",
+   "ok": true
+  },
+  {
+   "name": "bundle read @0",
+   "method": "caseBundleRead",
+   "ok": true
+  },
+  {
+   "name": "bundle read @65536",
+   "method": "caseBundleRead",
+   "ok": true
+  },
+  {
+   "name": "bundle read @131072",
+   "method": "caseBundleRead",
+   "ok": true
+  },
+  {
+   "name": "bundle read @196608",
+   "method": "caseBundleRead",
+   "ok": true
+  },
+  {
+   "name": "release export",
+   "method": "caseBundleRelease",
+   "ok": false,
+   "error": "Browser command timed out; inspect state before retrying"
+  },
+  {
+   "name": "bundle list after reload (before import)",
+   "method": "caseBundleList",
+   "ok": true
+  },
+  {
+   "name": "result view after reload (no rerun)",
+   "method": "getResultView",
+   "ok": false,
+   "error": "No supported displayed result"
+  },
+  {
+   "name": "bundle import begin",
+   "method": "caseBundleImport",
+   "ok": true
+  },
+  {
+   "name": "write @0",
+   "method": "caseBundleWrite",
+   "ok": true
+  },
+  {
+   "name": "write @65536",
+   "method": "caseBundleWrite",
+   "ok": true
+  },
+  {
+   "name": "write @131072",
+   "method": "caseBundleWrite",
+   "ok": true
+  },
+  {
+   "name": "write @196608",
+   "method": "caseBundleWrite",
+   "ok": true
+  },
+  {
+   "name": "bundle commit",
+   "method": "caseBundleCommit",
+   "ok": true
+  },
+  {
+   "name": "release transfer",
+   "method": "caseBundleRelease",
+   "ok": true
+  },
+  {
+   "name": "bundle list after import",
+   "method": "caseBundleList",
+   "ok": true
+  },
+  {
+   "name": "case list",
+   "method": "caseList",
+   "ok": true
+  },
+  {
+   "name": "restore case view",
+   "method": "caseView",
+   "ok": true
+  },
+  {
+   "name": "read result view after case restore",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "named view list",
+   "method": "namedViewList",
+   "ok": true
+  },
+  {
+   "name": "apply named view",
+   "method": "namedViewApply",
+   "ok": true
+  },
+  {
+   "name": "read result view after apply",
+   "method": "getResultView",
+   "ok": true
+  },
+  {
+   "name": "read setup view after apply",
+   "method": "getView",
+   "ok": true
+  }
+ ]
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceRevision": "72a58f4a96cb205f79c3920858c6e8475f6f1f60",
+  "status": "completed-preview-only",
+  "fixtureClassification": "Synthetic reference only; not measured material calibration",
+  "resourcesRead": [
+    {
+      "path": "skills/airpocket-studio/SKILL.md",
+      "bytes": 4755,
+      "sha256": "42c964da67c51a2558a368859396edb581547f7bb9ef7c840ae67a726f9852d3"
+    },
+    {
+      "path": "skills/airpocket-studio/references/saved-inputs.md",
+      "bytes": 18371,
+      "sha256": "36b1c2e08649e00df65fc65d64a86e100569bc1fa95da4fae5181e30a21000f2"
+    },
+    {
+      "path": "skills/airpocket-studio/references/physics-provenance.md",
+      "bytes": 10192,
+      "sha256": "97740f273a33a06ab27fe0eb53dc8f6251254ddf6dd6348b8f8ddec88ee4a85a"
+    }
+  ],
+  "toolDiscovery": {
+    "transport": "in-repository stdio MCP",
+    "toolCount": 30,
+    "tools": [
+      "studio_preview_edit",
+      "studio_edit_project",
+      "studio_capabilities",
+      "studio_inspect_project",
+      "studio_analyze"
+    ],
+    "previewReadOnly": true,
+    "previewHasNoOutputPath": true
+  },
+  "executionPaths": {
+    "capabilities": {
+      "target": "node",
+      "runtimeKind": "node"
+    },
+    "preview": "studio_preview_edit via tools/call on scripts/studio-mcp.mjs stdio"
+  },
+  "input": {
+    "path": ".qa/skill-forward-input-project-b2.json",
+    "before": {
+      "bytes": 5140,
+      "sha256": "f3dc1eb8efda8dc3f782aaba96198f25c75d12364591314f44c015f57529242b"
+    },
+    "after": {
+      "bytes": 5140,
+      "sha256": "f3dc1eb8efda8dc3f782aaba96198f25c75d12364591314f44c015f57529242b"
+    },
+    "unchanged": true,
+    "baselineRevision": "sha256:6229f684404cf2588338758e38866b94db03a5c87ee8dc7b118ec4d6c37dd936",
+    "inspectedSections": {
+      "study": {
+        "revision": "sha256:6229f684404cf2588338758e38866b94db03a5c87ee8dc7b118ec4d6c37dd936",
+        "section": "study",
+        "exists": true
+      },
+      "material": {
+        "revision": "sha256:6229f684404cf2588338758e38866b94db03a5c87ee8dc7b118ec4d6c37dd936",
+        "section": "material",
+        "exists": true
+      },
+      "conditions": {
+        "revision": "sha256:6229f684404cf2588338758e38866b94db03a5c87ee8dc7b118ec4d6c37dd936",
+        "section": "conditions",
+        "exists": true
+      },
+      "provenance": {
+        "revision": "sha256:6229f684404cf2588338758e38866b94db03a5c87ee8dc7b118ec4d6c37dd936",
+        "section": "provenance",
+        "exists": true
+      }
+    },
+    "baselineForceN": 100,
+    "proposedForceN": 150,
+    "unit": "N",
+    "loadTriangles": [
+      8,
+      9
+    ]
+  },
+  "proposal": {
+    "operations": [
+      {
+        "method": "removeCondition",
+        "args": [
+          1
+        ]
+      },
+      {
+        "method": "clearSelection",
+        "args": []
+      },
+      {
+        "method": "selectTriangles",
+        "args": [
+          0,
+          [
+            8,
+            9
+          ],
+          {
+            "replace": true
+          }
+        ]
+      },
+      {
+        "method": "addCondition",
+        "args": [
+          {
+            "type": "force",
+            "value": 150,
+            "direction": [
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      }
+    ],
+    "previewRevision": "sha256:7a745d0e35ef2f07c248614e61c2f6229ebbf7fde0416b685acdd535e1f2e02d",
+    "changedPointers": [
+      "/conditions"
+    ],
+    "preflight": {
+      "allowed": false,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "diagnosticCount": 1,
+      "diagnostics": [
+        {
+          "code": "PROVENANCE_STALE",
+          "target": "/conditions/1/value",
+          "evidence": {
+            "recordedValue": 100,
+            "exists": true,
+            "value": 150
+          },
+          "suggestions": [
+            "Review changed input and replace its provenance snapshot"
+          ]
+        }
+      ]
+    },
+    "applied": false,
+    "analyzed": false,
+    "outputCreated": false
+  },
+  "fixtureConstruction": {
+    "modules": [
+      "src/project-import.js#createProjectFromBuiltin",
+      "src/studio-api.js#createStudioApi",
+      "src/input-provenance.js#createInputProvenance",
+      "src/analysis-preflight.js#preflightProject"
+    ],
+    "method": "Generated a bounded built-in box and synthetic provenance locally, then used the actual in-repository MCP stdio server for discovery, inspection and preview.",
+    "testReference": "tests/mcp-edit-preview.test.mjs"
+  },
+  "limitations": [
+    "SDK/source factories were used only to create the synthetic fixture; this is not a Skill-only end-to-end demonstration.",
+    "No edit application, saved-output publication or solver invocation occurred.",
+    "Exploratory baseline is provisional, and completePreflight remains false; this is a stale-input handling check, not physical validation."
+  ]
+}

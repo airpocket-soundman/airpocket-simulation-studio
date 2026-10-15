@@ -4,10 +4,12 @@
 
 2026-10-14時点。最大の差別化要因はユーザーのLLMが専門SKILLから全機能を扱えること。以下の不足を最優先で解消する。対応は機能群単位の初期棚卸しであり、全操作の網羅率は未測定。
 
+現行の入口は通常31/接続33 MCPツール・87ブラウザ操作、単体connectorは3ツール。後続の過去件数は当時の記録として保持する。今回比較の検証・実ブラウザ・公開完了は保留。
+
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
 | 操作契約の発見 | studioApi.getBrowserOperationContracts | studio_browser_contracts（session不要・最大10件/65,536 UTF-8バイト） | nested適用性・物理検証は実adapterで維持 |
-| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（82操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
+| ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（87操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |
 | 実行組合せ診断 | studioApi.diagnoseExecution | studio_diagnose_execution | 単位・必須値・拘束・メッシュの構造化診断へ拡張 |
 | 編集候補のプレビュー | studioApi.previewOperations | studio_preview_edit、inspect権限previewEdit | nested物理検証・全P0/P1/P3は継続 |
@@ -64,3 +66,11 @@ Stokes P1/P2の構造化GMRES残差は既存jobEventsで取得でき、phase/res
 プレビューは完全検査のallowed/provisionalを保ち、診断50件・根拠Pointer100件へ縮約し省略総数を明示します。返却value JSONは65,536 UTF-8バイトまで。ブラウザのnormalization.requiresReview時はGUI共用表現変換を確認し、最終候補版だけを確定してください。Node保存入力の候補版とは異なる場合があります。
 
 入力値の検査はstudioApi.inspectInput/ライブinspectInput（inspect権限）とstudio_inspect_projectのsection opt-inに対応。section内Pointerと入力版で物性・study・条件・根拠・選択・source・mesh等を最大50 object/200 array・文字列UTF-16 unitsずつ取得し、nested payloadはcount/canonical-JSON hashへ要約します。応答valueは65,536 UTF-8バイト上限。既知単位のみ返し、旧section無しの無制限study応答とは混載しません。通常29/接続31ツール・ライブ82操作。CAS例と互換制限は[仕様](automation.md)を参照してください。
+
+## 保存ケース比較の今回追加（検証記録は保留）
+
+共通 `createCaseComparisonApi({cases}).compare`、ブラウザinspect操作 `caseCompare`、MCP `studio_compare_cases` で、保存ケースの同一点を表示変更せず比較する。1〜8件のcase revisionを固定し、任意のmm全体座標を測定する。モード/保存フレームを明示し、モード正規化形状の差分や時間補間は行わない。応力Pa・塑性ひずみ比率1など、生値のunitsを返す。kind/field/unit/time/frequencyの非互換は差分不能理由として返し、不正ケース・未知部品・stale lease/guardは全体拒否する。
+
+MCPはversion 1保存ケースarchiveを対象とし、references省略のpath-only呼出でsnapshot内IDとcase/archive revisionを列挙する。比較ではexpectedArchiveRevision必須、元ファイルhashを読取前後で確認する。bundleは対象外。共通応答とMCP応答のJSON値は64KiB上限で、MCP wire包装全体の上限ではない。計算時runtimeIdentityの未記録を現在の環境で補完しない。詳細は[自動操作](automation.md)。今回の成功件数・実ブラウザ・公開完了は検証待ちで、P0〜P6の完了は未達。
+
+過渡結果は保存物理時刻の完全一致のみ比較可能（補間・許容誤差なし）。SPLで `referencePressurePa` が異なる場合は `different-reference-pressure` で差分なし。Paの生圧力は基準圧が異なっても比較できる。
