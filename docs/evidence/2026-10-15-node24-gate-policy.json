@@ -12,13 +12,41 @@
   },
   "ciEvidence": {
     "source": "gh run list --branch main --workflow 'Publish application', 2026-10-15",
-    "summary": "From run 38679277727 (ec98256) to run 38724981240 (2c19007) there are 28 runs on main: 25 succeeded (verify, deploy and verify-published), 1 failed (38706323710, 6f195bf) and 2 were cancelled because newer commits superseded them (38692909864, 38687710680). Pull-request heads also passed verify before every merge today.",
+    "summary": "From run 38679277727 (ec98256) to run 38724981240 (2c19007) there are 28 runs on main: 25 succeeded (verify, deploy and verify-published), 1 failed (38706323710, 6f195bf) and 2 were cancelled because newer commits superseded them (38692909864, 38687710680). Pull-request heads also passed verify before every merge today. Correction after PR 45: the known V8 fatal also occurred once in a pull-request CI run (4be0672, see recordedFailures), so \"passes every time\" is not accurate; verify passes on a retry/new push. Policy B therefore rests on the required verify passing for the exact head that is merged, not on the fatal never occurring.",
     "successfulRunIds": [
-      38724981240, 38715215463, 38713929238, 38707143618, 38705173704, 38703238389, 38701514439, 38700153486, 38699217923,
-      38697764762, 38696918408, 38694780474, 38694237702, 38693448612, 38692282006, 38691317682, 38690150686, 38688236594,
-      38685524491, 38684668942, 38682609850, 38682020758, 38680993905, 38679733428, 38679277727
+      38724981240,
+      38715215463,
+      38713929238,
+      38707143618,
+      38705173704,
+      38703238389,
+      38701514439,
+      38700153486,
+      38699217923,
+      38697764762,
+      38696918408,
+      38694780474,
+      38694237702,
+      38693448612,
+      38692282006,
+      38691317682,
+      38690150686,
+      38688236594,
+      38685524491,
+      38684668942,
+      38682609850,
+      38682020758,
+      38680993905,
+      38679733428,
+      38679277727
     ],
     "recordedFailures": [
+      {
+        "run": 38746530615,
+        "sha": "4be0672",
+        "kind": "pull-request head (PR 45, board-only change)",
+        "detail": "mcp-acoustic-channel-observation (\"real MCP harmonic, sweep and channel jobs expose declared recurrence observations without result fields\") died with the known V8 fatal \"Check failed: jit_page_->allocations_.erase(addr) == 1\" in CI on Node 24 (3m40s). The same test passed in earlier CI runs and alone. It was rerun/re-pushed; this first-attempt failure is recorded, not hidden."
+      },
       {
         "run": 38706323710,
         "sha": "6f195bf",
@@ -32,6 +60,7 @@
     ]
   },
   "limits": [
+    "The V8 fatal occurs in CI as well (main 6f195bf, PR head 4be0672); policy B requires a passing verify for the exact merged head and does not claim the fatal is gone.",
     "CI passing repeatedly is not a root fix; failures can recur (one native heap failure occurred in CI today at 6f195bf).",
     "Local Windows full runs still hit the V8 fatal occasionally; rerun the file alone and report it, do not hide it.",
     "Re-check upstream issue 66366 on each new Node 24.x release and revisit this policy when a backport lands."
