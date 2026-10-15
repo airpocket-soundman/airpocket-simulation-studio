@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T06:15:23.775Z",
+  "updatedAt": "2026-10-15T07:07:33.101Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1345,9 +1345,9 @@
       "detailEn": "18 MCP tools and 17 atomic edit operations cover imports, builtins, face IDs, provenance, assumptions, limited linear-static preflight, persisted provisional labels and bounded intermediate reads.",
       "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs",
-      "lastUpdate": "2026-10-15 再監査: 関連22件成功。全物理preflightが未実装のため検証中を維持(ライブ接続はPUBLICHTTPS1)。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: 22 related tests pass. All-physics preflight remains unimplemented, so stays checking (live transport is tracked in PUBLICHTTPS1). Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
+      "lastUpdate": "2026-10-15: 構造・熱・音響・限定流体の既存preflight契約を再確認し、要求された疲労/破壊評価の材料・オプション・温度範囲を検査する候補を追加。共有APIと実stdio MCPで不足/正常/入力不変を検証。評価の数式は不変、解析後の応力適合性・境界/拘束・物理妥当性の確認は引き続き必要。今回候補の全体CIは継続、checking維持。",
+      "lastUpdateEn": "2026-10-15: rechecked existing structural/thermal/acoustic/limited-fluid preflight contracts and added candidate checks for requested fatigue/fracture material data, options and temperature range. Shared API and real stdio MCP verify missing/valid inputs and source invariance. Assessment equations are unchanged; post-solve stress applicability, boundary/constraint and physical validation remain necessary. Full CI for this candidate is pending; stays checking."
     },
     {
       "id": "VIEWCOMPARE",
@@ -2253,9 +2253,9 @@
       "detailEn": "Split the long entry into eight workflow references;avoid full roadmap/catalog retrieval for input-only work and distinguish registered tools from explicit SDK fallback.",
       "acceptance": "repo/installed9files hash一致、UI設定/登録不変。synthetic150N previewで100N根拠との矛盾を検出しsource保持・未適用/未解析。SDK知識を補っておりSkill単独や全一巡の証明ではない。",
       "acceptanceEn": "Nine repository/installed files hash-match;UI metadata/server registration unchanged. Synthetic150N preview detects stale100N evidence,preserves source,and does not apply/solve. SDK knowledge supplemented execution;not proof of Skill-only or complete end-to-end behavior.",
-      "evidence": "skills/airpocket-studio/SKILL.md; docs/evidence/2026-10-15-skill-synchronization.json; docs/evidence/2026-10-15-skill-forward-input-preview.json",
-      "lastUpdate": "2026-10-15 再監査: repoと導入先のSKILL.mdは現在一致(42c964da)だが同期証跡のSHAが旧版(bba01f4a)のため更新が必要。Skill単独の完走も未証明で検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: repo and installed SKILL.md now match (42c964da) but the synchronization evidence records an older SHA (bba01f4a) and needs refreshing; Skill-only completion remains unproven, so stays checking."
+      "evidence": "skills/airpocket-studio/SKILL.md; docs/evidence/2026-10-15-skill-synchronization.json; docs/evidence/2026-10-15-skill-forward-input-preview.json; docs/evidence/2026-10-15-skill-synchronization-b.json",
+      "lastUpdate": "2026-10-15: physics-provenanceの既定値/同種評価置換の注意書きを実装と照合して導入先へ同期。全11ファイルのbytes/SHAが一致し、双方のSkill validator成功。旧9ファイルの証跡は履歴として保持。今回のforward-input preview再検証は未実施のためcheckingを維持。",
+      "lastUpdateEn": "2026-10-15: matched the physics-provenance default/replacement note against implementation and synchronized that installed reference. All 11 file bytes/SHA match and both Skill validators passed. The old nine-file evidence remains historical. Forward-input preview was not rerun in this batch; stays checking."
     },
     {
       "id": "MCPARGUMENTTYPES1",
