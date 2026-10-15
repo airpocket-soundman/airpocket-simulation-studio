@@ -36,9 +36,10 @@ export async function createNativeFlowHost({origin,executable,meshPath,outputRoo
     }catch(error){job.status=error.code==='SU2_CANCELLED'?'cancelled':'failed';job.error={code:error.code??'NATIVE_FLOW_FAILED',message:error.message,logTail:error.logTail};}finally{job.settled=true;active=null;}})();
     return send(202,{jobId});
    }
-   const match=url.pathname.match(/^\/jobs\/([a-f0-9-]+)(\/result|\/cancel)?$/);if(!match) return send(404,{error:'Unknown native route'});
+   const match=url.pathname.match(/^\/jobs\/([a-f0-9-]+)(\/result|\/cancel|\/release)?$/);if(!match) return send(404,{error:'Unknown native route'});
    const job=jobs.get(match[1]);if(!job)return send(404,{error:'Unknown native job'});
-   if(match[2]==='/cancel'&&req.method==='POST'){job.controller.abort();return send(200,{jobId:job.jobId,cancelRequested:true});}
+   if(match[2]==='/release'&&req.method==='POST'){if(!job.settled)throw Error('Wait for native execution settlement before release');jobs.delete(job.jobId);for(const [key,id] of requests)if(id===job.jobId)requests.delete(key);return send(200,{jobId:job.jobId,released:true,filesDeleted:false});}
+   if(match[2]==='/cancel'&&req.method==='POST'){if(job.settled)return send(200,{jobId:job.jobId,cancelRequested:false,status:job.status});job.controller.abort();return send(200,{jobId:job.jobId,cancelRequested:true});}
    if(match[2]==='/result'&&req.method==='GET'){if(job.status!=='completed')throw Error('Native result unavailable');return send(200,job.result);}
    if(!match[2]&&req.method==='GET')return send(200,{jobId:job.jobId,status:job.status,executionSettled:job.settled,latestObservation:job.events.at(-1)??null,...(job.metadata?{metadata:job.metadata,resultSha256:job.resultSha256,resultBytes:job.resultBytes}:{}),...(job.error?{error:job.error}:{})});
    return send(405,{error:'Method refused'});

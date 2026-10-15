@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "transport": "real JSON-RPC stdio; full Studio MCP optional native integration",
+  "tools": [
+    "studio_native_flow_capabilities",
+    "studio_native_flow_connection",
+    "studio_native_flow_start",
+    "studio_native_flow_status",
+    "studio_native_flow_result",
+    "studio_native_flow_cancel",
+    "studio_native_flow_release"
+  ],
+  "connectionTool": {
+    "loopback": true,
+    "codeReturned": true,
+    "codeRedacted": true
+  },
+  "idempotentStart": true,
+  "intermediateObservations": 74,
+  "inputRevisionMatch": true,
+  "pressure": {
+    "values": 7716,
+    "maximumAbsoluteDifference": 0
+  },
+  "velocity": {
+    "values": 23148,
+    "maximumAbsoluteDifference": 0
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "solver": "SU2",
+    "expectedVersion": "8.5.0",
+    "inputRevision": "sha256:15192ef4993638c7eb3e085ea2886fe58b864cc776b1a3cdb0b30b090684325b",
+    "executionSettled": true,
+    "pressureCriterionMet": true,
+    "allReportedResidualsMet": false,
+    "numericallyConverged": false,
+    "residualChecks": [
+      {
+        "name": "rms[P]",
+        "value": -5.021495891,
+        "target": -5,
+        "met": true
+      },
+      {
+        "name": "rms[U]",
+        "value": -3.73859823,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[V]",
+        "value": -3.844614565,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[W]",
+        "value": -3.957408212,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[nu]",
+        "value": -4.862592819,
+        "target": -5,
+        "met": false
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+        "severity": "warning",
+        "occurrences": 369,
+        "lastAffectedPoints": 116,
+        "maximumAffectedPoints": 363,
+        "message": "Wall-function y+ computation did not converge at some points.",
+        "suggestions": [
+          "Inspect the wall y+ distribution and near-wall mesh.",
+          "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+          "Do not use this result as a validated drag or pressure prediction."
+        ]
+      }
+    ],
+    "physicalValidationComplete": false,
+    "convergenceCriterion": "SU2 stopping criterion: pressure residual only; adapter additionally checks all reported residuals and wall warnings",
+    "provisional": true,
+    "history": {
+      "Time_Iter": 0,
+      "Outer_Iter": 0,
+      "Inner_Iter": 184,
+      "rms[P]": -5.021495891,
+      "rms[U]": -3.73859823,
+      "rms[V]": -3.844614565,
+      "rms[W]": -3.957408212,
+      "rms[nu]": -4.862592819
+    },
+    "artifacts": [
+      {
+        "name": "flow.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:76437cb6d1da0b7b10c78c9b7e160ab822ae3fedf1256ed9251242422df69e55"
+      },
+      {
+        "name": "surface_flow.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:7d6db4e7ce6d5f2ff4670e2e2c51b00d5b17eef06d038ff8a913d945a7f40ad2"
+      },
+      {
+        "name": "history.csv",
+        "bytes": 24924,
+        "sha256": "sha256:ee0db5d6a5071462f5ae21323583d892c8a4db6c8b961e2f653195773a6b92df"
+      }
+    ]
+  },
+  "release": {
+    "jobId": "cc777613-9953-43e6-82d0-42894958feb1",
+    "released": true,
+    "filesDeleted": false
+  },
+  "prematureReleaseRefused": true,
+  "cancellation": {
+    "status": "cancelled",
+    "executionSettled": true
+  }
+}

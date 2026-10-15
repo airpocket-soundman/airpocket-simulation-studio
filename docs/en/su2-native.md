@@ -2,7 +2,7 @@
 
 [日本語](../su2-native.md)
 
-2026-10-15. Experimental native adapter, fixed-case loopback host, Studio panel and browser API are implemented. This is separate from WASM and is not integrated into the public release, ordinary solver selection or existing MCP tools. Arbitrary CAD meshing is not automatic.
+2026-10-15. Experimental native adapter, fixed-case loopback host, Studio panel and browser API are implemented. This is separate from WASM and is not integrated into the public release or ordinary solver selection. Dedicated tools can be added to existing MCP with explicit startup configuration. Arbitrary CAD meshing is not automatic.
 
 ## Cow direct/Studio equivalence
 
@@ -23,12 +23,20 @@ The host binds to loopback and checks Origin/Host/Bearer. It accepts only the co
 
 ## APIs and limitations
 
-window.nativeFlowApi exposes configure/connect/startJob/getJob/cancelJob/getResult/showResult/setField/capture/getDisplayedResult. startJob computes; showResult displays retrieved data. Pressure/velocity, a center slice and vectors, JSON and PNG exports are available. Results use the experimental panel format, not existing caseApi archives. Do not invent MCP tools for these operations.
+window.nativeFlowApi exposes configure/connect/startJob/getJob/cancelJob/getResult/showResult/setField/capture/getDisplayedResult. startJob computes; showResult displays retrieved data. Pressure/velocity, a center slice and vectors, JSON and PNG exports are available. Results use the experimental panel format, not existing caseApi archives. Default MCP exposes no native tools; configured compute/data tools are listed below. Native view/capture still uses browser APIs.
 
-Remaining: wall mesh/treatment, complete residual/balance/mesh convergence, independent accuracy checks, general meshing, unsteady/additional turbulence models, shared job/case/probe/MCP integration, public connectivity and distributed Skills. WASM porting is not a prerequisite.
+Remaining: wall mesh/treatment, complete residual/balance/mesh convergence, independent accuracy checks, general meshing, unsteady/additional turbulence models, shared job/case/probe and view-MCP integration, public connectivity and distributed Skills. WASM porting is not a prerequisite.
 
 ## Pinned runtime and initial example
 
 Official release: https://github.com/su2code/SU2/releases/tag/v8.5.0 . Windows OpenMP archive SHA-256: 4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11. Retain licenses/notices; product redistribution review remains pending.
 
 The earlier cylinder [record](../evidence/2026-10-15-su2-native.json) distinguishes the initial timeout, later numerical-settings success and cancellation. Its pressure criterion is not a physical-accuracy certification.
+
+## Native MCP and Skill
+
+Add native tools to the full server with node scripts/studio-mcp.mjs --native-flow-config=<absolute approved-case.json>, or run the native-only entry node scripts/studio-native-flow-mcp.mjs <approved-case.json>. Default startup remains unchanged. Updating source does not register tools into an already running client/conversation; deliberate registration/restart is separate.
+
+Seven tools: studio_native_flow_capabilities, studio_native_flow_connection, studio_native_flow_start, studio_native_flow_status, studio_native_flow_result, studio_native_flow_cancel and studio_native_flow_release. Start is request-ID idempotent while retained; status exposes provisional observations, settlement and diagnostics. Result defaults to compact summary and supports <=200 entries/64 KiB. Coordinates are metres, gauge pressure Pa and velocity m/s; vector page offsets count nodes. Reads use registered memory, not fresh disk validation. Release drops retention without deleting files, and released IDs may execute again. Connection information does not grant existing browser-MCP scopes.
+
+Real JSON-RPC stdio through the full MCP reran the cow in a separate process. All 7,716 pressures and 23,148 velocity components matched direct execution; 74 observations, idempotency, cancellation/settlement, premature-release refusal and retained warnings were verified. [MCP evidence](../evidence/2026-10-15-cow-flow-mcp.json). The task-specific Skill reference is skills/airpocket-studio/references/native-flow.md; distributed Skills and running MCP registrations are not automatically updated. Native view/capture via MCP remains pending.

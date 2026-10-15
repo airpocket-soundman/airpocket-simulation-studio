@@ -2,7 +2,7 @@
 
 [English](en/su2-native.md)
 
-2026-10-15。実験用ネイティブアダプター、固定ケース用loopbackホスト、Studio内の表示パネルとブラウザAPIを実装。既存WASM解析とは別経路であり、公開版・通常の解析選択・既存MCPツールへの統合は未完了。任意CADの自動メッシュ作成機能ではない。
+2026-10-15。実験用ネイティブアダプター、固定ケース用loopbackホスト、Studio内の表示パネルとブラウザAPIを実装。既存WASM解析とは別経路であり、公開版・通常の解析選択への統合は未完了。既存MCPには起動オプションで専用ツールを追加できる。任意CADの自動メッシュ作成機能ではない。
 
 ## 牛モデルでの直接実行とStudio実行
 
@@ -23,12 +23,30 @@ Gmsh WASM 0.3.0で牛のSTEPをmへ正規化し周囲の空気を四面体化し
 
 ## APIと制限
 
-window.nativeFlowApiのconfigure、connect、startJob、getJob、cancelJob、getResult、showResult、setField、capture、getDisplayedResultを使う。開始は実計算であり、showResultは取得済み結果の表示。入力を変えずに結果を取得し、圧力/速度・中央断面・矢印を表示し、JSON/PNGを保存できる。結果は既存caseApiのケースではなく、実験用パネル独自の形式。既存MCPにこれらのツールがあるとは案内しない。
+window.nativeFlowApiのconfigure、connect、startJob、getJob、cancelJob、getResult、showResult、setField、capture、getDisplayedResultを使う。開始は実計算であり、showResultは取得済み結果の表示。入力を変えずに結果を取得し、圧力/速度・中央断面・矢印を表示し、JSON/PNGを保存できる。結果は既存caseApiのケースではなく、実験用パネル独自の形式。起動設定なしの既存MCPではネイティブ用ツールは公開されない。表示切替・PNG取得はブラウザAPIにあり、ネイティブMCPへの接続は残る。
 
-残作業は壁近傍メッシュ/壁処理、全残差と収支/メッシュ収束、独立精度検証、一般メッシュ取込、非定常・追加乱流、共通ジョブ/ケース/測定/MCPへの統合、公開接続とSkill配布同期。WASM移植は先行条件にしない。
+残作業は壁近傍メッシュ/壁処理、全残差と収支/メッシュ収束、独立精度検証、一般メッシュ取込、非定常・追加乱流、共通ジョブ/ケース/測定・表示MCPへの統合、公開接続とSkill配布同期。WASM移植は先行条件にしない。
 
 ## 固定版と初期例題
 
 公式配布: https://github.com/su2code/SU2/releases/tag/v8.5.0 。Windows OpenMP zipのSHA-256は4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11。ライセンス・通知を保持し、製品再配布の整理は別途必要。
 
 初期の円柱例題は[実行記録](evidence/2026-10-15-su2-native.json)に保存。初期設定の時間切れ、数値設定変更後の成功、取消を区別する。この過去の記録の圧力基準達成を物理精度保証としない。
+
+## 流体MCPとSkill
+
+既存MCPへ追加する場合はnode scripts/studio-mcp.mjs --native-flow-config=<承認済みケースJSONの絶対パス>で起動する。流体専用ならnode scripts/studio-native-flow-mcp.mjs <承認済みケースJSON>。通常起動のMCPは変更しない。サーバーのコード更新だけでは、既に起動中のMCPや現在の会話へツールは追加されない。クライアントの登録/再起動は別途必要。
+
+| ツール | 操作 |
+|---|---|
+| studio_native_flow_capabilities | 承認済み入力・能力・単位を確認 |
+| studio_native_flow_connection | 同じホストの一時接続情報を取得。既存ブラウザMCPの権限は付与しない |
+| studio_native_flow_start | requestIdで実計算開始。保持中の同じIDは同じジョブを返す |
+| studio_native_flow_status | 状態・最新の暫定残差・終了待機・診断を取得 |
+| studio_native_flow_result | 既定は要約。物理量/座標/接続を最大200エントリ、64 KiB以内で取得 |
+| studio_native_flow_cancel | 中止要求。終了完了は状態で確認 |
+| studio_native_flow_release | 終了済みジョブの保持枠を解放。出力ファイルは削除しない |
+
+結果ページの座標はm、圧力はPaゲージ、速度はm/s。速度/座標のoffsetはスカラー成分ではなく節点エントリ数。旧studio_probeのmm入力や既存ケース形式と混同しない。保持メモリの読取であり、出力ハッシュは保存時点を示す。ディスク上の現在のバイトを再検証したとは扱わない。
+
+実MCPのJSON-RPC stdioから牛を別プロセスで再計算し、圧力7,716値・速度23,148値が直接実行と一致した。74回の中間観測、冪等再試行、取消・終了待機・早過ぎる解放の拒否、警告保持も確認した。[MCP検証記録](evidence/2026-10-15-cow-flow-mcp.json)。リポジトリSkillの用途別参照はskills/airpocket-studio/references/native-flow.md。配布済みSkillや登録済みMCPが自動更新されたとは扱わない。

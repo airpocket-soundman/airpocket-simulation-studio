@@ -39,7 +39,7 @@ export function configureAnalysisExecution({isolation='worker',createProcessWork
  if(executionConfigurationLocked)throw Error('Analysis execution configuration is locked');
  const service=createHeadlessJobService({isolation,...(createProcessWorker!==undefined?{createProcessWorker}:{})});analysisIsolation=isolation;jobService=service;
 }
-let browserBridge;
+let browserBridge,nativeFlowMcp;
 const toolList=[
  {name:'studio_preview_edit',description:'Preview semantic input edits without writing files or changing a browser. Returns the exact resulting input revision, bounded changed JSON pointers, compact summary and Node physical preflight. A valid edit can return preflight.allowed false with missing-input diagnostics. Nested operation payloads remain validated by the actual semantic methods; no physical input is inferred.',inputSchema:object({path:pathSchema,expectedRevision:{type:'string',pattern:'^sha256:[a-f0-9]{64}$'},operations:{type:'array',items:object({method:{enum:['selectTriangles','selectCadFace','selectPlanarRegion','selectCylindricalRegion','clearSelection','addCondition','removeCondition','selectCondition','replaceConditionRegion','reapplyConditionRegion','setMaterial','setMaterialProperties','setMaterialPreset','applyCatalogMaterial','setStudy','setMeshSettings','setInputProvenance','setAnalysisIntent']},args:{...semanticOperationArgumentsSchema,description:'Positional arguments of the selected semantic method; nested material, boundary and provenance validation is runtime-only.'}},['method','args'])},method:{enum:['wasm-pcg','pcg','pcg-strict','mfem-wasm']},size:{type:'number',exclusiveMinimum:0},operation:{enum:['solve','mesh']},mode:{enum:['legacy','quantitative','exploratory']}},['path','expectedRevision','operations'])},
  {name:'studio_browser_contracts',description:'Discover declared input schemas,required scopes,revision arguments,units,side effects and limits for live browser operations without connecting or executing them. Query one method,scope or a bounded page (default 5,maximum 10; <=64 KiB). Nested physical validation remains authoritative in the adapters. Declarations do not grant access or prove an optional browser adapter is available.',inputSchema:object({method:{enum:Object.keys(browserMethods)},scope:{enum:['inspect','edit','analyze','view']},offset:{type:'integer',minimum:0},limit:{type:'integer',minimum:1,maximum:10}})},
@@ -77,6 +77,7 @@ export async function callStudioTool(name,args={}){
  executionConfigurationLocked=true;
  const tool=toolList.find(t=>t.name===name);if(!tool)throw Error('Unknown tool: '+name);
  if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!(key in tool.inputSchema.properties))||tool.inputSchema.required.some(key=>!(key in args)))throw Error('Invalid tool arguments');
+ if(nativeFlowMcp?.toolList.some(t=>t.name===name))return nativeFlowMcp.callTool(name,args);
  if(name==='studio_browser_contracts')return getBrowserOperationContracts(args);
  if(name==='studio_import_print'){
   if(typeof args.path!=='string'||!isAbsolute(args.path)||typeof args.outputPath!=='string'||!isAbsolute(args.outputPath)||resolve(args.path).toLowerCase()===resolve(args.outputPath).toLowerCase())throw Error('Use distinct absolute print input and output paths');
@@ -174,6 +175,9 @@ export async function callStudioTool(name,args={}){
  await writeFile(resolve(args.outputPath),JSON.stringify(output)+'\n',{flag:'wx'});return {...summary(output),outputPath:resolve(args.outputPath)};
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+ const nativeArgs=process.argv.slice(2).filter(a=>a==='--native-flow-config'||a.startsWith('--native-flow-config='));
+ if(nativeArgs.length>1||nativeArgs.length===1&&!nativeArgs[0].slice('--native-flow-config='.length))throw Error('Use one --native-flow-config=<absolute approved-case.json>');
+ if(nativeArgs.length){const {createNativeFlowMcp}=await import('./studio-native-flow-mcp.mjs');nativeFlowMcp=await createNativeFlowMcp(await jsonFile(nativeArgs[0].slice('--native-flow-config='.length)));toolList.push(...nativeFlowMcp.toolList);}
  const isolationArgs=process.argv.slice(2).filter(arg=>arg==='--analysis-isolation'||arg.startsWith('--analysis-isolation='));
  if(isolationArgs.length>1||isolationArgs.length===1&&!['worker','process'].includes(isolationArgs[0].slice('--analysis-isolation='.length)))throw Error('Use one --analysis-isolation=worker|process');
  if(isolationArgs.length){configureAnalysisExecution({isolation:isolationArgs[0].slice('--analysis-isolation='.length)});}
@@ -186,5 +190,5 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
 }
 export function startServer(){
  executionConfigurationLocked=true;
- return startMcpStdio({tools:toolList,callTool:callStudioTool,close:async()=>{await jobService.closeAsync();await browserBridge?.close();}});
+ return startMcpStdio({tools:toolList,callTool:callStudioTool,close:async()=>{await jobService.closeAsync();await browserBridge?.close();await nativeFlowMcp?.close();}});
 }
