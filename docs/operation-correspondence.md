@@ -5,7 +5,7 @@
 [API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作88件とMCPツール33件（既定31件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
 
 - 範囲/権限: ブラウザ操作は`src/browser-operation-names.js`の範囲（inspect/edit/analyze/view）。MCPツールは注釈の読み取り専用/書き込み・実行。
-- GUI: `src/main.js`・`src/ui/*.js`などページを構築するソース内の要素idを名前検索で確認したもの。行ごとに生成されるボタンはid無しと明記。「no GUI control」はidが見つからなかったことを示し、機能の不在を意味しない。
+- GUI: 各操作について、GUIを組み立てるソース（`src/main.js`・`src/ui/*.js`・`src/*-ui.js`・`src/visual-export.js`）と、操作の実体（`src/browser-session.js`・各`*-operations.js`・MCPは`scripts/studio-mcp.mjs`）を読み、呼び出す関数を突き合わせて分類した。`同一経路`はGUI操作が同じ共有関数を呼ぶもの、`関連（別処理）`は近いが別の処理をするもの（理由を併記）、`connector only — no GUI control by design`はGUIから呼ぶ経路がコードに無いもの（機能が不要という意味ではなく、GUIを足す余地はある）。行ごとに生成されるボタンはid・classが無いため、ボタン名と親のidで示した。限界: 静的に読んだ結果で、実ブラウザでの操作確認ではない。分類は関数の共有を見ており、引数・リビジョン確認・権限の同等性までは保証しない。`tests/operation-correspondence-gui.test.mjs`がGUI列のid・data属性・classがソースに存在することだけを確認する（分類の正しさは検証しない）。
 - SKILL: `skills/airpocket-studio`配下で名前が出現するファイル。「none」は個別の記述がない。
 - MCPの「saved-file counterpart」は保存JSONを対象とする別操作であり、同一操作ではない。
 
@@ -13,129 +13,129 @@
 
 | 操作 | 範囲 | MCP | GUI | SKILL |
 |---|---|---|---|---|
-| `inspect` | inspect | `studio_inspect_project` (saved-file counterpart); `studio_browser_call` method=inspect | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/physics-provenance.md`, `references/result-views.md`, `references/saved-inputs.md`, `SKILL.md` |
-| `inspectInput` | inspect | `studio_browser_call` method=inspectInput | no GUI control | `references/browser-session.md`, `references/saved-inputs.md` |
-| `geometry` | inspect | `studio_browser_call` method=geometry | `#geometry-inspect` `#geometry-report` | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/physics-provenance.md`, `references/saved-inputs.md`, `SKILL.md` |
-| `inspectSurface` | inspect | `studio_browser_call` method=inspectSurface | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `checkGpuEnvironment` | inspect | `studio_browser_call` method=checkGpuEnvironment | `#gpu-check` `#gpu-environment` | `references/browser-session.md` |
-| `createBuiltinProject` | edit | `studio_create_builtin_project` (saved-file counterpart); `studio_browser_call` method=createBuiltinProject | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `prepareFluidDomain` | edit | `studio_browser_call` method=prepareFluidDomain | `#internal-create` `#exterior-create` `#fluid-domain-info` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `applyCaseSource` | edit | `studio_browser_call` method=applyCaseSource | `#thermal-case-apply` `#vibration-create` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `clearCaseSource` | edit | `studio_browser_call` method=clearCaseSource | `#thermal-case-clear` `#vibration-clear` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `applyFluidDomainMesh` | edit | `studio_browser_call` method=applyFluidDomainMesh | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `inputImportBegin` | edit | `studio_browser_call` method=inputImportBegin | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `inputImportWrite` | edit | `studio_browser_call` method=inputImportWrite | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `inputImportCommit` | edit | `studio_browser_call` method=inputImportCommit | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `inputImportRelease` | edit | `studio_browser_call` method=inputImportRelease | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `preflight` | inspect | `studio_preflight_project` (saved-file counterpart); `studio_browser_call` method=preflight | no GUI control | `references/browser-session.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/physics-provenance.md`, `references/saved-inputs.md`, `SKILL.md` |
-| `meshBoundaryPreflight` | inspect | `studio_preflight_mesh_boundaries` (saved-file counterpart); `studio_browser_call` method=meshBoundaryPreflight | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `previewEdit` | inspect | `studio_preview_edit` (saved-file counterpart); `studio_browser_call` method=previewEdit | no GUI control | `references/browser-session.md`, `references/physics-provenance.md`, `references/saved-inputs.md` |
-| `listJobs` | inspect | `studio_browser_call` method=listJobs | no GUI control | `references/browser-session.md` |
-| `jobStatus` | inspect | `studio_job_status` (saved-file counterpart); `studio_browser_call` method=jobStatus | no GUI control | `references/browser-session.md` |
-| `jobEvents` | inspect | `studio_job_events` (saved-file counterpart); `studio_browser_call` method=jobEvents | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `jobArtifacts` | inspect | `studio_job_artifacts` (saved-file counterpart); `studio_browser_call` method=jobArtifacts | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `jobArtifact` | inspect | `studio_job_artifact` (saved-file counterpart); `studio_browser_call` method=jobArtifact | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `jobResultExport` | inspect | `studio_browser_call` method=jobResultExport | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `jobResultRead` | inspect | `studio_browser_call` method=jobResultRead | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `jobResultRelease` | inspect | `studio_browser_call` method=jobResultRelease | no GUI control | `references/browser-session.md`, `references/jobs-observations.md` |
-| `probe` | inspect | `studio_probe` (saved-file counterpart); `studio_browser_call` method=probe | `#probe-result` `#sweep-results` | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/jobs-observations.md`, `references/result-views.md` |
-| `edit` | edit | `studio_edit_project` (saved-file counterpart); `studio_browser_call` method=edit | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/physics-provenance.md`, `references/result-views.md`, `references/saved-inputs.md`, `SKILL.md` |
-| `startJob` | analyze | `studio_start_analysis` (saved-file counterpart); `studio_browser_call` method=startJob | `#solve-run` `#mesh-run` `#adaptive-run` | `references/browser-session.md` |
-| `cancelJob` | analyze | `studio_cancel_job` (saved-file counterpart); `studio_browser_call` method=cancelJob | `#cancel-run` | `references/browser-session.md` |
-| `releaseJob` | analyze | `studio_release_job` (saved-file counterpart); `studio_browser_call` method=releaseJob | no GUI control | `references/browser-session.md` |
-| `showJob` | analyze | `studio_browser_call` method=showJob | no GUI control | `references/browser-session.md` |
-| `getView` | view | `studio_browser_call` method=getView | `#clip-enabled` `#clip-axis` `#clip-position` `#clip-flip` `#part-visibility` `#model-opacity` | `references/browser-session.md` |
-| `setView` | view | `studio_browser_call` method=setView | `#clip-enabled` `#clip-axis` `#clip-position` `#clip-flip` `#part-visibility` `#model-opacity` | `references/browser-session.md` |
-| `getResultView` | inspect | `studio_browser_call` method=getResultView | `#result-field` `#result-mode` `#color-fixed` `#color-min` `#color-max` `#deform-scale` `#result-surface` `#result-surface-wire` `#volume-wire` `#acoustic-time-frame` `#result-section` | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/result-views.md` |
-| `setResultView` | view | `studio_browser_call` method=setResultView | `#result-field` `#result-mode` `#color-fixed` `#color-min` `#color-max` `#deform-scale` `#result-surface` `#result-surface-wire` `#volume-wire` `#acoustic-time-frame` `#result-section` | `references/browser-session.md`, `references/result-views.md` |
-| `caseList` | inspect | `studio_browser_call` method=caseList | `#case-list` | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/result-views.md` |
-| `caseCompare` | inspect | `studio_compare_cases` (saved-file counterpart); `studio_browser_call` method=caseCompare | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseView` | edit | `studio_browser_call` method=caseView | `#case-list` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `caseRestoreInput` | edit | `studio_browser_call` method=caseRestoreInput | `#case-list` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `caseRename` | edit | `studio_browser_call` method=caseRename | `#case-name` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `caseRemove` | edit | `studio_browser_call` method=caseRemove | `#case-list` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `caseSave` | analyze | `studio_browser_call` method=caseSave | `#case-add` `#case-name` | `references/browser-session.md`, `references/result-views.md` |
-| `exportCapabilities` | inspect | `studio_browser_call` method=exportCapabilities | `#visual-export-status` | `references/browser-session.md`, `references/result-views.md` |
-| `startExport` | view | `studio_browser_call` method=startExport | `#view-png` `#animation-kind` `#animation-seconds` | `references/browser-session.md`, `references/result-views.md` |
-| `exportStatus` | inspect | `studio_browser_call` method=exportStatus | `#visual-export-status` | `references/browser-session.md`, `references/result-views.md` |
-| `exportArtifact` | inspect | `studio_browser_call` method=exportArtifact | `#visual-export-download` | `references/browser-session.md`, `references/result-views.md` |
-| `cancelExport` | view | `studio_browser_call` method=cancelExport | `#animation-stop` | `references/browser-session.md`, `references/result-views.md` |
-| `releaseExport` | view | `studio_browser_call` method=releaseExport | no GUI control | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewList` | inspect | `studio_browser_call` method=namedViewList | `#named-view-list` | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewExport` | inspect | `studio_browser_call` method=namedViewExport | `#named-view-export` | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewSave` | view | `studio_browser_call` method=namedViewSave | `#named-view-save` `#named-view-name` | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewApply` | view | `studio_browser_call` method=namedViewApply | `#named-view-list` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewRemove` | view | `studio_browser_call` method=namedViewRemove | `#named-view-list` (row buttons without ids) | `references/browser-session.md`, `references/result-views.md` |
-| `namedViewImport` | view | `studio_browser_call` method=namedViewImport | `#named-view-import` | `references/browser-session.md`, `references/result-views.md` |
-| `caseArchiveExport` | inspect | `studio_browser_call` method=caseArchiveExport | `#case-export` | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseArchiveRead` | inspect | `studio_browser_call` method=caseArchiveRead | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseArchiveImport` | edit | `studio_browser_call` method=caseArchiveImport | `#case-import` | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseArchiveWrite` | edit | `studio_browser_call` method=caseArchiveWrite | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseArchiveCommit` | edit | `studio_browser_call` method=caseArchiveCommit | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseArchiveRelease` | inspect | `studio_browser_call` method=caseArchiveRelease | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `getAssessment` | inspect | `studio_assessment` (saved-file counterpart); `studio_browser_call` method=getAssessment | `#fatigue-summary` `#fracture-summary` | `references/browser-session.md`, `references/physics-provenance.md` |
-| `evaluateAssessment` | analyze | `studio_assess_result` (saved-file counterpart); `studio_browser_call` method=evaluateAssessment | `#fatigue-evaluate` `#fracture-evaluate` | `references/browser-session.md`, `references/physics-provenance.md` |
-| `previewCadUpdate` | inspect | `studio_preview_cad_update` (saved-file counterpart); `studio_browser_call` method=previewCadUpdate | `#cad-update` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `applyCadUpdate` | edit | `studio_apply_cad_update` (saved-file counterpart); `studio_browser_call` method=applyCadUpdate | `#cad-update` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printInspect` | inspect | `studio_inspect_print` (saved-file counterpart); `studio_browser_call` method=printInspect | `#print-file` `#print-report` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `importPrint` | edit | `studio_import_print` (saved-file counterpart); `studio_browser_call` method=importPrint | `#print-file` `#print-import` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `getPrintData` | inspect | `studio_browser_call` method=getPrintData | `#print-text-show` `#print-text` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `setPrintView` | view | `studio_browser_call` method=setPrintView | `#print-view` `#print-layer` `#print-all-layers` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferExport` | inspect | `studio_browser_call` method=printTransferExport | `#print-export` | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferRead` | inspect | `studio_browser_call` method=printTransferRead | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferImport` | edit | `studio_browser_call` method=printTransferImport | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferWrite` | edit | `studio_browser_call` method=printTransferWrite | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferCommit` | edit | `studio_browser_call` method=printTransferCommit | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `printTransferRelease` | inspect | `studio_browser_call` method=printTransferRelease | no GUI control | `references/browser-session.md`, `references/geometry-imports.md` |
-| `caseBundleList` | inspect | `studio_browser_call` method=caseBundleList | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseBundleExport` | inspect | `studio_browser_call` method=caseBundleExport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseBundleRead` | inspect | `studio_browser_call` method=caseBundleRead | no GUI control | `references/browser-session.md` |
-| `caseBundleImport` | edit | `studio_browser_call` method=caseBundleImport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `caseBundleWrite` | edit | `studio_browser_call` method=caseBundleWrite | no GUI control | `references/browser-session.md` |
-| `caseBundleCommit` | edit | `studio_browser_call` method=caseBundleCommit | no GUI control | `references/browser-session.md` |
-| `caseBundleRelease` | inspect | `studio_browser_call` method=caseBundleRelease | no GUI control | `references/browser-session.md` |
-| `measurementList` | inspect | `studio_browser_call` method=measurementList | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementGet` | inspect | `studio_browser_call` method=measurementGet | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementSave` | edit | `studio_browser_call` method=measurementSave | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementRemove` | edit | `studio_browser_call` method=measurementRemove | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementExport` | inspect | `studio_browser_call` method=measurementExport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementImport` | edit | `studio_browser_call` method=measurementImport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementVerify` | inspect | `studio_verify_measurements` (saved-file counterpart); `studio_browser_call` method=measurementVerify | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `inspect` | inspect | `studio_inspect_project` (saved-file counterpart); `studio_browser_call` method=inspect | 関連（別処理）: `#project-text-show` `#project-text` — 同じexportProject()の保存形を表示するが、リビジョン・要約の表示はない | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/physics-provenance.md`, `references/result-views.md`, `references/saved-inputs.md`, `SKILL.md` |
+| `inspectInput` | inspect | `studio_browser_call` method=inspectInput | connector only — no GUI control by design (studio.inspectInputをGUIは呼ばない) | `references/browser-session.md`, `references/saved-inputs.md` |
+| `geometry` | inspect | `studio_browser_call` method=geometry | 関連（別処理）: `#geometry-inspect` `#geometry-report` — GUIはapi.inspectGeometry（メッシュ別のinspectSurface）、操作はinspectGeometrySummary（境界・面ページ・リビジョン）で別処理 | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/physics-provenance.md`, `references/saved-inputs.md`, `SKILL.md` |
+| `inspectSurface` | inspect | `studio_browser_call` method=inspectSurface | 関連（別処理）: `#geometry-inspect` `#geometry-report` — 同じinspectSurface()の核をapi.inspectGeometry経由で使う。ページ・許容差・リビジョンの指定はGUIにない | `references/browser-session.md`, `references/geometry-imports.md` |
+| `checkGpuEnvironment` | inspect | `studio_browser_call` method=checkGpuEnvironment | 同一経路: `#gpu-check` `#gpu-environment` — gpu-environment.jsの同じcheckGpuEnvironment()を呼ぶ。操作は状態不変の確認を加える | `references/browser-session.md` |
+| `createBuiltinProject` | edit | `studio_create_builtin_project` (saved-file counterpart); `studio_browser_call` method=createBuiltinProject | 関連（別処理）: `#demo` `#analysis-demo` — サンプルボタンは固定の内蔵形状で同じcreateProjectFromBuiltinを呼ぶ。形状・寸法の入力欄はない | `references/browser-session.md`, `references/geometry-imports.md` |
+| `prepareFluidDomain` | edit | `studio_browser_call` method=prepareFluidDomain | 関連（別処理）: `#exterior-create` `#exterior-acoustic-create` `#internal-create` `#fluid-padding` `#fluid-domain-info` — 同じexteriorFluidSource等の領域生成関数を使うが、GUIはメッシュ生成まで一括で行う | `references/browser-session.md`, `references/geometry-imports.md` |
+| `applyCaseSource` | edit | `studio_browser_call` method=applyCaseSource | 関連（別処理）: `#thermal-case-apply` `#vibration-create` `#thermal-case` `#vibration-case` — copySourceAssessment・validateVibrationSourceは共有するが実装は別。GUIは一覧の番号、操作はcaseIdとリビジョンで指定 | `references/browser-session.md`, `references/geometry-imports.md` |
+| `clearCaseSource` | edit | `studio_browser_call` method=clearCaseSource | 関連（別処理）: `#thermal-case-clear` `#vibration-clear` — GUIは温度・振動の連成源を自前の処理で解除する | `references/browser-session.md`, `references/geometry-imports.md` |
+| `applyFluidDomainMesh` | edit | `studio_browser_call` method=applyFluidDomainMesh | 関連（別処理）: `#exterior-create` `#internal-create` `#fluid-domain-info` — GUIはメッシュ生成と適用を一括で行う。既存のメッシュジョブだけを適用する操作はない | `references/browser-session.md`, `references/geometry-imports.md` |
+| `inputImportBegin` | edit | `studio_browser_call` method=inputImportBegin | connector only — no GUI control by design (段階転送。1回で読む相当の操作は`#model`（inputImportCommit参照）) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `inputImportWrite` | edit | `studio_browser_call` method=inputImportWrite | connector only — no GUI control by design (段階転送の書き込み。GUIはファイルを一括で読む) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `inputImportCommit` | edit | `studio_browser_call` method=inputImportCommit | 関連（別処理）: `#model` `#unit` — readStepProject・createProjectFromStlの同じ生成関数を使う。GUIはUI設定を保つinstallInputProjectで反映し、リビジョン確認付きの確定はしない | `references/browser-session.md`, `references/geometry-imports.md` |
+| `inputImportRelease` | edit | `studio_browser_call` method=inputImportRelease | connector only — no GUI control by design (段階転送の破棄。GUIには対応する状態がない) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `preflight` | inspect | `studio_preflight_project` (saved-file counterpart); `studio_browser_call` method=preflight | 関連（別処理）: `#solve-run` `#mesh-run` — ジョブ開始時に同じ事前検査（requireAnalysisPreflight）が走り、拒否理由は`#status`に出る。検査結果を表示する操作はない | `references/browser-session.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/physics-provenance.md`, `references/saved-inputs.md`, `SKILL.md` |
+| `meshBoundaryPreflight` | inspect | `studio_preflight_mesh_boundaries` (saved-file counterpart); `studio_browser_call` method=meshBoundaryPreflight | connector only — no GUI control by design (GUIからmesh-boundary-preflightを呼ばない) | `references/browser-session.md`, `references/jobs-observations.md` |
+| `previewEdit` | inspect | `studio_preview_edit` (saved-file counterpart); `studio_browser_call` method=previewEdit | connector only — no GUI control by design (編集の事前確認（dry run）を行うGUIはない) | `references/browser-session.md`, `references/physics-provenance.md`, `references/saved-inputs.md` |
+| `listJobs` | inspect | `studio_browser_call` method=listJobs | connector only — no GUI control by design (GUIで開始したジョブ（origin gui）も同じ解析クライアントに登録されるが、一覧表示はない) | `references/browser-session.md` |
+| `jobStatus` | inspect | `studio_job_status` (saved-file counterpart); `studio_browser_call` method=jobStatus | connector only — no GUI control by design (ジョブ状態の表示はない) | `references/browser-session.md` |
+| `jobEvents` | inspect | `studio_job_events` (saved-file counterpart); `studio_browser_call` method=jobEvents | 関連（別処理）: `#status` — ワーカーの進捗文だけが状態行に出る。イベントの順序・カーソルはない | `references/browser-session.md`, `references/jobs-observations.md` |
+| `jobArtifacts` | inspect | `studio_job_artifacts` (saved-file counterpart); `studio_browser_call` method=jobArtifacts | connector only — no GUI control by design (中間成果物の一覧表示はない) | `references/browser-session.md`, `references/jobs-observations.md` |
+| `jobArtifact` | inspect | `studio_job_artifact` (saved-file counterpart); `studio_browser_call` method=jobArtifact | connector only — no GUI control by design (中間成果物の読み取りはない) | `references/browser-session.md`, `references/jobs-observations.md` |
+| `jobResultExport` | inspect | `studio_browser_call` method=jobResultExport | 関連（別処理）: `#result-export` — 表示中の解析結果を同じ出力オブジェクトのJSONとして保存する。転送ハンドルはない | `references/browser-session.md`, `references/jobs-observations.md` |
+| `jobResultRead` | inspect | `studio_browser_call` method=jobResultRead | connector only — no GUI control by design (転送の読み出し。GUIには対応する操作がない) | `references/browser-session.md`, `references/jobs-observations.md` |
+| `jobResultRelease` | inspect | `studio_browser_call` method=jobResultRelease | connector only — no GUI control by design (転送の解放。GUIには対応する操作がない) | `references/browser-session.md`, `references/jobs-observations.md` |
+| `probe` | inspect | `studio_probe` (saved-file counterpart); `studio_browser_call` method=probe | 同一経路: `[data-mode="probe"]` `#canvas` `#probe-result` — 測定モードでクリックすると同じsampleDisplayedResult（window.analysisApi.probe）を呼ぶ | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/jobs-observations.md`, `references/result-views.md` |
+| `edit` | edit | `studio_edit_project` (saved-file counterpart); `studio_browser_call` method=edit | 関連（別処理）: `#fixed` `#load` `#material-save` `#physics` `#restore` — 設定欄はstudio-apiのaddCondition/setMaterialProperties等で同じ入力を編集するが、applyOperationsのリビジョン確認付き一括編集は使わない。`#restore`はloadProjectで丸ごと読込 | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/physics-provenance.md`, `references/result-views.md`, `references/saved-inputs.md`, `SKILL.md` |
+| `startJob` | analyze | `studio_start_analysis` (saved-file counterpart); `studio_browser_call` method=startJob | 同一経路: `#mesh-run` `#solve-run` `#adaptive-run` — guiAnalysis.runが同じanalysis.startJobを呼ぶ（origin gui）。requestIdは使わない。`#adaptive-run`は開始オプションのチェック | `references/browser-session.md` |
+| `cancelJob` | analyze | `studio_cancel_job` (saved-file counterpart); `studio_browser_call` method=cancelJob | 同一経路: `#cancel-run` — guiAnalysis.cancelが同じanalysis.cancelJobを呼ぶ | `references/browser-session.md` |
+| `releaseJob` | analyze | `studio_release_job` (saved-file counterpart); `studio_browser_call` method=releaseJob | connector only — no GUI control by design (GUIは8件を超えると古いジョブを自動解放するが、操作するボタンはない) | `references/browser-session.md` |
+| `showJob` | analyze | `studio_browser_call` method=showJob | 関連（別処理）: `#mesh-run` `#solve-run` — GUIは自分のジョブ結果を直接表示する。showJobはケース保存してから表示する別経路 | `references/browser-session.md` |
+| `getView` | view | `studio_browser_call` method=getView | 関連（別処理）: `#clip-enabled` `#clip-axis` `#clip-position` `#clip-flip` `#model-opacity` `#part-visibility` — 各欄が状態の表示そのもの。viewApi.getを呼ぶのは`#part-visibility`の切替だけ | `references/browser-session.md` |
+| `setView` | view | `studio_browser_call` method=setView | 同一経路: `#clip-enabled` `#clip-axis` `#clip-position` `#clip-flip` `#model-opacity` `#part-visibility` — 各欄がwindow.viewApi.setを呼ぶ | `references/browser-session.md` |
+| `getResultView` | inspect | `studio_browser_call` method=getResultView | 関連（別処理）: `#color-fixed` `#color-min` `#color-max` `#result-field` `#result-mode` `#deform-scale` `#result-surface` `#result-surface-wire` `#volume-wire` `#result-section` `#acoustic-time-frame` — 色範囲の3欄はresultViewApi.getを呼ぶ。他は同じ表示状態を示す欄 | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/result-views.md` |
+| `setResultView` | view | `studio_browser_call` method=setResultView | 同一経路: `#color-fixed` `#color-min` `#color-max` — resultViewApi.setを呼ぶ。`#result-field` `#result-mode` `#deform-scale` `#result-surface` `#result-surface-wire` `#volume-wire` `#result-section` `#acoustic-time-frame`は同じ表示状態を直接変える別経路 | `references/browser-session.md`, `references/result-views.md` |
+| `caseList` | inspect | `studio_browser_call` method=caseList | 関連（別処理）: `#case-list` — 同じケース保存先をstore.list()/compare()で描画する。リビジョン付きの一覧ではない | `references/browser-session.md`, `references/case-archives-measurements.md`, `references/geometry-imports.md`, `references/jobs-observations.md`, `references/result-views.md` |
+| `caseCompare` | inspect | `studio_compare_cases` (saved-file counterpart); `studio_browser_call` method=caseCompare | 関連（別処理）: `#case-list` — ケースごとの代表値（store.compare()）のみ。フィールド参照の比較はない | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseView` | edit | `studio_browser_call` method=caseView | 同一経路: `#case-list` — 行ボタン「保存結果を3D表示」が同じviewCaseを呼ぶ（id・class無し） | `references/browser-session.md`, `references/result-views.md` |
+| `caseRestoreInput` | edit | `studio_browser_call` method=caseRestoreInput | 関連（別処理）: `#case-list` — 行ボタン「入力を複製して復元」はloadProjectに加えメッシュ寸法・ソルバー・適応設定の欄も戻す。操作はloadProjectのみ | `references/browser-session.md`, `references/result-views.md` |
+| `caseRename` | edit | `studio_browser_call` method=caseRename | connector only — no GUI control by design (行ボタンは表示・復元・削除の3つのみ。`#case-name`は新規保存の名前で改名には使わない) | `references/browser-session.md`, `references/result-views.md` |
+| `caseRemove` | edit | `studio_browser_call` method=caseRemove | 関連（別処理）: `#case-list` — 行ボタン「削除」はstore.remove。操作はリビジョン確認付きでstore.importにより置換 | `references/browser-session.md`, `references/result-views.md` |
+| `caseSave` | analyze | `studio_browser_call` method=caseSave | 同一経路: `#case-add` `#case-name` — 同じcaseApi.addを呼ぶ。操作はリビジョン確認を加える | `references/browser-session.md`, `references/result-views.md` |
+| `exportCapabilities` | inspect | `studio_browser_call` method=exportCapabilities | connector only — no GUI control by design (capabilities()を呼ぶGUIはない。WebM非対応は`#visual-export-status`の失敗文で分かるのみ) | `references/browser-session.md`, `references/result-views.md` |
+| `startExport` | view | `studio_browser_call` method=startExport | 同一経路: `#view-png` `#animation-save` `#animation-kind` `#animation-seconds` — 同じcapture()/animate()描画を使う。操作はジョブ・リビジョン固定・成果物化を加える。`#animation-preview`は保存しない再生 | `references/browser-session.md`, `references/result-views.md` |
+| `exportStatus` | inspect | `studio_browser_call` method=exportStatus | 関連（別処理）: `#visual-export-status` — GUI自身の再生・保存の進行文で、ジョブ状態ではない | `references/browser-session.md`, `references/result-views.md` |
+| `exportArtifact` | inspect | `studio_browser_call` method=exportArtifact | 関連（別処理）: `#visual-export-download` — 直近の保存ファイルの再ダウンロードリンク。分割読み出しではない | `references/browser-session.md`, `references/result-views.md` |
+| `cancelExport` | view | `studio_browser_call` method=cancelExport | 同一経路: `#animation-stop` — 同じstopフラグを立てる。PNG出力は止められない | `references/browser-session.md`, `references/result-views.md` |
+| `releaseExport` | view | `studio_browser_call` method=releaseExport | connector only — no GUI control by design (エクスポートジョブの解放。GUIにはジョブ記録がない) | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewList` | inspect | `studio_browser_call` method=namedViewList | 同一経路: `#named-view-list` — 同じnamedViewApi.listで一覧を描画 | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewExport` | inspect | `studio_browser_call` method=namedViewExport | 同一経路: `#named-view-export` — 同じnamedViewApi.exportでJSON保存 | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewSave` | view | `studio_browser_call` method=namedViewSave | 同一経路: `#named-view-save` `#named-view-name` — 同じnamedViewApi.save | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewApply` | view | `studio_browser_call` method=namedViewApply | 同一経路: `#named-view-list` — 行ボタン「復元」が同じnamedViewApi.apply（id・class無し） | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewRemove` | view | `studio_browser_call` method=namedViewRemove | 同一経路: `#named-view-list` — 行ボタン「削除」が同じnamedViewApi.remove（id・class無し） | `references/browser-session.md`, `references/result-views.md` |
+| `namedViewImport` | view | `studio_browser_call` method=namedViewImport | 同一経路: `#named-view-import` — 同じnamedViewApi.import | `references/browser-session.md`, `references/result-views.md` |
+| `caseArchiveExport` | inspect | `studio_browser_call` method=caseArchiveExport | 同一経路: `#case-export` — 同じstore.export()のアーカイブをJSON保存する。操作はリビジョンと分割転送を加える | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseArchiveRead` | inspect | `studio_browser_call` method=caseArchiveRead | connector only — no GUI control by design (分割読み出し。GUIは一括で保存する) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseArchiveImport` | edit | `studio_browser_call` method=caseArchiveImport | 関連（別処理）: `#case-import` — GUIは一括でstore.importを呼ぶ。操作は転送を開始するだけの段階 | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseArchiveWrite` | edit | `studio_browser_call` method=caseArchiveWrite | connector only — no GUI control by design (分割書き込み。GUIは一括で読む) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseArchiveCommit` | edit | `studio_browser_call` method=caseArchiveCommit | 同一経路: `#case-import` — 確定時に同じstore.importで置換する（操作は事前にprepareCaseViewで検証） | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseArchiveRelease` | inspect | `studio_browser_call` method=caseArchiveRelease | connector only — no GUI control by design (転送の解放。GUIには対応する状態がない) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `getAssessment` | inspect | `studio_assessment` (saved-file counterpart); `studio_browser_call` method=getAssessment | 関連（別処理）: `#fatigue-summary` `#fracture-summary` — 評価後に保存済みの評価を描画するが、読み出し専用の操作はない | `references/browser-session.md`, `references/physics-provenance.md` |
+| `evaluateAssessment` | analyze | `studio_assess_result` (saved-file counterpart); `studio_browser_call` method=evaluateAssessment | 関連（別処理）: `#fatigue-evaluate` `#fracture-evaluate` — 同じevaluateFatigue/evaluateFractureを使う。GUIは表示中の結果を直接更新し、操作はリビジョン確認付きで検証済みの複製を確定する | `references/browser-session.md`, `references/physics-provenance.md` |
+| `previewCadUpdate` | inspect | `studio_preview_cad_update` (saved-file counterpart); `studio_browser_call` method=previewCadUpdate | 同一経路: `#cad-update-file` `#cad-update-report` `#cad-update-status` — 更新STEPの選択でapi.previewCadUpdate（同じplanCadUpdate）を呼ぶ。操作はリビジョン確認とページ化を加える | `references/browser-session.md`, `references/geometry-imports.md` |
+| `applyCadUpdate` | edit | `studio_apply_cad_update` (saved-file counterpart); `studio_browser_call` method=applyCadUpdate | 同一経路: `#cad-update-apply` — api.applyCadUpdate（同じplanCadUpdate）を呼ぶ。操作はリビジョン確認を加える | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printInspect` | inspect | `studio_inspect_print` (saved-file counterpart); `studio_browser_call` method=printInspect | 関連（別処理）: `#print-file` `#print-report` `#print-view` — GUIは読込直後の要約を表示する。操作は読込済みデータを検査する | `references/browser-session.md`, `references/geometry-imports.md` |
+| `importPrint` | edit | `studio_import_print` (saved-file counterpart); `studio_browser_call` method=importPrint | 同一経路: `#print-file` — 同じparsePrintGcode/parsePrint3mfと読込（load）を使う。GUIはファイル、操作は本文かbase64を受け取る | `references/browser-session.md`, `references/geometry-imports.md` |
+| `getPrintData` | inspect | `studio_browser_call` method=getPrintData | 関連（別処理）: `#print-text-show` `#print-text` — GUIは全体のJSONを表示する。操作は経路・三角形をページ単位で返す | `references/browser-session.md`, `references/geometry-imports.md` |
+| `setPrintView` | view | `studio_browser_call` method=setPrintView | 同一経路: `#print-view` `#print-layer` `#print-all-layers` — 操作はprint-uiのsetViewでこれらの欄を書き換えて再描画する | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferExport` | inspect | `studio_browser_call` method=printTransferExport | 関連（別処理）: `#print-export` — 同じ{version,filename,data}を保存する。操作はsha256リビジョンと分割転送を加える | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferRead` | inspect | `studio_browser_call` method=printTransferRead | connector only — no GUI control by design (分割読み出し。GUIは一括で保存する) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferImport` | edit | `studio_browser_call` method=printTransferImport | connector only — no GUI control by design (`#print-file`は3MF/G-codeのみで、書き出したJSONは開けない) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferWrite` | edit | `studio_browser_call` method=printTransferWrite | connector only — no GUI control by design (分割書き込み。GUIにはない) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferCommit` | edit | `studio_browser_call` method=printTransferCommit | connector only — no GUI control by design (書き出したJSONを確定する操作はGUIにない) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `printTransferRelease` | inspect | `studio_browser_call` method=printTransferRelease | connector only — no GUI control by design (転送の解放。GUIには対応する状態がない) | `references/browser-session.md`, `references/geometry-imports.md` |
+| `caseBundleList` | inspect | `studio_browser_call` method=caseBundleList | connector only — no GUI control by design (`#case-bundle-import`は内部でlistを呼んでリビジョンを取るが、表示はしない) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseBundleExport` | inspect | `studio_browser_call` method=caseBundleExport | 同一経路: `#case-bundle-export` — 同じcaseBundleApi.exportArchiveを呼ぶ。操作は分割転送を加える | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseBundleRead` | inspect | `studio_browser_call` method=caseBundleRead | connector only — no GUI control by design (分割読み出し。GUIは一括で保存する) | `references/browser-session.md` |
+| `caseBundleImport` | edit | `studio_browser_call` method=caseBundleImport | 関連（別処理）: `#case-bundle-import` — GUIは一括でimportArchiveを呼ぶ。操作は転送を開始するだけの段階 | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `caseBundleWrite` | edit | `studio_browser_call` method=caseBundleWrite | connector only — no GUI control by design (分割書き込み。GUIは一括で読む) | `references/browser-session.md` |
+| `caseBundleCommit` | edit | `studio_browser_call` method=caseBundleCommit | 同一経路: `#case-bundle-import` — 確定時に同じcaseBundleApi.importArchiveを呼ぶ | `references/browser-session.md` |
+| `caseBundleRelease` | inspect | `studio_browser_call` method=caseBundleRelease | connector only — no GUI control by design (転送の解放。GUIには対応する状態がない) | `references/browser-session.md` |
+| `measurementList` | inspect | `studio_browser_call` method=measurementList | connector only — no GUI control by design (測定履歴を表示するGUIはない（`#probe-result`の測定値は履歴に保存されない）) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementGet` | inspect | `studio_browser_call` method=measurementGet | connector only — no GUI control by design (測定履歴を読むGUIはない) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementSave` | edit | `studio_browser_call` method=measurementSave | connector only — no GUI control by design (測定モードの結果を履歴へ保存するGUIはない) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementRemove` | edit | `studio_browser_call` method=measurementRemove | connector only — no GUI control by design (測定履歴を削除するGUIはない) | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementExport` | inspect | `studio_browser_call` method=measurementExport | 関連（別処理）: `#case-bundle-export` — ケース・ビュー・測定の書き出しが同じmeasurements.exportArchiveを内部で使う。測定だけの書き出しはない | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementImport` | edit | `studio_browser_call` method=measurementImport | 関連（別処理）: `#case-bundle-import` — バンドル読込が測定履歴を置換する（prepareArchiveReplacement）。測定だけの読込はない | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementVerify` | inspect | `studio_verify_measurements` (saved-file counterpart); `studio_browser_call` method=measurementVerify | 関連（別処理）: `#case-bundle-export` `#case-bundle-import` — 書き出し・読込の中で同じverifyMeasurementArchiveが走る。単独の検証操作はない | `references/browser-session.md`, `references/case-archives-measurements.md` |
 
 ## MCPツール
 
 | ツール | 権限 | 対応するブラウザ操作 | GUI | SKILL |
 |---|---|---|---|---|
-| `studio_preview_edit` | read-only | `previewEdit` | no GUI control | `references/saved-inputs.md` |
-| `studio_browser_contracts` | read-only | none | no GUI control | `references/browser-session.md`, `references/physics-provenance.md`, `SKILL.md` |
-| `studio_job_artifacts` | read-only | `jobArtifacts` | no GUI control | `references/jobs-observations.md`, `references/saved-inputs.md` |
-| `studio_verify_measurements` | read-only | `measurementVerify` | no GUI control | `references/case-archives-measurements.md` |
-| `studio_validate_case_bundle` | read-only | none | no GUI control | `references/case-archives-measurements.md` |
-| `studio_import_print` | write/execute | `importPrint` | no GUI control | `references/geometry-imports.md` |
-| `studio_inspect_print` | read-only | `printInspect` | no GUI control | `references/geometry-imports.md` |
-| `studio_preview_cad_update` | read-only | `previewCadUpdate` | no GUI control | `references/geometry-imports.md` |
-| `studio_apply_cad_update` | write/execute | `applyCadUpdate` | no GUI control | `references/geometry-imports.md` |
-| `studio_assess_result` | write/execute | `evaluateAssessment` | no GUI control | `references/physics-provenance.md` |
-| `studio_assessment` | read-only | `getAssessment` | no GUI control | `references/physics-provenance.md` |
-| `studio_import_project` | write/execute | none | no GUI control | `references/saved-inputs.md` |
-| `studio_create_builtin_project` | write/execute | `createBuiltinProject` | no GUI control | `references/saved-inputs.md` |
-| `studio_preflight_project` | read-only | `preflight` | no GUI control | `references/saved-inputs.md` |
-| `studio_job_artifact` | read-only | `jobArtifact` | no GUI control | `references/jobs-observations.md`, `references/saved-inputs.md` |
-| `studio_edit_project` | write/execute | `edit` | no GUI control | `references/saved-inputs.md` |
-| `studio_start_analysis` | write/execute | `startJob` | no GUI control | `references/jobs-observations.md`, `references/saved-inputs.md` |
-| `studio_job_status` | read-only | `jobStatus` | no GUI control | `references/jobs-observations.md`, `references/saved-inputs.md` |
-| `studio_preflight_mesh_boundaries` | read-only | `meshBoundaryPreflight` | no GUI control | `references/jobs-observations.md` |
-| `studio_job_events` | read-only | `jobEvents` | no GUI control | `references/saved-inputs.md` |
-| `studio_cancel_job` | write/execute | `cancelJob` | no GUI control | `references/saved-inputs.md` |
-| `studio_release_job` | write/execute | `releaseJob` | no GUI control | `references/saved-inputs.md` |
-| `studio_capabilities` | read-only | none | no GUI control | `references/saved-inputs.md`, `SKILL.md` |
-| `studio_diagnose_execution` | read-only | none | no GUI control | `references/saved-inputs.md` |
-| `studio_material_catalog` | read-only | none | no GUI control | `references/saved-inputs.md` |
-| `studio_progress` | read-only | none | no GUI control | `references/development-progress.md`, `references/saved-inputs.md`, `SKILL.md` |
-| `studio_inspect_project` | read-only | `inspect` | no GUI control | `references/geometry-imports.md`, `references/saved-inputs.md` |
-| `studio_analyze` | write/execute | none | no GUI control | `references/saved-inputs.md` |
-| `studio_probe` | read-only | `probe` | no GUI control | `references/jobs-observations.md`, `references/physics-provenance.md`, `references/saved-inputs.md` |
-| `studio_compare_cases` | read-only | `caseCompare` | no GUI control | `references/case-archives-measurements.md` |
-| `studio_validate_cases` | read-only | none | no GUI control | `references/case-archives-measurements.md`, `references/saved-inputs.md` |
-| `studio_browser_sessions` | read-only | none | `#agent-connection` | `references/browser-session.md` |
-| `studio_browser_call` | live-write (scope per method) | none | `#agent-connection` | `references/browser-session.md`, `references/saved-inputs.md` |
+| `studio_preview_edit` | read-only | `previewEdit` | connector only — no GUI control by design (GUIにpreviewEditの経路がない) | `references/saved-inputs.md` |
+| `studio_browser_contracts` | read-only | none | connector only — no GUI control by design (getBrowserOperationContractsをGUIは呼ばない) | `references/browser-session.md`, `references/physics-provenance.md`, `SKILL.md` |
+| `studio_job_artifacts` | read-only | `jobArtifacts` | connector only — no GUI control by design (GUIにジョブ成果物の表示がない) | `references/jobs-observations.md`, `references/saved-inputs.md` |
+| `studio_verify_measurements` | read-only | `measurementVerify` | 関連（別処理）: `#case-bundle-export` `#case-bundle-import` — 同じverifyMeasurementArchiveが書き出し・読込の中で走る。保存ファイルを直接検証する操作はない | `references/case-archives-measurements.md` |
+| `studio_validate_case_bundle` | read-only | none | 同一経路: `#case-bundle-import` — 読込時に同じvalidateCaseViewBundleで検証する | `references/case-archives-measurements.md` |
+| `studio_import_print` | write/execute | `importPrint` | 同一経路: `#print-file` — 同じparsePrintGcode/parsePrint3mfで読む。GUIは表示に読み込む。JSON保存は別ボタン`#print-export` | `references/geometry-imports.md` |
+| `studio_inspect_print` | read-only | `printInspect` | 関連（別処理）: `#print-report` `#print-view` — 読込済みの内容を表示する。保存した解析済みJSONは開けない | `references/geometry-imports.md` |
+| `studio_preview_cad_update` | read-only | `previewCadUpdate` | 同一経路: `#cad-update-file` `#cad-update-report` — 同じplanCadUpdateで照合する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
+| `studio_apply_cad_update` | write/execute | `applyCadUpdate` | 同一経路: `#cad-update-apply` — 同じplanCadUpdateで適用する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
+| `studio_assess_result` | write/execute | `evaluateAssessment` | 関連（別処理）: `#fatigue-evaluate` `#fracture-evaluate` — 同じevaluateFatigue/evaluateFractureを使う。保存解析ファイルからの評価ではない | `references/physics-provenance.md` |
+| `studio_assessment` | read-only | `getAssessment` | 関連（別処理）: `#fatigue-summary` `#fracture-summary` — 表示中の結果の評価を描画する。保存ファイルの読み出しではない | `references/physics-provenance.md` |
+| `studio_import_project` | write/execute | none | 同一経路: `#model` `#unit` — 同じcreateProjectFromStep/createProjectFromStlで読む。GUIは開いて表示する。JSON保存は別ボタン`#save` | `references/saved-inputs.md` |
+| `studio_create_builtin_project` | write/execute | `createBuiltinProject` | 関連（別処理）: `#demo` `#analysis-demo` — 固定の内蔵形状で同じcreateProjectFromBuiltinを呼ぶ。形状・寸法の入力欄はない | `references/saved-inputs.md` |
+| `studio_preflight_project` | read-only | `preflight` | 関連（別処理）: `#solve-run` `#mesh-run` — 同じ事前検査（analysis-preflight）がジョブ開始時に走る。報告は表示しない | `references/saved-inputs.md` |
+| `studio_job_artifact` | read-only | `jobArtifact` | connector only — no GUI control by design (GUIにジョブ成果物の読み取りがない) | `references/jobs-observations.md`, `references/saved-inputs.md` |
+| `studio_edit_project` | write/execute | `edit` | 関連（別処理）: `#fixed` `#load` `#material-save` `#physics` `#restore` — browser操作`edit`と同じく、GUIは設定欄で開いている入力を直接編集する（保存ファイルではない） | `references/saved-inputs.md` |
+| `studio_start_analysis` | write/execute | `startJob` | 関連（別処理）: `#mesh-run` `#solve-run` — 同じ解析コードをブラウザ内で開始する。Nodeジョブではない | `references/jobs-observations.md`, `references/saved-inputs.md` |
+| `studio_job_status` | read-only | `jobStatus` | connector only — no GUI control by design (GUIにジョブ状態の表示がない) | `references/jobs-observations.md`, `references/saved-inputs.md` |
+| `studio_preflight_mesh_boundaries` | read-only | `meshBoundaryPreflight` | connector only — no GUI control by design (GUIにmesh-boundary-preflightの経路がない) | `references/jobs-observations.md` |
+| `studio_job_events` | read-only | `jobEvents` | connector only — no GUI control by design (ワーカー進捗文が`#status`に出るだけで、イベント読み出しはない) | `references/saved-inputs.md` |
+| `studio_cancel_job` | write/execute | `cancelJob` | 関連（別処理）: `#cancel-run` — ブラウザ内のGUIジョブを止める。Nodeジョブではない | `references/saved-inputs.md` |
+| `studio_release_job` | write/execute | `releaseJob` | connector only — no GUI control by design (解放するGUIはない) | `references/saved-inputs.md` |
+| `studio_capabilities` | read-only | none | connector only — no GUI control by design (getCapabilitiesをGUIは呼ばない) | `references/saved-inputs.md`, `SKILL.md` |
+| `studio_diagnose_execution` | read-only | none | connector only — no GUI control by design (diagnoseExecutionをGUIは呼ばない) | `references/saved-inputs.md` |
+| `studio_material_catalog` | read-only | none | 同一経路: `#catalog-family` `#catalog-filler` `#catalog-content` `#catalog-search` `#catalog-grade` `#catalog-export` — 同じmaterial-catalog.jsのcatalogEntriesを絞り込み表示・JSON保存する | `references/saved-inputs.md` |
+| `studio_progress` | read-only | none | 関連（別処理）: `a.dev-link` — ヘッダーの「開発管理」リンクが別ページ（development.html）を開く。そこが同じprogress.jsonを描画する（スタジオ画面の操作ではない） | `references/development-progress.md`, `references/saved-inputs.md`, `SKILL.md` |
+| `studio_inspect_project` | read-only | `inspect` | 関連（別処理）: `#geometry-inspect` `#geometry-report` `#project-text-show` — 表面検査は同じinspectSurface、テキスト表示は同じexportProject。保存ファイルの検証ではない | `references/geometry-imports.md`, `references/saved-inputs.md` |
+| `studio_analyze` | write/execute | none | 関連（別処理）: `#solve-run` — 同じ解析コードをブラウザ内で実行する。保存プロジェクトの計算ではない | `references/saved-inputs.md` |
+| `studio_probe` | read-only | `probe` | 同一経路: `[data-mode="probe"]` `#canvas` `#probe-result` — 同じsampleResult系の測定（GUIは表示中の結果） | `references/jobs-observations.md`, `references/physics-provenance.md`, `references/saved-inputs.md` |
+| `studio_compare_cases` | read-only | `caseCompare` | 関連（別処理）: `#case-list` — ケースごとの代表値のみ。フィールド参照の比較はない | `references/case-archives-measurements.md` |
+| `studio_validate_cases` | read-only | none | 同一経路: `#case-import` `#case-list` — 読込で同じstore.import、行ボタン「保存結果を3D表示」で同じprepareCaseViewによる検証 | `references/case-archives-measurements.md`, `references/saved-inputs.md` |
+| `studio_browser_sessions` | read-only | none | 関連（別処理）: `#agent-state` — GUIは自身の接続状態だけを示す。接続一覧ではない | `references/browser-session.md` |
+| `studio_browser_call` | live-write (scope per method) | none | 関連（別処理）: `#agent-connection` `#agent-endpoint` `#agent-token` `#agent-diagnose` `#agent-connect` `#agent-disconnect` `[data-agent-scope="inspect"]` `[data-agent-scope="edit"]` `[data-agent-scope="analyze"]` `[data-agent-scope="view"]` — GUIは接続と許可範囲を設定する側で、呼び出し自体はコネクタから届く | `references/browser-session.md`, `references/saved-inputs.md` |
