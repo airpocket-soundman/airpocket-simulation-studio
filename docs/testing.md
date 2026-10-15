@@ -561,3 +561,7 @@ Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeId
 制御fixtureは実子のsame-executable実行、バイナリーIPC、終了待機、結果後の非零終了、失敗伝達を検証する。物理ソルバーの精度やV8根治の証明ではない。ブラウザの実Worker、MCPの既定実行方式、サポートNode最低版は変更していない。Node切替、GC設定変更、skip、自動retry/fallbackは追加していない。
 
 今回変更後の既定Node24全体980件中977成功・3skip・失敗0（154.09秒）。buildとローカル配信物26項目（72.55秒、44 child）が成功。公開CIは別途記録する。原因の同定と上流修正との一致は未証明のままである。終了判定範囲と一次資料は[WASM実行調査](wasm-runtime-investigation.md)を参照。
+
+## 2026-10-15: 開発の履歴・完成度の可視化
+
+Claude CLIの実装を独立レビューし、欠落区間・Windows改行・過去候補の加点を修正。全体1011件中1008成功・3skip・失敗0、buildと配信物27項目（元26＋履歴）が成功。151記録点と日英・390px・凡例・キー選択・表・算定根拠を実画面で確認。推定25%、主観シナリオ幅16〜42%。[証跡](evidence/2026-10-15-progress-dashboard.json)と[算定方法](progress-dashboard.md)。本機能の公開CIは別途記録する。公開基盤23e430eはverify/deploy/verify-publishedと26項目が成功し、失敗したbadce2cは保存する。

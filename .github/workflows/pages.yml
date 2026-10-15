@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The progress history is generated from the full git log of src/progress.json.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -35,6 +38,8 @@ jobs:
         run: npm test 2>&1 | tee .qa/ci-tests.log
       - name: Build application
         shell: bash
+        env:
+          PROGRESS_HISTORY_REQUIRE_COMPLETE: "1"
         run: npm run build 2>&1 | tee .qa/ci-build.log
       - name: Verify local published assets
         shell: bash
