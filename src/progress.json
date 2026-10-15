@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T05:20:22.331Z",
+  "updatedAt": "2026-10-15T05:36:53.348Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1493,15 +1493,15 @@
       "detailEn": "Revision/view-pinned PNG/WebM start/status/cancel/release and hashed base64 pages. Optional connector:28 methods. 32 MiB/four jobs/64 KiB page limits.",
       "acceptance": "全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化は未完了。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "370 passed, three skipped of373. Real MCP/Chrome verified hashed PNG77944 bytes/two pages, WebM8795 bytes, cancellation restoration and artifact refusal. Background one-second video had two frames. Fixed-frame export, MP4/GIF and persistence remain unfinished. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md",
-      "lastUpdate": "2026-10-15再判定: visual-export-jobs/adapter・browser-export-session試験成功。公開HTTPSはPUBLICHTTPS1へ分離。固定フレーム/MP4/GIF/永続化未完と実ブラウザ証跡ファイル未保存のためchecking維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: visual-export-jobs/adapter and browser-export-session tests passed. Public HTTPS split to PUBLICHTTPS1. Stays checking: fixed-frame/MP4/GIF/persistence unfinished and no committed real-browser evidence file."
+      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json",
+      "lastUpdate": "2026-10-15実ChromeでPNG(105,846 B/SHA一致)とWebM 2秒(12,505 B/SHA一致)の出力と取消後の表示復元を確認。WebM 1秒は110 Bでクラスタ0(映像フレームなし)で、短い動画の出力に不具合の疑い。固定フレーム・MP4/GIF・永続化は未完成。検証中を維持。",
+      "lastUpdateEn": "2026-10-15: PNG (105,846 B, SHA matches) and 2 s WebM (12,505 B, SHA matches) exports and view restoration after cancel confirmed in real Chrome. The 1 s WebM is 110 B with zero clusters (no video frames): suspected defect for short clips. Fixed-frame, MP4/GIF and persistence unfinished. Stays checking."
     },
     {
       "id": "NAMEDVIEWS1",
       "title": "結果版に結び付けた名前付きビューの保存",
       "titleEn": "Save named views bound to result revisions",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "RESULTCONTROL1"
@@ -1511,8 +1511,8 @@
       "acceptance": "389件中386成功・3スキップ。実Chrome/MCPで設定変更後の復元と、再読込後の保存ケース+ビューJSON復元を全項目照合。削除/入出力一致、不正カメラ/別結果版の拒否、日英を確認。ケース同梱はCASEVIEWBUNDLE1で追加。自動永続化・異なる結果の同期は残す。",
       "acceptanceEn": "386 passed, three skipped of389. Real Chrome/MCP verified complete snapshots after changes and after page reload plus saved case/view JSON import. Remove/import/export equality, invalid-camera/foreign-result refusal and localization passed. CASEVIEWBUNDLE1 adds case bundling. Automatic persistence and cross-result synchronization remain unfinished.",
       "evidence": "src/named-result-views.js; src/named-view-ui.js; tests/named-result-views.test.mjs; tests/browser-named-view-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-namedviews-real-chrome.json",
-      "lastUpdate": "2026-10-15実Chrome証跡で見つかった復元値の1ULPずれ(カメラz 89.99999999999999)をresult-view-apiで12桁正準化して修正(単体テストは修正前に失敗・修正後に成功を確認)。実Chromeでの再確認、GUIパネル・削除・16件上限・自動保存は未了のため検証中を維持。",
-      "lastUpdateEn": "2026-10-15: named-result-views and browser-named-view-session tests pass; real-Chrome evidence (2026-10-15-namedviews-real-chrome.json, status partial) confirms save/apply/refusals/export-import/case-bundle restore, but strict equality of restored view failed by 1 ULP and invalid-camera, remove, localization and GUI panel were not exercised in Chrome."
+      "lastUpdate": "2026-10-15実Chromeで修正後の復元が完全一致(JSON.stringify一致・カメラz===90・colorRangeキー順)、約3秒の描画後も一致、削除・16件上限・GUIパネル(保存/復元/削除/上限拒否)を確認。再読込・ケース同梱の復元は修正前の実Chrome証跡と単体/統合テストが根拠で、修正後の実Chrome再確認は未実施。自動永続化・異なる結果の同期は本項目の対象外。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-15: after the fix, restore is exactly equal in real Chrome (JSON.stringify equal, camera z===90, colorRange key order), still equal after ~3 s of live frames; removal, the 16-view cap and the GUI panel (save/restore/remove/cap refusal) confirmed. Reload and case-bundle restore rest on the pre-fix real-Chrome evidence plus unit/integration tests; not re-run in Chrome after the fix. Auto-persistence and cross-result sync are out of scope. Moved to ready. Published HTTPS is tracked in PUBLICHTTPS1."
     },
     {
       "id": "CASEARCHIVE1",
@@ -1546,9 +1546,9 @@
       "detailEn": "Atomically append fatigue/Mode-I screening from original material evidence and stresses. Return revision/status/provenance/units/limitations and up to200 elements. Two saved-result MCP tools and two connector methods.",
       "acceptance": "全体418件中415成功・3スキップ。実MCPと実WASMで疲労寿命1e6cycles/損傷0.1とK参照式、両評価保持、上書き/旧版/省略設定拒否を確認。実画面の評価表示は未確認。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "415 passed, three skipped of418. Real MCP/WASM verified fatigue1e6cycles/damage0.1, K reference formula, both-assessment preservation and overwrite/stale/omitted-option refusal. Real-browser rendering remains unverified. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "src/result-assessment-api.js; tests/result-assessment-api.test.mjs; tests/mcp-assessment.test.mjs; docs/testing.md",
-      "lastUpdate": "2026-10-15再監査: result-assessment-api/mcp-assessmentが通る。実画面の評価表示証跡がなく検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: result-assessment-api and mcp-assessment tests pass; no real-browser assessment-display evidence, so remains checking."
+      "evidence": "src/result-assessment-api.js; tests/result-assessment-api.test.mjs; tests/mcp-assessment.test.mjs; docs/testing.md; docs/evidence/2026-10-15-assessmentapi-real-chrome-2.json",
+      "lastUpdate": "2026-10-15実Chromeで疲労(寿命1e6回・損傷0.1・428要素)と破壊(K参照式一致)の評価をAPIとGUIで確認。ただし本文の「上書き拒否・省略オプション拒否」の記述は実Chromeで拒否されず(同条件の再評価は置換、省略はデフォルト適用)、条件文と実挙動の整合を要確認。破壊の靭性欠落拒否は未分離。検証中を維持。",
+      "lastUpdateEn": "2026-10-15: fatigue (life 1e6 cycles, damage 0.1 over 428 elements) and fracture (K reference formula match) assessments confirmed through API and GUI in real Chrome. The text claiming overwrite and omitted-option refusal did not match real behavior (same-option re-evaluation replaced the assessment; omitted options applied defaults) — reconcile text vs behavior. Fracture-without-toughness refusal not isolated. Stays checking."
     },
     {
       "id": "RUNTIMEWASM1",
@@ -1634,18 +1634,18 @@
       "id": "GUIJOBS1",
       "title": "GUI開始の解析をLLMから監視する",
       "titleEn": "Observe GUI-started analysis through the user LLM",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P3"
       ],
       "detail": "画面4経路を共通ジョブへ接続。入力SHA・CAS、中間場、履歴8件とGUI分のみの解放、最大100件のlistJobsを実装。49ライブ操作。直接analyze/generateMesh APIの互換経路は維持。",
       "detailEn": "Connect four GUI paths to common jobs with input SHA/CAS, retained intermediate fields, eight GUI history entries, GUI-only pruning and listJobs pages up to100.49 live methods; preserve legacy direct analyze/generateMesh APIs.",
-      "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md; docs/evidence/2026-10-14-gui-jobs-catalog.json",
-      "acceptance": "共通API・実MCP/HTTPの模擬Worker試験に加え、実ローカルアプリ内ブラウザ/Worker/WASM/MCPで構造変位0.04mm・171節点/428要素と、熱10/20/30秒の暫定場・点測定を確認。切断継続・完了時入力照合・保持/解放の回帰も検証。全GUI経路は未確認。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "In addition to shared API/real MCP/HTTP tests with simulated Workers, actual local in-app browser/Worker/WASM/MCP verified structural0.04mm/171nodes/428elements and provisional thermal fields/probes at10/20/30s. Regression covers disconnect continuity, completion input checks and retention/release. All GUI routes remain unverified. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "lastUpdate": "2026-10-15再監査: gui-analysis-jobs/mcp-gui-jobsが通る。実アプリ確認は構造・熱のみで全GUI4経路は未確認、検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: gui-jobs tests pass; real-app proof only for structural and thermal, not all four GUI routes; remains checking."
+      "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/evidence/2026-10-15-guijobs-real-chrome-2.json",
+      "acceptance": "共通API・実MCP/HTTPの模擬Worker試験に加え、実ローカルアプリ内ブラウザ/Worker/WASM/MCPで構造変位0.04mm・171節点/428要素と、熱10/20/30秒の暫定場・点測定を確認。切断継続・完了時入力照合・保持/解放の回帰も検証。実Chrome(localhost)で構造・熱・音響・流路・内部流体・外部流体の全GUI経路を確認(2026-10-15)。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "In addition to shared API/real MCP/HTTP tests with simulated Workers, actual local in-app browser/Worker/WASM/MCP verified structural0.04mm/171nodes/428elements and provisional thermal fields/probes at10/20/30s. Regression covers disconnect continuity, completion input checks and retention/release. All GUI routes (structural, thermal, acoustic, channel flow, internal and exterior fluid domain) were exercised in real Chrome on localhost on 2026-10-15. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
+      "lastUpdate": "2026-10-15実Chrome(localhost)で全GUI経路のジョブをlistJobs/jobStatusで確認(gui起源・履歴8件上限・失敗の可観測性)。切断継続・中間場保持はこの回の対象外(単体/統合テストで検証済み)。公開HTTPSはPUBLICHTTPS1。検証済みへ。",
+      "lastUpdateEn": "2026-10-15: all GUI routes observed through listJobs/jobStatus in real Chrome on localhost (gui origin, 8-job history cap, observable failure). Disconnect continuity and intermediate-field retention were not part of this run (covered by unit/integration tests). Published HTTPS is tracked in PUBLICHTTPS1. Moved to ready."
     },
     {
       "id": "CATALOGAPPLY1",

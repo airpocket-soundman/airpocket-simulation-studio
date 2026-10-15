@@ -1,0 +1,105 @@
+{
+  "task": "NAMEDVIEWS1",
+  "status": "passed-local-dev",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "adf014c5f6959321d8dce4bf471a7dc9fdb6ff0b",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server",
+    "tab": "new tab in own tab group"
+  },
+  "scenario": "Local dev server; demo -> mesh -> solve with in-page buttons; connector setResultView(stress, fixed colorRange 0..10, camera position [70,50,90]) and setView; namedViewSave; change view; namedViewApply; re-read; wait about 3.2 s of live frames; re-read; namedViewRemove; save 17 views; GUI panel clicked through with in-page clicks.",
+  "checks": [
+    {
+      "name": "view actually changed before apply",
+      "passed": true,
+      "detail": "{\"field\":\"displacement\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":2,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":null,\"camera\":{\"position\":[30,30,60],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":50}}"
+    },
+    {
+      "name": "re-read result state EXACTLY equal (JSON.stringify) immediately after apply",
+      "passed": true,
+      "detail": "before={\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[70,50,90],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":30}} after={\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[7"
+    },
+    {
+      "name": "camera z===90 after apply",
+      "passed": true,
+      "detail": "90"
+    },
+    {
+      "name": "colorRange key order exact",
+      "passed": true,
+      "detail": "{\"field\":\"stress\",\"minimum\":0,\"maximum\":10}"
+    },
+    {
+      "name": "setup view equal after apply",
+      "passed": true,
+      "detail": "{\"clipEnabled\":true,\"axis\":1,\"position\":4,\"flip\":false,\"opacity\":0.7,\"meshCount\":1,\"hiddenParts\":[]}"
+    },
+    {
+      "name": "re-read EXACTLY equal after ~3 s of live frames",
+      "passed": true,
+      "detail": "{\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[70,50,90],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":30}}"
+    },
+    {
+      "name": "setup view equal after 3 s",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "stored view camera/colorRange canonical in archive",
+      "passed": true,
+      "detail": "{\"id\":\"faf6f02d-ef71-4e42-acec-092214154864\",\"name\":\"recheck A\",\"resultRevision\":\"sha256:da85ebecb3171d98fa068d7033d5f822f3e74ceced7a260f51ad4f607a94c239\",\"result\":{\"field\":\"stress\",\"modeIndex\":null,\"frameIndex\":null,\"deformScale\":1,\"surface\":true,\"surfaceWire\":false,\"volumeWire\":false,\"section\":true,\"colorRange\":{\"field\":\"stress\",\"minimum\":0,\"maximum\":10},\"camera\":{\"position\":[70,50,90],\"target\":[5,5,20],\"up\":[0,1,0],\"fov\":30}},\"setup\":{\"clipEnabled\":true,\"axis\":1,\"position\":4,\"flip\":false,\"opa"
+    },
+    {
+      "name": "namedViewRemove empties list",
+      "passed": true,
+      "detail": "count=0"
+    },
+    {
+      "name": "second remove refused",
+      "passed": true,
+      "detail": "Named view revision conflict"
+    },
+    {
+      "name": "16-view cap: 16 saved, 17th refused",
+      "passed": true,
+      "detail": "saved=16 refusedAt=17 error=Named view limit reached listCount=16"
+    },
+    {
+      "name": "16-view cap refused the 17th save with a clear error",
+      "passed": true,
+      "detail": "cap save 17 error: Named view limit reached"
+    },
+    {
+      "name": "GUI panel #named-views: Save at 16/16 shows the refusal in #named-view-status",
+      "passed": true,
+      "detail": "status text: \"Named view limit reached\"; list stayed at 16 rows"
+    },
+    {
+      "name": "GUI panel: per-row Remove button removed a view and the list re-rendered",
+      "passed": true,
+      "detail": "rows 16 -> 15, status \"View removed.\""
+    },
+    {
+      "name": "GUI panel: Save button saved a new view under a typed name",
+      "passed": true,
+      "detail": "name \"gui view\" saved, rows 15 -> 16, status \"View saved. Export JSON to reopen it later.\""
+    },
+    {
+      "name": "GUI panel: Restore button restored the saved view; connector re-read is EXACTLY equal (JSON.stringify) with camera z===90 and colorRange {field,minimum,maximum}",
+      "passed": true,
+      "detail": "view changed through the connector to displacement/colorRange null/camera [30,30,60]; GUI Restore click -> status \"View restored.\"; getResultView.state equals the pre-change state byte for byte"
+    }
+  ],
+  "observations": [
+    "The GUI list #named-view-list does not refresh after connector-side namedViewSave/Remove; it re-renders on GUI actions or language change (it showed 0 rows while the connector had 16 until the first GUI Save click).",
+    "Connector calls intermittently stalled or returned \"Browser command timed out\" until the tab received other tool activity; read-only calls were retried by the driver, mutating calls were not retried."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Reload persistence of named views via namedViewExport/Import and case bundles after the canonicalization fix (covered by 2026-10-15-namedviews-real-chrome.json before the fix)",
+    "Invalid-camera refusal in Chrome in this run",
+    "Language switching of the panel"
+  ]
+}
