@@ -1,0 +1,39 @@
+{
+  "decision": "Owner decision (2026-10-15), option B: the default Node 24 full-suite gate is satisfied by the required CI verify job passing on Node 24 for the exact head; the intermittent local Windows Node 24.11.1 V8 fatal is recorded as a known issue, not as a failure of the application.",
+  "scope": "Applies to the Node 24 full-suite gate clauses of HEADLESSLIFECYCLE1 and BROWSERCONTRACTS1 and, for the same clause, WAVECHANNELOBS1. It does NOT close RUNTIMEWASM1 (root-cause verification) and does not claim the V8 fatal is fixed.",
+  "knownIssue": {
+    "symptom": "Fatal error / Check failed: jit_page_->allocations_.erase(addr) == 1 (V8 ThreadIsolation::UnregisterWasmAllocation) during isolate disposal; one test file dies at file level in an occasional full local run and passes when run alone.",
+    "upstream": "https://github.com/nodejs/node/issues/66366 (open on 2026-10-15; fixed upstream in V8 commit 9b8ca54d5a, not backported to 24.x per the research notes). That this repository's Windows failures share that cause is unconfirmed.",
+    "affectedRuntime": "Node.js test/MCP/Worker runtime only; not the browser application.",
+    "mitigationsNotAdopted": [
+      "--no-wasm-code-gc (reduces frequency, not a fix)",
+      "switching CI/test runtime to Node 22 or 26 (not affected upstream; needs a separate full-suite verification and a support decision)"
+    ]
+  },
+  "ciEvidence": {
+    "source": "gh run list --branch main --workflow 'Publish application', 2026-10-15",
+    "summary": "From run 38679277727 (ec98256) to run 38724981240 (2c19007) there are 28 runs on main: 25 succeeded (verify, deploy and verify-published), 1 failed (38706323710, 6f195bf) and 2 were cancelled because newer commits superseded them (38692909864, 38687710680). Pull-request heads also passed verify before every merge today.",
+    "successfulRunIds": [
+      38724981240, 38715215463, 38713929238, 38707143618, 38705173704, 38703238389, 38701514439, 38700153486, 38699217923,
+      38697764762, 38696918408, 38694780474, 38694237702, 38693448612, 38692282006, 38691317682, 38690150686, 38688236594,
+      38685524491, 38684668942, 38682609850, 38682020758, 38680993905, 38679733428, 38679277727
+    ],
+    "recordedFailures": [
+      {
+        "run": 38706323710,
+        "sha": "6f195bf",
+        "detail": "mcp-advanced-structural-provenance failed with native heap corruption ('corrupted size vs. prev_size'); not attributed to a cause."
+      },
+      {
+        "run": 38663202965,
+        "sha": "badce2c",
+        "detail": "Earlier failure (before the range above) recorded as a V8 failure in docs/evidence/2026-10-15-publication-badce2c-v8-failure.json."
+      }
+    ]
+  },
+  "limits": [
+    "CI passing repeatedly is not a root fix; failures can recur (one native heap failure occurred in CI today at 6f195bf).",
+    "Local Windows full runs still hit the V8 fatal occasionally; rerun the file alone and report it, do not hide it.",
+    "Re-check upstream issue 66366 on each new Node 24.x release and revisit this policy when a backport lands."
+  ]
+}

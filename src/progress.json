@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T08:32:36.715Z",
+  "updatedAt": "2026-10-15T12:29:41.474Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1580,9 +1580,9 @@
       "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration. The publication-progress defaultNode24 full run reproduced the same fatal in analysis-job-service (883reported/879passed/onefailure/3skipped). Affected file alone3passed;same-sourceNode26 comparison881passed/3skipped of884. No default migration or root-fix proof.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json",
-      "lastUpdate": "2026-10-15 再監査: 原因検証が未達のためchecking維持。CIのNode24全体成功は根治の証明ではない。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: stays checking; root-cause verification is unmet. Passing CI on Node 24 does not prove a root fix. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json",
+      "lastUpdate": "2026-10-15 方針Bはゲートの判定方法の決定であり、本項目の受け入れ条件(固定条件での再現と原因の検証)は未達のまま。上流#66366は候補で同根かは未確認。検証中を維持。",
+      "lastUpdateEn": "2026-10-15 Option B decides how the gate is judged; this task's own acceptance (reproduction under fixed conditions and verified cause) remains unmet. Upstream #66366 is a candidate, same cause unconfirmed. Stays checking."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1777,18 +1777,18 @@
       "id": "HEADLESSLIFECYCLE1",
       "title": "解析APIの応答前にWorker終了を待機する",
       "titleEn": "Wait for Worker termination before settling headless analysis",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "RUNTIMEWASM1"
       ],
       "detail": "headless解析の成功・失敗・取消・時間切れでterminate完了後だけPromiseを確定。終了処理失敗と元エラーを保持し、遅延応答と二重確定を防止。診断CLIに対象・並列数・別Node・親子環境・ソース指紋・途中記録を追加。共有ジョブの取消terminal先行は別の制約として残す。",
       "detailEn": "Headless success/failure/cancel/timeout promises settle only after termination. Preserve cleanup and original errors; prevent late replies and duplicate settlements. Diagnostic CLI gains targets/concurrency/runtime identity/source fingerprints/checkpoints. Shared-job cancellation may still become terminal before cleanup ends.",
-      "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブの取消と終了追跡はJOBSETTLEMENT1で追加。ビルド・配信物26項目・SKILL成功。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. JOBSETTLEMENT1 adds shared-job cancellation and settlement tracking. Build,26distribution checks andSKILL passed. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json",
-      "lastUpdate": "2026-10-15 独立確認: headless-worker-lifecycle/reproduce-wasm-runtime含む8ファイル45件成功。所有権修正の試験は成立するが、既定Node24でV8 fatalは根治未証明かつ後続の全体実行で再発しており、checking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: 8 files incl. headless-worker-lifecycle/reproduce-wasm-runtime, 45 pass. Ownership tests hold, but the default-Node24 V8 fatal is unproven fixed and recurred in later full runs, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブの取消と終了追跡はJOBSETTLEMENT1で追加。ビルド・配信物26項目・SKILL成功。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。 既定Node24の全体ゲートは、利用者決定(2026-10-15・方針B)により「必須CI verifyのNode 24成功」で判定し、手元Windows Node 24.11.1の断続的V8 fatal(nodejs/node#66366)は既知問題として記録する。V8根治の証明ではない(RUNTIMEWASM1)。",
+      "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. JOBSETTLEMENT1 adds shared-job cancellation and settlement tracking. Build,26distribution checks andSKILL passed. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
+      "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-15-node24-gate-policy.json",
+      "lastUpdate": "2026-10-15 方針B: 既定Node24ゲートは必須CI verifyのNode 24成功で判定(main 28回中25成功・失敗1・取消2、PR headは毎回verify成功)。V8 fatalの根治は未証明で別項目。検証済みへ。",
+      "lastUpdateEn": "2026-10-15 option B: the default Node 24 gate is judged by the required CI verify on Node 24 (28 main runs: 25 passed, 1 failed, 2 cancelled; PR heads passed verify every time). V8 root fix remains unproven and tracked separately. Moved to ready."
     },
     {
       "id": "JOBSETTLEMENT1",
@@ -2051,7 +2051,7 @@
       "id": "WAVECHANNELOBS1",
       "title": "周波数音響・掃引・流路の反復残差をLLMへ返す",
       "titleEn": "Expose harmonic/sweep acoustic and channel iteration observations to LLMs",
-      "status": "fixing",
+      "status": "checking",
       "category": "共通",
       "depends": [
         "P3",
@@ -2061,9 +2061,9 @@
       "detailEn": "Expose BiCGStab/channel-PCG recurrence residuals and acoustic sweep start/completion through existing jobEvents,declaring phase/solvePhase/frequency/residualKind without claiming independent true residuals or intermediate fields.",
       "acceptance": "新14対象・実8対象ジョブと既存MCP profile7ジョブ回帰は成功。既定Node24.11.1全体は718件中714成功・1file失敗・3skip（87.59秒）、既知V8 fatal再発でゲート未解消。単独3試験は成功。別portableNode26.10.0同一source全体719件中716成功・3skip（219.48秒、driftなし）もNode24失敗の代替にはしない。build2.72秒成功、配信物26項目成功（28.04秒）。物理精度・終端前timing・V8根治は保証しない。",
       "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees.",
-      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json",
-      "lastUpdate": "2026-10-15再監査: mcp-acoustic-channel-observation(2件)は既定Node24単独で通るが、既定Node24全体ゲートの合格証跡はなく修正中を維持。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: mcp-acoustic-channel-observation passes alone on default Node24, but no passing default-Node24 full-suite evidence exists; stays fixing. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json; docs/evidence/2026-10-15-node24-gate-policy.json",
+      "lastUpdate": "2026-10-15 方針B(既定Node24ゲートはCI verifyのNode 24成功で判定)を適用すると主要ゲート条件は満たされる見込み。ただし本項目の再監査は未実施のため、修正中から検証中へ戻して再判定待ち。",
+      "lastUpdateEn": "2026-10-15 option B (the default Node 24 gate is judged by CI verify on Node 24) would satisfy the main gate clause; a re-audit of this task has not been done, so it moves from fixing back to checking pending re-judgment."
     },
     {
       "id": "PROCESSISOLATION1",
@@ -2140,7 +2140,7 @@
       "id": "BROWSERCONTRACTS1",
       "title": "全ライブ操作の契約を必要時にLLMへ返す",
       "titleEn": "Discover all live operation contracts on demand",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P0",
@@ -2149,11 +2149,11 @@
       ],
       "detail": "全80ライブ操作の入力schema・scope・版照合・単位・副作用・制限を共有APIと接続不要MCPから最大10件/64KiBで取得。直接例外のfailureをHTTP越しに保持。",
       "detailEn": "Discover schemas,scopes,revision fields,units,effects and limitations for all80live operations through shared API and session-free MCP,in pages of at most10/64KiB. Preserve validated thrown failure metadata across HTTP.",
-      "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gate未達。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
-      "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0.",
-      "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs",
-      "lastUpdate": "2026-10-15 再監査: 契約試験成功、実ブラウザ証跡あり。既定Node24全体gateはCIで成功だがローカルNode24で断続的V8 fatalあり。方針は所有者判断待ち。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: contract tests pass, real-browser evidence exists. Default Node24 full gate passes in CI but local Node 24 intermittently hits the V8 fatal; policy awaits owner decision. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "新17件・対象28件成功。Node26比較全体840件中837成功・3skip。既定Node24は839件中835成功・1V8fatal・3skip、該当単独3件成功。既定runtime gateは方針Bで判定する(必須CI verifyのNode 24成功、手元の断続的V8 fatalは既知問題として記録: docs/evidence/2026-10-15-node24-gate-policy.json)。実ブラウザで80契約→作成→不正座標系拒否/入力版不変→明示修正成功を確認。宣言は接続権限・optional adapter利用可否・nested物理検査・P0全機能完了の保証ではない。",
+      "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
+      "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs; docs/evidence/2026-10-15-node24-gate-policy.json",
+      "lastUpdate": "2026-10-15 方針B: 既定runtime gateは必須CI verifyのNode 24成功で判定。実ブラウザ80契約→作成→拒否→修正と対象テストは成功済み。検証済みへ。V8根治は別項目。",
+      "lastUpdateEn": "2026-10-15 option B: the default runtime gate is judged by the required CI verify on Node 24. Real-browser 80-contract flow and targeted tests already passed. Moved to ready. V8 root fix tracked separately."
     },
     {
       "id": "EDITPREVIEW1",
@@ -2543,9 +2543,9 @@
       "detailEn": "Verify in a real browser that the published HTTPS page (GitHub Pages) can connect to the local 127.0.0.1 connector. Split out of the individual feature tasks so that only published-HTTPS connectivity is tracked here. The earlier attempt failed before session creation in an in-app browser with the cause unidentified; 403 refusals now carry CORS headers for the exact configured Origin only, so unreachable and refused can be told apart.",
       "acceptance": "通常のChromeで公開ページから許可済みスコープ(確認のみ)で接続でき、確認用の操作が成功し、切断でセッションが終了する。失敗時は到達不能/拒否/ブラウザ権限のどれかを診断カウンターで区別して記録する。結果は日付・ブラウザ版・公開リビジョン付きの証跡に残す。編集・解析への権限拡大は行わない。",
       "acceptanceEn": "In regular Chrome, the published page connects with the granted scope (inspect only), an inspection operation succeeds and disconnect ends the session. On failure, unreachable vs refused vs browser-permission is distinguished via the diagnostics counters and recorded. Results are stored as evidence with date, browser version and published revision. No scope escalation to edit or analysis.",
-      "evidence": "docs/evidence/2026-10-15-public-https-inspect-failure.json; docs/evidence/2026-10-15-public-https-reconnect-user-report.json; scripts/browser-bridge.mjs; tests/browser-bridge-diagnostics.test.mjs",
-      "lastUpdate": "2026-10-15 利用者報告: 公開HTTPS版へ確認専用で再接続できたとの申告あり。これは独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認。編集/解析へ権限を広げず、受け入れ条件未達のためchecking維持。",
-      "lastUpdateEn": "2026-10-15 user report: the user says an inspect-only reconnect to the published HTTPS version succeeded. This is not an independent observation; success of an inspection operation, session termination after disconnect, browser version and published revision remain unverified. No edit/analysis scope was granted; acceptance is incomplete, so the task stays checking."
+      "evidence": "docs/evidence/2026-10-15-public-https-inspect-failure.json; docs/evidence/2026-10-15-public-https-reconnect-user-report.json; scripts/browser-bridge.mjs; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-public-https-connection.json",
+      "lastUpdate": "2026-10-15 利用者の通常Chromeで公開ページから確認専用で接続でき、inspect/caseList成功・edit拒否・解除でセッション0件・コネクタ停止まで確認(カウンター: ペアリング成功2・拒否0・切断2)。未了: Chromeバージョン未記録、ページは古いキャッシュ版(操作86件)で最新操作は未実行、最初の失敗の原因設定は未報告。検証中を維持。",
+      "lastUpdateEn": "2026-10-15 In the owner's regular Chrome the published page connected with inspect-only scope; inspect/caseList succeeded, edit was refused, disconnect left 0 sessions and the connector was stopped (counters: pairSuccess 2, refusals 0, disconnects 2). Open: Chrome version not recorded, the page was an older cached build (86 operations) so the newest operations were not run, and the setting that fixed the first failure was not reported. Stays checking."
     },
     {
       "id": "MESHBOUNDARYPREFLIGHT1",
