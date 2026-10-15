@@ -1,4 +1,5 @@
 import {validateOrthotropicResult} from './orthotropic-result.js';
+import {validateRuntimeIdentity} from './runtime-identity.js';
 import {validateSavedAssessment} from './analysis-preflight.js';
 import {validatePlasticResult} from './plasticity-result.js';
 import {validateStokesResult} from './stokes-result.js';
@@ -11,12 +12,20 @@ import {validateInternalMesh} from './internal-fluid.js';
 import {validateProject} from './regions.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 const metrics={stokes:[['maxSpeedMs','m/s'],['minPressurePa','Pa'],['maxPressurePa','Pa']],modal:[['lowestFrequencyHz','Hz'],['highestFrequencyHz','Hz']],acousticTransient:[['receiverPeakPa','Pa peak'],['receiverRmsPa','Pa record RMS']],channelFlow:[['maxSpeedMs','m/s'],['outletFlowM3s','m³/s']],elastic:[['maxDisplacementMm','mm'],['maxVonMisesPa','Pa']],thermal:[['minTemperature','°C'],['maxTemperature','°C']],acoustic:[['maxPressurePa','Pa peak'],['maxSplDb','dB RMS']]};
+export function validateCalculationRuntimeIdentity(output){
+ const calculation=output?.calculation;
+ if(!calculation||!Object.hasOwn(calculation,'runtimeIdentity'))return;
+ const identity=validateRuntimeIdentity(calculation.runtimeIdentity,{allowUndefined:false});
+ if(identity.engine.requestedMethod!==calculation.options?.method)throw Error('Runtime identity method does not match calculation');
+ if(output.result?.engine!==undefined&&identity.engine.actualEngine!==output.result.engine)throw Error('Runtime identity engine does not match result');
+}
 export function createCaseStore(){
  let cases=[];
  function validate(c){
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
   validateSavedAssessment(c.output);
+  validateCalculationRuntimeIdentity(c.output);
   requireResolvedCadConditions(c.output.input);
   validateStokesResult(c.output?.mesh,c.output?.result,c.output?.input,c.output?.calculation);
   validateStlMesh(c.output?.mesh,c.output?.input,c.output?.calculation);

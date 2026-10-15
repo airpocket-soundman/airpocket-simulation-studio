@@ -4,7 +4,7 @@ process.on('disconnect',()=>process.exit(0));
 if(!process.connected)process.exit(0);
 let received=false,rejected=false;
 const send=message=>{if(!rejected&&process.connected)process.send(message);};
-const ready=initializeHeadlessWorker(send);
+const ready=initializeHeadlessWorker(send,{isolation:'process'});
 ready.catch(()=>{});
 process.on('message',async data=>{
  if(received){if(!rejected&&process.connected)process.send({error:'Analysis child accepts only one request'});rejected=true;return;}

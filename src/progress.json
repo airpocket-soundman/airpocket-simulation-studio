@@ -2205,6 +2205,23 @@
       "acceptance": "UI入力BのままjobAの保持出力を再構成・検証し、表示/編集せず、拒否/期限/切断/解放を確認。実Worker由来outputとJSON正規化を検証。公開HTTPS、保存後全比較とengine build identityは別条件。",
       "acceptanceEn": "Reconstruct/verify jobA while UI inputB remains unchanged; verify refusals,expiry,disconnect/release and actual Worker-output JSON normalization. Public HTTPS,complete saved comparisons and engine build identity remain separate requirements.",
       "evidence": "src/job-result-transfer.js; tests/job-result-transfer.test.mjs; tests/browser-job-result-transfer.test.mjs; docs/evidence/2026-10-15-job-result-export.json"
+    },
+    {
+      "id": "RUNTIMEIDENTITY1",
+      "title": "計算時のコード版と実WASM識別を結果へ固定",
+      "titleEn": "Freeze executing build and WASM identity in results",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P3",
+        "P4"
+      ],
+      "detail": "Worker初期化時のbuild/source fingerprint、browser/nodeとthread/process、要求method/実engine、実初期化WASM bytesのhashをcalculationへ保存。旧保存へ現行版を補わない。",
+      "detailEn": "Record initialization-time build/source fingerprint,target/isolation,requested/actual engine and hashes of actual WASM initialization bytes in calculation;never backfill old outputs with the current build.",
+      "acceptance": "旧形式互換・不正identity拒否・ケース保存/復元/一覧での保持、実Node thread/processとbrowser worker経路、kernel/Gmsh/MFEM hash、GPU fallback、別版で旧結果を開いても不変を検証。署名/環境認証/物理精度の証明とは区別。",
+      "acceptanceEn": "Verify legacy compatibility,invalid identity refusal,preservation/discovery across case save/restore,Node thread/process and browser Worker paths,kernel/Gmsh/MFEM hashes,GPU fallback and no restamping on later restoration. Distinguish from signatures,environment attestation or physical accuracy.",
+      "evidence": "src/runtime-identity.js; scripts/source-build-identity.mjs; tests/browser-runtime-identity.test.mjs; tests/headless-runtime-identity.test.mjs; docs/evidence/2026-10-15-runtime-identity.json"
     }
   ],
   "solvers": [
@@ -2350,7 +2367,8 @@
           "CASEMEASUREMENTBUNDLE1",
           "MEASUREMENTVERIFY1",
           "VIEWCOMPARE",
-          "JOBRESULTEXPORT1"
+          "JOBRESULTEXPORT1",
+          "RUNTIMEIDENTITY1"
         ],
         "acceptance": "Retrieve, verify, save, restore, compare and remeasure results while retaining input/result/mesh/calculation/engine/assumption identity."
       },

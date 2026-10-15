@@ -1,16 +1,21 @@
+import {createRuntimeIdentity,validateRuntimeIdentity} from './runtime-identity.js';
 import {restoreAnalysisError,getAnalysisFailure} from './analysis-failure.js';
 import {requireAnalysisPreflight} from './analysis-preflight.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {createAnalysisJobs} from './analysis-jobs.js';
 import {createBrowserIntermediateStore} from './browser-intermediate-store.js';
 export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
+ const hostDescriptor=Object.getOwnPropertyDescriptor(runtime,'identityHost');
+ const host=hostDescriptor?hostDescriptor.value:{target:'browser',isolation:'web-worker'};
+ if(hostDescriptor&&!Object.hasOwn(hostDescriptor,'value')||!host||typeof host!=='object'||![Object.prototype,null].includes(Object.getPrototypeOf(host))||Reflect.ownKeys(host).length!==2||Reflect.ownKeys(host).some(key=>!['target','isolation'].includes(key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(host,key),'value')))throw TypeError('Invalid runtime identity host');
+ const identityHost=createRuntimeIdentity({target:host.target,isolation:host.isolation});
  const createWorker=runtime.createWorker||(()=>new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'}));
  const isIsolated=runtime.isIsolated||(()=>globalThis.crossOriginIsolated);
  const baseUrl=runtime.baseUrl||(()=>new URL(import.meta.env?.BASE_URL||'/',location.href).href),timeoutMs=runtime.timeoutMs??120000;
  let active=null;
  function finish(job,error,result){
   if(active!==job||job.finishing)return;job.finishing=true;clearTimeout(job.timer);job.signal?.removeEventListener('abort',job.abort);
-  const settle=(failure)=>{if(active===job)active=null;try{if(failure){job.reject(failure);return;}try{job.resolve({...result,...(result.result?{result:{...result.result,analysisAssessment:job.analysisAssessment}}:{}),analysisAssessment:job.analysisAssessment,input:job.project,calculation:{operation:job.operation,options:job.options}});}catch(cause){job.reject(cause);}}finally{job.markSettled();}};
+  const settle=(failure)=>{if(active===job)active=null;try{if(failure){job.reject(failure);return;}try{const identity=result?.runtimeIdentity===undefined?undefined:validateRuntimeIdentity(result.runtimeIdentity);if(identity&&(identity.target!==identityHost.target||identity.isolation!==identityHost.isolation))throw Error('Worker runtime identity host mismatch');const cleanResult=Object.fromEntries(Object.entries(result).filter(([key])=>key!=='runtimeIdentity'));job.resolve({...cleanResult,...(result.result?{result:{...result.result,analysisAssessment:job.analysisAssessment}}:{}),analysisAssessment:job.analysisAssessment,input:job.project,calculation:{operation:job.operation,options:job.options,...(identity?{runtimeIdentity:identity}:{})}});}catch(cause){job.reject(cause);}}finally{job.markSettled();}};
   const cleanupFailed=cause=>{const failure=cause instanceof Error?cause:new Error('Worker cleanup failed: '+String(cause),{cause});settle(error?new AggregateError([error,failure],'Analysis failed: '+(error?.message??String(error))+'; Worker cleanup failed: '+failure.message):failure);};
   let termination;try{termination=job.worker.terminate();}catch(cause){cleanupFailed(cause);return;}
   // Native browser terminate returns void; host adapters may return a cleanup promise.
@@ -18,7 +23,7 @@ export function createAnalysisClient(getProject,onProgress=()=>{},runtime={}){
  }
  function start(operation,options={},snapshot,onEvent,signal,jobId,observeFields=false){
  if(active)return Promise.reject(Error('A calculation is already running'));
- let project,settings,analysisAssessment;try{if(signal?.aborted)throw Error('Calculation cancelled');project=structuredClone(snapshot??getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');analysisAssessment=requireAnalysisPreflight(project,settings,{target:'browser',operation:operation==='mesh'?'mesh':'solve'});}catch(e){return Promise.reject(e);}
+ let project,settings,analysisAssessment;try{if(signal?.aborted)throw Error('Calculation cancelled');project=structuredClone(snapshot??getProject());if(operation!=='mesh')requireResolvedCadConditions(project);settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});if(!project.sourceModel)throw Error('Reload a STEP file or use the built-in sample; this project has no original solid');if(!isIsolated())throw Error('Browser isolation is not ready. Reload once, or use a compatible browser.');analysisAssessment=requireAnalysisPreflight(project,settings,{target:identityHost.target,operation:operation==='mesh'?'mesh':'solve'});}catch(e){return Promise.reject(e);}
  return new Promise((resolve,reject)=>{let worker;try{worker=createWorker();}catch(e){reject(e);return;}let markSettled;const settled=new Promise(done=>{markSettled=done;});const job={worker,project,operation,options:settings,resolve,reject,signal,jobId,analysisAssessment,settled,markSettled};active=job;
  if(!jobId)job.timer=setTimeout(()=>finish(job,Error(`Calculation exceeded ${timeoutMs/1000} seconds`)),timeoutMs);
  job.abort=()=>finish(job,Error('Calculation cancelled'));signal?.addEventListener('abort',job.abort,{once:true});

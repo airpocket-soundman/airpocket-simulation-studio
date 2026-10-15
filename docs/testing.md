@@ -515,3 +515,11 @@ P1/P3の候補検査・版照合・実行中非変更の限定確認であり、
 公開0e53638の単体接続ファイルはmanifest版・bytes/SHA256と隔離起動・3ツール・EOF終了を確認した。ユーザー承認後の公開ページ確認専用接続は到達エラーでsession未作成となり、コードを消去し試験用MCPと待受を終了した。[公開ファイル](evidence/2026-10-15-public-browser-connector.json)、[失敗記録](evidence/2026-10-15-public-https-inspect-failure.json)、[画面](evidence/2026-10-15-public-https-inspect-failed.jpg)を参照。原因は未特定で、公開HTTPS gateを閉じない。保存後の全比較、engine版追跡、Skill単独一巡、P0〜P6全体も未完了。
 
 Node26.10.0の比較全体は921件中917成功・1失敗・3skip（373.93秒）。失敗はqueryNodeIdentity子プロセスの5秒spawn timeoutで、同じruntime再現suiteの単独6件は成功した。比較全体も未通過であり、既定環境のV8根治や全体成功の代替にはしない。最終差分の必須CIを別途確認する。
+
+## 2026-10-15: 実行時のビルド・WASM識別
+
+calculation.runtimeIdentityを追加し、Worker起動/コンパイル時にbuild識別を固定、実際の初期化へ渡すkernel/Gmsh/MFEMの同じWASM bytesを観測した。Node packageとbrowser資産を区別し、case保存/復元/listでも保持する。旧identity欠落へ現行版を補わず、不正形式・method/engine矛盾を拒否する。完全結果転送のouter inputRevisionが存在する場合も元入力版との一致を検査する。
+
+初回934件は923成功・8失敗・3skip。実Node Workerをブラウザ用clientへ注入するadapterのhost不一致を修正し、identityを削除/偽browserへ変更せず、constructor専用identityHostとpreflightを実hostへ合わせた。最終21対象成功、全体935件中932成功・3skip・失敗0（148.87秒）。保存/復元等36件、buildとローカル配信物26項目（57.91秒）も成功。[全体証跡](evidence/2026-10-15-runtime-identity.json)を参照。既知のWindows V8問題の根治とは扱わない。
+
+実ブラウザでdirty本番ビルドをlocalhost配信し、GUIの熱サンプルを解析。171節点/428要素、20〜100°Cで完了し、visible JSONからbrowser/web-worker、build版、kernel229 bytes・Gmsh41,430,673 bytesのobserved hashを取得した。実配信ファイルのhashと照合し、ケース保存・再表示後にidentity不変を確認。QA tab/serverを終了した。[ブラウザ記録](evidence/2026-10-15-runtime-identity-browser.json)、[保存JSON](evidence/2026-10-15-runtime-identity-browser-case.json)、[画面](evidence/2026-10-15-runtime-identity-browser.jpg)、[Skill同期](evidence/2026-10-15-skill-runtime-identity.json)を参照。公開HTTPS/MCP単独一巡・全P0〜P6は未完了。

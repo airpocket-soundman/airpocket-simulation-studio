@@ -506,3 +506,15 @@ Inspect-scoped live jobResultExport({jobId,inputRevision}) stages the retained c
 Decode base64 data from jobResultRead({transferId,offset:0,length:65536}) and follow nextOffset until null. Verify complete raw UTF-8 byte count/SHA256 before parsing/saving JSON. Defaults:four transfers,100MB total,65,536byte chunks. jobResultRelease frees staging; disconnect invalidates that session's transfers. Cross-session transfer IDs are rejected. This API does not display results,register cases,change inputs or recalculate.
 
 Preserve units,assumptions,provisional assessment and settings already present. Do not attach today's deployment revision/WASM hashes to historical outputs missing build identity. Engine provenance,full saved-comparison acceptance and actual HTTPS remain outstanding.
+
+## Preserve execution-time runtime identity
+
+New outputs freeze calculation.runtimeIdentity schemaVersion1 with target(browser/node),isolation(web-worker/worker-thread/process),build,engine and assets. Production browser builds embed identity in the compiled Worker;Node collects it at host initialization. Project/options cannot choose it. Dev/unavailable builds report status unavailable. Available builds include version,Git revision,dirty and sourceFingerprint:SHA256 of actual src/scripts/native and package/lock/Vite/HTML source records. The dependency lock identifies declarations,not all executed node_modules/generated-public bytes.
+
+Up to16 assets carry role(kernel/gmsh/mfem),bytes,sha256,status observed/declared. Observed means the same hashed WASM bytes were supplied to initialization. Node Gmsh uses the actual package binary;never substitute browser dist hashes. MFEM under Node remains WASM,not native machine code. Actual HTTP(S) browser paths and Node providers observe loaded WASM;unobserved file-fixture/provider-less assets remain omitted rather than inferred.
+
+Engine requestedMethod and actualEngine are distinct;actualEngine is the returned engine label or null when unrecorded. CPU fallback is not labeled GPU execution. Cases,restoration,bundles,full job-output transfer and caseList preserve/expose existing identity. Invalid schema or method/result-engine contradictions are refused on save/restore. Legacy outputs remain unrecorded;never stamp them with today's manifest/build.
+
+Identity/integrity records do not prove an atomic snapshot of every dynamic import,publisher signatures,environment attestation or physical accuracy. Actual public HTTPS,Skill-only end-to-end and full P0-P6 remain separate gates.
+
+Embedding adapters connecting the shared client to a Node Worker explicitly provide constructor-only runtime.identityHost(target/isolation). The default remains browser/web-worker;preflight follows the actual host. Project/options values with the same name are ignored. This is not a wire argument for users to relabel execution.

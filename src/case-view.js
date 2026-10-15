@@ -9,11 +9,12 @@ import {validateStlMesh} from './stl-source.js';
 import {validateCylindricalMesh} from './cylindrical-cad.js';
 import {validatePlanarMesh} from './planar-region.js';
 import {validateInternalMesh} from './internal-fluid.js';
-import {validateComputeMetadata} from './cases.js';
+import {validateComputeMetadata,validateCalculationRuntimeIdentity} from './cases.js';
 import {inspectMesh} from './mesh-core.js';
 export function prepareCaseView(saved){
  const output=structuredClone(saved?.output),mesh=output?.mesh,r=output?.result;
  validateSavedAssessment(output);
+ validateCalculationRuntimeIdentity(output);
  requireResolvedCadConditions(output?.input??{});
  validateStokesResult(mesh,r,output?.input,output?.calculation);
  validateStlMesh(mesh,output?.input,output?.calculation);

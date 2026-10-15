@@ -2,6 +2,16 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createCaseStore} from '../src/cases.js';
 const output=()=>({input:{version:1,meshes:[{positions:[0,0,0,1,0,0,0,1,0],faceIds:[0]}],conditions:[]},calculation:{operation:'elastic',options:{size:5,method:'pcg',adaptive:false,maxRounds:3}},result:{kind:'elastic',maxDisplacementMm:.04,maxVonMisesPa:1e6}});
+
+test('runtime identity is preserved across case roundtrip without stamping legacy output or accepting contradictory metadata',()=>{
+ const legacy=createCaseStore();legacy.add('old',output());assert.equal(legacy.list()[0].output.calculation.runtimeIdentity,undefined);
+ const value=output();value.result.engine='Recorded engine';value.calculation.runtimeIdentity={schemaVersion:1,target:'node',isolation:'worker-thread',build:{status:'available',version:'0.43.0',revision:'a'.repeat(40),dirty:true,sourceFingerprint:'sha256:'+'b'.repeat(64)},engine:{requestedMethod:'pcg',actualEngine:'Recorded engine'},assets:[{role:'kernel',bytes:8,sha256:'sha256:'+'c'.repeat(64),status:'observed'}]};
+ const store=createCaseStore();store.add('recorded',value);const archive=JSON.parse(JSON.stringify(store.export())),copy=createCaseStore();copy.import(archive);assert.deepEqual(copy.export(),archive);
+ value.calculation.runtimeIdentity.build.revision='d'.repeat(40);assert.equal(copy.list()[0].output.calculation.runtimeIdentity.build.revision,'a'.repeat(40));
+ for(const mutate of [o=>o.calculation.runtimeIdentity=null,o=>o.calculation.runtimeIdentity.build.revision='bad',o=>o.calculation.runtimeIdentity.assets[0].bytes=-1,o=>o.calculation.runtimeIdentity.engine.requestedMethod='wasm-pcg',o=>o.calculation.runtimeIdentity.engine.actualEngine='Different engine',o=>o.calculation.runtimeIdentity.isolation='web-worker']){
+  const bad=structuredClone(archive);mutate(bad.cases[0].output);assert.throws(()=>copy.import(bad));assert.deepEqual(copy.export(),archive);
+ }
+});
 test('case snapshots and exported copies remain independent; archives roundtrip atomically',()=>{const store=createCaseStore(),o=output();store.add('A',o);o.result.maxDisplacementMm=99;const exported=store.export();exported.cases[0].output.input.name='edited';assert.equal(store.compare()[0].metrics[0].value,.04);assert.equal(store.list()[0].output.input.name,undefined);const next=createCaseStore();next.import(JSON.parse(JSON.stringify(store.export())));assert.deepEqual(next.export(),store.export());const bad=next.export();bad.cases.push({name:'invalid'});assert.throws(()=>next.import(bad));assert.deepEqual(next.export(),store.export());});
 test('comparison keeps physics units and bounds case collection',()=>{const store=createCaseStore();store.add('A',output());const thermal=output();thermal.result={kind:'thermal',minTemperature:20,maxTemperature:80};store.add('T',thermal);assert.equal(store.compare()[1].metrics[1].unit,'°C');assert.throws(()=>store.remove(-1));for(let i=2;i<8;i++)store.add('case',output());assert.throws(()=>store.add('overflow',output()));store.remove(0);assert.equal(store.list().length,7);});
 test('corrupt calculation operation, discipline and result ranges cannot replace saved cases',()=>{
