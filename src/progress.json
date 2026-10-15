@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T05:02:59.709Z",
+  "updatedAt": "2026-10-15T05:20:22.331Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -1117,8 +1117,8 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "第7〜8スライス: 材料フォームUI(material-form-ui)を分離、worker のメッシュ生成の分野別オプション(buildOptions)と適応細分化(adaptive)をアダプターフックへ移動(22ケースの旧実装出力を固定)。公開済みは第6スライスまで。MOD1全体は未完了(React/WASM移行、境界条件・3D選択・解析ライフサイクルの分離、GUI/API/MCP同等の網羅回帰は未実施)。",
-      "evidence": "src/ui/material-form-ui.js; tests/ui-material-form.test.mjs; tests/solver-adapter-build.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md"
+      "lastUpdate": "第9〜10スライス: 研究用フォームの読み書き(study-form-ui)を分離、境界条件転送のスキップ(skipsBoundaryTransfer)と熱の温度範囲検査(postprocess)をアダプターのフックへ移動(20ケースの旧実装出力を固定)。破壊・疲労の評価ガードは共通の関門としてworkerに残す。公開済みは第8スライスまで。MOD1全体は未完了(React/WASM移行、3D選択・解析ライフサイクルの分離、GUI/API/MCP同等の網羅回帰は未実施)。",
+      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md"
     },
     {
       "id": "P0",

@@ -46,3 +46,15 @@ MOD1は未完了です。ここではmain.jsから保存ケース一覧のUIだ�
 
 `$`、`document`、`materialFields`、`materialReadiness`、`readFatigueMaterial`、`getMaterialProperties`、`getLanguage`は引数で受け取り、main.jsをimportしません。変化する値は取得関数で渡します。`renderMaterial`の破壊UI更新・未保存フラグ・条件表示の更新、保存ハンドラの塑性荷重分率の整理、カタログ照合、`api`呼び出しはmain.jsに残しています（呼び出し順も維持）。3D選択、解析実行（`lastAnalysis`・`startJob`）、ワーカーには触れていません。
 `tests/ui-material-form.test.mjs`が偽DOMで確認します。実ブラウザでの動作確認は別途必要です。
+
+## 第7スライス: 試験・適応・内部領域フォーム
+`src/ui/study-form-ui.js`（`createStudyFormUi`）に、入力欄の読み書きだけを行う5関数を移しました。挙動は変えていません。
+
+- `readBrowserStudyControls` / `writeBrowserStudyControls`（ブラウザ試験の制御欄。チェックボックスは`checked`、他は`value`）
+- `restoreAdaptiveOptions`（適応メッシュ設定の復元。既定値と百分率換算を含む）
+- `internalOptions` / `restoreInternalFields`（内部流体領域の囲い・種点・ポート面）
+
+`$`と`browserStudyControls`は引数で受け取り、main.jsをimportしません。3D選択、`lastAnalysis`、ジョブ、ワーカーには触れていません。
+`tests/ui-study-form.test.mjs`が偽DOMで確認します。実ブラウザでの動作確認は別途必要です。
+
+英語版: [en/ui-state-separation.md](en/ui-state-separation.md)

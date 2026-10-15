@@ -36,7 +36,7 @@
 
 - 任意フック `buildOptions({data})`: ワーカーの `build()` が `data.options` の後ろへ展開する分野別メッシュオプションを返す。creepingFlow のみ実装（`maxElements` を `min(8000, options.maxElements ?? 8000)` に制限）。従来の `stokes?{…}:{}` 分岐と同じ位置・同じ値。
 - 任意フック `adaptive({data,mesh,solve,progress,observe})`: 適応細分化ループの呼び出し（上限パラメータの既定値を含む）。構造のみ実装（応力・ひずみ指標が構造結果に依存するため）。他分野は `validate` が適応を既に拒否しており到達しない。到達した場合の防御として、ワーカーは `adaptive` を持たないアダプタに同じメッセージ「Adaptive refinement currently supports structural analysis only」で失敗させる。
-- ワーカーに残したもの: `build`/`solve` クロージャ、メッシュ生成呼び出し、円筒・平面 CAD 領域とユーザー細分化指定の合成、メッシュ観測、`operation==='mesh'` と適応の分岐、`stokes`/`flow` による境界転送のスキップ（`boundary-transfer` ステージ）、`thermal` の温度範囲チェック。いずれも共通オーケストレーションまたは後処理で、フック化すると挙動差の危険が大きいため。
+- ワーカーに残したもの: `build`/`solve` クロージャ、メッシュ生成呼び出し、円筒・平面 CAD 領域とユーザー細分化指定の合成、メッシュ観測、`operation==='mesh'` と適応の分岐、`stokes`/`flow` による境界転送のスキップ（破壊・疲労評価の呼び出し（`boundary-transfer` スキップと温度範囲チェックは下記の後処理スライスで移管）。いずれも共通オーケストレーションまたは後処理で、フック化すると挙動差の危険が大きいため。
 - 固定: `tests/solver-adapter-build.test.mjs`（移管前コードで取得した22ケース: 構造適応・熱適応拒否・メッシュのみ・STL・fluidDomain・流れ/Stokes の build と要素数上限。タイミングを除く全メッセージのダイジェストを含む）。
 
 ## 未実施（MOD1 は未完了）
@@ -47,3 +47,10 @@
 ## テスト
 
 `tests/solver-adapter-validation.test.mjs`（39ケースの拒否メッセージ・失敗ステージ/コード・優先順位を、移管前のコードで取得した固定値で検証）、`tests/solver-adapter-registry.test.mjs`（レジストリ参照、未登録 kind のフォールバック、operation の扱い、拒否メッセージ）と既存の `tests/worker-pipeline.test.mjs`。
+
+## 後処理フックの移管（第9スライス）
+
+- 任意フラグ `skipsBoundaryTransfer`: `true` のとき、ワーカーは `boundary-transfer` ステージと「Transferring boundary regions…」進捗を従来どおり出しつつ、`transferConditions` を呼ばず `{reports:[]}` を渡す。`creepingFlow` / `channelFlow` が設定（従来の `stokes||flow` 判定の置換）。
+- 任意フック `postprocess({data,result})`: ワーカーの `postprocess` ステージで、共通の破壊・疲労評価の後、`result.performance` 設定の前に呼ばれる。`thermal` のみ実装（最終温度場、過渡の初期温度、履歴の最小/最大に対する材料温度範囲チェック。エラーは従来どおり）。
+- ワーカーに残したもの: 破壊・疲労評価の呼び出しと `study.kind!=='structural'` ガード。ガードは非構造の全分野（および熱応力・モーダル）を拒否する共有の評価可否ゲートで、1分野の規則ではない。移すと他の全アダプタが拒否フック（または既定）を持たなければ同じエラー・順序を保てないため残した。順序は不変: 破壊、疲労、アダプタ `postprocess`、performance、送出。
+- 固定: `tests/solver-adapter-post.test.mjs`（移管前コードで取得した20ケース: 流れ/Stokes の解と評価ガード、熱の定常/過渡の範囲内外、構造の破壊/疲労、音響。タイミングを除く全メッセージのダイジェスト）。

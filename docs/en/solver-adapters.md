@@ -36,7 +36,7 @@ Shared guards live in `src/solver-adapters/validation.js`; each adapter's `valid
 
 - Optional hook `buildOptions({data})`: returns discipline-specific mesh options that the worker's `build()` spreads after `data.options`. Only creepingFlow implements it (caps `maxElements` at `min(8000, options.maxElements ?? 8000)`), at the same position and with the same value as the former `stokes?{...}:{}` branch.
 - Optional hook `adaptive({data,mesh,solve,progress,observe})`: invokes the adaptive refinement loop (including its default limits). Only structural implements it, because the indicators need structural stress/strain fields. Other disciplines never reach it since `validate` already rejects adaptive; as a guard the worker fails an adapter without `adaptive` with the same message ("Adaptive refinement currently supports structural analysis only").
-- Stays in the worker: the `build`/`solve` closures, the mesh-generation call, merging of cylindrical/planar CAD regions and user refinements, mesh observation, the `operation==='mesh'` vs adaptive branching, skipping boundary transfer for flow/Stokes (`boundary-transfer` stage) and the thermal temperature-range check. These are shared orchestration or post-processing, and hooking them would risk behavior drift.
+- Stays in the worker: the `build`/`solve` closures, the mesh-generation call, merging of cylindrical/planar CAD regions and user refinements, mesh observation, the `operation==='mesh'` vs adaptive branching, the fracture/fatigue assessment calls. These are shared orchestration or post-processing, and hooking them would risk behavior drift. (Boundary-transfer skipping and the thermal temperature-range check moved out in the post-processing slice below.)
 - Pinned by `tests/solver-adapter-build.test.mjs` (22 cases recorded from the pre-move code: structural adaptive, thermal/other adaptive rejection, mesh-only, STL, fluidDomain, flow/Stokes build and element cap; includes a digest of all non-timing messages).
 
 ## Not done (MOD1 is not complete)
@@ -47,3 +47,10 @@ Shared guards live in `src/solver-adapters/validation.js`; each adapter's `valid
 ## Tests
 
 `tests/solver-adapter-validation.test.mjs` (39 cases pinning rejection messages, failure stage/code and precedence with values recorded from the pre-move code), `tests/solver-adapter-registry.test.mjs` (registry lookup, fallback for unknown kinds, operation handling, rejection messages) plus the existing `tests/worker-pipeline.test.mjs`.
+
+## Post-processing hooks (slice 9)
+
+- Optional flag `skipsBoundaryTransfer`: when `true` the worker still enters the `boundary-transfer` stage and emits the "Transferring boundary regions…" progress, but passes `{reports:[]}` instead of calling `transferConditions`. Set by `creepingFlow` and `channelFlow` (replaces the worker's `stokes||flow` test).
+- Optional hook `postprocess({data,result})`: called in the worker's `postprocess` stage after the generic fracture/fatigue assessments and before `result.performance` is set. Implemented only by `thermal` (material temperature-range check of the final field, the transient initial temperature and each history min/max; same errors as before).
+- Stays in the worker: the fracture/fatigue assessment calls and their `study.kind!=='structural'` guards. The guards reject every non-structural study (and thermal-stress/modal), so they are a shared assessment-support gate rather than one discipline's rule; moving them would force every other adapter to carry a rejecting hook (or a default) to keep the same error and ordering. Ordering is unchanged: fracture, fatigue, adapter `postprocess`, performance, delivery.
+- Pinned by `tests/solver-adapter-post.test.mjs` (20 cases recorded from the pre-move code: flow/Stokes solves and their assessment guards, thermal steady/transient in/out of range, structural fracture/fatigue, acoustic; digest of all non-timing messages).
