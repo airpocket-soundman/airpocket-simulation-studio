@@ -2,7 +2,7 @@
 
 Japanese: [../perf-browser-plan.md](../perf-browser-plan.md)
 
-**This is a plan and is not implemented.** Node-side measurement is in [performance-measurement.md](performance-measurement.md) (`scripts/perf-measure.mjs`). This document designs `scripts/perf-browser.mjs`, which will measure what PERF1 asks for: browser memory, time and cancel response. Until it exists, nothing is claimed about browser values. Results will be measurements, not support limits or guarantees.
+**Status: script implemented, real-browser run pending.** `scripts/perf-browser.mjs` (driven through the stdio connector; unit-tested with a fake connector) exists, but no real-browser values have been measured. The "Approach" below is the original CDP/tab-API design; the implementation instead uses the stdio connector (`jobStatus`/`jobEvents`/`cancelJob`), so times are host-observed rather than in-page `performance.now()`, and memory is optional via an operator-pasted `window.__perfProbe`. See [performance-measurement.md](performance-measurement.md) for usage. Original text: Node-side measurement is in [performance-measurement.md](performance-measurement.md) (`scripts/perf-measure.mjs`). This document designs `scripts/perf-browser.mjs`, which will measure what PERF1 asks for: browser memory, time and cancel response. Until it exists, nothing is claimed about browser values. Results will be measurements, not support limits or guarantees.
 
 ## Goal and scope
 
