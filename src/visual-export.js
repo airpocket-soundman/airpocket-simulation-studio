@@ -4,6 +4,14 @@ export function animationState(kind,phase,{scale=1,frames=1,min=0,max=1}={}){
  return {angle:phase*2*Math.PI,deformScale:scale*(1-Math.cos(phase*2*Math.PI))/2,frame:Math.min(frames-1,Math.floor(phase*frames)),position:min+(max-min)*phase};
 }
 
+// A WebM with a header but no Matroska Cluster (ID 1F 43 B6 75) has no video frames and is unusable.
+export async function hasVideoFrames(blob){
+ if(!blob||blob.size<=0)return false;
+ const bytes=new Uint8Array(await blob.arrayBuffer());
+ for(let i=0;i+3<bytes.length;i++)if(bytes[i]===0x1f&&bytes[i+1]===0x43&&bytes[i+2]===0xb6&&bytes[i+3]===0x75)return true;
+ return false;
+}
+
 export function installVisualExport({renderer,scene,camera,controls,getAnalysis,redraw,language,translate}){
  const $=id=>document.getElementById(id),host=document.createElement('details');
  host.innerHTML=`<summary>画像・アニメーションを保存</summary><label><input id="result-surface" type="checkbox" checked> 結果の表面を表示</label><label><input id="result-surface-wire" type="checkbox"> 結果の表面メッシュを表示</label><button id="view-png">表示中の画像をPNGで保存</button><label>アニメーションの種類<select id="animation-kind"><option value="orbit">モデルを一周</option><option value="deformation">変形を往復（表示用）</option><option value="time">過渡音響の時間変化</option><option value="slice">断面を移動</option></select></label><label>動画の長さ（秒）<input id="animation-seconds" type="number" value="4" min="1" max="15" step="1"></label><div class="row"><button id="animation-preview">再生</button><button id="animation-save">WebM動画で保存</button><button id="animation-stop" disabled>再生を止める</button></div><p>画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化は保存した過渡音響フレームを使い、動画時間は表示用に伸縮します。</p><p id="visual-export-status" role="status"></p><a id="visual-export-download" hidden></a>`;
@@ -42,7 +50,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   active=state;controls.enabled=false;controls.enableDamping=false;message('再生を開始しています。','Starting playback.');
   const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='animation-stop'&&el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);
   locked.forEach(el=>{el.disabled=true;});$('animation-stop').disabled=false;
-  let recorder,stream,chunks=[],finished;
+  let recorder,stream,chunks=[],finished,completed=false;
   try{
    if(record){capture();stream=canvas.captureStream(24);recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:5000000});finished=new Promise((resolve,reject)=>{recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};recorder.onstop=resolve;recorder.onerror=e=>reject(e.error||Error('Recording failed'));});finished.catch(()=>{state.stop=true;});recorder.start();}
    const started=performance.now(),offset=saved.position.clone().sub(saved.target);
@@ -51,13 +59,13 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
     else if(kind==='deformation'){$('deform-scale').value=s.deformScale;redraw();}
     else if(kind==='time'){time.value=s.frame;time.dispatchEvent(new Event('input'));}
     else {$('clip-enabled').checked=true;$('clip-position').value=s.position;$('clip-position').dispatchEvent(new Event('input'));}
-    message(kind==='time'?'表示時間 '+result.snapshots[s.frame].time.toPrecision(5)+' s（動画は表示用の時間尺度）':kind==='deformation'?'表示用の変形往復 · 倍率 '+s.deformScale.toPrecision(4):'アニメーション '+kind+' · '+Math.round(phase*100)+'%',kind==='time'?'Physical time '+result.snapshots[s.frame].time.toPrecision(5)+' s (visualization time scale)':kind==='deformation'?'Visual deformation cycle · scale '+s.deformScale.toPrecision(4):'Animation '+kind+' · '+Math.round(phase*100)+'%');capture();onProgress({fraction:phase,kind,physicalTimeSeconds:kind==='time'?result.snapshots[s.frame].time:undefined});if(phase>=1)resolve();else requestAnimationFrame(tick);
+    message(kind==='time'?'表示時間 '+result.snapshots[s.frame].time.toPrecision(5)+' s（動画は表示用の時間尺度）':kind==='deformation'?'表示用の変形往復 · 倍率 '+s.deformScale.toPrecision(4):'アニメーション '+kind+' · '+Math.round(phase*100)+'%',kind==='time'?'Physical time '+result.snapshots[s.frame].time.toPrecision(5)+' s (visualization time scale)':kind==='deformation'?'Visual deformation cycle · scale '+s.deformScale.toPrecision(4):'Animation '+kind+' · '+Math.round(phase*100)+'%');capture();onProgress({fraction:phase,kind,physicalTimeSeconds:kind==='time'?result.snapshots[s.frame].time:undefined});if(phase>=1){completed=true;resolve();}else requestAnimationFrame(tick);
    }catch(error){reject(error);}}requestAnimationFrame(tick);});
   }finally{
-   try{if(recorder&&recorder.state!=='inactive')recorder.stop();if(finished)await finished;}
+   try{if(recorder&&recorder.state==='recording'&&completed&&!state.stop){capture();stream?.getVideoTracks?.()[0]?.requestFrame?.();await new Promise(resolve=>setTimeout(resolve,150));try{recorder.requestData?.();}catch{}}if(recorder&&recorder.state!=='inactive')recorder.stop();if(finished)await finished;}
    finally{stream?.getTracks().forEach(track=>track.stop());camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}}
   }
-  const blob=record&&chunks.length?new Blob(chunks,{type:mime}):null;if(save&&blob&&!state.stop)download(blob,'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
+  const blob=record&&chunks.length?new Blob(chunks,{type:mime}):null;if(record&&blob&&!state.stop&&!await hasVideoFrames(blob))throw Error('Recording produced no video frames');if(save&&blob&&!state.stop)download(blob,'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
   if(state.stop)throw Error('Export cancelled');if(record&&!blob)throw Error('Recording produced no data');return blob;
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
