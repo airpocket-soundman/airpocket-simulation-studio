@@ -6,6 +6,7 @@ As of 2026-10-14. The main differentiator is enabling the user's own LLM to oper
 
 | Feature group | Current shared/browser API | Current MCP | Next work |
 |---|---|---|---|
+| Experimental native external flow | nativeFlowApi connection/start/status/cancel/integrity/view/JSON/PNG through a separate loopback host | Not integrated into existing MCP; separate from WASM analysis | Cow direct/Studio rerun equivalence verified for a fixed approved case. Wall treatment/full residuals/accuracy and shared jobs/cases/MCP remain pending. See su2-native.md |
 | Operation contract discovery | studioApi.getBrowserOperationContracts | studio_browser_contracts (no session; maximum 10 entries/65,536 UTF-8 bytes) | Nested applicability/physical validation stays in adapters |
 | Live sessions | browser-session and shared APIs | Optional studio_browser_sessions/studio_browser_call (82 scoped methods) | Local GUI job monitoring verified; continue public HTTPS connectivity and reconnection |
 | Capabilities | studioApi.getCapabilities; diagnoseExecution/preflight.selectedObservation (profile selection) | studio_capabilities; selectedObservation in diagnosis/preflight and MCP-only runtime | Extend required inputs, validity limits and all combinations |

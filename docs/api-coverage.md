@@ -6,6 +6,7 @@
 
 | 機能群 | 現行共通/ブラウザAPI | 現行MCP | 次の作業 |
 |---|---|---|---|
+| ネイティブ外部流れ（試験版） | nativeFlowApiの接続・開始・状態・取消・結果照合・表示・JSON/PNG、別loopbackホスト | 既存MCPには未接続。通常のWASM解析とは独立 | 牛の直接/Studio再計算一致を確認。固定の承認済みケースのみ。壁処理・全残差・精度、共通ジョブ/ケース/MCPは未完了。詳細はsu2-native.md |
 | 操作契約の発見 | studioApi.getBrowserOperationContracts | studio_browser_contracts（session不要・最大10件/65,536 UTF-8バイト） | nested適用性・物理検証は実adapterで維持 |
 | ライブ接続 | browser-sessionと共有API | 接続モードのstudio_browser_sessions/studio_browser_call（82操作、許可範囲付き） | ローカル実画面でGUIジョブ監視を確認。公開HTTPS接続・再接続を継続 |
 | 対応能力 | studioApi.getCapabilities、diagnoseExecution/preflight.selectedObservation（観測profile選択） | studio_capabilities、診断/事前検査のselectedObservation・MCP限定runtime | 必要入力・有効範囲・全組合せへ拡張 |

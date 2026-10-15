@@ -213,14 +213,14 @@
       "title": "流体領域を作り、流れを解析",
       "status": "building",
       "category": "流体",
-      "detail": "通常風速の外部流れを新規ソルバーの第一優先として着手。SU2 8.5.0の実験用ネイティブアダプターで公式円柱の実行、中間残差、結果ハッシュ、取消・時間切れを確認。独立精度検証、3D/境界層、乱流、共通結果・GUI・MCP接続と牛の解析は未完了。",
+      "detail": "通常風速の外部流れに着手。SU2 8.5.0・牛の3D定常SA RANSを直接実行し、実StudioブラウザAPIから別プロセスで再実行。全節点圧力・速度と出力SHAが一致。固定ケース用の試験用接続/表示であり、壁面116点の未収束、速度/乱流残差未達、境界層/精度検証と共通ジョブ・MCP統合は未完了。",
       "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。",
       "titleEn": "Create fluid regions and simulate flow",
-      "detailEn": "Started ordinary-speed external flow as the first new solver. Experimental SU2 8.5.0 native adapter runs the official cylinder, reports residuals/result hashes and verifies cancellation/timeouts. Independent accuracy, 3D/boundary layers, turbulence, shared results/GUI/MCP and cow analysis remain incomplete.",
+      "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work.",
       "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
       "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete.",
-      "evidence": "docs/evidence/2026-10-15-su2-native.json"
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json"
     },
     {
       "id": "GPU1",

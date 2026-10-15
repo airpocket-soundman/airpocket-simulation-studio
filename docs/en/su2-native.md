@@ -1,17 +1,34 @@
-# Native SU2 external-flow introduction
+# Native SU2 external-flow integration
 
 [日本語](../su2-native.md)
 
-2026-10-15. The experimental adapter is `scripts/su2-native.mjs`. It is not registered in the browser solver, GUI or MCP. This is native execution, separate from existing WASM, and not a finished browser-only capability.
+2026-10-15. Experimental native adapter, fixed-case loopback host, Studio panel and browser API are implemented. This is separate from WASM and is not integrated into the public release, ordinary solver selection or existing MCP tools. Arbitrary CAD meshing is not automatic.
 
-Official SU2 v8.5.0 Windows OpenMP starts and runs the official steady incompressible cylinder case. With the official 5000-iteration limit it stops at iteration 105 with log10 pressure residual -10.0074 and produces VTU fields. This establishes execution, not independent physical validation or cow analysis. The example's density 998.2 kg/m³, viscosity 0.000798 Pa·s and speed 8e-6 m/s must not be reused as cow airflow conditions.
+## Cow direct/Studio equivalence
 
-Source: https://github.com/su2code/SU2/releases/tag/v8.5.0 . GitHub reports SHA-256 `4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11` for `SU2-v8.5.0-win64-omp.zip`; extract its nested win64-omp.zip. Verify the hash. No system PATH or service changes. Retain SU2 licenses/notices; product redistribution review remains pending.
+User-approved conditions: representative 20 C air, 5 m/s head-to-tail, no ground. Assumed density 1.204 kg/m³ and viscosity 1.81e-5 Pa·s. Steady incompressible RANS, SA, standard wall function and SU2 FREESTREAM_NU_FACTOR=10. Prefer freestreamNuFactor; the initial test's turbulentViscosityRatio is a compatible legacy name for this modified-kinematic-viscosity/molecular-viscosity ratio, not the eddy-viscosity ratio itself.
 
-The adapter requires explicit properties, velocity, metre-based SU2 mesh, wall/farfield markers, iteration limit and residual target. It writes only a new job directory and launches without a shell using one thread. It exposes intermediate CSV residuals, input/mesh identity and final VTU/CSV hashes. Cancellation/timeouts await process close. Pressure residual achievement, successful execution and physical accuracy are distinct; results remain provisional.
+Gmsh WASM 0.3.0 normalized STEP coordinates to metres and generated 7,716 points, 37,455 tetrahedra and 4,262 cow surface triangles, without prism layers. After direct execution, nativeFlowApi.startJob in the actual Studio browser page launched a separate process with identical input/mesh/settings. Both reached iteration 184. All 7,716 pressures and 23,148 velocity components, mesh/surface pressure, VTU and history hashes matched exactly. [Evidence](../evidence/2026-10-15-cow-flow-equivalence.json), [comparison](../evidence/2026-10-15-cow-flow-comparison.png). Headless Chrome was used without desktop interaction.
 
-Remaining work: independent references and balance/convergence checks; 3D/boundary-layer meshing; turbulence/unsteadiness at the target Reynolds numbers; VTU conversion; shared jobs, MCP and browser connectivity; storage/views/exports; distributed Skill and examples. Run the cow only after integration. WASM porting is not a prerequisite.
+This proves path reproducibility, not accuracy. Pressure log10 residual -5 alone stopped the solver; velocity/turbulence targets were not all met. Wall-function y+ failed at 116 points in the final iteration; maximum y+ was approximately 1706. The adapter distinguishes pressure stopping from complete numerical convergence and returns SU2_WALL_MODEL_NOT_CONVERGED with repair candidates. Do not use this result for quantitative drag/local-pressure predictions.
 
-Official configuration: https://github.com/su2code/SU2/blob/v8.5.0/TestCases/incomp_navierstokes/cylinder/incomp_cylinder.cfg . Mesh: https://github.com/su2code/TestCases/tree/master/incomp_navierstokes/cylinder . Pinning the mesh commit/hash in a reproducible setup script remains pending.
+## Local setup
 
-Adapter proof: explicit CFL 100 and three multigrid levels reached pressure log10 residual -6.00649 at iteration 56. Real cancellation and timeout both awaited process close. These numerical settings differ from the official example. Evidence: [native adapter record](../evidence/2026-10-15-su2-native.json). Opt-in Windows setup: `node scripts/setup-su2.mjs`; no automatic download at import.
+1. Opt in on Windows x64 with node scripts/setup-su2.mjs. Imports do not download code or modify system PATH.
+2. Prepare a checked SU2 mesh and approved input. The initial mesh remains in the working area's .qa/cow-flow/cow.su2; see evidence.input. Meshing is currently a separate preparation step.
+3. Create a local JSON with origin, executable, meshPath, outputRoot and approvedInput. Paths must be absolute. Run node scripts/native-flow-host.mjs approved-case.json. Origin must exactly match Studio.
+4. In Studio's experimental native external-flow panel enter endpoint/code, inspect conditions and run. Only local development-server connectivity is verified; public HTTPS is unverified.
+
+The host binds to loopback and checks Origin/Host/Bearer. It accepts only the configured mesh and approved input, never client-selected filesystem paths. One active/four retained jobs, cancellation/settlement and result SHA-256 checking are provided. Authentication is separate from existing browser MCP permissions.
+
+## APIs and limitations
+
+window.nativeFlowApi exposes configure/connect/startJob/getJob/cancelJob/getResult/showResult/setField/capture/getDisplayedResult. startJob computes; showResult displays retrieved data. Pressure/velocity, a center slice and vectors, JSON and PNG exports are available. Results use the experimental panel format, not existing caseApi archives. Do not invent MCP tools for these operations.
+
+Remaining: wall mesh/treatment, complete residual/balance/mesh convergence, independent accuracy checks, general meshing, unsteady/additional turbulence models, shared job/case/probe/MCP integration, public connectivity and distributed Skills. WASM porting is not a prerequisite.
+
+## Pinned runtime and initial example
+
+Official release: https://github.com/su2code/SU2/releases/tag/v8.5.0 . Windows OpenMP archive SHA-256: 4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11. Retain licenses/notices; product redistribution review remains pending.
+
+The earlier cylinder [record](../evidence/2026-10-15-su2-native.json) distinguishes the initial timeout, later numerical-settings success and cancellation. Its pressure criterion is not a physical-accuracy certification.

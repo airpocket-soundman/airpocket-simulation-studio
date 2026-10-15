@@ -9,6 +9,7 @@ test('discovery separates host support, candidates and unavailable live MCP',asy
  assert.ok(!node.engines[0].methods.includes('webgpu-pcg'));
  assert.ok(createStudioApi().getCapabilities().engines[0].methods.includes('webgpu-pcg'));
  assert.equal(node.nativeMachineCode,false);assert.equal(node.operations.liveBrowserMcp,false);
+ assert.equal(node.experimentalNativeFlow.fixedApprovedCaseOnly,true);assert.equal(node.experimentalNativeFlow.mcpIntegrated,false);assert.equal(node.experimentalNativeFlow.physicalAccuracyVerified,false);
  assert.ok(node.candidates.every(c=>!c.executable));
  node.engines[0].methods.push('bad');assert.ok(!getCapabilities().engines[0].methods.includes('bad'));
  assert.throws(()=>getCapabilities({target:'remote'}),/target/);

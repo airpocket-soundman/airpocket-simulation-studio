@@ -7,6 +7,7 @@ export function getCapabilities({target='browser',analysisIsolation='worker'}={}
  if(!['worker','process'].includes(analysisIsolation)||target==='browser'&&analysisIsolation!=='worker')throw Error('Invalid target analysis isolation');
  return {
   schemaVersion:1,target,execution:'local-wasm-and-javascript',nativeMachineCode:false,
+  experimentalNativeFlow:{available:true,solver:'SU2',expectedVersion:'8.5.0',execution:'separate-local-native-process',host:'scripts/native-flow-host.mjs',browserApi:'nativeFlowApi',requiresExplicitConnection:true,fixedApprovedCaseOnly:true,sharedJobIntegration:false,mcpIntegrated:false,publicHttpsVerified:false,physicalAccuracyVerified:false},
   executionIsolation:{mode:analysisIsolation,availableModes:target==='node'?['worker','process']:['worker'],selection:target==='node'?'host-startup':'browser-worker',automaticFallback:false,rootFixProven:false,...(target==='node'?{processFailureEvent:{stage:'runtime-failure',solver:'node-process',requiresMode:'process',boundedStderr:true}}:{})},
   runtimeDetectionRequired:target==='browser'?['crossOriginIsolated','webgpu-adapter']:[],
   units:{geometry:'mm',youngModulus:'Pa',force:'N',temperature:'degC',velocity:'m/s',pressure:'Pa'},
