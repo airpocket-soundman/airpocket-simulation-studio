@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-15",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38739349155",
+  "headSha": "8ea074ae981c470a4e47e0868057afe3384c490a",
+  "version": "0.44.0",
+  "jobs": [
+    {"name": "verify", "conclusion": "success", "jobId": 116436686402},
+    {"name": "deploy", "conclusion": "success", "jobId": 116439139148},
+    {"name": "verify-published", "conclusion": "success", "jobId": 116439336604}
+  ],
+  "verifyPublished": {
+    "passLines": 27,
+    "failLines": 0,
+    "summaryLine": "Deployed 0.44.0 8ea074a verified in 32.37 s"
+  },
+  "publishedManifest": {
+    "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/runtime-manifest.json",
+    "version": "0.44.0",
+    "revision": "8ea074ae981c470a4e47e0868057afe3384c490a",
+    "dirty": false
+  },
+  "tag": "release-8ea074ae981c470a4e47e0868057afe3384c490a",
+  "tasksMovedToReleasedByThisRecord": ["HEADLESSLIFECYCLE1", "BROWSERCONTRACTS1"],
+  "note": "These two tasks were moved to ready earlier today under the owner's Node 24 gate policy (docs/evidence/2026-10-15-node24-gate-policy.json). Their code is part of the published candidate above. PUBLICHTTPS1 is verification-only and stays ready; the publication-milestone gate is not closed by task status.",
+  "notVerified": [
+    "This record proves that the CI-verified candidate was deployed and passed the 27 published checks; it does not prove the V8 root cause is fixed (RUNTIMEWASM1).",
+    "Real-browser behavior of the published page is covered only by the evidence files cited by each task."
+  ]
+}
