@@ -1,0 +1,878 @@
+{
+ "schemaVersion": 1,
+ "scope": "node; shared modules; not browser UI, not network",
+ "configuration": "full",
+ "generatedAt": "2026-10-15T05:53:12.851Z",
+ "runtime": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64"
+ },
+ "limits": {
+  "maxCases": 8,
+  "maxViews": 16,
+  "maxMeasurements": 100,
+  "maxMeasurementArchiveBytes": 300000,
+  "chunkBytes": 65536,
+  "maxBundleBytes": 100000000
+ },
+ "requested": {
+  "kinds": [
+   "elastic",
+   "thermal",
+   "acoustic",
+   "modal",
+   "acousticTransient",
+   "stokes",
+   "channelFlow",
+   "plastic",
+   "hyperelastic",
+   "fatigue",
+   "fracture"
+  ],
+  "cases": 8,
+  "views": 16,
+  "measurements": 100
+ },
+ "note": "Cases replicate one real analysis output under distinct names (the store accepts duplicate outputs); distinctPhysicalOutputs records this.",
+ "summary": {
+  "status": "pass",
+  "kindsRequested": 11,
+  "passed": 11,
+  "failed": 0,
+  "skipped": 0,
+  "wallMs": 219323.24
+ },
+ "kinds": [
+  {
+   "kind": "elastic",
+   "label": "Linear elastic bar",
+   "status": "pass",
+   "analysisMs": 972.17,
+   "resultKind": "elastic",
+   "resultFeatures": [],
+   "singleOutputBytes": 107485,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 58.56,
+   "resultRevision": "sha256:f52900b37a55f75712dda74b4e91f7682c034c59059293937c0fbd331d0909f4",
+   "measurementBuildMs": 3539.56,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 102369
+   },
+   "validatingImportMs": 1368.76,
+   "exportAndValidateMs": 1555.92,
+   "commitMs": 1420.27,
+   "bytes": {
+    "bundle": 970383,
+    "caseArchive": 860191,
+    "namedViewArchive": 7727,
+    "measurementArchive": 102369
+   },
+   "transfer": {
+    "chunks": 15,
+    "uploadChunks": 15,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:82f2e7534e17b6812c7bbce959f3ef43d1e3e5da2287ae16766d5cadba30d06c",
+    "readMs": 28.44,
+    "beginExportMs": 1551.96,
+    "writeMs": 127.84
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 12917.61,
+   "memory": {
+    "peakRssBytes": 373620736,
+    "peakHeapUsedBytes": 171796832
+   },
+   "processMaxRssBytesCumulative": 375705600
+  },
+  {
+   "kind": "thermal",
+   "label": "Steady thermal",
+   "status": "pass",
+   "analysisMs": 853.62,
+   "resultKind": "thermal",
+   "resultFeatures": [],
+   "singleOutputBytes": 32151,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 31.73,
+   "resultRevision": "sha256:8674d5b36c7f2488b9e5f0a5cc4de28532f04d6f33c3936994e9c46bd525e392",
+   "measurementBuildMs": 2034.39,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 95652
+   },
+   "validatingImportMs": 737.26,
+   "exportAndValidateMs": 703.98,
+   "commitMs": 629.27,
+   "bytes": {
+    "bundle": 361002,
+    "caseArchive": 257519,
+    "namedViewArchive": 7735,
+    "measurementArchive": 95652
+   },
+   "transfer": {
+    "chunks": 6,
+    "uploadChunks": 6,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:5827e5ac672089d9610ab269afa06d43cf7e0e81b1434e288cf0dad86a788a04",
+    "readMs": 7.76,
+    "beginExportMs": 706.65,
+    "writeMs": 42.8
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 6765.44,
+   "memory": {
+    "peakRssBytes": 567066624,
+    "peakHeapUsedBytes": 149856976
+   },
+   "processMaxRssBytesCumulative": 583577600
+  },
+  {
+   "kind": "acoustic",
+   "label": "Acoustic harmonic",
+   "status": "pass",
+   "analysisMs": 940.07,
+   "resultKind": "acoustic",
+   "resultFeatures": [],
+   "singleOutputBytes": 10577,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 14.01,
+   "resultRevision": "sha256:c80bc6f8e669ad757dea4a7de60cb177e32410ab360b89a26fc200bc551df3ee",
+   "measurementBuildMs": 1245.42,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 89860
+   },
+   "validatingImportMs": 251.97,
+   "exportAndValidateMs": 247.95,
+   "commitMs": 242.5,
+   "bytes": {
+    "bundle": 182578,
+    "caseArchive": 84935,
+    "namedViewArchive": 7687,
+    "measurementArchive": 89860
+   },
+   "transfer": {
+    "chunks": 3,
+    "uploadChunks": 3,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:5d258e036ece47aaa31b8e710e28ace489111dc1678b6e93ead91951a7c25692",
+    "readMs": 2.03,
+    "beginExportMs": 256.47,
+    "writeMs": 19.78
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 3631.47,
+   "memory": {
+    "peakRssBytes": 599207936,
+    "peakHeapUsedBytes": 175355000
+   },
+   "processMaxRssBytesCumulative": 629493760
+  },
+  {
+   "kind": "modal",
+   "label": "Modal (lumped Tet4)",
+   "status": "pass",
+   "analysisMs": 1052.51,
+   "resultKind": "modal",
+   "resultFeatures": [],
+   "singleOutputBytes": 28170,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 25.59,
+   "resultRevision": "sha256:ea351ba771744e29a103c000b35b42c131161394689aa17f9853a47d0d285d93",
+   "measurementBuildMs": 1786.4,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 112942
+   },
+   "validatingImportMs": 519.42,
+   "exportAndValidateMs": 569.66,
+   "commitMs": 528.52,
+   "bytes": {
+    "bundle": 346388,
+    "caseArchive": 225655,
+    "namedViewArchive": 7695,
+    "measurementArchive": 112942
+   },
+   "transfer": {
+    "chunks": 6,
+    "uploadChunks": 6,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:a269c10515cac68fa9f255d13ad03d97fd5fffba102ec45b281476f50bb16414",
+    "readMs": 4.37,
+    "beginExportMs": 560.15,
+    "writeMs": 36.32
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 5906.83,
+   "memory": {
+    "peakRssBytes": 661291008,
+    "peakHeapUsedBytes": 195963824
+   },
+   "processMaxRssBytesCumulative": 661422080
+  },
+  {
+   "kind": "acousticTransient",
+   "label": "Transient acoustic pulse",
+   "status": "pass",
+   "analysisMs": 890.33,
+   "resultKind": "acousticTransient",
+   "resultFeatures": [],
+   "singleOutputBytes": 78933,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 46.05,
+   "resultRevision": "sha256:940cf36ca0fa1f679a39571780f69fa49028e3ea2caab354bb2d0def2eaa2b45",
+   "measurementBuildMs": 2351.05,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 84460
+   },
+   "validatingImportMs": 788.2,
+   "exportAndValidateMs": 809.7,
+   "commitMs": 736.2,
+   "bytes": {
+    "bundle": 724352,
+    "caseArchive": 631855,
+    "namedViewArchive": 7941,
+    "measurementArchive": 84460
+   },
+   "transfer": {
+    "chunks": 12,
+    "uploadChunks": 12,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:d3aca03e95996d5e5c320fe5accff534337d97d9cbec7a2460b4506485f850c8",
+    "readMs": 13.42,
+    "beginExportMs": 807.28,
+    "writeMs": 77.78
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 7730.94,
+   "memory": {
+    "peakRssBytes": 622419968,
+    "peakHeapUsedBytes": 153474504
+   },
+   "processMaxRssBytesCumulative": 661422080
+  },
+  {
+   "kind": "stokes",
+   "label": "Creeping flow (Stokes P1)",
+   "status": "pass",
+   "analysisMs": 1011.52,
+   "resultKind": "stokes",
+   "resultFeatures": [
+    "stokes"
+   ],
+   "singleOutputBytes": 85825,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 112.48,
+   "resultRevision": "sha256:e53f6bfcdfcdb6ed3256e98edc8fa4fb30a1d488b153d7405ddaba41f87a3211",
+   "measurementBuildMs": 2925.57,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 104193
+   },
+   "validatingImportMs": 1320.94,
+   "exportAndValidateMs": 1437.29,
+   "commitMs": 1418.92,
+   "bytes": {
+    "bundle": 798903,
+    "caseArchive": 686903,
+    "namedViewArchive": 7711,
+    "measurementArchive": 104193
+   },
+   "transfer": {
+    "chunks": 13,
+    "uploadChunks": 13,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:694f161c53be5691b4eec76e40ccc2a98ddd8ed4c21e4cc42d0ff7edae517bad",
+    "readMs": 10.38,
+    "beginExportMs": 1419.77,
+    "writeMs": 94.58
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 11745.41,
+   "memory": {
+    "peakRssBytes": 673681408,
+    "peakHeapUsedBytes": 183808144
+   },
+   "processMaxRssBytesCumulative": 691056640
+  },
+  {
+   "kind": "channelFlow",
+   "label": "Channel flow",
+   "status": "pass",
+   "analysisMs": 985.9,
+   "resultKind": "channelFlow",
+   "resultFeatures": [],
+   "singleOutputBytes": 8754,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 17.03,
+   "resultRevision": "sha256:54d1f19a8e72febccbf84788422d6a255991102a32662d48b2b69f589b40d0f3",
+   "measurementBuildMs": 1264.22,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 85436
+   },
+   "validatingImportMs": 226.91,
+   "exportAndValidateMs": 239.26,
+   "commitMs": 238.84,
+   "bytes": {
+    "bundle": 163698,
+    "caseArchive": 70375,
+    "namedViewArchive": 7791,
+    "measurementArchive": 85436
+   },
+   "transfer": {
+    "chunks": 3,
+    "uploadChunks": 3,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:4bbfc91dbd379917fbcbd340ee901380367cca27b26689fbc4b0d3714b08d9b8",
+    "readMs": 1.87,
+    "beginExportMs": 259.76,
+    "writeMs": 18.77
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 3687.71,
+   "memory": {
+    "peakRssBytes": 604983296,
+    "peakHeapUsedBytes": 179531680
+   },
+   "processMaxRssBytesCumulative": 691056640
+  },
+  {
+   "kind": "plastic",
+   "label": "J2 plasticity",
+   "status": "pass",
+   "analysisMs": 1386.75,
+   "resultKind": "elastic",
+   "resultFeatures": [
+    "plasticity"
+   ],
+   "singleOutputBytes": 165782,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 100.35,
+   "resultRevision": "sha256:7aedea972d635f5f07e101448558796586a128e5b39c653340b5c20f2d1b8702",
+   "measurementBuildMs": 4941.77,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 107331
+   },
+   "validatingImportMs": 2148.3,
+   "exportAndValidateMs": 2225.96,
+   "commitMs": 1918.91,
+   "bytes": {
+    "bundle": 1441744,
+    "caseArchive": 1326567,
+    "namedViewArchive": 7750,
+    "measurementArchive": 107331
+   },
+   "transfer": {
+    "chunks": 22,
+    "uploadChunks": 22,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:2e1b6eda27193d3674e5a6dea0419b4df809eeda8cff5c8acac409baf5eb9db9",
+    "readMs": 19.4,
+    "beginExportMs": 2088.04,
+    "writeMs": 156.07
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 18136.68,
+   "memory": {
+    "peakRssBytes": 653922304,
+    "peakHeapUsedBytes": 263879416
+   },
+   "processMaxRssBytesCumulative": 691056640
+  },
+  {
+   "kind": "hyperelastic",
+   "label": "Neo-Hookean hyperelastic",
+   "status": "pass",
+   "analysisMs": 1084.24,
+   "resultKind": "elastic",
+   "resultFeatures": [
+    "hyperelastic"
+   ],
+   "singleOutputBytes": 152807,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 93.44,
+   "resultRevision": "sha256:06ed11d2bd4eb0141b55a456fe28e2481e1f34ba5f42f04fc9d89bcbed62c9bc",
+   "measurementBuildMs": 4948.63,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 100127
+   },
+   "validatingImportMs": 2181.52,
+   "exportAndValidateMs": 2484.47,
+   "commitMs": 5377.61,
+   "bytes": {
+    "bundle": 1330837,
+    "caseArchive": 1222807,
+    "namedViewArchive": 7807,
+    "measurementArchive": 100127
+   },
+   "transfer": {
+    "chunks": 21,
+    "uploadChunks": 21,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:b8e0e1c710e986958e33d3f2ec430d8e47ac486200b7edbca3d15776d919c1ee",
+    "readMs": 32.03,
+    "beginExportMs": 5454,
+    "writeMs": 397.21
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 28682.63,
+   "memory": {
+    "peakRssBytes": 642441216,
+    "peakHeapUsedBytes": 287723952
+   },
+   "processMaxRssBytesCumulative": 691056640
+  },
+  {
+   "kind": "fatigue",
+   "label": "Stress-life fatigue assessment",
+   "status": "pass",
+   "analysisMs": 4239.05,
+   "resultKind": "elastic",
+   "resultFeatures": [
+    "fatigue"
+   ],
+   "singleOutputBytes": 139018,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 278.45,
+   "resultRevision": "sha256:93e848068c028acac80589ed68bc7a37cd535aad5fd6d4ac092fdc00315fcbf1",
+   "measurementBuildMs": 13998.7,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 102369
+   },
+   "validatingImportMs": 5174.1,
+   "exportAndValidateMs": 4042.93,
+   "commitMs": 2990.83,
+   "bytes": {
+    "bundle": 1222647,
+    "caseArchive": 1112455,
+    "namedViewArchive": 7727,
+    "measurementArchive": 102369
+   },
+   "transfer": {
+    "chunks": 19,
+    "uploadChunks": 19,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:f28862d437ef429c876edaff25704638edee4ccf518f79e3ae9d37742aa7423b",
+    "readMs": 19.61,
+    "beginExportMs": 4054.64,
+    "writeMs": 145.32
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 41978.37,
+   "memory": {
+    "peakRssBytes": 640188416,
+    "peakHeapUsedBytes": 266453776
+   },
+   "processMaxRssBytesCumulative": 691056640
+  },
+  {
+   "kind": "fracture",
+   "label": "LEFM mode-I fracture assessment",
+   "status": "pass",
+   "analysisMs": 3304.85,
+   "resultKind": "elastic",
+   "resultFeatures": [
+    "fracture"
+   ],
+   "singleOutputBytes": 141630,
+   "distinctPhysicalOutputs": 1,
+   "caseAddMs": 101.51,
+   "resultRevision": "sha256:3e128be50113df141332f71f9e031f243e4266b760991310bb157f2ad5db91cc",
+   "measurementBuildMs": 11217.62,
+   "measurementLimit": {
+    "requested": 100,
+    "achieved": 100,
+    "stoppedBy": "configured count reached",
+    "archiveBytes": 102469
+   },
+   "validatingImportMs": 4215.62,
+   "exportAndValidateMs": 4858.25,
+   "commitMs": 5450.64,
+   "bytes": {
+    "bundle": 1243667,
+    "caseArchive": 1133359,
+    "namedViewArchive": 7743,
+    "measurementArchive": 102469
+   },
+   "transfer": {
+    "chunks": 19,
+    "uploadChunks": 19,
+    "maxChunkBytes": 65536,
+    "sha256": "sha256:9302ddfdccc97c59cbdb2e504d2df96a924f1190502c13b9d844cce7f26f040c",
+    "readMs": 21.84,
+    "beginExportMs": 5105.95,
+    "writeMs": 471.01
+   },
+   "verification": {
+    "hashEqual": true,
+    "byteLengthEqual": true,
+    "jsonEqualToBuiltBundle": true,
+    "exportApiEqualsBuilt": true,
+    "restoredEqualsBuilt": true,
+    "archiveRevisionEqual": true,
+    "counts": {
+     "cases": 8,
+     "views": 16,
+     "measurements": 100
+    },
+    "countsMatchConfig": true,
+    "restoredViewFields": {
+     "appliedViews": 16,
+     "mismatches": 0
+    },
+    "restoredMeasurementRecords": {
+     "checked": 100,
+     "trustFlagMismatches": 0
+    }
+   },
+   "wallMs": 41392.89,
+   "memory": {
+    "peakRssBytes": 630603776,
+    "peakHeapUsedBytes": 201243888
+   },
+   "processMaxRssBytesCumulative": 691056640
+  }
+ ],
+ "refusals": {
+  "checkedOnKind": "elastic",
+  "notExercised": [
+   "bundle larger than 100 MB (would require constructing >100 MB of cases; the size is bounded by 8 cases of at most 30000 tets each)"
+  ],
+  "checks": [
+   {
+    "name": "ninth case added to a full store",
+    "expectedMessagePattern": "/Maximum 8 cases/",
+    "refused": true,
+    "actualMessage": "Maximum 8 cases",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true,
+    "kind": "elastic"
+   },
+   {
+    "name": "9-case bundle import",
+    "expectedMessagePattern": "/Invalid case archive/",
+    "refused": true,
+    "actualMessage": "Invalid case archive",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "17-view bundle import",
+    "expectedMessagePattern": "/Invalid named view archive/",
+    "refused": true,
+    "actualMessage": "Invalid named view archive",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "101-measurement bundle import",
+    "expectedMessagePattern": "/Invalid measurement archive|exceeds 300000/",
+    "refused": true,
+    "actualMessage": "Invalid measurement archive",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "oversize chunk (65537 bytes) write",
+    "expectedMessagePattern": "/Invalid archive base64 chunk/",
+    "refused": true,
+    "actualMessage": "Invalid archive base64 chunk",
+    "matchesDocumentedMessage": true,
+    "chunkBytes": 65537
+   },
+   {
+    "name": "oversize read range (65537 bytes)",
+    "expectedMessagePattern": "/Invalid archive read range/",
+    "refused": true,
+    "actualMessage": "Invalid archive read range",
+    "matchesDocumentedMessage": true
+   },
+   {
+    "name": "import declared above 100 MB limit",
+    "expectedMessagePattern": "/Invalid archive import metadata/",
+    "refused": true,
+    "actualMessage": "Invalid archive import metadata",
+    "matchesDocumentedMessage": true,
+    "declaredBytes": 100000001
+   },
+   {
+    "name": "declared hash differs from content",
+    "expectedMessagePattern": "/Archive import hash mismatch/",
+    "refused": true,
+    "actualMessage": "Archive import hash mismatch",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "content byte flipped after hashing",
+    "expectedMessagePattern": "/Archive import hash mismatch/",
+    "refused": true,
+    "actualMessage": "Archive import hash mismatch",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "rehashed bundle with orphan view revision",
+    "expectedMessagePattern": "/matching saved result/",
+    "refused": true,
+    "actualMessage": "Named view has no matching saved result",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   },
+   {
+    "name": "stale expected archive revision",
+    "expectedMessagePattern": "/revision conflict/",
+    "refused": true,
+    "actualMessage": "Case view bundle revision conflict",
+    "matchesDocumentedMessage": true,
+    "stateUnchanged": true
+   }
+  ],
+  "allRefused": true
+ },
+ "notClaimed": [
+  "browser UI behaviour",
+  "real-Chrome rendering of any result kind",
+  "MCP/HTTP network transfer",
+  "published HTTPS",
+  "bundle exactly at 100 MB",
+  "distinct physical outputs per case (cases replicate one real output)"
+ ]
+}
