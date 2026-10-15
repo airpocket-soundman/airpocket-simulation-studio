@@ -11,15 +11,16 @@ English: [en/performance-measurement.md](en/performance-measurement.md)
 - 時間(ms): 全体、Worker起動からメッシュ生成開始まで、メッシュ生成、境界条件転送、解析段階、ソルバー本体(ソルバー報告の`solveMs`)、後処理(解析段階からソルバー本体を引いた残り。結果組立とメッセージ複製を含む)。段階境界はホスト側のイベント受信時刻から求めた近似である。
 - 冷間と温間: ケースごとに専用の子プロセスを起動し、その最初の実行を冷間、続く`--repeats`回(既定3)を温間とする。温間は中央値・最小・最大を記録する。温間でも毎回新しいWorkerを起動する。
 - ピークRSS: 子プロセスの`process.resourceUsage().maxRSS`(Node本体・Worker・WASMメモリを含むプロセス全体の最大値)。
+- 中止応答(`cancel`ブロック、追加項目): 既定では`structural-medium`と`thermal-steady`、`--cancel`で選択した全ケースが対象(`--no-cancel`で無効)。専用の子プロセス内で、ウォームアップ後に中止なしの温間実行を測って基準時間とし、`analyzeProject`の`AbortSignal`で次の2点で中止を要求する: (1) 最初の進捗・観測イベント受信直後、(2) 基準の温間総時間の中央値の50%経過時点。各点を`--repeats`回行い、中止要求から`analyzeProject`のPromiseが決着するまで(Worker終了後に決着する)の遅延を中央値・最小・最大で記録する。最終状態は`cancelled` / `completed-before-cancel`(競合で先に完了) / `error`のいずれか。子プロセスが自然終了(終了コード0、タイムアウト内)するかを`processReleased`として記録し、残存ハンドルがあれば終了せずタイムアウトで失敗になる。子プロセスのピークRSSも記録する。レポートのスキーマはversion 1のまま、ケースに`cancel`ブロックを追加しただけである。
 - 環境: Nodeとv8のバージョン、OS・アーキテクチャ、CPUモデル・論理CPU数、総メモリ、gitのリビジョン・ブランチ・未コミット変更の有無。
 
 ## 測定しないもの
 
-- ブラウザ(Chrome等)でのメモリ・時間・中止応答。PERF1の本体であり別途測定が必要。
+- ブラウザ(Chrome等)でのメモリ・時間・中止応答。PERF1の本体であり別途測定が必要(計画: [perf-browser-plan.md](perf-browser-plan.md))。`cancel`ブロックはNodeのWorker+AbortSignalのみで、ブラウザの中止応答は測定していない。
 - WebGPU・GPU。
 - ネットワーク、転送量、配布物サイズ、回線条件。
 - ブラウザのキャッシュ冷温(ここでの冷間はプロセス起動直後の意味で、ディスクやHTTPキャッシュは制御しない)。
-- メモリ上限・メモリ不足時の挙動、解析の中止応答。
+- メモリ上限・メモリ不足時の挙動。中止応答はNode側のみ測定済みで、ブラウザ側は未測定。
 - 実機・端末差の網羅。1台1回の測定は代表値ではない。
 
 ## 実行方法
@@ -27,6 +28,7 @@ English: [en/performance-measurement.md](en/performance-measurement.md)
 ```
 node scripts/perf-measure.mjs                      # 全ケース、.qa/perf-report.json へ出力
 node scripts/perf-measure.mjs --out <file> --repeats 1 --cases structural-tiny,thermal-steady
+node scripts/perf-measure.mjs --cases structural-medium --cancel --repeats 5   # 中止応答を含める
 node scripts/perf-measure.mjs --list
 ```
 
