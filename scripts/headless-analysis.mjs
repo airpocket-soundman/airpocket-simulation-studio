@@ -3,6 +3,7 @@ import {createAnalysisProcessWorker} from './analysis-process-worker.mjs';
 import {Worker} from 'node:worker_threads';
 import {createStudioApi} from '../src/studio-api.js';
 import {requireAnalysisPreflight} from '../src/analysis-preflight.js';
+import {validateRuntimeIdentity} from '../src/runtime-identity.js';
 export async function analyzeProject(project,options={},operation='elastic',runtime={}){
  const api=createStudioApi();api.loadProject(project);const input=api.exportProject();
  if(!input.sourceModel)throw Error('Project has no source model; import STEP/STL or use a built-in solid');
@@ -31,7 +32,7 @@ export async function analyzeProject(project,options={},operation='elastic',runt
    // Ownership ends only after Worker termination or process close, including cancellation.
    Promise.resolve(termination).then(()=>{
     if(error){reject(error);return;}
-    try{resolve({...result,...(result.result?{result:{...result.result,analysisAssessment}}:{}),analysisAssessment,input,calculation:{operation,options:settings,...(isolation==='process'?{execution:{isolation:'process'}}:{})}});}catch(failure){reject(failure);}
+    try{const {runtimeIdentity:providedIdentity,...output}=result,identity=validateRuntimeIdentity(providedIdentity);if(identity&&(identity.target!=='node'||identity.isolation!==(isolation==='process'?'process':'worker-thread')))throw Error('Analysis runtime identity does not match the execution host');resolve({...output,...(output.result?{result:{...output.result,analysisAssessment}}:{}),analysisAssessment,input,calculation:{operation,options:settings,...(identity?{runtimeIdentity:identity}:{}),...(isolation==='process'?{execution:{isolation:'process'}}:{})}});}catch(failure){reject(failure);}
    },cleanupFailed);
   };
   timer=setTimeout(()=>finish(Error('Analysis exceeded '+timeoutMs/1000+' seconds')),timeoutMs);

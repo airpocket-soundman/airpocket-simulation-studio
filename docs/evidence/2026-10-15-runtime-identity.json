@@ -1,0 +1,476 @@
+{
+  "checkedAt": "2026-10-15T00:19:24.829Z",
+  "baseRevision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+  "sources": {
+    "scripts/headless-analysis.mjs": {
+      "bytes": 5175,
+      "sha256": "ab47b853a16a6d98835fec64de178429ea0bd1627f4c1571c4c73d992474e6d2"
+    },
+    "scripts/headless-process.mjs": {
+      "bytes": 909,
+      "sha256": "6782a15c80a2f32a9bbe7b7fd8839b20ee12eda854deba6d167fb64b2503a85f"
+    },
+    "scripts/headless-worker-environment.mjs": {
+      "bytes": 1752,
+      "sha256": "2dbbf67f9a4ebf637475c6f823151e14e44d380c2f1422b880e293d0d91f628a"
+    },
+    "skills/airpocket-studio/references/case-archives-measurements.md": {
+      "bytes": 8421,
+      "sha256": "8c842450ad63ba9e84cf1a09feb375e2d1a42ccea5cbccb1cd0bca03669b3cc6"
+    },
+    "skills/airpocket-studio/references/jobs-observations.md": {
+      "bytes": 8907,
+      "sha256": "2bd784e613e2edcbe88f90d716b17d5aa327c22d190d2c76b4a422748020df37"
+    },
+    "src/analysis-client.js": {
+      "bytes": 9386,
+      "sha256": "a08c2ab37a4f8e4d62c3bbcc6540609b3407bde9038ffa74e7a0b65138a3cb52"
+    },
+    "src/analysis.worker.js": {
+      "bytes": 17123,
+      "sha256": "f24639e9c15e3dcf0d7f450e17e24530b95a369d334c8cc31aae94b70936091d"
+    },
+    "src/case-operations.js": {
+      "bytes": 12175,
+      "sha256": "fca3cbd3484aa4d5f7f02bec668a54966dccf353b96936c8a997fab57619a020"
+    },
+    "src/case-view.js": {
+      "bytes": 3198,
+      "sha256": "9c5628ed26376ccec5045450182e4f7a6946f8c9baaa33a6feda9383c1f0b00a"
+    },
+    "src/cases.js": {
+      "bytes": 14435,
+      "sha256": "005a56bf555cb4a073775d389ee9f48fb961278bdc235f0662b5cc518c9a7f85"
+    },
+    "src/job-result-transfer.js": {
+      "bytes": 6829,
+      "sha256": "009d4a695353f5560c2cc8afb61f4b9a2315866c304ab05e3bce21267d6c5d1c"
+    },
+    "src/progress.json": {
+      "bytes": 216577,
+      "sha256": "390db729ec596686776617228e3632dbaa44ed407598c02edc0c8266a3dd8203"
+    },
+    "tests/case-operations.test.mjs": {
+      "bytes": 14038,
+      "sha256": "47c3ee227694224bc1abac5da064984bc81b46be51532fd1e74919e0cf953343"
+    },
+    "tests/case-view.test.mjs": {
+      "bytes": 2587,
+      "sha256": "d40720b592f8c107e0bf646aea9c4bf5fb9295efb3f9016761cec3deabb7bdb1"
+    },
+    "tests/cases.test.mjs": {
+      "bytes": 5497,
+      "sha256": "dd9e177711b2760fdc9146c0af00fdb3b0ac4635192bac4281e19be45ac52e7a"
+    },
+    "tests/headless-worker-lifecycle.test.mjs": {
+      "bytes": 7639,
+      "sha256": "05bb99b265862e1b3fd80725543dc998e8e7f1143028013f22227655cea4ab2b"
+    },
+    "tests/job-result-transfer.test.mjs": {
+      "bytes": 9457,
+      "sha256": "bca7be25c53558a4b292039c13426d32dba243919c0add269b665ebaa540725e"
+    },
+    "tests/mcp-browser-builtin.test.mjs": {
+      "bytes": 7399,
+      "sha256": "3d0eb0ca28e587b18113ac50999f87b3dbef8e7e0be696d61677077dd8733845"
+    },
+    "tests/mcp-fluid-domain.test.mjs": {
+      "bytes": 8687,
+      "sha256": "8a403f6cd72ffd1a769165f32792e3aa3a96dcf39f2e4c150cedefe99b527ac6"
+    },
+    "tests/nonlinear-intermediate-pipeline.test.mjs": {
+      "bytes": 9042,
+      "sha256": "7ef5b08d174b27cabd006a3f1f64678be5c9a30e77be1d3a2b6ee072301371d6"
+    },
+    "tests/stokes-observation-pipeline.test.mjs": {
+      "bytes": 3681,
+      "sha256": "69b750e99b5918492b22b4c37cce6470dc9f27b21ecd81b527a8e0bc11622672"
+    },
+    "tests/wave-channel-observation-pipeline.test.mjs": {
+      "bytes": 4957,
+      "sha256": "23d4b0c5e79ff66238448b8b692bc3d69863dbe55206a22e672c1a95b86f7421"
+    },
+    "tests/worker-pipeline.test.mjs": {
+      "bytes": 24704,
+      "sha256": "2389e8072434c1b819c04ee26eec9f944bdc8a29dacd5939357d84abfe11fcd6"
+    },
+    "src/runtime-identity.js": {
+      "bytes": 2877,
+      "sha256": "35fa2787bf443c768e2e21a82d31ac971fe31a059e0d5be1b59c3c50be9af38d"
+    },
+    "scripts/source-build-identity.mjs": {
+      "bytes": 3553,
+      "sha256": "b59a667b37a22b2996c929bac866d21c5b2c9889c4b3fe068a9451d21b1280c6"
+    },
+    "tests/browser-runtime-identity.test.mjs": {
+      "bytes": 5978,
+      "sha256": "cd83e8ae2e31744af15c20388c41f1e8052a5c9a82d9b1c4a385d6ffaf6467db"
+    },
+    "tests/headless-runtime-identity.test.mjs": {
+      "bytes": 2794,
+      "sha256": "9340689ce95f96b86bdde53ff629c869ded5feb2c54470d0c45f148f7f541206"
+    },
+    "tests/runtime-identity.test.mjs": {
+      "bytes": 2382,
+      "sha256": "4391461132b42f8598b183b85573a8c7fffc31525111cc79d23183048fe90760"
+    },
+    "tests/source-build-identity.test.mjs": {
+      "bytes": 2757,
+      "sha256": "2f69e035b1a359a667728fc150f463fa212398283065a8f77ffe13c287ebb844"
+    },
+    "vite.config.js": {
+      "bytes": 507,
+      "sha256": "3d97a96ed0cbd184237d3c39c438a88614eef14b84214285d65070238fb9c413"
+    }
+  },
+  "logs": {
+    ".qa/runtime-identity-first-full.log": {
+      "bytes": 106412,
+      "sha256": "93387b07efb63e2d4973e80e0e7e599945d5731cf903965e1de91c8d0eaeca76",
+      "tail": "  \n      at TestContext.<anonymous> (file:///D:/github/airpocket-soundman/airpocket-simulation-studio/tests/wave-channel-observation-pipeline.test.mjs:18:378)\n      at async Test.run (node:internal/test_runner/test:1113:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: 'failed',\n    expected: 'succeeded',\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n"
+    },
+    ".qa/runtime-identity-final-full.log": {
+      "bytes": 99901,
+      "sha256": "b5ff8528199ba1ea657bb20b59eabd526da04bae5f4b58e446b7df5476e04bd7",
+      "tail": "\u2714 canonical worker uses exact rectangular CAD patches and validates their saved areas (856.0561ms)\n\u2714 canonical worker conserves force on exact cylindrical CAD patches and restores saved dimensions (3153.6949ms)\n\u2714 canonical worker only sends thermal and transient acoustic fields when both observation flags are true (2436.6429ms)\n\u2139 tests 935\n\u2139 suites 0\n\u2139 pass 932\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 3\n\u2139 todo 0\n\u2139 duration_ms 148866.6964\n"
+    },
+    ".qa/runtime-identity-save-targeted.log": {
+      "bytes": 3772,
+      "sha256": "534d460e53f1b31d56b5755d55b9ebe4b431f705542ea36e68c0e12a9faa5908",
+      "tail": "\u2714 optional undefined properties and finite typed arrays use JSON archive representation without silently normalizing invalid numbers (11.0353ms)\n\u2714 release, disconnect, invalid guards and released jobs during asynchronous hashing cannot publish a transfer (10.842ms)\n\u2714 actual Worker output retained by analysis-client exports while the UI has moved to another input (398.8132ms)\n\u2139 tests 36\n\u2139 suites 0\n\u2139 pass 36\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 764.3362\n"
+    },
+    ".qa/runtime-identity-build.log": {
+      "bytes": 2840,
+      "sha256": "cafa9cede80617b55f9110155d8c2b9c5f17522729fe92b040899127222d291d",
+      "tail": "dist/assets/i18n-BCksTE3y.js                    74.15 kB \u2502 gzip:  26.59 kB\ndist/assets/development-BR8xAyio.js            271.24 kB \u2502 gzip:  89.45 kB\ndist/assets/app-DEDoz_CA.js                  1,359.76 kB \u2502 gzip: 364.46 kB\n\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n\u2713 built in 5.00s\nStandalone browser connector: 72648 bytes / 2efce3b74966f4ef008e392b6e141bc70fa1845e85433b2f0ab127a1168b19c5\nRuntime manifest: 0.43.0 / 1ceb128\n"
+    },
+    ".qa/runtime-identity-local.log": {
+      "bytes": 1412,
+      "sha256": "3aca616923523e340c444e81073e67073d3c5b1a98f1a80f03cabeb2e37219b6",
+      "tail": "PASS internal-cad-channel-and-port-archive 4597 ms\nPASS exact-planar-cad-patch-and-archive 1549 ms\nPASS exact-cylindrical-cad-patch-and-reaction 3000 ms\nPASS j2-plasticity-free-contraction-and-archive 1345 ms\nPASS j2-plasticity-elastic-unloading-and-archive 2807 ms\nPASS failure-and-restart 1899 ms\nPASS project-and-case-roundtrips 26 ms\nPASS published-cad-reader-and-step-mesher 1930 ms\nPASS cad-update-reconciliation-pending-repair-and-step-worker-reference 2278 ms\nPASS oblique-planar-cad-area-and-reaction 1283 ms\nLocal build 0.43.0 1ceb128 verified in 57.91 s\n"
+    },
+    ".qa/pr-6-ci/ci-tests.log": {
+      "bytes": 102392,
+      "sha256": "72580eaa02b2de66daf68b7a548b41ab752e5cd392d58f17230476ea7ef0ce00",
+      "tail": "\u2714 canonical worker uses exact rectangular CAD patches and validates their saved areas (552.058111ms)\n\u2714 canonical worker conserves force on exact cylindrical CAD patches and restores saved dimensions (1717.055479ms)\n\u2714 canonical worker only sends thermal and transient acoustic fields when both observation flags are true (2444.645163ms)\n\u2139 tests 921\n\u2139 suites 0\n\u2139 pass 918\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 3\n\u2139 todo 0\n\u2139 duration_ms 167202.709175\n"
+    }
+  },
+  "firstFailure": "Initial934:923pass,8fail,3skip;all8 were Node-injected browser adapters refusing real Node identity. Corrected constructor-only identityHost and preflight target;preserved actual Node identity rather than stripping/relabeling it.",
+  "final": "935tests,932pass,3skip,0fail,148866.6964ms",
+  "localDistribution": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+    "local": true,
+    "checkedAt": "2026-10-15T00:15:53.026Z",
+    "elapsedMs": 57908.6794,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 23,
+        "downloaded": 7
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 1217.5514
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 639.4008000000003
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 1294.1834
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 5002.7065
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 1777.8348999999998
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 3743.9089999999997
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 784.185300000001
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 963.9014000000006
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 1587.6021
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 6410.343699999998
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 4212.538199999999
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 2471.572699999997
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 930.1625000000022
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 1533.428899999999
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 3813.7860999999975
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 4597.465700000001
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 1548.5181000000011
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 3000.273000000001
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 1344.7502000000022
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 2806.9535000000033
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 1898.7179000000033
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 25.883800000003248
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 1930.3337000000029
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 2277.901199999993
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 1283.1726000000053
+      }
+    ],
+    "limitations": [
+      "Node workers execute deployed CAD/analysis assets; browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "priorPrCI": {
+    "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38657932134",
+    "tests": 921,
+    "passed": 918,
+    "skipped": 3,
+    "failed": 0
+  },
+  "browserEvidence": "docs/evidence/2026-10-15-runtime-identity-browser.json",
+  "skillEvidence": "docs/evidence/2026-10-15-skill-runtime-identity.json",
+  "limitations": [
+    "Build source fingerprint identifies source/lock snapshot,not every dynamic JS import or atomic execution attestation.",
+    "Observed assets identify exact WASM bytes supplied for initialization;declared data and missing data remain distinct.",
+    "Legacy missing identity is never backfilled with the current build.",
+    "Local full success does not resolve the known intermittent default-Windows V8 issue.",
+    "Public HTTPS,Skill-only end-to-end and full P0-P6 remain incomplete."
+  ],
+  "priorPublication": {
+    "revision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+    "run": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38658513220",
+    "conclusion": "success",
+    "jobs": [
+      "verify",
+      "deploy",
+      "verify-published"
+    ],
+    "tag": "release-1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+    "peeledRevision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+    "report": {
+      "status": "passed",
+      "version": "0.43.0",
+      "revision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+      "local": false,
+      "checkedAt": "2026-10-15T00:16:10.908Z",
+      "elapsedMs": 37658.509853999996,
+      "checks": [
+        {
+          "name": "deployed-asset-integrity",
+          "passed": true,
+          "assets": 23,
+          "downloaded": 23
+        },
+        {
+          "name": "structural-airpocket-and-mfem",
+          "passed": true,
+          "ms": 1091.8443110000003
+        },
+        {
+          "name": "closed-convex-stl-volume-structure-and-archive",
+          "passed": true,
+          "ms": 595.9395460000005
+        },
+        {
+          "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+          "passed": true,
+          "ms": 561.0876909999997
+        },
+        {
+          "name": "engineering-polymer-five-family-axial-references",
+          "passed": true,
+          "ms": 2768.656194
+        },
+        {
+          "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+          "passed": true,
+          "ms": 567.3345150000005
+        },
+        {
+          "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+          "passed": true,
+          "ms": 1629.6377730000004
+        },
+        {
+          "name": "thermal-radiation",
+          "passed": true,
+          "ms": 527.0626870000015
+        },
+        {
+          "name": "rubber-finite-strain",
+          "passed": true,
+          "ms": 865.6368860000002
+        },
+        {
+          "name": "laminar-channel-flow",
+          "passed": true,
+          "ms": 881.9863839999998
+        },
+        {
+          "name": "three-dimensional-creeping-stokes-flow-and-archive",
+          "passed": true,
+          "ms": 3466.5721139999987
+        },
+        {
+          "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "passed": true,
+          "ms": 2495.0206610000005
+        },
+        {
+          "name": "exterior-radiation-and-far-field",
+          "passed": true,
+          "ms": 1634.443972000001
+        },
+        {
+          "name": "transient-acoustic-wave-and-archive",
+          "passed": true,
+          "ms": 742.5395469999967
+        },
+        {
+          "name": "modal-frequencies-and-archive",
+          "passed": true,
+          "ms": 1486.9835459999995
+        },
+        {
+          "name": "modal-to-exterior-acoustic-power",
+          "passed": true,
+          "ms": 2569.1571159999985
+        },
+        {
+          "name": "internal-cad-channel-and-port-archive",
+          "passed": true,
+          "ms": 2500.538918000002
+        },
+        {
+          "name": "exact-planar-cad-patch-and-archive",
+          "passed": true,
+          "ms": 812.2259590000031
+        },
+        {
+          "name": "exact-cylindrical-cad-patch-and-reaction",
+          "passed": true,
+          "ms": 1868.3178469999984
+        },
+        {
+          "name": "j2-plasticity-free-contraction-and-archive",
+          "passed": true,
+          "ms": 1003.3120999999992
+        },
+        {
+          "name": "j2-plasticity-elastic-unloading-and-archive",
+          "passed": true,
+          "ms": 1604.0619009999973
+        },
+        {
+          "name": "failure-and-restart",
+          "passed": true,
+          "ms": 938.4784650000001
+        },
+        {
+          "name": "project-and-case-roundtrips",
+          "passed": true,
+          "ms": 15.398659999998927
+        },
+        {
+          "name": "published-cad-reader-and-step-mesher",
+          "passed": true,
+          "ms": 1403.2998200000002
+        },
+        {
+          "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+          "passed": true,
+          "ms": 1622.3505409999998
+        },
+        {
+          "name": "oblique-planar-cad-area-and-reaction",
+          "passed": true,
+          "ms": 740.8758069999967
+        }
+      ],
+      "limitations": [
+        "Node workers execute deployed CAD/analysis assets; browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+      ]
+    }
+  }
+}

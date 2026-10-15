@@ -1,6 +1,7 @@
 import {canonicalJson,getProjectRevision} from './project-revision.js';
 import {prepareCaseView} from './case-view.js';
 import {createCaseStore} from './cases.js';
+import {validateRuntimeIdentity} from './runtime-identity.js';
 
 const error=(code,message)=>Object.assign(Error(message),{code});
 /** Runtime-only identity adapter; the existing version-1 archive stays unchanged.
@@ -23,8 +24,8 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
  function unchanged(snapshot){if(current()!==snapshot.signature)throw error('CASE_REVISION_CONFLICT','Case collection changed; list cases again');}
  function rows(archive,ids,revisions,comparison){
   return archive.cases.map((saved,index)=>{
-   const assessment=saved.output.analysisAssessment;
-   return {caseId:ids[index],revision:revisions[index],name:saved.name,kind:comparison[index].kind,metrics:structuredClone(comparison[index].metrics),...(assessment?{analysisAssessment:{mode:assessment.mode,provisional:assessment.provisional,completePreflight:assessment.completePreflight}}:{})};
+   const assessment=saved.output.analysisAssessment,runtimeIdentity=validateRuntimeIdentity(saved.output.calculation?.runtimeIdentity);
+   return {caseId:ids[index],revision:revisions[index],name:saved.name,kind:comparison[index].kind,metrics:structuredClone(comparison[index].metrics),...(runtimeIdentity?{runtimeIdentity}:{}),...(assessment?{analysisAssessment:{mode:assessment.mode,provisional:assessment.provisional,completePreflight:assessment.completePreflight}}:{})};
   });
  }
  async function snapshot(){

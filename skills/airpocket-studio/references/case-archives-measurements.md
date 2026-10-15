@@ -45,3 +45,7 @@ v2 bundles recompute every recorded measurement against the matching display-pre
 On a measurement-enabled host, v1 import returns measurementsCleared:true and an effective v2 revision with empty history. v2 metadata includes measurementCount. Local actual-UI v1 clearing/v2 restoration and GUI/MCP export-byte equality were checked.
 
 caseBundleExport() is read-only: it returns the captured snapshot revision, without an expectedArchiveRevision precondition. Keep expectedArchiveRevision mandatory for import/CAS.
+
+## Preserve calculation runtime identity
+
+New outputs may carry calculation.runtimeIdentity(schemaVersion1). caseList exposes the existing bounded identity:target/isolation,build version/revision/dirty/sourceFingerprint,requestedMethod versus actualEngine,and observed/declared WASM hashes. Keep it unchanged through saves,bundles,restoration and comparison. Missing legacy identity means unrecorded;never use today's capabilities/manifest to fill it. observed identifies the same bytes supplied to initialization;declared alone does not prove actual loaded bytes. Node package Gmsh differs from browser dist,Node MFEM remains WASM,and CPU fallback is not GPU execution. Invalid schema/method/engine contradictions are refused. These records are not signatures,environment attestation or physical-validity evidence.

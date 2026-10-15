@@ -33,3 +33,16 @@ test('abort during Worker creation is rechecked before posting and waits for cle
 test('sequential fulfilled analyses cannot create the next Worker before the first exits',async()=>{const workers=[];const createWorker=()=>{assert.ok(workers.length===0||workers.at(-1).closed);const worker=new DeferredWorker();workers.push(worker);return worker;};const first=analyzeProject(input(),{},'mesh',{createWorker});workers[0].emit('message',{result:{mesh:{}}});await workers[0].stopping;workers[0].closed=true;workers[0].complete();await first;const second=analyzeProject(input(),{},'mesh',{createWorker});workers[1].emit('message',{result:{mesh:{}}});workers[1].closed=true;workers[1].complete();await second;assert.equal(workers.length,2);});
 
 test('host timeout override cannot exceed the fixed 120-second analysis limit',async()=>{for(const timeoutMs of [120001,Infinity,NaN,0,-1]){let created=false;await assert.rejects(analyzeProject(input(),{},'mesh',{timeoutMs,createWorker:()=>{created=true;return new DeferredWorker();}}),/Invalid analysis timeout/);assert.equal(created,false);}});
+
+const runtimeIdentity=()=>({schemaVersion:1,target:'node',isolation:'worker-thread',build:{status:'unavailable'},engine:{requestedMethod:'wasm-pcg',actualEngine:null},assets:[{role:'kernel',bytes:10,sha256:'sha256:'+'a'.repeat(64),status:'observed'}]});
+test('host preserves the returned execution identity without trusting project or option metadata',async()=>{
+ const worker=new DeferredWorker(),identity=runtimeIdentity(),options={runtimeIdentity:{target:'forged'}},promise=analyzeProject(input(),options,'mesh',{createWorker:()=>worker});
+ worker.emit('message',{result:{mesh:{summary:{}},runtimeIdentity:identity}});worker.complete();const result=await promise;
+ assert.deepEqual(result.calculation.runtimeIdentity,identity);assert.equal(result.runtimeIdentity,undefined);identity.assets[0].bytes=999;assert.equal(result.calculation.runtimeIdentity.assets[0].bytes,10);
+});
+test('wrong host or isolation identity cannot be published, while legacy Workers remain compatible',async()=>{
+ for(const change of [value=>value.target='browser',value=>value.isolation='process',value=>value.assets[0].sha256='bad']){
+  const worker=new DeferredWorker(),identity=runtimeIdentity();change(identity);const promise=analyzeProject(input(),{},'mesh',{createWorker:()=>worker});worker.emit('message',{result:{mesh:{},runtimeIdentity:identity}});worker.complete();await assert.rejects(promise,/identity|runtime|asset/i);
+ }
+ const h=launch();h.worker.emit('message',{result:{mesh:{summary:{}}}});h.worker.complete();const result=await h.promise;assert.equal(Object.hasOwn(result.calculation,'runtimeIdentity'),false);
+});

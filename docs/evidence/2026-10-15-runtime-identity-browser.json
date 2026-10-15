@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-10-15T00:19:24.698Z",
+  "url": "http://127.0.0.1:5180/",
+  "actions": [
+    "Load synthetic thermal sample",
+    "Run GUI analysis in real browser Worker",
+    "Save current result",
+    "Read visible case-archive JSON",
+    "Display saved result",
+    "Read archive again and compare runtime identity"
+  ],
+  "identity": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "isolation": "web-worker",
+    "build": {
+      "status": "available",
+      "version": "0.43.0",
+      "revision": "1ceb1287fef6e01a61c5e191f4b407329d12e0b0",
+      "dirty": true,
+      "sourceFingerprint": "sha256:4fb173db44aa5929707c36ec9957048da4cd6cdddedc93e1be9b4e87ca0873aa"
+    },
+    "engine": {
+      "requestedMethod": "wasm-pcg",
+      "actualEngine": "Airpocket Heat Tet4 / WASM CPU"
+    },
+    "assets": [
+      {
+        "role": "kernel",
+        "bytes": 229,
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+      },
+      {
+        "role": "gmsh",
+        "bytes": 41430673,
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+      }
+    ]
+  },
+  "assets": {
+    "kernel": {
+      "path": "dist/fem-kernel.wasm",
+      "bytes": 229,
+      "sha256": "08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2"
+    },
+    "gmsh": {
+      "path": "dist/gmsh/gmsh-core.wasm",
+      "bytes": 41430673,
+      "sha256": "c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23"
+    }
+  },
+  "archive": {
+    "path": "docs/evidence/2026-10-15-runtime-identity-browser-case.json",
+    "bytes": 67383,
+    "sha256": "f413a450545a1bf5fa07964bf60f24bc731e7e037b45a3af6245f7334da0ba3b",
+    "afterDisplaySha256": "f413a450545a1bf5fa07964bf60f24bc731e7e037b45a3af6245f7334da0ba3b",
+    "identityUnchanged": true,
+    "caseCount": 1
+  },
+  "result": {
+    "kind": "thermal",
+    "minTemperature": 20,
+    "maxTemperature": 100,
+    "nodeCount": 171,
+    "elementCount": 428
+  },
+  "screenshot": "docs/evidence/2026-10-15-runtime-identity-browser.jpg",
+  "cleanup": {
+    "tabClosed": true,
+    "previewSession": 39530,
+    "previewExited": true
+  },
+  "limitations": [
+    "Local dirty production build,not public HTTPS or MCP-only end-to-end.",
+    "Synthetic legacy thermal example;runtime identification does not establish input evidence or physical accuracy."
+  ]
+}
