@@ -544,3 +544,11 @@ MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来
 `observationSequence` は元の観測順序です。要約・診断は保存待ちを迂回するため、古い場の保存通知より先着する場合があります。latestPolicyはlast-accepted-snapshotで、最後に拒否した場へ置き換えません。meshを受理できなければ後続fieldも保存せず、旧meshへ結び付けません。accepted/latestCompletedはqueue受付・consumer完了であって成果物保存成功ではなく、artifact参照と完全性を別途検査します。取消時は待機payloadを解放し、処理中の終了をdrainで待ちます。
 
 bytesは保守的な構造見積もりで、JSヒープ総量・Worker内部のpostMessage待機・イベントring内の任意payloadのbytesを上限保証しません。元の場をすべて取得できたと報告せず、drop/制限を結果と一緒に説明してください。
+
+## ジョブイベント本文とページの容量
+
+既定では1イベント32,768 UTF-8バイト、1ジョブの保持合計1,048,576バイトかつ256件、jobEventsのJSON値全体65,536バイトを上限にします。イベントは原子的に返し、ページの件数が指定limitより少なくてもnextSequence/hasMoreで続きを取得します。件数または容量を超えると古いイベントから破棄し、firstAvailableSequence/truncatedで検出できます。eventRetentionは有効上限・保持件数/bytes、eventPageBytesは実際のJSON値容量を返します。
+
+過大、循環参照、非有限数、accessor等の不正な観測は、同じsequenceの `observation-event-gap` / `payloadOmitted:true` / `gap.reason` へ置き換えます。getterは実行せず、欠けた物理値を0やnullへ補いません。これはソルバー失敗や数値収束の証明ではありません。小さな通常metricsと有効な構造化failureを保持し、statusの過大な要約はsummaryOmissions、error本文は最大2,048 UTF-16 code unitsとmessageTruncated/originalMessageLengthで明示します。終了状態・取消・解放の意味は変えません。
+
+能力情報のobservation.eventPayloadが既定上限と適用範囲を返します。内部registryの起動時budgetは有効なfailureとenvelopeを収める最小容量を要求し、極小指定を拒否します。64KiBはjobEvents JSON値の上限です。MCPはtext/structuredContentへ値を重複格納するため、JSON-RPCやHTTP包装込みの通信全体は64KiBを超え得ます。Worker送信待機やJSヒープ全体の上限保証とは別です。完全な最終結果はjobResultExport/Read等の専用分割経路を使い、イベント要約から再構築しません。

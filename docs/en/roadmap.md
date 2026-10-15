@@ -143,3 +143,5 @@ Publisheda446dc5 passedCI,26runtime checks,annotated tagging and actual JP/EN br
 Expose evidence/intent edit arguments through MCP discovery, validate every saved case through restoration, and reject planar rotation controls without a matching frame. Bound pending observation count/estimated bytes independently of retained storage, exposing drop reasons and source sequence. Track PROVENANCECONTRACT1, CASEARCHIVEVALIDATION1, PLANARROTATION1 and OBSERVATIONQUEUE1 as verification work rather than published completion.
 
 Worker transport backpressure and event-ring payload/page byte limits remain P3 follow-ups; current queue limits do not bound total JavaScript heap. Preserve public HTTPS, saved comparison/same-point remeasurement, Skill-only end-to-end and all P0–P6 acceptance requirements.
+
+JOBEVENTBYTES1 implements P3 event payload/retention/page limits with explicit gaps and cursor continuation. This is separate from OBSERVATIONQUEUE1 pending-storage limits; Worker transport backpressure remains open. Track ongoing fluid PR #7 integration independently without treating its common API/MCP/Skill connections as complete.

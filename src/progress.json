@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T00:54:36.489334Z",
+  "updatedAt": "2026-10-15T01:04:31.610462Z",
   "release": {
     "version": "v0.43",
     "date": "2026-10-14",
@@ -2300,6 +2300,22 @@
       "acceptance": "実API/MCPでframe無し回転拒否・元入力不変・GUI生成回転の保存保持、従来回転無し軸領域を検証。",
       "acceptanceEn": "Verify actual API/MCP rejection without mutation, saved GUI rotation preservation and legacy unrotated axial regions.",
       "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json"
+    },
+    {
+      "id": "JOBEVENTBYTES1",
+      "title": "ジョブ観測イベントの保持・応答容量を制限",
+      "titleEn": "Bound retained job event and response bytes",
+      "status": "checking",
+      "category": "共通",
+      "depends": [
+        "P3",
+        "OBSERVATIONQUEUE1"
+      ],
+      "detail": "イベント件数上限に加えてpayload・保持合計・ページのUTF8容量を制限し、不正/過大な観測は同じsequenceの明示欠落通知へ置き換える。",
+      "detailEn": "Bound event payload, retained total and page UTF-8 sizes in addition to count; replace unsafe or oversized observations with explicit same-sequence gaps.",
+      "acceptance": "有効な構造化failureと通常metricsを保持し、getter未実行・過大/不正payload・bytesによるeviction・cursor継続・取消/終了不変・実API/MCPのJSON値容量を検証。RPC包装とWorker送信待機の上限とは区別する。",
+      "acceptanceEn": "Preserve valid structured failures and ordinary metrics; verify no getter execution, oversized/unsafe data, byte eviction, cursor continuation, unchanged lifecycle and real API/MCP JSON-value bounds. Distinguish RPC wrappers and Worker transport.",
+      "evidence": "docs/evidence/2026-10-15-job-event-bounds.json"
     }
   ],
   "solvers": [
@@ -2433,7 +2449,8 @@
           "BROWSERCONNECTOR1",
           "P3OBSERVATIONLIFECYCLE1",
           "CONNECTIONDIAGNOSTICS1",
-          "OBSERVATIONQUEUE1"
+          "OBSERVATIONQUEUE1",
+          "JOBEVENTBYTES1"
         ],
         "acceptance": "Verify public HTTPS pairing, scoped lifecycle/cancellation/cleanup and available observations with revisions, units, provisional state and limits."
       },

@@ -543,3 +543,11 @@ MCPから根拠/intentの位置引数schemaを取得し、明示したfixtureの
 修正後の既定Node24全体は956件中952成功・1失敗・3skip（158.05秒）。mcp-advanced-structural-provenanceが既知V8のjit_page allocation内部停止で終了した。停止ファイルの単独1件は成功（16.05秒）したが、既定全体成功や根治の証明ではない。buildとローカル配信物26項目は成功（67.78秒）。
 
 Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeIdentityの実子process起動が5秒timeoutで失敗し、同suiteの単独6件は成功した。比較全体も未通過であり、既定環境の全体成功やV8根治の代替にしない。[全体証跡](evidence/2026-10-15-agent-contract-validation.json)を参照。配布/リポジトリSkill10ファイルはhash一致、両validator成功。
+
+## 2026-10-15: ジョブイベント本文・保持・ページの容量
+
+イベント32KiB、各ジョブ保持1MiBかつ256件、jobEvents JSON値64KiBの上限を実装した。過大/不正payloadを同じsequenceの明示欠落通知へ置き換え、byte eviction後のtruncated/cursor継続、getter未実行、通常metricsと構造化failure、error本文の切詰情報、取消/終了状態を確認した。
+
+対象13件、全体968件中965成功・3skip・失敗0（171.53秒）。buildとローカル配信物26項目（57.72秒）も成功。実製品stdio/HTTP/adapterと制御executorで最大JSON値52,854 bytes、MCP JSONRPC行106,350 bytes、bridge reply body52,908 bytesを測定した。64KiBは値の上限であり通信全体とは違う。別途、全体試験で実solverのMCP観測とlifecycleも回帰した。合成イベント試験を物理精度の証明としない。[証跡](evidence/2026-10-15-job-event-bounds.json)を参照。
+
+前回PR #10はLinux Node24必須CIで956件中953成功・3skip・失敗0となり、badce2cへ取り込んだ。前回Windows/Node26の失敗記録を上書きせず、今回成功も既知V8問題の根治とは扱わない。配布/リポジトリSkill10ファイル一致と両validator成功を確認した。公開HTTPS・Worker transport全体・保存比較再測定API・Skill単独一巡・全P0〜P6は継続する。
