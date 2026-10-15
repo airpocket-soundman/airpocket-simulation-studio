@@ -602,4 +602,4 @@ MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で�
 
 ブラウザ操作 `checkGpuEnvironment`（inspect権限、引数なし）は、接続中のブラウザセッションで実際のWebGPUアダプタとデバイスを取得できるか呼出し時に確認します。一時デバイスは応答前に破棄され、プロジェクトや結果は変更しません。宣言や機能探索はデバイスの利用可否を約束せず、Nodeの能力も報告しません。
 
-ブラウザ操作 `meshBoundaryPreflight({jobId,inputRevision})`（MCPでは `studio_preflight_mesh_boundaries({path,jobId,inputRevision})`）は、成功して実行が完了したmesh-onlyジョブが保持する正確なメッシュに対し、境界条件の転写を検査します。入力リビジョンの一致が必要で、メッシャーもソルバーも再実行せず、対象は静的線形構造入力のみです。`completePreflight` は常にfalseで、拘束の階数・剛体モード・収束・物理精度は未検査のままです。
+ブラウザ操作 `meshBoundaryPreflight({jobId,inputRevision})`（MCPでは `studio_preflight_mesh_boundaries({path,jobId,inputRevision})`）は、成功して実行が完了したmesh-onlyジョブが保持する正確なメッシュに対し、境界条件の転写を検査します。入力リビジョンの一致が必要で、メッシャーもソルバーも再実行せず、対象は静的線形構造入力のみです。結果には追加フィールド `rigidBody` も含まれ、転写された節点のfixed/displacement拘束について6つの剛体運動を `eliminated` または `free` で報告します（拘束を課した剛体行列の数値rank、相対許容1e-6、`rigidBodyModesEliminated`、`freeRigidModeCount`、成分ごとのrank）。自由モードがあるとエラー診断 `ANALYSIS_RIGID_BODY_MODE_FREE` を追加しますが `allowed:false` にはしません。非構造・modal研究は `not-applicable`、使えないメッシュは `unknown`、ばね・弾性支持はモデル化されず剛体モードを除去したと数えません。`completePreflight` は常にfalseで、収束・物理精度は未検査のままです。
