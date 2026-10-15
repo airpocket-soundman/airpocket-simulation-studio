@@ -36,3 +36,13 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 
 `$`, `document`, `getMaterialProperties` and `getLanguage` are injected; the module does not import main.js. `materialProperties` and `language` change over time, so getters are passed and read on every call. main.js creates the module right after `status` because `renderMaterial` runs early. `fatigueOptions` and `evaluateDisplayedFatigue` (which touch `lastAnalysis`), the conditions list, 3D selection and analysis execution stay in main.js.
 `tests/ui-fatigue.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.
+
+## Sixth slice: material property form
+`src/ui/material-form-ui.js` (`createMaterialFormUi`) now holds three material-form routines. Behavior is unchanged.
+
+- `installFields` (creates the property inputs)
+- `writeForm` (the form-fill and status-text part of `renderMaterial`, including the plasticity / hyperelastic / orthotropic precedence)
+- `readForm` (reads the form on save; orthotropic and fracture data are kept by clone)
+
+`$`, `document`, `materialFields`, `materialReadiness`, `readFatigueMaterial`, `getMaterialProperties` and `getLanguage` are injected; the module does not import main.js. Changing values are passed as getters. The fracture-UI refresh, dirty flag and discipline-visibility update in `renderMaterial`, plus the plastic-load-fraction cleanup, catalog reconcile and `api` calls in the save handler stay in main.js (call order preserved). 3D selection, analysis execution (`lastAnalysis`, `startJob`) and the worker are untouched.
+`tests/ui-material-form.test.mjs` checks it with a fake DOM. Real-browser behavior still needs separate verification.

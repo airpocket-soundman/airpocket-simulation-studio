@@ -32,10 +32,17 @@
 - 外部流体領域は解析不可の検証（`fluidDomain`）: `source.kind`・`study.kind`・`mode` を横断する条件で、単一分野の規則ではないため。
 - 破壊・疲労評価と温度範囲チェック（`postprocess` ステージ）、メッシュ生成、適応ループ、進捗、キャンセル、結果送出。
 
+## build / 適応ループの移管（第7スライス）
+
+- 任意フック `buildOptions({data})`: ワーカーの `build()` が `data.options` の後ろへ展開する分野別メッシュオプションを返す。creepingFlow のみ実装（`maxElements` を `min(8000, options.maxElements ?? 8000)` に制限）。従来の `stokes?{…}:{}` 分岐と同じ位置・同じ値。
+- 任意フック `adaptive({data,mesh,solve,progress,observe})`: 適応細分化ループの呼び出し（上限パラメータの既定値を含む）。構造のみ実装（応力・ひずみ指標が構造結果に依存するため）。他分野は `validate` が適応を既に拒否しており到達しない。到達した場合の防御として、ワーカーは `adaptive` を持たないアダプタに同じメッセージ「Adaptive refinement currently supports structural analysis only」で失敗させる。
+- ワーカーに残したもの: `build`/`solve` クロージャ、メッシュ生成呼び出し、円筒・平面 CAD 領域とユーザー細分化指定の合成、メッシュ観測、`operation==='mesh'` と適応の分岐、`stokes`/`flow` による境界転送のスキップ（`boundary-transfer` ステージ）、`thermal` の温度範囲チェック。いずれも共通オーケストレーションまたは後処理で、フック化すると挙動差の危険が大きいため。
+- 固定: `tests/solver-adapter-build.test.mjs`（移管前コードで取得した22ケース: 構造適応・熱適応拒否・メッシュのみ・STL・fluidDomain・流れ/Stokes の build と要素数上限。タイミングを除く全メッセージのダイジェストを含む）。
+
 ## 未実施（MOD1 は未完了）
 
 - UI/状態の分離、TypeScript 契約、React/WASM 移行は本スライスの対象外。
-- `adaptiveSolve` や `build` のアダプタ化は未着手。
+- `build` の分野固有部分と適応ループ呼び出しはアダプタへ移管済み（下記）。メッシュ生成本体・進捗・適応ループ本体（`src/adaptive.js`）は共通のまま。
 
 ## テスト
 
