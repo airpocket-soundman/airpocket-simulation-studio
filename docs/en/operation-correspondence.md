@@ -94,12 +94,12 @@ Companion to [API and MCP coverage](api-coverage.md). One row per browser operat
 | `caseBundleWrite` | edit | `studio_browser_call` method=caseBundleWrite | no GUI control | `references/browser-session.md` |
 | `caseBundleCommit` | edit | `studio_browser_call` method=caseBundleCommit | no GUI control | `references/browser-session.md` |
 | `caseBundleRelease` | inspect | `studio_browser_call` method=caseBundleRelease | no GUI control | `references/browser-session.md` |
-| `measurementList` | inspect | `studio_browser_call` method=measurementList | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementGet` | inspect | `studio_browser_call` method=measurementGet | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementSave` | edit | `studio_browser_call` method=measurementSave | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementRemove` | edit | `studio_browser_call` method=measurementRemove | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementExport` | inspect | `studio_browser_call` method=measurementExport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
-| `measurementImport` | edit | `studio_browser_call` method=measurementImport | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementList` | inspect | `studio_browser_call` method=measurementList | `#measurement-history-list` | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementGet` | inspect | `studio_browser_call` method=measurementGet | `#measurement-history-list` | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementSave` | edit | `studio_browser_call` method=measurementSave | `#measurement-history-name` `#measurement-history-save` | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementRemove` | edit | `studio_browser_call` method=measurementRemove | `#measurement-history-list` | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementExport` | inspect | `studio_browser_call` method=measurementExport | `#measurement-history-export` | `references/browser-session.md`, `references/case-archives-measurements.md` |
+| `measurementImport` | edit | `studio_browser_call` method=measurementImport | `#measurement-history-import` | `references/browser-session.md`, `references/case-archives-measurements.md` |
 | `measurementVerify` | inspect | `studio_verify_measurements` (saved-file counterpart); `studio_browser_call` method=measurementVerify | no GUI control | `references/browser-session.md`, `references/case-archives-measurements.md` |
 
 ## MCP tools

@@ -69,4 +69,13 @@ MOD1は未完了です。以下の各スライスでmain.jsから一部のUI処�
 DOMの`$`/`querySelector`/`querySelectorAll`と、変化する分野・条件・材料・形状・実行状態・ソルバー情報を返す`getState()`を注入します。状態は更新のたびに取得し、モジュールはmain.jsをimportしません。main.jsはコントロール更新関数を組み立て、既存の更新処理から呼び出します。
 `tests/discipline-controls-ui.test.mjs`に偽DOMを使う独立した4テストを追加しました。実Chromeのlocalhost画面でも、熱への切替時のソルバー復帰、流体設定の展開、モーダル時のMFEM/WebGPU・適応無効化を確認しました。[ソースsnapshot付き証跡](evidence/2026-10-15-mod1-discipline-ui-chrome.json)を参照。解析実行・全組合せ・公開HTTPS接続の確認を意味しません。
 
+## 第9スライス: 測定履歴パネルと自動保存
+`src/ui/measurement-history-ui.js`（`installMeasurementHistoryUi`）と`src/ui/measurement-history-storage.js`を追加しました。MEASUREMENTHISTORY1の残り条項「履歴GUIと自動永続化」に対応します。新しいブラウザ操作は追加していません（操作数は不変）。
+
+- パネル（`#measurement-history`、結果ビュー保存パネルの直後）: 表示中の結果の履歴を一覧（点・表示量・値と単位・名前・モード/フレーム）、「現在のプローブ点を保存」、削除、JSON書き出し/読み込み、全消去。結果版が違う履歴は一覧せず件数だけ表示します。
+- 保存・削除・書き出し・読み込みは`window.measurementApi`（コネクタと同じ検証・版照合）を呼ぶだけで、検証は複製していません。プローブ点はmain.jsの測定ツールが`setProbe`で渡し、保存時に表示中の結果版と一致しなければ拒否します。
+- 自動保存: 結果SHAをキーに、IndexedDB（失敗時はlocalStorage）へ保存。保存先は同一オリジン内のみで、履歴アーカイブ以外（資格情報など）は保存しません。履歴の上限（100件・300,000バイト）と同じ検証を保存時・読込時に適用し、壊れた/別結果版のデータは無視して削除します。保存先の版数は最大20。保存失敗でも画面は動作し、注記で知らせます。「保存した履歴をすべて消去」で画面と保存コピーを消去します。
+- 依存（`document`、`anchor`、`api`、`resultView`、`storage`、`translate`、`language`）は引数で渡し、保存先はget/set/remove/keysの非同期アダプターです。
+- `tests/ui-measurement-history.test.mjs`が偽DOM・偽ストレージで確認します。実ブラウザでの動作確認は別途必要です。
+
 英語版: [en/ui-state-separation.md](en/ui-state-separation.md)

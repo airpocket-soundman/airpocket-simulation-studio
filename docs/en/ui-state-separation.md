@@ -69,4 +69,13 @@ Dependencies (the `$` DOM getter, the case store, `status`, `viewCase`, input re
 The module receives the `$`, `querySelector` and `querySelectorAll` DOM functions, plus a `getState()` getter for the changing discipline, conditions, material, source model, run state and solver selection. It reads that state on every update and does not import main.js. main.js creates the updater and calls it from the existing update flow.
 `tests/discipline-controls-ui.test.mjs` adds four independent fake-DOM tests. Real Chrome on localhost also verified solver fallback when selecting thermal, opening flow settings, and disabling MFEM/WebGPU/adaptation for modal analysis; see the [source-snapshot evidence](../evidence/2026-10-15-mod1-discipline-ui-chrome.json). This does not verify analysis execution, every combination or public HTTPS pairing.
 
+## Slice 9: measurement history panel and automatic saving
+Added `src/ui/measurement-history-ui.js` (`installMeasurementHistoryUi`) and `src/ui/measurement-history-storage.js`. This covers the remaining MEASUREMENTHISTORY1 clauses "history GUI and automatic persistence". No browser operation was added (the operation count is unchanged).
+
+- Panel (`#measurement-history`, right after the saved result views panel): lists history entries for the displayed result (point, field, value and unit, name, mode/frame), "Save current probe", remove, JSON export/import and clear-all. Entries bound to other result revisions are not listed; only their count is shown.
+- Save, remove, export and import call `window.measurementApi` (the same validation and revision checks as the connector); validation is not duplicated. The main.js probe tool hands its point to `setProbe`, and saving is refused when the displayed result revision no longer matches.
+- Automatic saving: keyed by result SHA in IndexedDB (localStorage fallback), same origin only, holding nothing but measurement archives (no credentials). The archive validator (100 entries / 300,000 bytes) is applied on write and on load; corrupt or other-revision data is ignored and removed. At most 20 revisions are kept. The page works when saving fails and a note says so. "Clear all history and saved copy" empties both the panel and the saved copy.
+- Dependencies (`document`, `anchor`, `api`, `resultView`, `storage`, `translate`, `language`) are injected; storage is an async get/set/remove/keys adapter.
+- `tests/ui-measurement-history.test.mjs` checks this with a fake DOM and fake storage. Real-browser verification is still required.
+
 Japanese: [../ui-state-separation.md](../ui-state-separation.md)
