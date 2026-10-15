@@ -1,0 +1,55 @@
+{
+  "task": "ASSESSMENTAPI1",
+  "status": "partial",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "158150cbc7ed376a3cb9d66ddafdc76eb3aaf333",
+    "note": "uncommitted fixes: src/visual-export.js (short-clip WebM) and assessment contract wording",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server (worktree mod1-wt)",
+    "tab": "new tab in own tab group, closed at end"
+  },
+  "scenario": "#fatigue-demo -> #mesh-run -> #solve-run in the GUI (no fracture toughness registered), then connector getAssessment/evaluateAssessment with a fresh getResultView revision read right before each call.",
+  "checks": [
+    {
+      "name": "Fracture evaluation without registered toughness is refused (fresh current revision)",
+      "passed": true,
+      "detail": "revision sha256:63102edefd8ea3bf302c0614b300fadcc6068380f9fdd9edb93a483396211d4d re-read immediately before; error \"Fracture assessment requires registered toughness and surface data\"; result revision unchanged after the refusal."
+    },
+    {
+      "name": "Same refusal after a fatigue evaluation, again with a freshly re-read revision",
+      "passed": true,
+      "detail": "revision sha256:63abd8648b66e223fd2f3082610f6cf12bdd6078a513877eceac4e61eb5a1085; error \"Fracture assessment requires registered toughness and surface data\""
+    },
+    {
+      "name": "Fatigue evaluate (min -1, max 1, 1e5 cycles, none) succeeds; result revision changes",
+      "passed": true,
+      "detail": "{\"model\":\"stress-life\",\"minLoadFactor\":-1,\"maxLoadFactor\":1,\"meanStressCorrection\":\"none\",\"appliedCycles\":100000,\"minLifeCycles\":999999.9965183046,\"maxDamage\":0.10000000034816954}; revision sha256:63102edefd8ea3bf302c0614b300fadcc6068380f9fdd9edb93a483396211d4d -> sha256:63abd8648b66e223fd2f3082610f6cf12bdd6078a513877eceac4e61eb5a1085"
+    },
+    {
+      "name": "Same-revision fatigue re-evaluation replaces the stored assessment (not refused)",
+      "passed": true,
+      "detail": "second evaluate (appliedCycles 2e5, expectedResultRevision sha256:63abd8648b66e223fd2f3082610f6cf12bdd6078a513877eceac4e61eb5a1085) accepted; getAssessment then returns {\"model\":\"stress-life\",\"minLoadFactor\":-1,\"maxLoadFactor\":1,\"meanStressCorrection\":\"none\",\"appliedCycles\":200000,\"minLifeCycles\":999999.9965183046,\"maxDamage\":0.20000000069633908} (maxDamage 0.2 versus 0.1 before)"
+    },
+    {
+      "name": "Omitted fatigue options take defaults",
+      "passed": true,
+      "detail": "{\"model\":\"stress-life\",\"minLoadFactor\":0,\"maxLoadFactor\":1,\"meanStressCorrection\":\"none\",\"appliedCycles\":1,\"minLifeCycles\":3999999.986073219,\"maxDamage\":2.500000008704238e-7} (defaults minLoadFactor 0, maxLoadFactor 1, appliedCycles 1, correction none)"
+    },
+    {
+      "name": "Stale expectedResultRevision refused",
+      "passed": true,
+      "detail": "error \"Displayed result revision conflict\""
+    }
+  ],
+  "observations": [
+    "The missing-toughness refusal is isolated from revision conflicts: the revision was read right before the call and the stale case returns a different error.",
+    "Fracture success with registered toughness was not repeated in this run; it was verified in real-chrome-2."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Fracture evaluation success path in this run (not repeated)",
+    "Mixed-mode, residual-stress or non-structural inputs"
+  ]
+}

@@ -156,7 +156,7 @@ NUMERICREFERENCE1の追加調査では、生成参照200回が成功し、既定
 
 `tests/mcp-assessment.test.mjs`は実stdio MCPと実WASM軸力解析を使用。明示した架空S-N参照データで寿命1e6 cycles・損傷0.1を確認し、Mode-I評価のK値をsigma*sqrt(pi*a)と照合。疲労評価に破壊評価を追加しても既存評価・入力・応力配列を保持。出典・元の暫定判定と残確認事項、単位・制約、最大200要素の取得を検証した。架空参照値は実材料の設計値ではない。
 
-既存出力/入力への上書き、古い結果版、設定省略、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
+MCP `studio_assess_result`は既存出力/入力パスへの上書きと設定(options)省略を拒否する(保存ファイル経路のみ)。ブラウザ接続`evaluateAssessment`/`resultAssessmentApi.evaluate`では同種の再評価は現行結果版で保存済み評価を置換し、疲労のoptions省略は既定値(minLoadFactor0・maxLoadFactor1・appliedCycles1)で受理する(実Chrome確認)。両経路とも古い結果版、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
 
 ビルド成功。配信物チェックは、全体テストと並行した初回にNode v24.11.1のV8で `jit_page_->allocations_.erase(addr) == 1` のFatal errorとなり停止した。単独再実行は26項目すべて成功（29.07秒）。ソルバーと検証スクリプトは変更しておらず、原因を解決した記録ではない。RUNTIMEWASM1で失敗条件・WASM終了時の状態捕捉と再現性を追跡する。専門SKILLも検証済み。
 
