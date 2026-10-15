@@ -577,3 +577,8 @@ PR #32は、要求された破壊・疲労評価の材料データとオプシ�
 ACK待ちと送信待ちを各8件/8 MBに制限し、同期ソルバーを止めずにscalar iterationだけを集約する。通常の結果・報告エラーの前に配送を待ち、メッシュ世代と観測値の受理時コピーを維持する。取消・timeout・異常終了では終端集計が届かず、最終欠落数は不明となる。progress・最終結果・JSヒープ全体はこの容量保証の対象外。
 
 初期の即時drop方式は実Stokes P2のfinal-checkとsweep周波数イベントを失ったため採用せず、[失敗証跡](evidence/2026-10-15-worker-transport-initial-regression.json)を残した。修正版の関連77試験と、別途モジュール境界・共通型29試験が成功。全体回帰・実ブラウザ・今回候補の公開検証は未了で、P3全体の完了ではない。
+## 2026-10-15: 公開HTTPS再接続の利用者報告とSkill入力preview
+
+利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。
+
+Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し、両validatorが成功した。実in-repo stdioのsynthetic 100 N→150 N previewは `/conditions/1/value` の古い根拠を `PROVENANCE_STALE` として示し、元入力bytesを保持した。変更はpreviewのみで適用・解析していない。fixture生成にrepository factoryを使ったためSkill単独/全一巡の証明ではないが、SKILLROUTING1の記載済み受け入れ範囲を満たしreadyへ更新した。[同期証跡](evidence/2026-10-15-skill-synchronization-b.json)、[preview証跡](evidence/2026-10-15-skill-forward-input-preview-b.json)。

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "scope": "PR #33 follow-up: isolate only the exploratory thermal lineage test's four analysis calls",
+  "originalPullRequestHead": "6155512c086d53c3149f82d90916a21a6cff7654",
+  "initialFailure": {
+    "workflowRunId": "38698340023",
+    "result": "failed",
+    "suite": "prepared tests",
+    "tests": { "total": 1135, "passed": 1131, "failed": 1, "skipped": 3 },
+    "testFile": "tests/mcp-thermal-provenance.test.mjs",
+    "symptom": "Native abort after the second test; stderr reported 'corrupted size vs. prev_size'.",
+    "cause": "Unknown; not attributed to a specific runtime defect.",
+    "log": ".qa/pr33-verify-failure.log"
+  },
+  "repair": {
+    "change": "Set isolation:'process' on the four analyzeProject calls in the third exploratory thermal lineage test only.",
+    "defaultIsolationChanged": false,
+    "automaticRetryOrFallback": false,
+    "secondTestIsolation": "Node Worker (unchanged)",
+    "purpose": "Isolate lineage assertions from shared native allocations released by earlier Worker-based analysis calls; this is a scoped mitigation, not a root-cause fix."
+  },
+  "verification": {
+    "command": "node --test tests/mcp-thermal-provenance.test.mjs",
+    "tests": { "total": 3, "passed": 3, "failed": 0, "skipped": 0 },
+    "thirdTest": "process-isolated exploratory thermal lineage remains provisional after coupling into legacy thermal stress",
+    "result": "passed"
+  },
+  "relatedPreparedCheck": {
+    "log": ".qa/pr33-thermal-prepared.log",
+    "result": "3/3 passed for the thermal test file with after-build-kernel preparation.",
+    "limitation": "The copy-cad preparation was not ready because native cache was unavailable; this was not a fully prepared verification run."
+  },
+  "limitations": [
+    "One targeted rerun does not establish that the original native memory-corruption symptom is fixed or identify its cause.",
+    "No default isolation change, retry, fallback, solver, or capability claim was added."
+  ]
+}
