@@ -59,7 +59,7 @@ UIの制御表示は `src/ui/discipline-controls-ui.js` が担当し、`src/main
 
 ## 共有型契約 (`src/contracts/*.d.ts`)
 
-`diagnostics.d.ts`(AnalysisFailure/AnalysisDiagnostic/JobErrorRecord)、`job.d.ts`(JobView/JobEvent/ページ)、`case.d.ts`(Revision/RuntimeIdentity/ケース一覧/比較応答)。`npm run check:contracts` はTypeScriptのstrict/noEmitコンパイラを使い、これらの宣言と `tests/fixtures/contracts-types.ts` の代表的な使用例を検査する。これは宣言ファイルとfixtureに限った検査で、JavaScript実装全体の型検査ではない。別途 `tests/contracts.test.mjs` が実際の実行時出力と宣言フィールドを照合し(必須欠落・未宣言フィールド・宣言型の違反を検出し、宣言された任意フィールドは実行時サンプルで1回は観測されるか `OPTIONAL_NOT_OBSERVED` に理由つきで列挙されていなければ失敗する。索引シグネチャを持つ型の余剰キーも `INDEXED_EXTRAS` に固定)、実行時と宣言のparityを確認する。追加するときは実装に存在する形に限り、fixtureと実行時照合テストを更新する。
+`diagnostics.d.ts`(AnalysisFailure/AnalysisDiagnostic/JobErrorRecord)、`job.d.ts`(JobView/JobEvent/ページ)、`case.d.ts`(Revision/RuntimeIdentity/ケース一覧/比較応答)、`project-input.d.ts`(保存Project envelope、代表的なsource/condition/material/study/units/provenance形状)。`npm run check:contracts` はTypeScriptのstrict/noEmitコンパイラを使い、これらの宣言と `tests/fixtures/contracts-types.ts` の正例・負例を検査する。`SavedProjectBase` は実際に必須のversion/meshes/conditionsをruntime parity testと照合する。これは宣言・fixtureと限定したruntime envelopeに限った検査で、JavaScript実装全体の型検査ではない。`SavedProject` は完全な保存schemaではなく代表的な共通形状である。condition内の `planarRegion` / `cylindricalRegion` は `unknown` のままで、runtime正本の全optional fieldやnested descriptorを網羅しない。解析study/material拡張点も `unknown` index signatureで保存形式の将来拡張を許し、全nested schema・物理範囲・単位変換・provenanceの真偽までは保証しない。fixtureの代表的material例はruntime material validatorで、ProjectUnitsの表現済み単位はruntime thermal input-contract表と機械照合する。別途 `tests/contracts.test.mjs` が既存runtime型のフィールドを照合する(宣言された任意フィールドは観測されるか `OPTIONAL_NOT_OBSERVED` に理由を記載し、索引シグネチャの余剰キーは `INDEXED_EXTRAS` に固定)。型宣言とfixtureは実装上の形状を追加するときに更新する。
 
 ## このチェックが扱わないこと
 

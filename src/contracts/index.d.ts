@@ -3,3 +3,4 @@
 export * from './diagnostics';
 export * from './job';
 export * from './case';
+export * from './project-input';

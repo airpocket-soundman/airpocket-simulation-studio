@@ -9,6 +9,10 @@ import {createCaseStore} from '../src/cases.js';
 import {createCaseOperations} from '../src/case-operations.js';
 import {createCaseComparisonApi} from '../src/case-comparison.js';
 import {createRuntimeIdentity} from '../src/runtime-identity.js';
+import {createProjectFromBuiltin} from '../src/project-import.js';
+import {validateMaterialProperties} from '../src/materials.js';
+import {inspectThermalInputContract} from '../src/thermal-input-contract.js';
+import {inspectThermalStressInputContract} from '../src/thermal-stress-input-contract.js';
 
 // Structural parity between the declared interfaces (src/contracts/*.d.ts) and real runtime output:
 //  - every declared required field is present at runtime;
@@ -19,7 +23,7 @@ import {createRuntimeIdentity} from '../src/runtime-identity.js';
 //    interface and 'unknown' types are NOT checked;
 //  - every declared optional field must be observed in at least one parity sample, or be listed in
 //    OPTIONAL_NOT_OBSERVED with a reason (a listed field that is observed fails, so the list cannot rot).
-const files = ['diagnostics', 'job', 'case', 'index'].map(n => `src/contracts/${n}.d.ts`);
+const files = ['diagnostics', 'job', 'case', 'project-input', 'index'].map(n => `src/contracts/${n}.d.ts`);
 const source = Object.fromEntries(files.map(f => [f, existsSync(f) ? readFileSync(f, 'utf8') : '']));
 const all = Object.values(source).join('\n');
 const allNoComments = all.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
@@ -141,8 +145,8 @@ function assertInUnion(typeName, value) {
 
 test('contract declaration files exist and export the documented names', () => {
   for (const f of files) assert.ok(existsSync(f), f + ' must exist');
-  for (const name of ['AnalysisFailure', 'AnalysisDiagnostic', 'JobErrorRecord', 'JobView', 'JobEvent', 'JobEventsPage', 'JobListPage', 'RuntimeIdentity', 'CaseRow', 'CaseListResponse', 'CaseComparisonReference', 'CaseComparisonResponse']) declared(name);
-  for (const mod of ['diagnostics', 'job', 'case']) assert.match(source['src/contracts/index.d.ts'], new RegExp(`from './${mod}'`));
+  for (const name of ['AnalysisFailure', 'AnalysisDiagnostic', 'JobErrorRecord', 'JobView', 'JobEvent', 'JobEventsPage', 'JobListPage', 'RuntimeIdentity', 'CaseRow', 'CaseListResponse', 'CaseComparisonReference', 'CaseComparisonResponse', 'SavedProjectBase', 'SavedProject', 'ProjectMesh', 'ProjectCondition', 'MaterialProperties', 'ProjectUnits']) declared(name);
+  for (const mod of ['diagnostics', 'job', 'case', 'project-input']) assert.match(source['src/contracts/index.d.ts'], new RegExp(`from './${mod}'`));
 });
 
 test('the type matcher accepts members and rejects violations (self-test of the parity harness)', () => {
@@ -261,6 +265,32 @@ test('contract parity: runtime identity, case rows and comparison response', asy
   assertParity('CaseComparisonResult', sampled.comparison);
   assertParity('CaseComparisonResponse', sampled);
   assert.match(list.archiveRevision, /^sha256:[a-f0-9]{64}$/);
+});
+
+test('contract parity: saved project required envelope', () => {
+  const project = createProjectFromBuiltin({source: {kind: 'box', bounds: [0, 0, 0, 1, 1, 1]}});
+  assertParity('SavedProjectBase', {version: project.version, meshes: project.meshes, conditions: project.conditions});
+});
+
+test('project unit and material fixture examples stay aligned with runtime validators', () => {
+  const fixture = readFileSync('tests/fixtures/contracts-types.ts', 'utf8');
+  const declaredUnits = declared('ProjectUnits').fields;
+  const runtimeUnits = {
+    ...inspectThermalInputContract({conditions: [], materialProperties: {}, study: {kind: 'thermal'}}).units,
+    ...inspectThermalStressInputContract({conditions: [], materialProperties: {}, study: {kind: 'structural'}}).units,
+  };
+  for (const [key, symbol] of Object.entries(runtimeUnits)) {
+    const declaration = declaredUnits.get(key);
+    if (!declaration) continue; // Only the represented subset is claimed here.
+    assert.ok(declaration.type.split('|').some(part => part.trim() === `'${symbol}'`), `${key} runtime unit ${symbol} must be represented by ProjectUnits`);
+  }
+
+  assert.match(fixture, /youngModulus: 2e11/);
+  assert.match(fixture, /poissonRatio: 0\.3/);
+  assert.doesNotThrow(() => validateMaterialProperties({youngModulus: 2e11, poissonRatio: 0.3, dependence: {elasticTemperatureTable: [
+    {temperature: 20, youngModulus: 2e11, poissonRatio: 0.3},
+    {temperature: 100, youngModulus: 1.9e11, poissonRatio: 0.31},
+  ]}}));
 });
 
 // Must stay last: it summarises what the samples above actually exercised.
