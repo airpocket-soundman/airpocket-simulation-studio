@@ -23,8 +23,8 @@ export function fixedFrameSchedule({animation,frames,state,scale=1,snapshotTimes
  if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
  if(typeof state!=='function')throw Error('fixedFrameSchedule requires an animation state function');
  if(animation==='time'){
-  if(!snapshotTimes.length||!snapshotTimes.every(finite))throw Error('Time frames require stored acoustic snapshots');
-  if(frames>snapshotTimes.length)throw Error(`png-sequence frames (${frames}) exceed the ${snapshotTimes.length} stored acoustic snapshots`);
+  if(snapshotTimes.length<2||!snapshotTimes.every((time,i)=>finite(time)&&time>=0&&(!i||time>snapshotTimes[i-1])))throw Error('Time frames require increasing stored snapshot times');
+  if(frames>snapshotTimes.length)throw Error(`png-sequence frames (${frames}) exceed the ${snapshotTimes.length} stored snapshots`);
  }
  const cyclic=animation==='orbit'||animation==='deformation',out=[];
  for(let i=0;i<frames;i++){

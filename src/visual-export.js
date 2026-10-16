@@ -1,3 +1,4 @@
+import {framesOf} from './result-frames.js';
 import {FIXED_FRAME_LIMITS,FIXED_FRAME_ANIMATIONS,validateFrameCount,fixedFrameSchedule,buildStoreZip,sha256Hex,pickViewFields,orbitCameraPosition} from './visual-export-fixed-frame.js';
 // Capture the rendered view without changing the archived analysis fields.
 export function animationState(kind,phase,{scale=1,frames=1,min=0,max=1}={}){
@@ -26,7 +27,7 @@ export function exportFormatCapabilities({mediaRecorder}={}){
  };
 }
 
-export function installVisualExport({renderer,scene,camera,controls,getAnalysis,redraw,language,translate}){
+export function installVisualExport({renderer,scene,camera,controls,getAnalysis,redraw,language,translate,getTimeView,restoreTimeView}){
  const $=id=>document.getElementById(id),host=document.createElement('details');
  host.innerHTML=`<summary>画像・アニメーションを保存</summary><label><input id="result-surface" type="checkbox" checked> 結果の表面を表示</label><label><input id="result-surface-wire" type="checkbox"> 結果の表面メッシュを表示</label><button id="view-png">表示中の画像をPNGで保存</button><label>アニメーションの種類<select id="animation-kind"><option value="orbit">モデルを一周</option><option value="deformation">変形を往復（表示用）</option><option value="time">過渡音響の時間変化</option><option value="slice">断面を移動</option></select></label><label>動画の長さ（秒）<input id="animation-seconds" type="number" value="4" min="1" max="15" step="1"></label><div class="row"><button id="animation-preview">再生</button><button id="animation-save">WebM動画で保存</button><button id="animation-stop" disabled>再生を止める</button></div><p>画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化は保存した過渡音響フレームを使い、動画時間は表示用に伸縮します。</p><p id="visual-export-status" role="status"></p><a id="visual-export-download" hidden></a>`;
  $('result-legend').after(host);
@@ -86,12 +87,19 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
 
   // Same checks renderSequence runs, exposed so the job layer can refuse at start instead of failing after the job began.
- function preflight({animation='orbit'}={}){
+ function preflight({animation='orbit',view}={}){
   const output=getAnalysis(),result=output?.result;
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
   if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
-  if(animation==='time'&&result?.kind==='thermal')throw Error('Time playback export is not supported for thermal results yet.');
-  if(animation==='time'&&(result?.kind!=='acousticTransient'||!$('acoustic-time-frame')||!result.snapshots?.length))throw Error('Time playback requires transient acoustic frames.');
+  if(animation==='time'){
+   const stored=framesOf(result);if(!stored||!$('acoustic-time-frame'))throw Error('Time playback requires stored transient acoustic or thermal frames.');
+   if(result.kind==='thermal'){
+    if((view?.result?.field??$('result-field')?.value)!=='temperature')throw Error('Thermal time export requires temperature; heat flux is final-step only.');
+    const count=output.mesh?.nodes?.length/3;
+    if(!Number.isInteger(count)||stored.fields.some(values=>!Array.isArray(values)||values.length!==count||!values.every(Number.isFinite)))throw Error('Invalid stored thermal temperatures');
+   }
+   fixedFrameSchedule({animation:'time',frames:2,state:animationState,snapshotTimes:stored.times});
+  }
   if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
  }
  // Fixed-frame PNG sequence: frame i is rendered from the stored view state for index i of N; wall-clock time and tab throttling never enter the result.
@@ -100,10 +108,10 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   validateFrameCount(frames);
   if(typeof crypto==='undefined'||!crypto.subtle?.digest)throw Error('png-sequence export requires SHA-256 support');
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
-  preflight({animation});
+  preflight({animation,view});
   const output=getAnalysis(),result=output?.result,time=$('acoustic-time-frame');
   const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),min=coordinates.length?Math.min(...coordinates):0,max=coordinates.length?Math.max(...coordinates):1;
-  const saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value};
+  const saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value,timeView:getTimeView?.()};
   const schedule=fixedFrameSchedule({animation,frames,state:animationState,scale:Number(saved.scale),snapshotTimes:animation==='time'?result.snapshots.map(snapshot=>snapshot.time):[],min,max});
   const state={stop:false};active=state;controls.enabled=false;controls.enableDamping=false;
   const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
@@ -130,7 +138,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
     onProgress({fraction:(step.index+1)/frames*.98});
    }
    const manifest={schemaVersion:physicalRevision?2:1,kind:'airpocket-fixed-frame-png-sequence',...(physicalRevision?{physicalRevision}:{resultRevision:expectedResultRevision}),animation,frameCount:frames,resolution,
-    schedule:{basis:'fixed',timeBasis:animation==='time'?'stored acoustic frames':'frame index',phase:animation==='orbit'||animation==='deformation'?'index/frameCount':'index/(frameCount-1)',realtime:false,wallClockIndependent:true},
+    schedule:{basis:'fixed',timeBasis:animation==='time'?(result.kind==='thermal'?'stored thermal temperature frames':'stored acoustic frames'):'frame index',...(animation==='time'?{resultKind:result.kind,field:result.kind==='thermal'?'temperature':'instantPressure'}:{}),phase:animation==='orbit'||animation==='deformation'?'index/frameCount':'index/(frameCount-1)',realtime:false,wallClockIndependent:true},
     view:pickViewFields(view),scale:{units:{time:'second',angle:'radian'},...(animation==='deformation'?{deformScaleKind:'visualization multiplier'}:{})},frames:records};
    const manifestBytes=new TextEncoder().encode(JSON.stringify(manifest,null,1));
    if(signal?.aborted||state.stop)throw Error('Export cancelled');
@@ -138,7 +146,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
    return new Blob([zip],{type:'application/zip'});
   }finally{
    try{camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;
-    try{if(time&&animation==='time'){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}}
+    try{if(time&&animation==='time'&&getAnalysis()===output){if(restoreTimeView&&saved.timeView!==undefined)restoreTimeView(saved.timeView);else{time.value=saved.time;time.dispatchEvent(new Event('input'));}}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}}
    catch(error){active=null;throw error;}
   }
  }
@@ -152,7 +160,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
  }
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
- const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
+ const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],timeSelection:'stored-frames-only',timeAnimationResultKinds:['acousticTransient','thermal'],thermalTimeField:'temperature',recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
  const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }

@@ -36,7 +36,7 @@ async function sequenceManifest(job,mimeType,bytes,sha256){
  const v2=detail.schemaVersion===2;if(v2&&(!job.physicalRevision||detail.physicalRevision!==job.physicalRevision))throw Error('png-sequence physical revision mismatch');
  for(const record of detail.frames){const data=files.get(record.file);if(!data||(v2?record.physicalRevision!==job.physicalRevision||record.resultRevision!==undefined:record.resultRevision!==expectedResultRevision)||'sha256:'+await sha256Hex(data)!==record.sha256)throw Error('png-sequence frame hash mismatch');}
  const manifest={schemaVersion:1,resultRevision:expectedResultRevision,...(v2?{physicalRevision:job.physicalRevision}:{}),format:'png-sequence',container:'zip',compression:'store',mimeType,sha256,totalBytes:bytes.length,frameCount:frames,
-  resolution:detail.resolution,view:detail.view,time:{animation,timeBasis:'fixed-frame',realtime:false,wallClockIndependent:true,frameSelection:animation==='time'?'stored-acoustic-frames-only':'deterministic schedule'},
+  resolution:detail.resolution,view:detail.view,time:{animation,timeBasis:'fixed-frame',realtime:false,wallClockIndependent:true,frameSelection:animation==='time'?(detail.schedule?.resultKind==='thermal'?'stored-thermal-temperature-frames-only':'stored-acoustic-frames-only'):'deterministic schedule',...(animation==='time'&&detail.schedule?.resultKind==='thermal'?{resultKind:'thermal',field:'temperature'}:{})},
   manifestEntry:{name:'manifest.json',bytes:inner.length,sha256:'sha256:'+await sha256Hex(inner)},scale:detail.scale};
  if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
  return manifest;

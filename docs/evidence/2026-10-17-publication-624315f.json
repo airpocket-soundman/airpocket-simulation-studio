@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-16T15:14:32.963Z",
+  "headSha": "624315f98a50463056c4ead713cd5e96e7d9f756",
+  "version": "0.44.0",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38915613897",
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify-published",
+      "conclusion": "success"
+    }
+  ],
+  "publishedProgress": {
+    "verified": true,
+    "bytes": 334246,
+    "sha256": "b20fb9df3d8a69f2fc652d8b813ade02dfa361967b7f7c45e28dd92a88ef6094",
+    "historyStatus": "verified"
+  },
+  "tag": "release-624315f98a50463056c4ead713cd5e96e7d9f756",
+  "tasksMovedToReleasedByThisRecord": [
+    "CASEARCHIVE1",
+    "NUMERICREFERENCE1",
+    "CFDRESEARCH1"
+  ],
+  "notVerified": [
+    "Thermal comparison rendering in real Chrome is not verified.",
+    "This does not close the product publication milestone or certify physical accuracy."
+  ],
+  "includedMergeCommits": {
+    "NUMERICREFERENCE1": "4f39e2145435f5c203ab68069b08fab6af1151ff",
+    "CFDRESEARCH1": "457d970ba314c7d1106e8aa56c509b65987a3656"
+  },
+  "ancestryVerifiedWith": "git merge-base --is-ancestor against headSha"
+}

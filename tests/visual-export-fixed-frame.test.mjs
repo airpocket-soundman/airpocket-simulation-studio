@@ -16,7 +16,7 @@ function parseZip(bytes){const v=new DataView(bytes.buffer,bytes.byteOffset,byte
   assert.equal(crc(data),v.getUint32(p+16,true));assert.equal(v.getUint32(lo+14,true),v.getUint32(p+16,true));out.push({name,data});p+=46+v.getUint16(p+28,true)+v.getUint16(p+30,true)+v.getUint16(p+32,true);}
  return out;}
 
-function fixture({kind='elastic',snapshots=0,pngBytes}={}){
+function fixture({kind='elastic',snapshots=0,pngBytes,getTimeView,restoreTimeView}={}){
  const previous=globalThis.document,elements=new Map();let renders=0;
  const element=id=>{if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){},dispatchEvent(){}});return elements.get(id);};
  for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','acoustic-time-frame'])element(id);
@@ -24,8 +24,8 @@ function fixture({kind='elastic',snapshots=0,pngBytes}={}){
  let last='';const canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(){},fillText(){}}),toBlob(cb,type){cb(new Blob([pngBytes?pngBytes(last):'frame:'+last],{type}));}};
  globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('agent-disconnect')]};
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
- const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind,snapshots:Array.from({length:snapshots},(_,i)=>({time:i*0.5}))}};
- const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;last=[camera.position.x,camera.position.z,element('deform-scale').value,element('acoustic-time-frame').value,element('clip-position').value].map(v=>Number(v).toFixed(6)).join(',');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){}});
+ const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind,...(kind==='thermal'?{transient:true}:{}),snapshots:Array.from({length:snapshots},(_,i)=>({time:i*0.5,...(kind==='thermal'?{temperature:[20+i,30+i]}:{})}))}};
+ const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;last=[camera.position.x,camera.position.z,element('deform-scale').value,element('acoustic-time-frame').value,element('clip-position').value].map(v=>Number(v).toFixed(6)).join(',');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){},getTimeView,restoreTimeView});
  return {api,camera,controls,elements,get renders(){return renders;},output,restore(){if(previous===undefined)delete globalThis.document;else globalThis.document=previous;}};
 }
 const run=(f,extra={})=>f.api.render({format:'png-sequence',animation:'orbit',frames:4,expectedResultRevision:revision,view:{result:{field:'temperature',camera:{position:[1,2,3]}}},...extra});
@@ -164,5 +164,36 @@ test('job layer carries physicalRevision from prepare into the ZIP and the outer
   const job=await api.start(args);let state;for(;;){state=api.status(job);if(state.state!=='running')break;await new Promise(r=>setTimeout(r,5));}
   assert.equal(state.state,'completed',state.error);assert.equal(state.resultRevision,revision);assert.equal(state.artifact.manifest.resultRevision,revision);assert.equal(state.artifact.manifest.physicalRevision,physical);
   const inner=JSON.parse(new TextDecoder().decode(parseZip(new Uint8Array(Buffer.from(api.artifact({...job,length:65536}).data,'base64')))[0].data));assert.equal(inner.physicalRevision,physical);
+ }finally{f.restore();}
+});
+
+
+test('thermal PNG sequence uses only stored temperatures, exact times, reproducible frames and truthful job metadata',async()=>{
+ const f=fixture({kind:'thermal',snapshots:4});try{
+  f.output.result.snapshots.forEach((frame,i)=>{frame.time=[0,.2,2,7][i];});
+  const files=await zipOf(await run(f,{animation:'time',frames:3})),manifest=JSON.parse(new TextDecoder().decode(files[0].data));
+  assert.deepEqual(manifest.frames.map(x=>x.snapshotIndex),[0,2,3]);assert.deepEqual(manifest.frames.map(x=>x.physicalTimeSeconds),[0,2,7]);assert.equal(manifest.schedule.timeBasis,'stored thermal temperature frames');assert.equal(manifest.schedule.field,'temperature');assert.equal(manifest.schedule.resultKind,'thermal');
+  assert.equal(new Set(files.slice(1).map(x=>new TextDecoder().decode(x.data))).size,3);for(const [i,fr]of manifest.frames.entries())assert.equal(fr.sha256,'sha256:'+createHash('sha256').update(files[i+1].data).digest('hex'));
+  assert.deepEqual(await zipOf(await run(f,{animation:'time',frames:3})),files);
+  const caps=f.api.capabilities();assert.deepEqual(caps.formats['png-sequence'].timeAnimationResultKinds,['acousticTransient','thermal']);assert.deepEqual(caps.timeAnimationResultKinds,['acousticTransient']);
+  const jobs=createVisualExportJobs({render:args=>f.api.render(args)}),job=await jobs.start({requestId:'thermal',expectedResultRevision:revision,format:'png-sequence',animation:'time',frames:3,view:{result:{field:'temperature'}}});let state;for(let i=0;i<100;i++){state=jobs.status({jobId:job.jobId});if(state.state==='completed'||state.state==='failed')break;await new Promise(resolve=>setTimeout(resolve,5));}
+  assert.equal(state.state,'completed',state.error);assert.equal(state.artifact.manifest.time.frameSelection,'stored-thermal-temperature-frames-only');assert.equal(state.artifact.manifest.time.field,'temperature');
+ }finally{f.restore();}
+});
+
+test('thermal PNG sequence refuses flux, absent frames, invalid time/temperature and still refuses WebM',async()=>{
+ const f=fixture({kind:'thermal',snapshots:3});try{
+  await assert.rejects(run(f,{animation:'time',frames:2,view:{result:{field:'heatFlux'}}}),/temperature/);assert.equal(f.renders,0);
+  f.output.result.transient=false;await assert.rejects(run(f,{animation:'time',frames:2}),/stored/);f.output.result.transient=true;
+  f.output.result.snapshots[1].time=0;await assert.rejects(run(f,{animation:'time',frames:2}),/increasing/);f.output.result.snapshots[1].time=.5;
+  f.output.result.snapshots[1].temperature=[1];await assert.rejects(run(f,{animation:'time',frames:2}),/temperatures/);
+  await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/not supported for thermal/);assert.equal(f.renders,0);
+ }finally{f.restore();}
+});
+
+test('thermal sequence restores exact interpolated time through hooks after completion and cancellation',async()=>{
+ const exact={frameIndex:1,timeSeconds:.67890123456789},restored=[];const f=fixture({kind:'thermal',snapshots:4,getTimeView:()=>structuredClone(exact),restoreTimeView:state=>restored.push(state)});try{
+  await run(f,{animation:'time',frames:3});assert.deepEqual(restored,[exact]);
+  const controller=new AbortController();await assert.rejects(run(f,{animation:'time',frames:3,signal:controller.signal,onProgress:()=>controller.abort()}),/cancelled/);assert.deepEqual(restored,[exact,exact]);assert.equal(f.api.isActive(),false);
  }finally{f.restore();}
 });
