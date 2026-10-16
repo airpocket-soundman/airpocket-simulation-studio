@@ -22,3 +22,9 @@ Date: 2026-10-16. Only the pure computation module `src/view-compare-layout.js` 
 - The load factor is only validated; it is not mapped to saved data or used to recompute results.
 
 Next step: an adapter in the viewer collects each case's range and frame times, passes them to this module, and applies the resulting plan to each panel through the existing view-settings API.
+
+## Increment 2: GUI (2026-10-16)
+
+"Compare two cases side by side" below the saved-case list (`#compare-left` `#compare-right` `#compare-time` `#compare-run` `#compare-png`). Each case is drawn in turn with the existing result renderer (`showAnalysis`), copied off-screen and composed left/right on a 2D canvas (`#compare-canvas`). Project input is not changed; the displayed result, colour range and frame are restored afterwards. The shared camera is the current camera, the deformation scale the current input, the quantity the current selection. Each case is drawn once with its automatic range to get min/max, then `computeSharedRange` fixes one range and both are redrawn. Transient acoustics need a shared physical time; the offset to the stored frame is printed in the legend. Labels show case name, mesh size (mm) and headline metrics with units. PNG saves the comparison canvas (a separate path from the viewer's `#view-png`).
+
+Not implemented: video export, MCP/API operations, state retention after reload or cancel. Not verified in a real browser (fake-DOM unit tests only). Modal results are fixed to mode 0.
