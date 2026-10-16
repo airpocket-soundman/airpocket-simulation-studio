@@ -39,6 +39,24 @@ async function duringHash(action,run){
 }
 const codes=out=>out.comparison.reasons.map(r=>r.code);
 
+test('thermal stored frame comparison samples the chosen physical time and preserves final defaults',async()=>{
+ const a=thermal(meshA(),[100,101,102,103]),b=thermal(meshB(),[200,202,204,206,210]);
+ a.result.transient=b.result.transient=true;
+ a.result.snapshots=[{time:0,temperature:[0,1,2,3]},{time:2,temperature:[10,11,12,13]}];
+ b.result.snapshots=[{time:0,temperature:[0,2,4,6,10]},{time:1,temperature:[20,22,24,26,30]},{time:2,temperature:[30,32,34,36,40]}];
+ const f=fixture({a,b}),api=createCaseComparisonApi({cases:f.cases}),run=(ai,bi)=>api.compare({references:[f.ref('a','temperature',{frameIndex:ai}),f.ref('b','temperature',{frameIndex:bi})],point:P});
+ const out=await run(1,2);assert.equal(out.comparison.comparable,true);
+ assert.deepEqual(out.references[0].selection,{field:'temperature',displayUnit:'degC',frameIndex:1,timeSeconds:2,timeSelection:'stored-frames-only'});
+ close(out.references[0].measurement.values.temperature,10.6);close(out.references[1].measurement.values.temperature,31.2);close(out.comparison.deltas[0].values.temperature,20.6);
+ assert.deepEqual(codes(await run(1,1)),['different-time']);
+ const mixed=await api.compare({references:[f.ref('a','temperature'),f.ref('b','temperature',{frameIndex:2})],point:P});assert.deepEqual(codes(mixed),['different-time']);
+ const final=await api.compare({references:[f.ref('a','temperature')],point:P});close(final.references[0].measurement.values.temperature,100.6);assert.equal(final.references[0].selection.timeSeconds,undefined);
+ const flux=await api.compare({references:[f.ref('a','heatFlux')],point:P});assert.deepEqual(flux.references[0].measurement.values.flux,[1,2,3]);
+ for(const frameIndex of [0,1,99])await assert.rejects(api.compare({references:[f.ref('a','heatFlux',{frameIndex})],point:P}),{code:'CASE_COMPARISON_SELECTOR_INVALID'});
+ const steady=structuredClone(a);steady.result.transient=false;const steadyFixture=fixture({a:steady});await assert.rejects(createCaseComparisonApi({cases:steadyFixture.cases}).compare({references:[steadyFixture.ref('a','temperature',{frameIndex:0})],point:P}),{code:'CASE_COMPARISON_SELECTOR_INVALID'});
+ for(const patch of [{temperature:[1,2]},{temperature:[0,1,2,'3']},{time:-1},{time:null}]){const corrupt=structuredClone(a);Object.assign(corrupt.result.snapshots[0],patch);const bad=fixture({a:corrupt}),badApi=createCaseComparisonApi({cases:bad.cases});for(const point of [undefined,P])await assert.rejects(badApi.compare({references:[bad.ref('a','temperature',{frameIndex:0})],...(point?{point}:{})}),{code:'CASE_COMPARISON_DATA_INVALID'});}
+});
+
 test('same global point is sampled independently in distinct meshes',async()=>{
  const f=fixture({a:thermal(meshA(),[0,1,2,3]),b:thermal(meshB(),[0,2,4,6,10])});
  const api=createCaseComparisonApi({cases:f.cases});

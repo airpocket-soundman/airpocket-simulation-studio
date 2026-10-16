@@ -4,18 +4,28 @@ import {createViewCompareUi} from '../src/ui/view-compare-ui.js';
 
 const fakeCtx = () => { const calls = []; return {calls, fillRect() {}, drawImage: (...a) => calls.push(['draw', ...a]), fillText: (t) => calls.push(['text', t]), createLinearGradient: () => ({addColorStop() {}}), set fillStyle(v) {}, set font(v) {}, set textAlign(v) {}}; };
 function el(tag) { const e = {tag, children: [], textContent: '', value: '', style: {}, append(...c) { this.children.push(...c); }, replaceChildren(...c) { this.children = [...c]; }, setAttribute() {}, addEventListener() {}, after() {}, ctx: tag === 'canvas' ? fakeCtx() : null, getContext() { return this.ctx; }}; return e; }
-function setup({transient = false} = {}) {
+function setup({transient = false, field = 'stress', finalOnly = false} = {}) {
   const cases = [{name: 'A', output: {calculation: {options: {size: 5}}}}, {name: 'B', output: {calculation: {options: {size: 4}}}}];
-  const renders = [], statuses = [];
+  const renders = [], statuses = [], inspections = [];
   const ui = createViewCompareUi({
     $: () => null, document: {createElement: el}, anchor: el('div'), status: t => statuses.push(t),
     store: {list: () => cases, compare: () => cases.map(() => ({metrics: [{key: 'maxVonMisesPa', value: 2e6, unit: 'Pa'}]}))},
-    inspectCase: i => ({frameTimes: transient ? [0, 0.1, 0.2].map(t => t + i * 0.01) : null, fields: ['stress']}),
-    renderCase: (i, spec) => { renders.push([i, spec]); return {canvas: {width: 100, height: 50}, min: i ? 1 : 0, max: i ? 20 : 10, unit: 'MPa'}; },
-    getField: () => 'stress', getDeformScale: () => 25, getCamera: () => ({position: [0, 0, 5], target: [0, 0, 0], up: [0, 1, 0], fov: 45})
+    inspectCase: (i, selectedField) => { inspections.push([i, selectedField]); return {frameTimes: transient ? [0, 0.1, 0.2].map(t => t + i * 0.01) : null, fields: [field]}; },
+    renderCase: (i, spec) => { renders.push([i, spec]); return {canvas: {width: 100, height: 50}, min: i ? 1 : 0, max: i ? 20 : 10, unit: 'MPa', finalOnly}; },
+    getField: () => field, getDeformScale: () => 25, getCamera: () => ({position: [0, 0, 5], target: [0, 0, 0], up: [0, 1, 0], fov: 45})
   });
-  return {ui, renders, statuses, cases};
+  return {ui, renders, statuses, cases, inspections};
 }
+test('final-only thermal fields are inspected by quantity and visibly exclude shared time', async () => {
+  const {ui, renders, inspections} = setup({field: 'heatFlux', finalOnly: true});
+  const plan = await ui.show();
+  assert.deepEqual(inspections, [[0, 'heatFlux'], [1, 'heatFlux']]);
+  assert.ok(plan.panels.every(p => !p.time.timeApplies));
+  assert.ok(renders.every(([, spec]) => spec.frameIndex === null));
+  const canvas = ui.host.children.find(e => e.id === 'compare-canvas');
+  const text = canvas.ctx.calls.filter(c => c[0] === 'text').map(c => c[1]).join('\n');
+  assert.match(text, /最終ステップのみ/);
+});
 test('static pair is rendered twice per case: auto range first, then one shared fixed range and scale', async () => {
   const {ui, renders} = setup();
   const plan = await ui.show();

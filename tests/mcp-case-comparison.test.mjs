@@ -17,6 +17,17 @@ function server(){
  return {request,notify:()=>child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n'),raw:args=>request('tools/call',{name:'studio_compare_cases',arguments:args}),async call(args){const response=(await this.raw(args)).result;assert.notEqual(response.isError,true,JSON.stringify(response));assert.deepEqual(JSON.parse(response.content[0].text),response.structuredContent.value);return response.structuredContent.value;},async close(){const done=new Promise(resolve=>child.once('exit',resolve));child.stdin.end();const timer=setTimeout(()=>child.kill(),2000);await done;clearTimeout(timer);lines.close();}};
 }
 const reference=(catalog,index,field)=>({caseId:catalog.cases[index].caseId,expectedRevision:catalog.cases[index].revision,field});
+test('real MCP samples stored thermal temperature frames with exact times and no borrowed final flux',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'mcp-thermal-frames-')),mcp=server();try{
+  const saved=archive();for(const [i,row]of saved.cases.entries())if(i<2){row.output.result.transient=true;row.output.result.snapshots=[{time:0,temperature:Array(4).fill(i*10)},{time:2,temperature:[1,2,3,4].map(v=>v+i*10)}];}
+  const path=join(directory,'thermal.json'),raw=Buffer.from(JSON.stringify(saved));await writeFile(path,raw);await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();
+  const catalog=await mcp.call({path}),references=[0,1].map(i=>({...reference(catalog,i,'temperature'),frameIndex:1})),request={path,expectedArchiveRevision:catalog.archiveRevision,references,point},result=await mcp.call(request);
+  assert.equal(result.references[0].selection.timeSeconds,2);assert.equal(result.references[0].measurement.values.temperature,1.6);assert.equal(result.comparison.deltas[0].values.temperature,10);
+  const different=await mcp.call({...request,references:[references[0],{...references[1],frameIndex:0}]});assert.deepEqual(different.comparison.reasons.map(x=>x.code),['different-time']);
+  for(const ref of [{...references[0],field:'heatFlux'},{...references[0],frameIndex:99}])assert.equal((await mcp.raw({...request,references:[ref]})).result.isError,true);
+  const final=await mcp.call({...request,references:[reference(catalog,0,'heatFlux')]});assert.deepEqual(final.references[0].measurement.values.flux,[1,2,3]);assert.deepEqual(await readFile(path),raw);
+ }finally{await mcp.close();await rm(directory,{recursive:true,force:true});}
+});
 test('real MCP lists stable snapshot-local saved cases then compares physical values without writes or analysis',async()=>{
  const directory=await mkdtemp(join(tmpdir(),'mcp-case-comparison-')),mcp=server();try{
   const path=join(directory,'archive.json'),raw=Buffer.from(JSON.stringify(archive(),null,2));await writeFile(path,raw);

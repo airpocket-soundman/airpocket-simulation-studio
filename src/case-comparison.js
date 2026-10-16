@@ -60,6 +60,13 @@ function select(ref,result){
   if(!frame)throw selectorError('Unknown stored frame index');
   if(!finite(frame.time))throw dataError('Stored frame time is corrupt');
   Object.assign(selection,{frameIndex:ref.frameIndex,timeSeconds:frame.time,timeSelection:'stored-frames-only'});
+ }else if(result.kind==='thermal'&&ref.frameIndex!==undefined){
+  if(!result.transient||!Array.isArray(result.snapshots)||result.snapshots.length<2)throw selectorError('This result has no stored time frames');
+  const frame=Array.isArray(result.snapshots)?result.snapshots[ref.frameIndex]:undefined;
+  if(!frame)throw selectorError('Unknown stored frame index');
+  if(!finite(frame.time)||frame.time<0)throw dataError('Stored frame time is corrupt');
+  if(ref.field!=='temperature')throw selectorError('Stored thermal snapshots contain temperature only; omit frameIndex for final heat flux');
+  Object.assign(selection,{frameIndex:ref.frameIndex,timeSeconds:frame.time,timeSelection:'stored-frames-only'});
  }else if(ref.frameIndex!==undefined)throw selectorError('This result has no stored time frames');
  if(result.kind==='acoustic'){if(finite(result.frequency))selection.frequencyHz=result.frequency;if(!finite(result.referencePressurePa)||result.referencePressurePa<=0)throw dataError('Stored acoustic reference pressure is corrupt');selection.referencePressurePa=result.referencePressurePa;}
  return selection;
@@ -115,7 +122,7 @@ function measure(sample,selection,field){
  if(!plain(sample)||!nonnegative(sample.element))throw dataError('Sampled element is corrupt');
  const values={},units={};
  for(const key of measuredKeys[field]){if(!validValue(sample[key]))throw dataError('Sampled field is corrupt');values[key]=sample[key];units[key]=rawUnits[key];}
- if(selection.timeSeconds!==undefined&&sample.time!==selection.timeSeconds)throw dataError('Sampled time does not match the selected stored frame');
+ if(selection.timeSeconds!==undefined&&(sample.frameTimeSeconds??sample.time)!==selection.timeSeconds)throw dataError('Sampled time does not match the selected stored frame');
  return {element:sample.element,...(nonnegative(sample.bodyIndex)?{bodyIndex:sample.bodyIndex}:{}),values,units};
 }
 
@@ -150,13 +157,15 @@ export function createCaseComparisonApi({cases,maxResponseBytes=MAX_BYTES}={}){
   if(lease.caseId!==ref.caseId||lease.revision!==ref.expectedRevision)throw error('CASE_REVISION_CONFLICT','Case lease does not match the requested reference');
   if(!plain(output)||!plain(output.result)||!plain(output.mesh)||!plain(output.input)||typeof lease.name!=='string'||lease.name.length>100)throw dataError('Invalid saved case output');
   const selection=select(ref,output.result),{calculation,mesh,runtimeIdentity}=summarize(output),analysisAssessment=assess(output);
+  const thermalFrame=output.result.kind==='thermal'&&ref.frameIndex!==undefined?output.result.snapshots[ref.frameIndex]:undefined;
+  if(thermalFrame&&(!Array.isArray(thermalFrame.temperature)||thermalFrame.temperature.length!==output.mesh.nodes.length/3||!thermalFrame.temperature.every(finite)))throw dataError('Stored thermal frame temperature is corrupt');
   const [inputRevision,resultRevision]=await Promise.all([getProjectRevision(output.input),getProjectRevision(output)]);
   expired(guard);lease.assertCurrent();
   const row={reference:{caseId:ref.caseId,expectedRevision:ref.expectedRevision},name:lease.name,inputRevision,resultRevision,kind:output.result.kind,selection,calculation,mesh,runtimeIdentity,analysisAssessment};
   if(point===undefined)return row;
   checkBodies(ref,output.mesh);
   let sample;
-  try{sample=sampleDisplayedResult(output.mesh,output.result,point,{bodyIndex:ref.bodyIndex,elementIndex:ref.elementIndex},{modeIndex:ref.modeIndex,frameIndex:ref.frameIndex});}
+  try{sample=sampleDisplayedResult(output.mesh,output.result,point,{bodyIndex:ref.bodyIndex,elementIndex:ref.elementIndex},{modeIndex:ref.modeIndex,frameIndex:ref.frameIndex,...(thermalFrame?{frameValues:thermalFrame.temperature,frameTime:thermalFrame.time,interpolated:false}:{})});}
   catch(cause){
    const reason=Object.hasOwn(domain,cause?.message)?domain[cause.message]:undefined;
    if(reason){row.unavailable={reason};return row;}

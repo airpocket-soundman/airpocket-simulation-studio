@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-16T00:05:16.769Z",
+  "updatedAt": "2026-10-16T14:15:18.223Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1367,8 +1367,8 @@
       "titleEn": "Synchronized side-by-side case viewer and video export",
       "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
       "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
-      "acceptance": "二条件を左右に配置し、共通色範囲・倍率・時間同期を確認。MCP/APIで配置と書き出しを操作し、再読込・中止後の状態保持を検証。 2026-10-16 段階実装: 純粋な配置/共有範囲モジュールと2ケース左右比較パネル(PNG付き)をmainへ。実Chromeで確認: 共有色範囲・単位付きラベル・過渡音響の共有時刻とオフセット表示、比較後のメイン表示の復元、不一致の拒否、PNG。注意: 共有範囲は文字表示のみ(カラーバーなし)、時刻の浮動小数が丸められずに表示、メインビューアの選択フィールドに従う。動画出力、MCP/API操作、再読込・中止後の保持、完全に別形状の比較は未実装/未確認。",
-      "acceptanceEn": "Verify paired cases with shared ranges/scales and synchronized time; expose layout/export through MCP/API and validate reload/cancellation state. 2026-10-16 Staged: pure layout/shared-range module and a two-case side-by-side panel with PNG are on main. Real Chrome verified shared colour range, labels with units, shared time and offset for transient acoustics, restoration of the main viewer, mismatch refusal and PNG. Notes: the shared range is text only (no colour bar), the shown time is an unrounded float, and the panel follows the main viewer field. Video, MCP/API operations, state retention after reload/cancel and comparison of truly different geometries are not built/verified.",
+      "acceptance": "二条件を左右に配置し、共通色範囲・倍率・時間同期を確認。MCP/APIで配置と書き出しを操作し、再読込・中止後の状態保持を検証。 2026-10-16 段階実装: 純粋な配置/共有範囲モジュールと2ケース左右比較パネル(PNG付き)をmainへ。実Chromeで確認: 共有色範囲・単位付きラベル・過渡音響の共有時刻とオフセット表示、比較後のメイン表示の復元、不一致の拒否、PNG。注意: 共有範囲は文字表示のみ(カラーバーなし)、時刻の浮動小数が丸められずに表示、メインビューアの選択フィールドに従う。動画出力、MCP/API操作、再読込・中止後の保持、完全に別形状の比較は未実装/未確認。 2026-10-16 追加: 保存済みの過渡温度フレームを比較パネルで選択し、実時刻と指定時刻との差を表示。caseCompare/studio_compare_casesも温度のframeIndexに対応。熱流束のフレーム指定と異時刻の数値差分は拒否。実Chrome確認は未実施。",
+      "acceptanceEn": "Verify paired cases with shared ranges/scales and synchronized time; expose layout/export through MCP/API and validate reload/cancellation state. 2026-10-16 Staged: pure layout/shared-range module and a two-case side-by-side panel with PNG are on main. Real Chrome verified shared colour range, labels with units, shared time and offset for transient acoustics, restoration of the main viewer, mismatch refusal and PNG. Notes: the shared range is text only (no colour bar), the shown time is an unrounded float, and the panel follows the main viewer field. Video, MCP/API operations, state retention after reload/cancel and comparison of truly different geometries are not built/verified. 2026-10-16 addition: the comparison panel selects stored transient-temperature frames and labels actual time and offset. caseCompare/studio_compare_cases accept temperature frameIndex. Frame-selected heat flux and numerical deltas across different times are refused. Real-Chrome verification is pending.",
       "status": "queued",
       "category": "結果表示"
     },
