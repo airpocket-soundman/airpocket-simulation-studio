@@ -13,3 +13,5 @@ Verification: `tests/result-slice.test.mjs` checks area, affine interpolation, s
 ## Interpolated display between stored frames (GUI)
 
 Transient acoustic results have, besides the stored-frame slider `#acoustic-time-frame`, a fine slider `#acoustic-time-fine` (stored range in 1000 steps) and a play/pause button `#acoustic-time-play`. Times between stored frames show linearly interpolated pressure and are labelled as interpolated. There is no extrapolation, and color ranges, physical arrays and stored results are unchanged. `setResultView` and image/video export still use stored frames only. Pure functions: `src/time-interpolation.js` ([Transient acoustics](transient-acoustics.md)).
+
+See also: [Transient acoustics and stored thermal frames](transient-acoustics.md)
