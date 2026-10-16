@@ -29,6 +29,15 @@ export async function getProjectRevision(project,memo) {
   return hashCanonicalJson(canonicalJson(project,new Set(),memo));
 }
 
+/** Revision of the physical content of a result output: the same hash as getProjectRevision, but with result.performance
+ * (wall-clock solveMs) removed. Stored result/case/measurement/view revisions keep using getProjectRevision unchanged. */
+export async function getPhysicalRevision(output,memo) {
+  const result=output?.result;
+  if(!plain(output)||!plain(result)||!Object.hasOwn(result,'performance'))return getProjectRevision(output,memo);
+  const {performance:_performance,...physical}=result;
+  return getProjectRevision({...output,result:physical},memo);
+}
+
 /** SHA-256 revision of an already canonical JSON string. */
 export async function hashCanonicalJson(canonical) {
   const bytes=new TextEncoder().encode(canonical);
