@@ -1,0 +1,160 @@
+{
+  "title": "Case archive at 1.0 mm (4 cases, ~34 MB) in real Chrome after PR 82 (bridge long-poll)",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "base": "worktree p-d merged origin/main including PR 82",
+    "browser": "real Chrome (Claude in Chrome), own tab, vite dev on 127.0.0.1:5174, stdio connector plus file-IPC driver (about 20 ms driver polling)",
+    "foreground": "The tab could not be made the selected tab of its window with the available tools (tabs_context reported another tab selected), but document.visibilityState was \"visible\" in the page throughout.",
+    "load": "Other agents were reported idle; no heavy local processes were started by me during measurement. Machine load was not otherwise measured. The page JS heap reached about 1.4 GB after holding 4-7 large cases.",
+    "localNetworkAccessPrompt": "No Local Network Access prompt appeared or blocked the page (the connector connected and all commands worked)",
+    "connectionLimitStalls": "None observed as a distinct failure; the stalls seen were page-side busy time, not request queuing (not instrumented at network level)"
+  },
+  "previous": {
+    "read518Chunks": "519 s (1.0 s/chunk, poll-bound)",
+    "import518Chunks": "518 s write (previous run) / 1154 s earlier",
+    "smallRoundTrip7Chunks": "about 7 s read and 7 s write"
+  },
+  "measurements": {
+    "idlePollRate": {
+      "pollsIn10sIdle": 10,
+      "parkDurationMs": "about 1010-1017 per request",
+      "note": "one parked /poll request at a time, re-issued at once after each response; measured with the Resource Timing API over a 10 s idle window after connecting"
+    },
+    "smallRoundTrip2Cases": {
+      "bytes": 416283,
+      "chunks": 7,
+      "readTotalMs": 345,
+      "readPerChunkMs": [
+        48,
+        61,
+        47,
+        46,
+        47,
+        51,
+        44
+      ],
+      "writeTotalMs": 406,
+      "writePerChunkMs": [
+        63,
+        48,
+        59,
+        50,
+        77,
+        47,
+        62
+      ],
+      "commitMs": 157,
+      "wholeImportMs": 623,
+      "hashMatch": true,
+      "archiveRevisionEqual": true,
+      "caseRevisionsEqual": true,
+      "saveMs": [
+        143,
+        230
+      ],
+      "result": "passed"
+    },
+    "largeRun4Cases": {
+      "archiveBytes": 33910415,
+      "chunks": 518,
+      "sha256Declared": "sha256:dd5c6bc9866e268a3561b7ca43ffada11987bb79282175e7a3c823a4468fea29",
+      "saveMsBuilding4Cases": [
+        1998,
+        4205,
+        8051,
+        10699
+      ],
+      "caseListMs": [
+        1476,
+        2819,
+        4247,
+        5585
+      ],
+      "exportFreezeMs": 6110,
+      "read": {
+        "totalMs": 26482,
+        "perQuarterAvgMs": [
+          49.0,
+          51.0,
+          54.2,
+          49.4
+        ],
+        "minMs": 44,
+        "maxMs": 206,
+        "hashMatchesDeclared": true
+      },
+      "import1": {
+        "writeTotalMs": 26632,
+        "retries": 0,
+        "perQuarterAvgMs": [
+          54.1,
+          51.0,
+          50.9,
+          49.6
+        ],
+        "commit": "timed out at the 15 s command limit; the import was NOT applied (case list stayed empty)",
+        "removeAllCasesMs": 23283
+      },
+      "import2_commitRetry": {
+        "writeTotalMs": 25466,
+        "q1AvgMs": 49.8,
+        "q4AvgMs": 49.3,
+        "commitMs": 9192,
+        "commitOk": true,
+        "restoredCaseCount": 4,
+        "archiveRevisionEqualsOriginal": true,
+        "caseRevisionsEqualOriginal": true,
+        "removeAllCasesMs": 5497
+      },
+      "fifthAndSixthSave": "not cleanly measured: after the second import the page was heavily loaded; two caseSave calls hit the 15 s timeout (15.2 s and 15.5 s) with listMs of 14-19 s, and a later clean 1..6 series (remove all, then save six) did not complete within about 15 minutes (page JS heap about 1.4 GB, case removal/list extremely slow). Treat the 5th/6th save as NOT passing the 15 s limit on this run."
+    }
+  },
+  "comparison": "Export read 26.5 s vs 519 s (19.6x faster); per-chunk about 49 ms vs about 1000 ms, flat across quarters (49.0, 51.0, 54.2, 49.4 ms). Import write 26.6 s vs 518 s (19.5x faster), flat (about 50 ms per chunk). Small 2-case round trip 0.35 s read + 0.41 s write + 0.16 s commit vs about 7 s + 7 s. The bottleneck moved from the poll interval to page work: commit of the 34 MB archive takes about 9-15 s and sometimes exceeded the 15 s command timeout (first import), case saves/listing remain slow as cases accumulate (4th save 10.7 s, 5th/6th over 15 s), so the per-command timeout margin is now limited by caseSave/commit, not transfer chunks.",
+  "checks": [
+    {
+      "id": "small-roundtrip",
+      "result": "passed",
+      "detail": "7 chunks each way, 0.35 s read and 0.41 s write, hashes and revisions equal"
+    },
+    {
+      "id": "large-read-hash",
+      "result": "passed",
+      "detail": "518 chunks, 26.5 s, SHA-256 equals declared"
+    },
+    {
+      "id": "large-import-roundtrip",
+      "result": "passed-on-retry",
+      "detail": "first import: writes fine but commit timed out and nothing was restored; second import: commit 9.2 s, archive revision and all 4 case revisions equal the originals"
+    },
+    {
+      "id": "idle-poll-rate",
+      "result": "passed",
+      "detail": "10 /poll requests in 10 s idle, each parked about 1.01 s"
+    },
+    {
+      "id": "console-errors",
+      "result": "observation",
+      "detail": "No poll-related console errors. One uncaught exception \"Error: La\" (minified, from a worker/eval path) was logged at 16:52, during the slow, memory-heavy phase; its relation to the connector is unknown"
+    },
+    {
+      "id": "clean-disconnect",
+      "result": "passed",
+      "detail": "after stopping the connector the page state showed \"Cannot reach the local connector...\" with Connect re-enabled and Disconnect disabled; no page error or hang. Whether polls fully stopped was not counted (the Resource Timing buffer was full)."
+    },
+    {
+      "id": "case-save-up-to-6",
+      "result": "failed",
+      "detail": "5th/6th save over the 15 s command timeout and page extremely slow with 5-7 large cases"
+    }
+  ],
+  "notVerified": [
+    "Clean 5th/6th caseSave timing (not obtained)",
+    "Cause of the memory growth and slowness with many large cases (page heap about 1.4 GB)",
+    "Cause of the 34 MB commit sometimes exceeding 15 s (9.2 s on the retry, over 15 s the first time)",
+    "Poll count after disconnect; connection-limit stalls at network level",
+    "Selected/foreground tab state beyond visibilityState being visible",
+    "Run-to-run variance of the transfer times (one read, two import writes)",
+    "The meaning of the \"Error: La\" exception"
+  ]
+}
