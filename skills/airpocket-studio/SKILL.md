@@ -1,6 +1,6 @@
 ---
 name: airpocket-studio
-description: Analyze saved Airpocket Simulation Studio projects, inspect validated cases and point measurements, and export model/result images or animations. Use for this application, not general CAD editing or unrelated FEM software.
+description: Analyze saved airpocket Simulation Studio projects, inspect validated cases and point measurements, and export model/result images or animations. Use for this application, not general CAD editing or unrelated FEM software.
 ---
 
 Specialize the user's own LLM as a CAE agent; this application does not supply a proprietary AI subscription. Work from the user's geometry, physical intent and material sources. The checkout normally lives at `D:/github/airpocket-soundman/airpocket-simulation-studio`; reuse its actual location if different.
