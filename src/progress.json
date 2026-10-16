@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-16T16:11:58.923Z",
+  "updatedAt": "2026-10-16T16:34:39.017Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1367,13 +1367,13 @@
       "titleEn": "Synchronized side-by-side case viewer and video export",
       "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
       "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
-      "acceptance": "二条件を共通カメラ・色範囲・倍率・保存時刻で左右表示し、API/MCPから配置・出力を操作、再読込・中止後の状態保持を検証する。現在: 配置/共有範囲モジュール、カラーバー付き比較パネル、熱・過渡音響の保存フレームと実時刻/オフセット表示、PNG操作を実装。2026-10-17実Chromeで解析式の熱2ケースを5秒で比較し、1280×640 canvasと元の2秒表示への復元を確認。比較PNGのダウンロード完了、比較動画、比較表示操作API、比較パネル設定の保存・再読込/中止、完全に別形状の比較は未確認または未実装。熱流束のフレーム指定と異時刻の数値差分は拒否する。",
-      "acceptanceEn": "Verify paired cases with shared camera/range/scale/stored time, API/MCP layout/export and reload/cancellation state. Current implementation includes layout/shared-range modules, a colour-bar comparison panel, stored thermal/acoustic frames with actual times/offsets and a PNG action. Real Chrome on 2026-10-17 verified two analytic thermal cases at 5 s, a 1280x640 canvas and restoration of the original 2 s display. Comparison PNG download completion, video, display API, comparison-panel settings persistence/reload/cancellation and truly different geometries remain unverified or unimplemented. Frame-selected heat flux and numerical deltas across different times are refused.",
+      "acceptance": "二条件を共通カメラ・色範囲・倍率・保存時刻で左右表示し、API/MCPから配置・出力を操作、再読込・中止後の状態保持を検証する。現在:共通描画コアとstartCompareExport PNGジョブ、保存時刻/ずれ/許容差、SHA付きページ取得/取消/解放を実装。localhost実Chromeのリポジトリ意味操作ブリッジで1280x640 PNG/SHA・5秒25/30°C/範囲25..30/ずれ0・元の2秒と補間2.01秒への完全復元・staleケース/熱流束共有時刻拒否を確認。登録MCP実行、GUIボタンのダウンロード完了、比較動画、パネル設定保存/再読込、公開HTTPS、一般形状は未確認または未実装。",
+      "acceptanceEn": "Verify paired cases with shared camera/range/scale/stored time, API/MCP layout/export and reload/cancellation state. Shared rendering and startCompareExport PNG jobs provide stored times/offsets/tolerance and SHA-backed paged read/cancel/release. Localhost real Chrome via repository semantic bridge verified 1280x640 PNG/SHA, 25/30 degC at 5 s / range 25..30 / zero offsets, complete original 2 s / interpolated 2.01 s restoration and stale-case/shared-time heat-flux refusals. Registered MCP execution, GUI-button download completion, video, panel settings persistence/reload, public HTTPS and general geometry remain unverified or unimplemented.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-17: 実Chromeで解析式の熱2ケースを5秒で比較表示し、比較後の元の2秒表示を確認。1280x640比較canvas生成。比較PNGのダウンロード完了通知は取得できず未確認。比較動画・表示操作API・比較パネル設定の保存/再読込・中止後の保持は残る。熱の保存時刻は名前付きビュー/測定履歴では対応済み。",
-      "lastUpdateEn": "2026-10-17: Real Chrome displayed two analytic thermal cases at 5 s and restored the original 2 s viewer, generating a 1280x640 comparison canvas. Completion of comparison PNG download is unverified (browser event timeout). Comparison video/display API and comparison-panel settings persistence/reload/cancellation remain open. Stored thermal times are supported in named views and measurement history.",
-      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json"
+      "lastUpdate": "2026-10-17: startCompareExport比較PNGを実装。リポジトリ意味操作ブリッジ経由localhost実Chromeで1280x640/SHA、5秒25/30°C・共有範囲25..30・ずれ0、元の2秒/補間2.01秒の完全復元、staleケース/熱流束共有時刻拒否を確認。登録MCP実行・GUIダウンロード完了・動画・パネル永続化・公開HTTPS・一般形状は残る。",
+      "lastUpdateEn": "2026-10-17: startCompareExport PNG implemented. Localhost real Chrome via repository semantic bridge verified 1280x640/SHA, 25/30 degC at 5 s / range 25..30 / zero offsets, full 2 s / interpolated 2.01 s restoration and stale-case/shared-time heat-flux refusals. Registered MCP execution, GUI download completion, video, panel persistence, public HTTPS and general geometry remain open.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json"
     },
     {
       "id": "VIEWTIME",
