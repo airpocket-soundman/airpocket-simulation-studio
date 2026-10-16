@@ -1,0 +1,54 @@
+{
+  "title": "Case heap after PR 91/92 and thermal time slider (PR 93) in real Chrome",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "base": "worktree p-d merged with origin/main including PRs 91, 92 and 93",
+    "browser": "real Chrome (Claude in Chrome), own tab, vite dev on 127.0.0.1:5174, stdio connector with file-IPC driver; Chrome auto-translation to Japanese was active on the ?lang=en page (some dynamic text appears translated)",
+    "load": "About 13 GB free RAM earlier in the session, no heavy local processes started by me, other agents idle; machine load not otherwise measured. The first mesh/solve after starting vite was cold and exceeded 120 s once; later runs were fast.",
+    "heapMethod": "performance.memory.usedJSHeapSize read twice 3 s apart at checkpoints (the script paused at each checkpoint). Garbage is not forced out: the first read right after a step can be much higher than the settled one (for example 390 -> 152 MB), so the settled value is reported.",
+    "screenshots": "scratchpad chrome-media/verify2/ (thermal-case-restored-interpolated-22s.jpg, thermal-after-duplicate-restore-no-result.jpg, compare-thermal-pair-with-colour-bar.jpg)"
+  },
+  "A_heap": {
+    "previous": {"heapAt6to7Cases": "1.46-1.86 GB", "caseSaveS": "1.2-2.2", "importCommitS": "5.5-5.6"},
+    "run1_usedHeapMB_settled": {"freshPage": 26, "after2Cases": 99, "after4Cases": 152, "afterExportRelease": 178, "afterImportCommit4Cases": 202, "after6Cases": 253, "after7Cases": 279, "after8Cases": 306, "limit": 4396},
+    "run2_usedHeapMB_settled_onSamePageAfterRun1": {"after2Cases": 295, "after4Cases": 348, "afterExportRelease": 382, "afterImportCommit4Cases": 515, "after6Cases": 457, "after7Cases": 483, "after8Cases": 510, "note": "run 2 started with run 1's heap still in the page, so its baseline is higher; transient peaks right after steps reached 1147 and 767 MB before GC"},
+    "timings": {
+      "run1": {"saveMs": [975, 1017, 958, 961, 953, 924, 991, 990], "listMs": [234, 299, 394, 459, 520, 580, 647, 726], "renameMs": [594, 490], "exportBeginMs": 423, "readTotalMs": 25961, "readPerQuarterAvgMs": [51.5, 50.1, 50.1, 48.8], "writeTotalMs": 25912, "writePerQuarterAvgMs": [48.7, 48.8, 52.6, 50.0], "commitMs": 4354, "removeMs": [80, 391, 298, 204]},
+      "run2": {"saveMs": [982, 926, 992, 926, 1057, 960, 959, 963], "listMs": [267, 331, 393, 468, 489, 549, 660, 707], "renameMs": [545, 519], "exportBeginMs": 437, "readTotalMs": 25562, "readPerQuarterAvgMs": [49.1, 49.6, 49.9, 48.6], "writeTotalMs": 25465, "writePerQuarterAvgMs": [48.1, 48.5, 50.5, 49.3], "commitMs": 4188, "removeMs": [77, 360, 294, 236]}
+    },
+    "roundTrip": "archive revision and all 4 case revisions equal in both runs (archive sha256:389cdccf...), hash of the exported archive matches the declared one, 518 chunks",
+    "renderer": "no reload (timeOrigin unchanged) and no window error / unhandledrejection events recorded",
+    "budget": {
+      "status": "not reached",
+      "detail": "CASE_MEMORY_BUDGET (256 MiB retained serialized bytes) could not be exceeded through the UI. At 1.0 mm a case is about 8.5 MB; the finest mesh that generates is 0.9 mm (0.8 mm and below report 'Element limit exceeded'). A thermal transient case at 0.9 mm with 61 snapshots is 9.4 MB each; 8 such cases archive to 75.2 MB (saves took 0.93-1.64 s). The 8-case cap triggers first: the 9th save is refused in 0.49 s with 'Maximum 8 cases' and the store stays intact (same 8 case revisions and archive revision after the refusal, export still works at 75,178,655 bytes). The budget message itself was not seen."
+    },
+    "restoreAndCompare": {
+      "restoreButton": "passed: 'View saved result' (case list) shows the stored thermal result including the time panel; 'Duplicate and restore' restores inputs (transient heat, 40 steps, 21 snapshots) and clears the result as designed; the 8th case view also worked",
+      "comparePanel": "passed: heavy thermal case 1 vs case 4 of 8 compared, 'Comparison shown.', main viewer state identical before and after; the compare canvas now shows a colour gradient bar with 20 degC / 100 degC end labels, shared colour range text and 'Physical time: no time axis' (snapshots not used by compare)"
+    }
+  },
+  "B_thermalSlider": {
+    "setup": "thermal-demo, #transient-heat on, 2 s x 40 steps, #thermal-snapshots 21 (control range 0..61, label says 0 = do not store, 2-61, transient only), mesh 4 mm",
+    "checks": [
+      {"id": "stored-slider", "result": "passed", "detail": "#acoustic-time-frame 0..20 (21 frames), value 20 = final at 80 s / step 40; frame k shows time 4k s / step 2k"},
+      {"id": "fine-slider-and-interpolated", "result": "passed", "detail": "#acoustic-time-fine 0..1000; value 275 gives 22 s with 'Interpolated: linear display blend between stored frames...' ; 0 and 1000 are the first and final frames with no interpolation text"},
+      {"id": "play", "result": "passed", "detail": "Play -> Pause while running, ran to the final frame (fine 1000, 80 s) and the button returned to Play; stored-frame slider change stops playback"},
+      {"id": "final-frame-equals-final-temperature", "result": "passed", "detail": "probe at (5,5,20) = 40.967109648913144 C and (5,5,40) = 99.99999999999996 C with snapshots 21 and with snapshots unset (0): bit-identical; legend 20.00 -> 100.0 C"},
+      {"id": "colour-range-fixed", "result": "passed", "detail": "legend stays 20.00 -> 100.0 C at frames 0, 1, 5, 10, 19, 20 and at interpolated times; panel text says the colour range is fixed over all stored frames"},
+      {"id": "unset-behaviour", "result": "passed", "detail": "with #thermal-snapshots 0 the panel is empty (no sliders), frameCount 0 and the result equals the final step"},
+      {"id": "probe-at-non-final-time", "result": "observation", "detail": "NOT refused: with frame 7 (28 s) displayed, probe returned final-step values (display.frameIndex null, T 40.967 / 100.0) with no error or warning. The panel text says flux, probes and export use the final step, so this follows the documented behaviour but may mislead"},
+      {"id": "export-at-non-final-time", "result": "partial", "detail": "png still: accepted (final step by the panel text). webm with animation time: accepted. png-sequence animation time: refused with 'Time playback requires transient acoustic frames.' (message mentions acoustic only). exportCapabilities.timeSelection still says 'stored-acoustic-frames-only'"},
+      {"id": "setResultView-does-not-reset", "result": "passed", "detail": "setResultView {deformScale:1} at frame 7 left the page on frame 7 / 28 s / same legend; the API's state.frameIndex stays null for thermal results (the stored frame is not exposed there)"},
+      {"id": "case-save-restore-with-snapshots", "result": "passed", "detail": "caseSave of the 21-snapshot result (kind thermal); after loading another result, 'View saved result' restored the thermal result with frames 0..20, 80 s/step 40, slider and interpolation working; 'Duplicate and restore' restored transient-heat, 40 steps and snapshots 21"},
+      {"id": "name-after-case-restore", "result": "observation", "detail": "after restoring the thermal case the model name shown was the axial bar's name rather than the heat conduction sample's (cosmetic, not isolated)"},
+      {"id": "console", "result": "passed", "detail": "no window errors or unhandled rejections recorded"}]
+  },
+  "notVerified": [
+    "The CASE_MEMORY_BUDGET error path and its message (not reachable with available demos; 256 MiB of retained data was not approached)",
+    "Peak heap between checkpoints and the exact retained size (garbage not forced)",
+    "Visual correctness of thermal interpolation beyond the legend and one screenshot",
+    "Thermal compare at a shared time (compare ignores snapshots)",
+    "Japanese-language text of the new controls (Chrome translation interfered)",
+    "Clean foreground-tab timings (tab not the selected tab)"]
+}
