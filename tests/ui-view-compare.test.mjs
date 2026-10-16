@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createViewCompareUi} from '../src/ui/view-compare-ui.js';
 
-const fakeCtx = () => { const calls = []; return {calls, fillRect() {}, drawImage: (...a) => calls.push(['draw', ...a]), fillText: (t) => calls.push(['text', t]), set fillStyle(v) {}, set font(v) {}}; };
+const fakeCtx = () => { const calls = []; return {calls, fillRect() {}, drawImage: (...a) => calls.push(['draw', ...a]), fillText: (t) => calls.push(['text', t]), createLinearGradient: () => ({addColorStop() {}}), set fillStyle(v) {}, set font(v) {}, set textAlign(v) {}}; };
 function el(tag) { const e = {tag, children: [], textContent: '', value: '', style: {}, append(...c) { this.children.push(...c); }, replaceChildren(...c) { this.children = [...c]; }, setAttribute() {}, addEventListener() {}, after() {}, ctx: tag === 'canvas' ? fakeCtx() : null, getContext() { return this.ctx; }}; return e; }
 function setup({transient = false} = {}) {
   const cases = [{name: 'A', output: {calculation: {options: {size: 5}}}}, {name: 'B', output: {calculation: {options: {size: 4}}}}];
@@ -41,4 +41,16 @@ test('transient pair snaps each case to its nearest stored frame and draws the o
   assert.ok(Math.abs(plan.panels[1].time.offsetSeconds - 0.01) < 1e-12);
   const texts = find(ui.host, 'compare-canvas').ctx.calls.filter(c => c[0] === 'text').map(c => c[1]).join('\n');
   assert.match(texts, /保存フレームとのずれ/);
+  assert.match(texts, /100 ms/);
+  assert.match(texts, /\+10 ms/);
+  assert.doesNotMatch(texts, /\d{8,}/);
+});
+test('colour bar: gradient fillRect per panel with min/max labels and unit; hint line present', async () => {
+  const {ui} = setup();
+  const find = (n, id) => n.id === id ? n : n.children?.map?.(c => find(c, id)).find(Boolean);
+  assert.match(find(ui.host, 'compare-hint').textContent, /過渡/);
+  await ui.show();
+  const texts = find(ui.host, 'compare-canvas').ctx.calls.filter(c => c[0] === 'text').map(c => c[1]);
+  assert.equal(texts.filter(t => t === '0 MPa').length, 2);
+  assert.equal(texts.filter(t => t === '20 MPa').length, 2);
 });

@@ -111,3 +111,34 @@ export function planCompareView(list, {camera, deformScale, loadFactor, timeSeco
     legend: layout.legend, size: {width: layout.width, height: layout.height}
   };
 }
+
+// Colour bar geometry inside the shared legend band: one bar under each panel (same x-span as the panel's
+// label band), min label at the left end and max label right-aligned at the right end, text rows below.
+export function legendBars(plan, {barHeight = 14, pad = 8, labelGap = 16, rowHeight = 20} = {}) {
+  const L = plan.legend, y = L.y + pad;
+  const labelY = y + barHeight + labelGap, textY = labelY + rowHeight;
+  return {
+    textRows: [textY, textY + rowHeight],
+    bars: plan.panels.map(p => {
+      const bar = {x: p.rects.label.x + pad, y, width: Math.max(1, p.rects.label.width - 2 * pad), height: barHeight};
+      return {bar, minLabel: {x: bar.x, y: labelY, align: 'left'}, maxLabel: {x: bar.x + bar.width, y: labelY, align: 'right'}};
+    })
+  };
+}
+
+// Significant-digit formatting for legend text. Exponent form is avoided for ordinary magnitudes.
+export function formatQuantity(value, digits = 5) {
+  if (!finite(value)) return String(value);
+  if (value === 0) return '0';
+  const a = Math.abs(value);
+  return a >= 1e6 || a < 1e-4 ? value.toExponential(digits - 1) : String(Number(value.toPrecision(digits)));
+}
+
+// Physical time with a readable unit (us, ms or s) and `digits` significant digits; optional explicit sign.
+export function formatSeconds(t, {digits = 5, signed = false} = {}) {
+  if (!finite(t)) return String(t);
+  const a = Math.abs(t);
+  const [scale, unit] = a === 0 || a >= 1 ? [1, 's'] : a >= 1e-3 ? [1e3, 'ms'] : [1e6, 'us'];
+  const v = Number((t * scale).toPrecision(digits));
+  return `${signed && v > 0 ? '+' : ''}${v} ${unit}`;
+}

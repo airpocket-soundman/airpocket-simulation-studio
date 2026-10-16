@@ -80,3 +80,30 @@ test('plan assembles one shared camera, range, scale, time and layout', () => {
   const stat = planCompareView([{...a, frameTimes: undefined}, {...b, frameTimes: undefined}], {camera, deformScale: 1, output: {width: 1280, height: 720}});
   assert.ok(stat.panels.every(p => p.time.timeApplies === false));
 });
+
+import {planCompareView as _plan, legendBars, formatQuantity, formatSeconds} from '../src/view-compare-layout.js';
+test('legendBars: one bar per panel inside the legend band, aligned with the panel, labels at the bar ends', () => {
+  const cams = {position: [0, 0, 1], target: [0, 0, 0], up: [0, 1, 0], fov: 45};
+  const plan = _plan([{caseId: 'a', label: 'A', field: 'f', unit: 'u', minimum: 0, maximum: 1}, {caseId: 'b', label: 'B', field: 'f', unit: 'u', minimum: 0, maximum: 2}], {camera: cams, deformScale: 1, output: {width: 1000, height: 600, labelHeight: 60, legendHeight: 100}});
+  const g = legendBars(plan);
+  assert.equal(g.bars.length, 2);
+  g.bars.forEach((b, i) => {
+    const r = plan.panels[i].rects.label;
+    assert.ok(b.bar.x >= r.x && b.bar.x + b.bar.width <= r.x + r.width);
+    assert.ok(b.bar.y >= plan.legend.y && b.bar.y + b.bar.height < plan.legend.y + plan.legend.height);
+    assert.equal(b.minLabel.x, b.bar.x); assert.equal(b.maxLabel.x, b.bar.x + b.bar.width); assert.equal(b.maxLabel.align, 'right');
+  });
+  assert.ok(g.textRows[1] < plan.legend.y + plan.legend.height);
+  assert.ok(g.bars[0].bar.x + g.bars[0].bar.width <= g.bars[1].bar.x);
+});
+test('formatSeconds / formatQuantity use sensible significant digits and units', () => {
+  assert.equal(formatSeconds(0.0020205799812909263), '2.0206 ms');
+  assert.equal(formatSeconds(1.5), '1.5 s');
+  assert.equal(formatSeconds(2.5e-7, {digits: 3}), '0.25 us');
+  assert.equal(formatSeconds(0.01, {signed: true}), '+10 ms');
+  assert.equal(formatSeconds(-0.01, {signed: true}), '-10 ms');
+  assert.equal(formatSeconds(0), '0 s');
+  assert.equal(formatQuantity(12.3456789), '12.346');
+  assert.equal(formatQuantity(0), '0');
+  assert.equal(formatQuantity(1.23456e-7), '1.2346e-7');
+});
