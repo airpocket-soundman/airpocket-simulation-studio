@@ -9,3 +9,7 @@
 検証: `tests/result-slice.test.mjs` は断面積、線形場の補間、共有面重複、変形座標の逆対応を確認します。`tests/probe.test.mjs` は過渡音・モード・共有面の四面体指定を確認します。ブラウザの内部流路断面とクリック測定も確認します。
 
 [English](en/result-sections.md)
+
+## 保存フレーム間の補間表示（GUI）
+
+過渡音響の結果には、保存フレーム用の`#acoustic-time-frame`に加え、微調整スライダー`#acoustic-time-fine`（保存範囲を1000分割）と再生/一時停止`#acoustic-time-play`があります。保存フレーム間の時刻では音圧を線形補間して表示し、「補間表示」と明記します。外挿はせず、色範囲・物理配列・保存結果は変わりません。`setResultView`と画像・動画出力は従来どおり保存フレームのみです。純粋関数は`src/time-interpolation.js`（[過渡音響](transient-acoustics.md)）。

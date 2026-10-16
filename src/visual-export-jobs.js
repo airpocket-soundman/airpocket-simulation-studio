@@ -32,8 +32,10 @@ async function sequenceManifest(job,mimeType,bytes,sha256){
  if(!inner)throw Error('png-sequence archive has no manifest.json');
  const detail=JSON.parse(new TextDecoder().decode(inner));
  if(detail.frameCount!==frames||!Array.isArray(detail.frames)||detail.frames.length!==frames||files.size!==frames+1)throw Error('png-sequence archive does not match the requested frame count');
- for(const record of detail.frames){const data=files.get(record.file);if(!data||record.resultRevision!==expectedResultRevision||'sha256:'+await sha256Hex(data)!==record.sha256)throw Error('png-sequence frame hash mismatch');}
- const manifest={schemaVersion:1,resultRevision:expectedResultRevision,format:'png-sequence',container:'zip',compression:'store',mimeType,sha256,totalBytes:bytes.length,frameCount:frames,
+ // schemaVersion 2 archives carry only physicalRevision (resultRevision hashes wall-clock solveMs, which would make the ZIP bytes vary).
+ const v2=detail.schemaVersion===2;if(v2&&(!job.physicalRevision||detail.physicalRevision!==job.physicalRevision))throw Error('png-sequence physical revision mismatch');
+ for(const record of detail.frames){const data=files.get(record.file);if(!data||(v2?record.physicalRevision!==job.physicalRevision||record.resultRevision!==undefined:record.resultRevision!==expectedResultRevision)||'sha256:'+await sha256Hex(data)!==record.sha256)throw Error('png-sequence frame hash mismatch');}
+ const manifest={schemaVersion:1,resultRevision:expectedResultRevision,...(v2?{physicalRevision:job.physicalRevision}:{}),format:'png-sequence',container:'zip',compression:'store',mimeType,sha256,totalBytes:bytes.length,frameCount:frames,
   resolution:detail.resolution,view:detail.view,time:{animation,timeBasis:'fixed-frame',realtime:false,wallClockIndependent:true,frameSelection:animation==='time'?'stored-acoustic-frames-only':'deterministic schedule'},
   manifestEntry:{name:'manifest.json',bytes:inner.length,sha256:'sha256:'+await sha256Hex(inner)},scale:detail.scale};
  if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
@@ -91,10 +93,11 @@ export function createVisualExportJobs({render,prepare,maxBytes=32*1024*1024,max
     if(snapshot?.resultRevision!==normalized.expectedResultRevision)throw Error('Displayed result revision conflict');
     if(!snapshot.view||typeof snapshot.view!=='object'||Array.isArray(snapshot.view))throw Error('Visual export requires frozen view settings');
     const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate visual export job ID');
-    const job={jobId,request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null};jobs.set(jobId,job);entry.jobId=jobId;
+    const physicalRevision=typeof snapshot.physicalRevision==='string'&&/^sha256:[0-9a-f]{64}$/.test(snapshot.physicalRevision)?snapshot.physicalRevision:undefined;
+    const job={jobId,physicalRevision,request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null};jobs.set(jobId,job);entry.jobId=jobId;
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
-    renderActive=true;let output;try{output=render({...copy(normalized),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
+    renderActive=true;let output;try{output=render({...copy(normalized),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
     Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);}}).finally(()=>{renderActive=false;});
     resolve();return summary(job);
    }catch(error){requests.delete(normalized.requestId);reject(error);throw error;}
