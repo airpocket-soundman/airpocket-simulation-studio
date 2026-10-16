@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-16",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38848568202",
+  "headSha": "d26866122254db4c36e91e11e81ce62343ac0736",
+  "version": "0.44.0",
+  "jobs": [
+    {"name": "verify", "conclusion": "success", "jobId": 116804490524},
+    {"name": "deploy", "conclusion": "success", "jobId": 116805472900},
+    {"name": "verify-published", "conclusion": "success", "jobId": 116805537264}
+  ],
+  "verifyPublished": {
+    "passLines": 27,
+    "failLines": 0,
+    "summaryLine": "Deployed 0.44.0 d268661 verified in 40.39 s"
+  },
+  "publishedManifest": {
+    "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/runtime-manifest.json",
+    "version": "0.44.0",
+    "revision": "d26866122254db4c36e91e11e81ce62343ac0736",
+    "dirty": false
+  },
+  "tag": "release-d26866122254db4c36e91e11e81ce62343ac0736",
+  "tasksMovedToReleasedByThisRecord": ["CASEOPS1", "PRINTAPI1", "CASEVIEWBUNDLE1", "MEASUREMENTHISTORY1", "CASEMEASUREMENTBUNDLE1", "WORKERTRANSPORT1"],
+  "note": "These six tasks were moved to ready earlier with committed real-Chrome (localhost) or test evidence cited by each task, and each was merged to main after the required CI verify passed. Their code is part of the published candidate above. PUBLICHTTPS1 is verification-only and stays ready. The publication-milestone gate is not closed by task status. The Node 24 gate is judged under docs/evidence/2026-10-15-node24-gate-policy.json.",
+  "notVerified": [
+    "This record proves that the CI-verified candidate was deployed and passed the 27 published checks; it does not prove the V8 root cause is fixed (RUNTIMEWASM1).",
+    "Behavior on the published page itself was not exercised for these operations; the real-Chrome runs used localhost."
+  ]
+}
