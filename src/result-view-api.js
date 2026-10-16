@@ -7,6 +7,8 @@ const units={displacement:'mm',stress:'MPa',plasticStrain:'%',temperature:'degC'
 export function resultFields(result){const fields=[...(fieldsByKind[result?.kind]||[])];if(result?.kind==='elastic'&&result.plasticity)fields.push('plasticStrain');return fields.map(id=>({id,unit:units[id]}));}
 export function displayRange(minimum,maximum,range,field){if(range&&range.field===field)return {min:range.minimum,max:range.maximum,mode:'fixed'};return {min:minimum,max:maximum,mode:'auto'};}
 export function colorFraction(value,minimum,maximum){return maximum>minimum?Math.max(0,Math.min(1,(value-minimum)/(maximum-minimum))):0;}
+// The single result colormap (HSL, blue at the minimum to red at the maximum), shared by the 3D view and legends.
+export function colormapHsl(fraction){return [(1-fraction)*.65,.8,.5];}
 const vector=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 function cameraSettings(value){
  if(!value||Object.keys(value).some(k=>!['position','target','up','fov'].includes(k))||!vector(value.position)||!vector(value.target)||!vector(value.up)||!Number.isFinite(value.fov)||value.fov<=0||value.fov>=180)throw Error('Invalid camera settings');

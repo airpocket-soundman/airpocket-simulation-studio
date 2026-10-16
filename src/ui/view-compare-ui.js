@@ -1,7 +1,7 @@
 // Two-case left/right result comparison panel (VIEWCOMPARE increment 2). Every dependency is injected.
 // It renders each saved case with the existing result renderer (via renderCase, supplied by main.js) and
 // composes the snapshots on a 2D canvas using the pure rules in view-compare-layout.js.
-import {computeSharedRange, planCompareView} from '../view-compare-layout.js';
+import {computeSharedRange, formatQuantity, formatSeconds, legendBars, planCompareView} from '../view-compare-layout.js';
 const T = {
   '2ケース並べて比較': 'Compare two cases side by side',
   '左のケース': 'Left case', '右のケース': 'Right case',
@@ -12,26 +12,29 @@ const T = {
   '左右に別のケースを選んでください。': 'Choose two different cases.',
   '共通の物理時刻を入力してください。': 'Enter the shared physical time.',
   '比較を表示しました。': 'Comparison shown.',
-  '共通色範囲': 'Shared colour range', '変形倍率': 'Deformation scale', '物理時刻': 'Physical time', '保存フレームとのずれ': 'Offset from stored frame', '時間軸なし': 'no time axis'
+  '共通色範囲': 'Shared colour range', '変形倍率': 'Deformation scale', '物理時刻': 'Physical time', '保存フレームとのずれ': 'Offset from stored frame', '時間軸なし': 'no time axis',
+  '表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。': 'Both panels show the quantity selected in the main result viewer. For a transient pair, display a transient result in the viewer first, then compare.'
 };
-export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, getField, getDeformScale, getCamera, env = {}}) {
+export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, colorAt = () => '#888', getField, getDeformScale, getCamera, env = {}}) {
   const URLApi = env.URL || globalThis.URL, tr = (ja) => language() === 'en' ? (T[ja] ?? ja) : ja;
   translate(T);
   const host = doc.createElement('details');
   const el = (tag, id, text) => { const e = doc.createElement(tag); if (id) e.id = id; if (text) e.textContent = text; return e; };
   const summary = el('summary', null, '2ケース並べて比較'), note = el('p', null, '共通の色範囲・変形倍率・カメラ・保存フレームで左右に表示します。色範囲は同じ物理量・単位のときだけ共有します。');
+  const hint = el('p', 'compare-hint', '表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。');
+  hint.style.fontSize = '12px'; const syncHint = () => { hint.textContent = tr('表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。'); };
   const a = el('select', 'compare-left'), b = el('select', 'compare-right'), time = el('input', 'compare-time');
   time.type = 'number'; time.step = 'any'; time.placeholder = '0.001';
   const run = el('button', 'compare-run', '比較を表示'), png = el('button', 'compare-png', '比較画像をPNGで保存'), out = el('p', 'compare-status'), canvas = el('canvas', 'compare-canvas');
   out.setAttribute('role', 'status'); canvas.style.maxWidth = '100%'; png.disabled = true;
   const label = (text, control) => { const l = el('label', null, text + ' '); l.append(control); return l; };
-  host.append(summary, note, label('左のケース', a), label('右のケース', b), label('共通の物理時刻（秒、過渡音響のみ）', time), run, png, out, canvas);
+  host.append(summary, note, hint, label('左のケース', a), label('右のケース', b), label('共通の物理時刻（秒、過渡音響のみ）', time), run, png, out, canvas);
   anchor.after(host);
   host.addEventListener('toggle', refresh);
   function refresh() {
+    syncHint();
     for (const s of [a, b]) { const keep = s.value; s.replaceChildren(); for (const [i, c] of store.list().entries()) { const o = doc.createElement('option'); o.value = i; o.textContent = c.name; s.append(o); } s.value = keep && Number(keep) < store.list().length ? keep : s === a ? '0' : '1'; }
   }
-  const fmt = v => Number(v).toPrecision(4);
   function conditions(index) {
     const saved = store.list()[index], row = store.compare()[index], o = saved.output.calculation?.options ?? {};
     const items = [];
@@ -50,13 +53,13 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     if (transient && (time.value === '' || !Number.isFinite(timeSeconds))) throw Error(tr('共通の物理時刻を入力してください。'));
     // Resolve frames first (needs only time axes), then measure each case at its frame, then share one range.
     const stubs = [ia, ib].map((index, k) => ({caseId: String(index), label: conditions(index).label, field, unit: '-', minimum: 0, maximum: 1, frameTimes: infos[k].frameTimes ?? undefined}));
-    const framePlan = planCompareView(stubs, {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 60}}).panels.map(p => p.time);
+    const framePlan = planCompareView(stubs, {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 100}}).panels.map(p => p.time);
     const auto = [ia, ib].map((index, k) => renderCase(index, {field, deformScale, frameIndex: framePlan[k].frameIndex, colorRange: null}));
     const described = auto.map((r, k) => ({caseId: String(k ? ib : ia), label: '', field, unit: r.unit, minimum: r.min, maximum: r.max}));
     const shared = computeSharedRange(described);
     const shots = [ia, ib].map((index, k) => renderCase(index, {field, deformScale, frameIndex: framePlan[k].frameIndex, colorRange: shared.colorRange}));
     const infoLabels = [ia, ib].map(conditions);
-    const plan = planCompareView([ia, ib].map((index, k) => ({caseId: String(index), label: infoLabels[k].label, conditions: infoLabels[k].items, field, unit: shared.unit, minimum: auto[k].min, maximum: auto[k].max, frameTimes: infos[k].frameTimes ?? undefined})), {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 60}});
+    const plan = planCompareView([ia, ib].map((index, k) => ({caseId: String(index), label: infoLabels[k].label, conditions: infoLabels[k].items, field, unit: shared.unit, minimum: auto[k].min, maximum: auto[k].max, frameTimes: infos[k].frameTimes ?? undefined})), {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 100}});
     draw(plan, shots, shared);
     return plan;
   }
@@ -69,10 +72,17 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
       g.drawImage(src, v.x + (v.width - w) / 2, v.y + (v.height - h) / 2, w, h);
       p.labelLines.forEach((text, i) => g.fillText(text, p.rects.label.x + 8, p.rects.label.y + 20 + 18 * i, p.rects.label.width - 16));
     });
-    const L = plan.legend, c = plan.colorRange;
-    const times = plan.panels.map(p => p.time.timeApplies ? `${p.time.timeSeconds} s (${tr('保存フレームとのずれ')} ${p.time.offsetSeconds >= 0 ? '+' : ''}${p.time.offsetSeconds.toPrecision(3)} s)` : tr('時間軸なし'));
-    g.fillText(`${tr('共通色範囲')}: ${fmt(c.minimum)} → ${fmt(c.maximum)} ${shared.unit} · ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}`, 8, L.y + 22, L.width - 16);
-    g.fillText(`${tr('物理時刻')}: ${times.join(' | ')}`, 8, L.y + 44, L.width - 16);
+    const L = plan.legend, c = plan.colorRange, geo = legendBars(plan);
+    geo.bars.forEach(({bar, minLabel, maxLabel}) => {
+      const grad = g.createLinearGradient(bar.x, 0, bar.x + bar.width, 0);
+      for (let i = 0; i <= 8; i++) grad.addColorStop(i / 8, colorAt(i / 8));
+      g.fillStyle = grad; g.fillRect(bar.x, bar.y, bar.width, bar.height); g.fillStyle = '#edf6f8';
+      g.textAlign = 'left'; g.fillText(`${formatQuantity(c.minimum)} ${shared.unit}`, minLabel.x, minLabel.y);
+      g.textAlign = 'right'; g.fillText(`${formatQuantity(c.maximum)} ${shared.unit}`, maxLabel.x, maxLabel.y); g.textAlign = 'left';
+    });
+    const times = plan.panels.map(p => p.time.timeApplies ? `${formatSeconds(p.time.timeSeconds)} (${tr('保存フレームとのずれ')} ${formatSeconds(p.time.offsetSeconds, {signed: true})})` : tr('時間軸なし'));
+    g.fillText(`${tr('共通色範囲')}: ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}`, 8, geo.textRows[0], L.width - 16);
+    g.fillText(`${tr('物理時刻')}: ${times.join(' | ')}`, 8, geo.textRows[1], L.width - 16);
     out.textContent = tr('比較を表示しました。'); png.disabled = false;
   }
   run.onclick = async () => { try { png.disabled = true; await show(); } catch (e) { out.textContent = e.message; status(e.message); } };
