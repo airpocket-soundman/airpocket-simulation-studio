@@ -10,6 +10,13 @@ export function createTimeViewState({$,getState,setState,stop=()=>{}}){
    if(!saved)return;
    setState({...saved.state});
    for(const {id,key,value} of saved.controls){const el=$(id);if(el)el[key]=value;}
+  },
+  selectStoredFrame(frameIndex){
+   if(frameIndex===null||frameIndex===undefined)return false;
+   stop();setState({...getState(),frameIndex,timeSeconds:null});
+   const slider=$('acoustic-time-frame');
+   if(!slider)return false;
+   slider.value=frameIndex;slider.oninput();return true;
   }
  };
 }

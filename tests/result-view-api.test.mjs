@@ -78,8 +78,41 @@ test('thermal probe at a non-final displayed time samples the displayed frame, n
  let display={frameTime:10,interpolated:false};
  const state={field:'temperature',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:true,colorRange:null,camera:camera()};
  const api=createResultViewApi({getAnalysis:()=>output,get:()=>state,isBusy:()=>false,set(){},frameDisplay:()=>display});
- let s=await api.get();assert.equal(s.physicalTimeSeconds,10);assert.equal(s.timeSelection,'viewer-slider-only');assert.equal(s.state.frameIndex,null);
+ let s=await api.get();assert.equal(s.physicalTimeSeconds,10);assert.equal(s.timeSelection,'stored-frames-only');assert.equal(s.storedFrameIndex,1);assert.equal(s.state.frameIndex,null);
  let p=await api.probe({expectedResultRevision:s.resultRevision,point:[.25,.25,.25]});assert.equal(p.temperature,40);assert.deepEqual(p.flux,[1,2,3]);assert.equal(p.display.physicalTimeSeconds,10);
  display={frameTime:2.5,interpolated:true,frameValues:[25,25,25,25]};
  p=await api.probe({expectedResultRevision:s.resultRevision,point:[.25,.25,.25]});assert.ok(Math.abs(p.temperature-25)<1e-9);assert.equal(p.flux,undefined);assert.equal(p.frameTimeSeconds,2.5);assert.equal(p.interpolated,true);assert.equal(p.display.physicalTimeSeconds,2.5);
+});
+
+
+function thermalHarness(){
+ const base=harness(),output=structuredClone(base.output);Object.assign(output.result,{transient:true,snapshots:[{time:0,temperature:[0,10,20,30]},{time:2,temperature:[10,20,30,40]},{time:7,temperature:[20,30,40,50]}]});
+ let state={...base.state,modeIndex:null,frameIndex:null},time={frameIndex:2,timeSeconds:null},busy=false,fail=false,sets=0;
+ const display=()=>time.timeSeconds!==null?{frameTime:time.timeSeconds,interpolated:true,frameValues:[5,15,25,35]}:time.frameIndex===2?{frameTime:7,interpolated:false}:{frameTime:output.result.snapshots[time.frameIndex].time,interpolated:false,frameValues:output.result.snapshots[time.frameIndex].temperature};
+ const api=createResultViewApi({getAnalysis:()=>output,get:()=>state,isBusy:()=>busy,frameDisplay:display,getTimeView:()=>structuredClone(time),restoreTimeView:value=>{time=structuredClone(value);},set:(next,{timeChanged=false}={})=>{sets++;state=structuredClone(next);if(timeChanged){time={frameIndex:next.frameIndex,timeSeconds:null};}if(fail){fail=false;throw Error('Thermal renderer failed');}}});
+ return {api,output,get state(){return structuredClone(state);},get time(){return structuredClone(time);},get sets(){return sets;},interpolate:()=>{time={frameIndex:1,timeSeconds:.123456789123456};},setBusy:value=>busy=value,failNext:()=>fail=true};
+}
+
+test('thermal API selects only exact stored times, samples selected temperature and leaves revisions immutable',async()=>{
+ const h=thermalHarness(),before=structuredClone(h.output),s=await h.api.get();assert.deepEqual(s.frames,[{index:0,timeSeconds:0},{index:1,timeSeconds:2},{index:2,timeSeconds:7}]);
+ let next=await h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0}});assert.equal(next.state.frameIndex,null);assert.equal(next.storedFrameIndex,0);assert.equal(next.physicalTimeSeconds,0);assert.equal(next.timeSelection,'stored-frames-only');
+ let p=await h.api.probe({expectedResultRevision:s.resultRevision,point:[.25,.25,.25]});assert.equal(p.temperature,15);assert.equal(p.flux,undefined);assert.equal(p.display.storedFrameIndex,0);
+ next=await h.api.set({expectedResultRevision:s.resultRevision,settings:{timeSeconds:2}});assert.equal(next.storedFrameIndex,1);assert.equal(next.resultRevision,s.resultRevision);assert.equal(next.physicalRevision,s.physicalRevision);
+ next=await h.api.set({expectedResultRevision:s.resultRevision,settings:{timeSeconds:7,field:'heatFlux'}});p=await h.api.probe({point:[.25,.25,.25]});assert.deepEqual(p.flux,[1,2,3]);assert.deepEqual(h.output,before);
+});
+
+test('thermal invalid times and unavailable flux fail atomically, including from interpolated UI time',async()=>{
+ const h=thermalHarness(),s=await h.api.get(),before=h.time;
+ for(const settings of [{frameIndex:-1},{frameIndex:3},{frameIndex:.5},{timeSeconds:1},{timeSeconds:2+1e-12},{timeSeconds:2,frameIndex:1},{frameIndex:0,field:'heatFlux'}]){await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings}));assert.deepEqual(h.time,before);}
+ assert.equal(h.sets,0);h.interpolate();const exact=h.time;
+ await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{field:'heatFlux'}}),/final/);assert.deepEqual(h.time,exact);
+ const next=await h.api.set({expectedResultRevision:s.resultRevision,settings:{surfaceWire:true,frameIndex:null}});assert.deepEqual(h.time,exact);assert.equal(next.physicalTimeSeconds,exact.timeSeconds);assert.equal(next.interpolated,true);assert.equal(next.timeSelection,'viewer-slider-only');assert.equal(next.storedFrameIndex,undefined);
+ const p=await h.api.probe({point:[.25,.25,.25]});assert.equal(p.temperature,20);assert.equal(p.flux,undefined);
+});
+
+test('thermal setters reject stale or busy commands and restore exact interpolation after renderer failure',async()=>{
+ const h=thermalHarness(),s=await h.api.get();h.interpolate();const before=h.time,state=h.state;
+ await assert.rejects(h.api.set({expectedResultRevision:'stale',settings:{frameIndex:0}}),/revision conflict/);h.setBusy(true);await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0}}),/busy/);h.setBusy(false);
+ await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0}},{guard:()=>false}),/expired/);assert.equal(h.sets,0);
+ h.failNext();await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0,surface:false}}),/Thermal renderer failed/);assert.deepEqual(h.time,before);assert.deepEqual(h.state,state);
 });

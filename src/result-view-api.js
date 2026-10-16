@@ -1,3 +1,4 @@
+import {framesOf} from './result-frames.js';
 import {getProjectRevision} from './project-operations.js';
 import {getPhysicalRevision} from './project-revision.js';
 import {sampleDisplayedResult} from './probe.js';
@@ -30,7 +31,7 @@ export function validateResultViewSettings(settings,result){
  if(!Number.isFinite(settings.deformScale)||settings.deformScale<0)throw Error('Deformation scale must be finite and nonnegative');
  for(const key of ['surface','surfaceWire','volumeWire','section'])if(typeof settings[key]!=='boolean')throw Error('Invalid result layer setting');
  if(result.kind==='modal'){if(!Number.isInteger(settings.modeIndex)||!result.modes?.[settings.modeIndex])throw Error('Invalid stored mode index');}else if(settings.modeIndex!==null)throw Error('This result has no stored modes');
- if(result.kind==='acousticTransient'){if(!Number.isInteger(settings.frameIndex)||!result.snapshots?.[settings.frameIndex])throw Error('Invalid stored acoustic frame index');}else if(settings.frameIndex!==null)throw Error('This result has no stored time frames');
+ if(result.kind==='acousticTransient'){if(!Number.isInteger(settings.frameIndex)||!result.snapshots?.[settings.frameIndex])throw Error('Invalid stored acoustic frame index');}else if(result.kind==='thermal'&&settings.frameIndex!==null){const frames=framesOf(result);if(!frames||!Number.isInteger(settings.frameIndex)||settings.frameIndex<0||settings.frameIndex>=frames.times.length)throw Error('Invalid stored thermal frame index');}else if(settings.frameIndex!==null)throw Error('This result has no stored time frames');
  if(settings.colorRange!==null){const r=settings.colorRange;if(!r||Object.keys(r).some(k=>!['field','minimum','maximum'].includes(k))||r.field!==settings.field||!Number.isFinite(r.minimum)||!Number.isFinite(r.maximum)||r.minimum>=r.maximum)throw Error('Invalid fixed color range or field unit mismatch');}
  cameraSettings(settings.camera);return settings;
 }
@@ -41,14 +42,14 @@ export function createResultViewApi(adapter){
  async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),parsed=JSON.parse(serialized),revision=await getProjectRevision(parsed),physicalRevision=await getPhysicalRevision(parsed);if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision,physicalRevision};}
  const unchanged=({output,serialized})=>adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
  function read(output){const s=canonicalViewState(structuredClone(adapter.get()));return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
- // Thermal frames are chosen with the viewer slider only (frameIndex stays null); the displayed time is reported read-only so no tool mistakes it for the final step.
+ // Thermal state.frameIndex remains null for legacy named-view consumers; physical-time metadata describes the actual display.
  const frameDisplay=()=>adapter.frameDisplay?.()||{};
- function thermalTime(){const d=frameDisplay();return d.frameTime===undefined?{}:{physicalTimeSeconds:d.frameTime,interpolated:!!d.interpolated,timeSelection:'viewer-slider-only'};}
- function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...thermalTime(),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
+ function thermalTime(output){if(output.result.kind!=='thermal')return {};const d=frameDisplay(),frames=framesOf(output.result),index=frames&&!d.interpolated?frames.times.indexOf(d.frameTime):-1;return d.frameTime===undefined?{}:{physicalTimeSeconds:d.frameTime,interpolated:!!d.interpolated,timeSelection:index>=0?'stored-frames-only':'viewer-slider-only',...(index>=0?{storedFrameIndex:index}:{})};}
+ function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...thermalTime(context.output),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){
    const c=await current();if(expectedResultRevision!==undefined&&expectedResultRevision!==c.revision)throw Error('Displayed result revision conflict');const state=read(c.output),r=c.output.result;
-   return {schemaVersion:1,resultRevision:c.revision,kind:r.kind,display:{field:state.field,modeIndex:state.modeIndex,frameIndex:state.frameIndex,...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time}:{}),...thermalTime()},...sampleDisplayedResult(c.output.mesh,r,point,options,{modeIndex:state.modeIndex,frameIndex:state.frameIndex,...frameDisplay()}),...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.analysisAssessment||c.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||c.output.analysisAssessment)}:{})};
+   return {schemaVersion:1,resultRevision:c.revision,kind:r.kind,display:{field:state.field,modeIndex:state.modeIndex,frameIndex:state.frameIndex,...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time}:{}),...thermalTime(c.output)},...sampleDisplayedResult(c.output.mesh,r,point,options,{modeIndex:state.modeIndex,frameIndex:state.frameIndex,...frameDisplay()}),...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.analysisAssessment||c.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||c.output.analysisAssessment)}:{})};
   },
   async get({frameOffset=0,frameLimit=20,modeOffset=0,modeLimit=20}={}){
    for(const [offset,limit]of [[frameOffset,frameLimit],[modeOffset,modeLimit]])if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<0||limit>50)throw Error('Invalid result metadata page');
@@ -62,10 +63,26 @@ export function createResultViewApi(adapter){
    const previous=read(c.output),next={...previous,...patch};delete next.timeSeconds;
    if(patch.camera)next.camera={...previous.camera,...patch.camera};
    if(patch.field!==undefined&&patch.field!==previous.field&&!Object.hasOwn(patch,'colorRange'))next.colorRange=null;
-   if(patch.timeSeconds!==undefined){if(patch.frameIndex!==undefined||!Number.isFinite(patch.timeSeconds)||c.output.result.kind!=='acousticTransient')throw Error('Specify one stored acoustic time or frame index');const index=c.output.result.snapshots.findIndex(f=>Math.abs(f.time-patch.timeSeconds)<=Math.max(1e-12,Math.abs(f.time)*1e-10));if(index<0)throw Error('No stored acoustic frame at requested physical time');next.frameIndex=index;}
+   const result=c.output.result,thermal=result.kind==='thermal',frames=thermal?framesOf(result):null;
+   const timeChanged=patch.timeSeconds!==undefined||patch.frameIndex!==undefined&&patch.frameIndex!==null;
+   if(patch.timeSeconds!==undefined){
+    if(patch.frameIndex!==undefined||!Number.isFinite(patch.timeSeconds)||!['acousticTransient','thermal'].includes(result.kind)||thermal&&!frames)throw Error('Specify one stored acoustic or thermal time or frame index');
+    const index=result.snapshots.findIndex(f=>thermal?f.time===patch.timeSeconds:Math.abs(f.time-patch.timeSeconds)<=Math.max(1e-12,Math.abs(f.time)*1e-10));
+    if(index<0)throw Error('No stored frame at requested physical time');next.frameIndex=index;
+   }
+   if(thermal&&timeChanged){
+    const frame=result.snapshots?.[next.frameIndex],n=c.output.mesh?.nodes?.length/3;
+    if(!frames||!Number.isInteger(next.frameIndex)||next.frameIndex<0||!frame)throw Error('Invalid stored thermal frame index');
+    if(!Number.isFinite(frame.time)||frame.time<0||!Array.isArray(frame.temperature)||frame.temperature.length!==n||!frame.temperature.every(Number.isFinite))throw Error('Invalid stored thermal temperature frame');
+   }
+   if(thermal&&next.field==='heatFlux'&&frames){
+    const display=frameDisplay(),final=timeChanged?next.frameIndex===frames.times.length-1:!display.interpolated&&(display.frameTime===undefined||display.frameTime===frames.times.at(-1));
+    if(!final)throw Error('Heat flux is available only at the final thermal time');
+   }
    validateResultViewSettings(next,c.output.result);
    if(!unchanged(c)||adapter.isBusy?.()||!guard())throw Error('Displayed result changed, viewer busy or command expired');
-   try{adapter.set(structuredClone(next));}catch(error){try{adapter.set(previous);}catch(rollback){throw new AggregateError([error,rollback],'Viewer update and restoration failed');}throw error;}
+   const savedTime=adapter.getTimeView?.();
+   try{adapter.set(structuredClone(next),{timeChanged});}catch(error){const errors=[error];try{adapter.set(previous,{timeChanged:false});}catch(rollback){errors.push(rollback);}try{if(savedTime!==undefined)adapter.restoreTimeView?.(savedTime);}catch(rollback){errors.push(rollback);}if(errors.length>1)throw new AggregateError(errors,'Viewer update and restoration failed');throw error;}
    return summary(c,read(c.output));
   }
  });

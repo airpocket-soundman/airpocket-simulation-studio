@@ -28,3 +28,15 @@ test('stored frame or absent controls restore safely without fabricating interpo
  assert.deepEqual(state,{frameIndex:2,timeSeconds:null});
  assert.deepEqual(saved.controls,[]);hooks.restoreTimeView(null);
 });
+
+test('explicit stored selection updates slider labels and clears interpolation; null leaves exact time alone',()=>{
+ let state={frameIndex:1,timeSeconds:1.234567891},stops=0,events=0;
+ const slider={value:'1',oninput(){events++;elements['acoustic-time-label'].textContent='Stored '+this.value;elements['acoustic-time-interpolated'].textContent='';}},
+ elements={'acoustic-time-frame':slider,'acoustic-time-label':{textContent:'1.2346 s'},'acoustic-time-interpolated':{textContent:'Interpolated'}};
+ const hooks=createTimeViewState({$:id=>elements[id],getState:()=>state,setState:s=>{state=s;},stop:()=>stops++});
+ assert.equal(hooks.selectStoredFrame(null),false);assert.equal(events,0);assert.equal(stops,0);assert.equal(state.timeSeconds,1.234567891);
+ const saved=hooks.getTimeView();
+ assert.equal(hooks.selectStoredFrame(0),true);assert.equal(events,1);assert.deepEqual(state,{frameIndex:0,timeSeconds:null});
+ assert.equal(elements['acoustic-time-label'].textContent,'Stored 0');assert.equal(elements['acoustic-time-interpolated'].textContent,'');
+ hooks.restoreTimeView(saved);assert.equal(state.timeSeconds,1.234567891);assert.equal(elements['acoustic-time-interpolated'].textContent,'Interpolated');
+});
