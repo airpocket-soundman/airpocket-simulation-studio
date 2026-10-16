@@ -582,3 +582,9 @@ ACK待ちと送信待ちを各8件/8 MBに制限し、同期ソルバーを止�
 利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。
 
 Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し、両validatorが成功した。実in-repo stdioのsynthetic 100 N→150 N previewは `/conditions/1/value` の古い根拠を `PROVENANCE_STALE` として示し、元入力bytesを保持した。変更はpreviewのみで適用・解析していない。fixture生成にrepository factoryを使ったためSkill単独/全一巡の証明ではないが、SKILLROUTING1の記載済み受け入れ範囲を満たしreadyへ更新した。[同期証跡](evidence/2026-10-15-skill-synchronization-b.json)、[preview証跡](evidence/2026-10-15-skill-forward-input-preview-b.json)。
+
+## 非線形ソルバーの失敗捕捉(任意)
+
+`solveHyperelastic` はオプション `onFailure(record)` を受け取る。Newton の line search 失敗または反復上限で、元のエラーを投げる直前に1回だけ呼ばれ、メッシュ・物性・境界条件・オプション(inputs)と、反復ごとの荷重係数・残差ノルム・CG反復数・line search の各step長alphaと候補残差(trace)を渡す。未指定なら挙動・許容差は変わらず、時間依存もない。テストでは `tests/helpers/newton-capture.mjs` の `captureOptions` が環境変数 `AIRPOCKET_CAPTURE_DIR` を見て、設定時のみ JSON を `<label>-<pid>-<time>.json` として書き出す(未設定なら何もしない)。まれな失敗の調査: `AIRPOCKET_CAPTURE_DIR=captures node --test tests/hyperelastic.test.mjs` を繰り返し、出力された inputs を固定入力の回帰テストにする。フック自体は `tests/newton-capture.test.mjs` で検証する。
+
+捕捉結果(2026-10-16): 6並列で `tests/hyperelastic.test.mjs` を繰り返し、フック有りで 410回中3件、フック強化後 598回中6件(約1%)の line search 失敗を捕捉した。入力・反復状態は全件でビット一致(81節点・184要素、荷重段1の反復0、フルNewton刻みの残差 6.18e-1→5.17e-3)。しかしフルステップが「十分減少」判定で棄却されていた。判定の基準値 `state.norm` が、直前の候補の `norm` と等しい値で読まれていた(記録した `limit` が候補normに連動)。新しいプロセスでの同入力の再実行は常に成功するため、入力ではなく実行時(JIT最適化後)の揺らぎと判断した。ソルバー許容差は変更せず、line search前に基準値を局所定数 `baseNorm` へ退避する修正のみを行った。修正後は 717回中0件(修正前の約1%に対し、偶然に0件となる確率は約0.1%)。V8側の不具合と断定はしていない。固定入力は `tests/fixtures/hyperelastic-line-search-capture.json` と回帰テストで保持する。
