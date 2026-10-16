@@ -62,6 +62,7 @@ import {createAnalysisClient} from './analysis-client.js';
 import {installLanguage,language,addTranslations} from './i18n.js';
 import {interpolateFrames,fineSliderTime,advancePlayback,fixedFieldRange} from './time-interpolation.js';
 import {framesOf,defaultFrameIndex} from './result-frames.js';
+import {inspectComparisonResult,comparisonFrame} from './comparison-result.js';
 import { materialFields,materialReadiness } from './materials.js';
 import { createStudioApi } from './studio-api.js';
 import * as THREE from 'three';
@@ -274,13 +275,13 @@ $('displacement-demo').onclick=displacementExample;window.analysisApi.loadDispla
 const caseStore=createCaseStore();
 function viewCase(index){if($('cancel-run').disabled===false)throw Error('先に実行中の計算を中止してください。');const saved=caseStore.at(index);if(!saved)throw Error('Unknown case');const output=prepareCaseView(saved);api.loadProject(output.input);const o=output.calculation.options;$('mesh-size').value=o.size;$('solver').value=o.method;$('adaptive-run').checked=o.adaptive;$('adaptive-rounds').value=o.maxRounds;restoreAdaptiveOptions(o);lastAnalysis=output;renderInternalPorts(output.mesh);showAnalysis();$('result-export').disabled=false;$('mesh-summary').textContent=output.mesh.summary.nodeCount+' 節点 / '+output.mesh.summary.elementCount+' 四面体';$('result-summary').textContent=saved.name+' · '+caseStore.compare()[index].metrics.map(m=>m.value.toPrecision(5)+' '+m.unit).join(' / ');appendComputeStatus(output.result);status('保存時の入力と結果を表示しています。');return {name:saved.name,kind:output.result.kind};}
 
-function compareInspect(index){const saved=caseStore.at(index);if(!saved)throw Error('Unknown case');const r=prepareCaseView(saved).result;return {frameTimes:r.kind==='acousticTransient'?r.snapshots.map(f=>f.time):null,fields:resultFields(r).map(f=>f.id)};}
+function compareInspect(index,field){const saved=caseStore.at(index);if(!saved)throw Error('Unknown case');return inspectComparisonResult(prepareCaseView(saved).result,field);}
 // Render one saved case with the existing result renderer using the shared camera, then restore the displayed result. Does not touch the project input.
-function compareRender(index,{field,deformScale,frameIndex,colorRange}){if(!$('cancel-run').disabled||visualExport.isActive())throw Error('先に実行中の計算を中止してください。');const saved=caseStore.at(index);if(!saved)throw Error('Unknown case');const output=prepareCaseView(saved),fieldInfo=resultFields(output.result).find(f=>f.id===field);if(!fieldInfo)throw Error('Field is unavailable for this result');
+function compareRender(index,{field,deformScale,frameIndex,colorRange}){if(!$('cancel-run').disabled||visualExport.isActive())throw Error('先に実行中の計算を中止してください。');const saved=caseStore.at(index);if(!saved)throw Error('Unknown case');const output=prepareCaseView(saved),selection=comparisonFrame(output.result,field,frameIndex),fieldInfo=resultFields(output.result).find(f=>f.id===field);
  const keep={analysis:lastAnalysis,range:resultColorRange,frame:acousticFrame,time:acousticDisplayTime,modal:modalIndex,field:$('result-field').value,scale:$('deform-scale').value};
- try{lastAnalysis=output;resultColorRange=colorRange;acousticFrame=frameIndex??defaultFrameIndex(output.result);acousticDisplayTime=null;modalIndex=0;$('result-field').value=field;$('deform-scale').value=deformScale;showAnalysis();renderer.render(scene,camera);
+ try{lastAnalysis=output;resultColorRange=colorRange;acousticFrame=selection.frameIndex;acousticDisplayTime=null;modalIndex=0;$('result-field').value=field;$('deform-scale').value=deformScale;showAnalysis();renderer.render(scene,camera);
   const source=renderer.domElement,snapshot=document.createElement('canvas');snapshot.width=source.width;snapshot.height=source.height;snapshot.getContext('2d').drawImage(source,0,0);
-  return {canvas:snapshot,min:resultSliceContext.min,max:resultSliceContext.max,unit:fieldInfo.unit};
+  return {canvas:snapshot,min:resultSliceContext.min,max:resultSliceContext.max,unit:fieldInfo.unit,...selection};
  }finally{lastAnalysis=keep.analysis;resultColorRange=keep.range;acousticFrame=keep.frame;acousticDisplayTime=keep.time;modalIndex=keep.modal;$('result-field').value=keep.field;$('deform-scale').value=keep.scale;
   if(keep.analysis)showAnalysis();else{analysisLayer.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});analysisLayer.clear();group.visible=true;markers.visible=true;$('result-legend').textContent='';resultSliceContext=null;}}}
 const caseUi=createCaseListUi({$,store:caseStore,status,viewCase,restoreCaseInput:c=>{api.loadProject(c.output.input);const o=c.output.calculation.options;$('mesh-size').value=o.size;$('solver').value=o.method;$('adaptive-run').checked=o.adaptive;$('adaptive-rounds').value=o.maxRounds;restoreAdaptiveOptions(o);},getLastAnalysis:()=>lastAnalysis});

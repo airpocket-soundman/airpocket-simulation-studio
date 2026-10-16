@@ -5,13 +5,14 @@ import {computeSharedRange, formatQuantity, formatSeconds, legendBars, planCompa
 const T = {
   '2ケース並べて比較': 'Compare two cases side by side',
   '左のケース': 'Left case', '右のケース': 'Right case',
-  '共通の物理時刻（秒、過渡音響のみ）': 'Shared physical time (s, transient acoustics only)',
+  '共通の物理時刻（秒、保存済みの音響・温度フレーム）': 'Shared physical time (s, stored acoustic or temperature frames)',
   '比較を表示': 'Show comparison', '比較画像をPNGで保存': 'Save comparison as PNG',
   '共通の色範囲・変形倍率・カメラ・保存フレームで左右に表示します。色範囲は同じ物理量・単位のときだけ共有します。': 'Shows both cases with a shared colour range, deformation scale, camera and stored frame. The colour range is shared only for the same quantity and unit.',
   '保存ケースが2件以上必要です。': 'Two or more saved cases are required.',
   '左右に別のケースを選んでください。': 'Choose two different cases.',
   '共通の物理時刻を入力してください。': 'Enter the shared physical time.',
   '比較を表示しました。': 'Comparison shown.',
+  '最終ステップのみ（共通時刻は適用されません）': 'Final step only (shared time does not apply)',
   '共通色範囲': 'Shared colour range', '変形倍率': 'Deformation scale', '物理時刻': 'Physical time', '保存フレームとのずれ': 'Offset from stored frame', '時間軸なし': 'no time axis',
   '表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。': 'Both panels show the quantity selected in the main result viewer. For a transient pair, display a transient result in the viewer first, then compare.'
 };
@@ -28,7 +29,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   const run = el('button', 'compare-run', '比較を表示'), png = el('button', 'compare-png', '比較画像をPNGで保存'), out = el('p', 'compare-status'), canvas = el('canvas', 'compare-canvas');
   out.setAttribute('role', 'status'); canvas.style.maxWidth = '100%'; png.disabled = true;
   const label = (text, control) => { const l = el('label', null, text + ' '); l.append(control); return l; };
-  host.append(summary, note, hint, label('左のケース', a), label('右のケース', b), label('共通の物理時刻（秒、過渡音響のみ）', time), run, png, out, canvas);
+  host.append(summary, note, hint, label('左のケース', a), label('右のケース', b), label('共通の物理時刻（秒、保存済みの音響・温度フレーム）', time), run, png, out, canvas);
   anchor.after(host);
   host.addEventListener('toggle', refresh);
   // Per-case access when the store supports it (no whole-store clone); other stores keep the list() path.
@@ -51,7 +52,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     const ia = Number(a.value), ib = Number(b.value);
     if (count() < 2) throw Error(tr('保存ケースが2件以上必要です。'));
     if (!Number.isInteger(ia) || !Number.isInteger(ib) || ia === ib) throw Error(tr('左右に別のケースを選んでください。'));
-    const field = getField(), deformScale = getDeformScale(), infos = [ia, ib].map(inspectCase);
+    const field = getField(), deformScale = getDeformScale(), infos = [ia, ib].map(index => inspectCase(index, field));
     const transient = infos.some(i => i.frameTimes);
     const timeSeconds = transient ? Number(time.value) : undefined;
     if (transient && (time.value === '' || !Number.isFinite(timeSeconds))) throw Error(tr('共通の物理時刻を入力してください。'));
@@ -84,7 +85,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
       g.textAlign = 'left'; g.fillText(`${formatQuantity(c.minimum)} ${shared.unit}`, minLabel.x, minLabel.y);
       g.textAlign = 'right'; g.fillText(`${formatQuantity(c.maximum)} ${shared.unit}`, maxLabel.x, maxLabel.y); g.textAlign = 'left';
     });
-    const times = plan.panels.map(p => p.time.timeApplies ? `${formatSeconds(p.time.timeSeconds)} (${tr('保存フレームとのずれ')} ${formatSeconds(p.time.offsetSeconds, {signed: true})})` : tr('時間軸なし'));
+    const times = plan.panels.map((p, k) => shots[k].finalOnly ? tr('最終ステップのみ（共通時刻は適用されません）') : p.time.timeApplies ? `${formatSeconds(p.time.timeSeconds)} (${tr('保存フレームとのずれ')} ${formatSeconds(p.time.offsetSeconds, {signed: true})})` : tr('時間軸なし'));
     g.fillText(`${tr('共通色範囲')}: ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}`, 8, geo.textRows[0], L.width - 16);
     g.fillText(`${tr('物理時刻')}: ${times.join(' | ')}`, 8, geo.textRows[1], L.width - 16);
     out.textContent = tr('比較を表示しました。'); png.disabled = false;
