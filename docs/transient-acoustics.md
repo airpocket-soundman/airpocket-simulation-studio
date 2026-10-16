@@ -25,3 +25,9 @@ SI単位の弱形式は `M p¨ + D p˙ + K p = 0`。Tet4の集中質量は各節
 空洞の解析固有振動 `c/(2L)` とメッシュ収束、整合インピーダンス出口での `距離/c` の伝播時間・振幅、球音源の `a/r` と外部放射、入力振幅に対する線形性、JS/WASM一致、不安定刻みの拒否、保存結果の破損拒否、WAVの時間・周波数・無音・高周波除去を自動検査。詳細は `tests/acoustic-transient.test.mjs`、`tests/acoustic-audio.test.mjs`、`tests/worker-pipeline.test.mjs`。
 
 中心差分と集中質量の背景: [Noh & Bathe, Computers & Structures 129 (2013)](https://web.mit.edu/kjb/Desktop/kjb/OldFiles/www/Principal_Publications/An_explicit_time_integration_scheme_for_the_analysis_of_wave_propagations.pdf)。本実装は一般の中心差分で、この論文が提案する新しい積分法を移植したものではありません。
+
+## 時間履歴の滑らかな表示（設計メモ・VIEWTIME 第1段階）
+
+計算刻み（ソルバーのステップ）、保存刻み（保存フレーム、最大約61）、表示補間（保存フレーム間の線形補間）は別物です。`src/time-interpolation.js` は純粋関数として、保存時刻の厳密な区間検索、2フレーム間の線形補間、物理時刻で一様な再生時刻列、全フレームで固定した色範囲を提供します。保存時刻は狭義単調増加が必須で、保存範囲外への外挿はエラーです。保存時刻ちょうどでは元の値のコピーを返し `interpolated:false` になります。補間値は表示専用で、物理配列や保存結果は変更しません。テストは `tests/time-interpolation.test.mjs`。
+
+未実装（後続）: スライダー・再生UIへの接続、`setResultView` の保存時刻以外の時刻指定、固定フレーム出力での補間時刻（現在は保存フレームのみ）、熱の節点温度履歴の保存（現在の熱の過渡解は節点場ではなくスカラー履歴のみ）、メモリ上限。補間表示は必ず「補間」と明記します。関連: [結果断面](result-sections.md)、[画像・動画出力](visual-export.md)。
