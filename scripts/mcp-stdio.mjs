@@ -1,6 +1,6 @@
 import {createInterface} from 'node:readline';
 import {getAnalysisFailure} from '../src/analysis-failure.js';
-export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-simulation-studio',version='0.43.0',stdin=process.stdin,stdout=process.stdout,stderr=process.stderr}){
+export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-simulation-studio',version='0.44.0',stdin=process.stdin,stdout=process.stdout,stderr=process.stderr}){
  const send=message=>stdout.write(JSON.stringify(message)+'\n');
  let initialized=false,ready=false,queue=Promise.resolve();const input=createInterface({input:stdin,crlfDelay:Infinity});
  input.on('line',line=>{queue=queue.then(async()=>{
@@ -14,7 +14,7 @@ export function startMcpStdio({tools,callTool,close=async()=>{},name='airpocket-
    else if(message.method==='ping')result={};
    else if(!initialized||!ready)throw Object.assign(Error('Initialize the server first'),{code:-32000});
    else if(message.method==='tools/list')result={tools};
-   else if(message.method==='tools/call'){try{const value=await callTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
+   else if(message.method==='tools/call'){try{const value=await callTool(message.params?.name,message.params?.arguments);result={content:[{type:'text',text:JSON.stringify(value)}],structuredContent:{value}};}catch(error){const failure=getAnalysisFailure(error),code=error.code??failure?.code;result={isError:true,content:[{type:'text',text:error.message}],...(code?{structuredContent:{error:{code,message:error.message,...(typeof error.delivered==='boolean'?{delivered:error.delivered}:{}),...(error.diagnostics?{diagnostics:error.diagnostics}:{}),...(failure?{failure}:{})}}}:{})};}}
    else if(message.method.startsWith('notifications/'))return;
    else throw Object.assign(Error('Method not found'),{code:-32601});
    if(hasId)send({jsonrpc:'2.0',id:message.id,result});

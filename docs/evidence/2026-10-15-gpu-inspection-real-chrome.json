@@ -1,0 +1,34 @@
+{
+  "status": "passed-local-dev",
+  "scope": "Real Chrome (Claude in Chrome) on http://127.0.0.1:5174 against the Vite dev server of branch codex/gpu-integration; stdio connector with inspect scope only. Not the published site.",
+  "checkedAt": "2026-10-15",
+  "checks": [
+    {
+      "name": "live-page-wiring-defect-found",
+      "passed": false,
+      "detail": "On the cherry-picked branch the connector answered 'Browser GPU environment inspection unavailable': main.js attached checkGpuEnvironment only to window.analysisApi (a copy) and not to the analysis object handed to the browser session. Unit tests injected the function and missed it."
+    },
+    {
+      "name": "checkGpuEnvironment-after-wiring-fix",
+      "passed": true,
+      "detail": "With analysis.checkGpuEnvironment wired, an inspect-scoped session returned {target:'browser', declaredCapability:{operation:'checkGpuEnvironment', declarationOnly:true}, observation:{available:true, description:'intel', isFallbackAdapter:false, maxStorageBufferBindingSize:134217728}}. The observation is a real probe of this machine; the capability declaration is kept separate from it."
+    },
+    {
+      "name": "arguments-refused",
+      "passed": true,
+      "detail": "checkGpuEnvironment with an extra argument was refused ('checkGpuEnvironment takes no arguments')."
+    },
+    {
+      "name": "input-unchanged-and-scope",
+      "passed": true,
+      "detail": "The live input revision was identical before and after; an edit with the inspect-only session was refused ('Browser permission scope refused'); the contract for the method is discoverable via studio_browser_contracts (scope inspect)."
+    }
+  ],
+  "regressionTest": "tests/browser-gpu-inspection.test.mjs 'the live page wires checkGpuEnvironment into the analysis object handed to the browser session' (a static wiring check on src/main.js, fails without the fix).",
+  "notVerified": [
+    "Published HTTPS site (PUBLICHTTPS1).",
+    "Only one machine/adapter was observed; fallback-adapter and no-WebGPU environments are covered by unit tests, not real browsers.",
+    "Delayed-response rejection after disconnect and device release were verified by unit tests, not in Chrome.",
+    "GPU solve correctness or performance is not claimed."
+  ]
+}

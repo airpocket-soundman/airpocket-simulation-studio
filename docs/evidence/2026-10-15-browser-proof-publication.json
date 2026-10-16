@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15T08:27:53.829Z",
+  "revision": "9f57d0fb0cfde7ceec9c61d0adca5fc393022593",
+  "workflowRun": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38705173704",
+  "ci": {
+    "verify": "success",
+    "deploy": "success",
+    "verifyPublished": "success"
+  },
+  "report": {
+    "status": "passed",
+    "checks": 28,
+    "sha256": "aa9f1d5f3fe674923caf98fe1ba5a2fa09bb48a7eaf5e59fa3c2def54dc9ea2c",
+    "checkedAt": "2026-10-15T08:27:18.057Z"
+  },
+  "publicIntegrity": {
+    "revision": "9f57d0fb0cfde7ceec9c61d0adca5fc393022593",
+    "checkedAt": "2026-10-15T08:26:55.038Z",
+    "manifest": {
+      "bytes": 3826,
+      "sha256": "89fcd8e34d7c131e9e9022e1808a9df53e5065b10550a27d496212483003b58e",
+      "stable": true
+    },
+    "progress": {
+      "bytes": 297050,
+      "sha256": "3aa525d04469e14a1d70030aabd34c801dea3bd8f348bbabbbfa7c106c023628",
+      "matchesManifest": true,
+      "counts": {
+        "released": 109,
+        "queued": 25,
+        "building": 9,
+        "checking": 17,
+        "ready": 2,
+        "fixing": 1
+      }
+    }
+  },
+  "releaseTag": {
+    "name": "release-9f57d0fb0cfde7ceec9c61d0adca5fc393022593",
+    "object": "c54ecbfaefcc76b7a9a6daca5c4352c9d765d035",
+    "peeledRevision": "9f57d0fb0cfde7ceec9c61d0adca5fc393022593"
+  },
+  "promotedTasks": [
+    "NAMEDVIEWS1",
+    "INPUTINSPECTION1"
+  ],
+  "browserEvidence": "docs/evidence/2026-10-15-browser-input-view-proof.json",
+  "limitations": [
+    "Published runtime checks use Node; local real-Chrome evidence is separately recorded.",
+    "Public HTTPS pairing acceptance remains tracked under PUBLICHTTPS1.",
+    "No automatic persistence or complete P1/P4 claim."
+  ]
+}

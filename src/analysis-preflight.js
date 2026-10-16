@@ -11,6 +11,11 @@ import {validateProject} from './regions.js';
 import {validateMaterialProperties} from './materials.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {inspectInputProvenance} from './input-provenance.js';
+import {validateFractureData,validateFractureOptions} from './fracture-core.js';
+import {validateFatigueData} from './fatigue-material.js';
+import {validateFatigueOptions} from './fatigue-core.js';
+import {inspectUnitMagnitude} from './preflight-unit-magnitude.js';
+import {physicsCoverage} from './preflight-physics-coverage.js';
 
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const units={geometry:'mm',displacement:'mm',youngModulus:'Pa',force:'N',pressure:'Pa',density:'kg/m3',gravity:'m/s2',poissonRatio:'1'};
@@ -50,6 +55,32 @@ export function preflightProject(project,options={}, {target='browser',operation
  }
  if(options.size!==undefined&&(!Number.isFinite(options.size)||options.size<=0))add('MESH_SIZE_INVALID','/options/size','Mesh size must be positive millimetres',{value:options.size,unit:'mm'},['Provide a positive mesh size in mm']);
  const study=object(project.study)?project.study:{},material=object(project.materialProperties)?project.materialProperties:{},conditions=Array.isArray(project.conditions)?project.conditions:[];
+ if(operation==='solve'){
+  const assessments=[
+   {key:'fractureAssessment',dataKey:'fractureData',dataValidator:validateFractureData,optionsValidator:validateFractureOptions},
+   {key:'fatigueAssessment',dataKey:'fatigueData',dataValidator:validateFatigueData,optionsValidator:validateFatigueOptions},
+  ];
+  for(const assessment of assessments){
+   if(!Object.hasOwn(options,assessment.key))continue;
+   const optionPath='/options/'+assessment.key,dataPath='/materialProperties/'+assessment.dataKey;
+   const request=options[assessment.key];
+   // The current worker treats a present-but-undefined assessment as absent.
+   if(request===undefined)continue;
+   requiredPointers.push(dataPath);
+   if(!object(request))add('ASSESSMENT_INPUT_INVALID',optionPath,'Assessment request must be an options object',{value:request},['Provide a valid assessment options object']);
+   const unsupported=study.kind!==undefined&&study.kind!=='structural'||study.modalAnalysis===true||study.thermalStress===true||Boolean(material.orthotropic||material.plasticity||material.hyperelastic);
+   if(unsupported)add('ASSESSMENT_MODEL_UNSUPPORTED',(study.kind??'structural')!=='structural'?'/study/kind':study.modalAnalysis?'/study/modalAnalysis':study.thermalStress?'/study/thermalStress':'/materialProperties','Failure assessment requires supported linear isotropic, static structural analysis',{assessment:assessment.key,kind:study.kind??'structural'},['Use the assessment only with a supported linear isotropic static structural result']);
+   const data=material[assessment.dataKey];
+   let validData=false;
+   if(data===undefined||data===null)add('ASSESSMENT_INPUT_REQUIRED',dataPath,'Assessment requires registered material assessment data',{assessment:assessment.key},['Provide material data with its source and test conditions']);
+   else try{assessment.dataValidator(data);validData=true;}catch(error){add('ASSESSMENT_INPUT_INVALID',dataPath,error.message,{assessment:assessment.key},['Correct the registered material assessment data']);}
+   if(object(request))try{assessment.optionsValidator(request);}catch(error){add('ASSESSMENT_INPUT_INVALID',optionPath,error.message,{assessment:assessment.key},['Correct the physical assessment assumptions and load settings']);}
+   if(assessment.key==='fractureAssessment'&&validData){
+    const temperature=study.materialTemperature??20,[minimum,maximum]=data.temperatureRangeC;
+    if(!Number.isFinite(temperature)||temperature<minimum||temperature>maximum)add('ASSESSMENT_TEMPERATURE_OUT_OF_RANGE','/study/materialTemperature','Fracture toughness data does not cover the structural material evaluation temperature',{temperature,temperatureRangeC:data.temperatureRangeC},['Use toughness data valid for the material evaluation temperature or change the documented study temperature']);
+   }
+  }
+ }
  const inheritedProvisional=operation==='solve'&&((study.kind==='structural'&&study.thermalStress===true&&study.temperatureSource?.sourceAssessment?.provisional===true)||(study.kind==='acoustic'&&study.vibrationSource?.sourceAssessment?.provisional===true));
  const supported=(study.kind??'structural')==='structural'&&!study.modalAnalysis&&!study.thermalStress&&!material.orthotropic&&!material.plasticity&&!material.hyperelastic&&!material.dependence?.elasticTemperatureTable&&!thermoelasticContract;
  if(operation==='solve'&&supported){
@@ -68,9 +99,10 @@ export function preflightProject(project,options={}, {target='browser',operation
   if(effectiveMode!=='legacy'&&typeof study.gravityEnabled!=='boolean')add('GRAVITY_INTENT_REQUIRED','/study/gravityEnabled','Explicit gravity setting required',{value:study.gravityEnabled??null},['Record whether gravity is included in the intended physical model']);
  }else if(physicalContract){requiredPointers.push(...physicalContract.requiredPointers);diagnostics.push(...physicalContract.diagnostics);}
  else if(operation==='solve')add('PREFLIGHT_CONTRACT_LIMITED','/study','Required-input provenance contract is not implemented for this study/material combination',{kind:study.kind??'structural'},['Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run'],effectiveMode==='legacy'?'warning':'error');
+ if(operation==='solve')diagnostics.push(...inspectUnitMagnitude(project));
  let provenance;
  try{provenance=inspectInputProvenance(project,project.inputProvenance,{mode:effectiveMode,requiredPointers:effectiveMode==='legacy'?[]:requiredPointers});diagnostics.push(...provenance.diagnostics);}catch(error){add('PROVENANCE_INVALID','/inputProvenance','Provenance could not be inspected',{message:error.message},['Use JSON input and repair the provenance contract']);}
- return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':physicalContract?physicalContract.contract:supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
+ return {schemaVersion:1,target,operation,selectedObservation,mode:effectiveMode,allowed:!diagnostics.some(issue=>issue.severity==='error'),provisional:inheritedProvisional||(provenance?.provisional??false),completePreflight:false,requiredInputContract:operation==='mesh'?'mesh-only':physicalContract?physicalContract.contract:supported?'static-isotropic-linear-structure':'unsupported',requiredPointers,units:{...getCapabilities({target}).units,...inputUnits},diagnostics,physicsCoverage:physicsCoverage(operation==='solve'?physicalContract?.contract:undefined),remainingChecks:['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy']};
 }
 
 export function requireAnalysisPreflight(project,options={},runtime={}){

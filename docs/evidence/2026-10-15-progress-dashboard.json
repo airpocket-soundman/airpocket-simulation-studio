@@ -1,0 +1,265 @@
+{
+  "date": "2026-10-15",
+  "testedRevision": "c5a12abf342d61cce3ef2938bfbf0d5ee40e5333",
+  "implementation": "Claude CLI implementation in isolated worktree; Codex independent review, fixes, MCP integration and executed verification",
+  "fullDefaultNode24": {
+    "tests": 1011,
+    "pass": 1008,
+    "skip": 3,
+    "fail": 0,
+    "durationMs": 197608.0612
+  },
+  "independentTargetedReview": {
+    "tests": 35,
+    "pass": 35
+  },
+  "build": "passed",
+  "localDistribution": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "c5a12abf342d61cce3ef2938bfbf0d5ee40e5333",
+    "local": true,
+    "checkedAt": "2026-10-15T01:37:58.390Z",
+    "elapsedMs": 74442.443,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 24,
+        "downloaded": 24
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 2693.2194999999997
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 1172.9039000000002
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 1190.3575999999994
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 8741.9755
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 1738.9632999999976
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 2785.339500000002
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 716.752199999999
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 1216.4169000000002
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 1040.6990000000005
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 5974.867300000002
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 4014.291300000001
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 3876.7294
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 1847.3863999999958
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 2120.2955999999976
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 5138.9565
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 4747.806099999994
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 1692.4771000000037
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 3883.0596000000005
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 2458.3920999999973
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 2782.047099999996
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 1773.6801999999952
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 18.16259999999602
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 4836.503099999994
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 4668.243900000001
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 2483.335699999996
+      },
+      {
+        "name": "progress-history-candidate",
+        "passed": true,
+        "ms": 63.63499999999476
+      }
+    ],
+    "execution": {
+      "host": "node-child-process",
+      "sameExecutable": true,
+      "node": "v24.11.1",
+      "v8": "13.6.233.10-node.28",
+      "platform": "win32",
+      "arch": "x64",
+      "childCount": 44,
+      "requestCount": 44,
+      "automaticFallback": false,
+      "automaticRetry": false
+    },
+    "limitations": [
+      "Same-Node child processes execute hash-verified deployed CAD/analysis WASM assets and fixed STEP generation tasks.",
+      "Process isolation is containment and does not establish a V8 root-cause fix or a non-WASM native solver.",
+      "Browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "browser": {
+    "host": "127.0.0.1:5182 built preview",
+    "revision": "c5a12abf342d61cce3ef2938bfbf0d5ee40e5333",
+    "points": 151,
+    "counts": {
+      "queued": 26,
+      "building": 7,
+      "checking": 37,
+      "fixing": 0,
+      "ready": 6,
+      "released": 83
+    },
+    "estimatePercent": 25,
+    "scenarioRangePercent": [
+      16,
+      42
+    ],
+    "checks": [
+      "JP/EN rendering",
+      "Home/End keyboard commit selection",
+      "legend off/on",
+      "151-row table fallback",
+      "13 criterion details and 12 unknowns",
+      "390px responsive chart with no document horizontal overflow",
+      "no captured browser console errors"
+    ],
+    "screenshots": [
+      "2026-10-15-progress-dashboard-ja.png",
+      "2026-10-15-progress-dashboard-en.png",
+      "2026-10-15-progress-dashboard-narrow.png"
+    ]
+  },
+  "reviewCorrections": [
+    "No forward fill of skipped/unknown history; show known points only, including equal/reversed timestamps.",
+    "Accept only CRLF conversion when binding exact displayed source bytes to committed history.",
+    "Current gate credit requires matched verified/passed candidate evidence.",
+    "Treat ISO Z and +00:00 as the same instant in actual-Git test."
+  ],
+  "limitations": [
+    "Completion is subjective fixed-weight task-status scoring, not measured acceptance, statistical confidence, work hours or delivery prediction.",
+    "12 untracked criteria and all P0-P6 remain incomplete; rubric revision must map unknown acceptance requirements to evidence-bearing tasks before closure.",
+    "Local MCP history describes its checkout, not public deployment.",
+    "Public CI/deployment for this feature remains pending."
+  ],
+  "files": {
+    "src/progress-history.js": {
+      "bytes": 8235,
+      "sha256": "831670de8d90b8996c51262bdd59886a348d4194b3e4b55d2e8967e4dae80b43"
+    },
+    "src/product-estimate.js": {
+      "bytes": 19284,
+      "sha256": "9d4e52d2eefdc543d9756ad5654666da88441b5d0881c53c444a722338ec3e34"
+    },
+    "src/board-progress.js": {
+      "bytes": 25312,
+      "sha256": "6728794ae322c7c66de092628332d3a539c015634115ddd75f1b6e6a05c7b7c3"
+    },
+    "src/board.js": {
+      "bytes": 15462,
+      "sha256": "a7ffe8de9f8bb7aec4ff0366bc3c4e2f80546c9b7c7acb7294d255e8667798e6"
+    },
+    "src/published-progress.js": {
+      "bytes": 7653,
+      "sha256": "251507604af58c48ccf1f1a3b8a4ad4bc2a2e40506108edab2a493cc0c0f1853"
+    },
+    "scripts/progress-history.mjs": {
+      "bytes": 6309,
+      "sha256": "3ee1a42c3cc025a6bc1259ab7a934cf774d933918ccd7589813abfd3b3f21619"
+    },
+    "scripts/build-progress-history.mjs": {
+      "bytes": 868,
+      "sha256": "107ba88d4df5d5acb441f50a2b6572cc05df3655dcf2fc976684c5fb3dc57bea"
+    },
+    "scripts/studio-mcp.mjs": {
+      "bytes": 42591,
+      "sha256": "d0981ea02a67e67fb3d98eacac19c038cb8a3f8adcde75750f4a77e9866c9d22"
+    },
+    "scripts/check-published.mjs": {
+      "bytes": 38558,
+      "sha256": "7621ebf8af2e829da3c6b74560b4eda5b9b396ce8cb607a46c90d13d0669de4a"
+    }
+  },
+  "postFullSuiteChanges": [
+    "Documentation/evidence only, then first-point explanatory JP/EN text clarified; no data or scoring logic changed. Final required CI validates the latest head."
+  ]
+}

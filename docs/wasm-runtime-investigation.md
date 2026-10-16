@@ -87,3 +87,15 @@ MCPのstudio_capabilities/diagnose_execution/preflight_projectのruntimeから�
 任意のMCP起動`--analysis-isolation=process`は同じNode子プロセス内へ解析を分け、子の異常終了時もホストを維持する失敗封じ込めを追加する。既定workerは変更せず、再試行・runtime自動切替・任意実行ファイルのwire指定は行わない。runtime-failureの有界stderr/hashを確認し、process close後の資源終了を待つ。最終検証は[試験記録](testing.md)と[実行証跡](evidence/2026-10-15-process-isolation-full.json)を参照。V8根治や全モデル互換性の証明ではない。
 
 この経路のruntime-failureはcode:ANALYSIS_PROCESS_EXITを返します。検証に使うcontrolled exit86は実V8 fatalの再現ではなく、根治の証拠でもありません。親disconnect時の子終了はbest effortで、同期native処理によりハンドラが遅れる場合があります。
+
+## 2026-10-15: Linux配信物検査での再発と分離範囲
+
+main `badce2c0704385616af5c2dcc76898df85f833cb` の[公開CI run 38663202965](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38663202965)は、LinuxのNode v24.21.0で全体テスト・ビルドを通過した後、`check-published --local`がexit 133で停止した。22件の名前付き検査が成功し、`project-and-case-roundtrips`の後に`jit_page_->allocations_.erase(addr) == 1`と`UnregisterWasmAllocation`を記録した。26項目全体の成功・公開反映の成功とは扱わない。
+
+直後の検査は検証親プロセス自身でGmshを初期化し、STEP参照を生成する既存経路である。後続のCAD更新参照生成にも同じ親内初期化があった。停止時刻とこの順序は観測事実であり、どのインスタンス解放や処理が原因かは未同定である。[Node公式issue 66366](https://github.com/nodejs/node/issues/66366)の類似報告と上流V8修正候補は比較根拠であり、本アプリの原因を証明しない。最新24系への更新や過去のNode26成功だけで修正済みとはしない。
+
+今回の検証方針は、同じNode実行ファイルで配信済みのハッシュ照合済みanalysis/CADモジュールを子プロセスで実行し、STEP参照生成も子へ分けること。元の26検査・数値許容差・保存復元の判定を維持する。Node版変更、GC無効化フラグ、検査省略、自動再試行・自動フォールバックは採用しない。子の結果受信だけで成功を確定せず、closeまで待ち、非零終了・シグナル・結果後の異常も失敗として保持する。
+
+各検査と子実行の開始・終了をチェックポイントへ記録し、通常のJavaScript例外で捕捉できない停止でも直前までの証跡を残す。実子の制御失敗試験は、親の維持・異常終了伝達・保存判定の確認であり、V8 fatalの再現試験ではない。完全な配信物検査、実行時Node/V8/platform/arch、子実行方式と失敗記録は今回の[試験記録](testing.md)を参照する。分離後の成功が得られても根本原因の解決とは区別する。
+
+終了の判定範囲は、選択した配信モジュールの1回のhandler呼出しと、その返却Promise・子processのcloseまでである。closeまでに観測した異常終了は拒否するが、handler終了後に任意の遅延で予定された追加処理や、自然なV8終了時の全cleanupを検証する契約ではない。任意の1 tick待機を追加して将来のエラーを検査済みとはしない。[Node v24.21.0公式close仕様](https://github.com/nodejs/node/blob/v24.21.0/doc/api/child_process.md#event-close)は、終了後またはspawn失敗error後のcloseを保証している。error後のexitが非保証である点とは区別し、errorを保存してcloseまで待つ。

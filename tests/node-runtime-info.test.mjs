@@ -26,3 +26,10 @@ test('missing or invalid identity values are null and never infer compatibility'
  }
  const source=await readFile(new URL('../scripts/node-runtime-info.mjs',import.meta.url),'utf8');assert.doesNotMatch(source,/^import\s/m);assert.doesNotMatch(source,/WebAssembly\.|process\.(?:env|execPath|pid)|fetch\(/);
 });
+
+test('recorded Linux Node version warning states its weaker match without inventing a recorded V8 build',()=>{
+ const p={version:'v24.21.0',versions:{v8:'13.6.233.17-example'},platform:'linux',arch:'x64'},r=inspectNodeRuntime(p);
+ assert.equal(r.knownIssueAssessment,'observed-risk');assert.equal(r.v8,p.versions.v8);assert.equal(r.diagnostics[0].recordedV8Version,null);assert.equal(r.diagnostics[0].matchBasis,'node-version-platform-architecture');
+ assert.deepEqual(r.diagnostics[0].evidence,['docs/evidence/2026-10-15-publication-badce2c-v8-failure.json']);assert.equal(r.rootFixProven,false);assert.equal(r.compatibilityVerified,false);
+ for(const change of [{version:'v24.22.0'},{platform:'win32'},{arch:'arm64'}])assert.equal(inspectNodeRuntime({...p,...change}).knownIssueAssessment,'not-assessed');
+});

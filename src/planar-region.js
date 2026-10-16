@@ -1,6 +1,7 @@
 import {frameFromEuler} from './constraints.js';
 export function validatePlanarRegion(d){
  if(!d||!Array.isArray(d.min)||!Array.isArray(d.max)||d.min.length!==2||d.max.length!==2||![...d.min,...d.max].every(Number.isFinite)||d.max.some((v,i)=>v<=d.min[i]))throw Error('Invalid planar rectangle dimensions');
+ if(d.rotationDegrees!==undefined&&!d.frame)throw Error('Planar rotation controls require a matching saved frame');
  if(d.frame){const f=d.frame;if(!['origin','u','v'].every(k=>Array.isArray(f[k])&&f[k].length===3&&f[k].every(Number.isFinite))||Math.abs(Math.hypot(...f.u)-1)>1e-8||Math.abs(Math.hypot(...f.v)-1)>1e-8||Math.abs(f.u.reduce((s,v,k)=>s+v*f.v[k],0))>1e-8)throw Error('Planar frame axes must be finite orthonormal vectors');if(d.rotationDegrees!==undefined){if(!Number.isFinite(d.position)||!Number.isInteger(d.axis)||d.axis<0||d.axis>2)throw Error('Invalid planar rotation controls');const axes=frameFromEuler(d.rotationDegrees,d.axis).axes,across=[0,1,2].filter(k=>k!==d.axis);if(f.u.some((v,k)=>Math.abs(v-axes[across[0]][k])>1e-8)||f.v.some((v,k)=>Math.abs(v-axes[across[1]][k])>1e-8)||f.origin.some((v,k)=>Math.abs(v-d.position*axes[d.axis][k])>1e-7))throw Error('Planar rotation controls do not match the saved frame');}}
  else if(!Number.isInteger(d.axis)||d.axis<0||d.axis>2||!Number.isFinite(d.position))throw Error('Invalid planar rectangle dimensions');
  return d;

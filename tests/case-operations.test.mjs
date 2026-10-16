@@ -6,6 +6,11 @@ import {getProjectRevision} from '../src/project-revision.js';
 const output=()=>({input:{version:1,meshes:[{positions:[0,0,0,1,0,0,0,1,0],faceIds:[0]}],conditions:[]},calculation:{operation:'elastic',options:{size:5,method:'pcg',adaptive:false,maxRounds:3}},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],surface:[{nodes:[0,1,2]}]},result:{kind:'elastic',maxDisplacementMm:.04,maxVonMisesPa:1e6,displacement:Array(12).fill(0),magnitudes:Array(4).fill(0),vonMises:[0]}});
 function setup(options={}){const store=createCaseStore();store.add('A',output());store.add('B',output());let sequence=0;return {store,api:createCaseOperations({store,id:()=>String(++sequence),...options})};}
 const reference=row=>({caseId:row.caseId,expectedRevision:row.revision});
+
+test('case discovery exposes recorded bounded runtime identity without adding it to legacy results',async()=>{
+ const store=createCaseStore(),a=output();a.calculation.runtimeIdentity={schemaVersion:1,target:'browser',isolation:'web-worker',build:{status:'unavailable'},engine:{requestedMethod:'pcg',actualEngine:null},assets:[]};store.add('recorded',a);store.add('legacy',output());
+ const api=createCaseOperations({store}),rows=(await api.list()).cases;assert.deepEqual(rows[0].runtimeIdentity,a.calculation.runtimeIdentity);assert.equal(rows[1].runtimeIdentity,undefined);assert.equal(rows[0].output,undefined);rows[0].runtimeIdentity.build.status='edited';assert.equal((await api.list()).cases[0].runtimeIdentity.build.status,'unavailable');
+});
 test('listing is compact, independent and stable without output payloads',async()=>{
  const {api}=setup(),first=await api.list(),second=await api.list();assert.deepEqual(first,second);assert.equal(first.cases[0].metrics[0].unit,'mm');assert.match(first.cases[0].revision,/^sha256:[a-f0-9]{64}$/);assert.equal(first.cases[0].output,undefined);assert.ok(JSON.stringify(first).length<2000);first.cases[0].metrics[0].value=99;assert.equal((await api.list()).cases[0].metrics[0].value,.04);
 });

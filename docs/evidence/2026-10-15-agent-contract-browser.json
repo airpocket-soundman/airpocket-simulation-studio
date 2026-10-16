@@ -1,0 +1,79 @@
+{
+  "origin": "http://127.0.0.1:5180",
+  "execution": "Real GUI thermal sample and Worker/WASM, case save, visible textarea export, saved 3D display",
+  "validation": [
+    {
+      "name": "Case 1",
+      "kind": "thermal",
+      "metrics": [
+        {
+          "key": "minTemperature",
+          "unit": "°C",
+          "value": 20
+        },
+        {
+          "key": "maxTemperature",
+          "unit": "°C",
+          "value": 100
+        }
+      ]
+    }
+  ],
+  "measurement": {
+    "point": [
+      5,
+      5,
+      20
+    ],
+    "element": 4,
+    "weights": [
+      0.0473118844132544,
+      0.04731188441325418,
+      0.08865274894305841,
+      0.8167234822304326
+    ],
+    "temperature": 59.999999992397605,
+    "flux": [
+      0.000002115665665769484,
+      -0.00004119031837035436,
+      -4000.000003711928
+    ]
+  },
+  "runtimeIdentity": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "isolation": "web-worker",
+    "build": {
+      "status": "available",
+      "version": "0.43.0",
+      "revision": "18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+      "dirty": true,
+      "sourceFingerprint": "sha256:0d5f3f852e53d5c3abbd485fdf98ae59a6bcb134ea076339db9364518029b45c"
+    },
+    "engine": {
+      "requestedMethod": "wasm-pcg",
+      "actualEngine": "Airpocket Heat Tet4 / WASM CPU"
+    },
+    "assets": [
+      {
+        "role": "kernel",
+        "bytes": 229,
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+      },
+      {
+        "role": "gmsh",
+        "bytes": 41430673,
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+      }
+    ]
+  },
+  "nodeCount": 171,
+  "elementCount": 428,
+  "limitations": [
+    "This GUI regression did not force queue overflow or retrieve queue counters. Controlled queue tests separately verify bounds.",
+    "Legacy synthetic sample; not quantitative physical validation."
+  ],
+  "cleanup": "QA tab closed and preview listener absent"
+}

@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-15",
+  "baseRevision": "1d47ce9ef113546daef10abeb5de842c54789352",
+  "scope": "Published bundle verification containment, not default MCP/browser execution",
+  "priorFailure": "2026-10-15-publication-badce2c-v8-failure.json",
+  "fullDefaultNode24": {
+    "tests": 980,
+    "pass": 977,
+    "skip": 3,
+    "fail": 0,
+    "durationMs": 154091.5498
+  },
+  "build": "passed",
+  "localDistribution": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "1d47ce9ef113546daef10abeb5de842c54789352",
+    "local": true,
+    "checkedAt": "2026-10-15T01:19:47.932Z",
+    "elapsedMs": 72551.7298,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 23,
+        "downloaded": 7
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 3687.6662000000006
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 2468.7879000000003
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 2445.4011
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 6539.586899999998
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 673.0335000000014
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 3716.232
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 1121.9563000000016
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 1745.844000000001
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 1875.0344000000005
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 5528.302900000002
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 4377.196499999998
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 3188.559500000003
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 1383.8202999999994
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 1743.2230999999956
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 3626.3345000000045
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 5312.392800000001
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 1248.1387000000032
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 3926.2862000000023
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 1742.6405000000013
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 2674.1790000000037
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 1903.7776999999987
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 18.131499999995867
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 3901.9225000000006
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 4814.833399999989
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 1762.1698999999935
+      }
+    ],
+    "execution": {
+      "host": "node-child-process",
+      "sameExecutable": true,
+      "node": "v24.11.1",
+      "v8": "13.6.233.10-node.28",
+      "platform": "win32",
+      "arch": "x64",
+      "childCount": 44,
+      "requestCount": 44,
+      "automaticFallback": false,
+      "automaticRetry": false
+    },
+    "limitations": [
+      "Same-Node child processes execute hash-verified deployed CAD/analysis WASM assets and fixed STEP generation tasks.",
+      "Process isolation is containment and does not establish a V8 root-cause fix or a non-WASM native solver.",
+      "Browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "review": {
+    "claudeCli": "Independent source review; no tests run by Claude reviewer",
+    "accepted": "Unsolicited child messages before dispatch now rejected and tested",
+    "notAdopted": [
+      "Claim that spawn error lacks close contradicts official Node close specification and real ENOENT check.",
+      "Arbitrary delayed tasks after selected handler returns are outside the verifier contract; one extra tick cannot guarantee them."
+    ]
+  },
+  "limitations": [
+    "Not proof of a V8 root fix or real-browser stability.",
+    "Original Linux failure did not retain full V8 version; warning basis is Node version/platform/architecture only.",
+    "No retries, skips, fallback or weakened numerical tolerances introduced.",
+    "Published CI remains pending for this change."
+  ],
+  "files": {
+    "scripts/published-process-runtime.mjs": {
+      "bytes": 4006,
+      "sha256": "d96f3447e7e29515c74e10d9a3299ab8d56c763d4a5d52096bbe3748227ba22e"
+    },
+    "scripts/published-process.mjs": {
+      "bytes": 3398,
+      "sha256": "fd0d1074be2482a0a41729a67804092da1b4b6381ee54f9f686b52cb0cc57be7"
+    },
+    "scripts/check-published.mjs": {
+      "bytes": 37948,
+      "sha256": "5f6b89ae4d7601a2378d1e1bbe17ea8f5300afabae69ecaf743fec01077b3d12"
+    },
+    "scripts/node-runtime-info.mjs": {
+      "bytes": 1996,
+      "sha256": "83906e8748c9961d84777c77e94b8cf675107a8be5f19716a5bb1eb502e00d0b"
+    },
+    "tests/published-process-runtime.test.mjs": {
+      "bytes": 4684,
+      "sha256": "80f0d4257060c5a3bf6d87a78510599da93da3d23ac0b50dd0139a41849ce8ba"
+    },
+    "tests/published-process-verification.test.mjs": {
+      "bytes": 5836,
+      "sha256": "cfd483c26605b5bd467bbc4b5908f6d501bc9b71436a52e4e6ac3697015e8e63"
+    }
+  }
+}

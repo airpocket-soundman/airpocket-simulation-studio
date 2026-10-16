@@ -1,0 +1,199 @@
+{
+  "date": "2026-10-15",
+  "revision": "18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+  "publicRun": 38661091266,
+  "jobs": {
+    "verify": "success",
+    "deploy": "success",
+    "verify-published": "success"
+  },
+  "tag": "release-18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+  "tagPeeledRevision": "18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+  "report": {
+    "status": "passed",
+    "version": "0.43.0",
+    "revision": "18a416d354f333d94fbeea5b81986b3bb2b2da9c",
+    "local": false,
+    "checkedAt": "2026-10-15T00:42:22.896Z",
+    "elapsedMs": 37324.032137,
+    "checks": [
+      {
+        "name": "deployed-asset-integrity",
+        "passed": true,
+        "assets": 23,
+        "downloaded": 23
+      },
+      {
+        "name": "structural-airpocket-and-mfem",
+        "passed": true,
+        "ms": 1061.810286
+      },
+      {
+        "name": "closed-convex-stl-volume-structure-and-archive",
+        "passed": true,
+        "ms": 555.7501360000006
+      },
+      {
+        "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+        "passed": true,
+        "ms": 586.6251670000001
+      },
+      {
+        "name": "engineering-polymer-five-family-axial-references",
+        "passed": true,
+        "ms": 2800.966661999999
+      },
+      {
+        "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+        "passed": true,
+        "ms": 614.5294350000004
+      },
+      {
+        "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+        "passed": true,
+        "ms": 1840.0626420000008
+      },
+      {
+        "name": "thermal-radiation",
+        "passed": true,
+        "ms": 522.0741880000005
+      },
+      {
+        "name": "rubber-finite-strain",
+        "passed": true,
+        "ms": 843.1500240000005
+      },
+      {
+        "name": "laminar-channel-flow",
+        "passed": true,
+        "ms": 789.8537220000017
+      },
+      {
+        "name": "three-dimensional-creeping-stokes-flow-and-archive",
+        "passed": true,
+        "ms": 3014.575307000001
+      },
+      {
+        "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+        "passed": true,
+        "ms": 2521.4887629999976
+      },
+      {
+        "name": "exterior-radiation-and-far-field",
+        "passed": true,
+        "ms": 1587.8964009999981
+      },
+      {
+        "name": "transient-acoustic-wave-and-archive",
+        "passed": true,
+        "ms": 714.9184910000004
+      },
+      {
+        "name": "modal-frequencies-and-archive",
+        "passed": true,
+        "ms": 1496.819746000001
+      },
+      {
+        "name": "modal-to-exterior-acoustic-power",
+        "passed": true,
+        "ms": 2513.1251599999996
+      },
+      {
+        "name": "internal-cad-channel-and-port-archive",
+        "passed": true,
+        "ms": 2409.5401969999984
+      },
+      {
+        "name": "exact-planar-cad-patch-and-archive",
+        "passed": true,
+        "ms": 756.3817079999972
+      },
+      {
+        "name": "exact-cylindrical-cad-patch-and-reaction",
+        "passed": true,
+        "ms": 1820.2559189999993
+      },
+      {
+        "name": "j2-plasticity-free-contraction-and-archive",
+        "passed": true,
+        "ms": 973.2520730000033
+      },
+      {
+        "name": "j2-plasticity-elastic-unloading-and-archive",
+        "passed": true,
+        "ms": 1607.2102889999987
+      },
+      {
+        "name": "failure-and-restart",
+        "passed": true,
+        "ms": 879.4955249999985
+      },
+      {
+        "name": "project-and-case-roundtrips",
+        "passed": true,
+        "ms": 13.232636000000639
+      },
+      {
+        "name": "published-cad-reader-and-step-mesher",
+        "passed": true,
+        "ms": 1301.0759919999982
+      },
+      {
+        "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+        "passed": true,
+        "ms": 1588.5529999999999
+      },
+      {
+        "name": "oblique-planar-cad-area-and-reaction",
+        "passed": true,
+        "ms": 720.3299879999977
+      }
+    ],
+    "limitations": [
+      "Node workers execute deployed CAD/analysis assets; browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+    ]
+  },
+  "downloadedConnector": {
+    "bytes": 74500,
+    "sha256": "5e29fc83ab08e7d88844d6085ecc5129b716a589267dc3d1bb93f3d6aa911329",
+    "execution": "Downloaded exported createBrowserMcp factory configured at port63727, repository shared MCP stdio host; not standalone CLI-only startup."
+  },
+  "browserQa": {
+    "browser": "Codex In-app Browser",
+    "origin": "https://airpocket-soundman.github.io",
+    "endpoint": "http://127.0.0.1:63727",
+    "newDiagnosticButtonObserved": true,
+    "health": "unreachable",
+    "permissionQuery": "prompt",
+    "permissionDialogObserved": false,
+    "pairing": "unreachable",
+    "scopes": [
+      "inspect"
+    ],
+    "otherScopes": false,
+    "sessions": 0,
+    "bridgeCounters": "all twelve counters zero after health/pair/health sequence",
+    "inputInspectionPerformed": false,
+    "cause": "undetermined",
+    "screenshot": "2026-10-15-public-https-diagnostics-18a416d.jpg",
+    "credentialCleared": true,
+    "processClosed": true,
+    "listenerAbsent": true,
+    "tabClosed": true
+  },
+  "limitations": [
+    "Permission query prompt is not proof of user denial.",
+    "Fetch loopback hint did not resolve reachability in this environment.",
+    "No public HTTPS success, standard external-browser coverage or Skill-only completion is claimed."
+  ],
+  "pullRequestVerification": {
+    "pullRequest": 9,
+    "run": 38660549287,
+    "platform": "Linux Node24",
+    "tests": 944,
+    "pass": 941,
+    "fail": 0,
+    "skip": 3,
+    "logSha256": "73f651dbe7cea40a0e6defc9542730e649ca2aa93fbe8675986ddffe6074c415"
+  }
+}

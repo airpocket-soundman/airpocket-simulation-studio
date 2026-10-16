@@ -44,6 +44,7 @@ export function createJobResultTransfer({analysis,maxBytes=100000000,maxTransfer
    // Validate and detach every field before the first asynchronous hash.
    const output=JSON.parse(canonicalJson(snapshot(analysis.getJobResult(jobId))));
    if(!plain(output)||!plain(output.input)||!plain(output.calculation)||!plain(output.mesh)||output.result!==undefined&&!plain(output.result)||output.boundary!==undefined&&!plain(output.boundary))fail('Invalid complete job result output');
+   if(Object.hasOwn(output,'inputRevision')&&output.inputRevision!==inputRevision)fail('Job result output revision mismatch');
    if(output.result===undefined&&output.calculation.operation!=='mesh')fail('Job result output is missing its computed result');
    const kind=output.result?.kind??'mesh';if(typeof kind!=='string'||!kind||kind.length>100)fail('Invalid job result kind');
    const bytes=new TextEncoder().encode(JSON.stringify(output));

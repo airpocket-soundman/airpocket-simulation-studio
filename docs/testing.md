@@ -156,7 +156,7 @@ NUMERICREFERENCE1の追加調査では、生成参照200回が成功し、既定
 
 `tests/mcp-assessment.test.mjs`は実stdio MCPと実WASM軸力解析を使用。明示した架空S-N参照データで寿命1e6 cycles・損傷0.1を確認し、Mode-I評価のK値をsigma*sqrt(pi*a)と照合。疲労評価に破壊評価を追加しても既存評価・入力・応力配列を保持。出典・元の暫定判定と残確認事項、単位・制約、最大200要素の取得を検証した。架空参照値は実材料の設計値ではない。
 
-既存出力/入力への上書き、古い結果版、設定省略、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
+MCP `studio_assess_result`は既存出力/入力パスへの上書きと設定(options)省略を拒否する(保存ファイル経路のみ)。ブラウザ接続`evaluateAssessment`/`resultAssessmentApi.evaluate`では同種の再評価は現行結果版で保存済み評価を置換し、疲労のoptions省略は既定値(minLoadFactor0・maxLoadFactor1・appliedCycles1)で受理する(実Chrome確認)。両経路とも古い結果版、不明項目、範囲外の取得、保存評価の改変を拒否。途中の結果変更・処理中・失効でcommitしないことを検証。実画面と公開HTTPS接続による評価表示は未確認であり、Node/MCPの数値・保存検証と区別する。
 
 ビルド成功。配信物チェックは、全体テストと並行した初回にNode v24.11.1のV8で `jit_page_->allocations_.erase(addr) == 1` のFatal errorとなり停止した。単独再実行は26項目すべて成功（29.07秒）。ソルバーと検証スクリプトは変更しておらず、原因を解決した記録ではない。RUNTIMEWASM1で失敗条件・WASM終了時の状態捕捉と再現性を追跡する。専門SKILLも検証済み。
 
@@ -515,3 +515,70 @@ P1/P3の候補検査・版照合・実行中非変更の限定確認であり、
 公開0e53638の単体接続ファイルはmanifest版・bytes/SHA256と隔離起動・3ツール・EOF終了を確認した。ユーザー承認後の公開ページ確認専用接続は到達エラーでsession未作成となり、コードを消去し試験用MCPと待受を終了した。[公開ファイル](evidence/2026-10-15-public-browser-connector.json)、[失敗記録](evidence/2026-10-15-public-https-inspect-failure.json)、[画面](evidence/2026-10-15-public-https-inspect-failed.jpg)を参照。原因は未特定で、公開HTTPS gateを閉じない。保存後の全比較、engine版追跡、Skill単独一巡、P0〜P6全体も未完了。
 
 Node26.10.0の比較全体は921件中917成功・1失敗・3skip（373.93秒）。失敗はqueryNodeIdentity子プロセスの5秒spawn timeoutで、同じruntime再現suiteの単独6件は成功した。比較全体も未通過であり、既定環境のV8根治や全体成功の代替にはしない。最終差分の必須CIを別途確認する。
+
+## 2026-10-15: 実行時のビルド・WASM識別
+
+calculation.runtimeIdentityを追加し、Worker起動/コンパイル時にbuild識別を固定、実際の初期化へ渡すkernel/Gmsh/MFEMの同じWASM bytesを観測した。Node packageとbrowser資産を区別し、case保存/復元/listでも保持する。旧identity欠落へ現行版を補わず、不正形式・method/engine矛盾を拒否する。完全結果転送のouter inputRevisionが存在する場合も元入力版との一致を検査する。
+
+初回934件は923成功・8失敗・3skip。実Node Workerをブラウザ用clientへ注入するadapterのhost不一致を修正し、identityを削除/偽browserへ変更せず、constructor専用identityHostとpreflightを実hostへ合わせた。最終21対象成功、全体935件中932成功・3skip・失敗0（148.87秒）。保存/復元等36件、buildとローカル配信物26項目（57.91秒）も成功。[全体証跡](evidence/2026-10-15-runtime-identity.json)を参照。既知のWindows V8問題の根治とは扱わない。
+
+実ブラウザでdirty本番ビルドをlocalhost配信し、GUIの熱サンプルを解析。171節点/428要素、20〜100°Cで完了し、visible JSONからbrowser/web-worker、build版、kernel229 bytes・Gmsh41,430,673 bytesのobserved hashを取得した。実配信ファイルのhashと照合し、ケース保存・再表示後にidentity不変を確認。QA tab/serverを終了した。[ブラウザ記録](evidence/2026-10-15-runtime-identity-browser.json)、[保存JSON](evidence/2026-10-15-runtime-identity-browser-case.json)、[画面](evidence/2026-10-15-runtime-identity-browser.jpg)、[Skill同期](evidence/2026-10-15-skill-runtime-identity.json)を参照。公開HTTPS/MCP単独一巡・全P0〜P6は未完了。
+
+## 2026-10-15: 接続の到達性診断
+
+認証コードを送らない1KiB/5秒上限のhealth照会、参考情報としての権限状態照会、任意指定の秘密を保持しないMCP受信カウンタを追加した。新規対象9件成功。実ローカル本番GUIでコードなしに診断窓口へ到達し、未接続を維持した。許可済みの確認専用公開HTTPS再試験は旧公開UIで到達エラーとなり、bridge受信0・session0だった。原因の特定や新hintの公開HTTPS成功とは扱わない。試験プログラムとタブは終了した。[証跡](evidence/2026-10-15-browser-diagnostics.json)を参照。
+
+944 tests: 941 passed, 3 skipped, 0 failed (186.75 s). Build and 26 local distribution checks passed (49.13 s). Repository/installed Skill: 10 file hashes match; both validators passed.
+
+## 2026-10-15: 根拠編集・保存復元検証・中間待機
+
+MCPから根拠/intentの位置引数schemaを取得し、明示したfixtureの根拠でexploratory診断修復とquantitative未確認拒否を実stdioで確認した。実際の利用者確認を取得した証明ではない。全ケース復元検証、短い場/不正接続/identity拒否、回転frame無し拒否と元入力不変も検証した。中間payloadは既定8件/推定8MBで受理前に制限し、遅いconsumer・cancel/drain・旧meshへの誤結合防止を確認した。
+
+初回全体955件は950成功・2失敗・3skip（150.33秒）。新queue通知の未宣言と、最後の保持場を最終時刻と仮定した試験が失敗した。通知契約を追加し、すべての保持場を同時刻の完全保存frameと照合、最終pressure/frameと時刻の完全性も別途検査するよう修正した。初回失敗を成功へ読み替えない。
+
+実ブラウザのdirty本番buildで熱サンプルを実行し、171節点/428要素・20〜100°C、保存・再表示、画面から取得したJSONの復元検証と中央59.9999999924°Cの再測定を確認した。GUI例はqueue超過を強制しておらず、上限の証明は制御試験と区別する。[画面/測定記録](evidence/2026-10-15-agent-contract-browser.json)、[保存JSON](evidence/2026-10-15-agent-contract-browser-case.json)を参照。
+
+公開18a416dはverify/deploy/verify-publishedと26配信物/tag一致が成功した。同版から取得・hash照合した接続factoryで、公開実画面のhealthと確認専用pairは未到達・受信0、権限照会promptだった。原因は未特定で公開HTTPS gateを閉じない。[公開試験](evidence/2026-10-15-publication-18a416d.json)を参照。試験用コード・タブ・接続プログラム・ローカルpreviewを終了した。Worker transport全体の背圧、event ring bytes、比較/同一点再測定API、Skill単独一巡と全P0〜P6は継続する。
+
+修正後の既定Node24全体は956件中952成功・1失敗・3skip（158.05秒）。mcp-advanced-structural-provenanceが既知V8のjit_page allocation内部停止で終了した。停止ファイルの単独1件は成功（16.05秒）したが、既定全体成功や根治の証明ではない。buildとローカル配信物26項目は成功（67.78秒）。
+
+Node26比較は956件中952成功・1失敗・3skip（367.06秒）。queryNodeIdentityの実子process起動が5秒timeoutで失敗し、同suiteの単独6件は成功した。比較全体も未通過であり、既定環境の全体成功やV8根治の代替にしない。[全体証跡](evidence/2026-10-15-agent-contract-validation.json)を参照。配布/リポジトリSkill10ファイルはhash一致、両validator成功。
+
+## 2026-10-15: ジョブイベント本文・保持・ページの容量
+
+イベント32KiB、各ジョブ保持1MiBかつ256件、jobEvents JSON値64KiBの上限を実装した。過大/不正payloadを同じsequenceの明示欠落通知へ置き換え、byte eviction後のtruncated/cursor継続、getter未実行、通常metricsと構造化failure、error本文の切詰情報、取消/終了状態を確認した。
+
+対象13件、全体968件中965成功・3skip・失敗0（171.53秒）。buildとローカル配信物26項目（57.72秒）も成功。実製品stdio/HTTP/adapterと制御executorで最大JSON値52,854 bytes、MCP JSONRPC行106,350 bytes、bridge reply body52,908 bytesを測定した。64KiBは値の上限であり通信全体とは違う。別途、全体試験で実solverのMCP観測とlifecycleも回帰した。合成イベント試験を物理精度の証明としない。[証跡](evidence/2026-10-15-job-event-bounds.json)を参照。
+
+前回PR #10はLinux Node24必須CIで956件中953成功・3skip・失敗0となり、badce2cへ取り込んだ。前回Windows/Node26の失敗記録を上書きせず、今回成功も既知V8問題の根治とは扱わない。配布/リポジトリSkill10ファイル一致と両validator成功を確認した。公開HTTPS・Worker transport全体・保存比較再測定API・Skill単独一巡・全P0〜P6は継続する。
+
+## 2026-10-15: 配信物検証のプロセス分離（ローカル検証済み）
+
+取り込み後のmain `badce2c0704385616af5c2dcc76898df85f833cb` は、[Linux Node v24.21.0の公開CI](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38663202965)で全体テスト・ビルドを通過した後、ローカル配信物検査が既知の`jit_page_->allocations_.erase(addr) == 1`でexit 133となった。22件の名前付き検査の成功後、`project-and-case-roundtrips`に続く区間で停止しており、26項目全体の成功・デプロイ成功とは扱わない。この失敗を前回PRの成功やWindowsの記録と区別して保持する。
+
+配信物検査用の実行方式だけを変更し、同じNode実行ファイルの子プロセスのmainで、ハッシュ照合済み配信analysis/CADモジュールとSTEP参照生成を実行する。元の26項目と数値・保存復元のassertionを維持し、親自身のGmsh初期化を除いた。受信結果はclose 0・シグナルなし・観測されたnative fatalなしまで暫定とし、要求前の応答、子の異常、期限切れを拒否する。同期チェックポイントと失敗時の部分記録を残す。
+
+制御fixtureは実子のsame-executable実行、バイナリーIPC、終了待機、結果後の非零終了、失敗伝達を検証する。物理ソルバーの精度やV8根治の証明ではない。ブラウザの実Worker、MCPの既定実行方式、サポートNode最低版は変更していない。Node切替、GC設定変更、skip、自動retry/fallbackは追加していない。
+
+今回変更後の既定Node24全体980件中977成功・3skip・失敗0（154.09秒）。buildとローカル配信物26項目（72.55秒、44 child）が成功。公開CIは別途記録する。原因の同定と上流修正との一致は未証明のままである。終了判定範囲と一次資料は[WASM実行調査](wasm-runtime-investigation.md)を参照。
+
+## 2026-10-15: 開発の履歴・完成度の可視化
+
+Claude CLIの実装を独立レビューし、欠落区間・Windows改行・過去候補の加点を修正。全体1011件中1008成功・3skip・失敗0、buildと配信物27項目（元26＋履歴）が成功。151記録点と日英・390px・凡例・キー選択・表・算定根拠を実画面で確認。推定25%、主観シナリオ幅16〜42%。[証跡](evidence/2026-10-15-progress-dashboard.json)と[算定方法](progress-dashboard.md)。本機能の公開CIは別途記録する。公開基盤23e430eはverify/deploy/verify-publishedと26項目が成功し、失敗したbadce2cは保存する。
+
+## 2026-10-15: 評価オプションの事前検査と公開確認
+
+PR #32は、要求された破壊・疲労評価の材料データとオプションを解析前に検査し、MCP `studio_preflight_project`から同じ拒否・修復情報を返す。未指定時とメッシュのみの動作を維持する。後処理時の物理妥当性や応力場の検証を代替しない。
+
+統合候補071e05bのローカル全体試験は1135件中1132成功・3skip・失敗0。main `3ef460e173a3253fc5ad8c87f97191cfb28caf0b` のverify・deploy・verify-publishedが成功し、公開検証28項目、manifestと進捗のbytes/SHA、注釈付きreleaseタグを照合した。[公開証跡](evidence/2026-10-15-assessment-publication.json)。これはNodeによる配信物の実行確認であり、ブラウザ描画や公開接続の独立証明ではない。
+
+## 2026-10-15: Worker観測の送信上限（検証中）
+
+ACK待ちと送信待ちを各8件/8 MBに制限し、同期ソルバーを止めずにscalar iterationだけを集約する。通常の結果・報告エラーの前に配送を待ち、メッシュ世代と観測値の受理時コピーを維持する。取消・timeout・異常終了では終端集計が届かず、最終欠落数は不明となる。progress・最終結果・JSヒープ全体はこの容量保証の対象外。
+
+初期の即時drop方式は実Stokes P2のfinal-checkとsweep周波数イベントを失ったため採用せず、[失敗証跡](evidence/2026-10-15-worker-transport-initial-regression.json)を残した。修正版の関連77試験と、別途モジュール境界・共通型29試験が成功。全体回帰・実ブラウザ・今回候補の公開検証は未了で、P3全体の完了ではない。
+## 2026-10-15: 公開HTTPS再接続の利用者報告とSkill入力preview
+
+利用者から公開HTTPS版へ再接続できたとの報告があった。今回は独立観測ではなく、inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。編集/解析への権限拡大はしていない。[利用者報告の記録](evidence/2026-10-15-public-https-reconnect-user-report.json)。
+
+Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し、両validatorが成功した。実in-repo stdioのsynthetic 100 N→150 N previewは `/conditions/1/value` の古い根拠を `PROVENANCE_STALE` として示し、元入力bytesを保持した。変更はpreviewのみで適用・解析していない。fixture生成にrepository factoryを使ったためSkill単独/全一巡の証明ではないが、SKILLROUTING1の記載済み受け入れ範囲を満たしreadyへ更新した。[同期証跡](evidence/2026-10-15-skill-synchronization-b.json)、[preview証跡](evidence/2026-10-15-skill-forward-input-preview-b.json)。

@@ -28,6 +28,7 @@ test('job lifecycle, actual saved input identity, JSON and strict transfer queri
  for(const change of [{state:'running'},{executionSettled:false},{state:'cancelled'},{inputRevision:'sha256:'+'0'.repeat(64)}]){f.setJob({...f.job,...change});await assert.rejects(f.api.beginExport(f.command));}f.setJob(f.job);
  for(const args of [{...f.command,extra:1},{...f.command,inputRevision:'bad'},{...f.command,jobId:''}])await assert.rejects(f.api.beginExport(args));
  f.output.input.study.kind='changed';await assert.rejects(f.api.beginExport(f.command),/revision mismatch/);f.output.input.study.kind='thermal';
+ f.output.inputRevision='sha256:'+'0'.repeat(64);await assert.rejects(f.api.beginExport(f.command),/output revision mismatch/);delete f.output.inputRevision;
  const getter={};Object.defineProperty(getter,'jobId',{enumerable:true,get(){throw Error('getter must not run');}});await assert.rejects(f.api.beginExport(getter),/arguments/);
  const entry=await f.api.beginExport(f.command);
  for(const args of [{offset:-1},{offset:entry.totalBytes+1},{offset:1.5},{length:0},{length:65537},{extra:true}])assert.throws(()=>f.api.read({transferId:entry.transferId,...args}));

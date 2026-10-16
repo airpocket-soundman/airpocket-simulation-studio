@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-15",
+  "baseRevision": "badce2c0704385616af5c2dcc76898df85f833cb",
+  "scope": "Common browser/Node job event payload, ring retention and JSON-value page bounds",
+  "targeted": {
+    "tests": 13,
+    "pass": 13,
+    "fail": 0
+  },
+  "fullDefaultNode24": {
+    "tests": 968,
+    "pass": 965,
+    "fail": 0,
+    "skip": 3,
+    "durationMs": 171532.0947
+  },
+  "limits": {
+    "eventBytes": 32768,
+    "retainedBytesPerJob": 1048576,
+    "eventsPerJob": 256,
+    "pageValueBytes": 65536,
+    "viewBytes": 24576,
+    "messageUtf16CodeUnits": 2048
+  },
+  "actualMcp": {
+    "executor": "synthetic controlled events; real product MCP stdio, loopback HTTP, browser adapter and shared registry",
+    "maximumJobEventsValueUtf8Bytes": 52854,
+    "maximumMcpJsonRpcLineUtf8Bytes": 106350,
+    "maximumBridgeReplyBodyUtf8Bytes": 52908,
+    "notes": [
+      "64 KiB applies to jobEvents JSON value, not duplicate MCP representations or transport wrappers.",
+      "Actual solver MCP profile/lifecycle tests also regressed in the full run; synthetic event test does not establish physical validity."
+    ]
+  },
+  "build": "passed",
+  "localDistribution": {
+    "checks": 26,
+    "status": "passed",
+    "seconds": 57.72
+  },
+  "previousPullRequest": {
+    "number": 10,
+    "run": 38662735129,
+    "verify": "success",
+    "LinuxNode24": {
+      "tests": 956,
+      "pass": 953,
+      "fail": 0,
+      "skip": 3
+    },
+    "mergedRevision": "badce2c0704385616af5c2dcc76898df85f833cb"
+  },
+  "limitsRemaining": [
+    "Worker transport backpressure and total JS heap are outside event byte guarantees.",
+    "No root fix for the known Windows V8 native fatal is claimed from one successful full run.",
+    "Public HTTPS pairing, comparative saved remeasurement, Skill-only completion and all P0-P6 remain incomplete."
+  ],
+  "files": {
+    "src/job-event-payload.js": {
+      "bytes": 9099,
+      "sha256": "7736cb94b12a9b396430c48b4c56f55c19020962979311c2b4cefb56c97ab09a"
+    },
+    "src/analysis-jobs.js": {
+      "bytes": 9781,
+      "sha256": "a604b21df5ad33fc099e83426296090b9df3fd360718d5012f5b16d01749451b"
+    },
+    "src/capabilities.js": {
+      "bytes": 10068,
+      "sha256": "5884c6a6844cced11b053e4bb666a60f57db51a4beb31ff37641577a91e4977b"
+    },
+    "src/observation-profiles.js": {
+      "bytes": 17225,
+      "sha256": "360921c7c84a99880eb0af8baed98d1ce90ea2043a98c1fb853a7181eca3db1e"
+    },
+    "src/browser-operation-job-contracts.js": {
+      "bytes": 7110,
+      "sha256": "1cffc027586eb66eeb22ce32a9ddc74438bb4c41ca159f2711af235b9e838e6c"
+    },
+    "tests/job-event-payload.test.mjs": {
+      "bytes": 6346,
+      "sha256": "9dbe0dfa1bbd67ae75f02c75f80c377d9f1afc2ac642d477b65120322b6ae552"
+    },
+    "tests/analysis-jobs-event-bytes.test.mjs": {
+      "bytes": 5918,
+      "sha256": "d0207801a88fc28fef6d176d96938c3df673e62ba3c9c52d31ed13844190f246"
+    },
+    "tests/mcp-job-event-bytes.test.mjs": {
+      "bytes": 7955,
+      "sha256": "af622305bae579f454f272005c34a83e1415f53a5668d16b70ef93030778c513"
+    },
+    ".qa/job-event-bounds-targeted.log": {
+      "bytes": 1848,
+      "sha256": "ca3ce95138fe52c3dd2a969b8ece37e46ab8e418cc334cee057e74385301da1b"
+    },
+    ".qa/job-event-bounds-full.log": {
+      "bytes": 104212,
+      "sha256": "33dd39fd4bf5b4f2ee7d24e77ac9e05a1baec33eebe822b7ae4972a651edf55c"
+    },
+    ".qa/job-event-bounds-build.log": {
+      "bytes": 2840,
+      "sha256": "bf36b26db15f689ddf2db56eaa1f7ca7742170f52577ce589b563dc963a905f7"
+    },
+    ".qa/job-event-bounds-local.log": {
+      "bytes": 1413,
+      "sha256": "3ceae51987a5a449491eda8e7b3f7e6a9605595b542521b91494b2abf43111dd"
+    },
+    ".qa/agent-contract-validation-linux-ci.log": {
+      "bytes": 207192,
+      "sha256": "e5009e772a7f915268dea8dae4bbc97ff5f952cd3940f91090744a51a9f28aac"
+    }
+  },
+  "skill": {
+    "validated": "repository and installed validators passed",
+    "ownedReference": "references/jobs-observations.md",
+    "sync": [
+      {
+        "path": "SKILL.md",
+        "installedMatches": true
+      },
+      {
+        "path": "agents/openai.yaml",
+        "installedMatches": true
+      },
+      {
+        "path": "references/browser-session.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/case-archives-measurements.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/geometry-imports.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/jobs-observations.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/physics-provenance.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/result-views.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/runtime-diagnostics.md",
+        "installedMatches": true
+      },
+      {
+        "path": "references/saved-inputs.md",
+        "installedMatches": true
+      }
+    ]
+  }
+}

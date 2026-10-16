@@ -12,6 +12,16 @@ function cameraSettings(value){
  const direction=value.target.map((v,i)=>v-value.position[i]),length=Math.hypot(...direction),up=Math.hypot(...value.up),cross=[direction[1]*value.up[2]-direction[2]*value.up[1],direction[2]*value.up[0]-direction[0]*value.up[2],direction[0]*value.up[1]-direction[1]*value.up[0]];
  if(![...direction,length,up,...cross,Math.hypot(...cross)].every(Number.isFinite)||length<=1e-9||up<=1e-9||Math.hypot(...cross)<=length*up*1e-9)throw Error('Camera direction and up vector are degenerate');return value;
 }
+// The live three.js/OrbitControls camera re-derives position through spherical coordinates on every update,
+// so numbers drift by one ULP (e.g. 90 -> 89.99999999999999). Reads are canonicalized to 12 significant
+// digits (idempotent) with a fixed key order so save -> apply -> read is exactly stable.
+const canonicalNumber=v=>typeof v==='number'&&Number.isFinite(v)?Number(v.toPrecision(12))+0:v;
+const canonicalVector=v=>Array.isArray(v)?v.map(canonicalNumber):v;
+export function canonicalViewState(s){
+ if(s?.camera&&typeof s.camera==='object'){const c=s.camera;s.camera={position:canonicalVector(c.position),target:canonicalVector(c.target),up:canonicalVector(c.up),fov:canonicalNumber(c.fov)};}
+ if(s?.colorRange&&typeof s.colorRange==='object'&&!Array.isArray(s.colorRange)){const r=s.colorRange;s.colorRange={field:r.field,minimum:r.minimum,maximum:r.maximum};}
+ return s;
+}
 export function validateResultViewSettings(settings,result){
  const fields=resultFields(result).map(f=>f.id);if(!fields.includes(settings.field))throw Error('Field is unavailable for this result');
  if(!Number.isFinite(settings.deformScale)||settings.deformScale<0)throw Error('Deformation scale must be finite and nonnegative');
@@ -27,7 +37,7 @@ export function validateResultViewSettings(settings,result){
 export function createResultViewApi(adapter){
  async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),revision=await getProjectRevision(JSON.parse(serialized));if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision};}
  const unchanged=({output,serialized})=>adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
- function read(output){const s=structuredClone(adapter.get());return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
+ function read(output){const s=canonicalViewState(structuredClone(adapter.get()));return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
  function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){

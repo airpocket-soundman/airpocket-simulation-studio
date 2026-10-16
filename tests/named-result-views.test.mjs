@@ -17,3 +17,22 @@ test('guard is rechecked after asynchronous snapshot reads before committing arc
 test('mesh count mismatches reject before changing result settings',async()=>{const h=harness(),saved=await save(h);h.change();h.meshCount(3);const before=h.state;await assert.rejects(h.api.apply({viewId:saved.viewId,expectedRevision:saved.revision,expectedResultRevision:rev}),/mesh count/);assert.deepEqual(h.state,before);});
 
 test('save rejects presentation or physical result changes discovered after snapshot hashing',async()=>{for(const change of ['state','result']){const h=harness();let reads=0;h.onGet(()=>{if(++reads===2){if(change==='state')h.change();else h.revision('sha256:'+'b'.repeat(64));}});await assert.rejects(save(h),/Viewer changed/);assert.equal((await h.api.list()).views.length,0);}});
+
+test('save -> apply -> read through the real result view API is exactly stable despite live camera ULP drift',async()=>{
+ const {createResultViewApi}=await import('../src/result-view-api.js');
+ const output={input:{version:1},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},result:{kind:'thermal',temperature:[20,30,40,50],flux:[[1,2,3]]}};
+ let live={field:'temperature',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:true,colorRange:{field:'temperature',minimum:0,maximum:10},camera:{position:[70.00000000000001,50,90],target:[5,5,20],up:[0,1,0],fov:30}};
+ // Like OrbitControls.update(): every write comes back one ULP off and with differently ordered colorRange keys.
+ const driftAdapter={getAnalysis:()=>output,get:()=>{const s=structuredClone(live);s.camera.position[2]=s.camera.position[2]===90?89.99999999999999:s.camera.position[2];if(s.colorRange)s.colorRange={maximum:s.colorRange.maximum,minimum:s.colorRange.minimum,field:s.colorRange.field};return s;},set:s=>{live=structuredClone(s);},isBusy:()=>false};
+ const resultView=createResultViewApi(driftAdapter);let setup=setup_();function setup_(){return {clipEnabled:false,flip:false,axis:0,position:0,opacity:1,meshCount:2,hiddenParts:[]};}
+ const api=createNamedResultViews({resultView,setupView:{get:()=>structuredClone(setup),set:v=>{setup=structuredClone(v);}}});
+ const before=await resultView.get(),list=await api.list();
+ const saved=await api.save({name:'Drift',expectedResultRevision:before.resultRevision,expectedArchiveRevision:list.archiveRevision});
+ assert.equal(JSON.stringify((await api.export()).views[0].result.camera),'{"position":[70,50,90],"target":[5,5,20],"up":[0,1,0],"fov":30}');
+ await resultView.set({expectedResultRevision:before.resultRevision,settings:{deformScale:2,colorRange:null,camera:{position:[1,2,3]}}});
+ await api.apply({viewId:saved.viewId,expectedRevision:saved.revision,expectedResultRevision:before.resultRevision});
+ const after=await resultView.get();
+ assert.equal(JSON.stringify(after.state),JSON.stringify(before.state));
+ assert.deepEqual(after.state.camera.position,[70,50,90]);
+ assert.equal(JSON.stringify(after.state.colorRange),'{"field":"temperature","minimum":0,"maximum":10}');
+});

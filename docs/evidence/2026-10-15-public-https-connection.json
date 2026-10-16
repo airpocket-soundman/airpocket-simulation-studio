@@ -1,0 +1,54 @@
+{
+  "status": "passed-with-caveats",
+  "scope": "Connection from the published HTTPS page https://airpocket-soundman.github.io/airpocket-simulation-studio/ in the owner's regular Chrome to a local connector (scripts/studio-mcp.mjs --browser-origin=https://airpocket-soundman.github.io, 127.0.0.1) with inspect scope only. The pairing code was typed by the owner; the assistant only issued inspect-scope calls and read connector diagnostics.",
+  "checkedAt": "2026-10-15",
+  "environment": {
+    "browser": "Chrome (regular profile, operated by the owner)",
+    "browserVersion": "Google Chrome 155.0.8059.41 (official build, 64-bit, cohort Control), V8 15.5.35.20; supplied by the owner from chrome://version",
+    "pageBuild": "older cached build: inspect reported 86 browser methods while main had 87-88, so the page did not yet include meshBoundaryPreflight/checkGpuEnvironment; the exact served revision is not recorded",
+    "publishedRevisionAtCheck": "2c19007b70159aa983f774d7e2fb6fd8e07978c1 (v0.44.0)",
+    "connectorOrigin": "https://airpocket-soundman.github.io",
+    "grantedScopes": [
+      "inspect"
+    ],
+    "os": "Windows 11 Version 25H2 (Build 26200.9711)"
+  },
+  "earlierAttempt": {
+    "result": "failed",
+    "detail": "First attempt: the page showed that the local connector could not be reached; connector counters showed 1 request (a local /health issued by the assistant) and 0 preflights, 0 pairing attempts, 0 refusals, so the browser's requests never reached the connector. The cause was not identified from the page side; the owner then got it to work and the setting that changed was not reported. Documented candidates: Chrome local-network-access permission, the coi service worker."
+  },
+  "checks": [
+    {
+      "name": "pairing-from-published-page",
+      "passed": true,
+      "detail": "Connector counters after the owner's connection: pairSuccess 2, healthChecks 4, pairRefused 0, originHostRefused 0, authRefused 0, requestErrors 0, commandTimeouts 0; one session with scopes [inspect]."
+    },
+    {
+      "name": "inspect-operations-succeed",
+      "passed": true,
+      "detail": "inspect returned schemaVersion 1, a revision, project.loaded true, liveBrowserMcp true and 86 methods; caseList returned 0 cases. No input was changed."
+    },
+    {
+      "name": "scope-enforced",
+      "passed": true,
+      "detail": "An edit call through the inspect-only session was refused ('Browser permission scope refused'); connector scopeRefused counter 1."
+    },
+    {
+      "name": "disconnect-ends-session",
+      "passed": true,
+      "detail": "After the owner pressed disconnect in the page, the connector listed 0 sessions and the disconnects counter was 2; expiredSessions 0."
+    },
+    {
+      "name": "connector-stopped-and-secrets-removed",
+      "passed": true,
+      "detail": "The connector process was quit, port 62814 no longer listened, and the local connection-info file was deleted. The pairing code is not recorded anywhere in the repository."
+    }
+  ],
+  "notVerified": [
+    "The page build the owner loaded is not identified exactly: it exposed 86 operations (older than the published 2c19007 with 88), consistent with a cached earlier v0.44.0 build; only the published revision at check time is recorded.",
+    "The exact published revision the page was running is not recorded; it was an older cached build, so the newest operations (meshBoundaryPreflight, checkGpuEnvironment) were not exercised from the published page (checkGpuEnvironment returned 'Invalid browser operation' on that build).",
+    "The setting that made the connection work after the first failure was not reported, so the root cause of the first failure is unconfirmed.",
+    "Edit, analyze and view scopes from the published page were intentionally not used (inspect only).",
+    "Other browsers and operating systems."
+  ]
+}

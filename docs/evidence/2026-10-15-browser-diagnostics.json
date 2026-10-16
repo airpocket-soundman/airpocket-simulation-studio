@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-15",
+  "base": "51f84fc",
+  "targeted": {
+    "tests": 9,
+    "pass": 9
+  },
+  "full": {
+    "tests": 944,
+    "pass": 941,
+    "skip": 3,
+    "fail": 0,
+    "durationMs": 186752.3119
+  },
+  "build": "passed",
+  "localDistribution": {
+    "checks": 26,
+    "status": "passed",
+    "seconds": 49.13
+  },
+  "publicHttps": {
+    "origin": "https://airpocket-soundman.github.io",
+    "endpoint": "http://127.0.0.1:63727",
+    "authorization": "User explicitly approved inspect-only built-in sample QA; no edit/analyze/view",
+    "ui": "older published UI, without new diagnostics/hint",
+    "status": "unreachable",
+    "bridgeRequests": 0,
+    "sessions": 0,
+    "permissionPromptObserved": false,
+    "cause": "unknown",
+    "scopeChanges": false,
+    "inputInspectionPerformed": false,
+    "credentialCleared": true,
+    "processClosed": true,
+    "screenshot": "2026-10-15-public-https-zero-requests.jpg"
+  },
+  "localUi": {
+    "origin": "http://127.0.0.1:5180",
+    "status": "health reachable",
+    "codeEntered": false,
+    "connected": false,
+    "permissionDisplay": "prompt; advisory only",
+    "screenshot": "2026-10-15-connection-diagnostics-local.jpg",
+    "cleanup": "tabs closed, listeners 5180/63727 absent"
+  },
+  "limitations": [
+    "Local health success does not establish public HTTPS pairing or Skill-only end-to-end completion.",
+    "No inferred cause from zero bridge requests.",
+    "No security bypass or legacy PNA header workaround."
+  ],
+  "files": {
+    ".qa/browser-diagnostics-full.log": {
+      "sha256": "a191fb507be464dcfd5912b427b2bc0fb865ff94c4292615cd9b699293334624",
+      "bytes": 101029
+    },
+    ".qa/browser-diagnostics-build.log": {
+      "sha256": "c428856367b3ab2cede110bab77997b52322c15ae190f9bd01b48baccff51da0",
+      "bytes": 2840
+    },
+    ".qa/browser-diagnostics-local.log": {
+      "sha256": "ff6990942f0b6378ddbc14a8af1a44c7e4aeff3ff3b228f90050675cf9700289",
+      "bytes": 1412
+    },
+    "src/browser-connection-diagnostics.js": {
+      "sha256": "89f813aafe11a02a9696b26aaf3fa53d2a24295cc6f966d43ce4128f8486aeaa",
+      "bytes": 3758
+    },
+    "scripts/browser-bridge.mjs": {
+      "sha256": "e06502b112d3f9dc2e1a9828950741d79bc53df147e53f001bf846b46f3450db",
+      "bytes": 6337
+    },
+    "scripts/studio-browser-mcp.mjs": {
+      "sha256": "3a953317eebb3b2f8d88017baae69737e5f7ef46af6f1bceb0b1a38268c96808",
+      "bytes": 3687
+    },
+    "scripts/studio-mcp.mjs": {
+      "sha256": "a27bdc586bdad36c64cbc26e6d3168adfcf30226fc49101f6a675bb928c5ef97",
+      "bytes": 39789
+    },
+    "src/browser-session-ui.js": {
+      "sha256": "b1749a0f051a81822177f4dbf4186fd40674a9fbd7e92992f15eca8cf504a2a1",
+      "bytes": 5073
+    },
+    "src/browser-session.js": {
+      "sha256": "2d006e79cf856ae0ec8585b7de897384f4f99a072c64581b8ccdb784e2491566",
+      "bytes": 20993
+    }
+  },
+  "skill": {
+    "validators": "both passed",
+    "files": [
+      {
+        "path": "SKILL.md",
+        "sha256": "688e510a0299d801277bb01cf8312f20480e461b2ab7ecc1389a3d03656d3bc5",
+        "installedMatches": true
+      },
+      {
+        "path": "agents/openai.yaml",
+        "sha256": "f7c0a135c5c1b8c4c9f100e985bddd36d6d78f6f16d28b32ac497b4413d3d5a1",
+        "installedMatches": true
+      },
+      {
+        "path": "references/browser-session.md",
+        "sha256": "e188c380518bc69ab503e5e4629e34dd936b6419303d421dc07f7577c524d743",
+        "installedMatches": true
+      },
+      {
+        "path": "references/case-archives-measurements.md",
+        "sha256": "8c842450ad63ba9e84cf1a09feb375e2d1a42ccea5cbccb1cd0bca03669b3cc6",
+        "installedMatches": true
+      },
+      {
+        "path": "references/geometry-imports.md",
+        "sha256": "8d1b794bf432bb9bbff40401d006d1d6969d0d8dd3ff361b04ea5a3556d9fbfb",
+        "installedMatches": true
+      },
+      {
+        "path": "references/jobs-observations.md",
+        "sha256": "2bd784e613e2edcbe88f90d716b17d5aa327c22d190d2c76b4a422748020df37",
+        "installedMatches": true
+      },
+      {
+        "path": "references/physics-provenance.md",
+        "sha256": "4c03a0bf4a4f302bbc90bc1d1fb8480d2e69661a7dd217423f07d74d775a164e",
+        "installedMatches": true
+      },
+      {
+        "path": "references/result-views.md",
+        "sha256": "27d19cb62992114aed43389857adf3da80a23ebd06920e0c532920242cc84473",
+        "installedMatches": true
+      },
+      {
+        "path": "references/runtime-diagnostics.md",
+        "sha256": "e8827bdc7baa6fef0256d7ceaf0c06cc78f91ce01938c320634e10d2e4382ff4",
+        "installedMatches": true
+      },
+      {
+        "path": "references/saved-inputs.md",
+        "sha256": "19e1a4c9eeb808ff387f3930c21d1c8b3988c4ab4323211d04e9385ac920ac4c",
+        "installedMatches": true
+      }
+    ]
+  }
+}

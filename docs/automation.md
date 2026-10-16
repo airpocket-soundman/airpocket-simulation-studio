@@ -4,7 +4,9 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-29ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+31ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_preflight_mesh_boundaries`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+
+現行の入口は通常31/接続33 MCPツール、88ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -14,7 +16,7 @@
 
 `studio_inspect_project({path})`が返す`revision`を`expectedRevision`として、`studio_edit_project({path,outputPath,expectedRevision,operations:[{method,args}]})`へ渡します。1〜100操作を作業用コピーに一括適用し、すべて成功した場合だけ新規`outputPath`に保存します。古い版・未対応操作・不正入力は拒否し、元入力と既存出力は上書きしません。戻り値は新旧revisionと保存先・要約を含みます。検査revisionは入力JSONのキー順に依存しないハッシュで、ジョブの正規化入力`inputRevision`と同一とは限りません。
 
-対応methodは`selectTriangles`、`selectCadFace`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`applyCatalogMaterial`、`setStudy`、`setMeshSettings`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
+対応methodは`selectTriangles`、`selectCadFace`、`selectPlanarRegion`、`selectCylindricalRegion`、`clearSelection`、`addCondition`、`removeCondition`、`selectCondition`、`replaceConditionRegion`、`reapplyConditionRegion`、`setMaterial`、`setMaterialProperties`、`setMaterialPreset`、`applyCatalogMaterial`、`setStudy`、`setMeshSettings`、`addSelectedMeshRefinements`、`setInputProvenance`、`setAnalysisIntent`。`args`には同名の`studioApi`操作の位置引数を配列で渡します。例: `operations:[{"method":"setMeshSettings","args":[{"refinements":[{"center":[5,5,20],"radius":5,"size":2}]}]}]`。`setInputProvenance`は下記根拠document、`setAnalysisIntent`は`{mode:"quantitative"|"exploratory"}`を引数に取ります。全物理モデルの根拠・必須入力契約の網羅は未完了です。
 
 追加の`selectCadFace`と`applyCatalogMaterial`を含め計18メソッドです。例: `operations:[{"method":"selectCadFace","args":[0,2]}]`。CAD更新では既存根拠entryを`unconfirmed`・`assumption:null`へ戻し、confirmationを削除します。更新後は領域と根拠を再確認してください。
 
@@ -41,7 +43,8 @@
 - `studio_cancel_job({jobId})`: 実行中Workerを中止。終端状態は変更せず、最終ファイル公開中の`saving`状態は中止できません。
 - `studio_release_job({jobId})`: 終端ジョブのメタデータ・イベント・`requestId`を解放。保存ファイルは残ります。解放後の同じ`requestId`は新規実行になり得ます。
 
-ジョブは同一MCP/Nodeプロセス内だけ保持し、再起動を越えた再接続や復元は未対応です。既定で最大32ジョブ・各256イベントを保持します。古いイベントが落ちると`truncated:true`と`firstAvailableSequence`を返します。欠落を推測で埋めず、状態と利用可能な成果物を確認してください。直接Nodeから呼ぶ場合も同一プロセスを維持します。`studio_analyze`は従来の最終応答型操作です。
+ジョブは既定では同一MCP/Nodeプロセス内だけ保持し、再起動を越えた再接続や復元は行いません。既定で最大32ジョブ・各256イベントを保持します。古いイベントが落ちると`truncated:true`と`firstAvailableSequence`を返します。欠落を推測で埋めず、状態と利用可能な成果物を確認してください。直接Nodeから呼ぶ場合も同一プロセスを維持します。`studio_analyze`は従来の最終応答型操作です。
+任意の`node scripts/studio-mcp.mjs --job-store=<絶対パスのディレクトリ>`（既定は無効で挙動は不変）を指定すると、ジョブごとに小さな記録（jobId・inputRevision・operation・requestId・state・時刻・短縮したエラー要約・結果ファイルのサイズとSHA-256）を一時ファイル+renameで原子的に書き、起動時に読み込みます。ディレクトリは明示的な絶対パスで`..`を含まず、無ければ空で作成します。記録は1件8192バイト、最大256件で、破損・超過・ファイル名不一致の記録は診断（標準エラー）を出して無視し、起動は失敗しません。結果本体・イベント・中間成果物・プロジェクト・出力パスは保存しないため、再起動後のジョブは`restored:true`・`resultAvailable:false`のメタデータのみで、イベントは空、成果物とメッシュ出力は取得できません（終端状態は記録どおり）。再起動時に`running`/`saving`だった記録は`state:'interrupted'`（`error.code:ANALYSIS_JOB_INTERRUPTED_BY_RESTART`、`executionSettled:true`、`releaseAllowed:true`）になり、再開も再実行もしません。`studio_release_job`は記録も削除します。再起動後のrequestId冪等性は保証しません。ツール27/接続29・80操作は不変です。
 
 イベントには`jobId`・`inputRevision`・`sequence`が付き、中間スナップショットは`provisional:true`です。メッシュ/品質、反復残差、対応解析の時刻場・適応段階等、実際に発生したイベントのみ取得できます。全ソルバーの全反復・全物理場を保証しません。`includeFields:true`では新規ディレクトリ`outputPath + ".intermediate"`に暫定メッシュ/時刻場JSONを保存し、イベントの成果物参照にパス・バイト数・SHA-256を含めます。場JSONには取得できた対応メッシュへの`meshArtifact`参照を含み、再メッシュで参照を更新します。既存ディレクトリは再利用しません。既定の合計上限64 MB（64,000,000バイト）以降は場保存を止め、`observation-limit`を通知して要約と解析を継続します。中止・失敗時も既に書いた暫定ファイルが残り得ます。`provisional:false`の最終保存結果でも物理精度・収束の確認は別途必要です。
 
@@ -78,7 +81,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 - 計算: `startJob({inputRevision,requestId,operation,options})`、`cancelJob({jobId})`、`releaseJob({jobId})`、`showJob({jobId,name})`。showJobは入力版が一致する場合だけ保存ケースを作成し表示。メッシュ単独のshowJobは未対応。
 - 表示: `getView`、`setView`。断面・透過・部品表示設定。結果カメラは下記の結果ビューAPIで操作できます。画像/動画出力は下記の出力ジョブを使います。
 
-命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
+命令は最大16件、応答待ちは15秒。タイムアウトは未実行の保証ではないため、変更を再試行する前に状態を取得します。タイムアウトのエラー（code:BROWSER_COMMAND_TIMEOUT、messageは従来通り）は`delivered:true|false`を持ち、MCPでは`structuredContent.error.delivered`として返ります。`false`はブラウザが命令を一度も取得していないため再試行しても安全で、`true`は命令がページへ渡された後に返答がなかったため、再試行の前に必ず状態を取得してください。再起動復元、GUIジョブ全経路の実画面での確認、公開HTTPSページからのlocalhost接続・ブラウザ権限は未検証。ローカルChromeと実MCPで版照合編集→Worker解析→途中イベント→結果表示→0.04 mmの点値→表示変更→接続解除を確認しました。
 
 ### 単体browser connector配布（配信物確認済み・実接続未検証）
 
@@ -114,7 +117,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## PNG/WebMの出力ジョブ
 
-任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返します。
+任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -151,7 +154,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 `studio_assess_result({path,outputPath,expectedResultRevision,kind,options})`は保存済み解析JSONを検証し、`kind:"fatigue"|"fracture"`の評価を追加した完全な解析JSONを新規パスへ保存します。既存出力の上書きは拒否します。`studio_assessment({path,kind,expectedResultRevision?,offset?,limit?})`は読取専用で、評価の要約・出典・単位・制限と要素別データを返します。ページは既定50、最大200要素です。保存結果ではまず`studio_assessment({path,kind})`を呼び、返された`resultRevision`を評価時の`expectedResultRevision`へ渡します。対象となる構造線形弾性結果にまだ評価がない場合も、`available:false`、現在の結果版、空の要素ページを返します。保存済み評価がある場合は`available:true`です。
 
-ブラウザでは`window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})`と`get({kind,expectedResultRevision?,offset:0,limit:50})`を使います。MCP接続の`evaluateAssessment`はanalyze権限、`getAssessment`はinspect権限です。評価応答には変更前・変更後の結果版、要約、材料出典、制限、要素数が含まれます。入力・変位・応力配列は変更しませんが、評価と計算設定を含む出力全体の版は変わります。保存ビューや古い結果版の参照を適用する前に、新しい版を取得してください。
+ブラウザでは`window.resultAssessmentApi.evaluate({expectedResultRevision,kind,options})`と`get({kind,expectedResultRevision?,offset:0,limit:50})`を使います。MCP接続の`evaluateAssessment`はanalyze権限、`getAssessment`はinspect権限です。MCP`studio_assess_result`は`options`必須で出力パスの上書きも拒否しますが、ブラウザ側`evaluate`は現行結果版で同じkindを再評価すると保存済み評価を置換し(上書き拒否はなし)、疲労の`options`省略は既定値(minLoadFactor0・maxLoadFactor1・meanStressCorrection none・appliedCycles1)で受理します。古い結果版は拒否します。評価応答には変更前・変更後の結果版、要約、材料出典、制限、要素数が含まれます。入力・変位・応力配列は変更しませんが、評価と計算設定を含む出力全体の版は変わります。保存ビューや古い結果版の参照を適用する前に、新しい版を取得してください。
 
 材料データは元の保存入力の`materialProperties.fatigueData`または`fractureData`だけを使用します。欠けたS-N曲線・強度・破壊靱性を名前やLLMの推測で補いません。既存評価も元入力から数値を再計算して検証し、別種の有効な評価を保持します。
 
@@ -506,3 +509,97 @@ sourceのSTEP等data文字列や大きい文字列も値をdescriptorへ展開�
 jobResultRead({transferId,offset:0,length:65536})のbase64 dataを復号し、nextOffsetがnullになるまで取得します。全体のバイト長と生UTF-8 SHA256を照合してからJSONを解析・保存してください。既定は4転送・合計100 MB、chunk最大65,536 bytesです。jobResultReleaseで解放し、切断でも同セッションの転送は失効します。他セッションのtransferIdは拒否します。結果表示・ケース登録・入力変更・再解析を行うAPIではありません。
 
 出力に元から含まれる単位・仮定・暫定性と計算設定を保存します。過去の結果に欠けているengine build revisionやWASM hashを、現在の配信版から補って同一だとは主張しません。その追跡と保存後比較の全条件、実HTTPSは継続課題です。
+
+## 計算時の実行識別を保存する
+
+新しい出力はcalculation.runtimeIdentity schemaVersion:1へ、target(browser/node)、isolation(web-worker/worker-thread/process)、build、engine、assetsを固定します。browserのproduction buildはWorkerへコンパイル時の版を埋め込み、Nodeは実行host初期化時に採取します。利用者のproject/optionsから識別を指定しません。devや取得不能なbuildはstatus:unavailableです。availableにはversion・Git revision・dirty・sourceFingerprintがあり、sourceFingerprintはsrc/scripts/nativeとpackage/lock/Vite/HTMLの実バイト一覧のSHA256です。依存lockは宣言の識別であり、node_modulesや生成済みpublic資産全体の実ロード証明ではありません。
+
+assetsは最大16件で、role(kernel/gmsh/mfem)、bytes、sha256、status(observed/declared)を持ちます。observedはハッシュした同じWASMバイト列を初期化へ渡した場合だけです。NodeのGmshは実node_modules packageを対象にし、ブラウザ用distのhashを流用しません。Node上のMFEMもWASMであり、機械語native版とは扱いません。実HTTP(S)のbrowserとNode providerは利用するWASMを観測し、provider無しfile fixture等で未観測の資産は推測せず省略します。
+
+engineはrequestedMethodとactualEngineを分け、後者は結果engine名または未記録のnullです。GPU要求からCPUへfallbackした結果をGPU実行とは記録しません。ケース保存/復元/一体bundleと完全ジョブ結果転送は識別を保持し、caseListにも既存の識別を返します。不正な形式、計算methodや結果engineとの矛盾は保存/復元時に拒否します。旧保存に識別がない場合は未記録のまま扱い、現在manifestやソフト版で補いません。
+
+この情報は識別・完全性を助ける記録です。コード採取から動的importまでの全ファイルの原子的snapshot、配布者署名、実行環境の認証、物理精度の証明ではありません。公開HTTPS・Skill単独一巡・全P0〜P6の完了は別条件です。
+
+共通クライアントをNode Workerへ接続する埋込みadapterは、constructorのhost専用runtime.identityHostで実target/isolationを明示します。既定はbrowser/web-workerのままで、preflightも実hostに合わせます。project/optionsに同名の値を置いても採用されません。これはwireで利用者が実行先を偽装する引数ではありません。
+
+## 接続の到達性と認証を分けて診断する
+
+接続画面の診断は、ブラウザのローカルネットワーク権限と接続先への到達性を別々に表示します。`GET /health` は設定済み Origin と loopback Host の検査後、認証なしで `{schemaVersion:1,kind:"airpocket-browser-bridge"}` だけを返します。成功しても接続コードの正しさ、ペアリング、共有権限やモデル操作の許可を証明せず、診断結果の `authenticated` は `false` のままです。ヘルス要求は資格情報・コード・モデルを送信せず、応答を最大1,024 UTF-8バイト、待機を5秒に制限します。期限切れ・到達不能・不正応答を認証失敗と同一視しません。
+
+MCP側では `studio_browser_sessions({diagnostics:true})` を呼ぶと、従来の `sessions` に `diagnostics` を追加して取得できます。省略または `false` なら従来の返答形です。診断は設定済み `origin` / `endpoint`、現在の `sessionCount`、要求・preflight・health・pair成功/拒否・Origin/Host拒否・認証拒否・切断・失効・要求エラー・scope拒否・timeoutの固定カウンタだけを返します。コード、Bearer token、受信URL/Origin/header/body、モデル、個別session IDは診断に記録しません。通常の `sessions` 一覧のIDと付与scopeは従来通りです。
+
+カウンタはこのプロセスへ到達した事実だけを示します。増加しない場合、ブラウザ権限、混在コンテンツ、ネットワーク、停止したサーバーなどの原因は断定できません。health到達とペアリングを順に確認し、必要なscopeは利用者が明示的に付与します。
+
+ブラウザ要求は `targetAddressSpace:"loopback"` を指定し、ローカル接続の権限判断をブラウザへ委ねます。これは権限付与や対応ブラウザの保証ではありません。現行の [Local Network Access仕様](https://wicg.github.io/local-network-access/) と [Chromeの公式解説](https://developer.chrome.com/blog/local-network-access) に沿い、保留された旧Private Network Accessの特別preflightヘッダーには依存しません。`Access-Control-Allow-Private-Network` を無条件に付けず、既存CORS・Origin/Host・Bearer・scope検査を維持します。
+
+配信するCOI Service Workerは、`http://127.0.0.1`への要求を横取りせず、ページからの通常の通信としてブラウザに処理させます。Worker内からの再送では事前のローカル通信権限が必要となり、初回の許可確認を開始できない場合があるためです。これは権限確認やCORSの回避ではなく、接続元・コード・共有scopeの検査も引き続き必要です。通常のアプリ資産には従来の分離ヘッダー処理を維持します。公開HTTPSでのペアリング成功は別途実機検証が必要で、PUBLICHTTPS1は未完了です。
+
+Origin/Host検査で拒否した場合も、データを含まない403を返します。要求のOriginが設定済みOriginと完全一致するときだけ `Access-Control-Allow-Origin`（と `Vary: Origin`）を付け、ページに「接続できない」ではなく「拒否(403)」と表示できるようにします。他のOriginには付けず、`*` も使いません。Host不一致などの設定ミスの切り分け用で、検査自体は緩めません。
+
+## エージェント編集と保存検証の厳密化
+
+`studio_validate_cases` は全ケースを実際の復元経路で検査してから従来形式の比較要約を返します。節点数と場配列の不一致、不正な四面体/表面、実行識別の矛盾を検証成功として返しません。有効な旧形式は保持し、元ファイルを書き換えません。この検証も物理精度や保存データの出所を証明するものではありません。
+
+`selectPlanarRegion` の `rotationDegrees` を明示する場合、整合する `frame:{origin,u,v}` が必要です。回転だけの指定はゼロ回転も含め拒否し、黙って軸平行領域へ置き換えません。GUIが生成した整合するframe+回転、frameのみの任意平面、回転を指定しない従来のaxis/positionは維持します。`min/max` はframe内のmm座標、角度はdegreeです。拒否時は選択・条件・入力版を変更しません。
+
+`studio_browser_contracts({method:"previewEdit"})` または `edit` から、`setInputProvenance` と `setAnalysisIntent` の具体的な位置引数schemaを取得できます。`operations[].args[0]` に根拠documentまたはintentを渡します。根拠はschemaVersion:1/entriesとし、pointer/value/source/rationale/applicability/assumption/statusを保持します。CAD/文書sourceにはreference/revisionが必要です。対象pointerの適用性、実入力との値一致、必須根拠と確認状態はpreflightで検査します。schema適合は資料の真実性や利用者の確認を意味しません。agent-proposalをLLMの判断だけでuser-confirmedへ変えず、実際の確認を取得してください。exploratoryの仮定付き実行はprovisionalを保持します。
+
+## 中間結果の保存待機上限
+
+保存ストア64MBの制限とは別に、中間mesh/fieldの保存待機を既定8件・8,000,000推定bytes（処理中1件を含む）へ制限します。clone/JSON化前に構造を見積もり、超過snapshotを保持せず、要約・診断と最終結果の計算を継続します。単一超過・件数/bytes超過・mesh欠落等の理由を `observation-queue-limit` / `observationQueue` で取得できます。browser完了情報の `intermediate.queue`、Nodeの `intermediateQueue` に件数・peak・上限・dropを返し、能力情報の `observation.pendingPayloadQueue` はhost既定値を宣言します。起動時設定で上限を変更でき、実ジョブの情報を優先します。
+
+protocolを有効にしたbrowser/headless jobでは、Workerからhostへの観測配送はin-flight 8件/8,000,000推定bytesと別outbox 8件/8,000,000推定bytesに制限します。最大合計は16件/16,000,000推定bytesで、hostがACKするとoutboxをFIFO送信します。同期ソルバーcallbackは待たず、outbox内の同じsolver/phase/step/frequencyのscalar iterationは最新値へ集約します。final-checkとfrequency-step start/completeはiterationより優先します。overflow時は理由付きでdropし、mesh世代をまたいでfieldを送信しません。通常resultまたは報告errorの直前にdrainし、最大1件・4,096推定bytesのdrop集計control eventを送ります。`observation-transport` のsequence、in-flight/outbox、peak、accepted/drop理由を確認してください。これはhost `observationQueue`、64MB保存ストア、JOBEVENTBYTES1の制限と別のbudgetで、legacy direct worker経路には適用しません。
+
+terminal集計は通常結果、またはWorkerが捕捉して報告するerrorの直前に送られます。取消・timeoutはWorkerを即時終了し、異常終了でも集計が届かないことがあります。terminal集計がない場合、最後のevent内の暫定metadataから最終drop数を推定せず、不明として扱います。取消時に集計を待たないのは既存の即時停止契約を維持するためです。
+
+`observationSequence` は元の観測順序です。要約・診断は保存待ちを迂回するため、古い場の保存通知より先着する場合があります。latestPolicyはlast-accepted-snapshotで、最後に拒否した場へ置き換えません。meshを受理できなければ後続fieldも保存せず、旧meshへ結び付けません。accepted/latestCompletedはqueue受付・consumer完了であって成果物保存成功ではなく、artifact参照と完全性を別途検査します。取消時は待機payloadを解放し、処理中の終了をdrainで待ちます。
+
+Worker transportの推定bytesはmetadata込みの保守的なenvelope構造見積もりです。上記のWorker観測budgetはprogress通知、最終結果、JSヒープ総量、legacy direct worker経路を上限保証しません。またhost queueの見積もりはJSヒープ総量・イベントring内の任意payload bytesを上限保証しません。元の場をすべて取得できたと報告せず、drop/制限を結果と一緒に説明してください。
+
+## ジョブイベント本文とページの容量
+
+既定では1イベント32,768 UTF-8バイト、1ジョブの保持合計1,048,576バイトかつ256件、jobEventsのJSON値全体65,536バイトを上限にします。イベントは原子的に返し、ページの件数が指定limitより少なくてもnextSequence/hasMoreで続きを取得します。件数または容量を超えると古いイベントから破棄し、firstAvailableSequence/truncatedで検出できます。eventRetentionは有効上限・保持件数/bytes、eventPageBytesは実際のJSON値容量を返します。
+
+過大、循環参照、非有限数、accessor等の不正な観測は、同じsequenceの `observation-event-gap` / `payloadOmitted:true` / `gap.reason` へ置き換えます。getterは実行せず、欠けた物理値を0やnullへ補いません。これはソルバー失敗や数値収束の証明ではありません。小さな通常metricsと有効な構造化failureを保持し、statusの過大な要約はsummaryOmissions、error本文は最大2,048 UTF-16 code unitsとmessageTruncated/originalMessageLengthで明示します。終了状態・取消・解放の意味は変えません。
+
+能力情報のobservation.eventPayloadが既定上限と適用範囲を返します。内部registryの起動時budgetは有効なfailureとenvelopeを収める最小容量を要求し、極小指定を拒否します。64KiBはjobEvents JSON値の上限です。MCPはtext/structuredContentへ値を重複格納するため、JSON-RPCやHTTP包装込みの通信全体は64KiBを超え得ます。Worker送信待機やJSヒープ全体の上限保証とは別です。完全な最終結果はjobResultExport/Read等の専用分割経路を使い、イベント要約から再構築しません。
+
+### 配信物検証用の子プロセス実行
+
+`check-published`は、同じNode実行ファイルの子プロセスのmainで、ハッシュ照合済み配信analysis/CADモジュールと固定のSTEP参照生成を実行します。元の26検査・数値assertionを維持し、close 0・シグナルなし・観測されたnative fatalなしを確認してから受信結果を採用します。検査と子実行のチェックポイント、失敗前の部分記録を残します。
+
+これは公開検証スクリプトの分離方式であり、実ブラウザのWorkerやMCP既定実行方式を変更しません。Node切替、GC設定変更、skip、自動retry/fallbackは追加していません。Linux Node24.21.0/main badce2cでの既知native fatalを保持し、原因の根治を主張しません。今回変更後の全体980件中977成功・3skip・失敗0、buildとローカル26項目が成功。公開CIは別途記録します。詳細と適用限界は[試験記録](testing.md)と[WASM実行調査](wasm-runtime-investigation.md)を参照してください。
+
+### 開発状況の任意取得
+
+studio_progress({includeEstimate:true,includeHistory:true})で、元のprogressと主観推定・Git履歴を分離して返します。省略/falseは従来の応答形を維持。履歴はHEADと入力bytesの不一致・Git不在・容量超過を利用不可として明示し、2MB応答上限を適用。ローカルcheckoutの履歴であり公開候補の合格証明ではありません。[算定方法](progress-dashboard.md)。
+
+## 保存ケースの読取専用比較（今回の検証記録は保留）
+
+共通 `createCaseComparisonApi({cases}).compare(request, {guard})` と接続ブラウザの `caseCompare`（inspect権限）は、保存ケースを読み、入力・表示・時刻・履歴を変更しません。`caseList` で得たcaseIdとrevisionを、1〜8件の異なるケースの `references:[{caseId,expectedRevision,field,modeIndex?,frameIndex?,bodyIndex?,elementIndex?}]` に指定します。`point` は同じ全体座標系のmm単位3成分です。省略時はメタデータ比較だけで数値差分を返しません。bodyIndex/elementIndexはpoint指定時だけ使用し、ケースごとの局所番号です。別メッシュ間で同じ番号が同じ部品を意味するとは限りません。
+
+fieldは displacement / stress / plasticStrain / temperature / heatFlux / instantPressure / pressure / spl / phase / speed / fluidPressure。モードはmodeIndex、過渡結果は保存済みframeIndexを明示します。現在表示や最終フレームへの暗黙選択、時間補間、位置合わせは行いません。モード変位は最大1mmに正規化した形状で、動的応答ではなく数値差分の対象外です。
+
+各行はcase/input/result revision、kind、selection、計算・メッシュ情報、保存時runtimeIdentityとassessmentの記録状況を返します。旧結果の未記録identityを現在のmanifestで埋めません。`selection.displayUnit` は表示単位、`measurement.units` と `comparison.deltas[].units` は生の値の単位です。応力はPa（MPaではない）、塑性ひずみは比率1（%ではない）。他もmm、degC、W/m2、Pa、dB、rad、m/sを値に対応するunitsで確認します。
+
+過渡結果の比較は保存された物理時刻の完全一致のみを条件とし、補間も許容誤差もありません。不一致は `different-time` で差分を返しません。SPL同士で `referencePressurePa` が異なる場合は `different-reference-pressure` となり差分を返しません。一方、Paの生圧力（instantPressure/pressure/fluidPressure）は基準圧が異なっても比較できます。
+
+数値差分は最初のケースを基準に「対象−基準」、ベクトルは成分ごとです。kind/field/unit/time/frequencyの不一致、周波数未記録、モード形状、測定不可などでは理由を返し、差分を作りません。同じ入力・物理精度の証明ではありません。有効な選択部品の外側や部品の曖昧さは行単位のunavailable、存在しない部品・不正selector・破損ケースは全体拒否です。読取leaseやguardの失効も全体を拒否します。
+
+MCP `studio_compare_cases({path})` はversion 1保存ケースarchive専用で、bundle v1/v2は対象外です。references省略時はpathだけを渡し、`cases` の `saved-case:0` 等のスナップショット内ID、case revision、archiveRevisionとsourceの生bytes/SHA-256を取得します。比較にはこのarchiveRevisionをexpectedArchiveRevisionとして指定し、上のreferencesと任意pointを渡します。IDだけを別archiveに流用しません。応答前にも元ファイルのhashを再確認し、変化は拒否します。ファイル書込・ソルバー起動はありません。
+
+応答のJSON値全体はUTF-8で65536bytes以下です。超過時は参照数を減らします。MCPのtext/structuredContentによる重複やHTTP/JSON-RPCの包装込みwire全体の64KiB保証ではありません。今回の検証件数・実ブラウザ・公開完了は検証待ちとし、P0〜P6全体の完了を宣言しません。
+
+### 評価要求を含む解析前検査
+
+`studio_preflight_project({path,fractureAssessment?,fatigueAssessment?,...})`は、共通APIの`preflight(options)`と同様に、solveで要求した破壊・疲労評価の材料データとオプションも検査します。評価未指定（または`undefined`）とmesh-onlyは従来どおりです。疲労の省略オプションには従来の既定値が適用されるため、意図した荷重倍率・回数・平均応力補正を明示してください。
+
+不足は`ASSESSMENT_INPUT_REQUIRED`、不正値は`ASSESSMENT_INPUT_INVALID`、対象外の構造モデルは`ASSESSMENT_MODEL_UNSUPPORTED`として対象ポインタを返します。破壊靭性の登録温度範囲を外れる評価温度は`ASSESSMENT_TEMPERATURE_OUT_OF_RANGE`です。適合する温度依存の線形等方材は一律に除外しません。quantitative/exploratoryでは材料評価データも既存の根拠・仮定検査に含めます。ソルバーや評価を実行せず、入力ファイルを変更しません。成功しても、解析後の応力状態・弾性範囲・メッシュ・拘束・収束・物理妥当性を保証しません。
+
+選択領域の局所細分化は `addSelectedMeshRefinements({size,radius,baseSize})` をedit/previewのargsに渡します。単位はmm、sizeはbaseSizeの15〜100%。GUIと同じ選択三角形重心を最大80件追加し、保存全体160件まで。既存設定と選択を保持し、空選択・不正値・容量超過・版競合では入力を変更しません。baseSizeは後続ジョブの全体サイズを自動変更しません。
+
+### GPU環境確認とメッシュ境界検査
+
+ブラウザ操作 `checkGpuEnvironment`（inspect権限、引数なし）は、接続中のブラウザセッションで実際のWebGPUアダプタとデバイスを取得できるか呼出し時に確認します。一時デバイスは応答前に破棄され、プロジェクトや結果は変更しません。宣言や機能探索はデバイスの利用可否を約束せず、Nodeの能力も報告しません。
+
+ブラウザ操作 `meshBoundaryPreflight({jobId,inputRevision})`（MCPでは `studio_preflight_mesh_boundaries({path,jobId,inputRevision})`）は、成功して実行が完了したmesh-onlyジョブが保持する正確なメッシュに対し、境界条件の転写を検査します。入力リビジョンの一致が必要で、メッシャーもソルバーも再実行せず、対象は静的線形構造入力のみです。結果には追加フィールド `rigidBody` も含まれ、転写された節点のfixed/displacement拘束について6つの剛体運動を `eliminated` または `free` で報告します（拘束を課した剛体行列の数値rank、相対許容1e-6、`rigidBodyModesEliminated`、`freeRigidModeCount`、成分ごとのrank）。自由モードがあるとエラー診断 `ANALYSIS_RIGID_BODY_MODE_FREE` を追加しますが `allowed:false` にはしません。非構造・modal研究は `not-applicable`、使えないメッシュは `unknown`、ばね・弾性支持はモデル化されず剛体モードを除去したと数えません。`completePreflight` は常にfalseで、収束・物理精度は未検査のままです。

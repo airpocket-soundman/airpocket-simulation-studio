@@ -16,10 +16,10 @@ export function parseSu2Vtu(bytes,{maxBytes=100_000_000,maxPoints=500_000,maxCel
   const attrs=Object.fromEntries([...item[1].matchAll(/(\w+)\s*=\s*"([^"]*)"/g)].map(m=>[m[1],m[2]]));
   const widths={Float32:4,Float64:8,Int32:4,UInt8:1},width=widths[attrs.type],offset=Number(attrs.offset),components=Number(attrs.NumberOfComponents);
   if(attrs.format!=='appended'||!width||!Number.isSafeInteger(offset)||offset<0||!Number.isSafeInteger(components)||components<1||components>9)throw Error('Invalid VTU array declaration');
-  const location=start+offset;if(location+8>bytes.length)throw Error('VTU array out of bounds');
-  const length=Number(view.getBigUint64(location,true));if(!Number.isSafeInteger(length)||length%width||location+8+length>bytes.length)throw Error('VTU array length invalid');
+  const entryStart=start+offset;if(entryStart+8>bytes.length)throw Error('VTU array out of bounds');
+  const length=Number(view.getBigUint64(entryStart,true));if(!Number.isSafeInteger(length)||length%width||entryStart+8+length>bytes.length)throw Error('VTU array length invalid');
   const count=length/width;if(count>maxCells*4||count%components)throw Error('VTU array entity limit');
-  const values=new Array(count);for(let i=0;i<count;i++){const p=location+8+i*width;const v=attrs.type==='Float32'?view.getFloat32(p,true):attrs.type==='Float64'?view.getFloat64(p,true):attrs.type==='Int32'?view.getInt32(p,true):view.getUint8(p);if(!Number.isFinite(v))throw Error('Nonfinite VTU value');values[i]=v;}
+  const values=new Array(count);for(let i=0;i<count;i++){const p=entryStart+8+i*width;const v=attrs.type==='Float32'?view.getFloat32(p,true):attrs.type==='Float64'?view.getFloat64(p,true):attrs.type==='Int32'?view.getInt32(p,true):view.getUint8(p);if(!Number.isFinite(v))throw Error('Nonfinite VTU value');values[i]=v;}
   if(Object.hasOwn(result,attrs.Name))throw Error('Duplicate VTU array');result[attrs.Name]={components,values};
  }return result;}
  const points=arrays(section('Points'))['']?.values,cells=arrays(section('Cells')),fields=arrays(section('PointData'));

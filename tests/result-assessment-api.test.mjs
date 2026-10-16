@@ -63,3 +63,10 @@ test('empty assessment discovery preserves provenance status but rejects request
   o.calculation.options[kind+'Assessment']=kind==='fatigue'?fatigueOptions:fractureOptions;await assert.rejects(s.api.get({kind}),/request has no assessment/);
  }
 });
+
+test('live API (connector path) replaces an existing assessment and defaults omitted fatigue options; fracture options stay required',async()=>{
+ const s=setup();await s.api.evaluate(await command(s));assert.equal(s.output.result.fatigue.appliedCycles,5000);
+ const again=await s.api.evaluate({kind:'fatigue',expectedResultRevision:await getProjectRevision(JSON.parse(JSON.stringify(s.output)))});
+ assert.equal(s.commits,2);assert.deepEqual([s.output.result.fatigue.minLoadFactor,s.output.result.fatigue.maxLoadFactor,s.output.result.fatigue.appliedCycles],[0,1,1]);assert.equal(again.summary.appliedCycles,1);
+ const f=setup(fixture('fracture'));await assert.rejects(f.api.evaluate({kind:'fracture',expectedResultRevision:await getProjectRevision(JSON.parse(JSON.stringify(f.output)))}));assert.equal(f.commits,0);
+});

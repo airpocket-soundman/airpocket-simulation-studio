@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "checkedAt": "2026-10-15T06:44:10.336Z",
+  "candidateRevision": "5c6747624994a12f5dc3c61882dea2049d692839",
+  "version": "0.44.0",
+  "progress": {
+    "bytes": 287815,
+    "sha256": "05d4949bc01b5f6db4b7426d7feb7ff61a5cc59045bd678afce2fb7b10c39214",
+    "release": {
+      "version": "v0.44",
+      "date": "2026-10-15",
+      "testCount": 1112,
+      "description": "保存済みケース比較(画面・MCP studio_compare_cases)、Originが許可リストと完全一致するHost拒否403応答へのCORSヘッダー付与(他Originは許可しない)、タイムアウト時delivered表示、名前付き結果ビューの正確な復元、短尺WebM修正、3.25MB超3MF読込修正、性能・容量の測定スクリプト、MOD1初期分(境界検査、検証/生成/適応/後処理フックを持つソルバーアダプタ登録、UI分割)、評価APIの文言・契約修正、PERF1 Nodeハーネス、CAE UI調査文書、ボード監査を追加。テスト記録(.qa/full10.log): 1112件中1109 pass、3 skip、0 fail。未達: 公開HTTPSでの接続は未検証(PUBLICHTTPS1保留)、Node 24の断続的V8異常終了は未解決で原因候補はnodejs/node#66366と同根の可能性があるが未確認、MOD1は未完でReact/WASM移行なし。背景タブでの書出し停止は既知の未対処事象で、発生頻度・影響の定量測定も未実施。",
+      "descriptionEn": "Adds saved-case comparison (browser and MCP studio_compare_cases), CORS headers on 403 Host-rejection responses only when Origin exactly matches the allowlist (other Origins remain disallowed), delivered flag on timeouts, exact restore of named result views, a short-clip WebM fix, a fix for 3MF import above 3.25 MB, performance and capacity measurement scripts, first MOD1 slices (boundary check, solver-adapter registry with validate/build/adaptive/postprocess hooks, UI splits), assessment API wording/contract fixes, the PERF1 Node harness, a CAE UI research document and a board audit. Test record (.qa/full10.log): 1,109 passed, 3 skipped, 0 failed (1,112 total). Not done: connection from the published HTTPS site is unverified (PUBLICHTTPS1 pending); the intermittent Node 24 V8 fatal is unresolved, and a possible relationship to nodejs/node#66366 is unconfirmed; MOD1 is incomplete with no React/WASM migration. Background-tab export stalls are a known, unaddressed issue, and their frequency and impact have not been measured."
+    },
+    "counts": {
+      "released": 83,
+      "queued": 25,
+      "building": 9,
+      "ready": 27,
+      "checking": 17,
+      "fixing": 1
+    }
+  },
+  "ci": {
+    "run": 38693448612,
+    "verify": "success",
+    "deploy": "success",
+    "verifyPublished": "success",
+    "publicationReport": {
+      "status": "passed",
+      "version": "0.44.0",
+      "revision": "5c6747624994a12f5dc3c61882dea2049d692839",
+      "local": false,
+      "checkedAt": "2026-10-15T06:43:20.416Z",
+      "elapsedMs": 38642.21331,
+      "checks": [
+        {
+          "name": "deployed-asset-integrity",
+          "passed": true,
+          "assets": 24,
+          "downloaded": 24
+        },
+        {
+          "name": "structural-airpocket-and-mfem",
+          "passed": true,
+          "ms": 1051.527446
+        },
+        {
+          "name": "saved-case-comparison-and-point-remeasurement",
+          "passed": true,
+          "ms": 474.59191199999987
+        },
+        {
+          "name": "closed-convex-stl-volume-structure-and-archive",
+          "passed": true,
+          "ms": 556.9756940000007
+        },
+        {
+          "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+          "passed": true,
+          "ms": 530.6869059999999
+        },
+        {
+          "name": "engineering-polymer-five-family-axial-references",
+          "passed": true,
+          "ms": 2631.4006320000008
+        },
+        {
+          "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+          "passed": true,
+          "ms": 494.812715
+        },
+        {
+          "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+          "passed": true,
+          "ms": 1547.959667000001
+        },
+        {
+          "name": "thermal-radiation",
+          "passed": true,
+          "ms": 463.98709099999905
+        },
+        {
+          "name": "rubber-finite-strain",
+          "passed": true,
+          "ms": 715.3306809999995
+        },
+        {
+          "name": "laminar-channel-flow",
+          "passed": true,
+          "ms": 735.4033949999994
+        },
+        {
+          "name": "three-dimensional-creeping-stokes-flow-and-archive",
+          "passed": true,
+          "ms": 2928.9637900000016
+        },
+        {
+          "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+          "passed": true,
+          "ms": 2297.061979000002
+        },
+        {
+          "name": "exterior-radiation-and-far-field",
+          "passed": true,
+          "ms": 1636.9419340000022
+        },
+        {
+          "name": "transient-acoustic-wave-and-archive",
+          "passed": true,
+          "ms": 766.6737329999996
+        },
+        {
+          "name": "modal-frequencies-and-archive",
+          "passed": true,
+          "ms": 1188.9904800000004
+        },
+        {
+          "name": "modal-to-exterior-acoustic-power",
+          "passed": true,
+          "ms": 2465.8258940000014
+        },
+        {
+          "name": "internal-cad-channel-and-port-archive",
+          "passed": true,
+          "ms": 2396.3364770000007
+        },
+        {
+          "name": "exact-planar-cad-patch-and-archive",
+          "passed": true,
+          "ms": 739.2095300000001
+        },
+        {
+          "name": "exact-cylindrical-cad-patch-and-reaction",
+          "passed": true,
+          "ms": 1785.4163310000004
+        },
+        {
+          "name": "j2-plasticity-free-contraction-and-archive",
+          "passed": true,
+          "ms": 971.5855200000005
+        },
+        {
+          "name": "j2-plasticity-elastic-unloading-and-archive",
+          "passed": true,
+          "ms": 1436.2126489999973
+        },
+        {
+          "name": "failure-and-restart",
+          "passed": true,
+          "ms": 931.7064650000029
+        },
+        {
+          "name": "project-and-case-roundtrips",
+          "passed": true,
+          "ms": 12.40951800000039
+        },
+        {
+          "name": "published-cad-reader-and-step-mesher",
+          "passed": true,
+          "ms": 2424.4891659999994
+        },
+        {
+          "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+          "passed": true,
+          "ms": 2063.3624189999973
+        },
+        {
+          "name": "oblique-planar-cad-area-and-reaction",
+          "passed": true,
+          "ms": 968.4537669999991
+        },
+        {
+          "name": "progress-history-candidate",
+          "passed": true,
+          "ms": 2.236604999998235
+        }
+      ],
+      "execution": {
+        "host": "node-child-process",
+        "sameExecutable": true,
+        "node": "v24.21.0",
+        "v8": "13.6.233.17-node.53",
+        "platform": "linux",
+        "arch": "x64",
+        "childCount": 44,
+        "requestCount": 44,
+        "automaticFallback": false,
+        "automaticRetry": false
+      },
+      "checkpointPath": "/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/.qa/published-checkpoints-1792046561759-2176.jsonl",
+      "limitations": [
+        "Same-Node child processes execute hash-verified deployed CAD/analysis WASM assets and fixed STEP generation tasks.",
+        "Process isolation is containment and does not establish a V8 root-cause fix or a non-WASM native solver.",
+        "Browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+      ]
+    },
+    "artifact": {
+      "name": "published-verification-38693448612-1",
+      "reportBytes": 4397,
+      "reportSha256": "67d3792a3da426a826b94d32b6f8eb73c867e9e567adc317ba6c39b3f3d8fa1f"
+    }
+  },
+  "limitations": [
+    "Public HTTPS connector pairing remains unverified",
+    "This does not complete all task acceptance criteria"
+  ],
+  "tag": {
+    "name": "release-5c6747624994a12f5dc3c61882dea2049d692839",
+    "object": "a3bd649d0a39de47f5be430985333cd8dc0d3188",
+    "commit": "5c6747624994a12f5dc3c61882dea2049d692839",
+    "annotated": true
+  }
+}

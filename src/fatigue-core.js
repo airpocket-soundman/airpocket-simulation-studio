@@ -2,6 +2,13 @@ import {principalStresses} from './fem-core.js';
 import {validateFatigueData} from './fatigue-material.js';
 export {validateFatigueData} from './fatigue-material.js';
 
+export function validateFatigueOptions(options={}){
+ if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Invalid fatigue load settings');
+ const {minLoadFactor=0,maxLoadFactor=1,meanStressCorrection='none',appliedCycles=1}=options;
+ if(!Number.isFinite(minLoadFactor)||!Number.isFinite(maxLoadFactor)||minLoadFactor>maxLoadFactor||!['none','goodman'].includes(meanStressCorrection)||!Number.isFinite(appliedCycles)||appliedCycles<0)throw Error('Invalid fatigue load settings');
+ return {minLoadFactor,maxLoadFactor,meanStressCorrection,appliedCycles};
+}
+
 // A measured fully reversed S-N curve supplies N(sigma_a). Interpolation is
 // linear in log(stress amplitude) and log(cycles); there is no extrapolation.
 function curveLife(amplitude,curve){
@@ -18,9 +25,7 @@ export function evaluateFatigue(elasticResult,properties,options={}){
  const r=elasticResult;
  if(r?.kind!=='elastic'||r.orthotropic||properties.orthotropic||r.plasticity||r.hyperelastic||properties.plasticity||properties.hyperelastic||r.thermalStress||r.temperature!==undefined||r.referenceTemperature!=null||r.thermalStrains?.some(row=>!Array.isArray(row)||row.some(v=>!Number.isFinite(v)||v!==0)))throw Error('Fatigue evaluation requires a linear elastic result without thermal stress, plasticity or hyperelasticity');
  if(!Array.isArray(r.stresses)||!r.stresses.length||r.stresses.length>30000||r.stresses.some(s=>!Array.isArray(s)||s.length!==6||!s.every(Number.isFinite)))throw Error('Fatigue evaluation requires finite six-component element stresses in Pa');
- if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Invalid fatigue load settings');
- const {minLoadFactor=0,maxLoadFactor=1,meanStressCorrection='none',appliedCycles=1}=options;
- if(!Number.isFinite(minLoadFactor)||!Number.isFinite(maxLoadFactor)||minLoadFactor>maxLoadFactor||!['none','goodman'].includes(meanStressCorrection)||!Number.isFinite(appliedCycles)||appliedCycles<0)throw Error('Invalid fatigue load settings');
+ const {minLoadFactor,maxLoadFactor,meanStressCorrection,appliedCycles}=validateFatigueOptions(options);
  const lifeCycles=[],damage=[],stressAmplitudePa=[],correctedAmplitudePa=[],meanStressPa=[],minimumStressPa=[],maximumStressPa=[],zeroAmplitude=[],referenceStressPa=[];
  for(const stress of r.stresses){
   // Normalize before the eigensolve so the uniaxial ratio test is independent

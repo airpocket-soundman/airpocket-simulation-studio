@@ -2,7 +2,20 @@
 
 [日本語](../roadmap.md)
 
-Updated 2026-10-14. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
+Updated 2026-10-15. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
+
+## Upper priority: module boundaries and parallel development (MOD1, added 2026-10-15)
+
+Prioritize independent maintenance and parallel development over additional physics, solvers and printing features. Publication incident recovery comes first; perform bounded structural improvements alongside existing API/MCP, jobs and result-access work. A complete React or WASM rewrite is not a new publication prerequisite.
+
+1. Define TypeScript contracts for projects, materials, units, diagnostics, jobs and results; fix dependency direction and compatibility rules.
+2. Extract materials, boundary conditions, analysis settings and result/export UI and state from `main.js`. Introduce React incrementally by screen, with explicit Three.js and Worker interfaces.
+3. Separate discipline-specific execution adapters; keep common Worker responsibilities to dispatch, cancellation, progress and results. Reduce central branching changes for new solvers.
+4. Establish boundaries for shared models, operation APIs, viewer, disciplines and runtime adapters, with independent tests, file ownership and integration procedures. Demonstrate separate UI and solver changes without editing the same central files.
+5. Regress saved formats, GUI/API/MCP parity, numerical references, cancellation and restoration at each migration step. Move measured computational bottlenecks to WASM; assess Rust/C++ separately based on existing assets and validation scope.
+
+Acceptance: checked types/public interfaces/dependency rules, representative UI and solver changes in independent file sets and tests, and restoration of existing projects/results. Directory moves or extension changes alone do not complete MOD1. Initially queued.
+
 
 ## First priority for the next solver (2026-10-15)
 
@@ -24,7 +37,7 @@ Prioritize inputs, observations, result retrieval, views/exports and LLM documen
 | Order | Plans | Priority work | Acceptance |
 |---|---|---|---|
 | 0 | Publication foundation | Repair failed publication and reconcile candidate, deployed assets and progress revisions | Required CI and public-environment checks succeed; retain a release tag and verification evidence |
-| 1 | P0/P1 | Close existing input, capability, unit, provenance, unconfirmed-input and structured-diagnostic gaps | Record GUI/API/MCP/Skill coverage per operation; verify success, refusal and repair paths |
+| 1 | P0/P1 (shared contracts and dependency boundaries under MOD1) | Close existing input, capability, unit, provenance, unconfirmed-input and structured-diagnostic gaps. Start bounded MOD1 checks of shared types/operation contracts and dependency direction at this stage | Record GUI/API/MCP/Skill coverage per operation; verify success, refusal and repair paths. Record which contract/dependency rules are machine-checked (not MOD1 completion) |
 | 2 | P3 | Complete shared jobs, observations, cancellation/settlement/release and ordinary-browser connectivity | Associate stages, residuals and supported fields with input revisions; expose units, provisional status, sampling, retention limits and unavailable observations. Verify public HTTPS connectivity in the actual environment |
 | 3 | P3/P4 | Align final-result retrieval, storage, restoration and comparison | Trace quantities, units, input/result revisions, meshes, settings, engine versions and assumptions; verify chunked retrieval, integrity and remeasurement after storage |
 | 4 | P4 | Complete camera/color/time-range controls, view restoration and reproducible image/video export | Preserve PNG/WebM; declare capabilities and limits for fixed frames, MP4/GIF and comparison videos. Unsupported requests return reasons and verified alternatives. Manually converted external videos do not count as product support |
@@ -32,7 +45,7 @@ Prioritize inputs, observations, result retrieval, views/exports and LLM documen
 
 Documentation and verification in order 5 accompany every change rather than waiting until the end. Do not require every iteration field from every solver. Require an explicit contract for available/unavailable observations, physical versus presentation time and provisional versus final results. Numerical convergence remains distinct from physical validity.
 
-Prioritize P2/P6 only where acquisition, performance, compatibility or stability supports this workflow. A full rewrite or general native product is not a publication prerequisite. Keep P5 SolidCraft integration, general/compressible/meshfree CFD, contact/additional coupling, printing analysis/test equipment and new streamline/particle visuals in the later backlog. Preserve research without delaying publication work.
+P2 performance measurement precedes performance-optimization module splits, performance targets and supported-size decisions. Shared-contract and dependency-boundary checks under MOD1 may start earlier and do not wait for those measurements. Prioritize P2/P6 only where acquisition, performance, compatibility or stability supports this workflow. A full rewrite or general native product is not a publication prerequisite. Keep P5 SolidCraft integration, general/compressible/meshfree CFD, contact/additional coupling, printing analysis/test equipment and new streamline/particle visuals in the later backlog. Preserve research without delaying publication work.
 
 Track the current publication milestone separately from future extensions, including unfinished, verification-pending and publication-pending items. Adding or splitting tasks must not automatically expand the milestone. Close verification items against acceptance evidence; documentation changes alone do not justify released status.
 
@@ -50,7 +63,7 @@ Start with P0/P1, then prioritize P3 intermediate-result/shared-job pipelines an
 
 ## Baseline and tracking
 
-The published baseline is v0.43. Its recorded verification is 242 tests, 26 runtime checks and 42 browser checks; these were not rerun for this documentation review. Reuse STEP/regions, shared APIs, volume meshes, Airpocket structural/thermal/limited-flow/acoustic/modal analysis, MFEM linear-structural WASM, cases, PNG/WebM and saved-JSON MCP. Scope restrictions remain in the analysis guide and discipline documents.
+The published baseline is v0.44.0. Revision `5c6747624994a12f5dc3c61882dea2049d692839` passed required CI, deployment and 28 published checks (including deployed-asset integrity). The public manifest and progress JSON bytes/SHA were matched with the annotated release tag; see the [publication evidence](../evidence/2026-10-15-v044-publication.json). The user reports reconnecting to the published HTTPS version, but this was not independently observed. Inspection-operation success, session termination after disconnect, browser version and published revision remain unverified, so PUBLICHTTPS1 stays checking; see the [user-report record](../evidence/2026-10-15-public-https-reconnect-user-report.json). The old v0.43 record of 242 tests, 26 runtime checks and 42 browser checks is historical, not a rerun or a current requirement. Reuse STEP/regions, shared APIs, volume meshes, Airpocket structural/thermal/limited-flow/acoustic/modal analysis, MFEM linear-structural WASM, cases, PNG/WebM and saved-JSON MCP. Scope restrictions remain in the analysis guide and discipline documents.
 
 `src/progress.json` tracks existing tasks and release evidence. Early task descriptions retain historical scope and are not a complete current capability list. P0–P6 below are registered planning identifiers in progress JSON. Register implementation tasks with dependencies, acceptance criteria and evidence when work starts; a plan alone does not justify released status.
 
@@ -74,7 +87,7 @@ Partial implementations exist for P0 capabilities/diagnostics,P1 input/provenanc
 
 - Before P1: settle API/save schema compatibility, migration and unsupported-version rejection against existing projects, cases and the full current shared API/MCP operation contracts.
 - Before public P3 acceptance: validate the chosen temporary-local connector with public HTTPS and the same-origin serving alternative, environment-specific setup/permissions, authentication, sharing, disconnection and installation-free reach. Local computation does not imply no external data transmission.
-- After P2 measurements: decide module boundaries, resource limits, cache/Worker policy and performance targets.
+- After P2 measurements: decide performance-driven module splits, resource limits, cache/Worker policy and performance targets. Shared-contract and dependency-boundary checks start earlier under MOD1.
 - After the P6 small proof: decide Rust scope based on interoperability, size, startup, performance and maintenance. A wholesale rewrite remains undecided.
 - Before P5: validate real STEP exchange, design IDs/revisions/hashes, named regions and failed matching/reselection. The external SolidCraft API has not been verified in this review.
 
@@ -88,7 +101,7 @@ CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not 
 
 ## Parallel development by module
 
-Prioritize LLM integration while developing independent modules against shared contracts. Track module evidence and missing integration separately from completion of an entire plan.
+Prioritize LLM integration while developing independent modules against shared contracts. Track module evidence and missing integration separately from completion of an entire plan. File ownership and integration procedures follow the MOD1 dependency direction and public-interface rules, avoiding simultaneous edits to central files such as `main.js`.
 
 - AGENTEDIT1: atomic saved-input edits and revision checks, preceding full P1 STEP/provenance support.
 - AGENTJOBS1: Node CPU jobs and intermediate-result pipelines, preceding P3 live-browser MCP and restart recovery.
@@ -137,3 +150,21 @@ Keep initial size 0.6 stack overflow and HMR-blocked complete export separate fr
 Publication run [38651016310](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38651016310) passed verify,deploy and verify-published for103065f,including26public runtime checks and an annotated release tag. See [publication record](../evidence/2026-10-15-publication-103065f.json). PUBLISHEDPROGRESS1/PUBLICATIONGATES1 add manifest-bound progress and runtime gate validation; they remain checking after recurrence of the known defaultNode24 V8 fatal. Public HTTPS pairing,positive browser progress adoption and the other publication gates remain incomplete.
 
 Publisheda446dc5 passedCI,26runtime checks,annotated tagging and actual JP/EN browser progress adoption. Only publication gate0 is complete with candidate-specific evidence;five gates and the fullP0–P6 objective remain open. See [publication](../evidence/2026-10-15-publication-a446dc5.json) and [browser proof](../evidence/2026-10-15-published-progress-browser.json). INPUTINSPECTION1 covers bounded input reading,SKILLROUTING1 workflow references/distribution synchronization,andMCPARGUMENTTYPES1 positional types. The limited Skill evaluation used supplemental SDK knowledge;Skill-only end-to-end completion and updated registered-host projections remain unverified.
+
+## 2026-10-15: Contract discovery, saved validation and pending observations
+
+Expose evidence/intent edit arguments through MCP discovery, validate every saved case through restoration, and reject planar rotation controls without a matching frame. Bound pending observation count/estimated bytes independently of retained storage, exposing drop reasons and source sequence. Track PROVENANCECONTRACT1, CASEARCHIVEVALIDATION1, PLANARROTATION1 and OBSERVATIONQUEUE1 as verification work rather than published completion.
+
+Protocol-enabled job paths now bound Worker observation delivery with eight in-flight events / 8,000,000 estimated bytes plus a separate eight-event / 8,000,000-byte outbox (16 events / 16,000,000 bytes combined), separate from host pending-storage limits. Scalar iterations coalesce by solver/phase/step/frequency and final-check/frequency-step events take priority. A terminal drop summary is sent only before a normal result or reported error; cancellation, timeout and abnormal Worker exit can omit it, leaving final drop totals unknown. Progress, final results, total JavaScript heap and legacy direct Worker calls remain outside that budget; event-ring payload/page byte limits remain P3 follow-ups. Preserve public HTTPS, saved comparison/same-point remeasurement, Skill-only end-to-end and all P0–P6 acceptance requirements.
+
+JOBEVENTBYTES1 implements P3 event payload/retention/page limits with explicit gaps and cursor continuation. Worker observation transport is a third, independent layer alongside JOBEVENTBYTES1 and OBSERVATIONQUEUE1: its in-flight window and outbox each cap at eight events / 8,000,000 estimated bytes, and normal terminal delivery drains queued events before the drop summary. Terminal drop totals may be unknown after cancellation, timeout or abnormal Worker exit. The limits apply only to protocol-enabled job paths and do not bound progress/final-result delivery or total JavaScript heap. Track ongoing fluid PR #7 integration independently without treating its common API/MCP/Skill connections as complete.
+
+PUBLICATIONISOLATION1 prioritizes publication verification repair by isolating numerical checks in same-Node child main processes. Full suite: 980 tests, 977 passed, 3 skipped, zero failed; all 26 local checks passed. Preserve the original Linux V8 failure, without claiming a root fix or browser stability. CI and published-candidate evidence remain separate requirements.
+
+DEVINSIGHTS1 adds six-status history and fixed-criterion product estimates to the management page, separating observation from subjective scoring. Optional studio_progress arguments expose the same data to the user’s LLM. Full1011tests/zero failures and real UI verified; publication acceptance stays candidate-specific.
+
+## CASECOMPARISON1: saved-case comparison (validation pending)
+
+Add P4 read-only comparison through the shared API, browser inspect caseCompare and studio_compare_cases. Current entry points have 31 default/33 connected MCP tools and 87 browser operations (minimal connector: three); preserve historical count records. Pin 1–8 saved versions and case/input/result/runtime identities, and compare raw values at the same global point in mm. Acceptance includes stress Pa/plastic strain ratio 1, explicit modes/stored frames, incompatibility reasons, no modal deltas, outside-body unavailable, and batch rejection for unknown bodies, corrupt data or stale leases/guards. MCP archive listing followed by expectedArchiveRevision comparison, source-byte rechecking, the 64 KiB JSON-value bound and unchanged UI are also required.
+
+Current successful counts, actual-browser and publication completion remain pending. Comparison does not establish physical accuracy, equal inputs, cross-mesh part correspondence or spatial registration. Overall P3/P4, the standalone Skill workflow and existing P0–P6 completion conditions remain incomplete.

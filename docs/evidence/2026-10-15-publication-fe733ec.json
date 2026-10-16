@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-15",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38751635686",
+  "headSha": "fe733ec4a910fc674cf4bf782e4183c7a0ce9d64",
+  "version": "0.44.0",
+  "jobs": [
+    {"name": "verify", "conclusion": "success", "jobId": 116479322565},
+    {"name": "deploy", "conclusion": "success", "jobId": 116481709547},
+    {"name": "verify-published", "conclusion": "success", "jobId": 116481823212}
+  ],
+  "verifyPublished": {
+    "passLines": 27,
+    "failLines": 0,
+    "summaryLine": "Deployed 0.44.0 fe733ec verified (see the job log)"
+  },
+  "publishedManifest": {
+    "url": "https://airpocket-soundman.github.io/airpocket-simulation-studio/runtime-manifest.json",
+    "version": "0.44.0",
+    "revision": "fe733ec4a910fc674cf4bf782e4183c7a0ce9d64"
+  },
+  "tag": "release-fe733ec4a910fc674cf4bf782e4183c7a0ce9d64",
+  "tasksMovedToReleasedByThisRecord": ["WAVECHANNELOBS1", "BROWSERBRIDGE1", "RESULTCONTROL1", "CADUPDATEAPI1"],
+  "note": "These tasks were moved to ready earlier today with committed real-Chrome (localhost) or test evidence; their code is part of the published candidate above. PUBLICHTTPS1 is verification-only and stays ready. The publication-milestone gate is not closed by task status. The Node 24 gate for WAVECHANNELOBS1 is judged under the owner's policy B (docs/evidence/2026-10-15-node24-gate-policy.json).",
+  "notVerified": [
+    "This record proves that the CI-verified candidate was deployed and passed the 27 published checks; it does not prove the V8 root cause is fixed (RUNTIMEWASM1).",
+    "Real-browser behavior of the published page is covered only by the evidence files cited by each task; the real-Chrome runs used localhost, not the published page, except the inspect-only PUBLICHTTPS1 check."
+  ]
+}

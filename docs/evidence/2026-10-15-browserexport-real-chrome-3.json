@@ -1,0 +1,85 @@
+{
+  "task": "BROWSEREXPORT1",
+  "status": "partial",
+  "environment": {
+    "browser": "Chrome via Claude in Chrome",
+    "origin": "http://127.0.0.1:5174",
+    "revision": "158150cbc7ed376a3cb9d66ddafdc76eb3aaf333",
+    "note": "uncommitted fixes: src/visual-export.js (short-clip WebM) and assessment contract wording",
+    "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio; loopback HTTP polling; scopes inspect/edit/analyze/view granted for the local test session; local vite dev server (worktree mod1-wt)",
+    "tab": "new tab in own tab group, closed at end"
+  },
+  "scenario": "#fatigue-demo -> #mesh-run -> #solve-run, connector paired via #agent-connect; startExport/exportStatus/exportArtifact/releaseExport with the visual-export.js fix (final frame + requestData + zero-Cluster check) in the working tree.",
+  "checks": [
+    {
+      "name": "PNG export through the connector: assembled bytes equal declared, SHA-256 equal",
+      "passed": true,
+      "detail": "png: 89402 bytes, sha256 90a2a4de96baee55b0cfccaeac7f37f95238aaf899dda8bf5d4d197dcc9acd0e, declared hash match true, Cluster(1F43B675) count 0, image/png; PNG signature 89504e470d0a1a0a"
+    },
+    {
+      "name": "WebM orbit 1 s, 3 attempts with the tab actively driven: all completed, each artifact contains a Matroska Cluster, hash matches",
+      "passed": true,
+      "detail": "webm1s-1: 7405 bytes, sha256 2771ebd5df0fe1bd4a9afe9dd56b28653d6759533aedb170280320094b4c1a52, declared hash match true, Cluster(1F43B675) count 1, video/webm;codecs=vp9 | webm1s-2: 7818 bytes, sha256 88113fef11c1b6a37f6f20d8991fb05322de231fa532af7e4a957560358fcbc1, declared hash match true, Cluster(1F43B675) count 1, video/webm;codecs=vp9 | webm1s-3: 7405 bytes, sha256 769d91d686615fe35f148cc090b0c344f4b243e38d01c59b6ffa81d41a84fc48, declared hash match true, Cluster(1F43B675) count 1, video/webm;codecs=vp9. Sizes differ run to run (7405/7818/7405) and all three hashes differ: realtime recording is not byte-deterministic."
+    },
+    {
+      "name": "WebM orbit 2 s: completed, Cluster present, hash matches",
+      "passed": true,
+      "detail": "webm2s: 8923 bytes, sha256 6ba80ad4c6bcdd05cb8f0c5b6313395ed3ae26ab59ac20223197eca0334ce5f1, declared hash match true, Cluster(1F43B675) count 1, video/webm;codecs=vp9. Earlier 2 s runs in the same session also completed: 13913 bytes (sha256 75b7196edbe91ab6b4c3b997750e5b6a78dc3ed03e56607335fc7faa4c7e5646, 1 Cluster) and 12079 bytes (sha256 01fdefee20a915688796d0d3cef80640b4bb9136ec7090e4da8c94e962323772, 1 Cluster)."
+    },
+    {
+      "name": "WebM 0.5 s clip refused up front",
+      "passed": true,
+      "detail": "startExport error: \"Invalid visual export animation or seconds\" (no artifact created)"
+    },
+    {
+      "name": "No 1 s export produced a header-only (zero-Cluster) artifact and none failed with \"Recording produced no video frames\"",
+      "passed": true,
+      "detail": "Every completed 1 s and 2 s artifact had 1 Cluster. The previous revision produced a 110-byte zero-Cluster 1 s file; that was not reproduced. The explicit-failure branch was therefore not exercised."
+    },
+    {
+      "name": "Unattended tab: exports can stall (environmental throttling, not a data defect)",
+      "passed": false,
+      "detail": "When no tool call was driving the Chrome tab during an export, the job stayed \"running\": a 1 s job stuck at progress fraction 0.9437699999969918 for 30 s, then cancelExport returned state cancelled but the page kept refusing new exports (\"A visual export is already active\") until a later tool call in the tab woke it; another 1 s job and a first-attempt 2 s job stayed running for 60 s and were ended by releaseExport (\"Playback stopped.\"). document.visibilityState reported \"visible\" throughout. Every export completed when a concurrent tool call kept requestAnimationFrame running in the tab. Some unattended jobs also completed normally (a 1 s job in 3.4 s and 2 s jobs)."
+    }
+  ],
+  "artifacts": {
+    "png": {
+      "bytes": 89402,
+      "sha256": "90a2a4de96baee55b0cfccaeac7f37f95238aaf899dda8bf5d4d197dcc9acd0e"
+    },
+    "webm1s": [
+      {
+        "bytes": 7405,
+        "sha256": "2771ebd5df0fe1bd4a9afe9dd56b28653d6759533aedb170280320094b4c1a52",
+        "clusters": 1
+      },
+      {
+        "bytes": 7818,
+        "sha256": "88113fef11c1b6a37f6f20d8991fb05322de231fa532af7e4a957560358fcbc1",
+        "clusters": 1
+      },
+      {
+        "bytes": 7405,
+        "sha256": "769d91d686615fe35f148cc090b0c344f4b243e38d01c59b6ffa81d41a84fc48",
+        "clusters": 1
+      }
+    ],
+    "webm2s": {
+      "bytes": 8923,
+      "sha256": "6ba80ad4c6bcdd05cb8f0c5b6313395ed3ae26ab59ac20223197eca0334ce5f1",
+      "clusters": 1
+    }
+  },
+  "observations": [
+    "Artifact bytes are not committed to the repository; only sizes and hashes are recorded.",
+    "State \"running\" with progress below 1 for tens of seconds in an undriven tab is a tab-throttling symptom; cancelExport does not take effect in the page until the tab runs again."
+  ],
+  "notVerified": [
+    "Published HTTPS (tracked by PUBLICHTTPS1); only http://127.0.0.1:5174 was used",
+    "Other browsers or operating systems",
+    "Genuine background-tab or minimised-window behaviour beyond the stall described above",
+    "Fixed-frame export, MP4/GIF, persistence (declared unfinished)",
+    "Time/slice/deformation animations and acoustic stored-frame export",
+    "The explicit \"Recording produced no video frames\" failure path in a real browser (could not be provoked)"
+  ]
+}

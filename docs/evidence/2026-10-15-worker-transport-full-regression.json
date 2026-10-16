@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "testedRevision": "e8f80e7c890f5a54858af040945448a75488cbef",
+  "initialFullSuite": {
+    "tests": 1154,
+    "passed": 1150,
+    "failed": 1,
+    "skipped": 3,
+    "durationMs": 156841.7176,
+    "failedTest": "tests/mcp-observation-profiles.test.mjs",
+    "failure": "native-mfem declaration assertion classified the new shared observation-transport control summary as a numerical solver event",
+    "log": {
+      "path": ".qa/transport-full.log",
+      "bytes": 123687,
+      "sha256": "9ab555f18e8c7788e0a592fa0d47649e7f7683e4ad8b3b46a659fcc0acfe8e07"
+    }
+  },
+  "repair": {
+    "scope": "Test contract classification only; preserve shared transport declaration and explicitly validate native MFEM terminal control summary and required fields.",
+    "targetedTests": 35,
+    "passed": 35,
+    "failed": 0
+  },
+  "limitations": [
+    "The targeted repair is not a second successful full-suite run.",
+    "Real-browser and candidate-publication acceptance remain pending."
+  ]
+}

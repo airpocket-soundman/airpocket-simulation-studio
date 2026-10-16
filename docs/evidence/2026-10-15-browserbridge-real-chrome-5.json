@@ -1,0 +1,55 @@
+{
+ "task": "BROWSERBRIDGE1",
+ "status": "passed-local-dev",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "8ea074ae981c470a4e47e0868057afe3384c490a",
+  "connector": "node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio (own driver); local vite dev server; pairing filled by page-side JS from gitignored .qa/conn-local.txt; own new tab",
+  "case": "#fatigue-demo (単軸疲労の参照サンプル) with startJob options.size 0.95 (~12 s run); #flow-demo solves in <1 s so unsuitable for mid-run actions"
+ },
+ "checks": [
+  {
+   "name": "Pairing with all four scopes via the page UI (#agent-endpoint/#agent-token/[data-agent-scope]/#agent-connect)",
+   "passed": true,
+   "detail": "studio_browser_sessions listed scopes inspect,edit,analyze,view for the new session; #agent-state read connected"
+  },
+  {
+   "name": "edit with expectedRevision applies and a stale expectedRevision is refused",
+   "passed": true,
+   "detail": "previewEdit then edit setMeshSettings {refinements:[],size:7} moved revision sha256:b30426ac... to sha256:7a092c2c...; a second edit with the old revision failed \"Project revision conflict.\" and inspect revision stayed 7a092c2c"
+  },
+  {
+   "name": "startJob solve -> events -> showJob -> setResultView -> result in page DOM (connector chain)",
+   "passed": true,
+   "detail": "startJob (inputRevision from inspect, size 0.95) ran running seq3->seq13->succeeded seq17 in ~5 s; jobEvents ok; showJob kind elastic; getResultView/setResultView deformScale 3 reflected on re-read; page DOM text showed \"構造 · 最大変位: 0.040000 mm / 最大von Mises: 1.0000e+6 Pa\" and 2 canvases. Note the edit in this chain was a no-op revision-wise in run7 (size already 8 -> same revision); edit-with-new-revision was verified separately in the previous check"
+  },
+  {
+   "name": "Disconnect from page UI (#agent-disconnect) while a connector-started job runs stops that job",
+   "passed": true,
+   "detail": "page-side watcher clicked #agent-disconnect when analysisApi.listJobs showed the api-origin job cbc14a1f running at seq1; 77 ms later the job was state cancelled, error JOB_CANCELLED \"Calculation cancelled\", executionSettled true, resourceState settled; connector jobStatus returned \"Browser disconnected\", subsequent inspect \"Browser session unavailable\"; #agent-state 未接続, #agent-disconnect disabled"
+  },
+  {
+   "name": "GUI-started job continues after the connection is dropped",
+   "passed": true,
+   "detail": "#solve-run started gui-origin job 5d599451 (running seq3) while connected; #agent-disconnect was clicked at 206 ms; job kept running (seq6 at 2.4 s, seq13 at 6.2 s) and reached state succeeded seq17 settled true at ~8 s; origin stayed gui"
+  },
+  {
+   "name": "Reconnect after disconnect needs a new grant and works with the same connector pairing code",
+   "passed": true,
+   "detail": "after disconnect the session was gone; re-pairing via UI produced a new sessionId with the requested scopes (observed three times)"
+  },
+  {
+   "name": "inspect-only session refuses edit/startJob/setResultView and does not change the revision",
+   "passed": true,
+   "detail": "session with scopes [inspect]: inspect ok; edit, startJob, setResultView each failed \"Browser permission scope refused\"; revision unchanged sha256:b30426ac..."
+  }
+ ],
+ "notVerified": [
+  "Published HTTPS page to localhost connector (PUBLICHTTPS1) - not opened, localhost only",
+  "Drop of the connector process itself (as opposed to the UI disconnect) with a GUI job running was not exercised; the UI disconnect was used as the connection drop",
+  "The edit->startJob chain used an edit whose revision change was verified separately, not the same call sequence",
+  "No large/flow solve was cancelled mid-run; the flow demo finishes in under 1 s",
+  "Page timers of the background tab were throttled (rAF ~139 frames in minutes) but jobs still progressed"
+ ]
+}

@@ -3,7 +3,13 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {getObservationProfiles,resolveObservationProfile as resolve} from '../src/observation-profiles.js';
 import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
+import {createWorkerObservationTransport} from '../src/worker-observation-transport.js';
 const project=(kind='structural',study={},material={})=>({study:{kind,...study},materialProperties:material,conditions:[]});
+test('all targets declare optional event gaps independently of field queue limits and solver convergence',()=>{
+ for(const target of ['browser','node'])for(const profile of getObservationProfiles({target})){
+  const gap=profile.events.find(event=>event.stage==='observation-event-gap');assert.ok(gap,profile.id);assert.equal(gap.optional,true);assert.equal(gap.provisional,true);assert.equal(gap.payloadOmitted,true);assert.equal(gap.workerTransportBounded,false);assert.deepEqual(gap.requiredFields,['gap.reason']);assert.ok(gap.gapReasons.includes('accessor'));assert.ok(gap.gapReasons.includes('bytes'));assert.ok(gap.limitations.some(value=>value.includes('missing telemetry')));
+ }
+});
 test('worker branch matrix selects numerical versus text-only paths without loading solvers',async()=>{
  const cases=[
  [project(),{},'elastic-cpu'],[project('structural',{}, {orthotropic:{}}),{},'elastic-cpu'],
@@ -17,7 +23,7 @@ test('worker branch matrix selects numerical versus text-only paths without load
  ];
  for(const [p,o,id]of cases){const selected=resolve(p,o);assert.equal(selected.profileId,id);assert.equal(selected.supported,true);assert.deepEqual(selected.profile.events.slice(0,3).map(e=>e.stage),['preparation','mesh','progress']);}
  const source=await readFile(new URL('../src/observation-profiles.js',import.meta.url),'utf8');assert.doesNotMatch(source,/^import\s/m);
- for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>e.when!=='execution-failure').map(e=>e.stage),['preparation','mesh','progress']);
+ for(const id of ['elastic-mfem','elastic-webgpu'])assert.deepEqual(getObservationProfiles().find(p=>p.id===id).events.filter(e=>!['execution-failure','pending-payload-limit','job-event-payload-omission','protocol-enabled worker observation delivery'].includes(e.when)).map(e=>e.stage),['preparation','mesh','progress']);
 });
 test('unsupported combinations and malformed selectors never advertise fields',()=>{
  const cases=[ [project(),{method:4}], [project(),{adaptive:'yes'}], [project('thermal'),{includeFields:'yes'}],
@@ -49,4 +55,40 @@ test('catalog, diagnostics and returned selections are independent JSON metadata
  const c=getCapabilities({target:'node'});assert.equal(c.observation.profiles.length,12);assert.ok(!c.observation.profiles.some(p=>p.id==='elastic-webgpu'));c.observation.profiles.length=0;assert.equal(getObservationProfiles({target:'node'}).length,12);
  assert.deepEqual(diagnoseExecution(p).selectedObservation,resolve(p));assert.throws(()=>diagnoseExecution(p,{includeFields:'yes'}),/options/);
  assert.deepEqual(JSON.parse(JSON.stringify(resolve(null))),resolve(null));
+});
+
+test('pending queue gap notifications are optional provisional host metadata with explicit required fields and budget basis',()=>{
+ for(const profile of getObservationProfiles()){
+  const declaration=profile.events.find(event=>event.stage==='observation-queue-limit');assert.ok(declaration);
+  assert.equal(declaration.when,'pending-payload-limit');assert.equal(declaration.optional,true);assert.equal(declaration.provisional,true);
+  assert.equal(declaration.pendingBasis,'in-flight-and-queued-full-payloads');assert.equal(declaration.byteBasis,'conservative-structural-estimate');assert.equal(declaration.storageBudgetSeparate,true);assert.equal(declaration.workerTransportBounded,false);
+  assert.equal(declaration.latestPolicy,'last-accepted-snapshot');assert.equal(declaration.acceptedIsStored,false);
+  assert.deepEqual(declaration.requiredFields,['observationQueue.reason','observationQueue.observationSequence','observationQueue.maxEvents','observationQueue.maxBytes','observationQueue.pendingEvents','observationQueue.pendingBytes','observationQueue.dropped','observationQueue.latestPolicy']);
+ }
+});
+
+test('worker observation transport profile is a separate protocol-gated budget, not a heap or terminal-result guarantee',()=>{
+ for(const profile of getObservationProfiles()){
+  const transport=profile.events.find(event=>event.stage==='observation-transport');assert.ok(transport);
+  assert.equal(transport.optional,true);assert.equal(transport.provisional,true);assert.equal(transport.maxEvents,8);assert.equal(transport.maxBytes,8000000);assert.equal(transport.maxOutboxEvents,8);assert.equal(transport.maxOutboxBytes,8000000);assert.equal(transport.maxTotalEvents,16);assert.equal(transport.maxTotalBytes,16000000);
+  assert.equal(transport.terminalControlMaxEvents,1);assert.equal(transport.terminalControlMaxBytes,4096);assert.equal(transport.hostQueueBudgetSeparate,true);
+  assert.equal(transport.progressBounded,false);assert.equal(transport.finalResultBounded,false);assert.equal(transport.totalJavaScriptHeapBounded,false);
+  assert.match(transport.scope,/not legacy direct worker calls/);assert.match(transport.policy,/bounded outbox/);
+  assert.deepEqual(transport.terminalRequiredFields,['observationTransport.droppedReasons']);
+  assert.equal(transport.workerTransportBounded,true);assert.equal(transport.boundedOnlyWhenProtocolEnabled,true);
+  assert.equal(transport.terminalSummaryOnHardTermination,false);assert.equal(transport.missingTerminalSummaryMeans,'final transport drop totals unknown; never infer zero from the last observation snapshot');
+  assert.equal(transport.dataEnvelopeSequenceField,'observationTransport.sequence');assert.equal(transport.dataEnvelopeAckField,'observationAckId');
+  assert.ok(!transport.requiredFields.includes('observationTransport.sequence'));
+ }
+});
+
+test('an emitted terminal transport summary validates against its declared profile fields',()=>{
+ const declaration=getObservationProfiles()[0].events.find(event=>event.stage==='observation-transport'),sent=[],transport=createWorkerObservationTransport({send:message=>sent.push(message)});
+ transport.post({stage:'iteration',metrics:{iteration:1}});transport.close();
+ const dataEnvelope=sent[0],terminal=sent[1]?.event?.observationTransport;assert.equal(dataEnvelope.observationAckId,1);
+ assert.equal(dataEnvelope.event.observationTransport.sequence,1);assert.ok(terminal);assert.equal(terminal.terminal,true);
+ const getPath=(value,path)=>path.split('.').reduce((current,key)=>current?.[key],value);
+ for(const field of declaration.requiredFields)assert.notEqual(getPath({observationTransport:terminal},field),undefined,field);
+ for(const field of declaration.terminalRequiredFields)assert.notEqual(getPath({observationTransport:terminal},field),undefined,field);
+ assert.equal(terminal.sequence,undefined);
 });

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {installVisualExport} from '../src/visual-export.js';
+import {installVisualExport,hasVideoFrames} from '../src/visual-export.js';
 
 class Vector {
  constructor(x=1,y=2,z=3){Object.assign(this,{x,y,z});}
@@ -10,9 +10,10 @@ class Vector {
  add(v){this.x+=v.x;this.y+=v.y;this.z+=v.z;return this;}
  applyAxisAngle(){this.x+=10;return this;}
 }
-function fixture({failure=false}={}){
+const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
+function fixture({failure=false,emptyRecording=false,noChunks=false}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
- const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;
+ const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
  for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect'])element(id);
  Object.assign(element('cancel-run'),{disabled:true});element('animation-kind').value='orbit';element('animation-seconds').value='1';element('clip-axis').value='0';element('deform-scale').value='2';element('clip-position').value='4';element('result-legend').textContent='20 → 100 °C';
@@ -23,13 +24,14 @@ function fixture({failure=false}={}){
  static isTypeSupported(type){return type==='video/webm';}
  constructor(){this.state='inactive';recorder=this;}
  start(){this.state='recording';}
- stop(){this.state='inactive';this.ondataavailable?.({data:new Blob(['video'],{type:'video/webm'})});this.onstop?.();}
+ requestData(){order.push('requestData');}
+ stop(){order.push('stop');this.state='inactive';if(!noChunks)this.ondataavailable?.({data:new Blob([emptyRecording?Uint8Array.of(0x1a,0x45,0xdf,0xa3):CLUSTER],{type:'video/webm'})});this.onstop?.();}
  }
  globalThis.MediaRecorder=Recorder;
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
  const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind:'elastic'}};
  const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){}});
- return {api,canvas,controls,camera,tracks,elements,frames,draws,get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
+ return {order,api,canvas,controls,camera,tracks,elements,frames,draws,get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
 test('PNG export returns a PNG Blob with caption space and never initiates a download',async()=>{
@@ -49,7 +51,7 @@ test('PNG cancellation during asynchronous encoding discards the artifact and re
 });
 
 test('completed WebM returns encoded bytes, restores view, and never downloads',async()=>{
- const f=fixture();try{const saved=f.camera.position.clone(),promise=f.api.render({format:'webm',animation:'orbit',seconds:1});f.frames.shift()(performance.now()+2000);const blob=await promise;assert.equal(blob.type,'video/webm');assert.equal(await blob.text(),'video');assert.deepEqual(f.camera.position,saved);assert.equal(f.tracks[0].stopped,true);assert.equal(f.controls.enabled,true);assert.equal(f.api.isActive(),false);assert.equal(f.clicks,0);}finally{f.restore();}
+ const f=fixture();try{const saved=f.camera.position.clone(),promise=f.api.render({format:'webm',animation:'orbit',seconds:1});f.frames.shift()(performance.now()+2000);const blob=await promise;assert.equal(blob.type,'video/webm');assert.ok((await blob.text()).endsWith('video'));assert.deepEqual(f.camera.position,saved);assert.equal(f.tracks[0].stopped,true);assert.equal(f.controls.enabled,true);assert.equal(f.api.isActive(),false);assert.equal(f.clicks,0);}finally{f.restore();}
 });
 
 
@@ -59,4 +61,29 @@ test('recorder failure during playback rejects without unhandled rejection and r
 
 test('MCP disconnect remains available during WebM playback and PNG encoding',async()=>{
  const f=fixture();try{const disconnect=f.elements.get('agent-disconnect'),promise=f.api.render({format:'webm',animation:'orbit',seconds:1});assert.equal(disconnect.disabled,false);f.api.stop();f.frames.shift()(performance.now()+500);await assert.rejects(promise,/cancelled/);let encoded;f.canvas.toBlob=callback=>{encoded=callback;};const png=f.api.render({format:'png'});assert.equal(disconnect.disabled,false);encoded(new Blob(['png'],{type:'image/png'}));await png;assert.equal(disconnect.disabled,false);}finally{f.restore();}
+});
+
+test('short WebM requests data before stop and returns a clip containing a Cluster',async()=>{
+ const f=fixture();try{const promise=f.api.render({format:'webm',animation:'orbit',seconds:1});const r0=f.renders;f.frames.shift()(performance.now()+2000);const blob=await promise;assert.ok(f.renders>r0+1,'extra final frame rendered');assert.deepEqual(f.order,['requestData','stop']);assert.ok(await hasVideoFrames(blob));}finally{f.restore();}
+});
+
+test('WebM with header but zero Clusters fails explicitly instead of reporting an empty success',async()=>{
+ const f=fixture({emptyRecording:true});try{const promise=f.api.render({format:'webm',animation:'orbit',seconds:1});f.frames.shift()(performance.now()+2000);await assert.rejects(promise,/no video frames/);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(f.tracks[0].stopped,true);}finally{f.restore();}
+});
+
+test('WebM recorder that emits no chunks fails explicitly',async()=>{
+ const f=fixture({noChunks:true});try{const promise=f.api.render({format:'webm',animation:'orbit',seconds:1});f.frames.shift()(performance.now()+2000);await assert.rejects(promise,/no data/);}finally{f.restore();}
+});
+
+test('hasVideoFrames rejects empty and clusterless blobs',async()=>{
+ assert.equal(await hasVideoFrames(new Blob([])),false);assert.equal(await hasVideoFrames(new Blob([new Uint8Array(110)])),false);assert.equal(await hasVideoFrames(new Blob([CLUSTER])),true);
+});
+
+test('capabilities keep legacy flags and add structured mp4/gif entries for both injected probe outcomes',()=>{
+ const f=fixture();try{
+  const caps=f.api.capabilities({mediaRecorder:{isTypeSupported:t=>t.startsWith('video/mp4')}}),none=f.api.capabilities({mediaRecorder:{isTypeSupported:()=>false}});
+  for(const c of [caps,none]){assert.equal(c.png,true);assert.equal(c.mp4,false);assert.equal(c.gif,false);assert.equal(c.schemaVersion,1);assert.equal(c.maxSeconds,15);assert.equal(c.formats.mp4.supported,false);assert.equal(c.formats.gif.supported,false);}
+  assert.equal(caps.formats.mp4.browserRecorderSupport,true);assert.equal(none.formats.mp4.browserRecorderSupport,false);assert.equal(none.webm,false);
+  assert.equal(f.api.capabilities().webm,true);
+ }finally{f.restore();}
 });

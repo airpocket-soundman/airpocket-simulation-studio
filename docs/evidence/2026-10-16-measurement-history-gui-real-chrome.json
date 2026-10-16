@@ -1,0 +1,43 @@
+{
+  "status": "passed-local-dev",
+  "scope": "Real Chrome (Claude in Chrome) on http://127.0.0.1:5174 against the Vite dev server of branch codex/r-b (measurement history panel and automatic persistence). Localhost only; not the published site.",
+  "checkedAt": "2026-10-16",
+  "checks": [
+    {
+      "name": "panel-present",
+      "passed": true,
+      "detail": "#measurement-history with name, save, export, import, clear, note, status, list and 'other results' elements was present; no console errors."
+    },
+    {
+      "name": "save-after-gui-probe",
+      "passed": true,
+      "detail": "Without a prior GUI probe the save was refused ('Probe a point on the result first'; analysisApi.probe does not set the panel's probe by design). After a click on the bar in probe mode (position [10.000, 6.107, 28.040] mm, displacement 0.028040 mm) the save created a list row 'mid' with point, field, value and unit and a remove button; window.measurementApi.list returned count 1."
+    },
+    {
+      "name": "browser-persistence-written",
+      "passed": true,
+      "detail": "IndexedDB database airpocket-measurement-history (store kv) held two keys: 'index' and 'archive:<result sha>'; localStorage fallback was not used."
+    },
+    {
+      "name": "other-result-entries-not-listed",
+      "passed": true,
+      "detail": "After reload and recomputation the result revision differs, so the earlier entry was not listed for the new result (stored data stays under its own key)."
+    },
+    {
+      "name": "restore-when-same-result-displayed",
+      "passed": true,
+      "detail": "Saved a measurement 'persist-me' and a case, exported the case archive, reloaded the page, imported the case archive (the archive does not contain the measurement history) and viewed the case: the list showed 'persist-me' for the same point and value again and measurementApi.list returned count 1, i.e. the entry came back from browser storage."
+    }
+  ],
+  "findings": [
+    "Because a recomputed result gets a new result revision even for identical inputs, entries are visible again only when the same stored result is displayed (for example by importing a case archive); a plain re-run does not bring them back.",
+    "The 'entries for other results' count line is computed from the in-memory archive, so after a reload it stays empty until the matching result is displayed (it did not show the count for the old revision).",
+    "The panel language follows the app language; in this session the page was in Japanese even with ?lang=en in the URL, so the panel labels were Japanese."
+  ],
+  "notVerified": [
+    "Published HTTPS site.",
+    "localStorage fallback and storage-failure tolerance in a real browser (unit tests only).",
+    "Export/import JSON buttons in the real page (unit tests with the real validators only).",
+    "Other browsers and operating systems; the 100-entry / 300,000-byte caps in the real page."
+  ]
+}

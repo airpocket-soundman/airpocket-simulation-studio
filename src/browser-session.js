@@ -1,3 +1,5 @@
+import {createCaseComparisonApi} from './case-comparison.js';
+import {parseBrowserConnectorEndpoint} from './browser-connection-diagnostics.js';
 import {inspectProjectInput} from './project-input-inspection.js';
 import {createBuiltinProjectOperations} from './builtin-project-operations.js';
 import {getProjectRevision,applyProjectOperations} from './project-operations.js';
@@ -7,12 +9,14 @@ import {browserMethods} from './browser-operation-names.js';
 export {browserMethods} from './browser-operation-names.js';
 import {getAnalysisFailure} from './analysis-failure.js';
 import {previewProjectOperations} from './project-edit-preview.js';
+import {preflightMeshBoundaryTransfer} from './mesh-boundary-preflight.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
 export function createBrowserSession({studio,analysis,jobResults,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedResultTransfers=new Set(),ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
  const busy=()=>isBusy()||executionBusy();
+ const caseComparison=typeof cases?.readSource==='function'?createCaseComparisonApi({cases}):null;
  const builtins=builtinProjects??(studio?createBuiltinProjectOperations({studio,isBusy:busy}):null);
  return {
   async call(method,args={},{expiresAt=Infinity}={}){
@@ -28,6 +32,16 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
     if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during input inspection'),{code:'INPUT_INSPECTION_STALE'});
     return response;
    }
+   if(method==='checkGpuEnvironment'){
+    if(Reflect.ownKeys(args).length)throw Error('checkGpuEnvironment takes no arguments');
+    if(typeof analysis?.checkGpuEnvironment!=='function')throw Error('Browser GPU environment inspection unavailable');
+    const inputBefore=studio?.exportProject?JSON.stringify(studio.exportProject()):undefined;
+    const resultBefore=getResult?JSON.stringify(getResult()):undefined;
+    const diagnostic=await analysis.checkGpuEnvironment();
+    if(!diagnostic||typeof diagnostic!=='object'||Array.isArray(diagnostic))throw Error('Invalid browser GPU environment diagnostic');
+    if(!valid()||inputBefore!==undefined&&JSON.stringify(studio.exportProject())!==inputBefore||resultBefore!==undefined&&JSON.stringify(getResult())!==resultBefore)throw Error('Browser GPU inspection expired or browser state changed');
+    return {schemaVersion:1,target:'browser',declaredCapability:{operation:'checkGpuEnvironment',declarationOnly:true},observation:structuredClone(diagnostic)};
+   }
    if(method==='inputImportBegin'){if(!inputImports)throw Error('Input import transfer unavailable');const result=await inputImports.beginImport(args,{guard:valid});if(!valid()){inputImports.release({transferId:result.transferId});throw Error('Input import command expired');}ownedInputTransfers.add(result.transferId);return result;}
    if(['inputImportWrite','inputImportCommit','inputImportRelease'].includes(method)){
     if(!inputImports)throw Error('Input import transfer unavailable');if(!ownedInputTransfers.has(args.transferId))throw Error('Input import transfer is not owned by this session');
@@ -41,6 +55,12 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='applyCaseSource'||method==='clearCaseSource'){if(!caseSources||editing||busy())throw Error('Case source operations unavailable or browser busy');editing=true;try{return await caseSources[method==='applyCaseSource'?'apply':'clear'](args,{guard:valid});}finally{editing=false;}}
    if(method==='prepareFluidDomain'||method==='applyFluidDomainMesh'){if(!fluidDomains||editing||busy())throw Error('Fluid domain operations unavailable or browser busy');editing=true;try{return await fluidDomains[method==='prepareFluidDomain'?'prepare':'applyMesh'](args,{guard:valid});}finally{editing=false;}}
    if(method==='preflight')return studio.preflight(args.options||{},args.context||{});
+   if(method==='meshBoundaryPreflight'){
+    if(Object.keys(args).some(key=>!['jobId','inputRevision'].includes(key))||typeof args.jobId!=='string'||typeof args.inputRevision!=='string')throw Error('Invalid mesh boundary preflight arguments');
+    const snapshot=project(),job=analysis.getJob(args.jobId);let output=null;try{output=analysis.getJobResult(args.jobId);}catch{/* Non-successful jobs are reported as not ready by the shared inspector. */}const report=await preflightMeshBoundaryTransfer({project:snapshot,job,output,expectedRevision:args.inputRevision});
+    if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))return {...report,allowed:false,diagnostics:[{code:'ANALYSIS_MESH_PREFLIGHT_STALE_INPUT',severity:'error',stage:'boundary-transfer',target:'/',message:'Live input changed during boundary-transfer inspection',evidence:{},suggestions:['Inspect the current input revision and retry'],requiresUserIntent:true}],reports:[]};
+    return report;
+   }
    if(method==='previewEdit'){
     const snapshot=project(),previewOptions={expectedRevision:args.expectedRevision,options:args.options,operation:args.operation,mode:args.mode},response=typeof studio.previewOperations==='function'?await studio.previewOperations(args.operations,previewOptions):await previewProjectOperations(snapshot,args.operations,{...previewOptions,target:'browser'});
     if(!valid()||JSON.stringify(project())!==JSON.stringify(snapshot))throw Object.assign(Error('Project changed or command expired during edit preview.'),{code:'EDIT_PREVIEW_STALE'});
@@ -114,6 +134,7 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='importPrint'||method==='setPrintView'){if(!prints||busy()||editing)throw Error('Print API unavailable or browser busy');editing=true;try{return await prints[method==='importPrint'?'import':'set'](args,{guard:valid});}finally{editing=false;}}
    if(method==='previewCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');const response=await cadUpdates.preview(args);if(!valid())throw Error('CAD preview command expired');return response;}
    if(method==='applyCadUpdate'){if(!cadUpdates||busy()||editing)throw Error('CAD update unavailable or browser busy');editing=true;try{return await cadUpdates.apply(args,{guard:valid});}finally{editing=false;}}
+   if(method==='caseCompare'){if(!caseComparison)throw Error('Case comparison API unavailable');const result=await caseComparison.compare(args,{guard:valid});if(!valid())throw Object.assign(Error('Case comparison expired or connection was revoked'),{code:'CASE_COMMAND_EXPIRED'});return result;}
    if(method==='caseList'){if(!cases)throw Error('Case API unavailable');return cases.list();}
    if(method.startsWith('case')){const names={caseView:'view',caseRestoreInput:'restoreInput',caseRename:'rename',caseRemove:'remove',caseSave:'saveCurrent'};if(!cases||busy()||editing)throw Error('Case API unavailable or browser busy');editing=true;try{return await cases[names[method]](args,{guard:valid});}finally{editing=false;}}
   },
@@ -122,9 +143,9 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
 }
 
 export function connectBrowserSession({endpoint,pairingToken,scopes,session,onState=()=>{},fetcher=fetch,intervalMs=750}) {
- const url=new URL(endpoint);if(url.protocol!=='http:'||url.hostname!=='127.0.0.1'||url.pathname!=='/'||url.search||url.hash)throw Error('Use an HTTP loopback endpoint');
+ const url=parseBrowserConnectorEndpoint(endpoint);
  let stopped=false,token,sessionId,timer;const controller=new AbortController();
- async function request(path,body,pair=false,requestSignal=controller.signal){const r=await fetcher(url.origin+path,{method:body===undefined?'GET':'POST',headers:{Authorization:'Bearer '+(pair?pairingToken:token),...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:requestSignal,credentials:'omit',cache:'no-store'});if(!r.ok)throw Error(`Browser bridge refused (${r.status})`);return r.json();}
+ async function request(path,body,pair=false,requestSignal=controller.signal){const r=await fetcher(url.origin+path,{method:body===undefined?'GET':'POST',headers:{Authorization:'Bearer '+(pair?pairingToken:token),...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:requestSignal,credentials:'omit',cache:'no-store',targetAddressSpace:'loopback'});if(!r.ok)throw Error(`Browser bridge refused (${r.status})`);return r.json();}
  async function poll(){if(stopped)return;try{const {commands}=await request('/poll');for(const command of commands){if(stopped)break;let reply={id:command.id};try{if(Date.now()>=command.expiresAt)throw Error('Browser command expired');if(!scopes.includes(browserMethods[command.method]))throw Error('Browser scope refused');reply.value=await session.call(command.method,command.args,{expiresAt:command.expiresAt});}catch(error){const failure=getAnalysisFailure(error);reply.error={message:error.message,code:error.code??failure?.code,...(failure?{failure}:{})};}if(!stopped)await request('/reply',reply);}if(!stopped)timer=setTimeout(poll,intervalMs);}catch(error){if(!stopped){stop();onState({state:'disconnected',message:error.message});}}}
  function stop(){if(stopped)return;stopped=true;clearTimeout(timer);session.disconnect();if(token)request('/disconnect',{},false,AbortSignal.timeout(2000)).catch(()=>{});controller.abort();onState({state:'disconnected'});}
  const ready=(async()=>{const paired=await request('/pair',{scopes},true);if(stopped)return;token=paired.token;sessionId=paired.sessionId;onState({state:'connected',sessionId,scopes});poll();return {sessionId,scopes};})();

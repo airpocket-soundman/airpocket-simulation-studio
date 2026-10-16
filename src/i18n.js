@@ -216,7 +216,7 @@ export const dictionary={
  '開発管理ボード':'Development board','開発管理':'Development','作業':'Tasks','開発メモ':'Development notes','ソルバー':'Solvers','公開版':'Release','決定事項':'Decisions',
  '左から右へ進み、右端が公開版です。':'Work moves from left to right; the rightmost column is deployed.',
  '順番を待っている':'Queued','つくっている':'Building','確かめている':'Checking','直している':'Fixing','次の版を待っている':'Ready for release','公開版に入っている':'Deployed',
- '未着手':'Not started','実装中':'Implementation','検証中':'Validation','修正中':'Fixes','検証済み・未公開':'Validated, not deployed','Pagesで利用できる':'Available on Pages',
+ '未着手':'Not started','実装中':'Implementation','検証中':'Validation','修正中':'Fixes','検証済み・未公開':'Validated, not deployed','公開版への反映を確認済み':'Verified in the published release',
  'この段階の作業はありません。':'No tasks at this stage.','条件に一致する作業はありません。':'No matching tasks.','すべての分野':'All disciplines','作業を検索':'Search tasks','分野で絞り込む':'Filter by discipline',
  '現在の公開版':'Current release','解析は準備中':'Analysis is not implemented','＋ 開発メモを書く':'+ Write a note','解析アプリを開く ↗':'Open simulation app ↗','GitHubを開く ↗':'Open GitHub ↗','閉じる':'Close','完了条件':'Acceptance criteria','前提: ':'Dependencies: ','最新の記録: ':'Latest update: ','実装・検証記録を開く ↗':'Open implementation / validation record ↗',
  'このブラウザに保存したメモ。公式の進捗とは別に管理します。':'Notes saved in this browser, separate from official progress.',
