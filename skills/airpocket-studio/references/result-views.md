@@ -18,9 +18,9 @@ Inspect scope permits exportCapabilities/exportStatus/exportArtifact. Poll `expo
 
 Use view scope for cancelExport/releaseExport; release retained output when finished. Default limits are 32 MiB total, four jobs and one active renderer including cancellation cleanup. Disconnect cancels connection-owned exports; late cancelled/released output is unavailable. Page exit loses output; case archives and restart recovery do not retain it.
 
-WebM uses real-time recording targeting 24 fps, not deterministic fixed-frame output; use `png-sequence` when reproducibility matters. Time playback uses stored transient-acoustic frames only; recording duration is not physical time. Deformation cycles change visualization scale, not the applied load or physical response. See docs/automation.md for the full contract.
+WebM uses real-time recording targeting 24 fps, not deterministic fixed-frame output; use `png-sequence` when reproducibility matters. WebM time playback uses stored transient-acoustic frames only; recording duration is not physical time. For thermal time export use format:"png-sequence", animation:"time" with the temperature field selected and at least two stored transient-thermal snapshots. frames must not exceed the snapshot count. No interpolation occurs: index-based selection may produce uneven physical-time spacing. The ZIP records snapshotIndex/physicalTimeSeconds and the thermal-temperature time basis. Heat flux, real-time thermal preview and thermal WebM time export are unsupported. Read formats["png-sequence"].timeAnimationResultKinds (["acousticTransient","thermal"]), timeSelection ("stored-frames-only") and thermalTimeField ("temperature"); top-level time capabilities remain acoustic-only. This path uses API/MCP jobs, not the general GUI animation controls; real-Chrome verification is pending. Deformation cycles change visualization scale, not the applied load or physical response. See docs/automation.md for the full contract.
 
-Real-time recording requests 24 fps but does not guarantee frame counts; background tabs and load can drop frames. Deterministic fixed-frame export remains unimplemented.
+Real-time recording requests 24 fps but does not guarantee frame counts; background tabs and load can drop frames. Use png-sequence for deterministic fixed-frame export.
 
 
 ## Portable named views
