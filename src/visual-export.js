@@ -55,6 +55,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error(language()==='en'?'Duration must be 1–15 seconds.':'長さは1～15秒で指定してください。');
   if(kind==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error(language()==='en'?'Deformation requires a structural or modal result.':'変形には構造または固有振動の結果が必要です。');
   const time=$('acoustic-time-frame');
+  if(kind==='time'&&result?.kind==='thermal')throw Error(language()==='en'?'Time playback export is not supported for thermal results yet. Use the viewer slider and a still PNG or an orbit animation.':'熱結果の時間変化の書き出しはまだ未対応です。表示時刻スライダーとPNG静止画、または回転アニメーションを使ってください。');
   if(kind==='time'&&(result?.kind!=='acousticTransient'||!time))throw Error(language()==='en'?'Time playback requires transient acoustic frames.':'時間変化には過渡音響の結果が必要です。');
   if(kind==='slice'&&!output?.mesh)throw Error(language()==='en'?'Generate a volume mesh first.':'先に体積メッシュを生成してください。');
   const mime=WEBM_TYPES.find(type=>typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(type));
@@ -77,7 +78,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
    }catch(error){reject(error);}}requestAnimationFrame(tick);});
   }finally{
    try{if(recorder&&recorder.state==='recording'&&completed&&!state.stop){capture();stream?.getVideoTracks?.()[0]?.requestFrame?.();await new Promise(resolve=>setTimeout(resolve,150));try{recorder.requestData?.();}catch{}}if(recorder&&recorder.state!=='inactive')recorder.stop();if(finished)await finished;}
-   finally{stream?.getTracks().forEach(track=>track.stop());camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}}
+   finally{stream?.getTracks().forEach(track=>track.stop());camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;try{if(time&&kind==='time'){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}}
   }
   const blob=record&&chunks.length?new Blob(chunks,{type:mime}):null;if(record&&blob&&!state.stop&&!await hasVideoFrames(blob))throw Error('Recording produced no video frames');if(save&&blob&&!state.stop)download(blob,'simulation-'+kind+'.webm');message(state.stop?'再生を停止しました。':'再生が完了しました。',state.stop?'Playback stopped.':'Playback completed.');
   if(state.stop)throw Error('Export cancelled');if(record&&!blob)throw Error('Recording produced no data');return blob;
@@ -89,6 +90,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   const output=getAnalysis(),result=output?.result;
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
   if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
+  if(animation==='time'&&result?.kind==='thermal')throw Error('Time playback export is not supported for thermal results yet.');
   if(animation==='time'&&(result?.kind!=='acousticTransient'||!$('acoustic-time-frame')||!result.snapshots?.length))throw Error('Time playback requires transient acoustic frames.');
   if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
  }
@@ -136,7 +138,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
    return new Blob([zip],{type:'application/zip'});
   }finally{
    try{camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;
-    try{if(time){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}}
+    try{if(time&&animation==='time'){time.value=saved.time;time.dispatchEvent(new Event('input'));}if(getAnalysis()===output&&output)redraw();$('clip-position').dispatchEvent(new Event('input'));}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}}
    catch(error){active=null;throw error;}
   }
  }
@@ -151,6 +153,6 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  }
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
  const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
- const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
+ const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }
