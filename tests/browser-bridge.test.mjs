@@ -101,3 +101,39 @@ test('connector re-polls immediately after handled commands, waits only after em
  // disconnect during a command burst stops further polls
  const stopping=await run({batches:Array(50).fill(['a']),intervalMs:5000});stopping.client.stop();const count=stopping.stamps.length;await wait(100);assert.equal(stopping.stamps.length,count);assert.equal(stopping.disconnects(),1);
 });
+
+const lpHeaders=(origin,token)=>({Origin:origin,Authorization:'Bearer '+token});
+async function lpBridge(t,options={}){const origin='https://studio.example';const bridge=await createBrowserBridge({origin,...options});t.after(()=>bridge.close());const f=(url,o={})=>fetch(url,{...o,headers:{...o.headers,Origin:origin}});return {bridge,origin,fetcher:f};}
+test('bridge long-poll delivers a command sent while a poll is parked in well under 100 ms and releases empty polls after the wait',async t=>{
+ const {bridge,origin,fetcher}=await lpBridge(t,{pollWaitMs:400});
+ const paired=await (await fetcher(bridge.endpoint+'/pair',{method:'POST',headers:{Authorization:'Bearer '+bridge.pairingToken,'Content-Type':'application/json'},body:JSON.stringify({scopes:['inspect']})})).json();
+ const H=lpHeaders(origin,paired.token);
+ let t0=Date.now();const empty=await (await fetch(bridge.endpoint+'/poll',{headers:H})).json();const idleMs=Date.now()-t0;assert.deepEqual(empty.commands,[]);assert.ok(idleMs>=350&&idleMs<1500,'empty poll parks for about pollWaitMs: '+idleMs);
+ const parked=fetch(bridge.endpoint+'/poll',{headers:H}).then(r=>r.json());await new Promise(r=>setTimeout(r,50));
+ t0=Date.now();const result=bridge.call(paired.sessionId,'getState',{});const got=await parked;const deliverMs=Date.now()-t0;assert.equal(got.commands.length,1);assert.ok(deliverMs<100,'delivered in '+deliverMs);
+ await fetch(bridge.endpoint+'/reply',{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify({id:got.commands[0].id,value:{ok:1}})});assert.deepEqual(await result,{ok:1});
+ // a command queued before the poll is returned immediately
+ const q=bridge.call(paired.sessionId,'getState',{});t0=Date.now();const now1=await (await fetch(bridge.endpoint+'/poll',{headers:H})).json();assert.ok(Date.now()-t0<100&&now1.commands.length===1);
+ await fetch(bridge.endpoint+'/reply',{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify({id:now1.commands[0].id,value:1})});await q;
+});
+test('bridge long-poll keeps refusals unchanged and shutdown/disconnect/abort release parked polls without leaks',async t=>{
+ const origin='https://studio.example';const bridge=await createBrowserBridge({origin,pollWaitMs:5000});
+ const f=(url,o={})=>fetch(url,{...o,headers:{...o.headers,Origin:origin}});
+ const pair=async()=>(await (await f(bridge.endpoint+'/pair',{method:'POST',headers:{Authorization:'Bearer '+bridge.pairingToken,'Content-Type':'application/json'},body:JSON.stringify({scopes:['inspect']})})).json());
+ let t0=Date.now();assert.equal((await fetch(bridge.endpoint+'/poll',{headers:{Origin:'https://evil.example',Authorization:'Bearer x'}})).status,403);assert.equal((await f(bridge.endpoint+'/poll',{headers:{Authorization:'Bearer wrong'}})).status,401);assert.ok(Date.now()-t0<500,'refusals never park');
+ const a=await pair(),b=await pair(),c=await pair();
+ const pa=f(bridge.endpoint+'/poll',{headers:{Authorization:'Bearer '+a.token}}).then(r=>r.json());
+ await new Promise(r=>setTimeout(r,30));t0=Date.now();await f(bridge.endpoint+'/disconnect',{method:'POST',headers:{Authorization:'Bearer '+a.token,'Content-Type':'application/json'},body:'{}'});assert.deepEqual((await pa).commands,[]);assert.ok(Date.now()-t0<300,'disconnect releases parked poll');
+ const ctl=new AbortController();const pb=f(bridge.endpoint+'/poll',{headers:{Authorization:'Bearer '+b.token},signal:ctl.signal}).catch(e=>e.name);await new Promise(r=>setTimeout(r,30));ctl.abort();assert.equal(await pb,'AbortError');
+ const pc=f(bridge.endpoint+'/poll',{headers:{Authorization:'Bearer '+c.token}}).then(r=>r.json()).catch(()=>'closed');await new Promise(r=>setTimeout(r,30));
+ t0=Date.now();await bridge.close();assert.ok(Date.now()-t0<1000,'close does not wait for the poll wait');await pc;
+});
+test('20 sequential commands round-trip fast through the real bridge with long-poll, and idle request rate stays low',async t=>{
+ const {bridge,origin,fetcher}=await lpBridge(t,{pollWaitMs:1000});
+ const requests=[];const counting=(url,o)=>{requests.push(new URL(url).pathname);return fetcher(url,o);};
+ const client=connectBrowserSession({endpoint:bridge.endpoint,pairingToken:bridge.pairingToken,scopes:['inspect'],session:{async call(){return {ok:true};},disconnect(){}},fetcher:counting});t.after(()=>client.stop());
+ const {sessionId}=await client.ready;
+ await new Promise(r=>setTimeout(r,150));
+ const t0=Date.now();for(let i=0;i<20;i++)assert.deepEqual(await bridge.call(sessionId,'inspect',{}),{ok:true});const ms=Date.now()-t0;assert.ok(ms<1000,'20 sequential commands took '+ms+' ms (was ~15 s with the 750 ms idle wait)');
+ const before=requests.length;await new Promise(r=>setTimeout(r,2200));assert.ok(requests.length-before<=6,'idle polls: '+(requests.length-before));
+});
