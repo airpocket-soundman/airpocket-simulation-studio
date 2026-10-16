@@ -23,6 +23,7 @@ export function inspectThermalInputContract(project,options={}, {mode='legacy'}=
    for(const key of ['density','specificHeat'])require('/materialProperties/'+key,material[key],value=>Number.isFinite(value)&&value>0,'Transient thermal material value must be positive');
    require('/study/timeStep',study.timeStep,value=>Number.isFinite(value)&&value>0,'Thermal time step must be positive seconds');
    require('/study/steps',study.steps,value=>Number.isInteger(value)&&value>=1&&value<=100,'Thermal steps must be an integer from 1 to 100');
+   if(own(study,'thermalSnapshotCount'))require('/study/thermalSnapshotCount',study.thermalSnapshotCount,value=>Number.isInteger(value)&&value>=2&&value<=61,'Thermal snapshot count must be an integer from 2 to 61 (omit to store no nodal snapshots)');
    require('/study/initialTemperature',study.initialTemperature,value=>Number.isFinite(value)&&value>=-273.15,'Initial temperature must be finite and at least absolute zero in degC');
   }
   for(const key of ['transient','timeStep','steps','initialTemperature','volumetricSource'])if(own(options,key)&&options[key]!==study[key])add('THERMAL_RUNTIME_OVERRIDE','/options/'+key,'Runtime thermal override differs from the provenance-bearing project study',{studyPointer:'/study/'+key});
