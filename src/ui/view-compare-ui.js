@@ -1,7 +1,7 @@
 // Two-case left/right result comparison panel (VIEWCOMPARE increment 2). Every dependency is injected.
 // It renders each saved case with the existing result renderer (via renderCase, supplied by main.js) and
 // composes the snapshots on a 2D canvas using the pure rules in view-compare-layout.js.
-import {computeSharedRange, formatQuantity, formatSeconds, legendBars, planCompareView} from '../view-compare-layout.js';
+import {createComparisonRenderer} from '../view-compare-renderer.js';
 const T = {
   '2ケース並べて比較': 'Compare two cases side by side',
   '左のケース': 'Left case', '右のケース': 'Right case',
@@ -52,43 +52,9 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     const ia = Number(a.value), ib = Number(b.value);
     if (count() < 2) throw Error(tr('保存ケースが2件以上必要です。'));
     if (!Number.isInteger(ia) || !Number.isInteger(ib) || ia === ib) throw Error(tr('左右に別のケースを選んでください。'));
-    const field = getField(), deformScale = getDeformScale(), infos = [ia, ib].map(index => inspectCase(index, field));
-    const transient = infos.some(i => i.frameTimes);
-    const timeSeconds = transient ? Number(time.value) : undefined;
-    if (transient && (time.value === '' || !Number.isFinite(timeSeconds))) throw Error(tr('共通の物理時刻を入力してください。'));
-    // Resolve frames first (needs only time axes), then measure each case at its frame, then share one range.
-    const stubs = [ia, ib].map((index, k) => ({caseId: String(index), label: conditions(index).label, field, unit: '-', minimum: 0, maximum: 1, frameTimes: infos[k].frameTimes ?? undefined}));
-    const framePlan = planCompareView(stubs, {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 100}}).panels.map(p => p.time);
-    const auto = [ia, ib].map((index, k) => renderCase(index, {field, deformScale, frameIndex: framePlan[k].frameIndex, colorRange: null}));
-    const described = auto.map((r, k) => ({caseId: String(k ? ib : ia), label: '', field, unit: r.unit, minimum: r.min, maximum: r.max}));
-    const shared = computeSharedRange(described);
-    const shots = [ia, ib].map((index, k) => renderCase(index, {field, deformScale, frameIndex: framePlan[k].frameIndex, colorRange: shared.colorRange}));
-    const infoLabels = [ia, ib].map(conditions);
-    const plan = planCompareView([ia, ib].map((index, k) => ({caseId: String(index), label: infoLabels[k].label, conditions: infoLabels[k].items, field, unit: shared.unit, minimum: auto[k].min, maximum: auto[k].max, frameTimes: infos[k].frameTimes ?? undefined})), {camera: getCamera(), deformScale, timeSeconds, output: {width: 1280, height: 640, labelHeight: 96, legendHeight: 100}});
-    draw(plan, shots, shared);
-    return plan;
-  }
-  function draw(plan, shots, shared) {
-    canvas.width = plan.size.width; canvas.height = plan.size.height;
-    const g = canvas.getContext('2d');
-    g.fillStyle = '#102331'; g.fillRect(0, 0, canvas.width, canvas.height); g.fillStyle = '#edf6f8'; g.font = '14px sans-serif';
-    plan.panels.forEach((p, k) => {
-      const v = p.rects.view, src = shots[k].canvas, s = Math.min(v.width / src.width, v.height / src.height), w = src.width * s, h = src.height * s;
-      g.drawImage(src, v.x + (v.width - w) / 2, v.y + (v.height - h) / 2, w, h);
-      p.labelLines.forEach((text, i) => g.fillText(text, p.rects.label.x + 8, p.rects.label.y + 20 + 18 * i, p.rects.label.width - 16));
-    });
-    const L = plan.legend, c = plan.colorRange, geo = legendBars(plan);
-    geo.bars.forEach(({bar, minLabel, maxLabel}) => {
-      const grad = g.createLinearGradient(bar.x, 0, bar.x + bar.width, 0);
-      for (let i = 0; i <= 8; i++) grad.addColorStop(i / 8, colorAt(i / 8));
-      g.fillStyle = grad; g.fillRect(bar.x, bar.y, bar.width, bar.height); g.fillStyle = '#edf6f8';
-      g.textAlign = 'left'; g.fillText(`${formatQuantity(c.minimum)} ${shared.unit}`, minLabel.x, minLabel.y);
-      g.textAlign = 'right'; g.fillText(`${formatQuantity(c.maximum)} ${shared.unit}`, maxLabel.x, maxLabel.y); g.textAlign = 'left';
-    });
-    const times = plan.panels.map((p, k) => shots[k].finalOnly ? tr('最終ステップのみ（共通時刻は適用されません）') : p.time.timeApplies ? `${formatSeconds(p.time.timeSeconds)} (${tr('保存フレームとのずれ')} ${formatSeconds(p.time.offsetSeconds, {signed: true})})` : tr('時間軸なし'));
-    g.fillText(`${tr('共通色範囲')}: ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}`, 8, geo.textRows[0], L.width - 16);
-    g.fillText(`${tr('物理時刻')}: ${times.join(' | ')}`, 8, geo.textRows[1], L.width - 16);
-    out.textContent = tr('比較を表示しました。'); png.disabled = false;
+    const renderer=createComparisonRenderer({inspectCase,renderCase,createCanvas:()=>canvas,colorAt,translate:tr});
+    const result=renderer.render({cases:[ia,ib].map(index=>{const info=conditions(index);return {caseId:String(index),source:index,label:info.label,conditions:info.items};}),field:getField(),deformScale:getDeformScale(),camera:getCamera(),timeSeconds:time.value===''?undefined:Number(time.value)});
+    out.textContent=tr('比較を表示しました。');png.disabled=false;return result.plan;
   }
   run.onclick = async () => { try { png.disabled = true; await show(); } catch (e) { out.textContent = e.message; status(e.message); } };
   png.onclick = () => canvas.toBlob(blob => { if (!blob) { out.textContent = 'PNG failed'; return; } const url = URLApi.createObjectURL(blob), link = doc.createElement('a'); link.href = url; link.download = 'case-comparison.png'; link.click(); setTimeout(() => URLApi.revokeObjectURL(url), 1000); }, 'image/png');

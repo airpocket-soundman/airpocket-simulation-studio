@@ -6,7 +6,7 @@
 
 31ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_preflight_mesh_boundaries`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
-現行の入口は通常31/接続33 MCPツール、88ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
+現行の入口は通常31/接続33 MCPツール、89ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -124,6 +124,12 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 `exportStatus({jobId})`で進捗とrunning/completed/failed/cancelledを確認します。completedの成果物メタデータには`mimeType`、`name`、`totalBytes`、`sha256`が含まれます。`exportArtifact({jobId,offset:0,length:65536})`からbase64の`data`を復号し、返却された`nextOffset`がnullになるまでページを取得します。lengthは最大65,536バイトで、offsetは復号後のバイト位置です。結合したバイト数とSHA-256をメタデータに照合してから利用します。ブラウザ内の任意コード実行、任意パス読取、グローバルなファイルシステム操作は不要です。自動ダウンロードや永続保存は行いません。
 
 `cancelExport({jobId})`で中止し、不要になったら`releaseExport({jobId})`で保持枠と成果物を解放します。取消・解放後に届いた録画結果は取得できません。既定の保持上限は合計32 MiBと4ジョブ、レンダラーは取消後の後処理を含め同時に1件です。切断はその接続が開始した出力ジョブも中止します。ページ終了で出力は消失し、再起動復元・ケース集への永続保存は提供しません。
+
+`startCompareExport({requestId,references:[{caseId,expectedRevision},{caseId,expectedRevision}],field,timeSeconds?,toleranceSeconds?,camera?,deformScale?})`（view権限）は、保存した別々の2ケースを左右に配置したPNGだけを書き出します。先に`caseList`から安定したIDと現在のrevisionを取り、表示量`field`を明示します。`format`・動画・ケースの画面インデックスは指定しません。共有カメラと非負の変形倍率は省略時に現在の表示から固定し、共有色範囲は同じ物理量・単位から求めます。GUI比較パネルと共通の描画コアを使います。 最初の実装では、開始前に保存結果をメインビューアへ表示してください（例: `caseView`）。熱比較の自動色範囲は選択したフレームの最小・最大から求め、通常の熱履歴再生で使う全保存フレーム共通の範囲とは区別します。
+
+温度または過渡音響の保存フレームを比較するときは、秒単位の`timeSeconds`を指定します。各ケースは最も近い保存フレームへ合わせ、実際の`timeSeconds`・`frameIndex`・符号付き`offsetSeconds`を返します。補間は行いません。任意の非負`toleranceSeconds`を指定すると、要求時刻との差がその値を超えるケースを拒否します。時間軸のないケースは`timeApplies:false`、熱流束は最終ステップ限定として表示し、共有時刻を適用しません。これは保存時刻が厳密に同じ場合だけ差分を返す数値比較`caseCompare`とは別の画像出力です。
+
+返却されたjobIdを通常の`exportStatus`・`exportArtifact`・`cancelExport`・`releaseExport`で扱います。`target:"comparison"`と成果物の`manifest.comparison`には2ケースのID/版/結果版、表示量・単位・範囲、選択した実時刻とずれが入り、`view`には固定したカメラ・倍率等が入ります。成果物をページ取得してバイト数とSHA-256を検証し、不要になったら解放してください。通常の4ジョブ/合計32 MiBの上限とrequestId再送の規則を共有します。取得元の版や接続権限が失効した場合、取消・失敗の場合は成果物を返しません。入力・表示結果・カメラ・選択時刻は書き出し後に復元し、自動ダウンロードや永続保存は行いません。比較動画と比較パネル設定の保存は未対応です。2026-10-17にリポジトリの意味操作ブリッジを通すlocalhost実Chrome検証が成功しました（`docs/evidence/2026-10-17-comparison-api-real-chrome.json`とPNG）。1280×640 PNGのサイズとSHA-256、5秒で25/30°C・共有範囲25..30・ずれ0、元の2秒表示および2.01秒補間表示の完全な状態復元、staleケースと熱流束の共有時刻拒否を確認しました。登録済みMCPツールの実行、GUIボタンからのダウンロード完了、比較動画、パネル設定保存、公開HTTPS、一般形状は未確認です。
 
 共有範囲は能力・状態・成果物取得が確認（inspect）、開始・取消・解放が表示（view）です。動画は実時間の24 fps録画で、固定フレームの決定的な書き出しではありません。time再生は保存された過渡音響フレームに限り、動画の再生秒数と物理時刻は別です。変形アニメーションは表示倍率の周期変化で、負荷履歴の解析結果ではありません。
 

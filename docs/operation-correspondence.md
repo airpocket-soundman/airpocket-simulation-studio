@@ -57,6 +57,7 @@
 | `caseSave` | analyze | `studio_browser_call` method=caseSave | 同一経路: `#case-add` `#case-name` — 同じcaseApi.addを呼ぶ。操作はリビジョン確認を加える | `references/browser-session.md`, `references/result-views.md` |
 | `exportCapabilities` | inspect | `studio_browser_call` method=exportCapabilities | connector only — no GUI control by design (capabilities()を呼ぶGUIはない。WebM非対応は`#visual-export-status`の失敗文で分かるのみ) | `references/browser-session.md`, `references/result-views.md` |
 | `startExport` | view | `studio_browser_call` method=startExport | 同一経路: `#view-png` `#animation-save` `#animation-kind` `#animation-seconds` — 同じcapture()/animate()描画を使う。操作はジョブ・リビジョン固定・成果物化を加える。`#animation-preview`は保存しない再生 | `references/browser-session.md`, `references/result-views.md` |
+| `startCompareExport` | view | `studio_browser_call` method=startCompareExport | 同一経路: `#compare-run` `#compare-png` — 共通の比較描画コアを使用。意味操作は安定した2ケースID/版と表示量からPNGジョブを作り、成果物をページ取得 | `references/result-views.md` |
 | `exportStatus` | inspect | `studio_browser_call` method=exportStatus | 関連（別処理）: `#visual-export-status` — GUI自身の再生・保存の進行文で、ジョブ状態ではない | `references/browser-session.md`, `references/result-views.md` |
 | `exportArtifact` | inspect | `studio_browser_call` method=exportArtifact | 関連（別処理）: `#visual-export-download` — 直近の保存ファイルの再ダウンロードリンク。分割読み出しではない | `references/browser-session.md`, `references/result-views.md` |
 | `cancelExport` | view | `studio_browser_call` method=cancelExport | 同一経路: `#animation-stop` — 同じstopフラグを立てる。PNG出力は止められない | `references/browser-session.md`, `references/result-views.md` |
