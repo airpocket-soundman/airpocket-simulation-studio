@@ -1,0 +1,195 @@
+{
+  "title": "Case archive at 1.0 mm (4 cases, ~34 MB) in real Chrome after PR 66 (archive performance) and PR 73 (connector immediate re-poll)",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "base": "worktree p-d merged origin/main at 0506290 (PR 66 and PR 73 included)",
+    "browser": "real Chrome (Claude in Chrome), own tab, vite dev on 127.0.0.1:5174, stdio connector with a file-IPC driver",
+    "case": "axial bar reference demo, mesh size 1.0 mm, ~8.5 MB archived per case",
+    "machineLoad": "Not controlled. Other agents shared the machine; the Windows CPU counter read 100 percent at times while per-process deltas were low. The tab was a background tab. Over a long session the tab became sluggish: after the 5th/6th save in one run the renderer froze for minutes, a fresh tab once needed about 130 s to mesh and solve the 1.0 mm case (about 40 s normally), and a 4th save needed several attempts in another run. Numbers below are from the final clean run unless stated.",
+    "harnessLatency": "Per-command latency is dominated by the connector idle poll (about 1.0 s per call: minimum chunk 952 ms, median about 1000 ms), not by payload. Driver file-IPC polling was reduced to about 20 ms for the final runs, so about 1.0 s is the connector poll floor for sequential external commands. The same floor was present in the earlier numbers."
+  },
+  "previousNumbers": {
+    "exportReadTotalMs": 519183,
+    "importWriteTotalMs": 1153966,
+    "importChunkGrowth": "1 s growing to 3-4 s",
+    "fifthCaseSave": "timed out at 15 s"
+  },
+  "measurements": {
+    "finalRun4Cases": {
+      "archive": {
+        "bytes": 33910415,
+        "chunks": 518,
+        "sha256": "sha256:af098a60c2287466d760797202b6c8fe636de15757738ccbcf315cd6baac54cc"
+      },
+      "exportFreezeMs": 6478,
+      "read": {
+        "chunks": 518,
+        "firstQuarterAvgMs": 1004,
+        "lastQuarterAvgMs": 1000,
+        "minMs": 952,
+        "maxMs": 1548,
+        "medianMs": 1000,
+        "totalMs": 518532,
+        "hashMatchesDeclared": true
+      },
+      "import": {
+        "chunks": 518,
+        "firstQuarterAvgMs": 1000,
+        "lastQuarterAvgMs": 1000,
+        "minMs": 954,
+        "maxMs": 1059,
+        "medianMs": 1000,
+        "totalMs": 517987,
+        "retries": 0,
+        "commitMs": 8830,
+        "importTotalMsIncludingCommit": 527788,
+        "removeAllCasesMs": 26656
+      },
+      "roundTrip": {
+        "archiveRevisionEqual": true,
+        "caseRevisionsEqual": true,
+        "countEqual": true,
+        "archiveRevisionBefore": "sha256:20542d87450e6efcdca48aa86e8be88de815e30b6460a49e7073e7f50c2ac448",
+        "archiveRevisionAfter": "sha256:20542d87450e6efcdca48aa86e8be88de815e30b6460a49e7073e7f50c2ac448",
+        "restoredCaseCount": 4,
+        "caseRevisionsBefore": [
+          "sha256:bdeb8a56af6458fb1cefe64295058f78588fd93f4b1837882879194275db3d55",
+          "sha256:58a90b0649e4796d6ef72bc770b5304f5cab0b175bf1ca78d8e70b24923b8606",
+          "sha256:973a08aa95b806d652f6b2876cfdfc94b2698771c310626b463d86a67eb25cff",
+          "sha256:c5c11e90a93b9a28265fe3488b11e56f74c92a635f6cca1ed57d8840b49cf30d"
+        ],
+        "caseRevisionsAfter": [
+          "sha256:bdeb8a56af6458fb1cefe64295058f78588fd93f4b1837882879194275db3d55",
+          "sha256:58a90b0649e4796d6ef72bc770b5304f5cab0b175bf1ca78d8e70b24923b8606",
+          "sha256:973a08aa95b806d652f6b2876cfdfc94b2698771c310626b463d86a67eb25cff",
+          "sha256:c5c11e90a93b9a28265fe3488b11e56f74c92a635f6cca1ed57d8840b49cf30d"
+        ]
+      },
+      "savesAfterRoundTrip": [
+        {
+          "n": 5,
+          "saveMs": 10872,
+          "saveOk": true,
+          "listMs": 6328,
+          "listCount": 5
+        },
+        {
+          "n": 6,
+          "saveMs": 13628,
+          "saveOk": true,
+          "listMs": 7593,
+          "listCount": 6
+        }
+      ]
+    },
+    "saveGrowthBuildingFourCases": [
+      {
+        "run": "run 2 (clean)",
+        "saveMs": [
+          2810,
+          4340,
+          5871,
+          8196
+        ],
+        "caseListMs": [
+          1435,
+          2587,
+          3873,
+          5031
+        ],
+        "allOk": true
+      },
+      {
+        "run": "run 3 (fresh tab, loaded machine)",
+        "saveMs": [
+          3833,
+          7390,
+          9957,
+          "4th timed out twice at 15 s, succeeded on 3rd attempt (14268 ms)"
+        ],
+        "caseListMs": [
+          2537,
+          5163,
+          42554,
+          "10264, 12607, 10955"
+        ]
+      }
+    ],
+    "fifthAndSixthSave": [
+      {
+        "run": "final",
+        "save5Ms": 10872,
+        "save6Ms": 13628,
+        "timedOut": false,
+        "caseListMsAfter": [
+          6328,
+          7593
+        ],
+        "note": "completed under the 15 s limit but close to it"
+      },
+      {
+        "run": "run 2",
+        "save5Ms": 15628,
+        "save6Ms": 15059,
+        "timedOut": true,
+        "note": "both hit the 15 s command timeout; later caseList calls took 90-100 s and the tab froze for several minutes; the 4-case export read in that run failed at chunk 494 of 518 with a command timeout after chunk times rose from about 1 s to 4-9 s in the last ~25 chunks (first quarter avg 1005 ms, last quarter 1503 ms)"
+      }
+    ],
+    "earlierTwoCaseRun": {
+      "cases": 2,
+      "bytes": 16955221,
+      "chunks": 259,
+      "readTotalMs": 259431,
+      "importWriteTotalMs": 261118,
+      "commitMs": 5229,
+      "hashMatch": true,
+      "archiveRevisionEqual": true,
+      "caseRevisionsEqual": true,
+      "note": "before the driver polling was sped up; chunk times flat about 1.0 s; saves 3 and 4 timed out in that run"
+    },
+    "smallRoundTrip2Cases": {
+      "bytes": 416283,
+      "chunks": 7,
+      "readTotalMs": 6967,
+      "writeChunks": 7,
+      "writeTotalMs": 6998,
+      "commitMs": 1140,
+      "hashMatchesDeclared": true,
+      "archiveRevisionEqual": true,
+      "caseRevisionsEqual": true,
+      "countEqual": true,
+      "result": "passed"
+    }
+  },
+  "comparison": "Read total 518.5 s vs 519.2 s before (unchanged). Import write 518.0 s vs 1154 s before (2.2x faster) with flat per-chunk time (first quarter 1000 ms, last quarter 1000 ms) instead of growing 1 s to 3-4 s. The 5th and 6th caseSave completed (10.9 s and 13.6 s) in the final run, where previously the 5th timed out; in another run both again hit the 15 s timeout, so the margin is thin and varies with machine and tab state. Building four cases: saves 2.8, 4.3, 5.9, 8.2 s; caseList grew 1.4 to 5.0 s.",
+  "checks": [
+    {
+      "id": "export-read-hash",
+      "result": "passed",
+      "detail": "518 chunks, assembled SHA-256 equals declared; read per chunk flat about 1.0 s"
+    },
+    {
+      "id": "import-roundtrip-intact",
+      "result": "passed",
+      "detail": "import into an emptied case list committed; archiveRevision and all four case revisions equal those before export; case count 4"
+    },
+    {
+      "id": "small-roundtrip",
+      "result": "passed",
+      "detail": "2 small cases round-tripped with equal archive and case revisions"
+    },
+    {
+      "id": "command-timeout-15s",
+      "result": "partial",
+      "detail": "caseSave 5 and 6 under 15 s in the final run, over it in an earlier run; the 4th save timed out in one loaded run"
+    }
+  ],
+  "notVerified": [
+    "Whether the improved per-chunk import time holds on an unloaded machine or foreground tab (per-chunk time is bounded below by the ~1 s connector idle poll in this harness)",
+    "Peak JS heap and memory (not measured; one tab froze for minutes with 6 cases held and renderers near 2 GB working set)",
+    "Cause of the 90-100 s caseList stalls and the tab freeze after the 5th/6th save in run 2 (page busy or memory pressure suspected, not diagnosed)",
+    "Run-to-run variance (only one fully clean 4-case read plus import was captured)",
+    "Export of 5 or 6 cases"
+  ]
+}
