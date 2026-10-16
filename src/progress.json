@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-16T15:15:55.027Z",
+  "updatedAt": "2026-10-16T15:18:53.131Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1464,14 +1464,16 @@
       "id": "NUMERICREFERENCE1",
       "title": "非線形参照のまれな失敗を捕捉・再現する",
       "titleEn": "Capture and reproduce intermittent nonlinear reference failure",
-      "status": "queued",
+      "status": "released",
       "category": "基盤",
       "depends": [],
       "detail": "力制御Neo-Hookean棒で一度Newton line search失敗。追加200回と計測付き並列全体検証では再現せず。ソルバー・許容差は未変更。失敗入力と反復状態の捕捉を継続。",
       "detailEn": "One force-controlled Neo-Hookean bar line-search failure remains unreproduced after 200 generated references and an instrumented parallel full run. Solver/tolerances unchanged; failed-input and iteration capture remain open.",
       "acceptance": "失敗入力を固定して再現し、変位・反力・独立伸長解・残差と不正入力拒否を維持して修正を検証。",
       "acceptanceEn": "Reproduce a frozen failing input and verify displacement, reaction, independent stretch, residual and invalid-input refusal after correction.",
-      "evidence": "tests/hyperelastic.test.mjs; docs/testing.md"
+      "evidence": "tests/newton-capture.test.mjs; tests/fixtures/hyperelastic-line-search-capture.json; docs/testing.md; docs/evidence/2026-10-17-publication-624315f.json",
+      "lastUpdate": "2026-10-17: PR80の修正・固定失敗入力・独立伸長解/反力/残差/拒否テストと、公開624315fへの包含を確認しreleasedへ。基準ノルム退避後717回で失敗0。全環境保証やV8原因解決を意味しない。",
+      "lastUpdateEn": "2026-10-17: PR80 capture/fix and fixed-input independent stretch/reaction/residual/refusal tests are included in published 624315f; corrected to released. No failures in 717 runs after preserving the baseline norm. This is not an all-environment guarantee or a V8 root-cause fix."
     },
     {
       "id": "RESULTCONTROL1",
@@ -1617,10 +1619,13 @@
       "titleEn": "Research compressible CFD candidates and native/WASM configurations",
       "detail": "SU2、OpenFOAM系、HiSA、Eilmerの固定版、依存、入出力、中間結果、停止・再開、配布条件を調査する。今回は実装・試験計算を行わない。",
       "detailEn": "Research pinned versions, dependencies, I/O, observations, cancellation/restart and redistribution for SU2/OpenFOAM/HiSA/Eilmer; no implementation or simulation in this stage.",
-      "status": "queued",
+      "status": "released",
       "category": "流体",
       "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
-      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration.",
+      "lastUpdate": "2026-10-17: PR78のSU2/OpenFOAM/HiSA/Eilmer調査票、固定候補版・依存/ライセンス・入出力/停止再開・検証問題/採否条件が公開624315fに含まれることを確認し、調査タスクをreleasedへ。CFD実装・試験計算・WASM成立性の完了を意味しない。",
+      "lastUpdateEn": "2026-10-17: PR78 survey of SU2/OpenFOAM/HiSA/Eilmer, pinned candidates, dependencies/licenses, I/O/restart and validation/adoption criteria is included in published 624315f; the research task is released. CFD implementation, numerical trials and WASM feasibility remain unverified.",
+      "evidence": "docs/compressible-cfd-plan.md; docs/en/compressible-cfd-plan.md; docs/evidence/2026-10-17-publication-624315f.json"
     },
     {
       "id": "CFDRESEARCH2",
