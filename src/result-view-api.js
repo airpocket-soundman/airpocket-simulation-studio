@@ -1,4 +1,5 @@
 import {getProjectRevision} from './project-operations.js';
+import {getPhysicalRevision} from './project-revision.js';
 import {sampleDisplayedResult} from './probe.js';
 
 const fieldsByKind={elastic:['displacement','stress'],modal:['displacement'],thermal:['temperature','heatFlux'],acousticTransient:['instantPressure'],acoustic:['pressure','spl','phase'],channelFlow:['speed','fluidPressure'],stokes:['speed','fluidPressure']};
@@ -35,10 +36,10 @@ export function validateResultViewSettings(settings,result){
 // The result revision identifies archived calculation data, not a screen index.
 // Settings never modify physical arrays, normalized modes or saved time frames.
 export function createResultViewApi(adapter){
- async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),revision=await getProjectRevision(JSON.parse(serialized));if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision};}
+ async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),parsed=JSON.parse(serialized),revision=await getProjectRevision(parsed),physicalRevision=await getPhysicalRevision(parsed);if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision,physicalRevision};}
  const unchanged=({output,serialized})=>adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
  function read(output){const s=canonicalViewState(structuredClone(adapter.get()));return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
- function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
+ function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){
    const c=await current();if(expectedResultRevision!==undefined&&expectedResultRevision!==c.revision)throw Error('Displayed result revision conflict');const state=read(c.output),r=c.output.result;
