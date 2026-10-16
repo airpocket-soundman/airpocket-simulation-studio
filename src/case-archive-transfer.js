@@ -25,8 +25,8 @@ export function createCaseArchiveTransfer({cases,maxBytes=100000000,maxTransfers
  function releaseEntry(entry){if(transfers.delete(entry.transferId)){retained-=entry.bytes?.length??0;entry.bytes=null;}}
  return Object.freeze({
   async beginExport(args={}, {guard=()=>true}={}){
-   guardCheck(guard);const value=await cases.exportArchive();guardCheck(guard);
-   const bytes=new TextEncoder().encode(JSON.stringify(value.archive));
+   guardCheck(guard);const value=typeof cases.exportArchiveJson==='function'?await cases.exportArchiveJson():await cases.exportArchive();guardCheck(guard);
+   const bytes=new TextEncoder().encode(value.json??JSON.stringify(value.archive));
    if(!bytes.length||bytes.length>maxBytes)fail('Archive export byte limit exceeded');
    const entry=allocate('export',bytes.length);entry.bytes.set(bytes);entry.archiveRevision=value.archiveRevision;
    try{entry.sha256=await digest(entry.bytes);live(entry,guard);return metadata(entry);}catch(error){releaseEntry(entry);throw error;}
