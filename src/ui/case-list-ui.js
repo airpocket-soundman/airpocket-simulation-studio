@@ -9,12 +9,17 @@ export function createCaseListUi({$,document:doc=globalThis.document,store,statu
   const rows=store.compare();
   fillSelect($('vibration-case'),rows,'modal');fillSelect($('thermal-case'),rows,'thermal');
   const root=$('case-list');root.replaceChildren();
-  for(const [index,c] of store.list().entries()){
-   const row=rows[index],item=doc.createElement('article'),title=doc.createElement('strong');title.textContent=c.name;item.append(title);
+  // With a store that has at()/inspect() the cases are not cloned here; a case is read when its restore button is pressed, and only
+  // if it is still the same immutable record that was rendered. Other stores keep the rendered snapshot.
+  const lazy=typeof store.at==='function'&&typeof store.inspect==='function',legacy=lazy?null:store.list(),inspected=lazy?store.inspect().cases:null;
+  const names=lazy?store.names():legacy.map(c=>c.name);
+  const restoreAt=index=>{if(!lazy)return legacy[index];const now=store.inspect().cases[index];if(!now||now.token!==inspected[index].token)throw Error('Unknown case');return store.at(index);};
+  for(const [index,name] of names.entries()){
+   const row=rows[index],item=doc.createElement('article'),title=doc.createElement('strong');title.textContent=name;item.append(title);
    const summary=doc.createElement('p');
    summary.textContent=(KIND_LABELS[row.kind]||row.kind)+' · '+row.metrics.map(m=>(m.key==='maxPressurePa'?(row.kind==='stokes'?'最大圧力':'最大音圧'):METRIC_LABELS[m.key]||m.key)+': '+m.value.toPrecision(5)+' '+m.unit).join(' / ');
    item.append(summary);
-   for(const [label,action] of [['保存結果を3D表示',()=>viewCase(index)],['入力を複製して復元',()=>restoreCaseInput(c)],['削除',()=>{store.remove(index);renderCases();}]]){
+   for(const [label,action] of [['保存結果を3D表示',()=>viewCase(index)],['入力を複製して復元',()=>restoreCaseInput(restoreAt(index))],['削除',()=>{store.remove(index);renderCases();}]]){
     const b=doc.createElement('button');b.textContent=label;b.onclick=()=>{try{action();}catch(e){status(e.message);}};item.append(b);
    }
    root.append(item);

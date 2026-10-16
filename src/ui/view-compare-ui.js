@@ -31,12 +31,16 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   host.append(summary, note, hint, label('左のケース', a), label('右のケース', b), label('共通の物理時刻（秒、過渡音響のみ）', time), run, png, out, canvas);
   anchor.after(host);
   host.addEventListener('toggle', refresh);
+  // Per-case access when the store supports it (no whole-store clone); other stores keep the list() path.
+  const at = i => typeof store.at === 'function' ? store.at(i) : store.list()[i];
+  const count = () => typeof store.count === 'function' ? store.count() : store.list().length;
+  const names = () => typeof store.names === 'function' ? store.names() : store.list().map(c => c.name);
   function refresh() {
     syncHint();
-    for (const s of [a, b]) { const keep = s.value; s.replaceChildren(); for (const [i, c] of store.list().entries()) { const o = doc.createElement('option'); o.value = i; o.textContent = c.name; s.append(o); } s.value = keep && Number(keep) < store.list().length ? keep : s === a ? '0' : '1'; }
+    for (const s of [a, b]) { const keep = s.value; s.replaceChildren(); for (const [i, name] of names().entries()) { const o = doc.createElement('option'); o.value = i; o.textContent = name; s.append(o); } s.value = keep && Number(keep) < count() ? keep : s === a ? '0' : '1'; }
   }
   function conditions(index) {
-    const saved = store.list()[index], row = store.compare()[index], o = saved.output.calculation?.options ?? {};
+    const saved = at(index), row = store.compare()[index], o = saved.output.calculation?.options ?? {};
     const items = [];
     if (Number.isFinite(o.size)) items.push({name: language() === 'en' ? 'Mesh size' : 'メッシュ寸法', value: o.size, unit: 'mm'});
     for (const m of row.metrics) items.push({name: m.key, value: Number(m.value.toPrecision(5)), unit: m.unit || '1'});
@@ -45,7 +49,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   async function show() {
     refresh();
     const ia = Number(a.value), ib = Number(b.value);
-    if (store.list().length < 2) throw Error(tr('保存ケースが2件以上必要です。'));
+    if (count() < 2) throw Error(tr('保存ケースが2件以上必要です。'));
     if (!Number.isInteger(ia) || !Number.isInteger(ib) || ia === ib) throw Error(tr('左右に別のケースを選んでください。'));
     const field = getField(), deformScale = getDeformScale(), infos = [ia, ib].map(inspectCase);
     const transient = infos.some(i => i.frameTimes);

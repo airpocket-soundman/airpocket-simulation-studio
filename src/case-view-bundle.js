@@ -11,14 +11,15 @@ export async function validateCaseViewBundle(input){
  if(!keys(archive,fields)||![1,2].includes(archive.version)||archive.kind!=='case-view-bundle'||!keys(archive.caseArchive,['version','cases']))throw Error('Invalid case view bundle');
  const store=createCaseStore();store.import(archive.caseArchive);const named=validateNamedViewArchive(archive.namedViewArchive),outputs=new Map();
  // Match the actual restored viewer output, including recomputed mesh metadata.
- for(const saved of store.list()){const displayed=prepareCaseView(saved);outputs.set(await getProjectRevision(JSON.parse(JSON.stringify(displayed))),displayed);}
+ for(let i=0;i<store.count();i++){const displayed=prepareCaseView(store.at(i));outputs.set(await getProjectRevision(JSON.parse(JSON.stringify(displayed))),displayed);}
  for(const view of named.views){const output=outputs.get(view.resultRevision);if(!output)throw Error('Named view has no matching saved result');if(view.setup.meshCount!==output.input.meshes.length)throw Error('Named view setup mesh count conflict');validateResultViewSettings(view.result,output.result);}
  if(archive.version===2)await verifyMeasurementArchive({caseArchive:archive.caseArchive,measurementArchive:archive.measurementArchive});return archive;
 }
 export function createCaseViewBundle({store,namedViews,measurements,isBusy=()=>false}={}){
  if(!store||!['export','import'].every(method=>typeof store[method]==='function')||!namedViews||!['export','prepareArchiveReplacement','matchesArchive'].every(method=>typeof namedViews[method]==='function')||measurements!==undefined&&(!measurements||!['exportArchive','prepareArchiveReplacement','matchesArchive'].every(method=>typeof measurements[method]==='function')))throw TypeError('Invalid case view bundle adapters');let locked=false;
  const check=guard=>{if(isBusy()||typeof guard!=='function'||!guard())throw Error('Case view bundle busy or command expired');};
- const unchanged=archive=>canonicalJson(store.export())===canonicalJson(archive.caseArchive)&&namedViews.matchesArchive(archive.namedViewArchive)&&(!measurements||measurements.matchesArchive(archive.measurementArchive));
+ const storeCanonical=()=>typeof store.inspect==='function'?store.inspect().canonical:canonicalJson(store.export());
+ const unchanged=archive=>storeCanonical()===canonicalJson(archive.caseArchive)&&namedViews.matchesArchive(archive.namedViewArchive)&&(!measurements||measurements.matchesArchive(archive.measurementArchive));
  async function capture(){const caseArchive=store.export(),namedViewArchive=await namedViews.export(),archive=measurements?{version:2,kind:'case-view-bundle',caseArchive,namedViewArchive,measurementArchive:(await measurements.exportArchive()).archive}:{version:1,kind:'case-view-bundle',caseArchive,namedViewArchive},archiveRevision=await getProjectRevision(archive);if(!unchanged(archive))throw Error('Case view bundle revision conflict');return {archive,archiveRevision};}
  const metadata=value=>({schemaVersion:1,archiveRevision:value.archiveRevision,caseCount:value.archive.caseArchive.cases.length,viewCount:value.archive.namedViewArchive.views.length,...(value.archive.version===2?{measurementCount:value.archive.measurementArchive.measurements.length}:{})});
  return Object.freeze({
