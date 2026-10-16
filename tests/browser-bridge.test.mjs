@@ -79,3 +79,25 @@ test('real HTTP polling client enforces browser scopes and stops connection-owne
  const refusal=await rpc('tools/call',{name:'studio_browser_call',arguments:{sessionId:paired.sessionId,method:'edit',args:{}}});assert.equal(refusal.result.isError,true);
  connected.stop();
 });
+
+test('connector re-polls immediately after handled commands, waits only after empty polls, backs off on failure and stops on disconnect',async()=>{
+ const run=async({batches,intervalMs,failAt})=>{
+  const calls=[],stamps=[];let polls=0,disconnects=0;const started=Date.now();
+  const fetcher=async(url,options)=>{const path=new URL(url).pathname;calls.push(path);
+   if(path==='/pair')return {ok:true,json:async()=>({token:'t',sessionId:'s'})};
+   if(path==='/poll'){stamps.push(Date.now()-started);polls++;if(failAt===polls)return {ok:false,status:500,json:async()=>({})};const commands=batches[polls-1]??[];return {ok:true,json:async()=>({commands:commands.map(id=>({id,method:'getState',args:{},expiresAt:Date.now()+15000}))})};}
+   return {ok:true,json:async()=>({})};};
+  const states=[];const client=connectBrowserSession({endpoint:'http://127.0.0.1:12345',pairingToken:'p',scopes:['inspect'],session:{async call(){return {ok:true};},disconnect(){disconnects++;}},fetcher,intervalMs,onState:s=>states.push(s.state)});
+  await client.ready;return {client,calls,stamps,states,disconnects:()=>disconnects};};
+ const wait=ms=>new Promise(r=>setTimeout(r,ms));
+ // 20 back-to-back commands with a 5 s idle interval finish well within it
+ const busy=await run({batches:[['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i'],['j']],intervalMs:5000});
+ await wait(200);assert.equal(busy.calls.filter(p=>p==='/reply').length,10);assert.ok(busy.stamps.length>=11&&busy.stamps[10]<1000,'handled commands must not wait for the idle interval');
+ const before=busy.stamps.length;await wait(150);assert.equal(busy.stamps.length,before,'after an empty poll the idle interval applies');busy.client.stop();
+ // idle polling keeps the interval
+ const idle=await run({batches:[],intervalMs:60});await wait(250);idle.client.stop();assert.ok(idle.stamps.length>=3&&idle.stamps.length<=6);assert.ok(idle.stamps[2]-idle.stamps[1]>=50);
+ // failure disconnects and stops polling
+ const failing=await run({batches:[['a']],intervalMs:5,failAt:2});await wait(100);assert.equal(failing.states[0],'connected');assert.ok(failing.states.includes('disconnected'));assert.equal(failing.stamps.length,2);assert.equal(failing.disconnects(),1);
+ // disconnect during a command burst stops further polls
+ const stopping=await run({batches:Array(50).fill(['a']),intervalMs:5000});stopping.client.stop();const count=stopping.stamps.length;await wait(100);assert.equal(stopping.stamps.length,count);assert.equal(stopping.disconnects(),1);
+});
