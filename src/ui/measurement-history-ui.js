@@ -18,6 +18,7 @@ export function describeMeasurement(record){
  const d=e.display,context=[];
  if(d.modeIndex!==null&&d.modeIndex!==undefined)context.push('mode '+d.modeIndex);
  if(d.frameIndex!==null&&d.frameIndex!==undefined)context.push('frame '+d.frameIndex+(d.physicalTimeSeconds!==undefined?' ('+(d.physicalTimeSeconds*1000).toPrecision(4)+' ms)':''));
+ if(e.kind==='thermal'&&d.physicalTimeSeconds!==undefined)context.push('frame '+d.storedFrameIndex+' ('+Number(d.physicalTimeSeconds.toPrecision(6))+' s)');
  return {field,value:value[0],unit:value[1],context:context.join(' · ')};
 }
 export function installMeasurementHistoryUi({document:doc=globalThis.document,anchor,api,resultView,storage=null,translate=()=>{},language=()=>'ja',validateArchive=validateMeasurementArchive,env={}}){

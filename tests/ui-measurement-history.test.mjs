@@ -131,4 +131,6 @@ test('describeMeasurement formats every kind with unit and context',()=>{
  assert.equal(describeMeasurement(base('acoustic',{field:'spl'},{splDb:60})).unit,'dB');
  assert.equal(describeMeasurement(base('stokes',{field:'speed'},{speedMs:.5})).unit,'m/s');
  assert.equal(describeMeasurement(base('thermal',{field:'heatFlux'},{flux:[3,4,0]})).value,'5.0000');
+ assert.equal(describeMeasurement(base('thermal',{field:'temperature',storedFrameIndex:5,physicalTimeSeconds:5},{temperature:25})).context,'frame 5 (5 s)');
+ assert.equal(describeMeasurement(base('thermal',{field:'temperature',storedFrameIndex:10,physicalTimeSeconds:10},{temperature:30})).context,'frame 10 (10 s)');
 });

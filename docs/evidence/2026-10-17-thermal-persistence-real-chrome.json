@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "passed",
+  "environment": {
+    "browser": "real Chrome via extension",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "repository createBrowserBridge semantic calls; not registered MCP",
+    "scopes": [
+      "inspect",
+      "edit",
+      "view"
+    ],
+    "fixture": "saved solveThermal closed tetrahedron with analytic T=20+t degC"
+  },
+  "namedView": {
+    "savedTimeSeconds": 5,
+    "importExportRoundtrip": true,
+    "restoredFromTimeSeconds": 10,
+    "restoredToTimeSeconds": 5
+  },
+  "measurements": [
+    {
+      "physicalTimeSeconds": 5,
+      "storedFrameIndex": 5,
+      "temperature": 24.999999999999936,
+      "fluxPresent": false
+    },
+    {
+      "physicalTimeSeconds": 10,
+      "storedFrameIndex": 10,
+      "temperature": 29.999999999999936,
+      "fluxPresent": true
+    }
+  ],
+  "verification": {
+    "browser": true,
+    "nodeReplay": true,
+    "measurementCount": 2,
+    "physicalAccuracyVerified": false,
+    "invalidStoredTimeRejected": true,
+    "tamperedTemperatureRejected": true
+  },
+  "notVerified": [
+    "Large or imported geometry",
+    "Public HTTPS pairing",
+    "General solver accuracy",
+    "Injected renderer/setup failures in real Chrome (automated coverage only)",
+    "New saved-time list labels have automated UI coverage; the Chrome screenshot predates those label changes."
+  ],
+  "interpolatedRefusals": {
+    "timeSeconds": 5.01,
+    "namedViewRejected": true,
+    "measurementRejected": true,
+    "archivesUnchanged": true,
+    "namedApplyRestoredStoredTimeSeconds": 5
+  },
+  "sourceBaseRevision": "38f0dc5303ce2756ad4772afeaedb85511972ac9",
+  "sourceChanges": {
+    "src/named-result-views.js": "0d954e75fdd9c0e53b2839b2ffeeb51a4c347293590a52fbaefa2a0d29e94b74",
+    "src/measurement-history.js": "3529b8a830678fa6b81b17beee9028d7a4a990f1b67badd4e1816868fefd727c",
+    "src/measurement-verification.js": "d6b6036c68770bdf1170ef269fe3a6f089cdacc4a952def90cd298c233da605f",
+    "src/case-view-bundle.js": "837405f52be25cfece1ec045b098e93fd70ac3f1e101a7bc4f1ff0750e116ae0",
+    "src/main.js": "35f138829c663b791123df705e20bd57649d7cdccbd59dfd0485e0d6016fcb57"
+  },
+  "bundleArtifact": "docs/evidence/2026-10-17-thermal-persistence-real-chrome-bundle.json",
+  "screenshotArtifact": "docs/evidence/2026-10-17-thermal-persistence-real-chrome.jpg"
+}

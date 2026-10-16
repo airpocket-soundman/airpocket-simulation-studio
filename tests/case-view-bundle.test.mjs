@@ -38,3 +38,21 @@ test('v1 imports on a v2 host explicitly clear old measurement history and repor
 test('measurement preparation failure, changed history and revoked guards leave cases and named views untouched',async()=>{const archive=await v2bundle();for(const mode of ['reject','change','revoke']){const h=v2host();let valid=true;const host=createCaseViewBundle({store:h.store,namedViews:h.namedViews,measurements:{...h.measurements,async prepareArchiveReplacement(...args){if(mode==='reject')throw Error('Measurement preparation rejected');const plan=await h.measurements.prepareArchiveReplacement(...args);if(mode==='change')await h.measurements.importArchive({archive:{version:1,measurements:[]},expectedArchiveRevision:(await h.measurements.list()).archiveRevision});if(mode==='revoke')valid=false;return plan;}}});const before=await host.exportArchive();await assert.rejects(host.importArchive({archive,expectedArchiveRevision:before.archiveRevision},{guard:()=>valid}));assert.deepEqual(h.store.export(),before.archive.caseArchive);assert.deepEqual(await h.namedViews.export(),before.archive.namedViewArchive);assert.deepEqual((await h.measurements.exportArchive()).archive,before.archive.measurementArchive);}});
 test('three-store callback failure and a locked measurement operation cannot expose a partial bundle',async()=>{const h=v2host(),archive=await v2bundle(),rejecting=createCaseViewBundle({store:{...h.store,import(){throw Error('Case store rejected');}},namedViews:h.namedViews,measurements:h.measurements}),before=await rejecting.exportArchive();await assert.rejects(rejecting.importArchive({archive,expectedArchiveRevision:before.archiveRevision}),/Case store rejected/);assert.deepEqual(await rejecting.exportArchive(),before);const plan=await h.measurements.prepareArchiveReplacement({archive:archive.measurementArchive,expectedArchiveRevision:(await h.measurements.list()).archiveRevision});assert.throws(()=>plan.commit(async()=>{}),/synchronous/);let refused;plan.commit(()=>{refused=assert.rejects(h.measurements.importArchive({archive:{version:1,measurements:[]},expectedArchiveRevision:before.archiveRevision}),/in progress/);});await refused;assert.equal((await h.measurements.list()).count,1);assert.throws(()=>plan.commit(()=>{}),/already committed/);});
 test('synchronous archive matching catches case changes induced after the final named snapshot read',async()=>{const h=harness(),wrapped={...h.namedViews,async export(){const archive=await h.namedViews.export();h.store.add('Concurrent case',output());return archive;}},host=createCaseViewBundle({store:h.store,namedViews:wrapped});await assert.rejects(host.list(),/revision conflict/);});
+
+async function thermalNamedBundle(version=1){
+ const saved=output();saved.result={kind:'thermal',transient:true,minTemperature:40,maxTemperature:40,temperature:[40,40,40,40],flux:[[1,2,3]],snapshots:[{time:0,temperature:[20,20,20,20]},{time:7,temperature:[40,40,40,40]}]};
+ const view={id:'thermal-view',name:'Stored thermal',resultRevision:await getProjectRevision(prepareCaseView({output:saved})),result:{...result(),field:'temperature'},setup:setup(),thermalTime:{kind:'thermal',timeSeconds:0}};
+ return {version,kind:'case-view-bundle',caseArchive:{version:1,cases:[{name:'Thermal',output:saved}]},namedViewArchive:{version:1,views:[view]},...(version===2?{measurementArchive:{version:1,measurements:[]}}:{})};
+}
+test('v1 and v2 bundles preserve thermal named times and reject mismatched times atomically',async()=>{
+ for(const version of [1,2]){
+  const archive=await thermalNamedBundle(version),h=version===1?harness():v2host();
+  await load(h,archive);assert.deepEqual((await h.api.exportArchive()).archive,archive);
+  for(const mutate of [a=>a.namedViewArchive.views[0].thermalTime.timeSeconds=1,a=>a.namedViewArchive.views[0].result.field='heatFlux']){
+   const invalid=structuredClone(archive);mutate(invalid);const before=await h.api.exportArchive();
+   await assert.rejects(load(h,invalid),/thermal time|temperature frame/);assert.deepEqual(await h.api.exportArchive(),before);
+  }
+  const finalFlux=structuredClone(archive);finalFlux.namedViewArchive.views[0].result.field='heatFlux';finalFlux.namedViewArchive.views[0].thermalTime.timeSeconds=7;
+  assert.deepEqual(await validateCaseViewBundle(finalFlux),finalFlux);
+ }
+});

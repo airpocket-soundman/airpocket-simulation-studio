@@ -480,7 +480,7 @@ const visualExportJobs=createVisualExportJobs({prepare:async request=>{if(!$('ca
 window.visualExportApi=Object.freeze({...visualExportJobs,capabilities:()=>({...visualExport.capabilities(),maxArtifactBytes:32*1024*1024,maxArtifactChunkBytes:65536})});
 const measurements=createMeasurementHistory({resultView:window.resultViewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 window.measurementApi=Object.freeze({...Object.fromEntries(['list','get','save','remove','exportArchive','importArchive'].map(method=>[method,measurements[method]])),...createMeasurementVerificationApi({getCaseArchive:()=>caseStore.export(),measurements,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()})});
-const namedViews=createNamedResultViews({resultView:window.resultViewApi,setupView:window.viewApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
+const namedViews=createNamedResultViews({resultView:window.resultViewApi,setupView:window.viewApi,getTimeView:timeViewState.getTimeView,restoreTimeView:s=>{timeViewState.restoreTimeView(s);showAnalysis();},isBusy:()=>!$('cancel-run').disabled||$('model').disabled||visualExport.isActive()});
 let namedViewUi;
 window.namedViewApi=Object.freeze(Object.fromEntries(['list','save','apply','remove','export','import'].map(method=>[method,async(...args)=>{const value=await namedViews[method](...args);if(['save','remove','import'].includes(method))await namedViewUi?.refresh().catch(error=>status(error.message));return value;}] )));
 namedViewUi=installNamedViewUi({api:window.namedViewApi,resultView:window.resultViewApi,translate:addTranslations,language:()=>language});

@@ -4,6 +4,7 @@ import {prepareCaseView} from './case-view.js';
 import {validateNamedViewArchive} from './named-result-views.js';
 import {validateResultViewSettings} from './result-view-api.js';
 import {verifyMeasurementArchive} from './measurement-verification.js';
+import {framesOf} from './result-frames.js';
 const keys=(value,allowed)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===allowed.length&&allowed.every(key=>Object.hasOwn(value,key));
 const revision=value=>typeof value==='string'&&/^sha256:[a-f0-9]{64}$/.test(value);
 export async function validateCaseViewBundle(input){
@@ -12,7 +13,13 @@ export async function validateCaseViewBundle(input){
  const store=createCaseStore();store.import(archive.caseArchive);const named=validateNamedViewArchive(archive.namedViewArchive),outputs=new Map();
  // Match the actual restored viewer output, including recomputed mesh metadata.
  for(let i=0;i<store.count();i++){const displayed=prepareCaseView(store.at(i));outputs.set(await getProjectRevision(JSON.parse(JSON.stringify(displayed))),displayed);}
- for(const view of named.views){const output=outputs.get(view.resultRevision);if(!output)throw Error('Named view has no matching saved result');if(view.setup.meshCount!==output.input.meshes.length)throw Error('Named view setup mesh count conflict');validateResultViewSettings(view.result,output.result);}
+ for(const view of named.views){const output=outputs.get(view.resultRevision);if(!output)throw Error('Named view has no matching saved result');if(view.setup.meshCount!==output.input.meshes.length)throw Error('Named view setup mesh count conflict');validateResultViewSettings(view.result,output.result);
+  if(view.thermalTime){
+   const frames=output.result.kind==='thermal'?framesOf(output.result):null,index=frames?frames.times.indexOf(view.thermalTime.timeSeconds):-1,values=frames?.fields[index];
+   if(index<0||!Array.isArray(values)||values.length!==output.mesh.nodes.length/3||!values.every(Number.isFinite))throw Error('Named thermal time has no matching stored temperature frame');
+   if(view.result.field==='heatFlux'&&index!==frames.times.length-1)throw Error('Named heat flux requires the final stored thermal time');
+  }
+ }
  if(archive.version===2)await verifyMeasurementArchive({caseArchive:archive.caseArchive,measurementArchive:archive.measurementArchive});return archive;
 }
 export function createCaseViewBundle({store,namedViews,measurements,isBusy=()=>false}={}){
