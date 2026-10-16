@@ -1,12 +1,22 @@
+import {FIXED_FRAME_LIMITS,readStoreZip,sha256Hex} from './visual-export-fixed-frame.js';
 const CHUNK=65536;
 const copy=value=>structuredClone(value);
 function freeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;}
 function request(value){
  if(!value||typeof value.requestId!=='string'||!value.requestId.trim()||value.requestId.length>128)throw Error('Invalid visual export requestId');
  if(typeof value.expectedResultRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(value.expectedResultRevision))throw Error('Invalid expectedResultRevision');
- if(!['png','webm'].includes(value.format))throw Error('Visual export format must be png or webm');
- const animation=value.animation??'orbit',seconds=value.seconds??5;
- if(!['orbit','deformation','time','slice'].includes(animation)||!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error('Invalid visual export animation or seconds');
+ if(!['png','webm','png-sequence'].includes(value.format))throw Error('Visual export format must be png, webm or png-sequence');
+ const animation=value.animation??'orbit';
+ if(!['orbit','deformation','time','slice'].includes(animation))throw Error('Invalid visual export animation or seconds');
+ if(value.format==='png-sequence'){
+  if(value.seconds!==undefined&&value.seconds!==null)throw Error('png-sequence is fixed-frame; seconds is not accepted, use frames');
+  const frames=value.frames??FIXED_FRAME_LIMITS.defaultFrames;
+  if(!Number.isInteger(frames)||frames<FIXED_FRAME_LIMITS.minFrames||frames>FIXED_FRAME_LIMITS.maxFrames)throw Error('png-sequence frames must be an integer from '+FIXED_FRAME_LIMITS.minFrames+' through '+FIXED_FRAME_LIMITS.maxFrames);
+  return {requestId:value.requestId,expectedResultRevision:value.expectedResultRevision,format:value.format,animation,frames,...(value.view===undefined?{}:{view:copy(value.view)})};
+ }
+ if(value.frames!==undefined&&value.frames!==null)throw Error('frames is only valid with format png-sequence');
+ const seconds=value.seconds??5;
+ if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error('Invalid visual export animation or seconds');
  return {requestId:value.requestId,expectedResultRevision:value.expectedResultRevision,format:value.format,animation,seconds,...(value.view===undefined?{}:{view:copy(value.view)})};
 }
 function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical(value[k])).join(',')+'}';return JSON.stringify(value);}
@@ -17,6 +27,18 @@ const finite=v=>typeof v==='number'&&Number.isFinite(v);
 function vector(v){return Array.isArray(v)&&v.length===3&&v.every(finite)?v.slice():undefined;}
 function pngSize(bytes){const sig=[137,80,78,71,13,10,26,10];if(bytes.length<24||sig.some((v,i)=>bytes[i]!==v))return undefined;const dv=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),width=dv.getUint32(16),height=dv.getUint32(20);return width>0&&height>0?{width,height}:undefined;}
 // Only facts this module already holds: frozen request/view, artifact bytes and MIME type. Nothing is inferred from pixels or invented.
+async function sequenceManifest(job,mimeType,bytes,sha256){
+ const {animation,frames,expectedResultRevision}=job.request,files=readStoreZip(bytes),inner=files.get('manifest.json');
+ if(!inner)throw Error('png-sequence archive has no manifest.json');
+ const detail=JSON.parse(new TextDecoder().decode(inner));
+ if(detail.frameCount!==frames||!Array.isArray(detail.frames)||detail.frames.length!==frames||files.size!==frames+1)throw Error('png-sequence archive does not match the requested frame count');
+ for(const record of detail.frames){const data=files.get(record.file);if(!data||record.resultRevision!==expectedResultRevision||'sha256:'+await sha256Hex(data)!==record.sha256)throw Error('png-sequence frame hash mismatch');}
+ const manifest={schemaVersion:1,resultRevision:expectedResultRevision,format:'png-sequence',container:'zip',compression:'store',mimeType,sha256,totalBytes:bytes.length,frameCount:frames,
+  resolution:detail.resolution,view:detail.view,time:{animation,timeBasis:'fixed-frame',realtime:false,wallClockIndependent:true,frameSelection:animation==='time'?'stored-acoustic-frames-only':'deterministic schedule'},
+  manifestEntry:{name:'manifest.json',bytes:inner.length,sha256:'sha256:'+await sha256Hex(inner)},scale:detail.scale};
+ if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
+ return manifest;
+}
 function buildManifest(job,mimeType,bytes,sha256){
  const {format,animation,seconds,expectedResultRevision}=job.request,result=job.view?.result&&typeof job.view.result==='object'?job.view.result:{},picked={};
  for(const key of RESULT_SETTINGS)if(typeof result[key]==='string'&&result[key].length<=64||finite(result[key]))picked[key]=result[key];
@@ -40,7 +62,7 @@ export function createVisualExportJobs({render,prepare,maxBytes=32*1024*1024,max
  function finish(job,blob){
   return (async()=>{
    if(job.state!=='running'||!jobs.has(job.jobId))return;
-   const mime=job.request.format==='png'?'image/png':'video/webm';
+   const format=job.request.format,mime=format==='png'?'image/png':format==='png-sequence'?'application/zip':'video/webm';
    if(!(blob instanceof Blob)||!blob.size||!(blob.type===mime||mime==='video/webm'&&blob.type.startsWith('video/webm;')))throw Error('Renderer returned an invalid visual artifact');
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
    const bytes=new Uint8Array(await blob.arrayBuffer());
@@ -51,7 +73,7 @@ export function createVisualExportJobs({render,prepare,maxBytes=32*1024*1024,max
    try{
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
     if(job.state!=='running'||!jobs.has(job.jobId))return;
-    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');job.metadata={mimeType:blob.type,name:`result-${job.jobId}.${job.request.format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest:buildManifest(job,blob.type,bytes,sha256)};job.progress={fraction:1};job.state='completed';
+    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):buildManifest(job,blob.type,bytes,sha256);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`result-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
    }finally{if(job.state!=='completed'&&job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}}
   })();
  }

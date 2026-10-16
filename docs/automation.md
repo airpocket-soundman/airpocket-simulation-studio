@@ -115,11 +115,11 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 共有範囲は、一覧/測定/結果ビュー取得が確認、表示設定変更が表示、保存が計算・結果保存、改名/削除/復元/ケース表示が入力・ケース編集です。ケース表示は保存時の入力も復元するため編集許可を要します。接続解除・命令期限・処理中の入力/結果/ケース変更・計算/動画再生との競合を実行直前に再検査します。ケース集のライブ入出力は以下の分割転送APIを使用します。ケースと名前付きビューの一体保存には下記のbundle形式を使用します。
 
-## PNG/WebMの出力ジョブ
+## PNG/WebM/連番PNGの出力ジョブ
 
-任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
+任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。`formats["png-sequence"]`（`{supported,container:"zip",compression:"store",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}`、追加項目）は固定フレーム書き出しの可否と上限を示します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
 
-`getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
+`getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。`format:"png-sequence"`は固定フレーム書き出しで、`frames`（2〜120の整数、省略時24）枚を実時間・タブの描画間引きに依存せず、フレームiを保存済みの表示状態（orbit/deformationは位相i/N、time/sliceは位相i/(N-1)、timeは保存済み過渡音響スナップショットに対応しNがその数を超えると拒否）から描画し、STORE方式（無圧縮）の単一ZIP（`manifest.json`と`frame-0000.png`…）として返します。`seconds`は指定できません。1フレーム4 MiB・全体24 MiB・フレーム数の上限超過は明示的に拒否され、取消・結果更新・失敗では成果物を作らずコントロールとカメラを元に戻します。ZIP内`manifest.json`にはフレームごとの結果リビジョン、位相/角度/物理時間/断面位置、解像度、SHA-256が入り、成果物メタデータの`manifest`には枚数・解像度・`manifest.json`のSHA-256を含む上限付き要約が付きます。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
 `exportStatus({jobId})`で進捗とrunning/completed/failed/cancelledを確認します。completedの成果物メタデータには`mimeType`、`name`、`totalBytes`、`sha256`が含まれます。`exportArtifact({jobId,offset:0,length:65536})`からbase64の`data`を復号し、返却された`nextOffset`がnullになるまでページを取得します。lengthは最大65,536バイトで、offsetは復号後のバイト位置です。結合したバイト数とSHA-256をメタデータに照合してから利用します。ブラウザ内の任意コード実行、任意パス読取、グローバルなファイルシステム操作は不要です。自動ダウンロードや永続保存は行いません。
 
@@ -147,6 +147,8 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 取込前に`caseList()`の`archiveRevision`を取得し、UTF-8 JSONのバイト数とSHA-256を計算します。`sha256`と版は`sha256:`に続く小文字64桁の16進数です。`caseArchiveImport({expectedArchiveRevision,totalBytes,sha256})`で転送を作成し、`caseArchiveWrite({transferId,offset,data})`へbase64を順に送ります。1チャンクは復号後最大65,536バイトです。全体送信後、`caseArchiveCommit({transferId})`で完全性・ハッシュ・UTF-8・JSON・ケース内容を検証し、版が一致した場合だけケース集全体を置き換えます。最大8ケースで、取込後は既存の実行時caseIdが失効するため`caseList()`を再取得します。
 
 書出・読取・解放は確認権限、取込開始・書込・確定は編集権限を要します。共通APIは`window.caseArchiveTransfer.beginExport/read/beginImport/write/commit/release`です。共通の保持上限は100,000,000バイト、同時転送は最大4件。不完全・不正・ハッシュ不一致・版競合・期限切れの取込は既存ケースを維持して拒否します。不要・失敗した転送は`caseArchiveRelease({transferId})`で解放してください。ページ終了で未保存転送を失い、接続解除ではその接続の取込を破棄します。ファイルシステム操作や任意のブラウザコード実行は提供しません。
+
+性能の注記（測定値、n=1、単一マシン）: 接続の1コマンドは最大でポーリング間隔（既定750 ms）ぶん待つため、チャンクごとに往復する転送のスループットはこの間隔と往復遅延で決まり、約34 MB（518チャンク）で数分かかります。Node内の共有モジュール単体ではチャンクの読取・書込は1チャンクあたり数ミリ秒でチャンク番号に依存しません（`node scripts/measure-case-archive-transfer.mjs`）。`caseList`/`caseSave`/取込確定はケース集全体を直列化・ハッシュするため、保存済みケースの総量に比例して遅くなります。数値は[検証記録](testing.md)の実測を参照し、保証値ではありません。
 
 100,000,000バイトは保持する転送バッファの合計上限であり、JSON解析・複製・検証を含むブラウザのヒープ上限ではありません。確定済み取込も再送時の重複適用を避けるため、解放するまで転送枠とバイトを保持します。
 

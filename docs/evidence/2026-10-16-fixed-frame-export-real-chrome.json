@@ -1,0 +1,89 @@
+{
+  "title": "Fixed-frame png-sequence export in real Chrome (PR #63, codex/s-d)",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "browser": "Real Chrome via Claude in Chrome (own new tab, English UI ?lang=en)",
+    "origin": "http://127.0.0.1:5174 (vite dev, localhost only)",
+    "connector": "scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174 over stdio, scopes inspect/edit/analyze/view, pairing code handed to the page via a temporary local file (deleted afterwards)",
+    "tabState": "tab was not the selected tab of its window during the exports (undriven)",
+    "canvasResolution": "1365x957 (viewport dependent; 1365x1077/1021 in earlier runs)",
+    "note": "vite and the connector driver each died once mid-session (process reaping after a failed shell command); both were restarted, the page reloaded and re-paired, and the checks re-run. Not an app failure."
+  },
+  "checks": [
+    {
+      "id": "capabilities",
+      "result": "passed",
+      "detail": "exportCapabilities formats['png-sequence'].supported=true, container zip, compression store, frames 2..120 default 24, animations orbit/deformation/time/slice, maxFrameBytes 4194304, maxTotalBytes 25165824, wallClockIndependent true"
+    },
+    {
+      "id": "structural-orbit-deformation",
+      "result": "passed",
+      "detail": "Reference axial bar (#analysis-demo/#mesh-run/#solve-run, 0.04 mm): orbit and deformation, frames 8 and 24 each completed; ZIP parsed by an independent STORE reader, all CRC32 OK, python -m zipfile -l lists 9/25 entries, PowerShell Expand-Archive on a copy extracted 9 files; every frame has PNG signature and IHDR 1365x1077 (same size for all); manifest.json frameCount equals frame files (8/24) and every per-frame sha256 matches the PNG bytes; all frames distinct; artifact metadata sha256/totalBytes equal re-assembled bytes"
+    },
+    {
+      "id": "transient-acoustic-time",
+      "result": "passed",
+      "detail": "Transient acoustic demo (61 stored frames, 4 ms): time with frames 8 and 24 completed, ZIP/PNG/manifest/per-frame SHA-256 checks as above"
+    },
+    {
+      "id": "determinism-deformation-time",
+      "result": "passed",
+      "detail": "Two identical deformation (8 frames) exports gave identical artifact SHA-256 (13835a32...); two identical time (8 frames) exports on the acoustic result gave identical SHA-256 (16f3f1f6...)"
+    },
+    {
+      "id": "determinism-orbit",
+      "result": "failed-partially (fix applied in code; real-Chrome re-verification pending)",
+      "detail": "Orbit 8 frames: all PNG frames byte-identical across runs, but the manifest.json differs between the FIRST orbit export after a fresh solve and later ones (manifest camera.position last-digit float differences, e.g. -35.99999999999999 vs -36), so the ZIP SHA-256 differs for that pair. Reproduced twice (after two separate fresh solves). Subsequent identical orbit exports were byte-identical to each other (second vs third, also in a later session). Frame PNGs (the determinism claim for pixels) hold; the whole-ZIP byte-identical claim does not hold for orbit across the first export."
+    },
+    {
+      "id": "cancel-mid-run",
+      "result": "passed",
+      "detail": "Deformation 120 frames cancelled at ~10 percent progress: state cancelled, exportArtifact refused ('Visual export artifact is unavailable'), getResultView state (camera, field, section) identical to the state before the export"
+    },
+    {
+      "id": "refusals",
+      "result": "passed",
+      "detail": "frames 121, 1 and 8.5 refused ('png-sequence frames must be an integer from 2 through 120'); seconds with png-sequence refused ('fixed-frame; seconds is not accepted, use frames'); time with 100 frames on a 61-snapshot result failed with 'frames (100) exceed the 61 stored acoustic snapshots'; deformation on an acoustic result failed 'requires a structural or modal result'; a second export while one runs is refused ('already active')"
+    },
+    {
+      "id": "time-on-structural",
+      "result": "observation",
+      "detail": "startExport animation time on a structural result is accepted (job starts) and then fails within about a second with 'Time playback requires transient acoustic frames.'; it is not refused at start Follow-up change: the job layer now calls visualExport.preflight(request) in prepare for png-sequence, so time on a non-transient result (and deformation on a non-structural result, slice without mesh) is refused at start. Not yet re-checked in real Chrome."
+    },
+    {
+      "id": "undriven-tab",
+      "result": "passed",
+      "detail": "Deformation 60 frames (4.7 MB) completed in about 65 s with no interaction and the tab not selected; frame count 60, CRC and PNG checks OK. Earlier 8/24-frame runs also ran undriven (about 8-9 s and 25 s)."
+    },
+    {
+      "id": "timing",
+      "result": "info",
+      "detail": "About 1 s per 1365x1077 frame (8 frames 7-9 s, 24 frames 25 s, 60 frames 65 s); ZIP sizes 0.6-0.7 MB (8), 2.1 MB (24), 4.8 MB (60)."
+    }
+  ],
+  "notVerified": [
+    "slice animation with png-sequence",
+    "Total-size (24 MiB) and per-frame (4 MiB) limit refusals at their boundaries",
+    "frames 120 end-to-end success (120 only partially run until cancelled; 60 completed)",
+    "WebM real-time recording in a background tab (not re-run here)",
+    "Other browsers, published HTTPS page, larger viewports, GPU differences between machines (determinism verified only on this machine and tab)",
+    "Result-update-during-export abort path",
+    "Orbit ZIP byte-identity across the first and later exports after the manifest rounding fix (real Chrome re-run pending)",
+    "time-on-structural refusal at start in real Chrome after the preflight change"
+  ],
+  "defects": [
+    {
+      "id": "orbit-manifest-camera-float-noise",
+      "observed": "The first orbit export after a fresh solve differed from later ones only in manifest.json frames[].camera.position last float digit (e.g. -35.99999999999999 vs -36); PNG frames were byte-identical.",
+      "cause": "The manifest recorded camera.position read back from the live three.js camera after offset.applyAxisAngle(...).add(target), so it carried floating-point rounding noise from the subtract/rotate/add round trip that depends on the exact start state.",
+      "fix": "src/visual-export-fixed-frame.js: orbitCameraPosition(position,target,angle) computes the position from the saved start state with a fixed formula and rounds every recorded number to 9 decimals (roundRecorded). renderSequence records that value instead of reading the live camera. The live camera update used for rendering is unchanged, so frames are unchanged.",
+      "unitTest": "tests/visual-export-fixed-frame.test.mjs: two exports from the same state give identical manifest bytes and frame 0 records exactly [-36,10,0]; no browser. Node test suites for visual-export, docs and module boundaries pass.",
+      "status": "fixed in code, unit-tested"
+    }
+  ],
+  "reverification": {
+    "status": "pending",
+    "detail": "Byte-identity of orbit ZIPs (first export after a fresh solve vs later exports) has NOT been re-verified in real Chrome after the fix. Until that run, the whole-ZIP orbit determinism claim stays unverified and this evidence status remains partial."
+  }
+}
