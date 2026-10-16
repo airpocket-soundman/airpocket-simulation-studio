@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {compareNativeFlowResults} from '../src/native-flow-comparison.js';
+const result=()=>({metadata:{inputRevision:'same',artifacts:[{name:'flow.vtu',sha256:'abc'}]},volume:{points:[0,0,0],connectivity:[0],offsets:[1],types:[1],fields:{Pressure:{values:[-2]},Velocity:{values:[1,0,0]}}},surface:{points:[0,0,0],connectivity:[0],fields:{Pressure:{values:[-2]}}}});
+test('full field comparison reports changes independently of artifact hashes',()=>{const a=result(),b=result();assert.equal(compareNativeFlowResults(a,b).allExact,true);b.volume.fields.Velocity.values[0]=1.01;const proof=compareNativeFlowResults(a,b);assert.equal(proof.allExact,false);assert.ok(proof.arrays.velocity.maximumAbsoluteDifference>.009);assert.equal(proof.physicalAccuracyVerified,false);b.metadata.inputRevision='other';assert.throws(()=>compareNativeFlowResults(a,b),/revisions/);});
