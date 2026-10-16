@@ -1,4 +1,4 @@
-import {canonicalJson,getProjectRevision} from './project-revision.js';
+import {canonicalJson,getProjectRevision,hashCanonicalJson} from './project-revision.js';
 import {prepareCaseView} from './case-view.js';
 import {createCaseStore} from './cases.js';
 import {validateRuntimeIdentity} from './runtime-identity.js';
@@ -29,14 +29,14 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
   });
  }
  async function snapshot(){
-  const archive=store.export(),serialized=canonicalJson(archive);
+  const archive=store.export(),memo=new Map(),serialized=canonicalJson(archive,new Set(),memo);
   if(archive?.version!==1||!Array.isArray(archive.cases))throw error('CASE_ARCHIVE_INVALID','Expected the existing version-1 case archive');
   const ids=signature===serialized?identities.slice():archive.cases.map(()=>newId());
-  const [archiveRevision,...revisions]=await Promise.all([getProjectRevision(archive),...archive.cases.map(saved=>getProjectRevision(saved))]);
+  const [archiveRevision,...revisions]=await Promise.all([hashCanonicalJson(serialized),...archive.cases.map(saved=>getProjectRevision(saved,memo))]);
   if(current()!==serialized)throw error('CASE_REVISION_CONFLICT','Case collection changed during inspection');
   signature=serialized;identities=ids;
   const comparison=store.compare();
-  return {archive,archiveRevision,signature:serialized,ids,cases:rows(archive,ids,revisions,comparison)};
+  return {archive,archiveRevision,signature:serialized,ids,memo,cases:rows(archive,ids,revisions,comparison)};
  }
  function resolve(snapshot,{caseId,expectedRevision}={}){
   if(typeof caseId!=='string'||typeof expectedRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(expectedRevision))throw error('CASE_REFERENCE_INVALID','Supply caseId and expectedRevision from list');
@@ -72,8 +72,9 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
    if(new TextEncoder().encode(serialized).byteLength>100000000)throw error('CASE_ARCHIVE_TOO_LARGE','Case archive exceeds 100000000 UTF-8 bytes');
    const temporary=createCaseStore();
    try{temporary.import(JSON.parse(serialized));for(const saved of temporary.list())prepareCaseView(saved);}catch(cause){throw error('CASE_ARCHIVE_INVALID',cause.message);}
-   const next=temporary.export(),nextSignature=canonicalJson(next);
-   const [previousRevision,archiveRevision,...revisions]=await Promise.all([getProjectRevision(JSON.parse(initial)),getProjectRevision(next),...next.cases.map(saved=>getProjectRevision(saved))]);
+   const next=temporary.export(),memo=new Map(),nextSignature=canonicalJson(next,new Set(),memo);
+   // `initial` is already canonical JSON, so hashing it equals the revision of its parsed value.
+   const [previousRevision,archiveRevision,...revisions]=await Promise.all([hashCanonicalJson(initial),hashCanonicalJson(nextSignature),...next.cases.map(saved=>getProjectRevision(saved,memo))]);
    guardCommand(guard);
    if(previousRevision!==expectedArchiveRevision||current()!==initial)throw error('CASE_REVISION_CONFLICT','Case collection changed; list cases again');
    // Prepare every fallible response component before the atomic store replacement.
@@ -95,10 +96,12 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
    prepareCaseView({name,output});guardCommand(guard);
    const state=await snapshot();guardCommand(guard);
    if(state.archive.cases.length>=8)throw error('CASE_LIMIT_REACHED','Maximum 8 cases');
-   const resultRevision=await getProjectRevision(output);guardCommand(guard);
+   const resultRevision=await hashCanonicalJson(serializedOutput);guardCommand(guard);
    if(resultRevision!==expectedResultRevision)throw error('CASE_RESULT_REVISION_CONFLICT','Current result revision differs from the expected revision');
-   const saved={name,output},revision=await getProjectRevision(saved);guardCommand(guard);
-   const archive=structuredClone(state.archive);archive.cases.push(saved);const serializedArchive=canonicalJson(archive),caseId=newId();
+   const saved={name,output},savedMemo=new Map([[output,serializedOutput]]),revision=await getProjectRevision(saved,savedMemo);guardCommand(guard);
+   // Shallow copy: the snapshot's cases are not mutated, and their canonical strings are reused from the snapshot.
+   const archive={...state.archive,cases:[...state.archive.cases,saved]},archiveMemo=new Map(state.memo);for(const [key,value] of savedMemo)archiveMemo.set(key,value);
+   const serializedArchive=canonicalJson(archive,new Set(),archiveMemo),caseId=newId();
    unchanged(state);available();
    const latest=getAnalysis();if(!latest?.result||canonicalJson(JSON.parse(JSON.stringify(latest)))!==serializedOutput)throw error('CASE_RESULT_REVISION_CONFLICT','Displayed analysis changed while preparing the case');
    guardCommand(guard);store.add(name,output);signature=serializedArchive;identities=[...state.ids,caseId];
@@ -107,7 +110,7 @@ export function createCaseOperations({store,view,loadProject,getAnalysis,isBusy=
   }),
   view:(reference,{guard=()=>true}={})=>exclusive(async()=>{guardCommand(guard);available();const state=await snapshot();guardCommand(guard);const index=resolve(state,reference);prepareCaseView(state.archive.cases[index]);unchanged(state);available();guardCommand(guard);invoke(view,index);return {schemaVersion:1,...state.cases[index],displayed:true};}),
   restoreInput:(reference,{guard=()=>true}={})=>exclusive(async()=>{guardCommand(guard);available();const state=await snapshot();guardCommand(guard);const index=resolve(state,reference),output=prepareCaseView(state.archive.cases[index]);unchanged(state);available();guardCommand(guard);invoke(loadProject,structuredClone(output.input));return {schemaVersion:1,...state.cases[index],inputRestored:true};}),
-  remove:(reference,{guard=()=>true}={})=>exclusive(async()=>{guardCommand(guard);available();const state=await snapshot();guardCommand(guard);const index=resolve(state,reference);const archive=structuredClone(state.archive);archive.cases.splice(index,1);const serialized=canonicalJson(archive);unchanged(state);available();guardCommand(guard);store.import(archive);signature=serialized;identities=state.ids.filter((_,i)=>i!==index);return {schemaVersion:1,caseId:state.ids[index],removed:true};}),
+  remove:(reference,{guard=()=>true}={})=>exclusive(async()=>{guardCommand(guard);available();const state=await snapshot();guardCommand(guard);const index=resolve(state,reference);const archive={...state.archive,cases:state.archive.cases.filter((_,i)=>i!==index)};const serialized=canonicalJson(archive,new Set(),new Map(state.memo));unchanged(state);available();guardCommand(guard);store.import(archive);signature=serialized;identities=state.ids.filter((_,i)=>i!==index);return {schemaVersion:1,caseId:state.ids[index],removed:true};}),
   rename:(request,{guard=()=>true}={})=>exclusive(async()=>{
    guardCommand(guard);available();const state=await snapshot();guardCommand(guard);const index=resolve(state,request);
    if(typeof request.name!=='string'||!request.name.trim()||request.name.length>100)throw error('CASE_NAME_INVALID','Case name must contain 1–100 characters');
