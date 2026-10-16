@@ -1,12 +1,12 @@
 import {validateRadiationFace,radiationTerms,solveRadiatingSystem} from './thermal-radiation.js';
 import {elementGeometry,pcg} from './fem-core.js';
 import {meshComponents} from './components.js';
-export const THERMAL_SNAPSHOT_DEFAULT=61,THERMAL_SNAPSHOT_MAX=61,THERMAL_SNAPSHOT_BUDGET_BYTES=64*1024*1024;
+export const THERMAL_SNAPSHOT_MAX=61,THERMAL_SNAPSHOT_BUDGET_BYTES=64*1024*1024;
 /** Evenly spaced stored-step indices 0..steps (0 is the initial state), first and last always included. Pure; exported for tests. */
 export function thermalSnapshotPlan(steps,n,requested,budgetBytes=THERMAL_SNAPSHOT_BUDGET_BYTES){
  if(requested!==undefined&&(!Number.isInteger(requested)||requested<2||requested>THERMAL_SNAPSHOT_MAX))throw Error('thermalSnapshotCount must be an integer from 2 through '+THERMAL_SNAPSHOT_MAX);
  if(!Number.isFinite(budgetBytes)||budgetBytes<=0)throw Error('Invalid thermal snapshot budget');
- const warnings=[],wanted=requested??THERMAL_SNAPSHOT_DEFAULT;let count=Math.min(wanted,steps+1);
+ const warnings=[],wanted=requested;let count=Math.min(wanted,steps+1);
  if(count<wanted&&requested!==undefined)warnings.push('Requested '+wanted+' snapshots but only '+(steps+1)+' states exist (initial plus '+steps+' steps); storing '+count);
  const fit=Math.floor(budgetBytes/(8*n));
  if(fit<2)throw Error('Thermal snapshot memory budget of '+budgetBytes+' bytes cannot hold two frames of '+n+' nodes');
@@ -27,7 +27,7 @@ export function solveThermal(mesh,properties,boundary,{matvecFactory,method,tran
  for(const face of radiation){validateRadiationFace(face,n);face.nodes.forEach(i=>anchors.add(i));}
  const temperatures=new Map(boundary.temperatures||[]);for(const [i,v]of temperatures)if(!Number.isInteger(i)||i<0||i>=n||!Number.isFinite(v)||v<-273.15)throw Error('Invalid prescribed temperature');
  if(!transient)for(const component of meshComponents({...mesh,tetrahedra:[...mesh.tetrahedra,...contacts.map(c=>c.ids)]}))if(!component.some(i=>temperatures.has(i)||anchors.has(i)))throw Error('Each disconnected solid needs a temperature, convection or radiation boundary for steady heat conduction');
- let field=new Float64Array(n).fill(initialTemperature),solveResult,lastPrevious=field;const history=[];const plan=transient?thermalSnapshotPlan(steps,n,thermalSnapshotCount,thermalSnapshotBudgetBytes):null,wantStep=plan?new Set(plan.indices):null,snapshots=[];if(plan&&wantStep.has(0))snapshots.push({step:0,time:0,temperature:Array.from(field)});
+ let field=new Float64Array(n).fill(initialTemperature),solveResult,lastPrevious=field;const history=[];const plan=transient&&thermalSnapshotCount!==undefined?thermalSnapshotPlan(steps,n,thermalSnapshotCount,thermalSnapshotBudgetBytes):null,wantStep=plan?new Set(plan.indices):null,snapshots=[];if(plan&&wantStep.has(0))snapshots.push({step:0,time:0,temperature:Array.from(field)});
  const system=transient?[...entries,...Array.from(mass,(m,i)=>({ids:[i],k:[m/timeStep]}))]:entries;
  const convectionRate=values=>convection.reduce((sum,f)=>sum+f.coefficient*f.areaM2*(f.ambientTemperature-f.nodes.reduce((s,i)=>s+values[i]/3,0)),0);
  for(let step=0;step<(transient?steps:1);step++){const rhs=transient?Float64Array.from(load,(v,i)=>v+mass[i]*field[i]/timeStep):load;const previous=field;lastPrevious=previous;solveResult=radiation.length?solveRadiatingSystem(n,system,rhs,temperatures,radiation,field,{matvecFactory,method,maxRadiationIterations}):pcg(n,system,rhs,temperatures,{matvecFactory,tolerance:method==='pcg-strict'?1e-10:1e-8});field=solveResult.solution;const storedEnergy=transient?field.reduce((s,v,i)=>s+mass[i]*(v-previous[i]),0):0;history.push({time:transient?(step+1)*timeStep:0,minTemperature:Math.min(...field),maxTemperature:Math.max(...field),storedEnergyJ:storedEnergy,radiationHeatW:-radiationTerms(n,radiation,field,false).outwardHeatW,nonlinearIterations:solveResult.nonlinearIterations??0,convectionHeatW:convectionRate(field),residual:solveResult.residual});if(wantStep?.has(step+1))snapshots.push({step:step+1,time:history.at(-1).time,temperature:Array.from(field)});onObserve?.({stage:'time-step',kind:'thermal',step:step+1,steps:transient?steps:1,time:history.at(-1).time,timeUnit:'s',converged:true,metrics:history.at(-1),...(observeFields!==false?{field:{kind:'thermal',time:history.at(-1).time,temperature:Array.from(field),units:{temperature:'degC'}}}:{})});}
