@@ -1,0 +1,70 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-10-16",
+ "task": "RUNTIMEWASM1 crash isolation",
+ "host": {"platform": "win32", "arch": "x64", "cpu": "Intel i5-9500, 6 cores, shared with many concurrently running agent sessions (heavy load)"},
+ "upstream": {
+  "retrieved": "2026-10-16",
+  "issue": {
+   "url": "https://github.com/nodejs/node/issues/66366",
+   "state": "open (last update 2026-09-28)",
+   "claim": "WasmImportWrapperCache::MaybeGet adds a ref to WasmCodeRefScope before checking is_dying(); code GC on another thread frees the wrapper, which is then freed again on scope unwind. V8 fixes 68210d500a and 9b8ca54d5a (crbug 409379692). Reporter trigger: worker_threads terminate() of wasm instances while others hold shared wrappers. Reporter workaround --no-wasm-code-gc (0 failures in 20 jobs vs 16 without). 22.x not affected per reporter (per-process wrappers arrived in V8 13.6)."
+  },
+  "backportPr": {
+   "url": "https://github.com/nodejs/node/pull/66376",
+   "state": "open, not merged (base v24.x-staging, updated 2026-10-10, mergeable_state dirty)",
+   "note": "Third-party comment: 0 crashes in 191 processes with the patch vs 8 in 149 without."
+  },
+  "v24Changelog": {
+   "url": "https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V24.md",
+   "finding": "v24.22.0 (2026-10-14) has one V8 cherry-pick (ea9c016f26ad, AIX DecommitPages) and no wrapper/is_dying fix. v24.21.0 and v24.22.0 do not contain the fix."
+  },
+  "nodeDist": {
+   "url": "https://nodejs.org/dist/index.json",
+   "latest": {"22": "v22.23.3 (V8 12.4)", "24": "v24.22.0 (V8 13.6)", "25": "v25.9.0 (V8 14.1)", "26": "v26.12.0 (V8 14.6)"},
+   "unverified": "Whether 25/26 contain 68210d500a/9b8ca54d5a was not checked in V8 source; only inferred from the issue thread."
+  }
+ },
+ "download": {
+  "note": "Portable zips fetched from nodejs.org/dist into the session scratchpad only (no system install); SHA-256 verified against SHASUMS256.txt.",
+  "files": [
+   {"version": "v22.23.3", "sha256": "2b0ff57b049cda1bbcea2240eec20467018713c1efe1f7360c2681859b90ed71"},
+   {"version": "v24.22.0", "sha256": "f9683a19877e12a9b167305c8db71040d812876359de21f0d2e97c3f321f80c3"},
+   {"version": "v26.12.0", "sha256": "50efaf01a08c520b4bbe499c09a8c5a5c370002c419c0d9da2c6815d3066a453"}
+  ]
+ },
+ "codeFindings": [
+  "scripts/studio-mcp.mjs defaults to analysis isolation 'worker' (worker_threads). scripts/headless-analysis.mjs creates a new Worker per job and finish() always calls worker.terminate() after the result, so one MCP server process performs a create / instantiate-wasm / terminate cycle per job.",
+  "tests/mcp-observation-profiles.test.mjs runs about 7 such jobs (cpu, thermal, acoustic, channel-flow, native-mfem) in one server process: repeated terminate() of wasm-running Workers in a long-lived process, the same shape as the upstream trigger.",
+  "Isolation 'process' (child_process fork + kill) exists as --analysis-isolation=process; it was not measured."
+ ],
+ "method": {
+  "runner": "Loop of `node --test` over 5 files (mcp-observation-profiles, analysis-job-service, plasticity-integration, stokes-integration, worker-pipeline), 3 concurrent runs, 330 s budget per config; V8 fatal classified by jit_page_ / Fatal error / allocations_.erase / SIGSEGV / 0xC0000005 / signal exit.",
+  "flagVariant": "V8 flags are rejected in NODE_OPTIONS, so a --require preload called v8.setFlagsFromString('--no-wasm-code-gc'); it propagates to the spawned MCP server and its workers via NODE_OPTIONS."
+ },
+ "results": [
+  {"config": "node 24.11.1", "runs": 15, "exit0": 0, "nonzeroNoV8Signature": 15, "v8Fatal": 0, "wallSeconds": 371},
+  {"config": "node 24.22.0", "runs": 18, "exit0": 6, "nonzeroNoV8Signature": 12, "v8Fatal": 0, "wallSeconds": 361},
+  {"config": "node 22.23.3", "runs": 15, "exit0": 15, "nonzeroNoV8Signature": 0, "v8Fatal": 0, "wallSeconds": 350},
+  {"config": "node 26.12.0", "runs": 24, "exit0": 24, "nonzeroNoV8Signature": 0, "v8Fatal": 0, "wallSeconds": 349},
+  {"config": "node 24.11.1 + --no-wasm-code-gc", "runs": 21, "exit0": 14, "nonzeroNoV8Signature": 7, "v8Fatal": 0, "wallSeconds": 356}
+ ],
+ "totals": {"runs": 93, "v8Fatal": 0},
+ "interpretation": [
+  "Zero V8 fatals in 93 runs. The CI rate is on the order of one in tens of full-suite runs and this Windows host never reproduced it in the earlier ~108k-iteration micro matrix, so this is uninformative: the 95% upper bound on the per-run rate is about 3.2% overall and about 12-18% per config. No config can be ranked.",
+  "Non-zero exits without a V8 signature were job-deadline timeouts (20 s per-job deadlines in the tests) caused by machine load shared with dozens of other node processes. They differ by config but are confounded by time-varying background load and must not be read as a performance or stability comparison."
+ ],
+ "recommendation": [
+  "Primary: track nodejs/node#66376 (v24.x backport of 68210d500a + 9b8ca54d5a), the actual fix; bump the CI Node pin once a v24.x release lists it in CHANGELOG_V24.md.",
+  "Interim option, needing a separate approved change (not made here): run the test suite with --no-wasm-code-gc (upstream reporter saw 0 failures; applied via a preload or flags on the node --test invocation plus the spawned MCP server). Memory cost over a long suite is unmeasured.",
+  "Candidate targeted mitigation, unverified: run the MCP server with --analysis-isolation=process in the crash-listed MCP/job tests so terminate() of wasm-running threads in a long-lived process becomes process exit. Needs hundreds of CI-like Linux runs to evaluate.",
+  "Node 22 LTS (V8 12.4) is the upstream-described unaffected line, but it is a policy change and is not recommended on this evidence alone."
+ ],
+ "unverified": [
+  "No crash was reproduced locally, so which of our operations triggers the fatal is not narrowed down by measurement; the terminate()-per-job hypothesis rests on code reading plus the upstream report.",
+  "Linux/CI behaviour (the only place the fatal was seen) was not tested; this host is Windows.",
+  "The Node 22.23.3 / 24.22.0 / 26.12.0 runs carry no crash-rate information; presence of the fix in 26.12.0 is unverified.",
+  "process-isolation, await-exit-before-terminate and liftoff-only variants were not run within the time box.",
+  "Setup note: a native MFEM adapter build started in this worktree was killed with taskkill of python.exe, which may have terminated unrelated python processes of other sessions; the MFEM artifacts were then copied from the case-comparison worktree's public/mfem."
+ ]
+}
