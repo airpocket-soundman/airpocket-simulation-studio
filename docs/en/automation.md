@@ -148,6 +148,8 @@ Before importing, read caseList's archiveRevision and compute the UTF-8 JSON byt
 
 Export/read/release require inspect scope; begin-import/write/commit require edit scope. Shared API: window.caseArchiveTransfer.beginExport/read/beginImport/write/commit/release. Retention is shared across transfers: 100,000,000 bytes and at most four transfers. Incomplete, invalid, hash-mismatched, stale or expired imports are refused while preserving existing cases. Release unwanted or failed staging with `caseArchiveRelease({transferId})`. Page exit loses unsaved transfers; disconnect discards imports owned by that connection. This API provides neither filesystem operations nor arbitrary browser code execution.
 
+Performance note (measurements, n=1, single machine): each connector command can wait up to one poll interval (default 750 ms), so a per-chunk transfer is bounded by that interval plus round-trip latency; about 34 MB (518 chunks) takes minutes. In Node, the shared modules alone read or write a chunk in a few milliseconds independent of the chunk index (`node scripts/measure-case-archive-transfer.mjs`). `caseList`, `caseSave` and import commit serialise and hash the whole case collection, so they slow in proportion to the total saved-case size. Figures are measurements, not guarantees; see the [test record](testing.md).
+
 The 100,000,000-byte limit bounds retained transfer buffers, not browser heap usage during JSON parsing, copying or validation. Completed imports retain their slot and bytes until release so commit retries do not apply the archive twice.
 
 ## Versioned fatigue and fracture assessment
