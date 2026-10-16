@@ -1,6 +1,6 @@
 # 結果ビューアと出力の製品仕様案
 
-[English](en/result-viewer-direction.md)
+[English](en/result-viewer-direction.md) / [複数ケース同期表示の設計メモ](view-compare-design.md)
 
 策定日: 2026-10-14。直感的に結果を理解し、設計判断に使い、他者へ伝えられるビューアを差別化の柱とする。以下は目標仕様であり、未対応の解析を表示機能によって対応済みとは扱わない。
 

@@ -1,6 +1,6 @@
 # Result viewer and export requirements
 
-[日本語](../result-viewer-direction.md)
+[日本語](../result-viewer-direction.md) / [Synchronized multi-case view design note](view-compare-design.md)
 
 Date: 2026-10-14. Proposed product requirements: make results understandable, useful for design decisions and easy to communicate. Visualization does not establish support for an unimplemented analysis.
 
