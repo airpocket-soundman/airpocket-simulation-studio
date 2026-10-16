@@ -2,7 +2,7 @@
 
 [English](en/compressible-cfd-plan.md)
 
-調査日: 2026-10-14。マッハ2で複雑な3D形状の周囲に生じる衝撃波、マッハ数、圧力係数等を、利用者の計算資源とエージェントから扱うことを目標とする。今回は資料調査と計画のみ。ソルバーの導入、ビルド、WASM移植、試験計算、自作実装は行っていない。
+調査日: 2026-10-14（SU2・OpenFOAM系・HiSA・Eilmerの調査票は2026-10-16追記）。マッハ2で複雑な3D形状の周囲に生じる衝撃波、マッハ数、圧力係数等を、利用者の計算資源とエージェントから扱うことを目標とする。今回は資料調査と計画のみ。ソルバーの導入、ビルド、WASM移植、試験計算、自作実装は行っていない。
 
 ## ソルバー導入順の変更（2026-10-15）
 
@@ -89,6 +89,108 @@ EOS、数値流束、時間積分、物理境界の意味、検証問題と結�
 現在の凸STL体積メッシュの制約では牛のような一般凹形状を扱えないため、別の表面形状/流体領域経路を計画する。複雑形状のWASM対応を現状の取り込み機能だけで保証しない。
 
 結果契約は節点・セル・粒子を区別し、密度、圧力、速度、温度、Mach、時間、残差と収支を保持する。Cpは自由流基準を保存し、シュリーレン風表示は密度勾配として定義する。断面、等値面、流線、時系列を共通ビューアへ接続し、保存/出力間隔と計算時間刻みを区別する。
+
+## 調査票（CFDRESEARCH1、取得日 2026-10-16）
+
+実装・ビルド・試験計算・バイナリ取得は行っていない。各行の根拠は表末の番号付き出典。区分は【確認】=出典で直接確認、【推定】=確認事項からの推論、【未確認】=今回確認できず。ネットワーク取得は公式ページ・GitHub/GitLab API・生ファイルの読取のみ。
+
+### 固定版・ライセンス・配布
+
+| 候補 | 固定候補 | ライセンスと配布条件 | 区分 |
+|---|---|---|---|
+| SU2 | v8.5.0（2026-04-27、GitHub API）。公式zipはlinux64-mpi/omp、macos64、win64-mpi/omp（win64-ompは28,043,921 B）[S1] | LGPL 2.1。LICENSEは同梱の第三者通知も含む。ParMETIS/METISは非営利の教育・研究用途のみ自由で、営利は評価のみ・再配布は事前承認が必要、TecIOはTecplot条件、CGNSはzlib系、CLI11はBSD 3条項[S2] | 【確認】。ParMETIS同梱を除く構成なら再配布可能かは【未確認】（MPI無しビルドでの除外はmeson.buildの条件分岐から【推定】） |
+| OpenFOAM Foundation | v14（2026-07-14）、v13（2025-07-08）[S3] | GPLv3（公式フッター）[S4]。商標は別 | 【確認】 |
+| OpenFOAM ESI/OpenCFD（Keysight） | v2606（2026-06-26）、v2512（2025-12-22）[S5] | 「GPL Licenseで配布」（版は同ページ未記載）。ソース、Linux/Windows/macOS向け事前ビルドあり[S6] | 【確認】。GPL版の細目は【未確認】 |
+| HiSA | OpenCFD v2512向け1.13.4（tag validated-v2512、2026-04-03）、Foundation v13向け1.13.2（validated-v13、2025-08-10）。対応: OpenCFD 2006〜2512、Foundation 9〜13[S7] | GitLabのLICENSEはGPLv3 only[S8]。公式サイトは明記せず、OpenCFD非推奨の注記あり | 【確認】。OpenFOAM v14/v2606対応は【未確認】 |
+| Eilmer/GDTk | v5.0.0（2025-12-31）。前はv4.1.0（2022-02-23）[S9] | GPLv3。文書はCC BY-SA 4.0[S10] | 【確認】。GitHub Releasesは空でtagのみ |
+
+HiSAのOpenFOAM依存: Foundation最新v14は未対応と読めるため、Foundation系を使う場合はv13固定が必要【推定】。ESI系はv2512固定。いずれもGPLのため、ユーザーがダウンロードして自機で実行する構成は成立しやすいが、Studioのバンドル再配布は版ごとにGPL/LGPLの頒布条件（ソース提供・通知）を満たす必要があり、法的判断はこの調査の範囲外。
+
+### 依存・ビルド・実行規模
+
+| 候補 | 依存とビルド | WASM/ブラウザ | 区分 |
+|---|---|---|---|
+| SU2 | C++17、meson（要>=1.8.2）、Python。基本の直列ビルドは外部ライブラリ不要で、Eigen・CLI11・mel・Catch2は同梱。MPI時はMETIS/ParMETIS、オプションにCGNS、TecIO、PaStiX、BLAS、CoolProp、Mutation++等[S11, S12] | Emscripten移植の公開例は検索で見つからず【未確認】。C++17でファイルI/O中心の単一ソルバーのため、依存を絞れば技術的には可能性があるが、メモリ上限・スレッド・ファイルシステム仮想化は【推定】で未検証 | 配布zipは約28〜38 MB（展開後は【未確認】） |
+| OpenFOAM（両系統） | 大規模C++、wmake独自ビルド、ThirdParty（MPI等）別アーカイブ[S13]。環境変数と多数の共有ライブラリに依存 | 公開の移植例は検索で見つからず【未確認】。動的ライブラリ読込、シェル駆動、MPI前提のため直接移植は困難【推定】。Windows向けは事前ビルドあり | 展開後の規模は【未確認】 |
+| HiSA | OpenFOAMの上にAllwmakeで追加ビルド。cfMesh改造版は任意[S7] | OpenFOAMに従属。独立移植は不可【推定】 | |
+| Eilmer | D言語（ldc2）、gfortran（32bitライブラリ）、C、readline、ncurses、OpenMPI、plotutils、Python/Ruby FFI等。Lua同梱[S14] | LDCはWebAssembly対象を2018年から持つが、druntime/WASIの完成度を示す2025〜2026の資料は見つからず【未確認】。Fortran、Lua、ネイティブFFIを含むため【推定】で困難 | |
+
+### 入出力・中間結果・停止再開
+
+| 候補 | 入力 | 出力 | 残差・中間結果 | 停止・再開 |
+|---|---|---|---|---|
+| SU2 | .cfg + .su2（ASCII、節点/要素/MARKER_TAG）またはCGNS（単一ゾーン非構造、ADFのみ）。Gmshは.su2へ出力して使う[S15] | OUTPUT_FILES既定はRESTART、PARAVIEW、SURFACE_PARAVIEW。CSV、TECPLOT、STL等も選択可。VOLUME_OUTPUTで場を選択、RES_接頭辞で残差場も保存[S16] | history出力（RMS_RES、AERO_COEFF等）、SCREEN_OUTPUT、-dで項目一覧。出力頻度は設定可。【確認】 | RESTART_SOL=YESと再開用ファイル、非定常はRESTART_ITER[S12]。ソフト停止（信号・停止ファイル）の有無はCDriver.cppの前半に見当たらず【未確認】。SIGTERMによる中断は外部プロセス停止で代替【推定】 |
+| OpenFOAM | case/ディレクトリ（system、constant、0）。メッシュはblockMesh、snappyHexMesh等 | 時刻ディレクトリ（ascii既定、binary可）。ParaView用変換は別 | 残差のログ化はfunction object等【未確認】。controlDictでwriteControl指定[S17] | startFrom latestTime、stopAt writeNow/nextWriteで書き出し後停止、runTimeModifiableで動的再読込[S17]。mid-run反映の詳細は【未確認】 |
+| HiSA | OpenFOAMのcase形式[S7] | OpenFOAM形式 | 局所時間刻みで定常収束。残差出力の形式は【未確認】 | OpenFOAMに従う【推定】 |
+| Eilmer | Luaスクリプト（prep）からグリッド・設定を生成。構造・非構造格子（sfluidblock/ufluidblock） | VTK、Tecplot（tecio）等のwriter、history、loads[S18] | history.d、loads.dあり。halt_on_large_flow_changeを設定にもつ[S19] | max_step、max_time、halt_nowフラグ、.controlファイル再読込（control_count）[S19]。再開は準備スクリプトe4-prep-restartがある【確認】が運用は【未確認】 |
+
+### 圧縮性外部流れの境界条件
+
+| 候補 | 確認できた対応 |
+|---|---|
+| SU2 | MARKER_EULER（滑り壁）、MARKER_FAR（遠方場）、MARKER_SUPERSONIC_INLET、MARKER_SUPERSONIC_OUTLET、MARKER_INLET、MARKER_OUTLET、MARKER_SYM、MARKER_HEATFLUX、MARKER_ISOTHERMAL（無滑り壁）。SOLVERはEULER/NAVIER_STOKES/RANS、対流法にROE、AUSM系、HLLC等[S20]。【確認】（config_templateの説明文）。各BCがマッハ2の非構造3D形状で安定かは【未確認】 |
+| OpenFOAM rhoCentralFoam | 過渡の密度ベース解法でKurganov-Tadmorの中心風上、熱伝達と衝撃捕獲を含む。p、U、Tが必須、乱流と熱物性は設定ファイル[S21]。個別BCの網羅は【未確認】（OpenFOAMのBC一式は別資料で確認する） |
+| HiSA | 非反射遠方場と反射壁の特性境界条件、局所時間刻み、陰的連成系、衝撃捕獲スキーム、移動メッシュ（ALE）[S22]。個別BC名は【未確認】 |
+| Eilmer | bc/ディレクトリ（超音速流入等の存在はファイル名から【推定】）。例題に鈍頭くさび、6度くさび、斜め衝撃、球、円柱、衝撃波管、前向きステップがある（ディレクトリ名のみ、内容は【未確認】）[S23] |
+
+### 検証問題と採否条件
+
+共通方針: 同一のSI単位・理想気体（γ=1.4）・同一の自由流状態で、候補ごとの出力を共通結果契約へ変換して比較する。以下の許容値は暫定の判定指標で、実測前の仮値（実測で見直す）。
+
+| ID | 問題 | 参照 | 採用側の見る指標（暫定） |
+|---|---|---|---|
+| V1 | 1D衝撃波管（Sod型、無次元） | 厳密リーマン解 | 衝撃波・接触波位置、密度・圧力の保存、正値性。格子倍化でL1誤差が単調減少 |
+| V2 | マッハ2・くさび半角10度の斜め衝撃波 | θ-β-M関係と斜め衝撃波前後の圧力比 | 衝撃波角と圧力比の相対誤差が格子細分で減少。暫定目標は1%以下 |
+| V3 | マッハ2・鈍頭円柱または球 | 衝撃離脱距離の既往相関と、候補同士の相互比較 | 表面Cp分布、離脱距離。候補間差は参照値の不確かさ（相関の公表幅）以内 |
+| V4 | 流入出・遠方場の反射 | 一様流の保持と領域サイズ依存 | 一様流を置いた時の自由流からの逸脱が小さく、領域を拡大しても結果が変わらない |
+| V5 | 粗い牛形状（最終デモ、参照値なし） | 参照解は使わない | 表面閉鎖性、実行完了、保存収支、密度勾配の可視化のみ。精度保証とはしない |
+
+採否の判定（全て満たして採用候補に進む）:
+
+1. 固定版・ライセンス・依存が上表で【確認】に揃い、ユーザーのダウンロード利用またはバンドルが許容される。
+2. V1・V2でSI単位の入出力を変換でき、許容内で再現する。
+3. 中間結果（残差履歴または場）を実行中に取得でき、停止と再開が手順として確立する（SU2は停止の検証、OpenFOAMはstopAt/latestTime、Eilmerはmax_step/halt_now/再開で実測確認）。
+4. V3・V4で非物理的な負圧・負密度が出ず、遠方場が成立する。
+5. メモリと実行時間がユーザーの計算資源で見積もれる。WASM採用の場合は配信量・初期化・メモリ上限が別途許容される。
+
+却下条件: ライセンス条件を満たせない、版固定ができない、V1/V2を再現できない、停止・再開が手順化できない、依存がStudioの配布形態で扱えない。WASMは採否の必須条件にせず、ネイティブ基準を先に評価する（既存方針）。
+
+### 暫定の推奨（推定を含む）
+
+- SU2 v8.5.0を第一候補のまま維持。公式zip、CLI、メッシュ形式、BC、履歴、再開の文書が揃っているため。ParMETIS同梱部の条件は営利再配布で課題になりうるので、バンドルではなく利用者ダウンロード方式を先に設計する【推定】。
+- OpenFOAM系は相互検証候補。Foundation v14とHiSA 1.13.2(v13)の版差に注意し、検証用にはv13+HiSAまたはv2512+HiSA 1.13.4のどちらか一つを固定する【推定】。
+- Eilmerは検証資料としての例題が豊富だが、ビルド依存が重く、WASMは困難と見る【推定】。
+- ブラウザ内WASM化の可否は、どの候補も実証されておらず【未確認】。次段階で最小構成の試験が必要。
+
+### 出典（取得日 2026-10-16）
+
+- S1: https://api.github.com/repos/su2code/SU2/releases/latest 
+- S2: https://github.com/su2code/SU2/blob/master/LICENSE.md
+- S3: https://openfoam.org/download/history/
+- S4: https://openfoam.org/download/14-source/
+- S5: https://www.openfoam.com/news/main-news
+- S6: https://www.openfoam.com/news/main-news/openfoam-v2606
+- S7: https://hisa.gitlab.io/download/
+- S8: https://gitlab.com/hisa/hisa/-/blob/master/LICENSE
+- S9: https://github.com/gdtk-uq/gdtk/tags
+- S10: https://github.com/gdtk-uq/gdtk
+- S11: https://raw.githubusercontent.com/su2code/SU2/v8.5.0/meson.build
+- S12: https://su2code.github.io/docs_v7/Installation/ ・ https://raw.githubusercontent.com/su2code/SU2/v8.5.0/meson_scripts/init.py
+- S13: https://openfoam.org/download/14-source/
+- S14: https://github.com/gdtk-uq/gdtk （READMEのQuick Start）
+- S15: https://su2code.github.io/docs_v7/Mesh-File/
+- S16: https://su2code.github.io/docs_v7/Custom-Output/
+- S17: https://doc.cfd.direct/openfoam/user-guide-v13/controldict
+- S18/S23: https://github.com/gdtk-uq/gdtk/tree/master/src/eilmer ・ https://api.github.com/repos/gdtk-uq/gdtk/contents/examples/eilmer/2D
+- S19: https://raw.githubusercontent.com/gdtk-uq/gdtk/master/src/eilmer/globalconfig.d
+- S20: https://raw.githubusercontent.com/su2code/SU2/v8.5.0/config_template.cfg
+- S21: https://doc.openfoam.com/2212/tools/processing/solvers/rtm/compressible/rhoCentralFoam/
+- S22: https://hisa.gitlab.io/
+- WASM関連の検索（SU2/OpenFOAMの移植例なし、LDCのWebAssembly履歴）: 各検索結果。LDC 1.11（2018）でWebAssembly対象追加、現状は未確認。
+
+### 今回未検証の事項
+
+SU2のソフト停止機構、ParMETISを外した再配布の可否、各ソルバーのMach 2での実BC動作、OpenFOAMの残差出力方式の詳細、HiSAの個別BC名とv14対応、Eilmerの再開手順と停止ファイル、全候補の展開後サイズ・メモリ量・WASM成立性。ライセンスの法的解釈は今回の範囲外で、採用時に版ごとに確認する。
 
 ## 結論と残る調査
 
