@@ -16,7 +16,7 @@ At the user's request Claude's work is paused and handed to Codex. This is a sna
 ## State at recording
 
 - The only open PR is #13 (draft). Released 125, ready 2 (CASEARCHIVE1, PUBLICHTTPS1), checking 4 (AGENTINPUT1, BROWSEREXPORT1, RUNTIMEWASM1, MCPARGUMENTTYPES1), building 10, queued 24. The last publication check was around #95 (`4b57373`); the publish runs after #96 are unchecked.
-- The only running sub-agent is chrome-media (real-Chrome re-verification of PR #96, the thermal slider fixes). Its result is to be written to `docs/evidence/2026-10-16-thermal-slider-fixes-real-chrome.json` (uncommitted, in the p-d worktree). Its completion notice will not reach a new owner, so look at p-d.
+- No sub-agent is running. The real-Chrome re-verification of PR #96 (thermal slider fixes) passed with notes; its evidence `docs/evidence/2026-10-16-thermal-slider-fixes-real-chrome.json` is taken in by this PR. Notes: the thermal webm time export is refused by a failing job rather than at start, and the legacy `exportCapabilities.timeSelection` field still reads acoustic-only.
 
 ## Merged today (summary)
 
