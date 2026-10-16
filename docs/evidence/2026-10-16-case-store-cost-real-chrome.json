@@ -1,0 +1,57 @@
+{
+  "title": "Case store cost at 1.0 mm (about 8.5 MB per case) in real Chrome after PR 88 (memoised canonical strings)",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "base": "worktree p-d merged with origin/main including PR 88; PR 89 was not on origin/main, so the compare panel was not re-checked",
+    "browser": "real Chrome (Claude in Chrome), own tab (not the selected tab; visibilityState visible), vite dev on 127.0.0.1:5174, stdio connector with file-IPC driver",
+    "load": "About 13 GB free RAM at start, no heavy local processes started by me; other agents idle. Machine load was not otherwise measured.",
+    "heap": "performance.memory.usedJSHeapSize / jsHeapSizeLimit (limit 4396 MB). In run 1 the in-page sampler was starved by the busy main thread (no samples during the steps; only idle samples at the end). Run 2 paused at checkpoints and read the heap twice 3 s apart after each step. JS heap excludes some off-heap ArrayBuffers; garbage is not forced out, so values include uncollected garbage.",
+    "renderer": "No renderer reload (performance.timeOrigin unchanged) and no window error / unhandledrejection events in either run. Console tool errors not separately sampled."
+  },
+  "previous": {"caseSaveS": [2.0, 4.2, 8.1, 10.7], "fifthSixthSave": "timed out at 15 s", "heapMB": 1400, "importCommitS": "9-15", "readS": 26.5, "writeS": 26.6, "perChunkMs": 50},
+  "runs": {
+    "run1_noHeapCheckpoints": {
+      "caseSaveMs": [1391, 1545, 1646, 1796],
+      "caseListMs": [514, 531, 651, 765],
+      "rename": {"ms": 1032, "listAfterMs": 749, "renameBackMs": 998},
+      "exportBeginMs": 421, "exportBytes": 33910407, "chunks": 518,
+      "readTotalMs": 30093, "readPerQuarterAvgMs": [58.5, 57.1, 60.1, 56.7], "readMaxChunkMs": 106, "hashMatchesDeclared": true,
+      "removeAllMs": [515, 654, 428, 165],
+      "importBeginMs": 50, "writeTotalMs": 29812, "writePerQuarterAvgMs": [57.9, 57.9, 57.9, 56.6], "writeMaxChunkMs": 94,
+      "commitMs": 5500,
+      "roundTrip": {"archiveRevisionEqual": true, "caseRevisionsEqual": true, "restoredCaseCount": 4, "archiveRevision": "sha256:2ff1b9f1036f88494f1f44a32fd9fe29ff421d8e51724428b50862376dc9318c"},
+      "savesAfterImportMs": {"5": 1859, "6": 2078, "7": 2093}, "listAfterImportMs": {"5": 875, "6": 952, "7": 1016},
+      "extension": {"save8Ms": 2187, "list8Ms": 1078, "save9": "refused: Maximum 8 cases (by design, 482 ms)", "renameAt8Ms": 1516, "removeAt8Ms": 1046, "exportBeginAt7CasesMs": 1327, "exportBytesAt7Cases": 59343195},
+      "heapMB": "not captured during steps; idle samples 28-34 MB before the run and after the run 639 -> 522 -> 343 MB while idle (garbage collection)"
+    },
+    "run2_heapCheckpoints": {
+      "caseSaveMs": [1359, 1545, 1204, 1373],
+      "caseListMs": [501, 546, 656, 718],
+      "rename": {"ms": 874, "listAfterMs": 623, "renameBackMs": 812},
+      "exportBeginMs": 436, "exportBytes": 33910403, "chunks": 518,
+      "readTotalMs": 29344, "readPerQuarterAvgMs": [54.9, 59.7, 56.2, 54.8], "readMaxChunkMs": 233, "hashMatchesDeclared": true,
+      "removeAllMs": [509, 592, 405, 234],
+      "importBeginMs": 51, "writeTotalMs": 29373, "writePerQuarterAvgMs": [55.3, 56.4, 58.3, 56.7], "writeMaxChunkMs": 218,
+      "commitMs": 5624,
+      "roundTrip": {"archiveRevisionEqual": true, "caseRevisionsEqual": true, "restoredCaseCount": 4, "archiveRevision": "sha256:f4cac61fe8c49346205b95ddcc2423cca4ef2ab865b5aaeea022a67fe16ac45f"},
+      "savesAfterImportMs": {"5": 1405, "6": 1485, "7": 1691}, "listAfterImportMs": {"5": 718, "6": 781, "7": 842},
+      "heapUsedMB": {"freshPageBeforeAnything": 269, "after2Cases": 122, "after4Cases": 264, "afterExportRelease": 374, "afterImportCommit(4 cases)": 533, "after6Cases": 1856, "after7Cases": 1464, "limit": 4396}
+    }
+  },
+  "comparison": "caseSave 1.2-2.1 s for cases 1-7 (rising only about 0.1-0.2 s per case) against 2.0/4.2/8.1/10.7 s before; 5th/6th/7th saves 1.4/1.5/1.7 s (run 2) and 1.9/2.1/2.1 s (run 1), no timeouts, 8th case 2.2 s, a 9th refused by the 8-case cap. caseList 0.5-1.0 s (before 1.4-5.6 s). Rename about 0.9-1.5 s, remove about 0.2-1.0 s, export begin 0.4 s for 34 MB and 1.3 s for 59 MB. Export read 29-30 s and import write 29-30 s (about 55-58 ms per chunk, flat across quarters). Import commit 5.5-5.6 s (before 9-15 s, once over 15 s). Archive and all four case revisions equal after the round trip in both runs. Heap is NOT improved at the high end: 1.46-1.86 GB with 6-7 cases in run 2 (about the same as the earlier 1.4 GB), with a jump from 533 MB (4 imported cases) to 1856 MB after two more saves following an import; in run 1 the same sequence ended at 639 MB shortly after and fell to 343 MB, so heap numbers depend heavily on GC timing.",
+  "checks": [
+    {"id": "caseSave-scaling", "result": "passed", "detail": "1.2-2.2 s for 1..8 cases, no timeouts"},
+    {"id": "caseList-scaling", "result": "passed", "detail": "0.5-1.1 s"},
+    {"id": "rename-remove-export-begin", "result": "passed", "detail": "all about 1 s or less"},
+    {"id": "large-read-write-commit", "result": "passed", "detail": "518 chunks each way about 29-30 s, commit 5.5-5.6 s, hash match"},
+    {"id": "roundtrip-equality", "result": "passed", "detail": "archive revision and all 4 case revisions equal in both runs"},
+    {"id": "heap", "result": "observation", "detail": "peak used heap observed 1856 MB of a 4396 MB limit; not reduced versus the earlier 1.4 GB at 6-7 cases"},
+    {"id": "renderer-reload-console", "result": "passed", "detail": "no reload, no page errors recorded"}],
+  "notVerified": [
+    "Heap during the steps of run 1 (sampler starved) and any peak between checkpoints in run 2",
+    "Whether the heap jump after saves following an import is retained memory or uncollected garbage (no forced GC)",
+    "PR 89 compare panel (not merged)",
+    "Unloaded foreground-tab timings (tab was not the selected tab)",
+    "Run-to-run variance beyond two runs"]
+}
