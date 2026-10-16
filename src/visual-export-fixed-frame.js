@@ -3,6 +3,14 @@ export const FIXED_FRAME_LIMITS=Object.freeze({minFrames:2,maxFrames:120,default
 export const FIXED_FRAME_ANIMATIONS=Object.freeze(['orbit','deformation','time','slice']);
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 
+/** Recorded numbers are rounded to 9 decimals so float noise (e.g. -35.99999999999999 vs -36) never reaches manifest bytes. */
+export function roundRecorded(value){const r=Math.round(value*1e9)/1e9;return r===0?0:r;}
+/** Orbit camera position from the saved start state only (rotation about +Y, same convention as three.js applyAxisAngle). Pure and rounded. */
+export function orbitCameraPosition(position,target,angle){
+ const ox=position[0]-target[0],oy=position[1]-target[1],oz=position[2]-target[2],c=Math.cos(angle),s=Math.sin(angle);
+ return [ox*c+oz*s+target[0],oy+target[1],-ox*s+oz*c+target[2]].map(roundRecorded);
+}
+
 export function validateFrameCount(frames){
  if(!Number.isInteger(frames)||frames<FIXED_FRAME_LIMITS.minFrames||frames>FIXED_FRAME_LIMITS.maxFrames)throw Error(`png-sequence frames must be an integer from ${FIXED_FRAME_LIMITS.minFrames} through ${FIXED_FRAME_LIMITS.maxFrames}`);
  return frames;

@@ -1,4 +1,4 @@
-import {FIXED_FRAME_LIMITS,FIXED_FRAME_ANIMATIONS,validateFrameCount,fixedFrameSchedule,buildStoreZip,sha256Hex,pickViewFields} from './visual-export-fixed-frame.js';
+import {FIXED_FRAME_LIMITS,FIXED_FRAME_ANIMATIONS,validateFrameCount,fixedFrameSchedule,buildStoreZip,sha256Hex,pickViewFields,orbitCameraPosition} from './visual-export-fixed-frame.js';
 // Capture the rendered view without changing the archived analysis fields.
 export function animationState(kind,phase,{scale=1,frames=1,min=0,max=1}={}){
  if(!['orbit','deformation','time','slice'].includes(kind)||!Number.isFinite(phase)||phase<0||phase>1||!Number.isFinite(scale)||scale<0||!Number.isInteger(frames)||frames<1||!Number.isFinite(min)||!Number.isFinite(max)||max<min)throw Error('Invalid animation settings');
@@ -84,22 +84,28 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
 
+  // Same checks renderSequence runs, exposed so the job layer can refuse at start instead of failing after the job began.
+ function preflight({animation='orbit'}={}){
+  const output=getAnalysis(),result=output?.result;
+  if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
+  if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
+  if(animation==='time'&&(result?.kind!=='acousticTransient'||!$('acoustic-time-frame')||!result.snapshots?.length))throw Error('Time playback requires transient acoustic frames.');
+  if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
+ }
  // Fixed-frame PNG sequence: frame i is rendered from the stored view state for index i of N; wall-clock time and tab throttling never enter the result.
  async function renderSequence({animation='orbit',frames=FIXED_FRAME_LIMITS.defaultFrames,view={},expectedResultRevision,signal,onProgress=()=>{}}){
   if(signal?.aborted)throw Error('Export cancelled');
   validateFrameCount(frames);
   if(typeof crypto==='undefined'||!crypto.subtle?.digest)throw Error('png-sequence export requires SHA-256 support');
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
+  preflight({animation});
   const output=getAnalysis(),result=output?.result,time=$('acoustic-time-frame');
-  if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
-  if(animation==='time'&&(result?.kind!=='acousticTransient'||!time||!result.snapshots?.length))throw Error('Time playback requires transient acoustic frames.');
-  if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
   const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),min=coordinates.length?Math.min(...coordinates):0,max=coordinates.length?Math.max(...coordinates):1;
   const saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value};
   const schedule=fixedFrameSchedule({animation,frames,state:animationState,scale:Number(saved.scale),snapshotTimes:animation==='time'?result.snapshots.map(snapshot=>snapshot.time):[],min,max});
   const state={stop:false};active=state;controls.enabled=false;controls.enableDamping=false;
   const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
-  const offset=saved.position.clone().sub(saved.target),entries=[],records=[];let total=0,resolution;
+  const offset=saved.position.clone().sub(saved.target),startPosition=[saved.position.x,saved.position.y,saved.position.z],startTarget=[saved.target.x,saved.target.y,saved.target.z],entries=[],records=[];let total=0,resolution;
   try{
    for(const step of schedule){
     if(signal?.aborted||state.stop)throw Error('Export cancelled');
@@ -117,7 +123,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
     total+=bytes.length;if(total>FIXED_FRAME_LIMITS.maxTotalBytes)throw Error('png-sequence exceeds the '+FIXED_FRAME_LIMITS.maxTotalBytes+' byte total cap; reduce frames');
     if(resolution&&(resolution.width!==width||resolution.height!==height))throw Error('Canvas resolution changed during export');resolution={width,height};
     const name='frame-'+String(step.index).padStart(4,'0')+'.png';entries.push({name,bytes});
-    records.push({...step,file:name,resultRevision:expectedResultRevision,width,height,bytes:bytes.length,sha256:'sha256:'+await sha256Hex(bytes),...(animation==='orbit'?{camera:{position:[camera.position.x,camera.position.y,camera.position.z]}}:{})});
+    records.push({...step,file:name,resultRevision:expectedResultRevision,width,height,bytes:bytes.length,sha256:'sha256:'+await sha256Hex(bytes),...(animation==='orbit'?{camera:{position:orbitCameraPosition(startPosition,startTarget,step.angleRadians)}}:{})});
     if(signal?.aborted||state.stop)throw Error('Export cancelled');
     onProgress({fraction:(step.index+1)/frames*.98});
    }
@@ -146,5 +152,5 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
  const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (per-frame resultRevision, phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
  const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
- return {stop,capture,render,capabilities,isActive:()=>active!==null};
+ return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }

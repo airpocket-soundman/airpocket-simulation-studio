@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {installVisualExport,animationState} from '../src/visual-export.js';
 import {createVisualExportJobs} from '../src/visual-export-jobs.js';
-import {fixedFrameSchedule,buildStoreZip,FIXED_FRAME_LIMITS} from '../src/visual-export-fixed-frame.js';
+import {fixedFrameSchedule,buildStoreZip,orbitCameraPosition,FIXED_FRAME_LIMITS} from '../src/visual-export-fixed-frame.js';
 
 const revision='sha256:'+'b'.repeat(64);
 class Vector{constructor(x=1,y=2,z=3){Object.assign(this,{x,y,z});}clone(){return new Vector(this.x,this.y,this.z);}copy(v){Object.assign(this,{x:v.x,y:v.y,z:v.z});return this;}sub(v){this.x-=v.x;this.y-=v.y;this.z-=v.z;return this;}add(v){this.x+=v.x;this.y+=v.y;this.z+=v.z;return this;}
@@ -109,4 +109,25 @@ test('job layer: png-sequence request validation, ZIP artifact, bounded manifest
 test('job layer refuses an archive that is not a valid frame sequence',async()=>{
  const bad=createVisualExportJobs({render:()=>new Blob([buildStoreZip([{name:'x.txt',bytes:Uint8Array.of(1)}])],{type:'application/zip'})}),job=await bad.start({requestId:'z',expectedResultRevision:revision,format:'png-sequence',view:{}});
  let s;for(;;){s=bad.status(job);if(s.state!=='running')break;await new Promise(r=>setTimeout(r,5));}assert.equal(s.state,'failed');assert.throws(()=>bad.artifact(job),/unavailable/);
+});
+
+test('orbit manifest camera numbers are deterministic and rounded: identical manifest bytes across exports',async()=>{
+ const f=fixture({kind:'elastic'});try{
+  f.camera.position=new Vector(-36,10,0);f.controls.target=new Vector(0.1,0.2,0.3);
+  const manifestBytes=async()=>(await zipOf(await run(f,{frames:8}))).find(e=>e.name==='manifest.json').data;
+  const a=await manifestBytes();f.camera.position=new Vector(-36,10,0);const b=await manifestBytes();
+  assert.equal(Buffer.compare(Buffer.from(a),Buffer.from(b)),0);
+  const manifest=JSON.parse(new TextDecoder().decode(a));
+  assert.deepEqual(manifest.frames[0].camera.position,[-36,10,0]);
+  for(const frame of manifest.frames)for(const v of frame.camera.position)assert.equal(v,Math.round(v*1e9)/1e9);
+  // The pure formula equals the rotation the live camera applies (frames themselves are unchanged).
+ assert.deepEqual(orbitCameraPosition([-36,10,0],[0.1,0.2,0.3],Math.PI/2),[-0.2,10.2,36.4].map((v,k)=>k===1?10:v));
+ }finally{f.restore();}
+});
+
+test('preflight refuses time on a non-transient result and deformation on non-structural, before any job starts',()=>{
+ const f=fixture({kind:'elastic'});try{
+  assert.throws(()=>f.api.preflight({animation:'time'}),/transient acoustic/);
+  assert.doesNotThrow(()=>f.api.preflight({animation:'deformation'}));assert.doesNotThrow(()=>f.api.preflight({animation:'orbit'}));
+ }finally{f.restore();}
 });
