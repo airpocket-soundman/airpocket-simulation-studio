@@ -20,7 +20,7 @@ export function createCaseListUi({$,document:doc=globalThis.document,store,statu
    root.append(item);
   }
  }
- const caseApi=Object.freeze({...store,view:viewCase,add(name,output){const result=store.add(name,output);renderCases();return result;},import(value){store.import(value);renderCases();},remove(index){store.remove(index);renderCases();}});
+ const caseApi=Object.freeze({...store,view:viewCase,add(name,output){const result=store.add(name,output);renderCases();return result;},import(value){store.import(value);renderCases();},remove(index){store.remove(index);renderCases();},...(typeof store.rename==='function'?{rename(index,name){store.rename(index,name);renderCases();}}:{}),...(typeof store.adopt==='function'?{adopt(other){store.adopt(other);renderCases();}}:{})});
  function install(){
   $('case-add').onclick=()=>{try{if(!getLastAnalysis()?.result)throw Error('Run an analysis first');caseApi.add($('case-name').value,getLastAnalysis());}catch(e){status(e.message);}};
   $('case-export').onclick=()=>{const url=URLApi.createObjectURL(new BlobApi([JSON.stringify(store.export())],{type:'application/json'}));const a=doc.createElement('a');a.href=url;a.download='simulation-cases.json';a.click();timer(()=>URLApi.revokeObjectURL(url),1000);};
