@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-16T00:02:07.931Z",
+  "node": "v24.11.1",
+  "v8": "13.6.233.10-node.28",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": {
+    "model": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+    "count": 6
+  },
+  "cellSeconds": 150,
+  "sha256": {
+    "scripts/repro-v8-wasm-terminate.mjs": "9678612ce168e6966be84d2aaad0ff4d1ed4a84e3b554f08af85c04b30e437e7",
+    "public/fem-kernel.wasm": "08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2"
+  },
+  "matrix": [
+    {
+      "cell": {
+        "shared": false,
+        "module": "tiny",
+        "flags": "",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 15865,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150060,
+      "verdict": "not reproduced in 15865 iterations"
+    },
+    {
+      "cell": {
+        "shared": true,
+        "module": "tiny",
+        "flags": "",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 15907,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150071,
+      "verdict": "not reproduced in 15907 iterations"
+    },
+    {
+      "cell": {
+        "shared": true,
+        "module": "tiny",
+        "flags": "--no-wasm-code-gc",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 14028,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150056,
+      "verdict": "not reproduced in 14028 iterations"
+    },
+    {
+      "cell": {
+        "shared": true,
+        "module": "tiny",
+        "flags": "--liftoff-only",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 15498,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150051,
+      "verdict": "not reproduced in 15498 iterations"
+    },
+    {
+      "cell": {
+        "shared": true,
+        "module": "tiny",
+        "flags": "--no-wasm-tier-up",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 14541,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150188,
+      "verdict": "not reproduced in 14541 iterations"
+    },
+    {
+      "cell": {
+        "shared": false,
+        "module": "tiny",
+        "flags": "--no-wasm-code-gc",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 15270,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150059,
+      "verdict": "not reproduced in 15270 iterations"
+    },
+    {
+      "cell": {
+        "shared": false,
+        "module": "kernel",
+        "flags": "",
+        "children": 5,
+        "workersPerIteration": 2,
+        "maxDelayMs": 25,
+        "iterationsPerChild": null,
+        "secondsBudget": 150
+      },
+      "childrenRun": 5,
+      "iterationsCompleted": 17458,
+      "crashes": 0,
+      "harnessErrors": 0,
+      "harnessErrorStderr": null,
+      "signatures": [],
+      "firstCrashStderr": null,
+      "exitCodes": [
+        0
+      ],
+      "durationMs": 150069,
+      "verdict": "not reproduced in 17458 iterations"
+    }
+  ]
+}
