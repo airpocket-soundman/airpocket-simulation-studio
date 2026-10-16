@@ -1,0 +1,45 @@
+{
+ "task": "CASEARCHIVE1",
+ "status": "partial",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "ab39d183b3e648b6bd47e6bd0b94d9d06ebdd7de",
+  "connector": "node scripts/studio-mcp.mjs over stdio, all 4 scopes, own tab; Windows 11 local machine"
+ },
+ "checks": [
+  {
+   "name": "Finer-mesh structural result produced in real Chrome (analysis-demo, #mesh-size 1.0 mm)",
+   "passed": true,
+   "detail": "Solve 6.3 s at 1.0 mm; 1.5 mm solved in 2.0 s; 0.8 mm refused with \"Element limit exceeded; increase mesh size\" (so ~1.0 mm is the practical lower bound of the page). One saved case is 8,477,632 bytes of archive (versus ~1.4 MB for two earlier small cases); a 1.5 mm case archive was 2,757,728 bytes."
+  },
+  {
+   "name": "Saving 8 large cases: not achieved; 4 saved",
+   "passed": false,
+   "detail": "caseSave of cases 1-4 succeeded (about 2.7 s for the first). Saves of cases 5-8 each returned \"Browser command timed out; inspect state before retrying\" and a later caseList (itself 10.8 s with 4 large cases) still showed 4 cases; a separate retry of case 5 also timed out after ~15 s with no case added. 8 x 8.48 MB = about 68 MB would be below the 100,000,000-byte transfer cap, so the limiting factor observed here is the per-command timeout of the connector/page, not the transfer cap."
+  },
+  {
+   "name": "caseArchiveExport of 4 large cases, chunked read, hash",
+   "passed": true,
+   "detail": "4 cases, 33910459 bytes, 518 chunks of up to 65536 bytes; assembled SHA-256 equals the declared hash; freeze (caseArchiveExport call) 10345 ms; reading all chunks 519183 ms (about 1.0 s per chunk, constant across the run); total 530714 ms (8.8 min); throughput about 0.062 MiB/s"
+  },
+  {
+   "name": "Page reload then caseArchiveImport + Write x518 + Commit restores the 4 cases",
+   "passed": true,
+   "detail": "after reload list was empty (0 cases); begin ok; 518 chunk writes in 1153966 ms (19.2 min; per chunk about 1 s at the start growing to about 3-4 s per chunk after ~350 chunks, with 3 write retries after command timeouts that the idempotent retry rule accepted); commit ok in 14456 ms; total 1169081 ms (19.5 min); restored archiveRevision equals the exported revision sha256:2d751ce751478; caseList afterwards shows the same 4 names/kinds"
+  },
+  {
+   "name": "Comparison of write and read costs",
+   "passed": true,
+   "detail": "Import write cost grew with staged size (progress per 50 chunks: 47.7, 66.3, 103.9, 99.8, 147.2, 114.6, 109.6, 201.2, 120.8, 107.3 s), consistent with page- or connector-side cost that is not constant per chunk; cause not diagnosed. n=1 on one machine; not a guarantee."
+  }
+ ],
+ "notVerified": [
+  "8-case large archive (only 4 cases of 8.48 MB were saved because caseSave 5-8 timed out)",
+  "Published HTTPS (never opened)",
+  "Cases are four identical replicated results of one 1.0 mm structural solve, not four distinct physical results",
+  "Bytes/chunk numbers are single measurements (n=1); throughput is dominated by one loopback round trip per 64 KiB",
+  "Root cause of the growing import-write latency and of the caseSave timeouts was not diagnosed (page stayed responsive: caseList answered in ~11 s)"
+ ],
+ "notes": "Partial: round trip, hashing and revision identity at 33.9 MB are verified; the stated 8-case scale was not reached."
+}

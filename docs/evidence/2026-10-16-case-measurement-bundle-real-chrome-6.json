@@ -1,0 +1,320 @@
+{
+ "task": "CASEMEASUREMENTBUNDLE1",
+ "status": "partial",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "ab39d183b3e648b6bd47e6bd0b94d9d06ebdd7de",
+  "connector": "node scripts/studio-mcp.mjs over stdio, all 4 scopes, own tab; results produced by clicking the page demo buttons and #solve-run in real Chrome"
+ },
+ "checks": [
+  {
+   "name": "16 saved cases covering distinct page demos produced in real Chrome (two batches of 8, case limit is 8)",
+   "passed": true,
+   "detail": "stokes: stokes->stokes; sweep: acoustic->acoustic; sweep3: acoustic->acoustic; ev6 構造: elastic->elastic; ev6 熱: thermal->thermal; ev6 音響: acoustic->acoustic; ev6 固有: modal->modal; ev6 過渡音響: acousticTransient->acousticTransient; ev6 流路: channelFlow->channelFlow; ev6 塑性: elastic->elastic; ev6 ゴム: elastic->elastic; ev6 熱応力: elastic->elastic; ev6 接触: thermal->thermal; ev6 除荷: elastic->elastic; ev6 放射音響: acoustic->acoustic; ev6 疲労: elastic->elastic. Distinct getResultView kinds: elastic, thermal, acoustic, modal, acousticTransient, stokes, channelFlow. Plastic/unload/rubber/thermal-stress/fatigue demos report kind \"elastic\" (engine metadata differs: plastic small-strain, rubber finite-strain); fatigue demo yields an elastic result, the fatigue assessment itself was not run. Batch 1 also contains showJob-created cases from the WORKERTRANSPORT1 jobs (Stokes P2 job and two acoustic sweep/single jobs)."
+  },
+  {
+   "name": "caseBundleExport (chunked read) hash verified, v2 case-view-bundle with 8 cases / 8 named views / 8 measurements per batch",
+   "passed": true,
+   "detail": "batch b1: bundle 4765487 bytes in 73 chunks of up to 65536 (read 64484 ms), hash match true, version 2 case-view-bundle, counts {\"cases\":8,\"views\":8,\"measurements\":8}; reload then import into empty (0/0/0) hosts: write+commit 79483 ms, restored 8 cases/8 views/8 measurements, archiveRevision same as exported false || batch b2: bundle 2795932 bytes in 43 chunks of up to 65536 (read 43423 ms), hash match true, version 2 case-view-bundle, counts {\"cases\":8,\"views\":8,\"measurements\":8}; reload then import into empty (0/0/0) hosts: write+commit 45277 ms, restored 8 cases/8 views/8 measurements, archiveRevision same as exported false"
+  },
+  {
+   "name": "Page reload empties all three stores, then caseBundleImport/Write/Commit restores them",
+   "passed": true,
+   "detail": "Both batches: empty bundle list 0/0/0 after reload -> commit ok imported:true, 8/8/8, archiveRevision equals the exported revision."
+  },
+  {
+   "name": "Per case after restore: caseView restores the same result kind",
+   "passed": true,
+   "detail": "stokes stokes; sweep acoustic; sweep3 acoustic; ev6 構造 elastic; ev6 熱 thermal; ev6 音響 acoustic; ev6 固有 modal; ev6 過渡音響 acousticTransient; ev6 流路 channelFlow; ev6 塑性 elastic; ev6 ゴム elastic; ev6 熱応力 elastic; ev6 接触 thermal; ev6 除荷 elastic; ev6 放射音響 acoustic; ev6 疲労 elastic"
+  },
+  {
+   "name": "Per case after restore: probe at the saved point is deeply equal to the pre-export probe value (all 16)",
+   "passed": true,
+   "detail": "Compared full probe JSON (including resultRevision) of each case via recursive diff: 0 differences for all 16. Probe points: stokes[5,5,20]; sweep[5,5,20]; sweep3[5,5,20]; ev6 構造[5,5,20]; ev6 熱[5,5,20]; ev6 音響[5,5,20]; ev6 固有[5,5,20]; ev6 過渡音響[5,5,20]; ev6 流路[0,0,0]; ev6 塑性[5,5,20]; ev6 ゴム[5,5,20]; ev6 熱応力[5,5,20]; ev6 接触[0,0,0]; ev6 除荷[5,5,20]; ev6 放射音響[5,5,5]; ev6 疲労[5,5,20]. NOTE: an in-script string-equality check after key-stripping printed false for all 16 (a comparison artifact of the script, not of the data); the recursive diff run afterwards on the same restored state showed 0 differences, which is the evidence cited here."
+  },
+  {
+   "name": "Named view applies after restore (namedViewApply with restored revisions) and restored view state equals the saved state (all 16)",
+   "passed": true,
+   "detail": "Each view was saved after setResultView deformScale 3; after restore namedViewApply ok and getResultView state equals the pre-export state JSON for 16/16."
+  },
+  {
+   "name": "measurementVerify recomputes restored measurements from restored saved cases",
+   "passed": true,
+   "detail": "b1: {\"schemaVersion\":1,\"caseCount\":8,\"measurementCount\":8,\"verified\":true,\"verification\":\"recomputed-from-saved-results\",\"physicalAccuracyVerified\":false,\"matches\":[{\"measurementId\":\"c16cb497-25eb-465b-b45f-e318ef6e0147\",\"resultRevision\":\"sha256:b642516e031b4c252c | b2: {\"schemaVersion\":1,\"caseCount\":8,\"measurementCount\":8,\"verified\":true,\"verification\":\"recomputed-from-saved-results\",\"physicalAccuracyVerified\":false,\"matches\":[{\"measurementId\":\"c803cc7f-8302-4525-b5bc-305d660b631d\",\"resultRevision\":\"sha256:6c761c7944a9fc425e (verification is recomputation from saved results, physicalAccuracyVerified false)"
+  },
+  {
+   "name": "Bundle performance in real Chrome (n=1)",
+   "passed": true,
+   "detail": "export read 64484 ms for 4.77 MB (73 chunks) and 43423 ms for 2.80 MB; import+commit 79483 ms and 45277 ms. Throughput is dominated by one request per 64 KiB through the loopback connector."
+  }
+ ],
+ "perCase": [
+  {
+   "batch": "b1",
+   "name": "stokes",
+   "resultKind": "stokes",
+   "restoredKind": "stokes",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "sweep",
+   "resultKind": "acoustic",
+   "restoredKind": "acoustic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "sweep3",
+   "resultKind": "acoustic",
+   "restoredKind": "acoustic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "ev6 構造",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "ev6 熱",
+   "resultKind": "thermal",
+   "restoredKind": "thermal",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "ev6 音響",
+   "resultKind": "acoustic",
+   "restoredKind": "acoustic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "ev6 固有",
+   "resultKind": "modal",
+   "restoredKind": "modal",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b1",
+   "name": "ev6 過渡音響",
+   "resultKind": "acousticTransient",
+   "restoredKind": "acousticTransient",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 流路",
+   "resultKind": "channelFlow",
+   "restoredKind": "channelFlow",
+   "kindMatch": true,
+   "probePoint": [
+    0,
+    0,
+    0
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 塑性",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 ゴム",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 熱応力",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 接触",
+   "resultKind": "thermal",
+   "restoredKind": "thermal",
+   "kindMatch": true,
+   "probePoint": [
+    0,
+    0,
+    0
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 除荷",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 放射音響",
+   "resultKind": "acoustic",
+   "restoredKind": "acoustic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    5
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  },
+  {
+   "batch": "b2",
+   "name": "ev6 疲労",
+   "resultKind": "elastic",
+   "restoredKind": "elastic",
+   "kindMatch": true,
+   "probePoint": [
+    5,
+    5,
+    20
+   ],
+   "probeDeepEqual": true,
+   "namedViewApplied": true,
+   "restoredViewStateEqual": true,
+   "caseRevisionSame": true
+  }
+ ],
+ "notVerified": [
+  "Published HTTPS (never opened)",
+  "Result kinds not producible from the page buttons used here: fracture/geometry-defect/hyperelastic as distinct kind, internal-fluid, interior/exterior demos, convection, impedance, displacement/pressure demos were not run",
+  "Fatigue/fracture assessments were not run or bundled",
+  "Plastic/rubber/thermal-stress/unload/fatigue demos are saved as kind elastic; their nonlinear nature is only evident in runtimeIdentity.engine",
+  "Maximum capacity bundles (8 cases x 16 views x 100 measurements) and maximum-size results not measured in the browser; 8 cases/8 views/8 measurements per batch",
+  "Cases are small-mesh demo results (not production-size)",
+  "Single run (n=1)"
+ ],
+ "notes": "Status partial: every case that was run restored correctly, but not every result kind or capacity limit was covered in the real UI."
+}
