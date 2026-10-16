@@ -49,8 +49,8 @@ test('completePreflight stays false and coverage lists remaining checks per phys
   const r=preflightProject(p,{}, {target:'node'});assert.equal(r.completePreflight,false);assert.equal(r.physicsCoverage.contract,contract);assert.equal(r.physicsCoverage.completePreflight,false);
   assert.ok(r.physicsCoverage.implemented.includes('unit magnitude warning'));assert.ok(r.physicsCoverage.remaining.includes('Mesh quality and element validity after generation'));
  }
- assert.ok(physicsCoverage('acoustic-wave').remaining.includes('Wavelength-per-element resolution after meshing'));
- assert.ok(physicsCoverage('thermal-conduction').remaining.includes('Connected-component anchoring after meshing'));
+ assert.ok(physicsCoverage('acoustic-wave').postMeshImplemented.some(x=>x.startsWith('Wavelength-per-element')));assert.ok(!physicsCoverage('acoustic-wave').remaining.some(x=>x.startsWith('Wavelength-per-element')));
+ assert.ok(physicsCoverage('thermal-conduction').postMeshImplemented.some(x=>x.startsWith('Connected-component anchoring')));assert.ok(!physicsCoverage('thermal-conduction').remaining.some(x=>x.startsWith('Connected-component')));
  assert.deepEqual(physicsCoverage('nope'),{contract:'nope',implemented:[],remaining:physicsCoverage(undefined).remaining,completePreflight:false});
  assert.equal(preflightProject(thermal(),{}, {operation:'mesh'}).physicsCoverage.contract,null);
 });
