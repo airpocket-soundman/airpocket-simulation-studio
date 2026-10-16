@@ -1,0 +1,31 @@
+{
+  "title": "Thermal slider fixes (PR 96) re-verified in real Chrome",
+  "date": "2026-10-16",
+  "status": "passed-with-notes",
+  "environment": {
+    "base": "worktree p-d merged with origin/main including PR 96",
+    "browser": "real Chrome (Claude in Chrome), own tab (not the selected tab), vite dev on 127.0.0.1:5174, stdio connector; Chrome auto-translation to Japanese active (some dynamic text translated)",
+    "setup": "thermal-demo, #transient-heat on, 2 s x 40 steps, #thermal-snapshots 21, mesh 4 mm (frame slider 0..20, final 80 s / step 40)",
+    "errors": "no window errors or unhandled rejections recorded"
+  },
+  "checks": [
+    {"id": "1-probe-bridge-final", "result": "passed", "detail": "final step: T(5,5,20)=40.967109648913144 and T(5,5,40)=99.99999999999996 (bit-identical to before), heat flux present, view timeSelection viewer-slider-only"},
+    {"id": "1-probe-bridge-stored-frame", "result": "passed", "detail": "frame 7 (28 s): T(5,5,20)=25.27171422034722 (not the final 40.97), flux omitted, frameTimeSeconds 28, interpolated false"},
+    {"id": "1-probe-bridge-interpolated", "result": "passed", "detail": "fine slider 275 (22 s, between frames 5 and 6): T(5,5,20)=23.340062830457093, flux omitted, frameTimeSeconds 22, interpolated true"},
+    {"id": "1-probe-GUI", "result": "passed", "detail": "probe mode click at the same surface point: interpolated 22 s 'Temperature 25.702 C / t = 22.0000 s (interpolated)'; frame 7 'Temperature 28.358 C / t = 28.0000 s'; final 'Temperature 46.136 C / Heat flux 4785.9 W/m2' (no time text, flux present)"},
+    {"id": "2-getResultView", "result": "passed", "detail": "physicalTimeSeconds 80 / 28 / 22, interpolated false / false / true, timeSelection 'viewer-slider-only', frameCount 21; state.frameIndex stays null for thermal"},
+    {"id": "2-setResultView-no-reset", "result": "passed", "detail": "setResultView {deformScale:1} at the interpolated 22 s time kept physicalTimeSeconds 22, interpolated true, and the page slider unchanged"},
+    {"id": "3-png-still-at-time", "result": "passed", "detail": "stills at 22 s (interpolated), 28 s and 80 s differ (6,977 / 52,497 / 54,652 differing pixels between pairs; screenshot montage thermal-stills-22-28-80.png in verify3/); export metadata manifest.view.timeSeconds and manifest.time.physicalTimeSeconds record 22 / 28 / 80, timeBasis 'single frame'"},
+    {"id": "3-orbit-slice-keep-interpolated-time", "result": "passed", "detail": "png-sequence orbit and slice at the 22 s interpolated time completed, manifests record physicalTimeSeconds/viewTime 22, and the page slider stayed at fine 275 / frame 5 / 22 s with the Interpolated label afterwards. deformation refused for thermal ('Deformation requires a structural or modal result.')"},
+    {"id": "4-time-export-png-sequence", "result": "passed", "detail": "refused at start: 'Time playback export is not supported for thermal results yet.'"},
+    {"id": "4-time-export-webm", "result": "passed-with-note", "detail": "startExport is accepted and the job then fails (state failed, progress 0) with 'Time playback export is not supported for thermal results yet. Use the viewer slider and a still PNG or an orbit animation.' - i.e. refused by the job, not at start (unlike png-sequence)"},
+    {"id": "4-exportCapabilities-fields", "result": "passed-with-note", "detail": "timeAnimationResultKinds ['acousticTransient'] and stillTime 'displayed-time-recorded-for-thermal' present; timeSelection still reads 'stored-acoustic-frames-only' (unchanged legacy field)"},
+    {"id": "5-restore-saved-thermal-case-name", "result": "passed", "detail": "after loading the axial bar demo, 'View saved result' for the saved 21-snapshot thermal case shows the thermal example name (heat conduction reference sample, displayed in Japanese by translation) with frames 0..20 and the thermal legend 20.00 -> 100.0 C"}
+  ],
+  "notVerified": [
+    "Probe values against an independent reference (only monotonic plausibility and bit-identical final values)",
+    "Heat flux omission via the GUI at an interpolated time was seen only as absent text",
+    "webm time refusal at start (it fails in the job)",
+    "Japanese-language text of the new controls (Chrome translation interfered)",
+    "Foreground-tab behaviour (tab was not the selected tab)"]
+}

@@ -16,7 +16,7 @@
 ## 現在地（記録時点）
 
 - 開いているPRは#13（ドラフト）のみ。公開済み（released）125、ready 2（CASEARCHIVE1、PUBLICHTTPS1）、checking 4（AGENTINPUT1、BROWSEREXPORT1、RUNTIMEWASM1、MCPARGUMENTTYPES1）、building 10、queued 24。最新の公開確認は#95（`4b57373`付近）まで。#96以降の公開runは未確認。
-- 動いているサブエージェントはchrome-mediaのみ（PR #96の熱スライダー修正の実Chrome再確認）。結果は`docs/evidence/2026-10-16-thermal-slider-fixes-real-chrome.json`（p-dのworktreeに未コミット）に書かれる予定。完了通知は新しい担当へは届かない。p-dを確認すること。
+- 動いているサブエージェントはない。PR #96の熱スライダー修正の実Chrome再確認は合格（注記あり）で、証拠`docs/evidence/2026-10-16-thermal-slider-fixes-real-chrome.json`は本PRで取り込んだ。注記: 熱のwebm時間書出しは開始時でなくジョブ失敗で拒否、`exportCapabilities.timeSelection`の旧フィールドは音響表記のまま。
 
 ## 今日マージしたもの（要点）
 
