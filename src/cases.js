@@ -21,9 +21,16 @@ export function validateCalculationRuntimeIdentity(output){
  if(output.result?.engine!==undefined&&identity.engine.actualEngine!==output.result.engine)throw Error('Runtime identity engine does not match result');
 }
 const recordsOf=new WeakMap();
-export function createCaseStore(){
+/** Estimated bytes of serialized case data (canonical JSON characters) the store may retain: 256 MiB.
+ * Measured retention is about 5.8 heap bytes per serialized byte (object clone + canonical string, before PR "case-heap": 3.9 + archive strings),
+ * and an import transiently needs several more copies, so this keeps a page well below Chrome's ~4 GB heap limit.
+ * The store also holds at most 8 cases; whichever limit is reached first refuses the save/import with code CASE_MEMORY_BUDGET (budget only). */
+export const CASE_STORE_MAX_RETAINED_BYTES=268435456;
+const budgetError=(retained,max)=>Object.assign(Error('Case memory budget exceeded: '+retained+' of '+max+' serialized bytes'),{code:'CASE_MEMORY_BUDGET'});
+export function createCaseStore({maxRetainedBytes=CASE_STORE_MAX_RETAINED_BYTES}={}){
+ if(!Number.isSafeInteger(maxRetainedBytes)||maxRetainedBytes<1)throw TypeError('Invalid case memory budget');
  let cases=[];
- function validate(c){
+ function validate(c,owned=false){
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
   validateSavedAssessment(c.output);
@@ -43,36 +50,46 @@ export function createCaseStore(){
   if(!metrics[r?.kind]||metrics[r.kind].some(([k])=>!Number.isFinite(r[k])))throw Error('Invalid case result');
   if((r.kind==='modal')!==Boolean(c.output.input.study?.modalAnalysis))throw Error('Modal input and result do not match');if((r.kind==='acousticTransient')!==Boolean(c.output.input.study?.acousticTransient))throw Error('Transient acoustic input and result do not match');if(Boolean(r.coupling)!==Boolean(c.output.input.study?.vibrationSource))throw Error('Saved vibration source does not match its input');if(r.coupling){const source=c.output.input.study.vibrationSource,solid=c.output.input.sourceModel?.solid;if(['modeIndex','amplitudeMm','phaseDeg'].some(k=>source[k]!==r.coupling[k])||source.frequencyHz!==r.frequency||source.name!==r.coupling.sourceName||solid?.kind!=='box'||!Array.isArray(solid.bounds)||solid.bounds.length!==6||solid.bounds.some((v,i)=>Math.abs(v-source.bounds[i])>1e-7))throw Error('Saved modal sound input does not match its result');}if(r.kind==='acoustic'&&Boolean(c.output.input.study?.exteriorRadiation)!==Boolean(r.radiation))throw Error('Saved exterior acoustic model does not match its input');if(c.output.input.study&&c.output.input.study.kind!==({stokes:'creepingFlow',elastic:'structural',modal:'structural',thermal:'thermal',acoustic:'acoustic',acousticTransient:'acoustic',channelFlow:'channelFlow'}[r.kind]))throw Error('Case discipline does not match result');
   if((r.kind==='channelFlow'&&r.maxSpeedMs<0)||(r.kind==='elastic'&&(r.maxDisplacementMm<0||r.maxVonMisesPa<0))||(r.kind==='thermal'&&(r.minTemperature<-273.15||r.minTemperature>r.maxTemperature))||(r.kind==='acoustic'&&r.maxPressurePa<0))throw Error('Invalid case result range');
-  return structuredClone(c);
+  return owned?c:structuredClone(c);
  }
  // Entries are private records {c,canonical}: `c` is a validated deep clone that is never handed out or mutated, so the
  // memoised canonical string of an entry is valid for the whole life of the record. Every mutation replaces records.
- let archiveCache=null;
- const wrap=c=>({c,canonical:null,token:Object.freeze({})});
- const changed=()=>{archiveCache=null;};
+  // The canonical string is computed once when the record is created (its length is the budget estimate). If the value cannot be
+ // serialised it stays null and inspect() throws later exactly as before.
+ const wrap=c=>{let canonical=null;try{canonical=canonicalJson(c);}catch{}return {c,canonical,token:Object.freeze({})};};
+ const size=list=>list.reduce((n,r)=>n+(r.canonical===null?0:r.canonical.length),0);
+ const changed=()=>{};
+ function load(validated){const next=validated.map(wrap),retained=size(next);if(retained>maxRetainedBytes)throw budgetError(retained,maxRetainedBytes);cases=next;changed();}
  const store={
   list:()=>structuredClone(cases.map(r=>r.c)),
-  add(name,output){if(cases.length>=8)throw Error('Maximum 8 cases');const c=validate({name,output});cases.push(wrap(c));changed();return structuredClone(c);},
+  add(name,output){if(cases.length>=8)throw Error('Maximum 8 cases');const c=validate({name,output}),record=wrap(c),retained=size(cases)+size([record]);if(retained>maxRetainedBytes)throw budgetError(retained,maxRetainedBytes);cases.push(record);changed();return structuredClone(c);},
   remove(index){if(!Number.isInteger(index)||!cases[index])throw Error('Unknown case');cases.splice(index,1);changed();},
   /** Rename one case; only that case is re-validated and re-cloned. */
   rename(index,name){if(!Number.isInteger(index)||!cases[index])throw Error('Unknown case');const c=structuredClone(cases[index].c);c.name=name;cases[index]=wrap(validate(c));changed();},
   export:()=>({version:1,cases:structuredClone(cases.map(r=>r.c))}),
   /** JSON.stringify(export()) without materialising the deep clone (stringify only reads the private entries). */
   exportJson:()=>JSON.stringify({version:1,cases:cases.map(r=>r.c)}),
-  import(archive){if(archive?.version!==1||!Array.isArray(archive.cases)||archive.cases.length>8)throw Error('Invalid case archive');const next=archive.cases.map(validate).map(wrap);cases=next;changed();},
+  import(archive){if(archive?.version!==1||!Array.isArray(archive.cases)||archive.cases.length>8)throw Error('Invalid case archive');return load(archive.cases.map(validate));},
+  /** Validate JSON text without a second deep clone: JSON.parse yields a private tree that nothing else references. */
+  importJson(text){const archive=JSON.parse(text);if(archive?.version!==1||!Array.isArray(archive.cases)||archive.cases.length>8)throw Error('Invalid case archive');return load(archive.cases.map(c=>validate(c,true)));},
   /** Take over the already validated entries of another store created here (no re-validation, no clone). */
-  adopt(other){if(!recordsOf.has(other))throw Error('Invalid case archive');const taken=recordsOf.get(other)();cases=taken.records;archiveCache=taken.archive;},
+  adopt(other){if(!recordsOf.has(other))throw Error('Invalid case archive');const taken=recordsOf.get(other)();cases=taken.records;},
   /** Deep copy of one entry (the other cases are not cloned). */
   exportCase(index){if(!Number.isInteger(index)||!cases[index])throw Error('Unknown case');return structuredClone(cases[index].c);},
-  /** Canonical JSON of export() without cloning it: per-entry strings are memoised, the archive string is cached until a mutation. */
+  /** Estimated serialized bytes retained by the store and the configured limit (see CASE_STORE_MAX_RETAINED_BYTES). */
+  retainedBytes:()=>size(cases),
+  maxRetainedBytes,
+  /** Canonical JSON of export() without cloning it. `key` identifies the exact set of immutable records (every mutation creates new
+   * records), so callers can detect changes without holding an archive-sized string; `canonical` joins the memoised per-case strings
+   * on demand and is never cached here. */
   inspect(){
    for(const r of cases)if(r.canonical===null)r.canonical=canonicalJson(r.c);
-   if(archiveCache===null)archiveCache='{"cases":['+cases.map(r=>r.canonical).join(',')+'],"version":1}';
-   return {canonical:archiveCache,cases:cases.map(r=>{const a=r.c.output.analysisAssessment,i=r.c.output.calculation?.runtimeIdentity;return {token:r.token,canonical:r.canonical,name:r.c.name,runtimeIdentity:i===undefined?undefined:structuredClone(i),assessment:a?{mode:a.mode,provisional:a.provisional,completePreflight:a.completePreflight}:undefined};})};
+   const records=cases.slice();
+   return {key:records.map(r=>r.token),get canonical(){return '{"cases":['+records.map(r=>r.canonical).join(',')+'],"version":1}';},cases:cases.map(r=>{const a=r.c.output.analysisAssessment,i=r.c.output.calculation?.runtimeIdentity;return {token:r.token,canonical:r.canonical,name:r.c.name,runtimeIdentity:i===undefined?undefined:structuredClone(i),assessment:a?{mode:a.mode,provisional:a.provisional,completePreflight:a.completePreflight}:undefined};})};
   },
   compare:()=>cases.map(({c})=>({name:c.name,kind:c.output.result.kind,metrics:metrics[c.output.result.kind].map(([key,unit])=>({key,unit,value:c.output.result[key]}))}))
  };
- recordsOf.set(store,()=>({records:cases.slice(),archive:archiveCache}));
+ recordsOf.set(store,()=>({records:cases.slice()}));
  return Object.freeze(store);
 }
 export function validateComputeMetadata(result){if(result?.velocityInputPowerW!==undefined&&(result.kind!=='acoustic'||!Number.isFinite(result.velocityInputPowerW)))throw Error('Invalid velocity-source power');if(result?.coupling!==undefined){const c=result.coupling;if(result.kind!=='acoustic'||c?.model!=='one-way modal surface velocity'||typeof c.sourceName!=='string'||c.sourceName.length>100||!Number.isInteger(c.modeIndex)||c.modeIndex<0||c.modeIndex>5||!Number.isFinite(c.frequencyHz)||c.frequencyHz<=0||c.frequencyHz!==result.frequency||!Number.isFinite(c.amplitudeMm)||c.amplitudeMm<0||!Number.isFinite(c.phaseDeg)||Math.abs(c.phaseDeg)>360||!Number.isInteger(c.faceCount)||c.faceCount<12||!Number.isFinite(c.areaM2)||c.areaM2<=0||!Number.isFinite(c.maxNormalVelocityMs)||c.maxNormalVelocityMs<0||!Number.isFinite(result.velocityInputPowerW))throw Error('Invalid saved modal acoustic coupling');}if(result?.kind==='modal'){const r=result;if(r.massModel!=='lumped Tet4'||!Array.isArray(r.modes)||r.modes.length<1||r.modes.length>6||!Number.isInteger(r.iterations)||r.iterations<1||r.iterations>100||!Number.isInteger(r.linearIterations)||r.linearIterations<1||!Number.isFinite(r.totalMassKg)||r.totalMassKg<=0||r.modes.some((m,i)=>!Number.isFinite(m.frequencyHz)||m.frequencyHz<=0||i&&m.frequencyHz<r.modes[i-1].frequencyHz||!Number.isFinite(m.eigenvalue)||Math.abs(Math.sqrt(m.eigenvalue)/(2*Math.PI)-m.frequencyHz)>1e-8||!Number.isFinite(m.residual)||m.residual<0||m.residual>1e-5)||r.lowestFrequencyHz!==r.modes[0].frequencyHz||r.highestFrequencyHz!==r.modes.at(-1).frequencyHz)throw Error('Invalid saved modal result');}if(result?.kind==='acousticTransient'){const r=result,n=r.pressure?.length,finite=v=>Number.isFinite(v);if(!Number.isInteger(n)||n<4||n>3000||![r.time,r.duration,r.timeStep,r.stableTimeStep,r.frequency,r.pulseWidth,r.bandwidthHz,r.wavelengthMm,r.maxEdgeMm].every(v=>finite(v)&&v>0)||r.time!==r.duration||r.timeStep>r.stableTimeStep*(1+1e-12)||!Number.isInteger(r.steps)||r.steps<1||r.steps>60000||Math.abs(r.steps*r.timeStep-r.duration)>1e-10||r.maxEdgeMm>r.wavelengthMm/6||![r.maxPressurePa,r.receiverPeakPa,r.receiverRmsPa,r.dampingRate].every(v=>finite(v)&&v>=0)||!Array.isArray(r.pressure)||!r.pressure.every(finite)||!Array.isArray(r.receiverPoint)||r.receiverPoint.length!==3||!r.receiverPoint.every(finite)||!Array.isArray(r.receiverPressurePa)||r.receiverPressurePa.length!==r.steps+1||!r.receiverPressurePa.every(finite)||!Array.isArray(r.snapshots)||r.snapshots.length<2||r.snapshots.length>62||r.snapshots.some((f,i)=>!finite(f.time)||f.time<0||f.time>r.duration||i&&f.time<=r.snapshots[i-1].time||!Array.isArray(f.pressure)||f.pressure.length!==n||!f.pressure.every(finite))||r.snapshots[0].time!==0||r.snapshots.at(-1).time!==r.duration)throw Error('Invalid saved transient acoustic result');}if(result?.radiation!==undefined){const a=result.radiation;if(result.kind!=='acoustic'||a?.model!=='spherical-first-order'||!Array.isArray(a.centerMm)||a.centerMm.length!==3||!a.centerMm.every(Number.isFinite)||![a.radiusMm,a.waveNumberReal,a.airDensity].every(v=>Number.isFinite(v)&&v>0)||!Number.isFinite(a.waveNumberDecay)||a.waveNumberDecay<0||!Number.isInteger(a.faceCount)||a.faceCount<4||!Number.isFinite(a.powerW)||a.powerW<0)throw Error('Invalid saved spherical radiation');}if(result?.farField!==undefined){const f=result.farField;if(!result.radiation||f?.method!=='Kirchhoff-Helmholtz spherical trace'||!Number.isInteger(f.axis)||f.axis<0||f.axis>2||!Number.isInteger(f.count)||f.count<12||f.count>180||!Number.isFinite(f.referenceDistanceM)||f.referenceDistanceM<=0||!Number.isFinite(f.maxPeakPressurePa)||f.maxPeakPressurePa<0||typeof f.normalized!=='boolean'||!Array.isArray(f.samples)||f.samples.length!==f.count||f.samples.some((s,i)=>!Number.isFinite(s.angleDeg)||Math.abs(s.angleDeg-i/f.count*360)>1e-8||!Array.isArray(s.direction)||s.direction.length!==3||!s.direction.every(Number.isFinite)||Math.abs(Math.hypot(...s.direction)-1)>1e-8||Math.abs(s.direction[f.axis])>1e-8||!['pressureReal','pressureImag','peakPressurePa','splDb'].every(k=>Number.isFinite(s[k]))||s.peakPressurePa<0||(f.normalized?(!Number.isFinite(s.relativeDb)||s.relativeDb>1e-8||s.relativeDb< -240-1e-8):s.relativeDb!==null)))throw Error('Invalid saved far-field directivity');}if(result?.waveResolution!==undefined){const w=result.waveResolution;if(result.kind!=='acoustic'||!['wavelengthMm','maxEdgeMm','pointsPerWavelength'].every(k=>Number.isFinite(w[k])&&w[k]>0)||w.pointsPerWavelength<6-1e-9||Math.abs(w.wavelengthMm/w.maxEdgeMm-w.pointsPerWavelength)>1e-8)throw Error('Invalid saved acoustic wavelength resolution');}
