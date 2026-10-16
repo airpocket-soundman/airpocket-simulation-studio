@@ -40,7 +40,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(canvas.width!==w||canvas.height!==h+116){canvas.width=w;canvas.height=h+116;}
   context.fillStyle='#102331';context.fillRect(0,0,w,h+116);context.drawImage(source,0,0,w,h);
   context.fillStyle='#edf6f8';context.font='15px sans-serif';
-  const lines=['Airpocket Simulation Studio · '+$('name').textContent,(getAnalysis()?.result?.analysisAssessment?.provisional?(language()==='en'?'PROVISIONAL · ':'暫定解析 · '):'')+$('result-legend').textContent,$('section-summary').textContent,$('visual-export-status').textContent];
+  const lines=['airpocket Simulation Studio · '+$('name').textContent,(getAnalysis()?.result?.analysisAssessment?.provisional?(language()==='en'?'PROVISIONAL · ':'暫定解析 · '):'')+$('result-legend').textContent,$('section-summary').textContent,$('visual-export-status').textContent];
   lines.forEach((text,i)=>context.fillText(text,16,h+23+23*i,w-32));return canvas;
  }
  function download(blob,name){if(downloadUrl)URL.revokeObjectURL(downloadUrl);downloadUrl=URL.createObjectURL(blob);const link=$('visual-export-download');link.href=downloadUrl;link.download=name;link.textContent=language()==='en'?'Download again':'もう一度ダウンロード';link.hidden=false;link.click();}
