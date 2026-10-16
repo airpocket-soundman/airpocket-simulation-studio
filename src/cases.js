@@ -62,6 +62,10 @@ export function createCaseStore({maxRetainedBytes=CASE_STORE_MAX_RETAINED_BYTES}
  function load(validated){const next=validated.map(wrap),retained=size(next);if(retained>maxRetainedBytes)throw budgetError(retained,maxRetainedBytes);cases=next;changed();}
  const store={
   list:()=>structuredClone(cases.map(r=>r.c)),
+  /** Per-case read access that does not clone the other cases. at(i) equals list()[i] (undefined when absent). */
+  at(index){const key=typeof index==='string'&&/^(0|[1-9]\d*)$/.test(index)?Number(index):index;return Number.isInteger(key)&&key>=0&&cases[key]?structuredClone(cases[key].c):undefined;},
+  count:()=>cases.length,
+  names:()=>cases.map(r=>r.c.name),
   add(name,output){if(cases.length>=8)throw Error('Maximum 8 cases');const c=validate({name,output}),record=wrap(c),retained=size(cases)+size([record]);if(retained>maxRetainedBytes)throw budgetError(retained,maxRetainedBytes);cases.push(record);changed();return structuredClone(c);},
   remove(index){if(!Number.isInteger(index)||!cases[index])throw Error('Unknown case');cases.splice(index,1);changed();},
   /** Rename one case; only that case is re-validated and re-cloned. */
