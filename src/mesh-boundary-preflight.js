@@ -2,10 +2,12 @@ import {transferConditions} from './boundaries.js';
 import {getProjectRevision,canonicalJson} from './project-revision.js';
 import {analyzeRigidBodyConstraints} from './constraint-rank.js';
 import {getAnalysisFailure,analysisError} from './analysis-failure.js';
+import {analyzeAcousticResolution,analyzeComponentAnchoring} from './mesh-resolution-preflight.js';
 
 const REMAINING_AFTER_RIGID_BODY=['Solver convergence and physical accuracy have not been checked.','Rigid-body constraint rank covers nodal fixed/displacement supports only; spring or elastic supports are not modelled and are never counted as eliminating a mode.'];
 const unsupported=(project)=>{
  const study=project.study??{},material=project.materialProperties??{};
+ if(study.kind==='thermal'||study.kind==='acoustic')return study.modalAnalysis===true;
  return (study.kind!==undefined&&study.kind!=='structural')||study.modalAnalysis===true||study.thermalStress===true||(study.materialTemperature!==undefined&&material.dependence!=null)||Boolean(material.orthotropic||material.plasticity||material.hyperelastic||material.dependence?.elasticTemperatureTable);
 };
 const rejected=(code,message,target,evidence={})=>({schemaVersion:1,allowed:false,completePreflight:false,diagnostics:[{code,severity:'error',stage:'boundary-transfer',target,message,evidence,suggestions:['Inspect the exact saved input and retained mesh-only job, then retry with a successful settled job for the current revision'],requiresUserIntent:true}],reports:[],remainingChecks:['Constraint rank and rigid-body modes have not been checked.','Solver convergence and physical accuracy have not been checked.']});
@@ -27,12 +29,14 @@ export async function preflightMeshBoundaryTransfer({project,job,output,expected
  let outputRevision;try{outputRevision=await getProjectRevision(outputSnapshot.input);}catch{return rejected('ANALYSIS_MESH_PREFLIGHT_OUTPUT_INVALID','Retained mesh output input is invalid','/job');}
  if(!unchanged())return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_CHANGED','Input or retained mesh changed during boundary-transfer inspection','/');
  if(outputRevision!==revision)return rejected('ANALYSIS_MESH_PREFLIGHT_JOB_STALE','Retained mesh was produced from a different input revision','/job',{jobRevision:job.inputRevision,currentRevision:revision,outputRevision});
- if(unsupported(projectSnapshot))return rejected('ANALYSIS_MESH_PREFLIGHT_MODEL_UNSUPPORTED','Boundary-transfer inspection is limited to static linear structural inputs','/study',{kind:projectSnapshot.study?.kind??'structural'});
+ if(unsupported(projectSnapshot))return rejected('ANALYSIS_MESH_PREFLIGHT_MODEL_UNSUPPORTED','Boundary-transfer inspection is limited to static linear structural, thermal and acoustic inputs','/study',{kind:projectSnapshot.study?.kind??'structural'});
  try{
   const transferred=transferConditions(projectSnapshot,outputSnapshot.mesh);
   if(!unchanged())return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_CHANGED','Input or retained mesh changed during boundary-transfer inspection','/');
-  const {diagnostics,...rigidBody}=analyzeRigidBodyConstraints({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred});
-  return {schemaVersion:1,allowed:true,completePreflight:false,inputRevision:revision,jobId:job.jobId,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics,rigidBody,remainingChecks:REMAINING_AFTER_RIGID_BODY};
+  const {diagnostics:rigidDiagnostics,...rigidBody}=analyzeRigidBodyConstraints({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred});
+  const anchoring=analyzeComponentAnchoring({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred}),resolution=analyzeAcousticResolution({project:projectSnapshot,mesh:outputSnapshot.mesh});
+  const diagnostics=[...rigidDiagnostics,...anchoring.diagnostics,...resolution.diagnostics];
+  return {schemaVersion:1,allowed:!diagnostics.some(d=>d.code==='ACOUSTIC_MESH_WAVELENGTH_UNRESOLVED'),completePreflight:false,inputRevision:revision,jobId:job.jobId,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics,rigidBody,componentAnchoring:anchoring.report,acousticResolution:resolution.report,remainingChecks:REMAINING_AFTER_RIGID_BODY};
  }catch(error){
   const failure=getAnalysisFailure(error);if(failure)return {...rejected(failure.code,failure.message,failure.diagnostics[0].target,failure.diagnostics[0].evidence),diagnostics:failure.diagnostics};
   const diagnostic=analysisError('ANALYSIS_MESH_PREFLIGHT_FAILED','Boundary transfer inspection failed',{stage:'boundary-transfer',target:'/conditions',evidence:{}});
