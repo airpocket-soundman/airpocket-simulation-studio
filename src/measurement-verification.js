@@ -1,3 +1,4 @@
+import {framesOf} from './result-frames.js';
 import {canonicalJson,getProjectRevision} from './project-revision.js';
 import {createCaseStore} from './cases.js';
 import {prepareCaseView} from './case-view.js';
@@ -14,7 +15,17 @@ export async function verifyMeasurementArchive(command){
  if(!exact(snapshot.caseArchive,['version','cases'])||snapshot.caseArchive.version!==1)throw Error('Invalid measurement verification case archive');
  const measurementArchive=validateMeasurementArchive(snapshot.measurementArchive),store=createCaseStore();store.import(snapshot.caseArchive);
  const outputs=new Map();for(let caseIndex=0;caseIndex<store.count();caseIndex++){const output=prepareCaseView(store.at(caseIndex)),resultRevision=await getProjectRevision(JSON.parse(JSON.stringify(output))),previous=outputs.get(resultRevision);if(previous)previous.caseIndexes.push(caseIndex);else outputs.set(resultRevision,{output,caseIndexes:[caseIndex]});}
- const matches=[];for(const record of measurementArchive.measurements){const matched=outputs.get(record.resultRevision);if(!matched)throw Error('Measurement has no matching restored saved result: '+record.id);const display=record.evidence.display,state={field:display.field,modeIndex:display.modeIndex,frameIndex:display.frameIndex,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:false,colorRange:null,camera:{position:[5,5,5],target:[0,0,0],up:[0,1,0],fov:40}},resultView=createResultViewApi({getAnalysis:()=>matched.output,get:()=>state});
+ const matches=[];for(const record of measurementArchive.measurements){const matched=outputs.get(record.resultRevision);if(!matched)throw Error('Measurement has no matching restored saved result: '+record.id);const display=record.evidence.display,state={field:display.field,modeIndex:display.modeIndex,frameIndex:display.frameIndex,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:false,colorRange:null,camera:{position:[5,5,5],target:[0,0,0],up:[0,1,0],fov:40}},thermal=matched.output.result.kind==='thermal'&&Object.hasOwn(display,'physicalTimeSeconds');
+  let frameDisplay;
+  if(thermal){
+   const result=matched.output.result,frames=framesOf(result),i=display.storedFrameIndex;
+   if(!frames||frames.times[i]!==display.physicalTimeSeconds||display.interpolated!==false)throw Error('Measurement stored thermal frame does not match saved result: '+record.id);
+   if(!Array.isArray(frames.fields[i])||frames.fields[i].length!==matched.output.mesh.nodes.length/3||!frames.fields[i].every(Number.isFinite))throw Error('Invalid saved thermal snapshot temperature');
+   const final=i===frames.times.length-1;
+   if(final&&canonicalJson(frames.fields[i])!==canonicalJson(result.temperature))throw Error('Final thermal snapshot does not match saved final temperature');
+   frameDisplay=()=>({frameTime:frames.times[i],interpolated:false,...(final?{}:{frameValues:frames.fields[i]})});
+  }
+  const resultView=createResultViewApi({getAnalysis:()=>matched.output,get:()=>state,...(frameDisplay?{frameDisplay}:{})});
   const actual=await resultView.probe({expectedResultRevision:record.resultRevision,point:record.point,options:record.options});
   if(canonicalJson(actual)!==canonicalJson(record.evidence))throw Error('Measurement evidence does not match saved result: '+record.id);
   matches.push({measurementId:record.id,resultRevision:record.resultRevision,caseIndexes:[...matched.caseIndexes]});

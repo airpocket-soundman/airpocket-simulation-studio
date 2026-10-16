@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createNamedResultViews} from '../src/named-result-views.js';
+import {createResultViewApi} from '../src/result-view-api.js';
 const rev='sha256:'+'a'.repeat(64);
 const state=()=>({field:'temperature',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:false,colorRange:null,camera:{position:[5,5,5],target:[0,0,0],up:[0,1,0],fov:40}});
 const setup=()=>({clipEnabled:false,flip:false,axis:0,position:0,opacity:1,meshCount:2,hiddenParts:[]});
@@ -35,4 +36,51 @@ test('save -> apply -> read through the real result view API is exactly stable d
  assert.equal(JSON.stringify(after.state),JSON.stringify(before.state));
  assert.deepEqual(after.state.camera.position,[70,50,90]);
  assert.equal(JSON.stringify(after.state.colorRange),'{"field":"temperature","minimum":0,"maximum":10}');
+});
+
+function thermalHarness({hooks=true}={}){
+ const output={input:{version:1},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},result:{kind:'thermal',transient:true,temperature:[40,40,40,40],flux:[[1,2,3]],snapshots:[{time:0,temperature:[20,20,20,20]},{time:7,temperature:[40,40,40,40]}]}};
+ let live=state(),view=setup(),time={index:0,interpolated:false,timeSeconds:0},fail=false,sets=0;
+ const getTimeView=()=>structuredClone(time),restoreTimeView=s=>{time=structuredClone(s);};
+ const resultView=createResultViewApi({getAnalysis:()=>output,get:()=>live,frameDisplay:()=>({frameTime:time.timeSeconds,interpolated:time.interpolated,...(time.index===1&&!time.interpolated?{}:{frameValues:time.interpolated?[30,30,30,30]:output.result.snapshots[time.index].temperature})}),getTimeView,restoreTimeView,set:(s,{timeChanged=false}={})=>{sets++;live=structuredClone(s);if(timeChanged)time={index:s.frameIndex,interpolated:false,timeSeconds:output.result.snapshots[s.frameIndex].time};}});
+ const api=createNamedResultViews({resultView,setupView:{get:()=>view,set:s=>{view=structuredClone(s);if(fail){fail=false;throw Error('Setup rejected');}}},...(hooks?{getTimeView,restoreTimeView}:{})});
+ return {api,resultView,get time(){return structuredClone(time);},get sets(){return sets;},fail:()=>fail=true,interpolate:()=>{time={index:0,interpolated:true,timeSeconds:.123456789123};},async save(){const current=await resultView.get();return api.save({name:'Stored thermal',expectedResultRevision:current.resultRevision,expectedArchiveRevision:(await api.list()).archiveRevision});},async apply(saved){return api.apply({viewId:saved.viewId,expectedRevision:saved.revision,expectedResultRevision:(await resultView.get()).resultRevision});},async select(index){await resultView.set({expectedResultRevision:(await resultView.get()).resultRevision,settings:{frameIndex:index}});}};
+}
+
+test('stored thermal time is additive in v1 and save/apply uses the exact physical time',async()=>{
+ const h=thermalHarness(),saved=await h.save(),archive=await h.api.export();
+ assert.equal(archive.version,1);assert.deepEqual(archive.views[0].thermalTime,{kind:'thermal',timeSeconds:0});
+ const summary=(await h.api.list()).views[0];assert.deepEqual(summary.thermalTime,{kind:'thermal',timeSeconds:0});
+ summary.thermalTime.timeSeconds=999;assert.equal((await h.api.list()).views[0].thermalTime.timeSeconds,0);
+ await h.select(1);await h.apply(saved);assert.equal(h.time.timeSeconds,0);
+ const other=thermalHarness();await other.api.import({archive,expectedArchiveRevision:(await other.api.list()).archiveRevision});assert.deepEqual(await other.api.export(),archive);
+ h.interpolate();const before=await h.api.export();await assert.rejects(h.save(),/stored thermal times only/);assert.deepEqual(await h.api.export(),before);
+});
+
+test('thermal named rollback restores prior stored or exact interpolated time after setup failure',async()=>{
+ for(const interpolate of [false,true]){
+  const h=thermalHarness(),saved=await h.save();if(interpolate)h.interpolate();else await h.select(1);
+  const before=h.time;h.fail();await assert.rejects(h.apply(saved),/Setup rejected/);assert.deepEqual(h.time,before);
+ }
+ const h=thermalHarness({hooks:false}),saved=await h.save();h.interpolate();const before=h.time,sets=h.sets;
+ await assert.rejects(h.apply(saved),/Cannot restore interpolated/);assert.deepEqual(h.time,before);assert.equal(h.sets,sets);
+});
+
+test('named thermal context rejects malformed data and cannot be applied to another kind',async()=>{
+ const h=thermalHarness(),saved=await h.save(),original=await h.api.export(),cas=(await h.api.list()).archiveRevision;
+ for(const context of [null,{kind:'acoustic',timeSeconds:0},{kind:'thermal',timeSeconds:-1},{kind:'thermal',timeSeconds:0,extra:true}]){
+  const archive=structuredClone(original);archive.views[0].thermalTime=context;
+  await assert.rejects(h.api.import({archive,expectedArchiveRevision:cas}),/thermal time/);assert.deepEqual(await h.api.export(),original);
+ }
+ const legacy=harness();const archive=structuredClone(original);archive.views[0].resultRevision=rev;
+ await legacy.api.import({archive,expectedArchiveRevision:(await legacy.api.list()).archiveRevision});const imported=(await legacy.api.list()).views[0];
+ await assert.rejects(legacy.api.apply({viewId:imported.viewId,expectedRevision:imported.revision,expectedResultRevision:rev}),/requires a thermal result/);
+ assert.ok(saved.viewId);
+});
+
+test('thermal capture checks physical time again after snapshot hashing',async()=>{
+ const h=thermalHarness(),get=h.resultView.get;let reads=0;
+ const api=createNamedResultViews({resultView:{...h.resultView,async get(...args){if(++reads===2)await h.select(1);return get(...args);}},setupView:{get:setup}});
+ const current=await get();await assert.rejects(api.save({name:'Race',expectedResultRevision:current.resultRevision,expectedArchiveRevision:(await api.list()).archiveRevision}),/Viewer changed/);
+ assert.equal((await api.list()).views.length,0);
 });

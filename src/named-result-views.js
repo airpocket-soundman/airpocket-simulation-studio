@@ -20,18 +20,27 @@ function resultSettings(s){
 }
 function setupSettings(s){if(!keys(s,setupKeys))throw Error('Invalid setup settings');validateViewSettings(s);if(new Set(s.hiddenParts).size!==s.hiddenParts.length)throw Error('Duplicate hidden part');return s;}
 function validName(name){if(typeof name!=='string'||name.length>100||!name.trim()||/[\u0000-\u001f\u007f]/.test(name))throw Error('Invalid named view name');return name.trim();}
+function storedThermalTime(current){
+ if(current.kind!=='thermal'||current.physicalTimeSeconds===undefined)return undefined;
+ if(current.interpolated||current.timeSelection!=='stored-frames-only')throw Error('Named views support stored thermal times only; choose a stored frame before saving');
+ return {kind:'thermal',timeSeconds:current.physicalTimeSeconds};
+}
+function validateThermalTime(time,result){
+ if(!keys(time,['kind','timeSeconds'])||time.kind!=='thermal'||!Number.isFinite(time.timeSeconds)||time.timeSeconds<0||!['temperature','heatFlux'].includes(result.field)||result.frameIndex!==null||result.modeIndex!==null)throw Error('Invalid named thermal time');
+}
+function timedSettings(state,time){const settings=structuredClone(state);if(time){delete settings.frameIndex;settings.timeSeconds=time.timeSeconds;}return settings;}
 export function validateNamedViewArchive(input){
  if(!keys(input,['version','views'])||input.version!==1||!Array.isArray(input.views)||input.views.length>16)throw Error('Invalid named view archive');
- const ids=new Set();for(const v of input.views){if(!keys(v,['id','name','resultRevision','result','setup'])||typeof v.id!=='string'||!v.id.length||v.id.length>200||/[\u0000-\u001f\u007f]/.test(v.id)||ids.has(v.id)||!revision(v.resultRevision))throw Error('Invalid or duplicate named view');ids.add(v.id);if(validName(v.name)!==v.name)throw Error('Named view name must be trimmed');resultSettings(v.result);setupSettings(v.setup);}
+ const ids=new Set();for(const v of input.views){if(!keys(v,['id','name','resultRevision','result','setup',...(Object.hasOwn(v??{},'thermalTime')?['thermalTime']:[])])||typeof v.id!=='string'||!v.id.length||v.id.length>200||/[\u0000-\u001f\u007f]/.test(v.id)||ids.has(v.id)||!revision(v.resultRevision))throw Error('Invalid or duplicate named view');ids.add(v.id);if(validName(v.name)!==v.name)throw Error('Named view name must be trimmed');resultSettings(v.result);setupSettings(v.setup);if(Object.hasOwn(v,'thermalTime'))validateThermalTime(v.thermalTime,v.result);}
  return structuredClone(input);
 }
 
 /** Portable presentation snapshots. Physical results remain in their original archive. */
-export function createNamedResultViews({resultView,setupView,isBusy=()=>false,id=()=>crypto.randomUUID()}){
+export function createNamedResultViews({resultView,setupView,isBusy=()=>false,id=()=>crypto.randomUUID(),getTimeView,restoreTimeView}){
  let archive={version:1,views:[]},locked=false;
  const check=guard=>{if(isBusy()||!guard())throw Error('Viewer busy or command expired');};
  const archiveRevision=()=>getProjectRevision(archive);
- const item=async v=>({viewId:v.id,revision:await getProjectRevision(v),name:v.name,resultRevision:v.resultRevision});
+ const item=async v=>({viewId:v.id,revision:await getProjectRevision(v),name:v.name,resultRevision:v.resultRevision,...(v.thermalTime?{thermalTime:structuredClone(v.thermalTime)}:{})});
  async function listing(){const snapshot=structuredClone(archive);return {schemaVersion:1,archiveRevision:await getProjectRevision(snapshot),views:await Promise.all(snapshot.views.map(item))};}
  async function mutate(guard,action){if(locked)throw Error('Named view operation in progress');check(guard);locked=true;try{return await action();}finally{locked=false;}}
  async function expectedArchive(expected){if(!revision(expected)||expected!==await archiveRevision())throw Error('Named view archive revision conflict');}
@@ -52,14 +61,19 @@ export function createNamedResultViews({resultView,setupView,isBusy=()=>false,id
   matchesArchive:value=>canonicalJson(archive)===canonicalJson(value),
   list:listing,
   async export(){return validateNamedViewArchive(archive);},
-  async save({name,expectedResultRevision,expectedArchiveRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{name=validName(name);await expectedArchive(expectedArchiveRevision);if(archive.views.length>=16)throw Error('Named view limit reached');const current=await resultView.get();if(!revision(expectedResultRevision)||current.resultRevision!==expectedResultRevision)throw Error('Displayed result revision conflict');const v={id:id(),name,resultRevision:current.resultRevision,result:structuredClone(current.state),setup:structuredClone(setupView.get())};const next=validateNamedViewArchive({version:1,views:[...archive.views,v]});const summary=await item(v),nextRevision=await getProjectRevision(next),latest=await resultView.get();if(latest.resultRevision!==current.resultRevision||JSON.stringify(latest.state)!==JSON.stringify(current.state)||JSON.stringify(setupView.get())!==JSON.stringify(v.setup))throw Error('Viewer changed during named view snapshot');check(guard);archive=next;return {...summary,archiveRevision:nextRevision};});},
+  async save({name,expectedResultRevision,expectedArchiveRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{name=validName(name);await expectedArchive(expectedArchiveRevision);if(archive.views.length>=16)throw Error('Named view limit reached');const current=await resultView.get();if(!revision(expectedResultRevision)||current.resultRevision!==expectedResultRevision)throw Error('Displayed result revision conflict');const thermalTime=storedThermalTime(current),v={id:id(),name,resultRevision:current.resultRevision,result:structuredClone(current.state),setup:structuredClone(setupView.get()),...(thermalTime?{thermalTime}:{})};const next=validateNamedViewArchive({version:1,views:[...archive.views,v]});const summary=await item(v),nextRevision=await getProjectRevision(next),latest=await resultView.get();if(latest.resultRevision!==current.resultRevision||JSON.stringify(latest.state)!==JSON.stringify(current.state)||JSON.stringify(storedThermalTime(latest))!==JSON.stringify(thermalTime)||JSON.stringify(setupView.get())!==JSON.stringify(v.setup))throw Error('Viewer changed during named view snapshot');check(guard);archive=next;return {...summary,archiveRevision:nextRevision};});},
   async remove({viewId,expectedRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{await selected(viewId,expectedRevision);const next={version:1,views:archive.views.filter(v=>v.id!==viewId)};const nextRevision=await getProjectRevision(next);check(guard);archive=next;return {viewId,removed:true,archiveRevision:nextRevision};});},
   async import({archive:input,expectedArchiveRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{const next=validateNamedViewArchive(input);await expectedArchive(expectedArchiveRevision);const nextRevision=await getProjectRevision(next);check(guard);archive=next;return {schemaVersion:1,archiveRevision:nextRevision,views:await Promise.all(next.views.map(item))};});},
   async apply({viewId,expectedRevision,expectedResultRevision}={},{guard=()=>true}={}){return mutate(guard,async()=>{
    const v=await selected(viewId,expectedRevision);if(expectedResultRevision!==v.resultRevision)throw Error('Named view result revision conflict');const previous=await resultView.get(),setup=structuredClone(setupView.get());if(previous.resultRevision!==v.resultRevision)throw Error('Displayed result revision conflict');if(setup.meshCount!==v.setup.meshCount)throw Error('Setup mesh count conflict');check(guard);
-   const result=await resultView.set({expectedResultRevision,settings:structuredClone(v.result)},{guard:()=>guard()&&!isBusy()});
+   if(v.thermalTime&&previous.kind!=='thermal')throw Error('Named thermal time requires a thermal result');
+   const interpolated=previous.kind==='thermal'&&previous.interpolated;
+   if(v.thermalTime&&interpolated&&(!getTimeView||!restoreTimeView))throw Error('Cannot restore interpolated thermal time with this named view adapter');
+   const previousTime=previous.kind==='thermal'&&!interpolated&&previous.timeSelection==='stored-frames-only'?{kind:'thermal',timeSeconds:previous.physicalTimeSeconds}:undefined;
+   const savedTime=v.thermalTime&&getTimeView&&restoreTimeView?getTimeView():undefined;
+   const result=await resultView.set({expectedResultRevision,settings:timedSettings(v.result,v.thermalTime)},{guard:()=>guard()&&!isBusy()});
    try{check(guard);if(setupView.get().meshCount!==v.setup.meshCount)throw Error('Setup mesh count conflict');setupView.set(structuredClone(v.setup));}
-   catch(error){const errors=[error];try{setupView.set(setup);}catch(e){errors.push(e);}try{await resultView.set({expectedResultRevision,settings:previous.state});}catch(e){errors.push(e);}if(errors.length>1)throw new AggregateError(errors,'Named view update and restoration failed');throw error;}
+   catch(error){const errors=[error];try{setupView.set(setup);}catch(e){errors.push(e);}try{await resultView.set({expectedResultRevision,settings:timedSettings(previous.state,v.thermalTime?previousTime:undefined)});}catch(e){errors.push(e);}try{if(savedTime!==undefined)restoreTimeView(savedTime);}catch(e){errors.push(e);}if(errors.length>1)throw new AggregateError(errors,'Named view update and restoration failed');throw error;}
    return {...await item(v),resultView:result};
   });}
  });
