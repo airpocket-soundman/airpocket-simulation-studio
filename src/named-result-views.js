@@ -23,6 +23,7 @@ function validName(name){if(typeof name!=='string'||name.length>100||!name.trim(
 function storedThermalTime(current){
  if(current.kind!=='thermal'||current.physicalTimeSeconds===undefined)return undefined;
  if(current.interpolated||current.timeSelection!=='stored-frames-only')throw Error('Named views support stored thermal times only; choose a stored frame before saving');
+ if(current.state.field==='heatFlux'&&(!Number.isSafeInteger(current.frameCount)||current.frameCount<2||!Number.isSafeInteger(current.storedFrameIndex)||current.storedFrameIndex!==current.frameCount-1))throw Error('Heat flux named views require the final stored thermal frame');
  return {kind:'thermal',timeSeconds:current.physicalTimeSeconds};
 }
 function validateThermalTime(time,result){
