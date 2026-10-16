@@ -16,19 +16,21 @@ export function createCaseArchiveTransfer({cases,maxBytes=100000000,maxTransfers
  const find=({transferId}={})=>transfers.get(transferId)??fail('Unknown or released archive transfer');
  const live=(entry,guard)=>{guardCheck(guard);if(transfers.get(entry.transferId)!==entry)fail('Archive transfer released or expired');};
  const metadata=entry=>({transferId:entry.transferId,direction:entry.direction,...(entry.archiveRevision?{archiveRevision:entry.archiveRevision}:{}),totalBytes:entry.totalBytes,sha256:entry.sha256,maxChunkBytes:CHUNK});
- function allocate(direction,totalBytes){
+ function allocate(direction,totalBytes,bytes=new Uint8Array(totalBytes)){
   if(transfers.size>=maxTransfers)fail('Archive transfer count limit exceeded');
   if(totalBytes>maxBytes-retained)fail('Archive transfer byte budget exceeded');
   const transferId=id();if(typeof transferId!=='string'||!transferId||issued.has(transferId))fail('Invalid archive transfer identity');
-  const entry={transferId,direction,totalBytes,bytes:new Uint8Array(totalBytes),offset:0};issued.add(transferId);transfers.set(transferId,entry);retained+=totalBytes;return entry;
+  const entry={transferId,direction,totalBytes,bytes,offset:0};issued.add(transferId);transfers.set(transferId,entry);retained+=totalBytes;return entry;
  }
- function releaseEntry(entry){if(transfers.delete(entry.transferId)){retained-=entry.bytes?.length??0;entry.bytes=null;}}
+ // A committed import never needs its staged bytes again (replays return the stored result), so they are freed at once.
+ function dropBytes(entry){if(entry.bytes){retained-=entry.bytes.length;entry.bytes=null;}entry.previous=null;}
+ function releaseEntry(entry){if(transfers.delete(entry.transferId))dropBytes(entry);}
  return Object.freeze({
   async beginExport(args={}, {guard=()=>true}={}){
    guardCheck(guard);const value=typeof cases.exportArchiveJson==='function'?await cases.exportArchiveJson():await cases.exportArchive();guardCheck(guard);
    const bytes=new TextEncoder().encode(value.json??JSON.stringify(value.archive));
    if(!bytes.length||bytes.length>maxBytes)fail('Archive export byte limit exceeded');
-   const entry=allocate('export',bytes.length);entry.bytes.set(bytes);entry.archiveRevision=value.archiveRevision;
+   const entry=allocate('export',bytes.length,bytes);entry.archiveRevision=value.archiveRevision;
    try{entry.sha256=await digest(entry.bytes);live(entry,guard);return metadata(entry);}catch(error){releaseEntry(entry);throw error;}
   },
   read({transferId,offset=0,length=CHUNK}={}){
@@ -57,7 +59,7 @@ export function createCaseArchiveTransfer({cases,maxBytes=100000000,maxTransfers
     const archive=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(entry.bytes));live(entry,guard);
     const valid=()=>transfers.get(transferId)===entry&&guard();
     entry.result=await cases.importArchive({archive,expectedArchiveRevision:entry.expectedArchiveRevision},{guard:valid});
-    entry.completed=true;return entry.result;
+    entry.completed=true;dropBytes(entry);return entry.result;
    })();
    try{await entry.commitPromise;live(entry,guard);return structuredClone(entry.result);}finally{entry.commitPromise=null;}
   },
