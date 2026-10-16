@@ -43,3 +43,16 @@ export function fixedFieldRange(fields){
  if(!Number.isFinite(min))throw Error('No snapshot values');
  return {min,max};
 }
+/** Map an integer fine-slider position 0..steps onto [first,last] stored time; both ends are exact. */
+export function fineSliderTime(times,position,steps){
+ checkTimes(times);
+ if(!Number.isInteger(steps)||steps<1||!Number.isInteger(position)||position<0||position>steps)throw Error('Fine slider position must be an integer from 0 through steps');
+ const t0=times[0],t1=times[times.length-1];
+ return position===0?t0:position===steps?t1:t0+(t1-t0)*position/steps;
+}
+/** Advance a playback position by elapsed wall-clock time; one full sweep takes durationMs. Returns {position,done}; never exceeds steps. */
+export function advancePlayback(position,elapsedMs,steps,durationMs){
+ if(![position,elapsedMs,steps,durationMs].every(Number.isFinite)||steps<1||durationMs<=0||elapsedMs<0||position<0||position>steps)throw Error('Invalid playback arguments');
+ const next=Math.min(steps,position+elapsedMs/durationMs*steps);
+ return {position:next,done:next>=steps};
+}
