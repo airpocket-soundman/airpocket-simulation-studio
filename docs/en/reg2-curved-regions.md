@@ -2,7 +2,7 @@
 
 [日本語](../reg2-curved-regions.md)
 
-The remaining REG2 work ("apply dimensional regions exactly to CAD boundaries") is exact sub-division of curved faces other than planar rectangles ([planar-regions.md](planar-regions.md), [oblique-planar.md](oblique-planar.md)) and cylinders ([cylindrical-cad.md](cylindrical-cad.md)). This note records the survey, the smallest next increment, and its verification, limits, tests and risks. Only the geometry kernel for conical patches is implemented; it is not yet wired into selection, fragmentation or boundary transfer.
+The remaining REG2 work ("apply dimensional regions exactly to CAD boundaries") is exact sub-division of curved faces other than planar rectangles ([planar-regions.md](planar-regions.md), [oblique-planar.md](oblique-planar.md)) and cylinders ([cylindrical-cad.md](cylindrical-cad.md)). This note records the survey, the smallest next increment, and its verification, limits, tests and risks. Conical patches are implemented (see Wiring result below); spheres and general surfaces are not started.
 
 ## Current state (survey)
 
@@ -24,12 +24,16 @@ Recommended order: cone, then sphere, then the general case. Cones and spheres s
 
 `src/conical-cad.js` (added to the domain layer in `src/module-layers.json`) and `tests/conical-cad.test.mjs`.
 
-- `validateConicalPatch(d)`: checks origin, axis, reference, `radiusAtMin`/`radiusAtMax` (> 0), axial range, start angle and sweep; reuses `cylindricalFrame`.
+- `validateConicalPatch(d)`: checks origin, axis, reference, `radius` (axial start) / `radiusAtMax` (> 0), axial range, start angle and sweep; reuses `cylindricalFrame`.
 - `conicalPatchArea(d)`: angle (rad) x mean radius x slant length; equals the cylinder formula when the radii are equal.
 - `conicalPatchPoint` / `conicalPatchContains`: points on the patch and containment, including wrapped angles.
 - `makeConicalPatch(g, d)`: same revolve as the cylinder. Tests confirm the face type is `Cone` and `getMass` matches the formula to a relative 1e-9 on a built-in cone.
 
-## Next wiring (not implemented; proposed API)
+## Wiring result (implemented)
+
+To avoid changing the public contracts (operation names and input pointer lists), no new `selectConicalRegion` was added. Instead the `selectCylindricalRegion` spec accepts an optional `radiusAtMax` (`radius` is the radius at the axial start; `radiusAtMin` is not used). `cylindricalFrame` validates it (positive radii, exactCad required, half-angle at most 45 degrees) and `cylinderPatchArea/Point/Contains/makeCylinderPatch` dispatch to the cone. Boundary transfer, mesh storage, restore checks, CAD update and the UI reuse the cylindrical path unchanged. See [cylindrical-cad.md](cylindrical-cad.md). The text below is the original API proposal.
+
+## Original API proposal
 
 ```js
 studioApi.selectConicalRegion(0, {

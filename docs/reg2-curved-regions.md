@@ -2,7 +2,7 @@
 
 [English](en/reg2-curved-regions.md)
 
-REG2「寸法領域をCAD境界へ反映」の残課題は、平面矩形([planar-regions.md](planar-regions.md)、[oblique-planar.md](oblique-planar.md))と円筒([cylindrical-cad.md](cylindrical-cad.md))以外の曲面の厳密な分割です。本書は現状調査、次の最小増分の選定、検証・限界・試験・リスクをまとめた設計メモです。実装済みなのは円錐パッチの幾何カーネルのみで、選択・分割・境界転写には未接続です。
+REG2「寸法領域をCAD境界へ反映」の残課題は、平面矩形([planar-regions.md](planar-regions.md)、[oblique-planar.md](oblique-planar.md))と円筒([cylindrical-cad.md](cylindrical-cad.md))以外の曲面の厳密な分割です。本書は現状調査、次の最小増分の選定、検証・限界・試験・リスクをまとめた設計メモです。円錐パッチは実装済みで(下記「接続結果」)、球面と一般曲面は未着手です。
 
 ## 現状(調査結果)
 
@@ -24,12 +24,16 @@ REG2「寸法領域をCAD境界へ反映」の残課題は、平面矩形([plana
 
 `src/conical-cad.js`(`src/module-layers.json` の domain 層に追加)と `tests/conical-cad.test.mjs`。
 
-- `validateConicalPatch(d)`: 原点・軸・基準方向・`radiusAtMin`/`radiusAtMax`(>0)・軸方向範囲・開始角・角度幅を検査。円筒と同じ座標系 `cylindricalFrame` を再利用。
+- `validateConicalPatch(d)`: 原点・軸・基準方向・`radius`(軸方向開始側)/`radiusAtMax`(>0)・軸方向範囲・開始角・角度幅を検査。円筒と同じ座標系 `cylindricalFrame` を再利用。
 - `conicalPatchArea(d)`: 角度(rad) × 平均半径 × 母線長。半径が等しいときは円筒の面積式と一致。
 - `conicalPatchPoint` / `conicalPatchContains`: 寸法上の点と包含判定(折り返し角度対応)。
 - `makeConicalPatch(g, d)`: 円筒と同じrevolve。試験で、組込み円錐に対して面種別が `Cone`、`getMass` が式と相対1e-9で一致することを確認。
 
-## 次の接続(未実装、API案)
+## 接続結果(実装済み)
+
+公開契約(操作名・入力ポインタ一覧)を変えないため、新しい`selectConicalRegion`は作らず、`selectCylindricalRegion`のスペックに任意の`radiusAtMax`を追加しました(`radius`が軸方向開始側の半径、`radiusAtMin`は使わない)。`cylindricalFrame`が検査(正の半径、exactCad必須、半頂角45度以下)し、`cylinderPatchArea/Point/Contains/makeCylinderPatch`が円錐へ振り分けます。境界転写・メッシュ保存・復元検査・CAD更新・UIは円筒の経路をそのまま使います。詳細は[cylindrical-cad.md](cylindrical-cad.md)。以下は当初案です。
+
+## 当初のAPI案
 
 ```js
 studioApi.selectConicalRegion(0, {
