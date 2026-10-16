@@ -159,6 +159,8 @@ export interface AnalysisStudy {
   timeStep?: number;
   steps?: number;
   initialTemperature?: number;
+  /** Transient heat: stored nodal temperature frames (initial state + steps, evenly spaced, 2..61; default 61, memory-budget limited). */
+  thermalSnapshotCount?: number;
   frequency?: number;
   soundSpeed?: number;
   airDensity?: number;

@@ -30,4 +30,8 @@ SI単位の弱形式は `M p¨ + D p˙ + K p = 0`。Tet4の集中質量は各節
 
 計算刻み（ソルバーのステップ）、保存刻み（保存フレーム、最大約61）、表示補間（保存フレーム間の線形補間）は別物です。`src/time-interpolation.js` は純粋関数として、保存時刻の厳密な区間検索、2フレーム間の線形補間、物理時刻で一様な再生時刻列、全フレームで固定した色範囲を提供します。保存時刻は狭義単調増加が必須で、保存範囲外への外挿はエラーです。保存時刻ちょうどでは元の値のコピーを返し `interpolated:false` になります。補間値は表示専用で、物理配列や保存結果は変更しません。テストは `tests/time-interpolation.test.mjs`。
 
-実装済み: 音圧スライダー（`#acoustic-time-fine`）と再生（`#acoustic-time-play`）の補間表示（[結果断面](result-sections.md)）。未実装（後続）: `setResultView` の保存時刻以外の時刻指定、固定フレーム出力での補間時刻（現在は保存フレームのみ）、熱の節点温度履歴の保存（現在の熱の過渡解は節点場ではなくスカラー履歴のみ）、メモリ上限。補間表示は必ず「補間」と明記します。関連: [結果断面](result-sections.md)、[画像・動画出力](visual-export.md)。
+実装済み: 音圧スライダー（`#acoustic-time-fine`）と再生（`#acoustic-time-play`）の補間表示（[結果断面](result-sections.md)）。未実装（後続）: `setResultView` の保存時刻以外の時刻指定、固定フレーム出力での補間時刻（現在は保存フレームのみ）、熱の保存フレームを表示する時間スライダー（保存自体は下記の通り実装済み）、音響側のメモリ上限。補間表示は必ず「補間」と明記します。関連: [結果断面](result-sections.md)、[画像・動画出力](visual-export.md)。
+
+## 過渡熱の保存節点温度（VIEWTIME・ソルバー側のみ）
+
+`solveThermal`（`src/thermal-core.js`）の過渡解は、従来のスカラー`history`に加えて節点温度の保存フレーム`snapshots`（`{step,time,temperature}`、初期状態をstep 0として含む）と`snapshotInfo`（要求数、実保存数、保存ステップ番号、バイト数、予算、`warnings`）を返します。既存の結果フィールドと`history`は変わりません（新しい結果は新フィールドのため`resultRevision`・出力ハッシュが変わります。既存の保存済みケースは影響を受けません）。保存数はstudyの任意項目`thermalSnapshotCount`（整数2〜61、既定61、上限61）で指定し、初期状態と最終ステップを含む等間隔のステップを選びます。存在する状態数（steps+1）より多い要求、またはメモリ予算（既定64 MiB、フレーム数×節点数×8バイト）を超える場合は黙って切り詰めず、保存数を減らして`snapshotInfo.warnings`に理由を記録します。2フレームも入らない場合と、範囲外の`thermalSnapshotCount`は例外で拒否します。定常解には付きません。表示時刻の補間には`src/time-interpolation.js`をそのまま使えます。未実装: 熱結果のビューア時間スライダー、`setResultView`/ケース比較/固定フレーム出力での熱フレーム。テストは`tests/thermal-snapshots.test.mjs`。関連: [過渡音響の表示設計](#時間履歴の滑らかな表示設計メモviewtime-第1段階)、[結果断面](result-sections.md)。
