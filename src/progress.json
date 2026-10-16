@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T23:05:23.233Z",
+  "updatedAt": "2026-10-16T00:05:16.769Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -211,15 +211,16 @@
     {
       "id": "CFD1",
       "title": "流体領域を作り、流れを解析",
-      "status": "queued",
+      "status": "building",
       "category": "流体",
-      "detail": "公開基盤と既存入出力・API/MCP/Skill整備の後、新規ソルバー内では通常風速の固定ソリッド周囲の外部流れを優先する。慣性を含む低Mach非圧縮粘性Navier–Stokesを既存OSSからネイティブ参照問題で評価し、対象Reに応じた非定常・乱流の必要性を確認する。",
+      "detail": "通常風速の外部流れに着手。SU2 8.5.0・牛の3D定常SA RANSを直接実行し、実StudioブラウザAPIから別プロセスで再実行。全節点圧力・速度と出力SHAが一致。固定ケース用の試験用接続/表示であり、壁面116点の未収束、速度/乱流残差未達、境界層/精度検証と共通ジョブ・MCP統合は未完了。 計算/取得系7ツールを専用MCPと既存MCPの任意設定へ追加。実MCPで牛の再計算とページ取得が直接実行に一致し、警告/取消/解放を確認。表示MCPは後続。",
       "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。",
       "titleEn": "Create fluid regions and simulate flow",
-      "detailEn": "After publication infrastructure and existing I/O/API/MCP/Skill work, prioritize ordinary-speed external airflow around fixed solids among new solvers. Evaluate existing OSS low-Mach incompressible viscous Navier–Stokes with inertia on native reference cases; assess unsteady/turbulence needs at the target Reynolds numbers.",
+      "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work.",
       "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
-      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete."
+      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete.",
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json"
     },
     {
       "id": "GPU1",
@@ -1541,7 +1542,7 @@
       "id": "CASEARCHIVE1",
       "title": "ケース集をLLMから分割入出力する",
       "titleEn": "Transfer full case archives through the user LLM",
-      "status": "checking",
+      "status": "fixing",
       "category": "共通",
       "depends": [
         "CASEOPS1",
@@ -1549,11 +1550,11 @@
       ],
       "detail": "既存version1ケース集を最大64 KiBのbase64ページで転送。全体SHA-256・一覧版・全ケース検証後に原子的置換。合計100,000,000バイト/4転送、切断時の取込破棄、確定再送を重複適用しない。",
       "detailEn": "Full version1 case JSON via base64 pages up to64 KiB; whole-hash/archive-revision/all-case validation before atomic replacement. Shared100000000-byte/four-transfer retention, disconnect cleanup and idempotent commit retries.",
-      "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。Node接続アダプターでの検証であり実画面・大規模性能測定は未完了。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser and large-case performance remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md; tests/browser-case-archive-session.test.mjs; docs/evidence/2026-10-15-casearchive-real-chrome-5.json",
-      "lastUpdate": "2026-10-15 実Chromeで2ケース(1,426,548バイト・22分割)の書出し→再読込→取込を7/7確認(ハッシュ一致、archiveRevision・ケース版同一、再書出しはJSONとして完全一致でバイト列は別、誤ハッシュ・古い版は拒否)。大規模ケースの性能測定は未実施(Node側容量測定のみ)のため検証中を維持。公開HTTPSはPUBLICHTTPS1。",
-      "lastUpdateEn": "2026-10-15 Real Chrome confirmed an export of two cases (1,426,548 bytes, 22 chunks) → reload → import: 7/7 (hash match, same archiveRevision and case revisions, re-export deeply equal as JSON with different raw bytes, wrong hash and stale revision refused). Large-case performance was not measured (Node-side capacity only), so it stays checking. Published HTTPS is covered by PUBLICHTTPS1."
+      "acceptance": "全体406件中403成功・3スキップ。実stdio MCPとHTTPで日本語入り大容量合成ケースの往復・ハッシュ・新ID・配列保持と拒否経路を確認。実Chrome(localhost、2026-10-15/16)で小規模(2ケース)の往復は確認済み。大規模(1件約8.5MBのケース4件、34MB・518分割)では性能が悪く、書出しの読出し約519秒、取込の書込み約1,154秒(チャンクごとに1秒から3〜4秒へ増加)、5件目以降のcaseSaveがタイムアウトした。原因は調査中で、性能が受け入れ水準に達するまで未完了。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "acceptanceEn": "403 passed, three skipped of406. Real stdio MCP/HTTP verified a large synthetic Japanese-text archive, hash/JSON equality, fresh IDs, preserved arrays and refusals. Node adapter evidence; real browser and large-case performance remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. Small-scale (2 cases) round trip was confirmed in real Chrome on localhost. At large scale (four cases of about 8.5 MB each, 34 MB, 518 chunks) performance is poor: export read about 519 s, import writes about 1,154 s (per-chunk time growing from 1 s to 3–4 s) and caseSave timed out from the fifth case. The cause is under investigation; not complete until performance reaches an acceptable level.",
+      "evidence": "src/case-archive-transfer.js; src/case-operations.js; tests/mcp-case-archive-protocol.test.mjs; tests/case-archive-transfer.test.mjs; docs/testing.md; tests/browser-case-archive-session.test.mjs; docs/evidence/2026-10-15-casearchive-real-chrome-5.json; docs/evidence/2026-10-16-casearchive-large-real-chrome-6.json",
+      "lastUpdate": "2026-10-16 大規模ケースの実測で性能問題を確認(書出し519秒・取込1,154秒でチャンクごとに遅くなる・5件目以降の保存がタイムアウト、n=1)。原因調査と修正を別作業で実施中。修正中へ。",
+      "lastUpdateEn": "2026-10-16 Large-case measurement found a performance problem (export 519 s, import 1,154 s with per-chunk slowdown, saves timing out from the fifth case; n=1). Cause investigation and fix are under way separately. Moved to fixing."
     },
     {
       "id": "ASSESSMENTAPI1",
@@ -1643,15 +1644,15 @@
       "id": "PRINTAPI1",
       "title": "印刷データを共有API・MCPへ公開",
       "titleEn": "Expose printing data through shared API and MCP",
-      "status": "checking",
+      "status": "ready",
       "category": "API",
       "detail": "3MF/G-code読込、版照合、最大200件の形状・層ページ、表示切替と失敗時復元を実装。分割転送はPRINTTRANSFER1で追加。通常24ツール・接続26ツール/55操作。実画面の全経路と公開HTTPSを残す。",
       "detailEn": "Implement3MF/G-code import, revision checks, up to200 geometry/layer rows, display settings and rollback. PRINTTRANSFER1 adds chunk transfer. Default24/paired26tools with55methods. All real-browser routes/public HTTPS remain pending.",
-      "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md; tests/print-import.test.mjs; tests/mcp-print-transfer-protocol.test.mjs; docs/evidence/2026-10-14-print-transfer.json",
-      "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は未解決、実画面は未確認。強度推定・機器制御は含まない。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser unverified. No strength inference or hardware control. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "lastUpdate": "2026-10-15 再監査: 印刷関連テスト成功、最大容量はNode証跡あり。実Chrome全経路の証跡なしのためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 re-audit: print tests pass; Node capacity evidence at documented max exists. No real-Chrome evidence for the print routes, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "evidence": "src/print-operations.js; tests/print-operations.test.mjs; tests/mcp-print.test.mjs; tests/browser-print-session.test.mjs; docs/testing.md; tests/print-import.test.mjs; tests/mcp-print-transfer-protocol.test.mjs; docs/evidence/2026-10-14-print-transfer.json; docs/evidence/2026-10-16-print-api-real-chrome-6.json",
+      "acceptance": "全体再試行441件中438成功・3スキップ、ビルド・ローカル配信物26項目成功。実MCP・共有セッションを検証。初回既知V8停止は方針Bで判定(必須CIのNode 24成功)。実Chrome(localhost、2026-10-16)で合成G-codeと1,796バイトの3MFを使い、importPrint・printTransferImport/Write/Commit・printInspect・getPrintData(層絞り込み、三角形)・setPrintView・printTransferExport/Read(3,864バイト、ハッシュ一致)と各種拒否(層範囲外、種別違い、古い版、G2円弧、誤ハッシュ、破損3MF、確定後の書込み、解放後の読込)を10/10確認。大きなファイル・実スライサーファイル・キャンバスの目視は未確認。強度推定・機器制御は含まない。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "acceptanceEn": "Full retry: 438 passed, three skipped of441. Build and26 local-distribution checks passed. Real MCP and shared sessions verified. Initial known V8 crash remains unresolved; browser unverified. No strength inference or hardware control. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. Real Chrome on localhost (2026-10-16) with a synthetic G-code and a 1,796-byte 3MF: importPrint, printTransferImport/Write/Commit, printInspect, getPrintData (layer filter, triangles), setPrintView and printTransferExport/Read (3,864 bytes, hash match) plus the refusals (layer out of range, wrong kind, stale revision, G2 arc, wrong hash, corrupted 3MF, write after commit, read after release): 10/10. Large files, real slicer files and a visual check of the canvas are not verified.",
+      "lastUpdate": "2026-10-16 実Chromeで印刷の全経路と拒否を10/10確認。大容量はNode側証跡。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-16 Real Chrome confirmed all print routes and refusals: 10/10; large-file capacity rests on Node-side evidence. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "GUIJOBS1",
@@ -1709,7 +1710,7 @@
       "id": "CASEVIEWBUNDLE1",
       "title": "ケースと結果版付きビューを一体保存・復元",
       "titleEn": "Save and restore linked cases and result views together",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "NAMEDVIEWS1",
@@ -1717,11 +1718,11 @@
       ],
       "detail": "既存単体形式を維持したcase-view-bundleを追加。ケース表示用の正規化結果SHA・表示量/時刻/モード/setupを照合し、両一覧を一括取込。現在入力へ自動適用せず、孤立ビューや版の自動修正を拒否。GUI・共通API・MCP25/27ツール・62ライブ操作。",
       "detailEn": "Add case-view-bundle while preserving separate formats. Validate display-prepared result SHA, fields/frames/modes/setup and atomically replace both archives without automatic current-input changes or orphan/revision remapping. GUI/shared API/MCP25/27tools and62live methods.",
-      "acceptance": "全体484中481成功・3スキップ。実ローカルIAB/Worker/WASM/MCPで208374bytesのGUI/MCP一致、0件から1ケース1ビューへ読込、全表示設定と0.04mm点値を復元。旧ケース/固有/過渡の文脈拒否は単体試験。ビルド・配信物26項目成功。最大容量・全結果種の実画面は未確認。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "481passed/three skipped of484. Actual local IAB/Worker/WASM/MCP verifies208374byte GUI/MCP equality, empty-to-one case/view import, complete display restoration and0.04mm probe. Legacy/modal/transient context refusal covered by unit tests. Build and26distribution checks passed. Maximum sizes and every result kind inUI remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "src/case-view-bundle.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-bundle-proof.json; docs/testing.md; docs/evidence/2026-10-14-case-view-bundle.json; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/evidence/2026-10-15-namedviews-real-chrome.json; docs/evidence/2026-10-15-case-bundle-capacity-node.json; tests/case-bundle-capacity.test.mjs",
-      "lastUpdate": "2026-10-15 Node側で11種の結果(構造・熱・音響・モーダル・過渡音響・ストークス・流路・塑性・超弾性・疲労・破壊)を8ケース・16ビュー・100計測の最大構成で書出し→分割転送→取込→照合し、全件一致・超過拒否11件を確認(最大1.44MB、複製ケースのため物理的に別の結果ではない)。実画面での全結果種は未確認のため検証中を維持。公開HTTPSはPUBLICHTTPS1。",
-      "lastUpdateEn": "2026-10-15: in Node, 11 result kinds were exported, chunk-transferred, imported and verified at the maximum configuration (8 cases, 16 views, 100 measurements) with all matches and 11 over-limit refusals (largest 1.44 MB; cases are replicated outputs, not distinct physics). Real-UI coverage of every result kind is unverified, so it stays checking. Published HTTPS is tracked in PUBLICHTTPS1."
+      "acceptance": "全体484中481成功・3スキップ。実ローカルIAB/Worker/WASM/MCPで208374bytesのGUI/MCP一致、0件から1ケース1ビューへ読込、全表示設定と0.04mm点値を復元。旧ケース/固有/過渡の文脈拒否は単体試験。ビルド・配信物26項目成功。最大容量はNode側で測定済み(CASEVIEWBUNDLE1/CASEMEASUREMENTBUNDLE1容量証跡)。全結果種は実Chrome(localhost、2026-10-16)で7種(構造・熱・音響・モーダル・過渡音響・ストークス・流路)を8ケース×8ビュー×8測定の一括保存で往復し、v2一括(4,765,487バイト・73分割)のハッシュ一致、再読込後の取込、16件すべてでkind一致・保存点の測定値一致・名前付きビュー復元を確認。塑性・超弾性・疲労・ゴムはkindがelasticで、非線形性はruntimeIdentityにだけ現れる。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
+      "acceptanceEn": "481passed/three skipped of484. Actual local IAB/Worker/WASM/MCP verifies208374byte GUI/MCP equality, empty-to-one case/view import, complete display restoration and0.04mm probe. Legacy/modal/transient context refusal covered by unit tests. Build and26distribution checks passed. Maximum sizes and every result kind inUI remain unverified. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. Maximum capacity was measured in Node (capacity evidence). All 7 result kinds (elastic, thermal, acoustic, modal, acousticTransient, stokes, channelFlow) were round-tripped in real Chrome on localhost (2026-10-16) in 8-case × 8-view × 8-measurement bundles (v2 bundle 4,765,487 bytes in 73 chunks; hash match; import after reload; 16 of 16 cases restored with the same kind, the same probe value at the saved point and the named view). Plastic, hyperelastic, fatigue and rubber report kind elastic; their nonlinearity shows only in runtimeIdentity.",
+      "evidence": "src/case-view-bundle.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-bundle-proof.json; docs/testing.md; docs/evidence/2026-10-14-case-view-bundle.json; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/evidence/2026-10-15-namedviews-real-chrome.json; docs/evidence/2026-10-15-case-bundle-capacity-node.json; tests/case-bundle-capacity.test.mjs; docs/evidence/2026-10-16-case-view-bundle-real-chrome-6.json",
+      "lastUpdate": "2026-10-16 実Chromeで7種の結果を一括保存で往復し16/16復元。最大容量はNode側証跡。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-16 Real Chrome round-tripped 7 result kinds in bundles with 16/16 cases restored; maximum capacity rests on Node-side evidence. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "MEASUREMENTHISTORY1",
@@ -1763,7 +1764,7 @@
       "id": "CASEMEASUREMENTBUNDLE1",
       "title": "ケース・ビュー・測定履歴を検証付きで一体保存",
       "titleEn": "Bundle cases, views and verified recorded measurements",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "CASEVIEWBUNDLE1",
@@ -1771,11 +1772,11 @@
       ],
       "detail": "v2case-view-bundleにmeasurementArchiveを追加。表示用SHAに対応する保存場から全履歴を再補間し、3保存データを同期的一括置換。v1互換を維持しv2環境へのv1取込は測定を空へ明示置換。GUI/共通API/既存MCP分割転送で利用。",
       "detailEn": "Add measurementArchive to v2case-view-bundle. Reinterpolate every record from display-SHA-matched saved fields and atomically replace all three stores. Preserve v1 compatibility; v1 imports into v2 hosts explicitly clear history. GUI/sharedAPI/existingMCP chunked transfers supported.",
-      "acceptance": "新v2 core6件・関連35件・MCP2件成功。実IABで0/0/0→1/1/1取込、209414bytesのGUI/MCP4分割一致、v1で1/1/0→書出v2で1/1/1復元、円柱入力不変・保存結果/倍率25復元、日英を確認。初回全体は既知V8停止で1失敗。再試行523中520成功・3スキップ、ビルド・配信物26・SKILL成功。V8原因未解決。最大容量・全物理GUIは残す。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "Six new core,35related and twoMCP tests pass. ActualIAB verifies0/0/0→1/1/1 import,209414byteGUI/MCP fourpage equality,v1→1/1/0 then exportedv2→1/1/1 restore, unchanged cylinder inputs, saved display/deform25 and JP/EN. Initial full suite had one knownV8 stop. Retry520passed/three skipped of523; build/26distribution/SKILL pass. V8 cause unresolved; maximum capacity and allphysicsGUI remain. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "src/case-view-bundle.js; src/measurement-history.js; src/named-result-views.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/testing.md; docs/evidence/2026-10-15-case-bundle-capacity-node.json; tests/case-bundle-capacity.test.mjs",
-      "lastUpdate": "2026-10-15 再監査: 関連21件成功、最大容量はNode側証跡あり。全結果種の実画面確認が未了のため検証中を維持。",
-      "lastUpdateEn": "2026-10-15 re-audit: 21 related tests pass; maximum capacity covered by Node-side evidence. Real-UI coverage of all result kinds is missing, so stays checking."
+      "acceptance": "新v2 core6件・関連35件・MCP2件成功。実IABで0/0/0→1/1/1取込、209414bytesのGUI/MCP4分割一致、v1で1/1/0→書出v2で1/1/1復元、円柱入力不変・保存結果/倍率25復元、日英を確認。初回全体は既知V8停止で1失敗。再試行523中520成功・3スキップ、ビルド・配信物26・SKILL成功。V8原因未解決。最大容量はNode側で測定済み。全結果種(7種)の実Chrome往復と測定履歴の検証(measurementVerify: verified、物理精度は未検証)を実Chrome(localhost、2026-10-16)で確認。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "Six new core,35related and twoMCP tests pass. ActualIAB verifies0/0/0→1/1/1 import,209414byteGUI/MCP fourpage equality,v1→1/1/0 then exportedv2→1/1/1 restore, unchanged cylinder inputs, saved display/deform25 and JP/EN. Initial full suite had one knownV8 stop. Retry520passed/three skipped of523; build/26distribution/SKILL pass. V8 cause unresolved; maximum capacity and allphysicsGUI remain. Published-HTTPS verification is tracked in PUBLICHTTPS1. Maximum capacity was measured in Node. The 7 result kinds were round-tripped in real Chrome on localhost (2026-10-16) including measurement-history verification (measurementVerify: verified, physical accuracy not verified).",
+      "evidence": "src/case-view-bundle.js; src/measurement-history.js; src/named-result-views.js; src/case-bundle-ui.js; tests/case-view-bundle.test.mjs; tests/mcp-case-view-bundle.test.mjs; tests/mcp-case-bundle-protocol.test.mjs; docs/evidence/2026-10-14-case-view-measurement-bundle-proof.json; docs/testing.md; docs/evidence/2026-10-15-case-bundle-capacity-node.json; tests/case-bundle-capacity.test.mjs; docs/evidence/2026-10-16-case-measurement-bundle-real-chrome-6.json",
+      "lastUpdate": "2026-10-16 実Chromeで8/8確認(測定履歴込みの往復と検証)。最大容量はNode側証跡。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-16 Confirmed 8/8 in real Chrome (round trip with measurement history and verification); maximum capacity rests on Node-side evidence. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "HEADLESSLIFECYCLE1",
@@ -2519,7 +2520,7 @@
       "id": "WORKERTRANSPORT1",
       "title": "Worker観測メッセージの送信数・容量制限",
       "titleEn": "Bound Worker observation messages in transit",
-      "status": "checking",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "P3",
@@ -2527,11 +2528,11 @@
       ],
       "detail": "Worker送信中と送信待ちoutboxの観測数・推定bytesを別々に制限する。同期ソルバーは待たせず、通常終端前に配送を待つ。間引き・scalar iteration集約を保存待機・保存容量とは別の統計としてMCPの観測能力に公開する。",
       "detailEn": "Bound in-flight and outbox observation count and estimated bytes separately. Solver callbacks do not wait; normal terminals wait for delivery. Expose thinning and scalar-iteration coalescing separately from pending-storage and retained-artifact limits through MCP observation capabilities.",
-      "acceptance": "ブラウザ・Node thread/process経路で送信窓・メタデータ込み容量・重複/未知ACK・メッシュ欠落後の場拒否・通常終端統計・取消/旧応答・第二solve拒否を検証。固定終端control、強制終了時の集計不明、progress/最終結果の対象外範囲を機械宣言し、保持待機上限と混同しない。",
-      "acceptanceEn": "Verify sender windows, envelope bytes, duplicate/unknown ACKs, field rejection after mesh loss, normal terminal statistics, cancellation/stale replies and second-solve refusal across browser and Node thread/process hosts. Declare the separate fixed terminal control budget, unknown totals after hard termination and excluded progress/final-result paths; keep storage-queue limits distinct.",
-      "evidence": "src/worker-observation-transport.js; tests/worker-observation-transport.test.mjs; tests/stokes-observation-pipeline.test.mjs; tests/wave-channel-observation-pipeline.test.mjs; docs/evidence/2026-10-15-worker-transport-initial-regression.json; docs/evidence/2026-10-15-worker-transport-full-regression.json",
-      "lastUpdate": "bounded outbox・ACK drain・受理時コピー・メッシュ世代を実装し、実Stokes P2/sweepを含む77対象試験と境界/型29試験成功。全体1154件は1150成功・3skip・新controlの宣言分類1件失敗。分類修正後35対象試験と初回PR必須CIは成功。公開状態追従後のCI、実Chrome・公開検証は継続。",
-      "lastUpdateEn": "Implemented bounded outbox/ACK drain, acceptance-time copies and mesh generations. 77 targeted and 29 boundary/type tests pass. The first full run had 1150 passes, three skips and one new-control classification failure out of 1154. The correction passed 35 targeted tests and initial required PR CI. CI after publication-state reconciliation, real Chrome and publication checks remain pending."
+      "acceptance": "ブラウザ・Node thread/process経路で送信窓・メタデータ込み容量・重複/未知ACK・メッシュ欠落後の場拒否・通常終端統計・取消/旧応答・第二solve拒否を検証。固定終端control、強制終了時の集計不明、progress/最終結果の対象外範囲を機械宣言し、保持待機上限と混同しない。 実Chrome(localhost、2026-10-16)でStokes P2(送信12・間引き10・保留0、終端統計あり)と音響掃引(受理17・破棄100)のWorker経路、取消後の旧応答拒否(JOB_EXECUTION_REJECTED_AFTER_TERMINAL)、実行中の第二solve拒否を確認(8/8)。重複/未知ACKとメッシュ欠落後の場拒否、Nodeホストは接続からは試験できず単体試験で検証。強制終了時の集計は不明と宣言どおり。",
+      "acceptanceEn": "Verify sender windows, envelope bytes, duplicate/unknown ACKs, field rejection after mesh loss, normal terminal statistics, cancellation/stale replies and second-solve refusal across browser and Node thread/process hosts. Declare the separate fixed terminal control budget, unknown totals after hard termination and excluded progress/final-result paths; keep storage-queue limits distinct. Real Chrome on localhost (2026-10-16) confirmed the Worker path for Stokes P2 (12 sent, 10 coalesced, 0 pending, terminal statistics) and an acoustic sweep (17 accepted, 100 dropped), refusal of a late response after cancel (JOB_EXECUTION_REJECTED_AFTER_TERMINAL) and refusal of a second solve while running (8/8). Duplicate/unknown ACKs, field rejection after mesh loss and the Node hosts cannot be exercised from the connector and rest on unit tests; totals after forced termination are unknown as declared.",
+      "evidence": "src/worker-observation-transport.js; tests/worker-observation-transport.test.mjs; tests/stokes-observation-pipeline.test.mjs; tests/wave-channel-observation-pipeline.test.mjs; docs/evidence/2026-10-15-worker-transport-initial-regression.json; docs/evidence/2026-10-15-worker-transport-full-regression.json; docs/evidence/2026-10-16-worker-transport-real-chrome-6.json",
+      "lastUpdate": "2026-10-16 実Chromeで8/8確認。必須CIは成功済み(PR 35)。公開済みの候補に含まれる。検証済みへ。公開HTTPSはPUBLICHTTPS1。",
+      "lastUpdateEn": "2026-10-16 Confirmed 8/8 in real Chrome; required CI passed earlier (PR 35); part of published candidates. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1."
     },
     {
       "id": "PUBLICHTTPS1",

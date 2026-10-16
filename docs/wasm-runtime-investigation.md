@@ -99,3 +99,14 @@ main `badce2c0704385616af5c2dcc76898df85f833cb` の[公開CI run 38663202965](ht
 各検査と子実行の開始・終了をチェックポイントへ記録し、通常のJavaScript例外で捕捉できない停止でも直前までの証跡を残す。実子の制御失敗試験は、親の維持・異常終了伝達・保存判定の確認であり、V8 fatalの再現試験ではない。完全な配信物検査、実行時Node/V8/platform/arch、子実行方式と失敗記録は今回の[試験記録](testing.md)を参照する。分離後の成功が得られても根本原因の解決とは区別する。
 
 終了の判定範囲は、選択した配信モジュールの1回のhandler呼出しと、その返却Promise・子processのcloseまでである。closeまでに観測した異常終了は拒否するが、handler終了後に任意の遅延で予定された追加処理や、自然なV8終了時の全cleanupを検証する契約ではない。任意の1 tick待機を追加して将来のエラーを検査済みとはしない。[Node v24.21.0公式close仕様](https://github.com/nodejs/node/blob/v24.21.0/doc/api/child_process.md#event-close)は、終了後またはspawn失敗error後のcloseを保証している。error後のexitが非保証である点とは区別し、errorを保存してcloseまで待つ。
+
+## 2026-10-16: 最小の単独再現器と固定条件マトリクス（非再現）
+
+`scripts/repro-v8-wasm-terminate.mjs`（依存なし）は、上流[Node issue 66366](https://github.com/nodejs/node/issues/66366)の報告トリガー（メイン・worker_threads双方でwasmをinstantiateし、ホットループでtier-upさせ、workerを短いランダム遅延で`terminate()`）を、wabtで手組みした小wasm（import関数呼出し＋メモリ書込みループ）と実カーネル`public/fem-kernel.wasm`（スタブimport、instantiateのみ）で繰り返す。メモリはshared（`{initial:1,maximum:1,shared:true}`をメイン・workerで共有）とnon-sharedを切替。1セル=複数子プロセス並列×反復、各子で1反復2 worker。終了コード・signal・stderrのFatal/Check failed/`allocations_.erase`/`UnregisterWasmAllocation`を判定し、スクリプト自体のエラー（終了コード1でV8署名なし）は`harnessErrors`として区別する。
+
+```powershell
+node scripts/repro-v8-wasm-terminate.mjs --children=2 --iterations=50 --shared=1 [--module=tiny|kernel] [--flags="--no-wasm-code-gc"]
+node scripts/repro-v8-wasm-terminate.mjs --matrix --cell-seconds=150 --output=<新規.json>
+```
+
+結果（[docs/evidence/2026-10-16-v8-wasm-repro-matrix.json](evidence/2026-10-16-v8-wasm-repro-matrix.json)）: Node v24.11.1 / V8 13.6.233.10-node.28、Windows x64、Intel i5-9500 6コア、5子プロセス並列×各セル150秒。7セル（non-shared既定、shared既定、shared+`--no-wasm-code-gc`、shared+`--liftoff-only`、shared+`--no-wasm-tier-up`、non-shared+`--no-wasm-code-gc`、実カーネルnon-shared）で合計約108,500反復（14,028〜17,458/セル）、クラッシュ0、終了コードは全て0。**全セルとも「約1.4〜1.7万反復では再現せず」であり、修正済み・安全の証明ではない。** 本件fatalが既存試験の長いプロセス（大きなコード量・コードGC圧・多数のisolate）で出ていた点、Windows固有か、上流報告のLinux/メモリ圧との差を、この小さなモジュールでは再現できていない。したがって上流トリガーとの一致は未確認で、fatalの原因（wrapper cache競合）も本実験では検証されていない。`--no-wasm-code-gc`等の差も、全セルが0件のため比較不能。RUNTIMEWASM1は未解決を維持する。次の候補は、実カーネルでのホットループ呼出し、大きなコード量によるコードGC圧、全体試験と同規模のisolate数・並列数での反復。

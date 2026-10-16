@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "scope": "experimental native adapter only; no browser/MCP integration or physical accuracy certification",
+  "runtime": {
+    "version": "8.5.0",
+    "archiveSha256": "4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11"
+  },
+  "mesh": {
+    "repository": "su2code/TestCases",
+    "commit": "790c80ec5b543487b5f8ecf8bb0f0e4d2cc67f3f",
+    "path": "incomp_navierstokes/cylinder/mesh_cylinder_lam.su2",
+    "sha256": "0ac6b183af781ba2a98620c083980a3a42b41bab6a09dc1b788241723fa9b549"
+  },
+  "input": {
+    "schemaVersion": 1,
+    "kind": "steady-incompressible-laminar",
+    "meshUnits": "m",
+    "densityKgM3": 998.2,
+    "dynamicViscosityPaS": 0.000798,
+    "velocityMps": [
+      0.000008,
+      0,
+      0
+    ],
+    "wallMarker": "cylinder",
+    "farfieldMarker": "farfield",
+    "cflNumber": 100,
+    "multigridLevels": 3,
+    "maxIterations": 1000,
+    "residualLog10Target": -6
+  },
+  "result": {
+    "schemaVersion": 1,
+    "solver": "SU2",
+    "expectedVersion": "8.5.0",
+    "inputRevision": "sha256:cff86569bfac7ebbb55e74e9a22693eb9603bf2a1f78f17545d463a0930d2d32",
+    "executionSettled": true,
+    "numericallyConverged": true,
+    "convergenceCriterion": "solver pressure residual only",
+    "provisional": true,
+    "physicalValidationComplete": false,
+    "history": {
+      "Time_Iter": 0,
+      "Outer_Iter": 0,
+      "Inner_Iter": 56,
+      "rms[P]": -6.006493613,
+      "rms[U]": -5.76126225,
+      "rms[V]": -5.788002512
+    },
+    "artifacts": [
+      {
+        "name": "flow.vtu",
+        "bytes": 1407463,
+        "sha256": "sha256:667c48ae612989bb48a81b1337a88f8bf2eeb985f26f41659e2b63a040bdee7e"
+      },
+      {
+        "name": "surface_flow.vtu",
+        "bytes": 35981,
+        "sha256": "sha256:39f8b9db3bbca065ba753610e5571d531c2fbf3ddf7022fb5c86f17842186f45"
+      },
+      {
+        "name": "history.csv",
+        "bytes": 5568,
+        "sha256": "sha256:ae886b7ab0e5a7f598e8e7f3901f8b8b4ddd4a7f5d5668f26e35d3eb1103486c"
+      }
+    ]
+  },
+  "lifecycle": [
+    {
+      "kind": "timeout",
+      "code": "SU2_TIMEOUT",
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      }
+    },
+    {
+      "kind": "cancel",
+      "code": "SU2_CANCELLED",
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      }
+    }
+  ],
+  "initialAttempt": {
+    "cflNumber": 10,
+    "multigridLevels": 0,
+    "timeoutMs": 120000,
+    "outcome": "SU2_TIMEOUT",
+    "numericallyConverged": false
+  }
+}

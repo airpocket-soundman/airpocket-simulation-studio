@@ -21,6 +21,7 @@ Choose the smallest task-relevant read. Use `studio_progress` only when asked ab
 - [Cases and measurements](references/case-archives-measurements.md): chunked case transfer, view/measurement bundles, saved history and independent reinterpolation checks.
 - [Physics and provenance](references/physics-provenance.md): fatigue/fracture limits and thermal/acoustic/fluid/modal/orthotropic/nonlinear input contracts. Read the applicable section before evaluating physical assumptions.
 - [Runtime and diagnostics](references/runtime-diagnostics.md): termination/recovery, optional process isolation, typed failures versus stage fallbacks, known Node/V8 risk and evidence limits.
+- [Native SU2 flow](references/native-flow.md): optional native MCP startup/integration, approved-case execution, intermediate residuals, paged SI fields, warning interpretation and browser/API boundaries. These tools are absent unless explicitly configured.
 
 - [Development progress](references/development-progress.md): opt-in status history and weighted product estimate; use only for development/planning questions, never as engineering validation.
 
