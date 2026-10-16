@@ -1,0 +1,62 @@
+{
+  "title": "UI features merged 2026-10-16 verified in real Chrome (VIEWTIME stage 2, VIEWCOMPARE stage 2, REG2 cone UI, physicalRevision)",
+  "date": "2026-10-16",
+  "status": "partial",
+  "environment": {
+    "base": "worktree p-d merged with origin/main",
+    "browser": "real Chrome (Claude in Chrome), own tab, vite dev on 127.0.0.1:5174, stdio connector driver",
+    "caveat": "Chrome's built-in page translation (Japanese UI) was active on the ?lang=en page: dynamic text such as Play/Pause, select options, status lines and the demo name in canvas captions were sometimes rewritten to machine-translated Japanese (for example Play shown as a leisure-play word). This is a browser effect, not necessarily an app defect, and it changed one export caption (see physicalRevision).",
+    "errors": "No window 'error' or 'unhandledrejection' events were recorded by an in-page hook for the whole session (hook installed at page load); the Claude in Chrome console tool only started tracking late, and it reported no errors for the final part. A single minified exception 'Error: La' seen in an earlier task is not reproduced here.",
+    "screenshots": "scratchpad chrome-media/verify/ (viewtime-interp-340.jpg, viewtime-interp-347.jpg, compare-axial-mesh4-vs-mesh2.jpg, compare-transient-shared-time-offset.jpg, compare-pressure-vs-ax-with-bar-loaded.jpg, orbit-frame0-legend-p2a-vs-p1a.png)"
+  },
+  "features": {
+    "VIEWTIME-stage2": {
+      "status": "passed",
+      "checks": [
+        {"id": "fine-slider", "result": "passed", "detail": "#acoustic-time-fine range 0..1000 step 1 present after solving transient-acoustic-demo (61 stored frames, 4 ms)"},
+        {"id": "interpolated-status", "result": "passed", "detail": "#acoustic-time-interpolated (role=status) shows 'Interpolated: linear display blend between stored frames, not a solved time step.' only between stored frames (fine 340 -> 1.36 ms and 347 -> 1.388 ms); empty at stored frames and at both ends"},
+        {"id": "stored-slider-resets-and-stops", "result": "passed", "detail": "#acoustic-time-frame (0..60) change clears the interpolation text, syncs the fine slider, and stops playback (button returned to Play)"},
+        {"id": "smooth-field-change", "result": "passed", "detail": "legend range at stored frame 20 -0.831..0.7155 Pa, at 20.4 -0.682..0.4457, at 20.8 -0.548..-0.040, at frame 21 -0.829..0.352 Pa; two screenshots of interpolated times show visibly different fields"},
+        {"id": "no-extrapolation", "result": "passed", "detail": "fine 0 gives frame 0 (0.000..0.000 Pa), fine 1000 gives frame 60 (4.0000 ms); playback from 995 stops at 1000 and the button returns to Play"},
+        {"id": "play-pause-text", "result": "passed", "detail": "EN: Play -> Pause while playing -> Play when paused (pause holds the position). JA strings 再生/一時停止 exist in src/main.js; the JA page itself was not loaded (Chrome translation interfered in EN)"}]
+    },
+    "VIEWCOMPARE-stage2": {
+      "status": "passed-with-notes",
+      "checks": [
+        {"id": "axial-pair", "result": "passed", "detail": "two axial bar cases (mesh 4 mm and 2 mm), left/right selects populated after opening the panel, run drew #compare-canvas 1280x640 with per-case caption (name, mesh size, max displacement, max von Mises), 'Shared colour range: 0.000 -> 0.04000 mm - displacement - Deformation scale 1', and 'Physical time: no time axis | no time axis'"},
+        {"id": "main-viewer-restored", "result": "passed", "detail": "legend, model name, result field, time frame and the form control values were identical before and after compare runs (structural and transient); the main 3D view stayed unchanged in screenshots"},
+        {"id": "transient-pair-shared-time-offset", "result": "passed", "detail": "tr A vs tr B at requested 0.00203 s drew with 'Physical time: 0.0020205799812909263 s (Offset from stored frame -0.00000942 s)' for both sides (cosmetic: unrounded float in the text); shared colour range -0.00004459..0.001193 Pa"},
+        {"id": "mismatch-refusal", "result": "passed", "detail": "structural vs transient case: 'Field is unavailable for this result' (and an 'enter shared time' message when time was blank); a same-field different-units mismatch could not be constructed with available cases"},
+        {"id": "png-download", "result": "passed", "detail": "#compare-png produced a 1280x640 image/png of 74,520 bytes named case-comparison.png (the actual download was suppressed in the test to avoid writing to the user's folder)"},
+        {"id": "no-exception-case-differs-from-loaded-project", "result": "passed", "detail": "compared cases whose mesh differed from the loaded project (mesh 4 case with project at mesh 2) and a case saved from another structural demo while the bar demo was loaded: no exception, comparison shown. The pressure demo used is geometrically similar to the bar, so a truly different model was not tested"},
+        {"id": "compare-uses-main-viewer-field", "result": "observation", "detail": "the compared field follows the main viewer's selected field: with a transient result displayed the structural cases are refused, and with a structural result displayed the transient cases are refused (compare of transient cases requires a transient result in the main viewer first)"},
+        {"id": "legend-bar", "result": "observation", "detail": "the compare canvas shows the shared range as text only; no colour gradient bar was seen"}]
+    },
+    "REG2-cone-UI": {
+      "status": "passed-with-notes",
+      "checks": [
+        {"id": "field-present", "result": "passed", "detail": "#cylinder-radius-end labelled 'radius at end (mm, blank for cylinder)' (shown machine-translated), empty by default"},
+        {"id": "cone-step", "result": "passed", "detail": "no cone STEP exists in the repo (only tests/fixtures/cad-update-reference.step, no conical surface); I generated one with the same gmsh-wasm call the unit test uses (addCone r12 to r6, axis Y, -30..30 mm) and loaded it through the file input"},
+        {"id": "cone-end-radius-accepted", "result": "passed", "detail": "radius 10, end 8, axial -10..10, angle 315/90: fixed condition listed as 'CAD cylindrical region ... radius 10 -> 8 mm / axial range -10 -> 10 mm' and the volume mesh was generated"},
+        {"id": "wrong-end-radius-refused-at-mesh", "result": "passed", "detail": "end radius 9 (wrong): mesh refused with 'CAD patch area or boundary verification failed'. The region selection itself reports 'Cylindrical region selected.' for every value, so refusal happens at mesh time, not at selection"},
+        {"id": "blank-on-cone", "result": "observation", "detail": "blank end on the cone also failed verification, but the condition text still showed radius 10 -> 8 (possible stale text); not isolated"},
+        {"id": "blank-equals-cylinder-unchanged", "result": "passed", "detail": "cylindrical-cad-demo: end field blank, condition 'radius 12 mm / axial -30..-20 mm / 0..360 deg', mesh generated"}]
+    },
+    "physicalRevision": {
+      "status": "passed-with-notes",
+      "checks": [
+        {"id": "manifest-v2", "result": "passed", "detail": "manifest schemaVersion 2 with top-level and per-frame physicalRevision (sha256:5c86c94e...), identical across two fresh solves of the same demo"},
+        {"id": "byte-identical-zips-across-solves", "result": "passed-with-note", "detail": "orbit png-sequence 8 frames, two exports after fresh solve 1 and after fresh solve 2 (plus two more): 5 of 6 ZIPs byte-identical (sha256 5b2e22a0...), including across the two solves. The one different ZIP (first export after solve 2) differs only in frame-0000.png: the caption showed the English demo name instead of the Japanese one, because Chrome's page translation rewrote the demo name text between exports. Manifest content and all other frames were identical. Result: the physicalRevision change removes the earlier result-revision differences; caption text can still vary with the page language state"},
+        {"id": "frame0-camera-exact", "result": "passed", "detail": "manifest frames[0].camera.position equals the saved view camera exactly"}]
+    }
+  },
+  "notVerified": [
+    "Japanese-language rendering of the new UI (the page was exercised in ?lang=en with Chrome translation active; JA strings only read from the source)",
+    "Same-field different-units refusal in compare (no suitable case pair)",
+    "Compare with a truly different model/geometry than the loaded project",
+    "Whether the stale-looking radius 10 -> 8 condition text after a blank end on the cone is a real defect",
+    "Real colour gradient legend in the compare canvas (only text range seen)",
+    "Full console history (the console tool started tracking late; an in-page error hook recorded nothing)",
+    "Interpolation correctness beyond legend ranges and screenshots (no numeric field comparison against a reference)"
+  ]
+}
