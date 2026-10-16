@@ -1,0 +1,143 @@
+{
+ "generated": "2026-10-16",
+ "totalBytes": 1918302,
+ "lang": "en",
+ "failedDemos": [],
+ "skipped": {
+  "rubber-demo": "object leaves frame in default camera; not representative",
+  "fatigue-demo": "renders an elastic result visually identical to structural",
+  "stokes-demo / flow-demo": "stills and clips have a duplicated legend line from the crop; not published until recaptured"
+ },
+ "files": [
+  {
+   "file": "acoustic.png",
+   "solver": "Acoustic harmonic",
+   "demoButtonId": "acoustic-demo",
+   "shows": "Acoustic domain reference sample, pressure peak 0-1 Pa; animation: orbit, 36 frames @12fps",
+   "bytes": 102203,
+   "sha256": "d8f936e4afe28d3b5be0a50c13980b1034abef75f4149d6a45983a12873cb611",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "acoustic.webm",
+   "solver": "Acoustic harmonic",
+   "demoButtonId": "acoustic-demo",
+   "shows": "Acoustic domain reference sample, pressure peak 0-1 Pa; animation: orbit, 36 frames @12fps",
+   "bytes": 91643,
+   "sha256": "2fa2d4da2ac23a5ea2757782e39c442e7b04b6bfc8ad486ea3ebf6a1ad4355a0",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "modal.gif",
+   "solver": "Modal",
+   "demoButtonId": "modal-demo",
+   "shows": "Cantilever first mode shape (displacement, normalized mode); animation: deformation, 24 frames @12fps",
+   "bytes": 177964,
+   "sha256": "ea54e81f5cecd0b6cebef5b75eab79f3cd18496fda339ac3ee0957f359b768dd",
+   "resolution": "800x450",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "modal.png",
+   "solver": "Modal",
+   "demoButtonId": "modal-demo",
+   "shows": "Cantilever first mode shape (displacement, normalized mode); animation: deformation, 24 frames @12fps",
+   "bytes": 89400,
+   "sha256": "139780c8cf9111b2700554e7b071f148ae8cc3c6cab04401c13aadb4830d0509",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "modal.webm",
+   "solver": "Modal",
+   "demoButtonId": "modal-demo",
+   "shows": "Cantilever first mode shape (displacement, normalized mode); animation: deformation, 24 frames @12fps",
+   "bytes": 29295,
+   "sha256": "b1fbbe2d218c6558be270242d393a72e1b5fd7b117e818fe9d2f6669c13e09ac",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "structural.gif",
+   "solver": "Structural (linear elastic)",
+   "demoButtonId": "analysis-demo",
+   "shows": "Axial bar reference sample, displacement colour 0-0.04 mm; animation: deformation, 24 fixed frames @12fps",
+   "bytes": 72679,
+   "sha256": "deef18dd272a212fc64bdbdc76756c799261e0a73601b45222cb58f87d9c9a15",
+   "resolution": "800x450",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "structural.png",
+   "solver": "Structural (linear elastic)",
+   "demoButtonId": "analysis-demo",
+   "shows": "Axial bar reference sample, displacement colour 0-0.04 mm; animation: deformation, 24 fixed frames @12fps",
+   "bytes": 106140,
+   "sha256": "48546000555ef6dc33e87f206c68ae74f0a8cfd918dc740b79b6c7b3135c0aba",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "structural.webm",
+   "solver": "Structural (linear elastic)",
+   "demoButtonId": "analysis-demo",
+   "shows": "Axial bar reference sample, displacement colour 0-0.04 mm; animation: deformation, 24 fixed frames @12fps",
+   "bytes": 17564,
+   "sha256": "881b939a41cffe8486c758fb1271a78f464a74f4efdf369c97e06c6907d83248",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "thermal.png",
+   "solver": "Thermal conduction",
+   "demoButtonId": "thermal-demo",
+   "shows": "Heat conduction reference sample, temperature 20-100 C; animation: orbit, 36 frames @12fps",
+   "bytes": 101155,
+   "sha256": "aa3b3f1acaa5f7cc891193654ce04c787587f8c5d0ad2b5b8eb05d43d4ae361f",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "thermal.webm",
+   "solver": "Thermal conduction",
+   "demoButtonId": "thermal-demo",
+   "shows": "Heat conduction reference sample, temperature 20-100 C; animation: orbit, 36 frames @12fps",
+   "bytes": 92118,
+   "sha256": "f28b5534c08e2d94bedaa82b61ea08dfaa2e7f0f2c183a70105d9b1f9ad0c985",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "transient.gif",
+   "solver": "Transient acoustic",
+   "demoButtonId": "transient-acoustic-demo",
+   "shows": "Wave propagation, instantaneous pressure; animation: time, 48 stored frames @16fps",
+   "bytes": 770746,
+   "sha256": "eb9eaff0bace21b33186bc08101fdeb031a102302b867248ee65a870e17f0288",
+   "resolution": "800x450",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "transient.png",
+   "solver": "Transient acoustic",
+   "demoButtonId": "transient-acoustic-demo",
+   "shows": "Wave propagation, instantaneous pressure; animation: time, 48 stored frames @16fps",
+   "bytes": 111382,
+   "sha256": "6441356fba5138dc4febfbd9e36389a451452890c18cbec9e73d37c74aa7d2cf",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  },
+  {
+   "file": "transient.webm",
+   "solver": "Transient acoustic",
+   "demoButtonId": "transient-acoustic-demo",
+   "shows": "Wave propagation, instantaneous pressure; animation: time, 48 stored frames @16fps",
+   "bytes": 156013,
+   "sha256": "b82020fcbe9f7adbceb50dbb1a8af2e5c838e80ecdf29669e01689948b215e46",
+   "resolution": "1280x720",
+   "source": "real app via real Chrome; stills = app PNG export cropped/scaled; clips = app fixed-frame png-sequence export encoded with ffmpeg (WebM VP9 / GIF)"
+  }
+ ]
+}
