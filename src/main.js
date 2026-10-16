@@ -1,5 +1,6 @@
 import {installNativeFlowPanel} from './native-flow-panel.js';
 import {createCaseListUi} from './ui/case-list-ui.js';
+import {createViewCompareUi} from './ui/view-compare-ui.js';
 import {createStatusUi} from './ui/status-ui.js';
 import {createFatigueUi} from './ui/fatigue-ui.js';
 import {createMaterialFormUi} from './ui/material-form-ui.js';
@@ -269,8 +270,17 @@ $('displacement-demo').onclick=displacementExample;window.analysisApi.loadDispla
 const caseStore=createCaseStore();
 function viewCase(index){if($('cancel-run').disabled===false)throw Error('先に実行中の計算を中止してください。');const saved=caseStore.list()[index];if(!saved)throw Error('Unknown case');const output=prepareCaseView(saved);api.loadProject(output.input);const o=output.calculation.options;$('mesh-size').value=o.size;$('solver').value=o.method;$('adaptive-run').checked=o.adaptive;$('adaptive-rounds').value=o.maxRounds;restoreAdaptiveOptions(o);lastAnalysis=output;renderInternalPorts(output.mesh);showAnalysis();$('result-export').disabled=false;$('mesh-summary').textContent=output.mesh.summary.nodeCount+' 節点 / '+output.mesh.summary.elementCount+' 四面体';$('result-summary').textContent=saved.name+' · '+caseStore.compare()[index].metrics.map(m=>m.value.toPrecision(5)+' '+m.unit).join(' / ');appendComputeStatus(output.result);status('保存時の入力と結果を表示しています。');return {name:saved.name,kind:output.result.kind};}
 
+function compareInspect(index){const saved=caseStore.list()[index];if(!saved)throw Error('Unknown case');const r=prepareCaseView(saved).result;return {frameTimes:r.kind==='acousticTransient'?r.snapshots.map(f=>f.time):null,fields:resultFields(r).map(f=>f.id)};}
+// Render one saved case with the existing result renderer using the shared camera, then restore the displayed result. Does not touch the project input.
+function compareRender(index,{field,deformScale,frameIndex,colorRange}){if(!$('cancel-run').disabled||visualExport.isActive())throw Error('先に実行中の計算を中止してください。');const saved=caseStore.list()[index];if(!saved)throw Error('Unknown case');const output=prepareCaseView(saved),fieldInfo=resultFields(output.result).find(f=>f.id===field);if(!fieldInfo)throw Error('Field is unavailable for this result');
+ const keep={analysis:lastAnalysis,range:resultColorRange,frame:acousticFrame,time:acousticDisplayTime,modal:modalIndex,field:$('result-field').value,scale:$('deform-scale').value};
+ try{lastAnalysis=output;resultColorRange=colorRange;acousticFrame=frameIndex??0;acousticDisplayTime=null;modalIndex=0;$('result-field').value=field;$('deform-scale').value=deformScale;showAnalysis();renderer.render(scene,camera);
+  const source=renderer.domElement,snapshot=document.createElement('canvas');snapshot.width=source.width;snapshot.height=source.height;snapshot.getContext('2d').drawImage(source,0,0);
+  return {canvas:snapshot,min:resultSliceContext.min,max:resultSliceContext.max,unit:fieldInfo.unit};
+ }finally{lastAnalysis=keep.analysis;resultColorRange=keep.range;acousticFrame=keep.frame;acousticDisplayTime=keep.time;modalIndex=keep.modal;$('result-field').value=keep.field;$('deform-scale').value=keep.scale;
+  if(keep.analysis)showAnalysis();else{analysisLayer.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});analysisLayer.clear();group.visible=true;markers.visible=true;$('result-legend').textContent='';resultSliceContext=null;}}}
 const caseUi=createCaseListUi({$,store:caseStore,status,viewCase,restoreCaseInput:c=>{api.loadProject(c.output.input);const o=c.output.calculation.options;$('mesh-size').value=o.size;$('solver').value=o.method;$('adaptive-run').checked=o.adaptive;$('adaptive-rounds').value=o.maxRounds;restoreAdaptiveOptions(o);},getLastAnalysis:()=>lastAnalysis});
-const {renderCases}=caseUi;window.caseApi=caseUi.caseApi;
+const {renderCases}=caseUi;const compareUi=createViewCompareUi({$,anchor:$('case-list'),store:caseStore,status,translate:addTranslations,language:()=>language,inspectCase:compareInspect,renderCase:compareRender,getField:()=>$('result-field').value,getDeformScale:()=>Number($('deform-scale').value),getCamera:()=>({position:camera.position.toArray(),target:controls.target.toArray(),up:camera.up.toArray(),fov:camera.fov})});window.caseApi=caseUi.caseApi;
 
 function thermalStressExample(){displacementExample();api.selectCondition(1);api.removeCondition(1);api.addCondition({type:'displacement',value:0,direction:[0,0,1]});api.setMaterialProperties({...getProject().materialProperties,expansion:1e-5});api.setStudy({...getProject().study,thermalStress:true,temperature:80,referenceTemperature:20});modelName=language==='en'?'Restrained thermal expansion':'拘束した熱膨張サンプル';$('name').textContent=modelName;status('60 Kの温度上昇。軸方向の参照応力−0.6 MPa、両端反力は±60 Nです。');}
 $('thermal-stress-demo').onclick=thermalStressExample;window.analysisApi.loadThermalStressExample=thermalStressExample;
