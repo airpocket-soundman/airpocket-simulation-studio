@@ -1,3 +1,4 @@
+import {installNativeFlowPanel} from './native-flow-panel.js';
 import {createCaseListUi} from './ui/case-list-ui.js';
 import {createStatusUi} from './ui/status-ui.js';
 import {createFatigueUi} from './ui/fatigue-ui.js';
@@ -494,3 +495,5 @@ window.printImportApi=installPrintImport({language:()=>language,translate:addTra
 window.printOperations=createPrintOperations({...window.printImportApi,isBusy:()=>!$('cancel-run').disabled||$('model').disabled||$('print-file').disabled||visualExport.isActive()});
 window.printTransfer=createPrintTransfer({prints:window.printOperations});
 installBrowserSession({studio:api,analysis,jobResults:createJobResultTransfer({analysis}),view:window.viewApi,resultView:window.resultViewApi,cases:window.caseOperations,exports:window.visualExportApi,namedViews:window.namedViewApi,caseArchives:window.caseArchiveTransfer,assessments:window.resultAssessmentApi,cadUpdates:window.cadUpdateApi,builtinProjects:window.builtinProjectApi,inputImports:window.inputImportTransfer,fluidDomains:window.fluidDomainApi,caseSources:window.caseSourceApi,prints:window.printOperations,printTransfers:window.printTransfer,caseBundles:window.caseBundleApi,caseBundleTransfers:window.caseBundleTransfer,measurements:window.measurementApi,getResult:()=>lastAnalysis,probe:(_mesh,_result,point,options)=>window.analysisApi.probe(point,options),isBusy:()=>!$('cancel-run').disabled||visualExport.isActive()||$('model').disabled,translate:addTranslations,language:()=>language,showResult:(output,name)=>{if(!output.result)throw Error('A mesh-only job has no result case');const index=caseStore.list().length;window.caseApi.add(name,output);return viewCase(index);}});
+
+installNativeFlowPanel({translate:addTranslations});
