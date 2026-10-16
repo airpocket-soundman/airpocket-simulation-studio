@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "environment": "real Chrome localhost semantic repository bridge; analytic thermal fixtures",
+  "initial": {
+    "status": "passed",
+    "checks": [
+      "Incomplete panel returned null archive and CAS revision",
+      "Portable content hashes resolved to exactly two current case IDs",
+      "CAS import/get archive equality",
+      "Panel import did not change main viewer or saved cases",
+      "Refused stale CAS atomically",
+      "Refused missing source hash atomically",
+      "Refused invalid preset atomically",
+      "Resolved preset generated SHA-256 verified 1280x640 PNG at stored 5 s",
+      "Exact original main viewer and comparison panel preserved after export"
+    ],
+    "phase": "initial",
+    "runtimeCaseIds": [
+      "846ed01d-86a2-4c4d-b46d-5ef210cb4c6e",
+      "4bb3e49a-5093-4e51-ac60-89553cc5ff14"
+    ],
+    "presetRevision": "sha256:68cb0bb7f725b45423d22bf79d23a7638ead12d359e0b251456d53958a1ea7c3",
+    "artifact": {
+      "bytes": 79776,
+      "sha256": "sha256:ad6b6f8c5cff20ba3ee852633b9046a53abc8ba4e58083530c2e26538305497a",
+      "width": 1280,
+      "height": 640
+    },
+    "jobReleased": true
+  },
+  "reloaded": {
+    "status": "passed",
+    "checks": [
+      "Incomplete panel returned null archive and CAS revision",
+      "Portable content hashes resolved to exactly two current case IDs",
+      "CAS import/get archive equality",
+      "Panel import did not change main viewer or saved cases",
+      "Same JSON rebound successfully after reload to new runtime case IDs",
+      "Refused stale CAS atomically",
+      "Refused missing source hash atomically",
+      "Refused invalid preset atomically",
+      "Resolved preset generated SHA-256 verified 1280x640 PNG at stored 5 s",
+      "Exact original main viewer and comparison panel preserved after export"
+    ],
+    "phase": "reloaded",
+    "runtimeCaseIds": [
+      "1b07b9a9-d0ff-4221-8ed0-cfb5bc0c30b7",
+      "7cb1c78e-f3a1-4acb-a09d-d5881b71d2a1"
+    ],
+    "presetRevision": "sha256:6818e48476dc4d66de5a595a555844c7c09cb3fc4520d71fd60318c4f3a6073b",
+    "artifact": {
+      "bytes": 79776,
+      "sha256": "sha256:ad6b6f8c5cff20ba3ee852633b9046a53abc8ba4e58083530c2e26538305497a",
+      "width": 1280,
+      "height": 640
+    },
+    "jobReleased": true,
+    "reloadMethod": "actual browser tab.reload()",
+    "caseImportOrder": "reversed: T=20+2t then T=20+t",
+    "portableSourceOrder": "Preserved original source-hash order: left25 degC, right30 degC at 5s",
+    "identicalPngAfterReload": true
+  },
+  "guiFileImport": {
+    "status": "passed",
+    "observer": "parent agent controlling real Chrome",
+    "steps": [
+      "Reset comparison panel",
+      "Import .qa/comparison-preset.json through GUI file picker",
+      "Imported hint displayed; main viewer unchanged",
+      "Explicitly show comparison successfully"
+    ],
+    "screenshot": "docs/evidence/2026-10-17-comparison-presets-real-chrome.jpg",
+    "afterReload": {
+      "status": "Comparison shown",
+      "pngEnabled": true,
+      "canvas": {
+        "width": 1280,
+        "height": 640
+      }
+    }
+  },
+  "presetFile": "docs/evidence/2026-10-17-comparison-preset.json",
+  "identicalPngFile": "docs/evidence/2026-10-17-comparison-api-real-chrome.png",
+  "notVerified": [
+    "GUI export download completion",
+    "Automatic browser storage",
+    "Comparison video",
+    "General or imported geometry",
+    "Public HTTPS execution",
+    "Installed MCP server execution",
+    "General physical accuracy"
+  ]
+}

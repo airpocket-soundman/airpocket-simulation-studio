@@ -12,7 +12,7 @@ import {previewProjectOperations} from './project-edit-preview.js';
 import {preflightMeshBoundaryTransfer} from './mesh-boundary-preflight.js';
 
 // Invoke only named semantic operations. No arbitrary window method or code path.
-export function createBrowserSession({studio,analysis,jobResults,view,resultView,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
+export function createBrowserSession({studio,analysis,jobResults,view,resultView,comparisonViews,cases,exports,namedViews,caseArchives,assessments,cadUpdates,builtinProjects,prints,printTransfers,caseBundles,caseBundleTransfers,measurements,inputImports,fluidDomains,caseSources,getResult,probe,showResult,isBusy=()=>false}) {
  const ownedResultTransfers=new Set(),ownedInputTransfers=new Set(),ownedBundleTransfers=new Set(),ownedPrintTransfers=new Set(),ownedImports=new Set(),ownedExports=new Set(),owned=new Set(),requests=new Map();let editing=false,epoch=0;
  const executionBusy=()=>analysis?.isBusy?.()||[...owned].some(id=>{try{const job=analysis.getJob(id);return job.executionSettled===false||['queued','running','saving'].includes(job.state);}catch{return false;}});
  const busy=()=>isBusy()||executionBusy();
@@ -98,6 +98,17 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='probe'){if(resultView?.probe)return resultView.probe(args);const output=getResult();if(!output?.result)throw Error('No displayed result');return {...probe(output.mesh,output.result,args.point,args.options||{}),analysisAssessment:output.analysisAssessment};}
    if(method==='getView')return view.get();
    if(method==='setView'){if(busy()||editing)throw Error('Browser is busy');view.set(args);return view.get();}
+   if(method==='getCompareView'){
+    if(Reflect.ownKeys(args).length)throw Error('getCompareView takes no arguments');
+    if(typeof comparisonViews?.get!=='function')throw Error('Comparison view API unavailable');
+    const response=await comparisonViews.get();if(!valid())throw Error('Comparison view inspection expired');return response;
+   }
+   if(method==='setCompareView'){
+    if(typeof comparisonViews?.set!=='function'||busy()||editing)throw Error('Comparison view API unavailable or browser busy');
+    const command=JSON.parse(canonicalJson(args));
+    if(Object.keys(command).some(key=>!['archive','expectedRevision'].includes(key))||!Object.hasOwn(command,'archive')||typeof command.expectedRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(command.expectedRevision))throw Error('Invalid comparison view command');
+    editing=true;try{const response=await comparisonViews.set(command,{guard:valid});if(!valid())throw Error('Comparison view command expired');return response;}finally{editing=false;}
+   }
    if(method==='getResultView'){if(!resultView)throw Error('Result view API unavailable');return resultView.get(args);}
    if(method==='setResultView'){if(!resultView||busy()||editing)throw Error('Result view unavailable or browser busy');return resultView.set(args,{guard:valid});}
    if(method==='exportCapabilities'){if(!exports)throw Error('Export API unavailable');return exports.capabilities();}
