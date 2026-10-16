@@ -2,10 +2,10 @@ const CHUNK=65536;
 const hashPattern=/^sha256:[a-f0-9]{64}$/;
 const fail=message=>{throw Error(message);};
 const digest=async bytes=>'sha256:'+Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
-const encode=bytes=>{let value='';for(const byte of bytes)value+=String.fromCharCode(byte);return btoa(value);};
+const encode=bytes=>{let value='';for(let i=0;i<bytes.length;i+=8192)value+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));return btoa(value);};
 function decode(value){
  if(typeof value!=='string'||value.length>Math.ceil(CHUNK/3)*4||! /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value))fail('Invalid archive base64 chunk');
- const text=atob(value),bytes=Uint8Array.from(text,c=>c.charCodeAt(0));
+ const text=atob(value),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);
  if(!bytes.length||bytes.length>CHUNK||encode(bytes)!==value)fail('Invalid archive base64 chunk');return bytes;
 }
 /** Portable, bounded staging. Guards are private host callbacks, never wire data. */
