@@ -33,8 +33,8 @@
     },
     {
       "id": "determinism-orbit",
-      "result": "failed-partially (fix applied in code; real-Chrome re-verification pending)",
-      "detail": "Orbit 8 frames: all PNG frames byte-identical across runs, but the manifest.json differs between the FIRST orbit export after a fresh solve and later ones (manifest camera.position last-digit float differences, e.g. -35.99999999999999 vs -36), so the ZIP SHA-256 differs for that pair. Reproduced twice (after two separate fresh solves). Subsequent identical orbit exports were byte-identical to each other (second vs third, also in a later session). Frame PNGs (the determinism claim for pixels) hold; the whole-ZIP byte-identical claim does not hold for orbit across the first export."
+      "result": "failed-partially-superseded",
+      "detail": "Orbit 8 frames: all PNG frames byte-identical across runs, but the manifest.json differs between the FIRST orbit export after a fresh solve and later ones (manifest camera.position last-digit float differences, e.g. -35.99999999999999 vs -36), so the ZIP SHA-256 differs for that pair. Reproduced twice (after two separate fresh solves). Subsequent identical orbit exports were byte-identical to each other (second vs third, also in a later session). Frame PNGs (the determinism claim for pixels) hold; the whole-ZIP byte-identical claim does not hold for orbit across the first export. SUPERSEDED: see reverification (fixed after merging origin/main)."
     },
     {
       "id": "cancel-mid-run",
@@ -49,7 +49,7 @@
     {
       "id": "time-on-structural",
       "result": "observation",
-      "detail": "startExport animation time on a structural result is accepted (job starts) and then fails within about a second with 'Time playback requires transient acoustic frames.'; it is not refused at start Follow-up change: the job layer now calls visualExport.preflight(request) in prepare for png-sequence, so time on a non-transient result (and deformation on a non-structural result, slice without mesh) is refused at start. Not yet re-checked in real Chrome."
+      "detail": "startExport animation time on a structural result is accepted (job starts) and then fails within about a second with 'Time playback requires transient acoustic frames.'; it is not refused at start Follow-up change: the job layer now calls visualExport.preflight(request) in prepare for png-sequence, so time on a non-transient result (and deformation on a non-structural result, slice without mesh) is refused at start. Not yet re-checked in real Chrome. SUPERSEDED: now refused at start, see reverification."
     },
     {
       "id": "undriven-tab",
@@ -70,7 +70,9 @@
     "Other browsers, published HTTPS page, larger viewports, GPU differences between machines (determinism verified only on this machine and tab)",
     "Result-update-during-export abort path",
     "Orbit ZIP byte-identity across the first and later exports after the manifest rounding fix (real Chrome re-run pending)",
-    "time-on-structural refusal at start in real Chrome after the preflight change"
+    "time-on-structural refusal at start in real Chrome after the preflight change",
+    "Why resultRevision differs between repeated identical demo solves",
+    "Behaviour on an unloaded, foreground tab (this pass ran on a heavily loaded machine with a throttled tab)"
   ],
   "defects": [
     {
@@ -83,7 +85,43 @@
     }
   ],
   "reverification": {
-    "status": "pending",
-    "detail": "Byte-identity of orbit ZIPs (first export after a fresh solve vs later exports) has NOT been re-verified in real Chrome after the fix. Until that run, the whole-ZIP orbit determinism claim stays unverified and this evidence status remains partial."
+    "date": "2026-10-16",
+    "base": "worktree p-d merged origin/main (includes PR #63 orbit manifest fix and the caption rename)",
+    "environment": "real Chrome, own tab, English UI, vite dev on 127.0.0.1:5174, stdio connector; machine heavily loaded and tab throttled (8-frame export took 20-180 s and startExport calls timed out at the 15 s connector limit several times, retried)",
+    "results": [
+      {
+        "id": "orbit-byte-identical-fresh-solve-1",
+        "result": "passed",
+        "detail": "Axial-bar demo, fresh solve: two orbit 8-frame exports gave byte-identical ZIPs (sha256 f32e59c0..., 602025 bytes). The first orbit export after the fresh solve is now identical to the second (previously differed)."
+      },
+      {
+        "id": "orbit-byte-identical-fresh-solve-2",
+        "result": "passed",
+        "detail": "After a second fresh solve (demo reset, new solve): two orbit 8-frame exports were byte-identical to each other (sha256 8b400361..., 594838 bytes)."
+      },
+      {
+        "id": "orbit-across-fresh-solves",
+        "result": "observation",
+        "detail": "ZIPs from different fresh solves are not byte-identical to each other because each fresh solve produces a different resultRevision (three solves: fcd5e48b..., 886d6479..., 7db02c48...), which is embedded in manifest.json and the frames; frame pixels differ slightly too. Determinism holds per stored result, not across re-solves. Not investigated why the result revision changes between identical demo solves."
+      },
+      {
+        "id": "orbit-camera-manifest",
+        "result": "passed",
+        "detail": "manifest frames[0].camera.position equals the saved view camera exactly ([61,41,84], no float residue); other frames are rounded to 9 decimals (89.852813742,41,25.656854249 ... 69,41,-36 ...); identical across both exports."
+      },
+      {
+        "id": "time-on-structural-refused",
+        "result": "passed",
+        "detail": "startExport animation time on a structural result is now refused by the startExport call itself with \"Time playback requires transient acoustic frames.\"; no job was created (the call returned an error, no jobId)."
+      },
+      {
+        "id": "deformation-png-still-work",
+        "result": "passed",
+        "detail": "deformation png-sequence 8 frames completed (638691 bytes) and format png completed (78906 bytes) after the merge."
+      }
+    ],
+    "notReverified": [
+      "Acoustic time/transient and modal exports were not re-run for the manifest check after the merge in this pass (media recapture exercises time/deformation exports, but ZIP determinism was not re-compared)"
+    ]
   }
 }

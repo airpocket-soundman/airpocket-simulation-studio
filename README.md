@@ -17,8 +17,9 @@ Each tile is a result produced by the app itself from its built-in demo models.
 |---|---|
 | ![Structural](docs/media/structural.png) **Structural** — linear elasticity, prescribed displacement, thermal stress, J2 plasticity, Neo-Hookean rubber | ![Thermal](docs/media/thermal.png) **Thermal** — steady and transient conduction, convection, radiation, contact resistance |
 | ![Modal](docs/media/modal.png) **Natural vibration** — mode shapes and frequencies | ![Acoustic](docs/media/acoustic.png) **Acoustics** — frequency-domain and transient, exterior radiation, directivity, WAV output |
+| ![Stokes flow](docs/media/stokes.png) **Fluid** — Stokes flow around a sphere (half section) | ![Channel flow](docs/media/flow.png) **Channel flow** — developed laminar speed profile |
 
-Animated versions: [structural (GIF)](docs/media/structural.gif) · [modal (GIF)](docs/media/modal.gif) · [transient acoustics (GIF)](docs/media/transient.gif) · WebM clips are in [docs/media](docs/media/).
+Animated versions: [structural (GIF)](docs/media/structural.gif) · [modal (GIF)](docs/media/modal.gif) · [transient acoustics (GIF)](docs/media/transient.gif) · [Stokes flow (GIF)](docs/media/stokes.gif) · WebM clips are in [docs/media](docs/media/).
 
 ### Feature overview
 
@@ -88,4 +89,4 @@ Official progress is tracked in [`src/progress.json`](src/progress.json) and sho
 
 See [LICENSE](LICENSE) and [THIRD_PARTY.md](THIRD_PARTY.md) (includes the optional SU2 notice). The source repository is public at the owner's request.
 
-*Media in `docs/media` were captured from the app running in Chrome; [media-manifest.json](docs/media/media-manifest.json) lists how each file was made. Their burned-in captions still show the earlier spelling "Airpocket".*
+*Media in `docs/media` were captured from the app running in Chrome; [media-manifest.json](docs/media/media-manifest.json) lists how each file was made. Rubber and fatigue demos are not shown because their results are not visually distinct yet.*
