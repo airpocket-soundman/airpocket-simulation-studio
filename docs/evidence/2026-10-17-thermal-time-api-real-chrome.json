@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "environment": {
+    "browser": "real Chrome via extension",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "repository createBrowserBridge semantic calls (not registered MCP server)",
+    "scopes": [
+      "inspect",
+      "view"
+    ],
+    "fixture": "actual solveThermal on one tetrahedron; uniform closed-body heating; T=20+t degC; 11 stored frames at 1 s intervals"
+  },
+  "status": "passed",
+  "checks": [
+    {
+      "timeSeconds": 5,
+      "storedFrameIndex": 5,
+      "temperature": 24.999999999999936,
+      "fluxPresent": false,
+      "resultRevisionUnchanged": true
+    },
+    {
+      "timeSeconds": 10,
+      "storedFrameIndex": 10,
+      "temperature": 29.999999999999936,
+      "fluxPresent": true,
+      "resultRevisionUnchanged": true
+    },
+    {
+      "timeSeconds": 2,
+      "storedFrameIndex": 2,
+      "temperature": 21.999999999999986,
+      "fluxPresent": false,
+      "resultRevisionUnchanged": true
+    }
+  ],
+  "refusals": [
+    "non-stored time",
+    "out-of-range frame",
+    "heat flux at nonfinal time",
+    "stale result revision"
+  ],
+  "export": {
+    "format": "png-sequence",
+    "frameCount": 3,
+    "physicalTimes": [
+      0,
+      5,
+      10
+    ],
+    "frameHashes": [
+      "sha256:a1e33f4308fdd8769a43abe4f8a488084c83ac897536200235bbb6e9f23ee5eb",
+      "sha256:1197a5ecb409fbf76c6a23723d636110c9f8e7b1567a6da220172a92108d68c7",
+      "sha256:4c32ed7a67711cf1440a3dd9eaefa645721ea409d9039e0c75754654982b3f05"
+    ],
+    "sha256": "sha256:6651244716577b3ef7c020853e7c5d33684acb4e558f3243d4e9df3ebba17c5c",
+    "bytes": 162226,
+    "restoredTimeSeconds": 2
+  },
+  "notVerified": [
+    "General imported geometry or large meshes",
+    "Public HTTPS operation",
+    "Measurement history and named thermal time persistence",
+    "Arbitrary physical-time interpolation through API",
+    "Interpolated-display generic patch/export restoration was covered by automated tests, not this Chrome run."
+  ],
+  "comparison": {
+    "timeSeconds": 5,
+    "caseNames": [
+      "QA analytic T=20+1t",
+      "QA analytic T=20+2t"
+    ],
+    "status": "comparison shown in real Chrome",
+    "canvas": {
+      "width": 1280,
+      "height": 640
+    },
+    "originalViewerTimeAfterComparisonSeconds": 2,
+    "downloadVerification": "not verified: browser download event timed out"
+  },
+  "sourceBaseRevision": "dfed284f80d1929ebae6e67ac9200c15eb113bbe",
+  "sourceChanges": {
+    "src/result-view-api.js": "1d1a65326adfd527aca50285db32160c1552f4ee2a33a8fbbd527a714f910a82",
+    "src/main.js": "0e3709790bc585caed6d573dd5dcc60dd7ec1e6d59f5a910115c38c2ae915efc",
+    "src/ui/time-view-state.js": "ac740208a7991647c6aa033884ec100349f5184664a3946edd8bacecb5aaa0a7"
+  },
+  "fixtureArtifact": "docs/evidence/2026-10-17-thermal-time-api-real-chrome-cases.json",
+  "exportedMiddleFrameArtifact": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.png"
+}
