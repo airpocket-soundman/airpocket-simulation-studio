@@ -1,0 +1,61 @@
+{
+ "task": "WORKERTRANSPORT1",
+ "status": "partial",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "ab39d183b3e648b6bd47e6bd0b94d9d06ebdd7de",
+  "connector": "node scripts/studio-mcp.mjs over stdio, scopes inspect/edit/analyze/view, own tab; real Chrome dedicated Worker path"
+ },
+ "checks": [
+  {
+   "name": "Stokes P2 job through connector with includeFields:true (size 6, wasm-pcg), real Chrome Worker",
+   "passed": true,
+   "detail": "state succeeded in 8024 ms; iteration events report velocityElement P2 stokes-gmres 140 iterations converged; mesh 1342 nodes/6481 elements; jobArtifacts: one mesh artifact (192346 bytes) only, no scalar-field artifacts listed; showJob kind stokes"
+  },
+  {
+   "name": "Declared transport limits visible in observation-transport event",
+   "passed": true,
+   "detail": "maxEvents 8, maxBytes 8000000, maxOutboxEvents 8, maxOutboxBytes 8000000, maxTotalEvents 16, maxTotalBytes 16000000, terminalControlMaxEvents 1, terminalControlMaxBytes 4096, policy drop-immediately-or-coalesce-without-waiting"
+  },
+  {
+   "name": "Stokes P2 normal-terminal transport statistics (one control summary after drain)",
+   "passed": true,
+   "detail": "accepted 12, dropped 10, sourceSequence 22, peakEvents 8, peakBytes 764422, outboxPeakEvents 3, outboxPeakBytes 9600, pending/outbox at terminal 0/0, droppedReasons {\"outbox-coalesced\":10}, terminal true; events carry observationTransport.sequence and ACK drains to zero"
+  },
+  {
+   "name": "Scalar-iteration coalescing is reported separately from storage queue (no observation-queue-limit or gap events)",
+   "passed": true,
+   "detail": "outbox-coalesced 10; observation-queue-limit events 0; observation-event-gap events 0"
+  },
+  {
+   "name": "Acoustic frequency sweep (2000 Hz start 500-5000, 20 points, size 3) with includeFields through connector",
+   "passed": true,
+   "detail": "state succeeded in 2349 ms; stages {\"undefined\":3,\"preparation\":1,\"progress\":23,\"mesh\":1,\"iteration\":6,\"frequency-step\":9,\"observation-transport\":1}; jobArtifacts one mesh artifact (29999 bytes); showJob kind acoustic. Note: the first attempt before enabling the sweep checkbox ran a single frequency; sweep count 40 was rejected (Invalid sweep count, max 20) and recorded as a failed job"
+  },
+  {
+   "name": "Acoustic sweep transport statistics under pressure",
+   "passed": true,
+   "detail": "accepted 17, dropped 100, sourceSequence 117, peakEvents 8, peakBytes 147392, outboxPeakEvents 8, outboxPeakBytes 26532, pending/outbox at terminal 0/0, droppedReasons {\"outbox-capacity\":94,\"outbox-coalesced\":2,\"outbox-priority-eviction\":4}, terminal true"
+  },
+  {
+   "name": "Second solve refused while a long job runs",
+   "passed": true,
+   "detail": "startJob with a different requestId while the Stokes job was running returned error \"Browser is busy\" (observed in 3 Stokes runs and the 20-point sweep). Short jobs that had already finished (<1 s) were accepted, which is expected and not a refusal case. A solve started after a succeeded job is accepted (one such solve failed on the default mesh limit, unrelated)."
+  },
+  {
+   "name": "Cancel mid-run: terminal cancelled, no stale response, no result artifact",
+   "passed": true,
+   "detail": "Stokes P2 cancelled ~3.5 s in (during mesh/solve start); cancelJob returned state cancelled with executionSettled false, jobStatus later executionSettled true with JOB_CANCELLED; 9 events total; later execution report was JOB_EXECUTION_REJECTED_AFTER_TERMINAL \"Calculation cancelled\"; no new events appeared 8 s later; no observation-transport terminal summary event (declared hardTerminationKinds include cancellation: totals unknown); only the mesh artifact retained; a later sweep job's 26 events all carry its own jobId"
+  }
+ ],
+ "notVerified": [
+  "Published HTTPS (never opened; localhost only)",
+  "Duplicate/unknown ACK and field-rejection-after-mesh-loss paths are not reachable from the connector and were not exercised in the browser (unit tests only)",
+  "Worker hard-termination aggregate (timeout/abnormal exit) not exercised",
+  "Single run each (n=1); no byte-level proof of ACK wire messages from outside the Worker",
+  "Field (non-mesh) artifacts were not produced for Stokes/acoustic with includeFields; only mesh artifacts listed",
+  "Node thread/process hosts not part of this browser run"
+ ],
+ "notes": "Partial because only connector-observable clauses of the acceptance were exercised in the browser."
+}
