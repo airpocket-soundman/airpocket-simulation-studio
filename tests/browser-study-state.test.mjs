@@ -43,3 +43,14 @@ test('normalizer is pure and preserves outer candidate snapshots while dropping 
  assert.deepEqual(out.study,expected);assert.equal(out.study.unknownPhysicalInput,undefined);assert.deepEqual(candidate,before);assert.deepEqual(c,oldControls);for(const key of ['name','meshes','selection','conditions','materialProperties','meshSettings','analysisIntent'])assert.deepEqual(out[key],candidate[key]);out.meshes[0].positions[0]=99;assert.equal(candidate.meshes[0].positions[0],0);
  const defaults=normalize({version:1,study:{kind:'structural'}},c);assert.deepEqual(defaults.meshSettings,{refinements:[]});assert.deepEqual(defaults.materialProperties,{});
 });
+test('thermal snapshot count round-trips only for transient thermal and is absent when off',()=>{
+ const base={kind:'thermal',transient:true,timeStep:1,steps:10};
+ assert.equal(round({...base,thermalSnapshotCount:9}).study.thermalSnapshotCount,9);
+ assert.equal(Object.hasOwn(round(base).study,'thermalSnapshotCount'),false);
+ assert.equal(Object.hasOwn(round({...base,transient:false,thermalSnapshotCount:9}).study,'thermalSnapshotCount'),false);
+ assert.equal(Object.hasOwn(round({kind:'structural',thermalSnapshotCount:9}).study,'thermalSnapshotCount'),false);
+});
+test('viewer wiring: per-kind accessor is used and unsupported thermal paths refuse',async()=>{
+ assert.match(html,/function renderTimeFrames\(r\)/);assert.match(html,/framesOf\(r\)\)renderTimeFrames\(r\)/);assert.match(html,/fixedFieldRange\(framesOf\(result\)\.fields\)/);assert.match(html,/Probing is available only for the final thermal step/);
+ const exporter=await readFile(new URL('../src/visual-export.js',import.meta.url),'utf8');assert.match(exporter,/result\?\.kind!=='acousticTransient'/);
+});
