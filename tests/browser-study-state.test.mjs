@@ -51,6 +51,6 @@ test('thermal snapshot count round-trips only for transient thermal and is absen
  assert.equal(Object.hasOwn(round({kind:'structural',thermalSnapshotCount:9}).study,'thermalSnapshotCount'),false);
 });
 test('viewer wiring: per-kind accessor is used and unsupported thermal paths refuse',async()=>{
- assert.match(html,/function renderTimeFrames\(r\)/);assert.match(html,/framesOf\(r\)\)renderTimeFrames\(r\)/);assert.match(html,/fixedFieldRange\(framesOf\(result\)\.fields\)/);assert.match(html,/Probing is available only for the final thermal step/);
- const exporter=await readFile(new URL('../src/visual-export.js',import.meta.url),'utf8');assert.match(exporter,/result\?\.kind!=='acousticTransient'/);
+ for(const s of ['function renderTimeFrames(r)','if(framesOf(r))renderTimeFrames(r)','fixedFieldRange(framesOf(result).fields)','...thermalFrameDisplay()});};',"name:language==='en'?'Heat conduction reference sample'"])assert.ok(html.includes(s),s);assert.ok(!html.includes('Probing is available only for the final thermal step'));
+ const exporter=await readFile(new URL('../src/visual-export.js',import.meta.url),'utf8');assert.match(exporter,/result\?\.kind!=='acousticTransient'/);assert.equal(exporter.split('Time playback export is not supported for thermal results yet').length-1,2);assert.ok(exporter.includes("timeAnimationResultKinds:['acousticTransient']"));
 });

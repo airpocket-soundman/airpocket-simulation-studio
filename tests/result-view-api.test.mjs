@@ -73,3 +73,13 @@ test('camera float drift and colorRange key order are canonicalized on read',asy
  assert.equal(JSON.stringify(s.camera),'{"position":[70,50,90],"target":[5,5,20],"up":[0,1,0],"fov":30}');
  assert.equal(JSON.stringify(s.colorRange),'{"field":"temperature","minimum":0,"maximum":10}');
 });
+test('thermal probe at a non-final displayed time samples the displayed frame, never the final step',async()=>{
+ const output={input:{version:1},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},result:{kind:'thermal',transient:true,temperature:[40,40,40,40],flux:[[1,2,3]],snapshots:[{step:0,time:0,temperature:[20,20,20,20]},{step:1,time:10,temperature:[40,40,40,40]}]}};
+ let display={frameTime:10,interpolated:false};
+ const state={field:'temperature',modeIndex:null,frameIndex:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:true,colorRange:null,camera:camera()};
+ const api=createResultViewApi({getAnalysis:()=>output,get:()=>state,isBusy:()=>false,set(){},frameDisplay:()=>display});
+ let s=await api.get();assert.equal(s.physicalTimeSeconds,10);assert.equal(s.timeSelection,'viewer-slider-only');assert.equal(s.state.frameIndex,null);
+ let p=await api.probe({expectedResultRevision:s.resultRevision,point:[.25,.25,.25]});assert.equal(p.temperature,40);assert.deepEqual(p.flux,[1,2,3]);assert.equal(p.display.physicalTimeSeconds,10);
+ display={frameTime:2.5,interpolated:true,frameValues:[25,25,25,25]};
+ p=await api.probe({expectedResultRevision:s.resultRevision,point:[.25,.25,.25]});assert.ok(Math.abs(p.temperature-25)<1e-9);assert.equal(p.flux,undefined);assert.equal(p.frameTimeSeconds,2.5);assert.equal(p.interpolated,true);assert.equal(p.display.physicalTimeSeconds,2.5);
+});
