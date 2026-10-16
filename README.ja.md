@@ -17,8 +17,9 @@
 |---|---|
 | ![構造](docs/media/structural.png) **構造** — 線形弾性、指定変位、熱応力、J2塑性、Neo-Hookeanゴム | ![熱](docs/media/thermal.png) **熱** — 定常/非定常熱伝導、対流、放射、接触熱抵抗 |
 | ![固有振動](docs/media/modal.png) **固有振動** — モード形状と固有振動数 | ![音響](docs/media/acoustic.png) **音響** — 周波数領域・過渡、外部放射、指向性、WAV出力 |
+| ![Stokes流](docs/media/stokes.png) **流体** — 球まわりのStokes流（半断面） | ![流路](docs/media/flow.png) **流路流れ** — 十分発達した層流の速度分布 |
 
-動画版: [構造(GIF)](docs/media/structural.gif) · [固有振動(GIF)](docs/media/modal.gif) · [過渡音響(GIF)](docs/media/transient.gif) · WebMは [docs/media](docs/media/) にあります。
+動画版: [構造(GIF)](docs/media/structural.gif) · [固有振動(GIF)](docs/media/modal.gif) · [過渡音響(GIF)](docs/media/transient.gif) · [Stokes流(GIF)](docs/media/stokes.gif) · WebMは [docs/media](docs/media/) にあります。
 
 ### 機能一覧
 
@@ -88,4 +89,4 @@ npm test         # 全テスト
 
 [LICENSE](LICENSE) と [THIRD_PARTY.ja.md](THIRD_PARTY.ja.md)（任意のSU2の表示を含む）を参照してください。ソースリポジトリは所有者の指示で公開しています。
 
-*`docs/media` のメディアはChrome上のアプリから撮影しました。作り方は [media-manifest.json](docs/media/media-manifest.json) に記録しています。画像内の字幕には以前の表記「Airpocket」が残っています。*
+*`docs/media` のメディアはChrome上のアプリから撮影しました。作り方は [media-manifest.json](docs/media/media-manifest.json) に記録しています。ゴムと疲労のデモは、結果の見た目に差が出ないため掲載していません。*
