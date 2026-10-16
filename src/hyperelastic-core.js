@@ -19,7 +19,8 @@ export function neoHookean(F,h,{tangent=true}={}){
  return {J,energy:mu/2*(F.flat().reduce((s,v)=>s+v*v,0)-3)-mu*log+lambda/2*log*log,P,sigma,A};
 }
 
-export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve,observeFields=false}={}){
+export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',matvecFactory,gravity=[0,0,0],loadSteps=10,maxNewtonIterations=30,onProgress=()=>{},onObserve,observeFields=false,onFailure}={}){
+ if(onFailure!==undefined&&typeof onFailure!=='function')throw Error('onFailure must be a function');
  if(typeof observeFields!=='boolean')throw Error('observeFields must be a boolean');
  const h=properties.hyperelastic;validateHyperelastic(h);if(!h)throw Error('Hyperelastic parameters required');
  if(!['pcg','pcg-strict','wasm-pcg'].includes(method))throw Error('Hyperelastic analysis currently supports Airpocket CPU solvers only');
@@ -41,14 +42,17 @@ export function solveHyperelastic(mesh,properties,boundary,{method='wasm-pcg',ma
   const reactionScale=Math.sqrt(localInternal.reduce((s,v,i)=>s+(fixed.has(i)?v*v:0),0));
   return {entries,states,internal,localInternal,residual,energy,norm:Math.sqrt(norm2),reference:Math.max(Math.sqrt(reference2),reactionScale,1e-9)};
  }
- let state,totalNewton=0,totalCG=0;
+ let state,totalNewton=0,totalCG=0;const trace=onFailure?[]:null;
+ // Opt-in failure capture: reports the exact inputs and iteration state, then rethrows the original error unchanged.
+ const fail=(message,at)=>{if(onFailure){try{onFailure({kind:'hyperelastic-newton-failure',reason:message,at,inputs:{mesh:{nodes:Array.from(mesh.nodes),tetrahedra:mesh.tetrahedra.map(t=>Array.from(t))},properties,boundary,options:{method,gravity,loadSteps,maxNewtonIterations}},trace,totalNewton,totalCG});}catch{}}throw Error(message);};
  for(let step=1;step<=loadSteps;step++){const scale=step/loadSteps;for(const [i,v]of dirichlet)u[i]=scale*v;let converged=false;
   for(let iteration=0;iteration<maxNewtonIterations;iteration++){state=assemble(u,scale,true);const relative=state.norm/state.reference;if(relative<1e-8){history.push({step,loadFraction:scale,newtonIterations:iteration,residual:relative,minJ:Math.min(...state.states.map(s=>s.J)),energyJ:state.energy});converged=true;break;}
-   const rhs=Float64Array.from(state.residual,(v,i)=>fixed.has(i)?0:-v),correction=pcg(n,state.entries,rhs,zero,{tolerance:1e-10,maxIterations:2500,matvecFactory});totalCG+=correction.iterations;
-   let accepted=false;for(let attempt=0;attempt<20;attempt++){const alpha=2**(-attempt),trial=Float64Array.from(u,(v,i)=>v+alpha*correction.solution[i]);try{const candidate=assemble(trial,scale,false);if(candidate.norm<state.norm*(1-1e-4*alpha)){u.set(trial);accepted=true;break;}}catch(e){if(!e.message.includes('Inverted or collapsed'))throw e;}}
-   if(!accepted)throw Error('Hyperelastic Newton line search failed; reduce the load or increase load steps');totalNewton++;
+   const traceEntry=trace&&{step,loadFactor:scale,iteration,residualNorm:state.norm,reference:state.reference,relative,attempts:[]};if(trace)trace.push(traceEntry);
+   const rhs=Float64Array.from(state.residual,(v,i)=>fixed.has(i)?0:-v),correction=pcg(n,state.entries,rhs,zero,{tolerance:1e-10,maxIterations:2500,matvecFactory});totalCG+=correction.iterations;if(traceEntry)traceEntry.cgIterations=correction.iterations;
+   let accepted=false;const baseNorm=state.norm;for(let attempt=0;attempt<20;attempt++){const alpha=2**(-attempt),trial=Float64Array.from(u,(v,i)=>v+alpha*correction.solution[i]);try{const candidate=assemble(trial,scale,false);const limit=baseNorm*(1-1e-4*alpha),sufficient=candidate.norm<limit;traceEntry?.attempts.push({alpha,norm:candidate.norm,limit,sufficient});if(sufficient){u.set(trial);accepted=true;break;}}catch(e){if(!e.message.includes('Inverted or collapsed'))throw e;traceEntry?.attempts.push({alpha,inverted:true});}}
+   if(!accepted)fail('Hyperelastic Newton line search failed; reduce the load or increase load steps','line-search');totalNewton++;
   }
-  if(!converged)throw Error('Hyperelastic Newton iteration limit reached; no converged result returned');onObserve?.({stage:'load-step',kind:'hyperelastic',step,steps:loadSteps,converged:true,metrics:history.at(-1),...(observeFields?{field:{kind:'structuralDisplacement',solver:'hyperelastic',step,steps:loadSteps,loadFactor:scale,displacement:Array.from(toGlobal(u,bases),v=>v*1000),units:{displacement:'mm'}}}:{})});onProgress('Hyperelastic load step '+step+'/'+loadSteps+' converged');
+  if(!converged)fail('Hyperelastic Newton iteration limit reached; no converged result returned','iteration-limit');onObserve?.({stage:'load-step',kind:'hyperelastic',step,steps:loadSteps,converged:true,metrics:history.at(-1),...(observeFields?{field:{kind:'structuralDisplacement',solver:'hyperelastic',step,steps:loadSteps,loadFactor:scale,displacement:Array.from(toGlobal(u,bases),v=>v*1000),units:{displacement:'mm'}}}:{})});onProgress('Hyperelastic load step '+step+'/'+loadSteps+' converged');
  }
  state=assemble(u,1,false);const global=toGlobal(u,bases),stresses=state.states.map(s=>[s.sigma[0][0],s.sigma[1][1],s.sigma[2][2],s.sigma[0][1],s.sigma[1][2],s.sigma[0][2]]),strains=state.states.map(s=>{const C=Array.from({length:3},(_,i)=>Array.from({length:3},(_,j)=>s.F.reduce((sum,r)=>sum+r[i]*r[j],0)));return [(C[0][0]-1)/2,(C[1][1]-1)/2,(C[2][2]-1)/2,C[0][1],C[1][2],C[0][2]];}),vonMises=stresses.map(s=>Math.sqrt(.5*((s[0]-s[1])**2+(s[1]-s[2])**2+(s[2]-s[0])**2)+3*(s[3]**2+s[4]**2+s[5]**2))),localReaction=Float64Array.from(state.residual,(v,i)=>fixed.has(i)?v:0),globalReaction=toGlobal(localReaction,bases),reaction=[0,0,0],applied=[0,0,0],constraintReactions=[];
  for(let node=0;node<n/3;node++){for(let k=0;k<3;k++){reaction[k]+=globalReaction[node*3+k];applied[k]+=external[node*3+k];}if([0,1,2].some(k=>fixed.has(node*3+k)))constraintReactions.push({node,force:Array.from(globalReaction.slice(node*3,node*3+3))});}
