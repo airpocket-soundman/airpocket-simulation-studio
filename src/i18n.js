@@ -260,6 +260,7 @@ export function installLanguage(){
 
 addTranslations({'平面を矩形寸法で選ぶ':'Select a planar rectangle by dimensions','面に垂直な軸':'Axis normal to the face','面の位置（mm）':'Face position (mm)','範囲の下限（mm）':'Range minimum (mm)','範囲の上限（mm）':'Range maximum (mm)','矩形領域を選択':'Select rectangle','範囲は残りの2軸をX/Y/Z順で指定します。単一のSTEP・直方体の外側平面に対応。矩形の境界をCAD分割してメッシュへ反映します。曲面と接触面は未対応です。':'Use the other two axes in X/Y/Z order for the ranges. Supports external planar faces of single STEP or box solids. CAD fragmentation makes the mesh conform to rectangle edges. Curved and contact interfaces are not supported.','矩形領域を選択しました。条件を追加してください。':'Rectangle selected. Add a boundary condition.','矩形CAD領域: ':'CAD rectangle: '});
 
+addTranslations({'終端の円錐半径（mm、空欄で円筒）':'Cone radius at axial end (mm, blank for cylinder)'});
 addTranslations({'円筒CAD分割サンプル':'Cylindrical CAD patch sample','円筒領域をCAD分割する':'Fragment the cylindrical CAD region','CAD円筒領域: ':'CAD cylindrical region: ','CAD円筒領域: 半径 ':'CAD cylindrical region: radius ','円筒の帯を固定し、90度の部分領域に123 Nを掛けます。CAD境界に沿ってメッシュを切ります。':'Fix a cylindrical sleeve and apply 123 N to a 90-degree patch. Mesh edges follow the CAD patch boundaries.'});
 
 addTranslations({'平面矩形と円筒寸法領域はCAD分割に対応。他の曲面部分は投影近似です。':'Planar rectangles and dimensional cylindrical patches support CAD fragmentation. Other curved partial regions use projection.'});

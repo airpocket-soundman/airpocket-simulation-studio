@@ -17,6 +17,20 @@ studioApi.selectCylindricalRegion(0, {
 studioApi.addCondition({type: 'force', value: 123, direction: [-1, 0, 0]});
 ```
 
-半径許容差は表示三角形の選択に使用します。CAD半径・範囲が一致しなければ拒否します。最大20領域（平面矩形と合わせて）。任意曲面・円錐・球面・複数CAD体積・流体領域・接触熱抵抗は未対応です。以前の保存データはexactCadがなければ投影方式を維持します。
+## 円錐(テーパー)
+
+`radiusAtMax`(軸方向終端の半径)を加えると円錐面の部分領域になります。`radius`は軸方向開始側の半径で、半径は軸方向に線形変化します。`exactCad: true`が必須で、半頂角は45度以下、両端半径は正です。面積は角度(rad)×平均半径×母線長。作成は円筒と同じrevolveで、CAD半径が合わなければ拒否します。UIは「終端の円錐半径」欄(空欄で円筒)。新しい操作名は追加せず、`selectCylindricalRegion`のオプション項目です。
+
+```js
+studioApi.selectCylindricalRegion(0, {
+  origin: [0, 0, 0], axis: [0, 1, 0], reference: [1, 0, 0],
+  radius: 10, radiusAtMax: 8, tolerance: 0.3, axialMin: -10, axialMax: 10,
+  startDegrees: 315, sweepDegrees: 90, exactCad: true
+});
+```
+
+設計は[reg2-curved-regions.md](reg2-curved-regions.md)。試験はtests/conical-wiring.test.mjs(STEP円錐のOCCT分割、面積、総荷重と軸方向荷重、保存復元検査、誤った半径・範囲の拒否)。
+
+半径許容差は表示三角形の選択に使用します。CAD半径・範囲が一致しなければ拒否します。最大20領域（平面矩形と合わせて）。任意曲面・球面・複数CAD体積・流体領域・接触熱抵抗は未対応です。以前の保存データはexactCadがなければ投影方式を維持します。
 
 ケースに寸法とCAD面積・三角形面積を保存し、復元時に範囲と面積を検査します。tests/cylindrical-cad.test.mjsは角度折り返し、全周帯、回転STEP、荷重保存、細分化による面積差の改善を確認。Workerテストは反力と保存復元を確認します。CAD構築には[GmshのOpenCASCADE revolveとfragment](https://gmsh.info/doc/texinfo/gmsh.html#Namespace-gmsh_002fmodel_002focc)を使用します。

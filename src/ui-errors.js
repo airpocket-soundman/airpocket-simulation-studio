@@ -164,6 +164,9 @@ const messages={
  'Planar rotation controls do not match the saved frame':'矩形の回転情報が保存した局所座標と一致していません。',
  'Invalid planar rotation controls':'矩形の回転と面位置を確認してください。',
 
+ 'Conical regions require exact CAD fragmentation':'円錐領域にはCAD分割が必要です。「円筒領域をCAD分割する」を有効にしてください。',
+ 'Invalid conical region radii':'終端の円錐半径は正の数にしてください。',
+ 'Conical half-angle must not exceed 45 degrees':'円錐の半頂角は45度以下にしてください。',
  'Exact cylindrical patch is too small':'円筒領域が小さすぎます。角度と軸方向の範囲を広げてください。',
  'Exact cylindrical patches require a STEP or cylindrical solid':'円筒のCAD分割はSTEPか円筒・中空管に対応します。',
  'Exact cylindrical thermal contact patches are not yet supported':'円筒のCAD分割による接触熱抵抗は未対応です。',
