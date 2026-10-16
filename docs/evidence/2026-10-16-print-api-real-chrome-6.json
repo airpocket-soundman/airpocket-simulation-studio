@@ -1,0 +1,70 @@
+{
+ "task": "PRINTAPI1",
+ "status": "partial",
+ "environment": {
+  "browser": "Chrome via Claude in Chrome",
+  "origin": "http://127.0.0.1:5174",
+  "revision": "ab39d183b3e648b6bd47e6bd0b94d9d06ebdd7de",
+  "connector": "node scripts/studio-mcp.mjs over stdio, all 4 scopes, own tab; fixtures from scripts/print-fixtures.mjs (synthetic, own)"
+ },
+ "checks": [
+  {
+   "name": "printInspect before import reports no print",
+   "passed": true,
+   "detail": "{\"loaded\":false,\"revision\":null}"
+  },
+  {
+   "name": "importPrint synthetic linear G-code (2 layers, 12 segments, own fixture) with expectedRevision null",
+   "passed": true,
+   "detail": "{\"loaded\":true,\"revision\":\"sha256:5cb7ad5a1adfd3d9ce5bacffddc8470a00e03937e0c65f48a7070280ec73691e\",\"filename\":\"ev6-reference.gcode\",\"kind\":\"gcode\",\"unit\":\"mm\",\"views\":[{\"viewId\":\"plate:0\",\"segmentCount\":12,\"layerCount\":2,\"part\":null}],\"settings\":{\"viewId\":\"plate:0\",\"allLayers\":true,\"layerIndex\":0},"
+  },
+  {
+   "name": "printInspect + getPrintData segments (page, layerIndex filter) + setPrintView",
+   "passed": true,
+   "detail": "12 segments total (6 on layer 1); first segment from [50,50,0.2] to [70,50,0.2], extrusionMm 1, feed 600; setPrintView returns settings {viewId plate:0, allLayers, layerIndex}"
+  },
+  {
+   "name": "Refusals on G-code: layer out of range, triangles on segment view, stale revision (data/import), null expectedRevision while loaded, unsupported G2 arc",
+   "passed": true,
+   "detail": "REFUSE setPrintView layer 999 -> Print layer index out of range | REFUSE getPrintData triangles on gcode -> Data kind does not match print view | REFUSE getPrintData stale revision -> Print revision conflict | REFUSE importPrint with stale expectedRevision -> Print revision conflict | REFUSE importPrint expectedRevision null while print loaded -> Print revision conflict | REFUSE importPrint unsupported arc G-code -> Extruding G2/G3 arcs are not supported; export linear G-code | REFUSE commit with wrong hash -> Print import hash mismatch | REFUSE commit corrupted 3MF -> Metadata/plate_1.gcode: invalid distance | REFUSE printTransferImport stale expectedRevision -> {\"transferId\":\"994ed739-9a46-4488-8400-1f0031f06687\",\"direction\":\"import\",\"totalBytes\":1796,\"sha256\":\"sha256:33bdfc387323505db8a0d3e68885bd1449395ff0ff028f4691fdb30875573133\",\"maxChunkBytes\":65536} | REFUSE old gcode revision after 3MF commit (stale) -> Print revision conflict | REFUSE printTransferExport stale revision -> Print revision conflict | REFUSE printTransferRead after release -> Unknown or released print transfer; after the refusals printInspect revision was unchanged (same:true)"
+  },
+  {
+   "name": "printTransferImport begin/write/commit for a synthetic 3MF (1796 bytes, own fixture, geometry + plate G-code)",
+   "passed": true,
+   "detail": "commit returned loaded print kind 3mf, views geometry (12 triangles) and plate:0 (12 segments); revision changed from the G-code revision"
+  },
+  {
+   "name": "Transfer refusals: declared-hash mismatch at commit, corrupted 3MF bytes (hash of corrupted bytes), stale expectedRevision detected at commit, write to a committed/finished transfer",
+   "passed": true,
+   "detail": "wrong hash: Print import hash mismatch; corrupted zip: Metadata/plate_1.gcode: invalid distance; stale begin accepted but commit refused: Print revision conflict (staleness is checked at commit, not at begin); write after commit: \"Print import is not writable\""
+  },
+  {
+   "name": "getPrintData triangles (geometry view) + setPrintView between geometry and plate:0 views + stale G-code revision refused after 3MF commit",
+   "passed": true,
+   "detail": "12 triangles with positions in mm (first face [50,50,0],[70,60,0],[70,50,0], i.e. the build transform applied)"
+  },
+  {
+   "name": "printTransferExport + chunked printTransferRead: assembled SHA-256 equals declared hash",
+   "passed": true,
+   "detail": "bytes 3864, chunks 1, sha256 match true; snapshot JSON keys [\"version\",\"filename\",\"data\"] (version 1); this normalized snapshot is not the inverse of the source import, so no re-import round trip was claimed"
+  },
+  {
+   "name": "Export refusals: stale revision, read after release",
+   "passed": true,
+   "detail": "Print revision conflict; Unknown or released print transfer"
+  },
+  {
+   "name": "importPrint of the same 3MF as canonical base64 (small route)",
+   "passed": true,
+   "detail": "{\"loaded\":true,\"revision\":\"sha256:ce089332eaac87c90641f289a60205ffa768ab32e271ba586a8dec1070564ea8\",\"filename\":\"ev6-b64.3mf\",\"kind\":\"3mf\",\"unit\":\"mm\",\"views\":[{\"viewId\":\"geometry\",\"triangleCount\":12,\""
+  }
+ ],
+ "notVerified": [
+  "Published HTTPS (never opened)",
+  "Visual check of the print viewer canvas was not captured; verification is through connector responses (printInspect/getPrintData/setPrintView settings)",
+  "Only a 1,796-byte 3MF and 495-byte G-code; large (up to 50 MB) imports and the 4-transfer / 100 MB retention limits not exercised in the browser",
+  "Slicer-produced real-world 3MF/G-code files not used; no strength estimation or device control (out of scope by design)",
+  "Single run (n=1)"
+ ],
+ "notes": "Partial rather than passed because large-size and real-slicer inputs and visual canvas state were not covered."
+}
