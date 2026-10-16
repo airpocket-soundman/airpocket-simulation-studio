@@ -25,3 +25,14 @@ test('interpolated values stay inside the fixed range over all snapshots',()=>{
  for(const t of playbackTimes(times,40))for(const v of interpolateFrames(times,fields,t).values)assert.ok(v>=range.min&&v<=range.max);
  assert.throws(()=>fixedFieldRange([[1,Infinity]]),/finite/);
 });
+import {fineSliderTime,advancePlayback} from '../src/time-interpolation.js';
+test('fine slider maps to exact endpoints and stays inside the stored range',()=>{
+ assert.equal(fineSliderTime(times,0,100),0);assert.equal(fineSliderTime(times,100,100),3);assert.equal(fineSliderTime(times,50,100),1.5);
+ for(let p=0;p<=100;p++)assert.doesNotThrow(()=>interpolateFrames(times,fields,fineSliderTime(times,p,100)));
+ assert.throws(()=>fineSliderTime(times,101,100),/integer/);assert.throws(()=>fineSliderTime(times,.5,100),/integer/);
+});
+test('playback advance is proportional to elapsed time and clamps at the end',()=>{
+ assert.deepEqual(advancePlayback(0,500,100,1000),{position:50,done:false});
+ assert.deepEqual(advancePlayback(90,500,100,1000),{position:100,done:true});
+ assert.throws(()=>advancePlayback(0,-1,100,1000),/Invalid/);
+});

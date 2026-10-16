@@ -93,7 +93,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(animation==='slice'&&!output?.mesh)throw Error('Generate a volume mesh first.');
  }
  // Fixed-frame PNG sequence: frame i is rendered from the stored view state for index i of N; wall-clock time and tab throttling never enter the result.
- async function renderSequence({animation='orbit',frames=FIXED_FRAME_LIMITS.defaultFrames,view={},expectedResultRevision,signal,onProgress=()=>{}}){
+ async function renderSequence({animation='orbit',frames=FIXED_FRAME_LIMITS.defaultFrames,view={},expectedResultRevision,physicalRevision,signal,onProgress=()=>{}}){
   if(signal?.aborted)throw Error('Export cancelled');
   validateFrameCount(frames);
   if(typeof crypto==='undefined'||!crypto.subtle?.digest)throw Error('png-sequence export requires SHA-256 support');
@@ -123,11 +123,11 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
     total+=bytes.length;if(total>FIXED_FRAME_LIMITS.maxTotalBytes)throw Error('png-sequence exceeds the '+FIXED_FRAME_LIMITS.maxTotalBytes+' byte total cap; reduce frames');
     if(resolution&&(resolution.width!==width||resolution.height!==height))throw Error('Canvas resolution changed during export');resolution={width,height};
     const name='frame-'+String(step.index).padStart(4,'0')+'.png';entries.push({name,bytes});
-    records.push({...step,file:name,resultRevision:expectedResultRevision,width,height,bytes:bytes.length,sha256:'sha256:'+await sha256Hex(bytes),...(animation==='orbit'?{camera:{position:orbitCameraPosition(startPosition,startTarget,step.angleRadians)}}:{})});
+    records.push({...step,file:name,...(physicalRevision?{physicalRevision}:{resultRevision:expectedResultRevision}),width,height,bytes:bytes.length,sha256:'sha256:'+await sha256Hex(bytes),...(animation==='orbit'?{camera:{position:orbitCameraPosition(startPosition,startTarget,step.angleRadians)}}:{})});
     if(signal?.aborted||state.stop)throw Error('Export cancelled');
     onProgress({fraction:(step.index+1)/frames*.98});
    }
-   const manifest={schemaVersion:1,kind:'airpocket-fixed-frame-png-sequence',resultRevision:expectedResultRevision,animation,frameCount:frames,resolution,
+   const manifest={schemaVersion:physicalRevision?2:1,kind:'airpocket-fixed-frame-png-sequence',...(physicalRevision?{physicalRevision}:{resultRevision:expectedResultRevision}),animation,frameCount:frames,resolution,
     schedule:{basis:'fixed',timeBasis:animation==='time'?'stored acoustic frames':'frame index',phase:animation==='orbit'||animation==='deformation'?'index/frameCount':'index/(frameCount-1)',realtime:false,wallClockIndependent:true},
     view:pickViewFields(view),scale:{units:{time:'second',angle:'radian'},...(animation==='deformation'?{deformScaleKind:'visualization multiplier'}:{})},frames:records};
    const manifestBytes=new TextEncoder().encode(JSON.stringify(manifest,null,1));
@@ -140,17 +140,17 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
    catch(error){active=null;throw error;}
   }
  }
- async function render({format,animation,seconds,frames,view,expectedResultRevision,signal,onProgress=()=>{}}){
+ async function render({format,animation,seconds,frames,view,expectedResultRevision,physicalRevision,signal,onProgress=()=>{}}){
   if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
   if(signal?.aborted)throw Error('Export cancelled');
-  if(format==='png-sequence')return renderSequence({animation,frames,view,expectedResultRevision,signal,onProgress});
+  if(format==='png-sequence')return renderSequence({animation,frames,view,expectedResultRevision,physicalRevision,signal,onProgress});
   if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false});
   if(format!=='png')throw Error('Unsupported export format');
   const state={stop:false};active=state;const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
   try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
  }
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
- const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (per-frame resultRevision, phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
+ const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
  const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }

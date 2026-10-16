@@ -131,3 +131,38 @@ test('preflight refuses time on a non-transient result and deformation on non-st
   assert.doesNotThrow(()=>f.api.preflight({animation:'deformation'}));assert.doesNotThrow(()=>f.api.preflight({animation:'orbit'}));
  }finally{f.restore();}
 });
+
+test('physicalRevision: ZIP embeds it instead of the wall-clock-sensitive resultRevision; schemaVersion 2',async()=>{
+ const f=fixture(),physical='sha256:'+'c'.repeat(64);try{
+  const files=await zipOf(await run(f,{physicalRevision:physical})),manifest=JSON.parse(new TextDecoder().decode(files[0].data));
+  assert.equal(manifest.schemaVersion,2);assert.equal(manifest.physicalRevision,physical);assert.equal(manifest.resultRevision,undefined);
+  for(const fr of manifest.frames){assert.equal(fr.physicalRevision,physical);assert.equal(fr.resultRevision,undefined);}
+  assert.ok(!new TextDecoder().decode(files[0].data).includes(revision));
+ }finally{f.restore();}
+});
+
+test('two real solves differing only in solveMs yield different resultRevision, same physicalRevision and byte-identical ZIPs',async()=>{
+ const {analyzeProject}=await import('../scripts/headless-analysis.mjs'),{createProjectFromBuiltin}=await import('../src/project-import.js'),{getProjectRevision,getPhysicalRevision}=await import('../src/project-revision.js');
+ const faces=(p,z)=>p.meshes[0].faceIds.map((_,i)=>i).filter(i=>[2,5,8].every(k=>Math.abs(p.meshes[0].positions[i*9+k]-z)<1e-7));
+ const make=()=>{const p=createProjectFromBuiltin({source:{kind:'box',bounds:[0,0,0,10,10,40]}});p.materialProperties={youngModulus:1e9,poissonRatio:.3};p.conditions=[{type:'fixed',value:0,direction:[1,0,0],regions:[{mesh:0,triangles:faces(p,0)}]},{type:'force',value:100,direction:[0,0,1],regions:[{mesh:0,triangles:faces(p,40)}]}];return p;};
+ const a=JSON.parse(JSON.stringify(await analyzeProject(make(),{size:5}))),b=JSON.parse(JSON.stringify(await analyzeProject(make(),{size:5})));
+ b.result.performance.solveMs=a.result.performance.solveMs+123.456;
+ const [ra,rb,pa,pb]=await Promise.all([getProjectRevision(a),getProjectRevision(b),getPhysicalRevision(a),getPhysicalRevision(b)]);
+ assert.notEqual(ra,rb);assert.equal(pa,pb);
+ const withoutPerf=JSON.parse(JSON.stringify(a));delete withoutPerf.result.performance;assert.equal(pa,await getProjectRevision(withoutPerf));
+ const f=fixture();try{
+  const zip=async(result,physicalRevision)=>Buffer.from(await (await run(f,{expectedResultRevision:result,physicalRevision})).arrayBuffer());
+  const x=await zip(ra,pa),y=await zip(rb,pb);assert.equal(Buffer.compare(x,y),0);
+  // Legacy path (no physicalRevision) still embeds resultRevision, so differing solves differ there.
+  assert.notEqual(Buffer.compare(await zip(ra),await zip(rb)),0);
+ }finally{f.restore();}
+});
+
+test('job layer carries physicalRevision from prepare into the ZIP and the outer manifest; resultRevision keeps its meaning',async()=>{
+ const f=fixture(),physical='sha256:'+'d'.repeat(64);try{
+  const api=createVisualExportJobs({prepare:async r=>({resultRevision:r.expectedResultRevision,physicalRevision:physical,view:r.view}),render:args=>f.api.render(args)}),args={requestId:'phys',expectedResultRevision:revision,format:'png-sequence',animation:'orbit',frames:4,view:{result:{field:'temperature'}}};
+  const job=await api.start(args);let state;for(;;){state=api.status(job);if(state.state!=='running')break;await new Promise(r=>setTimeout(r,5));}
+  assert.equal(state.state,'completed',state.error);assert.equal(state.resultRevision,revision);assert.equal(state.artifact.manifest.resultRevision,revision);assert.equal(state.artifact.manifest.physicalRevision,physical);
+  const inner=JSON.parse(new TextDecoder().decode(parseZip(new Uint8Array(Buffer.from(api.artifact({...job,length:65536}).data,'base64')))[0].data));assert.equal(inner.physicalRevision,physical);
+ }finally{f.restore();}
+});
