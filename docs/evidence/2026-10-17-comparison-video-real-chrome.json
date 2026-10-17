@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "passed",
+  "environment": {
+    "browser": "real Chrome localhost",
+    "transport": "authenticated repository semantic bridge, not installed MCP",
+    "fixture": "analytic thermal T=20+t and T=20+2t"
+  },
+  "checks": [
+    "Complete WebM bytes, EBML header, video cluster and SHA-256 verified",
+    "Known 1280x640 canvas and realtime orbit metadata verified",
+    "Both physical saved-frame times stayed fixed at 5 s",
+    "FFprobe decoded video and FFmpeg independently found changing orbit frames",
+    "5-second recording cancelled without artifact",
+    "Shared renderer admission recovered and next PNG completed",
+    "Exact original main and comparison view state, input revision and saved cases unchanged"
+  ],
+  "notVerified": [
+    "Public HTTPS recording",
+    "General geometries",
+    "Exact frame count or physical time integration"
+  ],
+  "artifact": {
+    "totalBytes": 21546,
+    "sha256": "sha256:4deffc31ec99be46f899d5a6b3ae5be3a82662b708c09194d454c9440c120446",
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "webm",
+      "container": "webm",
+      "mimeType": "video/webm;codecs=vp9",
+      "codec": "vp9",
+      "sha256": "sha256:4deffc31ec99be46f899d5a6b3ae5be3a82662b708c09194d454c9440c120446",
+      "totalBytes": 21546,
+      "resolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "bd0d109b-d440-426c-9f5a-6b2c5b0d4a01",
+            "label": "QA analytic T=20+1t degC (closed tetra)",
+            "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+            "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+          },
+          {
+            "caseId": "149f6400-4313-4532-8167-6a7cf38ee37d",
+            "label": "QA analytic T=20+2t degC (closed tetra)",
+            "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+            "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+          }
+        ],
+        "colorRange": {
+          "field": "temperature",
+          "maximum": 29.99999999999997,
+          "minimum": 24.999999999999936
+        },
+        "field": "temperature",
+        "panels": [
+          {
+            "caseId": "bd0d109b-d440-426c-9f5a-6b2c5b0d4a01",
+            "field": "temperature",
+            "finalOnly": false,
+            "frameIndex": 5,
+            "maximum": 24.999999999999943,
+            "minimum": 24.999999999999936,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 5,
+            "unit": "degC"
+          },
+          {
+            "caseId": "149f6400-4313-4532-8167-6a7cf38ee37d",
+            "field": "temperature",
+            "finalOnly": false,
+            "frameIndex": 5,
+            "maximum": 29.99999999999997,
+            "minimum": 29.99999999999997,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 5,
+            "unit": "degC"
+          }
+        ],
+        "requestedTimeSeconds": 5,
+        "unit": "degC"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "ja",
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        }
+      },
+      "time": {
+        "animation": "orbit",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "physicalTime": "Each panel retains its selected saved result and physical time throughout the display orbit.",
+        "fps": {
+          "target": 24,
+          "recording": "realtime",
+          "frameCountGuaranteed": false
+        }
+      }
+    }
+  },
+  "decoded": {
+    "codec": "vp9",
+    "width": 1280,
+    "height": 640,
+    "frames": 4,
+    "durationSeconds": null,
+    "durationUnavailableReason": "WebM format duration metadata was not supplied; requested display duration is separate.",
+    "frameTimestampsSeconds": [
+      0,
+      0.078,
+      1.039,
+      2.069
+    ],
+    "sampledFrameHashes": [
+      "0fcbc40031e422df49dfeef6436a9e1b",
+      "0fcbc40031e422df49dfeef6436a9e1b",
+      "0fcbc40031e422df49dfeef6436a9e1b",
+      "0fcbc40031e422df49dfeef6436a9e1b",
+      "b1ef36b163930cc1689a3a8ab3d6cf4e",
+      "b1ef36b163930cc1689a3a8ab3d6cf4e",
+      "b1ef36b163930cc1689a3a8ab3d6cf4e",
+      "b1ef36b163930cc1689a3a8ab3d6cf4e",
+      "12bb54eee5fb50519c1c8e05e83317be",
+      "12bb54eee5fb50519c1c8e05e83317be",
+      "12bb54eee5fb50519c1c8e05e83317be",
+      "12bb54eee5fb50519c1c8e05e83317be"
+    ],
+    "distinctSampledFrames": 3
+  },
+  "originalDisplay": {
+    "physicalTimeSeconds": 2.01,
+    "interpolated": true
+  },
+  "releasedJobs": 3,
+  "attempts": [
+    {
+      "schemaVersion": 1,
+      "date": "2026-10-17",
+      "status": "failed",
+      "environment": {
+        "browser": "real Chrome localhost",
+        "transport": "authenticated repository semantic bridge, not installed MCP",
+        "fixture": "analytic thermal T=20+t and T=20+2t"
+      },
+      "checks": [],
+      "notVerified": [
+        "Public HTTPS recording",
+        "General geometries",
+        "Exact frame count or physical time integration"
+      ],
+      "error": "Comparison recording produced no data\n+ actual - expected\n\n+ 'failed'\n- 'completed'\n",
+      "releasedJobs": 1
+    },
+    {
+      "schemaVersion": 1,
+      "date": "2026-10-17",
+      "status": "passed",
+      "environment": {
+        "browser": "real Chrome localhost",
+        "transport": "authenticated repository semantic bridge, not installed MCP",
+        "fixture": "analytic thermal T=20+t and T=20+2t"
+      },
+      "checks": [
+        "Complete WebM bytes, EBML header, video cluster and SHA-256 verified",
+        "Known 1280x640 canvas and realtime orbit metadata verified",
+        "Both physical saved-frame times stayed fixed at 5 s",
+        "FFprobe decoded video and FFmpeg independently found changing orbit frames",
+        "5-second recording cancelled without artifact",
+        "Shared renderer admission recovered and next PNG completed",
+        "Exact original main and comparison view state, input revision and saved cases unchanged"
+      ],
+      "notVerified": [
+        "Public HTTPS recording",
+        "General geometries",
+        "Exact frame count or physical time integration"
+      ],
+      "artifact": {
+        "totalBytes": 20366,
+        "sha256": "sha256:27ee85b58f78727d003b0bc9daa86fa6fb220f6c1d17a5a4f6a52a133dde3904",
+        "manifest": {
+          "schemaVersion": 1,
+          "target": "comparison",
+          "format": "webm",
+          "container": "webm",
+          "mimeType": "video/webm;codecs=vp9",
+          "codec": "vp9",
+          "sha256": "sha256:27ee85b58f78727d003b0bc9daa86fa6fb220f6c1d17a5a4f6a52a133dde3904",
+          "totalBytes": 20366,
+          "resolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "comparison": {
+            "cases": [
+              {
+                "caseId": "bd0d109b-d440-426c-9f5a-6b2c5b0d4a01",
+                "label": "QA analytic T=20+1t degC (closed tetra)",
+                "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+                "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+              },
+              {
+                "caseId": "149f6400-4313-4532-8167-6a7cf38ee37d",
+                "label": "QA analytic T=20+2t degC (closed tetra)",
+                "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+                "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+              }
+            ],
+            "colorRange": {
+              "field": "temperature",
+              "maximum": 29.99999999999997,
+              "minimum": 24.999999999999936
+            },
+            "field": "temperature",
+            "panels": [
+              {
+                "caseId": "bd0d109b-d440-426c-9f5a-6b2c5b0d4a01",
+                "field": "temperature",
+                "finalOnly": false,
+                "frameIndex": 5,
+                "maximum": 24.999999999999943,
+                "minimum": 24.999999999999936,
+                "offsetSeconds": 0,
+                "timeApplies": true,
+                "timeSeconds": 5,
+                "unit": "degC"
+              },
+              {
+                "caseId": "149f6400-4313-4532-8167-6a7cf38ee37d",
+                "field": "temperature",
+                "finalOnly": false,
+                "frameIndex": 5,
+                "maximum": 29.99999999999997,
+                "minimum": 29.99999999999997,
+                "offsetSeconds": 0,
+                "timeApplies": true,
+                "timeSeconds": 5,
+                "unit": "degC"
+              }
+            ],
+            "requestedTimeSeconds": 5,
+            "unit": "degC"
+          },
+          "view": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "layers": {
+              "surface": true,
+              "surfaceWire": false,
+              "volumeWire": false,
+              "section": true
+            },
+            "setup": {
+              "clipEnabled": false,
+              "axis": 2,
+              "position": 0,
+              "flip": false,
+              "opacity": 1,
+              "meshCount": 1,
+              "hiddenParts": []
+            },
+            "language": "ja",
+            "resolution": {
+              "width": 1280,
+              "height": 640
+            }
+          },
+          "time": {
+            "animation": "orbit",
+            "durationSeconds": 2,
+            "timeBasis": "display time",
+            "physicalTime": "Each panel retains its selected saved result and physical time throughout the display orbit.",
+            "fps": {
+              "target": 24,
+              "recording": "realtime",
+              "frameCountGuaranteed": false
+            }
+          }
+        }
+      },
+      "decoded": {
+        "codec": "vp9",
+        "width": 1280,
+        "height": 640,
+        "frames": 4,
+        "durationSeconds": null,
+        "sampledFrameHashes": [
+          "f864da7ed38a0ef86a4a156b7e3372db",
+          "df5b80299153c6cbac3cb974b3020907",
+          "df5b80299153c6cbac3cb974b3020907",
+          "df5b80299153c6cbac3cb974b3020907",
+          "df5b80299153c6cbac3cb974b3020907",
+          "a28c2bddc79a807f3885475747820dac",
+          "a28c2bddc79a807f3885475747820dac",
+          "a28c2bddc79a807f3885475747820dac",
+          "a28c2bddc79a807f3885475747820dac",
+          "45521678d178678bba2a8e69e91fff12",
+          "45521678d178678bba2a8e69e91fff12",
+          "45521678d178678bba2a8e69e91fff12",
+          "45521678d178678bba2a8e69e91fff12"
+        ],
+        "distinctSampledFrames": 4,
+        "frameTimestampsSeconds": [
+          0,
+          0.214,
+          1.213,
+          2.249
+        ],
+        "durationUnavailableReason": "WebM format duration metadata was not supplied; requested display duration is recorded separately in the manifest."
+      },
+      "originalDisplay": {
+        "physicalTimeSeconds": 10,
+        "interpolated": false
+      },
+      "releasedJobs": 3
+    }
+  ]
+}

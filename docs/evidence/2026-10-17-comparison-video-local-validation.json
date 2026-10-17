@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-17",
+  "localFullRun": {
+    "status": "failed",
+    "passed": 1417,
+    "skipped": 4,
+    "failed": 1,
+    "file": "tests/analysis-job-store.test.mjs",
+    "node": "v24.11.1",
+    "nativeFatal": "Check failed: jit_page_->allocations_.erase(addr) == 1.",
+    "stackIncludes": "v8::internal::ThreadIsolation::UnregisterWasmAllocation",
+    "log": ".qa/comparison-video-full.log"
+  },
+  "targetedRerun": {
+    "passed": 27,
+    "skipped": 1,
+    "failed": 0,
+    "suites": [
+      "analysis-job-store",
+      "comparison-video",
+      "comparison-export-adapter",
+      "operation-correspondence"
+    ]
+  },
+  "interpretation": "Native fatal remains unresolved; isolated rerun success is not a full-suite pass or a root-cause fix."
+}
