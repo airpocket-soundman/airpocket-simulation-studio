@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-17T10:31:20.636Z",
+  "headSha": "5af30be20362eb47d1e9ab28e0cc837ada7cfa34",
+  "version": "0.44.0",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39021225771",
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify-published",
+      "conclusion": "success"
+    }
+  ],
+  "manifest": {
+    "revision": "5af30be20362eb47d1e9ab28e0cc837ada7cfa34",
+    "dirty": false
+  },
+  "publishedProgress": {
+    "verified": true,
+    "bytes": 341016,
+    "sha256": "425cc2e17a00ecd4bdbf7546f2554e470a3434c0bf32a8f6de2e3a97bf563b9b",
+    "historyStatus": "verified",
+    "historyHead": "5af30be20362eb47d1e9ab28e0cc837ada7cfa34",
+    "historyPoints": 225,
+    "historyBytes": 58547,
+    "historySha256": "b514976d94486a230507e5bdb1b44a5f94f2f207fec1fc74967b517859a388a7"
+  },
+  "tag": "release-5af30be20362eb47d1e9ab28e0cc837ada7cfa34",
+  "tagObject": "abeccb49bc5ee97f0b0681a442579bd974859ac1",
+  "tagPeeledRevision": "5af30be20362eb47d1e9ab28e0cc837ada7cfa34",
+  "requiredPullRequestCi": {
+    "pullRequest": 111,
+    "headSha": "438b91a23db1d3d64bc1a7281aae2cb658f0d107",
+    "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39020856209",
+    "tests": {
+      "total": 1475,
+      "passed": 1472,
+      "skipped": 3,
+      "failed": 0
+    }
+  },
+  "tasksMovedToReleasedByThisRecord": [],
+  "notVerified": [
+    "Public HTTPS pairing, general geometry, smooth24fps and GUI download completion remain unverified.",
+    "This record does not complete VIEWCOMPARE or close any product publication gate."
+  ],
+  "scope": "Published comparison PNG, portable/manual and opt-in local settings, orbit/stored-time/linear-elastic visualization videos and accepted-job lifetime guard. Existing parent task counts and status weights are unchanged."
+}
