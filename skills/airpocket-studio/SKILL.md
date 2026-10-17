@@ -7,12 +7,13 @@ Specialize the user's own LLM as a CAE agent; this application does not supply a
 
 ## Discover the actual connection first
 
-Inspect the tools registered in this conversation before choosing a workflow. A connected older server may expose 18 tools including `studio_progress`, while the full repository entry declares 29 default/31 paired tools and the minimal browser entry exposes three browser tools. Repository declarations do not install or activate missing tools. Do not claim that a listed tool exists in the current session without checking.
+Inspect the tools registered in this conversation before choosing a workflow. A connected older server may expose 18 tools including `studio_progress`, while the full repository entry declares 31 default/33 paired tools and the minimal browser entry exposes three browser tools. Repository declarations do not install or activate missing tools. Do not claim that a listed tool exists in the current session without checking.
 
 Choose the smallest task-relevant read. Use `studio_progress` only when asked about development, publication or outstanding-task status; it can return the full roadmap and is unnecessary for ordinary input inspection or edit preview. Read `studio_capabilities` when selecting or checking an execution engine/path, not for read-only input access. For an input-read/preview task, use the relevant exposed tool schema and input section/pointer; do not fetch the full operation catalog or roadmap. If a live method's arguments are unknown and `studio_browser_contracts` is exposed, request that one method to discover its envelope, required scope, revisions, units and effects. Schema declarations are not permissions or physical validation. For missing tools that the task needs, see [saved-inputs](references/saved-inputs.md) for the documented local `callStudioTool` fallback and prerequisites; use the repository implementation deliberately and report its execution environment rather than silently treating it as the older registered server.
 
 ## Load only the relevant workflow
 
+- [Local MCP loop](references/skill-loop.md): a synthetic axial bar from input/provenance repair through two analyses, case comparison and verified PNG/archive output; revised-recipe evidence and remaining independent-reproduction limits.
 - [Saved inputs and editing](references/saved-inputs.md): bounded section/pointer inspection of saved/live input, edit/preview transactions, selection-based local mesh refinement, catalog application, provenance/preflight and local MCP setup/fallback.
 - [Browser session](references/browser-session.md): explicit pairing/scopes, GUI jobs, argument-contract discovery. Discovery alone grants no browser access.
 - [Geometry and imports](references/geometry-imports.md): STEP/STL and built-ins, CAD updates, print transfers, fluid domains, coupling sources and surface defects.

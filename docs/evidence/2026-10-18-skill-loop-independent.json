@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "outcome": "blocked-gui-connection-preparation",
+  "revision": "33891d2129fb585d240cfc2e657879bbab9d8173",
+  "trackedDirty": true,
+  "entryDocuments": [
+    "skills/airpocket-studio/SKILL.md",
+    "skills/airpocket-studio/references/skill-loop.md"
+  ],
+  "discoveredDocuments": [
+    "skills/airpocket-studio/references/saved-inputs.md",
+    "skills/airpocket-studio/references/browser-session.md",
+    "docs/automation.md",
+    "docs/visual-export.md"
+  ],
+  "gap": {
+    "stage": "GUI pairing preparation",
+    "detail": "Computer Use stopped because it could not determine the current browser URL on Windows confidently enough to enforce policy."
+  },
+  "productOperations": 0,
+  "startedServices": 2,
+  "pairedSessions": 0,
+  "credentialsOutputOrSaved": false,
+  "additionalUndocumentedKnowledgeUsed": false,
+  "sourceRead": false,
+  "previousQaOrEvidenceRead": false,
+  "measurement": {
+    "performed": false,
+    "reason": "Connection prerequisite blocked"
+  },
+  "png": {
+    "created": false,
+    "sha256": null
+  },
+  "archive": {
+    "created": false,
+    "sha256": null
+  },
+  "fourStatePreservation": {
+    "tested": false,
+    "reason": "No session or mutation"
+  },
+  "cleanup": {
+    "mcp": "stdin EOF, process exited",
+    "vite": "Owned session stopped; process exited1 after Ctrl-C",
+    "token": "MCP process termination revokes unpaired token",
+    "jobsExportsTransfers": "none-created"
+  },
+  "acceptance": "Independent skill-only loop has not passed. No statement about overall project or public deployment completion.",
+  "runtimeSource": "33891d2129fb585d240cfc2e657879bbab9d8173 plus root-authored startup documentation",
+  "initialGapRepaired": true,
+  "date": "2026-10-18",
+  "dirtyScope": "Root-authored startup documentation only; independent agent did not edit tracked files"
+}
