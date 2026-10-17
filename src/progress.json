@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T13:23:18.786Z",
+  "updatedAt": "2026-10-17T13:42:10.717Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-17",
     "testCount": 1475,
-    "description": "比較画面からPNG・回転動画・保存時刻の時間動画・線形弾性の変形動画を使えるようになり、比較設定のJSON保存と任意のブラウザ内保存・明示復元にも対応しました。localhost実Chromeで小規模ケースの動画成果物・形状変化・元表示への復元を確認し、受理済み比較ジョブの開始命令期限による失敗を修正しました。直近の公開5af30be（PR111）は公開検証3工程とmanifest・releaseタグ・進捗履歴の一致を確認済み。テスト数はPR111の必須CI記録（1475件中1472成功・3スキップ・失敗0）です。公開HTTPSからの接続・一般形状・滑らかな24fps・GUIダウンロード完了は未確認。GIF/MP4、物理載荷履歴の動画、製品全体の公開ゲートは未完です。件数は親タスク単位のため、部分機能の追加だけでは完了数は変わりません。",
-    "descriptionEn": "Comparison now supports PNG, camera-orbit video, stored-time video and linear-elastic deformation video, plus portable JSON settings and opt-in browser-local saving with explicit restoration. Small localhost real-Chrome cases verified video artifacts, geometry change and original-view restoration. Accepted comparison jobs no longer fail solely on the already-replied admission deadline. Latest publication 5af30be (PR111) passed all three publication jobs with matching manifest, release tag and progress/history. Test count refers to required PR111 CI:1475 total,1472 passed,3 skipped,0 failed. Public HTTPS pairing, general geometry, smooth24fps and GUI download completion remain unverified. GIF/MP4, physical load-history video and product-wide publication gates remain incomplete. Counts track parent tasks, so adding a partial capability does not by itself change completion counts."
+    "description": "比較PNG・回転/保存時刻/線形変形WebMと回転GIF、比較設定の保存/復元を公開済み。公開HTTPSからの確認専用接続も通常Chromeで配信assetを照合して確認しました（ブラウザ厳密版はpolicy制限で不明、編集/解析/表示権限は対象外）。音響ソルバーと事前診断の閾値を統一し、熱接触の実連結に基づく未拘束拒否を追加。今回さらに保持メッシュの品質/要素妥当性診断を整備します。最新の新規残作業2件を未着手として計上し総数167件・待機22件へ増えますが、完了数や達成度の重みは変えません。テスト件数1475はPR111の過去CI基準（1472成功・3skip・失敗0）。一般形状・全分野診断/精度・背景動画/接続reset・GUI保存完了・時間/変形GIF・MP4・製品公開ゲートは未完です。",
+    "descriptionEn": "Published comparison PNG/orbit-stored-time-linear-deformation WebM/orbit GIF and settings save/restore. Regular Chrome verified inspect-only public-HTTPS pairing against published assets; exact browser version is unavailable under URL policy and edit/analyze/view scopes were excluded. Acoustic preflight now matches solver thresholds and thermal anchoring follows actual contact connectivity. This increment adds retained-mesh quality/element-validity diagnostics. Two newly recorded queued tasks raise total to167 and queued to22; completed counts and estimate weights are unchanged. Test count1475 is the historical PR111 CI baseline (1472 passed,3 skipped,0 failed). General geometry/all-physics diagnostics/accuracy, background video/reset issues, GUI download completion, time/deformation GIF,MP4 and product publication gates remain incomplete."
   },
   "tasks": [
     {
@@ -94,9 +94,9 @@
       "titleEn": "Finish CAD boundary-conforming meshes",
       "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
       "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
-      "lastUpdate": "STEP・組込み形状の体積生成をPagesで確認。部分領域は投影近似。厳密なCAD面分割・領域適合は未完了。",
-      "lastUpdateEn": "Pages volume meshing verified for STEP/built-in shapes. Partial regions use projection; exact CAD splitting/conformity remain.",
-      "evidence": "src/mesh-core.js"
+      "lastUpdate": "2026-10-17: メッシュを変更せず接続・縮退・有限性・品質配列を検査する事前診断を追加しました。負向きだけでは拒否しません。CAD境界への厳密適合や一般形状での品質保証は未完で、親タスクは未着手状態を維持します。",
+      "lastUpdateEn": "2026-10-17: Added read-only connectivity/degeneracy/finite-value/quality-array preflight; negative orientation alone is accepted. Exact CAD-boundary conformity and general-geometry quality guarantees remain incomplete; parent stays queued.",
+      "evidence": "src/mesh-core.js; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
     },
     {
       "id": "REG2",
@@ -1163,9 +1163,9 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence. This diagnostic increment has automated/independent solver-reference evidence; live GUI verification was not performed.",
-      "lastUpdate": "2026-10-17: 音響メッシュの事前診断をソルバーの最低分解能と統一し、過渡音響の帯域チェックも追加しました。熱接触は実際の連結成分で支持を検査し、未拘束の定常熱を拒否します。全分野の診断とSkillだけの一巡は未完のため実装中です。",
-      "lastUpdateEn": "2026-10-17: Aligned acoustic retained-mesh diagnostics with solver minimum resolution and added transient-bandwidth checks. Thermal anchors now follow actual contact connectivity and refuse unanchored steady components. All-physics diagnostics and a Skill-only full loop remain incomplete.",
-      "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md"
+      "lastUpdate": "2026-10-17: 保持メッシュの要素・接続・有限性・品質配列を解析前に読み取り検査し、不正なら理由付きで拒否するようにしました。負向きは既存正規化を維持します。全分野診断・収束/精度・実GUI確認とSkillだけの一巡は未完です。",
+      "lastUpdateEn": "2026-10-17: Added read-only retained-mesh element/connectivity/finite-value/quality-array checks with explicit refusal. Existing negative-orientation normalization remains. All-physics diagnostics, convergence/accuracy, live GUI and a Skill-only full loop remain incomplete.",
+      "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
     },
     {
       "id": "P2",
@@ -1356,11 +1356,11 @@
       ],
       "detail": "MCP18ツール、原子的編集17操作。STEP/STL/組込み形状、面ID選択、根拠・仮定、限定線形静解析preflight、暫定ラベルの保存検証、中間成果物の要約・点値・ページ取得を実装。",
       "detailEn": "18 MCP tools and 17 atomic edit operations cover imports, builtins, face IDs, provenance, assumptions, limited linear-static preflight, persisted provisional labels and bounded intermediate reads.",
-      "acceptance": "全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
-      "acceptanceEn": "317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
+      "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-16 (更新) 熱・音響の事前検査の既存コード13件をテストで固定し、物理別のphysicsCoverage(実装済み/残り)と単位の桁の警告(UNIT_MAGNITUDE_SUSPECT、警告のみ)を追加(37320b0で公開)。全物理の事前検査は未完了: メッシュ後の検査(連結成分の拘束、波長あたり要素数、拘束rank)と、流体・直交異方性・非線形・モーダルの桁規則が残る。検証中を維持。 追記: 拘束rank・剛体モード検査は実メッシュ後の境界転送検査に追加済み(MESHBOUNDARYPREFLIGHT1)。残り: 連結成分の拘束、波長あたり要素数、流体・直交異方性・非線形・モーダルの桁規則、PREFLIGHT_CONTRACT_LIMITED。 2026-10-16 追記: メッシュ後検査に、音響の波長あたり要素数(6未満で警告、2未満で拒否)と、連結成分ごとの拘束確認(構造・定常熱)を追加(合成四面体の単体テストのみ。実gmshの熱・音響メッシュ、ブラウザ/MCPスキーマ反映は未検証)。流体・直交異方性・非線形・モーダルの桁規則と、メッシュ品質・収束の検査は残る。検証中を維持。",
-      "lastUpdateEn": "2026-10-15 Pinned 13 existing thermal/acoustic preflight codes with tests and added per-physics physicsCoverage (implemented/remaining) and unit-magnitude warnings (UNIT_MAGNITUDE_SUSPECT, warning only); published at 37320b0. All-physics preflight is not complete: post-mesh checks (connected-component anchoring, elements per wavelength, constraint rank) and magnitude rules for fluid, orthotropic, nonlinear and modal inputs remain. Stays checking. Added: the constraint-rank / rigid-body check is part of the post-mesh boundary inspection (MESHBOUNDARYPREFLIGHT1). Remaining: connected-component anchoring, elements per wavelength, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, PREFLIGHT_CONTRACT_LIMITED. 2026-10-16 addendum: post-mesh checks now include acoustic elements per wavelength (warn below 6, refuse below 2) and per-component anchoring for structural and steady thermal (unit-tested on synthetic tetrahedra only; real gmsh thermal/acoustic meshes and browser/MCP schema exposure unverified). Magnitude rules for fluid, orthotropic, nonlinear and modal inputs and mesh-quality/convergence checks remain. Stays checking."
+      "lastUpdate": "2026-10-17: 拘束rank・連結成分と熱接触・音響の最低分解能と過渡帯域の診断を追加しました。今回メッシュ品質と要素の妥当性も事前検査へ追加しました。全物理の桁規則、収束・精度とSkillだけの一巡は残るため検証中です。",
+      "lastUpdateEn": "2026-10-17: Added constraint-rank/component/contact and acoustic minimum-resolution/transient-bandwidth checks. Retained-mesh quality/element validity is now integrated. All-physics magnitude rules, convergence/accuracy and a Skill-only full loop remain; stays checking."
     },
     {
       "id": "VIEWCOMPARE",
@@ -2599,6 +2599,37 @@
       ],
       "lastUpdate": "2026-10-16 PR 40(必須verify成功)でmain、公開候補6429eebで27 PASS。実ChromeでGUI/接続経由を確認。公開済みへ。",
       "lastUpdateEn": "2026-10-16 merged in PR 40 (required verify passed); published candidate 6429eeb passed 27 checks; GUI and connector paths confirmed in real Chrome. Moved to released."
+    },
+    {
+      "id": "EXPORTBACKGROUND1",
+      "title": "背景タブでの動画停滞を診断し安全に終了する",
+      "titleEn": "Diagnose stalled background-tab video and terminate safely",
+      "detail": "実時間WebMの背景タブ停滞を再現し、固定フレーム出力と区別して原因と利用者への復旧判断を記録する。 関連親はVIEWCOMPARE/BROWSEREXPORT1/P3で、親の完了は着手条件ではない。",
+      "detailEn": "Reproduce background-tab stalls in real-time WebM, distinguish fixed-frame output and record diagnosis/recovery guidance. Related parents are VIEWCOMPARE/BROWSEREXPORT1/P3; completing them is not a start prerequisite.",
+      "status": "queued",
+      "category": "結果表示",
+      "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
+      "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
+      "lastUpdate": "2026-10-17: 既知の動画停滞を独立した残作業として計上。未着手で、固定フレームGIF/PNGの成功を実時間WebMの解決扱いにしません。",
+      "lastUpdateEn": "2026-10-17: Newly recorded outstanding work for known video stalls. Not started; fixed-frame GIF/PNG success does not resolve real-time WebM stalls.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json"
+    },
+    {
+      "id": "BROWSERRESET1",
+      "title": "接続resetとページ初期化の診断・復旧判断を整える",
+      "titleEn": "Diagnose connection reset/page reset and recovery decisions",
+      "detail": "複数の実Chrome証跡に残る原因未確定のreset/timeoutを調べ、再試行前に状態を確認できるようにする。 関連親はP3とVIEWCOMPARE。",
+      "detailEn": "Investigate unexplained reset/timeouts retained in real-Chrome evidence and enable state inspection before retry. Related parents are P3 and VIEWCOMPARE.",
+      "status": "queued",
+      "category": "共通",
+      "depends": [
+        "BROWSERCONNECTOR1"
+      ],
+      "acceptance": "有界かつ資格情報を含まない接続/page lifecycle診断を設計し、resetの再現可否・未配信/配信済timeout・残ジョブ/現在入力の確認と安全な再接続手順を検証する。原因を断定せず、V8問題や永続ジョブ再起動復旧と同一視しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
+      "acceptanceEn": "Design bounded credential-free connection/page-lifecycle diagnostics and verify reproducibility, undelivered/delivered timeouts, retained jobs/current inputs and safe reconnect guidance. Do not assume a root cause or equate this with V8 failures or persistent-job restart recovery. Completing this work alone does not complete related parents or publication gates.",
+      "lastUpdate": "2026-10-17: 変形/GIF試験のreset/timeout記録から新規残作業を計上。原因未確定・未着手で、成功した再試行とは区別します。",
+      "lastUpdateEn": "2026-10-17: Newly recorded outstanding work from deformation/GIF reset-timeout attempts. Cause unknown and work not started; successful retries remain separate.",
+      "evidence": "docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json"
     }
   ],
   "solvers": [

@@ -1,3 +1,4 @@
+import {analyzeMeshValidity,nonfiniteMeshCoordinateDiagnostic} from './mesh-validity.js';
 import {transferConditions} from './boundaries.js';
 import {getProjectRevision,canonicalJson} from './project-revision.js';
 import {analyzeRigidBodyConstraints} from './constraint-rank.js';
@@ -10,14 +11,14 @@ const unsupported=(project)=>{
  if(study.kind==='thermal'||study.kind==='acoustic')return study.modalAnalysis===true;
  return (study.kind!==undefined&&study.kind!=='structural')||study.modalAnalysis===true||study.thermalStress===true||(study.materialTemperature!==undefined&&material.dependence!=null)||Boolean(material.orthotropic||material.plasticity||material.hyperelastic||material.dependence?.elasticTemperatureTable);
 };
-const rejected=(code,message,target,evidence={})=>({schemaVersion:1,allowed:false,completePreflight:false,diagnostics:[{code,severity:'error',stage:'boundary-transfer',target,message,evidence,suggestions:['Inspect the exact saved input and retained mesh-only job, then retry with a successful settled job for the current revision'],requiresUserIntent:true}],reports:[],remainingChecks:['Constraint rank and rigid-body modes have not been checked.','Solver convergence and physical accuracy have not been checked.']});
+const rejected=(code,message,target,evidence={},stage='boundary-transfer')=>({schemaVersion:1,allowed:false,completePreflight:false,diagnostics:[{code,severity:'error',stage,target,message,evidence,suggestions:['Inspect the exact saved input and retained mesh-only job, then retry with a successful settled job for the current revision'],requiresUserIntent:true}],reports:[],remainingChecks:['Constraint rank and rigid-body modes have not been checked.','Solver convergence and physical accuracy have not been checked.']});
 
 /** Inspect selected-condition transfer against a retained, successful mesh-only output.
  * This is intentionally read-only and never invokes a mesher or solver. */
 export async function preflightMeshBoundaryTransfer({project,job,output,expectedRevision}={}){
  let projectBytes,outputBytes,projectSnapshot,outputSnapshot;
  try{projectBytes=canonicalJson(project);projectSnapshot=JSON.parse(projectBytes);}catch{return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_INVALID','Saved input is not valid revisioned project data','/');}
- try{if(output!==undefined&&output!==null){outputBytes=canonicalJson({input:output.input,mesh:output.mesh});outputSnapshot=JSON.parse(outputBytes);}}catch{return rejected('ANALYSIS_MESH_PREFLIGHT_OUTPUT_INVALID','Retained mesh output is not valid revisioned JSON data','/job');}
+ try{if(output!==undefined&&output!==null){outputBytes=canonicalJson({input:output.input,mesh:output.mesh});outputSnapshot=JSON.parse(outputBytes);}}catch{const invalid=nonfiniteMeshCoordinateDiagnostic(output);return invalid?rejected(invalid.code,'Retained mesh contains a nonfinite node coordinate',invalid.target,invalid.evidence,'mesh'):rejected('ANALYSIS_MESH_PREFLIGHT_OUTPUT_INVALID','Retained mesh output is not valid revisioned JSON data','/job');}
  let revision;
  try{revision=await getProjectRevision(projectSnapshot);}catch{return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_INVALID','Saved input is not valid revisioned project data','/');}
  const unchanged=()=>{try{return canonicalJson(project)===projectBytes&&(output===undefined||output===null||canonicalJson({input:output.input,mesh:output.mesh})===outputBytes);}catch{return false;}};
@@ -30,13 +31,15 @@ export async function preflightMeshBoundaryTransfer({project,job,output,expected
  if(!unchanged())return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_CHANGED','Input or retained mesh changed during boundary-transfer inspection','/');
  if(outputRevision!==revision)return rejected('ANALYSIS_MESH_PREFLIGHT_JOB_STALE','Retained mesh was produced from a different input revision','/job',{jobRevision:job.inputRevision,currentRevision:revision,outputRevision});
  if(unsupported(projectSnapshot))return rejected('ANALYSIS_MESH_PREFLIGHT_MODEL_UNSUPPORTED','Boundary-transfer inspection is limited to static linear structural, thermal and acoustic inputs','/study',{kind:projectSnapshot.study?.kind??'structural'});
+ const quality=analyzeMeshValidity(outputSnapshot.mesh);
+ if(!quality.allowed)return {...rejected(quality.diagnostics[0].code,quality.diagnostics[0].message,quality.diagnostics[0].target,quality.diagnostics[0].evidence),inputRevision:revision,jobId:job.jobId,diagnostics:quality.diagnostics,meshQuality:quality.report};
  try{
   const transferred=transferConditions(projectSnapshot,outputSnapshot.mesh);
   if(!unchanged())return rejected('ANALYSIS_MESH_PREFLIGHT_INPUT_CHANGED','Input or retained mesh changed during boundary-transfer inspection','/');
   const {diagnostics:rigidDiagnostics,...rigidBody}=analyzeRigidBodyConstraints({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred});
   const anchoring=analyzeComponentAnchoring({project:projectSnapshot,mesh:outputSnapshot.mesh,boundary:transferred}),resolution=analyzeAcousticResolution({project:projectSnapshot,mesh:outputSnapshot.mesh});
   const diagnostics=[...rigidDiagnostics,...anchoring.diagnostics,...resolution.diagnostics];
-  return {schemaVersion:1,allowed:!diagnostics.some(d=>d.code==='ACOUSTIC_MESH_WAVELENGTH_UNRESOLVED'||projectSnapshot.study?.kind==='thermal'&&d.severity==='error'),completePreflight:false,inputRevision:revision,jobId:job.jobId,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics,rigidBody,componentAnchoring:anchoring.report,acousticResolution:resolution.report,remainingChecks:REMAINING_AFTER_RIGID_BODY};
+  return {schemaVersion:1,allowed:!diagnostics.some(d=>d.code==='ACOUSTIC_MESH_WAVELENGTH_UNRESOLVED'||projectSnapshot.study?.kind==='thermal'&&d.severity==='error'),completePreflight:false,inputRevision:revision,jobId:job.jobId,meshQuality:quality.report,reports:transferred.reports.map(({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})=>({conditionIndex,type,originalAreaMm2,mappedAreaMm2,relativeAreaError,maxProjectionDistanceMm,approximation})),diagnostics,rigidBody,componentAnchoring:anchoring.report,acousticResolution:resolution.report,remainingChecks:REMAINING_AFTER_RIGID_BODY};
  }catch(error){
   const failure=getAnalysisFailure(error);if(failure)return {...rejected(failure.code,failure.message,failure.diagnostics[0].target,failure.diagnostics[0].evidence),diagnostics:failure.diagnostics};
   const diagnostic=analysisError('ANALYSIS_MESH_PREFLIGHT_FAILED','Boundary transfer inspection failed',{stage:'boundary-transfer',target:'/conditions',evidence:{}});

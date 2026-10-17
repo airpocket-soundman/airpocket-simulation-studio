@@ -695,3 +695,7 @@ startCompareExportはformat:"gif"でorbitのみを受け付けます。固定24�
 2026-10-17 localhost実Chromeの[比較GIF証跡](evidence/2026-10-17-comparison-gif-real-chrome.json): API成果物5,574,849 bytesをSHA-256 e171333e…で照合。外部デコードで640×320・24枚/画像24種、Pillowでdelay80/90ms・合計2,000ms・loop0を確認しました。GUIの画像プレビュー・中止・再作成は成功し、各後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。最初の接続reset/timeoutは履歴に保持し原因を断定しません。公開HTTPS・一般形状・他プレーヤーの滑らかさ・GUIダウンロード完了は未確認です。
 
 2026-10-17 [公開HTTPS確認専用の実Chrome証跡](evidence/2026-10-17-public-https-inspect-real-chrome.json): 公開候補4b62b9dのscript名/取得asset SHAをmanifestと照合し、通常Chromeから確認スコープのみで接続。inspect/inspectInput/exportCapabilities/caseListの4操作と91操作の検出、解除後session0件、request/command error・timeout0件を確認しました。edit/analyze/viewは許可せず未試験。chrome://versionはURL policyで開けず厳密な版は取得できませんでした。既存readyを補完する証拠で、製品公開ゲートを閉じません。今回の新しい音響/熱診断のlive GUI確認は未実施で、自動テストと独立ソルバー参照の範囲です。
+
+### 保持メッシュの品質・要素妥当性
+
+meshBoundaryPreflightは境界転送前に読み取り専用で要素を検査します。meshQualityは節点/要素数・体積・負向き数・任意qualityの最小値/5区間histogram・診断数/省略有無を返します。不正節点/接続、非有限値、縮退/特異要素、非有限volume/gradient、不正quality配列はallowed:false。診断はstage:mesh、対象/job/mesh/...を付け最大20件です。quality配列不在はqualityAvailable:falseで、品質値の独自閾値は設けません。負向きは既存ソルバーが正規化するため拒否しません。既存の体積abs<1e-15 mm³・inverse pivot<1e-20を共有し入力や節点順を変更しません。これは境界/CAD適合、収束、物理精度や一般メッシュ成功を保証しません。新診断の実GUI確認は未実施です。
