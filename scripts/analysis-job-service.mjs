@@ -96,6 +96,19 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const inspected=inspectIntermediate(snapshot,meshRecord.snapshot.mesh,options);jobs.get(jobId);
    return {schemaVersion:1,jobId,inputRevision:job.inputRevision,jobState:job.state,artifactId,artifact:{...record},...inspected};
   },
+  listRestored({offset=0,limit=10}={}){
+   if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>20)throw Error('Invalid restored job page offset or limit');
+   const records=[...restored.values()].sort((a,b)=>a.jobId<b.jobId?-1:a.jobId>b.jobId?1:0),page={schemaVersion:1,jobs:[],total:records.length,nextOffset:null};
+   for(const record of records.slice(offset,offset+limit)){
+    const {error,executionErrorCode,...metadata}=restoredJobView(record);
+    const candidate={...page,jobs:[...page.jobs,metadata],nextOffset:offset+page.jobs.length+1<records.length?offset+page.jobs.length+1:null};
+    // Keep the duplicated text/structured MCP representation below 64 KiB too.
+    if(Buffer.byteLength(JSON.stringify(candidate))>30000)break;
+    page.jobs.push(metadata);
+   }
+   page.nextOffset=offset+page.jobs.length<records.length?offset+page.jobs.length:null;
+   return page;
+  },
   get:jobs.get,events:jobs.events,cancel:jobs.cancel,drain:jobs.drain,
   async meshOutput(jobId){const job=jobs.get(jobId),path=outputPaths.get(jobId);if(!path||job.state!=='succeeded'||job.executionSettled!==true||job.operation!=='mesh')throw Error('A successful, settled retained mesh-only job is required');if((await stat(path)).size>100_000_000)throw Error('Mesh output exceeds 100 MB');const bytes=await readFile(path);if(bytes.length!==job.result?.outputBytes||createHash('sha256').update(bytes).digest('hex')!==job.result?.outputSha256)throw Object.assign(Error('Mesh output integrity check failed'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});const output=JSON.parse(bytes.toString('utf8'));if(output.job?.jobId!==jobId||output.job?.inputRevision!==job.inputRevision)throw Object.assign(Error('Mesh output identity does not match its retained job'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});return output;},
   release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);outputPaths.delete(jobId);return result;},close:jobs.close,async closeAsync(){jobs.close();return jobs.drain();}

@@ -47,8 +47,9 @@ function validateRecord(value,name){
 export function restoredJobView(record){
  const interrupted=!terminal.has(record.state)||record.state==='interrupted';
  const state=interrupted?'interrupted':record.state;
+ const recovery={mode:'metadata-only',executionResumed:false,eventsAvailable:false,artifactsAvailable:false,nextSteps:[{tool:'studio_start_analysis',requiresNewRequestId:true,requiresExplicitPaths:true},{tool:'studio_release_job',arguments:{jobId:record.jobId},requestIdReusableAfterRelease:true}]};
  const error=interrupted?{code:INTERRUPTED_CODE,message:'The MCP process stopped before this job finished. It was not resumed and no result is available; start a new job.'}:record.error;
- return {schemaVersion:1,jobId:record.jobId,inputRevision:record.inputRevision,state,executionSettled:true,resourceState:'settled',releaseAllowed:true,operation:record.operation,origin:record.origin,startedAt:record.startedAt,updatedAt:record.updatedAt,lastSequence:0,firstAvailableSequence:0,restored:true,resultAvailable:false,...(record.state!==state?{recordedState:record.state}:{}),...(record.resultDigest?{recordedResultDigest:record.resultDigest}:{}),...(error?{error}:{}),...(record.executionErrorCode?{executionErrorCode:record.executionErrorCode}:{})};
+ return {schemaVersion:1,jobId:record.jobId,inputRevision:record.inputRevision,state,executionSettled:true,resourceState:'settled',releaseAllowed:true,operation:record.operation,origin:record.origin,startedAt:record.startedAt,updatedAt:record.updatedAt,lastSequence:0,firstAvailableSequence:0,restored:true,resultAvailable:false,recovery,...(record.state!==state?{recordedState:record.state}:{}),...(record.resultDigest?{recordedResultDigest:record.resultDigest}:{}),...(error?{error}:{}),...(record.executionErrorCode?{executionErrorCode:record.executionErrorCode}:{})};
 }
 export function createJobStore(directory,{onDiagnostic}={}){
  const dir=validateJobStoreDirectory(directory),diagnostics=[];

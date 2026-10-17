@@ -592,3 +592,7 @@ Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し�
 ## 2026-10-18: 再起動後の安全再送拒否とMCP一巡
 
 復元requestIdは計算前にANALYSIS_JOB_REQUEST_RESTOREDで拒否しjobId確認へ誘導します。実stdio MCPの終了/再起動、同一/変更payload拒否、別ID成功、解放後の再利用を含む9件中8成功・1symlink skip・0失敗。[検証](evidence/2026-10-18-mcp-restart-request.json)。[一巡評価](evidence/2026-10-18-skill-loop-real-mcp.json)は修正版手順で合成棒100/200Nの入力・根拠修復・mesh検査・解析・ケース比較PNG/ケース集保存を実MCPで確認。0.04/0.08mmと比2、出力hashと4状態不変を確認しました。独立fresh Skill評価、全物理精度、登録済hostの更新、公開HTTPS mutationと親計画全体は未完です。
+
+## 2026-10-18: 入力検査と復旧導線の実装
+
+モーダルの不正局所frame/方向不一致を事前拒否し、モーダル/直交異方性で無効支持を数えないようsolver規則に整合しました。復元jobIdを失ってもstudio_restored_jobsで有界再発見し、取得可能性と明示nextStepsを返します。保存caseの仮定詳細はstudio_inspect_caseでarchive/case/input版を固定してbounded取得します。[検証](evidence/2026-10-18-input-recovery-verification.json)、[再測定](evidence/2026-10-18-saved-case-remeasurement.json)、[正式MCPの32仮定取得](evidence/2026-10-18-saved-case-input-stdio.json)。新たな物理閾値を追加せず親/gate未完を維持。ブラウザへのcase復元、不明build版、Skill独立一巡は未完。背景手動確認は利用者が今は操作不可のため待機です。
