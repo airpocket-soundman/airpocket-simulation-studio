@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T04:32:21.147Z",
+  "updatedAt": "2026-10-17T05:01:13.256Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1367,13 +1367,13 @@
       "titleEn": "Synchronized side-by-side case viewer and video export",
       "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
       "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
-      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。自動保存・時間/変形動画・GIF/MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。",
-      "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Automatic storage, time/deformation video, GIF/MP4 are not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified.",
+      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。任意のブラウザ内自動保存（1件・128 KiB）と再読込後候補の明示復元を追加し、ケース本体・画像/動画・資格情報は保存しない。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。localhost実Chromeで任意自動保存・実再読込後の候補保持・新IDケース再取込後の明示復元・無効化/削除と再読込後の候補非復活を確認し、メイン表示/入力/ケースは不変。保存先の強制障害は自動テストのみ。時間/変形動画・GIF/MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。",
+      "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Time/deformation video and GIF/MP4 are not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-17: GUI比較動画の作成・ネイティブプレビュー再生（1280x640、終了2.738秒）・中止・再作成をlocalhost実Chromeで確認。全経路で元2.01秒補間表示と入力/ケース/比較設定は完全一致。保存リンク1回クリック後の10秒待機はタイムアウトで、ダウンロード完了は未確認。",
-      "lastUpdateEn": "2026-10-17: Localhost real Chrome verified GUI video creation/native 1280x640 preview playback ending 2.738 s/cancel/restart. Every path preserved original 2.01 s interpolation and input/cases/panel exactly. One save-link click timed out after 10 s; download completion remains unverified.",
-      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json"
+      "lastUpdate": "2026-10-17: 任意自動保存（既定無効・1件/128 KiB）をlocalhost実Chromeで確認。実再読込は候補のみ保持し、新IDでケースを別途取り込んで明示復元、無効化で候補保持、削除後再読込で候補非復活。各後のメイン表示/入力/ケースは不変。保存先強制障害は自動テストのみ。",
+      "lastUpdateEn": "2026-10-17: Localhost real Chrome verified opt-in saving (off by default, one preset/128 KiB), candidate-only reload, explicit restore after separate case reimport with new IDs, disable retaining the candidate, and no resurrection after delete/reload. Main viewer/input/cases were unchanged. Forced storage failures have automated coverage only.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json"
     },
     {
       "id": "VIEWTIME",

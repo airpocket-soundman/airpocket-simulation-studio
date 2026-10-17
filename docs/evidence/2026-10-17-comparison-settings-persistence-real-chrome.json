@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "checks": [
+    {
+      "mode": "setup",
+      "passed": true,
+      "newCaseIds": [
+        "f917f232-79be-48f0-bec0-48a59ecc6c6b",
+        "ed5699ea-bbd6-4367-ad5d-a982ddb17f28"
+      ]
+    },
+    {
+      "mode": "after",
+      "label": "saved",
+      "passed": true,
+      "viewInputCasesUnchanged": true,
+      "comparison": {
+        "schemaVersion": 1,
+        "revision": "sha256:1089509b69ca2426389f3591872c6f11c3039d5e4ebab998c449d480512268f3",
+        "archive": {
+          "kind": "comparison-view",
+          "settings": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "field": "temperature",
+            "timeSeconds": 5,
+            "toleranceSeconds": 0
+          },
+          "sources": [
+            {
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "version": 1
+        }
+      }
+    },
+    {
+      "mode": "import",
+      "passed": true,
+      "newCaseIds": [
+        "17e1b92a-b7fd-40d7-b907-224120de6a43",
+        "bbcf1509-4cc7-49c0-9633-f2f70c985351"
+      ]
+    },
+    {
+      "mode": "after",
+      "label": "restored",
+      "passed": true,
+      "viewInputCasesUnchanged": true,
+      "comparison": {
+        "schemaVersion": 1,
+        "revision": "sha256:dd24eca8fd53e00b9300f4d2d1f3bfe61fc1428cb42c65066c6a8a0cbe60f7d2",
+        "archive": {
+          "kind": "comparison-view",
+          "settings": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "field": "temperature",
+            "timeSeconds": 5,
+            "toleranceSeconds": 0
+          },
+          "sources": [
+            {
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "version": 1
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "label": "disabled",
+      "passed": true,
+      "viewInputCasesUnchanged": true,
+      "comparison": {
+        "schemaVersion": 1,
+        "revision": "sha256:dd24eca8fd53e00b9300f4d2d1f3bfe61fc1428cb42c65066c6a8a0cbe60f7d2",
+        "archive": {
+          "kind": "comparison-view",
+          "settings": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "field": "temperature",
+            "timeSeconds": 5,
+            "toleranceSeconds": 0
+          },
+          "sources": [
+            {
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "version": 1
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "label": "removed",
+      "passed": true,
+      "viewInputCasesUnchanged": true,
+      "comparison": {
+        "schemaVersion": 1,
+        "revision": "sha256:dd24eca8fd53e00b9300f4d2d1f3bfe61fc1428cb42c65066c6a8a0cbe60f7d2",
+        "archive": {
+          "kind": "comparison-view",
+          "settings": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "field": "temperature",
+            "timeSeconds": 5,
+            "toleranceSeconds": 0
+          },
+          "sources": [
+            {
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "version": 1
+        }
+      }
+    }
+  ],
+  "environment": {
+    "browser": "real Chrome",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "repository semantic bridge, not installed MCP",
+    "fixture": "two small solved thermal tetrahedra"
+  },
+  "expectedArchive": {
+    "version": 1,
+    "kind": "comparison-view",
+    "sources": [
+      {
+        "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+      },
+      {
+        "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+      }
+    ],
+    "settings": {
+      "field": "temperature",
+      "deformScale": 1,
+      "camera": {
+        "position": [
+          1.9,
+          1.4,
+          2.1
+        ],
+        "target": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      },
+      "timeSeconds": 5,
+      "toleranceSeconds": 0
+    }
+  },
+  "date": "2026-10-17",
+  "uiChecks": [
+    {
+      "name": "Japanese opt-in label and default unchecked",
+      "passed": true
+    },
+    {
+      "name": "Enable and Show comparison creates saved candidate",
+      "passed": true
+    },
+    {
+      "name": "Actual page reload retains enabled choice and candidate without restoring cases/time or rendering PNG",
+      "passed": true
+    },
+    {
+      "name": "Separate case reimport with new runtime IDs then explicit Restore reproduces exact portable archive",
+      "passed": true
+    },
+    {
+      "name": "Restored comparison Show succeeds",
+      "passed": true
+    },
+    {
+      "name": "Disable keeps candidate and original displayed result/input/cases",
+      "passed": true
+    },
+    {
+      "name": "Delete disables saving and removes candidate",
+      "passed": true
+    },
+    {
+      "name": "Another actual reload leaves checkbox unchecked and Restore/Delete disabled; no candidate resurrection",
+      "passed": true
+    }
+  ],
+  "notVerified": [
+    "Public HTTPS origin",
+    "Other browsers/devices",
+    "Forced IndexedDB/quota/corrupt-data failure in real Chrome (automated coverage only)",
+    "Automatic case/result persistence (out of scope)",
+    "Independent physical accuracy or arbitrary geometry"
+  ],
+  "review": {
+    "blockingFindings": [],
+    "scope": "Independent read-only controller/storage/main integration review; existing CAS, source leases, serialized writes, generation invalidation, pinned backend and deletion tombstone retained."
+  }
+}

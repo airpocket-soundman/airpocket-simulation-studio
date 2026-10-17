@@ -24,7 +24,7 @@ const T = {
   '共通色範囲': 'Shared colour range', '変形倍率': 'Deformation scale', '物理時刻': 'Physical time', '保存フレームとのずれ': 'Offset from stored frame', '時間軸なし': 'no time axis',
   '表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。': 'Both panels show the quantity selected in the main result viewer. For a transient pair, display a transient result in the viewer first, then compare.'
 };
-export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, colorAt = () => '#888', getField, getDeformScale, getCamera, presetApi, videoApi, env = {}}) {
+export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, colorAt = () => '#888', getField, getDeformScale, getCamera, presetApi, videoApi, onSettingsChanged=()=>{}, env = {}}) {
   const URLApi = env.URL || globalThis.URL, tr = (ja) => language() === 'en' ? (T[ja] ?? ja) : ja;
   translate(T);
   const host = doc.createElement('details');
@@ -87,6 +87,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     for (const m of row.metrics) items.push({name: m.key, value: Number(m.value.toPrecision(5)), unit: m.unit || '1'});
     return {label: saved.name, items: items.slice(0, 4)};
   }
+  function settingsChanged(){try{Promise.resolve(onSettingsChanged()).catch(()=>{});}catch{}}
   function invalidate(){png.disabled=true;canvas.width=0;canvas.height=0;}
   function checked(value){
     const next=structuredClone(value);
@@ -99,7 +100,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     return next;
   }
   function capture({validate=false}={}){const settings=structuredClone(overrides??{field:getField(),deformScale:getDeformScale(),camera:getCamera()});delete settings.timeSeconds;if(time.value!=='')settings.timeSeconds=Number(time.value);const captured=JSON.parse(JSON.stringify({indices:[Number(a.value||0),Number(b.value||1)],settings}));return validate?checked(captured):captured;}
-  function apply(value){const next=checked(value);refresh();a.value=String(next.indices[0]);b.value=String(next.indices[1]);overrides=next.settings;time.value=next.settings.timeSeconds===undefined?'':String(next.settings.timeSeconds);invalidate();syncHint();out.textContent=tr('比較設定を読み込みました。比較を表示して確認してください。');}
+  function apply(value){const next=checked(value);refresh();a.value=String(next.indices[0]);b.value=String(next.indices[1]);overrides=next.settings;time.value=next.settings.timeSeconds===undefined?'':String(next.settings.timeSeconds);invalidate();syncHint();out.textContent=tr('比較設定を読み込みました。比較を表示して確認してください。');settingsChanged();}
   for(const control of [a,b,time])control.onchange=()=>invalidate();
   reset.onclick=()=>{overrides=null;invalidate();syncHint();};
   const report=e=>{out.textContent=e.message;status(e.message);};
@@ -116,7 +117,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     const settings=capture({validate:true}).settings;
     const renderer=createComparisonRenderer({inspectCase,renderCase,createCanvas:()=>canvas,colorAt,translate:tr});
     const result=renderer.render({cases:[ia,ib].map(index=>{const info=conditions(index);return {caseId:String(index),source:index,label:info.label,conditions:info.items};}),...settings});
-    out.textContent=tr('比較を表示しました。');png.disabled=false;return result.plan;
+    out.textContent=tr('比較を表示しました。');png.disabled=false;settingsChanged();return result.plan;
   }
   run.onclick = async () => { try { png.disabled = true; await show(); } catch (e) { out.textContent = e.message; status(e.message); } };
   png.onclick = () => canvas.toBlob(blob => { if (!blob) { out.textContent = 'PNG failed'; return; } const url = URLApi.createObjectURL(blob), link = doc.createElement('a'); link.href = url; link.download = 'case-comparison.png'; link.click(); setTimeout(() => URLApi.revokeObjectURL(url), 1000); }, 'image/png');
