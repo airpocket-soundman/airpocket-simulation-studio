@@ -1,6 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {createCaseStore} from '../src/cases.js';
+import {createCaseOperations} from '../src/case-operations.js';
 import {createVisualExportJobs} from '../src/visual-export-jobs.js';
 const revision='sha256:'+'a'.repeat(64);
 const args=(requestId='one')=>({requestId,expectedResultRevision:revision,format:'png',view:{field:'temperature',camera:{position:[1,2,3]}}});
@@ -121,3 +123,32 @@ test('comparison time range validation preserves PNG and orbit parameter boundar
 });
 
 test('comparison deformation validates explicit positive scale and no time args before admission; manifest is visualization only',async()=>{let count=0;const snapshot=compareSnapshot();snapshot.view.resolution={width:1280,height:640};snapshot.comparison.deformationAnimation={startScale:0,endScale:4,scalePolicy:'linear',loadHistory:false};const api=createVisualExportJobs({render:()=>{},prepareCompare:()=>{count++;return snapshot;},renderCompare:()=>new Blob(['webm'],{type:'video/webm'})}),base={...compareArgs(),format:'webm',animation:'deformation',field:'displacement',deformScale:4};delete base.timeSeconds;delete base.toleranceSeconds;for(const patch of [{deformScale:0},{deformScale:undefined},{field:'temperature'},{timeSeconds:0},{toleranceSeconds:0},{startTimeSeconds:0},{endTimeSeconds:1}])await assert.rejects(api.startCompare({...base,...patch}));assert.equal(count,0);const done=await terminal(api,await api.startCompare(base));assert.equal(done.state,'completed');assert.equal(done.artifact.manifest.time.camera,'fixed');assert.match(done.artifact.manifest.time.physicalTime,/not a physical load history/);assert.equal(done.artifact.manifest.comparison.deformationAnimation.scalePolicy,'linear');});
+
+// A real source lease must observe the admission-to-lifetime transition too.
+test('accepted 15-second comparison outlives admission deadline while real leases stay guarded',async()=>{
+ const output={input:{version:1,meshes:[{positions:[0,0,0,1,0,0,0,1,0],faceIds:[0]}],conditions:[]},calculation:{operation:'elastic',options:{size:5,method:'pcg',adaptive:false,maxRounds:3}},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],surface:[{nodes:[0,1,2]}]},result:{kind:'elastic',maxDisplacementMm:.04,maxVonMisesPa:1e6,displacement:Array(12).fill(0),magnitudes:Array(4).fill(0),vonMises:[0]}};
+ for(const interruption of ['none','source','lifetime','cancel']){
+  const store=createCaseStore();store.add('A',output);store.add('B',output);const cases=createCaseOperations({store}),rows=(await cases.list()).cases;
+  let now=0,live=true,resume,lease;
+  const api=createVisualExportJobs({render:()=>{},prepareCompare:async(request,{guard})=>{lease=await cases.readSource(request.references[0],{guard});return {...compareSnapshot(),view:{resolution:{width:1280,height:640}},context:lease};},renderCompare:async({context,signal})=>{await new Promise(resolve=>resume=resolve);if(signal.aborted)throw Error('cancelled');context.assertCurrent();return new Blob(['webm'],{type:'video/webm'});}});
+  const request={...compareArgs(),references:rows.map(row=>({caseId:row.caseId,expectedRevision:row.revision})),format:'webm',seconds:15};
+  const job=await api.startCompare(request,{guard:()=>now<15000,jobGuard:()=>live});now=15150;
+  assert.doesNotThrow(()=>lease.assertCurrent());
+  if(interruption==='source')store.rename(0,'changed');
+  if(interruption==='lifetime')live=false;
+  if(interruption==='cancel')api.cancel(job);
+  resume();await api.waitForSettled(job);const done=api.status(job);
+  assert.equal(done.state,interruption==='none'?'completed':interruption==='cancel'?'cancelled':'failed');
+  if(interruption!=='none')assert.throws(()=>api.artifact(job),/unavailable/);
+  api.release(job);
+ }
+});
+
+test('comparison admission expiration refuses before acceptance and default guard remains live',async()=>{
+ let valid=true,resume,leaseGuard;
+ const api=createVisualExportJobs({render:()=>{},prepareCompare:async(_,{guard})=>{leaseGuard=guard;await new Promise(resolve=>resume=resolve);return compareSnapshot();},renderCompare:()=>{throw Error('must not render');}});
+ const pending=api.startCompare(compareArgs(),{guard:()=>valid,jobGuard:()=>true});valid=false;resume();await assert.rejects(pending,/expired/);assert.equal(leaseGuard(),false);
+ let finish;valid=true;
+ const legacy=createVisualExportJobs({render:()=>{},prepareCompare:(_,{guard})=>{leaseGuard=guard;return compareSnapshot();},renderCompare:()=>new Promise(resolve=>finish=resolve)});
+ const job=await legacy.startCompare(compareArgs(),{guard:()=>valid});valid=false;assert.equal(leaseGuard(),false);finish(new Blob([comparePng()],{type:'image/png'}));await legacy.waitForSettled(job);assert.equal(legacy.status(job).state,'failed');
+});

@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "passed-with-notes",
+  "environment": {
+    "browser": "real Chrome",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "repository semantic bridge, not installed MCP",
+    "fixture": "actual solveElastic1tetra basefixed sideforce3N/6N,E1e10,physical max displacement .00156/.00312mm; visualization scale200",
+    "load": "Dedicated low-load QA; no concurrent full test/build."
+  },
+  "checks": [
+    "API linear visual scale0..200/display2s WebM SHA decoded dynamic frames",
+    "Fixed0...00312mm range/camera/savedresult,visualizationOnly/loadHistoryfalse manifest",
+    "Zero scale, physicaltime argument and incompatible field refused",
+    "Exact original2.01s interpolation, input, cases and comparison unchanged",
+    "First/last geometry-only regions changed independently of caption/legend, with moved colored geometry bounds under fixed camera",
+    "New low-load GUI creation1280x640 and native playback completion observed"
+  ],
+  "notVerified": [
+    "Public HTTPS",
+    "General geometries",
+    "Smooth24fps or guaranteed frame counts",
+    "Physical load-history response",
+    "GUI download completion"
+  ],
+  "originalDisplay": {
+    "physicalTimeSeconds": 2.01,
+    "interpolated": true
+  },
+  "job": {
+    "jobId": "cd1997b2-e1ec-43f2-ab3e-cd5e6c6536ae",
+    "startReplyMs": 87,
+    "terminalElapsedMs": 2827,
+    "state": "completed"
+  },
+  "artifact": {
+    "totalBytes": 24858,
+    "sha256": "sha256:f2c424a565c9c86a369498e3ab7ec6750dcc837cd664cde333460b659e3a5fc0",
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "webm",
+      "container": "webm",
+      "mimeType": "video/webm;codecs=vp9",
+      "codec": "vp9",
+      "sha256": "sha256:f2c424a565c9c86a369498e3ab7ec6750dcc837cd664cde333460b659e3a5fc0",
+      "totalBytes": 24858,
+      "resolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "d1a502d8-b384-41c4-85ed-c5dad98b9ddb",
+            "label": "QA linear elastic 3N",
+            "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+            "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+          },
+          {
+            "caseId": "9de3e9f0-ae0c-42c7-9640-ef795db2a5c7",
+            "label": "QA linear elastic 6N",
+            "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+            "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+          }
+        ],
+        "colorRange": {
+          "field": "displacement",
+          "maximum": 0.003120000000000001,
+          "minimum": 0
+        },
+        "deformationAnimation": {
+          "camera": "fixed",
+          "endScale": 200,
+          "field": "displacement",
+          "kind": "elastic",
+          "loadHistory": false,
+          "resultValues": "fixed-saved-result",
+          "scalePolicy": "linear",
+          "startScale": 0,
+          "visualizationOnly": true
+        },
+        "field": "displacement",
+        "panels": [
+          {
+            "caseId": "d1a502d8-b384-41c4-85ed-c5dad98b9ddb",
+            "field": "displacement",
+            "finalOnly": false,
+            "frameIndex": null,
+            "maximum": 0.0015600000000000004,
+            "minimum": 0,
+            "offsetSeconds": null,
+            "timeApplies": false,
+            "timeSeconds": null,
+            "unit": "mm"
+          },
+          {
+            "caseId": "9de3e9f0-ae0c-42c7-9640-ef795db2a5c7",
+            "field": "displacement",
+            "finalOnly": false,
+            "frameIndex": null,
+            "maximum": 0.003120000000000001,
+            "minimum": 0,
+            "offsetSeconds": null,
+            "timeApplies": false,
+            "timeSeconds": null,
+            "unit": "mm"
+          }
+        ],
+        "unit": "mm"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 200,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "ja",
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        }
+      },
+      "time": {
+        "animation": "deformation",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "physicalTime": "Fixed saved structural result; only the visualization multiplier changes linearly from zero to the requested scale, not a physical load history.",
+        "camera": "fixed",
+        "fps": {
+          "target": 24,
+          "recording": "realtime",
+          "frameCountGuaranteed": false
+        }
+      }
+    },
+    "file": "2026-10-17-comparison-deformation-video-artifact-real-chrome.webm"
+  },
+  "decoded": {
+    "streams": [
+      {
+        "codec_name": "vp9",
+        "width": 1280,
+        "height": 640,
+        "nb_read_frames": "4",
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "eng",
+          "alpha_mode": "1"
+        }
+      }
+    ],
+    "timestamps": [
+      0,
+      0.572,
+      1.56,
+      2.564
+    ],
+    "distinctFrameHashes": 4
+  },
+  "previousAttempts": [
+    {
+      "status": "failed",
+      "error": "Comparison export expired\n+ actual - expected\n\n+ 'failed'\n- 'completed'\n"
+    },
+    {
+      "status": "failed",
+      "error": "Browser command timed out; inspect state before retrying"
+    }
+  ],
+  "geometryFrameComparison": {
+    "method": "First/last decoded RGB view rectangles exclude labels/legend/overlay. Count pixels with any channel difference>20; colored geometry bounds use maxRGB>80 and maxRGB-minRGB>50 to exclude the dark background.",
+    "panels": [
+      {
+        "panel": "left",
+        "geometryCrop": [
+          0,
+          96,
+          640,
+          540
+        ],
+        "changedPixelsThreshold20": 11469,
+        "firstColoredBounds": [
+          164,
+          80,
+          466,
+          327
+        ],
+        "lastColoredBounds": [
+          208,
+          79,
+          468,
+          354
+        ]
+      },
+      {
+        "panel": "right",
+        "geometryCrop": [
+          640,
+          96,
+          1280,
+          540
+        ],
+        "changedPixelsThreshold20": 24770,
+        "firstColoredBounds": [
+          168,
+          80,
+          472,
+          327
+        ],
+        "lastColoredBounds": [
+          262,
+          79,
+          472,
+          387
+        ]
+      }
+    ]
+  },
+  "gui": {
+    "createdRequestedSeconds": 2,
+    "preview": {
+      "hidden": false,
+      "videoWidth": 1280,
+      "videoHeight": 640,
+      "durationSeconds": 2.125,
+      "readyState": 4,
+      "pausedInitially": true
+    },
+    "trustedPlayback": "Space key",
+    "ended": true,
+    "endedAtSeconds": 2.125,
+    "screenshot": "2026-10-17-comparison-deformation-video-artifact-gui-real-chrome.jpg",
+    "byteProofScope": "API clip independently decoded; GUI clip verified only by native preview/playback and screenshot."
+  },
+  "priorPartialEvidence": "2026-10-17-comparison-deformation-video-real-chrome.json",
+  "fixtureArchiveSha256": "sha256:16f0ead9e4b992456c0eb353d11f1a4a93f52f06e168af5445f5b7e6a098867d",
+  "review": {
+    "blockingFindings": [],
+    "scope": "Existing linear visualization-only implementation; no product source edits for this evidence."
+  },
+  "guardBoundaryFollowup": "2026-10-17-comparison-deformation-video-15s-real-chrome.json"
+}
