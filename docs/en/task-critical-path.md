@@ -2,7 +2,7 @@
 
 [日本語](../task-critical-path.md)
 
-As of2026-10-18:167 tasks,128 released and39 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
+As of2026-10-18:167 tasks, 130 released and 37 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
 
 | Classification | Existing IDs | Conditions |
 |---|---|---|
@@ -18,4 +18,4 @@ Pause incremental comparison features. Prepare bounded connection-reset diagnosi
 
 Next batch addresses P3 restart requestId idempotency/real-MCP restart and P0/P1/Skill end-to-end gaps. Do not equate background export with reset causes or claim root fixes from successful retries. No new tasks are added; completion counts follow evidence.
 
-Batch result: BROWSERRESET1 reached ready on real-Chrome diagnostic/recovery evidence before publication. EXPORTBACKGROUND1 remains checking: CUA could not prove actual hidden transition and manual cooperation is unanswered. PERF1 remains building with three structural sizes measured,but thermal reset/timeout and absent memory/other-browser measurements. RUNTIMEWASM1 retains the initial Node24 V8 fatal separately from isolated success; final CI success does not prove a root fix. Only accepted items are promoted together after publication evidence.
+Batch result: undefined EXPORTBACKGROUND1 remains checking: CUA could not prove actual hidden transition and manual cooperation is unanswered. PERF1 remains building with three structural sizes measured,but thermal reset/timeout and absent memory/other-browser measurements. RUNTIMEWASM1 retains the initial Node24 V8 fatal separately from isolated success; final CI success does not prove a root fix. See [publication record](../evidence/2026-10-18-publication-8c57e16.json). No parent or publication gate is closed.

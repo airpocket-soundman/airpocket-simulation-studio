@@ -2,7 +2,7 @@
 
 [English](en/task-critical-path.md)
 
-2026-10-18時点、167件のうち公開済み128件、未完39件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
+2026-10-18時点、167件のうち公開済み130件、未完37件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
@@ -18,4 +18,4 @@ P0→P1→P3、およびP0→P4が公開ワークフローの主要経路。P5�
 
 次のまとまりはP3の再起動requestId冪等性/実MCP再起動と、P0/P1/Skill一巡の残条件。背景出力とresetの原因は同一視せず、成功した再試行だけで根治扱いしない。今回タスクは増設せず、完了数は受入証拠に従う。
 
-今回結果: BROWSERRESET1は診断・復旧手順を実Chromeで確認し公開前ready。EXPORTBACKGROUND1は実hidden操作をCUAで実証できず、利用者の手動協力回答待ちでchecking。PERF1は構造3サイズのみ測定、熱reset/timeoutとメモリ/他browser未測定でbuilding。RUNTIMEWASM1は初回全体試験のNode24 V8 fatalと単独成功を分離してchecking維持。最終CIの成功は根治証明ではありません。公開証跡後に受入を満たす項目だけまとめてreleasedへ反映します。
+今回結果: BROWSERRESET1とPUBLICHTTPS1は8c57e16の公開証跡と実Chromeの確認専用接続の合格によりreleased。内訳は公開済130/queued20/building12/checking5/ready0。EXPORTBACKGROUND1は実hidden操作をCUAで実証できず、利用者の手動協力回答待ちでchecking。PERF1は構造3サイズのみ測定、熱reset/timeoutとメモリ/他browser未測定でbuilding。RUNTIMEWASM1は初回全体試験のNode24 V8 fatalと単独成功を分離してchecking維持。最終CIの成功は根治証明ではありません。[公開記録](evidence/2026-10-18-publication-8c57e16.json)を参照。親と公開ゲートは閉じません。

@@ -50,7 +50,7 @@ GUI機能を追加する際は、意味的API・MCP・状態/診断・SKILLで�
 
 ## 現在地と管理方法
 
-公開基準はv0.44.0。リビジョン`5c6747624994a12f5dc3c61882dea2049d692839`で必須CI・公開処理・公開後検証28項目（配信物の完全性確認を含む）が成功し、公開manifestと進捗JSONのbytes/SHA、注釈付きタグを照合した。[公開証跡](evidence/2026-10-15-v044-publication.json)を参照。利用者から公開HTTPS版へ再接続できたとの報告があるが独立観測ではない。inspect操作の成功・切断後のsession終了・ブラウザ版・公開revisionは未確認のため、PUBLICHTTPS1はcheckingを維持する。[報告証跡](evidence/2026-10-15-public-https-reconnect-user-report.json)。旧v0.43の242テスト・配信物26項目・画面42項目は当時の記録であり、今回再実行した数や現行要件ではない。STEP、領域指定、共通API、体積メッシュ、Airpocket構造・熱・限定流体・音響・固有振動、MFEM線形構造WASM、ケース比較、PNG/WebM、保存JSON対象のMCPを基盤として利用する。制限は[解析ガイド](analysis-guide.md)と個別仕様を優先する。
+公開基準はv0.44.0。リビジョン`5c6747624994a12f5dc3c61882dea2049d692839`で必須CI・公開処理・公開後検証28項目（配信物の完全性確認を含む）が成功し、公開manifestと進捗JSONのbytes/SHA、注釈付きタグを照合した。[公開証跡](evidence/2026-10-15-v044-publication.json)を参照。現在のsource公開8c57e16750efe3f90aa588bebc3cf127828204dfではverify・deploy・verify-published、clean manifest、注釈タグ、進捗/history照合が成功した。[公開記録](evidence/2026-10-18-publication-8c57e16.json)を参照。通常Chromeで確認専用接続・4操作成功・切断後session0件を確認し、PUBLICHTTPS1は元受入条件を満たした。Chrome申告版155.0.0.0はreduced精度でfullVersionVerified:false、元条件にfull版指定はない。BROWSERRESET1/PUBLICHTTPS1はreleased、背景出力はchecking、PERF1はbuildingを維持する。編集/解析/表示へ権限を拡大せず、親や公開ゲートは閉じない。旧v0.43の242テスト・配信物26項目・画面42項目は当時の記録であり、今回再実行した数や現行要件ではない。STEP、領域指定、共通API、体積メッシュ、Airpocket構造・熱・限定流体・音響・固有振動、MFEM線形構造WASM、ケース比較、PNG/WebM、保存JSON対象のMCPを基盤として利用する。制限は[解析ガイド](analysis-guide.md)と個別仕様を優先する。
 
 `src/progress.json`は既存タスクと公開実績を管理する。古いタスクの説明は当時の範囲を含むため、単独で現在の能力一覧としない。以下のP0〜P6は進捗JSONに登録した計画識別子である。着手する作業単位を追加し、依存先、受け入れ条件、実装・検証の証跡を結び付ける。計画の追加だけでreleasedへ変更しない。
 
