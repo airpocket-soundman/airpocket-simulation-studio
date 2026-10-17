@@ -104,3 +104,8 @@ test('comparison WebM cancellation retains renderer exclusion and missing canvas
  let finish,signal;const snapshot=compareSnapshot();snapshot.view.resolution={width:1280,height:640};const api=createVisualExportJobs({render:()=>{},prepareCompare:()=>snapshot,renderCompare:args=>{signal=args.signal;return new Promise(resolve=>finish=resolve);}}),job=await api.startCompare({...compareArgs(),format:'webm',seconds:1});api.cancel(job);assert.equal(signal.aborted,true);await assert.rejects(api.startCompare(compareArgs('other')),/active/);finish(new Blob(['late'],{type:'video/webm'}));await tick();assert.equal(api.status(job).state,'cancelled');assert.throws(()=>api.artifact(job),/unavailable/);api.release(job);
  const bad=createVisualExportJobs({render:()=>{},prepareCompare:()=>compareSnapshot(),renderCompare:()=>new Blob(['video'],{type:'video/webm'})}),invalid=await bad.startCompare({...compareArgs(),format:'webm'});assert.equal((await terminal(bad,invalid)).state,'failed');assert.match(bad.status(invalid).error,/recorded canvas resolution/);
 });
+
+
+test('host-only waitForSettled waits through cancellation cleanup before releasing renderer exclusion',async()=>{
+ let finish;const api=createVisualExportJobs({render:()=>new Promise(resolve=>finish=resolve)}),job=await api.start(args());api.cancel(job);let settled=false;const waiting=api.waitForSettled(job).then(()=>settled=true);await tick();assert.equal(settled,false);await assert.rejects(api.start(args('other')),/active/);finish(new Blob(['late'],{type:'image/png'}));await waiting;assert.equal(settled,true);const next=await api.start(args('other'));api.cancel(next);finish(new Blob(['late'],{type:'image/png'}));await api.waitForSettled(next);
+});

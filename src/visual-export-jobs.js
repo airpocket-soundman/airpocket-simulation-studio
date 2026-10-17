@@ -121,7 +121,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
     renderActive=true;let output;try{output=(compare?renderCompare:render)({...copy(normalized),...(compare?{comparison:copy(job.comparison),context:snapshot.context}:{}),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
-    Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);}}).finally(()=>{renderActive=false;});
+    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);}}).finally(()=>{renderActive=false;});
     resolve();return summary(job);
    }catch(error){requests.delete(normalized.requestId);reject(error);throw error;}
   }
@@ -129,6 +129,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
   start:(args,options)=>start(args,options),
   startCompare:(args,options)=>start(args,options,true),
   status(args){return summary(find(args));},
+  waitForSettled(args){return find(args).settled;},
   cancel(args){const job=find(args);stop(job);return summary(job);},
   cancelAll(){epoch++;for(const job of jobs.values())stop(job);return {schemaVersion:1,cancelled:true};},
   release(args){const job=find(args);stop(job);if(job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}jobs.delete(job.jobId);requests.delete(job.request.requestId);return {schemaVersion:1,jobId:job.jobId,released:true};},

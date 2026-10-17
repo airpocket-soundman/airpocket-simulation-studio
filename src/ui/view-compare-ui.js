@@ -5,6 +5,11 @@ import {validateComparisonSettings} from '../comparison-view-settings.js';
 import {resolveSharedTime} from '../view-compare-layout.js';
 import {createComparisonRenderer} from '../view-compare-renderer.js';
 const T = {
+  '比較動画を作る':'Create comparison video','動画作成を中止':'Cancel video creation','動画の長さ（秒）':'Video duration (seconds)','比較動画を保存':'Save comparison video',
+  '比較動画は共通カメラの回転です。選択した保存時刻は固定されます。':'Comparison video rotates the shared camera. The selected stored time stays fixed.',
+  'このブラウザでは比較動画を作成できません。':'This browser cannot create comparison videos.','動画を作成しています。':'Creating video.','動画作成を中止しています。':'Cancelling video creation.',
+  '動画作成を中止しました。':'Video creation cancelled.','動画を作成しました。再生して確認し、保存リンクから保存してください。':'Video ready. Play it to review, then use the save link.',
+  '長さは1〜15秒の整数で指定してください。':'Duration must be an integer from 1 through 15 seconds.',
   '比較設定ファイル': 'Comparison settings file', '比較設定JSON': 'Comparison settings JSON', '比較設定を書き出す': 'Export comparison settings', '比較設定を読み込む': 'Import comparison settings', '現在の表示設定を使う': 'Use current viewer settings', '読み込んだ比較設定を使用中（メイン表示は変更しません）。': 'Using imported comparison settings (the main viewer is unchanged).', '比較設定を読み込みました。比較を表示して確認してください。': 'Comparison settings imported. Show the comparison to review them.',
   '2ケース並べて比較': 'Compare two cases side by side',
   '左のケース': 'Left case', '右のケース': 'Right case',
@@ -19,7 +24,7 @@ const T = {
   '共通色範囲': 'Shared colour range', '変形倍率': 'Deformation scale', '物理時刻': 'Physical time', '保存フレームとのずれ': 'Offset from stored frame', '時間軸なし': 'no time axis',
   '表示中の結果の物理量（結果の表示欄で選択中のもの）を左右とも表示します。過渡音響の組は、先に過渡の結果を表示してから比較してください。': 'Both panels show the quantity selected in the main result viewer. For a transient pair, display a transient result in the viewer first, then compare.'
 };
-export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, colorAt = () => '#888', getField, getDeformScale, getCamera, presetApi, env = {}}) {
+export function createViewCompareUi({$, document: doc = globalThis.document, anchor, store, status, translate = () => {}, language = () => 'ja', inspectCase, renderCase, colorAt = () => '#888', getField, getDeformScale, getCamera, presetApi, videoApi, env = {}}) {
   const URLApi = env.URL || globalThis.URL, tr = (ja) => language() === 'en' ? (T[ja] ?? ja) : ja;
   translate(T);
   const host = doc.createElement('details');
@@ -39,6 +44,31 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   save.disabled=load.disabled=!presetApi;
   const file=el('input','compare-settings-file');file.type='file';file.accept='.json,application/json';file.disabled=!presetApi;
   host.append(label('比較設定JSON',json),save,load,label('比較設定ファイル',file),reset);
+  const videoSeconds=el('input','compare-video-seconds'),videoStart=el('button','compare-video-start','比較動画を作る'),videoCancel=el('button','compare-video-cancel','動画作成を中止'),videoStatus=el('p','compare-video-status'),videoPreview=el('video','compare-video-preview'),videoDownload=el('a','compare-video-download','比較動画を保存'),videoNote=el('p',null,'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');
+  videoSeconds.type='number';videoSeconds.min=1;videoSeconds.max=15;videoSeconds.step=1;videoSeconds.value='2';
+  videoStatus.setAttribute('role','status');videoPreview.controls=true;videoPreview.hidden=true;videoPreview.style.maxWidth='100%';videoDownload.hidden=true;videoCancel.disabled=true;
+  host.append(videoNote,label('動画の長さ（秒）',videoSeconds),videoStart,videoCancel,videoStatus,videoPreview,videoDownload);
+  let videoUrl,videoActive;
+  function clearVideo(){videoPreview.pause?.();videoPreview.removeAttribute?.('src');videoPreview.src='';videoPreview.load?.();videoPreview.hidden=true;videoDownload.removeAttribute?.('href');videoDownload.href='';videoDownload.hidden=true;if(videoUrl){URLApi.revokeObjectURL(videoUrl);videoUrl=undefined;}}
+  function videoCapability(){try{return videoApi?.capabilities?.()??{supported:false,reason:tr('このブラウザでは比較動画を作成できません。')};}catch(error){return {supported:false,reason:error.message};}}
+  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
+  videoStart.onclick=async()=>{
+    if(videoActive)return;
+    clearVideo();const token={cancelled:false};videoActive=token;syncVideoCapability();
+    try{
+      const capability=videoCapability();if(!capability.supported)throw Error(tr('このブラウザでは比較動画を作成できません。'));
+      const seconds=Number(videoSeconds.value);if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error(tr('長さは1〜15秒の整数で指定してください。'));
+      const state=capture({validate:true});videoStatus.textContent=tr('動画を作成しています。');
+      const result=await videoApi.start(state,{seconds,onProgress:value=>{const fraction=typeof value==='number'?value:value?.fraction;if(videoActive===token&&!token.cancelled&&Number.isFinite(fraction))videoStatus.textContent=tr('動画を作成しています。')+' '+Math.round(Math.max(0,Math.min(1,fraction))*100)+'%';}});
+      if(videoActive!==token||token.cancelled)return;
+      if(!(result?.blob instanceof Blob)||!result.blob.size||!/^video\/webm(?:;|$)/.test(result.blob.type))throw Error('Invalid comparison video artifact');
+      videoUrl=URLApi.createObjectURL(result.blob);videoPreview.src=videoUrl;videoPreview.hidden=false;videoDownload.href=videoUrl;videoDownload.download='case-comparison-orbit.webm';videoDownload.hidden=false;
+      videoStatus.textContent=tr('動画を作成しました。再生して確認し、保存リンクから保存してください。');
+    }catch(error){clearVideo();videoStatus.textContent=token.cancelled?tr('動画作成を中止しました。'):error.message;}
+    finally{if(videoActive===token){videoActive=undefined;if(token.cancelled){clearVideo();videoStatus.textContent=tr('動画作成を中止しました。');}syncVideoCapability();}}
+  };
+  videoCancel.onclick=async()=>{if(!videoActive)return;videoActive.cancelled=true;clearVideo();videoStatus.textContent=tr('動画作成を中止しています。');try{await videoApi.cancel();}catch(error){videoStatus.textContent=error.message;}};
+  syncVideoCapability();
   anchor.after(host);
   host.addEventListener('toggle', refresh);
   // Per-case access when the store supports it (no whole-store clone); other stores keep the list() path.
@@ -47,6 +77,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   const names = () => typeof store.names === 'function' ? store.names() : store.list().map(c => c.name);
   function refresh() {
     syncHint();
+    syncVideoCapability();
     for (const s of [a, b]) { const keep = s.value; s.replaceChildren(); for (const [i, name] of names().entries()) { const o = doc.createElement('option'); o.value = i; o.textContent = name; s.append(o); } s.value = keep && Number(keep) < count() ? keep : s === a ? '0' : '1'; }
   }
   function conditions(index) {

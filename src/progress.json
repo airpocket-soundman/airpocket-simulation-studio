@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T04:09:44.182Z",
+  "updatedAt": "2026-10-17T04:32:21.147Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-15",
@@ -1367,13 +1367,13 @@
       "titleEn": "Synchronized side-by-side case viewer and video export",
       "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
       "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
-      "acceptance": "2ケースを共通カメラ・表示量・色範囲・倍率・保存物理時刻で左右比較。API/MCP意味操作のPNG/回転WebMジョブ、SHA付きページ取得・中止・解放、portable comparison-view v1手動保存/CAS取込を実装。localhost実ChromeでPNG・状態復元、再読込後の逆順/新IDケース再対応、stale/不正拒否、GUI設定取込を確認。VP9 WebMは1280x640・要求2秒で4フレーム/3種類の画像ハッシュを確認し、5秒録画中止で成果物なし・次PNG成功、入力/ケース/表示/比較設定不変。負荷下の回転確認で24fpsの滑らかさは保証しない。初回の空録画失敗も証跡に保持。GUI動画・時間/変形アニメーション・自動保存・滑らかな前面再生・公開HTTPS・一般形状・GUIダウンロード完了・installed MCP実行は残る。",
-      "acceptanceEn": "Two-case comparison shares camera/field/range/scale/stored physical time. Implemented semantic API PNG/orbit-WebM jobs with hashed artifact pages/cancel/release and portable comparison-view v1 manual save/CAS import. Localhost real Chrome verified PNG/restoration, reversed/new-ID rebinding after reload, stale/invalid refusals and GUI settings import. VP9 WebM was 1280x640: requested 2 s decoded 4 frames with 3 distinct images; cancelling 5 s returned no artifact and next PNG succeeded with viewer/input/cases/comparison unchanged. Motion under load is verified, not smooth 24fps; the initial empty recording failure is retained. GUI video, time/deformation animation, automatic storage, smooth foreground playback, public HTTPS, general geometry, GUI download completion and installed-MCP execution remain open.",
+      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。自動保存・時間/変形動画・GIF/MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。",
+      "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Automatic storage, time/deformation video, GIF/MP4 are not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-17: 回転WebMをlocalhost実Chromeで確認。VP9/1280x640/SHA一致、要求2秒で4フレーム（0/0.078/1.039/2.069秒）・画像ハッシュ3種。物理時刻5秒25/30°C固定、中止後成果物なし/次PNG成功/元の2.01秒補間状態も完全保持。最終添付21,546バイト/SHA接頭辞4deffc（以前の成功・失敗はattemptsに区別）。CPU負荷下で24fpsの滑らかさは未確認。初回空録画は失敗保持。GUI動画・時間アニメーション・前面の滑らかさ・公開HTTPS・一般形状は残る。",
-      "lastUpdateEn": "2026-10-17: Localhost real Chrome verified orbit WebM: VP9/1280x640/SHA, requested 2 s decoded 4 frames with 3 distinct images at 0/0.078/1.039/2.069 s. Physical time 5 s/25–30 degC stayed fixed; cancel withheld artifact and next PNG succeeded with the original 2.01 s interpolated state unchanged. Final attachment: 21,546 bytes/SHA prefix 4deffc; prior success/failure remain separate attempts. Smooth24fps under CPU load is not verified; initial empty recording remains failed. GUI video, time animation,smooth foreground playback, public HTTPS/general geometry remain open.",
-      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json"
+      "lastUpdate": "2026-10-17: GUI比較動画の作成・ネイティブプレビュー再生（1280x640、終了2.738秒）・中止・再作成をlocalhost実Chromeで確認。全経路で元2.01秒補間表示と入力/ケース/比較設定は完全一致。保存リンク1回クリック後の10秒待機はタイムアウトで、ダウンロード完了は未確認。",
+      "lastUpdateEn": "2026-10-17: Localhost real Chrome verified GUI video creation/native 1280x640 preview playback ending 2.738 s/cancel/restart. Every path preserved original 2.01 s interpolation and input/cases/panel exactly. One save-link click timed out after 10 s; download completion remains unverified.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json"
     },
     {
       "id": "VIEWTIME",
