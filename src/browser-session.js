@@ -113,7 +113,7 @@ export function createBrowserSession({studio,analysis,jobResults,view,resultView
    if(method==='setResultView'){if(!resultView||busy()||editing)throw Error('Result view unavailable or browser busy');return resultView.set(args,{guard:valid});}
    if(method==='exportCapabilities'){if(!exports)throw Error('Export API unavailable');return exports.capabilities();}
    if(method==='startExport'){if(!exports||editing||executionBusy())throw Error('Export unavailable or browser busy');editing=true;try{const job=await exports.start(args,{guard:valid});ownedExports.add(job.jobId);return job;}finally{editing=false;}}
-   if(method==='startCompareExport'){if(typeof exports?.startCompare!=='function'||editing||executionBusy())throw Error('Comparison export unavailable or browser busy');editing=true;try{const job=await exports.startCompare(args,{guard:valid});ownedExports.add(job.jobId);return job;}finally{editing=false;}}
+   if(method==='startCompareExport'){if(typeof exports?.startCompare!=='function'||editing||executionBusy())throw Error('Comparison export unavailable or browser busy');editing=true;try{const job=await exports.startCompare(args,{guard:valid,jobGuard:()=>epoch===invocationEpoch});ownedExports.add(job.jobId);return job;}finally{editing=false;}}
    if(method==='exportStatus')return exports.status(args);
    if(method==='exportArtifact')return exports.artifact(args);
    if(method==='cancelExport')return exports.cancel(args);

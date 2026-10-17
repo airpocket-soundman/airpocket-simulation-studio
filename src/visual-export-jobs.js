@@ -93,38 +93,46 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
  function finish(job,blob){
   return (async()=>{
    if(job.state!=='running'||!jobs.has(job.jobId))return;
+   job.assertLifetime?.();
    const format=job.request.format,mime=format==='png'?'image/png':format==='png-sequence'?'application/zip':'video/webm';
    if(!(blob instanceof Blob)||!blob.size||!(blob.type===mime||mime==='video/webm'&&blob.type.startsWith('video/webm;')))throw Error('Renderer returned an invalid visual artifact');
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
    const bytes=new Uint8Array(await blob.arrayBuffer());
    if(job.state!=='running'||!jobs.has(job.jobId))return;
+   job.assertLifetime?.();
    // Reserve before hashing so overlapping completions share one exact byte budget.
    if(bytes.length>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
    retainedBytes+=bytes.length;job.bytes=bytes;
    try{
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
     if(job.state!=='running'||!jobs.has(job.jobId))return;
+    job.assertLifetime?.();
     const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=job.request.target==='comparison'?comparisonManifest(job,blob.type,bytes,sha256):format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):buildManifest(job,blob.type,bytes,sha256);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`${job.request.target==='comparison'?'comparison':'result'}-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
    }finally{if(job.state!=='completed'&&job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}}
   })();
  }
- async function start(args,{guard=()=>true}={},compare=false){
+ async function start(args,{guard=()=>true,jobGuard=guard}={},compare=false){
    if(compare&&(typeof prepareCompare!=='function'||typeof renderCompare!=='function'))throw Error('Comparison export is unavailable');
    const normalized=compare?comparisonRequest(args):request(args),key=(compare?'comparison:':'result:')+canonical(normalized),prior=requests.get(normalized.requestId);
    if(prior){if(prior.key!==key)throw Error('Visual export requestId conflict');await prior.ready;return summary(find({jobId:prior.jobId}));}
    if(!guard())throw Error('Visual export request expired');
    if(renderActive||Array.from(requests.values()).some(r=>!r.jobId))throw Error('A visual export is already active');
    if(jobs.size+Array.from(requests.values()).filter(r=>!r.jobId).length>=maxJobs)throw Error('Visual export job limit reached; release a job');
-   const startEpoch=epoch;let resolve,reject;const ready=new Promise((yes,no)=>{resolve=yes;reject=no;});ready.catch(()=>{});const entry={key,ready,jobId:null};requests.set(normalized.requestId,entry);
+   const startEpoch=epoch;let accepted=false;
+   // Source leases retain this same guard: deadline before admission, session lifetime afterwards.
+   const sourceGuard=()=>epoch===startEpoch&&(accepted?jobGuard():guard()&&jobGuard());
+   let resolve,reject;const ready=new Promise((yes,no)=>{resolve=yes;reject=no;});ready.catch(()=>{});const entry={key,ready,jobId:null};requests.set(normalized.requestId,entry);
    try{
-    const snapshot=compare?await prepareCompare(copy(normalized),{guard:()=>guard()&&epoch===startEpoch}):prepare?await prepare(copy(normalized)):{resultRevision:normalized.expectedResultRevision,view:normalized.view};
-    if(!guard()||epoch!==startEpoch)throw Error('Visual export request expired');
+    const snapshot=compare?await prepareCompare(copy(normalized),{guard:sourceGuard}):prepare?await prepare(copy(normalized)):{resultRevision:normalized.expectedResultRevision,view:normalized.view};
+    if(!sourceGuard())throw Error('Visual export request expired');
     if(!compare&&snapshot?.resultRevision!==normalized.expectedResultRevision)throw Error('Displayed result revision conflict');
     let comparison;if(compare){comparison=JSON.parse(canonicalJson(snapshot?.comparison));if(!comparison||typeof comparison!=='object'||Array.isArray(comparison)||new TextEncoder().encode(JSON.stringify(comparison)).length>3000)throw Error('Invalid or oversized comparison export metadata');}
     if(!snapshot.view||typeof snapshot.view!=='object'||Array.isArray(snapshot.view))throw Error('Visual export requires frozen view settings');
     const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate visual export job ID');
     const physicalRevision=typeof snapshot.physicalRevision==='string'&&/^sha256:[0-9a-f]{64}$/.test(snapshot.physicalRevision)?snapshot.physicalRevision:undefined;
-    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison))}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null};jobs.set(jobId,job);entry.jobId=jobId;
+    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison))}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
+    if(!sourceGuard())throw Error('Visual export request expired');
+    accepted=true;jobs.set(jobId,job);entry.jobId=jobId;
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
     renderActive=true;let output;try{output=(compare?renderCompare:render)({...copy(normalized),...(compare?{comparison:copy(job.comparison),context:snapshot.context}:{}),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}

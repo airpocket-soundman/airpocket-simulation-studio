@@ -38,3 +38,12 @@ test('comparison preparation rejects competing starts and expires on disconnect'
  const pending=session.call('startCompareExport',{});await assert.rejects(session.call('startExport',{}),/busy/);await assert.rejects(session.call('startCompareExport',{}),/busy/);session.disconnect();resume();await assert.rejects(pending,/expired/);
  await assert.rejects(createBrowserSession({exports:{}}).call('startCompareExport',{}),/unavailable/);
 });
+
+test('comparison admission deadline and accepted-job session lifetime are separate',async(t)=>{
+ let now=100,admission,lifetime; t.mock.method(Date,'now',()=>now);
+ const cancelled=[],session=createBrowserSession({exports:{startCompare:async(_,{guard,jobGuard})=>{admission=guard;lifetime=jobGuard;assert.equal(guard(),true);assert.equal(jobGuard(),true);return {jobId:'long'};},cancel:({jobId})=>cancelled.push(jobId)}});
+ await session.call('startCompareExport',{}, {expiresAt:15100});now=15100;
+ assert.equal(admission(),false);assert.equal(lifetime(),true);
+ await assert.rejects(session.call('startCompareExport',{}, {expiresAt:15100}),/expired/);
+ session.disconnect();assert.equal(lifetime(),false);assert.deepEqual(cancelled,['long']);
+});
