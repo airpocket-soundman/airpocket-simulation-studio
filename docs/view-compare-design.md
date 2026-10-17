@@ -63,3 +63,9 @@ toleranceSecondsは任意で、要求区間全体で生じ得る最大時刻ず�
 比較欄の動画種類で保存時刻の時間変化を選び、開始/終了と必要ならずれ許容を入力します。既存のプレビュー・明示保存・中止・完了後の復元と共有キューを使います。動画種類/開始/終了/時間動画の許容はportable設定・自動保存には追加しません。MediaRecorderの実時間録画と目標24fpsは従来どおりで、枚数・滑らかさは保証しません。
 
 2026-10-17 localhost実Chrome（小規模熱2ケース）の[時間動画証跡](evidence/2026-10-17-comparison-time-video-real-chrome.json)。物理0..10秒・表示2秒のAPI動画は27,294 bytesのVP9 WebM（1280x640）でSHA-256を照合し、外部デコードで4フレーム・4種類の画像を確認しました。共通色範囲20..40°Cと固定カメラ、近傍保存時刻/ずれのmanifest、範囲外・許容0・熱流束の拒否を確認。GUIでは空欄の専用許容で作成、ネイティブプレビュー、5秒要求の中止、2秒で再作成と利用者再生の終了を確認しました。完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI動画自体の外部デコードではなくAPI証跡と区別します。実機音響・公開HTTPS・一般形状・滑らかな24fps/枚数保証・GUIダウンロード完了は未確認です。
+
+## 比較の変形動画（表示倍率のみ）
+
+startCompareExportのWebMでanimation:"deformation"を指定します。対象は線形弾性2ケースのdisplacement/stressで、有限かつ非zeroの保存変位と正の明示deformScaleが必要です。timeSeconds/toleranceSeconds/startTimeSeconds/endTimeSecondsは拒否します。GUIの「保存変位の倍率変化（片道）」も同じキューを使います。カメラ・色範囲・結果値を固定し、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理時間・載荷履歴・新しい解析結果ではありません。modal/超弾性/塑性/熱/音響/流体は対象外です。manifest.comparison.deformationAnimationに倍率端点・scalePolicy:linear・固定保存結果・loadHistory:falseを記録します。portable設定のschemaと既存回転/時間動画は変更しません。
+
+2026-10-17 localhost実Chromeの[部分検証証跡](evidence/2026-10-17-comparison-deformation-video-real-chrome.json)。実solveElasticで解いた小規模2ケース（3/6 N、表示倍率200）でGUIの2秒動画作成・1280x640ネイティブプレビュー・利用者再生開始、5秒要求の中止、2秒再作成を確認しました。3経路後それぞれ元2.01秒補間表示/入力/ケース/比較設定が完全一致しました。再生終了・再作成後の再生動作は未確認です。API初回はComparison export expiredで失敗し、2回目はブラウザ再接続/ページ初期化に伴うexportStatus timeoutで中断しました（原因未確定）。実機API成果物のbytes/SHA/manifest・外部デコード・独立した形状変化・保存動画/画像は未取得です。公開HTTPS・一般形状・滑らかな24fps・GUIダウンロード完了も未確認。部分検証を全面受入済みとして扱いません。

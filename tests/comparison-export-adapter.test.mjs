@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createComparisonExportAdapter} from '../src/comparison-export-adapter.js';
+import {solveElastic} from '../src/fem-core.js';
 const camera=()=>({position:[5,5,5],target:[0,0,0],up:[0,1,0],fov:40});
 function fixture({video=false}={}){
  const state={valid:true,busy:false,current:true,reads:0,renders:0,encodes:0,checks:0,locks:0,releases:0},defaults={camera:camera(),deformScale:2},canvas={width:1280,height:640},references=[{caseId:'a',expectedRevision:'a-rev'},{caseId:'b',expectedRevision:'b-rev'}];
@@ -70,4 +71,15 @@ test('time recording releases the host lock after frame/source/cancellation fail
   await assert.rejects(adapter.render({...prepared,format:'webm',animation:'time',seconds:2,signal:controller.signal}),/failed|changed|cancelled/);
   assert.equal(locked,false);assert.equal(releases,1);assert.deepEqual(view,before);
  }
+});
+
+test('actual elastic results ramp display scale linearly while camera scalar range and physical values remain fixed',async()=>{
+ const mesh={nodes:[0,0,0,10,0,0,0,10,0,0,0,10],tetrahedra:[[0,1,2,3]]},outputs=[1,2].map(load=>({mesh,result:solveElastic(mesh,{youngModulus:1e9,poissonRatio:.3},{fixed:[0,1,2],forces:[{node:3,value:[0,0,load]}]})})),before=structuredClone(outputs),calls=[];
+ let locks=0,releases=0;
+ const adapter=createComparisonExportAdapter({cases:{readSource:async ref=>({caseId:ref.caseId,revision:'rev',name:ref.caseId,output:outputs[Number(ref.caseId)],assertCurrent(){}})},getDefaults:()=>({camera:camera(),deformScale:2}),renderComparison:args=>{calls.push(args);const maximum=Math.max(...outputs.map(o=>o.result.maxDisplacementMm));return {canvas:{width:1280,height:640},panels:[],colorRange:args.colorRange??{field:'displacement',minimum:0,maximum},unit:'mm'};},acquireHostLock:()=>{locks++;return {assertOwned(){},release(){releases++;}};},recordVideo:async({renderFrame,camera:shared,animation})=>{assert.equal(animation,'deformation');for(const phase of [0,.25,1])renderFrame({...shared,position:[99,99,99]},{phase});return new Blob(['video'],{type:'video/webm'});}});
+ const request={format:'webm',animation:'deformation',field:'displacement',references:[{caseId:'0'},{caseId:'1'}],deformScale:20},prepared=await adapter.prepare(request);
+ assert.equal(prepared.comparison.deformationAnimation.visualizationOnly,true);assert.equal(prepared.comparison.deformationAnimation.scalePolicy,'linear');assert.equal(prepared.comparison.deformationAnimation.resultValues,'fixed-saved-result');
+ await adapter.render({...prepared,format:'webm',animation:'deformation',seconds:2});assert.deepEqual(calls.map(c=>c.deformScale),[0,0,5,20]);assert.ok(calls.every(c=>c.visualDeformation));assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(camera())));assert.ok(calls.slice(1).every(c=>JSON.stringify(c.colorRange)===JSON.stringify(prepared.comparison.colorRange)));assert.equal(locks,1);assert.equal(releases,1);assert.deepEqual(outputs,before);
+ const count=calls.length;for(const changed of [{...request,deformScale:0},{...request,timeSeconds:0},{...request,startTimeSeconds:0},{...request,toleranceSeconds:0}])await assert.rejects(adapter.prepare(changed));
+ const missing={...request};delete missing.deformScale;await assert.rejects(adapter.prepare(missing),/explicit positive/);assert.equal(calls.length,count);
 });

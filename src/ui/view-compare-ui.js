@@ -5,6 +5,7 @@ import {validateComparisonSettings} from '../comparison-view-settings.js';
 import {resolveSharedTime} from '../view-compare-layout.js';
 import {createComparisonRenderer} from '../view-compare-renderer.js';
 const T = {
+  '保存変位の倍率変化（片道）':'Saved displacement scale (one way)','変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':'Deformation video fixes the saved linear-elastic result and changes only its visualization multiplier linearly from zero to the requested scale, one way. It is not a physical load history.',
   '保存時刻のずれ許容（秒、空欄は制限なし）':'Stored-time offset tolerance (seconds, blank for no limit)','動画の種類':'Video type','共通カメラの回転':'Shared camera orbit','保存時刻の時間変化':'Stored-frame time history','開始物理時刻（秒）':'Start physical time (seconds)','終了物理時刻（秒）':'End physical time (seconds)',
   '時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'Time video fixes the camera and shows nearest stored frames within the requested physical range, with actual times and offsets; no interpolation.',
   '開始・終了の物理時刻を0以上の増加する範囲で指定してください。':'Enter an increasing physical time range starting at zero or above.',
@@ -49,7 +50,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   const file=el('input','compare-settings-file');file.type='file';file.accept='.json,application/json';file.disabled=!presetApi;
   host.append(label('比較設定JSON',json),save,load,label('比較設定ファイル',file),reset);
   const videoKind=el('select','compare-video-kind'),videoFrom=el('input','compare-video-from'),videoTo=el('input','compare-video-to'),videoTolerance=el('input','compare-video-tolerance');
-  for(const [value,text]of [['orbit','共通カメラの回転'],['time','保存時刻の時間変化']]){const option=el('option',null,tr(text));option.value=value;videoKind.append(option);}videoKind.value='orbit';
+  for(const [value,text]of [['orbit','共通カメラの回転'],['time','保存時刻の時間変化'],['deformation','保存変位の倍率変化（片道）']]){const option=el('option',null,tr(text));option.value=value;videoKind.append(option);}videoKind.value='orbit';
   for(const control of [videoFrom,videoTo,videoTolerance]){control.type='number';control.min=0;control.step='any';control.value='';}
   const videoSeconds=el('input','compare-video-seconds'),videoStart=el('button','compare-video-start','比較動画を作る'),videoCancel=el('button','compare-video-cancel','動画作成を中止'),videoStatus=el('p','compare-video-status'),videoPreview=el('video','compare-video-preview'),videoDownload=el('a','compare-video-download','比較動画を保存'),videoNote=el('p',null,'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');
   videoSeconds.type='number';videoSeconds.min=1;videoSeconds.max=15;videoSeconds.step=1;videoSeconds.value='2';
@@ -58,7 +59,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   let videoUrl,videoActive;
   function clearVideo(){videoPreview.pause?.();videoPreview.removeAttribute?.('src');videoPreview.src='';videoPreview.load?.();videoPreview.hidden=true;videoDownload.removeAttribute?.('href');videoDownload.href='';videoDownload.hidden=true;if(videoUrl){URLApi.revokeObjectURL(videoUrl);videoUrl=undefined;}}
   function videoCapability(){try{return videoApi?.capabilities?.()??{supported:false,reason:tr('このブラウザでは比較動画を作成できません。')};}catch(error){return {supported:false,reason:error.message};}}
-  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoKind.disabled=!!videoActive;videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoKind.value!=='time';videoNote.textContent=tr(videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
+  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoKind.disabled=!!videoActive;videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoKind.value!=='time';videoNote.textContent=tr(videoKind.value==='deformation'?'変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
   videoKind.onchange=()=>{if(!videoActive)clearVideo();syncVideoCapability();};
   videoStart.onclick=async()=>{
     if(videoActive)return;
@@ -74,7 +75,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
         if(!['temperature','instantPressure'].includes(state.settings.field)||infos.some(info=>!Array.isArray(info.frameTimes)||info.frameTimes.length<2||!info.frameTimes.every((t,i)=>Number.isFinite(t)&&t>=0&&(!i||t>info.frameTimes[i-1]))))throw Error(tr('時間動画には両ケースの保存済み温度または瞬時音圧フレームが必要です。'));
         if(infos.some(info=>startTimeSeconds<info.frameTimes[0]||endTimeSeconds>info.frameTimes.at(-1)))throw Error('Physical time range is outside shared stored frames');
         delete state.settings.timeSeconds;range={startTimeSeconds,endTimeSeconds};
-      }else if(animation==='orbit')state=capture({validate:true});else throw Error('Invalid comparison video animation');
+      }else if(animation==='deformation'){state=capture({validate:true});if(!['displacement','stress'].includes(state.settings.field)||!(state.settings.deformScale>0)||state.settings.timeSeconds!==undefined||state.settings.toleranceSeconds!==undefined)throw Error('Deformation video requires displacement/stress, positive visualization scale and no physical time settings');}else if(animation==='orbit')state=capture({validate:true});else throw Error('Invalid comparison video animation');
       videoStatus.textContent=tr('動画を作成しています。');
       const result=await videoApi.start(state,{seconds,animation,...range,onProgress:value=>{const fraction=typeof value==='number'?value:value?.fraction;if(videoActive===token&&!token.cancelled&&Number.isFinite(fraction))videoStatus.textContent=tr('動画を作成しています。')+' '+Math.round(Math.max(0,Math.min(1,fraction))*100)+'%';}});
       if(videoActive!==token||token.cancelled)return;

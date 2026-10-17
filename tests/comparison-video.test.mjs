@@ -95,3 +95,9 @@ test('stored-time recording passes phase to the renderer and preserves the share
  h.advance(250);h.advance(1000);await recording;
  assert.deepEqual(calls.map(c=>c.frame),[{phase:.25,animation:'time'},{phase:1,animation:'time'}]);assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(original)));assert.equal(h.progress.at(-1).kind,'time');assert.equal(h.trackStops,1);
 });
+
+test('deformation recording forwards linear phase with a fixed shared camera and releases recording resources',async()=>{
+ const h=harness(),calls=[],original=structuredClone(h.request.camera),recording=recordComparisonVideo({...h.request,animation:'deformation',renderFrame:(camera,state)=>{calls.push({camera,state});return {width:1280,height:640};}},h.env);
+ h.advance(250);h.advance(1000);await recording;
+ assert.deepEqual(calls.map(c=>c.state.phase),[.25,1]);assert.ok(calls.every(c=>c.state.animation==='deformation'));assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(original)));assert.equal(h.progress.at(-1).kind,'deformation');assert.equal(h.trackStops,1);assert.equal(h.pending,0);
+});

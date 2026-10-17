@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "partial",
+  "environment": {
+    "browser": "real Chrome",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "authenticated repository semantic bridge; not installed MCP",
+    "load": "First API attempt overlapped the parent full test suite; second attempt followed full-test completion. CUA later reported the browser unavailable and reconnected the same extension with a new browser ID; the QA page was then observed reset to its initial model. Cause not established."
+  },
+  "fixture": {
+    "solver": "actual solveElastic from src/fem-core.js, CPU JavaScript pcg-strict",
+    "mesh": "single1mm tetrahedron",
+    "fixed": "base face",
+    "loadsN": [
+      3,
+      6
+    ],
+    "loadRegion": "one side face via transferConditions",
+    "youngModulusPa": 10000000000.0,
+    "poissonRatio": 0.3,
+    "maxDisplacementMm": [
+      0.0015600000000000004,
+      0.003120000000000001
+    ],
+    "visualizationScale": 200,
+    "mainViewer": "Separate thermal result displayed at2.01s with interpolated:true, retained while structural cases were imported"
+  },
+  "review": {
+    "blockingFindings": [],
+    "scope": "Independent read-only pure deformation plan/adapter/recorder integration; linear0->S, fixed camera/range/scalars and refusal guards reviewed."
+  },
+  "gui": {
+    "animation": "deformation",
+    "scalePolicy": "linear0->200 visualization only",
+    "completed": {
+      "requestedSeconds": 2,
+      "status": "動画を作成しました。再生して確認し、保存リンクから保存してください。",
+      "preview": {
+        "hidden": false,
+        "videoWidth": 1280,
+        "videoHeight": 640,
+        "readyState": 4,
+        "autoplay": false,
+        "controls": true,
+        "pausedInitially": true,
+        "durationSeconds": 2.078
+      },
+      "nativePlayback": {
+        "trustedAction": "Space",
+        "pausedAfterStart": false,
+        "currentTimeAfterStart": 0.030984,
+        "endedVerified": false
+      }
+    },
+    "cancelled": {
+      "requestedSeconds": 5,
+      "status": "動画作成を中止しました。",
+      "previewHidden": true,
+      "previewSrc": ""
+    },
+    "restarted": {
+      "requestedSeconds": 2,
+      "preview": {
+        "hidden": false,
+        "readyState": 4,
+        "videoWidth": 1280,
+        "videoHeight": 640,
+        "durationSeconds": 2.865
+      },
+      "trustedSpacePressed": true,
+      "playbackAfterRestartIndependentlyObserved": false
+    },
+    "stateChecks": [
+      {
+        "label": "deformation-completed",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      },
+      {
+        "label": "deformation-cancelled",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      },
+      {
+        "label": "deformation-restarted",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      }
+    ]
+  },
+  "apiAttempts": [
+    {
+      "status": "failed",
+      "reason": "Comparison export expired",
+      "partialArtifactRetrieved": false,
+      "jobRelease": "release attempted in finally"
+    },
+    {
+      "status": "interrupted",
+      "reason": "Browser command timed out during exportStatus; CUA browser connection became unavailable and reconnected; page subsequently observed reset",
+      "partialArtifactRetrieved": false,
+      "jobRecovery": "No retained jobs or GUI Blob recoverable after page reset; no additional recording started."
+    }
+  ],
+  "notVerified": [
+    "API artifact bytes/SHA/manifest in real Chrome",
+    "Independent WebM decoding or actual shape change",
+    "Screenshot or retained GUI Blob (page reset before capture)",
+    "Native playback completion after restart",
+    "Current four-state equality after the external page reset (three prior GUI paths were verified exactly)",
+    "Root cause of browser reconnect/page reset",
+    "Public HTTPS, general geometries, modal/nonlinear deformation, smooth24fps, physical load-history animation",
+    "GUI download completion"
+  ],
+  "artifacts": {
+    "retainedVideo": null,
+    "screenshot": null
+  },
+  "followup": "Repeat bounded artifact/shape QA in a stable browser session; do not treat this partial record as full deformation-video acceptance."
+}

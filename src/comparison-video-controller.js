@@ -21,10 +21,11 @@ export function createComparisonVideoController({cases,exports,id=()=>crypto.ran
     const capture=clone(raw);
     if(!capture||typeof capture!=='object'||Array.isArray(capture)||Object.keys(capture).some(key=>!['indices','settings'].includes(key))||!Array.isArray(capture.indices)||capture.indices.length!==2||!capture.indices.every(i=>Number.isSafeInteger(i)&&i>=0)||capture.indices[0]===capture.indices[1])throw Error('Select two distinct comparison cases');
     if(!Number.isInteger(seconds)||seconds<1||seconds>15||typeof onProgress!=='function')throw Error('Invalid comparison video duration or progress callback');
-    if(!['orbit','time'].includes(animation))throw Error('Invalid comparison video animation');
+    if(!['orbit','time','deformation'].includes(animation))throw Error('Invalid comparison video animation');
     if(animation==='time'&&(!Number.isFinite(startTimeSeconds)||!Number.isFinite(endTimeSeconds)||startTimeSeconds<0||endTimeSeconds<=startTimeSeconds))throw Error('Comparison time video requires an increasing physical time range');
-    if(animation==='orbit'&&(startTimeSeconds!==undefined||endTimeSeconds!==undefined))throw Error('Physical range is only valid for time video');
+    if(animation!=='time'&&(startTimeSeconds!==undefined||endTimeSeconds!==undefined))throw Error('Physical range is only valid for time video');
     const settings=validateComparisonSettings(animation==='time'?{...capture.settings,timeSeconds:startTimeSeconds}:capture.settings);if(animation==='time')delete settings.timeSeconds;
+    if(animation==='deformation'&&(!['displacement','stress'].includes(settings.field)||!(settings.deformScale>0)||settings.timeSeconds!==undefined||settings.toleranceSeconds!==undefined))throw Error('Deformation video requires displacement/stress, positive visualization scale and no time settings');
     const listing=clone(await cases.list());check();
     if(!Array.isArray(listing.cases))throw Error('Invalid saved-case listing');
     const references=capture.indices.map(index=>{const row=listing.cases[index];if(!row||typeof row.caseId!=='string'||!row.caseId||!hash(row.revision))throw Error('Invalid comparison case reference');return {caseId:row.caseId,expectedRevision:row.revision};});

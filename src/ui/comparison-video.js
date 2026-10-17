@@ -22,7 +22,7 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
  const verify=env.hasVideoFrames??hasVideoFrames,maxBytes=env.maxBytes??MAX_BYTES;
  const flushWait=env.flushWait??(milliseconds=>new Promise(resolve=>setTimeout(resolve,milliseconds)));
  if(signal?.aborted)throw cancelled();
- if(!['orbit','time'].includes(animation))throw Error('Comparison video supports orbit or stored time only');
+ if(!['orbit','time','deformation'].includes(animation))throw Error('Comparison video supports orbit, stored time or visual deformation only');
  if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error('Comparison video duration must be an integer from 1 through 15');
  if(!Number.isSafeInteger(maxBytes)||maxBytes<1||maxBytes>MAX_BYTES)throw Error('Invalid comparison video byte limit');
  if(typeof renderFrame!=='function'||typeof raf!=='function'||typeof cancel!=='function')throw Error('Comparison video rendering is unavailable');
@@ -48,7 +48,7 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
    failPlayback=reject;
    const tick=()=>{try{
     if(failure)throw failure;if(signal?.aborted)throw cancelled();
-    const phase=Math.max(0,Math.min(1,(now()-started)/(seconds*1000))),frame=renderFrame(animation==='time'?structuredClone(originalCamera):orbit(originalCamera,phase),{phase,animation});
+    const phase=Math.max(0,Math.min(1,(now()-started)/(seconds*1000))),frame=renderFrame(animation==='orbit'?orbit(originalCamera,phase):structuredClone(originalCamera),{phase,animation});
     if(!frame||frame.width!==width||frame.height!==height||initialCanvas.width!==width||initialCanvas.height!==height)throw Error('Comparison canvas resolution changed during recording');
     if(frame!==initialCanvas){const context=initialCanvas.getContext('2d');if(!context)throw Error('Comparison canvas context is unavailable');context.clearRect(0,0,width,height);context.drawImage(frame,0,0);}
     requestFrame();renderedFrames++;motion||=phase>0&&phase<1;onProgress({fraction:phase,kind:animation});

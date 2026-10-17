@@ -48,3 +48,7 @@ test('final-only fields have no thermal time axis and renderer errors preserve c
  const failing=harness({failAt:3});assert.throws(()=>failing.renderer.render(failing.request),/Renderer failed/);
  assert.equal(failing.displayed,'original');assert.equal(failing.canvases,0);
 });
+
+test('visual deformation overlay explicitly distinguishes display amplification from loading history',()=>{
+ const h=harness();h.renderer.render({...h.request,visualDeformation:true});assert.ok(h.texts.some(t=>t.includes('Visual deformation only; not a loading history')));
+});
