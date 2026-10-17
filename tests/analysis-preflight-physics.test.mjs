@@ -47,7 +47,7 @@ test('acoustic harmonic, sweep and transient: required-input and branch codes ar
 test('completePreflight stays false and coverage lists remaining checks per physics',()=>{
  for(const [contract,p] of [['thermal-conduction',thermal()],['acoustic-wave',acoustic()]]){
   const r=preflightProject(p,{}, {target:'node'});assert.equal(r.completePreflight,false);assert.equal(r.physicsCoverage.contract,contract);assert.equal(r.physicsCoverage.completePreflight,false);
-  assert.ok(r.physicsCoverage.implemented.includes('unit magnitude warning'));assert.ok(r.physicsCoverage.remaining.includes('Mesh quality and element validity after generation'));
+  assert.ok(r.physicsCoverage.implemented.includes('unit magnitude warning'));assert.ok(r.physicsCoverage.postMeshImplemented.some(check=>check.includes('Finite Tet4 nodes/connectivity/volume/gradients')));assert.ok(r.physicsCoverage.remaining.some(check=>check.includes('physical accuracy')));
  }
  assert.ok(physicsCoverage('acoustic-wave').postMeshImplemented.some(x=>x.startsWith('Wavelength-per-element')));assert.ok(!physicsCoverage('acoustic-wave').remaining.some(x=>x.startsWith('Wavelength-per-element')));
  assert.ok(physicsCoverage('thermal-conduction').postMeshImplemented.some(x=>x.startsWith('Connected-component anchoring')));assert.ok(!physicsCoverage('thermal-conduction').remaining.some(x=>x.startsWith('Connected-component')));

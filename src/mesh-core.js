@@ -1,16 +1,21 @@
+import {tetraVolume} from './tetra-geometry.js';
+import {analyzeMeshValidity} from './mesh-validity.js';
 import {fragmentCadPatches} from './cad-patches.js';
 import {addTube,assertFluidSeed,selectInternalFluid} from './internal-fluid.js';
 import {sourceFingerprint} from './source-identity.js';
 import {validateFluidDomain,enclosureBounds,validateSphere} from './fluid-domain.js';
 import {validateStlSource} from './stl-source.js';
 function asciiStl(positions){const lines=['solid analysis'];for(let i=0;i<positions.length;i+=9){const p=[0,3,6].map(k=>positions.slice(i+k,i+k+3)),u=p[1].map((v,k)=>v-p[0][k]),v=p[2].map((x,k)=>x-p[0][k]),normal=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],length=Math.hypot(...normal);lines.push('facet normal '+normal.map(x=>x/length).join(' '),'outer loop',...p.map(x=>'vertex '+x.join(' ')),'endloop','endfacet');}lines.push('endsolid analysis');return new TextEncoder().encode(lines.join('\n'));}
-export function tetraVolume(nodes,t){const p=t.map(i=>nodes.slice(i*3,i*3+3)),a=p[1].map((v,i)=>v-p[0][i]),b=p[2].map((v,i)=>v-p[0][i]),c=p[3].map((v,i)=>v-p[0][i]);return (a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]))/6;}
+export {tetraVolume} from './tetra-geometry.js';
 export function inspectMesh(mesh){
- if(!Array.isArray(mesh.nodes)||mesh.nodes.length%3||!mesh.nodes.every(Number.isFinite)||!Array.isArray(mesh.tetrahedra)||!mesh.tetrahedra.length)throw Error('Invalid volume mesh');
- let volume=0,minVolume=Infinity;
- for(const t of mesh.tetrahedra){if(t.length!==4||new Set(t).size!==4||!t.every(i=>Number.isInteger(i)&&i>=0&&i<mesh.nodes.length/3))throw Error('Invalid tetrahedron');let v=tetraVolume(mesh.nodes,t);if(Math.abs(v)<1e-15)throw Error('Degenerate tetrahedron');if(v<0){[t[0],t[1]]=[t[1],t[0]];v=-v;}volume+=v;minVolume=Math.min(minVolume,v);}
- const qualityHistogram=Array(5).fill(0);let minQuality=Infinity;if(mesh.qualities){if(mesh.qualities.length!==mesh.tetrahedra.length||!mesh.qualities.every(Number.isFinite))throw Error('Invalid mesh quality data');for(const q of mesh.qualities){qualityHistogram[Math.max(0,Math.min(4,Math.floor(q*5)))]++;minQuality=Math.min(minQuality,q);}}
- return {nodeCount:mesh.nodes.length/3,elementCount:mesh.tetrahedra.length,volumeMm3:volume,minVolumeMm3:minVolume,minQuality:mesh.qualities?.length?minQuality:null,qualityHistogram};
+ // Legacy callers classify a finite short node array with elements as invalid connectivity.
+ if(Array.isArray(mesh?.nodes)&&mesh.nodes.length<12&&mesh.nodes.length%3===0&&mesh.nodes.every(Number.isFinite)&&Array.isArray(mesh.tetrahedra)&&mesh.tetrahedra.length)throw Error('Invalid tetrahedron');
+ const checked=analyzeMeshValidity(mesh);
+ if(!checked.allowed)throw Error(checked.diagnostics[0].message);
+ // Preserve the historical mesher normalization; read-only inspection never performs this swap.
+ for(const t of mesh.tetrahedra)if(tetraVolume(mesh.nodes,t)<0)[t[0],t[1]]=[t[1],t[0]];
+ const {nodeCount,elementCount,volumeMm3,minVolumeMm3,minQuality,qualityHistogram}=checked.report;
+ return {nodeCount,elementCount,volumeMm3,minVolumeMm3,minQuality,qualityHistogram};
 }
 export async function generateMesh(initialize,source,{size=5,refinements=[],maxElements=30000,planarRegions=[],cylindricalRegions=[]}={}){
  const sourceHash=await sourceFingerprint(source);

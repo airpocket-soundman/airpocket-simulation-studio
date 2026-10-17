@@ -1,9 +1,8 @@
 import {orthotropicElasticity} from './orthotropic-material.js';
 import {prepareConstraints,transformStiffness,toLocal,toGlobal} from './constraints.js';
-import {tetraVolume} from './mesh-core.js';
+import {elementGeometry} from './tetra-geometry.js';
+export {invert,elementGeometry} from './tetra-geometry.js';
 import {meshComponents} from './components.js';
-export function invert(a){const n=a.length,m=a.map((r,i)=>[...r,...Array.from({length:n},(_,j)=>i===j?1:0)]);for(let k=0;k<n;k++){let p=k;for(let i=k+1;i<n;i++)if(Math.abs(m[i][k])>Math.abs(m[p][k]))p=i;if(Math.abs(m[p][k])<1e-20)throw Error('Singular element');[m[k],m[p]]=[m[p],m[k]];const d=m[k][k];for(let j=0;j<2*n;j++)m[k][j]/=d;for(let i=0;i<n;i++)if(i!==k){const q=m[i][k];for(let j=0;j<2*n;j++)m[i][j]-=q*m[k][j];}}return m.map(r=>r.slice(n));}
-export function elementGeometry(mesh,t){const p=t.map(i=>mesh.nodes.slice(i*3,i*3+3).map(v=>v*.001));const inv=invert(p.map(v=>[1,...v]));return {grad:t.map((_,i)=>[inv[1][i],inv[2][i],inv[3][i]]),volume:Math.abs(tetraVolume(mesh.nodes,t))*1e-9};}
 function dot(a,b){let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s;}
 export function pcg(n,entries,rhs,dirichlet,{tolerance=1e-8,maxIterations=2500,matvecFactory,onObserve}={}){
  const mask=new Uint8Array(n),g=new Float64Array(n),diagonal=new Float64Array(n);for(const [i,v]of dirichlet){mask[i]=1;g[i]=v;}
