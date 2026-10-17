@@ -12,10 +12,11 @@ function camera(value){
 
 // Private source leases/canvas never cross the session boundary. Rendering is synchronous;
 // encoding may yield, so leases and the command guard are checked again before delivery.
-export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>false,renderComparison,encodePng,recordVideo,acquireHostLock}){
+export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>false,renderComparison,encodePng,recordVideo,encodeGif,acquireHostLock}){
  const available=()=>{if(isBusy())throw Error('Viewer is busy');};
  return {
   async prepare(request,{guard=()=>true}={}){
+   if(request.format==='gif'&&request.animation!=='orbit')throw Error('Comparison GIF supports orbit only');
    const check=()=>{if(!guard())throw Error('Comparison export expired');available();};check();
    const defaults=structuredClone(getDefaults()),view={...defaults,camera:camera(structuredClone(request.camera??defaults.camera)),deformScale:request.deformScale??defaults.deformScale};
    if(!Number.isFinite(view.deformScale)||view.deformScale<0)throw Error('Invalid comparison deformation scale');
@@ -34,18 +35,20 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
    if(JSON.stringify(getDefaults())!==JSON.stringify(defaults))throw Error('Viewer changed while preparing comparison');
    const renderAt=(nextCamera,timeSeconds,colorRange,deformScale=view.deformScale)=>renderComparison({cases:sources.map(source=>({caseId:source.caseId,label:source.name,source:source.output})),field:request.field,camera:nextCamera,deformScale,timeSeconds,toleranceSeconds:request.toleranceSeconds,colorRange,visualDeformation:deformationMode});
    const rendered=renderAt(view.camera,timePlan?timePlan.atPhase(0).timeSeconds:request.timeSeconds,timePlan?.colorRange,deformationPlan?0:view.deformScale);
+   if(request.format==='gif'){if(request.animation!=='orbit')throw Error('Comparison GIF supports orbit only');view.sourceResolution={width:rendered.canvas.width,height:rendered.canvas.height};view.resolution={width:640,height:320};}
    if(request.format==='webm')view.resolution={width:rendered.canvas.width,height:rendered.canvas.height};
    assertCurrent();
-   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{})};
+   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{}),...(request.format==='gif'?{gifAnimation:{frames:24,width:640,height:320,palette:'RGB332',colors:256,phasePolicy:'i/24',lossy:true,loop:0}}:{})};
    const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode||deformationMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange,deformationPlan?deformationPlan.atPhase(phase).deformScale:view.deformScale);assertSources();return frame.canvas;};
    return {view,comparison,context:{canvas:rendered.canvas,assertCurrent,assertSources,renderFrame}};
   },
   async render({context,format='png',animation='orbit',view,seconds,signal,onProgress=()=>{}}){
    const check=()=>{if(signal?.aborted)throw Error('Comparison export cancelled');context.assertCurrent();};check();onProgress({fraction:0});
-   if(format==='webm'){
-    if(typeof recordVideo!=='function'||typeof acquireHostLock!=='function')throw Error('Comparison WebM is unavailable');
+   if(format==='webm'||format==='gif'){
+    const encode=format==='gif'?encodeGif:recordVideo;
+    if(typeof encode!=='function'||typeof acquireHostLock!=='function')throw Error('Comparison animation export is unavailable');
     const lock=acquireHostLock(),active=()=>{if(signal?.aborted)throw Error('Comparison export cancelled');lock.assertOwned();context.assertSources();};
-    try{active();const blob=await recordVideo({initialCanvas:context.canvas,renderFrame:(next,frame)=>{active();const canvas=context.renderFrame(next,frame);active();return canvas;},camera:view.camera,animation,seconds,signal,onProgress});active();return blob;}finally{lock.release();}
+    try{active();const blob=await encode({initialCanvas:context.canvas,renderFrame:(next,frame)=>{active();const canvas=context.renderFrame(next,frame);active();return canvas;},camera:view.camera,animation,seconds,signal,onProgress,assertCurrent:active});active();return blob;}finally{lock.release();}
    }
    const blob=await encodePng(context.canvas);check();onProgress({fraction:1});return blob;
   }

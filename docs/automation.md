@@ -686,3 +686,10 @@ startCompareExportのWebMでanimation:"deformation"を指定します。対象�
 追加のlocalhost実Chrome [API成果物・形状検証](evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json)で前回部分記録を補完しました。低負荷で2秒要求の24,858 bytes VP9/1280x640をSHA-256（f2c424a5…）照合し、外部デコード4フレーム・画像4種を確認。凡例/ラベルを除く描画領域でも左右の形状変化と境界移動を確認し、固定色範囲0..0.00312 mm・固定カメラ・倍率0→200の視覚変形と区別しました。元2.01秒補間表示/入力/ケース/比較設定は完全一致。別GUI動画はネイティブ再生終了2.125秒を確認（GUI bytesの独立decodeとは別）。前回のexpiry/timeout記録は保持します。公開HTTPS・一般形状・滑らかな24fps/枚数保証・物理載荷応答・GUIダウンロード完了は引き続き未確認です。
 
 受理後期限分離の[15秒境界実Chrome検証](evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json)では開始返信74ms、ジョブ完了15,725ms（元15秒を超過）で成功しました。92,321 bytes/SHA-256 35ff9912…のVP9/1280x640を外部デコードし17フレーム・画像17種、ラベルを除く形状変化と元4状態一致を確認。開始コマンド期限自体は延長していません。この録画中の実機切断は未試験で、失効/取消/ケース変更は別の自動テストを根拠とします。
+
+## 比較の回転GIF
+
+startCompareExportはformat:"gif"でorbitのみを受け付けます。固定24枚・640×320・RGB332の256色（非可逆）で、secondsは整数1〜15（API既定5秒・GUI既定2秒）。各フレームのdelayは整数centisecondに配分し合計seconds×100を保ちます。位相i/24の固定スケジュールで、実時間録画や目標24fpsとは別です。GIFは無限ループ指定ですが実際の再生時間はプレーヤーに依存します。manifestは出力/元描画の解像度・delay・色/フレーム条件を区別します。比較専用comparisonGifExportで対応を通知し、単一ビューformats.gifは非対応のままです。GUI形式選択でGIFを選ぶと書出しだけorbitに固定し、元の時間/変形モードやportable設定は変えません。画像プレビュー・明示保存・中止・再作成は同じ共有キュー/成果物SHA/解放を使います。time/deformation GIFは拒否。
+
+
+2026-10-17 localhost実Chromeの[比較GIF証跡](evidence/2026-10-17-comparison-gif-real-chrome.json): API成果物5,574,849 bytesをSHA-256 e171333e…で照合。外部デコードで640×320・24枚/画像24種、Pillowでdelay80/90ms・合計2,000ms・loop0を確認しました。GUIの画像プレビュー・中止・再作成は成功し、各後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。最初の接続reset/timeoutは履歴に保持し原因を断定しません。公開HTTPS・一般形状・他プレーヤーの滑らかさ・GUIダウンロード完了は未確認です。
