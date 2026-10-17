@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-record",
+  "recordedAt": "2026-10-17T21:46:01.242Z",
+  "headSha": "8c57e16750efe3f90aa588bebc3cf127828204df",
+  "version": "0.44.0",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39071597827",
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify-published",
+      "conclusion": "success"
+    }
+  ],
+  "manifest": {
+    "revision": "8c57e16750efe3f90aa588bebc3cf127828204df",
+    "dirty": false
+  },
+  "publishedProgress": {
+    "verified": true,
+    "revision": "8c57e16750efe3f90aa588bebc3cf127828204df",
+    "bytes": 344717,
+    "sha256": "26461dc1bd2670dfc03e109984f6afab33380878c5f7eb467083db75e9c1ee61",
+    "historyStatus": "verified",
+    "historyHead": "8c57e16750efe3f90aa588bebc3cf127828204df",
+    "historyPoints": 230,
+    "historyBytes": 59842,
+    "historySha256": "26bde2331259de280fb99273014d0d1a92aa8f3139c1b9b8c8c42c0e2c8d4ef6"
+  },
+  "counts": {
+    "released": 128,
+    "queued": 20,
+    "building": 12,
+    "checking": 5,
+    "ready": 2
+  },
+  "tag": "release-8c57e16750efe3f90aa588bebc3cf127828204df",
+  "tagObject": "4ea6404dbf6e36231f16a2a9ce323ed6a6c9b931",
+  "tagPeeledRevision": "8c57e16750efe3f90aa588bebc3cf127828204df",
+  "requiredPullRequestCi": {
+    "pullRequest": 116,
+    "headSha": "41f0206126c35407b533475a3546c54a55299e41",
+    "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39071251672",
+    "tests": {
+      "total": 1507,
+      "passed": 1504,
+      "failed": 0,
+      "skipped": 3
+    }
+  },
+  "tasksMovedToReleasedByThisRecord": [
+    "BROWSERRESET1",
+    "PUBLICHTTPS1"
+  ],
+  "acceptanceEvidence": {
+    "BROWSERRESET1": [
+      "docs/evidence/2026-10-18-browser-reset-real-chrome.json",
+      "docs/evidence/2026-10-18-browser-performance-real-chrome.json"
+    ],
+    "PUBLICHTTPS1": [
+      "docs/evidence/2026-10-18-public-https-inspect-real-chrome.json",
+      "docs/evidence/2026-10-18-public-https-inspect-real-chrome.jpg"
+    ]
+  },
+  "notVerified": [
+    "Reported Chrome 155.0.0.0 is reduced precision; fullVersionVerified is false. The existing acceptance does not require a full version.",
+    "Public HTTPS permissions remain inspect only; edit, analyze and view were not granted.",
+    "EXPORTBACKGROUND1 remains checking without actual hidden-tab live proof. PERF1 remains building; memory, capacity and other-browser measurements are incomplete.",
+    "The preserved Node24 V8 failure and later CI success do not establish a root-cause fix. No parent task or publication gate is closed."
+  ]
+}
