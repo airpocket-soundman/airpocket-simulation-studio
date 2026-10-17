@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "status": "verified-local-awaiting-publication",
+  "scope": "Opt-in retained metadata prevents restart replay; no payload-equivalence or result restoration claim",
+  "node": "v24.11.1",
+  "verification": {
+    "command": "node --test tests/mcp-restored-request-id.test.mjs tests/analysis-job-store.test.mjs",
+    "total": 9,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 1,
+    "skipReason": "Windows symlink unavailable",
+    "realMcpRestart": true
+  },
+  "behavior": [
+    "All seven restored states refuse retained requestId before input reads",
+    "Same or changed payload refused; existing output bytes and record count unchanged",
+    "Fresh request starts mesh; same-process retry returns same job",
+    "Explicit release permits reuse; old output is not overwritten"
+  ],
+  "limits": [
+    "Only successfully retained valid records are protected",
+    "Missing/corrupt/capped/unwritten records cannot be matched",
+    "No automatic resumption,full result/event/artifact restoration or payload-equivalence check",
+    "P3 and product gates remain unfinished"
+  ]
+}

@@ -2,7 +2,7 @@
 
 [English](en/operation-correspondence.md)
 
-[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作88件とMCPツール33件（既定31件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
+[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作91件とMCPツール33件（既定31件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
 
 - 範囲/権限: ブラウザ操作は`src/browser-operation-names.js`の範囲（inspect/edit/analyze/view）。MCPツールは注釈の読み取り専用/書き込み・実行。
 - GUI: 各操作について、GUIを組み立てるソース（`src/main.js`・`src/ui/*.js`・`src/*-ui.js`・`src/visual-export.js`）と、操作の実体（`src/browser-session.js`・各`*-operations.js`・MCPは`scripts/studio-mcp.mjs`）を読み、呼び出す関数を突き合わせて分類した。`同一経路`はGUI操作が同じ共有関数を呼ぶもの、`関連（別処理）`は近いが別の処理をするもの（理由を併記）、`connector only — no GUI control by design`はGUIから呼ぶ経路がコードに無いもの（機能が不要という意味ではなく、GUIを足す余地はある）。行ごとに生成されるボタンはid・classが無いため、ボタン名と親のidで示した。限界: 静的に読んだ結果で、実ブラウザでの操作確認ではない。分類は関数の共有を見ており、引数・リビジョン確認・権限の同等性までは保証しない。`tests/operation-correspondence-gui.test.mjs`がGUI列のid・data属性・classがソースに存在することだけを確認する（分類の正しさは検証しない）。

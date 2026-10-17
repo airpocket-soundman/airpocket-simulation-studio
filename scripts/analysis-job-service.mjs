@@ -76,6 +76,9 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const pathKey=value=>process.platform==='win32'?resolve(value).toLowerCase():resolve(value);
    if(typeof path!=='string'||!isAbsolute(path)||typeof outputPath!=='string'||!isAbsolute(outputPath)||pathKey(path)===pathKey(outputPath))throw Error('Use distinct absolute input and output paths');
    if(typeof requestId!=='string'||!requestId||requestId.length>200||!['solve','mesh'].includes(operation)||!Number.isFinite(size)||size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(method)||typeof adaptive!=='boolean'||typeof includeFields!=='boolean')throw Error('Invalid analysis job arguments');
+   // Restored metadata cannot establish payload equivalence. Never replay its retained request ID.
+   const prior=[...restored.values()].find(record=>record.requestId===requestId);
+   if(prior)throw Object.assign(Error('Request ID belongs to restored job '+prior.jobId+'. Inspect that job before explicitly releasing it or choosing a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_RESTORED'});
    if((await stat(path)).size>100_000_000)throw Error('JSON file exceeds 100 MB');
    const api=createStudioApi();api.loadProject(JSON.parse(await readFile(path,'utf8')));
    const project=api.exportProject();

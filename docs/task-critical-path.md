@@ -19,3 +19,7 @@ P0→P1→P3、およびP0→P4が公開ワークフローの主要経路。P5�
 次のまとまりはP3の再起動requestId冪等性/実MCP再起動と、P0/P1/Skill一巡の残条件。背景出力とresetの原因は同一視せず、成功した再試行だけで根治扱いしない。今回タスクは増設せず、完了数は受入証拠に従う。
 
 今回結果: BROWSERRESET1とPUBLICHTTPS1は8c57e16の公開証跡と実Chromeの確認専用接続の合格によりreleased。内訳は公開済130/queued20/building12/checking5/ready0。EXPORTBACKGROUND1は実hidden操作をCUAで実証できず、利用者の手動協力回答待ちでchecking。PERF1は構造3サイズのみ測定、熱reset/timeoutとメモリ/他browser未測定でbuilding。RUNTIMEWASM1は初回全体試験のNode24 V8 fatalと単独成功を分離してchecking維持。最終CIの成功は根治証明ではありません。[公開記録](evidence/2026-10-18-publication-8c57e16.json)を参照。親と公開ゲートは閉じません。
+
+## 2026-10-18 次バッチの実装・実行証拠
+
+P3は復元requestIdの安全拒否を追加し、実MCP再起動後の同一/変更再送、新ID、明示解放後の再利用を検証しました。[証拠](evidence/2026-10-18-mcp-restart-request.json)。これは結果復元や要求内容照合の完全冪等性ではありません。P0/P1/P4は[一巡手順](../skills/airpocket-studio/references/skill-loop.md)と[実MCP証拠](evidence/2026-10-18-skill-loop-real-mcp.json)を追加。100/200 Nの変位0.04/0.08 mm、比較PNG/ケース集のhash、出力後4状態保持を確認しました。初稿の設定補完と応答wrapper不足を修復した実行で、最終手順の独立fresh再現は残作業です。既存親ID内の進展として計上し、総数167・公開済み130・残37と各親の未完状態を維持します。

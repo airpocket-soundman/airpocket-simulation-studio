@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "status": "revised-recipe-loop-passed; initial-draft-needed-repair",
+  "transport": "Real stdio MCP initialize/tools/list/tools/call; GUI used only for initial pairing and explicit final disconnect; no custom semantic driver, fixture import or private product API",
+  "tools": [
+    "studio_preview_edit",
+    "studio_browser_contracts",
+    "studio_job_artifacts",
+    "studio_verify_measurements",
+    "studio_validate_case_bundle",
+    "studio_import_print",
+    "studio_inspect_print",
+    "studio_preview_cad_update",
+    "studio_apply_cad_update",
+    "studio_assess_result",
+    "studio_assessment",
+    "studio_import_project",
+    "studio_create_builtin_project",
+    "studio_preflight_project",
+    "studio_job_artifact",
+    "studio_edit_project",
+    "studio_start_analysis",
+    "studio_job_status",
+    "studio_preflight_mesh_boundaries",
+    "studio_job_events",
+    "studio_cancel_job",
+    "studio_release_job",
+    "studio_capabilities",
+    "studio_diagnose_execution",
+    "studio_material_catalog",
+    "studio_progress",
+    "studio_inspect_project",
+    "studio_analyze",
+    "studio_probe",
+    "studio_compare_cases",
+    "studio_validate_cases",
+    "studio_browser_sessions",
+    "studio_browser_call"
+  ],
+  "browser": {
+    "name": "Chrome",
+    "reportedVersion": "155.0.0.0",
+    "precision": "reduced",
+    "fullVersionVerified": false,
+    "source": "navigator.userAgent"
+  },
+  "gaps": [
+    {
+      "stage": "connection",
+      "gap": "Registered tools omit browser call; used repository stdio MCP server and standard initialize/tools-list/tools-call, not private semantic driver."
+    },
+    {
+      "stage": "transport",
+      "gap": "MCP structuredContent wraps response in value; recipe needs explicit unwrap before using revisions."
+    },
+    {
+      "stage": "preview",
+      "gap": "setStudy replaces study; minimal object caused 43 host-normalized defaults with requiresReview:true. Reconstructed current study through bounded inspectInput and preserved inactive values; new preview must have requiresReview:false."
+    }
+  ],
+  "measurements": {
+    "forceA": 100,
+    "forceB": 200,
+    "tipAMm": 0.04000000000002636,
+    "tipBMm": 0.08000000000005272,
+    "ratio": 2
+  },
+  "mesh": {
+    "A": {
+      "status": "checked",
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "negativeOrientationCount": 0,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ],
+      "qualityAvailable": true,
+      "diagnosticCount": 0,
+      "diagnosticsTruncated": false
+    },
+    "B": {
+      "status": "checked",
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "negativeOrientationCount": 0,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ],
+      "qualityAvailable": true,
+      "diagnosticCount": 0,
+      "diagnosticsTruncated": false
+    }
+  },
+  "assessments": {
+    "A": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "B": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    }
+  },
+  "output": {
+    "pngBytes": 84081,
+    "pngSha256": "sha256:2623ba20d14c8627626e13b5d597c77e796e173d488dbd0efbc9964c8d6906b1",
+    "archiveBytes": 241550,
+    "archiveSha256": "sha256:e63135d4d47d4e7d6dbed4d6d538e9fda78ae0b97331e0305329626faa20c515"
+  },
+  "unchanged": {
+    "getResultView": true,
+    "inspectInput": true,
+    "caseList": true,
+    "getCompareView": true
+  },
+  "refusals": [
+    {
+      "operation": "edit",
+      "error": {
+        "code": "BROWSER_OPERATION_FAILED",
+        "message": "Project revision conflict."
+      }
+    },
+    {
+      "operation": "probe",
+      "error": {
+        "code": "BROWSER_OPERATION_FAILED",
+        "message": "Probe point is outside the analysis mesh"
+      }
+    },
+    {
+      "operation": "startCompareExport",
+      "error": {
+        "code": "BROWSER_OPERATION_FAILED",
+        "message": "Visual export requestId conflict"
+      }
+    }
+  ],
+  "remainingJobs": {
+    "jobs": [],
+    "total": 0,
+    "nextOffset": null
+  },
+  "notVerified": [
+    "An independent fresh agent following only revised prose",
+    "All-physics preflight and material source truth",
+    "General geometry/mesh convergence/physical accuracy",
+    "Installed-host browser tools; dedicated repository stdio tools were used",
+    "Public HTTPS mutation scopes intentionally excluded"
+  ],
+  "cleanup": {
+    "remainingJobs": {
+      "jobs": [],
+      "total": 0,
+      "nextOffset": null
+    },
+    "allExportTransfersReleased": true,
+    "guiDisconnect": "Explicit connection teardown only; all project operations after pairing used MCP protocol",
+    "sessionsAfterDisconnect": [],
+    "mcpStdinEofExitCode": 0,
+    "privateConnectionRemoved": true,
+    "ownedViteStopped": true
+  },
+  "runtime": {
+    "sourceRevision": "8c57e16750efe3f90aa588bebc3cf127828204df",
+    "sourceBasis": "Runtime source fixed for this evaluation; later repository HEAD may differ",
+    "trackedDirtyDuringRun": false,
+    "ignoredQaArtifactsPresent": true,
+    "usedDocuments": "Author-revised recipe and protocol-bootstrap; initial-draft failures preserved",
+    "acceptanceScope": "Bounded synthetic structural workflow only; not registered-host-only success or completion of P0/P1/P3/P4"
+  }
+}

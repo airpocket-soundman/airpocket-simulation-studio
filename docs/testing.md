@@ -588,3 +588,7 @@ Skill配布版の全11ファイルはsourceとinstalledでbytes/SHAが一致し�
 `solveHyperelastic` はオプション `onFailure(record)` を受け取る。Newton の line search 失敗または反復上限で、元のエラーを投げる直前に1回だけ呼ばれ、メッシュ・物性・境界条件・オプション(inputs)と、反復ごとの荷重係数・残差ノルム・CG反復数・line search の各step長alphaと候補残差(trace)を渡す。未指定なら挙動・許容差は変わらず、時間依存もない。テストでは `tests/helpers/newton-capture.mjs` の `captureOptions` が環境変数 `AIRPOCKET_CAPTURE_DIR` を見て、設定時のみ JSON を `<label>-<pid>-<time>.json` として書き出す(未設定なら何もしない)。まれな失敗の調査: `AIRPOCKET_CAPTURE_DIR=captures node --test tests/hyperelastic.test.mjs` を繰り返し、出力された inputs を固定入力の回帰テストにする。フック自体は `tests/newton-capture.test.mjs` で検証する。
 
 捕捉結果(2026-10-16): 6並列で `tests/hyperelastic.test.mjs` を繰り返し、フック有りで 410回中3件、フック強化後 598回中6件(約1%)の line search 失敗を捕捉した。入力・反復状態は全件でビット一致(81節点・184要素、荷重段1の反復0、フルNewton刻みの残差 6.18e-1→5.17e-3)。しかしフルステップが「十分減少」判定で棄却されていた。判定の基準値 `state.norm` が、直前の候補の `norm` と等しい値で読まれていた(記録した `limit` が候補normに連動)。新しいプロセスでの同入力の再実行は常に成功するため、入力ではなく実行時(JIT最適化後)の揺らぎと判断した。ソルバー許容差は変更せず、line search前に基準値を局所定数 `baseNorm` へ退避する修正のみを行った。修正後は 717回中0件(修正前の約1%に対し、偶然に0件となる確率は約0.1%)。V8側の不具合と断定はしていない。固定入力は `tests/fixtures/hyperelastic-line-search-capture.json` と回帰テストで保持する。
+
+## 2026-10-18: 再起動後の安全再送拒否とMCP一巡
+
+復元requestIdは計算前にANALYSIS_JOB_REQUEST_RESTOREDで拒否しjobId確認へ誘導します。実stdio MCPの終了/再起動、同一/変更payload拒否、別ID成功、解放後の再利用を含む9件中8成功・1symlink skip・0失敗。[検証](evidence/2026-10-18-mcp-restart-request.json)。[一巡評価](evidence/2026-10-18-skill-loop-real-mcp.json)は修正版手順で合成棒100/200Nの入力・根拠修復・mesh検査・解析・ケース比較PNG/ケース集保存を実MCPで確認。0.04/0.08mmと比2、出力hashと4状態不変を確認しました。独立fresh Skill評価、全物理精度、登録済hostの更新、公開HTTPS mutationと親計画全体は未完です。
