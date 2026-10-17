@@ -6,7 +6,7 @@ import {join,sep} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {BoxGeometry} from 'three';
 import {createHeadlessJobService} from '../scripts/analysis-job-service.mjs';
-import {createJobStore,jobStoreLimits,validateJobStoreDirectory,INTERRUPTED_CODE} from '../scripts/analysis-job-store.mjs';
+import {createJobStore,jobStoreLimits,validateJobStoreDirectory,INTERRUPTED_CODE,restoredJobView} from '../scripts/analysis-job-store.mjs';
 
 function project(){
  const g=new BoxGeometry(10,10,40).toNonIndexed();g.translate(5,5,20);const positions=Array.from(g.attributes.position.array);g.dispose();
@@ -136,10 +136,70 @@ test('without the option nothing is persisted and the service shape is unchanged
  const dir=await temp();
  try{
   const path=join(dir,'in.json'),outputPath=join(dir,'out.json');await writeFile(path,JSON.stringify(project()));
-  const service=createHeadlessJobService();assert.equal(service.jobStoreDiagnostics,undefined);
+  const service=createHeadlessJobService();assert.equal(service.jobStoreDiagnostics,undefined);assert.deepEqual(service.listRestored(),{schemaVersion:1,jobs:[],total:0,nextOffset:null});
   const job=await service.start({path,outputPath,requestId:'plain'});assert.equal(job.restored,undefined);
   const done=await settle(service,job.jobId);assert.equal(done.state,'succeeded');assert.equal(done.restored,undefined);assert.equal(done.resultAvailable,undefined);
   assert.deepEqual((await readdir(dir)).sort(),['in.json','out.json']);
   service.release(job.jobId);assert.throws(()=>service.get(job.jobId),/Unknown job/);
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('every restored state declares metadata availability and explicit recovery without persisting paths',()=>{
+ for(const state of ['running','saving','succeeded','failed','cancelled','timed_out','interrupted']){
+  const persisted=record(1,{state}),before=JSON.stringify(persisted),view=restoredJobView(persisted);
+  assert.equal(view.recovery.mode,'metadata-only');assert.equal(view.recovery.executionResumed,false);
+  assert.equal(view.recovery.eventsAvailable,false);assert.equal(view.recovery.artifactsAvailable,false);
+  assert.equal(view.recovery.nextSteps[0].requiresNewRequestId,true);assert.equal(view.recovery.nextSteps[0].requiresExplicitPaths,true);
+  assert.deepEqual(view.recovery.nextSteps[1],{tool:'studio_release_job',arguments:{jobId:persisted.jobId},requestIdReusableAfterRelease:true});
+  assert.equal(JSON.stringify(persisted),before);assert.equal(view.requestId,undefined);assert.equal(view.outputPath,undefined);
+  view.recovery.nextSteps[1].arguments.jobId='mutated';assert.equal(restoredJobView(persisted).recovery.nextSteps[1].arguments.jobId,persisted.jobId);
+ }
+});
+
+
+test('restored discovery is sorted, bounded, metadata only and reflects explicit release',async()=>{
+ const dir=await temp(),store=join(dir,'store');await mkdir(store);
+ try{
+  for(const n of [3,1,2])await writeFile(join(store,id(n)+'.json'),JSON.stringify(record(n,{state:'succeeded'})));
+  const service=createHeadlessJobService({jobStore:store}),first=service.listRestored({limit:2});
+  assert.equal(first.total,3);assert.equal(first.nextOffset,2);assert.deepEqual(first.jobs.map(job=>job.jobId),[id(1),id(2)]);
+  for(const job of first.jobs){assert.deepEqual(job,service.get(job.jobId));assert.equal(job.resultAvailable,false);assert.equal(job.requestId,undefined);assert.equal(job.outputPath,undefined);}
+  assert.deepEqual(service.listRestored({offset:2,limit:2}),{schemaVersion:1,jobs:[service.get(id(3))],total:3,nextOffset:null});
+  assert.deepEqual(service.listRestored({offset:10}),{schemaVersion:1,jobs:[],total:3,nextOffset:null});
+  for(const options of [{offset:-1},{offset:0.5},{offset:NaN},{limit:0},{limit:21},{limit:1.5}])assert.throws(()=>service.listRestored(options),/Invalid restored job page/);
+  service.release(id(1));assert.equal(service.listRestored().total,2);assert.equal(service.listRestored().jobs[0].jobId,id(2));
+  assert.deepEqual((await readdir(dir)).sort(),['store']);
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('maximum restored page omits long diagnostics and stays below 64 KiB in the MCP envelope',async()=>{
+ const dir=await temp(),store=join(dir,'store');await mkdir(store);
+ try{
+  for(let n=1;n<=21;n++)await writeFile(join(store,id(n)+'.json'),JSON.stringify(record(n,{state:'failed',inputRevision:'界'.repeat(200),error:{code:'X',message:'m'.repeat(6000)},executionErrorCode:'E'.repeat(400)})));
+  const service=createHeadlessJobService({jobStore:store}),page=service.listRestored({limit:20});
+  assert.equal(page.jobs.length,20);assert.equal(page.total,21);assert.equal(page.nextOffset,20);
+  for(const job of page.jobs){assert.equal(job.error,undefined);assert.equal(job.executionErrorCode,undefined);assert.equal(job.recovery.mode,'metadata-only');}
+  assert.equal(service.get(id(1)).error.message.length,6000);
+  const envelope={jsonrpc:'2.0',id:1,result:{content:[{type:'text',text:JSON.stringify(page)}],structuredContent:{value:page}}};
+  assert.ok(Buffer.byteLength(JSON.stringify(envelope))<65536);
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('escape-heavy restored metadata uses byte-bounded pages with a progressing cursor',async()=>{
+ const dir=await temp(),store=join(dir,'store');await mkdir(store);
+ try{
+  for(let n=1;n<=20;n++)await writeFile(join(store,id(n)+'.json'),JSON.stringify(record(n,{state:'failed',inputRevision:'\u0000'.repeat(200),error:{message:'\u0001'.repeat(900)}})));
+  const service=createHeadlessJobService({jobStore:store}),seen=[];let offset=0;
+  do{
+   const page=service.listRestored({offset,limit:20}),json=JSON.stringify(page);
+   assert.ok(Buffer.byteLength(json)<=30000);assert.ok(page.jobs.length>0);
+   assert.ok(Buffer.byteLength(JSON.stringify({jsonrpc:'2.0',id:1,result:{content:[{type:'text',text:json}],structuredContent:{value:page}}}))<65536);
+   seen.push(...page.jobs.map(job=>job.jobId));if(offset===0)assert.ok(page.jobs.length<20);
+   if(page.nextOffset!==null)assert.ok(page.nextOffset>offset);offset=page.nextOffset;
+  }while(offset!==null);
+  assert.deepEqual(seen,Array.from({length:20},(_,index)=>id(index+1)));
  }finally{await rm(dir,{recursive:true,force:true});}
 });

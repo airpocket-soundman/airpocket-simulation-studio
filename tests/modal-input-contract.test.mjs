@@ -1,11 +1,12 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {inspectModalInputContract as inspect} from '../src/modal-input-contract.js';
+import {validateProject} from '../src/regions.js';
 const condition=(type='fixed',value=0,extra={})=>({type,value,direction:[0,0,1],regions:[{mesh:0,triangles:[0]}],...extra});
 const project=()=>({study:{kind:'structural',modalAnalysis:true,gravityEnabled:false,modeCount:2,modalIterations:60},materialProperties:{youngModulus:1e9,poissonRatio:.3,density:1000},meshes:[{faceIds:[0]}],conditions:[condition()]});
 const report=(p,options={})=>inspect(p,options,{mode:'quantitative'});
 test('modal physical sources and all serialized supports are declared without numerical provenance or mutation',()=>{
- const p=project();p.conditions.push(condition('displacement',0,{frame:{axis:2},planarRegion:{mesh:0},cylindricalRegion:{mesh:0}}));const before=structuredClone(p),r=report(p);
+ const p=project();p.conditions.push(condition('displacement',0,{frame:{axis:2,axes:[[1,0,0],[0,1,0],[0,0,1]]},planarRegion:{mesh:0},cylindricalRegion:{mesh:0}}));const before=structuredClone(p),r=report(p);
  assert.equal(r.contract,'modal-isotropic-structure');assert.deepEqual(r.diagnostics,[]);assert.deepEqual(p,before);
  for(const pointer of ['/study/kind','/study/modalAnalysis','/study/gravityEnabled','/materialProperties/youngModulus','/materialProperties/poissonRatio','/materialProperties/density'])assert.ok(r.requiredPointers.includes(pointer),pointer);
  for(let i=0;i<2;i++)for(const key of ['type','value','direction','regions'])assert.ok(r.requiredPointers.includes(`/conditions/${i}/${key}`));
@@ -48,4 +49,15 @@ test('malformed boundaries, material values and branch intent return actionable 
 test('legacy stays unchanged and returned metadata cannot alter later inspections',()=>{
  for(const p of [null,{},project()]){const r=inspect(p);assert.deepEqual(r.diagnostics,[]);assert.deepEqual(r.requiredPointers,[]);}
  const r=report(project());r.units.density='changed';r.requiredPointers.push('changed');assert.equal(report(project()).units.density,'kg/m3');assert.ok(!report(project()).requiredPointers.includes('changed'));
+});
+
+test('local displacement frames match project validation and invalid frames cannot count as modal supports',()=>{
+ const frame={axis:2,axes:[[1,0,0],[0,1,0],[0,0,1]]};
+ for(const candidate of [{axis:2},{...frame,axis:3},{...frame,axes:[[1,0,0],[0,1,0],[0,0,-1]]},{...frame,axes:[[2,0,0],[0,1,0],[0,0,1]]},{...frame,axis:0}]){
+  const p=project();p.version=1;p.meshes[0].positions=[0,0,0,1,0,0,0,1,0];p.conditions=[condition('displacement',0,{frame:candidate})];const before=structuredClone(p);
+  assert.throws(()=>validateProject(p));
+  for(const mode of ['quantitative','exploratory']){const r=inspect(p,{}, {mode});assert.ok(r.diagnostics.some(d=>d.code==='MODAL_INPUT_INVALID'&&d.target==='/conditions/0/frame'&&d.severity==='error'));assert.ok(r.diagnostics.some(d=>d.code==='MODAL_SUPPORT_MISSING'));}
+  assert.deepEqual(p,before);
+ }
+ const p=project();p.version=1;p.meshes[0].positions=[0,0,0,1,0,0,0,1,0];p.conditions=[condition('displacement',0,{frame})];assert.doesNotThrow(()=>validateProject(p));assert.deepEqual(report(p).diagnostics,[]);
 });

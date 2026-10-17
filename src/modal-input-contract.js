@@ -1,5 +1,6 @@
 import {canonicalJson} from './project-revision.js';
 import {resolveElasticMaterial} from './material-dependence.js';
+import {validateFrame} from './constraints.js';
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v),own=(o,k)=>Object.hasOwn(o,k),positive=v=>Number.isFinite(v)&&v>0;
 const sameJson=(a,b)=>{if(a===undefined||b===undefined)return false;try{return canonicalJson(a)===canonicalJson(b);}catch{return false;}};
 const units={geometry:'mm',youngModulus:'Pa',poissonRatio:'1',density:'kg/m3',displacement:'mm',force:'N',pressure:'Pa',gravity:'m/s2',materialTemperature:'degC',frequency:'Hz'};
@@ -50,7 +51,12 @@ export function inspectModalInputContract(project,options={}, {mode='legacy'}={}
    require(base+'/direction',c.direction,v=>directionValid(v,c.type),'Serialized direction must be finite; forces and prescribed directions must be nonzero');
    require(base+'/regions',c.regions,regionsValid,'Nonempty valid structural boundary regions required');
    for(const key of ['frame','planarRegion','cylindricalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
-   if(['fixed','displacement'].includes(c.type)&&(c.type==='fixed'||c.value===0)&&regionsValid(c.regions)&&!c.cadUpdateRequired&&directionValid(c.direction,c.type))support=true;
+   let validFrame=true;
+   if(c.type==='displacement'&&c.frame!==undefined)try{
+    validateFrame(c.frame);
+    if(!directionValid(c.direction,c.type)||c.direction.some((v,k)=>Math.abs(v-c.frame.axes[c.frame.axis][k])>1e-7))throw Error('Constraint direction does not match local frame');
+   }catch(error){validFrame=false;add('MODAL_INPUT_INVALID',base+'/frame',error.message);}
+   if(['fixed','displacement'].includes(c.type)&&(c.type==='fixed'||c.value===0)&&regionsValid(c.regions)&&!c.cadUpdateRequired&&directionValid(c.direction,c.type)&&validFrame)support=true;
   }
   if(!support)add('MODAL_SUPPORT_MISSING','/conditions','Explicit homogeneous support required; constraint rank and remaining rigid-body modes are checked after meshing');
  }catch{add('MODAL_INPUT_INVALID','/','Malformed modal inputs cannot be inspected');}

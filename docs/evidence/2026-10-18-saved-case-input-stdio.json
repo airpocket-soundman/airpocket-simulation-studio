@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "transport": "Real stdio MCP initialize/tools/list/tools/call",
+  "toolCount": 33,
+  "tool": {
+    "name": "studio_inspect_case",
+    "description": "Read-only bounded input/provenance inspection of one validated saved case. Obtain snapshot-local caseId, expectedRevision and expectedArchiveRevision from studio_compare_cases listing. Section/pointer/page contracts match studio_inspect_project section mode; expectedInputRevision pins the nested input revision. Nested values and long strings are discoverable through explicit pointers/pages. Never applies inputs or solves; source bytes/hash are rechecked before return; response <=65536 UTF-8 bytes. Missing build/source evidence is not inferred.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute local JSON file path"
+        },
+        "caseId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expectedRevision": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "expectedArchiveRevision": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "expectedInputRevision": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "section": {
+          "enum": [
+            "project",
+            "study",
+            "material",
+            "conditions",
+            "provenance",
+            "selection",
+            "source",
+            "meshes",
+            "meshSettings",
+            "units",
+            "intent"
+          ]
+        },
+        "pointer": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        }
+      },
+      "required": [
+        "path",
+        "caseId",
+        "expectedRevision",
+        "expectedArchiveRevision",
+        "section"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  "archiveRevision": "sha256:81f016d982515b7c36ce8a11513829f022554a03a1db72f49eebb9c889048dc0",
+  "cases": [
+    {
+      "caseId": "saved-case:0",
+      "caseRevision": "sha256:2e3b49dedf256c279cd6e16dd721df30c01798c035c59bcb68865ddd8473d024",
+      "inputRevision": "sha256:db7e006d868954bdb4aaf3e007fd9572c9f35026dfe1081b4a553e98608279a1",
+      "source": {
+        "kind": "saved-case-archive",
+        "sha256": "sha256:e63135d4d47d4e7d6dbed4d6d538e9fda78ae0b97331e0305329626faa20c515",
+        "bytes": 241550,
+        "identityScope": "snapshot-local deterministic IDs; valid only with matching case and archive revisions"
+      },
+      "entryCount": 16,
+      "entries": [
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/kind",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "structural"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/gravityEnabled",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": false
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/thermalStress",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": false
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/materialProperties/youngModulus",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 1000000000
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/materialProperties/poissonRatio",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 0
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/materialTemperature",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 20
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/type",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "fixed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/value",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 0
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/direction",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/regions",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/planarRegion",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/type",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "force"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/value",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 100
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/direction",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/regions",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/planarRegion",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        }
+      ]
+    },
+    {
+      "caseId": "saved-case:1",
+      "caseRevision": "sha256:28aed535d072f7b195819dbc06e328488e945a556944dcf181706bb939a58087",
+      "inputRevision": "sha256:31dc8ac1640a0ffa1636f1461412423f6dad4b38fa5db1251e6dad91308a8976",
+      "source": {
+        "kind": "saved-case-archive",
+        "sha256": "sha256:e63135d4d47d4e7d6dbed4d6d538e9fda78ae0b97331e0305329626faa20c515",
+        "bytes": 241550,
+        "identityScope": "snapshot-local deterministic IDs; valid only with matching case and archive revisions"
+      },
+      "entryCount": 16,
+      "entries": [
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/kind",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "structural"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/gravityEnabled",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": false
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/thermalStress",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": false
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/materialProperties/youngModulus",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 1000000000
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/materialProperties/poissonRatio",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 0
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/study/materialTemperature",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 20
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/type",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "fixed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/value",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 0
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/direction",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/regions",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/0/planarRegion",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/type",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": "force"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/value",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed",
+          "value": 200
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/direction",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/regions",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        },
+        {
+          "applicability": "Only the10x10x40 mm homogeneous axial bar; no measured material calibration",
+          "assumption": "Explicit unverified synthetic workflow assumption",
+          "pointer": "/conditions/1/planarRegion",
+          "rationale": "Explicit synthetic axial reference input approved for this workflow evaluation",
+          "status": "unconfirmed"
+        }
+      ]
+    }
+  ],
+  "allAssumptionsRecovered": true,
+  "limits": [
+    "Synthetic exploratory input only; provenance/source labels are not authenticated",
+    "Build unavailable remains unchanged",
+    "No browser state restored and no solver executed"
+  ],
+  "date": "2026-10-18",
+  "runtime": {
+    "sourceBasis": "318ee8fd971f167ff974dda3ff3a2753332401bc",
+    "trackedDirty": true,
+    "scope": "Current input/recovery source batch before commit; no solver rerun or live browser operation"
+  }
+}

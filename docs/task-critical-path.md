@@ -6,8 +6,8 @@
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
-| 自律実装・検証可能（17） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIRESEARCH1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, CFDRESEARCH2, CFDRESEARCH3, EXPORTBACKGROUND1, BROWSERRESET1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
-| 外部・実機等の条件あり（7） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, PUBLICHTTPS1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
+| 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIRESEARCH1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, CFDRESEARCH2, CFDRESEARCH3 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
+| 外部・実機等の条件あり（7） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
 | 親エピック（15） | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | 子機能の公開だけで全体完了にしない。既存受入条件と共通完了判定を維持。 |
 
 ## 依存と今回のまとまり
@@ -18,10 +18,16 @@ P0→P1→P3、およびP0→P4が公開ワークフローの主要経路。P5�
 
 次のまとまりはP3の再起動requestId冪等性/実MCP再起動と、P0/P1/Skill一巡の残条件。背景出力とresetの原因は同一視せず、成功した再試行だけで根治扱いしない。今回タスクは増設せず、完了数は受入証拠に従う。
 
-今回結果: BROWSERRESET1とPUBLICHTTPS1は8c57e16の公開証跡と実Chromeの確認専用接続の合格によりreleased。内訳は公開済130/queued20/building12/checking5/ready0。EXPORTBACKGROUND1は実hidden操作をCUAで実証できず、利用者の手動協力回答待ちでchecking。PERF1は構造3サイズのみ測定、熱reset/timeoutとメモリ/他browser未測定でbuilding。RUNTIMEWASM1は初回全体試験のNode24 V8 fatalと単独成功を分離してchecking維持。最終CIの成功は根治証明ではありません。[公開記録](evidence/2026-10-18-publication-8c57e16.json)を参照。親と公開ゲートは閉じません。
+今回結果: BROWSERRESET1とPUBLICHTTPS1は8c57e16の公開証跡と実Chromeの確認専用接続の合格によりreleased。内訳は公開済130/queued20/building12/checking5/ready0。EXPORTBACKGROUND1は実hidden操作をCUAで実証できず、利用者は今は操作不可のため手動検証待ちでchecking。PERF1は構造3サイズのみ測定、熱reset/timeoutとメモリ/他browser未測定でbuilding。RUNTIMEWASM1は初回全体試験のNode24 V8 fatalと単独成功を分離してchecking維持。最終CIの成功は根治証明ではありません。[公開記録](evidence/2026-10-18-publication-8c57e16.json)を参照。親と公開ゲートは閉じません。
 
 ## 2026-10-18 次バッチの実装・実行証拠
 
 P3は復元requestIdの安全拒否を追加し、実MCP再起動後の同一/変更再送、新ID、明示解放後の再利用を検証しました。[証拠](evidence/2026-10-18-mcp-restart-request.json)。これは結果復元や要求内容照合の完全冪等性ではありません。P0/P1/P4は[一巡手順](../skills/airpocket-studio/references/skill-loop.md)と[実MCP証拠](evidence/2026-10-18-skill-loop-real-mcp.json)を追加。100/200 Nの変位0.04/0.08 mm、比較PNG/ケース集のhash、出力後4状態保持を確認しました。初稿の設定補完と応答wrapper不足を修復した実行で、最終手順の独立fresh再現は残作業です。既存親ID内の進展として計上し、総数167・公開済み130・残37と各親の未完状態を維持します。
 
 独立fresh評価ではローカル画面起動の記載不足を検出して修復。修正版でVite起動と実MCP33ツール発見まで進みましたが、Windowsの対象URL確認ができず画面操作の自動承認で停止しました。製品操作0・所有サービス停止済みで、[独立評価](evidence/2026-10-18-skill-loop-independent.json)は未合格です。接続準備を完了した後の独立一巡を残作業として維持します。
+
+## 2026-10-18: 入力検査と復旧導線の実装
+
+モーダルの不正局所frame/方向不一致を事前拒否し、モーダル/直交異方性で無効支持を数えないようsolver規則に整合しました。復元jobIdを失ってもstudio_restored_jobsで有界再発見し、取得可能性と明示nextStepsを返します。保存caseの仮定詳細はstudio_inspect_caseでarchive/case/input版を固定してbounded取得します。[検証](evidence/2026-10-18-input-recovery-verification.json)、[再測定](evidence/2026-10-18-saved-case-remeasurement.json)、[正式MCPの32仮定取得](evidence/2026-10-18-saved-case-input-stdio.json)。新たな物理閾値を追加せず親/gate未完を維持。ブラウザへのcase復元、不明build版、Skill独立一巡は未完。背景手動確認は利用者が今は操作不可のため待機です。
+
+現在の残37件は自律15・外部/手動条件7・親15。EXPORTBACKGROUND1は実hidden確認に手動操作が必要で利用者が今は対応不可のため外部/手動群へ移し、停止監視の公開と受入未完を分離します。

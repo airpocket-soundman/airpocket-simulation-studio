@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "status": "partial-saved-file-replay-passed",
+  "transport": "Real stdio MCP initialize/tools/list/tools/call; no solver, browser or private product API",
+  "point": [
+    5,
+    5,
+    40
+  ],
+  "source": {
+    "kind": "saved-case-archive",
+    "sha256": "sha256:e63135d4d47d4e7d6dbed4d6d538e9fda78ae0b97331e0305329626faa20c515",
+    "bytes": 241550,
+    "identityScope": "snapshot-local deterministic IDs; valid only with matching case and archive revisions"
+  },
+  "archiveRevision": "sha256:81f016d982515b7c36ce8a11513829f022554a03a1db72f49eebb9c889048dc0",
+  "reopenMeasurementExactlyEqual": true,
+  "cases": [
+    {
+      "reference": {
+        "caseId": "saved-case:0",
+        "expectedRevision": "sha256:2e3b49dedf256c279cd6e16dd721df30c01798c035c59bcb68865ddd8473d024"
+      },
+      "name": "Synthetic axial100N",
+      "inputRevision": "sha256:db7e006d868954bdb4aaf3e007fd9572c9f35026dfe1081b4a553e98608279a1",
+      "resultRevision": "sha256:a0f7317cf55f2a32404ede98aacae12bcb6352c2006519e2a31837386b88b62b",
+      "kind": "elastic",
+      "selection": {
+        "field": "displacement",
+        "displayUnit": "mm"
+      },
+      "calculation": {
+        "operation": "elastic",
+        "options": {
+          "method": "pcg-strict",
+          "size": 5,
+          "adaptive": false,
+          "maxRounds": 3
+        },
+        "engine": "Airpocket Tet4 / JavaScript CPU"
+      },
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "surfaceFaceCount": 180
+      },
+      "runtimeIdentity": {
+        "assets": [
+          {
+            "bytes": 41430673,
+            "role": "gmsh",
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ],
+        "build": {
+          "status": "unavailable"
+        },
+        "engine": {
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU",
+          "requestedMethod": "pcg-strict"
+        },
+        "isolation": "web-worker",
+        "schemaVersion": 1,
+        "target": "browser"
+      },
+      "analysisAssessment": {
+        "recorded": true,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "omittedFields": [
+          "remainingChecks",
+          "schemaVersion"
+        ],
+        "omittedFieldCount": 2,
+        "omissionReason": "assessment details omitted to keep the response bounded"
+      },
+      "measurement": {
+        "element": 117,
+        "values": {
+          "displacementMm": [
+            5.7904958621969095e-15,
+            1.6339122736563267e-14,
+            0.04000000000002636
+          ],
+          "magnitudeMm": 0.04000000000002636
+        },
+        "units": {
+          "displacementMm": "mm",
+          "magnitudeMm": "mm"
+        }
+      },
+      "originalLiveMeasurementMm": 0.04000000000002636,
+      "equalsOriginalLiveMeasurement": true,
+      "sourceFileMetadataOnly": {
+        "provenanceHash": "sha256:6116a6a5ec3ff3963a3f25f722e09ee4453eb27ed2b7ebcc0a6a279d8ea51b5d",
+        "entryCount": 16,
+        "statuses": [
+          "unconfirmed"
+        ],
+        "assumptions": [
+          "Explicit unverified synthetic workflow assumption"
+        ]
+      }
+    },
+    {
+      "reference": {
+        "caseId": "saved-case:1",
+        "expectedRevision": "sha256:28aed535d072f7b195819dbc06e328488e945a556944dcf181706bb939a58087"
+      },
+      "name": "Synthetic axial200N",
+      "inputRevision": "sha256:31dc8ac1640a0ffa1636f1461412423f6dad4b38fa5db1251e6dad91308a8976",
+      "resultRevision": "sha256:2da654971c4525328542a2f1f9ca5ac8cc114cc236cdd1c0777112fc7a28a2ec",
+      "kind": "elastic",
+      "selection": {
+        "field": "displacement",
+        "displayUnit": "mm"
+      },
+      "calculation": {
+        "operation": "elastic",
+        "options": {
+          "method": "pcg-strict",
+          "size": 5,
+          "adaptive": false,
+          "maxRounds": 3
+        },
+        "engine": "Airpocket Tet4 / JavaScript CPU"
+      },
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "surfaceFaceCount": 180
+      },
+      "runtimeIdentity": {
+        "assets": [
+          {
+            "bytes": 41430673,
+            "role": "gmsh",
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ],
+        "build": {
+          "status": "unavailable"
+        },
+        "engine": {
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU",
+          "requestedMethod": "pcg-strict"
+        },
+        "isolation": "web-worker",
+        "schemaVersion": 1,
+        "target": "browser"
+      },
+      "analysisAssessment": {
+        "recorded": true,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "omittedFields": [
+          "remainingChecks",
+          "schemaVersion"
+        ],
+        "omittedFieldCount": 2,
+        "omissionReason": "assessment details omitted to keep the response bounded"
+      },
+      "measurement": {
+        "element": 117,
+        "values": {
+          "displacementMm": [
+            1.1580991724393819e-14,
+            3.2678245473126535e-14,
+            0.08000000000005272
+          ],
+          "magnitudeMm": 0.08000000000005272
+        },
+        "units": {
+          "displacementMm": "mm",
+          "magnitudeMm": "mm"
+        }
+      },
+      "originalLiveMeasurementMm": 0.08000000000005272,
+      "equalsOriginalLiveMeasurement": true,
+      "sourceFileMetadataOnly": {
+        "provenanceHash": "sha256:ad1c14a3ecb65eb4e16f0bf1dfd816f62a4c0606b63e38adc8d118e73780724f",
+        "entryCount": 16,
+        "statuses": [
+          "unconfirmed"
+        ],
+        "assumptions": [
+          "Explicit unverified synthetic workflow assumption"
+        ]
+      }
+    }
+  ],
+  "gaps": [
+    "Local saved-case MCP tools read and reconstruct fields but do not expose apply/import/export into browser state. Actual browser restore not performed.",
+    "MCP comparison reports exploratory/provisional and completePreflight:false; detailed source/assumption provenance is omitted. Provenance above was read directly from source JSON, not obtained through MCP.",
+    "Recorded runtimeIdentity.build.status is unavailable; engine name, method and gmsh asset hash retained, exact app/engine build revision absent.",
+    "This remains partial candidate-independent evidence; no gate promotion or physical accuracy claim."
+  ],
+  "date": "2026-10-18",
+  "runtime": {
+    "sourceBasis": "318ee8fd971f167ff974dda3ff3a2753332401bc",
+    "trackedDirty": true,
+    "scope": "Current input/recovery source batch before commit; no solver rerun or live browser operation"
+  }
+}

@@ -31,7 +31,7 @@ test('real MCP samples stored thermal temperature frames with exact times and no
 test('real MCP lists stable snapshot-local saved cases then compares physical values without writes or analysis',async()=>{
  const directory=await mkdtemp(join(tmpdir(),'mcp-case-comparison-')),mcp=server();try{
   const path=join(directory,'archive.json'),raw=Buffer.from(JSON.stringify(archive(),null,2));await writeFile(path,raw);
-  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();const tools=(await mcp.request('tools/list',{})).result.tools;assert.equal(tools.length,31);const tool=tools.find(tool=>tool.name==='studio_compare_cases');assert.equal(tool.annotations.readOnlyHint,true);assert.equal(tool.inputSchema.properties.references.maxItems,8);assert.deepEqual(tool.inputSchema.required,['path']);
+  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();const tools=(await mcp.request('tools/list',{})).result.tools;assert.equal(tools.length,33);const tool=tools.find(tool=>tool.name==='studio_compare_cases');assert.equal(tool.annotations.readOnlyHint,true);assert.equal(tool.inputSchema.properties.references.maxItems,8);assert.deepEqual(tool.inputSchema.required,['path']);
   const catalog=await mcp.call({path});assert.deepEqual(catalog.cases.map(row=>row.caseId),['saved-case:0','saved-case:1','saved-case:2']);assert.equal(catalog.source.sha256,hash(raw));assert.equal(catalog.source.bytes,raw.length);
   const references=[reference(catalog,0,'temperature'),reference(catalog,1,'temperature')],request={path,references,point,expectedArchiveRevision:catalog.archiveRevision},comparison=await mcp.call(request);
   assert.ok(Buffer.byteLength(JSON.stringify(comparison))<=65536);assert.equal(comparison.bounds.maxResponseBytes,65536);assert.equal(comparison.source.sha256,catalog.source.sha256);assert.equal(comparison.references[0].measurement.values.temperature,26);assert.equal(comparison.references[1].measurement.values.temperature,36);assert.equal(comparison.comparison.comparable,true);assert.equal(comparison.comparison.deltas[0].values.temperature,10);
@@ -50,4 +50,16 @@ test('saved comparison rejects source changes after inspection and never execute
   await assert.rejects(compareSavedCaseArchive({path},{readSource:async()=>++reads===1?raw:Buffer.concat([raw,Buffer.from('\n')])}),{code:'CASE_ARCHIVE_SOURCE_CHANGED'});assert.deepEqual(await readFile(path),raw);
   let invoked=false;await assert.rejects(compareSavedCaseArchive({path,get references(){invoked=true;return [];}}));assert.equal(invoked,false);
  }finally{await rm(directory,{recursive:true,force:true});}
+});
+
+test('real MCP inspects saved case provenance with archive, case and input revision guards',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'mcp-case-input-')),mcp=server();try{
+  const path=join(directory,'cases.json'),raw=await readFile(new URL('../docs/evidence/2026-10-18-skill-loop-cases.json',import.meta.url));await writeFile(path,raw);
+  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();const tools=(await mcp.request('tools/list',{})).result.tools,tool=tools.find(t=>t.name==='studio_inspect_case');assert.equal(tool.annotations.readOnlyHint,true);assert.equal(tool.annotations.openWorldHint,false);assert.equal(tool.inputSchema.additionalProperties,false);
+  const catalog=await mcp.call({path}),request={path,expectedArchiveRevision:catalog.archiveRevision,caseId:catalog.cases[0].caseId,expectedRevision:catalog.cases[0].revision,section:'provenance',pointer:'/inputProvenance/entries/0'};
+  const inspect=async args=>{const response=(await mcp.request('tools/call',{name:'studio_inspect_case',arguments:args})).result;assert.notEqual(response.isError,true,JSON.stringify(response));assert.deepEqual(JSON.parse(response.content[0].text),response.structuredContent.value);return response.structuredContent.value;};
+  const result=await inspect(request);assert.equal(result.archiveRevision,catalog.archiveRevision);assert.equal(result.caseRevision,catalog.cases[0].revision);assert.equal(result.caseId,catalog.cases[0].caseId);assert.equal(result.source.sha256,hash(raw));assert.match(result.input.revision,/^sha256:[a-f0-9]{64}$/);assert.match(result.input.page.entries.find(e=>e.pointer.endsWith('/assumption')).value,/synthetic/);assert.equal(result.input.page.entries.find(e=>e.pointer.endsWith('/status')).value,'unconfirmed');assert.deepEqual(await inspect({...request,expectedInputRevision:result.input.revision}),result);
+  const stale='sha256:'+'0'.repeat(64);for(const patch of [{expectedArchiveRevision:stale},{expectedRevision:stale},{expectedInputRevision:stale}])assert.equal((await mcp.request('tools/call',{name:'studio_inspect_case',arguments:{...request,...patch}})).result.isError,true);
+  assert.deepEqual(await readFile(path),raw);
+ }finally{await mcp.close();await rm(directory,{recursive:true,force:true});}
 });

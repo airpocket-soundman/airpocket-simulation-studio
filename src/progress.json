@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T21:55:45.054Z",
+  "updatedAt": "2026-10-17T22:51:15.804Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1507,
-    "description": "公開済み130件・残37件（全167件）。公開HTTPSの確認専用接続とreset時の識別・明示復旧を公開証拠で確認済みです。今回、保存ジョブの再起動後に残るrequestIdを計算前に拒否し、重複実行を防ぎます。正式MCPで合成棒100N/200Nの入力・根拠修復・解析・保存・比較PNGを一巡し、手順書の不足も修正しました。初稿の独立成功ではなく、修正版の実行成功です。背景WebMの実hidden確認、熱性能resetの原因、メモリ/他ブラウザ、独立Skill再現、製品公開ゲートと全親計画は未完です。 検証件数1507はPR117の公開前CI（1504成功・3skip・失敗0）の確定値です。",
-    "descriptionEn": "130 released and37 unfinished among167 tasks. Published evidence verifies inspect-only public HTTPS and reset identity/explicit recovery. This increment refuses retained request IDs after a job-store restart before computation to prevent replay. A real-MCP synthetic100N/200N bar loop covers input,provenance repair,solve,cases and comparison PNG; recipe gaps were repaired. This is a revised-recipe execution,not independent success of the initial draft. Actual hidden WebM,thermal-reset cause,memory/other browsers,independent Skill reproduction,product gates and parent plans remain incomplete. Test count1507 is the completed PR117 CI baseline(1504passed,3skipped,0failed)."
+    "testCount": 1509,
+    "description": "公開済み130件・残37件（全167件）。今回、モーダルの不正局所座標を事前拒否し、モーダル/直交異方性で無効拘束を支持に数えないよう修正。再起動後ジョブの有界一覧/取得可能性/明示的な復旧手順と、保存ケース入力・根拠の版固定ページ取得を追加します。既存100/200Nケースの再測定は0.04/0.08mmと厳密一致し、各16件の仮定を正式MCPで取得しました。全物理の桁規則・一般精度・ブラウザへのケース復元・独立Skill一巡・公開ゲートは未完です。背景録画の手動確認は利用者が今は操作不可のため待機。件数1509はPR118確定CI（1506成功・3skip・失敗0）の基準です。",
+    "descriptionEn": "130 released/37 unfinished among167. This increment refuses invalid modal local frames and excludes invalid modal/orthotropic supports; adds bounded restored-job discovery/availability/explicit recovery and revision-pinned saved-case input/provenance pages. Existing100/200N saved cases remeasure exactly0.04/0.08mm and16 assumptions per case were recovered through real MCP. All-physics magnitude rules,general accuracy,browser case restoration,independent Skill acceptance and product gates remain open. Manual background QA waits because the user cannot operate now.1509 is completed PR118 CI baseline(1506passed,3skipped,0failed)."
   },
   "tasks": [
     {
@@ -1147,8 +1147,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md",
-      "lastUpdate": "2026-10-18: 正式stdio MCPで合成棒100N→200Nの入力・探索的根拠修復・mesh事前検査・解析・ケース比較PNG/保存を一巡しました。初稿の設定補完/value wrapper不足を修復した実行であり、配布最終手順だけによる独立再現・全分野診断/精度・親計画全体は未完です。",
-      "lastUpdateEn": "2026-10-18: Real stdio MCP completed a synthetic100N/200N loop through input,exploratory provenance repair,mesh preflight,solve,cases,comparison PNG/archive. The draft needed study-normalization/value-wrapper repairs. Independent final-prose reproduction,all-physics diagnosis/accuracy and parent acceptance remain open."
+      "lastUpdate": "2026-10-18: 既定33/接続35ツールの発見契約を更新。復元job一覧と保存case入力読取を追加し、既存ブラウザ91操作は維持。実stdio発見・拒否・復旧を確認。親と全操作の実機一巡は未完。",
+      "lastUpdateEn": "2026-10-18: Updated33default/35paired tool discovery with restored-job listing and saved-case input inspection;91 browser methods unchanged. Real stdio discovery/refusal/recovery verified; parent and full live loop remain open."
     },
     {
       "id": "P1",
@@ -1163,8 +1163,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence. This diagnostic increment has automated/independent solver-reference evidence; live GUI verification was not performed.",
-      "lastUpdate": "2026-10-18: 正式stdio MCPで合成棒100N→200Nの入力・探索的根拠修復・mesh事前検査・解析・ケース比較PNG/保存を一巡しました。初稿の設定補完/value wrapper不足を修復した実行であり、配布最終手順だけによる独立再現・全分野診断/精度・親計画全体は未完です。",
-      "lastUpdateEn": "2026-10-18: Real stdio MCP completed a synthetic100N/200N loop through input,exploratory provenance repair,mesh preflight,solve,cases,comparison PNG/archive. The draft needed study-normalization/value-wrapper repairs. Independent final-prose reproduction,all-physics diagnosis/accuracy and parent acceptance remain open.",
+      "lastUpdate": "2026-10-18: モーダルの不正frame/方向不一致を事前診断し、モーダル/直交異方性で無効支持を数えない修正を追加。solver既存規則に整合し関連34試験成功。全物理の桁規則と収束/精度は未完。",
+      "lastUpdateEn": "2026-10-18: Modal preflight now refuses invalid local frames/direction mismatches; modal/orthotropic checks exclude invalid supports. Existing solver rules retained;34 related tests pass. All-physics magnitude rules and convergence/accuracy remain open.",
       "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
     },
     {
@@ -1195,8 +1195,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-18: opt-in job-storeの復元requestIdを入力読取/計算前に理由コードとjobId付きで拒否し、暗黙の再実行を防ぎます。実MCPの終了→再起動、同一/変更再送拒否、新ID成功、明示release後の再利用を検証。結果/中間場の復元、完全な再起動冪等性、公開HTTPSの編集/解析、背景実hiddenと親全体は未完です。",
-      "lastUpdateEn": "2026-10-18: Opt-in job-store rejects restored request IDs before input reads/computation with a code and job ID. Actual MCP restart verifies same/changed replay refusal,new-ID success and reuse after explicit release. Result/field restoration,full restart idempotency,public mutation scopes,actual hidden QA and parent acceptance remain open.",
+      "lastUpdate": "2026-10-18: 復元jobIdを失ってもstudio_restored_jobsで有界再発見（最大20件/JSON30000bytes）、取得可能性と明示nextStepsを追加。実MCP再起動→再発見→status→明示解放を確認。結果/場復元・完全冪等性・公開mutation・背景手動確認は未完。",
+      "lastUpdateEn": "2026-10-18: Bounded studio_restored_jobs(max20/30000JSONbytes) rediscovers restored IDs with availability/explicit nextSteps. Real MCP restart/discovery/status/release verified. Result/field restoration,full idempotency,public mutation and manual background QA remain open.",
       "evidence": "docs/task-critical-path.md"
     },
     {
@@ -1212,8 +1212,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-18: 正式stdio MCPで合成棒100N→200Nの入力・探索的根拠修復・mesh事前検査・解析・ケース比較PNG/保存を一巡しました。初稿の設定補完/value wrapper不足を修復した実行であり、配布最終手順だけによる独立再現・全分野診断/精度・親計画全体は未完です。",
-      "lastUpdateEn": "2026-10-18: Real stdio MCP completed a synthetic100N/200N loop through input,exploratory provenance repair,mesh preflight,solve,cases,comparison PNG/archive. The draft needed study-normalization/value-wrapper repairs. Independent final-prose reproduction,all-physics diagnosis/accuracy and parent acceptance remain open."
+      "lastUpdate": "2026-10-18: 保存2caseを正式MCPで再読込/同一点再測定し0.04/0.08mmが厳密一致。比較で省略された根拠をstudio_inspect_caseのarchive/case/input版固定ページで各16件取得。ブラウザ状態復元/不明build版/公開gateは未完。",
+      "lastUpdateEn": "2026-10-18: Real-MCP saved-case reload/point remeasurement exactly matches0.04/0.08mm;studio_inspect_case recovers16 assumptions per case via pinned archive/case/input pages. Browser restoration,missing build identity and publication gates remain open."
     },
     {
       "id": "P5",
@@ -1362,8 +1362,8 @@
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-17: 拘束rank・連結成分と熱接触・音響の最低分解能と過渡帯域の診断を追加しました。今回メッシュ品質と要素の妥当性も事前検査へ追加しました。全物理の桁規則、収束・精度とSkillだけの一巡は残るため検証中です。",
-      "lastUpdateEn": "2026-10-17: Added constraint-rank/component/contact and acoustic minimum-resolution/transient-bandwidth checks. Retained-mesh quality/element validity is now integrated. All-physics magnitude rules, convergence/accuracy and a Skill-only full loop remain; stays checking."
+      "lastUpdate": "2026-10-18: 不正モーダル局所座標と無効支持を早期診断し、正式MCPで保存2caseの各16仮定を版固定で再取得しました。全物理の桁規則/精度・Skill独立一巡は未完、checking維持。",
+      "lastUpdateEn": "2026-10-18: Early invalid modal-frame/support diagnostics and real-MCP recovery of16 assumptions per saved case added. All-physics magnitude/accuracy and independent Skill loop remain open; stays checking."
     },
     {
       "id": "VIEWCOMPARE",
@@ -2613,8 +2613,8 @@
       "category": "結果表示",
       "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-18: 背景開始拒否・中断、進捗停止と終了待ちの監視を実装しました。実Chromeの正常録画/取消/再作成と自動テストは成功。実際のhidden移行は操作手段の制約で未確認のため検証中です。",
-      "lastUpdateEn": "2026-10-18: Implemented hidden-start/transition interruption, stall and stop monitoring. Real-Chrome normal recording/cancel/restart and automated tests passed. Actual hidden transition is unverified due to control limitations; stays checking.",
+      "lastUpdate": "2026-10-18: 利用者は今は操作不可。実hiddenの手動確認待ちとしてcheckingを維持し、ほかの実装/検証を先行します。停止監視実装の公開と実機確認の未完を分離。",
+      "lastUpdateEn": "2026-10-18: User cannot operate now;actual hidden manual QA remains checking while other work proceeds. Published monitoring is distinct from unverified real hidden behavior.",
       "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json"
     },
     {
