@@ -4,11 +4,11 @@ import {createViewCompareUi} from '../src/ui/view-compare-ui.js';
 
 const fakeCtx = () => { const calls = []; return {calls, fillRect() {}, drawImage: (...a) => calls.push(['draw', ...a]), fillText: (t) => calls.push(['text', t]), createLinearGradient: () => ({addColorStop() {}}), set fillStyle(v) {}, set font(v) {}, set textAlign(v) {}}; };
 function el(tag) { const e = {tag, children: [], textContent: '', value: '', style: {}, append(...c) { this.children.push(...c); }, replaceChildren(...c) { this.children = [...c]; }, setAttribute() {}, addEventListener() {}, after() {}, ctx: tag === 'canvas' ? fakeCtx() : null, getContext() { return this.ctx; }}; return e; }
-function setup({transient = false, field = 'stress', finalOnly = false, presetApi} = {}) {
+function setup({transient = false, field = 'stress', finalOnly = false, presetApi,videoApi,env,language} = {}) {
   const cases = [{name: 'A', output: {calculation: {options: {size: 5}}}}, {name: 'B', output: {calculation: {options: {size: 4}}}}];
   const renders = [], statuses = [], inspections = [];
   const ui = createViewCompareUi({
-    presetApi, $: () => null, document: {createElement: el}, anchor: el('div'), status: t => statuses.push(t),
+    presetApi,videoApi,env,language, $: () => null, document: {createElement: el}, anchor: el('div'), status: t => statuses.push(t),
     store: {list: () => cases, compare: () => cases.map(() => ({metrics: [{key: 'maxVonMisesPa', value: 2e6, unit: 'Pa'}]}))},
     inspectCase: (i, selectedField) => { inspections.push([i, selectedField]); return {frameTimes: transient ? [0, 0.1, 0.2].map(t => t + i * 0.01) : null, fields: [field],finalOnly}; },
     renderCase: (i, spec) => { renders.push([i, spec]); return {canvas: {width: 100, height: 50}, min: i ? 1 : 0, max: i ? 20 : 10, unit: 'MPa', finalOnly}; },
@@ -86,4 +86,35 @@ test('raw capture supports incomplete initial selections and no cases without mu
 });
 test('final-only thermal heat flux shared time is refused before settings mutation',()=>{
  const f=setup({field:'heatFlux',finalOnly:true}),before=f.ui.capture(),next=imported();next.settings.field='heatFlux';next.settings.timeSeconds=5;assert.throws(()=>f.ui.apply(next),/final-step only/);assert.deepEqual(f.ui.capture(),before);
+});
+
+function videoEnvironment(){const created=[],revoked=[];return {created,revoked,env:{URL:{createObjectURL:blob=>{const url='blob:comparison-'+created.length;created.push({blob,url});return url;},revokeObjectURL:url=>revoked.push(url)}}};}
+const videoBlob=()=>new Blob(['webm'],{type:'video/webm;codecs=vp8'});
+
+test('comparison video uses validated panel state/default two seconds and exposes preview plus explicit save only after success',async()=>{
+ const urls=videoEnvironment(),calls=[],f=setup({videoApi:{capabilities:()=>({supported:true}),async start(state,options){calls.push({state,seconds:options.seconds});options.onProgress({fraction:.5});assert.match(find(f.ui.host,'compare-video-status').textContent,/50%/);return {blob:videoBlob(),metadata:{name:'clip.webm'}};},cancel(){}},env:urls.env});
+ const start=find(f.ui.host,'compare-video-start'),preview=find(f.ui.host,'compare-video-preview'),download=find(f.ui.host,'compare-video-download');
+ preview.play=()=>assert.fail('Preview must not autoplay');download.click=()=>assert.fail('Video must not automatically download');
+ assert.equal(preview.hidden,true);assert.equal(download.hidden,true);assert.equal(preview.controls,true);assert.equal(find(f.ui.host,'compare-video-seconds').value,'2');
+ await start.onclick();assert.equal(calls[0].seconds,2);assert.deepEqual(calls[0].state.indices,[0,1]);assert.equal(calls[0].state.settings.field,'stress');
+ assert.equal(preview.hidden,false);assert.equal(download.hidden,false);assert.equal(preview.src,'blob:comparison-0');assert.equal(download.href,preview.src);assert.equal(download.download,'case-comparison-orbit.webm');assert.equal(start.disabled,false);
+ await start.onclick();assert.deepEqual(urls.revoked,['blob:comparison-0']);assert.equal(preview.src,'blob:comparison-1');
+});
+
+test('video cancellation discards late successful promises and stale links; subsequent failure leaves no preview',async()=>{
+ const urls=videoEnvironment();let finish,cancels=0,fail=false;
+ const f=setup({videoApi:{capabilities:()=>({supported:true}),start:()=>fail?Promise.reject(Error('Recorder failed')):new Promise(resolve=>{finish=resolve;}),cancel(){cancels++;}},env:urls.env}),start=find(f.ui.host,'compare-video-start'),cancel=find(f.ui.host,'compare-video-cancel'),preview=find(f.ui.host,'compare-video-preview'),link=find(f.ui.host,'compare-video-download');
+ const pending=start.onclick();assert.equal(start.disabled,true);assert.equal(cancel.disabled,false);await cancel.onclick();finish({blob:videoBlob()});await pending;
+ assert.equal(cancels,1);assert.equal(urls.created.length,0);assert.equal(preview.hidden,true);assert.equal(link.hidden,true);assert.equal(link.href,'');assert.equal(cancel.disabled,true);assert.match(find(f.ui.host,'compare-video-status').textContent,/中止しました/);
+ const success=start.onclick();finish({blob:videoBlob()});await success;assert.equal(preview.hidden,false);
+ fail=true;await start.onclick();assert.deepEqual(urls.revoked,['blob:comparison-0']);assert.equal(preview.hidden,true);assert.equal(link.hidden,true);assert.equal(link.href,'');assert.match(find(f.ui.host,'compare-video-status').textContent,/Recorder failed/);
+});
+
+test('unsupported capability, invalid duration and missing transient time refuse without invoking video start',async()=>{
+ const unsupported=setup({videoApi:{capabilities:()=>({supported:false,reason:'No WebM codec'}),start:()=>assert.fail('Unsupported start')}});
+ assert.equal(find(unsupported.ui.host,'compare-video-start').disabled,true);assert.equal(find(unsupported.ui.host,'compare-video-status').textContent,'このブラウザでは比較動画を作成できません。');
+ const english=setup({language:()=> 'en',videoApi:{capabilities:()=>({supported:false,reason:'Canvas captureStream is unavailable'})}});assert.equal(find(english.ui.host,'compare-video-status').textContent,'This browser cannot create comparison videos.');
+ let calls=0;const videoApi={capabilities:()=>({supported:true}),start(){calls++;return Promise.resolve({blob:videoBlob()});},cancel(){}};
+ const f=setup({videoApi});for(const value of ['0','16','1.5','']){find(f.ui.host,'compare-video-seconds').value=value;await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(f.ui.host,'compare-video-status').textContent,/1〜15/);}
+ const timed=setup({videoApi,transient:true});await find(timed.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(timed.ui.host,'compare-video-status').textContent,/物理時刻/);
 });

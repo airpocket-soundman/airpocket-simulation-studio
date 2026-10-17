@@ -1,0 +1,1222 @@
+{
+  "schemaVersion": 1,
+  "readOnly": true,
+  "label": "gui-video",
+  "before": {
+    "getResultView": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+      "physicalRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+      "kind": "thermal",
+      "fields": [
+        {
+          "id": "temperature",
+          "unit": "degC"
+        },
+        {
+          "id": "heatFlux",
+          "unit": "W/m2"
+        }
+      ],
+      "state": {
+        "field": "temperature",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 11,
+      "physicalTimeSeconds": 2.01,
+      "interpolated": true,
+      "timeSelection": "viewer-slider-only",
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 1
+        },
+        {
+          "index": 2,
+          "timeSeconds": 2
+        },
+        {
+          "index": 3,
+          "timeSeconds": 3
+        },
+        {
+          "index": 4,
+          "timeSeconds": 4
+        },
+        {
+          "index": 5,
+          "timeSeconds": 5
+        },
+        {
+          "index": 6,
+          "timeSeconds": 6
+        },
+        {
+          "index": 7,
+          "timeSeconds": 7
+        },
+        {
+          "index": 8,
+          "timeSeconds": 8
+        },
+        {
+          "index": 9,
+          "timeSeconds": 9
+        },
+        {
+          "index": 10,
+          "timeSeconds": 10
+        }
+      ],
+      "modes": []
+    },
+    "inspectInput": {
+      "schemaVersion": 1,
+      "revision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+      "section": "project",
+      "pointer": "",
+      "exists": true,
+      "units": {},
+      "limitations": [
+        "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+        "Hashes cover canonical JSON values, not original source-file bytes.",
+        "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+        "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+        "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+      ],
+      "descriptor": {
+        "pointer": "",
+        "type": "object",
+        "keyCount": 10,
+        "omitted": true,
+        "sha256": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+        "hashBasis": "canonical-json"
+      },
+      "page": {
+        "offset": 0,
+        "limit": 20,
+        "total": 10,
+        "nextOffset": null,
+        "entries": [
+          {
+            "pointer": "/conditions",
+            "type": "array",
+            "length": 0,
+            "omitted": true,
+            "sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/material",
+            "type": "string",
+            "length": 2,
+            "value": "金属"
+          },
+          {
+            "pointer": "/materialProperties",
+            "type": "object",
+            "keyCount": 3,
+            "omitted": true,
+            "sha256": "sha256:b69ec00141511b8f4102d756406dcc8ff341ca200b8da153c8cb9c549fc30713",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/meshSettings",
+            "type": "object",
+            "keyCount": 1,
+            "omitted": true,
+            "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/meshes",
+            "type": "array",
+            "length": 1,
+            "omitted": true,
+            "sha256": "sha256:eeda768e3e9b618724d1e8c200abe9a3245315316c2ae8172ef9c3cd0db5b5f4",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/name",
+            "type": "string",
+            "length": 19,
+            "value": "QA analytic T=20+1t"
+          },
+          {
+            "pointer": "/selection",
+            "type": "array",
+            "length": 1,
+            "omitted": true,
+            "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/sourceModel",
+            "type": "null",
+            "value": null
+          },
+          {
+            "pointer": "/study",
+            "type": "object",
+            "keyCount": 46,
+            "omitted": true,
+            "sha256": "sha256:a8b9db1fe6d68100142a6cc6cb694636809653206facf3a6cd85bb5340987e42",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/version",
+            "type": "number",
+            "value": 1
+          }
+        ]
+      }
+    },
+    "caseList": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:3ddee4a1c783024030de995c7d15c58bb502353b602047c20b8c9fb0180b5a67",
+      "cases": [
+        {
+          "caseId": "e0162027-fb26-47bf-8648-d01e0f9d55e4",
+          "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1",
+          "name": "QA analytic T=20+1t degC (closed tetra)",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 29.999999999999943
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 29.999999999999943
+            }
+          ]
+        },
+        {
+          "caseId": "3ce7d2c4-725c-4f4c-a7a6-db09779186f7",
+          "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e",
+          "name": "QA analytic T=20+2t degC (closed tetra)",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 39.99999999999994
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 39.99999999999994
+            }
+          ]
+        }
+      ]
+    },
+    "getCompareView": {
+      "schemaVersion": 1,
+      "revision": "sha256:905112693d5e4fbcf5aedd2310be4479dfca0286f15d6597471d67a782b57345",
+      "archive": {
+        "kind": "comparison-view",
+        "settings": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              1.9,
+              1.4,
+              2.1
+            ],
+            "target": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "field": "temperature",
+          "timeSeconds": 5
+        },
+        "sources": [
+          {
+            "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+          },
+          {
+            "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+          }
+        ],
+        "version": 1
+      }
+    }
+  },
+  "beforeSha256": "5863fdb2a1d782c5187755af98736116dac14e5808fab9425649f2112abcb40b",
+  "checks": [
+    {
+      "label": "completed",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      },
+      "afterSha256": "5863fdb2a1d782c5187755af98736116dac14e5808fab9425649f2112abcb40b",
+      "after": {
+        "getResultView": {
+          "schemaVersion": 1,
+          "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "physicalRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "kind": "thermal",
+          "fields": [
+            {
+              "id": "temperature",
+              "unit": "degC"
+            },
+            {
+              "id": "heatFlux",
+              "unit": "W/m2"
+            }
+          ],
+          "state": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            }
+          },
+          "modeCount": 0,
+          "frameCount": 11,
+          "physicalTimeSeconds": 2.01,
+          "interpolated": true,
+          "timeSelection": "viewer-slider-only",
+          "frames": [
+            {
+              "index": 0,
+              "timeSeconds": 0
+            },
+            {
+              "index": 1,
+              "timeSeconds": 1
+            },
+            {
+              "index": 2,
+              "timeSeconds": 2
+            },
+            {
+              "index": 3,
+              "timeSeconds": 3
+            },
+            {
+              "index": 4,
+              "timeSeconds": 4
+            },
+            {
+              "index": 5,
+              "timeSeconds": 5
+            },
+            {
+              "index": 6,
+              "timeSeconds": 6
+            },
+            {
+              "index": 7,
+              "timeSeconds": 7
+            },
+            {
+              "index": 8,
+              "timeSeconds": 8
+            },
+            {
+              "index": 9,
+              "timeSeconds": 9
+            },
+            {
+              "index": 10,
+              "timeSeconds": 10
+            }
+          ],
+          "modes": []
+        },
+        "inspectInput": {
+          "schemaVersion": 1,
+          "revision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+          "section": "project",
+          "pointer": "",
+          "exists": true,
+          "units": {},
+          "limitations": [
+            "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+            "Hashes cover canonical JSON values, not original source-file bytes.",
+            "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+            "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+            "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+          ],
+          "descriptor": {
+            "pointer": "",
+            "type": "object",
+            "keyCount": 10,
+            "omitted": true,
+            "sha256": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+            "hashBasis": "canonical-json"
+          },
+          "page": {
+            "offset": 0,
+            "limit": 20,
+            "total": 10,
+            "nextOffset": null,
+            "entries": [
+              {
+                "pointer": "/conditions",
+                "type": "array",
+                "length": 0,
+                "omitted": true,
+                "sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/material",
+                "type": "string",
+                "length": 2,
+                "value": "金属"
+              },
+              {
+                "pointer": "/materialProperties",
+                "type": "object",
+                "keyCount": 3,
+                "omitted": true,
+                "sha256": "sha256:b69ec00141511b8f4102d756406dcc8ff341ca200b8da153c8cb9c549fc30713",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshSettings",
+                "type": "object",
+                "keyCount": 1,
+                "omitted": true,
+                "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshes",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:eeda768e3e9b618724d1e8c200abe9a3245315316c2ae8172ef9c3cd0db5b5f4",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/name",
+                "type": "string",
+                "length": 19,
+                "value": "QA analytic T=20+1t"
+              },
+              {
+                "pointer": "/selection",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/sourceModel",
+                "type": "null",
+                "value": null
+              },
+              {
+                "pointer": "/study",
+                "type": "object",
+                "keyCount": 46,
+                "omitted": true,
+                "sha256": "sha256:a8b9db1fe6d68100142a6cc6cb694636809653206facf3a6cd85bb5340987e42",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/version",
+                "type": "number",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "caseList": {
+          "schemaVersion": 1,
+          "archiveRevision": "sha256:3ddee4a1c783024030de995c7d15c58bb502353b602047c20b8c9fb0180b5a67",
+          "cases": [
+            {
+              "caseId": "e0162027-fb26-47bf-8648-d01e0f9d55e4",
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1",
+              "name": "QA analytic T=20+1t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                }
+              ]
+            },
+            {
+              "caseId": "3ce7d2c4-725c-4f4c-a7a6-db09779186f7",
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e",
+              "name": "QA analytic T=20+2t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                }
+              ]
+            }
+          ]
+        },
+        "getCompareView": {
+          "schemaVersion": 1,
+          "revision": "sha256:905112693d5e4fbcf5aedd2310be4479dfca0286f15d6597471d67a782b57345",
+          "archive": {
+            "kind": "comparison-view",
+            "settings": {
+              "camera": {
+                "fov": 40,
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "deformScale": 1,
+              "field": "temperature",
+              "timeSeconds": 5
+            },
+            "sources": [
+              {
+                "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+              },
+              {
+                "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+              }
+            ],
+            "version": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "cancelled",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      },
+      "afterSha256": "5863fdb2a1d782c5187755af98736116dac14e5808fab9425649f2112abcb40b",
+      "after": {
+        "getResultView": {
+          "schemaVersion": 1,
+          "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "physicalRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "kind": "thermal",
+          "fields": [
+            {
+              "id": "temperature",
+              "unit": "degC"
+            },
+            {
+              "id": "heatFlux",
+              "unit": "W/m2"
+            }
+          ],
+          "state": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            }
+          },
+          "modeCount": 0,
+          "frameCount": 11,
+          "physicalTimeSeconds": 2.01,
+          "interpolated": true,
+          "timeSelection": "viewer-slider-only",
+          "frames": [
+            {
+              "index": 0,
+              "timeSeconds": 0
+            },
+            {
+              "index": 1,
+              "timeSeconds": 1
+            },
+            {
+              "index": 2,
+              "timeSeconds": 2
+            },
+            {
+              "index": 3,
+              "timeSeconds": 3
+            },
+            {
+              "index": 4,
+              "timeSeconds": 4
+            },
+            {
+              "index": 5,
+              "timeSeconds": 5
+            },
+            {
+              "index": 6,
+              "timeSeconds": 6
+            },
+            {
+              "index": 7,
+              "timeSeconds": 7
+            },
+            {
+              "index": 8,
+              "timeSeconds": 8
+            },
+            {
+              "index": 9,
+              "timeSeconds": 9
+            },
+            {
+              "index": 10,
+              "timeSeconds": 10
+            }
+          ],
+          "modes": []
+        },
+        "inspectInput": {
+          "schemaVersion": 1,
+          "revision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+          "section": "project",
+          "pointer": "",
+          "exists": true,
+          "units": {},
+          "limitations": [
+            "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+            "Hashes cover canonical JSON values, not original source-file bytes.",
+            "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+            "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+            "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+          ],
+          "descriptor": {
+            "pointer": "",
+            "type": "object",
+            "keyCount": 10,
+            "omitted": true,
+            "sha256": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+            "hashBasis": "canonical-json"
+          },
+          "page": {
+            "offset": 0,
+            "limit": 20,
+            "total": 10,
+            "nextOffset": null,
+            "entries": [
+              {
+                "pointer": "/conditions",
+                "type": "array",
+                "length": 0,
+                "omitted": true,
+                "sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/material",
+                "type": "string",
+                "length": 2,
+                "value": "金属"
+              },
+              {
+                "pointer": "/materialProperties",
+                "type": "object",
+                "keyCount": 3,
+                "omitted": true,
+                "sha256": "sha256:b69ec00141511b8f4102d756406dcc8ff341ca200b8da153c8cb9c549fc30713",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshSettings",
+                "type": "object",
+                "keyCount": 1,
+                "omitted": true,
+                "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshes",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:eeda768e3e9b618724d1e8c200abe9a3245315316c2ae8172ef9c3cd0db5b5f4",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/name",
+                "type": "string",
+                "length": 19,
+                "value": "QA analytic T=20+1t"
+              },
+              {
+                "pointer": "/selection",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/sourceModel",
+                "type": "null",
+                "value": null
+              },
+              {
+                "pointer": "/study",
+                "type": "object",
+                "keyCount": 46,
+                "omitted": true,
+                "sha256": "sha256:a8b9db1fe6d68100142a6cc6cb694636809653206facf3a6cd85bb5340987e42",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/version",
+                "type": "number",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "caseList": {
+          "schemaVersion": 1,
+          "archiveRevision": "sha256:3ddee4a1c783024030de995c7d15c58bb502353b602047c20b8c9fb0180b5a67",
+          "cases": [
+            {
+              "caseId": "e0162027-fb26-47bf-8648-d01e0f9d55e4",
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1",
+              "name": "QA analytic T=20+1t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                }
+              ]
+            },
+            {
+              "caseId": "3ce7d2c4-725c-4f4c-a7a6-db09779186f7",
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e",
+              "name": "QA analytic T=20+2t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                }
+              ]
+            }
+          ]
+        },
+        "getCompareView": {
+          "schemaVersion": 1,
+          "revision": "sha256:905112693d5e4fbcf5aedd2310be4479dfca0286f15d6597471d67a782b57345",
+          "archive": {
+            "kind": "comparison-view",
+            "settings": {
+              "camera": {
+                "fov": 40,
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "deformScale": 1,
+              "field": "temperature",
+              "timeSeconds": 5
+            },
+            "sources": [
+              {
+                "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+              },
+              {
+                "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+              }
+            ],
+            "version": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "restarted",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      },
+      "afterSha256": "5863fdb2a1d782c5187755af98736116dac14e5808fab9425649f2112abcb40b",
+      "after": {
+        "getResultView": {
+          "schemaVersion": 1,
+          "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "physicalRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "kind": "thermal",
+          "fields": [
+            {
+              "id": "temperature",
+              "unit": "degC"
+            },
+            {
+              "id": "heatFlux",
+              "unit": "W/m2"
+            }
+          ],
+          "state": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            }
+          },
+          "modeCount": 0,
+          "frameCount": 11,
+          "physicalTimeSeconds": 2.01,
+          "interpolated": true,
+          "timeSelection": "viewer-slider-only",
+          "frames": [
+            {
+              "index": 0,
+              "timeSeconds": 0
+            },
+            {
+              "index": 1,
+              "timeSeconds": 1
+            },
+            {
+              "index": 2,
+              "timeSeconds": 2
+            },
+            {
+              "index": 3,
+              "timeSeconds": 3
+            },
+            {
+              "index": 4,
+              "timeSeconds": 4
+            },
+            {
+              "index": 5,
+              "timeSeconds": 5
+            },
+            {
+              "index": 6,
+              "timeSeconds": 6
+            },
+            {
+              "index": 7,
+              "timeSeconds": 7
+            },
+            {
+              "index": 8,
+              "timeSeconds": 8
+            },
+            {
+              "index": 9,
+              "timeSeconds": 9
+            },
+            {
+              "index": 10,
+              "timeSeconds": 10
+            }
+          ],
+          "modes": []
+        },
+        "inspectInput": {
+          "schemaVersion": 1,
+          "revision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+          "section": "project",
+          "pointer": "",
+          "exists": true,
+          "units": {},
+          "limitations": [
+            "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+            "Hashes cover canonical JSON values, not original source-file bytes.",
+            "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+            "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+            "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+          ],
+          "descriptor": {
+            "pointer": "",
+            "type": "object",
+            "keyCount": 10,
+            "omitted": true,
+            "sha256": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+            "hashBasis": "canonical-json"
+          },
+          "page": {
+            "offset": 0,
+            "limit": 20,
+            "total": 10,
+            "nextOffset": null,
+            "entries": [
+              {
+                "pointer": "/conditions",
+                "type": "array",
+                "length": 0,
+                "omitted": true,
+                "sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/material",
+                "type": "string",
+                "length": 2,
+                "value": "金属"
+              },
+              {
+                "pointer": "/materialProperties",
+                "type": "object",
+                "keyCount": 3,
+                "omitted": true,
+                "sha256": "sha256:b69ec00141511b8f4102d756406dcc8ff341ca200b8da153c8cb9c549fc30713",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshSettings",
+                "type": "object",
+                "keyCount": 1,
+                "omitted": true,
+                "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/meshes",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:eeda768e3e9b618724d1e8c200abe9a3245315316c2ae8172ef9c3cd0db5b5f4",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/name",
+                "type": "string",
+                "length": 19,
+                "value": "QA analytic T=20+1t"
+              },
+              {
+                "pointer": "/selection",
+                "type": "array",
+                "length": 1,
+                "omitted": true,
+                "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/sourceModel",
+                "type": "null",
+                "value": null
+              },
+              {
+                "pointer": "/study",
+                "type": "object",
+                "keyCount": 46,
+                "omitted": true,
+                "sha256": "sha256:a8b9db1fe6d68100142a6cc6cb694636809653206facf3a6cd85bb5340987e42",
+                "hashBasis": "canonical-json"
+              },
+              {
+                "pointer": "/version",
+                "type": "number",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "caseList": {
+          "schemaVersion": 1,
+          "archiveRevision": "sha256:3ddee4a1c783024030de995c7d15c58bb502353b602047c20b8c9fb0180b5a67",
+          "cases": [
+            {
+              "caseId": "e0162027-fb26-47bf-8648-d01e0f9d55e4",
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1",
+              "name": "QA analytic T=20+1t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 29.999999999999943
+                }
+              ]
+            },
+            {
+              "caseId": "3ce7d2c4-725c-4f4c-a7a6-db09779186f7",
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e",
+              "name": "QA analytic T=20+2t degC (closed tetra)",
+              "kind": "thermal",
+              "metrics": [
+                {
+                  "key": "minTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                },
+                {
+                  "key": "maxTemperature",
+                  "unit": "°C",
+                  "value": 39.99999999999994
+                }
+              ]
+            }
+          ]
+        },
+        "getCompareView": {
+          "schemaVersion": 1,
+          "revision": "sha256:905112693d5e4fbcf5aedd2310be4479dfca0286f15d6597471d67a782b57345",
+          "archive": {
+            "kind": "comparison-view",
+            "settings": {
+              "camera": {
+                "fov": 40,
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "deformScale": 1,
+              "field": "temperature",
+              "timeSeconds": 5
+            },
+            "sources": [
+              {
+                "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+              },
+              {
+                "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+              }
+            ],
+            "version": 1
+          }
+        }
+      }
+    }
+  ],
+  "guiObservationsReportedByParent": {
+    "completed": {
+      "requestedSeconds": 2,
+      "status": "動画を作成しました",
+      "preview": {
+        "hidden": false,
+        "videoWidth": 1280,
+        "videoHeight": 640,
+        "readyState": 4,
+        "initialPaused": true,
+        "autoplay": false,
+        "controls": true
+      },
+      "saveVisible": true
+    },
+    "nativePlayback": {
+      "trustedAction": "Space",
+      "pausedAfterStart": false,
+      "currentTimeAfterStart": 0.011,
+      "ended": true,
+      "currentTimeAtEnd": 2.738,
+      "videoWidth": 1280,
+      "videoHeight": 640,
+      "readyState": 4
+    },
+    "cancelled": {
+      "requestedSeconds": 5,
+      "status": "動画作成を中止しました",
+      "startEnabled": true,
+      "cancelDisabled": true,
+      "previewHidden": true,
+      "previewSourceAbsent": true,
+      "saveHidden": true
+    },
+    "download": {
+      "clickedOnce": true,
+      "waitTimeoutSeconds": 10,
+      "completionVerified": false,
+      "retried": false,
+      "pageAssetsBlobAvailable": false
+    },
+    "byteProof": "GUI preview observations are not GUI artifact byte/hash/independent decoder proof."
+  },
+  "date": "2026-10-17",
+  "environment": {
+    "browser": "Real Chrome on localhost",
+    "transport": "Authenticated repository bridge for read-only preservation checks; GUI controls for video operations",
+    "fixture": "Analytic thermal one-tetrahedron saved cases"
+  },
+  "screenshot": "docs/evidence/2026-10-17-comparison-video-gui-real-chrome.jpg",
+  "notVerified": [
+    "GUI download completion: single browser download event timed out",
+    "Independent decoding or hash verification of GUI blob outside controller",
+    "Smooth foreground frame rate",
+    "Public HTTPS video creation",
+    "General geometry"
+  ]
+}
