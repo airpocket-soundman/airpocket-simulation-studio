@@ -1,3 +1,4 @@
+import {webmTestEnv} from './helpers/webm-test-env.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {installVisualExport,hasVideoFrames} from '../src/visual-export.js';
@@ -11,7 +12,7 @@ class Vector {
  applyAxisAngle(){this.x+=10;return this;}
 }
 const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
-function fixture({failure=false,emptyRecording=false,noChunks=false}={}){
+function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={}}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
  const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
@@ -30,7 +31,7 @@ function fixture({failure=false,emptyRecording=false,noChunks=false}={}){
  globalThis.MediaRecorder=Recorder;
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
  const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind:'elastic'}};
- const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){}});
+ const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){},recordingEnv});
  return {order,api,canvas,controls,camera,tracks,elements,frames,draws,get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
@@ -86,4 +87,11 @@ test('capabilities keep legacy flags and add structured mp4/gif entries for both
   assert.equal(caps.formats.mp4.browserRecorderSupport,true);assert.equal(none.formats.mp4.browserRecorderSupport,false);assert.equal(none.webm,false);
   assert.equal(f.api.capabilities().webm,true);
  }finally{f.restore();}
+});
+
+test('single-viewer WebM background/stall rejects without a new frame and restores locks, view and controls',async()=>{
+ for(const mode of ['hidden','stalled']){const clock=webmTestEnv(),f=fixture({recordingEnv:clock.env});try{const saved=f.camera.position.clone(),recording=f.api.render({format:'webm',animation:'orbit',seconds:1}),failure=assert.rejects(recording,{code:mode==='hidden'?'WEBM_BACKGROUND_INTERRUPTED':'WEBM_PROGRESS_STALLED'});if(mode==='hidden'){f.frames.shift()(performance.now()+250);clock.hide();}else clock.advance(5000);await failure;assert.deepEqual(f.camera.position,saved);assert.equal(f.controls.enabled,true);assert.equal(f.controls.enableDamping,true);assert.equal(f.api.isActive(),false);assert.equal(f.elements.get('deform-scale').disabled,false);assert.equal(f.tracks[0].stopped,true);assert.equal(f.clicks,0);assert.equal(clock.timers,0);}finally{f.restore();}}
+});
+test('single-viewer WebM missing stop event is bounded; hidden page still allows fixed PNG',async()=>{
+ const clock=webmTestEnv(),f=fixture({recordingEnv:clock.env});try{const recording=f.api.render({format:'webm',animation:'orbit',seconds:1}),failure=assert.rejects(recording,{code:'WEBM_BACKGROUND_INTERRUPTED'});f.recorder.stop=()=>{f.recorder.state='inactive';};clock.hide();await Promise.resolve();await Promise.resolve();clock.advance(2000);await failure;assert.equal(f.tracks[0].stopped,true);assert.equal(f.controls.enabled,true);assert.equal(f.api.isActive(),false);assert.equal(clock.timers,0);const png=await f.api.render({format:'png'});assert.equal(png.type,'image/png');}finally{f.restore();}
 });

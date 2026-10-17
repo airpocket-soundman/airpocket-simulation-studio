@@ -699,3 +699,13 @@ startCompareExportはformat:"gif"でorbitのみを受け付けます。固定24�
 ### 保持メッシュの品質・要素妥当性
 
 meshBoundaryPreflightは境界転送前に読み取り専用で要素を検査します。meshQualityは節点/要素数・体積・負向き数・任意qualityの最小値/5区間histogram・診断数/省略有無を返します。不正節点/接続、非有限値、縮退/特異要素、非有限volume/gradient、不正quality配列はallowed:false。診断はstage:mesh、対象/job/mesh/...を付け最大20件です。quality配列不在はqualityAvailable:falseで、品質値の独自閾値は設けません。負向きは既存ソルバーが正規化するため拒否しません。既存の体積abs<1e-15 mm³・inverse pivot<1e-20を共有し入力や節点順を変更しません。これは境界/CAD適合、収束、物理精度や一般メッシュ成功を保証しません。新診断の実GUI確認は未実施です。
+
+### 接続の再確認とページ識別
+
+新しい操作やスコープは追加しません。inspectに任意のpreviousLifecycle:{pageInstanceId,connectionEpoch,inputRevision?}を渡すと、lifecycleのrelationはunknown/same-connection/same-page-reconnected/page-resetとして観測された識別子を比較します。pageInstanceId、connectionEpoch、eventSequence、最大12件のイベント、入力版、接続所有ジョブ数と復旧手順を返します。原因はunconfirmedで、ページreset原因やV8障害を認定しません。automaticReplay:falseのまま、timeout時は入力版と残ジョブを確認してから明示再接続・再inspectし、編集/解析を自動再送しません。接続コード/トークンや入力本体を診断ログへ保存しません。inspect.browserのreportedVersionはnavigator.userAgent由来でprecisionがreduced/reported/unavailable、fullVersionVerified:falseです。通常UAを厳密なフル版と表現しません。
+
+### WebMの背景中断・進捗停止
+
+実時間WebMはhidden状態で開始すると拒否し、録画中visibilitychangeでhiddenになれば中断します。rAFと独立したtimerで5秒のフレーム無進捗を検査し、実行再開時にも経過時間を確認します。MediaRecorderのstop通知待ちは最大2秒。終了時はtrack/listener/rAFと元表示・lockを解放し部分成果物は返しません。exportStatus.errorCodeはWEBM_BACKGROUND_INTERRUPTED/WEBM_PROGRESS_STALLED/WEBM_STOP_TIMEOUTの限定3種だけを公開し、従来error文字列も維持します。GIF/PNG/連番はこの実時間録画規則の対象外。ページJS自体がsuspendされている間は検出/cleanupできず復帰後の処理となるため、壁時計の絶対終了保証ではありません。
+
+2026-10-18 [接続識別の実Chrome証拠](evidence/2026-10-18-browser-reset-real-chrome.json)は再接続/再読込と自動再送なしを確認。PERF熱試験中の原因未確定resetも新診断で観測しました。[WebM証拠](evidence/2026-10-18-webm-lifecycle-real-chrome.json)は正常録画/取消/再作成と元4状態一致の範囲です。CUAでは実hidden遷移を立証できず、利用者の手動協力もまだ未回答のため背景中断の実機受入は未完。疑似visibility/watchdogの自動試験と区別しEXPORTBACKGROUND1はchecking、BROWSERRESET1は公開前ready、PERF1は部分測定のbuildingを維持します。

@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T13:42:10.717Z",
+  "updatedAt": "2026-10-17T21:30:13.869Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-17",
     "testCount": 1475,
-    "description": "比較PNG・回転/保存時刻/線形変形WebMと回転GIF、比較設定の保存/復元を公開済み。公開HTTPSからの確認専用接続も通常Chromeで配信assetを照合して確認しました（ブラウザ厳密版はpolicy制限で不明、編集/解析/表示権限は対象外）。音響ソルバーと事前診断の閾値を統一し、熱接触の実連結に基づく未拘束拒否を追加。今回さらに保持メッシュの品質/要素妥当性診断を整備します。最新の新規残作業2件を未着手として計上し総数167件・待機22件へ増えますが、完了数や達成度の重みは変えません。テスト件数1475はPR111の過去CI基準（1472成功・3skip・失敗0）。一般形状・全分野診断/精度・背景動画/接続reset・GUI保存完了・時間/変形GIF・MP4・製品公開ゲートは未完です。",
-    "descriptionEn": "Published comparison PNG/orbit-stored-time-linear-deformation WebM/orbit GIF and settings save/restore. Regular Chrome verified inspect-only public-HTTPS pairing against published assets; exact browser version is unavailable under URL policy and edit/analyze/view scopes were excluded. Acoustic preflight now matches solver thresholds and thermal anchoring follows actual contact connectivity. This increment adds retained-mesh quality/element-validity diagnostics. Two newly recorded queued tasks raise total to167 and queued to22; completed counts and estimate weights are unchanged. Test count1475 is the historical PR111 CI baseline (1472 passed,3 skipped,0 failed). General geometry/all-physics diagnostics/accuracy, background video/reset issues, GUI download completion, time/deformation GIF,MP4 and product publication gates remain incomplete."
+    "description": "比較PNG・回転/保存時刻/線形変形WebMと回転GIF、比較設定の保存/復元を公開済み。公開HTTPSからの確認専用接続も通常Chromeで配信assetを照合して確認しました（ブラウザ厳密版はpolicy制限で不明、編集/解析/表示権限は対象外）。音響ソルバーと事前診断の閾値を統一し、熱接触の実連結に基づく未拘束拒否を追加。今回さらに保持メッシュの品質/要素妥当性診断を整備します。最新の新規残作業2件を未着手として計上し総数167件・待機22件へ増えますが、完了数や達成度の重みは変えません。テスト件数1475はPR111の過去CI基準（1472成功・3skip・失敗0）。一般形状・全分野診断/精度・背景動画/接続reset・GUI保存完了・時間/変形GIF・MP4・製品公開ゲートは未完です。 全体167件のうち未完39件を自律実装・外部条件・親エピックに分類し、依存と次の実行単位をdocs/task-critical-path.mdへ整理しました。今回の実装・検証は背景動画/接続resetとブラウザ性能実測を優先し、完了判定は各受入証拠に従います。",
+    "descriptionEn": "Published comparison PNG/orbit-stored-time-linear-deformation WebM/orbit GIF and settings save/restore. Regular Chrome verified inspect-only public-HTTPS pairing against published assets; exact browser version is unavailable under URL policy and edit/analyze/view scopes were excluded. Acoustic preflight now matches solver thresholds and thermal anchoring follows actual contact connectivity. This increment adds retained-mesh quality/element-validity diagnostics. Two newly recorded queued tasks raise total to167 and queued to22; completed counts and estimate weights are unchanged. Test count1475 is the historical PR111 CI baseline (1472 passed,3 skipped,0 failed). General geometry/all-physics diagnostics/accuracy, background video/reset issues, GUI download completion, time/deformation GIF,MP4 and product publication gates remain incomplete. docs/task-critical-path.md classifies39 unfinished tasks among167 into autonomous work,external conditions and parent epics, with dependencies and next batches. Current work prioritizes background-video/reset handling and browser measurements; closure follows acceptance evidence."
   },
   "tasks": [
     {
@@ -714,9 +714,9 @@
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
       "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "lastUpdate": "2026-10-15 Node側計測に取消の応答時間を追加(中断点2種、最終状態、プロセス解放、ピークRSS。n=1で構造2.4ms/51.7ms、熱2.7ms/64.1ms、すべて取消)。ブラウザのメモリ・時間・取消応答は未計測で、計画は docs/perf-browser-plan.md(実装なし)。実装中を維持。 2026-10-16追記: ブラウザ計測スクリプト scripts/perf-browser.mjs(コネクタ経由・localhost限定・接続コードをファイルに残さない)を実装(単体テスト7件、偽コネクタ)。実ブラウザでの実測は未実施。",
-      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md",
-      "lastUpdateEn": "2026-10-15 Added cancel-latency measurement to the Node harness (two cancel points, final state, process release, peak RSS; n=1: structural 2.4 ms / 51.7 ms, thermal 2.7 ms / 64.1 ms, all cancelled). Browser memory, time and cancel response are not measured; the plan is docs/perf-browser-plan.md (not implemented). Stays building. Added 2026-10-16: browser measurement script scripts/perf-browser.mjs (connector-driven, localhost only, no pairing code in files) implemented with 7 unit tests against a fake connector; the real-browser run has not been done."
+      "lastUpdate": "2026-10-18: 実Chromeで構造3段階の時間・取消応答と取消後の再実行を測定しました。熱は接続timeoutとページresetで中断し、原因は未確定です。メモリ・対応上限・他ブラウザは未測定のため実装中を維持します。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md",
+      "lastUpdateEn": "2026-10-18: Measured real-Chrome structural timing/cancellation/recovery at three mesh sizes. Thermal was interrupted by timeout/page reset, cause unknown. Memory, support limits and other browsers remain unmeasured; stays building."
     },
     {
       "id": "ADAPT1",
@@ -1146,7 +1146,7 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md",
+      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md",
       "lastUpdate": "2026-10-15 getCapabilitiesに組み合わせの機械可読一覧(共有規則表から生成)、GUI/API/MCP/Skill対応表(docs/operation-correspondence.md、名前のみテストで固定。GUI列は名前検索による暫定)、互換性方針(docs/compatibility-policy.md)、diagnoseExecutionとワーカーの規則一致を追加。残り: GUI列の人手確認、全物理の事前検査(P1)。実装中を維持。 2026-10-16追記: 対応表のGUI列をコードから再監査し(同一経路32・関連47・コネクタ専用42)、要素IDの実在をテストで検査。",
       "lastUpdateEn": "2026-10-15 Added a machine-readable combinations list in getCapabilities (generated from the shared rule table), the GUI/API/MCP/Skill correspondence table (docs/operation-correspondence.md; names pinned by test, GUI column provisional from a name search), a compatibility policy (docs/compatibility-policy.md) and rule parity between diagnoseExecution and the worker. Remaining: manual review of the GUI column and all-physics preflight (P1). Stays building. Added 2026-10-16: the GUI column of the correspondence table was re-audited from the code (same path 32, related 47, connector only 42) and its element ids are checked by test."
     },
@@ -1195,8 +1195,9 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-15 公開HTTPSページから確認専用で接続(PUBLICHTTPS1)、再起動後の復元(--job-store、interrupted状態、既定は無効)、タイムアウトのdelivered表示を追加。残り: 再起動後のrequestId冪等性、実MCPホストでの再起動確認、公開HTTPSでの編集・解析権限。実装中を維持。",
-      "lastUpdateEn": "2026-10-15 Added an inspect-only connection from the published HTTPS page (PUBLICHTTPS1), restart recovery (--job-store, interrupted state, off by default) and the delivered flag on timeouts. Remaining: requestId idempotency across restarts, restart confirmation in a real MCP host, edit/analyze scopes from the published page. Stays building."
+      "lastUpdate": "2026-10-18: 接続reset時の識別と明示復旧、背景WebMの停止監視を追加しました。実hiddenの確認、再起動後のrequestId冪等性・実MCP再起動、公開HTTPSの編集/解析権限は未完です。全体の実行順は監査計画を参照してください。",
+      "lastUpdateEn": "2026-10-18: Added reset identity/explicit recovery and WebM stall monitoring. Actual hidden QA,restart requestId idempotency,real-MCP restart and public-HTTPS edit/analyze remain incomplete. See the whole-task execution plan.",
+      "evidence": "docs/task-critical-path.md"
     },
     {
       "id": "P4",
@@ -1594,9 +1595,9 @@
       "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode 24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode 24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration. The publication-progress defaultNode 24 full run reproduced the same fatal in analysis-job-service (883reported/879passed/onefailure/3skipped). Affected file alone3passed;same-sourceNode26 comparison881passed/3skipped of884. No default migration or root-fix proof.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution. 2026-10-16 Tracking: upstream nodejs/node#66366 attributes the crash to a V8 race (WasmImportWrapperCache MaybeGet takes a ref before checking is_dying); V8 fixes 68210d500a/9b8ca54d5a, but the 24.x backport (PR 66376) is unmerged and neither 24.21.0 nor 24.22.0 contains it (CHANGELOG checked). Our Windows runs (Node 24.11.1, 24.22.0, 22.23.3, 26.12.0 and --no-wasm-code-gc; the five files that died in CI; 93 runs) produced 0 V8 fatals, so which operation of ours triggers it is not identified (hypothesis only: wasm kept alive across worker.terminate()). Recommendation: move the CI pin to the first 24.x release with the fix. Interim --no-wasm-code-gc (0/20 in the upstream report) needs an approved CI change. Stays checking.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json",
-      "lastUpdate": "2026-10-15 方針Bはゲートの判定方法の決定であり、本項目の受け入れ条件(固定条件での再現と原因の検証)は未達のまま。上流#66366は候補で同根かは未確認。検証中を維持。 2026-10-17: Node 24.11.1のローカル全件テストでanalysis-job-store実行中にV8 ThreadIsolation/jit_page allocations eraseのfatalを再観測。単独再実行は成功。根本原因の修正を示すものではない。",
-      "lastUpdateEn": "2026-10-15 Option B decides how the gate is judged; this task's own acceptance (reproduction under fixed conditions and verified cause) remains unmet. Upstream #66366 is a candidate, same cause unconfirmed. Stays checking. 2026-10-17: Local full tests on Node 24.11.1 again observed a V8 ThreadIsolation/jit_page allocations erase fatal during analysis-job-store. An isolated rerun passed; this does not establish a root-cause fix."
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json",
+      "lastUpdate": "2026-10-18: Node24.11.1の全体試験でmcp-artifact-catalogのV8 JIT CHECK停止を再観測しました。単独1回は成功しましたが原因や根治は未確認です。設定を変えず失敗を保存し、最終CIとは別の未解決事項として検証中を維持します。",
+      "lastUpdateEn": "2026-10-18: Full tests on Node24.11.1 again hit a V8 JIT CHECK in mcp-artifact-catalog. One isolated retry passed; cause/root fix remain unknown. No flags changed; failure is retained separately from final CI and this task stays checking."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -2606,13 +2607,13 @@
       "titleEn": "Diagnose stalled background-tab video and terminate safely",
       "detail": "実時間WebMの背景タブ停滞を再現し、固定フレーム出力と区別して原因と利用者への復旧判断を記録する。 関連親はVIEWCOMPARE/BROWSEREXPORT1/P3で、親の完了は着手条件ではない。",
       "detailEn": "Reproduce background-tab stalls in real-time WebM, distinguish fixed-frame output and record diagnosis/recovery guidance. Related parents are VIEWCOMPARE/BROWSEREXPORT1/P3; completing them is not a start prerequisite.",
-      "status": "queued",
+      "status": "checking",
       "category": "結果表示",
       "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-17: 既知の動画停滞を独立した残作業として計上。未着手で、固定フレームGIF/PNGの成功を実時間WebMの解決扱いにしません。",
-      "lastUpdateEn": "2026-10-17: Newly recorded outstanding work for known video stalls. Not started; fixed-frame GIF/PNG success does not resolve real-time WebM stalls.",
-      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json"
+      "lastUpdate": "2026-10-18: 背景開始拒否・中断、進捗停止と終了待ちの監視を実装しました。実Chromeの正常録画/取消/再作成と自動テストは成功。実際のhidden移行は操作手段の制約で未確認のため検証中です。",
+      "lastUpdateEn": "2026-10-18: Implemented hidden-start/transition interruption, stall and stop monitoring. Real-Chrome normal recording/cancel/restart and automated tests passed. Actual hidden transition is unverified due to control limitations; stays checking.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json"
     },
     {
       "id": "BROWSERRESET1",
@@ -2620,16 +2621,16 @@
       "titleEn": "Diagnose connection reset/page reset and recovery decisions",
       "detail": "複数の実Chrome証跡に残る原因未確定のreset/timeoutを調べ、再試行前に状態を確認できるようにする。 関連親はP3とVIEWCOMPARE。",
       "detailEn": "Investigate unexplained reset/timeouts retained in real-Chrome evidence and enable state inspection before retry. Related parents are P3 and VIEWCOMPARE.",
-      "status": "queued",
+      "status": "ready",
       "category": "共通",
       "depends": [
         "BROWSERCONNECTOR1"
       ],
       "acceptance": "有界かつ資格情報を含まない接続/page lifecycle診断を設計し、resetの再現可否・未配信/配信済timeout・残ジョブ/現在入力の確認と安全な再接続手順を検証する。原因を断定せず、V8問題や永続ジョブ再起動復旧と同一視しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Design bounded credential-free connection/page-lifecycle diagnostics and verify reproducibility, undelivered/delivered timeouts, retained jobs/current inputs and safe reconnect guidance. Do not assume a root cause or equate this with V8 failures or persistent-job restart recovery. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-17: 変形/GIF試験のreset/timeout記録から新規残作業を計上。原因未確定・未着手で、成功した再試行とは区別します。",
-      "lastUpdateEn": "2026-10-17: Newly recorded outstanding work from deformation/GIF reset-timeout attempts. Cause unknown and work not started; successful retries remain separate.",
-      "evidence": "docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json"
+      "lastUpdate": "2026-10-18: ページ識別・接続世代・有界イベントと明示復旧手順を実装し、実Chromeで再接続/再読込と実際のreset後の診断を確認しました。原因は未確定で、自動再送しません。公開確認待ちの検証済みです。",
+      "lastUpdateEn": "2026-10-18: Implemented bounded page/connection identity/events and explicit recovery. Real Chrome verified reconnect/reload and diagnosis after an observed reset. Cause remains unknown; no automatic replay. Ready, awaiting publication proof.",
+      "evidence": "docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-browser-reset-real-chrome.json; docs/evidence/2026-10-18-browser-performance-real-chrome.json"
     }
   ],
   "solvers": [

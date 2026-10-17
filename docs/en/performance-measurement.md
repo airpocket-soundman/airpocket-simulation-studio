@@ -53,3 +53,9 @@ The report has `schemaVersion: 1`, `scope: "browser via connector; localhost; re
 ## Interpretation
 
 Report values are results for that environment and build at that time. Do not treat them as supported size limits, performance targets or guarantees; deciding supported sizes needs follow-up work that includes browser measurement. Do not write these numbers into documentation or the UI as guarantees.
+
+## Partial real-Chrome measurements,2026-10-18
+
+[Evidence](../evidence/2026-10-18-browser-performance-real-chrome.json). Existing10x10x40mm structural input,mesh sizes8/3/2mm: cold905.563/885.355/1182.657ms; one warm run775.220/775.162/1080.749ms. Cold means first case run in the same page/existing runtime, with browser/HTTP caches uncontrolled. All six first-event/half-warm cancellations ended cancelled; host request-to-terminal-and-executionSettled observation149.076–172.910ms, and recovery solves succeeded. Times include connector round trips/100ms polling and are observations,not support limits or guarantees.
+
+Thermal size3mm was interrupted by command timeout. Follow-up read-only inspect/listJobs timed out too(listJobs delivered:false); an independent observer saw the same tab reset to initial input with its connection closed. Cause remains unknown; no retry was made. Memory is not exposed by supported semantic diagnostics and was not observed. PeakRAM/support limit/other browsers/thermal time and cancel measurements remain unavailable; PERF1 stays building.

@@ -53,3 +53,9 @@ node scripts/perf-browser.mjs --merge-memory <probe.json> --out .qa/perf-browser
 ## 解釈上の注意
 
 レポートの値は、その環境・その時点のビルドでの測定結果であり、対応規模の上限、性能目標、保証として扱わない。対応規模の決定にはブラウザ測定を含む後続作業が必要である。ここの数値をドキュメントや画面に保証として書かない。
+
+## 2026-10-18 実Chrome部分測定
+
+[実測証拠](evidence/2026-10-18-browser-performance-real-chrome.json)。既存の10×10×40mm構造参照入力を実Chromeでsize8/3/2mmの順に測定。coldは各ケースの初回（同一ページ/既存runtime、ブラウザ/HTTPキャッシュ未統制）で905.563/885.355/1182.657ms、warm各n1は775.220/775.162/1080.749ms。各ケースfirst-event/half-warmの取消は6回ともcancelled、request→terminalかつexecutionSettledの観測149.076〜172.910ms、後続solveも成功。これはコネクタ往復・100ms polling込みのホスト観測値で、上限/保証ではありません。
+
+熱size3mmはcommand timeoutで中断、readonly inspect/listJobsもtimeout（後者delivered:false）。別担当が同タブの初期画面/入力喪失・接続閉を観察しましたがreset原因は未確定。再試行せず失敗を保持しました。メモリは正式semantic診断で未提供のため未観測。peakRAM・対応上限・他ブラウザ・熱時間/取消の値はなく、PERF1はbuildingを維持します。

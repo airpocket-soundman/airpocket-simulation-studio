@@ -2,7 +2,7 @@
 
 English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 
-**状態: スクリプト実装済み、実ブラウザでの測定は未実施。** `scripts/perf-browser.mjs`(コネクター経由、テストは偽コネクター)は実装済みだが、実ブラウザの値はまだ無い。以下の「方式」はCDP/タブAPI前提の当初設計で、実装はstdioコネクター(`jobStatus`/`jobEvents`/`cancelJob`)経由に変更した(ページ内`performance.now()`ではなくホスト側の観測時刻、メモリはオペレーター貼付けの`window.__perfProbe`で任意取得)。使い方は[performance-measurement.md](performance-measurement.md)。旧記述: Node側の測定は[performance-measurement.md](performance-measurement.md)(`scripts/perf-measure.mjs`)にある。本書は、PERF1が求める「ブラウザでのメモリ・時間・中止応答」を測る`scripts/perf-browser.mjs`の設計を定める。実装前は、ブラウザの値について何も主張しない。得られる値は測定値であり、対応規模の上限や保証ではない。
+**現在: 実Chromeの構造3サイズで時間/取消を部分実測済み、熱は接続reset/timeoutで中断。メモリ・他ブラウザ・対応上限は未観測です。** 末尾の2026-10-18証跡を参照。以下は当初設計の履歴で、現在の実装はscripts/perf-browser.mjs経由のホスト観測時間を使います。下記のCDP/hidden-global測定を今回実行したという意味ではありません。
 
 ## 目的と範囲
 
@@ -74,3 +74,9 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 ## 完了条件(PERF1に対して)
 
 ブラウザのメモリ・時間・中止応答が、上記ケースで実測され、環境つきで記録されること。メモリ上限と対応規模の決定は、その先の別作業である。
+
+## 2026-10-18 実Chrome部分測定
+
+[実測証拠](evidence/2026-10-18-browser-performance-real-chrome.json)。既存の10×10×40mm構造参照入力を実Chromeでsize8/3/2mmの順に測定。coldは各ケースの初回（同一ページ/既存runtime、ブラウザ/HTTPキャッシュ未統制）で905.563/885.355/1182.657ms、warm各n1は775.220/775.162/1080.749ms。各ケースfirst-event/half-warmの取消は6回ともcancelled、request→terminalかつexecutionSettledの観測149.076〜172.910ms、後続solveも成功。これはコネクタ往復・100ms polling込みのホスト観測値で、上限/保証ではありません。
+
+熱size3mmはcommand timeoutで中断、readonly inspect/listJobsもtimeout（後者delivered:false）。別担当が同タブの初期画面/入力喪失・接続閉を観察しましたがreset原因は未確定。再試行せず失敗を保持しました。メモリは正式semantic診断で未提供のため未観測。peakRAM・対応上限・他ブラウザ・熱時間/取消の値はなく、PERF1はbuildingを維持します。

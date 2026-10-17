@@ -1,0 +1,920 @@
+{
+  "schemaVersion": 1,
+  "kind": "browser-performance-evidence",
+  "recordedAt": "2026-10-17T21:20:46.741Z",
+  "status": "partial",
+  "environment": {
+    "browser": "real Chrome,regular existing profile",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "authenticated repository semantic bridge using existing scripts/perf-browser.mjs",
+    "concurrency": "CPU measurement scheduled after other QA; no concurrent full build/test",
+    "memory": "Not observed: supported semantic browser diagnostics does not expose memory; no hidden-global evaluation performed."
+  },
+  "fixtures": {
+    "description": "Existing perf-measure CASES.build,10x10x40mm structural and steady thermal block",
+    "sha256": {
+      "structural": "sha256:3e1cc1924e0d4f98d961b7ed042e6edf52045693b4323b087aca4101f53bb826",
+      "thermal": "sha256:7461ef617ae2a3a2291f1ea5040d744d38e329eeba216a8da5920ca6d46a3d88"
+    }
+  },
+  "definitions": {
+    "cold": "First job of each case in the same page with existing runtime; browser/HTTP caches were not controlled.",
+    "warm": "One later run of the same case in the same page.",
+    "time": "Host-observed jobEvents/jobStatus timing including connector round trips and100ms polling.",
+    "cancel": "Request to terminal+executionSettled observation,not OS thread or peak-memory proof."
+  },
+  "structural": {
+    "schemaVersion": 1,
+    "scope": "browser via connector; localhost; real browser",
+    "generatedAt": "2026-10-17T21:18:48.305Z",
+    "revision": "sha256:e44f1832e344809adf62bc21fb5b1440eb0f562d4962d2ab52cf5c1deeb4f2a0",
+    "origin": "http://127.0.0.1:5176",
+    "git": {
+      "revision": "5ee804595e305936a641f6e6bc18fc5de244df5a",
+      "branch": "codex/whole-task-completion",
+      "dirty": true
+    },
+    "browser": {
+      "userAgent": null,
+      "userAgentNote": "not exposed by inspect; filled by --merge-memory when a probe is supplied",
+      "crossOriginIsolated": null
+    },
+    "hostEnvironment": {
+      "node": "v24.11.1",
+      "platform": "win32",
+      "arch": "x64",
+      "osRelease": "10.0.26200",
+      "cpuModel": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+      "cpuCount": 6,
+      "totalMemMiB": 32577
+    },
+    "repeats": 1,
+    "pollIntervalMs": 100,
+    "timeoutMs": 180000,
+    "loadedInput": {
+      "loaded": true,
+      "name": "復元モデル",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    },
+    "cases": [
+      {
+        "id": "structural-tiny",
+        "physics": "structural",
+        "meshSize": 8,
+        "status": "ok",
+        "repeats": 1,
+        "notes": [
+          "loaded input physics is not verified by the script; the operator must load the matching study"
+        ],
+        "cold": {
+          "state": "succeeded",
+          "ok": true,
+          "totalMs": 905.563,
+          "firstEventMs": 46.226,
+          "meshMs": 520.586,
+          "solvePhaseMs": 31.739,
+          "eventCount": 14,
+          "jobElapsedMs": 854,
+          "startEpochMs": 1792271917128,
+          "endEpochMs": 1792271918034
+        },
+        "warm": {
+          "runs": [
+            {
+              "state": "succeeded",
+              "ok": true,
+              "totalMs": 775.22,
+              "firstEventMs": 41.113,
+              "meshMs": 416.708,
+              "solvePhaseMs": 164.971,
+              "eventCount": 14,
+              "jobElapsedMs": 622,
+              "startEpochMs": 1792271918046,
+              "endEpochMs": 1792271918822
+            }
+          ],
+          "summary": {
+            "totalMs": {
+              "median": 775.22,
+              "min": 775.22,
+              "max": 775.22,
+              "n": 1
+            },
+            "firstEventMs": {
+              "median": 41.113,
+              "min": 41.113,
+              "max": 41.113,
+              "n": 1
+            },
+            "meshMs": {
+              "median": 416.708,
+              "min": 416.708,
+              "max": 416.708,
+              "n": 1
+            },
+            "solvePhaseMs": {
+              "median": 164.971,
+              "min": 164.971,
+              "max": 164.971,
+              "n": 1
+            },
+            "jobElapsedMs": {
+              "median": 622,
+              "min": 622,
+              "max": 622,
+              "n": 1
+            }
+          }
+        },
+        "cancel": {
+          "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+          "pollIntervalMs": 100,
+          "baselineWarmTotalMs": 775.22,
+          "points": {
+            "first-event": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 164.424,
+                "min": 164.424,
+                "max": 164.424,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 98.737,
+                "min": 98.737,
+                "max": 98.737,
+                "n": 1
+              }
+            },
+            "half-warm-total": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 149.076,
+                "min": 149.076,
+                "max": 149.076,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 511.037,
+                "min": 511.037,
+                "max": 511.037,
+                "n": 1
+              },
+              "note": "cancel requested at 50% of the median warm total"
+            }
+          },
+          "runs": [
+            {
+              "trigger": "first-event",
+              "state": "cancelled",
+              "requestedAfterMs": 98.737,
+              "latencyMs": 164.424,
+              "totalMs": 263.162,
+              "startEpochMs": 1792271918834,
+              "endEpochMs": 1792271919097
+            },
+            {
+              "trigger": "half-warm-total",
+              "state": "cancelled",
+              "requestedAfterMs": 511.037,
+              "latencyMs": 149.076,
+              "totalMs": 660.112,
+              "startEpochMs": 1792271919110,
+              "endEpochMs": 1792271919770
+            }
+          ],
+          "recoveredAfterCancel": true
+        },
+        "window": {
+          "startEpochMs": 1792271917128,
+          "endEpochMs": 1792271920527,
+          "cancelSettledEpochMs": 1792271919770
+        },
+        "memory": null,
+        "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+      },
+      {
+        "id": "structural-medium",
+        "physics": "structural",
+        "meshSize": 3,
+        "status": "ok",
+        "repeats": 1,
+        "notes": [
+          "loaded input physics is not verified by the script; the operator must load the matching study"
+        ],
+        "cold": {
+          "state": "succeeded",
+          "ok": true,
+          "totalMs": 885.355,
+          "firstEventMs": 42.523,
+          "meshMs": 526.43,
+          "solvePhaseMs": 149.849,
+          "eventCount": 17,
+          "jobElapsedMs": 778,
+          "startEpochMs": 1792271920540,
+          "endEpochMs": 1792271921425
+        },
+        "warm": {
+          "runs": [
+            {
+              "state": "succeeded",
+              "ok": true,
+              "totalMs": 775.162,
+              "firstEventMs": 36.751,
+              "meshMs": 533.149,
+              "solvePhaseMs": 32.116,
+              "eventCount": 17,
+              "jobElapsedMs": 724,
+              "startEpochMs": 1792271921437,
+              "endEpochMs": 1792271922212
+            }
+          ],
+          "summary": {
+            "totalMs": {
+              "median": 775.162,
+              "min": 775.162,
+              "max": 775.162,
+              "n": 1
+            },
+            "firstEventMs": {
+              "median": 36.751,
+              "min": 36.751,
+              "max": 36.751,
+              "n": 1
+            },
+            "meshMs": {
+              "median": 533.149,
+              "min": 533.149,
+              "max": 533.149,
+              "n": 1
+            },
+            "solvePhaseMs": {
+              "median": 32.116,
+              "min": 32.116,
+              "max": 32.116,
+              "n": 1
+            },
+            "jobElapsedMs": {
+              "median": 724,
+              "min": 724,
+              "max": 724,
+              "n": 1
+            }
+          }
+        },
+        "cancel": {
+          "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+          "pollIntervalMs": 100,
+          "baselineWarmTotalMs": 775.162,
+          "points": {
+            "first-event": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 172.91,
+                "min": 172.91,
+                "max": 172.91,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 74.849,
+                "min": 74.849,
+                "max": 74.849,
+                "n": 1
+              }
+            },
+            "half-warm-total": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 157.113,
+                "min": 157.113,
+                "max": 157.113,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 453.321,
+                "min": 453.321,
+                "max": 453.321,
+                "n": 1
+              },
+              "note": "cancel requested at 50% of the median warm total"
+            }
+          },
+          "runs": [
+            {
+              "trigger": "first-event",
+              "state": "cancelled",
+              "requestedAfterMs": 74.849,
+              "latencyMs": 172.91,
+              "totalMs": 247.76,
+              "startEpochMs": 1792271922223,
+              "endEpochMs": 1792271922471
+            },
+            {
+              "trigger": "half-warm-total",
+              "state": "cancelled",
+              "requestedAfterMs": 453.321,
+              "latencyMs": 157.113,
+              "totalMs": 610.435,
+              "startEpochMs": 1792271922487,
+              "endEpochMs": 1792271923097
+            }
+          ],
+          "recoveredAfterCancel": true
+        },
+        "window": {
+          "startEpochMs": 1792271920540,
+          "endEpochMs": 1792271923891,
+          "cancelSettledEpochMs": 1792271923097
+        },
+        "memory": null,
+        "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+      },
+      {
+        "id": "structural-fine",
+        "physics": "structural",
+        "meshSize": 2,
+        "status": "ok",
+        "repeats": 1,
+        "notes": [
+          "loaded input physics is not verified by the script; the operator must load the matching study"
+        ],
+        "cold": {
+          "state": "succeeded",
+          "ok": true,
+          "totalMs": 1182.657,
+          "firstEventMs": 40.347,
+          "meshMs": 539.307,
+          "solvePhaseMs": 305.012,
+          "eventCount": 17,
+          "jobElapsedMs": 1060,
+          "startEpochMs": 1792271923902,
+          "endEpochMs": 1792271925085
+        },
+        "warm": {
+          "runs": [
+            {
+              "state": "succeeded",
+              "ok": true,
+              "totalMs": 1080.749,
+              "firstEventMs": 51.982,
+              "meshMs": 559.347,
+              "solvePhaseMs": 305.312,
+              "eventCount": 17,
+              "jobElapsedMs": 1033,
+              "startEpochMs": 1792271925098,
+              "endEpochMs": 1792271926179
+            }
+          ],
+          "summary": {
+            "totalMs": {
+              "median": 1080.749,
+              "min": 1080.749,
+              "max": 1080.749,
+              "n": 1
+            },
+            "firstEventMs": {
+              "median": 51.982,
+              "min": 51.982,
+              "max": 51.982,
+              "n": 1
+            },
+            "meshMs": {
+              "median": 559.347,
+              "min": 559.347,
+              "max": 559.347,
+              "n": 1
+            },
+            "solvePhaseMs": {
+              "median": 305.312,
+              "min": 305.312,
+              "max": 305.312,
+              "n": 1
+            },
+            "jobElapsedMs": {
+              "median": 1033,
+              "min": 1033,
+              "max": 1033,
+              "n": 1
+            }
+          }
+        },
+        "cancel": {
+          "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+          "pollIntervalMs": 100,
+          "baselineWarmTotalMs": 1080.749,
+          "points": {
+            "first-event": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 159.397,
+                "min": 159.397,
+                "max": 159.397,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 90.863,
+                "min": 90.863,
+                "max": 90.863,
+                "n": 1
+              }
+            },
+            "half-warm-total": {
+              "n": 1,
+              "states": {
+                "cancelled": 1
+              },
+              "latencyMs": {
+                "median": 163.078,
+                "min": 163.078,
+                "max": 163.078,
+                "n": 1
+              },
+              "requestedAfterMs": {
+                "median": 615.085,
+                "min": 615.085,
+                "max": 615.085,
+                "n": 1
+              },
+              "note": "cancel requested at 50% of the median warm total"
+            }
+          },
+          "runs": [
+            {
+              "trigger": "first-event",
+              "state": "cancelled",
+              "requestedAfterMs": 90.863,
+              "latencyMs": 159.397,
+              "totalMs": 250.259,
+              "startEpochMs": 1792271926191,
+              "endEpochMs": 1792271926441
+            },
+            {
+              "trigger": "half-warm-total",
+              "state": "cancelled",
+              "requestedAfterMs": 615.085,
+              "latencyMs": 163.078,
+              "totalMs": 778.162,
+              "startEpochMs": 1792271926453,
+              "endEpochMs": 1792271927231
+            }
+          ],
+          "recoveredAfterCancel": true
+        },
+        "window": {
+          "startEpochMs": 1792271923902,
+          "endEpochMs": 1792271928293,
+          "cancelSettledEpochMs": 1792271927231
+        },
+        "memory": null,
+        "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+      }
+    ],
+    "notes": [
+      "Measurements, not support limits or guarantees.",
+      "Times are host-observed through connector polling (jobEvents/jobStatus), not in-page performance.now(); they include connector round trips and poll granularity.",
+      "cold = first job of the case in the loaded page session; warm = later jobs in the same page (no reload).",
+      "GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged."
+    ],
+    "executionNotes": [
+      "Existing performance harness via authenticated semantic driver; input physics checked before measurement.",
+      "Cold means first case run in this session, not a fresh browser process.",
+      "No concurrent heavy test/build/other browser QA requested.",
+      "One warm repeat only; no statistically representative support limit or peak RAM claim."
+    ]
+  },
+  "thermal": {
+    "schemaVersion": 1,
+    "scope": "browser via connector; localhost; real browser",
+    "generatedAt": "2026-10-17T21:19:42.828Z",
+    "revision": "sha256:de2ca54a552494e288365c08c623e67dec56f37abb3cd586002d73ade70989cb",
+    "origin": "http://127.0.0.1:5176",
+    "git": {
+      "revision": "5ee804595e305936a641f6e6bc18fc5de244df5a",
+      "branch": "codex/whole-task-completion",
+      "dirty": true
+    },
+    "browser": {
+      "userAgent": null,
+      "userAgentNote": "not exposed by inspect; filled by --merge-memory when a probe is supplied",
+      "crossOriginIsolated": null
+    },
+    "hostEnvironment": {
+      "node": "v24.11.1",
+      "platform": "win32",
+      "arch": "x64",
+      "osRelease": "10.0.26200",
+      "cpuModel": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+      "cpuCount": 6,
+      "totalMemMiB": 32577
+    },
+    "repeats": 1,
+    "pollIntervalMs": 100,
+    "timeoutMs": 180000,
+    "loadedInput": {
+      "loaded": true,
+      "name": "復元モデル",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    },
+    "cases": [
+      {
+        "id": "thermal-steady",
+        "physics": "thermal",
+        "meshSize": 3,
+        "status": "failed",
+        "repeats": 1,
+        "notes": [
+          "loaded input physics is not verified by the script; the operator must load the matching study"
+        ],
+        "error": "Browser command timed out; inspect state before retrying",
+        "timedOut": false,
+        "memory": null,
+        "memoryReason": "case failed"
+      }
+    ],
+    "notes": [
+      "Measurements, not support limits or guarantees.",
+      "Times are host-observed through connector polling (jobEvents/jobStatus), not in-page performance.now(); they include connector round trips and poll granularity.",
+      "cold = first job of the case in the loaded page session; warm = later jobs in the same page (no reload).",
+      "GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged."
+    ],
+    "executionNotes": [
+      "Existing performance harness via authenticated semantic driver; input physics checked before measurement.",
+      "Cold means first case run in this session, not a fresh browser process.",
+      "No concurrent heavy test/build/other browser QA requested.",
+      "One warm repeat only; no statistically representative support limit or peak RAM claim."
+    ]
+  },
+  "thermalFailure": {
+    "initial": "Browser command timed out during the thermal harness; case failed, no retry",
+    "followup": "Read-only inspect/listJobs also timed out; listJobs delivered:false.",
+    "visibleObservation": "Independent CUA observer reconnected browser; same tab showed initial curved sample and closed connection, losing thermal input/page state. Cause unconfirmed.",
+    "jobState": "Unavailable after page reset; no cancellation response claimed.",
+    "baselineCaveat": "inputChanged:false in the lifecycle comparison uses the default pre-import baseline, not the thermal fixture; it does not prove thermal input retention."
+  },
+  "limits": {
+    "observedStructuralSizesMm": [
+      8,
+      3,
+      2
+    ],
+    "supportLimit": null,
+    "peakRam": null,
+    "memoryAvailability": null,
+    "otherBrowsers": false,
+    "thermalCompleted": false
+  },
+  "notVerified": [
+    "Thermal timing/cancellation due to interrupted attempt",
+    "Memory/peak RAM/OOM or usable support-size limit",
+    "Other browsers/hardware/GPU/public HTTPS",
+    "Statistical repeatability beyond n=1 warm and each cancel point"
+  ],
+  "resetObservation": {
+    "initial": {
+      "schemaVersion": 1,
+      "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "project": {
+        "loaded": true,
+        "name": "曲面サンプル · Ø24 × 60 mm",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "155.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "7d9a0448-112e-4ecb-bdcb-8c96b16bc5b8",
+        "connectionEpoch": 1,
+        "eventSequence": 3,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "connected",
+            "connectionEpoch": 1
+          }
+        ],
+        "relation": "page-reset",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 0,
+        "inputChanged": true
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "checks": [
+      "reset"
+    ],
+    "reset": {
+      "schemaVersion": 1,
+      "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "project": {
+        "loaded": true,
+        "name": "曲面サンプル · Ø24 × 60 mm",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "155.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "45d91a5d-fd09-4318-ab81-6ff33651aa45",
+        "connectionEpoch": 1,
+        "eventSequence": 4,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "visible",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 4,
+            "kind": "connected",
+            "connectionEpoch": 1
+          }
+        ],
+        "relation": "page-reset",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 0,
+        "inputChanged": false
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "currentJobs": {
+      "jobs": [],
+      "total": 0,
+      "nextOffset": null
+    }
+  }
+}

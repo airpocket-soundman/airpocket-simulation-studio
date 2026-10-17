@@ -2,7 +2,7 @@
 
 Japanese: [../perf-browser-plan.md](../perf-browser-plan.md)
 
-**Status: script implemented, real-browser run pending.** `scripts/perf-browser.mjs` (driven through the stdio connector; unit-tested with a fake connector) exists, but no real-browser values have been measured. The "Approach" below is the original CDP/tab-API design; the implementation instead uses the stdio connector (`jobStatus`/`jobEvents`/`cancelJob`), so times are host-observed rather than in-page `performance.now()`, and memory is optional via an operator-pasted `window.__perfProbe`. See [performance-measurement.md](performance-measurement.md) for usage. Original text: Node-side measurement is in [performance-measurement.md](performance-measurement.md) (`scripts/perf-measure.mjs`). This document designs `scripts/perf-browser.mjs`, which will measure what PERF1 asks for: browser memory, time and cancel response. Until it exists, nothing is claimed about browser values. Results will be measurements, not support limits or guarantees.
+**Current: real-Chrome timing/cancellation measured for three structural sizes; thermal interrupted by reset/timeout. Memory,other browsers and support limits remain unobserved.** See the2026-10-18 evidence below. The following is historical design; actual scripts/perf-browser.mjs uses host-observed connector timing. It does not mean CDP/hidden-global memory measurements were performed.
 
 ## Goal and scope
 
@@ -74,3 +74,9 @@ Final states are `cancelled` / `completed-before-cancel` / `error`, the same voc
 ## Done criteria (for PERF1)
 
 Browser memory, time and cancel response are measured for the cases above and recorded with their environment. Deciding memory ceilings and supported sizes is further, separate work.
+
+## Partial real-Chrome measurements,2026-10-18
+
+[Evidence](../evidence/2026-10-18-browser-performance-real-chrome.json). Existing10x10x40mm structural input,mesh sizes8/3/2mm: cold905.563/885.355/1182.657ms; one warm run775.220/775.162/1080.749ms. Cold means first case run in the same page/existing runtime, with browser/HTTP caches uncontrolled. All six first-event/half-warm cancellations ended cancelled; host request-to-terminal-and-executionSettled observation149.076–172.910ms, and recovery solves succeeded. Times include connector round trips/100ms polling and are observations,not support limits or guarantees.
+
+Thermal size3mm was interrupted by command timeout. Follow-up read-only inspect/listJobs timed out too(listJobs delivered:false); an independent observer saw the same tab reset to initial input with its connection closed. Cause remains unknown; no retry was made. Memory is not exposed by supported semantic diagnostics and was not observed. PeakRAM/support limit/other browsers/thermal time and cancel measurements remain unavailable; PERF1 stays building.

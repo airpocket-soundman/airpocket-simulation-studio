@@ -1,3 +1,4 @@
+import {webmTestEnv} from './helpers/webm-test-env.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {recordComparisonVideo,comparisonVideoCapabilities} from '../src/ui/comparison-video.js';
@@ -100,4 +101,11 @@ test('deformation recording forwards linear phase with a fixed shared camera and
  const h=harness(),calls=[],original=structuredClone(h.request.camera),recording=recordComparisonVideo({...h.request,animation:'deformation',renderFrame:(camera,state)=>{calls.push({camera,state});return {width:1280,height:640};}},h.env);
  h.advance(250);h.advance(1000);await recording;
  assert.deepEqual(calls.map(c=>c.state.phase),[.25,1]);assert.ok(calls.every(c=>c.state.animation==='deformation'));assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(original)));assert.equal(h.progress.at(-1).kind,'deformation');assert.equal(h.trackStops,1);assert.equal(h.pending,0);
+});
+
+test('comparison WebM interrupts background and missing frames without waiting for a new animation callback',async()=>{
+ for(const mode of ['hidden','stalled']){const h=harness(),clock=webmTestEnv(),recording=recordComparisonVideo(h.request,{...h.env,...clock.env}),failure=assert.rejects(recording,{code:mode==='hidden'?'WEBM_BACKGROUND_INTERRUPTED':'WEBM_PROGRESS_STALLED'});if(mode==='hidden'){h.advance(250);clock.hide();}else clock.advance(5000);await failure;assert.equal(h.trackStops,1);assert.equal(h.pending,0);assert.equal(clock.timers,0);}
+});
+test('comparison WebM cleanup releases tracks even when recorder stop never emits a callback',async()=>{
+ const h=harness(),clock=webmTestEnv(),recording=recordComparisonVideo(h.request,{...h.env,...clock.env}),failure=assert.rejects(recording,{code:'WEBM_BACKGROUND_INTERRUPTED'});h.recorder.stop=()=>{h.recorder.state='inactive';};clock.hide();await Promise.resolve();await Promise.resolve();clock.advance(2000);await failure;assert.equal(h.trackStops,1);assert.equal(h.pending,0);assert.equal(clock.timers,0);assert.equal(h.recorder.onstop,null);
 });

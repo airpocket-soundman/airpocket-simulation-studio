@@ -1,0 +1,846 @@
+{
+  "date": "2026-10-18",
+  "environment": "Real Chrome localhost; actual elastic tetra cases, main thermal2.01s interpolated",
+  "attempts": [
+    {
+      "label": "foreground-single",
+      "target": "single",
+      "status": {
+        "schemaVersion": 1,
+        "jobId": "081ef6e1-1d73-47c1-9478-8471de1acc61",
+        "requestId": "background-foreground-single-1792272155298",
+        "state": "completed",
+        "format": "webm",
+        "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+        "view": {
+          "result": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            },
+            "timeSeconds": 2.01
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja"
+        },
+        "progress": {
+          "fraction": 1
+        },
+        "artifact": {
+          "mimeType": "video/webm;codecs=vp9",
+          "name": "result-081ef6e1-1d73-47c1-9478-8471de1acc61.webm",
+          "totalBytes": 14191,
+          "sha256": "sha256:02ac53dbe348086d72a0b3a04fcc2a82adc4e8666109130e9e68828bfec45476",
+          "maxChunkBytes": 65536,
+          "manifest": {
+            "schemaVersion": 1,
+            "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+            "format": "webm",
+            "container": "webm",
+            "mimeType": "video/webm;codecs=vp9",
+            "codec": "vp9",
+            "sha256": "sha256:02ac53dbe348086d72a0b3a04fcc2a82adc4e8666109130e9e68828bfec45476",
+            "totalBytes": 14191,
+            "view": {
+              "field": "temperature",
+              "timeSeconds": 2.01,
+              "deformScale": 1,
+              "camera": {
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ],
+                "fov": 40
+              }
+            },
+            "scale": {
+              "units": {
+                "time": "second"
+              },
+              "deformScale": 1,
+              "deformScaleKind": "visualization multiplier"
+            },
+            "time": {
+              "animation": "orbit",
+              "durationSeconds": 2,
+              "timeBasis": "display time",
+              "fps": {
+                "target": 24,
+                "recording": "realtime",
+                "frameCountGuaranteed": false
+              }
+            }
+          }
+        }
+      },
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "hidden-single",
+      "target": "single",
+      "status": {
+        "schemaVersion": 1,
+        "jobId": "d5742823-ff35-4a26-adbc-0901b6a966b7",
+        "requestId": "background-hidden-single-1792272160645",
+        "state": "completed",
+        "format": "webm",
+        "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+        "view": {
+          "result": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            },
+            "timeSeconds": 2.01
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja"
+        },
+        "progress": {
+          "fraction": 1
+        },
+        "artifact": {
+          "mimeType": "video/webm;codecs=vp9",
+          "name": "result-d5742823-ff35-4a26-adbc-0901b6a966b7.webm",
+          "totalBytes": 224248,
+          "sha256": "sha256:1263c054c809bf8273f85f9a64da97e5be9994ce13ee5027a65f4fad8a2b55e5",
+          "maxChunkBytes": 65536,
+          "manifest": {
+            "schemaVersion": 1,
+            "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+            "format": "webm",
+            "container": "webm",
+            "mimeType": "video/webm;codecs=vp9",
+            "codec": "vp9",
+            "sha256": "sha256:1263c054c809bf8273f85f9a64da97e5be9994ce13ee5027a65f4fad8a2b55e5",
+            "totalBytes": 224248,
+            "view": {
+              "field": "temperature",
+              "timeSeconds": 2.01,
+              "deformScale": 1,
+              "camera": {
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ],
+                "fov": 40
+              }
+            },
+            "scale": {
+              "units": {
+                "time": "second"
+              },
+              "deformScale": 1,
+              "deformScaleKind": "visualization multiplier"
+            },
+            "time": {
+              "animation": "orbit",
+              "durationSeconds": 15,
+              "timeBasis": "display time",
+              "fps": {
+                "target": 24,
+                "recording": "realtime",
+                "frameCountGuaranteed": false
+              }
+            }
+          }
+        }
+      },
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "foreground-comparison",
+      "target": "comparison",
+      "status": {
+        "schemaVersion": 1,
+        "jobId": "d355ebae-ede6-4347-8c5f-26bf43594a99",
+        "requestId": "background-foreground-comparison-1792272213825",
+        "state": "completed",
+        "format": "webm",
+        "target": "comparison",
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+              "label": "QA linear elastic 3N",
+              "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+              "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+            },
+            {
+              "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+              "label": "QA linear elastic 6N",
+              "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+              "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+            }
+          ],
+          "colorRange": {
+            "field": "displacement",
+            "maximum": 0.003120000000000001,
+            "minimum": 0
+          },
+          "field": "displacement",
+          "panels": [
+            {
+              "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.0015600000000000004,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            },
+            {
+              "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.003120000000000001,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            }
+          ],
+          "unit": "mm"
+        },
+        "view": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              1.9,
+              1.4,
+              2.1
+            ],
+            "target": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 200,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja",
+          "resolution": {
+            "width": 1280,
+            "height": 640
+          }
+        },
+        "progress": {
+          "fraction": 1
+        },
+        "artifact": {
+          "mimeType": "video/webm;codecs=vp9",
+          "name": "comparison-d355ebae-ede6-4347-8c5f-26bf43594a99.webm",
+          "totalBytes": 19567,
+          "sha256": "sha256:4e08ab16dce202f03cee9f6a8ed0873f86a419628f46c211213925c6abb300c2",
+          "maxChunkBytes": 65536,
+          "manifest": {
+            "schemaVersion": 1,
+            "target": "comparison",
+            "format": "webm",
+            "container": "webm",
+            "mimeType": "video/webm;codecs=vp9",
+            "codec": "vp9",
+            "sha256": "sha256:4e08ab16dce202f03cee9f6a8ed0873f86a419628f46c211213925c6abb300c2",
+            "totalBytes": 19567,
+            "resolution": {
+              "width": 1280,
+              "height": 640
+            },
+            "comparison": {
+              "cases": [
+                {
+                  "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+                  "label": "QA linear elastic 3N",
+                  "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+                  "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+                },
+                {
+                  "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+                  "label": "QA linear elastic 6N",
+                  "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+                  "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+                }
+              ],
+              "colorRange": {
+                "field": "displacement",
+                "maximum": 0.003120000000000001,
+                "minimum": 0
+              },
+              "field": "displacement",
+              "panels": [
+                {
+                  "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+                  "field": "displacement",
+                  "finalOnly": false,
+                  "frameIndex": null,
+                  "maximum": 0.0015600000000000004,
+                  "minimum": 0,
+                  "offsetSeconds": null,
+                  "timeApplies": false,
+                  "timeSeconds": null,
+                  "unit": "mm"
+                },
+                {
+                  "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+                  "field": "displacement",
+                  "finalOnly": false,
+                  "frameIndex": null,
+                  "maximum": 0.003120000000000001,
+                  "minimum": 0,
+                  "offsetSeconds": null,
+                  "timeApplies": false,
+                  "timeSeconds": null,
+                  "unit": "mm"
+                }
+              ],
+              "unit": "mm"
+            },
+            "view": {
+              "camera": {
+                "fov": 40,
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "deformScale": 200,
+              "layers": {
+                "surface": true,
+                "surfaceWire": false,
+                "volumeWire": false,
+                "section": true
+              },
+              "setup": {
+                "clipEnabled": false,
+                "axis": 2,
+                "position": 0,
+                "flip": false,
+                "opacity": 1,
+                "meshCount": 1,
+                "hiddenParts": []
+              },
+              "language": "ja",
+              "resolution": {
+                "width": 1280,
+                "height": 640
+              }
+            },
+            "time": {
+              "animation": "orbit",
+              "durationSeconds": 2,
+              "timeBasis": "display time",
+              "physicalTime": "Each panel retains its selected saved result and physical time throughout the display orbit.",
+              "camera": "orbit",
+              "fps": {
+                "target": 24,
+                "recording": "realtime",
+                "frameCountGuaranteed": false
+              }
+            }
+          }
+        }
+      },
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "restart-comparison",
+      "target": "comparison",
+      "status": {
+        "schemaVersion": 1,
+        "jobId": "f85c506e-fe80-4897-8c5e-40728ffb1684",
+        "requestId": "background-restart-comparison-1792272218270",
+        "state": "completed",
+        "format": "webm",
+        "target": "comparison",
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+              "label": "QA linear elastic 3N",
+              "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+              "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+            },
+            {
+              "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+              "label": "QA linear elastic 6N",
+              "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+              "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+            }
+          ],
+          "colorRange": {
+            "field": "displacement",
+            "maximum": 0.003120000000000001,
+            "minimum": 0
+          },
+          "field": "displacement",
+          "panels": [
+            {
+              "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.0015600000000000004,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            },
+            {
+              "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.003120000000000001,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            }
+          ],
+          "unit": "mm"
+        },
+        "view": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              1.9,
+              1.4,
+              2.1
+            ],
+            "target": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 200,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja",
+          "resolution": {
+            "width": 1280,
+            "height": 640
+          }
+        },
+        "progress": {
+          "fraction": 1
+        },
+        "artifact": {
+          "mimeType": "video/webm;codecs=vp9",
+          "name": "comparison-f85c506e-fe80-4897-8c5e-40728ffb1684.webm",
+          "totalBytes": 18451,
+          "sha256": "sha256:f7f0cebeed580128e76dac7cfc5d05466cf6d4e0ed907812921004594a87c29d",
+          "maxChunkBytes": 65536,
+          "manifest": {
+            "schemaVersion": 1,
+            "target": "comparison",
+            "format": "webm",
+            "container": "webm",
+            "mimeType": "video/webm;codecs=vp9",
+            "codec": "vp9",
+            "sha256": "sha256:f7f0cebeed580128e76dac7cfc5d05466cf6d4e0ed907812921004594a87c29d",
+            "totalBytes": 18451,
+            "resolution": {
+              "width": 1280,
+              "height": 640
+            },
+            "comparison": {
+              "cases": [
+                {
+                  "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+                  "label": "QA linear elastic 3N",
+                  "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+                  "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+                },
+                {
+                  "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+                  "label": "QA linear elastic 6N",
+                  "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+                  "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+                }
+              ],
+              "colorRange": {
+                "field": "displacement",
+                "maximum": 0.003120000000000001,
+                "minimum": 0
+              },
+              "field": "displacement",
+              "panels": [
+                {
+                  "caseId": "aeadd001-c968-46e5-8ae4-6855267c51bf",
+                  "field": "displacement",
+                  "finalOnly": false,
+                  "frameIndex": null,
+                  "maximum": 0.0015600000000000004,
+                  "minimum": 0,
+                  "offsetSeconds": null,
+                  "timeApplies": false,
+                  "timeSeconds": null,
+                  "unit": "mm"
+                },
+                {
+                  "caseId": "d4385c3e-9afb-433f-ba2b-ba8d32d28e53",
+                  "field": "displacement",
+                  "finalOnly": false,
+                  "frameIndex": null,
+                  "maximum": 0.003120000000000001,
+                  "minimum": 0,
+                  "offsetSeconds": null,
+                  "timeApplies": false,
+                  "timeSeconds": null,
+                  "unit": "mm"
+                }
+              ],
+              "unit": "mm"
+            },
+            "view": {
+              "camera": {
+                "fov": 40,
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "deformScale": 200,
+              "layers": {
+                "surface": true,
+                "surfaceWire": false,
+                "volumeWire": false,
+                "section": true
+              },
+              "setup": {
+                "clipEnabled": false,
+                "axis": 2,
+                "position": 0,
+                "flip": false,
+                "opacity": 1,
+                "meshCount": 1,
+                "hiddenParts": []
+              },
+              "language": "ja",
+              "resolution": {
+                "width": 1280,
+                "height": 640
+              }
+            },
+            "time": {
+              "animation": "orbit",
+              "durationSeconds": 2,
+              "timeBasis": "display time",
+              "physicalTime": "Each panel retains its selected saved result and physical time throughout the display orbit.",
+              "camera": "orbit",
+              "fps": {
+                "target": 24,
+                "recording": "realtime",
+                "frameCountGuaranteed": false
+              }
+            }
+          }
+        }
+      },
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "restart-single",
+      "target": "single",
+      "status": {
+        "schemaVersion": 1,
+        "jobId": "dc94c416-7f84-491f-b4e7-3c60b794c70c",
+        "requestId": "background-restart-single-1792272222238",
+        "state": "completed",
+        "format": "webm",
+        "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+        "view": {
+          "result": {
+            "field": "temperature",
+            "modeIndex": null,
+            "frameIndex": null,
+            "deformScale": 1,
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true,
+            "colorRange": null,
+            "camera": {
+              "position": [
+                1.9,
+                1.4,
+                2.1
+              ],
+              "target": [
+                0.5,
+                0.5,
+                0.5
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ],
+              "fov": 40
+            },
+            "timeSeconds": 2.01
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja"
+        },
+        "progress": {
+          "fraction": 1
+        },
+        "artifact": {
+          "mimeType": "video/webm;codecs=vp9",
+          "name": "result-dc94c416-7f84-491f-b4e7-3c60b794c70c.webm",
+          "totalBytes": 14663,
+          "sha256": "sha256:3e62b2202b311146f8def01d044ab33d170ae2f47b23b6eaf04b5d341aa5a887",
+          "maxChunkBytes": 65536,
+          "manifest": {
+            "schemaVersion": 1,
+            "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+            "format": "webm",
+            "container": "webm",
+            "mimeType": "video/webm;codecs=vp9",
+            "codec": "vp9",
+            "sha256": "sha256:3e62b2202b311146f8def01d044ab33d170ae2f47b23b6eaf04b5d341aa5a887",
+            "totalBytes": 14663,
+            "view": {
+              "field": "temperature",
+              "timeSeconds": 2.01,
+              "deformScale": 1,
+              "camera": {
+                "position": [
+                  1.9,
+                  1.4,
+                  2.1
+                ],
+                "target": [
+                  0.5,
+                  0.5,
+                  0.5
+                ],
+                "up": [
+                  0,
+                  1,
+                  0
+                ],
+                "fov": 40
+              }
+            },
+            "scale": {
+              "units": {
+                "time": "second"
+              },
+              "deformScale": 1,
+              "deformScaleKind": "visualization multiplier"
+            },
+            "time": {
+              "animation": "orbit",
+              "durationSeconds": 2,
+              "timeBasis": "display time",
+              "fps": {
+                "target": 24,
+                "recording": "realtime",
+                "frameCountGuaranteed": false
+              }
+            }
+          }
+        }
+      },
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    }
+  ],
+  "status": "passed-normal-recording-with-live-hidden-unverified",
+  "limitations": [
+    "CUA background tab creation did not produce a verified document visibility transition; the 15-second candidate completed successfully and is not hidden-interruption proof.",
+    "Native tabs.update(active) was rejected as unsupported. No workaround attempted.",
+    "True hidden/stalled animation and missing recorder stop callback have automated tests only.",
+    "Foreground labels identify requested normal recording runs, not verified native active-tab state."
+  ],
+  "automatedEvidence": [
+    "Bounded visibility/stall/stop lifecycle fake-clock tests",
+    "Single/comparison cleanup and source restoration regression tests",
+    "PNG/GIF unaffected by WebM-only lifecycle"
+  ]
+}
