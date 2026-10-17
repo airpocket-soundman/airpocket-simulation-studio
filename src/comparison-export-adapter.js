@@ -1,5 +1,6 @@
 import {getProjectRevision} from './project-revision.js';
 import {createComparisonTimePlan} from './comparison-time-plan.js';
+import {createComparisonDeformationPlan} from './comparison-deformation-plan.js';
 
 function camera(value){
  const vector=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
@@ -23,17 +24,20 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
    const timeMode=request.format==='webm'&&request.animation==='time';
    if(timeMode&&request.timeSeconds!==undefined)throw Error('Comparison time video uses startTimeSeconds/endTimeSeconds, not a fixed timeSeconds');
    const timePlan=timeMode?createComparisonTimePlan(sources.map(s=>s.output),request):null;
+   const deformationMode=request.format==='webm'&&request.animation==='deformation';
+   if(deformationMode&&!Object.hasOwn(request,'deformScale'))throw Error('Deformation comparison requires an explicit positive deformScale');
+   const deformationPlan=deformationMode?createComparisonDeformationPlan(sources.map(s=>s.output),request):null;
    if(request.field==='heatFlux'&&request.timeSeconds!==undefined&&sources.some(source=>source.output.result.kind==='thermal'))throw Error('Thermal heat flux comparison is final-step only; omit timeSeconds');
    const revisions=[];for(const source of sources)revisions.push(await getProjectRevision(source.output));
    const assertSources=()=>{if(!guard())throw Error('Comparison export expired');for(const source of sources)source.assertCurrent();};
    const assertCurrent=()=>{check();assertSources();};assertCurrent();
    if(JSON.stringify(getDefaults())!==JSON.stringify(defaults))throw Error('Viewer changed while preparing comparison');
-   const renderAt=(nextCamera,timeSeconds,colorRange)=>renderComparison({cases:sources.map(source=>({caseId:source.caseId,label:source.name,source:source.output})),field:request.field,camera:nextCamera,deformScale:view.deformScale,timeSeconds,toleranceSeconds:request.toleranceSeconds,colorRange});
-   const rendered=renderAt(view.camera,timePlan?timePlan.atPhase(0).timeSeconds:request.timeSeconds,timePlan?.colorRange);
+   const renderAt=(nextCamera,timeSeconds,colorRange,deformScale=view.deformScale)=>renderComparison({cases:sources.map(source=>({caseId:source.caseId,label:source.name,source:source.output})),field:request.field,camera:nextCamera,deformScale,timeSeconds,toleranceSeconds:request.toleranceSeconds,colorRange,visualDeformation:deformationMode});
+   const rendered=renderAt(view.camera,timePlan?timePlan.atPhase(0).timeSeconds:request.timeSeconds,timePlan?.colorRange,deformationPlan?0:view.deformScale);
    if(request.format==='webm')view.resolution={width:rendered.canvas.width,height:rendered.canvas.height};
    assertCurrent();
-   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{})};
-   const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange);assertSources();return frame.canvas;};
+   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{})};
+   const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode||deformationMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange,deformationPlan?deformationPlan.atPhase(phase).deformScale:view.deformScale);assertSources();return frame.canvas;};
    return {view,comparison,context:{canvas:rendered.canvas,assertCurrent,assertSources,renderFrame}};
   },
   async render({context,format='png',animation='orbit',view,seconds,signal,onProgress=()=>{}}){
