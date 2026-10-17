@@ -21,7 +21,7 @@ function request(value){
  return {requestId:value.requestId,expectedResultRevision:value.expectedResultRevision,format:value.format,animation,seconds,...(value.view===undefined?{}:{view:copy(value.view)})};
 }
 function comparisonRequest(raw){
- const value=JSON.parse(canonicalJson(raw)),allowed=['requestId','references','field','timeSeconds','toleranceSeconds','deformScale','camera'];
+ const value=JSON.parse(canonicalJson(raw)),allowed=['requestId','references','field','timeSeconds','toleranceSeconds','deformScale','camera','format','animation','seconds'];
  if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).some(key=>!allowed.includes(key)))throw Error('Invalid comparison export request');
  if(typeof value.requestId!=='string'||!value.requestId.trim()||value.requestId.length>128)throw Error('Invalid visual export requestId');
  if(!Array.isArray(value.references)||value.references.length!==2||value.references.some(ref=>!ref||typeof ref!=='object'||Array.isArray(ref)||Object.keys(ref).some(key=>!['caseId','expectedRevision'].includes(key))||typeof ref.caseId!=='string'||!ref.caseId||ref.caseId.length>200||typeof ref.expectedRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(ref.expectedRevision))||value.references[0].caseId===value.references[1].caseId)throw Error('Comparison export requires two distinct exact saved-case references');
@@ -29,11 +29,16 @@ function comparisonRequest(raw){
  for(const key of ['timeSeconds','toleranceSeconds','deformScale'])if(value[key]!==undefined&&(!Number.isFinite(value[key])||value[key]<0))throw Error('Invalid comparison export '+key);
  if(value.toleranceSeconds!==undefined&&value.timeSeconds===undefined)throw Error('toleranceSeconds requires timeSeconds');
  if(value.camera!==undefined){const c=value.camera;if(!c||typeof c!=='object'||Array.isArray(c)||Object.keys(c).some(key=>!['position','target','up','fov'].includes(key))||!vector(c.position)||!vector(c.target)||!vector(c.up)||!finite(c.fov)||c.fov<=0||c.fov>=180)throw Error('Invalid comparison camera');const d=c.target.map((v,i)=>v-c.position[i]),cross=[d[1]*c.up[2]-d[2]*c.up[1],d[2]*c.up[0]-d[0]*c.up[2],d[0]*c.up[1]-d[1]*c.up[0]];if(![...d,...cross,Math.hypot(...d),Math.hypot(...c.up),Math.hypot(...cross)].every(Number.isFinite)||Math.hypot(...d)<=1e-9||Math.hypot(...c.up)<=1e-9||Math.hypot(...cross)<=Math.hypot(...d)*Math.hypot(...c.up)*1e-9)throw Error('Degenerate comparison camera');}
- return {...value,format:'png',target:'comparison'};
+ const format=value.format===undefined?'png':value.format;if(!['png','webm'].includes(format))throw Error('Comparison export format must be png or webm');
+ if(format==='png'&&(Object.hasOwn(value,'animation')||Object.hasOwn(value,'seconds')))throw Error('Comparison PNG does not accept animation or seconds');
+ if(format==='webm'){if(value.animation!==undefined&&value.animation!=='orbit')throw Error('Comparison video supports orbit only');const seconds=value.seconds===undefined?5:value.seconds;if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error('Comparison video seconds must be an integer from 1 through 15');return {...value,format,animation:'orbit',seconds,target:'comparison'};}
+ return {...value,format,target:'comparison'};
 }
 function comparisonManifest(job,mimeType,bytes,sha256){
- const size=pngSize(bytes);if(!size)throw Error('Comparison renderer returned invalid PNG dimensions');
- const manifest={schemaVersion:1,target:'comparison',format:'png',container:'png',mimeType,sha256,totalBytes:bytes.length,resolution:size,comparison:copy(job.comparison),view:copy(job.view)};
+ const {format,animation,seconds}=job.request,recorded=job.view?.resolution,size=format==='png'?pngSize(bytes):recorded;
+ if(!size||!Number.isSafeInteger(size.width)||size.width<1||!Number.isSafeInteger(size.height)||size.height<1)throw Error(format==='png'?'Comparison renderer returned invalid PNG dimensions':'Comparison video requires recorded canvas resolution');
+ const codec=format==='webm'?(/codecs=([^;]+)/.exec(mimeType)||[])[1]:undefined;
+ const manifest={schemaVersion:1,target:'comparison',format,container:format,mimeType,...(codec?{codec}:{}),sha256,totalBytes:bytes.length,resolution:{width:size.width,height:size.height},comparison:copy(job.comparison),view:copy(job.view),...(format==='webm'?{time:{animation,durationSeconds:seconds,timeBasis:'display time',physicalTime:'Each panel retains its selected saved result and physical time throughout the display orbit.',fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}}}:{})};
  if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');return manifest;
 }
 function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical(value[k])).join(',')+'}';return JSON.stringify(value);}
