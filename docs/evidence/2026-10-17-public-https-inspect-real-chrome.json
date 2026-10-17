@@ -1,0 +1,392 @@
+{
+  "values": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "project": {
+        "loaded": true,
+        "name": "曲面サンプル · Ø24 × 60 mm",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "inspectInput": {
+      "schemaVersion": 1,
+      "revision": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+      "section": "project",
+      "pointer": "",
+      "exists": true,
+      "units": {},
+      "limitations": [
+        "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+        "Hashes cover canonical JSON values, not original source-file bytes.",
+        "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+        "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+        "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+      ],
+      "descriptor": {
+        "pointer": "",
+        "type": "object",
+        "keyCount": 10,
+        "omitted": true,
+        "sha256": "sha256:5d36fafdecda4c7b7553f3a36cd484500a71be8ec9348649f365e8f4bc301e00",
+        "hashBasis": "canonical-json"
+      },
+      "page": {
+        "offset": 0,
+        "limit": 20,
+        "total": 10,
+        "nextOffset": null,
+        "entries": [
+          {
+            "pointer": "/conditions",
+            "type": "array",
+            "length": 0,
+            "omitted": true,
+            "sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/material",
+            "type": "string",
+            "length": 2,
+            "value": "金属"
+          },
+          {
+            "pointer": "/materialProperties",
+            "type": "object",
+            "keyCount": 0,
+            "omitted": true,
+            "sha256": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/meshSettings",
+            "type": "object",
+            "keyCount": 1,
+            "omitted": true,
+            "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/meshes",
+            "type": "array",
+            "length": 1,
+            "omitted": true,
+            "sha256": "sha256:43eac3ba773a3aa15f1bc253ca0b88253f3c65350a6659d3e30fe0d4e5df8a95",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/name",
+            "type": "string",
+            "length": 20,
+            "value": "曲面サンプル · Ø24 × 60 mm"
+          },
+          {
+            "pointer": "/selection",
+            "type": "array",
+            "length": 1,
+            "omitted": true,
+            "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/sourceModel",
+            "type": "object",
+            "keyCount": 1,
+            "omitted": true,
+            "sha256": "sha256:5f5829db8928458d104e771de74d3175fef28f67f87b5283bb1127b06f3d4ef2",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/study",
+            "type": "object",
+            "keyCount": 46,
+            "omitted": true,
+            "sha256": "sha256:76bb79b3ad6387dfd9524a3d92e6f02cae980494c8adec737b39e8690da2e503",
+            "hashBasis": "canonical-json"
+          },
+          {
+            "pointer": "/version",
+            "type": "number",
+            "value": 1
+          }
+        ]
+      }
+    },
+    "exportCapabilities": {
+      "schemaVersion": 1,
+      "png": true,
+      "png-sequence": true,
+      "webm": true,
+      "mp4": false,
+      "gif": false,
+      "formats": {
+        "mp4": {
+          "supported": false,
+          "browserRecorderSupport": true,
+          "probedMimeType": "video/mp4;codecs=avc1.42E01E",
+          "reason": "MediaRecorder reports MP4 recording in this browser, but MP4 export is not implemented in this application",
+          "alternatives": [
+            "webm",
+            "png"
+          ]
+        },
+        "gif": {
+          "supported": false,
+          "reason": "GIF encoding is not implemented",
+          "alternatives": [
+            "webm",
+            "png"
+          ]
+        },
+        "png-sequence": {
+          "supported": true,
+          "container": "zip",
+          "compression": "store",
+          "minFrames": 2,
+          "maxFrames": 120,
+          "defaultFrames": 24,
+          "maxFrameBytes": 4194304,
+          "maxTotalBytes": 25165824,
+          "animations": [
+            "orbit",
+            "deformation",
+            "time",
+            "slice"
+          ],
+          "timeSelection": "stored-frames-only",
+          "timeAnimationResultKinds": [
+            "acousticTransient",
+            "thermal"
+          ],
+          "thermalTimeField": "temperature",
+          "recording": "fixed-frame",
+          "realtime": false,
+          "wallClockIndependent": true,
+          "frameCountGuaranteed": true,
+          "manifest": "manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)"
+        }
+      },
+      "animations": [
+        "orbit",
+        "deformation",
+        "time",
+        "slice"
+      ],
+      "timeSelection": "stored-acoustic-frames-only",
+      "timeAnimationResultKinds": [
+        "acousticTransient"
+      ],
+      "stillTime": "displayed-time-recorded-for-thermal",
+      "recording": "realtime",
+      "targetFrameRate": 24,
+      "frameCountGuaranteed": false,
+      "maxSeconds": 15,
+      "comparisonPngExport": true,
+      "comparisonGifExport": {
+        "supported": true,
+        "mimeType": "image/gif",
+        "frames": 24,
+        "width": 640,
+        "height": 320,
+        "palette": "RGB332",
+        "colors": 256
+      },
+      "comparisonWebmExport": {
+        "supported": true,
+        "mimeType": "video/webm;codecs=vp9"
+      },
+      "maxArtifactBytes": 33554432,
+      "maxArtifactChunkBytes": 65536
+    },
+    "caseList": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:95f1436c6153161a4e9e4372169ffc50f4d4e4c096f0df9e1b6a433d8c507764",
+      "cases": []
+    }
+  },
+  "diagnostics": {
+    "schemaVersion": 1,
+    "kind": "airpocket-browser-bridge-diagnostics",
+    "origin": "https://airpocket-soundman.github.io",
+    "endpoint": "http://127.0.0.1:60505",
+    "sessionCount": 1,
+    "counters": {
+      "requests": 59,
+      "preflights": 29,
+      "healthChecks": 1,
+      "pairSuccess": 1,
+      "pairRefused": 0,
+      "originHostRefused": 0,
+      "authRefused": 0,
+      "disconnects": 0,
+      "expiredSessions": 0,
+      "requestErrors": 0,
+      "scopeRefused": 0,
+      "commandTimeouts": 0
+    },
+    "limitations": [
+      "Counters describe requests observed by this bridge only; absent requests do not identify browser, network or permission failure causes.",
+      "No incoming origins, URLs, headers, tokens, session identifiers or model data are retained in diagnostics."
+    ]
+  },
+  "manifestRevision": "4b62b9dc244bb81b5453003f364f7dc05640968c",
+  "observedPageAsset": "assets/app-Bsz5Zeuo.js",
+  "assetSha256": "7df7f58d5549f58946ac00b08b4576105c15ba0998412741df8631096ad9bf0f",
+  "assetMatchesManifest": true,
+  "afterDisconnect": {
+    "sessionCount": 0,
+    "diagnostics": {
+      "schemaVersion": 1,
+      "kind": "airpocket-browser-bridge-diagnostics",
+      "origin": "https://airpocket-soundman.github.io",
+      "endpoint": "http://127.0.0.1:60505",
+      "sessionCount": 0,
+      "counters": {
+        "requests": 99,
+        "preflights": 49,
+        "healthChecks": 1,
+        "pairSuccess": 1,
+        "pairRefused": 0,
+        "originHostRefused": 0,
+        "authRefused": 0,
+        "disconnects": 1,
+        "expiredSessions": 0,
+        "requestErrors": 0,
+        "scopeRefused": 0,
+        "commandTimeouts": 0
+      },
+      "limitations": [
+        "Counters describe requests observed by this bridge only; absent requests do not identify browser, network or permission failure causes.",
+        "No incoming origins, URLs, headers, tokens, session identifiers or model data are retained in diagnostics."
+      ]
+    }
+  },
+  "date": "2026-10-17",
+  "status": "passed-with-limitations",
+  "environment": {
+    "browser": "Real Chrome, regular user profile via CUA",
+    "exactBrowserVersion": null,
+    "versionLimitation": "chrome://version navigation was blocked by browser URL policy; no workaround attempted",
+    "page": "https://airpocket-soundman.github.io/airpocket-simulation-studio/?lang=ja",
+    "scopes": [
+      "inspect"
+    ]
+  },
+  "checks": [
+    "Public-page diagnostic health reached local connector; permission query reported granted",
+    "Only inspect checkbox selected; edit/analyze/view remained unchecked",
+    "inspect, inspectInput, exportCapabilities and caseList succeeded; 91 advertised operations",
+    "DOM script filename and fetched asset SHA match published4b62b9d manifest",
+    "Disconnect removed session; no request/command errors or timeouts"
+  ],
+  "notVerified": [
+    "Edit/analyze/view scopes intentionally not granted or called",
+    "Other browsers/OS or permissions denied paths",
+    "Exact browser version unavailable under URL policy"
+  ],
+  "browserLogs": []
+}

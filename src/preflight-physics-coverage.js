@@ -5,8 +5,8 @@
 const postMesh=['Mesh quality and element validity after generation','Boundary-region transfer and constraint rank/rigid-body modes after meshing','Source applicability, convergence, mesh dependence and physical accuracy'];
 const common=['required-input presence','finite/positive range per input','provenance for every required pointer','fixed unit table mismatch','unit magnitude warning','runtime-option override conflict'];
 const table={
- 'thermal-conduction':{implemented:[...common,'boundary type discipline','steady anchor boundary','transient material/time/steps/initial temperature','region validity'],remaining:[...postMesh],postMeshImplemented:['Connected-component anchoring after meshing (steady thermal: temperature/convection/radiation node per component)']},
- 'acoustic-wave':{implemented:[...common,'harmonic medium and reference pressure','sweep range/count/receiver','transient duration/pulse/step/damping/receiver','source or impedance boundary','branch compatibility','exterior radiation/directivity geometry'],remaining:[...postMesh],postMeshImplemented:['Wavelength-per-element resolution after meshing (harmonic/sweep; transient reported unknown)']},
+ 'thermal-conduction':{implemented:[...common,'boundary type discipline','steady anchor boundary','transient material/time/steps/initial temperature','region validity'],remaining:[...postMesh],postMeshImplemented:['Connected-component anchoring after meshing (steady thermal: temperature/convection/radiation node per component including transferred thermal contact connectivity)']},
+ 'acoustic-wave':{implemented:[...common,'harmonic medium and reference pressure','sweep range/count/receiver','transient duration/pulse/step/damping/receiver','source or impedance boundary','branch compatibility','exterior radiation/directivity geometry'],remaining:[...postMesh],postMeshImplemented:['Wavelength-per-element resolution after meshing (harmonic/sweep including loss and target size; transient three-sigma pulse bandwidth; solver one-sixth-wavelength limit)']},
 };
 export function physicsCoverage(contract){
  const entry=table[contract];

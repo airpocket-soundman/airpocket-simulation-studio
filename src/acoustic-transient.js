@@ -1,3 +1,4 @@
+import {acousticResolutionLimits,acousticEdgeResolved} from './acoustic-resolution-contract.js';
 import {elementGeometry} from './fem-core.js';
 import {sampleResult} from './probe.js';
 import {sphericalOuterFaces} from './acoustic-radiation.js';
@@ -26,8 +27,8 @@ export function solveAcousticTransient(mesh,boundary,study={},options={}){
  if(duration<12*width*(1-1e-14))throw Error('Transient duration must include the complete 12-width pulse');
  const M=new Float64Array(n),D=new Float64Array(n),rowBound=new Float64Array(n),entries=[];let maxEdgeMm=0;
  for(const t of mesh.tetrahedra){const g=elementGeometry(mesh,t),k=new Float64Array(16);for(let i=0;i<4;i++){M[t[i]]+=g.volume/(4*airDensity*soundSpeed**2);for(let j=0;j<4;j++){k[i*4+j]=g.volume/airDensity*g.grad[i].reduce((s,v,a)=>s+v*g.grad[j][a],0);rowBound[t[i]]+=Math.abs(k[i*4+j]);if(j>i)maxEdgeMm=Math.max(maxEdgeMm,Math.hypot(...[0,1,2].map(a=>mesh.nodes[3*t[i]+a]-mesh.nodes[3*t[j]+a])));}}entries.push({ids:t,k});}
- const bandwidthHz=frequency+3/(2*Math.PI*width),wavelengthMm=soundSpeed/bandwidthHz*1000;
- if(!(maxEdgeMm>0)||maxEdgeMm>wavelengthMm/6)throw Error('Transient acoustic mesh edge exceeds one sixth of the three-sigma pulse bandwidth wavelength');
+ const resolution=acousticResolutionLimits({frequency,soundSpeed,transient:true,pulseWidth:width}),{bandwidthHz,wavelengthMm}=resolution;
+ if(!acousticEdgeResolved(maxEdgeMm,resolution))throw Error('Transient acoustic mesh edge exceeds one sixth of the three-sigma pulse bandwidth wavelength');
  const fixed=new Map();for(const [i,value] of boundary.acousticPressures||[]){if(!Number.isInteger(i)||i<0||i>=n||!Number.isFinite(value))throw Error('Invalid transient prescribed pressure');if(fixed.has(i)&&fixed.get(i)!==value)throw Error('Conflicting transient source pressure');fixed.set(i,value);}
  if(!fixed.size&&!options.initialPressure)throw Error('Specify a transient pressure source');
  const outer=radiationBoundary?sphericalOuterFaces(mesh,radiationBoundary):[],outerNodes=new Set(outer.flatMap(f=>f.nodes));
