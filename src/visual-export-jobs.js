@@ -86,11 +86,12 @@ function buildManifest(job,mimeType,bytes,sha256){
  return manifest;
 }
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
+const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT']);
 export function createVisualExportJobs({render,prepare,prepareCompare,renderCompare,maxBytes=32*1024*1024,maxJobs=4,id=()=>crypto.randomUUID()}={}){
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
  const jobs=new Map(),requests=new Map();let retainedBytes=0,renderActive=false,epoch=0;
  const find=({jobId}={})=>{const job=jobs.get(jobId);if(!job)throw Error('Unknown visual export job');return job;};
- const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
+ const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.errorCode?{errorCode:job.errorCode}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
  function stop(job){if(job.state==='running'){job.state='cancelled';job.controller.abort();}}
  function finish(job,blob){
   return (async()=>{
@@ -138,7 +139,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
     renderActive=true;let output;try{output=(compare?renderCompare:render)({...copy(normalized),...(compare?{comparison:copy(job.comparison),context:snapshot.context}:{}),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
-    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);}}).finally(()=>{renderActive=false;});
+    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);if(WEBM_FAILURE_CODES.has(error?.code))job.errorCode=error.code;}}).finally(()=>{renderActive=false;});
     resolve();return summary(job);
    }catch(error){requests.delete(normalized.requestId);reject(error);throw error;}
   }

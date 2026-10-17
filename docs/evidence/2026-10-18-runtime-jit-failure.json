@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "runtime-failure-record",
+  "recordedAt": "2026-10-17T21:29:18.234Z",
+  "baseRevision": "5ee804595e305936a641f6e6bc18fc5de244df5a",
+  "worktree": "uncommitted whole-task completion changes",
+  "environment": {
+    "node": "24.11.1",
+    "platform": "Windows x64",
+    "flagsChanged": false
+  },
+  "initialFull": {
+    "total": 1507,
+    "passed": 1502,
+    "failed": 1,
+    "skipped": 4,
+    "durationMs": 183406,
+    "status": "failed",
+    "testFile": "tests/mcp-artifact-catalog.test.mjs",
+    "testName": "real MCP artifact catalog discovers bounded registered fields independently of event pages",
+    "childExitCode": 2147483651,
+    "fatal": "Check failed: jit_page_->allocations_.erase(addr) == 1.",
+    "stackSymbol": "v8::internal::ThreadIsolation::UnregisterWasmAllocation"
+  },
+  "isolatedRetry": {
+    "attempts": 1,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "durationMs": 2494.7831
+  },
+  "limitations": [
+    "The initial full run failed and is not a successful full validation.",
+    "One isolated pass does not establish cause or a runtime root fix.",
+    "No flags/environment workaround was introduced.",
+    "Final default-runtime exact-head CI success is required separately; RUNTIMEWASM1 remains checking."
+  ]
+}

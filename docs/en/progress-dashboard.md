@@ -37,3 +37,5 @@ A batch audit of delayed status updates may create a jump in the released-count 
 ## Outstanding-work audit,2026-10-17
 
 Compared the existing165 tasks with recent publication evidence and added two queued items: real-time WebM background-tab stalls(EXPORTBACKGROUND1), and unexplained connection/page resets(BROWSERRESET1). Increased counts mean newly recorded outstanding work, not more completed work. Total167/queued22 retain existing statuses including128 released and fixed product-estimate weights. General-geometry/GUI-download comparison gaps, other public-HTTPS scopes and performance measurement remain in existing parents instead of duplicate cards. Closing either new item alone does not close its parents or publication gates. AGENTINPUT1 latest progress now describes current diagnostics while past test records remain labeled historical in acceptance.
+
+See the[whole-task audit and completion path](task-critical-path.md) for remaining work,critical dependencies,external conditions and next batches. Incremental comparison features alone do not imply whole-project completion.

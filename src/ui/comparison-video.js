@@ -1,3 +1,4 @@
+import {createWebmRecordingLifecycle,waitForWebmStop} from './webm-recording-lifecycle.js';
 import {hasVideoFrames} from '../visual-export.js';
 
 const WEBM_TYPES=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
@@ -34,11 +35,12 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
  if(!capability.supported)throw Error('WebM comparison recording is unavailable: '+capability.reason);
  const width=initialCanvas.width,height=initialCanvas.height;
  if(!Number.isInteger(width)||width<1||!Number.isInteger(height)||height<1)throw Error('Invalid comparison canvas dimensions');
- const originalCamera=structuredClone(camera),chunks=[];let stream,recorder,frameId,failPlayback,failure,bytes=0,finishRecording,stopping=false,renderedFrames=0,motion=false;
+ const originalCamera=structuredClone(camera),chunks=[];let lifecycle,stream,recorder,frameId,failPlayback,failure,bytes=0,finishRecording,stopping=false,renderedFrames=0,motion=false;
  const stopped=new Promise(resolve=>{finishRecording=resolve;});
  const fail=error=>{failure??=error;if(frameId!==undefined)cancel(frameId);failPlayback?.(failure);};
  const abort=()=>fail(cancelled());signal?.addEventListener('abort',abort,{once:true});
  try{
+  lifecycle=createWebmRecordingLifecycle({...env,onFailure:fail});
   stream=initialCanvas.captureStream(24);recorder=new Recorder(stream,{mimeType:mime,videoBitsPerSecond:5000000});
   recorder.ondataavailable=event=>{if(!event.data?.size)return;bytes+=event.data.size;if(bytes>maxBytes){fail(Error('Comparison video exceeds its byte limit'));return;}chunks.push(event.data);};
   recorder.onstop=()=>{if(!stopping)fail(Error('Comparison recording stopped before playback completed'));finishRecording();};recorder.onerror=event=>{fail(event.error??Error('Comparison video recording failed'));finishRecording();};
@@ -47,11 +49,11 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
   await new Promise((resolve,reject)=>{
    failPlayback=reject;
    const tick=()=>{try{
-    if(failure)throw failure;if(signal?.aborted)throw cancelled();
+    if(failure)throw failure;if(signal?.aborted)throw cancelled();lifecycle.check();
     const phase=Math.max(0,Math.min(1,(now()-started)/(seconds*1000))),frame=renderFrame(animation==='orbit'?orbit(originalCamera,phase):structuredClone(originalCamera),{phase,animation});
     if(!frame||frame.width!==width||frame.height!==height||initialCanvas.width!==width||initialCanvas.height!==height)throw Error('Comparison canvas resolution changed during recording');
     if(frame!==initialCanvas){const context=initialCanvas.getContext('2d');if(!context)throw Error('Comparison canvas context is unavailable');context.clearRect(0,0,width,height);context.drawImage(frame,0,0);}
-    requestFrame();renderedFrames++;motion||=phase>0&&phase<1;onProgress({fraction:phase,kind:animation});
+    lifecycle.progress();requestFrame();renderedFrames++;motion||=phase>0&&phase<1;onProgress({fraction:phase,kind:animation});
     if(phase>=1)resolve();else frameId=raf(tick);
    }catch(error){reject(error);}};
    frameId=raf(tick);
@@ -59,7 +61,7 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
   if(renderedFrames<2||!motion)throw Error('Comparison video received too few animation frames; keep the browser foreground and retry');
   if(failure)throw failure;if(signal?.aborted)throw cancelled();requestFrame();
   // Offscreen canvas changes need an encoder turn before requestData/stop, especially under load.
-  await new Promise((resolve,reject)=>{failPlayback=reject;Promise.resolve(flushWait(150)).then(resolve,reject);});
+  await lifecycle.race(new Promise((resolve,reject)=>{failPlayback=reject;Promise.resolve(flushWait(150)).then(resolve,reject);}));
   if(failure)throw failure;if(signal?.aborted)throw cancelled();requestFrame();
  }catch(error){failure??=error;}
  finally{
@@ -68,9 +70,9 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,an
    if(recorder&&recorder.state!=='inactive'){
     stopping=true;try{recorder.requestData?.();}catch(error){failure??=error;}
     try{recorder.stop();}catch(error){failure??=error;finishRecording();}
-    await stopped;
+    try{await waitForWebmStop(stopped,env);}catch(error){failure??=error;}
    }
-  }finally{for(const track of stream?.getTracks?.()??[])try{track.stop();}catch(error){failure??=error;}signal?.removeEventListener('abort',abort);}
+  }finally{for(const track of stream?.getTracks?.()??[])try{track.stop();}catch(error){failure??=error;}signal?.removeEventListener('abort',abort);lifecycle?.dispose();if(recorder){recorder.onstop=null;recorder.onerror=null;recorder.ondataavailable=null;}}
  }
  if(failure)throw failure;if(signal?.aborted)throw cancelled();
  if(!chunks.length)throw Error('Comparison recording produced no data');

@@ -154,3 +154,12 @@ test('comparison admission expiration refuses before acceptance and default guar
 });
 
 test('comparison GIF uses bounded orbit format with deterministic delays and actual GIF dimensions',async()=>{let got;const b=new Uint8Array(14);b.set(new TextEncoder().encode('GIF89a'));b[6]=128;b[7]=2;b[8]=64;b[9]=1;b[13]=59;const snapshot=compareSnapshot();snapshot.view.resolution={width:640,height:320};snapshot.view.sourceResolution={width:1280,height:640};const api=createVisualExportJobs({render:()=>{},prepareCompare:()=>snapshot,renderCompare:r=>{got=r;return new Blob([b],{type:'image/gif'});}});for(const animation of ['time','deformation'])await assert.rejects(api.startCompare({...compareArgs('bad'),format:'gif',animation}));const done=await terminal(api,await api.startCompare({...compareArgs(),format:'gif',seconds:2}));assert.equal(done.state,'completed');assert.equal(got.animation,'orbit');const m=done.artifact.manifest;assert.deepEqual(m.resolution,{width:640,height:320});assert.deepEqual(m.sourceResolution,{width:1280,height:640});assert.equal(m.time.delayCentiseconds.length,24);assert.equal(m.time.delayCentiseconds.reduce((a,b)=>a+b),200);assert.equal(m.time.realtime,false);assert.equal(m.time.frameCount,24);assert.equal(m.gif.palette,'RGB332');});
+
+test('result and comparison status expose only bounded WebM lifecycle failure codes and retain the original message',async()=>{
+ for(const compare of [false,true])for(const code of ['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_UNKNOWN','UNTRUSTED_'+'x'.repeat(5000),undefined]){
+  const fail=()=>{throw Object.assign(Error('Recording interrupted; view restored'),{code});},api=createVisualExportJobs({render:fail,prepareCompare:()=>compareSnapshot(),renderCompare:fail}),job=compare?await api.startCompare({...compareArgs(),format:'webm'}):await api.start({...args(),format:'webm'});
+  await api.waitForSettled(job);const status=api.status(job);assert.equal(status.state,'failed');assert.equal(status.error,'Recording interrupted; view restored');
+  if(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT'].includes(code))assert.equal(status.errorCode,code);else assert.equal(Object.hasOwn(status,'errorCode'),false);
+  assert.throws(()=>api.artifact(job),/unavailable/);api.release(job);
+ }
+});
