@@ -49,3 +49,25 @@ test('WebM checks leases after recorder resolves and PNG never acquires host vid
  const f=fixture({video:true}),prepared=await f.adapter.prepare(f.request,{guard:f.guard});f.hooks.video=async()=>{f.state.current=false;return new Blob(['late'],{type:'video/webm'});};await assert.rejects(f.adapter.render({...prepared,format:'webm',seconds:1}),/changed/);assert.equal(f.state.releases,1);
  const g=fixture({video:true}),png=await g.adapter.prepare(g.request,{guard:g.guard});assert.equal((await g.adapter.render(png)).type,'image/png');assert.equal(g.state.locks,0);assert.equal(g.state.encodes,1);
 });
+
+test('time WebM preflights the whole interval, keeps the camera fixed and reuses global range on every tick',async()=>{
+ const outputs=[[0,4,10],[0,6,10]].map((times,i)=>({mesh:{nodes:[0,0,0]},result:{kind:'thermal',transient:true,snapshots:times.map((time,k)=>({time,temperature:[[[-50,20,300],[-100,50,90]][i][k]]}))}}));
+ const before=structuredClone(outputs),calls=[];let locks=0,releases=0;
+ const adapter=createComparisonExportAdapter({cases:{readSource:async ref=>({caseId:ref.caseId,revision:'rev',name:ref.caseId,output:outputs[Number(ref.caseId)],assertCurrent(){}})},getDefaults:()=>({camera:camera(),deformScale:0}),renderComparison:args=>{calls.push(args);return {canvas:{width:1280,height:640},panels:[],colorRange:args.colorRange,unit:'degC'};},acquireHostLock:()=>{locks++;return {assertOwned(){},release(){releases++;}};},recordVideo:async({renderFrame,camera:shared,animation})=>{assert.equal(animation,'time');for(const phase of [0,.5,1])renderFrame({...shared,position:[99,99,99]},{phase});return new Blob(['video'],{type:'video/webm'});}});
+ const request={format:'webm',animation:'time',references:[{caseId:'0'},{caseId:'1'}],field:'temperature',startTimeSeconds:2.1,endTimeSeconds:7.1,toleranceSeconds:3};
+ const prepared=await adapter.prepare(request);assert.deepEqual(prepared.comparison.colorRange,{field:'temperature',minimum:-100,maximum:300});assert.equal(prepared.comparison.timeAnimation.camera,'fixed');assert.equal(prepared.comparison.timeAnimation.initial.timeSeconds,2.1);
+ await adapter.render({...prepared,format:'webm',animation:'time',seconds:2});
+ assert.deepEqual(calls.map(c=>c.timeSeconds),[2.1,2.1,4.6,7.1]);assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(camera())));assert.ok(calls.every(c=>c.colorRange.minimum===-100&&c.colorRange.maximum===300));assert.equal(locks,1);assert.equal(releases,1);assert.deepEqual(outputs,before);
+ const rendered=calls.length;await assert.rejects(adapter.prepare({...request,toleranceSeconds:0}),/tolerance/);await assert.rejects(adapter.prepare({...request,startTimeSeconds:-1}),/physical time range/);assert.equal(calls.length,rendered);
+});
+
+test('time recording releases the host lock after frame/source/cancellation failures and retains the displayed view',async()=>{
+ for(const failure of ['recorder','source','cancel']){
+  const output={mesh:{nodes:[0,0,0]},result:{kind:'thermal',transient:true,snapshots:[{time:0,temperature:[20]},{time:5,temperature:[25]},{time:10,temperature:[30]}]}},view={camera:camera(),frame:2,timeSeconds:2.01,field:'temperature'},before=structuredClone(view),controller=new AbortController();
+  let sourceCurrent=true,locked=false,releases=0;
+  const adapter=createComparisonExportAdapter({cases:{readSource:async ref=>({caseId:ref.caseId,revision:'rev',name:ref.caseId,output,assertCurrent(){if(!sourceCurrent)throw Error('Source changed');}})},getDefaults:()=>({camera:camera(),deformScale:0}),renderComparison:args=>{const keep=structuredClone(view);try{view.timeSeconds=args.timeSeconds;view.camera=args.camera;return {canvas:{width:1280,height:640},panels:[],colorRange:args.colorRange,unit:'degC'};}finally{Object.assign(view,keep);}},acquireHostLock:()=>{locked=true;return {assertOwned(){assert.equal(locked,true);},release(){locked=false;releases++;}};},recordVideo:async({renderFrame,camera:shared})=>{renderFrame(shared,{phase:.5});if(failure==='recorder')throw Error('Recorder failed');if(failure==='source')sourceCurrent=false;else controller.abort();renderFrame(shared,{phase:1});}});
+  const prepared=await adapter.prepare({format:'webm',animation:'time',field:'temperature',references:[{caseId:'a'},{caseId:'b'}],startTimeSeconds:0,endTimeSeconds:10});
+  await assert.rejects(adapter.render({...prepared,format:'webm',animation:'time',seconds:2,signal:controller.signal}),/failed|changed|cancelled/);
+  assert.equal(locked,false);assert.equal(releases,1);assert.deepEqual(view,before);
+ }
+});

@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "passed",
+  "environment": {
+    "browser": "real Chrome",
+    "origin": "http://127.0.0.1:5176",
+    "transport": "repository semantic bridge, not installed MCP",
+    "fixture": "two small solved thermal tetrahedra T=20+t and20+2t"
+  },
+  "checks": [
+    "API time0..10/display2s WebM SHA decoded dynamic frames",
+    "Shared20..40 range, fixedcamera, neareststored noninterpolated manifest",
+    "Out-of-axis interval, impossible zero tolerance and heat-flux refused",
+    "Exact original2.01s interpolation, input, cases and comparison unchanged",
+    "GUI time selection/from0/to10 and blank independent tolerance completed1280x640 native preview",
+    "GUI5s cancel hides preview/no source,2s restart/native playback ended",
+    "All4 inspect states exactly unchanged after GUI completion/cancel/restart"
+  ],
+  "notVerified": [
+    "Public HTTPS",
+    "General geometry",
+    "Real-Chrome acoustic time video",
+    "Smooth24fps or guaranteed frame count",
+    "GUI download completion",
+    "GUI clip bytes independently decoded (only API clip was retrieved and decoded)"
+  ],
+  "originalDisplay": {
+    "physicalTimeSeconds": 2.01,
+    "interpolated": true
+  },
+  "artifact": {
+    "totalBytes": 27294,
+    "sha256": "sha256:80d622c4d147492fe31cc1f945ea7eaf2ad94424d517780ccbb7087efd926109",
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "webm",
+      "container": "webm",
+      "mimeType": "video/webm;codecs=vp9",
+      "codec": "vp9",
+      "sha256": "sha256:80d622c4d147492fe31cc1f945ea7eaf2ad94424d517780ccbb7087efd926109",
+      "totalBytes": 27294,
+      "resolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "73d24864-c4bf-4ee8-b03c-9cde5755a0b4",
+            "label": "QA analytic T=20+1t degC (closed tetra)",
+            "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+            "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+          },
+          {
+            "caseId": "08094627-fcda-4935-ad3c-970cfaa0702c",
+            "label": "QA analytic T=20+2t degC (closed tetra)",
+            "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+            "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+          }
+        ],
+        "colorRange": {
+          "field": "temperature",
+          "maximum": 39.99999999999994,
+          "minimum": 20
+        },
+        "field": "temperature",
+        "panels": [
+          {
+            "caseId": "73d24864-c4bf-4ee8-b03c-9cde5755a0b4",
+            "field": "temperature",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 20,
+            "minimum": 20,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "degC"
+          },
+          {
+            "caseId": "08094627-fcda-4935-ad3c-970cfaa0702c",
+            "field": "temperature",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 20,
+            "minimum": 20,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "degC"
+          }
+        ],
+        "timeAnimation": {
+          "camera": "fixed",
+          "endTimeSeconds": 10,
+          "field": "temperature",
+          "final": {
+            "panels": [
+              {
+                "frameIndex": 10,
+                "offsetSeconds": 0,
+                "timeSeconds": 10
+              },
+              {
+                "frameIndex": 10,
+                "offsetSeconds": 0,
+                "timeSeconds": 10
+              }
+            ],
+            "timeSeconds": 10
+          },
+          "initial": {
+            "panels": [
+              {
+                "frameIndex": 0,
+                "offsetSeconds": 0,
+                "timeSeconds": 0
+              },
+              {
+                "frameIndex": 0,
+                "offsetSeconds": 0,
+                "timeSeconds": 0
+              }
+            ],
+            "timeSeconds": 0
+          },
+          "interpolated": false,
+          "kind": "thermal",
+          "maxAbsOffsetSeconds": [
+            0.5,
+            0.5
+          ],
+          "rangeBasis": "all-selectable-stored-frames",
+          "selectedFrameCounts": [
+            11,
+            11
+          ],
+          "startTimeSeconds": 0,
+          "timeSelection": "nearest-stored-frames-only"
+        },
+        "unit": "degC"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "ja",
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        }
+      },
+      "time": {
+        "animation": "time",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "physicalTime": "Requested physical range maps to nearest stored frames per panel; actual times and signed offsets are shown in each rendered frame.",
+        "camera": "fixed",
+        "frameSelection": "nearest-stored-frames-only",
+        "requestedRangeSeconds": {
+          "start": 0,
+          "end": 10
+        },
+        "fps": {
+          "target": 24,
+          "recording": "realtime",
+          "frameCountGuaranteed": false
+        }
+      }
+    },
+    "file": "2026-10-17-comparison-time-video-real-chrome.webm"
+  },
+  "decoded": {
+    "streams": [
+      {
+        "codec_name": "vp9",
+        "width": 1280,
+        "height": 640,
+        "nb_read_frames": "4",
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "eng",
+          "alpha_mode": "1"
+        }
+      }
+    ],
+    "timestamps": [
+      0,
+      0.702,
+      1.722,
+      2.755
+    ],
+    "distinctFrameHashes": 4
+  },
+  "previousAttempts": [
+    {
+      "status": "failed",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 39.99999999999994\n- 40\n",
+      "classification": "QA harness exact40 assertion failed on floating result39.99999999999994; changed to1e-10 tolerance, no product failure."
+    }
+  ],
+  "gui": {
+    "animation": "time",
+    "startTimeSeconds": 0,
+    "endTimeSeconds": 10,
+    "singlePanelTimeUnchanged": 5,
+    "toleranceInput": "blank (unlimited), independently of panel tolerance0",
+    "completion": {
+      "requestedVideoSeconds": 2,
+      "videoWidth": 1280,
+      "videoHeight": 640,
+      "readyState": 4,
+      "autoplay": false,
+      "pausedInitially": true,
+      "durationSeconds": 2.226
+    },
+    "cancel": {
+      "requestedVideoSeconds": 5,
+      "status": "動画作成を中止しました。",
+      "previewHidden": true,
+      "previewSrc": ""
+    },
+    "restart": {
+      "requestedVideoSeconds": 2,
+      "videoWidth": 1280,
+      "videoHeight": 640,
+      "durationSeconds": 2.821,
+      "nativePlayTriggeredBy": "trusted Space key",
+      "playStarted": true,
+      "ended": true,
+      "finalCurrentTime": 2.821
+    },
+    "stateChecks": [
+      {
+        "label": "time-completed",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      },
+      {
+        "label": "time-cancelled",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      },
+      {
+        "label": "time-restarted",
+        "passed": true,
+        "equal": {
+          "getResultView": true,
+          "inspectInput": true,
+          "caseList": true,
+          "getCompareView": true
+        }
+      }
+    ]
+  },
+  "review": {
+    "blockingFindings": [],
+    "scope": "Read-only pure plan/adapter/recorder/controller/UI integration review"
+  }
+}

@@ -25,6 +25,7 @@ test('explicit prepared sources share one camera/range and report actual selecte
  assert.deepEqual(h.calls.slice(2).map(c=>c.settings.colorRange),[out.colorRange,out.colorRange]);
  assert.deepEqual(h.request,before);assert.equal(h.displayed,'original');
  assert.ok(h.texts.some(t=>t.includes('Physical time')));
+ assert.ok(h.texts.some(t=>t.includes('Requested physical time')&&t.includes('4.7 s')));
 });
 
 test('explicit color range is applied consistently and unit mismatch refuses composition',()=>{

@@ -1,5 +1,5 @@
 import {computeSharedRange,formatQuantity,formatSeconds,legendBars,planCompareView} from './view-compare-layout.js';
-const labels={'最終ステップのみ（共通時刻は適用されません）':'Final step only (shared time does not apply)','保存フレームとのずれ':'Offset from stored frame','時間軸なし':'no time axis','共通色範囲':'Shared colour range','変形倍率':'Deformation scale','物理時刻':'Physical time','共通の物理時刻を入力してください。':'Enter the shared physical time.'};
+const labels={'要求時刻':'Requested physical time','最終ステップのみ（共通時刻は適用されません）':'Final step only (shared time does not apply)','保存フレームとのずれ':'Offset from stored frame','時間軸なし':'no time axis','共通色範囲':'Shared colour range','変形倍率':'Deformation scale','物理時刻':'Physical time','共通の物理時刻を入力してください。':'Enter the shared physical time.'};
 const defaultOutput={width:1280,height:640,labelHeight:96,legendHeight:100};
 /** Canvas composition with injected case inspection/rendering; no document or viewer globals. */
 export function createComparisonRenderer({inspectCase,renderCase,createCanvas,colorAt=()=> '#888',language=()=> 'ja',translate}){
@@ -21,7 +21,7 @@ export function createComparisonRenderer({inspectCase,renderCase,createCanvas,co
    shared.colorRange={field,minimum:colorRange.minimum,maximum:colorRange.maximum};shared.padded=false;
   }
   const shots=cases.map((c,k)=>renderCase(c.source,spec(k,shared.colorRange)));
-  const plan=planCompareView(described,options);plan.colorRange=shared.colorRange;plan.rangePadded=shared.padded;
+  const plan=planCompareView(described,options);plan.colorRange=shared.colorRange;plan.rangePadded=shared.padded;if(Number.isFinite(timeSeconds)&&plan.panels.some(p=>p.time.timeApplies))plan.requestedTimeSeconds=timeSeconds;
   const canvas=createCanvas();drawComparison(canvas,plan,shots,shared,{colorAt,tr});
   const panels=plan.panels.map((p,k)=>({caseId:p.caseId,field,unit:auto[k].unit,minimum:auto[k].min,maximum:auto[k].max,...p.time,finalOnly:!!shots[k].finalOnly}));
   return {canvas,plan,panels,colorRange:shared.colorRange,unit:shared.unit};
@@ -45,6 +45,6 @@ function drawComparison(canvas,plan,shots,shared,{colorAt,tr}) {
       g.textAlign = 'right'; g.fillText(`${formatQuantity(c.maximum)} ${shared.unit}`, maxLabel.x, maxLabel.y); g.textAlign = 'left';
     });
     const times = plan.panels.map((p, k) => shots[k].finalOnly ? tr('最終ステップのみ（共通時刻は適用されません）') : p.time.timeApplies ? `${formatSeconds(p.time.timeSeconds)} (${tr('保存フレームとのずれ')} ${formatSeconds(p.time.offsetSeconds, {signed: true})})` : tr('時間軸なし'));
-    g.fillText(`${tr('共通色範囲')}: ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}`, 8, geo.textRows[0], L.width - 16);
+    g.fillText(`${tr('共通色範囲')}: ${plan.field}${plan.rangePadded ? ' (padded)' : ''} · ${tr('変形倍率')} ${plan.deformScale}${plan.requestedTimeSeconds===undefined?'':` · ${tr('要求時刻')} ${formatSeconds(plan.requestedTimeSeconds)}`}`, 8, geo.textRows[0], L.width - 16);
     g.fillText(`${tr('物理時刻')}: ${times.join(' | ')}`, 8, geo.textRows[1], L.width - 16);
   }

@@ -124,3 +124,17 @@ test('only successful comparison display or preset apply notifies automatic savi
  await f.ui.show();assert.equal(notifications,1);f.ui.apply(imported());assert.equal(notifications,2);
  assert.throws(()=>f.ui.apply({...imported(),indices:[0,0]}));assert.equal(notifications,2);
 });
+
+
+test('GUI time video fixes camera, forwards explicit range and leaves current single-time panel untouched',async()=>{
+ const calls=[],urls=videoEnvironment(),f=setup({transient:true,field:'temperature',videoApi:{capabilities:()=>({supported:true}),start:async(state,options)=>{calls.push({state,options});return {blob:videoBlob()};},cancel(){}},env:urls.env});const kind=find(f.ui.host,'compare-video-kind');kind.value='time';kind.onchange();find(f.ui.host,'compare-video-from').value='.01';find(f.ui.host,'compare-video-to').value='.2';find(f.ui.host,'compare-time').value='.12';const before=f.ui.capture();await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls.length,1);assert.equal(calls[0].options.animation,'time');assert.equal(calls[0].options.startTimeSeconds,.01);assert.equal(calls[0].options.endTimeSeconds,.2);assert.equal(calls[0].state.settings.timeSeconds,undefined);assert.deepEqual(calls[0].state.settings.camera,before.settings.camera);assert.deepEqual(f.ui.capture(),before);assert.equal(find(f.ui.host,'compare-video-download').download,'case-comparison-time.webm');assert.equal(find(f.ui.host,'compare-video-from').disabled,false);
+});
+
+test('GUI time video rejects static/final-only fields and empty/nonoverlapping ranges before starting',async()=>{
+ let calls=0;const api={capabilities:()=>({supported:true}),start:()=>{calls++;return Promise.resolve({blob:videoBlob()});},cancel(){}};for(const options of [{field:'stress'},{field:'heatFlux',finalOnly:true},{field:'temperature',transient:true}]){const f=setup({...options,videoApi:api});find(f.ui.host,'compare-video-kind').value='time';for(const [from,to]of [['',''],['1','0'],['0','.2']]){find(f.ui.host,'compare-video-from').value=from;find(f.ui.host,'compare-video-to').value=to;await find(f.ui.host,'compare-video-start').onclick();}}assert.equal(calls,0);
+});
+
+
+test('GUI time-video tolerance is explicit and does not inherit the single-time preset tolerance',async()=>{
+ const calls=[],f=setup({field:'temperature',transient:true,videoApi:{capabilities:()=>({supported:true}),start:async(state)=>{calls.push(state);return {blob:videoBlob()};},cancel(){}},env:videoEnvironment().env}),saved=f.ui.capture();saved.settings.timeSeconds=.1;saved.settings.toleranceSeconds=.02;f.ui.apply(saved);find(f.ui.host,'compare-video-kind').value='time';find(f.ui.host,'compare-video-from').value='.01';find(f.ui.host,'compare-video-to').value='.2';await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls.length,1);assert.equal(calls[0].settings.toleranceSeconds,undefined);assert.equal(f.ui.capture().settings.toleranceSeconds,.02);find(f.ui.host,'compare-video-tolerance').value='.05';await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls[1].settings.toleranceSeconds,.05);assert.equal(f.ui.capture().settings.toleranceSeconds,.02);
+});

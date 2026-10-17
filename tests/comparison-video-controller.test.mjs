@@ -29,3 +29,12 @@ test('controller discards tampered metadata, offsets, base64 and hashes and alwa
  for(const corrupt of [page=>({...page,offset:9}),page=>({...page,nextOffset:0}),page=>({...page,data:'!!!!'}),page=>({...page,data:'AAAA'}),page=>({...page,data:page.data.slice(0,-4)+'AAAA'})]){const h=fixture(),original=h.exports.artifact;h.exports.artifact=args=>corrupt(original(args));await assert.rejects(h.controller.start(capture()),/artifact|base64|SHA-256/);assert.equal(h.released,1);}
  const h=fixture(),status=h.exports.status;h.exports.status=args=>{const value=status(args);if(value.artifact)value.artifact.totalBytes=32*1024*1024+1;return value;};await assert.rejects(h.controller.start(capture()),/metadata/);assert.equal(h.released,1);
 });
+
+
+test('controller time video forwards range while preserving captured single-time preset settings',async()=>{
+ let received;const h=fixture({renderCompare:request=>{received=request;return blob();}}),input=capture(),before=structuredClone(input);await h.controller.start(input,{animation:'time',startTimeSeconds:0,endTimeSeconds:10,seconds:2});assert.equal(received.animation,'time');assert.equal(received.startTimeSeconds,0);assert.equal(received.endTimeSeconds,10);assert.equal(received.timeSeconds,undefined);assert.equal(received.toleranceSeconds,0);assert.deepEqual(input,before);assert.equal(h.released,1);
+});
+
+test('controller invalid time range refuses before saved-source reads or queue admission',async()=>{
+ let lists=0;const h=fixture({list:()=>{lists++;return snapshot();}});for(const options of [{animation:'time'},{animation:'time',startTimeSeconds:10,endTimeSeconds:0},{animation:'time',startTimeSeconds:-1,endTimeSeconds:10},{animation:'orbit',startTimeSeconds:0,endTimeSeconds:10}])await assert.rejects(h.controller.start(capture(),options));assert.equal(lists,0);assert.equal(h.admitted,0);
+});

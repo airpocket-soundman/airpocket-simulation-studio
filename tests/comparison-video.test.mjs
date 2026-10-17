@@ -88,3 +88,10 @@ test('a throttled first callback at the final phase refuses an orbit with no act
  const h=harness(),recorded=recordComparisonVideo(h.request,h.env);h.advance(1000);
  await assert.rejects(recorded,/too few animation frames/);assert.equal(h.trackStops,1);assert.equal(h.pending,0);
 });
+
+test('stored-time recording passes phase to the renderer and preserves the shared camera at every tick',async()=>{
+ const h=harness(),calls=[],original=structuredClone(h.request.camera);
+ const recording=recordComparisonVideo({...h.request,animation:'time',renderFrame:(camera,frame)=>{calls.push({camera,frame});return {width:1280,height:640};}},h.env);
+ h.advance(250);h.advance(1000);await recording;
+ assert.deepEqual(calls.map(c=>c.frame),[{phase:.25,animation:'time'},{phase:1,animation:'time'}]);assert.ok(calls.every(c=>JSON.stringify(c.camera)===JSON.stringify(original)));assert.equal(h.progress.at(-1).kind,'time');assert.equal(h.trackStops,1);
+});
