@@ -12,7 +12,7 @@ export function createComparisonVideoController({cases,exports,id=()=>crypto.ran
  let active=null;
  const capabilities=()=>{const c=exports.capabilities?.()?.comparisonWebmExport;return c&&typeof c.supported==='boolean'?structuredClone(c):{supported:false,reason:'Comparison WebM availability is unavailable'};};
  const stop=work=>{work.cancelled=true;if(work.jobId&&!work.cancelRequest)work.cancelRequest=Promise.resolve().then(()=>exports.cancel({jobId:work.jobId}));return work.cancelRequest;};
- function start(raw,{seconds=2,onProgress=()=>{}}={}){
+ function start(raw,{seconds=2,animation='orbit',startTimeSeconds,endTimeSeconds,onProgress=()=>{}}={}){
   if(active)return Promise.reject(Error('Comparison video is already active'));
   const work={cancelled:false,jobId:null,cancelRequest:null};active=work;let settled;work.settled=new Promise(resolve=>settled=resolve);
   const check=()=>{if(work.cancelled||active!==work)throw abort();};
@@ -21,13 +21,17 @@ export function createComparisonVideoController({cases,exports,id=()=>crypto.ran
     const capture=clone(raw);
     if(!capture||typeof capture!=='object'||Array.isArray(capture)||Object.keys(capture).some(key=>!['indices','settings'].includes(key))||!Array.isArray(capture.indices)||capture.indices.length!==2||!capture.indices.every(i=>Number.isSafeInteger(i)&&i>=0)||capture.indices[0]===capture.indices[1])throw Error('Select two distinct comparison cases');
     if(!Number.isInteger(seconds)||seconds<1||seconds>15||typeof onProgress!=='function')throw Error('Invalid comparison video duration or progress callback');
-    const settings=validateComparisonSettings(capture.settings),listing=clone(await cases.list());check();
+    if(!['orbit','time'].includes(animation))throw Error('Invalid comparison video animation');
+    if(animation==='time'&&(!Number.isFinite(startTimeSeconds)||!Number.isFinite(endTimeSeconds)||startTimeSeconds<0||endTimeSeconds<=startTimeSeconds))throw Error('Comparison time video requires an increasing physical time range');
+    if(animation==='orbit'&&(startTimeSeconds!==undefined||endTimeSeconds!==undefined))throw Error('Physical range is only valid for time video');
+    const settings=validateComparisonSettings(animation==='time'?{...capture.settings,timeSeconds:startTimeSeconds}:capture.settings);if(animation==='time')delete settings.timeSeconds;
+    const listing=clone(await cases.list());check();
     if(!Array.isArray(listing.cases))throw Error('Invalid saved-case listing');
     const references=capture.indices.map(index=>{const row=listing.cases[index];if(!row||typeof row.caseId!=='string'||!row.caseId||!hash(row.revision))throw Error('Invalid comparison case reference');return {caseId:row.caseId,expectedRevision:row.revision};});
     if(references[0].caseId===references[1].caseId)throw Error('Select two distinct comparison cases');
     const current=clone(await cases.list());check();if(canonicalJson(current)!==canonicalJson(listing))throw Error('Saved cases changed while preparing comparison video');
     const requestId=id();if(typeof requestId!=='string'||!requestId||requestId.length>128)throw Error('Invalid comparison video request identity');
-    const job=await exports.startCompare({requestId,references,...settings,format:'webm',animation:'orbit',seconds},{guard:()=>!work.cancelled&&active===work});
+    const job=await exports.startCompare({requestId,references,...settings,format:'webm',animation,seconds,...(animation==='time'?{startTimeSeconds,endTimeSeconds}:{})},{guard:()=>!work.cancelled&&active===work});
     if(typeof job?.jobId!=='string'||!job.jobId)throw Error('Invalid comparison video job');work.jobId=job.jobId;if(work.cancelled)await stop(work);check();
     let state;const deadline=Date.now()+120000;
     for(;;){check();state=await exports.status({jobId:work.jobId});check();if(state?.jobId!==work.jobId)throw Error('Comparison video job identity changed');const fraction=state.progress?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)onProgress({fraction});check();if(state.state!=='running')break;if(Date.now()>=deadline)throw Error('Comparison video timed out');await delay(poll);}

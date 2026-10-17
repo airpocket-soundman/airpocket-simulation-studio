@@ -17,11 +17,12 @@ function orbit(camera,phase){
 }
 
 /** Real-time orbit of one shared camera. The caller owns source leases and viewer restoration. */
-export async function recordComparisonVideo({initialCanvas,renderFrame,camera,seconds,signal,onProgress=()=>{}},env={}){
+export async function recordComparisonVideo({initialCanvas,renderFrame,camera,animation='orbit',seconds,signal,onProgress=()=>{}},env={}){
  const Recorder=env.MediaRecorder??globalThis.MediaRecorder,now=env.now??(()=>performance.now()),raf=env.requestAnimationFrame??globalThis.requestAnimationFrame,cancel=env.cancelAnimationFrame??globalThis.cancelAnimationFrame;
  const verify=env.hasVideoFrames??hasVideoFrames,maxBytes=env.maxBytes??MAX_BYTES;
  const flushWait=env.flushWait??(milliseconds=>new Promise(resolve=>setTimeout(resolve,milliseconds)));
  if(signal?.aborted)throw cancelled();
+ if(!['orbit','time'].includes(animation))throw Error('Comparison video supports orbit or stored time only');
  if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error('Comparison video duration must be an integer from 1 through 15');
  if(!Number.isSafeInteger(maxBytes)||maxBytes<1||maxBytes>MAX_BYTES)throw Error('Invalid comparison video byte limit');
  if(typeof renderFrame!=='function'||typeof raf!=='function'||typeof cancel!=='function')throw Error('Comparison video rendering is unavailable');
@@ -47,15 +48,15 @@ export async function recordComparisonVideo({initialCanvas,renderFrame,camera,se
    failPlayback=reject;
    const tick=()=>{try{
     if(failure)throw failure;if(signal?.aborted)throw cancelled();
-    const phase=Math.max(0,Math.min(1,(now()-started)/(seconds*1000))),frame=renderFrame(orbit(originalCamera,phase));
+    const phase=Math.max(0,Math.min(1,(now()-started)/(seconds*1000))),frame=renderFrame(animation==='time'?structuredClone(originalCamera):orbit(originalCamera,phase),{phase,animation});
     if(!frame||frame.width!==width||frame.height!==height||initialCanvas.width!==width||initialCanvas.height!==height)throw Error('Comparison canvas resolution changed during recording');
     if(frame!==initialCanvas){const context=initialCanvas.getContext('2d');if(!context)throw Error('Comparison canvas context is unavailable');context.clearRect(0,0,width,height);context.drawImage(frame,0,0);}
-    requestFrame();renderedFrames++;motion||=phase>0&&phase<1;onProgress({fraction:phase,kind:'orbit'});
+    requestFrame();renderedFrames++;motion||=phase>0&&phase<1;onProgress({fraction:phase,kind:animation});
     if(phase>=1)resolve();else frameId=raf(tick);
    }catch(error){reject(error);}};
    frameId=raf(tick);
   });
-  if(renderedFrames<2||!motion)throw Error('Comparison orbit received too few animation frames; keep the browser foreground and retry');
+  if(renderedFrames<2||!motion)throw Error('Comparison video received too few animation frames; keep the browser foreground and retry');
   if(failure)throw failure;if(signal?.aborted)throw cancelled();requestFrame();
   // Offscreen canvas changes need an encoder turn before requestData/stop, especially under load.
   await new Promise((resolve,reject)=>{failPlayback=reject;Promise.resolve(flushWait(150)).then(resolve,reject);});
