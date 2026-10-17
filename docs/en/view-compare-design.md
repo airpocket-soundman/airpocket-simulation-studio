@@ -2,6 +2,8 @@
 
 [日本語](../view-compare-design.md) / Related: [Result viewer and export requirements](result-viewer-direction.md)
 
+The first two increments below are historical records from 2026-10-16. See later additions and [Automation API](automation.md) for current behavior and limitations.
+
 Date: 2026-10-16. Only the pure computation module `src/view-compare-layout.js` (domain layer; no DOM, three.js or case store) and its unit tests are implemented. **No GUI, no PNG/video export and no MCP/API operations exist yet**; the VIEWCOMPARE board task remains open.
 
 ## Rules implemented
@@ -37,3 +39,14 @@ From real-browser findings. Each panel legend band now draws a gradient colour b
 ## Stored-frame comparison for transient heat
 
 Thermal cases with stored temperature frames also select the nearest stored frame to the shared physical time and show its actual time and signed offset in the legend. No interpolation is performed. Time selection applies to temperature only; heat flux belongs to the final result. Numerical `caseCompare` and `studio_compare_cases` references select a temperature frame with explicit `frameIndex`, and deltas require exactly equal stored times. Heat-flux references with `frameIndex` are rejected. Thermal numerical references without `frameIndex` retain the existing final-result behavior. Real-Chrome verification of this addition is pending.
+
+
+## Browser-local automatic comparison settings (2026-10-17)
+
+Save comparison settings automatically in this browser is off by default. Once enabled, one preset is saved after a successful Show comparison or a valid manual-preset import. It contains portable saved-case content hashes and the field, requested shared time/tolerance, camera and deformation scale. It does not store cases, PNG/WebM bytes or connection tokens. Disabling keeps the candidate and stops subsequent automatic updates. Delete saved comparison settings disables saving and writes a settings-free deletion record.
+
+Reload only announces the available candidate. It does not load cases, apply settings or render a comparison automatically. Load the unchanged cases separately, then choose Restore saved comparison settings. Existing revision checks and a generation guard prevent an older restore from replacing newer user settings while asynchronous work is pending. Missing, ambiguous or changed source hashes refuse restoration while retaining the candidate and current view. Use Show comparison to inspect a restored preset.
+
+Storage is limited to the same browser and origin. It uses a dedicated IndexedDB airpocket-comparison-settings (kv/current), or localStorage airpocket-comparison-settings:current when initial database access is unavailable. An existing localStorage record takes precedence; the selected backend is then pinned for the session. The validated record is limited to 128 KiB. Corruption, quota exhaustion or disabled browser storage is reported in the status area; manual JSON and ordinary comparison operations remain available. Writes are serialized and older asynchronous work cannot overwrite newer settings.
+
+2026-10-17 localhost real-Chrome evidence (small thermal cases): [Automatic comparison settings verification](../evidence/2026-10-17-comparison-settings-persistence-real-chrome.json). Starting disabled, opting in and showing a comparison saved one candidate. An actual page reload retained the enabled choice/candidate without automatically restoring cases, time or a PNG. Separate case reimport with new runtime IDs followed by explicit Restore reproduced the same portable preset, and Show comparison succeeded. Disabling kept the candidate; deletion followed by another actual reload left saving off, no candidate and disabled Restore/Delete buttons. Main viewer/input/cases stayed unchanged after save/restore/disable/delete. Public HTTPS, other browsers/devices and forced IndexedDB/quota/corruption failures in real Chrome remain unverified (failure paths have automated coverage). Automatic case/result storage is out of scope.

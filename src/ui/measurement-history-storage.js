@@ -5,10 +5,10 @@
 // measurement archives (no credentials, no tokens).
 const DB_NAME='airpocket-measurement-history',STORE='kv',LS_PREFIX='airpocket-measurement-history:';
 function idbRequest(request){return new Promise((resolve,reject)=>{request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||Error('IndexedDB request failed'));});}
-export function createIndexedDbStorage(indexedDB){
+export function createIndexedDbStorage(indexedDB,{databaseName=DB_NAME}={}){
  if(!indexedDB||typeof indexedDB.open!=='function')throw Error('IndexedDB unavailable');
  let opened;
- const open=()=>opened||=new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,1);request.onupgradeneeded=()=>{request.result.createObjectStore(STORE);};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||Error('IndexedDB open failed'));request.onblocked=()=>reject(Error('IndexedDB blocked'));}).catch(error=>{opened=undefined;throw error;});
+ const open=()=>opened||=new Promise((resolve,reject)=>{const request=indexedDB.open(databaseName,1);request.onupgradeneeded=()=>{request.result.createObjectStore(STORE);};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||Error('IndexedDB open failed'));request.onblocked=()=>reject(Error('IndexedDB blocked'));}).catch(error=>{opened=undefined;throw error;});
  const store=async mode=>(await open()).transaction(STORE,mode).objectStore(STORE);
  return Object.freeze({kind:'indexeddb',
   async get(key){const value=await idbRequest((await store('readonly')).get(key));return typeof value==='string'?value:null;},
@@ -16,13 +16,13 @@ export function createIndexedDbStorage(indexedDB){
   async remove(key){await idbRequest((await store('readwrite')).delete(key));},
   async keys(){return (await idbRequest((await store('readonly')).getAllKeys())).filter(key=>typeof key==='string');}});
 }
-export function createLocalStorageAdapter(localStorage){
+export function createLocalStorageAdapter(localStorage,{prefix=LS_PREFIX}={}){
  if(!localStorage)throw Error('localStorage unavailable');
  return Object.freeze({kind:'localstorage',
-  async get(key){return localStorage.getItem(LS_PREFIX+key);},
-  async set(key,value){localStorage.setItem(LS_PREFIX+key,value);},
-  async remove(key){localStorage.removeItem(LS_PREFIX+key);},
-  async keys(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(typeof k==='string'&&k.startsWith(LS_PREFIX))out.push(k.slice(LS_PREFIX.length));}return out;}});
+  async get(key){return localStorage.getItem(prefix+key);},
+  async set(key,value){localStorage.setItem(prefix+key,value);},
+  async remove(key){localStorage.removeItem(prefix+key);},
+  async keys(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(typeof k==='string'&&k.startsWith(prefix))out.push(k.slice(prefix.length));}return out;}});
 }
 // Never throws: returns an adapter whose operations reject when no storage is usable.
 export function createBrowserMeasurementStorage({indexedDB,localStorage}={}){

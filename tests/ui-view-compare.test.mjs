@@ -4,11 +4,11 @@ import {createViewCompareUi} from '../src/ui/view-compare-ui.js';
 
 const fakeCtx = () => { const calls = []; return {calls, fillRect() {}, drawImage: (...a) => calls.push(['draw', ...a]), fillText: (t) => calls.push(['text', t]), createLinearGradient: () => ({addColorStop() {}}), set fillStyle(v) {}, set font(v) {}, set textAlign(v) {}}; };
 function el(tag) { const e = {tag, children: [], textContent: '', value: '', style: {}, append(...c) { this.children.push(...c); }, replaceChildren(...c) { this.children = [...c]; }, setAttribute() {}, addEventListener() {}, after() {}, ctx: tag === 'canvas' ? fakeCtx() : null, getContext() { return this.ctx; }}; return e; }
-function setup({transient = false, field = 'stress', finalOnly = false, presetApi,videoApi,env,language} = {}) {
+function setup({transient = false, field = 'stress', finalOnly = false, presetApi,videoApi,env,language,onSettingsChanged} = {}) {
   const cases = [{name: 'A', output: {calculation: {options: {size: 5}}}}, {name: 'B', output: {calculation: {options: {size: 4}}}}];
   const renders = [], statuses = [], inspections = [];
   const ui = createViewCompareUi({
-    presetApi,videoApi,env,language, $: () => null, document: {createElement: el}, anchor: el('div'), status: t => statuses.push(t),
+    presetApi,videoApi,env,language,onSettingsChanged, $: () => null, document: {createElement: el}, anchor: el('div'), status: t => statuses.push(t),
     store: {list: () => cases, compare: () => cases.map(() => ({metrics: [{key: 'maxVonMisesPa', value: 2e6, unit: 'Pa'}]}))},
     inspectCase: (i, selectedField) => { inspections.push([i, selectedField]); return {frameTimes: transient ? [0, 0.1, 0.2].map(t => t + i * 0.01) : null, fields: [field],finalOnly}; },
     renderCase: (i, spec) => { renders.push([i, spec]); return {canvas: {width: 100, height: 50}, min: i ? 1 : 0, max: i ? 20 : 10, unit: 'MPa', finalOnly}; },
@@ -117,4 +117,10 @@ test('unsupported capability, invalid duration and missing transient time refuse
  let calls=0;const videoApi={capabilities:()=>({supported:true}),start(){calls++;return Promise.resolve({blob:videoBlob()});},cancel(){}};
  const f=setup({videoApi});for(const value of ['0','16','1.5','']){find(f.ui.host,'compare-video-seconds').value=value;await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(f.ui.host,'compare-video-status').textContent,/1〜15/);}
  const timed=setup({videoApi,transient:true});await find(timed.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(timed.ui.host,'compare-video-status').textContent,/物理時刻/);
+});
+
+test('only successful comparison display or preset apply notifies automatic saving; failures remain nonfatal',async()=>{
+ let notifications=0;const f=setup({onSettingsChanged:()=>{notifications++;return Promise.reject(Error('Storage unavailable'));}});
+ await f.ui.show();assert.equal(notifications,1);f.ui.apply(imported());assert.equal(notifications,2);
+ assert.throws(()=>f.ui.apply({...imported(),indices:[0,0]}));assert.equal(notifications,2);
 });
