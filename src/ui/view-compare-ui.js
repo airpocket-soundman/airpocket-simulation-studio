@@ -5,6 +5,7 @@ import {validateComparisonSettings} from '../comparison-view-settings.js';
 import {resolveSharedTime} from '../view-compare-layout.js';
 import {createComparisonRenderer} from '../view-compare-renderer.js';
 const T = {
+ '出力形式':'Output format','GIFは24枚の固定フレームで共通カメラを回転します。640×320・256色で、時刻と変形動画には対応しません。':'GIF orbits the shared camera using24 fixed frames at640×320 with256 colors. Time/deformation GIF is unsupported.',
   '保存変位の倍率変化（片道）':'Saved displacement scale (one way)','変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':'Deformation video fixes the saved linear-elastic result and changes only its visualization multiplier linearly from zero to the requested scale, one way. It is not a physical load history.',
   '保存時刻のずれ許容（秒、空欄は制限なし）':'Stored-time offset tolerance (seconds, blank for no limit)','動画の種類':'Video type','共通カメラの回転':'Shared camera orbit','保存時刻の時間変化':'Stored-frame time history','開始物理時刻（秒）':'Start physical time (seconds)','終了物理時刻（秒）':'End physical time (seconds)',
   '時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'Time video fixes the camera and shows nearest stored frames within the requested physical range, with actual times and offsets; no interpolation.',
@@ -49,17 +50,20 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   save.disabled=load.disabled=!presetApi;
   const file=el('input','compare-settings-file');file.type='file';file.accept='.json,application/json';file.disabled=!presetApi;
   host.append(label('比較設定JSON',json),save,load,label('比較設定ファイル',file),reset);
+  const videoFormat=el('select','compare-video-format');for(const value of ['webm','gif']){const o=el('option',null,value==='gif'?'GIF':'WebM');o.value=value;videoFormat.append(o);}videoFormat.value='webm';
+  const gifPreview=el('img','compare-gif-preview');gifPreview.hidden=true;gifPreview.style.maxWidth='100%';
   const videoKind=el('select','compare-video-kind'),videoFrom=el('input','compare-video-from'),videoTo=el('input','compare-video-to'),videoTolerance=el('input','compare-video-tolerance');
   for(const [value,text]of [['orbit','共通カメラの回転'],['time','保存時刻の時間変化'],['deformation','保存変位の倍率変化（片道）']]){const option=el('option',null,tr(text));option.value=value;videoKind.append(option);}videoKind.value='orbit';
   for(const control of [videoFrom,videoTo,videoTolerance]){control.type='number';control.min=0;control.step='any';control.value='';}
   const videoSeconds=el('input','compare-video-seconds'),videoStart=el('button','compare-video-start','比較動画を作る'),videoCancel=el('button','compare-video-cancel','動画作成を中止'),videoStatus=el('p','compare-video-status'),videoPreview=el('video','compare-video-preview'),videoDownload=el('a','compare-video-download','比較動画を保存'),videoNote=el('p',null,'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');
   videoSeconds.type='number';videoSeconds.min=1;videoSeconds.max=15;videoSeconds.step=1;videoSeconds.value='2';
   videoStatus.setAttribute('role','status');videoPreview.controls=true;videoPreview.hidden=true;videoPreview.style.maxWidth='100%';videoDownload.hidden=true;videoCancel.disabled=true;
-  host.append(videoNote,label('動画の種類',videoKind),label('開始物理時刻（秒）',videoFrom),label('終了物理時刻（秒）',videoTo),label('保存時刻のずれ許容（秒、空欄は制限なし）',videoTolerance),label('動画の長さ（秒）',videoSeconds),videoStart,videoCancel,videoStatus,videoPreview,videoDownload);
+  host.append(videoNote,label('出力形式',videoFormat),label('動画の種類',videoKind),label('開始物理時刻（秒）',videoFrom),label('終了物理時刻（秒）',videoTo),label('保存時刻のずれ許容（秒、空欄は制限なし）',videoTolerance),label('動画の長さ（秒）',videoSeconds),videoStart,videoCancel,videoStatus,videoPreview,gifPreview,videoDownload);
   let videoUrl,videoActive;
-  function clearVideo(){videoPreview.pause?.();videoPreview.removeAttribute?.('src');videoPreview.src='';videoPreview.load?.();videoPreview.hidden=true;videoDownload.removeAttribute?.('href');videoDownload.href='';videoDownload.hidden=true;if(videoUrl){URLApi.revokeObjectURL(videoUrl);videoUrl=undefined;}}
-  function videoCapability(){try{return videoApi?.capabilities?.()??{supported:false,reason:tr('このブラウザでは比較動画を作成できません。')};}catch(error){return {supported:false,reason:error.message};}}
-  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoKind.disabled=!!videoActive;videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoKind.value!=='time';videoNote.textContent=tr(videoKind.value==='deformation'?'変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
+  function clearVideo(){gifPreview.src='';gifPreview.hidden=true;videoPreview.pause?.();videoPreview.removeAttribute?.('src');videoPreview.src='';videoPreview.load?.();videoPreview.hidden=true;videoDownload.removeAttribute?.('href');videoDownload.href='';videoDownload.hidden=true;if(videoUrl){URLApi.revokeObjectURL(videoUrl);videoUrl=undefined;}}
+  function videoCapability(){try{return videoApi?.capabilities?.({format:videoFormat.value})??{supported:false,reason:tr('このブラウザでは比較動画を作成できません。')};}catch(error){return {supported:false,reason:error.message};}}
+  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoFormat.disabled=!!videoActive;videoKind.disabled=!!videoActive||videoFormat.value==='gif';videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoFormat.value==='gif'||videoKind.value!=='time';videoNote.textContent=tr(videoFormat.value==='gif'?'GIFは24枚の固定フレームで共通カメラを回転します。640×320・256色で、時刻と変形動画には対応しません。':videoKind.value==='deformation'?'変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
+  videoFormat.onchange=()=>{if(!videoActive)clearVideo();syncVideoCapability();};
   videoKind.onchange=()=>{if(!videoActive)clearVideo();syncVideoCapability();};
   videoStart.onclick=async()=>{
     if(videoActive)return;
@@ -67,7 +71,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     try{
       const capability=videoCapability();if(!capability.supported)throw Error(tr('このブラウザでは比較動画を作成できません。'));
       const seconds=Number(videoSeconds.value);if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw Error(tr('長さは1〜15秒の整数で指定してください。'));
-      const animation=videoKind.value;let state,range={};
+      const format=videoFormat.value,animation=format==='gif'?'orbit':videoKind.value;let state,range={};
       if(animation==='time'){
         const startTimeSeconds=Number(videoFrom.value),endTimeSeconds=Number(videoTo.value);
         if(videoFrom.value===''||videoTo.value===''||!Number.isFinite(startTimeSeconds)||!Number.isFinite(endTimeSeconds)||startTimeSeconds<0||endTimeSeconds<=startTimeSeconds)throw Error(tr('開始・終了の物理時刻を0以上の増加する範囲で指定してください。'));
@@ -77,10 +81,10 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
         delete state.settings.timeSeconds;range={startTimeSeconds,endTimeSeconds};
       }else if(animation==='deformation'){state=capture({validate:true});if(!['displacement','stress'].includes(state.settings.field)||!(state.settings.deformScale>0)||state.settings.timeSeconds!==undefined||state.settings.toleranceSeconds!==undefined)throw Error('Deformation video requires displacement/stress, positive visualization scale and no physical time settings');}else if(animation==='orbit')state=capture({validate:true});else throw Error('Invalid comparison video animation');
       videoStatus.textContent=tr('動画を作成しています。');
-      const result=await videoApi.start(state,{seconds,animation,...range,onProgress:value=>{const fraction=typeof value==='number'?value:value?.fraction;if(videoActive===token&&!token.cancelled&&Number.isFinite(fraction))videoStatus.textContent=tr('動画を作成しています。')+' '+Math.round(Math.max(0,Math.min(1,fraction))*100)+'%';}});
+      const result=await videoApi.start(state,{seconds,format,animation,...range,onProgress:value=>{const fraction=typeof value==='number'?value:value?.fraction;if(videoActive===token&&!token.cancelled&&Number.isFinite(fraction))videoStatus.textContent=tr('動画を作成しています。')+' '+Math.round(Math.max(0,Math.min(1,fraction))*100)+'%';}});
       if(videoActive!==token||token.cancelled)return;
-      if(!(result?.blob instanceof Blob)||!result.blob.size||!/^video\/webm(?:;|$)/.test(result.blob.type))throw Error('Invalid comparison video artifact');
-      videoUrl=URLApi.createObjectURL(result.blob);videoPreview.src=videoUrl;videoPreview.hidden=false;videoDownload.href=videoUrl;videoDownload.download='case-comparison-'+animation+'.webm';videoDownload.hidden=false;
+      if(!(result?.blob instanceof Blob)||!result.blob.size||!(format==='gif'?result.blob.type==='image/gif':/^video\/webm(?:;|$)/.test(result.blob.type)))throw Error('Invalid comparison video artifact');
+      videoUrl=URLApi.createObjectURL(result.blob);if(format==='gif'){gifPreview.src=videoUrl;gifPreview.hidden=false;}else{videoPreview.src=videoUrl;videoPreview.hidden=false;}videoDownload.href=videoUrl;videoDownload.download='case-comparison-'+animation+'.'+format;videoDownload.hidden=false;
       videoStatus.textContent=tr('動画を作成しました。再生して確認し、保存リンクから保存してください。');
     }catch(error){clearVideo();videoStatus.textContent=token.cancelled?tr('動画作成を中止しました。'):error.message;}
     finally{if(videoActive===token){videoActive=undefined;if(token.cancelled){clearVideo();videoStatus.textContent=tr('動画作成を中止しました。');}syncVideoCapability();}}

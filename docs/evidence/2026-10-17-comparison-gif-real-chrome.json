@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "environment": {
+    "origin": "http://127.0.0.1:5176",
+    "browser": "real Chrome",
+    "fixture": "Actual solveElastic tetra, side force3N/6N; original thermal2.01s interpolated"
+  },
+  "notVerified": [
+    "Public HTTPS",
+    "General geometry",
+    "GUI download completion",
+    "Time/deformation GIF",
+    "Smoothness on other viewers"
+  ],
+  "status": "passed",
+  "artifact": {
+    "bytes": 5574849,
+    "sha256": "sha256:e171333e4c27fbd73691133892a5446675af831ef53f372d44fd1472217b2de6",
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "gif",
+      "container": "gif",
+      "mimeType": "image/gif",
+      "sha256": "sha256:e171333e4c27fbd73691133892a5446675af831ef53f372d44fd1472217b2de6",
+      "totalBytes": 5574849,
+      "resolution": {
+        "width": 640,
+        "height": 320
+      },
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "9963e318-b4fc-49d0-b4fd-f77a81b5d267",
+            "label": "QA linear elastic 3N",
+            "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+            "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+          },
+          {
+            "caseId": "1788e109-3de5-45fa-9d8c-fa80dc4a0558",
+            "label": "QA linear elastic 6N",
+            "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+            "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+          }
+        ],
+        "colorRange": {
+          "field": "displacement",
+          "maximum": 0.003120000000000001,
+          "minimum": 0
+        },
+        "field": "displacement",
+        "gifAnimation": {
+          "colors": 256,
+          "frames": 24,
+          "height": 320,
+          "loop": 0,
+          "lossy": true,
+          "palette": "RGB332",
+          "phasePolicy": "i/24",
+          "width": 640
+        },
+        "panels": [
+          {
+            "caseId": "9963e318-b4fc-49d0-b4fd-f77a81b5d267",
+            "field": "displacement",
+            "finalOnly": false,
+            "frameIndex": null,
+            "maximum": 0.0015600000000000004,
+            "minimum": 0,
+            "offsetSeconds": null,
+            "timeApplies": false,
+            "timeSeconds": null,
+            "unit": "mm"
+          },
+          {
+            "caseId": "1788e109-3de5-45fa-9d8c-fa80dc4a0558",
+            "field": "displacement",
+            "finalOnly": false,
+            "frameIndex": null,
+            "maximum": 0.003120000000000001,
+            "minimum": 0,
+            "offsetSeconds": null,
+            "timeApplies": false,
+            "timeSeconds": null,
+            "unit": "mm"
+          }
+        ],
+        "unit": "mm"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 200,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "ja",
+        "sourceResolution": {
+          "width": 1280,
+          "height": 640
+        },
+        "resolution": {
+          "width": 640,
+          "height": 320
+        }
+      },
+      "time": {
+        "animation": "orbit",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "recording": "fixed-frame",
+        "realtime": false,
+        "frameCount": 24,
+        "frameCountGuaranteed": true,
+        "phasePolicy": "i/24",
+        "delayCentiseconds": [
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8
+        ],
+        "loop": "infinite"
+      },
+      "gif": {
+        "palette": "RGB332",
+        "colors": 256,
+        "lossy": true
+      },
+      "sourceResolution": {
+        "width": 1280,
+        "height": 640
+      }
+    }
+  },
+  "decoded": {
+    "frames": [
+      {
+        "best_effort_timestamp_time": "0.000000"
+      },
+      {
+        "best_effort_timestamp_time": "0.080000"
+      },
+      {
+        "best_effort_timestamp_time": "0.170000"
+      },
+      {
+        "best_effort_timestamp_time": "0.250000"
+      },
+      {
+        "best_effort_timestamp_time": "0.330000"
+      },
+      {
+        "best_effort_timestamp_time": "0.420000"
+      },
+      {
+        "best_effort_timestamp_time": "0.500000"
+      },
+      {
+        "best_effort_timestamp_time": "0.580000"
+      },
+      {
+        "best_effort_timestamp_time": "0.670000"
+      },
+      {
+        "best_effort_timestamp_time": "0.750000"
+      },
+      {
+        "best_effort_timestamp_time": "0.830000"
+      },
+      {
+        "best_effort_timestamp_time": "0.920000"
+      },
+      {
+        "best_effort_timestamp_time": "1.000000"
+      },
+      {
+        "best_effort_timestamp_time": "1.080000"
+      },
+      {
+        "best_effort_timestamp_time": "1.170000"
+      },
+      {
+        "best_effort_timestamp_time": "1.250000"
+      },
+      {
+        "best_effort_timestamp_time": "1.330000"
+      },
+      {
+        "best_effort_timestamp_time": "1.420000"
+      },
+      {
+        "best_effort_timestamp_time": "1.500000"
+      },
+      {
+        "best_effort_timestamp_time": "1.580000"
+      },
+      {
+        "best_effort_timestamp_time": "1.670000"
+      },
+      {
+        "best_effort_timestamp_time": "1.750000"
+      },
+      {
+        "best_effort_timestamp_time": "1.830000"
+      },
+      {
+        "best_effort_timestamp_time": "1.920000"
+      }
+    ],
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "gif",
+        "width": 640,
+        "height": 320,
+        "nb_read_frames": "24",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        }
+      }
+    ],
+    "distinctFrameHashes": 24
+  },
+  "originalStateUnchanged": true,
+  "independentPillow": {
+    "frames": 24,
+    "delayMilliseconds": [
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80,
+      80,
+      90,
+      80
+    ],
+    "totalMilliseconds": 2000,
+    "loop": 0
+  },
+  "attempts": [
+    {
+      "status": "interrupted",
+      "description": "First browser connection reset and page returned to initial state; semantic bridge timed out. Cause unconfirmed. Existing browser warning/error log was empty. No artifact recovered."
+    },
+    {
+      "status": "passed",
+      "description": "Source frozen; same tab reconnected and fixtures reimported once."
+    }
+  ],
+  "gui": {
+    "create": "passed",
+    "preview": {
+      "visible": true,
+      "complete": true,
+      "width": 640,
+      "height": 320
+    },
+    "cancel": "passed; preview and download hidden, controls restored",
+    "restart": "passed",
+    "downloadCompletion": "unverified"
+  },
+  "guiStateChecks": [
+    {
+      "label": "gui-gif-completed",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "gui-gif-cancelled",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    },
+    {
+      "label": "gui-gif-restarted",
+      "passed": true,
+      "equal": {
+        "getResultView": true,
+        "inspectInput": true,
+        "caseList": true,
+        "getCompareView": true
+      }
+    }
+  ]
+}
