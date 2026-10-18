@@ -43,3 +43,9 @@ studio_restore_case_inputは全archive検証・archive/case/input版固定・元
 [正式MCP証拠](evidence/2026-10-18-result-archive-real-mcp.json)で入力復元→2Node解析→SHA固定studio_archive_results保存→別process検証/一覧/同一点比較を一巡。[新archive](evidence/2026-10-18-node-result-archive.json)は241900bytes・rawSHA8f01a5332d1cb7891cca693c1b54c4eb60f60fef102004a156f9eec9540ded31、0.04/0.08mm・比2。元SHA不変、上書き/旧SHA拒否を確認。保存元build不明と新Node dirty版を分離。合計/生成100MB境界は未実測、既存case-store予算も適用。一般精度・ブラウザ復元・親/gate完了の証明ではありません。
 
 音響の明示刻みで60000step超が確定する場合はsolver規則でmesh前に拒否し、overflowもJSON-safe診断。自動刻み/mesh依存仕事量は別確認。既定35/接続37、live91、公開130/残37を維持し背景手動確認は待機です。
+
+## 最新状況: 独立一巡と入力エラー復旧
+
+上記の「独立fresh未完」は各段階の履歴です。最新の[GUI接続後の独立評価](evidence/2026-10-18-skill-loop-independent-post-pair.json)は、Skill/公開MCP契約による合成入力・根拠修復・2解析・比較・PNG/archiveのSHA検証・4状態保持・3拒否を成功しました。GUI接続準備は前提で、公開HTTPSのこの手順・全Skill gate・一般物理精度は未完です。
+
+今回UIIMPROVE1はqueuedからbuildingへ。[実Chrome証拠](evidence/2026-10-18-comparison-input-recovery.json)に基づき比較/動画入力のエラー対象フォーカスとaria-invalid/errormessage、入力修正での解除を追加し、実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみで、Chrome全出力の再成功は未実施です。調和音響preflightは既存solverの波数/k²数値範囲拒否をmesh前へ整合。親/gateは昇格せず、130released/19queued/13building/5checking/0readyです。

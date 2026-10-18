@@ -1,5 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {solveAcoustic} from '../src/acoustic-core.js';
 import {solveAcousticTransient} from '../src/acoustic-transient.js';
 import {inspectAcousticInputContract} from '../src/acoustic-input-contract.js';
 const inspect=(p,options={})=>inspectAcousticInputContract(p,options,{mode:'quantitative'}),has=(r,code)=>r.diagnostics.some(d=>d.code===code);
@@ -32,4 +33,19 @@ test('overflowing explicit transient step counts retain JSON-safe diagnostic evi
  const r=inspect(p),diagnostic=r.diagnostics.find(d=>d.code==='ACOUSTIC_WORKLOAD_UNSUPPORTED');
  assert.deepEqual(diagnostic.evidence,{stepCountOverflow:true,maximumSteps:60000});
  assert.deepEqual(JSON.parse(JSON.stringify(r)),r);
+});
+
+test('harmonic numerical range checks agree with existing wave and squared-wave-number solver refusals',()=>{
+ const mesh={size:0,nodes:[],tetrahedra:[]},boundary={acousticPressures:[[0,1]]};
+ for(const patch of [{frequency:Number.MAX_VALUE},{frequency:1e160},{soundSpeed:Number.MIN_VALUE},{lossFactor:Number.MAX_VALUE}]){
+  const p=project();Object.assign(p.study,patch);const before=structuredClone(p),r=inspect(p);
+  assert.ok(r.diagnostics.some(d=>d.code==='ACOUSTIC_NUMERICAL_RANGE_UNSUPPORTED'),JSON.stringify(patch));
+  assert.throws(()=>solveAcoustic(mesh,boundary,p.study),/numerical limits/);assert.deepEqual(p,before);assert.deepEqual(JSON.parse(JSON.stringify(r)),r);
+ }
+ const p=project();Object.assign(p.study,{sweep:true,sweepStart:1000,sweepEnd:1e160,sweepCount:2,receiverPoint:[0,0,0]});
+ assert.ok(inspect(p).diagnostics.some(d=>d.code==='ACOUSTIC_NUMERICAL_RANGE_UNSUPPORTED'&&d.target==='/study/sweepEnd'));
+ p.study.sweepCount=1;assert.deepEqual(inspect(p).diagnostics,[]);
+ p.study.sweepCount=2;p.study.sweepEnd=2000;assert.deepEqual(inspect(p).diagnostics,[]);
+ p.study.sweep=false;p.study.frequency=1e150;assert.deepEqual(inspect(p).diagnostics,[]);
+ assert.deepEqual(inspectAcousticInputContract(p).diagnostics,[]);
 });
