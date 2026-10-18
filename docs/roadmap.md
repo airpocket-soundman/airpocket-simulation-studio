@@ -170,3 +170,5 @@ DEVINSIGHTS1は管理ページの6状態時系列と固定受入条件の完成�
 P4の読取専用比較を共通API・ブラウザinspectのcaseCompare・studio_compare_casesへ追加する。現在の入口は通常31/接続33 MCPツール・87ブラウザ操作（単体connectorは3）で、過去の件数記録は維持する。保存版1〜8件とcase/input/result/runtime identityを固定し、同じmm全体座標の生値を比較する。応力Pa・塑性ひずみ比率1、明示モード/保存フレーム、非互換理由、モード差分禁止、部品外unavailable、未知部品/破損/失効の全体拒否を受入条件とする。MCPのarchive listing→expectedArchiveRevisionによる比較と元bytes再確認、64KiB JSON値上限、UI無変更も条件とする。
 
 今回の検証成功件数・実ブラウザ・公開完了は保留。比較は物理精度、同入力性、別メッシュ間の部品対応や位置合わせを保証しない。P3/P4全体、Skill単独一巡およびP0〜P6の既存完了条件は引き続き未完了である。
+
+2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 [独立post-pair証跡](evidence/2026-10-18-skill-loop-independent-post-pair.json)。この狭い成功は全gateの完了やstatus昇格を意味しません。

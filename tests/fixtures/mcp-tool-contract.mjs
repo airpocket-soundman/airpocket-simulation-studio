@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 const savedTools=[
   "studio_analyze",
   "studio_apply_cad_update",
+  "studio_archive_results",
   "studio_assess_result",
   "studio_assessment",
   "studio_browser_contracts",

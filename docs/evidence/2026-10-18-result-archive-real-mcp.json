@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "scope": "Formal MCP stdio saved-case input restoration, two synthetic Node analyses, digest-pinned archive publication and persistence round-trip",
+  "transport": {
+    "entry": "scripts/studio-mcp.mjs",
+    "protocolVersion": "2025-11-25",
+    "initialized": true,
+    "toolsDiscovered": true,
+    "projectOperations": "tools/call only",
+    "shutdown": "stdin EOF; process exited 0",
+    "retainedJobs": "studio_analyze synchronous route; no retained job IDs created"
+  },
+  "savedSource": {
+    "relativePath": "docs/evidence/2026-10-18-skill-loop-cases.json",
+    "bytes": 241550,
+    "sha256": "sha256:e63135d4d47d4e7d6dbed4d6d538e9fda78ae0b97331e0305329626faa20c515",
+    "runtime": {
+      "assets": [
+        {
+          "bytes": 41430673,
+          "role": "gmsh",
+          "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+          "status": "observed"
+        }
+      ],
+      "build": {
+        "status": "unavailable"
+      },
+      "engine": {
+        "actualEngine": "Airpocket Tet4 / JavaScript CPU",
+        "requestedMethod": "pcg-strict"
+      },
+      "isolation": "web-worker",
+      "schemaVersion": 1,
+      "target": "browser"
+    },
+    "unchangedAfterLoop": true
+  },
+  "newRuntime": {
+    "assets": [
+      {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+      }
+    ],
+    "build": {
+      "dirty": true,
+      "revision": "80178eeb4271d28a01a32cd8c6aa2cd35f3711e8",
+      "sourceFingerprint": "sha256:229067efdbf43f2f3911755fdb9e43763d27b7976529c52741f690a3a212468f",
+      "status": "available",
+      "version": "0.44.0"
+    },
+    "engine": {
+      "actualEngine": "Airpocket Tet4 / JavaScript CPU",
+      "requestedMethod": "pcg-strict"
+    },
+    "isolation": "worker-thread",
+    "schemaVersion": 1,
+    "target": "node"
+  },
+  "pointMm": [
+    5,
+    5,
+    40
+  ],
+  "cases": [
+    {
+      "name": "Node reanalysis 100 N",
+      "inputRevision": "sha256:db7e006d868954bdb4aaf3e007fd9572c9f35026dfe1081b4a553e98608279a1",
+      "resultRevision": "sha256:36c60a98cb809e214a87093204c377e5cd95dfc31b61fb013dce3e9e2ff3e1f0",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "surfaceFaceCount": 180
+      },
+      "measurement": {
+        "element": 117,
+        "values": {
+          "displacementMm": [
+            5.7904958621969095e-15,
+            1.6339122736563267e-14,
+            0.04000000000002636
+          ],
+          "magnitudeMm": 0.04000000000002636
+        },
+        "units": {
+          "displacementMm": "mm",
+          "magnitudeMm": "mm"
+        }
+      },
+      "analysisAssessment": {
+        "recorded": true,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "omittedFields": [
+          "remainingChecks",
+          "schemaVersion"
+        ],
+        "omittedFieldCount": 2,
+        "omissionReason": "assessment details omitted to keep the response bounded"
+      },
+      "analysisSourceRawSha256": "b9b4149d5ce64513ec63d613cda5c505f07b9fa54084c75965433c269b6decb9"
+    },
+    {
+      "name": "Node reanalysis 200 N",
+      "inputRevision": "sha256:31dc8ac1640a0ffa1636f1461412423f6dad4b38fa5db1251e6dad91308a8976",
+      "resultRevision": "sha256:f7da929219d02434fe33c350b5133ee9564c6d67a82ab8de2ba672d6537a04b4",
+      "mesh": {
+        "nodeCount": 94,
+        "elementCount": 218,
+        "surfaceFaceCount": 180
+      },
+      "measurement": {
+        "element": 117,
+        "values": {
+          "displacementMm": [
+            1.1580991724393819e-14,
+            3.2678245473126535e-14,
+            0.08000000000005272
+          ],
+          "magnitudeMm": 0.08000000000005272
+        },
+        "units": {
+          "displacementMm": "mm",
+          "magnitudeMm": "mm"
+        }
+      },
+      "analysisAssessment": {
+        "recorded": true,
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false,
+        "omittedFields": [
+          "remainingChecks",
+          "schemaVersion"
+        ],
+        "omittedFieldCount": 2,
+        "omissionReason": "assessment details omitted to keep the response bounded"
+      },
+      "analysisSourceRawSha256": "ae0f46b207ba00dbce8fa22615641610f6b2df9588bf3110321903b383e7bf02"
+    }
+  ],
+  "archive": {
+    "relativePath": "docs/evidence/2026-10-18-node-result-archive.json",
+    "bytes": 241900,
+    "sha256": "8f01a5332d1cb7891cca693c1b54c4eb60f60fef102004a156f9eec9540ded31",
+    "archiveRevision": "sha256:29f92e02d9a9e42294002fcad02027a6f64e62f1ad7a56bd05d2648d3f7caa02",
+    "caseCount": 2
+  },
+  "verification": {
+    "archiveHashMatchesDisk": true,
+    "validateCasesSucceeded": true,
+    "standaloneProbeMatchesArchiveComparisonExactly": true,
+    "reReadListAndComparisonDeepEqual": true,
+    "syntheticAxialReferenceAbsoluteToleranceMm": 1e-8,
+    "ratio": 2,
+    "overwriteRefused": true,
+    "staleSourceDigestRefused": true,
+    "originalArchiveUnchanged": true,
+    "realMcpRouteTest": "tests/mcp-case-comparison.test.mjs: 5/5 passed",
+    "newStdioProcessReReadListAndComparisonDeepEqual": true
+  },
+  "limitations": [
+    "Synthetic 10x10x40 mm axial fixture with unconfirmed exploratory assumptions only; no general physical accuracy claim.",
+    "Saved source build unavailable; current Node results are a distinct sourcebase 80178eeb dirty runtime.",
+    "100 MB aggregate/generated-output boundaries were not physically exercised by this loop.",
+    "This result does not establish parent project gate completion."
+  ]
+}
