@@ -46,9 +46,13 @@ Import transfers are session-owned; other sessions cannot use them. Commands hav
 
 ## Prepare live fluid domains
 
-Use edit-scoped prepareFluidDomain({expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,name?}) or window.fluidDomainApi.prepare. Exterior requires original STEP/built-in solid and box/sphere enclosure; internal accepts explicit [x,y,z,dx,dy,dz], seedPoint and portPlanes0..5 and may unwrap an existing domain. STL is unsupported. New inputs clear material/conditions/selection/provenance/intent and keep study fluidDomain.
+Use edit-scoped prepareFluidDomain({expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,openingCaps?,name?}) or window.fluidDomainApi.prepare. Exterior requires original STEP/built-in solid and box/sphere enclosure; internal accepts explicit [x,y,z,dx,dy,dz], seedPoint and portPlanes0..5 and may unwrap an existing domain. STL is unsupported. New inputs clear material/conditions/selection/provenance/intent and keep study fluidDomain.
 
 Run mesh with the returned input revision, wait for succeeded plus executionSettled, then applyFluidDomainMesh({expectedRevision,jobId})/window.fluidDomainApi.applyMesh. Canonical input/revision/source fingerprint and mesh must match. A sourceHash-tagged gmsh surface updates display inputs without guessing physics; reread revision. domainSelection ports are bounded100/truncated with wall/channel summaries. Configure physical study/properties/conditions explicitly before solving; existing GUI demo automation is a separate path.
+
+For internal-only half-space caps, optionally pass openingCaps:[{id,point,normal}] (1–6 entries, unique letter-first IDs up to64 letters/digits/_/-, points inside the box in mm, explicit unit outward normals within1e-8). Retain dot(normal,x-point)<=0; seed must be inward by more than1e-6 mm. Keep portPlanes explicit ([] if none). Never infer/reverse the normal from the seed or silently rewrite input. Each plane must cut the box and touch the selected fluid boundary; undeclared box-face leaks are refused.
+
+This API extension clips the whole enclosure before CAD subtraction and keeps one seed-connected volume. It does not recognize opening wires, make local partial-face lids, join general CAD volumes or certify capped channels for channelFlow. GUI cap controls are not implemented; published-Worker verification remains unverified. applyMesh summaries return {capId,faceTag} ports; saved cap surfaces carry openingCapId. Import/application checks plane/half-space/identity, complete tetrahedral boundary and connectivity. CFDPORT1 remains building; refer to docs/evidence/2026-10-18-fluid-opening-caps.json in the repository for geometry/API-only reference scope. Operation names/counts are unchanged.
 
 ## Reuse saved coupling sources
 

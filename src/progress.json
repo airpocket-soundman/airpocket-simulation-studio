@@ -911,15 +911,18 @@
       "id": "CFDPORT1",
       "title": "任意方向の開口閉鎖・流体体積の結合",
       "titleEn": "Arbitrary opening caps and fluid-volume joining",
-      "status": "queued",
+      "status": "building",
       "category": "流体",
       "depends": [
         "CFDDOM1"
       ],
-      "detail": "CAD開口のワイヤーから任意方向の蓋を作り、複数CADボリュームに分割された流体を結合。3D上の点指定と漏れ検査を整備。",
-      "detailEn": "Cap arbitrarily oriented CAD opening wires, join fluid split across several CAD volumes, and improve 3D seed selection/leak checks.",
+      "detail": "明示point/単位outward normalの半空間capで有界箱を切りseed連結の一体積を抽出。API/型/保存検査と斜め管CAD参照を実装。任意開口wire認識/局所蓋・一般複数体積結合・GUI/公開Workerは未完。",
+      "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, GUI and published Worker remain incomplete.",
       "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
-      "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references."
+      "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
+      "lastUpdate": "2026-10-18: 半空間cap単位を実装。斜め管CAD体積相対誤差1.05e-9未満、API適用/JSON再読/保存改変5種拒否を確認。幾何検証であり流体物理精度・任意wire/一般結合の完了ではない。未公開。",
+      "lastUpdateEn": "2026-10-18: Half-space cap unit implemented; oblique-tube CAD volume error below 1.05e-9, API apply/JSON reload and five tamper refusals verified. Geometry only; fluid accuracy, arbitrary wires/general joining are not complete. Not published.",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json"
     },
     {
       "id": "VIEW2",

@@ -12,7 +12,7 @@
 4. **Extract internal fluid domain** keeps the single CAD-subtracted volume containing the seed. Port buttons select entire cap surfaces.
 5. CAD-verified straight circular/rectangular passages select laminar flow automatically. Other shapes support meshing only; general 3D flow is still unsupported. Acoustic analysis can instead apply pressure conditions on ports or walls.
 
-Disable all ports for a sealed cavity. Solid/boundary seeds, leakage onto undeclared box faces and declared ports missing the selected volume are rejected. Caps are limited to axis-aligned box planes. Arbitrarily oriented openings, curved caps and joining fluid split across several CAD volumes remain outstanding.
+Disable all ports for a sealed cavity. Solid/boundary seeds, leakage onto undeclared box faces and declared ports missing the selected volume are rejected. GUI caps remain axis-aligned box planes; the explicit API half-space extension is described below. Automatic opening-wire recognition, local/curved caps and general joining of fluid split across CAD volumes remain outstanding.
 
 ## Geometry and physics
 
@@ -28,8 +28,14 @@ Use `sourceModel: {kind:'fluidDomain', mode:'internal', solid: originalCAD, encl
 
 `mesh.domainSelection` retains `ports`, `cadVolumeMm3` and recognized `channel`. Archive imports check ports/geometry against input. UI and API share the same mesh/solver.
 
-Reference: [Gmsh official API — isInside / OCC / getBoundary](https://gmsh.info/doc/texinfo/). Boundary layers, arbitrary caps, general 3D flow and conjugate heat transfer are separate tasks.
+Reference: [Gmsh official API — isInside / OCC / getBoundary](https://gmsh.info/doc/texinfo/). Boundary layers, arbitrary opening-wire caps, general volume joining/3D flow and conjugate heat transfer remain separate tasks.
 
 ## Explicit-configuration API route
 
 Call window.fluidDomainApi.prepare with mode:internal and explicit box/seed/portPlanes, run mesh to success plus executionSettled, then applyMesh to display its surface. Existing domains may reuse their original solid. Unlike automatic channel switching in GUI examples, this API keeps study.kind:fluidDomain and clears properties/conditions/selection/provenance/intent. Channel summary metadata alone does not automatically enable flow solving. See the [operation contract](automation.md) for revision/mesh checks.
+
+## Explicit API half-space caps (CFDPORT1 building)
+
+Internal sources and prepareFluidDomain optionally accept 1–6 openingCaps entries `{id,point:[x,y,z],normal:[nx,ny,nz]}`. Points are inside the enclosure in mm; normals are explicit outward unit vectors. Retained fluid has dot(normal,x-point)<=0; the seed must be inward by more than 1e-6 mm. Normals are not inferred or rewritten. Specify portPlanes:[] when no box-face ports are used. This clips the entire enclosure with planes; it does not discover CAD opening wires or add a lid to only part of an opening.
+
+Example: a Y-oriented tube with point=[0,-10,0], normal=-[1,2,3]/sqrt(14), and point=[0,10,0], normal=[1,2,3]/sqrt(14), is capped at x+2y+3z=+-20. Every cap must touch the seed-selected volume and undeclared box-face leakage is refused. capId/faceTag and surface.openingCapId are retained; restoration checks planes/half-spaces, every cap triangle's identity, complete/unique tetrahedral boundary and single connectivity. Capped meshes are not straight-channel certified. See [automation](automation.md) and [sanitized reference evidence](../evidence/2026-10-18-fluid-opening-caps.json). GUI input, published Worker, arbitrary wires and general volume joining remain unverified/incomplete.

@@ -323,13 +323,15 @@ knownIssueAssessmentは文字列で、diagnostics配列の該当1件にcode/seve
 
 ## 流体領域の準備とメッシュの表示適用
 
-共有`window.fluidDomainApi.prepare(args)`と編集権限の`prepareFluidDomain`は`{expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,name?}`を受け取ります。modeはexterior/internal。外部は元solidから作り、enclosure:"box"|"sphere"とpaddingMmで囲いを指定します。内部は明示したenclosure:[x,y,z,dx,dy,dz]、seedPoint:[x,y,z]、portPlanesを使い、既存domainから元solidを取り出すこともできます。座標はmm。元形状はSTEPまたは対応組込みsolidで、STLは対象外です。
+共有`window.fluidDomainApi.prepare(args)`と編集権限の`prepareFluidDomain`は`{expectedRevision,mode,enclosure,paddingMm?,seedPoint?,portPlanes?,openingCaps?,name?}`を受け取ります。modeはexterior/internal。外部は元solidから作り、enclosure:"box"|"sphere"とpaddingMmで囲いを指定します。内部は明示したenclosure:[x,y,z,dx,dy,dz]、seedPoint:[x,y,z]、portPlanesを使い、既存domainから元solidを取り出すこともできます。座標はmm。元形状はSTEPまたは対応組込みsolidで、STLは対象外です。
 
 新しい入力としてstudy.kind:"fluidDomain"を設定し、物性・条件・選択・根拠・解析intentをクリアします。元設定を流体へ推測で移しません。通常の新入力と同様に現在結果を無効化し、別保存の履歴は維持します。現在の入力版・busy・失効を検査します。
 
 更新された入力版でstartJobのmeshを実行し、成功かつexecutionSettledを確認後、`window.fluidDomainApi.applyMesh({expectedRevision,jobId})`または編集権限の`applyFluidDomainMesh`へ渡します。入力版とcanonical入力、source fingerprint、meshを検証し、sourceHash付きgmsh-surfaceを表示入力へ適用。studyはfluidDomainを維持し、流体物性や解析種別を自動推定しません。応答のdomainSelectionはports最大100件/truncated、壁件数とchannelなどの有界な要約です。反映後は新しい入力版を取得してください。
 
-内部ポート番号は0/1/2がX/Y/Z最小、3/4/5が最大です。軸平行の箱面と単一のseed連結領域という既存制限を維持します。一般3D流体・任意方向の開口蓋・境界層・乱流の追加ではありません。詳細は[外部領域](fluid-domains.md)と[内部領域](internal-fluid.md)を参照。
+内部の箱ポート番号は0/1/2がX/Y/Z最小、3/4/5が最大です。GUIの箱面指定は維持し、APIには明示的な半空間capを追加しました（CFDPORT1 building、公開未確認）。内部modeだけで`openingCaps:[{id,point,normal}]`を任意追加でき、配列は1〜6件、idは一意な英字開始の英数字/`_`/`-`で64文字以内、pointは箱内のmm座標、normalは外向き単位ベクトルです。単位長の誤差は1e-8以内を要求し、保存normalを書き換えて推定・正規化しません。保持側は`dot(normal,x-point)<=0`で、seedは厳密に内側（距離1e-6 mmより大きい余裕）。各平面は箱を横断し、選択体積の境界に現れる必要があります。`portPlanes`は引き続き明示し、箱面ポートを使わない場合は`[]`です。
+
+capは箱全体を半空間で切ってから元CADを引き、seedを含む単一体積を残します。任意開口wireの自動認識、部分面だけの局所蓋、一般体積結合ではありません。cap付きmeshは`domainSelection.ports`の`{capId,faceTag}`とsurfaceの`openingCapId`を保持し、JSON復元時は平面/内外/タグ対応・完全な四面体境界・単一接続を検査します。`applyFluidDomainMesh`の要約もcapIdを返します。cap付き形状を直管認識せず、channelFlow対応を主張しません。一般3D流れ・境界層・乱流の追加もありません。斜め管のCAD体積/面積・API保存・改変拒否は[参照記録](evidence/2026-10-18-fluid-opening-caps.json)、操作は既存名/件数のままです。詳細は[外部領域](fluid-domains.md)と[内部領域](internal-fluid.md)を参照。
 
 ## 保存ケースを温度・振動の連成源へ設定
 

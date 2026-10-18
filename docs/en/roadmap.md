@@ -99,6 +99,12 @@ Keep existing limited coupling/material/fatigue/fracture support separate from C
 
 CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not prerequisites for P0–P5. Add streamlines, particles and isosurfaces in viewer-specification order; visualization does not add a physical solver model.
 
+### CFDPORT1 first implementation unit (2026-10-18, building)
+
+Explicit `openingCaps:{id,point,normal}[]` clips a bounded box by oriented half-spaces before original-CAD subtraction and selection of one seed-connected volume. Existing prepare/apply APIs, types, input inspection, capId surface tags and saved plane/boundary-completeness validation are covered. For an inner-radius-8 mm tube closed by two oblique planes, CAD volume differs from pi*8^2*20 by less than 1.05e-9 relatively; target-3 mm tetrahedral volume differs by 1.63%, including curved-boundary discretization. [Evidence](../evidence/2026-10-18-fluid-opening-caps.json) records API application, JSON reload and five saved-data tamper refusals. This does not validate fluid-physics accuracy.
+
+CFDPORT1 is still incomplete: arbitrary CAD-opening-wire recognition/local lids, general joining of multiple fluid volumes, physical inflow/outflow conditions for arbitrary ports, GUI and published Worker verification remain. Existing box-port channel solving is preserved; capped geometry does not imply a straight channel. Design wire/volume-connection references as a separate acceptance unit without relaxing the cap contract. This extends prepareFluidDomain arguments; browser/MCP operation names/counts do not change.
+
 ## Parallel development by module
 
 Prioritize LLM integration while developing independent modules against shared contracts. Track module evidence and missing integration separately from completion of an entire plan. File ownership and integration procedures follow the MOD1 dependency direction and public-interface rules, avoiding simultaneous edits to central files such as `main.js`.

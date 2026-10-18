@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-10-18",
+  "task": "CFDPORT1",
+  "scope": "explicit-oriented-half-space-cap-unit-only",
+  "sourceCommit": "6fdf986a6877f9949dfa9ecfca52b8cd71c8793c",
+  "runtime": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64",
+    "gmshWasm": "0.3.0"
+  },
+  "source": {
+    "kind": "fluidDomain",
+    "mode": "internal",
+    "solid": {
+      "kind": "tube",
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "axis": 1,
+      "outerRadius": 12,
+      "innerRadius": 8,
+      "length": 60
+    },
+    "enclosure": [
+      -12,
+      -30,
+      -12,
+      24,
+      60,
+      24
+    ],
+    "seedPoint": [
+      0,
+      0,
+      0
+    ],
+    "portPlanes": [],
+    "openingCaps": [
+      {
+        "id": "inlet",
+        "point": [
+          0,
+          -10,
+          0
+        ],
+        "normal": [
+          -0.2672612419124244,
+          -0.5345224838248488,
+          -0.8017837257372732
+        ]
+      },
+      {
+        "id": "outlet",
+        "point": [
+          0,
+          10,
+          0
+        ],
+        "normal": [
+          0.2672612419124244,
+          0.5345224838248488,
+          0.8017837257372732
+        ]
+      }
+    ]
+  },
+  "reference": {
+    "description": "Inner radius 8 mm Y tube between x+2y+3z=+-20: axial length 20 mm at each x,z; caps remain inside 60 mm tube.",
+    "cadVolumeMm3": 4021.2386007845544,
+    "referenceVolumeMm3": 4021.238596594935,
+    "cadVolumeRelativeError": 1.0418728102479236e-09,
+    "meshVolumeMm3": 3955.8123798944666,
+    "meshVolumeRelativeError": 0.01627016530575165,
+    "meshTargetSizeMm": 3,
+    "nodeCount": 292,
+    "tetrahedra": 896,
+    "caps": [
+      {
+        "id": "inlet",
+        "pointMm": [
+          0,
+          -10,
+          0
+        ],
+        "outwardUnitNormal": [
+          -0.2672612419124244,
+          -0.5345224838248488,
+          -0.8017837257372732
+        ],
+        "triangles": 107,
+        "meshAreaMm2": 371.62813080645003,
+        "referenceAreaMm2": 376.1524274732479,
+        "maximumPlaneDistanceMm": 8.260059303211165e-14
+      },
+      {
+        "id": "outlet",
+        "pointMm": [
+          0,
+          10,
+          0
+        ],
+        "outwardUnitNormal": [
+          0.2672612419124244,
+          0.5345224838248488,
+          0.8017837257372732
+        ],
+        "triangles": 109,
+        "meshAreaMm2": 371.6281308064497,
+        "referenceAreaMm2": 376.1524274732479,
+        "maximumPlaneDistanceMm": 2.2870594307278225e-14
+      }
+    ],
+    "channelCertificationPresent": false
+  },
+  "apiAndPersistence": {
+    "applyMeshSucceeded": true,
+    "returnedPorts": [
+      {
+        "capId": "outlet",
+        "faceTag": 23
+      },
+      {
+        "capId": "inlet",
+        "faceTag": 25
+      }
+    ],
+    "sourceUnchanged": true,
+    "jsonMeshValidationPassed": true,
+    "projectJsonReloadEqual": true,
+    "studyKind": "fluidDomain"
+  },
+  "tamperRejections": [
+    {
+      "name": "relabel-triangle-remove-id",
+      "rejected": true,
+      "reason": "Saved opening cap triangle is missing its declared port identity"
+    },
+    {
+      "name": "remove-cap-triangle",
+      "rejected": true,
+      "reason": "Capped fluid surface boundary is incomplete"
+    },
+    {
+      "name": "remove-port",
+      "rejected": true,
+      "reason": "Saved opening caps are incomplete"
+    },
+    {
+      "name": "move-node-outward",
+      "rejected": true,
+      "reason": "Saved fluid nodes cross an opening cap outward half-space"
+    },
+    {
+      "name": "forge-channel",
+      "rejected": true,
+      "reason": "Opening caps do not establish a supported straight channel"
+    }
+  ],
+  "sourceHashes": {
+    "src/fluid-opening-caps.js": "94f551727725f7c3749aa14f27acccb06571bb1a7ecd9521841d57fa3bd415e8",
+    "src/fluid-domain.js": "f75b2d45a3eb0d9a9389662f764cc1683ab75d8a1e933a13049f9138715c5ae3",
+    "src/internal-fluid.js": "c784a747940964cb7f869c0022253b6a43a4397a92b191d45d6cc39ddd6b6b2d",
+    "src/mesh-core.js": "ae4f90909f009d383b05bb1ff92b01cbc920cb63c316ab21359e2cd4aaf4f46c",
+    "src/fluid-domain-operations.js": "5cfbf6633dfc2fa13e30a7070aefde0c491c63e91ca6f34531c58040a7e5c42e",
+    "src/browser-operation-input-contracts.js": "9359d2932b5574e41526414fe85f36ff4ee5cd63058741719174f121840141a2",
+    "src/contracts/project-input.d.ts": "5d5db50b24357df3c4aec189a7f3764083d2a1893cbba0b98a61c4e14e95dc9d",
+    "tests/fluid-opening-caps.test.mjs": "7621811d4590536c3625f0c92f252e1e1867db730aaff2820cfbe5d7118732de",
+    "tests/fluid-opening-caps-cad.test.mjs": "59c5fff1b8251f887b017135aa916c917f26da73209ab6921bbef04cae783740"
+  },
+  "limits": [
+    "No opening-wire recognition, general CAD-volume union or arbitrary-geometry claim.",
+    "No physical solve, convergence study, GUI, published Worker or installed Skill verification.",
+    "Input normals are explicit unit outward normals; seed is retained strictly inward."
+  ],
+  "priorFocusedChecks": {
+    "initialSixFiles": {
+      "tests": 26,
+      "passed": 25,
+      "failed": 1,
+      "reason": "Missing generated fem-kernel.wasm in new worktree; not an assertion failure."
+    },
+    "isolatedRetry": {
+      "tests": 1,
+      "passed": 1,
+      "remediation": "Reused existing generated kernel; no download or build."
+    },
+    "finalLightweightCaps": {
+      "tests": 6,
+      "passed": 6
+    },
+    "typeDeclarations": {
+      "files": 5,
+      "passed": true
+    },
+    "independentReview": {
+      "additionalBlockers": 0
+    }
+  },
+  "documentationChecks": {
+    "docsProgressAndOperationCorrespondenceTests": {
+      "tests": 12,
+      "passed": 12
+    },
+    "repositorySkillValidatorPassed": true,
+    "installedSkillSynced": false,
+    "operationNamesOrCountsChanged": false
+  }
+}
