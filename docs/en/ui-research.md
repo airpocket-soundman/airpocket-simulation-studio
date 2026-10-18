@@ -160,13 +160,59 @@ Left column                   Right column
 - Result display details for Autodesk CFD and Abaqus, and LLM support where sources are silent (marked "?").
 - This app's real-browser appearance, narrow screens, keyboard operation and JP/EN display.
 
+## Versioned common-example comparison (2026-10-18)
+
+This supplement compares **COMSOL Multiphysics 6.3** and **Ansys Mechanical 2025 R2 (v252)** using publisher documentation retrieved on **2026-10-18**. Versions identify the documentation, not installed products. No product was operated. The earlier survey and app inspection remain dated 2026-10-15; this supplement does not upgrade their unverified claims. In particular, SOLIDWORKS 2025 help retrieval again returned a shell/error, so it is not a detailed comparison candidate.
+
+### Shared task and evidence boundary
+
+Use three separately supplied bracket solids: A baseline, B increased plate thickness, C added rib. Keep the mounting interface and loaded interface functionally equivalent. For each, run a linear static case and an independent steady conduction case; this is six cases, not a thermal-stress coupling. A shared input manifest must specify geometry files/units, material properties, fixed/load regions and magnitudes, temperature/heat-input regions and values, mesh policy and result quantities. Re-identify and visually check regions after every geometry change. No supplied CAD files, dimensions, loads or solved reference values exist in this document: this is a reproducible task specification once those inputs are supplied, not an executed benchmark.
+
+**D** means directly described by a retrieved document; **M** means our mapping of those commands to the shared task; **?** means not established. The publishers' tutorials use different geometries/loads. Their results do not establish results for A/B/C.
+
+| Stage | COMSOL 6.3 | Mechanical 2025 R2 |
+|---|---|---|
+| Import | **D:** CAD import supports STEP, source/current units and resulting selections; an appropriate CAD import/Design/LiveLink license is required [C1]. **M:** import A/B/C separately and check units. | **D:** workflow separates materials and geometry attachment [A1]. **M:** attach each bracket to an analysis system. **?:** exact STEP translator/options were not retrieved. |
+| Tree and selection | **D:** bracket tutorial uses Model Builder, geometry selections and selected boundaries [C2]. **M:** make mounting/load/thermal selections per variant. | **D:** Model/analysis objects use a tree [A2]; Named Selections support geometry or worksheet criteria [A3]. **M:** create equivalent named regions per variant. |
+| Materials and conditions | **D:** structural tutorial assigns material and mechanical conditions [C2]; thermal tutorial uses a stationary heat-transfer model and temperature/source conditions [C3]. **M:** populate the manifest's two independent cases. | **D:** system type filters compatible loads/results [A2]; thermal setup requires conductivity and offers temperature, heat-flow/flux conditions [A4]. **M:** assign the same manifest properties and regions. |
+| Mesh and job | **D:** bracket tutorial meshes and computes [C2]; Progress window permits stop/cancel [C4]. **M:** six separately identified jobs, record mesh/settings. | **D:** workflow exposes mesh, settings and solution steps [A1]. **M:** solve six identified cases. **?:** cancellation/restart behavior was not tested. |
+| Diagnostics | **D:** Progress links to logs [C4]; bracket tutorial discusses stress singularities and averaging [C2]. **M:** retain diagnostics with the affected case; distinguish solver success from a credible stress maximum. | **D:** Solution Information presents solver output and solution/result tracking, with solver-dependent availability [A5]. **M:** retain the diagnostic record before editing/re-solving. |
+| Results, comparison, export | **D:** parameter job configuration can store results/tables/images [C5]. **M:** compare A/B/C through recorded scalar tables and matched views; this is not proof of automatic cross-file comparison. | **D:** thermal documentation describes contours and charts for comparisons of analyses of the same model [A4]; supported objects export text/delimited data [A6]. **M:** assemble A/B/C tables externally; arbitrary cross-geometry synchronized comparison is **?**. |
+
+Compare displacement/stress for structural cases and temperature/heat flow for thermal cases, keeping quantities, units, averaging, color limits and camera comparable. A maximum at a singular constraint needs interpretation and mesh evidence, not a design ranking by itself. Exported tables/images must carry design/case/input identity. These are evaluation requirements, not claims that either product automatically preserves all of them.
+
+### Beginner burden and agent collaboration: inference, not observation
+
+COMSOL's explicit physics/study/selection nodes suggest more concepts to learn but offer inspectable intermediate settings. Mechanical's system-filtered controls and named regions suggest useful guidance, while the project/tree/Details transitions and selection maintenance still require learning. These are document-based inferences; no click count, completion time, error rate or usability winner was measured.
+
+COMSOL documents programmable CAD import [C1] and parametric solver configuration [C6]. That supports investigating an agent-generated script with human review; it does not establish a ready-made LLM integration. For Mechanical, retrieved pages establish inspectable regions, diagnostics and exported data, but this pass did not retrieve a version-matched automation API. Agent mutation, revision checks, undo, licensing and unattended operation remain **?** for both products. For our app, proposals 1–3 address readiness and retained actionable failures, 4–5 bind regions/conditions and stale results, 6–7 expose job/result context, and 8–9 require reviewable agent changes and design/case identity. Keep the existing ranking and screen sketch.
+
+### Primary sources and remaining verification
+
+All links below were read on 2026-10-18; each URL fixes 6.3 or v252. Brief summaries above paraphrase documentation, with no screen observation implied.
+
+- C1: [Import 3D CAD](https://doc.comsol.com/6.3/doc/com.comsol.help.cad/cad_ug_ref.6.21.html).
+- C2: [Bracket — Static Analysis](https://doc.comsol.com/6.3/doc/com.comsol.help.models.sme.bracket_static/bracket_static.html).
+- C3: [Heat Conduction with a Localized Heat Source on a Disk](https://doc.comsol.com/6.3/doc/com.comsol.help.models.heat.localized_heat_source/localized_heat_source.html).
+- C4: [The Progress Window](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_ref_solver.36.109.html).
+- C5: [Using a Job Configuration to Store Parametric Results on File](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_ref_solver.36.232.html).
+- C6: [Parametric Sweep API](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_api_solver.51.74.html).
+- A1: [General Analysis Workflow](https://ansyshelp.ansys.com/public/Views/Secured/corp/v252/en/wb_sim/ds_overview_approach.html).
+- A2: [Define Part Behavior](https://ansyshelp.ansys.com/public/Views/Secured/corp/v252/en/wb_sim/ds_Assign_Materials_to_Parts_step.html).
+- A3: [Defining Named Selections](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_geo_defname.html).
+- A4: [Steady-State Thermal Analysis](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_static_thermal_analysis_type.html).
+- A5: [Specifying Solution Information](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_Nonlinear.html).
+- A6: [Data Export](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_ExportingData.html).
+
+The research unit supplies a sourced workflow comparison and prioritization, not a six-case validation. Remaining hands-on work: supply the common files/manifest; verify import and region correspondence; record missing-support/wrong-face diagnostics and recovery; change a solved input and inspect stale-result behavior; cancel a job; compare/export/reopen all six cases; test keyboard, locale and narrow layouts. No automatic face persistence, identical solver accuracy or measured beginner benefit is established.
+
 ## Mapping to `UIRESEARCH1` acceptance
 
 | Requirement | How this document handles it |
 |---|---|
-| Compare import, trees, selection, materials/conditions, jobs, diagnostics, results/comparison/export | Comparison table (selection and export only partly; rest marked unverified) |
-| URLs, versions, dates, observed vs inferred | Table plus Observed / Inferred sections; all retrieval dates 2026-10-15 |
-| Beginner burden and agent collaboration | Proposals 1-3 and 8 |
+| Compare import, trees, selection, materials/conditions, jobs, diagnostics, results/comparison/export | Versioned common-example table covers every stage for two products; exact Mechanical STEP options and cross-geometry comparison remain explicitly unconfirmed |
+| URLs, versions, dates, observed vs inferred | Historical survey dated 2026-10-15; new primary sources fixed to 6.3/v252 and read 2026-10-18; D/M/? separates documentation, mapping and gaps |
+| Beginner burden and agent collaboration | Explicit inference section, source-backed automation boundary and proposals 1-9; no measured usability claim |
 | Ranked improvements and screen proposals | Proposals 1-9 and the screen sketch |
 
 ## Related

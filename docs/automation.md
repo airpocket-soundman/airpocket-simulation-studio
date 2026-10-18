@@ -737,3 +737,9 @@ full entry既定35/接続37ツール（minimal3・live91は不変）。studio_ar
 ## 時間履歴の保存入力
 
 setStudy/project JSONは既存thermalSnapshotCountと新thermalSnapshotBudgetBytes/acousticSnapshotCount/acousticSnapshotBudgetBytesを扱う。count2〜61、budget1〜67108864の整数。不正値は原子的に拒否し、strict preflightも検査する。物理入力と保存密度を分離し、scalar予算をpeak RAM保証と解釈しない。詳細は[過渡音響と履歴](transient-acoustics.md)。
+
+限定capの[正式MCP一巡](evidence/2026-10-18-fluid-opening-caps-mcp.json)はNode-hosted session/実CPU Worker。studio_browser_callのprepareFluidDomain→mesh job→applyFluidDomainMeshとrevision固定inspectInputを使用し、paged入力を再構築後studio_inspect_projectで保存検査した。saved-file MCPにprepare/applyや汎用JSONimportがあるとは主張しない。mesh受信改変3種と入力4種の拒否、137721byte成果物SHAを検証。Chrome/公開Worker/物理解析の証拠と区別する。
+
+### GUIの限定cap一巡
+
+内部流体パネルで最大6件のID/point/外向き単位normalを入力。未入力値は補完しない。法線不正時は対象へfocus/aria-invalidで復帰し、箱範囲補助は未完成draftを保持、新モデルはdraftをリセット。適用済みsourceだけをProject JSONに保存し再読込で行を復元する。mesh失敗時は適用sourceを戻し入力draftを保持。[実Chrome証拠](evidence/2026-10-18-fluid-opening-caps-gui.json)は2cap・4021.239mm3・2ports、107面三角形選択、JSON厳密往復、日英390px/keyboardを確認。非交差capのcore診断は英語のままで、全solver診断翻訳はUIIMPROVE1の残作業。公開Worker/任意wire/一般join/物理解析の実証ではない。

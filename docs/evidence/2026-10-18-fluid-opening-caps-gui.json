@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "outcome": "passed-bounded-opening-cap-gui-workflow",
+  "sourceBasis": "codex/fluid-opening-workflow a5d6f6e plus uncommitted GUI changes; publication candidate is recorded separately",
+  "scope": "Explicit point/unit-outward-normal half-space cap GUI; no opening-wire recognition, partial-face lids, general volume union or general flow solving",
+  "environment": {
+    "origin": "http://127.0.0.1:5181",
+    "browser": "Dedicated CUA Chrome tab",
+    "fullBrowserVersionVerified": false,
+    "solver": "Real browser Worker/Gmsh WASM meshing; no physical solve"
+  },
+  "flow": [
+    {
+      "step": "Existing Internal passage example",
+      "result": "Uncapped tube GUI mesh succeeded,12063.716mm3,two box-face Y ports; legacy path retained"
+    },
+    {
+      "step": "English-start row addition and keyboard entry",
+      "result": "Blank point/normal values are not invented; ID inlet typed by keyboard; extra third row removed"
+    },
+    {
+      "step": "Incomplete cap draft plus Use model bounds",
+      "result": "ID and empty component draft preserved; helper succeeds without validating/resetting caps"
+    },
+    {
+      "step": "EN to JP and JP to EN",
+      "result": "English-created heading/buttons/ID/point/normal labels and aria labels switch back to Japanese, then English; values retained"
+    },
+    {
+      "step": "Invalid normal X=-2 before extraction",
+      "result": "Japanese unit-normal diagnostic and focus/aria-invalid on correction field; project JSON exactly unchanged; corrected explicitly without normalization"
+    },
+    {
+      "step": "Two explicit 3D caps,box ports cleared,size3mm",
+      "result": "Real GUI mesh succeeds; CAD fluid volume4021.239mm3,two cap ports; study remains fluidDomain"
+    },
+    {
+      "step": "Select inlet port",
+      "result": "107 display triangles selected; no undefined plane caption"
+    },
+    {
+      "step": "Save project via visible Project JSON text",
+      "result": "Applied cap ID/point/normal source saved exactly; draft state is not independently stored"
+    },
+    {
+      "step": "Switch to Analysis example",
+      "result": "Common new-model path clears editor to zero rows"
+    },
+    {
+      "step": "GUI file chooser reads saved project JSON",
+      "result": "Two cap rows and their exact numbers restored; subsequent full project JSON exactly equals saved JSON"
+    },
+    {
+      "step": "Keyboard traversal",
+      "result": "Tab from Cap ID1 focuses Cap point X1 (mm)"
+    },
+    {
+      "step": "390x844 viewport",
+      "result": "No document horizontal overflow; English and Japanese screenshots retained"
+    },
+    {
+      "step": "Additional unused cap point[10,0,0]/normal[1,0,0]",
+      "result": "Real mesh refuses nonintersecting declared cap; all3 draft rows including unused ID retained after rollback; applied2-cap source remains exactly unchanged; removing row restores2 rows"
+    }
+  ],
+  "source": {
+    "kind": "fluidDomain",
+    "mode": "internal",
+    "solid": {
+      "kind": "tube",
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "axis": 1,
+      "outerRadius": 12,
+      "innerRadius": 8,
+      "length": 60
+    },
+    "enclosure": [
+      -12,
+      -30,
+      -12,
+      24,
+      60,
+      24
+    ],
+    "seedPoint": [
+      -4.9114227294921875E-05,
+      0,
+      0
+    ],
+    "portPlanes": [],
+    "openingCaps": [
+      {
+        "id": "inlet",
+        "point": [
+          0,
+          -10,
+          0
+        ],
+        "normal": [
+          -0.2672612419124244,
+          -0.5345224838248488,
+          -0.8017837257372732
+        ]
+      },
+      {
+        "id": "outlet",
+        "point": [
+          0,
+          10,
+          0
+        ],
+        "normal": [
+          0.2672612419124244,
+          0.5345224838248488,
+          0.8017837257372732
+        ]
+      }
+    ]
+  },
+  "geometry": {
+    "cadVolumeMm3Rounded": 4021.239,
+    "requestedMeshSizeMm": 3,
+    "capPortCount": 2,
+    "inletSelectedTriangles": 107,
+    "channelCertified": false
+  },
+  "persistence": {
+    "route": "Visible GUI project text -> local JSON file -> GUI file chooser -> export visible project text",
+    "projectBytes": 88781,
+    "projectSha256": "48a8519d0062ee14918b1de762cb7fcff5c78df8b03d7c4e34e2c1f0281595e5",
+    "fullProjectRoundtripEqual": true,
+    "sourceRoundtripEqual": true,
+    "invalidInputUnchanged": true,
+    "sourceUnchangedAfterMeshFailure": true
+  },
+  "tests": {
+    "files": [
+      "tests/ui-internal-opening-caps.test.mjs",
+      "tests/ui-study-form.test.mjs",
+      "tests/fluid-opening-caps.test.mjs",
+      "tests/fluid-opening-caps-cad.test.mjs"
+    ],
+    "passed": 17,
+    "failed": 0
+  },
+  "screenshots": [
+    "2026-10-18-fluid-opening-caps-gui-en-narrow.png",
+    "2026-10-18-fluid-opening-caps-gui-ja-narrow.png"
+  ],
+  "preparation": {
+    "initialAttempt": "New worktree lacked generated public/gmsh assets; initial example refused dynamic import",
+    "repair": "Reused existing generated CAD/gmsh/COI assets from sibling worktree,then explicitly reloaded before successful GUI pass;no source/runtime dependency download"
+  },
+  "limits": [
+    "Only the product tube reference was used",
+    "Core nonintersecting-cap mesh diagnostic remains English; local cap form diagnostics, labels and explanations were checked in JP/EN. Broader solver-diagnostic translation remains UIIMPROVE1 work.",
+    "No public HTTPS or registered-host MCP claim; actual MCP QA is separate",
+    "No general physical accuracy, wire recognition, joining or CFDPORT1 completion claim"
+  ],
+  "cleanup": {
+    "temporaryViewportReset": true,
+    "ownedTabClosed": true,
+    "ownedDevStopped": true,
+    "mcpOrPairingCredentialsUsed": false
+  }
+}

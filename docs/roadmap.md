@@ -185,3 +185,7 @@ P4の読取専用比較を共通API・ブラウザinspectのcaseCompare・studio
 CFDRESEARCH2/3は[圧縮性CFD調査](compressible-cfd-plan.md)の候補票・共通基準問題・採否条件・既存資産の再利用計画を完了。これは資料調査の完了で、候補採用/ビルド/数値実証を含まない。全候補は採用保留、CFD2等の親は未完。公開候補は132件完了・35件未完（自律13/外部7/親15）。
 
 VIEWTIMEは保存フレーム密度とscalar保存量予算を明示し、計算刻み・保存間隔・表示補間を分離する実装を進める。全体JS/peak RAM予算や一般形状の精度保証とは別。RUNTIMEWASM1は別々のJIT fatal署名と手動Linux比較導線を追加するが、同source再試行成功/Windows限定smokeは根治証明にならない。直近確定CI baseline1545件はPR122/mainの値で、今回最終CIは別途証拠に記録する。
+
+## 内部流体capの操作一巡とUI資料研究
+
+明示半空間capを日英GUI・保存復元・意味的API/MCPへ接続し、実ChromeとNodehosted CPU Workerの証拠を別々に保存。任意wire認識/局所蓋/一般join/公開Worker/物理精度を残しCFDPORT1はbuilding。UIRESEARCH1はCOMSOL6.3/Mechanical2025R2の版付き一次資料・共通6case計画・9改善案で研究のみ完了、実機比較/復旧/keyboard/定量負担とcore診断翻訳はUIIMPROVE1へ残る。133released/34未完（自律12/外部7/親15）。今回最終CIは公開証拠を参照。

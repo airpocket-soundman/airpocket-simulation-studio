@@ -4,9 +4,9 @@
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1545,
-    "description": "公開済み132件・残35件（今回公開候補）。CFDRESEARCH2/3は一次資料調査票・共通試験・採否条件・再利用段階計画の受入を満たし調査のみ完了。全候補採用保留、親CFD2の実装/ビルド/基準問題は残る。VIEWTIMEの保存密度/予算指定を実装、公開HTTPS/一般精度は未完。RUNTIMEWASM1は2署名分離と明示flag比較導線を追加、Windows smoke成功は根治証明でなくchecking。1545件は直近PR122/main確定CI（1542成功・3skip・失敗0）のbaselineで、今回候補最終CI件数ではない。",
-    "descriptionEn": "132released/35unfinished in this publication candidate. CFDRESEARCH2/3 complete research sheets,benchmarks,decision gates and staged reuse planning only;all adoption on hold and parent CFD2 implementation/build/benchmarks remain. VIEWTIME adds storage-density/budget controls;public HTTPS/general accuracy remain open. RUNTIMEWASM1 separates two fatal signatures and adds explicit-flag comparison;Windows smoke is not root-fix evidence;checking.1545 is the completed PR122/main CI baseline(1542passed,3skipped,0failed),not this candidate final CI count."
+    "testCount": 1557,
+    "description": "公開済み133件・残34件。CFDPORT1の明示半空間capをGUI/意味的API/MCP一巡として統合する公開候補。point/外向き単位normal/seedを明示し、幾何と保存の整合を検証。任意wire認識/局所蓋/一般複数体積結合・流体物理精度は未完でbuilding維持。1557件はPR123/main確定CI（1554成功・3skip・失敗0）のbaselineで、今回最終CI件数ではない。 UIRESEARCH1は版付き一次資料による共通例題比較を完了、実機比較と定量操作負担はUIIMPROVE1に残す。",
+    "descriptionEn": "133released/34unfinished. Publication candidate integrates explicit CFDPORT1 half-space caps through GUI/semantic API/MCP. Users declare point,outward unit normal and seed;geometry/persistence consistency is checked. Arbitrary wires/local lids/general multi-volume joins/fluid physical accuracy remain open;building.1557 is completed PR123/main CI baseline(1554passed,3skipped,0failed),not this candidate final CI count. UIRESEARCH1 completes versioned primary-document common-task comparison;hands-on comparisons and measured burden remain UIIMPROVE1 work."
   },
   "tasks": [
     {
@@ -916,13 +916,13 @@
       "depends": [
         "CFDDOM1"
       ],
-      "detail": "明示point/単位outward normalの半空間capで有界箱を切りseed連結の一体積を抽出。API/型/保存検査と斜め管CAD参照を実装。任意開口wire認識/局所蓋・一般複数体積結合・GUI/公開Workerは未完。",
-      "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, GUI and published Worker remain incomplete.",
+      "detail": "明示point/単位outward normalの半空間capで有界箱を切りseed連結の一体積を抽出。API/型/保存検査と斜め管CAD参照を実装。任意開口wire認識/局所蓋・一般複数体積結合・公開Workerは未完。",
+      "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, published Worker remain incomplete.",
       "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
       "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
-      "lastUpdate": "2026-10-18: 半空間cap単位を実装。斜め管CAD体積相対誤差1.05e-9未満、API適用/JSON再読/保存改変5種拒否を確認。幾何検証であり流体物理精度・任意wire/一般結合の完了ではない。未公開。",
-      "lastUpdateEn": "2026-10-18: Half-space cap unit implemented; oblique-tube CAD volume error below 1.05e-9, API apply/JSON reload and five tamper refusals verified. Geometry only; fluid accuracy, arbitrary wires/general joining are not complete. Not published.",
-      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json"
+      "lastUpdate": "2026-10-18: 限定半空間capをGUI/意味的API/MCPで一巡。実Chromeは明示2cap→実Worker4021.239mm3/2ports→JSON保存/再読の厳密一致、日英390px/keyboard/無効入力focus/失敗draft保持を確認。正式MCPはNodehosted実CPUWorkerで137721byte成果物SHA/7拒否/revision再構築保存検査を確認。ホストを分離、任意wire/局所蓋/一般join/公開Worker/物理精度は未完でbuilding。",
+      "lastUpdateEn": "2026-10-18: Bounded caps complete GUI/semantic API/MCP loops. Real Chrome:two caps,real Worker4021.239mm3/two ports,exact JSON save/reload,JP/EN390px,keyboard,invalid-focus and failed-draft preservation. Formal MCP:Node-hosted CPU Worker,137721byte SHA-verified artifact,seven refusals,revision-pinned reconstruction/saved inspection. Hosts stay distinct;arbitrary wires/local lids/general joins/deployed Worker/physical accuracy remain open;building.",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json"
     },
     {
       "id": "VIEW2",
@@ -1258,7 +1258,7 @@
       "id": "UIRESEARCH1",
       "title": "既存CAEのUIを研究し改善案をまとめる",
       "titleEn": "Study existing CAE interfaces and propose improvements",
-      "status": "queued",
+      "status": "released",
       "category": "UI",
       "depends": [
         "P0",
@@ -1270,8 +1270,9 @@
       "detailEn": "After prioritized LLM functionality, study representative CAE workflows using public documentation or accessible applications; record selected products and versions at research time.",
       "acceptance": "形状取込、モデル/解析ツリー、領域選択、材料/条件、ジョブ監視、診断、結果/比較/出力を共通例題で比較。資料URL・版・確認日・観察と推測を記録。初心者の操作負担とエージェントとの協働を評価し、優先順位付き改善案と画面案を残す。",
       "acceptanceEn": "Compare import, model/study trees, selection, materials/conditions, job monitoring, diagnostics and results/comparison/export with a common scenario. Record source URLs, versions, dates and observed versus inferred findings. Deliver ranked improvements and screen proposals for beginners and agent collaboration.",
-      "lastUpdate": "既存CAEのUI調査文書 docs/ui-research.md を追加(8製品の表と9件の改善案、出典の取得可否を明記)。FreeCAD等は検索要約のみ・実機未操作で、受け入れ条件の検証とUIIMPROVE1は未着手。",
-      "evidence": "docs/ui-research.md; docs/en/ui-research.md"
+      "lastUpdate": "2026-10-18: COMSOL6.3/Mechanical2025R2の一次資料で共通ブラケット3案×静構造/独立定常熱6caseの資料ベース比較を追加。7操作段階、版URL日付、資料記述/適用推論/未確認、初心者負担とagent協働、9改善案/画面案を整備。独立reviewでAnsys本文2件再照合。資料研究のみ完了、実機6case/定量負担/復旧/keyboardはUIIMPROVE1へ残す。",
+      "evidence": "docs/ui-research.md; docs/en/ui-research.md",
+      "lastUpdateEn": "2026-10-18: Added COMSOL6.3/Mechanical2025R2 primary-document comparison for three bracket variants,static structure and independent steady heat:six planned cases. Covers seven stages,versioned URLs/dates,documentation/mapping/gaps,beginner burden/agent collaboration and nine ranked proposals/screen sketch. Independent review rechecked two Ansys bodies. Literature research only complete;hands-on six cases,measured burden,recovery and keyboard remain UIIMPROVE1 work."
     },
     {
       "id": "UIIMPROVE1",
@@ -1286,8 +1287,8 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
-      "lastUpdate": "2026-10-18: 比較と動画の入力エラーで対象へフォーカスしaria-invalid/errormessageを設定、修正入力で解除。実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみ、Chrome全出力の再成功・全受入は未確認のためbuilding。",
-      "lastUpdateEn": "2026-10-18: Comparison/video input errors focus the offending control and set aria-invalid/errormessage; editing clears them. Real Chrome verifies JP/EN,390px and keyboard recovery. Successful output after correction is unit-tested only;complete Chrome output reruns and full acceptance remain open;building.",
+      "lastUpdate": "2026-10-18: 比較と動画の入力エラーで対象へフォーカスしaria-invalid/errormessageを設定、修正入力で解除。実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみ、Chrome全出力の再成功・全受入は未確認のためbuilding。 UIRESEARCH1の資料研究完了後も共通6caseの実機取込/領域対応/診断復旧/stale/取消/比較出力再読込、keyboard/locale/狭画面と定量負担比較を残条件として維持。 cap非交差等core solver診断の全日英翻訳も残作業。",
+      "lastUpdateEn": "2026-10-18: Comparison/video input errors focus the offending control and set aria-invalid/errormessage; editing clears them. Real Chrome verifies JP/EN,390px and keyboard recovery. Successful output after correction is unit-tested only;complete Chrome output reruns and full acceptance remain open;building. UIRESEARCH1 literature completion leaves common six-case hands-on import/region mapping/diagnostic recovery/stale/cancel/compare-export-reopen,keyboard/locale/narrow layouts and measured burden open. Full JP/EN core-solver diagnostic translation,including nonintersecting caps,remains open.",
       "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json"
     },
     {

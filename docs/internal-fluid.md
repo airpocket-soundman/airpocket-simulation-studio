@@ -38,4 +38,12 @@ window.fluidDomainApi.prepareでmode:internalと箱・seed・portPlanesを指定
 
 内部sourceとprepareFluidDomainに任意のopeningCaps配列を指定できます。各要素は`{id,point:[x,y,z],normal:[nx,ny,nz]}`、1〜6件。pointは箱内mm、normalは外向きの単位ベクトルで、保持側はdot(normal,x-point)<=0、seedは1e-6 mmの余裕を超えて内側です。normalは自動推定せず、入力した値を保持します。箱面ポートがなければportPlanes:[]を指定します。これは箱全体への平面clipであり、CADの開口wireを自動で見つけたり、開口の一部分だけに蓋を付けたりする機能ではありません。
 
-例: 元のY方向管にpoint=[0,-10,0]/normal=-[1,2,3]/√14とpoint=[0,10,0]/normal=[1,2,3]/√14を指定すると、x+2y+3z=±20で閉じます。各capがseed選択体積に接すること、未宣言箱面への漏れがないことを要求。capId/faceTagとsurface.openingCapIdを保存し、平面/半空間・全cap三角形の対応、四面体境界の欠落/重複、単一接続を復元時に検査します。cap付きmeshは直管認識しません。API手順は[自動操作](automation.md)、測定と未検証は[sanitized参照記録](evidence/2026-10-18-fluid-opening-caps.json)を参照。GUI入力・公開Worker・任意wire/一般体積結合の確認は未完です。
+例: 元のY方向管にpoint=[0,-10,0]/normal=-[1,2,3]/√14とpoint=[0,10,0]/normal=[1,2,3]/√14を指定すると、x+2y+3z=±20で閉じます。各capがseed選択体積に接すること、未宣言箱面への漏れがないことを要求。capId/faceTagとsurface.openingCapIdを保存し、平面/半空間・全cap三角形の対応、四面体境界の欠落/重複、単一接続を復元時に検査します。cap付きmeshは直管認識しません。API手順は[自動操作](automation.md)、測定と未検証は[sanitized参照記録](evidence/2026-10-18-fluid-opening-caps.json)を参照。公開Worker・任意wire/一般体積結合の確認は未完です。GUI/API一巡の今回証拠は以下を参照。
+
+## 正式MCPでの限定cap一巡
+
+[正式MCP証拠](evidence/2026-10-18-fluid-opening-caps-mcp.json)は実stdio/loopbackのNode-hosted意味的sessionと実CPU Workerによる幾何一巡。prepare→mesh→SHA検証export→apply→revision固定inspectInputの全入力再構築→saved-file inspectionを確認。斜め2capのCAD体積相対誤差1.042e-9、cap面107/109三角形、export137721bytes。7拒否と原入力不変を確認。trusted hostによる改変注入は受信側検査の試験で、MCPがmesh改変を公開する意味ではない。Chrome/公開Workerとは別、汎用JSONimportや物理流れ解析は未実証。記録runtimeのdirty:trueは実行時snapshotとして保持する。
+
+### GUIの限定cap一巡
+
+内部流体パネルで最大6件のID/point/外向き単位normalを入力。未入力値は補完しない。法線不正時は対象へfocus/aria-invalidで復帰し、箱範囲補助は未完成draftを保持、新モデルはdraftをリセット。適用済みsourceだけをProject JSONに保存し再読込で行を復元する。mesh失敗時は適用sourceを戻し入力draftを保持。[実Chrome証拠](evidence/2026-10-18-fluid-opening-caps-gui.json)は2cap・4021.239mm3・2ports、107面三角形選択、JSON厳密往復、日英390px/keyboardを確認。非交差capのcore診断は英語のままで、全solver診断翻訳はUIIMPROVE1の残作業。公開Worker/任意wire/一般join/物理解析の実証ではない。

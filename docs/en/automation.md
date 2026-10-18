@@ -737,3 +737,9 @@ Strict transient-acoustic preflight now rejects explicit positive time steps tha
 ## Time-history storage inputs
 
 setStudy/project JSON accept existing thermalSnapshotCount and new thermalSnapshotBudgetBytes/acousticSnapshotCount/acousticSnapshotBudgetBytes. Counts2–61,budgets1–67108864 are integers;invalid values fail atomically and strict preflight checks them. Storage density is distinct from physical inputs;scalar budgets do not guarantee peak RAM. See [transient acoustics/history](transient-acoustics.md).
+
+The [formal-MCP bounded-cap loop](../evidence/2026-10-18-fluid-opening-caps-mcp.json) uses a Node-hosted session/real CPU Worker:studio_browser_call prepareFluidDomain,mesh job,applyFluidDomainMesh and revision-pinned inspectInput;reconstructed paged inputs are checked with studio_inspect_project. No saved-file prepare/apply or generic JSON-import tool is claimed. Four input/three mesh-receiver refusals and137721byte artifact SHA are verified,separately from Chrome/deployed Worker/physical solves.
+
+### Bounded-cap GUI loop
+
+The internal-fluid panel accepts up to six explicit IDs/points/outward unit normals without inventing empty values. Invalid normals focus/mark the correction field. Bounds helpers preserve incomplete drafts;new models reset them. Project JSON saves only applied source and restores rows on reload. Failed meshing rolls back applied source while preserving draft rows. [Real-Chrome evidence](../evidence/2026-10-18-fluid-opening-caps-gui.json) verifies two caps,4021.239mm3,two ports,107 selected cap triangles,exact JSON roundtrip,JP/EN390px and keyboard. Nonintersecting-cap core diagnostics remain English;complete solver-diagnostic translation remains UIIMPROVE1 work. This does not validate deployed Workers,arbitrary wires,general joins or physical flow solving.
