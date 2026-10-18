@@ -35,6 +35,6 @@ test('after resetting study controls every prior-study state loads the acoustic 
  for(const prior of priors){const h=harness();h.api.setStudy(prior);h.form.resetBrowserStudyControls();acousticLoader(h);assert.deepEqual(h.get().study,expected,JSON.stringify(prior));}
 });
 test('main.js example bases reset study controls and the study form is captured at startup',()=>{
- assert.match(main,/createStudyFormUi\(\{\$,browserStudyControls\}\);\s*captureInitialStudyControls\(\)/);
+ assert.match(main,/createStudyFormUi\(\{\$,browserStudyControls,[^\n]*getOpeningCaps:[^\n]*restoreOpeningCaps:[^\n]*\}\);\s*captureInitialStudyControls\(\)/);
  for(const name of ['demo','analysisExample'])assert.match(main,new RegExp('function '+name+'\\(\\)\\{resetBrowserStudyControls\\(\\);'),name);
 });
