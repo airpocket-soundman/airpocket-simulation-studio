@@ -24,10 +24,15 @@ export function inspectThermalInputContract(project,options={}, {mode='legacy'}=
    require('/study/timeStep',study.timeStep,value=>Number.isFinite(value)&&value>0,'Thermal time step must be positive seconds');
    require('/study/steps',study.steps,value=>Number.isInteger(value)&&value>=1&&value<=100,'Thermal steps must be an integer from 1 to 100');
    if(own(study,'thermalSnapshotCount'))require('/study/thermalSnapshotCount',study.thermalSnapshotCount,value=>Number.isInteger(value)&&value>=2&&value<=61,'Thermal snapshot count must be an integer from 2 to 61 (omit to store no nodal snapshots)');
-   require('/study/initialTemperature',study.initialTemperature,value=>Number.isFinite(value)&&value>=-273.15,'Initial temperature must be finite and at least absolute zero in degC');
   }
+  // The solver validates this seed for steady radiation as well as transient heat.
+  if(study.transient===true||own(study,'initialTemperature'))require('/study/initialTemperature',study.initialTemperature,value=>Number.isFinite(value)&&value>=-273.15,'Initial temperature must be finite and at least absolute zero in degC');
   for(const key of ['transient','timeStep','steps','initialTemperature','volumetricSource'])if(own(options,key)&&options[key]!==study[key])add('THERMAL_RUNTIME_OVERRIDE','/options/'+key,'Runtime thermal override differs from the provenance-bearing project study',{studyPointer:'/study/'+key});
   const conditions=Array.isArray(project.conditions)?project.conditions:[];
+  if(conditions.some(c=>c?.type==='radiation')){
+   const fromOptions=own(options,'maxRadiationIterations'),limit=fromOptions?options.maxRadiationIterations:study.maxRadiationIterations;
+   if(limit!==undefined&&(!Number.isInteger(limit)||limit<1||limit>60))add('THERMAL_NUMERICAL_SETTING_INVALID',(fromOptions?'/options/':'/study/')+'maxRadiationIterations','Radiation iteration limit must be an integer from 1 to 60');
+  }
   if(!Array.isArray(project.conditions))add('THERMAL_INPUT_INVALID','/conditions','Expected an explicit boundary condition array');
   let anchored=false;
   conditions.forEach((condition,index)=>{

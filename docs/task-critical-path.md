@@ -31,3 +31,9 @@ P3は復元requestIdの安全拒否を追加し、実MCP再起動後の同一/�
 モーダルの不正局所frame/方向不一致を事前拒否し、モーダル/直交異方性で無効支持を数えないようsolver規則に整合しました。復元jobIdを失ってもstudio_restored_jobsで有界再発見し、取得可能性と明示nextStepsを返します。保存caseの仮定詳細はstudio_inspect_caseでarchive/case/input版を固定してbounded取得します。[検証](evidence/2026-10-18-input-recovery-verification.json)、[再測定](evidence/2026-10-18-saved-case-remeasurement.json)、[正式MCPの32仮定取得](evidence/2026-10-18-saved-case-input-stdio.json)。新たな物理閾値を追加せず親/gate未完を維持。ブラウザへのcase復元、不明build版、Skill独立一巡は未完。背景手動確認は利用者が今は操作不可のため待機です。
 
 現在の残37件は自律15・外部/手動条件7・親15。EXPORTBACKGROUND1は実hidden確認に手動操作が必要で利用者が今は対応不可のため外部/手動群へ移し、停止監視の公開と受入未完を分離します。
+
+## 2026-10-18: 保存入力復元と再解析
+
+studio_restore_case_inputは全archive検証・archive/case/input版固定・元bytes再照合の後、元入力を新projectへ原子的/上書き禁止で書出します。[正式MCP一巡](evidence/2026-10-18-case-input-restore-real-mcp.json)で2caseの入力/根拠保持と別解析を確認し、同一点vector/magnitudeは0.04/0.08mmで元保存値と厳密一致。旧browser build不明を維持し新Node dirty実行版と分離記録。ブラウザscene/結果復元・一般物理精度の証明ではありません。
+
+熱のinitialTemperature/放射反復数を既存solver拒否と整合し、関連4分野31試験成功。MCPの全tool名期待を共通化し件数だけの重複保守を解消。full entry既定34/接続36、live91は不変。既存P0/P1/P4/MOD1/AGENTINPUT1内の進展として公開済130/残37を維持し、背景手動・Skill独立一巡・公開gateは未完を追跡します。

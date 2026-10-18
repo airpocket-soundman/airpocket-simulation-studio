@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "status": "local-verified-before-publication",
+  "sourceBase": "cdf00c98b8053a537ca4196c7758cc4d4137a401",
+  "trackedDirty": true,
+  "scope": [
+    "No-overwrite atomic saved-case original-input export with archive/case/input pinning",
+    "Steady thermal initial-temperature and radiation iteration preflight alignment",
+    "Shared explicit public MCP tool-name contract"
+  ],
+  "verification": {
+    "thermalFluidNonlinearAcoustic": {
+      "passed": 31,
+      "failed": 0
+    },
+    "restoreAndInspection": {
+      "passed": 11,
+      "failed": 0
+    },
+    "protocolAndProgress": {
+      "passed": 27,
+      "failed": 0
+    },
+    "operationCorrespondence": {
+      "passed": 7,
+      "failed": 0
+    },
+    "moduleBoundaries": {
+      "status": "passed",
+      "files": 210,
+      "localEdges": 530,
+      "existingAllowlistedViolations": 7
+    },
+    "independentReviews": "No blocking findings in restoration or thermal alignment",
+    "realMcpLoop": "docs/evidence/2026-10-18-case-input-restore-real-mcp.json"
+  },
+  "limits": [
+    "Test sets overlap;not a full-suite total",
+    "Synthetic two-case input restoration and separate Node reanalysis only",
+    "No browser scene/result restoration or original missing build inference",
+    "No new physical plausibility thresholds or complete preflight claim",
+    "Parent tasks/publication gates and manual background QA remain unfinished"
+  ]
+}

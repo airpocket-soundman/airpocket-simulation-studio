@@ -1,3 +1,4 @@
+import {assertMcpTools} from './fixtures/mcp-tool-contract.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
@@ -18,7 +19,7 @@ async function start(t,entry,connector=true){
 }
 
 for(const [entry,count]of [['scripts/studio-mcp.mjs',35],['scripts/studio-browser-mcp.mjs',3]])test(entry+' exposes opt-in redacted diagnostics through actual stdio after refusals and browser errors',async t=>{
- const mcp=await start(t,entry),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,count);const declaration=tools.find(value=>value.name==='studio_browser_sessions');assert.deepEqual(declaration.inputSchema.properties.diagnostics,{type:'boolean'});assert.deepEqual(declaration.inputSchema.required,[]);
+ const mcp=await start(t,entry),tools=(await mcp.rpc('tools/list')).result.tools;assertMcpTools(tools,entry==='scripts/studio-mcp.mjs'?{browser:true}:{minimal:true});const declaration=tools.find(value=>value.name==='studio_browser_sessions');assert.deepEqual(declaration.inputSchema.properties.diagnostics,{type:'boolean'});assert.deepEqual(declaration.inputSchema.required,[]);
  assert.deepEqual(await mcp.call('studio_browser_sessions'),{sessions:[]});assert.deepEqual(await mcp.call('studio_browser_sessions',{diagnostics:false}),{sessions:[]});
  const baseline=(await mcp.call('studio_browser_sessions',{diagnostics:true})).diagnostics;
  const secrets=['received-secret-authorization','received-secret-token','received-secret-body','received-secret-url','received-secret-origin','received-secret-browser-code'],{endpoint,pairingToken}=mcp.details,headers={Origin:mcp.origin,Authorization:'Bearer '+pairingToken,'Content-Type':'application/json'};
@@ -37,4 +38,4 @@ for(const [entry,count]of [['scripts/studio-mcp.mjs',35],['scripts/studio-browse
  for(const value of ['received-secret-token',1,null,{}]){const error=await mcp.raw('studio_browser_sessions',{diagnostics:value});assert.equal(error.result.isError,true);assert.equal(JSON.stringify(error).includes('received-secret-token'),false);}
 });
 
-test('default full MCP keeps 33 tools and does not enable browser diagnostics',async t=>{const mcp=await start(t,'scripts/studio-mcp.mjs',false),tools=(await mcp.rpc('tools/list')).result.tools;assert.equal(tools.length,33);assert.equal(tools.some(value=>value.name==='studio_browser_sessions'),false);assert.equal((await mcp.raw('studio_browser_sessions',{diagnostics:true})).result.isError,true);});
+test('default full MCP preserves saved-file tools and does not enable browser diagnostics',async t=>{const mcp=await start(t,'scripts/studio-mcp.mjs',false),tools=(await mcp.rpc('tools/list')).result.tools;assertMcpTools(tools);assert.equal(tools.some(value=>value.name==='studio_browser_sessions'),false);assert.equal((await mcp.raw('studio_browser_sessions',{diagnostics:true})).result.isError,true);});

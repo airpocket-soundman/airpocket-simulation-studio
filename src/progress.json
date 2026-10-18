@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T22:51:15.804Z",
+  "updatedAt": "2026-10-18T00:39:42.648Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1509,
-    "description": "公開済み130件・残37件（全167件）。今回、モーダルの不正局所座標を事前拒否し、モーダル/直交異方性で無効拘束を支持に数えないよう修正。再起動後ジョブの有界一覧/取得可能性/明示的な復旧手順と、保存ケース入力・根拠の版固定ページ取得を追加します。既存100/200Nケースの再測定は0.04/0.08mmと厳密一致し、各16件の仮定を正式MCPで取得しました。全物理の桁規則・一般精度・ブラウザへのケース復元・独立Skill一巡・公開ゲートは未完です。背景録画の手動確認は利用者が今は操作不可のため待機。件数1509はPR118確定CI（1506成功・3skip・失敗0）の基準です。",
-    "descriptionEn": "130 released/37 unfinished among167. This increment refuses invalid modal local frames and excludes invalid modal/orthotropic supports; adds bounded restored-job discovery/availability/explicit recovery and revision-pinned saved-case input/provenance pages. Existing100/200N saved cases remeasure exactly0.04/0.08mm and16 assumptions per case were recovered through real MCP. All-physics magnitude rules,general accuracy,browser case restoration,independent Skill acceptance and product gates remain open. Manual background QA waits because the user cannot operate now.1509 is completed PR118 CI baseline(1506passed,3skipped,0failed)."
+    "testCount": 1521,
+    "description": "公開済み130件・残37件（全167件）。保存caseの元入力を版固定/上書き禁止で新projectへ復元するMCPを追加。正式MCPで2caseの入力・根拠保持、検査→再解析→同一点比較を通し0.04/0.08mmが元保存値と厳密一致しました。熱事前検査の初期温度/放射反復数をsolver既存拒否に整合。MCPツール名の回帰契約も共通化。ブラウザ状態復元、保存build不明、全物理の桁規則/精度、Skill独立一巡、製品公開gateは未完です。背景録画は利用者が今は操作不可のため手動確認待ち。件数1521はPR119確定CI（1518成功・3skip・失敗0）の基準。",
+    "descriptionEn": "130released/37unfinished among167. Add revision-pinned,no-overwrite restoration of saved-case original input to a new project. Real MCP verifies two inputs/provenance,preflight,reanalysis and same-point comparison exactly matching0.04/0.08mm. Align thermal initial-temperature/radiation-iteration preflight with existing solver refusals. Centralize the MCP public-tool-name regression contract. Browser restoration,missing saved build,all-physics magnitude/accuracy,independent Skill loop and product gates remain open. Manual background QA waits for user availability.1521 is completed PR119 CI baseline(1518passed,3skipped,0failed)."
   },
   "tasks": [
     {
@@ -1131,9 +1131,9 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "分野別UI制御と構造評価のアダプター移管はPR31で回帰・CI・実Chromeを確認。PR34で保存入力・材料・単位の限定共通型を追加し、5宣言ファイルとfixtureをTypeScript strict/noEmitで検査、runtime envelope・代表単位/材料の照合を実施してCI成功後マージ。完全なnested保存schemaや全JS型検査ではなく、MOD1全体と全面React/WASM移行は未完。",
+      "lastUpdate": "2026-10-18: MCPの公開tool名期待を1つの明示契約fixtureへ集約し、複数protocol試験で件数だけでなく全名称/重複/欠落を比較。新tool追加時に多数の固定件数を直す負担を低減。Node保存復元adapterはscriptsへ置き依存境界を維持。親全体は未完。",
       "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json",
-      "lastUpdateEn": "Discipline UI controls and structural assessment adapter moves passed regression, CI and real Chrome checks in PR31. PR34 adds limited saved-input/material/unit types: five declarations and fixtures pass TypeScript strict/noEmit, with runtime envelope and representative unit/material checks; merged after successful CI. This is not a complete nested saved schema or all-JavaScript type checking. MOD1 and full React/WASM migration remain incomplete."
+      "lastUpdateEn": "2026-10-18: Centralized explicit public MCP tool-name expectations so protocol tests compare complete names/duplicates/missing tools rather than duplicated counts. Node restoration stays in scripts and dependency directions are retained. Full MOD1 remains open."
     },
     {
       "id": "P0",
@@ -1147,8 +1147,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md",
-      "lastUpdate": "2026-10-18: 既定33/接続35ツールの発見契約を更新。復元job一覧と保存case入力読取を追加し、既存ブラウザ91操作は維持。実stdio発見・拒否・復旧を確認。親と全操作の実機一巡は未完。",
-      "lastUpdateEn": "2026-10-18: Updated33default/35paired tool discovery with restored-job listing and saved-case input inspection;91 browser methods unchanged. Real stdio discovery/refusal/recovery verified; parent and full live loop remain open."
+      "lastUpdate": "2026-10-18: 保存入力復元の正式MCPを追加し既定34/接続36ツールへ。既存91ブラウザ操作は不変。公開tool名の実発見/重複/欠落を共通期待契約で検査し、各protocol試験の件数だけの固定を解消。全体受入は未完。",
+      "lastUpdateEn": "2026-10-18: Added saved-input restoration:34default/36paired tools;91 browser methods unchanged. Shared explicit public-name contract verifies discovery/duplicates/missing tools across protocol tests. Parent acceptance remains open."
     },
     {
       "id": "P1",
@@ -1163,8 +1163,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence. This diagnostic increment has automated/independent solver-reference evidence; live GUI verification was not performed.",
-      "lastUpdate": "2026-10-18: モーダルの不正frame/方向不一致を事前診断し、モーダル/直交異方性で無効支持を数えない修正を追加。solver既存規則に整合し関連34試験成功。全物理の桁規則と収束/精度は未完。",
-      "lastUpdateEn": "2026-10-18: Modal preflight now refuses invalid local frames/direction mismatches; modal/orthotropic checks exclude invalid supports. Existing solver rules retained;34 related tests pass. All-physics magnitude rules and convergence/accuracy remain open.",
+      "lastUpdate": "2026-10-18: 定常熱でも明示initialTemperatureをsolver既存の有限/絶対零度規則で検査。radiationの実効maxRadiationIterationsを既存整数1..60で検査しoptions優先/既定値と整合。関連4分野31試験成功。全物理の桁規則と精度は未完。",
+      "lastUpdateEn": "2026-10-18: Explicit steady-thermal initialTemperature and effective radiation iteration limits now match existing solver finite/absolute-zero and integer1..60 rules including options/default semantics.31 related tests pass;all-physics magnitude/accuracy remain open.",
       "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
     },
     {
@@ -1212,8 +1212,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-18: 保存2caseを正式MCPで再読込/同一点再測定し0.04/0.08mmが厳密一致。比較で省略された根拠をstudio_inspect_caseのarchive/case/input版固定ページで各16件取得。ブラウザ状態復元/不明build版/公開gateは未完。",
-      "lastUpdateEn": "2026-10-18: Real-MCP saved-case reload/point remeasurement exactly matches0.04/0.08mm;studio_inspect_case recovers16 assumptions per case via pinned archive/case/input pages. Browser restoration,missing build identity and publication gates remain open."
+      "lastUpdate": "2026-10-18: studio_restore_case_inputでarchive/case/input版を固定して元入力を新projectへ原子的/上書き禁止で復元。正式MCPの2case再解析は元保存値0.04/0.08mmと厳密一致、入力/根拠と元archive不変を確認。ブラウザ/結果復元、保存build不明と公開gateは未完。",
+      "lastUpdateEn": "2026-10-18: studio_restore_case_input atomically restores pinned original input to a new no-overwrite project. Two real-MCP reanalyses exactly match saved0.04/0.08mm with input/provenance preservation and unchanged archive. Browser/result restoration,missing saved build and publication gates remain open."
     },
     {
       "id": "P5",
@@ -1362,8 +1362,8 @@
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-18: 不正モーダル局所座標と無効支持を早期診断し、正式MCPで保存2caseの各16仮定を版固定で再取得しました。全物理の桁規則/精度・Skill独立一巡は未完、checking維持。",
-      "lastUpdateEn": "2026-10-18: Early invalid modal-frame/support diagnostics and real-MCP recovery of16 assumptions per saved case added. All-physics magnitude/accuracy and independent Skill loop remain open; stays checking."
+      "lastUpdate": "2026-10-18: 保存caseから復元した入力/根拠の完全一致と正式MCP再解析を確認。熱の2事前検査をsolverと整合。全物理の桁規則/精度とSkill独立一巡は未完、checking維持。",
+      "lastUpdateEn": "2026-10-18: Verified restored saved-case input/provenance equality and real-MCP reanalysis;aligned two thermal preflight checks. All-physics magnitude/accuracy and independent Skill acceptance remain open;stays checking."
     },
     {
       "id": "VIEWCOMPARE",
