@@ -1,20 +1,11 @@
 import {validateRadiationFace,radiationTerms,solveRadiatingSystem} from './thermal-radiation.js';
 import {elementGeometry,pcg} from './fem-core.js';
 import {meshComponents} from './components.js';
-export const THERMAL_SNAPSHOT_MAX=61,THERMAL_SNAPSHOT_BUDGET_BYTES=64*1024*1024;
-/** Evenly spaced stored-step indices 0..steps (0 is the initial state), first and last always included. Pure; exported for tests. */
-export function thermalSnapshotPlan(steps,n,requested,budgetBytes=THERMAL_SNAPSHOT_BUDGET_BYTES){
- if(requested!==undefined&&(!Number.isInteger(requested)||requested<2||requested>THERMAL_SNAPSHOT_MAX))throw Error('thermalSnapshotCount must be an integer from 2 through '+THERMAL_SNAPSHOT_MAX);
- if(!Number.isFinite(budgetBytes)||budgetBytes<=0)throw Error('Invalid thermal snapshot budget');
- const warnings=[],wanted=requested;let count=Math.min(wanted,steps+1);
- if(count<wanted&&requested!==undefined)warnings.push('Requested '+wanted+' snapshots but only '+(steps+1)+' states exist (initial plus '+steps+' steps); storing '+count);
- const fit=Math.floor(budgetBytes/(8*n));
- if(fit<2)throw Error('Thermal snapshot memory budget of '+budgetBytes+' bytes cannot hold two frames of '+n+' nodes');
- if(count>fit){warnings.push('Snapshot count reduced from '+count+' to '+fit+' to stay within the '+budgetBytes+' byte budget');count=fit;}
- const indices=Array.from({length:count},(_,i)=>i===count-1?steps:Math.round(i*steps/(count-1)));
- return {requested:requested??null,count,indices:[...new Set(indices)],bytes:count*n*8,budgetBytes,warnings};
-}
+import {createHistoryPlan,HISTORY_MAX_FRAMES,HISTORY_MAX_BYTES,validateHistorySettings} from './time-history-plan.js';
+export const THERMAL_SNAPSHOT_MAX=HISTORY_MAX_FRAMES,THERMAL_SNAPSHOT_BUDGET_BYTES=HISTORY_MAX_BYTES;
+export function thermalSnapshotPlan(steps,n,requested,budgetBytes=THERMAL_SNAPSHOT_BUDGET_BYTES){return createHistoryPlan(steps,n,{requested,budgetBytes,prefix:'thermal'});}
 export function solveThermal(mesh,properties,boundary,{matvecFactory,method,transient=false,timeStep=1,steps=10,initialTemperature=20,volumetricSource=0,maxRadiationIterations=30,onObserve,observeFields=true,thermalSnapshotCount,thermalSnapshotBudgetBytes=THERMAL_SNAPSHOT_BUDGET_BYTES}={}){
+ validateHistorySettings({thermalSnapshotCount,thermalSnapshotBudgetBytes});
  const k=properties.conductivity;if(!(k>0)||!Number.isFinite(k))throw Error('Positive thermal conductivity required');
  if(!Number.isFinite(volumetricSource)||!Number.isFinite(initialTemperature)||initialTemperature<-273.15)throw Error('Invalid thermal inputs');
  if(transient&&(![properties.density,properties.specificHeat,timeStep].every(v=>Number.isFinite(v)&&v>0)||!Number.isInteger(steps)||steps<1||steps>100))throw Error('Transient heat requires density, specific heat and valid time limits');

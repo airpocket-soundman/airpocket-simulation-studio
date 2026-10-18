@@ -2,17 +2,21 @@
 
 [English](en/task-critical-path.md)
 
-2026-10-18時点、167件のうち公開済み130件、未完37件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
+2026-10-18今回公開候補は167件のうち公開済み132件、未完35件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
-| 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIRESEARCH1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, CFDRESEARCH2, CFDRESEARCH3 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
+| 自律実装・検証可能（13） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIRESEARCH1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
 | 外部・実機等の条件あり（7） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
 | 親エピック（15） | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | 子機能の公開だけで全体完了にしない。既存受入条件と共通完了判定を維持。 |
 
 ## 依存と今回のまとまり
 
 P0→P1→P3、およびP0→P4が公開ワークフローの主要経路。P5はP1/P2/P3/P4すべてに依存する。公開マイルストーンは6ゲート中5ゲートが未完で、完了済みゲートも候補固有の証拠である。最終候補を揃えず製品全体の公開完了とはしない。
+
+今回の3系統はVIEWTIMEの保存密度/予算の機能実装、RUNTIMEWASM1の署名/明示flag比較診断、CFDRESEARCH2/3の調査受入完了。研究2件だけを閉じ、自律13・外部7・親15=残35件。VIEWTIMEは公開HTTPS/一般精度を残しbuilding、RUNTIMEWASM1はchecking。親と製品/Skill gateは閉じない。1545件は直近PR122/mainの確定baselineで今回最終CIの件数ではない。
+
+## 履歴: reset/背景出力の以前のまとまり
 
 今回は比較の小機能追加を止め、接続resetの有界診断/明示復旧（BROWSERRESET1）、背景動画の有限取消/解放（EXPORTBACKGROUND1）、実Chromeでの性能/メモリ観測可能性/取消実測（PERF1）を並行準備し、CPU負荷のある検証は直列実施する。終了条件を満たす項目だけを閉じる。他ブラウザ・peak RAM・対応上限が未測定ならPERF1全完了にしない。
 
@@ -49,3 +53,7 @@ studio_restore_case_inputは全archive検証・archive/case/input版固定・元
 上記の「独立fresh未完」は各段階の履歴です。最新の[GUI接続後の独立評価](evidence/2026-10-18-skill-loop-independent-post-pair.json)は、Skill/公開MCP契約による合成入力・根拠修復・2解析・比較・PNG/archiveのSHA検証・4状態保持・3拒否を成功しました。GUI接続準備は前提で、公開HTTPSのこの手順・全Skill gate・一般物理精度は未完です。
 
 今回UIIMPROVE1はqueuedからbuildingへ。[実Chrome証拠](evidence/2026-10-18-comparison-input-recovery.json)に基づき比較/動画入力のエラー対象フォーカスとaria-invalid/errormessage、入力修正での解除を追加し、実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみで、Chrome全出力の再成功は未実施です。調和音響preflightは既存solverの波数/k²数値範囲拒否をmesh前へ整合。親/gateは昇格せず、130released/19queued/13building/5checking/0readyです。
+
+CFDRESEARCH2/3の最新[調査票](compressible-cfd-plan.md)は資料調査の受入を完了。候補の採用/ビルド/物理実証とは別で、全候補保留。CFD2には構成/依存固定、Linuxビルド、B1–B5実行、実装・収支・停止再開を残す。
+
+VIEWTIMEの[限定実Chrome証拠](evidence/2026-10-18-viewtime-storage.json): 熱11要求/2400byte予算で94nodes/3frames/2256bytes、5秒25℃。熱GUI5frames、音響GUI7frames/741nodes/41496bytes。336349byte archiveの全bytes/hash再読込とcount7/budget65536復元、不正入力の原子拒否を確認。scalar予算はpeak RAM保証でなく、公開HTTPS/一般精度は未完。

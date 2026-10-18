@@ -2,6 +2,14 @@
 
 [English](en/wasm-runtime-investigation.md)
 
+## 2026-10-18: 有界な比較診断
+
+PR122の初回Linux/Node24.21.0全体検証で `Check failed: jit_page.has_value()` が発生し、同じソースの再実行は成功しました。従来のallocation-erase署名とは分離して記録し、同じ原因とも根治済みとも扱いません。
+
+`node scripts/compare-wasm-runtime.mjs 1 .qa/new-comparison.json --target=analysis-jobs --concurrency=4` は、同じruntime/source/対象で既定と明示 `--no-wasm-code-gc` を順に比較します。新規出力のみ、通常対象は各最大3反復、全体対象は各1反復です。Linux用の手動workflow `WASM runtime diagnostic comparison` でも実行できます。通常テストと製品の起動設定は変更しません。診断子プロセスから `NODE_OPTIONS` を除去し、別途spawnされたプロセスへのフラグ伝播は保証しません。
+
+中断・期限切れは所有する直接の子へ終了要求を送り、猶予後の強制終了とclose確認にも上限を設けます。子孫プロセス全体の終了は保証せず、close未確認は失敗として比較を止めます。[Windows単発smoke](evidence/2026-10-18-runtime-comparison-smoke.json)は両設定で完了しましたが、Linux再現・軽減効果・メモリ影響の証明ではありません。終了制御の変更後経路は単体テストで検証しました。RUNTIMEWASM1は未完です。
+
 確認日: 2026-10-14。状態: 未解決。
 
 全体試験のローカルログ `.qa/print-api-full.log` では、`tests/analysis-job-service.test.mjs` の最初の2試験成功後、`jit_page_->allocations_.erase(addr) == 1` のV8 fatal CHECKで試験プロセスが終了した。スタックに `ThreadIsolation::UnregisterWasmAllocation` がある。3番目は取消・期限切れ・成果物制限の試験だが、直接の引き金は未特定。他ファイルも並列実行されていた。

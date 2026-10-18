@@ -49,3 +49,5 @@ test('harmonic numerical range checks agree with existing wave and squared-wave-
  p.study.sweep=false;p.study.frequency=1e150;assert.deepEqual(inspect(p).diagnostics,[]);
  assert.deepEqual(inspectAcousticInputContract(p).diagnostics,[]);
 });
+
+test('invalid optional history settings are diagnosed without adding physical provenance requirements',()=>{for(const [key,value]of [['acousticSnapshotCount',62],['acousticSnapshotBudgetBytes',67108865]]){const p={study:{kind:'acoustic',[key]:value}},r=inspectAcousticInputContract(p,{}, {mode:'exploratory'});assert.ok(r.diagnostics.some(d=>d.code==='ACOUSTIC_HISTORY_INVALID'&&d.target==='/study/'+key));}});

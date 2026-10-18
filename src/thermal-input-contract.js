@@ -1,3 +1,4 @@
+import {validateHistorySettings} from './time-history-plan.js';
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const own=(value,key)=>Object.prototype.hasOwnProperty.call(value,key);
 const thermalTypes=['temperature','heatFlux','heatPower','convection','radiation','thermalContact'];
@@ -15,6 +16,7 @@ export function inspectThermalInputContract(project,options={}, {mode='legacy'}=
   if(!['quantitative','exploratory'].includes(mode)){add('THERMAL_INPUT_INVALID','/analysisIntent','Invalid thermal contract mode');return result;}
   if(!object(project)||!object(options)){add('THERMAL_INPUT_INVALID','/','Thermal contract requires project and options objects');return result;}
   const study=object(project.study)?project.study:{},material=object(project.materialProperties)?project.materialProperties:{};
+  for(const key of ['thermalSnapshotCount','thermalSnapshotBudgetBytes'])for(const [base,input]of [['/study/',study],['/options/',options]])if(own(input,key)){try{validateHistorySettings({[key]:input[key]});}catch(error){add('THERMAL_HISTORY_INVALID',base+key,error.message);}}
   require('/study/kind',study.kind,value=>value==='thermal','Thermal conduction requires study.kind thermal');
   require('/study/transient',study.transient,value=>typeof value==='boolean','Explicit boolean transient setting required');
   require('/study/volumetricSource',study.volumetricSource,Number.isFinite,'Volumetric heat generation must be finite W/m3');

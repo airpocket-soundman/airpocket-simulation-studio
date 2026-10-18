@@ -151,3 +151,94 @@ Preserve node/cell/particle association, density, pressure, velocity, temperatur
 No official WASM distribution was confirmed in this review, which is not proof that none exists. Exact versions, build graphs, wall/inflow/outflow examples, acceptance tolerances and resource targets remain research items. Some sources are older guides; PeleC redirects to Pele-Suite and parts of its old documentation were inaccessible. Recheck against selected versions.
 
 Primary sources: [SU2 theory](https://github.com/su2code/su2code.github.io/blob/master/_docs_v7/Theory.md), [installation](https://su2code.github.io/docs_v7/Installation/), [AMReX embedded boundaries](https://amrex-codes.github.io/amrex/docs_html/_downloads/008eb6dbfab802633dff40122ece848c/amrex.pdf), and candidate repositories linked above.
+
+
+## Embedded-boundary and meshfree research sheets (CFDRESEARCH2, 2026-10-18)
+
+This addition is literature/source research only. SHAs below pin **research snapshots of default branches**, not recommended stable releases or complete runnable environments. [Confirmed] means documented in official sources; [Judgement] means a product-specific inference; [Unverified] means no build, numerical trial or integration was performed. This work is separate from the existing ordinary-speed SU2 evaluation and adds no Mach-2 capability.
+
+### Candidates and pins
+
+| Candidate | Research SHA / distribution | Documented evidence | Unverified work / decision |
+|---|---|---|---|
+| AMReX | `f621539f8f890a877119061caaef313852ea6166`, BSD-3 [E1] | [Confirmed] Cartesian EB geometry/data infrastructure; regular/cut/covered cells, no multi-valued cells, small-cell stability issue [E2] | [Judgement] First geometry-workflow research target, not a complete Euler solver. Reject or refine geometries where thin gaps divide one cell into multiple fluid fragments; validate that handling |
+| PeleC | `949e2bb67386bf4b16324b06555e303ff411e179`, three-condition BSD-style licence [E3]; PelePhysics gitlink `6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b` | [Confirmed] C++20, AMReX/PelePhysics/SUNDIALS dependencies, MPI/OpenMP/GPU configurations and plotfiles [E3]; EB updates and FluxRedist/StateRedist documented [E4] | [Judgement] Runnable EB comparison candidate. Pin all nested submodules, EOS and non-reacting configuration; do not mix independent AMReX HEAD with PeleC arbitrarily. Minimal serial CPU build, Windows and WASM are [Unverified] |
+| PySPH | `1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5`, BSD-3 with subordinate LICENSE exceptions [E6] | [Confirmed] Python with generated/compiled execution, optional OpenMP/OpenCL/MPI; installation requires a C++ compiler. Gas Sod example exists [E6, E7] | [Judgement] Small particle-method research candidate. Liquid WCSPH examples do not establish external gas-wall support. Neighbour counts, smoothing length, boundary particles, particle injection/removal balances, concave 3D walls and Mach 2 are [Unverified] |
+| Spheral | `e9e3df91174e5af4b51ed41327474d75062be4f1`, BSD-3 [E9] | [Confirmed] SPH/ASPH/CRKSPH and compatible-energy mode. Current CMake uses C/C++/Fortran and >=3.24; external build guide assumes Linux/Spack and recommends Ubuntu 24.04 [E9, E10] | [Judgement] Conservation/restart comparison candidate. Pin Python bindings, HDF5/Silo and other dependencies. Native Windows/browser execution, arbitrary CAD walls and resource requirements are [Unverified] |
+| GIZMO (method reference only) | Original paper v2, 2015-12-13 [E12] | [Confirmed] MFM/MFV research combines kernel volume estimates, reconstructed gradients and Riemann problems | [Judgement] Reference for flux/EOS reuse, not evidence of arbitrary solid-wall external-flow integration. Old gizmo-public README redirects to pfhopkins/gizmo [E13]. Current distribution/dependencies/licences are not fully pinned; adoption remains on hold |
+
+The standalone AMReX SHA supports geometry-document research; it is not claimed to match PeleC's dependency pin. Installed size, peak RSS, elapsed time, browser payload and initialization are unmeasured for every candidate. A BSD label does not clear the complete dependency distribution.
+
+### Walls, boundaries, I/O and operation
+
+| Candidate | Evidence on walls / inflow / outflow / shocks | Proposed I/O and stop/restart contract | Integration still needed |
+|---|---|---|---|
+| AMReX/PeleC | [Confirmed] Domain SlipWall/NoSlipWall, adiabatic by default, UserBC/Hard and inflow/outflow guidance; old GS-NSCBC is explicitly not ported to C++ [E5]. Distinguish domain BCs from EB-wall implementation | [Confirmed] Sod/EB input examples and plotfiles [E3, E14]. [Planned] Validate step/time, residuals or balances, checkpoint/restart and final complete frame after stopping | Small-cell redistribution, EB/AMR coarse-fine balances, wall normals/flux extraction and equivalent restart remain [Unverified]. Do not advertise the deprecated NSCBC text as current non-reflecting support |
+| PySPH | [Confirmed] Gas Sod source [E7]. [Unverified] Concave Mach-2 walls, far field and gas-particle injection/removal conditions | [Confirmed] Output implementation and --restart-file [E8]. [Planned] Preserve particle IDs, mass, positions, volume and smoothing length; compare restarted fields/neighbour settings. Killing a process does not create a checkpoint | Manage Python and generated-code caches. Do not silently relabel particle fields as nodal fields. A generic inflow/outflow class alone does not validate a compressible boundary |
+| Spheral | [Confirmed] InflowOutflowBoundary documents node creation/restart registration; ReflectingBoundary source and Sod/restart test definitions exist [E11] | [Planned] Python case to NodeList fields, conserved quantities and restart; begin with Sod restartStep/restoreCycle/checkRestart for measured restart differences | API declarations/upstream test definitions are not Airpocket passes. Wall penetration, facets, neighbour distribution and energy balance remain [Unverified] |
+
+A common adapter must declare input hashes, units, EOS/gamma, free-stream rho/p/T/U, method/version/dependencies, seed/grid/resolution, boundary semantics, physical time/dt and output interval. Record stop procedure, partial-artifact completeness and files/versions required for restart. Explicit solvers without residual output should report step/time and conservation errors, not invented residuals. A discretization-independent MCP wire contract is planned; existing API acceptance is not claimed.
+
+### Common benchmarks and decisions (unexecuted specification)
+
+Reuse V1–V5 above with the B1–B5 specifications below. Approve and freeze numerical tolerances **before execution**, including reference uncertainty and intended use; do not loosen them after seeing results. V2's earlier 1% target remains provisional research intent, not a validated product standard.
+
+| ID | Fixed problem | Comparison and rejection conditions |
+|---|---|---|
+| B1 / V1 | Sod: x in [0,1], discontinuity .5, left (rho,u,p)=(1,0,1), right=(.125,0,.1), gamma=1.4, t=.2, nondimensional. Evaluate before waves reach the ends. PeleC's current CMake rejects 1D, so use a transversely uniform periodic 2D strip [E14] | Exact Riemann solution: volume-weighted L1 rho/u/p, wave positions, minimum rho/p. Plan 100/200/400 equivalent axial resolution and separate dt variation. Particle volume is mass/density, not equal point weighting. Reject hidden negative-state/NaN clipping or unexplained resolution behaviour |
+| B2 / V2 | Mach 2, 10-degree wedge, gamma=1.4, identical free-stream pressure/density and length, slip wall; weak theta-beta-M branch [E15] | Shock angle, pressure ratio, normal wall mass flux, global mass/momentum/energy including boundary fluxes and wall-pressure forces. Translate/rotate Cartesian grids to isolate cut-cell sensitivity; vary particle placement/seed separately. Hold for reference mismatch, wall leakage or opaque stabilization |
+| B3 / V3 | Mach-2 sphere, distinct from a cylinder; fixed diameter D and far field, planned D/delta=16/32/64 equivalents | Cp, stand-off distance, resolution/dt/domain dependence. SU2 cross-comparison alone does not establish correctness: fix a correlation's applicability/uncertainty first. Separate surface-area errors from physical-solution errors |
+| B4 / V4 | Uniform flow without a body, then small-amplitude pulse passage through open boundaries; separately a closed oblique wall and thin gap in stationary fluid | Free-stream preservation, reflection amplitude, mass/energy balances, wall penetration, preparation time. Record minimum EB volume fraction/multi-valued detection or deficient particle neighbourhoods and conservation added/removed at open boundaries. Reject unrepresentable gaps explicitly rather than silently sealing them |
+| B5 / V5 | Same simplified closed cow surface/free stream, only after B1–B4 pass | Orientation/holes/thin features, preparation time, wall-clock, peak RSS, conservation and restart differences. Demonstration without a reference solution; attractive Mach images are not accuracy evidence |
+
+Accept only after source/dependencies/distribution are pinned, agreed B1–B4 errors/conservation/positivity and reproducibility pass, unsupported geometry is explicitly refused, observation/cancellation/restart work, and user-PC resource budgets pass. Measure a serial CPU baseline first; WASM/GPU are separate gates. Hold for unverified walls/open boundaries, silently accepted multi-valued geometry, missing conservation from particle corrections, unresolved dependency terms or failed benchmarks. **All candidates are currently on hold for adoption.** Prioritizing PeleC EB followed by independent PySPH/Spheral comparisons is [Judgement], not measured performance ranking.
+
+## Reuse-first custom solver plan (CFDRESEARCH3, 2026-10-18)
+
+### Trigger and existing assets
+
+There is no established need to build a custom solver yet. For each candidate, record requirements (concave walls, open boundaries, agent-controlled stop/restart, PC resources, distribution), B1–B5 results, whether configuration/adapter changes suffice, and the cost of a targeted library extension. Stop custom development if existing native OSS meets requirements. Unverified WASM or Python dependencies alone do not justify rewriting a solver. Build only a specified unmet capability with an agreed acceptance test.
+
+| Existing asset, checked in source | Reusable design/functionality | Work that cannot be reused unchanged |
+|---|---|---|
+| scripts/native-flow-host.mjs, studio-native-flow-mcp.mjs | Approved input, request IDs, process cancellation, observations and artifact hashes | Current host is a fixed SU2 case. Multiple candidates/compressible schemas need a new adapter and validation |
+| scripts/analysis-job-service.mjs, analysis-process-worker.mjs | Timeout, settlement, bounded events, failure versus complete output | Each candidate still needs checkpoint/restart and cancellation evidence |
+| src/input-provenance.js, project-revision.js, runtime-identity.js | Separate input sources/assumptions/revisions from runtime identity | Do not claim the present schema covers all CFD inputs. Explicitly extend for external binaries/dependency hashes, EOS and particle arrangement |
+| src/fluid-domain.js, stl-source.js | Units, original geometry and surface/closure inspection patterns | Convex-STL volume generation does not generate arbitrary concave EB or particle arrangements |
+| src/native-flow-view.js, probe.js, saved-case/archive | Pressure/velocity views, measurements/comparison and hashed persistence patterns | Current slice handles tetrahedral cell type 10. AMR cut-cell/particle sampling, balances and Cp/Mach need work; add result-kind validation before existing archive ingestion |
+
+### Stages and exit gates (all planned, unimplemented)
+
+| Stage | Smallest addition | Advance / stop gate |
+|---|---|---|
+| C0 gap/contract | Gap record; U=(rho,rho*u,rho*v,rho*w,rho*E), SI, gamma/EOS, absolute p/T, input hashes, cell/particle association, errors/balances | Do not build if an OSS adapter suffices. State nondimensional-test to SI conversion. Stop for EOS/gamma/energy-definition mismatch |
+| C1 1D CPU | First-order uniform-grid FVM; documented HLLE as robust baseline candidate and HLLC as comparison [E16]. Reflecting/transmissive boundaries, CFL-based dt, conservation accounting | B1 plus strong rarefaction/shock: positive rho/p, conservation and dt/resolution dependence. Do not pass through negative clipping. Fix CFL and vacuum-support envelope from the selected scheme beforehand; explicitly reject unsupported vacuum |
+| C2 2D CPU | Cartesian transverse B1, B2 wedge, rotation/advection tests. Add time integration and higher-order reconstruction as separate changes | 1D/2D reduction agreement, boundary flux/global balance and grid-orientation sensitivity. Retain C1 regression after higher order; document limiter/positivity treatment and limits |
+| C3 choose one geometry method | EB: cut volume/face apertures, wall flux, small-cell stabilization, coarse-fine accounting. Particle: neighbours, volume/gradients/pair flux, wall particles and open-boundary balances | B2/B4 and coarse B3 wall leakage/geometry sensitivity. Do not fully develop both methods simultaneously. Replacing FVM arrays with points is insufficient |
+| C4 3D/local resolution | B3 sphere then B5 cow, reproducible geometry-to-discretization, full fields/balances/domain study | B1–B4 regression, spatial/time/domain dependence, stop/restart, memory/time budgets. Visualization alone cannot pass |
+| C5 distribution/acceleration | Minimal CPU WASM sharing native input/result schemas; later SIMD/threads/WebGPU | Compare payload/init/peak memory, same-case numerical differences, cancellation/diagnostics/persistence. Keep native if porting fails. Viscosity/turbulence/boundary layers need a separate plan |
+
+Research completion means recorded candidate sheets, benchmark specifications, decision gates and staged reuse plan. It does not complete C0–C5, adopt a candidate or validate B1–B5 physically. Next work: pin a minimal candidate configuration and all nested dependency SHAs, build on Linux CPU, and approve B1/B2 execution tolerances/resource budgets beforehand. No such success is inferred here.
+
+
+### Additional primary sources (retrieved 2026-10-18)
+
+Source links are pinned to research snapshots. Dynamic documentation is supplementary; inaccessible or old PeleC pages are not used to infer support. Source IDs match the Japanese edition.
+
+- E1: [AMReX snapshot / LICENSE](https://github.com/AMReX-Codes/amrex/blob/f621539f8f890a877119061caaef313852ea6166/LICENSE)
+- E2: [AMReX EB restrictions and small cells](https://github.com/AMReX-Codes/amrex/blob/f621539f8f890a877119061caaef313852ea6166/Docs/sphinx_documentation/source/EB.rst), [Official EB overview](https://amrex-codes.github.io/amrex/docs_html/EB_Chapter.html)
+- E3: [PeleC README](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/README.rst), [license](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/license.txt), [submodule gitlink](https://github.com/Pele-Suite/PeleC/tree/949e2bb67386bf4b16324b06555e303ff411e179/Submodules)
+- E4: [PeleC EB/redistribution](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/Docs/sphinx/geometry/EB.rst)
+- E5: [PeleC domain BCs and GS-NSCBC warning](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/Docs/sphinx/BoundaryConditions.rst)
+- E6: [PySPH README](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/README.rst), [installation](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/docs/source/installation.rst), [LICENSE](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/LICENSE.txt)
+- E7: [PySPH gas Sod](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/examples/gas_dynamics/sod_shocktube.py)
+- E8: [PySPH application/restart](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/solver/application.py), [output](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/solver/output.py)
+- E9: [Spheral README](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/README.md), [LICENSE](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/LICENSE)
+- E10: [Spheral current CMake](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/CMakeLists.txt), [external build](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/docs/build_guide/external/index.rst), [dependencies](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/docs/build_guide/appendix/external_deps.rst)(prefer current CMake >=3.24 over the guide's >=3.21)
+- E11: [Spheral boundary](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/src/Boundary/InflowOutflowBoundary.hh), [ReflectingBoundary](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/src/Boundary/ReflectingBoundary.hh), [Sod/restart test definition](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/tests/functional/Hydro/Sod/Sod-planar-1d.py)
+- E12: [Hopkins GIZMO original paper v2](https://arxiv.org/abs/1409.7395v2)
+- E13: [Former GIZMO repository relocation notice](https://github.com/pfhopkins/gizmo-public/blob/78b66ffcfad6362f8aa0798f8a23a6c9ba5dd2ca/README.md)
+- E14: [PeleC Sod inputs](https://github.com/Pele-Suite/PeleC/tree/949e2bb67386bf4b16324b06555e303ff411e179/Exec/RegTests/Sod), [CMake rejection of 1D](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/CMakeLists.txt)
+
+- E15: [NASA Glenn oblique-shock applicability and relations](https://www.grc.nasa.gov/www/k-12/airplane/oblique.html)
+- E16: [Einfeldt et al. (1991), On Godunov-type methods near low densities](https://doi.org/10.1016/0021-9991(91)90211-3), [Toro et al. (1994), Restoration of the contact surface in the HLL-Riemann solver](https://doi.org/10.1007/BF01414629). Only DOI/bibliographic metadata was confirmed here; inspect original assumptions, wave speeds and CFL conditions before implementing C1.

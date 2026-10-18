@@ -1,6 +1,11 @@
 let savedLanguage='ja';try{savedLanguage=localStorage.getItem('studio-language')||'ja';}catch{}
 export let language=new URLSearchParams(location.search).get('lang')||savedLanguage;
 export const dictionary={
+"熱の保存場予算（MiB、空欄で64）":"Thermal stored-field budget (MiB, blank for 64)",
+"音響の保存枚数（2〜61、0で従来の自動間隔）":"Acoustic stored frames (2–61, 0 for legacy automatic spacing)",
+"音響の保存場予算（MiB、空欄で64）":"Acoustic stored-field budget (MiB, blank for 64)",
+"保存枚数は計算刻みを変更しません。予算は節点数×保存枚数×8 bytesで見積もり、足りなければ枚数を減らします。配列オブジェクト・表示用コピー・観測・プロセス全体のメモリは含みません。":"Storage count does not change solve steps. The budget estimates nodes × frames × 8 bytes and reduces frame count if necessary. Array objects, rendering copies, observations and total process memory are excluded.",
+"初期と最終の場は必ず保存します。保存枚数・予算は計算刻みと受音点の毎ステップ記録を変更しません。予算は保存するスカラー値だけの見積もりで、全メモリの上限ではありません。":"Initial and final fields are always retained. Storage count and budget do not change solve steps or the per-step receiver trace. This budget estimates stored scalar values only; it is not a total-memory bound.",
  '暫定解析：明示した仮定を含みます。':'Provisional analysis: explicit assumptions are included.',
  '入力設定の根拠を確認済みです。':'Input provenance confirmed.',
  '従来入力：設定全体の根拠は未記録です。':'Legacy input: full setup provenance is not recorded.',

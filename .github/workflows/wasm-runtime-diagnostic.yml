@@ -1,0 +1,47 @@
+name: WASM runtime diagnostic comparison
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        type: choice
+        options: [analysis-jobs, material-catalog, full]
+        default: analysis-jobs
+      iterations:
+        type: choice
+        options: ['1', '2', '3']
+        default: '1'
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: .native-cache
+          key: ${{ runner.os }}-mfem-v1-${{ hashFiles('native/**', 'scripts/setup-native.py', 'scripts/build-native.py') }}
+      - run: npm ci
+      - run: npm run native:build && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs
+      - name: Compare explicit diagnostic modes
+        env:
+          TARGET: ${{ inputs.target }}
+          ITERATIONS: ${{ inputs.iterations }}
+        run: |
+          mkdir -p .qa
+          node scripts/compare-wasm-runtime.mjs "$ITERATIONS" .qa/wasm-comparison.json "--target=$TARGET" --concurrency=4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wasm-runtime-comparison-${{ github.run_id }}
+          path: .qa/wasm-comparison.json*
+          include-hidden-files: true
+          retention-days: 14

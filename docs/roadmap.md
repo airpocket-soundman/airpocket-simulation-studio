@@ -172,3 +172,9 @@ P4の読取専用比較を共通API・ブラウザinspectのcaseCompare・studio
 今回の検証成功件数・実ブラウザ・公開完了は保留。比較は物理精度、同入力性、別メッシュ間の部品対応や位置合わせを保証しない。P3/P4全体、Skill単独一巡およびP0〜P6の既存完了条件は引き続き未完了である。
 
 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 [独立post-pair証跡](evidence/2026-10-18-skill-loop-independent-post-pair.json)。この狭い成功は全gateの完了やstatus昇格を意味しません。
+
+## 2026-10-18 今回の公開候補
+
+CFDRESEARCH2/3は[圧縮性CFD調査](compressible-cfd-plan.md)の候補票・共通基準問題・採否条件・既存資産の再利用計画を完了。これは資料調査の完了で、候補採用/ビルド/数値実証を含まない。全候補は採用保留、CFD2等の親は未完。公開候補は132件完了・35件未完（自律13/外部7/親15）。
+
+VIEWTIMEは保存フレーム密度とscalar保存量予算を明示し、計算刻み・保存間隔・表示補間を分離する実装を進める。全体JS/peak RAM予算や一般形状の精度保証とは別。RUNTIMEWASM1は別々のJIT fatal署名と手動Linux比較導線を追加するが、同source再試行成功/Windows限定smokeは根治証明にならない。直近確定CI baseline1545件はPR122/mainの値で、今回最終CIは別途証拠に記録する。

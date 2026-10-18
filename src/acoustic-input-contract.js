@@ -1,3 +1,4 @@
+import {validateHistorySettings} from './time-history-plan.js';
 import {acousticResolutionLimits} from './acoustic-resolution-contract.js';
 import {canonicalJson} from './project-revision.js';
 import {validateImpedance} from './acoustic-impedance.js';
@@ -17,6 +18,7 @@ export function inspectAcousticInputContract(project,options={}, {mode='legacy'}
  try{
   if(!['quantitative','exploratory'].includes(mode)||!object(project)||!object(options)){add('ACOUSTIC_INPUT_INVALID','/','Invalid acoustic contract arguments');return result;}
   const s=object(project.study)?project.study:{};
+  for(const key of ['acousticSnapshotCount','acousticSnapshotBudgetBytes'])for(const [base,input]of [['/study/',s],['/options/',options]])if(own(input,key)){try{validateHistorySettings({[key]:input[key]});}catch(error){add('ACOUSTIC_HISTORY_INVALID',base+key,error.message);}}
   require('/study/kind',s.kind,value=>value==='acoustic','Acoustic study kind required');
   for(const key of ['acousticTransient','sweep','exteriorRadiation','directivityEnabled'])require('/study/'+key,s[key],boolean,'Explicit acoustic branch setting required');
   for(const key of ['frequency','soundSpeed','airDensity'])require('/study/'+key,s[key],positive,'Positive finite acoustic medium value required');
@@ -42,7 +44,7 @@ export function inspectAcousticInputContract(project,options={}, {mode='legacy'}
   if(s.directivityEnabled===true){
    require('/study/directivityAxis',s.directivityAxis,value=>Number.isInteger(value)&&value>=0&&value<=2,'Directivity axis must be 0, 1 or 2');require('/study/directivityPoints',s.directivityPoints,value=>Number.isInteger(value)&&value>=12&&value<=180,'Directivity count must be from 12 to 180');require('/study/directivityDistanceMm',s.directivityDistanceMm,positive,'Positive reference distance required');if(s.exteriorRadiation!==true)add('ACOUSTIC_BRANCH_INCOMPATIBLE','/study/directivityEnabled','Far field requires exterior radiation');
   }
-  const runtimeKeys=['kind','acousticTransient','frequency','soundSpeed','airDensity','lossFactor','referencePressurePa','acousticDuration','pulseWidth','acousticTimeStep','dampingRate','receiverPoint','sweep','sweepStart','sweepEnd','sweepCount','exteriorRadiation','directivityEnabled','directivityAxis','directivityPoints','directivityDistanceMm','vibrationSource'];
+  const runtimeKeys=['acousticSnapshotCount','acousticSnapshotBudgetBytes','kind','acousticTransient','frequency','soundSpeed','airDensity','lossFactor','referencePressurePa','acousticDuration','pulseWidth','acousticTimeStep','dampingRate','receiverPoint','sweep','sweepStart','sweepEnd','sweepCount','exteriorRadiation','directivityEnabled','directivityAxis','directivityPoints','directivityDistanceMm','vibrationSource'];
   for(const key of runtimeKeys)if(own(options,key)&&canonicalJson(options[key])!==canonicalJson(s[key]??null))add('ACOUSTIC_RUNTIME_OVERRIDE','/options/'+key,'Runtime acoustic input differs from the provenance-bearing study');
   for(const key of ['initialPressure','radiationBoundary','normalVelocity'])if(own(options,key))add('ACOUSTIC_RUNTIME_OVERRIDE','/options/'+key,'This acoustic input is not accepted through runtime options');
   const conditions=Array.isArray(project.conditions)?project.conditions:[];if(!Array.isArray(project.conditions))add('ACOUSTIC_INPUT_INVALID','/conditions','Explicit boundary condition array required');let pressureSource=false;

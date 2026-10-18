@@ -731,3 +731,7 @@ full entry既定35/接続37ツール（minimal3・live91は不変）。studio_ar
 ## 2026-10-18: Skillの独立post-pair一巡
 
 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 [証跡](evidence/2026-10-18-skill-loop-independent-post-pair.json)と[比較PNG](evidence/2026-10-18-skill-loop-independent-post-pair.png)を保存。clean674cf804上の専用Chrome/正式stdio MCP（37ツール）を使用し、source・fixture・過去QAを読まずに再現しました。PNGは1280×640・87780bytes、archiveは241297bytes。共通0〜0.08mmレンジの2ケースを目視確認済み。全job/export/transfer解放、GUI切断後sessions=[]、stdio EOF終了0、自己所有dev停止を確認。以前の接続準備停止記録は履歴として保持し、gate/statusは昇格しません。
+
+## 時間履歴の保存入力
+
+setStudy/project JSONは既存thermalSnapshotCountと新thermalSnapshotBudgetBytes/acousticSnapshotCount/acousticSnapshotBudgetBytesを扱う。count2〜61、budget1〜67108864の整数。不正値は原子的に拒否し、strict preflightも検査する。物理入力と保存密度を分離し、scalar予算をpeak RAM保証と解釈しない。詳細は[過渡音響と履歴](transient-acoustics.md)。

@@ -2,6 +2,14 @@
 
 [日本語](../wasm-runtime-investigation.md)
 
+## 2026-10-18: Bounded diagnostic comparison
+
+The first Linux/Node24.21.0 full verification of PR122 failed with `Check failed: jit_page.has_value()`; a same-source rerun passed. Record this separately from allocation-erase failures, without claiming a shared cause or a root fix.
+
+`node scripts/compare-wasm-runtime.mjs 1 .qa/new-comparison.json --target=analysis-jobs --concurrency=4` compares default flags with explicit `--no-wasm-code-gc` sequentially using the same runtime/source/target. Outputs must be new; ordinary targets allow at most three iterations per mode and the full target allows one. The manual Linux workflow `WASM runtime diagnostic comparison` provides the same path. Ordinary tests and production launch flags are unchanged. Diagnostic children remove `NODE_OPTIONS`; separate spawned processes are not guaranteed to receive the flag.
+
+Interruption and timeout request termination of the owned direct child, followed by bounded escalation and close confirmation. Descendant-tree cleanup is not guaranteed; unconfirmed close fails and stops comparison. The [single-run Windows smoke](../evidence/2026-10-18-runtime-comparison-smoke.json) completed both modes, establishing neither Linux reproduction nor mitigation or memory effects. Changed termination-control paths have unit coverage. RUNTIMEWASM1 remains open.
+
 Checked: 2026-10-14. Status: unresolved.
 
 The local full-suite log `.qa/print-api-full.log` shows the first two tests in `tests/analysis-job-service.test.mjs` passing before the fatal V8 CHECK `jit_page_->allocations_.erase(addr) == 1` terminated its test process. The stack includes `ThreadIsolation::UnregisterWasmAllocation`. The third test covers cancellation, timeout and artifact limits; the exact trigger is unknown. Other files ran concurrently.

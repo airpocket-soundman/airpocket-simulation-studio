@@ -1,0 +1,22 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {createHistoryPlan,validateHistorySettings,HISTORY_MAX_BYTES} from '../src/time-history-plan.js';
+import {solveThermal} from '../src/thermal-core.js';import {solveAcousticTransient} from '../src/acoustic-transient.js';import {validateComputeMetadata} from '../src/cases.js';
+const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]],surface:[]};
+const acoustic={kind:'acoustic',acousticTransient:true,frequency:4000,soundSpeed:343,airDensity:1.2,lossFactor:0,pulseWidth:.0001,acousticDuration:.0012,receiverPoint:[.1,.1,.1]};
+test('shared history budget bounds retained scalar bytes while preserving endpoints and refusing impossible budgets',()=>{
+ const p=createHistoryPlan(100,1000,{requested:61,budgetBytes:24000});assert.deepEqual(p.indices,[0,50,100]);assert.equal(p.bytes,24000);assert.equal(p.count,3);assert.match(p.warnings[0],/reduced from 61 to 3/);
+ assert.throws(()=>createHistoryPlan(100,1000,{budgetBytes:15999}),/cannot hold two frames/);
+ for(const prefix of ['thermal','acoustic']){for(const count of [0,1,62,2.5,'3'])assert.throws(()=>validateHistorySettings({[prefix+'SnapshotCount']:count}));for(const budget of [0,-1,1.5,HISTORY_MAX_BYTES+1,Infinity,'64'])assert.throws(()=>validateHistorySettings({[prefix+'SnapshotBudgetBytes']:budget}));}
+});
+test('legacy acoustic indices are unchanged; explicit density and budget preserve exact solve and receiver trace',()=>{
+ const boundary={acousticPressures:[[0,1]]},base=solveAcousticTransient(mesh,boundary,acoustic),stride=Math.max(1,Math.ceil(base.steps/60)),legacy=[0];for(let s=stride;s<base.steps;s+=stride)legacy.push(s);legacy.push(base.steps);assert.deepEqual(base.snapshots.map(f=>f.time),legacy.map(s=>s*base.timeStep));assert.equal(base.snapshotInfo,undefined);
+ const dense=solveAcousticTransient(mesh,boundary,{...acoustic,acousticSnapshotCount:9}),limited=solveAcousticTransient(mesh,boundary,{...acoustic,acousticSnapshotCount:9,acousticSnapshotBudgetBytes:96});
+ assert.equal(dense.snapshots.length,9);assert.equal(limited.snapshots.length,3);assert.deepEqual(limited.snapshotInfo.steps,[0,Math.round(base.steps/2),base.steps]);
+ for(const r of [dense,limited]){assert.deepEqual(r.pressure,base.pressure);assert.deepEqual(r.receiverPressurePa,base.receiverPressurePa);assert.equal(r.steps,base.steps);assert.equal(r.timeStep,base.timeStep);assert.equal(r.snapshots.at(-1).time,r.duration);validateComputeMetadata(r);}
+ assert.throws(()=>solveAcousticTransient(mesh,boundary,{...acoustic,acousticSnapshotBudgetBytes:63}),/cannot hold two frames/);
+});
+test('thermal history budget changes storage only and roundtrips with validated metadata',()=>{
+ const props={conductivity:1,density:1000,specificHeat:1000},base={transient:true,timeStep:1,steps:10,volumetricSource:1e6},a=solveThermal(mesh,props,{},base),b=solveThermal(mesh,props,{},{...base,thermalSnapshotCount:11,thermalSnapshotBudgetBytes:96});assert.equal(b.snapshots.length,3);assert.deepEqual(b.temperature,a.temperature);assert.deepEqual(b.history,a.history);for(const f of b.snapshots)for(const v of f.temperature)assert.ok(Math.abs(v-(20+f.time))<1e-6);validateComputeMetadata(JSON.parse(JSON.stringify(b)));for(const patch of [{bytes:1},{budgetBytes:95},{count:9},{steps:[0,5,5]}])assert.throws(()=>validateComputeMetadata({...b,snapshotInfo:{...b.snapshotInfo,...patch}}),/storage metadata/);
+});
+
+test('history metadata binds solved steps, physical times, finite nodal fields and final endpoint',()=>{const r=solveThermal(mesh,{conductivity:1,density:1000,specificHeat:1000},{},{transient:true,timeStep:1,steps:10,thermalSnapshotCount:3});for(const mutate of [x=>x.snapshotInfo.steps=[0,5,999],x=>x.snapshots[1].time=9,x=>x.snapshots[1].step=9,x=>x.snapshots[1].temperature=[null],x=>x.snapshots.at(-1).temperature=[0,0,0,0]]){const bad=structuredClone(r);mutate(bad);assert.throws(()=>validateComputeMetadata(bad),/saved time history/);}const a=solveAcousticTransient(mesh,{acousticPressures:[[0,1]]},{...acoustic,acousticSnapshotCount:3});for(const mutate of [x=>x.snapshotInfo.steps[2]++,x=>x.snapshots[1].time+=.01,x=>x.snapshots[1].pressure[0]=NaN,x=>x.snapshots.at(-1).pressure[0]++]){const bad=structuredClone(a);mutate(bad);assert.throws(()=>validateComputeMetadata(bad),/saved time history|saved transient/);}const legacy=structuredClone(r);delete legacy.snapshotInfo;validateComputeMetadata(legacy);});

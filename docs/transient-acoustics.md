@@ -30,7 +30,7 @@ SI単位の弱形式は `M p¨ + D p˙ + K p = 0`。Tet4の集中質量は各節
 
 計算刻み（ソルバーのステップ）、保存刻み（保存フレーム、最大約61）、表示補間（保存フレーム間の線形補間）は別物です。`src/time-interpolation.js` は純粋関数として、保存時刻の厳密な区間検索、2フレーム間の線形補間、物理時刻で一様な再生時刻列、全フレームで固定した色範囲を提供します。保存時刻は狭義単調増加が必須で、保存範囲外への外挿はエラーです。保存時刻ちょうどでは元の値のコピーを返し `interpolated:false` になります。補間値は表示専用で、物理配列や保存結果は変更しません。テストは `tests/time-interpolation.test.mjs`。
 
-実装済み: 音圧スライダー（`#acoustic-time-fine`）と再生（`#acoustic-time-play`）の補間表示（[結果断面](result-sections.md)）。未実装（後続）: `setResultView` の保存時刻以外の時刻指定、固定フレーム出力での補間時刻（現在は保存フレームのみ）、音響側のメモリ上限。補間表示は必ず「補間」と明記します。関連: [結果断面](result-sections.md)、[画像・動画出力](visual-export.md)。
+実装済み: 音圧スライダー（`#acoustic-time-fine`）と再生（`#acoustic-time-play`）の補間表示（[結果断面](result-sections.md)）。未実装（後続）: `setResultView` の保存時刻以外の時刻指定、固定フレーム出力での補間時刻（現在は保存フレームのみ）。補間表示は必ず「補間」と明記します。関連: [結果断面](result-sections.md)、[画像・動画出力](visual-export.md)。
 
 ## 過渡熱の保存節点温度（VIEWTIME）
 
@@ -45,3 +45,9 @@ SI単位の弱形式は `M p¨ + D p˙ + K p = 0`。Tet4の集中質量は各節
 2026-10-17 localhost実Chrome証跡: `evidence/2026-10-17-thermal-time-api-real-chrome.json`。実`solveThermal`による小規模四面体結果（T = 20 + t）で、APIの5/10/2秒選択（25/30/22 degC）、途中時刻の熱流束省略と最終時刻の熱流束、無効指定・古い版の拒否を確認しました。PNG連番は0/5/10秒とハッシュを照合し2秒へ復元、比較パネルも5秒表示後に2秒へ復元しました。小規模localhost条件の確認であり、公開環境・任意メッシュは未確認です。補間表示の復元と一般設定変更は自動テストのみです。ブラウザのダウンロードはイベント待機のタイムアウトとデバッガ切断により未確認です。
 
 永続化の証跡（小規模localhost四面体、2026-10-17）: `evidence/2026-10-17-thermal-persistence-real-chrome.json`と同梱fixture。5秒の名前付きビューを保存後、10秒へ移動し、書出し・取込後も5秒へ復元できました。5秒（25 degC、熱流束なし）と10秒（30 degC、最終熱流束）の測定も往復し、ブラウザの測定検証・Nodeの保存ケース再検証はtrue、physicalAccuracyVerified:falseでした。v2同梱は有効で、未保存時刻5.5秒・改変温度は拒否しました。GUI補間5.01秒での名前付きビュー・測定保存はアーカイブを変えず拒否し、保存済み5秒ビューの適用は5秒へ復元しました。保存時刻のUIラベルは自動テストのみです。公開環境・一般メッシュ・強制していないエラー経路は未確認です。thermalTimeのない旧ビューは現在時刻を維持します。補間状態へのロールバックにはホストの時刻復元hookが必要で、hookがない場合は補間表示からの時刻付きビュー適用を変更前に拒否します。
+
+## 保存密度とscalar予算の明示設定（2026-10-18）
+
+既存thermalSnapshotCountに加え、studyにthermalSnapshotBudgetBytes、acousticSnapshotCount、acousticSnapshotBudgetBytesを追加。countは整数2〜61、budgetは整数1〜67108864bytes（既定64MiB）。熱はcount未指定で履歴保存なし、音響はcount/budget未指定で従来の保存step配列とmetadataなしの結果を維持。明示設定時は初期/最終状態を含み、計算状態数または予算に合わせcountを減らしsnapshotInfo.warningsへ記録。2frameが入らない予算は拒否。budgetはnodes×frames×8のscalar保存量のみで、JS配列/観測/受音点波形/描画copy/peak RAMの上限ではない。
+
+GUI・project JSON・setStudyは同じ設定を保持し、不正値は変更前に拒否。保存caseのsnapshotInfoはcount/bytes/budgetだけでなく、stepと物理時刻、節点場の長さ/有限性、最終場との一致まで検証する。metadataを持たない旧結果は互換経路を維持する。計算刻みと表示補間は変更しない。公開HTTPS・一般形状の精度確認は別途残る。
