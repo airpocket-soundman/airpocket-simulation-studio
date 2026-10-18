@@ -28,6 +28,7 @@ export function inspectFluidInputContract(project,options={}, {mode='legacy'}={}
    try{validateFluidDomain(source);}catch(error){add('FLUID_DOMAIN_INVALID','/sourceModel',error.message);}
    required('/sourceModel/enclosure',source.enclosure,box,'Existing flow models require a box enclosure','mm');geometry(source.solid,'/sourceModel/solid');
    if(source.mode!==undefined)requiredPointers.push('/sourceModel/mode');
+   if(source.openingCaps!==undefined){requiredPointers.push('/sourceModel/openingCaps');if(kind==='channelFlow')add('FLUID_DOMAIN_UNSUPPORTED','/sourceModel/openingCaps','Arbitrary half-space caps do not establish a supported straight channel');}
    if(source.mode==='internal'){
     required('/sourceModel/seedPoint',source.seedPoint,vector,'Internal domain requires explicit seed point','mm');
     required('/sourceModel/portPlanes',source.portPlanes,value=>Array.isArray(value)&&value.length===2&&new Set(value).size===2&&value.every(v=>Number.isInteger(v)&&v>=0&&v<6),'Internal channel requires two explicit box port planes');

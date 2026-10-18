@@ -104,3 +104,8 @@ const badCondition: ProjectCondition['type'] = 'heatFluxDensity';
 const badUnit: ProjectUnits['geometry'] = 'm';
 
 void [job, row, diagnostic, savedProject, badState, badRevision, badSeverity, missingRequiredDiagnosticField, undefinedRequiredDiagnosticField, badProjectVersion, badSource, badFluidDomainStl, badMaterialDependence, badCondition, badUnit];
+
+const cappedFluidSource: ProjectSource = {kind: 'fluidDomain', solid: {kind: 'cylinder'}, mode: 'internal', enclosure: [-20, -40, -20, 40, 80, 40], seedPoint: [0, 0, 0], portPlanes: [], openingCaps: [{id: 'inlet', point: [0, -10, 0], normal: [0, -1, 0]}]};
+// @ts-expect-error cap normals must have exactly three coordinates.
+const badCapNormal: ProjectSource = {kind: 'fluidDomain', solid: {kind: 'cylinder'}, enclosure: [-20, -40, -20, 40, 80, 40], openingCaps: [{id: 'inlet', point: [0, -10, 0], normal: [0, -1]}]};
+void [cappedFluidSource, badCapNormal];

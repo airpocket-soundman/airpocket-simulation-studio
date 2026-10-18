@@ -35,6 +35,7 @@ function unitFor(path,project,allowProvenance=true){
  if(root==='meshes'&&third==='positions')return 'mm';
  const indices=parts=>parts.every(part=>/^(0|[1-9]\d*)$/.test(part));
  if(root==='sourceModel'&&['bounds','boxes','center','radius','outerRadius','innerRadius','length','seedPoint'].includes(key)&&indices(path.slice(2)))return 'mm';
+ if(root==='sourceModel'&&key==='openingCaps'&&/^(0|[1-9]\d*)$/.test(third)&&['point','normal'].includes(fourth)&&indices(path.slice(4)))return fourth==='point'?'mm':'1';
  if(root==='sourceModel'&&key==='enclosure'&&(Array.isArray(project.sourceModel?.enclosure)&&indices(path.slice(2))||['center','radius'].includes(third)&&indices(path.slice(3))))return 'mm';
  if(root==='sourceModel'&&key==='solid'&&['bounds','boxes','center','radius','outerRadius','innerRadius','length'].includes(third)&&indices(path.slice(3)))return 'mm';
  if(root==='meshSettings'&&key==='refinements'&&['center','size','radius'].includes(fourth))return 'mm';

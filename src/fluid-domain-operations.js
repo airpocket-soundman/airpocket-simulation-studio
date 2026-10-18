@@ -12,16 +12,16 @@ function command(args,keys){if(!plain(args))throw Error('Invalid fluid domain re
  * Original CAD bytes are retained in sourceModel.solid. Old physical inputs,
  * confirmations, selection and solid refinements are deliberately cleared. */
 export function prepareFluidDomainProject(project,args){
- const options=command(args,['mode','enclosure','paddingMm','seedPoint','portPlanes','name']),original=copy(project);
+ const options=command(args,['mode','enclosure','paddingMm','seedPoint','portPlanes','openingCaps','name']),original=copy(project);
  if(options.name!==undefined&&(typeof options.name!=='string'||!options.name.trim()))throw Error('Invalid fluid domain name');
  let source;
  if(options.mode==='exterior'){
-  if(!['box','sphere'].includes(options.enclosure)||Object.hasOwn(options,'seedPoint')||Object.hasOwn(options,'portPlanes'))throw Error('Exterior domain requires explicit box or sphere enclosure and padding');
+  if(!['box','sphere'].includes(options.enclosure)||Object.hasOwn(options,'seedPoint')||Object.hasOwn(options,'portPlanes')||Object.hasOwn(options,'openingCaps'))throw Error('Exterior domain requires explicit box or sphere enclosure and padding');
   source=(options.enclosure==='sphere'?exteriorAcousticSource:exteriorFluidSource)(original,options.paddingMm);
  }else if(options.mode==='internal'){
   if(Object.hasOwn(options,'paddingMm'))throw Error('Internal domain does not accept padding');
   const solid=original.sourceModel?.kind==='fluidDomain'?original.sourceModel.solid:original.sourceModel;
-  source=internalFluidSource({...original,sourceModel:solid},{enclosure:options.enclosure,seedPoint:options.seedPoint,portPlanes:options.portPlanes});
+  source=internalFluidSource({...original,sourceModel:solid},{enclosure:options.enclosure,seedPoint:options.seedPoint,portPlanes:options.portPlanes,openingCaps:options.openingCaps});
  }else throw Error('Invalid fluid domain mode');
  const candidate={...original,name:options.name??original.name,sourceModel:source,study:{kind:'fluidDomain'},materialProperties:{},meshSettings:{refinements:[]},conditions:[],selection:original.meshes.map(()=>[])};
  for(const key of ['inputProvenance','analysisIntent','planarRegion','cylindricalRegion'])delete candidate[key];
@@ -29,7 +29,7 @@ export function prepareFluidDomainProject(project,args){
 }
 function domainSummary(mesh){
  const d=mesh.domainSelection,ports=d?.ports??[],tags=new Set(ports.map(p=>p.faceTag));
- return {mode:d?'internal':'exterior',portCount:ports.length,ports:ports.slice(0,100).map(p=>({plane:p.plane,faceTag:p.faceTag})),portsTruncated:ports.length>100,wallFaceCount:new Set(mesh.surface.filter(f=>!tags.has(f.faceTag)).map(f=>f.faceTag)).size,...(d?.channel?{channel:Object.fromEntries(['model','axis','start','end','lengthM','widthMm','radiusMm','centerMm','hydraulicDiameterM','areaM2'].filter(key=>Object.hasOwn(d.channel,key)).map(key=>[key,copy(d.channel[key])]))}:{})};
+ return {mode:d?'internal':'exterior',portCount:ports.length,ports:ports.slice(0,100).map(p=>({...('capId' in p?{capId:p.capId}:{plane:p.plane}),faceTag:p.faceTag})),portsTruncated:ports.length>100,wallFaceCount:new Set(mesh.surface.filter(f=>!tags.has(f.faceTag)).map(f=>f.faceTag)).size,...(d?.channel?{channel:Object.fromEntries(['model','axis','start','end','lengthM','widthMm','radiusMm','centerMm','hydraulicDiameterM','areaM2'].filter(key=>Object.hasOwn(d.channel,key)).map(key=>[key,copy(d.channel[key])]))}:{})};
 }
 /** Trusted getMeshJob returns {job,output}; no wire-supplied result is accepted.
  * loadProject must synchronously validate and atomically commit its input. */
@@ -54,7 +54,7 @@ export function createFluidDomainOperations({studio,getMeshJob,normalizeProject=
  return Object.freeze({
   isBusy:()=>locked||isBusy(),
   async prepare(args,{guard=()=>true}={}){
-   const frozen=command(args,['expectedRevision','mode','enclosure','paddingMm','seedPoint','portPlanes','name']);
+   const frozen=command(args,['expectedRevision','mode','enclosure','paddingMm','seedPoint','portPlanes','openingCaps','name']);
    return mutate(frozen,guard,before=>{const {expectedRevision,...parameters}=frozen;return {project:prepareFluidDomainProject(before,parameters),extra:{prepared:true,meshGenerated:false,studyKind:'fluidDomain'}};});
   },
   async applyMesh(args,{guard=()=>true}={}){

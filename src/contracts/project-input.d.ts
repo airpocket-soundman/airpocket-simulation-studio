@@ -60,6 +60,8 @@ export interface FluidDomainSource {
   mode?: 'exterior' | 'internal';
   seedPoint?: Vector3;
   portPlanes?: number[];
+  /** Explicit half-space clipping planes, internal mesh/cavity use only; seed is on inward side. */
+  openingCaps?: Array<{id: string; point: Vector3; normal: Vector3}>;
 }
 export type ProjectSource = SolidSource | FluidDomainSource;
 
