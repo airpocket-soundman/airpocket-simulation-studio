@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "scope": "CAD-only regression of existing STEP import, enclosure subtraction and seed selection; no mesh or solver execution",
+  "test": "tests/internal-fluid-step-connectivity-cad.test.mjs",
+  "runtime": {"node": "24.11.1", "gmshWasm": "0.3.0"},
+  "generation": {
+    "units": "mm",
+    "outerBox": [-5, -5, -5, 10, 10, 10],
+    "adjacentVoidBoxes": [[-4, -4, -4, 4, 8, 8], [0, -4, -4, 4, 8, 8]],
+    "fragmentedShell": "OCC fragment the adjacent-void shell with rectangle [-6,-6,0,12,12] rotated pi/2 about Y into x=0",
+    "wallBoxes": [[-5,-5,-5,1,10,10],[4,-5,-5,1,10,10],[-4,-5,-5,8,1,10],[-4,4,-5,8,1,10],[-4,-4,-5,8,8,1],[-4,-4,4,8,8,1]],
+    "transfer": "Export each representation to STEP in the WASM filesystem, then import into a new CAD model",
+    "enclosure": [-6, -6, -6, 12, 12, 12],
+    "seedPoint": [-2, 0, 0],
+    "portPlanes": []
+  },
+  "references": [
+    {"representation": "adjacent-voids", "importedSolidCount": 1},
+    {"representation": "fragmented-shell", "importedSolidCount": 2},
+    {"representation": "six-wall-assembly", "importedSolidCount": 6}
+  ],
+  "commonExpected": {
+    "cutVolumeCount": 2,
+    "internalCadVolumeMm3": 512,
+    "externalCadVolumeMm3": 728,
+    "volumeAbsoluteAssertionToleranceMm3": 1e-9,
+    "seedCandidateCount": 1,
+    "sharedCadFaceCountBetweenCutVolumes": 0,
+    "selectedVolumeCount": 1,
+    "excludedVolumeCount": 1
+  },
+  "interpretation": "These three permitted STEP representations already produce one seed-containing cavity after the existing OCC cut. They do not demonstrate a missing volume-join feature or generalize to arbitrary STEP inputs.",
+  "notEvaluated": ["separate cavities", "edge-only contacts", "point-only contacts", "all STEP representations", "mesh generation", "fluid solver", "new OCC fuse behavior"],
+  "coreImplementationChanged": false
+}
