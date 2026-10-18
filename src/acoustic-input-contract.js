@@ -26,6 +26,9 @@ export function inspectAcousticInputContract(project,options={}, {mode='legacy'}
    require('/study/receiverPoint',s.receiverPoint,point,'Explicit finite receiver point required');
    if(s.lossFactor!==0||s.sweep||s.directivityEnabled||s.vibrationSource!==undefined)add('ACOUSTIC_BRANCH_INCOMPATIBLE','/study','Transient acoustics requires zero harmonic loss and no sweep, directivity or modal source');
    if(Number.isFinite(s.acousticDuration)&&Number.isFinite(s.pulseWidth)&&s.acousticDuration<12*s.pulseWidth*(1-1e-14))add('ACOUSTIC_PULSE_INCOMPLETE','/study/acousticDuration','Duration must include the complete 12-width pulse');
+   // Explicit positive steps determine this solver workload limit before meshing.
+   // Automatic stepping and the node-dependent budget still require the mesh.
+   if(Number.isFinite(s.acousticDuration)&&s.acousticDuration>0&&Number.isFinite(s.acousticTimeStep)&&s.acousticTimeStep>0){const steps=Math.ceil(s.acousticDuration/s.acousticTimeStep);if(steps>60000)add('ACOUSTIC_WORKLOAD_UNSUPPORTED','/study/acousticTimeStep','Transient acoustic workload exceeds the supported 60000 time steps',{...(Number.isFinite(steps)?{steps}:{stepCountOverflow:true}),maximumSteps:60000});}
   }else require('/study/referencePressurePa',s.referencePressurePa,positive,'Explicit positive RMS reference pressure required');
   if(s.sweep===true){
    require('/study/sweepStart',s.sweepStart,positive,'Positive sweep start required');require('/study/sweepEnd',s.sweepEnd,value=>positive(value)&&value>=s.sweepStart,'Sweep end must be at least its start');require('/study/sweepCount',s.sweepCount,value=>Number.isInteger(value)&&value>=1&&value<=20,'Sweep count must be from 1 to 20');require('/study/receiverPoint',s.receiverPoint,point,'Explicit sweep receiver required');

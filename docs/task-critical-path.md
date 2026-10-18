@@ -37,3 +37,9 @@ P3は復元requestIdの安全拒否を追加し、実MCP再起動後の同一/�
 studio_restore_case_inputは全archive検証・archive/case/input版固定・元bytes再照合の後、元入力を新projectへ原子的/上書き禁止で書出します。[正式MCP一巡](evidence/2026-10-18-case-input-restore-real-mcp.json)で2caseの入力/根拠保持と別解析を確認し、同一点vector/magnitudeは0.04/0.08mmで元保存値と厳密一致。旧browser build不明を維持し新Node dirty実行版と分離記録。ブラウザscene/結果復元・一般物理精度の証明ではありません。
 
 熱のinitialTemperature/放射反復数を既存solver拒否と整合し、関連4分野31試験成功。MCPの全tool名期待を共通化し件数だけの重複保守を解消。full entry既定34/接続36、live91は不変。既存P0/P1/P4/MOD1/AGENTINPUT1内の進展として公開済130/残37を維持し、背景手動・Skill独立一巡・公開gateは未完を追跡します。
+
+## 2026-10-18: 新解析結果の保存と再読込
+
+[正式MCP証拠](evidence/2026-10-18-result-archive-real-mcp.json)で入力復元→2Node解析→SHA固定studio_archive_results保存→別process検証/一覧/同一点比較を一巡。[新archive](evidence/2026-10-18-node-result-archive.json)は241900bytes・rawSHA8f01a5332d1cb7891cca693c1b54c4eb60f60fef102004a156f9eec9540ded31、0.04/0.08mm・比2。元SHA不変、上書き/旧SHA拒否を確認。保存元build不明と新Node dirty版を分離。合計/生成100MB境界は未実測、既存case-store予算も適用。一般精度・ブラウザ復元・親/gate完了の証明ではありません。
+
+音響の明示刻みで60000step超が確定する場合はsolver規則でmesh前に拒否し、overflowもJSON-safe診断。自動刻み/mesh依存仕事量は別確認。既定35/接続37、live91、公開130/残37を維持し背景手動確認は待機です。

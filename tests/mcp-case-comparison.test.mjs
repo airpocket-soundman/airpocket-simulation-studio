@@ -69,3 +69,19 @@ test('real MCP inspects saved case provenance with archive, case and input revis
   assert.deepEqual(await readFile(path),raw);
  }finally{await mcp.close();await rm(directory,{recursive:true,force:true});}
 });
+
+test('real MCP archives digest-pinned saved results and round-trips comparison without overwrites',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'mcp-result-archive-')),mcp=server();try{
+  await mcp.request('initialize',{protocolVersion:'2025-11-25'});mcp.notify();
+  const tools=(await mcp.request('tools/list',{})).result.tools;assertMcpTools(tools);const tool=tools.find(t=>t.name==='studio_archive_results');assert.equal(tool.annotations.readOnlyHint,false);assert.equal(tool.annotations.idempotentHint,false);assert.equal(tool.inputSchema.additionalProperties,false);
+  const rows=archive().cases.slice(0,2),results=[];
+  for(const [i,row]of rows.entries()){const path=join(directory,`result-${i}.json`),raw=Buffer.from(JSON.stringify(row.output));await writeFile(path,raw);results.push({path,name:row.name,expectedSha256:hash(raw).slice(7)});}
+  const outputPath=join(directory,'new-cases.json'),args={results,outputPath},request=async arguments_=>(await mcp.request('tools/call',{name:'studio_archive_results',arguments:arguments_})).result;
+  const result=await request(args);assert.notEqual(result.isError,true,JSON.stringify(result));assert.deepEqual(JSON.parse(result.content[0].text),result.structuredContent.value);assert.equal(result.structuredContent.value.caseCount,2);
+  const raw=await readFile(outputPath);assert.equal(result.structuredContent.value.outputSha256,hash(raw).slice(7));assert.deepEqual(JSON.parse(raw),{version:1,cases:rows});
+  const catalog=await mcp.call({path:outputPath}),compareArgs={path:outputPath,expectedArchiveRevision:catalog.archiveRevision,references:[reference(catalog,0,'temperature'),reference(catalog,1,'temperature')],point},compared=await mcp.call(compareArgs);assert.equal(compared.comparison.deltas[0].values.temperature,10);assert.deepEqual(await mcp.call(compareArgs),compared);
+  assert.equal((await request(args)).isError,true);assert.deepEqual(await readFile(outputPath),raw);
+  const stale=await request({results:[{...results[0],expectedSha256:'0'.repeat(64)}],outputPath:join(directory,'stale.json')});assert.equal(stale.isError,true);assert.equal(stale.structuredContent.error.code,'RESULT_ARCHIVE_SOURCE_CHANGED');
+  await assert.rejects(readFile(join(directory,'stale.json')),{code:'ENOENT'});for(const r of results)assert.equal(hash(await readFile(r.path)).slice(7),r.expectedSha256);
+ }finally{await mcp.close();await rm(directory,{recursive:true,force:true});}
+});

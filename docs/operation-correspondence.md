@@ -2,7 +2,7 @@
 
 [English](en/operation-correspondence.md)
 
-[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作91件とMCPツール36件（既定34件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
+[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作91件とMCPツール37件（既定35件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
 
 - 範囲/権限: ブラウザ操作は`src/browser-operation-names.js`の範囲（inspect/edit/analyze/view）。MCPツールは注釈の読み取り専用/書き込み・実行。
 - GUI: 各操作について、GUIを組み立てるソース（`src/main.js`・`src/ui/*.js`・`src/*-ui.js`・`src/visual-export.js`）と、操作の実体（`src/browser-session.js`・各`*-operations.js`・MCPは`scripts/studio-mcp.mjs`）を読み、呼び出す関数を突き合わせて分類した。`同一経路`はGUI操作が同じ共有関数を呼ぶもの、`関連（別処理）`は近いが別の処理をするもの（理由を併記）、`connector only — no GUI control by design`はGUIから呼ぶ経路がコードに無いもの（機能が不要という意味ではなく、GUIを足す余地はある）。行ごとに生成されるボタンはid・classが無いため、ボタン名と親のidで示した。限界: 静的に読んだ結果で、実ブラウザでの操作確認ではない。分類は関数の共有を見ており、引数・リビジョン確認・権限の同等性までは保証しない。`tests/operation-correspondence-gui.test.mjs`がGUI列のid・data属性・classがソースに存在することだけを確認する（分類の正しさは検証しない）。
@@ -130,6 +130,7 @@
 | `studio_restored_jobs` | read-only | none (Node復元metadataのみ) | connector only — no GUI control by design (任意job-storeの記録) | `references/jobs-observations.md` |
 | `studio_inspect_case` | read-only | `inspectInput` (保存ケース入力の別操作) | connector only — no GUI control by design (保存archive入力ページ) | `references/case-archives-measurements.md` |
 | `studio_restore_case_input` | write/execute | `caseRestoreInput` (別操作・新規projectファイルへ入力のみ) | connector only — no GUI control by design (ブラウザ状態は変更しない) | `references/case-archives-measurements.md` |
+| `studio_archive_results` | write/execute | `caseSave` (保存JSONからの別操作) | connector only — no GUI control by design (Nodeで新archive生成) | `references/case-archives-measurements.md` |
 | `studio_preflight_mesh_boundaries` | read-only | `meshBoundaryPreflight` | connector only — no GUI control by design (GUIにmesh-boundary-preflightの経路がない) | `references/jobs-observations.md` |
 | `studio_job_events` | read-only | `jobEvents` | connector only — no GUI control by design (ワーカー進捗文が`#status`に出るだけで、イベント読み出しはない) | `references/saved-inputs.md` |
 | `studio_cancel_job` | write/execute | `cancelJob` | 関連（別処理）: `#cancel-run` — ブラウザ内のGUIジョブを止める。Nodeジョブではない | `references/saved-inputs.md` |

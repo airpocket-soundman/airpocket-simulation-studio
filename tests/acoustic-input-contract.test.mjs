@@ -1,5 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {solveAcousticTransient} from '../src/acoustic-transient.js';
 import {inspectAcousticInputContract} from '../src/acoustic-input-contract.js';
 const inspect=(p,options={})=>inspectAcousticInputContract(p,options,{mode:'quantitative'}),has=(r,code)=>r.diagnostics.some(d=>d.code===code);
 function project(){return {study:{kind:'acoustic',acousticTransient:false,sweep:false,exteriorRadiation:false,directivityEnabled:false,frequency:1000,soundSpeed:343,airDensity:1.2,lossFactor:0,referencePressurePa:20e-6},meshes:[{faceIds:[0]}],conditions:[{type:'acousticPressure',value:1,regions:[{mesh:0,triangles:[0]}]}]};}
@@ -12,3 +13,23 @@ test('constant and tabulated impedance require evidence and obey transient and f
 function modal(){const p=project();p.conditions=[];p.sourceModel={kind:'fluidDomain',solid:{kind:'box',bounds:[0,0,0,1,1,1]},enclosure:{kind:'sphere',center:[.5,.5,.5],radius:3}};p.study.exteriorRadiation=true;p.study.vibrationSource={name:'Saved mode',modeIndex:0,frequencyHz:1000,amplitudeMm:.001,phaseDeg:0,bounds:[0,0,0,1,1,1],mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},displacement:[1,0,0,1,0,0,1,0,0,1,0,0]};return p;}
 test('direct modal fields require mesh and displacement evidence; saved references require identity evidence',()=>{const p=modal();let r=inspect(p);assert.deepEqual(r.diagnostics,[]);assert.ok(r.requiredPointers.includes('/study/vibrationSource/mesh'));assert.ok(r.requiredPointers.includes('/study/vibrationSource/displacement'));p.study.vibrationSource.caseReference={schemaVersion:1,caseId:'saved',revision:'sha256:'+'a'.repeat(64)};p.study.vibrationSource.sourceAssessment={schemaVersion:1,mode:'exploratory',provisional:true,completePreflight:false,remainingChecks:['Mesh dependence']};r=inspect(p);assert.deepEqual(r.diagnostics,[]);assert.ok(r.requiredPointers.includes('/study/vibrationSource/caseReference'));assert.ok(r.requiredPointers.includes('/study/vibrationSource/sourceAssessment'));assert.ok(!r.requiredPointers.includes('/study/vibrationSource/displacement'));p.study.vibrationSource.caseReference.revision='bad';assert.ok(has(inspect(p),'ACOUSTIC_INPUT_INVALID'));p.study.frequency=999;assert.ok(has(inspect(p),'ACOUSTIC_VIBRATION_INVALID'));});
 test('runtime physics accepts same values but rejects changed and silently ignored options',()=>{const p=project();assert.deepEqual(inspect(p,{frequency:1000,soundSpeed:343,method:'wasm-pcg',size:1}).diagnostics,[]);for(const options of [{frequency:999},{receiverPoint:[0,0,0]},{initialPressure:[1,2,3]},{radiationBoundary:{}},{normalVelocity:[]}])assert.ok(has(inspect(p,options),'ACOUSTIC_RUNTIME_OVERRIDE'));assert.equal(inspectAcousticInputContract(null,{}, {mode:'quantitative'}).diagnostics[0].code,'ACOUSTIC_INPUT_INVALID');});
+
+test('explicit transient step counts above the existing solver limit fail before meshing',()=>{
+ const p=transient();p.study.acousticTimeStep=p.study.acousticDuration/60001;
+ const before=structuredClone(p),r=inspect(p),diagnostic=r.diagnostics.find(d=>d.code==='ACOUSTIC_WORKLOAD_UNSUPPORTED');
+ assert.equal(diagnostic.target,'/study/acousticTimeStep');assert.equal(diagnostic.evidence.maximumSteps,60000);assert.ok(diagnostic.evidence.steps>60000);assert.deepEqual(p,before);
+ const mesh={nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]};
+ assert.throws(()=>solveAcousticTransient(mesh,{acousticPressures:[[0,1]]},p.study),/Transient acoustic workload limit exceeded/);
+ p.study.acousticTimeStep=p.study.acousticDuration/60000;assert.deepEqual(inspect(p).diagnostics,[]);
+ p.study.acousticTimeStep=0;assert.deepEqual(inspect(p).diagnostics,[]);
+ assert.deepEqual(inspectAcousticInputContract(before).diagnostics,[]);
+});
+
+test('overflowing explicit transient step counts retain JSON-safe diagnostic evidence',()=>{
+ const p=transient();p.study.acousticTimeStep=Number.MIN_VALUE;
+ assert.ok(Number.isFinite(p.study.acousticDuration));assert.ok(Number.isFinite(p.study.acousticTimeStep));
+ assert.equal(p.study.acousticDuration/p.study.acousticTimeStep,Infinity);
+ const r=inspect(p),diagnostic=r.diagnostics.find(d=>d.code==='ACOUSTIC_WORKLOAD_UNSUPPORTED');
+ assert.deepEqual(diagnostic.evidence,{stepCountOverflow:true,maximumSteps:60000});
+ assert.deepEqual(JSON.parse(JSON.stringify(r)),r);
+});

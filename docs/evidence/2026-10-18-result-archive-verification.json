@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "status": "local-verified-before-publication",
+  "sourceBase": "80178eeb4271d28a01a32cd8c6aa2cd35f3711e8",
+  "trackedDirty": true,
+  "focused": {
+    "total": 49,
+    "passed": 49,
+    "failed": 0
+  },
+  "integration": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0
+  },
+  "setsOverlap": true,
+  "moduleBoundaries": {
+    "status": "passed",
+    "files": 210,
+    "localEdges": 530,
+    "preexistingAllowlistedViolations": 7
+  },
+  "independentReviews": "No blocking archive or solver-alignment findings;Windows inode IDs compared using BigInt",
+  "archive": {
+    "bytes": 241900,
+    "sha256": "8f01a5332d1cb7891cca693c1b54c4eb60f60fef102004a156f9eec9540ded31"
+  },
+  "realMcp": "docs/evidence/2026-10-18-result-archive-real-mcp.json",
+  "limits": [
+    "Aggregate/generated100MB boundaries not physically exercised",
+    "Synthetic two-case replay;no general physical-accuracy claim",
+    "Dirty runtime evidence is separate from later publication commit",
+    "Parent/gates and manual background acceptance remain unfinished"
+  ]
+}

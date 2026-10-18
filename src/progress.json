@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-18T00:39:42.648Z",
+  "updatedAt": "2026-10-18T01:20:24.480Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1521,
-    "description": "公開済み130件・残37件（全167件）。保存caseの元入力を版固定/上書き禁止で新projectへ復元するMCPを追加。正式MCPで2caseの入力・根拠保持、検査→再解析→同一点比較を通し0.04/0.08mmが元保存値と厳密一致しました。熱事前検査の初期温度/放射反復数をsolver既存拒否に整合。MCPツール名の回帰契約も共通化。ブラウザ状態復元、保存build不明、全物理の桁規則/精度、Skill独立一巡、製品公開gateは未完です。背景録画は利用者が今は操作不可のため手動確認待ち。件数1521はPR119確定CI（1518成功・3skip・失敗0）の基準。",
-    "descriptionEn": "130released/37unfinished among167. Add revision-pinned,no-overwrite restoration of saved-case original input to a new project. Real MCP verifies two inputs/provenance,preflight,reanalysis and same-point comparison exactly matching0.04/0.08mm. Align thermal initial-temperature/radiation-iteration preflight with existing solver refusals. Centralize the MCP public-tool-name regression contract. Browser restoration,missing saved build,all-physics magnitude/accuracy,independent Skill loop and product gates remain open. Manual background QA waits for user availability.1521 is completed PR119 CI baseline(1518passed,3skipped,0failed)."
+    "testCount": 1529,
+    "description": "公開済み130件・残37件。正式MCPで復元入力の2解析→SHA固定ケース集保存→別process再読/検証/同一点比較まで一巡。新archiveは241900bytes、0.04/0.08mm・比2・元source不変を確認。明示timeStepで60000stepを超える音響入力を既存solver規則で事前拒否しoverflow診断もJSON対応。保存元build不明と新Node dirty実行を分離し一般精度/ブラウザ状態復元/Skill独立一巡/公開gateは未完。背景手動確認は利用者待ち。件数1529はPR120確定CI（1526成功・3skip・失敗0）。",
+    "descriptionEn": "130released/37unfinished. Formal MCP now completes restored-input analyses,SHA-pinned archive creation,and separate-process reread/validation/same-point comparison:241900bytes,0.04/0.08mm,ratio2,unchanged source. Explicit acoustic steps implying>60000steps are refused by existing solver rules with JSON-safe overflow evidence. Missing saved build and new dirty Node runtime stay separate;general accuracy,browser restoration,independent Skill and product gates remain open. Manual background QA waits.1529 is completed PR120 CI(1526passed,3skipped,0failed)."
   },
   "tasks": [
     {
@@ -1147,8 +1147,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md",
-      "lastUpdate": "2026-10-18: 保存入力復元の正式MCPを追加し既定34/接続36ツールへ。既存91ブラウザ操作は不変。公開tool名の実発見/重複/欠落を共通期待契約で検査し、各protocol試験の件数だけの固定を解消。全体受入は未完。",
-      "lastUpdateEn": "2026-10-18: Added saved-input restoration:34default/36paired tools;91 browser methods unchanged. Shared explicit public-name contract verifies discovery/duplicates/missing tools across protocol tests. Parent acceptance remains open."
+      "lastUpdate": "2026-10-18: studio_archive_resultsを追加し既定35/接続37、live91操作は不変。tool名共通契約で新正式write操作の発見・重複/欠落とannotationを検証。親全体は未完。",
+      "lastUpdateEn": "2026-10-18: Added studio_archive_results:35default/37paired,live91unchanged. Shared public-name contract verifies discovery/duplicates/missing tools and write annotations. Parent remains open."
     },
     {
       "id": "P1",
@@ -1163,8 +1163,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence. This diagnostic increment has automated/independent solver-reference evidence; live GUI verification was not performed.",
-      "lastUpdate": "2026-10-18: 定常熱でも明示initialTemperatureをsolver既存の有限/絶対零度規則で検査。radiationの実効maxRadiationIterationsを既存整数1..60で検査しoptions優先/既定値と整合。関連4分野31試験成功。全物理の桁規則と精度は未完。",
-      "lastUpdateEn": "2026-10-18: Explicit steady-thermal initialTemperature and effective radiation iteration limits now match existing solver finite/absolute-zero and integer1..60 rules including options/default semantics.31 related tests pass;all-physics magnitude/accuracy remain open.",
+      "lastUpdate": "2026-10-18: 過渡音響の明示正timeStepだけで60000step超が確定する入力をsolver既存式で事前拒否。overflow evidenceをJSONで保持。自動刻み/mesh依存予算/全物理精度は未完。",
+      "lastUpdateEn": "2026-10-18: Explicit transient-acoustic steps implying>60000steps are refused by the existing solver formula;overflow evidence survives JSON. Automatic stepping,mesh budgets and all-physics accuracy remain open.",
       "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
     },
     {
@@ -1212,8 +1212,8 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-18: studio_restore_case_inputでarchive/case/input版を固定して元入力を新projectへ原子的/上書き禁止で復元。正式MCPの2case再解析は元保存値0.04/0.08mmと厳密一致、入力/根拠と元archive不変を確認。ブラウザ/結果復元、保存build不明と公開gateは未完。",
-      "lastUpdateEn": "2026-10-18: studio_restore_case_input atomically restores pinned original input to a new no-overwrite project. Two real-MCP reanalyses exactly match saved0.04/0.08mm with input/provenance preservation and unchanged archive. Browser/result restoration,missing saved build and publication gates remain open."
+      "lastUpdate": "2026-10-18: studio_archive_resultsでSHA固定した1〜8解析結果を新v1casearchiveへ原子的/上書き禁止で保存。正式MCP2caseと別process再読で一覧/測定完全一致、元SHA不変、上書き/旧SHA拒否を確認。一般精度/ブラウザ復元/公開gateは未完。",
+      "lastUpdateEn": "2026-10-18: studio_archive_results atomically packages1–8 SHA-pinned results into a new no-overwrite v1archive. Real MCP two-case/separate-process read verifies exact listing/point values,unchanged sources,overwrite/stale-SHA refusal. General accuracy,browser restoration and gates remain open."
     },
     {
       "id": "P5",
@@ -1362,8 +1362,8 @@
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs",
-      "lastUpdate": "2026-10-18: 保存caseから復元した入力/根拠の完全一致と正式MCP再解析を確認。熱の2事前検査をsolverと整合。全物理の桁規則/精度とSkill独立一巡は未完、checking維持。",
-      "lastUpdateEn": "2026-10-18: Verified restored saved-case input/provenance equality and real-MCP reanalysis;aligned two thermal preflight checks. All-physics magnitude/accuracy and independent Skill acceptance remain open;stays checking."
+      "lastUpdate": "2026-10-18: 正式MCPで入力復元→2解析→新ケース集保存→別process再読/同一点比較を一巡。探索的根拠とruntimeを保持。全物理の桁規則/精度とSkill独立一巡は残るためchecking維持。",
+      "lastUpdateEn": "2026-10-18: Formal MCP completes restore,two analyses,new archive,separate-process read and point comparison while preserving provenance/runtime. All-physics magnitude/accuracy and independent Skill remain open;stays checking."
     },
     {
       "id": "VIEWCOMPARE",
