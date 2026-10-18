@@ -4,9 +4,9 @@
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1541,
-    "description": "公開済み130件・残37件。比較/動画入力のエラー対象フォーカス・日英アクセシビリティ・修正解除を段階実装しUIIMPROVE1をbuildingへ。調和音響の既存波数/k²数値範囲拒否を事前検査へ整合。独立SkillはGUI接続後の合成一巡に成功、GUI準備前提・全Skill/親/公開gateは未完。修正後出力成功はunitのみ、Chrome全出力再成功は未実施。1541件はPR121確定CI（1538成功・3skip・失敗0）。",
-    "descriptionEn": "130released/37unfinished. Comparison/video validation focuses invalid controls,provides JP/EN accessible errors and clears them on edit;UIIMPROVE1 moves to building. Harmonic preflight matches existing wave-number/k² numerical refusals. Independent synthetic Skill loop passed after GUI pairing;GUI setup and full Skill/parent/publication gates remain open. Corrected-output success is unit-tested only;complete Chrome output reruns remain unperformed.1541 is completed PR121 CI(1538passed,3skipped,0failed)."
+    "testCount": 1545,
+    "description": "公開済み132件・残35件（今回公開候補）。CFDRESEARCH2/3は一次資料調査票・共通試験・採否条件・再利用段階計画の受入を満たし調査のみ完了。全候補採用保留、親CFD2の実装/ビルド/基準問題は残る。VIEWTIMEの保存密度/予算指定を実装、公開HTTPS/一般精度は未完。RUNTIMEWASM1は2署名分離と明示flag比較導線を追加、Windows smoke成功は根治証明でなくchecking。1545件は直近PR122/main確定CI（1542成功・3skip・失敗0）のbaselineで、今回候補最終CI件数ではない。",
+    "descriptionEn": "132released/35unfinished in this publication candidate. CFDRESEARCH2/3 complete research sheets,benchmarks,decision gates and staged reuse planning only;all adoption on hold and parent CFD2 implementation/build/benchmarks remain. VIEWTIME adds storage-density/budget controls;public HTTPS/general accuracy remain open. RUNTIMEWASM1 separates two fatal signatures and adds explicit-flag comparison;Windows smoke is not root-fix evidence;checking.1545 is the completed PR122/main CI baseline(1542passed,3skipped,0failed),not this candidate final CI count."
   },
   "tasks": [
     {
@@ -544,7 +544,9 @@
       "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。",
       "titleEn": "Support turbulence and unsteady flow",
       "detailEn": "Specify model assumptions and validate convergence and mass balance.",
-      "acceptanceEn": "Specify model assumptions and validate convergence and mass balance."
+      "acceptanceEn": "Specify model assumptions and validate convergence and mass balance.",
+      "lastUpdate": "2026-10-18: CFDRESEARCH2/3の調査票と段階計画は完了。候補構成/全依存SHA固定、Linux CPUビルド、B1/B2事前許容誤差と資源予算、基準問題の実行、実装/観測/停止再開/収支検証は残作業。研究完了はCFD2実装完了ではない。",
+      "lastUpdateEn": "2026-10-18: CFDRESEARCH2/3 research sheets/staged plan complete. Remaining:pin candidate configuration/all dependencies,Linux CPU build,pre-agreed B1/B2 tolerances/resource budgets,benchmark execution,implementation/observation/cancellation/restart and conservation validation. Research completion does not implement CFD2."
     },
     {
       "id": "CFD3",
@@ -1389,13 +1391,13 @@
       "titleEn": "Smooth thermal and acoustic history playback",
       "detail": "熱の節点温度履歴と音響の保存フレーム密度を設定可能にし、固定色範囲と物理時刻で再生。計算刻み・保存刻み・表示補間を区別。",
       "detailEn": "Store nodal thermal history and configurable acoustic frames; use fixed ranges and physical time, distinguishing solve steps, saved steps and display interpolation.",
-      "acceptance": "熱・音響の参照場で計算刻み・保存密度・表示補間を区別し、固定色範囲、保存復元、メモリ上限、API時間操作、固定フレーム出力を検証する。現在: 上限付きopt-in熱節点履歴、熱/音響スライダーと補間再生、表示時刻のプローブ・静止画、保存フレームのAPI選択、熱PNG連番を実装。2026-10-17実Chromeで解析式20+t/20+2tの保存時刻の温度、0/5/10秒PNG連番とハッシュ、出力後2秒復元、名前付きビュー/測定履歴の5秒保存復元・再検証・改ざん拒否を確認。旧v1互換を維持し任意補間時刻のAPI選択/保存は拒否。一般形状の伝播精度、フレーム密度/メモリ予算API、日本語UI、公開HTTPSの確認は残る。",
-      "acceptanceEn": "Verify solve/storage/display-time distinctions against thermal/acoustic reference fields, fixed ranges, persistence, memory limits, API time control and fixed-frame export. Implemented: bounded opt-in thermal nodal history, thermal/acoustic sliders and interpolated playback, displayed-time probes/stills, stored-frame API selection and thermal PNG sequences. Real Chrome on 2026-10-17 checked stored-time temperatures against 20+t/20+2t, a 0/5/10 s sequence and hashes, restoration to 2 s, and 5 s named-view/measurement persistence, replay and tamper refusal. Legacy v1 remains compatible; arbitrary interpolated-time API selection/persistence is refused. General-geometry propagation accuracy, frame-density/memory-budget APIs, Japanese UI and public HTTPS verification remain open.",
+      "acceptance": "熱・音響の参照場で計算刻み・保存密度・表示補間を区別し、固定色範囲、保存復元、メモリ上限、API時間操作、固定フレーム出力を検証する。現在: 上限付きopt-in熱節点履歴、熱/音響スライダーと補間再生、表示時刻のプローブ・静止画、保存フレームのAPI選択、熱PNG連番を実装。2026-10-17実Chromeで解析式20+t/20+2tの保存時刻の温度、0/5/10秒PNG連番とハッシュ、出力後2秒復元、名前付きビュー/測定履歴の5秒保存復元・再検証・改ざん拒否を確認。旧v1互換を維持し任意補間時刻のAPI選択/保存は拒否。一般形状の伝播精度、公開HTTPS、一般形状の精度と全体peak RAMの確認は残る。保存密度/scalar予算APIと日本語UIは2026-10-18の限定実Chrome証拠を追加。",
+      "acceptanceEn": "Verify solve/storage/display-time distinctions against thermal/acoustic reference fields, fixed ranges, persistence, memory limits, API time control and fixed-frame export. Implemented: bounded opt-in thermal nodal history, thermal/acoustic sliders and interpolated playback, displayed-time probes/stills, stored-frame API selection and thermal PNG sequences. Real Chrome on 2026-10-17 checked stored-time temperatures against 20+t/20+2t, a 0/5/10 s sequence and hashes, restoration to 2 s, and 5 s named-view/measurement persistence, replay and tamper refusal. Legacy v1 remains compatible; arbitrary interpolated-time API selection/persistence is refused. General-geometry propagation accuracy,total peak RAM and public HTTPS remain open. Storage-density/scalar-budget APIs and Japanese UI have bounded real-Chrome evidence from2026-10-18.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-17: 熱の保存時刻を名前付きビュー・測定履歴・ケースとの一体保存に対応。実Chromeで5秒保存→10秒→5秒復元、25℃/30℃の履歴保存・再読込、保存場からの再検証と改ざん拒否を確認。5.01秒の補間保存は内容不変で拒否。旧v1互換。任意補間時刻の保存、公開HTTPS・一般形状の確認は残る。",
-      "lastUpdateEn": "2026-10-17: Added stored thermal time to named views, measurement history and combined case archives. Real Chrome verified save5s ->10s ->restore5s, 25/30degC history roundtrip, saved-field replay and tamper refusal. Interpolated5.01s save is refused without mutation. Legacy v1 remains compatible. Arbitrary interpolated-time persistence, public HTTPS and general-geometry verification remain open.",
-      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json"
+      "lastUpdate": "2026-10-18: 保存密度/予算3keysとscalar保存量metadataをGUI/API/preflight/保存復元に接続。実Chromeで熱API11要求/2400byte→94nodes/3frames/2256bytesと5s25℃、熱GUI5frames、音響GUI7/65536→741nodes/7frames/41496bytesを確認。336349byte archiveのhash/全bytes再読込と入力count7/budget65536復元、不正入力原子拒否を確認。metadataのstep/time/有限場/最終場改ざん拒否はunit確認。公開HTTPS/一般精度/peakRAM保証は未完、building維持。",
+      "lastUpdateEn": "2026-10-18: Added three storage density/budget keys and scalar-storage metadata through GUI/API/preflight/persistence. Real Chrome:thermal11requested/2400bytes ->94nodes/3frames/2256bytes and25degC at5s;thermal GUI5frames;acoustic GUI7/65536 ->741nodes/7frames/41496bytes. Verified336349byte archive hash/full-byte replay,input count7/budget65536 restoration and atomic invalid-input refusal. Unit tests reject metadata step/time/finite-field/final-field tampering. Public HTTPS/general accuracy/peakRAM guarantees remain open;building.",
+      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json"
     },
     {
       "id": "BROWSERBRIDGE1",
@@ -1601,9 +1603,9 @@
       "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode 24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode 24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration. The publication-progress defaultNode 24 full run reproduced the same fatal in analysis-job-service (883reported/879passed/onefailure/3skipped). Affected file alone3passed;same-sourceNode26 comparison881passed/3skipped of884. No default migration or root-fix proof.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution. 2026-10-16 Tracking: upstream nodejs/node#66366 attributes the crash to a V8 race (WasmImportWrapperCache MaybeGet takes a ref before checking is_dying); V8 fixes 68210d500a/9b8ca54d5a, but the 24.x backport (PR 66376) is unmerged and neither 24.21.0 nor 24.22.0 contains it (CHANGELOG checked). Our Windows runs (Node 24.11.1, 24.22.0, 22.23.3, 26.12.0 and --no-wasm-code-gc; the five files that died in CI; 93 runs) produced 0 V8 fatals, so which operation of ours triggers it is not identified (hypothesis only: wasm kept alive across worker.terminate()). Recommendation: move the CI pin to the first 24.x release with the fix. Interim --no-wasm-code-gc (0/20 in the upstream report) needs an approved CI change. Stays checking.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json",
-      "lastUpdate": "2026-10-18: Node24.11.1の全体試験でmcp-artifact-catalogのV8 JIT CHECK停止を再観測しました。単独1回は成功しましたが原因や根治は未確認です。設定を変えず失敗を保存し、最終CIとは別の未解決事項として検証中を維持します。",
-      "lastUpdateEn": "2026-10-18: Full tests on Node24.11.1 again hit a V8 JIT CHECK in mcp-artifact-catalog. One isolated retry passed; cause/root fix remain unknown. No flags changed; failure is retained separately from final CI and this task stays checking."
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json",
+      "lastUpdate": "2026-10-18: Node24.11.1の全体試験でmcp-artifact-catalogのV8 JIT CHECK停止を再観測しました。単独1回は成功しましたが原因や根治は未確認です。設定を変えず失敗を保存し、最終CIとは別の未解決事項として検証中を維持します。 PR122初回CI Node24.21.0でjit_page.has_value() fatalを記録、同source再実行は成功。旧erase署名と分離して検出し、明示no-wasm-code-gcとのbounded比較/手動Linux workflowを追加。Windows限定smokeは両mode成功、Linux比較・原因一致・軽減/根治は未確認、checking維持。",
+      "lastUpdateEn": "2026-10-18: Full tests on Node24.11.1 again hit a V8 JIT CHECK in mcp-artifact-catalog. One isolated retry passed; cause/root fix remain unknown. No flags changed; failure is retained separately from final CI and this task stays checking. PR122 initial CI on Node24.21.0 hit jit_page.has_value();same-source retry passed. Added separate signature detection and bounded explicit no-wasm-code-gc comparison/manual Linux workflow. Both Windows smoke modes pass;Linux comparison,cause equivalence,mitigation/root fix remain unproven;checking."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -1643,10 +1645,13 @@
       "titleEn": "Compare embedded-boundary and meshfree suitability",
       "detail": "AMReX/PeleC、PySPH、Spheral等の複雑壁・流入流出・衝撃波の成立性と移植負担を調査し、基準問題と採否条件を定義。",
       "detailEn": "Research complex walls, boundaries, shocks and portability for AMReX/PeleC/PySPH/Spheral and define common benchmarks/selection gates.",
-      "status": "queued",
+      "status": "released",
       "category": "流体",
       "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
-      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration.",
+      "evidence": "docs/compressible-cfd-plan.md; docs/en/compressible-cfd-plan.md",
+      "lastUpdate": "2026-10-18: 固定SHA一次資料の候補票、壁/流入出/衝撃波と移植負担、B1–B5共通試験、採否条件、C0–C5再利用段階計画を記録し独立reviewで調査受入を確認。候補採用・ビルド・物理試験は未実施で全候補採用保留。調査タスクのみ完了、親は未完。",
+      "lastUpdateEn": "2026-10-18: Recorded pinned-source candidate sheets,walls/open boundaries/shocks and portability,B1–B5 benchmarks,decision gates and C0–C5 reuse stages;independent review confirms research acceptance. No candidate adopted,built or physically tested;all adoption remains on hold. Research tasks only complete;parents remain open."
     },
     {
       "id": "CFDRESEARCH3",
@@ -1654,10 +1659,13 @@
       "titleEn": "Plan a reusable staged custom compressible solver",
       "detail": "既存OSSで不足する要件を具体化してから自作を判断。1D Eulerから保存・正値性・境界を検証し、2D・形状方式・3Dへ進む計画を作る。",
       "detailEn": "Identify unmet requirements before deciding to build; plan 1D Euler conservation/positivity/boundaries, then 2D, geometry methods and 3D.",
-      "status": "queued",
+      "status": "released",
       "category": "流体",
       "acceptance": "docs/compressible-cfd-plan.mdの調査票・検証問題・採否条件を具体化し、対応確認と未検証を分けて記録する。",
-      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration."
+      "acceptanceEn": "Complete research sheets, benchmarks and decision gates, separating documented support from unverified integration.",
+      "evidence": "docs/compressible-cfd-plan.md; docs/en/compressible-cfd-plan.md",
+      "lastUpdate": "2026-10-18: 固定SHA一次資料の候補票、壁/流入出/衝撃波と移植負担、B1–B5共通試験、採否条件、C0–C5再利用段階計画を記録し独立reviewで調査受入を確認。候補採用・ビルド・物理試験は未実施で全候補採用保留。調査タスクのみ完了、親は未完。",
+      "lastUpdateEn": "2026-10-18: Recorded pinned-source candidate sheets,walls/open boundaries/shocks and portability,B1–B5 benchmarks,decision gates and C0–C5 reuse stages;independent review confirms research acceptance. No candidate adopted,built or physically tested;all adoption remains on hold. Research tasks only complete;parents remain open."
     },
     {
       "id": "PRINTAPI1",

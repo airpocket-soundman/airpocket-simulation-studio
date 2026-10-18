@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "task": "RUNTIMEWASM1",
+  "outcome": "diagnostic-runner-smoke-only",
+  "implementation": {
+    "fatalSignatures": [
+      "jit_page_->allocations_.erase(addr) == 1",
+      "Check failed: jit_page.has_value()"
+    ],
+    "distinctCausesNotEstablished": true,
+    "comparison": "Explicit default and --no-wasm-code-gc modes;no production/test defaults changed",
+    "bounds": "At most3 iterations per mode for fixed file targets;full permits1 per mode,600s per iteration,25min workflow cap",
+    "nodeOptions": "Removed from diagnostic children;flag is supplied directly on argv",
+    "propagation": "Node test workers/Worker threads may inherit execArgv unless overridden;independent spawn processes require explicit forwarding and are not guaranteed covered",
+    "workflow": "Manual Linux workflow only;not run in this evidence",
+    "cleanup": "SIGINT/SIGTERM stop current owned diagnostic child;timeout/cancel sends SIGTERM then SIGKILL after2s,then bounded2s close wait. Missing close reports cleanupConfirmed=false,stops comparison and fails. Descendant process-tree cleanup is not proven.",
+    "reportStatus": "completed only when both modes pass;failed otherwise;interrupted on parent cancellation"
+  },
+  "verification": {
+    "unit": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    "host": "Windows x64",
+    "target": "material-catalog",
+    "iterationsPerMode": 1,
+    "modes": [
+      {
+        "mode": "default",
+        "exitCode": 0,
+        "timedOut": false,
+        "durationMs": 7672,
+        "fatalSignatures": [
+          {
+            "allocation": false,
+            "jitPage": false
+          }
+        ]
+      },
+      {
+        "mode": "disabled",
+        "exitCode": 0,
+        "timedOut": false,
+        "durationMs": 7899,
+        "fatalSignatures": [
+          {
+            "allocation": false,
+            "jitPage": false
+          }
+        ]
+      }
+    ],
+    "defaultAndDisabledPassed": true,
+    "smokeSourceScope": "Smoke preceded parent cancellation/cleanup hardening and full-mode timeout adjustment;final control paths are covered by injected-child tests,not a repeated full/smoke run."
+  },
+  "limitations": [
+    "No Linux comparison run yet",
+    "No reproducible fatal in this bounded smoke",
+    "No proven mitigation or root-cause fix",
+    "No default-runtime migration or RUNTIMEWASM1 completion",
+    "Timeout kills owned runner/test processes but portable descendant-process-tree termination is not proven"
+  ]
+}

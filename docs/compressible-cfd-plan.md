@@ -208,3 +208,93 @@ SU2をメッシュありの第一調査候補、AMReX/PeleCを形状準備の負
 - [PySPH](https://github.com/meshfree-research/PySPH)・[ライセンス](https://github.com/meshfree-research/PySPH/blob/master/LICENSE.txt)
 - [Spheral](https://github.com/llnl/spheral)
 - [GIZMO手法論文](https://arxiv.org/abs/1409.7395)・[公開文書](https://www.tapir.caltech.edu/~phopkins/Site/GIZMO_files/gizmo_documentation.html)
+
+
+## 埋め込み境界・メッシュフリー調査票（CFDRESEARCH2、2026-10-18）
+
+今回の追加は資料調査のみ。以下のSHAは取得時のdefault branchの**調査スナップショット**で、安定版の推薦や、実行環境一式の固定完了を意味しない。【確認】は公式文書またはソースの記述、【判断】は本製品向けの評価、【未検証】はビルド・数値試験・接続を行っていない事項。既存の通常風速SU2経路の評価とは別であり、Mach 2対応を追加した記録ではない。
+
+### 候補と固定対象
+
+| 候補 | 調査SHA / 配布条件 | 文書で確認した内容 | 未検証・次の判定 |
+|---|---|---|---|
+| AMReX | `f621539f8f890a877119061caaef313852ea6166`、BSD 3条項 [E1] | 【確認】Cartesian EBの幾何・データ基盤。cut/covered/regularセルを扱い、multi-valuedセル非対応、小セル安定性の問題を明記 [E2] | 【判断】形状準備の第一調査対象。単独で完成Eulerソルバーとは扱わない。薄い隙間が同一セルを複数流体片に分断する形状は拒否または細分化を要検証 |
+| PeleC | `949e2bb67386bf4b16324b06555e303ff411e179`、BSD型3条件 [E3]。PelePhysics gitlinkは`6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b` | 【確認】C++20、AMReX/PelePhysics/SUNDIALS依存、MPI/OpenMP/GPU構成、plotfile出力 [E3]。EB更新とFluxRedist/StateRedistを記載 [E4] | 【判断】実行可能なEB比較候補。PeleCと独立AMReX HEADを勝手に組み合わせず、PelePhysics配下を含む全submodule SHA・EOS・化学無効化構成を確定する。CPU直列最小ビルド、Windows/WASMの成立性は【未検証】 |
+| PySPH | `1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5`、BSD 3条項（下位LICENSE例外あり）[E6] | 【確認】Pythonから生成・コンパイルする実行系、OpenMP/OpenCL/MPI選択、C++ compilerを要する導入資料。気体Sod例題あり [E6, E7] | 【判断】粒子法の最小研究候補。WCSPH液体例題から外部気体壁の対応を推定しない。近傍数・平滑化長・境界粒子・粒子流入出の収支、3D凹壁、Mach 2は【未検証】 |
+| Spheral | `e9e3df91174e5af4b51ed41327474d75062be4f1`、BSD 3条項 [E9] | 【確認】SPH/ASPH/CRKSPHとcompatible-energy方式。CMakeListsはC/C++/Fortran、CMake>=3.24。外部導入ガイドはLinux/Spack、Ubuntu 24.04を推奨 [E9, E10] | 【判断】保存性・再開比較候補。Python binding、HDF5/Silo等の依存も版固定が必要。Windows native/ブラウザ、任意CAD壁の精度と実行規模は【未検証】 |
+| GIZMO（参考のみ） | 手法論文v2、2015-12-13 [E12] | 【確認】体積のkernel近似・勾配再構成・Riemann問題を組み合わせるMFM/MFV系の研究 | 【判断】flux/EOS再利用の参考。任意固体壁・外部流の実用接続の証拠にはしない。旧`gizmo-public` READMEは`pfhopkins/gizmo`へ移転を案内 [E13]。現配布版・依存・ライセンス一式を未固定のため導入候補は保留 |
+
+AMReXの独立SHAは幾何文書の根拠用。PeleCのビルド依存SHAと同一と主張しない。全候補のインストール容量、peak RSS、計算時間、ブラウザpayload/初期化時間は未測定。BSDという名称だけで依存一式の頒布確認済みとはしない。
+
+### 壁・境界・入出力・運用の比較
+
+| 候補 | 壁・流入流出・衝撃波の根拠 | 入出力・停止再開の契約候補 | 残る接続負担 |
+|---|---|---|---|
+| AMReX/PeleC | 【確認】PeleCのdomain BCにSlipWall/NoSlipWall（既定断熱）、UserBC/Hardと流入出の注意事項。旧GS-NSCBCはC++未移植との警告 [E5]。EB壁の実装・domain BCを混同しない | 【確認】Sod/EB例題のinputとplotfile [E3, E14]。【計画】step/time、残差または収支ログ、checkpoint/restart、停止後の最終完全frameをadapterで検証 | EB小セル再分配とAMR coarse/fine収支、表面法線・壁fluxの取得、checkpointからの同一条件再開は【未検証】。旧NSCBC説明を現行の非反射境界対応と宣伝しない |
+| PySPH | 【確認】気体Sodソース [E7]。【未検証】凹壁Mach 2と遠方場、気体の粒子生成/削除条件 | 【確認】出力実装と`--restart-file`がある [E8]。【計画】particle ID/質量/位置/体積・平滑化長を残し、場と近傍条件を固定して再開比較。外部process中止はcheckpoint作成を意味しない | Python実行・生成コードcacheを管理。粒子fieldから節点fieldへの暗黙変換は禁止。汎用の流入出クラスがあるだけで圧縮性境界の成立とはしない |
+| Spheral | 【確認】InflowOutflowBoundaryにnode生成・restart登録、ReflectingBoundaryソース、Sod/restart試験定義 [E11] | 【計画】Python case→NodeListの場・保存量・restart。Sodの`restartStep/restoreCycle/checkRestart`を出発点に停止/再開差を測る | 宣言/上流試験定義の存在はAirpocketの合格証拠ではない。壁の粒子間penetration、形状facet・近傍分布・エネルギー収支は【未検証】 |
+
+共通adapterは入力hash、単位、EOSとγ、自由流のρ/p/T/U、方式・版・依存、粒子seed/格子と解像度、壁/流入出の意味、物理時間・dt・出力間隔を明示する。全候補で停止手順、途中成果物の完全性、再開に必要なファイルと版を記録する。残差を返さない陽解法は、残差を捏造せずstep/timeと保存量誤差を観測値にする。メッシュ方式に依存しないMCP wire contractは設計対象で、既存APIでそのまま受信できるとの主張ではない。
+
+### 共通検証問題と採否（未実行の試験仕様）
+
+前節V1–V5を共有し、以下B1–B5で比較条件を具体化する。数値許容値は参照解の誤差と用途を含め**実行前に**承認・固定し、結果を見て合格へ緩めない。既存V2の1%は暫定研究目標で、検証済み製品基準ではない。
+
+| ID | 固定する問題 | 比較と棄却条件 |
+|---|---|---|
+| B1 / V1 | Sod: x∈[0,1]、不連続x=.5、左(ρ,u,p)=(1,0,1)、右=(.125,0,.1)、γ=1.4、t=.2（無次元）。両端は波未到達区間だけ評価。PeleCは現CMakeが1Dを拒否するため、2Dの横一様・周期stripとして扱う [E14] | 厳密Riemann解に対するρ/u/pの体積重みL1、波位置、最小ρ/p。100/200/400相当のx解像度とdt依存を保存。粒子は質量/密度からの体積で重み付け、単なる点平均にしない。負状態・NaNをclampで隠す、または解像度依存を説明できない場合は不採用 |
+| B2 / V2 | Mach 2、10°くさび、γ=1.4、同じ自由流p/ρと長さ、滑り壁。θ-β-Mの弱い衝撃波枝を参照 [E15] | 衝撃波角、圧力比、壁の法線質量flux、global mass/momentum/energyを流入出fluxと壁圧力力まで含めて照合。背景格子を平行移動/回転しcut-cell依存を、粒子seed/配置を変え粒子依存を分離。参照不一致・壁漏れ・不透明な安定化は保留 |
+| B3 / V3 | Mach 2球（円柱とは別問題）、直径Dと遠方場を固定しD/Δ=16/32/64相当を計画 | Cp、衝撃離脱距離、格子/粒子解像度・dt・外域サイズ依存。SU2基準と相互比較だけでは正しさを確定せず、参照相関の適用条件・不確かさを先に固定。壁面積の誤差と物理解の誤差を区別 |
+| B4 / V4 | 物体なし一様流、次に小振幅pulseの流入出通過。別に静止流中の閉じた斜め壁と細隙間を設ける | 一様状態維持、反射振幅、総質量/エネルギー収支、wall penetration、形状準備時間。EBは最小volume fractionとmulti-valued検出、粒子は近傍欠損・流入/流出で加減した保存量を記録。表現不能な薄い隙間は入力段階で拒否し、黙って閉塞させない |
+| B5 / V5 | 同じ簡略化した閉鎖牛型表面と自由流。B1–B4合格後のみ | 面向き/穴/薄部の記録、準備時間、wall-clock、peak RSS、保存量、停止/再開後の差。参照解なしのデモとして扱い、Mach表示の見た目を精度証拠にしない |
+
+採用条件は、固定source/依存・頒布経路、B1–B4の合意した誤差/保存/正値性と再現性、明示的な未対応形状拒否、観測・中止・再開、利用者PCの資源予算をすべて満たすこと。直列CPU基準を先に測定し、WASM/GPUは別gate。保留条件は、任意壁や流入出の未検証、multi-valued形状の黙認、粒子補正による収支欠落、依存の頒布条件不明、または基準を満たさないこと。現時点の採用判定は**全候補保留**。優先研究はPeleCのEB、その独立対照がPySPH/Spheralという【判断】で、性能順位ではない。
+
+## 再利用を前提にした自作計画（CFDRESEARCH3、2026-10-18）
+
+### 自作へ進む条件と既存資産
+
+「自作が必要」という結論はまだない。既存候補ごとに、要求（任意凹壁/外部境界/agentから停止再開/PC資源/配布）、B1–B5結果、設定・adapter改修での解決可否、ライブラリ差分の費用を一枚のgap記録にする。ネイティブ既存OSSで満たせる場合はそこで終了する。WASM未確認やPython依存だけで自作を決定しない。必要な未充足要求と受入試験が固定された部分だけを自作対象にする。
+
+| 現在の資産（ソース確認） | 再利用する設計・機能 | そのまま流用できない範囲 |
+|---|---|---|
+| `scripts/native-flow-host.mjs`、`studio-native-flow-mcp.mjs` | 承認済み入力、request ID、process中止、観測、成果物hashという運用パターン | 現hostは固定SU2 case用。複数candidate実行やcompressible schemaは新adapter/validationが必要 |
+| `scripts/analysis-job-service.mjs`、`analysis-process-worker.mjs` | timeout、settlement、bounded events、failureと完成成果物の区別 | 任意candidateのcheckpoint/restartや細粒度cancelは新しい実証が必要 |
+| `src/input-provenance.js`、`project-revision.js`、`runtime-identity.js` | 入力出典・仮定・revisionとruntime identityの分離 | 現schemaで全CFD入力を表現できるとはしない。外部binary/依存hash、EOS、粒子配置などを明示拡張 |
+| `src/fluid-domain.js`、`stl-source.js` | 単位と元形状の保持、閉鎖性/表面検査の経験 | 既存凸STL体積生成は任意凹形状EBや粒子配置を生成しない |
+| `src/native-flow-view.js`、`probe.js`、saved-case/archive | pressure/velocity表示、計測、比較、hash付き保存の設計 | 現sliceはtetrahedral cell(type10)限定。AMR cut-cell/particle sampling、保存量・Cp/Machは別実装。新結果kindの検証なしに既存archiveへ入れない |
+
+### 段階と出口（すべて未実装の計画）
+
+| 段階 | 作る最小差分 | 次へ進む条件・止める条件 |
+|---|---|---|
+| C0 gap/契約 | 上のgap記録、保存変数U=(ρ,ρu,ρv,ρw,ρE)、SI、γ、EOS、absolute p/T、入力hash、cell/particle association、エラー・保存量の出力契約 | OSS adapterの改修で足りれば自作しない。無次元試験と製品SIの変換を明示。EOS/γとエネルギー定義の不一致は停止 |
+| C1 1D CPU | uniform-grid一次FVM、既存文献のHLLEを頑健な基準候補、HLLCは比較候補 [E16]。反射/透過境界、CFLに基づくdt、保存量収支 | B1と強い希薄波/衝撃波でρ/p正値・保存・dt/解像度依存。負値clippingで合格させない。CFL数や真空対応範囲は採用schemeに基づき事前固定。真空未対応なら明示拒否 |
+| C2 2D CPU | Cartesian、横一様B1、B2くさび、回転/移流問題。時間積分と高次再構成は別の変更で追加 | 2D/1D縮退一致、境界fluxとglobal収支、grid-orientation依存。高次化後もC1を保持し、limiter/positivity treatmentと適用限界を記録 |
+| C3 幾何方式を一つ選択 | EBならcut-volume/face aperture、壁flux、小セル安定化、coarse-fine収支。粒子なら近傍探索、体積・勾配・pair flux、境界粒子/流入出の収支 | B2/B4に加えB3の粗解像度で壁漏れと幾何感度を確認。同時にEB/粒子両方を全面開発しない。粒子へFVM配列を置換しただけでは完了しない |
+| C4 3D/局所解像度 | B3球→B5牛、元形状からの再現可能な配置、全場と収支、domain拡大試験 | B1–B4回帰、空間/時間/外域依存、停止/再開、メモリ/時間予算。美しい可視化だけでは通過しない |
+| C5 配布/高速化 | native基準と同じ入力/結果schemaのWASM最小CPU版。別段階でSIMD/thread/WebGPU | payload/init/peak memoryと同一case数値差、cancel/診断/保存を照合。移植困難ならnative経路維持。粘性/乱流/境界層は独立計画 |
+
+研究タスクの完了条件は候補票・共通試験仕様・採否条件・段階/再利用計画の記録であり、C0–C5実装、候補採用、B1–B5物理検証の完了ではない。次に必要なのは最小candidate構成と依存全SHAの固定、Linux CPUビルド、同じB1/B2の実行計画と事前許容誤差・資源予算の承認。今回それらの成功を推定していない。
+
+### 追加一次資料（取得日2026-10-18）
+
+ソースは上の調査SHAで固定。動的な文書サイトは補助にし、古いPeleC URLや取得不能なページから対応を推測しない。
+
+- E1: [AMReX snapshot / LICENSE](https://github.com/AMReX-Codes/amrex/blob/f621539f8f890a877119061caaef313852ea6166/LICENSE)
+- E2: [AMReX EB制約と小セル](https://github.com/AMReX-Codes/amrex/blob/f621539f8f890a877119061caaef313852ea6166/Docs/sphinx_documentation/source/EB.rst)、[公式EB概説](https://amrex-codes.github.io/amrex/docs_html/EB_Chapter.html)
+- E3: [PeleC README](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/README.rst)、[license](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/license.txt)、[submodule gitlink](https://github.com/Pele-Suite/PeleC/tree/949e2bb67386bf4b16324b06555e303ff411e179/Submodules)
+- E4: [PeleC EB/redistribution](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/Docs/sphinx/geometry/EB.rst)
+- E5: [PeleC domain BCとGS-NSCBC警告](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/Docs/sphinx/BoundaryConditions.rst)
+- E6: [PySPH README](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/README.rst)、[installation](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/docs/source/installation.rst)、[LICENSE](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/LICENSE.txt)
+- E7: [PySPH gas Sod](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/examples/gas_dynamics/sod_shocktube.py)
+- E8: [PySPH application/restart](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/solver/application.py)、[output](https://github.com/pypr/pysph/blob/1cd3dea9cfaac7d9f1bda2a2491ce4b42a31dbe5/pysph/solver/output.py)
+- E9: [Spheral README](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/README.md)、[LICENSE](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/LICENSE)
+- E10: [Spheral current CMake](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/CMakeLists.txt)、[external build](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/docs/build_guide/external/index.rst)、[dependencies](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/docs/build_guide/appendix/external_deps.rst)（ガイドのCMake>=3.21よりcurrent buildの>=3.24を優先）
+- E11: [Spheral boundary](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/src/Boundary/InflowOutflowBoundary.hh)、[ReflectingBoundary](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/src/Boundary/ReflectingBoundary.hh)、[Sod/restart test definition](https://github.com/LLNL/spheral/blob/e9e3df91174e5af4b51ed41327474d75062be4f1/tests/functional/Hydro/Sod/Sod-planar-1d.py)
+- E12: [Hopkins GIZMO原著v2](https://arxiv.org/abs/1409.7395v2)
+- E13: [旧GIZMO repositoryの移転告知](https://github.com/pfhopkins/gizmo-public/blob/78b66ffcfad6362f8aa0798f8a23a6c9ba5dd2ca/README.md)
+- E14: [PeleC Sod inputs](https://github.com/Pele-Suite/PeleC/tree/949e2bb67386bf4b16324b06555e303ff411e179/Exec/RegTests/Sod)、[CMakeの1D拒否](https://github.com/Pele-Suite/PeleC/blob/949e2bb67386bf4b16324b06555e303ff411e179/CMakeLists.txt)
+
+- E15: [NASA Glenn斜め衝撃波の適用範囲・関係式](https://www.grc.nasa.gov/www/k-12/airplane/oblique.html)
+- E16: [Einfeldt et al. (1991), On Godunov-type methods near low densities](https://doi.org/10.1016/0021-9991(91)90211-3)、[Toro et al. (1994), Restoration of the contact surface in the HLL-Riemann solver](https://doi.org/10.1007/BF01414629)。今回はDOI/書誌の確認のみ。C1実装前に原著の仮定・wave-speed・CFL条件を確認する。

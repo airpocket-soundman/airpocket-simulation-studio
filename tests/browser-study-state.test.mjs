@@ -54,3 +54,11 @@ test('viewer wiring: per-kind accessor is used and unsupported thermal paths ref
  for(const s of ['function renderTimeFrames(r)','if(framesOf(r))renderTimeFrames(r)','fixedFieldRange(framesOf(result).fields)','...thermalFrameDisplay()});};',"name:language==='en'?'Heat conduction reference sample'"])assert.ok(html.includes(s),s);assert.ok(!html.includes('Probing is available only for the final thermal step'));
  const exporter=await readFile(new URL('../src/visual-export.js',import.meta.url),'utf8');assert.match(exporter,/result\?\.kind!=='acousticTransient'/);assert.equal(exporter.split('Time playback export is not supported for thermal results yet').length-1,1);assert.ok(exporter.includes("timeAnimationResultKinds:['acousticTransient']"));
 });
+
+test('time history density and exact-byte budgets survive GUI study normalization without adding defaults',()=>{
+ for(const [kind,enabled,prefix]of [['thermal','transient','thermal'],['acoustic','acousticTransient','acoustic']]){
+  const s={kind,[enabled]:true,[prefix+'SnapshotCount']:7,[prefix+'SnapshotBudgetBytes']:123456},r=round(s);assert.equal(r.study[prefix+'SnapshotCount'],7);assert.equal(r.study[prefix+'SnapshotBudgetBytes'],123456);const again=round(r.study);assert.equal(again.study[prefix+'SnapshotBudgetBytes'],123456);
+ }
+ const defaults=serialize(initial());for(const key of ['thermalSnapshotBudgetBytes','acousticSnapshotCount','acousticSnapshotBudgetBytes'])assert.equal(Object.hasOwn(defaults,key),false);
+ const c=initial();c.physics='thermal';c['transient-heat']=true;c['thermal-snapshots']='1';assert.equal(serialize(c).thermalSnapshotCount,1,'invalid count is not silently converted to disabled history');
+});

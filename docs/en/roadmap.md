@@ -170,3 +170,9 @@ Add P4 read-only comparison through the shared API, browser inspect caseCompare 
 Current successful counts, actual-browser and publication completion remain pending. Comparison does not establish physical accuracy, equal inputs, cross-mesh part correspondence or spatial registration. Overall P3/P4, the standalone Skill workflow and existing P0–P6 completion conditions remain incomplete.
 
 2026-10-18: An independent fresh-Chrome evaluation followed only the Skill and public MCP contracts after GUI pairing: synthetic input/provenance repair,two solves,comparison,and SHA-verified PNG/archive. Verified0.04/0.08mm,ratio2,four-state preservation after both outputs and three refusals. GUI pairing remains prerequisite;public HTTPS,the full Skill gate and general accuracy remain open. See [independent post-pair evidence](../evidence/2026-10-18-skill-loop-independent-post-pair.json). This bounded success does not complete all gates or promote task status.
+
+## 2026-10-18 publication candidate
+
+CFDRESEARCH2/3 complete [compressible-CFD research](compressible-cfd-plan.md):candidate sheets,common benchmarks,selection gates and reuse stages. Literature research is complete;candidate adoption,builds and numerical validation are not. All adoption remains on hold and parents such as CFD2 stay open. Candidate counts:132 complete/35unfinished(13autonomous/7external/15parents).
+
+VIEWTIME implements explicit stored-frame density/scalar-storage budgets while separating solve steps,storage and display interpolation. This does not bound total JS/peak RAM or establish general-geometry accuracy. RUNTIMEWASM1 adds distinct JIT-fatal signatures/manual Linux comparison;successful same-source retries/Windows smoke do not prove a root fix.1545 is the completed PR122/main CI baseline;this candidate final CI is recorded separately in publication evidence.

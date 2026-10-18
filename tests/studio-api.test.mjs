@@ -26,3 +26,5 @@ test('API adapter used by UI receives identical commands',()=>{
  assert.equal(api.getSummary().selectedAreaMm2,4);api.selectTriangles(0,[0],{replace:false,erase:true});
  assert.deepEqual(state.selection,[[1]]);api.clearSelection();assert.equal(api.getSummary().selectedTriangles,0);
 });
+
+test('history storage settings are semantic study inputs with atomic refusal and JSON persistence',()=>{const api=createStudioApi();api.loadProject(model());for(const [kind,enabled,prefix]of [['thermal','transient','thermal'],['acoustic','acousticTransient','acoustic']]){api.setStudy({kind,[enabled]:true,[prefix+'SnapshotCount']:7,[prefix+'SnapshotBudgetBytes']:123456});const before=api.exportProject();const restored=createStudioApi();restored.loadProject(JSON.parse(JSON.stringify(before)));assert.deepEqual(restored.exportProject(),before);for(const patch of [{[prefix+'SnapshotCount']:1},{[prefix+'SnapshotBudgetBytes']:67108865}]){assert.throws(()=>api.setStudy({...before.study,...patch}));assert.deepEqual(api.exportProject(),before);}}});

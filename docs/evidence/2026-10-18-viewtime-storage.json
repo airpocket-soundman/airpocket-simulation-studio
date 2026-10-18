@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "outcome": "passed-bounded-history-density-budget-workflow",
+  "scope": "VIEWTIME storage controls and Japanese UI increment; full VIEWTIME/P4/P0-P6 acceptance not claimed",
+  "environment": {
+    "origin": "http://127.0.0.1:5174",
+    "browser": "Chrome via dedicated CUA browser API",
+    "transport": "repository formal stdio MCP;37 tools",
+    "source": "codex/workflow-milestones with uncommitted candidate changes",
+    "buildIdentity": "dev build unavailable; not publisher/environment attestation"
+  },
+  "settings": {
+    "maximumFrames": 61,
+    "maximumBudgetBytes": 67108864,
+    "minimumFrames": 2,
+    "newStudyKeys": [
+      "thermalSnapshotBudgetBytes",
+      "acousticSnapshotCount",
+      "acousticSnapshotBudgetBytes"
+    ],
+    "existingThermalKey": "thermalSnapshotCount",
+    "semanticOperation": "setStudy via existing preview/edit transaction; no new tool/method",
+    "defaultCompatibility": "No new keys in initial inactive study; thermal history remains opt-in; acoustic default retains legacy stride-based saved times",
+    "memoryBasis": "nodes * saved scalar frames * 8 bytes; excludes JS array/object overhead, observations, receiver trace, rendering copies and process peak memory"
+  },
+  "thermal": {
+    "syntheticReference": "Homogeneous closed 10x10x40 mm body,conductivity1 W/(m*K),density1000 kg/m3,specificHeat1000 J/(kg*K),q1e6 W/m3,initial20degC,10steps/dt1s;T=20+t;legacy input mode is not independent physical validation",
+    "mcpSolve": {
+      "requested": 11,
+      "budgetBytes": 2400,
+      "nodes": 94,
+      "storedFrames": 3,
+      "scalarBytes": 2256,
+      "timesSeconds": [
+        0,
+        5,
+        10
+      ],
+      "probeTimeSeconds": 5,
+      "probeTemperatureDegC": 25.000000000174634
+    },
+    "guiSolve": {
+      "requested": 5,
+      "budgetBytes": 4096,
+      "frameCount": 5,
+      "timesSeconds": [
+        0,
+        3,
+        5,
+        8,
+        10
+      ],
+      "origin": "gui",
+      "terminal": "succeeded",
+      "executionSettled": true,
+      "inspectInputMatches": true
+    },
+    "invalidBudget": {
+      "value": 67108865,
+      "refused": true,
+      "revisionUnchanged": true
+    }
+  },
+  "acoustic": {
+    "fixture": "Product transient-acoustic example, explicit synthetic GUI settings, real Worker/WASM; not new general-geometry physical validation",
+    "guiSolve": {
+      "requested": 7,
+      "budgetBytes": 65536,
+      "nodes": 741,
+      "scalarBytes": 41496,
+      "steps": 2138,
+      "frameCount": 7,
+      "timesSeconds": [
+        0,
+        0.000666043030869972,
+        0.001333956969130028,
+        0.002,
+        0.0026660430308699723,
+        0.0033339569691300283,
+        0.004
+      ],
+      "terminal": "succeeded",
+      "executionSettled": true,
+      "inspectInputMatches": true
+    },
+    "archive": {
+      "bytes": 336349,
+      "sha256": "sha256:a325fd81962f1678ae370cae295f7dd6754f0aea860e32487fc0c1c5beac2301",
+      "retrievedAndVerified": true,
+      "importCommitted": true,
+      "caseInputRestored": true,
+      "restoredCount": 7,
+      "restoredBudgetBytes": 65536,
+      "savedMetadata": {
+        "requested": 7,
+        "count": 7,
+        "indices": [
+          0,
+          356,
+          713,
+          1069,
+          1425,
+          1782,
+          2138
+        ],
+        "bytes": 41496,
+        "budgetBytes": 65536,
+        "warnings": [],
+        "steps": [
+          0,
+          356,
+          713,
+          1069,
+          1425,
+          1782,
+          2138
+        ],
+        "memoryBasis": "8-bytes-per-stored-scalar; excludes objects, observations and receiver trace"
+      }
+    },
+    "invalidCount": {
+      "value": 62,
+      "refused": true,
+      "revisionUnchanged": true
+    }
+  },
+  "gui": {
+    "japanese": "Both history settings and scalar storage/reduction explanations observed in Japanese",
+    "english": "Acoustic settings and re-rendered result storage explanation observed in English",
+    "narrow": {
+      "width": 390,
+      "height": 844,
+      "horizontalOverflow": false
+    },
+    "screenshot": "2026-10-18-viewtime-storage-ja-narrow.png"
+  },
+  "automated": {
+    "passed": 64,
+    "failed": 0,
+    "files": [
+      "tests/time-history-plan.test.mjs",
+      "tests/browser-study-state.test.mjs",
+      "tests/thermal-input-contract.test.mjs",
+      "tests/acoustic-input-contract.test.mjs",
+      "tests/thermal-snapshots.test.mjs",
+      "tests/acoustic-transient.test.mjs",
+      "tests/studio-api.test.mjs",
+      "tests/project-input-inspection.test.mjs",
+      "tests/cases.test.mjs"
+    ],
+    "coverage": [
+      "Budget reductions and impossible two-frame refusal",
+      "Default acoustic snapshot time compatibility",
+      "Exact final thermal/acoustic result and receiver/thermal scalar histories unchanged by storage settings",
+      "Study/API/JSON persistence and invalid atomic refusal",
+      "Snapshot metadata tamper refusal: frame field lengths/finite values, solved steps, physical times, final endpoint and count<=request",
+      "Existing cavity/propagation/radiation and JS-WASM tests"
+    ]
+  },
+  "interruptions": [
+    {
+      "stage": "Development hot-update after metadata validation repair",
+      "observed": "CUA DOM timed out;MCP inspect returned BROWSER_COMMAND_TIMEOUT delivered:false",
+      "response": "Explicit reload of owned synthetic page,explicit re-pairing;no automatic mutation replay",
+      "cause": "unconfirmed"
+    },
+    {
+      "stage": "QA stdio client reset during reconnect inspection",
+      "observed": "Node tool timed out and reset;MCP temporary process closed",
+      "response": "Fresh explicit MCP and pairing,retained completed GUI acoustic result inspected and archived",
+      "cause": "QA harness failure;no product cause inferred"
+    }
+  ],
+  "cleanup": {
+    "allOwnedAnalysisJobsReleased": true,
+    "exportsTransfersReleased": true,
+    "sessionsAfterGuiDisconnect": [],
+    "mcpExitCode": 0,
+    "temporarySecretFileRemoved": true,
+    "viewportReset": true,
+    "ownedTabClosed": true,
+    "ownedDevStopped": true
+  },
+  "limits": [
+    "No public HTTPS mutation test",
+    "No peak-RAM guarantee",
+    "General propagation accuracy/full VIEWTIME acceptance remains open",
+    "No new arbitrary interpolated-time persistence;existing stored-time-only API rules retained"
+  ]
+}
