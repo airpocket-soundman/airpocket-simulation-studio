@@ -1,3 +1,4 @@
+import {assertMcpTools} from './fixtures/mcp-tool-contract.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createBrowserBridge} from '../scripts/browser-bridge.mjs';
@@ -71,7 +72,7 @@ test('real HTTP polling client enforces browser scopes and stops connection-owne
  const details=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Connector did not start')),5000);child.stderr.on('data',data=>{stderr+=data;const match=stderr.match(/Browser connector: (.+)\n/);if(match){clearTimeout(timer);resolve(JSON.parse(match[1]));}});});
  const rpc=(method,params)=>new Promise((resolve,reject)=>{const id=++serial,timer=setTimeout(()=>reject(Error('MCP response timed out')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message);});child.stdin.write(JSON.stringify({jsonrpc:'2.0',id,method,params})+'\n');});
  await rpc('initialize',{protocolVersion:'2025-11-25'});child.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
- assert.equal((await rpc('tools/list',{})).result.tools.length,35);
+ assertMcpTools((await rpc('tools/list',{})).result.tools,{browser:true});
  const connected=connectBrowserSession({...details,scopes:['inspect'],session:{call:async()=>({revision:'observed'}),disconnect(){}},fetcher,intervalMs:2});t.after(()=>connected.stop());
  const paired=await connected.ready;
  const reply=await rpc('tools/call',{name:'studio_browser_call',arguments:{sessionId:paired.sessionId,method:'inspect'}});
