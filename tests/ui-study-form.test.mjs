@@ -38,3 +38,7 @@ test('study controls reset to the values captured at startup (fresh-load default
  ui.resetBrowserStudyControls();
  assert.equal(nodes.a.checked,false);assert.equal(nodes.b.value,'2');
 });
+
+test('internal cap editor hooks preserve source caps while keeping old options unchanged when absent',()=>{const nodes={},$=id=>nodes[id]??={value:'',checked:false};let restored,readGeometry;const caps=[{id:'cap',point:[0,0,0],normal:[0,1,0]}],ui=createStudyFormUi({$,browserStudyControls:{},getOpeningCaps:geometry=>{readGeometry=geometry;return restored;},restoreOpeningCaps:value=>{restored=value;}}),source={enclosure:[1,2,3,4,5,6],seedPoint:[7,8,9],portPlanes:[0,3],openingCaps:caps};ui.restoreInternalFields(source);assert.deepEqual(restored,caps);assert.deepEqual(ui.internalOptions(),source);assert.equal(readGeometry.openingCaps,undefined);const legacy={...source};delete legacy.openingCaps;ui.restoreInternalFields(legacy);assert.deepEqual(ui.internalOptions(),legacy);});
+
+test('bounds helper keeps invalid cap drafts and port choices without reading or resetting the editor',()=>{const nodes={},$=id=>nodes[id]??={value:'',checked:false};let reads=0,restores=0;const ui=createStudyFormUi({$,browserStudyControls:{},getOpeningCaps:()=>{reads++;throw Error('invalid draft');},restoreOpeningCaps:()=>restores++});$('internal-port-1').checked=true;ui.restoreInternalBounds([-12,-30,-12,24,60,24],[0,0,0]);assert.equal(reads,0);assert.equal(restores,0);assert.equal($('internal-port-1').checked,true);assert.equal($('internal-width-z').value,24);});

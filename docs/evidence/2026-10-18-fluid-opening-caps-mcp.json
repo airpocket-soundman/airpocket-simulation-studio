@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "task": "CFDPORT1",
+  "date": "2026-10-18",
+  "sourceCommit": "a5d6f6e0a8be95336ade957b33d6cf9ef0a4bc6a",
+  "scope": "real-stdio-MCP-loopback-Node-hosted-semantics-real-CPU-Worker",
+  "refusals": [
+    {
+      "name": "non-unit-normal",
+      "rejected": true,
+      "reason": "Opening caps require unique IDs, finite points and explicit unit outward normals",
+      "inputUnchanged": true
+    },
+    {
+      "name": "reversed-normal",
+      "rejected": true,
+      "reason": "Opening cap must retain the seed strictly on its inward side",
+      "inputUnchanged": true
+    },
+    {
+      "name": "seed-on-cap",
+      "rejected": true,
+      "reason": "Opening cap must retain the seed strictly on its inward side",
+      "inputUnchanged": true
+    },
+    {
+      "name": "seed-outward",
+      "rejected": true,
+      "reason": "Opening cap must retain the seed strictly on its inward side",
+      "inputUnchanged": true
+    },
+    {
+      "name": "trusted-host-retag-cap",
+      "rejected": true,
+      "reason": "Saved opening cap triangle is missing its declared port identity",
+      "inputUnchanged": true
+    },
+    {
+      "name": "trusted-host-remove-cap-triangle",
+      "rejected": true,
+      "reason": "Capped fluid surface boundary is incomplete",
+      "inputUnchanged": true
+    },
+    {
+      "name": "trusted-host-remove-port",
+      "rejected": true,
+      "reason": "Saved opening caps are incomplete",
+      "inputUnchanged": true
+    }
+  ],
+  "discovery": {
+    "toolCount": 37,
+    "prepareCapsDeclared": true,
+    "credentialRequired": false,
+    "browserMethods": 91
+  },
+  "geometry": {
+    "source": {
+      "enclosure": [
+        -12,
+        -30,
+        -12,
+        24,
+        60,
+        24
+      ],
+      "kind": "fluidDomain",
+      "mode": "internal",
+      "openingCaps": [
+        {
+          "id": "inlet",
+          "normal": [
+            -0.2672612419124244,
+            -0.5345224838248488,
+            -0.8017837257372732
+          ],
+          "point": [
+            0,
+            -10,
+            0
+          ]
+        },
+        {
+          "id": "outlet",
+          "normal": [
+            0.2672612419124244,
+            0.5345224838248488,
+            0.8017837257372732
+          ],
+          "point": [
+            0,
+            10,
+            0
+          ]
+        }
+      ],
+      "portPlanes": [],
+      "seedPoint": [
+        0,
+        0,
+        0
+      ],
+      "solid": {
+        "axis": 1,
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "innerRadius": 8,
+        "kind": "tube",
+        "length": 60,
+        "outerRadius": 12
+      }
+    },
+    "cadVolumeMm3": 4021.2386007845544,
+    "referenceVolumeMm3": 4021.238596594935,
+    "cadVolumeRelativeError": 1.0418728102479236e-9,
+    "meshVolumeMm3": 3955.8123798944666,
+    "capAreas": [
+      {
+        "id": "inlet",
+        "triangles": 107,
+        "meshAreaMm2": 371.62813080645003,
+        "referenceAreaMm2": 376.1524274732479,
+        "maxPlaneDistanceMm": 8.260059303211165e-14
+      },
+      {
+        "id": "outlet",
+        "triangles": 109,
+        "meshAreaMm2": 371.6281308064497,
+        "referenceAreaMm2": 376.1524274732479,
+        "maxPlaneDistanceMm": 2.2870594307278225e-14
+      }
+    ],
+    "channelCertificationPresent": false,
+    "displayBoundsMm": {
+      "min": [
+        -7.999638921228115,
+        -22.64170656973333,
+        -7.999811312693253
+      ],
+      "max": [
+        7.997344455834045,
+        22.50903458578084,
+        8
+      ],
+      "size": [
+        15.996983377062161,
+        45.15074115551417,
+        15.999811312693254
+      ]
+    }
+  },
+  "runtime": {
+    "assets": [
+      {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+      }
+    ],
+    "build": {
+      "dirty": true,
+      "revision": "a5d6f6e0a8be95336ade957b33d6cf9ef0a4bc6a",
+      "sourceFingerprint": "sha256:188de7fbbbb839a30aa2b406511de53e3bab0f2ed843ed72d8d73dbc1280e3c4",
+      "status": "available",
+      "version": "0.44.0"
+    },
+    "engine": {
+      "actualEngine": null,
+      "requestedMethod": "pcg"
+    },
+    "isolation": "worker-thread",
+    "schemaVersion": 1,
+    "target": "node"
+  },
+  "revisionEvidence": {
+    "created": "sha256:f35de8876e4480aed50956ea184db383dd99019463629101fa8667355593d12e",
+    "prepared": "sha256:c3af1a203fd0a87ff738dbd562ba7a54a8757f5061f22e20ffe6d7051335e4ae",
+    "preparedMatchesSource": true,
+    "applied": "sha256:55a7448a9b51e352452246637c24f7ddf86a6d91975d195001a262ec1eab4ff3",
+    "reconstructedMatchesApplied": true,
+    "savedMcpReloadRevision": "sha256:55a7448a9b51e352452246637c24f7ddf86a6d91975d195001a262ec1eab4ff3",
+    "capsUnchanged": true,
+    "savedInspectionUnchangedBytes": true
+  },
+  "exportIntegrity": {
+    "format": "analysis-output",
+    "kind": "mesh",
+    "bytes": 137721,
+    "sha256": "sha256:72ddf47efa434711fa33b6a19d66f768ae9d57b2d96eeb0fe20fb06354b06eb1",
+    "verified": true,
+    "savedInputBytes": 87699,
+    "savedInputSha256": "6baf067887098f2b6f01497eb27c68fa0cc8aea00a29cb0982f42a04c5e7302d"
+  },
+  "tamperInjection": "Trusted Node test host changed only getMeshJob output clones to exercise MCP receiver rejection. No MCP tool exposes this mutation.",
+  "limits": [
+    "Node-hosted semantic session over actual MCP/HTTP, not Chrome or deployed browser verification.",
+    "Saved-file MCP has no prepare/apply tool; loopback studio_browser_call exercises the actual supported route.",
+    "Input JSON was reconstructed through revision-pinned paged inspectInput, saved by the harness and reloaded/validated by studio_inspect_project; no generic MCP project-JSON import tool is claimed.",
+    "Mesh-only CAD geometry/API evidence; no physical flow solve, wire recognition or general volume union."
+  ],
+  "cleanup": {
+    "code": 0,
+    "signal": null,
+    "connectorStopped": true,
+    "analysisJobsDrained": true,
+    "temporaryFilesRemoved": true
+  },
+  "operations": [
+    "studio_browser_contracts",
+    "studio_create_builtin_project",
+    "browser:inspect",
+    "studio_browser_call",
+    "browser:createBuiltinProject",
+    "browser:prepareFluidDomain",
+    "browser:startJob",
+    "browser:jobStatus",
+    "browser:jobResultExport",
+    "browser:jobResultRead",
+    "browser:jobResultRelease",
+    "browser:applyFluidDomainMesh",
+    "browser:inspectInput",
+    "studio_inspect_project",
+    "browser:geometry",
+    "browser:releaseJob"
+  ]
+}

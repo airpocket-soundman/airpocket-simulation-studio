@@ -1,3 +1,4 @@
+import {validateOpeningCaps} from './fluid-opening-caps.js';
 export function validateSphere(s){
  if(s?.kind!=='sphere'||!Array.isArray(s.center)||s.center.length!==3||!s.center.every(Number.isFinite)||!Number.isFinite(s.radius)||s.radius<=0||!s.center.every(v=>Number.isFinite(v-s.radius)&&Number.isFinite(v+s.radius))||!Number.isFinite(2*s.radius))throw Error('Invalid sphere dimensions');
  return s;
@@ -18,6 +19,7 @@ export function validateFluidDomain(source){
  if(source.mode==='internal'){
   if(!Array.isArray(b)||!Array.isArray(source.seedPoint)||source.seedPoint.length!==3||!source.seedPoint.every(Number.isFinite)||source.seedPoint.some((v,k)=>v<=b[k]+1e-6||v>=b[k]+b[k+3]-1e-6)||!Array.isArray(source.portPlanes)||source.portPlanes.length>6||new Set(source.portPlanes).size!==source.portPlanes.length||!source.portPlanes.every(v=>Number.isInteger(v)&&v>=0&&v<6))throw Error('Internal fluid domain requires an interior seed and unique box port planes');
  }
+ validateOpeningCaps(source);
  if(s.kind==='tube')validateTube(s);
  if(s.kind==='sphere')validateSphere(s);
  const box=v=>Array.isArray(v)&&v.length===6&&v.every(Number.isFinite)&&v.slice(3).every(v=>v>0);
@@ -35,7 +37,7 @@ export function exteriorAcousticSource(project,paddingMm){
  const box=exteriorFluidSource(project,paddingMm),lo=box.enclosure.slice(0,3).map(v=>v+paddingMm),width=box.enclosure.slice(3).map(v=>v-2*paddingMm),center=lo.map((v,k)=>v+width[k]/2),radius=Math.hypot(...width)/2+paddingMm;
  return validateFluidDomain({...box,enclosure:{kind:'sphere',center,radius}});
 }
-export function internalFluidSource(project,{enclosure,seedPoint,portPlanes}={}){
+export function internalFluidSource(project,{enclosure,seedPoint,portPlanes,openingCaps}={}){
  if(!project?.sourceModel||project.sourceModel.kind==='fluidDomain')throw Error('Load an original solid before extracting internal fluid');
- return validateFluidDomain({kind:'fluidDomain',mode:'internal',solid:structuredClone(project.sourceModel),enclosure:structuredClone(enclosure),seedPoint:structuredClone(seedPoint),portPlanes:structuredClone(portPlanes)});
+ return validateFluidDomain({kind:'fluidDomain',mode:'internal',solid:structuredClone(project.sourceModel),enclosure:structuredClone(enclosure),seedPoint:structuredClone(seedPoint),portPlanes:structuredClone(portPlanes),...(openingCaps===undefined?{}:{openingCaps:structuredClone(openingCaps)})});
 }

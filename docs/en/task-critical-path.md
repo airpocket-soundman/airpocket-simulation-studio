@@ -2,17 +2,21 @@
 
 [日本語](../task-critical-path.md)
 
-This2026-10-18 publication candidate has167 tasks,132 released and35 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
+This2026-10-18 publication candidate has167 tasks,133 released and34 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
 
 | Classification | Existing IDs | Conditions |
 |---|---|---|
-| Autonomous implementation/verification(13) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIRESEARCH1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
+| Autonomous implementation/verification(12) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
 | External/device conditions(7) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
 | Parent epics(15) | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | Publishing a slice does not complete its parent. Keep existing acceptance and common completion criteria. |
 
 ## Dependencies and current batch
 
 P0->P1->P3 and P0->P4 are key publication-workflow paths. P5 depends on all P1/P2/P3/P4. Five of six publication gates remain open; completed evidence is candidate-specific and must align on the final candidate before product publication is considered complete.
+
+Current batch is bounded CFDPORT1 half-space caps and an end-to-end GUI/API workflow. Users explicitly provide point,outward unit normal and seed;the same semantic API checks input,meshing and saved replay. Arbitrary opening-wire recognition,local lids and general multi-volume joins remain open;bounded caps do not establish general fluid support. CFDPORT1 stays building;133released/34unfinished(12autonomous/7external/15parents)remain. The completed PR123/main CI baseline is1557(1554passed,3skipped,0failed);this candidate final CI is recorded separately.
+
+## History: PR123 time history/runtime/CFD research
 
 Current three tracks are VIEWTIME storage-density/budget implementation,RUNTIMEWASM1 signature/explicit-flag diagnostic comparison,and completed CFDRESEARCH2/3 research acceptance. Close only the two research tasks;13 autonomous+7 external+15 parents=35 unfinished. VIEWTIME remains building with public HTTPS/general accuracy open;RUNTIMEWASM1 checking. No parent/product/Skill gate closes.1545 is the completed PR122/main baseline,not this candidate final CI count.
 
@@ -57,3 +61,5 @@ UIIMPROVE1 moves queued to building. [Real-Chrome evidence](../evidence/2026-10-
 The latest [CFDRESEARCH2/3 sheets](compressible-cfd-plan.md) complete literature-research acceptance only. Adoption/build/physical validation remain separate;all candidates on hold. CFD2 still requires configuration/dependency pins,Linux builds,B1–B5 execution,implementation,conservation and stop/restart validation.
 
 [Bounded VIEWTIME real-Chrome evidence](../evidence/2026-10-18-viewtime-storage.json):thermal11requested/2400byte budget gives94nodes/3frames/2256bytes,25degC at5s;thermal GUI5frames and acoustic GUI7frames/741nodes/41496bytes.336349byte archive full-byte/hash replay,input count7/budget65536 restoration and atomic invalid-input refusal passed. Scalar budgets do not guarantee peak RAM;public HTTPS/general accuracy remain open.
+
+UIRESEARCH1 also completes [versioned literature comparison](ui-research.md). Hands-on common six cases,recovery/interaction burden and keyboard/locale checks remain UIIMPROVE1 work.Latest34unfinished=12autonomous/7external/15parents.

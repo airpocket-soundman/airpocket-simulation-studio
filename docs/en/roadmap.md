@@ -99,6 +99,12 @@ Keep existing limited coupling/material/fatigue/fracture support separate from C
 
 CalculiX, Elmer, Code_Aster and OpenFOAM remain candidates; their ports are not prerequisites for P0–P5. Add streamlines, particles and isosurfaces in viewer-specification order; visualization does not add a physical solver model.
 
+### CFDPORT1 first implementation unit (2026-10-18, building)
+
+Explicit `openingCaps:{id,point,normal}[]` clips a bounded box by oriented half-spaces before original-CAD subtraction and selection of one seed-connected volume. Existing prepare/apply APIs, types, input inspection, capId surface tags and saved plane/boundary-completeness validation are covered. For an inner-radius-8 mm tube closed by two oblique planes, CAD volume differs from pi*8^2*20 by less than 1.05e-9 relatively; target-3 mm tetrahedral volume differs by 1.63%, including curved-boundary discretization. [Evidence](../evidence/2026-10-18-fluid-opening-caps.json) records API application, JSON reload and five saved-data tamper refusals. This does not validate fluid-physics accuracy.
+
+CFDPORT1 is still incomplete: arbitrary CAD-opening-wire recognition/local lids, general joining of multiple fluid volumes, physical inflow/outflow conditions for arbitrary ports, GUI and published Worker verification remain. Existing box-port channel solving is preserved; capped geometry does not imply a straight channel. Design wire/volume-connection references as a separate acceptance unit without relaxing the cap contract. This extends prepareFluidDomain arguments; browser/MCP operation names/counts do not change.
+
 ## Parallel development by module
 
 Prioritize LLM integration while developing independent modules against shared contracts. Track module evidence and missing integration separately from completion of an entire plan. File ownership and integration procedures follow the MOD1 dependency direction and public-interface rules, avoiding simultaneous edits to central files such as `main.js`.
@@ -176,3 +182,7 @@ Current successful counts, actual-browser and publication completion remain pend
 CFDRESEARCH2/3 complete [compressible-CFD research](compressible-cfd-plan.md):candidate sheets,common benchmarks,selection gates and reuse stages. Literature research is complete;candidate adoption,builds and numerical validation are not. All adoption remains on hold and parents such as CFD2 stay open. Candidate counts:132 complete/35unfinished(13autonomous/7external/15parents).
 
 VIEWTIME implements explicit stored-frame density/scalar-storage budgets while separating solve steps,storage and display interpolation. This does not bound total JS/peak RAM or establish general-geometry accuracy. RUNTIMEWASM1 adds distinct JIT-fatal signatures/manual Linux comparison;successful same-source retries/Windows smoke do not prove a root fix.1545 is the completed PR122/main CI baseline;this candidate final CI is recorded separately in publication evidence.
+
+## Internal-fluid cap workflow and UI literature research
+
+Explicit half-space caps now connect JP/EN GUI,persistence and semantic API/MCP,with real-Chrome and Node-hosted CPU-Worker evidence kept separate. Arbitrary wires/local lids/general joins/deployed Worker/physical accuracy remain open;CFDPORT1 building. UIRESEARCH1 completes versioned COMSOL6.3/Mechanical2025R2 primary-document research,common six-case planning and nine proposals only. Hands-on comparison/recovery/keyboard/measured burden/core diagnostic translation remain UIIMPROVE1 work.133released/34unfinished(12autonomous/7external/15parents). Final candidate CI lives in publication evidence.

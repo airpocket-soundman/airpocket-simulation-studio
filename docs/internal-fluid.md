@@ -12,7 +12,7 @@
 4. 「内部の流体領域を取り出す」。CAD差分の各体積から、指定点を含む一つだけを残します。ポートのボタンで端面全体を選択できます。
 5. CADで確認できた円形・角形直管は層流計算へ自動で切り替え。その他の形状はメッシュ生成まで対応し、一般3D流れはまだ解けません。音響を選び、ポートや壁に音圧条件を設定することもできます。
 
-閉じた空洞はポートを全て解除します。指定点が固体内・固体境界上にある場合、ポート以外の箱の面へ漏れる場合、宣言したポートが選択体積に接しない場合は拒否します。入口・出口は箱の軸に平行な平面に限定。任意方向の開口、曲面の蓋、複数CAD体積に分割された流体の結合は残作業です。
+閉じた空洞はポートを全て解除します。指定点が固体内・固体境界上にある場合、ポート以外の箱の面へ漏れる場合、宣言したポートが選択体積に接しない場合は拒否します。GUIの入口・出口指定は箱の軸に平行な平面に限定。APIの明示半空間capは下記を参照。任意開口wireの自動認識、曲面/局所の蓋、複数CAD体積に分割された流体の一般結合は残作業です。
 
 ## 形状と計算
 
@@ -33,3 +33,17 @@ OCCのCAD差分を使い、流体を元の部品の単純な外接箱として�
 ## 明示設定を保つAPI経路
 
 window.fluidDomainApi.prepareでmode:internalと箱・seed・portPlanesを指定し、meshジョブの成功とexecutionSettledを確認してapplyMeshで表示surfaceを適用します。既存domainの元solidも再利用できます。GUIサンプルの自動層流切替と異なり、このAPIはstudy.kind:fluidDomainを維持し、物性・条件・選択・根拠・intentをクリアします。channel認識の要約だけを根拠に流量計算へ自動昇格しません。[操作契約](automation.md)に版・メッシュ照合の詳細を示します。
+
+## APIの明示半空間cap（CFDPORT1 building）
+
+内部sourceとprepareFluidDomainに任意のopeningCaps配列を指定できます。各要素は`{id,point:[x,y,z],normal:[nx,ny,nz]}`、1〜6件。pointは箱内mm、normalは外向きの単位ベクトルで、保持側はdot(normal,x-point)<=0、seedは1e-6 mmの余裕を超えて内側です。normalは自動推定せず、入力した値を保持します。箱面ポートがなければportPlanes:[]を指定します。これは箱全体への平面clipであり、CADの開口wireを自動で見つけたり、開口の一部分だけに蓋を付けたりする機能ではありません。
+
+例: 元のY方向管にpoint=[0,-10,0]/normal=-[1,2,3]/√14とpoint=[0,10,0]/normal=[1,2,3]/√14を指定すると、x+2y+3z=±20で閉じます。各capがseed選択体積に接すること、未宣言箱面への漏れがないことを要求。capId/faceTagとsurface.openingCapIdを保存し、平面/半空間・全cap三角形の対応、四面体境界の欠落/重複、単一接続を復元時に検査します。cap付きmeshは直管認識しません。API手順は[自動操作](automation.md)、測定と未検証は[sanitized参照記録](evidence/2026-10-18-fluid-opening-caps.json)を参照。公開Worker・任意wire/一般体積結合の確認は未完です。GUI/API一巡の今回証拠は以下を参照。
+
+## 正式MCPでの限定cap一巡
+
+[正式MCP証拠](evidence/2026-10-18-fluid-opening-caps-mcp.json)は実stdio/loopbackのNode-hosted意味的sessionと実CPU Workerによる幾何一巡。prepare→mesh→SHA検証export→apply→revision固定inspectInputの全入力再構築→saved-file inspectionを確認。斜め2capのCAD体積相対誤差1.042e-9、cap面107/109三角形、export137721bytes。7拒否と原入力不変を確認。trusted hostによる改変注入は受信側検査の試験で、MCPがmesh改変を公開する意味ではない。Chrome/公開Workerとは別、汎用JSONimportや物理流れ解析は未実証。記録runtimeのdirty:trueは実行時snapshotとして保持する。
+
+### GUIの限定cap一巡
+
+内部流体パネルで最大6件のID/point/外向き単位normalを入力。未入力値は補完しない。法線不正時は対象へfocus/aria-invalidで復帰し、箱範囲補助は未完成draftを保持、新モデルはdraftをリセット。適用済みsourceだけをProject JSONに保存し再読込で行を復元する。mesh失敗時は適用sourceを戻し入力draftを保持。[実Chrome証拠](evidence/2026-10-18-fluid-opening-caps-gui.json)は2cap・4021.239mm3・2ports、107面三角形選択、JSON厳密往復、日英390px/keyboardを確認。非交差capのcore診断は英語のままで、全solver診断翻訳はUIIMPROVE1の残作業。公開Worker/任意wire/一般join/物理解析の実証ではない。

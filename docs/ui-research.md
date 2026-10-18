@@ -160,13 +160,59 @@
 - Autodesk CFD、Abaqusの結果表示の詳細、LLM連携の有無（資料に記述がないものは「?」とした）。
 - 本アプリの実ブラウザでの見た目、狭い画面、キーボード操作、日英表示。
 
+## 版固定の共通例題比較（2026-10-18）
+
+**COMSOL Multiphysics 6.3** と **Ansys Mechanical 2025 R2（v252）** を、**2026-10-18** に取得した発行元公式資料で比較する。版は資料の版であり、インストール済み製品の版ではない。製品の実機操作は行っていない。先の広域調査と本アプリの静的調査は2026-10-15時点の記録として残し、この追記で未確認事項を確認済みに変更しない。SOLIDWORKS 2025のヘルプは再取得でも本文でなく外枠/エラーとなったため、詳細比較対象から外した。
+
+### 共通課題と根拠の境界
+
+別々に供給するブラケットsolidを A基準、B板厚増加、Cリブ追加の3案とする。取付部と荷重部の機能を揃え、各案に線形静構造と独立した定常熱伝導を実行する。計6ケースであり、熱応力連成ではない。共通入力表には形状ファイル/単位、材料特性、固定/荷重領域と大きさ、温度/熱入力領域と値、メッシュ方針、比較量を記録する。形状変更ごとに領域を再同定し画面上で確認する。本書に実形状ファイル・寸法・荷重・解析済み参照値はない。入力供給後に実行可能となる課題仕様であり、実行済みベンチマークではない。
+
+**D** は取得本文の直接記述、**M** は共通課題への本調査の対応付け、**?** は未確認。公式例題の形状・荷重は共通課題と異なるため、公式の解析結果をA/B/Cの結果として扱わない。
+
+| 段階 | COMSOL 6.3 | Mechanical 2025 R2 |
+|---|---|---|
+| 取込 | **D:** STEP、元/現単位、取込後selectionを指定でき、対応するCAD Import/Design/LiveLinkライセンスが必要 [C1]。**M:** A/B/Cを別々に取り込み単位確認。 | **D:** 材料と形状の接続を独立段階にする [A1]。**M:** 各案を解析systemへ接続。**?:** STEP translatorの具体設定は未取得。 |
+| ツリー・選択 | **D:** ブラケット例題はModel Builder、形状selection、選択境界を使う [C2]。**M:** 各案で取付/荷重/熱領域を定義。 | **D:** Model/解析objectのツリー [A2]、形状指定またはworksheet条件のNamed Selection [A3]。**M:** 各案に同じ意味の領域名を作る。 |
+| 材料・条件 | **D:** 構造例題は材料・機械条件を設定 [C2]。熱例題はStationaryの伝熱と温度/熱源条件を扱う [C3]。**M:** 共通入力表の独立2ケースを設定。 | **D:** system種別で対応荷重/結果を絞る [A2]。定常熱では熱伝導率が必要で、温度・熱流量/熱流束条件を使える [A4]。**M:** 同一入力表の特性と領域を設定。 |
+| メッシュ・ジョブ | **D:** ブラケット例題はメッシュ生成とCompute [C2]、Progressは停止/取消を提供 [C4]。**M:** 6ジョブを区別しメッシュ/設定を記録。 | **D:** メッシュ、設定、解法が独立段階 [A1]。**M:** 識別した6ケースを実行。**?:** 取消/再開挙動は実測していない。 |
+| 診断 | **D:** Progressからlogを参照 [C4]。構造例題は応力特異点と平均化の影響を説明 [C2]。**M:** 診断を対象ケースに残し、成功終了と応力最大値の妥当性を分ける。 | **D:** Solution Informationでsolver出力、solution/result履歴を表示。対応はsolver依存 [A5]。**M:** 修正/再計算前の診断を保存。 |
+| 結果・比較・出力 | **D:** parametric job設定で結果/表/画像を保存できる [C5]。**M:** 記録した数値表と表示条件を揃えA/B/C比較。別ファイル間自動比較の実証ではない。 | **D:** 定常熱資料はcontourと同一modelの解析間chart比較を説明 [A4]。対応objectをtext/区切り形式に出力できる [A6]。**M:** A/B/Cの表を外部で集約。任意の異形状を同期比較できるかは **?**。 |
+
+構造は変位/応力、熱は温度/熱流を比較し、量・単位・平均化・色範囲・カメラを揃える。特異な拘束近傍の最大値だけで設計を順位付けせず、解釈とメッシュ根拠を残す。表/画像には設計・ケース・入力の識別を付ける。これは比較の評価要件であり、各製品が自動で全項目を保持するという主張ではない。
+
+### 初心者負担とエージェント協働：観察ではなく推論
+
+COMSOLのphysics/study/selectionの明示的な節点は覚える概念を増やす一方、中間設定を点検しやすいと推測する。Mechanicalのsystem別の絞込みとNamed Selectionは案内に役立つと推測するが、project/tree/Details間の移動と形状変更後の選択維持には学習が必要となる。これは資料からの推論であり、クリック数、完了時間、誤操作率、使いやすさの優劣を測ったものではない。
+
+COMSOLにはCAD import API [C1] とparametric solver API [C6] の記述がある。エージェント生成scriptを人が確認する方式の調査根拠にはなるが、完成したLLM連携の証拠ではない。Mechanicalは領域・診断・出力の点検経路を確認したが、今回版対応の自動化API本文は取得していない。両製品のagent更新、revision検査、undo、ライセンス、無人実行は **?**。本アプリでは改善案1〜3を準備状況と修正可能な失敗の保持、4〜5を領域/条件と古い結果の結付け、6〜7をジョブ/結果の文脈、8〜9を変更の承認と設計/ケース識別に対応させる。既存の優先順位と画面案は維持する。
+
+### 一次資料と残る検証
+
+以下は全て2026-10-18に本文取得。URLで6.3またはv252を固定する。上表は資料の要約であり、画面を実際に観察した意味ではない。
+
+- C1: [Import 3D CAD](https://doc.comsol.com/6.3/doc/com.comsol.help.cad/cad_ug_ref.6.21.html)。
+- C2: [Bracket — Static Analysis](https://doc.comsol.com/6.3/doc/com.comsol.help.models.sme.bracket_static/bracket_static.html)。
+- C3: [Heat Conduction with a Localized Heat Source on a Disk](https://doc.comsol.com/6.3/doc/com.comsol.help.models.heat.localized_heat_source/localized_heat_source.html)。
+- C4: [The Progress Window](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_ref_solver.36.109.html)。
+- C5: [Using a Job Configuration to Store Parametric Results on File](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_ref_solver.36.232.html)。
+- C6: [Parametric Sweep API](https://doc.comsol.com/6.3/doc/com.comsol.help.comsol/comsol_api_solver.51.74.html)。
+- A1: [General Analysis Workflow](https://ansyshelp.ansys.com/public/Views/Secured/corp/v252/en/wb_sim/ds_overview_approach.html)。
+- A2: [Define Part Behavior](https://ansyshelp.ansys.com/public/Views/Secured/corp/v252/en/wb_sim/ds_Assign_Materials_to_Parts_step.html)。
+- A3: [Defining Named Selections](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_geo_defname.html)。
+- A4: [Steady-State Thermal Analysis](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_static_thermal_analysis_type.html)。
+- A5: [Specifying Solution Information](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_Nonlinear.html)。
+- A6: [Data Export](https://ansyshelp.ansys.com/public/views/secured/corp/v252/en/wb_sim/ds_ExportingData.html)。
+
+本調査単位の成果は根拠付き操作比較と改善優先付けであり、6ケースの実証ではない。実機で残る作業は、共通形状/入力表の供給、取込と領域対応、固定不足/誤面選択の診断と復旧、計算後の入力変更と古い結果の表示、ジョブ取消、6ケースの比較/出力/再読込、キーボード・言語・狭い画面での確認。面の自動追従、solver精度の一致、初心者負担の実測改善は未実証。
+
 ## 受け入れ条件との対応（`UIRESEARCH1`）
 
 | 要求 | この文書での扱い |
 |---|---|
-| 取込・ツリー・領域選択・材料条件・ジョブ・診断・結果比較出力の比較 | 比較表（領域選択、出力は一部のみ。残りは未確認） |
-| URL・版・確認日・観察と推測の区別 | 表と「観察」「推測」節。取得日は全て2026-10-15 |
-| 初心者の負担とエージェント協働の評価 | 改善案1〜3, 8 |
+| 取込・ツリー・領域選択・材料条件・ジョブ・診断・結果比較出力の比較 | 版固定の共通例題表で2製品の全段階を比較。MechanicalのSTEP詳細、異形状同期比較は未確認と明記 |
+| URL・版・確認日・観察と推測の区別 | 旧調査は2026-10-15、新一次資料は6.3/v252固定・2026-10-18取得。D/M/?で直接記述・対応付け・不足を区別 |
+| 初心者の負担とエージェント協働の評価 | 推論専用節、自動化根拠の境界、改善案1〜9。実測した使いやすさを主張しない |
 | 優先順位付き改善案と画面案 | 改善案1〜9と画面案 |
 
 ## 関連資料
