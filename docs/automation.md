@@ -727,3 +727,7 @@ full entryは既定34/接続36ツール（minimal3・live91操作は不変）。
 full entry既定35/接続37ツール（minimal3・live91は不変）。studio_archive_resultsは1〜8件の結果JSONを新しいv1 case archiveへまとめます。results各要素に絶対path、一意name（100文字以内）、lowercase64hex expectedSha256（prefixなし）、新outputPathを指定。全case/view検証、指定順、1source/合計/生成archive各100000000bytes上限、全source再照合、原子的上書き禁止を適用。既存store予算で先に拒否される場合もあります。入力・根拠・runtimeを保持し解析/欠落build推定は行いません。生成後は既存toolで検証/一覧/入力読取/比較できます。
 
 厳格な過渡音響preflightは明示正timeStepだけで60000stepを超える入力をsolver既存式で事前拒否。自動刻み/mesh依存仕事量はmesh後検査を維持。overflow時は非JSON数値の代わりにstepCountOverflow:trueを返しlegacy互換を維持します。
+
+## 2026-10-18: Skillの独立post-pair一巡
+
+2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 [証跡](evidence/2026-10-18-skill-loop-independent-post-pair.json)と[比較PNG](evidence/2026-10-18-skill-loop-independent-post-pair.png)を保存。clean674cf804上の専用Chrome/正式stdio MCP（37ツール）を使用し、source・fixture・過去QAを読まずに再現しました。PNGは1280×640・87780bytes、archiveは241297bytes。共通0〜0.08mmレンジの2ケースを目視確認済み。全job/export/transfer解放、GUI切断後sessions=[]、stdio EOF終了0、自己所有dev停止を確認。以前の接続準備停止記録は履歴として保持し、gate/statusは昇格しません。
