@@ -4,9 +4,9 @@
   "release": {
     "version": "v0.44",
     "date": "2026-10-18",
-    "testCount": 1529,
-    "description": "公開済み130件・残37件。正式MCPで復元入力の2解析→SHA固定ケース集保存→別process再読/検証/同一点比較まで一巡。新archiveは241900bytes、0.04/0.08mm・比2・元source不変を確認。明示timeStepで60000stepを超える音響入力を既存solver規則で事前拒否しoverflow診断もJSON対応。保存元build不明と新Node dirty実行を分離し一般精度/ブラウザ状態復元/公開gateは未完。背景手動確認は利用者待ち。件数1529はPR120確定CI（1526成功・3skip・失敗0）。 独立SkillのGUI接続後の合成一巡は成功。GUI接続前提と全Skill gate未完は維持。",
-    "descriptionEn": "130released/37unfinished. Formal MCP now completes restored-input analyses,SHA-pinned archive creation,and separate-process reread/validation/same-point comparison:241900bytes,0.04/0.08mm,ratio2,unchanged source. Explicit acoustic steps implying>60000steps are refused by existing solver rules with JSON-safe overflow evidence. Missing saved build and new dirty Node runtime stay separate;general accuracy,browser restoration and product gates remain open. Manual background QA waits.1529 is completed PR120 CI(1526passed,3skipped,0failed). Independent synthetic Skill loop passed after GUI pairing;GUI prerequisite and full Skill gate remain open."
+    "testCount": 1541,
+    "description": "公開済み130件・残37件。比較/動画入力のエラー対象フォーカス・日英アクセシビリティ・修正解除を段階実装しUIIMPROVE1をbuildingへ。調和音響の既存波数/k²数値範囲拒否を事前検査へ整合。独立SkillはGUI接続後の合成一巡に成功、GUI準備前提・全Skill/親/公開gateは未完。修正後出力成功はunitのみ、Chrome全出力再成功は未実施。1541件はPR121確定CI（1538成功・3skip・失敗0）。",
+    "descriptionEn": "130released/37unfinished. Comparison/video validation focuses invalid controls,provides JP/EN accessible errors and clears them on edit;UIIMPROVE1 moves to building. Harmonic preflight matches existing wave-number/k² numerical refusals. Independent synthetic Skill loop passed after GUI pairing;GUI setup and full Skill/parent/publication gates remain open. Corrected-output success is unit-tested only;complete Chrome output reruns remain unperformed.1541 is completed PR121 CI(1538passed,3skipped,0failed)."
   },
   "tasks": [
     {
@@ -1272,7 +1272,7 @@
       "id": "UIIMPROVE1",
       "title": "CAEのUI研究に基づいて操作画面を改良",
       "titleEn": "Improve interfaces based on CAE workflow research",
-      "status": "queued",
+      "status": "building",
       "category": "UI",
       "depends": [
         "UIRESEARCH1"
@@ -1280,7 +1280,10 @@
       "detail": "調査で優先した改善を段階実装する。既存CAEの画面構成をそのまま増やすのではなく、本アプリの初心者とLLM協働の用途に適用する。",
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
-      "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions."
+      "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
+      "lastUpdate": "2026-10-18: 比較と動画の入力エラーで対象へフォーカスしaria-invalid/errormessageを設定、修正入力で解除。実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみ、Chrome全出力の再成功・全受入は未確認のためbuilding。",
+      "lastUpdateEn": "2026-10-18: Comparison/video input errors focus the offending control and set aria-invalid/errormessage; editing clears them. Real Chrome verifies JP/EN,390px and keyboard recovery. Successful output after correction is unit-tested only;complete Chrome output reruns and full acceptance remain open;building.",
+      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json"
     },
     {
       "id": "AGENTEDIT1",
@@ -1363,8 +1366,8 @@
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs; docs/evidence/2026-10-18-skill-loop-independent-post-pair.json",
-      "lastUpdate": "2026-10-18: 正式MCPで入力復元→2解析→新ケース集保存→別process再読/同一点比較を一巡。探索的根拠とruntimeを保持。全物理の桁規則/精度と全Skill gateは残るためchecking維持。 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。",
-      "lastUpdateEn": "2026-10-18: Formal MCP completes restore,two analyses,new archive,separate-process read and point comparison while preserving provenance/runtime. All-physics magnitude/accuracy and the full Skill gate remain open;stays checking. 2026-10-18: An independent fresh-Chrome evaluation followed only the Skill and public MCP contracts after GUI pairing: synthetic input/provenance repair,two solves,comparison,and SHA-verified PNG/archive. Verified0.04/0.08mm,ratio2,four-state preservation after both outputs and three refusals. GUI pairing remains prerequisite;public HTTPS,the full Skill gate and general accuracy remain open."
+      "lastUpdate": "2026-10-18: 正式MCPで入力復元→2解析→新ケース集保存→別process再読/同一点比較を一巡。探索的根拠とruntimeを保持。全物理の桁規則/精度と全Skill gateは残るためchecking維持。 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 2026-10-18: 調和音響の波数/k²が既存solverの数値範囲を超える入力をmesh前に拒否。sweepは実際に解く端点だけを確認。新物理閾値の導入や全物理精度の保証ではない。",
+      "lastUpdateEn": "2026-10-18: Formal MCP completes restore,two analyses,new archive,separate-process read and point comparison while preserving provenance/runtime. All-physics magnitude/accuracy and the full Skill gate remain open;stays checking. 2026-10-18: An independent fresh-Chrome evaluation followed only the Skill and public MCP contracts after GUI pairing: synthetic input/provenance repair,two solves,comparison,and SHA-verified PNG/archive. Verified0.04/0.08mm,ratio2,four-state preservation after both outputs and three refusals. GUI pairing remains prerequisite;public HTTPS,the full Skill gate and general accuracy remain open. 2026-10-18: Harmonic wave-number/k² numerical limits already enforced by the solver are rejected before meshing;only solved sweep endpoints are checked. No new physical threshold or all-physics accuracy guarantee."
     },
     {
       "id": "VIEWCOMPARE",

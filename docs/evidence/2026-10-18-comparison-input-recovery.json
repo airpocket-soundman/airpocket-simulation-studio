@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "outcome": "passed-bounded-comparison-input-recovery",
+  "task": "UIIMPROVE1",
+  "sourceBasis": "codex/workflow-next with uncommitted UI change; final candidate revision is recorded by publication evidence",
+  "research": "docs/ui-research.md improvement 3: diagnostics lead to the correction location",
+  "scope": {
+    "files": [
+      "src/ui/view-compare-ui.js",
+      "tests/ui-view-compare.test.mjs"
+    ],
+    "behavior": "Comparison validation errors identify the corresponding input, link aria-errormessage to visible diagnostics, and focus that input after temporary controls unlock. Keyboard input clears the invalid marker. Existing semantic comparison/export contracts and physical validation stay unchanged."
+  },
+  "beforeAfter": {
+    "baseline": "Source inspection: existing handler displayed error text and left focus on the start button; no baseline browser run or timed user study was performed.",
+    "after": "Actual Chrome DOM checks show direct focus on the invalid field after the start action; the next keystroke can correct it without locating/clicking the field.",
+    "interactionCount": "One field-selection click is removed from the pointer recovery sequence by design; measured completion time and broader interaction counts remain unverified."
+  },
+  "browser": {
+    "surface": "Dedicated CUA Chrome tab",
+    "origin": "http://127.0.0.1:5174",
+    "steps": [
+      {
+        "language": "en",
+        "input": "video duration 0",
+        "result": {
+          "activeElementId": "compare-video-seconds",
+          "ariaInvalid": "true",
+          "ariaErrorMessage": "compare-video-status",
+          "message": "Duration must be an integer from 1 through 15 seconds."
+        }
+      },
+      {
+        "language": "en",
+        "input": "ControlOrMeta+A, then key 2",
+        "result": {
+          "value": "2",
+          "ariaInvalid": null
+        }
+      },
+      {
+        "language": "en",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "input": "time animation with missing start/end",
+        "result": {
+          "activeElementId": "compare-video-from",
+          "ariaInvalid": "true",
+          "message": "Enter an increasing physical time range starting at zero or above.",
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "language": "ja",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "input": "video duration 16",
+        "result": {
+          "activeElementId": "compare-video-seconds",
+          "ariaInvalid": "true",
+          "message": "長さは1〜15秒の整数で指定してください。",
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "language": "ja",
+        "input": "ControlOrMeta+A, then key 2",
+        "result": {
+          "value": "2",
+          "ariaInvalid": null
+        }
+      }
+    ],
+    "screenshots": [
+      "2026-10-18-comparison-input-recovery-en-narrow.png",
+      "2026-10-18-comparison-input-recovery-ja-narrow.png"
+    ],
+    "limits": [
+      "No successful corrected browser export was attempted in this UI evaluation; existing happy-path export evidence is separate.",
+      "Japanese was switched in the open page; the preexisting animation option caption retained English. Japanese new diagnostic and surrounding labels were verified.",
+      "No project/case input was loaded or mutated in this browser test.",
+      "No public HTTPS or full UIIMPROVE1 acceptance claim."
+    ]
+  },
+  "automated": {
+    "command": "node --test tests/ui-view-compare.test.mjs",
+    "passed": 23,
+    "failed": 0,
+    "newTests": 3,
+    "checks": [
+      "Missing shared time refuses before rendering and focuses the field; correction renders comparison.",
+      "Invalid video duration focuses after unlocking; correction starts export with unchanged panel settings.",
+      "Invalid physical range and negative tolerance focus the exact control before video start."
+    ],
+    "correctedExportSuccess": "Unit tests only"
+  },
+  "cleanup": {
+    "viewportReset": true,
+    "ownedDevStopped": true,
+    "ownedTabClosed": true
+  },
+  "status": "Partial UI implementation evidence only; parent task and gates remain incomplete"
+}

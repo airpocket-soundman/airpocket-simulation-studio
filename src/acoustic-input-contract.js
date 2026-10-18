@@ -1,3 +1,4 @@
+import {acousticResolutionLimits} from './acoustic-resolution-contract.js';
 import {canonicalJson} from './project-revision.js';
 import {validateImpedance} from './acoustic-impedance.js';
 import {validateSphere} from './fluid-domain.js';
@@ -32,6 +33,10 @@ export function inspectAcousticInputContract(project,options={}, {mode='legacy'}
   }else require('/study/referencePressurePa',s.referencePressurePa,positive,'Explicit positive RMS reference pressure required');
   if(s.sweep===true){
    require('/study/sweepStart',s.sweepStart,positive,'Positive sweep start required');require('/study/sweepEnd',s.sweepEnd,value=>positive(value)&&value>=s.sweepStart,'Sweep end must be at least its start');require('/study/sweepCount',s.sweepCount,value=>Number.isInteger(value)&&value>=1&&value<=20,'Sweep count must be from 1 to 20');require('/study/receiverPoint',s.receiverPoint,point,'Explicit sweep receiver required');
+  }
+  if(s.acousticTransient===false&&positive(s.soundSpeed)&&Number.isFinite(s.lossFactor)&&s.lossFactor>=0){
+   const frequencies=[['frequency',s.frequency],...(s.sweep===true?[['sweepStart',s.sweepStart],...(s.sweepCount>1?[['sweepEnd',s.sweepEnd]]:[])]:[])];
+   for(const [key,frequency]of frequencies)if(positive(frequency))try{acousticResolutionLimits({frequency,soundSpeed:s.soundSpeed,lossFactor:s.lossFactor});if(!Number.isFinite((2*Math.PI*frequency/s.soundSpeed)**2))throw Error('Frequency/speed ratio exceeds numerical limits');}catch(error){add('ACOUSTIC_NUMERICAL_RANGE_UNSUPPORTED','/study/'+key,error.message);}
   }
   if(s.exteriorRadiation===true){requiredPointers.push('/sourceModel/enclosure');try{if(project.sourceModel?.kind!=='fluidDomain'||project.sourceModel.mode==='internal')throw Error('Exterior fluid domain required');validateSphere(project.sourceModel.enclosure);}catch{add('ACOUSTIC_RADIATION_GEOMETRY_INVALID','/sourceModel/enclosure','Exterior radiation requires a spherical exterior domain');}}
   if(s.directivityEnabled===true){
