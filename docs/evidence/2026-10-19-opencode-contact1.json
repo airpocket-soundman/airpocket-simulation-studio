@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "docs/opencode-work-orders-2026-10-19/11-CONTACT1.md",
+  "status": "uncommitted source snapshot; Node reference only, not deployed verification",
+  "scope": "One degree of freedom unilateral penalty contact reference solver (spring + rigid displacement stop). Node-only pure module. Not connected to the production Tet4 contact path, the analysis worker, the schema or the UI; thermal contact conductance is not reused as mechanical contact.",
+  "baseCommit": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-contact1",
+  "sourceFilesSha256": {
+    "src/unilateral-contact-reference.js": "99bdead719cd983b5fdb1265672145d86d178e8f953792a9f231b0926802bafb",
+    "tests/unilateral-contact-reference.test.mjs": "8b6b6f050e16a1a7eefc81df0bd87b34f9ab0c6dcb35c4ab4929216c39b960e2",
+    "src/module-layers.json": "9331b967cb95f288aa73693d063a007aff8bdd51ffd73677f48b31113dd799c5"
+  },
+  "changedFiles": [
+    "src/unilateral-contact-reference.js (new, domain layer)",
+    "tests/unilateral-contact-reference.test.mjs (new)",
+    "src/module-layers.json (one line: classify the new module in the domain layer)"
+  ],
+  "model": {
+    "signConvention": "+u approaches the stop (mm); penetration = max(0, u - gapMm); contactReactionN = -penaltyNPerMm * penetration; residualN = springNPerMm*u + penaltyNPerMm*max(0,u-gapMm) - forceN",
+    "method": "active-set / piecewise Newton, fixed initial iterate u0 = 0",
+    "analyticNonContact": "u = forceN / springNPerMm",
+    "analyticContact": "u = (forceN + penaltyNPerMm*gapMm) / (springNPerMm + penaltyNPerMm)",
+    "resultFields": ["converged", "iterations", "u", "gapRemainingMm", "penetrationMm", "springForceN", "contactReactionN", "residualN"],
+    "forceSignPolicy": "the applied force sign is preserved; it is never replaced by its absolute value"
+  },
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass (dependencies installed in this worktree only; shared node_modules untouched)"
+    },
+    {
+      "command": "node --test tests/unilateral-contact-reference.test.mjs tests/elastic.test.mjs",
+      "result": "pass: 11 tests, 0 fail, 0 skipped (9 new contact tests + 2 unchanged elastic tests), duration_ms 589.7919"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass: Contract declarations type-check (5 declaration files), exit 0"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "result": "pass: 19 tests, 0 fail (related check: the new src file is classified exactly once and no layer edge is forbidden), duration_ms 956.5237"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass: no whitespace errors, exit 0"
+    }
+  ],
+  "referenceValues": {
+    "units": {"springNPerMm": "N/mm", "penaltyNPerMm": "N/mm", "gapMm": "mm", "forceN": "N", "toleranceN": "N", "u": "mm", "contactReactionN": "N"},
+    "fixture": "synthetic reference problem, not measured data: k = 100 N/mm, gap = 1 mm, tolerance = 1e-9 N, maxIterations = 50",
+    "cases": [
+      {"forceN": 50, "penaltyNPerMm": 10000, "expected": {"u": 0.5, "penetrationMm": 0, "contactReactionN": 0}, "measured": {"u": 0.5, "penetrationMm": 0, "contactReactionN": 0, "iterations": 2}, "residualN": 0},
+      {"forceN": 200, "penaltyNPerMm": 10000, "expected": {"u": 1.00990099009901, "penetrationMm": 0.00990099009901, "contactReactionN": -99.0099009900991}, "measured": {"u": 1.00990099009901, "penetrationMm": 0.00990099009900991, "contactReactionN": -99.0099009900991, "iterations": 3}, "residualN": 8.526512829121202e-14},
+      {"forceN": 100, "penaltyNPerMm": 10000, "expected": {"u": 1, "penetrationMm": 0, "contactReactionN": 0}, "measured": {"u": 1, "penetrationMm": 0, "contactReactionN": 0, "iterations": 2}, "residualN": 0},
+      {"forceN": -50, "penaltyNPerMm": 10000, "expected": {"u": -0.5, "penetrationMm": 0, "contactReactionN": 0}, "measured": {"u": -0.5, "penetrationMm": 0, "contactReactionN": 0, "iterations": 2}, "residualN": 0}
+    ],
+    "penaltySweepForceN200": [
+      {"penaltyNPerMm": 10000, "penetrationMm": 0.00990099009900991, "u": 1.00990099009901, "contactReactionN": -99.0099009900991, "residualN": 8.526512829121202e-14},
+      {"penaltyNPerMm": 100000, "penetrationMm": 0.0009990009990010762, "u": 1.000999000999001, "contactReactionN": -99.90009990010762, "residualN": 7.73070496506989e-12},
+      {"penaltyNPerMm": 1000000, "penetrationMm": 0.00009999000099991662, "u": 1.000099990001, "contactReactionN": -99.99000099991662, "residualN": 1.659827830735594e-11}
+    ],
+    "penaltySweepConclusion": "penetration strictly decreases and the contact reaction approaches the rigid-stop ideal -100 N (from a magnitude below 100 N) as kp grows; all residuals <= 1e-9 N",
+    "comparisonTolerance": "analytic expectations compared with relative tolerance 1e-12; residuals asserted <= 1e-9 N as specified by the work order (no tolerance widening)"
+  },
+  "refusals": {
+    "cases": [
+      "springNPerMm = 0 / -1 / Infinity / NaN -> CONTACT_SPRING_INVALID",
+      "penaltyNPerMm = 0 / -5 / Infinity -> CONTACT_PENALTY_INVALID",
+      "gapMm = -1 / NaN / Infinity -> CONTACT_GAP_INVALID",
+      "forceN = NaN / Infinity / -Infinity -> CONTACT_FORCE_INVALID",
+      "toleranceN = 0 / -1e-9 / NaN -> CONTACT_TOLERANCE_INVALID",
+      "maxIterations = 0 / -3 / 1.5 / Infinity -> CONTACT_MAX_ITERATIONS_INVALID",
+      "unknown key frictionCoefficient or tieBreak -> CONTACT_INPUT_UNKNOWN_KEY (friction is not silently ignored and no success is returned)",
+      "missing required key (gapMm) -> CONTACT_INPUT_MISSING_KEY",
+      "null or array input -> CONTACT_INPUT_INVALID"
+    ],
+    "typedRefusalShape": "thrown Error with name 'UnilateralContactRefusal', boolean refusal = true and a stable code string (code-based, JSON-safe finite details only)",
+    "nonConvergence": {
+      "fixedCondition": {"springNPerMm": 100, "penaltyNPerMm": 10000, "gapMm": 1, "forceN": 200, "toleranceN": 1e-9, "maxIterations": 1},
+      "observed": {"code": "CONTACT_NOT_CONVERGED", "refusal": true, "details": {"iterations": 1, "residualN": -200, "toleranceN": 1e-9}},
+      "note": "no success result is returned; the same problem converges (iterations 3) when maxIterations = 3"
+    }
+  },
+  "verifiedAssertions": {
+    "newFocusedTests": 9,
+    "allPassed": true,
+    "noSkipped": true,
+    "inputNotMutated": true,
+    "noFrictionOrHistoryMetadataOnResult": true,
+    "gapZeroIsAValidStop": true,
+    "negativeForceKeptSigned": true
+  },
+  "notVerified": [
+    "production Tet4 contact connectivity, active-set assembly, interface search or surface load distribution (not connected)",
+    "friction, friction convergence, bolt pretension or large sliding",
+    "analysis worker, studio API, MCP tools, schema, preflight, progress board or GUI wiring",
+    "3D contact, contact element quality, mesh dependence or any physical accuracy claim",
+    "real deployed/browser verification of any kind"
+  ],
+  "parentTask": {
+    "id": "CONTACT1",
+    "status": "queued (maintained; not promoted by this bounded result)",
+    "progressJsonChanged": false,
+    "progressUpdateProposed": "Keep CONTACT1 queued. Optional lastUpdate addition: 1自由度の片側penalty接触参照ソルバー（src/unilateral-contact-reference.js）を追加。k=100 N/mm・gap=1 mm・kp=1e4/1e5/1e6で非接触u=F/k、接触u=(F+kp*gap)/(k+kp)、硬いstopで反力が-100 Nへ接近することを9テストで確認。3D接触・摩擦・ボルト・本番Tet4接続は未対応。 -- This text is proposed for the integrator; src/progress.json was not modified by this work unit."
+  },
+  "notConnected": [
+    "src/fem-core.js",
+    "src/plasticity-core.js",
+    "src/hyperelastic-core.js",
+    "src/analysis.worker.js",
+    "src/semantic-operation-schema.js",
+    "UI",
+    "src/thermal-contact.js (thermal contact is not reused as mechanical contact)"
+  ]
+}
