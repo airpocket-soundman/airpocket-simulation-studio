@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-19",
+  "workOrder": "12-COUPLE4B",
+  "parentTask": "COUPLE4B",
+  "parentStatus": "queued (unchanged; this unit only covers the discrete faceted pressure-transfer operator)",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-couple4b",
+  "implemented": [
+    "src/curved-pressure-transfer.js: pure facet-fixed complex pressure -> nodal force operator and its exact transpose (nodal displacement -> per-face normal-displacement integral) with one shared area/3 weight set, plus conjugate virtual-work identity, geometry normals, total area, resultant force and origin moment; validates open/closed declaration, closed-shell edge incidence and orientation, and rejects non-finite input",
+    "tests/curved-pressure-transfer.test.mjs: 9 reference/rejection tests",
+    "src/module-layers.json: one line classifying curved-pressure-transfer.js in the domain layer"
+  ],
+  "notConnected": [
+    "Not wired into any solver, worker, MCP tool or UI path; no forced frequency response, damping or two-way coupled solve was added",
+    "vibration-source planar/one-way-only rejection left untouched"
+  ],
+  "changedFiles": [
+    "src/curved-pressure-transfer.js (new)",
+    "tests/curved-pressure-transfer.test.mjs (new)",
+    "src/module-layers.json (+1 line)"
+  ],
+  "commands": [
+    {
+      "cmd": "node --test tests/curved-pressure-transfer.test.mjs tests/vibration-source.test.mjs",
+      "note": "public/fem-kernel.wasm was absent; built once with `node scripts/build-kernel.mjs` (existing npm test prerequisite, no native fetch beyond the repo kernel build)",
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "cmd": "node --test tests/module-boundaries.test.mjs",
+      "pass": 19,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "cmd": "node scripts/check-module-boundaries.mjs",
+      "result": "module boundary check passed: 217 files, 554 local edges, 7 allowlisted violation(s)",
+      "pass": true
+    },
+    {
+      "cmd": "npm run check:contracts",
+      "result": "Contract declarations type-check (5 declaration files).",
+      "pass": true
+    },
+    {
+      "cmd": "git diff --check",
+      "result": "no whitespace errors",
+      "pass": true
+    }
+  ],
+  "inputs": {
+    "units": "nodes mm, pressure Pa as {real,imag}, displacement m, force N, moment N*m, work J, normal-displacement integral m^3",
+    "syntheticRightTriangle": {
+      "nodesMm": [[0, 0, 0], [10, 0, 0], [0, 10, 0]],
+      "triangle": [0, 1, 2],
+      "surface": "open",
+      "normal": [0, 0, 1],
+      "areaMm2Expected": 50,
+      "pressurePa": { "real": 1000, "imag": 500 }
+    },
+    "closedOctahedron": {
+      "nodesMm": [[10, 0, 0], [-10, 0, 0], [0, 10, 0], [0, -10, 0], [0, 0, 10], [0, 0, -10]],
+      "triangles": [[0, 2, 4], [2, 1, 4], [1, 3, 4], [3, 0, 4], [2, 0, 5], [1, 2, 5], [3, 1, 5], [0, 3, 5]],
+      "surface": "closed",
+      "note": "faceted polyhedron, NOT a smooth-sphere accuracy reference"
+    }
+  },
+  "measurements": {
+    "rightTriangleAreaMm2": 50,
+    "rightTriangleNormal": [0, 0, 1],
+    "resultantZ_N": { "real": -0.04999999999999999, "imag": -0.024999999999999994 },
+    "resultantZ_expected_N": { "real": -0.05, "imag": -0.025 },
+    "vertexForceZ_N": { "real": -0.016666666666666663, "imag": -0.008333333333333331 },
+    "vertexForceZ_expected_N": { "real": -0.016666666666666666, "imag": -0.008333333333333333 },
+    "vertexForceAbsError_N": 3e-18,
+    "octahedronTotalAreaMm2": 692.820323027551,
+    "octahedronTotalAreaExpected_400sqrt3_Mm2": 692.8203230275509,
+    "octahedronUniformMaxForceComponentAbs_N": 0,
+    "octahedronUniformMaxMomentComponentAbs_Nm": 0,
+    "virtualWorkRelativeError_perFaceComplexPressure": 1.3999893842731783e-16,
+    "virtualWorkAbsoluteErrorJ_perFaceComplexPressure": 1.9166167708542177e-20,
+    "virtualWorkTolerance": { "relative": 1e-12, "absoluteJ": 1e-14 },
+    "octahedronRigidTranslationWorkJ": { "real": 0, "imag": 0 },
+    "octahedronRigidTranslationAbsErrorJ": 0,
+    "octahedronRigidRotationWorkJ": { "real": 0, "imag": 0 },
+    "octahedronRigidRotationAbsErrorJ": 0,
+    "octahedronRigidTranslationVolumeM3": 0,
+    "closedTetrahedronVariedPressureResultantAbs_N": 0.09172,
+    "closedTetrahedronVariedPressureMomentAbs_Nm": 0.00010475,
+    "reversedWindingResultantZ_N": { "real": 0.04999999999999999, "imag": 0.024999999999999994 },
+    "phasePreservation": "equal magnitude with phase 0 vs 90 deg gives different complex force; imaginary components retained"
+  },
+  "rejections": [
+    "NaN in nodes -> 'requires finite mm nodes'",
+    "Infinity in nodes -> 'requires finite mm nodes'",
+    "Infinity in pressure -> 'requires finite complex pressure in Pa'",
+    "pressure length != triangle count -> 'requires one pressure per oriented face'",
+    "collinear (degenerate) triangle -> 'rejects a degenerate face'",
+    "duplicate face node set -> 'rejects a duplicate face'",
+    "closed declaration on a single triangle -> 'rejects an open-edge closed shell'",
+    "closed octahedron missing one face -> 'rejects an open-edge closed shell'",
+    "closed octahedron with one face reversed -> 'rejects an inconsistent closed-shell orientation'",
+    "lengthUnit 'cm' -> 'rejects an unknown length or pressure unit'",
+    "pressureUnit 'kPa' -> 'rejects an unknown length or pressure unit'",
+    "displacement array length mismatch -> 'requires a finite complex nodal displacement in metres'"
+  ],
+  "notVerified": [
+    "No non-matching curved-surface projection / nearest-surface transfer (rejected by design this unit)",
+    "No complex frequency response, damping, added mass or two-way coupled solve",
+    "No smooth curved-surface integration accuracy claim: only the discrete faceted integral is verified",
+    "No browser/UI/MCP path exercised; no real CAD or measured physical data involved",
+    "Full repository test suite and build not run in this unit"
+  ],
+  "notes": [
+    "Both work = Sigma conj(u).f and -Sigma p*conj(integral u.n dA) are computed independently and compared; the equality holds to floating-point round-off (rel 1.4e-16).",
+    "The octahedron origin moment is structurally zero because every face centroid lies along its own normal; the generally-nonzero force/moment demonstration therefore uses a closed tetrahedron.",
+    "Input contract objects are not mutated (asserted via JSON snapshot)."
+  ]
+}
