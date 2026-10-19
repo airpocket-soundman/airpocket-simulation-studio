@@ -6,9 +6,13 @@ const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value)
  * A value is flagged when |value| is nonzero, finite and outside [min,max] for
  * the declared unit. Bounds are deliberately wide (soft foam .. diamond) so a
  * flag means "probably another unit prefix", e.g. 210 (GPa) or 2.1e5 (MPa) given
- * as Pa for Young's modulus. The value is never changed and is not an error. */
+ * as Pa for Young's modulus. The value is never changed and is not an error.
+ * The same Young's modulus rule is reused per component for
+ * /materialProperties/orthotropic/youngModuliPa/0..2 when that material model is
+ * present; it is not extended to shear moduli, Poisson ratios or other arrays. */
+export const YOUNG_MODULUS_PA_RULE=Object.freeze({pointer:'/materialProperties/youngModulus',unit:'Pa',min:1e5,max:1e13,hint:'Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa'});
 export const UNIT_MAGNITUDE_RULES=Object.freeze([
- {pointer:'/materialProperties/youngModulus',unit:'Pa',min:1e5,max:1e13,hint:'Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa'},
+ YOUNG_MODULUS_PA_RULE,
  {pointer:'/materialProperties/density',unit:'kg/m3',min:.01,max:3e4,hint:'Values above 3e4 may be g/m3 or a mass per different volume'},
  {pointer:'/materialProperties/conductivity',unit:'W/(m*K)',min:.005,max:5000,hint:'Check W/(m*K) versus mW/(m*K) or W/(cm*K)'},
  {pointer:'/materialProperties/specificHeat',unit:'J/(kg*K)',min:10,max:3e4,hint:'Values near 1 may be kJ/(kg*K); convert to J/(kg*K)'},
@@ -37,6 +41,11 @@ export function inspectUnitMagnitude(project){
  };
  if(!object(project))return out;
  for(const rule of UNIT_MAGNITUDE_RULES)check(rule.pointer,walk(project,rule.pointer),rule);
+ // Reuse the named Young's modulus rule for the three directional moduli of an
+ // explicit orthotropic material, if any. Order stays index 0..2, each component
+ // is checked once, and non-array/invalid lengths are left to the input contract.
+ const orthotropic=object(project.materialProperties)&&object(project.materialProperties.orthotropic)?project.materialProperties.orthotropic:null;
+ if(orthotropic&&Array.isArray(orthotropic.youngModuliPa))for(const index of [0,1,2])check('/materialProperties/orthotropic/youngModuliPa/'+index,orthotropic.youngModuliPa[index],YOUNG_MODULUS_PA_RULE);
  if(Array.isArray(project.conditions))project.conditions.forEach((condition,index)=>{
   const rule=object(condition)?CONDITION_MAGNITUDE_RULES[condition.type]:undefined;
   if(rule)check('/conditions/'+index+'/value',condition.value,rule);
