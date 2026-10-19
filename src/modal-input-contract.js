@@ -50,7 +50,7 @@ export function inspectModalInputContract(project,options={}, {mode='legacy'}={}
    require(base+'/value',c.value,v=>Number.isFinite(v)&&(c.type==='fixed'||v===0),'Only homogeneous supports or exactly zero loads are supported',c.type==='displacement'?'mm':c.type==='force'?'N':['pressure','normalTraction'].includes(c.type)?'Pa':null);
    require(base+'/direction',c.direction,v=>directionValid(v,c.type),'Serialized direction must be finite; forces and prescribed directions must be nonzero');
    require(base+'/regions',c.regions,regionsValid,'Nonempty valid structural boundary regions required');
-   for(const key of ['frame','planarRegion','cylindricalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
+   for(const key of ['frame','planarRegion','cylindricalRegion','sphericalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
    let validFrame=true;
    if(c.type==='displacement'&&c.frame!==undefined)try{
     validateFrame(c.frame);

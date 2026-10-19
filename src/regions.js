@@ -8,6 +8,7 @@ import {validateTransientAcousticStudy} from './acoustic-transient.js';
 import {validateFarFieldStudy} from './acoustic-far-field.js';
 import {validateFluidDomain,validateSphere,validateTube} from './fluid-domain.js';
 import {validateChannelStudy} from './channel-flow.js';
+import {sphericalFrame,sphericalTriangles} from './spherical-region.js';
 import {cylindricalFrame} from './cylindrical-region.js';
 import {validateImpedance} from './acoustic-impedance.js';
 import {validateTemperatureSource} from './temperature-transfer.js';
@@ -60,10 +61,12 @@ export function validateProject(project) {
     if(!Array.isArray(m.faceIds)||m.faceIds.length!==m.positions.length/9||!m.faceIds.every(Number.isInteger)) throw Error('面データが不正です。');
   }
   if(project.planarRegion){const d=validatePlanarRegion(project.planarRegion);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid planar mesh');planarTriangles(project.meshes[d.mesh].positions,d);}
+  if(project.sphericalRegion){const d=project.sphericalRegion;sphericalFrame(d);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid spherical mesh');if(project.planarRegion||project.cylindricalRegion)throw Error('Conflicting selection dimensions');}
   for(const c of project.conditions) {
     if(c.cadUpdateRequired!==undefined){validatePendingCadCondition(c,validateProject);continue;}
     if(!Array.isArray(c.regions)||!c.regions.length||c.regions.some(r=>!Array.isArray(r.triangles)||!r.triangles.length))throw Error('Condition has no selected region');
     if(c.planarRegion){const d=validatePlanarRegion(c.planarRegion);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh]||c.regions.length!==1||c.regions[0].mesh!==d.mesh)throw Error('Invalid planar condition mesh');const expected=planarTriangles(project.meshes[d.mesh].positions,d),actual=new Set(c.regions[0].triangles);if(actual.size!==expected.length||!expected.every(t=>actual.has(t)))throw Error('Planar dimensions do not match the saved region');if(c.type==='thermalContact')throw Error('Exact planar thermal contact patches are not yet supported');}
+    if(c.sphericalRegion){sphericalFrame(c.sphericalRegion);if(c.type==='thermalContact')throw Error('Exact spherical thermal contact patches are not supported');const d=c.sphericalRegion;if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh]||c.regions.length!==1||c.regions[0].mesh!==d.mesh)throw Error('Invalid condition spherical mesh');const expected=sphericalTriangles(project.meshes[d.mesh].positions,d),actual=new Set(c.regions[0].triangles);if(actual.size!==expected.length||!expected.every(t=>actual.has(t)))throw Error('Spherical dimensions do not match the saved region');if(c.planarRegion||c.cylindricalRegion)throw Error('Conflicting condition dimensions');}
     if(c.cylindricalRegion){const d=c.cylindricalRegion;if(d.exactCad&&c.type==='thermalContact')throw Error('Exact cylindrical thermal contact patches are not yet supported');cylindricalFrame(d);if(!Number.isInteger(d.mesh)||!project.meshes[d.mesh])throw Error('Invalid condition cylindrical mesh');}
     if(!['fixed','displacement','force','pressure','normalTraction','temperature','heatFlux','heatPower','convection','radiation','thermalContact','acousticPressure','acousticImpedance'].includes(c.type)||!Array.isArray(c.regions)||!Number.isFinite(c.value)||!Array.isArray(c.direction)||c.direction.length!==3||!c.direction.every(Number.isFinite)) throw Error('条件データが不正です。');
     if(c.type==='displacement'){if(Math.hypot(...c.direction)<1e-12)throw Error('Invalid constraint direction');if(c.frame){validateFrame(c.frame);if(c.direction.some((v,k)=>Math.abs(v-c.frame.axes[c.frame.axis][k])>1e-7))throw Error('Constraint direction does not match local frame');}}

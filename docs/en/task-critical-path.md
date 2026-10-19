@@ -2,19 +2,25 @@
 
 [日本語](../task-critical-path.md)
 
-This2026-10-18 publication candidate has167 tasks,133 released and34 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
+As of 2026-10-19, there are171 tasks,133 released and38 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
 
 | Classification | Existing IDs | Conditions |
 |---|---|---|
-| Autonomous implementation/verification(12) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
-| External/device conditions(7) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
+| Autonomous implementation/verification(15) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
+| External/device conditions(8) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
 | Parent epics(15) | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | Publishing a slice does not complete its parent. Keep existing acceptance and common completion criteria. |
 
 ## Dependencies and current batch
 
 P0->P1->P3 and P0->P4 are key publication-workflow paths. P5 depends on all P1/P2/P3/P4. Five of six publication gates remain open; completed evidence is candidate-specific and must align on the final candidate before product publication is considered complete.
 
-Current batch is bounded CFDPORT1 half-space caps and an end-to-end GUI/API workflow. Users explicitly provide point,outward unit normal and seed;the same semantic API checks input,meshing and saved replay. Arbitrary opening-wire recognition,local lids and general multi-volume joins remain open;bounded caps do not establish general fluid support. CFDPORT1 stays building;133released/34unfinished(12autonomous/7external/15parents)remain. The completed PR123/main CI baseline is1557(1554passed,3skipped,0failed);this candidate final CI is recorded separately.
+This batch groups REG2 spherical dimensional regions, VIEWCOMPARE time/deformation GIF and UIIMPROVE1 preflight-to-repair navigation. Verify CAD area/load conservation, physical time versus visualization scale, and consistency with existing preflight/input revisions before one publication. General curved faces, MP4, physical accuracy and parent-task completion are outside this evidence. The completed PR124/main CI baseline is1570(1567passed,3skipped,0failed);this candidate's final CI is recorded separately.
+
+Reconciled four existing unpublished plans: AGENTACP1,AGENTCHAT1,RESULTCURVE1,FINITEVISCO1. Original working files and the existing MOD1 state are preserved; all four are queued. The previous34 unfinished plus four newly accounted tasks gives38,not a regression in completion. See the [reconciliation record](../evidence/2026-10-19-planning-reconciliation.json). Next work builds ACP/conversation connectivity and revisioned physical loading increments on existing APIs/MCP/module boundaries. Finite viscoelastic-plastic calibration and experimental comparisons need data and staged verification; existing J2,Neo-Hookean or visualization scaling are not substitutes.
+
+## History: PR124 bounded openings and UI research
+
+Published bounded CFDPORT1 half-space caps through GUI/API/MCP, separating localhost Chrome input/extraction/selection/JSON replay from formal MCP through a separate Node host. Arbitrary opening wires,local lids and general volume joins remain open. UIRESEARCH1 completed versioned primary-document comparison only;hands-on six-case and measured usability work remains UIIMPROVE1. There are133 released/34 unfinished(12autonomous/7external/15parents).
 
 ## History: PR123 time history/runtime/CFD research
 

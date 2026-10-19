@@ -29,7 +29,7 @@ export function validateStlMesh(mesh,input,calculation){
  if(source?.kind!=='stl'){if(metadata!==undefined)throw Error('Unexpected saved STL mesh metadata');return;}
  const summary=validateStlSource(source),allowed=['sourceVolumeMm3','convexBoundaryChecked','triangleCount','boundaryTransfer'];
  if(!metadata||typeof metadata!=='object'||Array.isArray(metadata)||Object.keys(metadata).some(k=>!allowed.includes(k))||metadata.convexBoundaryChecked!==true||metadata.boundaryTransfer!=='projection'||metadata.triangleCount!==summary.triangles||!Number.isFinite(metadata.sourceVolumeMm3)||Math.abs(metadata.sourceVolumeMm3/summary.signedVolumeMm3-1)>1e-6)throw Error('Invalid saved STL mesh metadata');
- if(calculation?.options?.adaptive||input.conditions?.some(c=>c.planarRegion||c.cylindricalRegion?.exactCad)||mesh.planarPatches?.length||mesh.cylindricalPatches?.length)throw Error('Saved STL meshes do not support adaptive refinement or exact CAD patches');
+ if(calculation?.options?.adaptive||input.conditions?.some(c=>c.planarRegion||c.cylindricalRegion?.exactCad||c.sphericalRegion)||mesh.planarPatches?.length||mesh.cylindricalPatches?.length||mesh.sphericalPatches?.length)throw Error('Saved STL meshes do not support adaptive refinement or exact CAD patches');
  if(typeof mesh.sourceHash!=='string'||!/^[a-f0-9]{64}$/.test(mesh.sourceHash))throw Error('Invalid saved STL source fingerprint');
  const display=input.meshes?.[0];
  if(input.meshes?.length!==1||!display||!['stl','gmsh-surface'].includes(display.kind))throw Error('Saved STL source requires one matching display surface');

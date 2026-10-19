@@ -41,7 +41,7 @@ export function inspectOrthotropicInputContract(project,options={}, {mode='legac
    required(base+'/value',c.value,Number.isFinite,'Boundary value must be finite',{fixed:'mm',displacement:'mm',force:'N',pressure:'Pa',normalTraction:'Pa'}[c.type]??null);
    required(base+'/direction',c.direction,v=>vector(v)&&(!['force','displacement'].includes(c.type)||Math.hypot(...v)>=(c.type==='displacement'?1e-12:Number.MIN_VALUE)),'Explicit finite boundary direction required','1');
    required(base+'/regions',c.regions,regions,'Explicit nonempty valid structural regions required');
-   for(const key of ['frame','planarRegion','cylindricalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
+   for(const key of ['frame','planarRegion','cylindricalRegion','sphericalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
    let validFrame=true;
    if(c.type==='displacement'&&c.frame!==undefined)try{validateFrame(c.frame);if(!vector(c.direction)||c.direction.some((v,k)=>Math.abs(v-c.frame.axes[c.frame.axis][k])>1e-7))throw Error('Constraint direction does not match local frame');}catch(error){validFrame=false;add('ORTHOTROPIC_INPUT_INVALID',base+'/frame',error.message);}
    if(['fixed','displacement'].includes(c.type)&&regions(c.regions)&&!c.cadUpdateRequired&&Number.isFinite(c.value)&&vector(c.direction)&&(c.type==='fixed'||Math.hypot(...c.direction)>=1e-12)&&validFrame)supported=true;

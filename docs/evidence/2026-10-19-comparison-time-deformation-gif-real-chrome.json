@@ -1,0 +1,762 @@
+{
+  "date": "2026-10-19",
+  "scope": "localhost real Chrome; existing small synthetic thermal 11-frame cases and linear-elastic 3N/6N cases; comparison GIF only",
+  "sourceBranch": "codex/fluid-volume-join",
+  "tests": {
+    "targetedPassed": 92,
+    "contractTypeCheck": true,
+    "fullSuiteRunByThisAgent": false
+  },
+  "transport": {
+    "stdioMcp": true,
+    "initialized": true,
+    "toolsListDiscovered": true,
+    "guiPairingPrerequisite": true,
+    "grantedScopes": [
+      "inspect",
+      "edit",
+      "analyze",
+      "view"
+    ],
+    "publicHttpsVerified": false
+  },
+  "fixedFramePolicy": {
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "palette": "RGB332",
+    "colors": 256,
+    "orbit": "i/24 unchanged",
+    "timeAndDeformation": "i/23 includes both endpoints",
+    "displaySeconds": 2,
+    "loop": "infinite",
+    "lossy": true
+  },
+  "time": {
+    "artifact": {
+      "state": "completed",
+      "bytes": 5574849,
+      "sha256": "sha256:33e43fa71ffa0576b1d8519243a3c02ac1576a2f85d6c518dcf6838a1df8f7e4",
+      "manifest": {
+        "schemaVersion": 1,
+        "target": "comparison",
+        "format": "gif",
+        "container": "gif",
+        "mimeType": "image/gif",
+        "sha256": "sha256:33e43fa71ffa0576b1d8519243a3c02ac1576a2f85d6c518dcf6838a1df8f7e4",
+        "totalBytes": 5574849,
+        "resolution": {
+          "width": 640,
+          "height": 320
+        },
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "a11662e6-3d66-4b83-9ee4-11f9ec35bce7",
+              "label": "QA analytic T=20+1t degC (closed tetra)",
+              "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "caseId": "c12c4722-dab7-4b89-885e-880d8d8f56e4",
+              "label": "QA analytic T=20+2t degC (closed tetra)",
+              "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "colorRange": {
+            "field": "temperature",
+            "maximum": 39.99999999999994,
+            "minimum": 20
+          },
+          "field": "temperature",
+          "gifAnimation": {
+            "colors": 256,
+            "frames": 24,
+            "height": 320,
+            "loop": 0,
+            "lossy": true,
+            "palette": "RGB332",
+            "phasePolicy": "i/23",
+            "width": 640
+          },
+          "panels": [
+            {
+              "caseId": "a11662e6-3d66-4b83-9ee4-11f9ec35bce7",
+              "field": "temperature",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 20,
+              "minimum": 20,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "degC"
+            },
+            {
+              "caseId": "c12c4722-dab7-4b89-885e-880d8d8f56e4",
+              "field": "temperature",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 20,
+              "minimum": 20,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "degC"
+            }
+          ],
+          "timeAnimation": {
+            "camera": "fixed",
+            "endTimeSeconds": 10,
+            "field": "temperature",
+            "final": {
+              "panels": [
+                {
+                  "frameIndex": 10,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 10
+                },
+                {
+                  "frameIndex": 10,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 10
+                }
+              ],
+              "timeSeconds": 10
+            },
+            "initial": {
+              "panels": [
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                },
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                }
+              ],
+              "timeSeconds": 0
+            },
+            "interpolated": false,
+            "kind": "thermal",
+            "maxAbsOffsetSeconds": [
+              0.5,
+              0.5
+            ],
+            "rangeBasis": "all-selectable-stored-frames",
+            "selectedFrameCounts": [
+              11,
+              11
+            ],
+            "startTimeSeconds": 0,
+            "timeSelection": "nearest-stored-frames-only",
+            "toleranceSeconds": 0.5
+          },
+          "unit": "degC"
+        },
+        "view": {
+          "camera": {
+            "position": [
+              1.9000000000000004,
+              1.3999999999999995,
+              2.1000000000000005
+            ],
+            "target": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          },
+          "deformScale": 1,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja",
+          "sourceResolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "resolution": {
+            "width": 640,
+            "height": 320
+          }
+        },
+        "time": {
+          "animation": "time",
+          "durationSeconds": 2,
+          "timeBasis": "display time",
+          "recording": "fixed-frame",
+          "realtime": false,
+          "frameCount": 24,
+          "frameCountGuaranteed": true,
+          "phasePolicy": "i/23",
+          "camera": "fixed",
+          "frameSelection": "nearest-stored-frames-only",
+          "requestedRangeSeconds": {
+            "start": 0,
+            "end": 10
+          },
+          "delayCentiseconds": [
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8
+          ],
+          "loop": "infinite"
+        },
+        "gif": {
+          "palette": "RGB332",
+          "colors": 256,
+          "lossy": true
+        },
+        "sourceResolution": {
+          "width": 1280,
+          "height": 640
+        }
+      }
+    },
+    "decoded": {
+      "frames": 24,
+      "width": 640,
+      "height": 320,
+      "durationMs": 2000,
+      "unique": 24,
+      "decodedFrames": [
+        {
+          "index": 0,
+          "delayMs": 80,
+          "sha256": "068632bc9a1697bdddc4998fe8f984496e468267023c54bfc178154913ef5e6d"
+        },
+        {
+          "index": 1,
+          "delayMs": 90,
+          "sha256": "bca27e2517a85d9d4aacc7e14c415117a31c35260dc69ae0456aa0e937f285bf"
+        },
+        {
+          "index": 2,
+          "delayMs": 80,
+          "sha256": "437deedb2d7b43abcccd25470fe7ecdd4b81aa1a5695fe2bb42826a2812a7115"
+        },
+        {
+          "index": 3,
+          "delayMs": 80,
+          "sha256": "3fc4df174bd1f27538a419918b1d3826642ffaf424d890a1b1d5996b0bcd2349"
+        },
+        {
+          "index": 4,
+          "delayMs": 90,
+          "sha256": "1ea0e05c62625a70f2dc6fb19b8cab4aa2978b248a53a7997d095619d2fbc3a4"
+        },
+        {
+          "index": 5,
+          "delayMs": 80,
+          "sha256": "3988a8b22011ea2adc3ef971514329ce3caa91c0c81f97df77a430dc43f12276"
+        },
+        {
+          "index": 6,
+          "delayMs": 80,
+          "sha256": "851da9f698bc648483396bd078743cf00e52f75e8cf8445ab344e98f2f09bd1d"
+        },
+        {
+          "index": 7,
+          "delayMs": 90,
+          "sha256": "bbc7b261a5d084cfde74cf3e2f83e7ce61a6fb699837bc283b8df8c34758443d"
+        },
+        {
+          "index": 8,
+          "delayMs": 80,
+          "sha256": "1030bb80448205416dd488682cca9ba51122cad13afc701c6097ee5ea1f7bd71"
+        },
+        {
+          "index": 9,
+          "delayMs": 80,
+          "sha256": "1655459597fa5f144201aa4896c430100573da19f78b413686b7d86ad96f0cb2"
+        },
+        {
+          "index": 10,
+          "delayMs": 90,
+          "sha256": "347268f9bd8a94a0383b3274f41642b41d77c95b6a34eb87e95804a98de2c973"
+        },
+        {
+          "index": 11,
+          "delayMs": 80,
+          "sha256": "c32b13029593fb678aedac13665260ad7aafb3304f5889f2643939a625dc19fd"
+        },
+        {
+          "index": 12,
+          "delayMs": 80,
+          "sha256": "ec443ec0ef25d179d5b2ea05f6dfc6e7893a771e008ec5bd0ab2d52cc3123108"
+        },
+        {
+          "index": 13,
+          "delayMs": 90,
+          "sha256": "dc6ea693f1a8a06f5605687b17a3af56d95ef93492a4f49d5ae31a3ead028812"
+        },
+        {
+          "index": 14,
+          "delayMs": 80,
+          "sha256": "883516046af490a83b80b654f53cb19a5d2d04df1d2c724c2248050b7c55b5e3"
+        },
+        {
+          "index": 15,
+          "delayMs": 80,
+          "sha256": "a28ae7e4e66ec58c32138b7ccf376b21d670a3642e44f54f536b08f23f2f04f7"
+        },
+        {
+          "index": 16,
+          "delayMs": 90,
+          "sha256": "c6e42b900b7fd9b7ac1aa42e1c9d0d9a654963090cf4e3a0fb2a15184bcfdc18"
+        },
+        {
+          "index": 17,
+          "delayMs": 80,
+          "sha256": "9ebeff8e20b6cd63be64159b25de95b6448a27e6af43d0d0186b29fd52d4d059"
+        },
+        {
+          "index": 18,
+          "delayMs": 80,
+          "sha256": "a084f1e5ac8c1c2d798e6bd904283d94d50f4b28d7e40f3c2639068f0ce9084b"
+        },
+        {
+          "index": 19,
+          "delayMs": 90,
+          "sha256": "9f78b8e079484dda086b9fc7aa39037f6f9d9b8dabe3363404e4509ae7a0e459"
+        },
+        {
+          "index": 20,
+          "delayMs": 80,
+          "sha256": "803dfa03d3e88f582f7ae96f4da274766db203fb61f42961327ff2987db9017b"
+        },
+        {
+          "index": 21,
+          "delayMs": 80,
+          "sha256": "9eae2c6369d8a18e6a67c81a29bec264fbb7b41db6135c00f6b6e68b0b7439e5"
+        },
+        {
+          "index": 22,
+          "delayMs": 90,
+          "sha256": "c75c20b6f5902e2a4e84509152d0a386f6137c9fb9de2f4c31481e0796e88b19"
+        },
+        {
+          "index": 23,
+          "delayMs": 80,
+          "sha256": "62cd75fbfcc1170141bdf5f086df224678c7903e451efb3e162b504a7d402541"
+        }
+      ]
+    },
+    "guiSuccess": true,
+    "guiCancelled": true,
+    "restored": {
+      "input": true,
+      "cases": true,
+      "result": true,
+      "compare": true
+    },
+    "refusals": [
+      {
+        "refused": true,
+        "error": "Comparison time interval exceeds stored-frame tolerance"
+      },
+      {
+        "refused": true,
+        "error": "Comparison time video requires an explicit increasing physical time range without timeSeconds"
+      },
+      {
+        "refused": true,
+        "error": "Time comparison requires two thermal temperature results or two transient acoustic pressure results"
+      },
+      {
+        "refused": true,
+        "error": "toleranceSeconds requires timeSeconds"
+      },
+      {
+        "refused": true,
+        "error": "Case content changed; list cases again"
+      }
+    ]
+  },
+  "deformation": {
+    "artifact": {
+      "state": "completed",
+      "bytes": 5574849,
+      "sha256": "sha256:0ecec68e71ac688852ae57a60337634e23c04a02359faeb2d247c79a60a1e83e",
+      "manifest": {
+        "schemaVersion": 1,
+        "target": "comparison",
+        "format": "gif",
+        "container": "gif",
+        "mimeType": "image/gif",
+        "sha256": "sha256:0ecec68e71ac688852ae57a60337634e23c04a02359faeb2d247c79a60a1e83e",
+        "totalBytes": 5574849,
+        "resolution": {
+          "width": 640,
+          "height": 320
+        },
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "4ac3ff6a-2093-4c4e-b683-3f0b77ccbd72",
+              "label": "QA linear elastic 3N",
+              "resultRevision": "sha256:e1676443cb27da5776cec02536d3b9d2e26a792c591dbfa6a16ee826207ed1bd",
+              "revision": "sha256:8158c0d2bec7b1b39ba78bc9668037b7095d144e019e86ea39f25016997c2bd2"
+            },
+            {
+              "caseId": "9a040252-f383-496c-9d65-089253a1b540",
+              "label": "QA linear elastic 6N",
+              "resultRevision": "sha256:09051cfe0ab080ab402b2021ed38e621e1341e98dc64ea13e5f949fe77a0aa67",
+              "revision": "sha256:8bddc1aabedaf874601f9925c43f8cc0f660c6405161f820fb546b95d2055747"
+            }
+          ],
+          "colorRange": {
+            "field": "displacement",
+            "maximum": 0.003120000000000001,
+            "minimum": 0
+          },
+          "deformationAnimation": {
+            "camera": "fixed",
+            "endScale": 1000,
+            "field": "displacement",
+            "kind": "elastic",
+            "loadHistory": false,
+            "resultValues": "fixed-saved-result",
+            "scalePolicy": "linear",
+            "startScale": 0,
+            "visualizationOnly": true
+          },
+          "field": "displacement",
+          "gifAnimation": {
+            "colors": 256,
+            "frames": 24,
+            "height": 320,
+            "loop": 0,
+            "lossy": true,
+            "palette": "RGB332",
+            "phasePolicy": "i/23",
+            "width": 640
+          },
+          "panels": [
+            {
+              "caseId": "4ac3ff6a-2093-4c4e-b683-3f0b77ccbd72",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.0015600000000000004,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            },
+            {
+              "caseId": "9a040252-f383-496c-9d65-089253a1b540",
+              "field": "displacement",
+              "finalOnly": false,
+              "frameIndex": null,
+              "maximum": 0.003120000000000001,
+              "minimum": 0,
+              "offsetSeconds": null,
+              "timeApplies": false,
+              "timeSeconds": null,
+              "unit": "mm"
+            }
+          ],
+          "unit": "mm"
+        },
+        "view": {
+          "camera": {
+            "position": [
+              1.9000000000000004,
+              1.3999999999999995,
+              2.1000000000000005
+            ],
+            "target": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          },
+          "deformScale": 1000,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "ja",
+          "sourceResolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "resolution": {
+            "width": 640,
+            "height": 320
+          }
+        },
+        "time": {
+          "animation": "deformation",
+          "durationSeconds": 2,
+          "timeBasis": "display time",
+          "recording": "fixed-frame",
+          "realtime": false,
+          "frameCount": 24,
+          "frameCountGuaranteed": true,
+          "phasePolicy": "i/23",
+          "camera": "fixed",
+          "physicalTime": "Fixed saved structural result; visualization multiplier only, not a physical load history.",
+          "delayCentiseconds": [
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8
+          ],
+          "loop": "infinite"
+        },
+        "gif": {
+          "palette": "RGB332",
+          "colors": 256,
+          "lossy": true
+        },
+        "sourceResolution": {
+          "width": 1280,
+          "height": 640
+        }
+      }
+    },
+    "decoded": {
+      "frames": 24,
+      "width": 640,
+      "height": 320,
+      "durationMs": 2000,
+      "unique": 24,
+      "decodedFrames": [
+        {
+          "index": 0,
+          "delayMs": 80,
+          "sha256": "73863e68877294c366363b274cbed5314c707251b49366f1c70fd735cf0cbc99"
+        },
+        {
+          "index": 1,
+          "delayMs": 90,
+          "sha256": "abc2cd95731553715e868f88cdcde3c42840d82af58e14e8546e0b67c3f67f12"
+        },
+        {
+          "index": 2,
+          "delayMs": 80,
+          "sha256": "3cd14e37b1f57b3c651cc9b5575b0a2a82d99c0297d31ed2078e0a3bba63e940"
+        },
+        {
+          "index": 3,
+          "delayMs": 80,
+          "sha256": "88a33bcd158295f930d091b3c9c699bf14490b18fa135c3c8b7f43701a76c429"
+        },
+        {
+          "index": 4,
+          "delayMs": 90,
+          "sha256": "8ab7486adbd5be9d67fd3b505f1b8ef519795be4725f058175cb402eaf7b7779"
+        },
+        {
+          "index": 5,
+          "delayMs": 80,
+          "sha256": "499c512ef70fec30918fc34beb7f0ba4c4d4b1a3f6cc25cb410073fc2392adf8"
+        },
+        {
+          "index": 6,
+          "delayMs": 80,
+          "sha256": "8c7ffd2e902a3864430aa6808ade1f66206db6f4cdc91e4643a2779530b410bf"
+        },
+        {
+          "index": 7,
+          "delayMs": 90,
+          "sha256": "359ea0ff8e55dd9359173c805248621932e85b34175fda61d35b11c636bc1e67"
+        },
+        {
+          "index": 8,
+          "delayMs": 80,
+          "sha256": "85ddd8c29dab42879afe3e9d55d59d702f92c5c376d4608b3b2d142062fccb7f"
+        },
+        {
+          "index": 9,
+          "delayMs": 80,
+          "sha256": "6c4453837040e9426f219439a8d7463aa689ad949a8b8f4f1d10a5e103622616"
+        },
+        {
+          "index": 10,
+          "delayMs": 90,
+          "sha256": "b13364edd92959e5fdaa028d229ee99d43bf31b5a29821c66cad34eb079fb890"
+        },
+        {
+          "index": 11,
+          "delayMs": 80,
+          "sha256": "4899cabbeda67228cdc5f5a025d0c7f2f4b27b1f95ab87121d899ef62344226d"
+        },
+        {
+          "index": 12,
+          "delayMs": 80,
+          "sha256": "41a155887d6bb44a584061228a96abbb5f4ac34d6b6237cc05def69350f81a31"
+        },
+        {
+          "index": 13,
+          "delayMs": 90,
+          "sha256": "898bd0a1caf85f7b1e1632ec8984dafd76f78d9d4d62b5429a77e193c2ea5769"
+        },
+        {
+          "index": 14,
+          "delayMs": 80,
+          "sha256": "05ceb3576cb5103bfc9dead5b3e21190807afae90b386c4068dc9c9ddc49b450"
+        },
+        {
+          "index": 15,
+          "delayMs": 80,
+          "sha256": "fea370638bf1c22648a5e811a8794e29c56594a7ca5e434eac6b4b8433ad32bd"
+        },
+        {
+          "index": 16,
+          "delayMs": 90,
+          "sha256": "6df684f328d5b78a8446ed91562b78f627e64eb92f2b315ea4bdceff10f44c46"
+        },
+        {
+          "index": 17,
+          "delayMs": 80,
+          "sha256": "4a9070679384cc5fc704f927d23ca17acd3edc37c5413a4c5f071e4e7fb3fc8b"
+        },
+        {
+          "index": 18,
+          "delayMs": 80,
+          "sha256": "19d61e1c306e468376dd4e792b55aeba161f065cece45afa8bd2ce7744b9dbc7"
+        },
+        {
+          "index": 19,
+          "delayMs": 90,
+          "sha256": "b2497f1283adc755e65214d6a773c1362b13b29361a6e1d92cff7e4dd05cd84e"
+        },
+        {
+          "index": 20,
+          "delayMs": 80,
+          "sha256": "dd3b39a0ec26da4009628ae47cbe35da3be2409b3e9073011a547dc4de4eef34"
+        },
+        {
+          "index": 21,
+          "delayMs": 80,
+          "sha256": "72a66f7f81384a95f1c37d9e53eb31722887e8295ffe5a687bac3f79c375cfac"
+        },
+        {
+          "index": 22,
+          "delayMs": 90,
+          "sha256": "8a891a83dd578089bcca18e482554c74e177bbb5f33a424fa096e2a40a976282"
+        },
+        {
+          "index": 23,
+          "delayMs": 80,
+          "sha256": "252839bbd1894c9489162205772d1ef34412f58d844207e8909f249dd6671deb"
+        }
+      ]
+    },
+    "guiSuccess": true,
+    "guiCancelled": true,
+    "restored": {
+      "input": true,
+      "cases": true,
+      "result": true,
+      "compare": true
+    },
+    "guiRestored": {
+      "input": true,
+      "cases": true,
+      "result": true,
+      "compare": true
+    },
+    "refusals": [
+      "Comparison deformation video requires displacement/stress, a positive explicit visualization scale and no physical time arguments",
+      "Comparison deformation video requires displacement/stress, a positive explicit visualization scale and no physical time arguments",
+      "Comparison deformation video requires displacement/stress, a positive explicit visualization scale and no physical time arguments"
+    ]
+  },
+  "limitations": [
+    "Small local synthetic cases only; no public HTTPS claim.",
+    "GUI preview and suggested download filename verified; OS download completion not claimed.",
+    "Initial HMR-enabled attempt observed page reset/case disappearance and detached browser command; cause not established. Formal successful run used source-frozen no-HMR server.",
+    "One exploratory deformation attempt included an explicit viewer scale change after API start; excluded from restoration proof. A separate completed export with unchanged baseline verified all four states."
+  ],
+  "cleanup": {
+    "temporarySecretsDeleted": true,
+    "ownedMcpStopped": true,
+    "ownedDevStopped": true,
+    "ownedTabClosed": true
+  }
+}

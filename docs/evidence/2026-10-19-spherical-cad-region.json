@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "status": "uncommitted source snapshot; not deployed verification",
+  "scope": "Exact spherical latitude/longitude CAD sectors on a single built-in sphere or STEP sphere; shared semantic API and Node-hosted real Worker. No SolidCraft integration or graphical selector validation.",
+  "baseCommit": "981191d2dd63853e816eb71a1b93bb0b621b21fd",
+  "sourceFilesSha256": {
+    "src/spherical-region.js": "43c34031c1d3293810939438a5d15c406c9b93e1d0a29814382f416349d5bf03",
+    "src/spherical-cad.js": "c083e5b171cd538e897da894f1d04b404f58c18ee954aaa16d4c1865f74ebaf9",
+    "src/cad-patches.js": "0a31212cbe69f5bacba6a387757cd383aba4a3853ba07f69713bc9f20e923a47",
+    "src/mesh-core.js": "7b0b1b4a17ad3f18a38cdc4dce58533c336493d875b90d1d9d4ccf2a00536414",
+    "src/boundaries.js": "c506bc3397a24154073598da83163ce5d389d0969ad551635df4499d63e73801",
+    "src/analysis.worker.js": "2f104acb78095699792bb5684681a939d68835c8e439acee5725372110842e80",
+    "src/studio-api.js": "e0c0a430df8e26faebaf2d531a1749c732428d6ead9bc19c5c2de2702f85f302",
+    "src/regions.js": "7e514038568fd592987a2371cf996e9739106ca5c0241a1126b1bddf966c9e54",
+    "src/cases.js": "fbea19a27abab52df5f3b938fe4171704b35155783fe306d7664285a4764d838",
+    "src/semantic-operation-schema.js": "7ec87f0e3ae696b6c9463f782d898fee62f7a157cab9f75104c1d67d93fe02e2",
+    "src/project-operations.js": "c74e302b2e0274eb49c5b2e3a79d4c3cf077db17eb6b0afcd2b85a82f59fac38",
+    "src/contracts/project-input.d.ts": "72e5c85a1e5c041dc9b5e948c3e5119259d5f85fd2a3c8cba8e0b5a5e37be57b",
+    "tests/spherical-cad.test.mjs": "48374a59140cce32aac4aab1bdec31bb3c55f58d0fb6e6772e165b82c79cad95",
+    "tests/spherical-wiring.test.mjs": "447ca1664fa86920b3c72bb7fe134dd2ed633cb05d9d3277da8596de0956ee8e",
+    "tests/mcp-typed-operation-schema.test.mjs": "8d3c2c735fa92d893651483332e2550dec1e897bf0df310ad7d36107511f8553"
+  },
+  "region": {
+    "exactCad": true,
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "axis": [
+      0,
+      0,
+      1
+    ],
+    "reference": [
+      1,
+      0,
+      0
+    ],
+    "radius": 10,
+    "tolerance": 0.01,
+    "latitudeMin": -30,
+    "latitudeMax": 30,
+    "startDegrees": 315,
+    "sweepDegrees": 90
+  },
+  "analyticalReference": {
+    "formula": "R^2 * sweepRadians * (sin(latitudeMax) - sin(latitudeMin))",
+    "areaMm2": 157.07963267948966
+  },
+  "verifiedAssertions": {
+    "newFocusedTests": 6,
+    "allPassed": true,
+    "cadAreaRelativeErrorLessThan": 1e-09,
+    "fragmentedCadAreaAbsoluteErrorMm2LessThan": 1e-07,
+    "remeshSizesMm": [
+      3,
+      1.5
+    ],
+    "existingCurvedAreaErrorBudget": 0.03,
+    "forceN": [
+      -123,
+      0,
+      0
+    ],
+    "forceSumAbsoluteErrorNLessThan": 1e-09,
+    "heatPowerW": 37,
+    "heatSumAbsoluteErrorWLessThan": 1e-09,
+    "orphanMeshNodes": 0,
+    "stepWorker": {
+      "coarseSizeMm": 3,
+      "coarseRejectedCode": "ANALYSIS_BOUNDARY_REGION_TRANSFER",
+      "coarseReportedRelativeAreaErrorApproximately": 0.051,
+      "acceptedSizeMm": 1.5,
+      "reactionXReferenceN": 123,
+      "reactionAbsoluteErrorNLessThan": 1e-05,
+      "caseJsonRoundtripPassed": true
+    },
+    "stdioMcp": [
+      "tools/list discovers selectSphericalRegion and typed sector schema",
+      "studio_preview_edit then exact-revision studio_edit_project retains sphericalRegion in saved condition"
+    ],
+    "tamperRefusals": [
+      "CAD area changed",
+      "region dimensions changed",
+      "triangle label removed",
+      "triangle label removed plus cached faceted area recomputed"
+    ],
+    "cadOnlyAreaShapes": [
+      "wrapped longitude sector",
+      "north cap",
+      "south cap",
+      "full sphere",
+      "arbitrary axis/reference and translated center"
+    ],
+    "tinyRadiusCenterRejected": true,
+    "serializationKeyReorderingAccepted": true,
+    "serializationValueChangeRejected": true,
+    "targetedCanonicalSerializationRetestPassed": true
+  },
+  "notVerified": [
+    "deployed Worker",
+    "SolidCraft 0.16 integration",
+    "new graphical region selector",
+    "general UV surfaces",
+    "thermal-contact spherical patches",
+    "STL spherical patches",
+    "fluid-domain spherical patches"
+  ],
+  "tests": [
+    "tests/spherical-cad.test.mjs",
+    "tests/spherical-wiring.test.mjs",
+    "tests/mcp-typed-operation-schema.test.mjs"
+  ],
+  "coreFrozenForReview": true
+}

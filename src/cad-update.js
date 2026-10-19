@@ -1,5 +1,7 @@
 import {validateProject,areaOfTriangle} from './regions.js';
 import {planarTriangles,planarArea} from './planar-region.js';
+import {sphericalPatchArea} from './spherical-cad.js';
+import {sphericalTriangles} from './spherical-region.js';
 import {cylinderPatchArea} from './cylindrical-cad.js';
 import {cylindricalTriangles} from './cylindrical-region.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
@@ -41,19 +43,19 @@ export function planCadUpdate(project,replacement){
  validateProject({version:1,sourceModel:replacement.sourceModel,meshes:replacement.meshes,conditions:[]});
  const oldFaces=facesOf(project.meshes),newFaces=facesOf(replacement.meshes),matches=new Map(),reverse=new Map();
  for(const old of oldFaces){const candidates=newFaces.filter(f=>sameFace(old,f));matches.set(old,candidates);for(const next of candidates){if(!reverse.has(next))reverse.set(next,[]);reverse.get(next).push(old);}}
- const output=structuredClone(project);output.name=replacement.name??project.name;output.meshes=structuredClone(replacement.meshes);output.sourceModel=structuredClone(replacement.sourceModel);output.selection=output.meshes.map(()=>[]);delete output.planarRegion;delete output.cylindricalRegion;
+ const output=structuredClone(project);output.name=replacement.name??project.name;output.meshes=structuredClone(replacement.meshes);output.sourceModel=structuredClone(replacement.sourceModel);output.selection=output.meshes.map(()=>[]);delete output.planarRegion;delete output.cylindricalRegion;delete output.sphericalRegion;
  const reports=[];
  output.conditions=project.conditions.map((original,index)=>{
   const c=structuredClone(original),refs=[],regions=new Map();let reason;
   for(const region of c.regions){const selected=new Set(region.triangles),faces=oldFaces.filter(f=>f.mesh===region.mesh&&f.triangles.some(t=>selected.has(t)));for(const old of faces){refs.push({mesh:old.mesh,faceId:old.faceId});const candidates=matches.get(old);if(candidates.length!==1||reverse.get(candidates[0])?.length!==1){reason??=candidates.length===0?'missing-face':'ambiguous-face';continue;}const next=candidates[0];let triangles;
-    if(c.planarRegion||c.cylindricalRegion){const spec={...(c.planarRegion??c.cylindricalRegion),mesh:next.mesh};try{triangles=c.planarRegion?planarTriangles(output.meshes[next.mesh].positions,spec):cylindricalTriangles(output.meshes[next.mesh].positions,spec);if(!triangles.length)throw Error('empty');if(c.planarRegion)c.planarRegion=spec;else c.cylindricalRegion=spec;}catch{reason??='changed-dimensions';continue;}}
+    if(c.planarRegion||c.cylindricalRegion||c.sphericalRegion){const spec={...(c.planarRegion??c.cylindricalRegion??c.sphericalRegion),mesh:next.mesh};try{triangles=c.sphericalRegion?sphericalTriangles(output.meshes[next.mesh].positions,spec):c.planarRegion?planarTriangles(output.meshes[next.mesh].positions,spec):cylindricalTriangles(output.meshes[next.mesh].positions,spec);if(!triangles.length)throw Error('empty');if(c.sphericalRegion)c.sphericalRegion=spec;else if(c.planarRegion)c.planarRegion=spec;else c.cylindricalRegion=spec;}catch{reason??='changed-dimensions';continue;}}
     else if(old.triangles.every(t=>selected.has(t)))triangles=next.triangles;
     else {const wanted=old.triangles.filter(t=>selected.has(t)).map(t=>triangleKey([0,1,2].map(i=>project.meshes[old.mesh].positions.slice(t*9+3*i,t*9+3*i+3))));triangles=next.triangles.filter(t=>wanted.includes(triangleKey([0,1,2].map(i=>output.meshes[next.mesh].positions.slice(t*9+3*i,t*9+3*i+3)))));if(triangles.length!==wanted.length){reason??='partial-selection';continue;}}
     if(!regions.has(next.mesh))regions.set(next.mesh,new Set());triangles.forEach(t=>regions.get(next.mesh).add(t));
    }}
-  const previousAreaMm2=original.planarRegion?planarArea(original.planarRegion):original.cylindricalRegion?.exactCad?cylinderPatchArea(original.cylindricalRegion):original.regions.reduce((sum,r)=>sum+r.triangles.reduce((a,t)=>a+areaOfTriangle(project.meshes[r.mesh].positions,t),0),0);
+  const previousAreaMm2=original.sphericalRegion?sphericalPatchArea(original.sphericalRegion):original.planarRegion?planarArea(original.planarRegion):original.cylindricalRegion?.exactCad?cylinderPatchArea(original.cylindricalRegion):original.regions.reduce((sum,r)=>sum+r.triangles.reduce((a,t)=>a+areaOfTriangle(project.meshes[r.mesh].positions,t),0),0);
   if(!regions.size)reason??='missing-face';if(c.type==='thermalContact'&&regions.size!==2)reason??='ambiguous-face';
-  if(reason){const dimensions={planar:original.planarRegion,cylindrical:original.cylindricalRegion};c.cadUpdateRequired={version:1,reason,previousAreaMm2,faces:refs,...(original.planarRegion||original.cylindricalRegion?{previousDimensions:JSON.stringify(dimensions)}:{})};c.regions=[];delete c.planarRegion;delete c.cylindricalRegion;}
+  if(reason){const dimensions={planar:original.planarRegion,cylindrical:original.cylindricalRegion,spherical:original.sphericalRegion};c.cadUpdateRequired={version:1,reason,previousAreaMm2,faces:refs,...(original.planarRegion||original.cylindricalRegion||original.sphericalRegion?{previousDimensions:JSON.stringify(dimensions)}:{})};c.regions=[];delete c.planarRegion;delete c.cylindricalRegion;delete c.sphericalRegion;}
   else c.regions=[...regions].map(([mesh,triangles])=>({mesh,triangles:[...triangles].sort((a,b)=>a-b)}));
   reports.push({index,type:c.type,status:reason?'needs-reselection':'matched',reason:reason??null,previousAreaMm2,regions:structuredClone(c.regions),faces:refs});return c;
  });

@@ -4,9 +4,9 @@
 
 `npm run mcp`はローカル標準入出力のMCPサーバーを起動します。[MCP 2025-11-25のツール仕様](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-11-25/server/tools.mdx)に対応し追加ライブラリは不要です。初回は`npm ci`と`npm run build`でWASMを準備してください。
 
-31ツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_preflight_mesh_boundaries`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
+主なツール: `studio_capabilities`、`studio_browser_contracts`、`studio_preview_edit`、`studio_diagnose_execution`、`studio_material_catalog`、`studio_progress`、`studio_inspect_project`、`studio_edit_project`、`studio_import_project`、`studio_create_builtin_project`、`studio_preflight_project`、`studio_preflight_mesh_boundaries`、`studio_analyze`、`studio_probe`、`studio_validate_cases`、`studio_validate_case_bundle`、`studio_verify_measurements`、`studio_compare_cases`、`studio_job_artifact`、`studio_job_artifacts`、`studio_assess_result`、`studio_assessment`、`studio_preview_cad_update`、`studio_apply_cad_update`、`studio_import_print`、`studio_inspect_print`と、下記5つのジョブ操作。ファイルパスは絶対パスを使います。解析は新規`outputPath`へ完全な結果JSONを保存し、要約を返します。入力・既存出力は上書きしません。ブラウザと同じWorkerを独立したNode workerで実行し、計算は120秒の制限があります。Airpocket CPUとMFEMに対応し、WebGPUは対象外です。
 
-現行の入口は通常31/接続33 MCPツール、91ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回比較の検証・実ブラウザ・公開完了は保留です。
+現行の入口は通常35/接続37 MCPツール、91ブラウザ操作です。単体connectorは3ツールを維持し、後続の過去件数は当時の記録です。今回のlocalhost比較/球面入力/preflight検証は末尾の証拠を参照。公開完了は保留です。
 
 `studio_import_project({path,outputPath,scaleToMm?,name?})`はSTEP/STPをOCCTでmmへ正規化し、元STEPとCAD面対応を保持した入力JSONを新規保存します。STLには正の`scaleToMm`が必須で、現行は外向き・閉・凸の単一シェルと既存サイズ制限に従います。入力ファイル上限は50 MiBです。`studio_create_builtin_project({source,outputPath,name?})`はmm指定の`box`（bounds）、`boxes`（boxes）、固定寸法`cylinder`（kindのみ）、`sphere`（center/radius）、`tube`（center/axis/innerRadius/outerRadius/length）を作成します。材料値や支持・荷重は自動で確定しません。
 
@@ -70,7 +70,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の29ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の35ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -93,7 +93,7 @@ manifestの任意フィールド `connector` は `{path:"assets/studio-browser-m
 
 MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https://airpocket-soundman.github.io` のように登録します。引数は実ページの正確なOrigin一つだけで、パスを含めません。公開ページのURL全体は `/airpocket-simulation-studio/` を含みますが、Originには含みません。stderrの `Browser connector:` にendpoint・origin・pairingTokenを出し、stdoutはJSON-RPC専用です。接続情報は上記のアプリ接続UIに入力し、必要なscopeだけを許可します。初期選択はinspectです。ローカル接続先の制限、Origin/Host/Bearer検査、期限切れの条件は既存接続と同じです。
 
-この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の29ツール／接続時31ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
+この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の35ツール／接続時37ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
 
 ソース実装と、単一ファイルだけを隔離ディレクトリへ置いたNode 24でのstdio・HTTP模擬ブラウザ接続・scope拒否・EOF終了のテストは完了しています。公開0e53638のmanifest版・バイト数・SHA-256照合、取得ファイルだけの隔離起動・3ツール発見・EOF終了を確認しました。[公開ファイル検証](evidence/2026-10-15-public-browser-connector.json)を参照。確認専用の実HTTPS接続は到達エラーで失敗し、セッションは作成されませんでした。[試験記録](evidence/2026-10-15-public-https-inspect-failure.json)を参照。
 
@@ -117,7 +117,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## PNG/WebM/連番PNGの出力ジョブ
 
-任意接続モードは82操作を公開します（通常29ツール、接続モード31ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。`formats["png-sequence"]`（`{supported,container:"zip",compression:"store",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}`、追加項目）は固定フレーム書き出しの可否と上限を示します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
+任意接続モードは91操作を公開します（通常35ツール、接続モード37ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。`formats["png-sequence"]`（`{supported,container:"zip",compression:"store",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}`、追加項目）は固定フレーム書き出しの可否と上限を示します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。`format:"png-sequence"`は固定フレーム書き出しで、`frames`（2〜120の整数、省略時24）枚を実時間・タブの描画間引きに依存せず、フレームiを保存済みの表示状態（orbit/deformationは位相i/N、time/sliceは位相i/(N-1)、timeは保存済み過渡音響スナップショットに対応しNがその数を超えると拒否）から描画し、STORE方式（無圧縮）の単一ZIP（`manifest.json`と`frame-0000.png`…）として返します。`seconds`は指定できません。1フレーム4 MiB・全体24 MiB・フレーム数の上限超過は明示的に拒否され、取消・結果更新・失敗では成果物を作らずコントロールとカメラを元に戻します。ZIP内`manifest.json`（`schemaVersion` 2）は壁時計時間を含む`resultRevision`の代わりに`physicalRevision`（`performance`を除いた結果のハッシュ、`getResultView`も返す）を記録するため、同一計算なら同一バイトのZIPになり、フレームごとの位相/角度/物理時間/断面位置、解像度、SHA-256が入り、成果物メタデータの`manifest`には枚数・解像度・`manifest.json`のSHA-256を含む上限付き要約が付きます。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -645,7 +645,7 @@ portable JSONは`{version:1,kind:"comparison-view",sources:[{revision},{revision
 
 MediaRecorderによる実時間録画（目標24 fps）で、フレーム数は保証しません。通常の成果物ページ取得・SHA-256検証・取消・解放を使い、manifest.timeは表示用の秒数と固定された各パネルの物理時刻を区別します。録画中はケース・ビュー操作をロックし、成功・失敗・中止後に元の操作状態と表示を復元します。「再生を止める」（animation-stop）と切断でも中止でき、部分成果物は返しません。受理前は約15秒の開始コマンド期限を確認します。受理したジョブは返信済み開始コマンドの期限から切り離し、接続epoch・ケース版/ソースlease・キューepoch・取消を引き続き確認します。録画/エンコードが開始コマンド期限を越えただけで失効しません。個々の開始/状態取得などのコマンド返信期限は変更しません。この動画追加の実Chrome証跡は下記を参照してください。
 
-比較の時間動画は末尾の追加を参照してください。変形動画・GIF/MP4は未実装です。
+当時の回転検証は時間/変形/GIFを対象外としました。現在の対応は末尾の追加契約を参照。MP4は未実装です。
 
 2026-10-17 localhost実Chrome（小規模熱ケース）: `evidence/2026-10-17-comparison-video-real-chrome.json`。VP9 WebM（1280x640、要求2秒）をSHA-256照合し、ffmpegで4フレーム（0、0.078、1.039、2.069秒）と3種類の画像ハッシュを確認しました。CPU負荷下で回転を確認した証跡であり、滑らかな24 fpsの証明ではありません。各パネルは物理時刻5秒・25/30°Cで固定。5秒録画の中止は成果物を返さず、次のPNGは成功し、メイン表示・入力・ケース・比較設定は不変でした。最初の空録画は失敗として保持され、成功扱いにしていません。GUI動画・時間アニメーション・滑らかな前面再生・公開HTTPS・一般形状は未確認または未実装です。
 
@@ -653,7 +653,7 @@ MediaRecorderによる実時間録画（目標24 fps）で、フレーム数は�
 
 比較欄に回転動画の開始（`compare-video-start`）・中止（`compare-video-cancel`）・プレビュー（`compare-video-preview`）・ダウンロード（`compare-video-download`）を追加します。ローカルGUIのジョブも共有キューの版確認・SHA付きページ取得・中止・最終解放を使います。取消は録画の停止と元表示の復元まで待ち、部分動画を公開しません。GUIジョブはローカル利用者の操作として起動するため、別のブラウザ接続の切断では自動取消しません。新しいブラウザ操作は追加せず91操作を維持します。プレビューとダウンロードのURLは新しい動画への置換時に解放します。このGUI追加の実Chrome証跡は下記を参照してください。
 
-2026-10-17 localhost実ChromeのGUI証跡: `evidence/2026-10-17-comparison-video-gui-real-chrome.json`（画面画像あり）。比較欄から2秒動画作成・1280x640ネイティブプレビュー・利用者操作による再生（終了時2.738秒）、5秒動画の中止、次の2秒動画の再作成を確認しました。完了・中止・再作成の各後で、元の2.01秒補間表示・入力・ケース・比較設定の4検査が完全一致しました。ダウンロードリンクは1回クリックしましたが、10秒の待機がタイムアウトしたため保存完了は未確認です。GUI動画の外部デコード・SHAの証明ではなく、API動画の別証跡と区別します。滑らかな24fps・公開HTTPS・一般形状は未確認です。この回転GUI証跡は時間動画の証明ではなく、末尾の追加と区別します。変形動画・GIF/MP4は未実装です。
+2026-10-17 localhost実ChromeのGUI証跡: `evidence/2026-10-17-comparison-video-gui-real-chrome.json`（画面画像あり）。比較欄から2秒動画作成・1280x640ネイティブプレビュー・利用者操作による再生（終了時2.738秒）、5秒動画の中止、次の2秒動画の再作成を確認しました。完了・中止・再作成の各後で、元の2.01秒補間表示・入力・ケース・比較設定の4検査が完全一致しました。ダウンロードリンクは1回クリックしましたが、10秒の待機がタイムアウトしたため保存完了は未確認です。GUI動画の外部デコード・SHAの証明ではなく、API動画の別証跡と区別します。滑らかな24fps・公開HTTPS・一般形状は未確認です。この回転GUI証跡は時間動画の証明ではなく、末尾の追加と区別します。当時の観察は変形/GIFを対象外としました（現契約は末尾参照）。MP4は未実装です。
 
 
 ## 比較設定のブラウザ内自動保存（2026-10-17）
@@ -691,7 +691,6 @@ startCompareExportのWebMでanimation:"deformation"を指定します。対象�
 
 ## 比較の回転GIF
 
-startCompareExportはformat:"gif"でorbitのみを受け付けます。固定24枚・640×320・RGB332の256色（非可逆）で、secondsは整数1〜15（API既定5秒・GUI既定2秒）。各フレームのdelayは整数centisecondに配分し合計seconds×100を保ちます。位相i/24の固定スケジュールで、実時間録画や目標24fpsとは別です。GIFは無限ループ指定ですが実際の再生時間はプレーヤーに依存します。manifestは出力/元描画の解像度・delay・色/フレーム条件を区別します。比較専用comparisonGifExportで対応を通知し、単一ビューformats.gifは非対応のままです。GUI形式選択でGIFを選ぶと書出しだけorbitに固定し、元の時間/変形モードやportable設定は変えません。画像プレビュー・明示保存・中止・再作成は同じ共有キュー/成果物SHA/解放を使います。time/deformation GIFは拒否。
 
 
 2026-10-17 localhost実Chromeの[比較GIF証跡](evidence/2026-10-17-comparison-gif-real-chrome.json): API成果物5,574,849 bytesをSHA-256 e171333e…で照合。外部デコードで640×320・24枚/画像24種、Pillowでdelay80/90ms・合計2,000ms・loop0を確認しました。GUIの画像プレビュー・中止・再作成は成功し、各後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。最初の接続reset/timeoutは履歴に保持し原因を断定しません。公開HTTPS・一般形状・他プレーヤーの滑らかさ・GUIダウンロード完了は未確認です。
@@ -743,3 +742,27 @@ setStudy/project JSONは既存thermalSnapshotCountと新thermalSnapshotBudgetByt
 ### GUIの限定cap一巡
 
 内部流体パネルで最大6件のID/point/外向き単位normalを入力。未入力値は補完しない。法線不正時は対象へfocus/aria-invalidで復帰し、箱範囲補助は未完成draftを保持、新モデルはdraftをリセット。適用済みsourceだけをProject JSONに保存し再読込で行を復元する。mesh失敗時は適用sourceを戻し入力draftを保持。[実Chrome証拠](evidence/2026-10-18-fluid-opening-caps-gui.json)は2cap・4021.239mm3・2ports、107面三角形選択、JSON厳密往復、日英390px/keyboardを確認。非交差capのcore診断は英語のままで、全solver診断翻訳はUIIMPROVE1の残作業。公開Worker/任意wire/一般join/物理解析の実証ではない。
+
+## 比較GIFの時間・表示倍率（2026-10-19）
+
+`startCompareExport`は`format:"gif"`で`animation:"orbit"|"time"|"deformation"`を受理します。新toolは増やさず、MCPは35 default/37 paired、live91操作、minimal connector3のまま。実登録schemaと`exportCapabilities().comparisonGifExport`を先に確認してください。単一ビューの`formats.gif`とMP4は非対応です。
+
+固定24枚、640×320、RGB332の256色（非可逆）。`seconds`は整数1〜15（API既定5、GUI既定2）で、整数centisecondのdelay合計は`seconds*100`。orbitは既存`i/24`、time/deformationは`i/23`で両端を含みます。無限loop指定であり、プレーヤーの再生精度や滑らかな24fpsを保証しません。
+
+時間は両ケースに保存温度または瞬時音圧が必要で、両時間軸内の明示`startTimeSeconds < endTimeSeconds`を指定します。`timeSeconds`や最終熱流束との併用は拒否。固定カメラ・全区間で選択可能な保存フレームの共通色範囲を使い、近傍保存フレームだけを表示し、実時刻と符号付きoffsetを描きます。補間や追加の物理解法は行いません。任意`toleranceSeconds`は全区間で点検します。
+
+変形は2つの線形弾性結果の変位/応力に限り、非零の保存変位と明示した正の`deformScale`が必要。時間引数と非線形結果は拒否。カメラ・結果値・色範囲を固定し、表示倍率だけ0→指定倍率へ線形に変えます。manifestの`visualizationOnly:true`/`loadHistory:false`と画像ラベルを維持し、載荷履歴として解釈しません。
+
+GUIの動画種類はGIF選択後も維持し、時間範囲/表示倍率は同じ共有queue・revision/lease・取消・SHA付きartifact取得・解放経路を通します。成功/取消/失敗後に元表示へ復元し、部分成果物は受け渡しません。[localhost正式MCP＋実Chrome証拠](evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json)は小規模な熱11保存フレームと線形弾性3N/6Nに限定し、API成果物・外部decode24枚・総delay・GUIプレビュー/取消/再作成・入力/ケース/表示/比較設定の一致を確認。公開HTTPS、一般形状、OSダウンロード完了は未確認です。
+
+## 解析前チェックと球面意味操作（2026-10-19）
+
+GUIの`#analysis-preflight`で対象（解析/メッシュのみ）を選び、`#preflight-run`で現在の登録入力を検査します。`#preflight-status`と`#preflight-diagnostics`は共有`api.preflight`のmode/allowed/provisional、診断code・severity・pointer・提案、requiredPointers/remainingChecksを表示します。ジョブを開始せず、物性・荷重・根拠を変更しません。未登録の物性draftは検査対象外である旨を表示します。
+
+入力/option/操作種別/言語が変わると古い報告を無効化し、非同期応答もsnapshot不一致なら破棄します。表示の入力版はGUIローカルrevisionと入力/options snapshotの照合であり、MCPのSHA入力revisionとは別です。既知の入力pointerには「入力箇所へ」を表示し、閉じた欄を開いてkeyboard focusへ移動。対応先がない/無効な場合はpointerを残し、自動補完や別領域への置換をしません。計算中は再検査を拒否します。
+
+`allowed:true`を物理精度・メッシュ・収束の合格と扱わず、`completePreflight:false`と後続確認を保持します。legacyは根拠全体未点検、exploratoryは明示仮定があれば暫定、quantitativeの根拠確認規則は従来どおりです。新たな物理基準や根拠の自動確認は追加しません。
+
+球面は新しいnested意味操作`selectSphericalRegion(meshIndex,spec)`で選択し、次のaddConditionが寸法を保存します。[球面契約](reg2-curved-regions.md)の必須値を明示し、previewの最終revisionを確認してeditへ渡してください。新GUI selectorや一般UV対応はありません。35/37 tools・live91は維持し、installed Skill同期と公開確認は別工程です。
+
+2026-10-19の[localhost実Chrome証拠](evidence/2026-10-19-preflight-gui-spherical-browser.json)で、legacy/非完全/入力版表示、無効mesh sizeの拒否→対象focus→keyboard修正→古い診断解除→再check、材料欄の展開/focus、EN起動→JA→EN、390px幅を確認。実機のprovisional:true経路やAPIとの無変更一致は今回unit側の根拠で、実機で全modeを検証した意味ではありません。球面は同Chromeへの正式stdio MCP inspect/editで418表示三角形・面積157.07963267948963mm²・123N条件と寸法保存を確認し、GUI JSON textを有界取得して保存ファイルMCPへ再読込、入力revision/descriptor一致を確認。browser側mesh/solve、新GUI selector、GUI download完了・file chooser経由の再importは未確認です。

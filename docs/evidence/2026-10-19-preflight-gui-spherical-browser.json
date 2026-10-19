@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "scope": "localhost real Chrome synthetic only;no published scope expansion",
+  "preflight": {
+    "inputRevisionVisible": true,
+    "nonCompleteAndLegacyWarningsVisible": true,
+    "invalidSizeRefusal": "MESH_SIZE_INVALID /options/size",
+    "correctionFocus": "mesh-size",
+    "keyboardCorrection": "0 ->4;old diagnostics cleared;recheck no refusal",
+    "materialFocus": {
+      "id": "mat-youngModulus",
+      "detailsOpened": true
+    },
+    "locale": "English startup ->Japanese ->English;static controls/aria reversible;studio-language clears old report",
+    "narrow": {
+      "width": 390,
+      "documentScrollWidth": 375
+    },
+    "screenshots": [
+      "2026-10-19-preflight-gui-en-narrow.jpg",
+      "2026-10-19-preflight-gui-ja-narrow.jpg"
+    ],
+    "apiParityAndNoMutation": "Unit-tested against actual createStudioApi.preflight;browser UI inspection only",
+    "provisionalTrue": "Unit report coverage;real browser run used legacy mode"
+  },
+  "sphere": {
+    "transport": "actual stdio MCP with paired real Chrome inspect/edit only",
+    "source": {
+      "kind": "sphere",
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "radius": 10
+    },
+    "spec": {
+      "exactCad": true,
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "reference": [
+        1,
+        0,
+        0
+      ],
+      "radius": 10,
+      "tolerance": 0.01,
+      "latitudeMin": -30,
+      "latitudeMax": 30,
+      "startDegrees": 315,
+      "sweepDegrees": 90
+    },
+    "selectedTriangles": 418,
+    "exactAreaMm2": 157.07963267948963,
+    "condition": {
+      "type": "force",
+      "value": 123,
+      "direction": [
+        -1,
+        0,
+        0
+      ]
+    },
+    "browserRevision": "sha256:6c2d3e44968b8f4e2f4f59ecc6c4b02f83fe868bba6fbe0bfed24122e2041d77",
+    "savedRevision": "sha256:6c2d3e44968b8f4e2f4f59ecc6c4b02f83fe868bba6fbe0bfed24122e2041d77",
+    "conditionDescriptorSha256": "sha256:da2a8bac40979270421a0eae879b2419dd29f80411b6fc3ae4747c1e6cb10187",
+    "savedDescriptorMatches": true,
+    "savedInputBytes": 688316,
+    "savedInputSha256": "8c90f6880f9e87af946f2eddb462421ccf2ad304323d8983b37ff1ad3dad5de5",
+    "savePath": "GUI Project JSON text read in bounded chunks;actual saved-file MCP reload/validation",
+    "limitations": [
+      "GUI download wait timed out;completion unverified",
+      "GUI file chooser timed out;browser file-import roundtrip unverified",
+      "No sphere mesh/solve in this browser run;core CAD tests are separate",
+      "No new spherical dimension selector"
+    ]
+  },
+  "cleanup": {
+    "browserDisconnected": true,
+    "ownedTabClosed": true,
+    "viewportReset": true,
+    "devServer": "stopped",
+    "stdio": "closed exit0",
+    "privatePairingFile": "removed"
+  }
+}

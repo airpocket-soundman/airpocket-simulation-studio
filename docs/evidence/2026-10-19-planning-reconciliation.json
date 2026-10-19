@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "scope": "Reconcile existing unpublished planning into the isolated development branch",
+  "addedTaskIds": [
+    "AGENTACP1",
+    "AGENTCHAT1",
+    "RESULTCURVE1",
+    "FINITEVISCO1"
+  ],
+  "existingMod1Preserved": true,
+  "existingTaskStatusesOverwritten": false,
+  "originalFilesUnchanged": true,
+  "sourceSha256": {
+    "docs/roadmap.md": "1a35f275c15283e9fecdd53505004ae68f23f28e3e90e333c7a3a5d8b1e50fc2",
+    "docs/en/roadmap.md": "fe6c36522c2d988824af0b9db77e5c4a97c11ef3056bf04ca2e523b28fe087d2",
+    "docs/printed-parts.md": "9124dcae993bf69874456e3944828807f3b1c191b6280f71da07db1d80d012bb",
+    "src/board-strategy.js": "efc1c77a9c355515c648e434f060f311a19c23668b692008e61d338c477ce7fc",
+    "src/progress.json": "c2d76130592518834fa45c0096b0112d4100e843089ec31fb4ee0a8684d16b45"
+  },
+  "importedSections": {
+    "docs/roadmap.md": [
+      "## 段階載荷データと静止グラフ（RESULTCURVE1、2026-10-16追加）",
+      "## 有限変形の粘弾塑性・損傷と引張試験（FINITEVISCO1、2026-10-16追加）",
+      "## 自分のAIをアプリ内から使う（AGENTACP1・AGENTCHAT1、2026-10-16追加）"
+    ],
+    "docs/en/roadmap.md": [
+      "## Incremental loading data and static curves (RESULTCURVE1, added 2026-10-16)",
+      "## Finite-strain viscoelastic-plasticity, damage and tensile testing (FINITEVISCO1, added 2026-10-16)",
+      "## In-app access to the user's AI (AGENTACP1 / AGENTCHAT1, added 2026-10-16)"
+    ]
+  },
+  "taskCount": 171,
+  "releasedCount": 133,
+  "unfinishedCount": 38,
+  "verification": {
+    "scope": "progress,board,history and formal stdio progress contract tests",
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0,
+    "isFinalCandidateCi": false
+  }
+}
