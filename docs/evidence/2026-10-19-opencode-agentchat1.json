@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "20-AGENTCHAT1",
+  "status": "uncommitted local source snapshot at time of writing; Node tests only, no browser verification",
+  "scope": "Read-only connection status panel inside the existing manual connection section. It shows the connection method, the actual connection state, the next required action and the permitted scopes, plus a separate ACP lane that stays 'unavailable'. Chat send, conversation history and automatic agent model selection are NOT implemented.",
+  "baseCommit": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-agentchat1",
+  "sourceFilesSha256": {
+    "src/ui/agent-connection-status-ui.js": "db8a0f7e21dca8b0c0438a8ea17d5acc8c3ccfbf276f80a5c53a7c537a851aad",
+    "src/browser-session-ui.js": "90c241ea3d7b74f4a24a0beb359911537cc35b5f166d2b006315145bbb36da55",
+    "src/module-layers.json": "8b20fdf9ed588dd7dde9951ed39d7ee90914ecec449d78a11af5ce5f3e99b741",
+    "tests/ui-agent-connection-status.test.mjs": "a83da4506a6ac59cc0e330d4b5f6c65d65a4c8b7b7799c921bcebdb211614488"
+  },
+  "connectionEventTable": [
+    {"event": "no event, undefined or null", "uiState": "disconnected"},
+    {"event": "{state:'connecting'}", "uiState": "connecting", "note": "set by the connect button click; the panel never promotes it on elapsed time"},
+    {"event": "{state:'connected', sessionId:<non-empty string>}", "uiState": "connected", "note": "scopes are filtered to inspect/edit/analyze/view and only those become permitted"},
+    {"event": "{state:'connected'} with no session identity", "uiState": "failed", "note": "reason missing-session-identity; a connected event alone never becomes connected"},
+    {"event": "{state:'disconnected'} with no message", "uiState": "disconnected"},
+    {"event": "{state:'disconnected', message:<non-empty>}", "uiState": "failed", "note": "the real transport-error path; string messages are bounded to 2048 characters and a non-string message shows no detail"},
+    {"event": "{state:'expired'}", "uiState": "expired"},
+    {"event": "{state:'failed', message?}", "uiState": "failed"},
+    {"event": "unknown state, non-object or non-string event", "uiState": "ignored", "note": "the previous state stays; nothing is fabricated"}
+  ],
+  "acpProbeTable": [
+    {"probe": "undefined or null", "uiState": "unavailable", "note": "the default in the app; the initialization probe of 19-AGENTACP1 is not installed here"},
+    {"probe": "{state:'initializing'}", "uiState": "initializing"},
+    {"probe": "{state:'initialized'}", "uiState": "initialized", "note": "always shown with 'initialized; conversation and authentication unverified' and never changes the connector state"},
+    {"probe": "{state:'stopping'}", "uiState": "stopping"},
+    {"probe": "{state:'stopped'}", "uiState": "stopped"},
+    {"probe": "{state:'failed'}", "uiState": "failed"},
+    {"probe": "any other state", "uiState": "ignored"}
+  ],
+  "verifiedAssertions": {
+    "command": "node --test tests/ui-agent-connection-status.test.mjs tests/browser-connection-diagnostics.test.mjs tests/browser-connection-errors.test.mjs tests/module-boundaries.test.mjs",
+    "totals": {"tests": 34, "pass": 34, "fail": 0, "skipped": 0},
+    "perFile": {
+      "tests/ui-agent-connection-status.test.mjs": {"tests": 9, "pass": 9, "fail": 0},
+      "tests/browser-connection-diagnostics.test.mjs": {"tests": 4, "pass": 4, "fail": 0},
+      "tests/browser-connection-errors.test.mjs": {"tests": 2, "pass": 2, "fail": 0},
+      "tests/module-boundaries.test.mjs": {"tests": 19, "pass": 19, "fail": 0}
+    },
+    "checkContracts": "npm run check:contracts -> 'Contract declarations type-check (5 declaration files).' exit 0",
+    "gitDiffCheck": "git diff --check -> exit 0 (only an autocrlf warning that LF will be replaced by CRLF for src/browser-session-ui.js)",
+    "unitOnly": [
+      "connecting stays connecting for 10 seconds of fake time and the module schedules 0 timers and writes 0 DOM updates while time passes",
+      "a connected event without a session identity becomes failed, not connected",
+      "expired -> reconnect -> connected and failed -> disconnect -> disconnected, once each",
+      "connected with scopes ['inspect'] shows only 入力・結果の確認 as permitted, lists the other three as not permitted and adds 0 inputs and 0 buttons",
+      "malformed scope values (a nested array, an unknown name) are dropped instead of permitted",
+      "ACP states are shown in their own lane and never change the connector state; an unsupported ACP state is ignored",
+      "ja -> en -> ja restores headings, states, actions and the aria-label of the live region, and the language event is subscribed exactly once",
+      "a 3000-character failure message is bounded and a non-string message surfaces no detail",
+      "no token or loopback URL appears in the panel text or in the state snapshot",
+      "an identical state is not rewritten and unknown events are ignored",
+      "after teardown: 0 DOM writes, the language listener is removed, report/setAcp/refresh return false and the state snapshot is unchanged",
+      "the status module source uses no timer, storage or network call, and its dictionary names no connection code or URL"
+    ]
+  },
+  "browserCheck": {
+    "performed": false,
+    "reason": "No desktop browser is connected to this session. browser.tabs.list and browser.tabs.open both failed with browser.disconnected, so JA/EN switch, the 390px layout and the Tab order were not observed in a real Chrome.",
+    "attempted": ["a local vite dev server on http://127.0.0.1:5173 (started for the check and stopped afterwards); no page was loaded"]
+  },
+  "separatedEvidence": {
+    "fakeAdapterUnitResults": "Every ACP-lane result above comes from probe objects injected into the unit test. No ACP process was started, no adapter exists in the app and no fixture is presented as a live success.",
+    "realBrowserObservations": "None. This change has no real Chrome observation."
+  },
+  "notImplemented": ["chat send", "conversation history", "automatic agent model selection", "ACP transport, streaming and attachments (19-AGENTACP1)"],
+  "notVerified": ["real Chrome JA/EN switch", "390px horizontal overflow", "Tab order to connect, disconnect and diagnose", "real connector pairing in a browser", "ACP initialization against a real agent", "project/revision/analysis-job changes after teardown in a browser (the module receives no such API and the unit test shows 0 DOM writes only)"],
+  "progressProposal": "AGENTCHAT1 stays queued; src/progress.json was not modified by this work order."
+}
