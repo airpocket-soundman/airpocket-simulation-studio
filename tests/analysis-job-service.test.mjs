@@ -1,11 +1,11 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,readFile,writeFile,rm,stat} from 'node:fs/promises';
+import {mkdtemp,readFile,writeFile,rm,stat,readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {BoxGeometry} from 'three';
-import {createHeadlessJobService} from '../scripts/analysis-job-service.mjs';
+import {createHeadlessJobService,startupConditionDigest} from '../scripts/analysis-job-service.mjs';
 
 function project(kind='structural'){
  const g=new BoxGeometry(10,10,40).toNonIndexed();g.translate(5,5,20);const positions=Array.from(g.attributes.position.array);g.dispose();
@@ -52,4 +52,36 @@ test('job cancellation, timeout, artifact limits and invalid options preserve in
   const limited=await service.start({path,outputPath:join(dir,'limited.json'),requestId:'limited',includeFields:true});const done=await terminal(service,limited.jobId);assert.equal(done.state,'succeeded');assert.equal(done.result.intermediateStorageLimited,true);assert.ok(service.events(limited.jobId,{limit:100}).events.some(e=>e.stage==='observation-limit'));
   await assert.rejects(service.start({path,outputPath,requestId:'bad',includeFields:'yes'}),/arguments/);assert.equal(await readFile(path,'utf8'),original);
  }finally{service.close();fast.close();await rm(dir,{recursive:true,force:true});}
+});
+
+// Synthetic fixture: the digest identifies recorded startup conditions, never file contents.
+test('restart startup-condition digest separates identical from changed conditions before any input read or worker start',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-digest-')),store=join(dir,'store');let workerStarts=0;
+ try{
+  const path=join(dir,'input.json'),outputPath=join(dir,'result.json'),request={path,outputPath,requestId:'recovery-01',operation:'mesh',size:5,method:'wasm-pcg'};
+  await writeFile(path,JSON.stringify(project()));
+  const first=createHeadlessJobService({jobStore:store}),job=await first.start(request);
+  const done=await terminal(first,job.jobId);assert.equal(done.state,'succeeded',JSON.stringify(done.error));await first.closeAsync();
+  const raw=await readFile(join(store,job.jobId+'.json'),'utf8'),persisted=JSON.parse(raw);
+  assert.equal(persisted.requestId,'recovery-01');assert.ok(persisted.resultDigest);
+  assert.match(persisted.startupDigest,/^[0-9a-f]{64}$/);
+  assert.equal(persisted.startupDigest,startupConditionDigest(request));
+  assert.ok(Buffer.byteLength(raw)<=8192);
+  assert.ok(!raw.includes(path)&&!raw.includes(outputPath),'the digest never stores the raw paths');
+  // A restart service that would report any worker start, and an input file that no longer exists:
+  // the refusal must precede both the read and the execution. The path string is unchanged, so the
+  // digest is identical while the underlying file is deliberately gone.
+  const restart=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('worker must not start for a refused replay');}});
+  await rm(path);await assert.rejects(stat(path),{code:'ENOENT'});
+  await assert.rejects(restart.start(request),error=>error.code==='ANALYSIS_JOB_REQUEST_RESTORED'&&error.message.includes(job.jobId));
+  const restored=restart.get(job.jobId);assert.equal(restored.restored,true);assert.equal(restored.resultAvailable,false);assert.equal(restored.result,undefined);
+  assert.equal(workerStarts,0);
+  // One changed field at a time is an explicit conflict, also before any read or worker start.
+  for(const change of [{method:'pcg'},{outputPath:join(dir,'other.json')},{includeFields:true}]){
+   await assert.rejects(restart.start({...request,...change}),error=>error.code==='ANALYSIS_JOB_REQUEST_CONFLICT'&&error.message.includes(job.jobId));
+  }
+  assert.equal(workerStarts,0);
+  assert.deepEqual((await readdir(dir)).sort(),['result.json','store']);
+  await restart.closeAsync();
+ }finally{await rm(dir,{recursive:true,force:true});}
 });

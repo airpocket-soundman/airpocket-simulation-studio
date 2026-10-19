@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "17-P3",
+  "status": "verified-local-awaiting-review",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-p3",
+  "scope": "Restored metadata-only records gain an optional canonical startup-condition digest so a retained requestId is classified as identical (ANALYSIS_JOB_REQUEST_RESTORED) or different (ANALYSIS_JOB_REQUEST_CONFLICT) startup conditions before any input read. No job resume, result restoration or re-analysis.",
+  "node": "v24.11.1",
+  "changedFiles": [
+    "scripts/analysis-job-store.mjs",
+    "scripts/analysis-job-service.mjs",
+    "scripts/studio-mcp.mjs",
+    "tests/analysis-job-store.test.mjs",
+    "tests/analysis-job-service.test.mjs",
+    "tests/mcp-restored-request-id.test.mjs",
+    "docs/automation.md",
+    "docs/en/automation.md"
+  ],
+  "design": {
+    "recordVersion": "unchanged at schemaVersion 1; startupDigest is an additive optional field so version1 records without it still load",
+    "digestField": "startupDigest (64 hex chars, /^[0-9a-f]{64}$/)",
+    "descriptor": "descriptorVersion=1 plus resolved absolute input/output paths, operation, size, method, adaptive, includeFields",
+    "canonicalization": "canonicalJson (sorted keys) then SHA-256 hex",
+    "notAFileHash": true,
+    "pathCaseFolding": "none; resolve() normalization only, case is not unified",
+    "notProvenByDigest": "whether a same-path input file was later modified",
+    "unknownOrInvalidDigest": "record rejected with ANALYSIS_JOB_STORE_CORRUPT_RECORD diagnostic; unknown fields rejected",
+    "ordering": "digest computed and restored requestId matched before any input stat/read or worker start",
+    "sameDigestOrLegacy": "ANALYSIS_JOB_REQUEST_RESTORED (existing refusal, no fabricated result)",
+    "differentDigest": "ANALYSIS_JOB_REQUEST_CONFLICT (explicit requestId conflict, message includes jobId)",
+    "limitsUnchanged": "maxRecords=256, maxRecordBytes=8192, no raw paths, no project/result arrays"
+  },
+  "verification": {
+    "targetCommand": "node --test tests/analysis-job-store.test.mjs tests/analysis-job-service.test.mjs tests/mcp-restored-request-id.test.mjs tests/analysis-jobs.test.mjs",
+    "targetTotal": 28,
+    "targetPassed": 27,
+    "targetFailed": 0,
+    "targetSkipped": 1,
+    "targetSkipReason": "Windows symlink unavailable (existing 'a symlinked record is not followed' test)",
+    "baseline": {"total": 26, "passed": 25, "failed": 0, "skipped": 1},
+    "diffCheckCommand": "git diff --check",
+    "diffCheckResult": "clean, exit 0",
+    "contractsCommand": "npm run check:contracts",
+    "contractsResult": "Contract declarations type-check (5 declaration files), exit 0",
+    "relatedCommand": "node --test tests/mcp-jobs-protocol.test.mjs tests/mcp-gui-jobs.test.mjs tests/analysis-job-failure.test.mjs",
+    "relatedResult": {"total": 5, "passed": 5, "failed": 0, "skipped": 0},
+    "realMcpRestart": true,
+    "realMcpRestartNote": "tests/mcp-restored-request-id.test.mjs spawns two real Node stdio MCP processes sharing one --job-store directory; the second process classifies identical conditions as ANALYSIS_JOB_REQUEST_RESTORED and changed outputPath/size or path/outputPath as ANALYSIS_JOB_REQUEST_CONFLICT"
+  },
+  "measuredValues": [
+    "persisted record startupDigest is 64 hex chars and equals startupConditionDigest({path,outputPath}) (unit: hex chars)",
+    "identical conditions across restart: process worker factory invocations 0, input read 0 (input file deleted, ENOENT would occur if read), resultAvailable=false",
+    "changed method ('pcg'), outputPath, includeFields: 3/3 return ANALYSIS_JOB_REQUEST_CONFLICT",
+    "descriptor key reordering yields the same 64-hex digest",
+    "record bytes with digest remain <= 8192 (unit: bytes)"
+  ],
+  "limits": [
+    "This is not a file-content hash and does not detect a same-path input file later being modified",
+    "Also not full payload equivalence: inputRevision/project contents are not fingerprint-verified against the record",
+    "No automatic resumption, no result/event/artifact restoration, no re-analysis, no automatic retry",
+    "Records absent/deleted/corrupt/over-cap or whose persistence failed cannot be matched",
+    "Verified locally only (Node worker and real stdio MCP); no browser or public HTTPS verification",
+    "P3 as a whole remains incomplete; completion-preflight remains false"
+  ],
+  "boardProposal": "Update only src/progress.json P3 latest entry: record that restored requestId is now discriminated by a canonical startup-condition digest (identical/legacy -> ANALYSIS_JOB_REQUEST_RESTORED, different -> ANALYSIS_JOB_REQUEST_CONFLICT) before input reads; metadata-only recovery, no resume; parent P3 stays in progress (not released, not complete)."
+}

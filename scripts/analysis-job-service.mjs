@@ -6,9 +6,18 @@ import {createAnalysisJobs} from '../src/analysis-jobs.js';
 import {createStudioApi} from '../src/studio-api.js';
 import {analyzeProject} from './headless-analysis.mjs';
 import {publishJson} from './json-artifacts.mjs';
-import {getProjectRevision} from '../src/project-revision.js';
+import {getProjectRevision,canonicalJson} from '../src/project-revision.js';
 import {inspectIntermediate} from '../src/intermediate-results.js';
 import {createJobStore,restoredJobView} from './analysis-job-store.mjs';
+
+// SHA-256 of the canonical startup-condition descriptor for one start() call. This identifies
+// "same startup conditions", NOT file contents: it never reads the input, is not a content hash,
+// holds no raw paths in the record, and does not prove that a same-path file was unchanged.
+// Paths are normalized to absolute form only; case is not folded (no basis to unify case).
+export function startupConditionDigest({path,outputPath,operation='solve',size=5,method='wasm-pcg',adaptive=false,includeFields=false}={}){
+ const descriptor={descriptorVersion:1,inputPath:resolve(path),outputPath:resolve(outputPath),operation,size,method,adaptive,includeFields};
+ return createHash('sha256').update(canonicalJson(descriptor)).digest('hex');
+}
 
 export function summarizeAnalysis({mesh,result}){
  return {mesh:mesh.summary,kind:result?.kind,engine:result?.engine,residual:result?.residual,iterations:result?.iterations,maxDisplacementMm:result?.maxDisplacementMm,maxVonMisesPa:result?.maxVonMisesPa,minTemperature:result?.minTemperature,maxTemperature:result?.maxTemperature,maxSpeedMs:result?.maxSpeedMs,reactionDragN:result?.reactionDragN,stokes:result?.stokes,modeFrequenciesHz:result?.modes?.map(m=>m.frequencyHz),analysisAssessment:result?.analysisAssessment};
@@ -20,7 +29,12 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
  if(jobStore!==undefined&&(typeof jobStore!=='string'||!jobStore))throw Error('Invalid job store configuration');
  const store=jobStore===undefined?undefined:createJobStore(jobStore,{onDiagnostic:entry=>process.stderr.write('Job store: '+JSON.stringify(entry)+'\n')}),restored=store?store.load():new Map();
  const destinations=new Map(),artifacts=new Map(),outputPaths=new Map();
- const jobs=createAnalysisJobs({id:randomUUID,timeoutMs,maxJobs,maxEvents,...(store?{onRecord:store.persist}:{}),execute:async({project,options,operation,context,inputRevision,jobId,signal,onEvent,beginCommit})=>{
+ // Canonical startup-condition digests for jobs started in this process, keyed by requestId, so
+ // even the first `running` record carries the digest. An entry that owns a live jobId is never
+ // overwritten by a rejected duplicate request.
+ const startupDigests=store?new Map():undefined,requestIdByJobId=store?new Map():undefined;
+ const onRecord=store?((view,meta)=>{const entry=meta&&typeof meta.requestId==='string'?startupDigests.get(meta.requestId):undefined;const startupDigest=entry&&(!entry.jobId||entry.jobId===view?.jobId)?entry.digest:undefined;store.persist(view,{...meta,...(startupDigest?{startupDigest}:{})});}):undefined;
+ const jobs=createAnalysisJobs({id:randomUUID,timeoutMs,maxJobs,maxEvents,...(onRecord?{onRecord}:{}),execute:async({project,options,operation,context,inputRevision,jobId,signal,onEvent,beginCommit})=>{
   const {outputPath,includeFields}=context,key=process.platform==='win32'?outputPath.toLowerCase():outputPath;
   if(destinations.has(key))throw Error('Analysis output is already reserved by another job');
   destinations.set(key,jobId);
@@ -76,13 +90,24 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const pathKey=value=>process.platform==='win32'?resolve(value).toLowerCase():resolve(value);
    if(typeof path!=='string'||!isAbsolute(path)||typeof outputPath!=='string'||!isAbsolute(outputPath)||pathKey(path)===pathKey(outputPath))throw Error('Use distinct absolute input and output paths');
    if(typeof requestId!=='string'||!requestId||requestId.length>200||!['solve','mesh'].includes(operation)||!Number.isFinite(size)||size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(method)||typeof adaptive!=='boolean'||typeof includeFields!=='boolean')throw Error('Invalid analysis job arguments');
-   // Restored metadata cannot establish payload equivalence. Never replay its retained request ID.
+   // Validate first, then fingerprint the observed startup conditions before any input read.
+   // Restored metadata cannot prove payload equivalence; its digest only distinguishes the
+   // recorded startup conditions from this request. Never replay a retained request ID.
+   const startupDigest=store?startupConditionDigest({path,outputPath,operation,size,method,adaptive,includeFields}):undefined;
    const prior=[...restored.values()].find(record=>record.requestId===requestId);
-   if(prior)throw Object.assign(Error('Request ID belongs to restored job '+prior.jobId+'. Inspect that job before explicitly releasing it or choosing a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_RESTORED'});
+   if(prior){
+    // Same digest (or a legacy record that stored no digest): existing restore refusal.
+    // A recorded, different digest: an explicit request-ID conflict.
+    if(!prior.startupDigest||prior.startupDigest===startupDigest)throw Object.assign(Error('Request ID belongs to restored job '+prior.jobId+'. Inspect that job before explicitly releasing it or choosing a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_RESTORED'});
+    throw Object.assign(Error('Request ID '+requestId+' belongs to restored job '+prior.jobId+' with different startup conditions (input/output path, operation, size, method, adaptive or includeFields). Inspect that job, then explicitly release it or choose a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_CONFLICT'});
+   }
+   if(store){const registered=startupDigests.get(requestId);if(!registered||!registered.jobId)startupDigests.set(requestId,{digest:startupDigest,jobId:null});}
    if((await stat(path)).size>100_000_000)throw Error('JSON file exceeds 100 MB');
    const api=createStudioApi();api.loadProject(JSON.parse(await readFile(path,'utf8')));
    const project=api.exportProject();
-   const resolvedOutput=resolve(outputPath),job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolvedOutput,includeFields}});outputPaths.set(job.jobId,resolvedOutput);return job;
+   const resolvedOutput=resolve(outputPath),job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolvedOutput,includeFields}});outputPaths.set(job.jobId,resolvedOutput);
+   if(store){const owned=startupDigests.get(requestId);if(owned&&!owned.jobId)owned.jobId=job.jobId;requestIdByJobId.set(job.jobId,requestId);}
+   return job;
   },
   listArtifacts(jobId,args={}){
    const job=jobs.get(jobId);if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['offset','limit'].includes(key)))throw Error('Invalid artifact catalog page');
@@ -124,6 +149,6 @@ if(!store)return Object.freeze(service);
   listArtifacts(jobId,args={}){const view=restoredView(jobId);if(!view)return service.listArtifacts(jobId,args);return {schemaVersion:1,jobId,inputRevision:view.inputRevision,jobState:view.state,provisional:true,artifacts:[],total:0,nextOffset:null};},
   async artifact(jobId,artifactId,options){if(restored.has(jobId))throw Error('Intermediate artifacts are not restored after a restart');return service.artifact(jobId,artifactId,options);},
   async meshOutput(jobId){if(restored.has(jobId))throw Error('A successful, settled retained mesh-only job is required');return service.meshOutput(jobId);},
-  release(jobId){if(restored.has(jobId)){restored.delete(jobId);store.remove(jobId);return {jobId,released:true};}const result=service.release(jobId);store.remove(jobId);return result;}
+  release(jobId){if(restored.has(jobId)){restored.delete(jobId);store.remove(jobId);return {jobId,released:true};}const result=service.release(jobId);store.remove(jobId);const requestId=requestIdByJobId.get(jobId);if(requestId!==undefined){requestIdByJobId.delete(jobId);startupDigests.delete(requestId);}return result;}
  });
 }
