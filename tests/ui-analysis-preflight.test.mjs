@@ -1,4 +1,5 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';
+const main=await readFile(new URL('../src/main.js',import.meta.url),'utf8');
 function element(tag){return {tagName:tag.toUpperCase(),children:[],style:{},attributes:{},append(...v){for(const c of v){this.children.push(c);c.parentElement=this;}},replaceChildren(...v){this.children=[];this.append(...v);},setAttribute(k,v){this.attributes[k]=v;},focus(){this.focused=true;}};}
 const all=e=>[e,...e.children.flatMap(all)],find=(e,id)=>all(e).find(c=>c.id===id);
 const report={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',message:'Mesh size must be positive',suggestions:['Set intended size']},{code:'INPUT_REQUIRED',target:'/unmapped/input',message:'Evidence missing'}],requiredPointers:['/materialProperties/youngModulus'],remainingChecks:['Mesh quality']};
@@ -12,3 +13,12 @@ test('GUI calls same API without input mutation and warns about unregistered mat
 test('English startup still supplies Japanese source labels for reversible locale scanning',()=>{const f=setup(),h=all(f.host).find(e=>e.tagName==='H3'),button=find(f.host,'preflight-run'),operation=find(f.host,'preflight-operation');assert.equal(h.textContent,'解析前チェック');assert.equal(button.textContent,'現在の入力をチェック');assert.equal(operation.attributes['aria-label'],'チェック対象');const source=[h,button,...operation.children].map(e=>e.textContent);for(const locale of ['en','ja','en']){const rendered=source.map(text=>locale==='en'?f.translations[text]??text:text);assert.equal(rendered[0],locale==='en'?'Pre-analysis check':'解析前チェック');assert.equal(rendered[1],locale==='en'?'Check current inputs':'現在の入力をチェック');}assert.equal(f.translations['チェック対象'],'Check operation');});
 
 test('locale event clears dynamic diagnostics instead of retaining an old-language report',async()=>{const f=setup();await f.ui.check();f.events['studio-language']();assert.equal(f.ui.getReport(),null);assert.equal(find(f.host,'preflight-diagnostics').children.length,0);assert.match(find(f.host,'preflight-status').textContent,/Check again/);});
+
+test('preflight and solve read the same single delegated analysis options reader',()=>{
+ assert.ok(main.includes("import {analysisOptionsFromValues} from './ui/analysis-options.js';"));
+ assert.equal(main.split('function currentAnalysisOptions()').length-1,1,'exactly one shared reader must exist');
+ assert.ok(main.includes('function currentAnalysisOptions(){return analysisOptionsFromValues({'),'shared reader must delegate to the pure converter');
+ assert.ok(main.includes("const options=currentAnalysisOptions();const output=await(guiAnalysis.run({operation:solve?'solve':'mesh',options}));"));
+ assert.ok(main.includes("preflight:operation=>api.preflight(currentAnalysisOptions(),{target:'browser',operation})"));
+ assert.ok(main.includes('snapshot:()=>({revision:projectRevision,project:api.exportProject(),options:currentAnalysisOptions()})'));
+});
