@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "16-P1",
+  "title": "Spherical selection/condition/provenance input units restored in input inspection",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "baseRef": "origin/main",
+  "branch": "codex/opencode-p1",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-p1",
+  "runtime": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "changedFiles": [
+    "src/project-input-inspection.js",
+    "tests/project-input-inspection.test.mjs",
+    "tests/spherical-wiring.test.mjs"
+  ],
+  "behavior": {
+    "summary": "unitFor now resolves known spherical dimension units through one shared lookup. Condition sphericalRegion and top-level spherical selection resolve center/radius/tolerance to mm, axis/reference to 1, latitudeMin/latitudeMax/startDegrees/sweepDegrees to deg. mesh index, exactCad and unknown keys get no unit. Provenance value pointers that reference those paths inherit the same units; missing pointers keep exists=false.",
+    "topLevelSphericalSelectionPointer": "/sphericalRegion",
+    "conditionSphericalPointer": "/conditions/<index>/sphericalRegion",
+    "notChanged": "solver, CAD generation, semantic-operation-schema, spherical-region.js, project revision/export contract"
+  },
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass",
+      "detail": "added 22 packages, 0 vulnerabilities; own worktree node_modules only"
+    },
+    {
+      "command": "node --test tests/project-input-inspection.test.mjs tests/spherical-wiring.test.mjs",
+      "result": "pass",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 16963,
+      "detail": "native gmsh-wasm 0.3.0 available in worktree node_modules; spherical-wiring 4 tests ran, not skipped"
+    },
+    {
+      "command": "node --test tests/project-input-inspection.test.mjs",
+      "result": "pass",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "no whitespace errors (exit 0)"
+    }
+  ],
+  "measuredValues": [
+    {"pointer": "/sphericalRegion/center", "unit": "mm", "elements": 3},
+    {"pointer": "/sphericalRegion/radius", "value": 10, "unit": "mm"},
+    {"pointer": "/sphericalRegion/tolerance", "value": 0.01, "unit": "mm"},
+    {"pointer": "/sphericalRegion/axis", "unit": "1"},
+    {"pointer": "/sphericalRegion/reference", "unit": "1"},
+    {"pointer": "/sphericalRegion/latitudeMin", "value": -30, "unit": "deg"},
+    {"pointer": "/sphericalRegion/latitudeMax", "value": 30, "unit": "deg"},
+    {"pointer": "/sphericalRegion/startDegrees", "value": 315, "unit": "deg"},
+    {"pointer": "/sphericalRegion/sweepDegrees", "value": 90, "unit": "deg"},
+    {"pointer": "/sphericalRegion/mesh", "unit": null, "note": "mesh index has no physical unit"},
+    {"pointer": "/conditions/2/value", "value": 123, "unit": "N", "note": "condition force kept separate from spherical dimensions"},
+    {"pointer": "/inputProvenance/entries/0/value", "value": 10, "unit": "mm", "note": "provenance pointer /sphericalRegion/radius"},
+    {"pointer": "/inputProvenance/entries/1/value", "value": 0.01, "unit": "mm", "note": "provenance pointer /conditions/2/sphericalRegion/tolerance"}
+  ],
+  "acceptance": {
+    "selectionConditionUnitMatch": "pass (per-field equal for center/radius/tolerance/axis/reference and 4 angles)",
+    "provenanceSameValueAndUnit": "pass",
+    "missingPointerExistsFalse": "pass (/sphericalRegion/diameter => exists:false)",
+    "unknownFieldNoUnit": "pass (/sphericalRegion/legacyScale => unit undefined)",
+    "exportReloadSameUnits": "pass (JSON.stringify round-trip reproduces identical units maps)",
+    "inspectionReadOnly": "pass (project deep-equal before/after)"
+  },
+  "unverified": [
+    "No real Chrome / GUI browser confirmation was performed for this change; only Node tests were run.",
+    "The 20-item parent P1 task (full physical input/provenance acceptance) remains incomplete.",
+    "spherical tolerance is a display-mesh match tolerance; it is NOT a CAD accuracy guarantee and must not be described as one.",
+    "No full test suite or production build was run; only the two targeted test files plus check:contracts."
+  ],
+  "notes": [
+    "src/progress.json was not modified; a board update proposal is delivered in the work report.",
+    "No secrets, tokens, or full logs are embedded."
+  ]
+}
