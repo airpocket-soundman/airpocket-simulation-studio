@@ -32,7 +32,24 @@ export function getCapabilities({target='browser',analysisIsolation='worker'}={}
   note:'Implemented scope is not universal physical validation. Geometry, boundary, material, mesh and runtime validation still apply.'
  };
 }
-const issue=(code,target,message,evidence,suggestions)=>({code,severity:'error',target,message,evidence,suggestions,requiresUserIntent:false});
+// RFC 6901 escaping: only '~' and '/' need escaping, in that order.
+const pointerToken=key=>String(key).replaceAll('~','~0').replaceAll('/','~1');
+/** Absolute JSON Pointer from known structural path keys. Never splits an existing dotted string. */
+export const toJsonPointer=(...keys)=>keys.map(key=>'/'+pointerToken(key)).join('');
+// Contract: '/options/*' addresses the execution options argument; '/study/*' and
+// '/materialProperties/*' address the project. Only a known diagnostic target maps to a
+// pointer; any other target stays target-only instead of a fabricated pointer.
+// The shared combination rules pass 'execution.combination', which is intentionally absent.
+const pointerTokensByTarget=Object.freeze({
+ 'options.method':['options','method'],
+ 'options.adaptive':['options','adaptive'],
+ 'study.kind':['study','kind'],
+ 'materialProperties.orthotropic':['materialProperties','orthotropic'],
+ 'materialProperties.plasticity':['materialProperties','plasticity'],
+ 'materialProperties.hyperelastic':['materialProperties','hyperelastic']
+});
+export const diagnosticPointer=target=>Object.hasOwn(pointerTokensByTarget,target)?toJsonPointer(...pointerTokensByTarget[target]):null;
+const issue=(code,target,message,evidence,suggestions)=>{const pointer=diagnosticPointer(target);return {code,severity:'error',target,...(pointer===null?{}:{pointer}),message,evidence,suggestions,requiresUserIntent:false};};
 export function diagnoseExecution(project,options={},target='browser'){
  getCapabilities({target});
  if(!options||typeof options!=='object'||Array.isArray(options)||options.adaptive!==undefined&&typeof options.adaptive!=='boolean'||options.method!==undefined&&typeof options.method!=='string'||options.includeFields!==undefined&&typeof options.includeFields!=='boolean')throw Error('Invalid execution diagnostic options');
