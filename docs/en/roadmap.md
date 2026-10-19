@@ -2,7 +2,55 @@
 
 [日本語](../roadmap.md)
 
-Updated 2026-10-14. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
+Updated 2026-10-16. Product intent is defined in [product direction](product-direction.md), [agent operations](agent-operation.md) and [viewer direction](result-viewer-direction.md). This document defines implementation order and completion gates; proposals are not shipped capabilities.
+
+## Incremental loading data and static curves (RESULTCURVE1, added 2026-10-16)
+
+Retrieve prescribed displacement, total axial reaction on the loaded face, gauge extension and calculation status at each displacement-controlled increment. Compare and save static force–displacement and stress–strain curves. Animated graphs are unnecessary; retain 3D deformation animation as a separate view. This task is queued. Existing numerical access or display-only deformation cycles do not establish graph support.
+
+- **Data access**: Share incremental data across GUI/API/MCP. Retain input revision, geometry/material/supports/loading path, increment, units, convergence/provisional status, node/face selections and result revision. Aggregate loaded-face reactions for displacement control; distinguish prescribed force from computed displacement for force control. Connecting independent final results must not be presented as a stateful plastic loading/unloading history.
+- **Stress–strain definitions**: Engineering stress is axial force divided by initial section area; engineering strain is gauge extension divided by initial gauge length. Maximum von Mises stress paired with maximum displacement is not a stress–strain curve. Record gauge/area provenance. Offer true stress/strain only when the necessary deformation data exists.
+- **Views and exports**: Plot force–displacement and stress–strain with axes, units, legends and multiple-case overlays. Export CSV/JSON increment tables and static images. Identify proportional straight lines and coincident unloading paths for linear elasticity. Yield, hysteresis and fracture require supporting material data and solver capability. Distinguish display-scale oscillation from computed loading history.
+- **Acceptance**: Verify uniform-bar reactions and extension against analytical solutions. For nonlinear support, verify continuous state history, reaction balance, an unloading reference and failed-increment handling. Confirm GUI/API/MCP, saved/restored results and exports agree, and an LLM can reproduce the curves from increment tables.
+
+Dependencies and priority: extend P3 result access and P4 views/exports. Existing API/MCP/jobs work comes first; separate acquisition and plotting according to MOD1. The current examples may use increment tables plotted by the user's LLM, without claiming in-app graph completion. Implementing another material model or solver does not substitute for this task.
+
+## Finite-strain viscoelastic-plasticity, damage and tensile testing (FINITEVISCO1, added 2026-10-16)
+
+The goal is to distinguish time-dependent material hysteresis, post-yield permanent deformation, and finite-deformation cross-section reduction/necking, then compare dumbbell force-displacement and stress-strain behavior only when calibrated to experiments. The current small-strain J2 and rubber-oriented finite-strain Neo-Hookean paths do not implement this combination. Abaqus Parallel Rheological Framework (PRF) is a reference constitutive approach from an existing CAE; neither adopting Abaqus nor using it in the SolidCraft/Studio-only design demonstrations is required.
+
+1. **Material data**: Collect tensile loading/unloading and stress-relaxation or creep data for a recorded material lot, print orientation/process, temperature and test rate. Do not assume FDM PLA is isotropic without stating the test evidence and treatment of anisotropy. Without material data, do not label results calibrated or predictive.
+2. **Single-element constitutive validation**: Add large-deformation kinematics and objective stress updates, then introduce material behaviors in stages. Model time-dependent loops in the elastic range with finite-strain viscoelasticity (generalized Maxwell/Prony or PRF-like); yielding/cycling with finite-strain elastoplasticity/viscoplasticity; and load drop/fracture with damage/softening as a separate behavior. Match reference tests at the same material and loading times. First compare material-point/single-element loading rate, hold, unload, reload, dissipated energy and residual strain. Reject unsupported model combinations.
+3. **Structural integration**: Track internal state, displacement, reaction, Cauchy and reference-configuration stress, strain measure and deformed cross-section at each converged physical load step. Validate large rotation/strain, element inversion, and force- versus displacement-control. Report true stress only when local area and strain definitions are supported.
+4. **Necking and damage**: Compare neck initiation and post-peak response on the dumbbell. Assess geometric imperfection, local mesh, characteristic-length or fracture-energy regularization, and element deletion. Report mesh/time-step sensitivity and do not claim fracture prediction outside the calibrated data range.
+5. **Results and LLM access**: Expose physical steps through RESULTCURVE1 history APIs/MCP so static force-displacement/stress-strain plots and 3D deformation can be compared. Verify that curves, 3D states and saved cases reference the same input revision, material, time history and calculation step. Display-scale animation is not physical load-history playback.
+
+Dependencies and priority: Full-feature APIs/MCP, the LLM intermediate-result pipeline and job infrastructure remain the highest priorities; FINITEVISCO1 does not replace them as a publication goal. Before implementation, establish the MOD1 solver-adapter boundary, material provenance contract and physical result history. Accept each stage separately; do not proceed from single-element loops to the dumbbell until the material loop matches experiment. Keep the existing SolidCraft/Studio-only design and verification policy; external CAE tools are references only.
+
+## In-app access to the user's AI (AGENTACP1 / AGENTCHAT1, added 2026-10-16)
+
+Adopt the agent selection, connection and embedded-chat workflow exemplified by SolidCraft. Start with Codex and ChatGPT sign-in; model access and usage remain governed by the user's plan, visibly distinguished from API-key authentication. No proprietary AI subscription is required.
+
+- **AGENTACP1 local connection**: Extend the existing browser connector to discover, start and stop ACP agents and guide authentication. A browser cannot directly launch local programs. ACP carries conversation and approval events; existing MCP/shared operations perform Studio actions. Provide Codex ACP adapter installation/update guidance, record supported protocol/adapter versions and preserve external MCP clients.
+- **AGENTCHAT1 UI**: Add an AI toolbar entry, a collapsible chat panel and connection settings. Include agent selection, refresh, missing-install guidance, connection test, sign-in state, connect/disconnect and model selection when exposed by the agent. Keep manual endpoint/code entry in advanced settings. Provide bilingual messages, questions, operation cards, analysis progress, provisional/final result references, stop and connection recovery.
+- **Permissions and analysis integrity**: Distinguish inspection, editing, analysis and save/export permissions, mapping them to existing scopes and identifying operations requiring multiple scopes. Retain explicit grants, Origin/Host checks, authentication and expiry. Never retain credentials in chat or diagnostics. Explain that a local connector can still send analysis information to the AI provider. Follow existing cancellation contracts on stop/disconnect, observe termination and prevent duplicate runs/exports after reconnect. Preserve physical provenance, input revisions and frozen running snapshots.
+- **Skills and acceptance**: Document installation, ChatGPT sign-in, connection, inspection, edit preview/approval, solve, intermediate observations, results and save/export in the specialist skill. Initially verify a standard Windows browser against both public HTTPS and local serving. Exercise missing installation/login, usage limits, permission refusal, stale revisions, disconnect, cancellation and reconnect. A chat mockup alone does not establish completion.
+
+Dependencies: AGENTACP1 uses P0/P3 and BROWSERCONNECTOR1; AGENTCHAT1 uses AGENTACP1 and existing operation contracts. Separate UI and connection modules according to MOD1. Incident recovery and existing API/MCP/jobs work come first. These are additional P3 plans, not automatic additions to the current publication gate. Both tasks are queued, with no implementation claimed.
+
+Reference: [SolidCraft agent chat](https://github.com/bherbruck/solidcraft/blob/main/docs/agent-chat.md). Reuse the workflow concept; assess licensing and dependencies separately before incorporating external code.
+
+## Upper priority: module boundaries and parallel development (MOD1, added 2026-10-15)
+
+Prioritize independent maintenance and parallel development over additional physics, solvers and printing features. Publication incident recovery comes first; perform bounded structural improvements alongside existing API/MCP, jobs and result-access work. A complete React or WASM rewrite is not a new publication prerequisite.
+
+1. Define TypeScript contracts for projects, materials, units, diagnostics, jobs and results; fix dependency direction and compatibility rules.
+2. Extract materials, boundary conditions, analysis settings and result/export UI and state from `main.js`. Introduce React incrementally by screen, with explicit Three.js and Worker interfaces.
+3. Separate discipline-specific execution adapters; keep common Worker responsibilities to dispatch, cancellation, progress and results. Reduce central branching changes for new solvers.
+4. Establish boundaries for shared models, operation APIs, viewer, disciplines and runtime adapters, with independent tests, file ownership and integration procedures. Demonstrate separate UI and solver changes without editing the same central files.
+5. Regress saved formats, GUI/API/MCP parity, numerical references, cancellation and restoration at each migration step. Move measured computational bottlenecks to WASM; assess Rust/C++ separately based on existing assets and validation scope.
+
+Acceptance: checked types/public interfaces/dependency rules, representative UI and solver changes in independent file sets and tests, and restoration of existing projects/results. Directory moves or extension changes alone do not complete MOD1. Initially queued.
 
 ## First priority for the next solver (2026-10-15)
 
