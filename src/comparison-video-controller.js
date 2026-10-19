@@ -18,7 +18,7 @@ export function createComparisonVideoController({cases,exports,id=()=>crypto.ran
   const check=()=>{if(work.cancelled||active!==work)throw abort();};
   const run=async()=>{
    try{
-    if(!['webm','gif'].includes(format)||format==='gif'&&animation!=='orbit')throw Error('Comparison GIF supports orbit only');
+    if(!['webm','gif'].includes(format))throw Error('Invalid comparison video format');
     const capture=clone(raw);
     if(!capture||typeof capture!=='object'||Array.isArray(capture)||Object.keys(capture).some(key=>!['indices','settings'].includes(key))||!Array.isArray(capture.indices)||capture.indices.length!==2||!capture.indices.every(i=>Number.isSafeInteger(i)&&i>=0)||capture.indices[0]===capture.indices[1])throw Error('Select two distinct comparison cases');
     if(!Number.isInteger(seconds)||seconds<1||seconds>15||typeof onProgress!=='function')throw Error('Invalid comparison video duration or progress callback');

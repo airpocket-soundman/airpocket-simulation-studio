@@ -76,7 +76,18 @@ The [15 s boundary real-Chrome check](../evidence/2026-10-17-comparison-deformat
 
 ## Comparison orbit GIF
 
-startCompareExport accepts format:"gif" for orbit only. It uses24 fixed frames at640x320 with256-color RGB332 lossy quantization. seconds is an integer1-15 (API default5, GUI default2). Integer-centisecond frame delays sum exactly to seconds*100. Fixed phase i/24 scheduling is distinct from real-time recording or target24fps. GIF requests infinite looping; observed playback timing depends on the player. The manifest distinguishes output/source resolutions, delays and palette/frame policy. Comparison-only comparisonGifExport reports support; single-view formats.gif remains unsupported. Selecting GIF in the GUI forces only the export to orbit without changing the chosen time/deformation mode or portable settings. Image preview, explicit download, cancellation and restart reuse the shared queue, artifact SHA and release lifecycle. Time/deformation GIF is refused. 
 
 
 2026-10-17 localhost real-Chrome [comparison GIF evidence](../evidence/2026-10-17-comparison-gif-real-chrome.json): API artifact 5,574,849 bytes passed SHA-256 e171333e… validation. External decoding found 640x320, 24 frames/24 images; Pillow verified 80/90 ms delays totaling 2,000 ms and loop0. GUI image preview/cancel/restart passed, each preserving the original 2.01 s interpolated viewer, input, cases and panel exactly. The first connection-reset/timeout attempt is retained without a root-cause claim. Public HTTPS, general geometry, smoothness in other players and GUI download completion remain unverified.
+
+## Comparison GIF time and visualization scale (2026-10-19)
+
+`startCompareExport` accepts `format:"gif"` and `animation:"orbit"|"time"|"deformation"`. No new tool is added:35 default/37 paired MCP tools,91 live operations and the three-tool minimal connector remain. Discover the actual registered schema and `exportCapabilities().comparisonGifExport` first. Single-view `formats.gif` and MP4 remain unsupported.
+
+GIF uses 24 fixed frames,640×320 and lossy 256-color RGB332. Integer seconds 1–15 (API default 5, GUI default 2) distribute integer-centisecond delays totaling `seconds*100`. Orbit retains `i/24`; time/deformation use `i/23`, including both endpoints. Infinite looping does not guarantee player timing or smooth 24fps.
+
+Time requires stored temperature or instantaneous-pressure frames in both cases and explicit `startTimeSeconds < endTimeSeconds` within both axes. Fixed `timeSeconds` and final-only thermal heat flux are refused. Camera and the common color range over every selectable stored frame in the interval remain fixed. Nearest stored frames show actual times and signed offsets without interpolation or new physics. Optional toleranceSeconds is checked over the whole interval.
+
+Deformation requires two linear-elastic displacement/stress results, nonzero saved displacement and a positive explicit deformScale. Physical-time arguments and nonlinear results are refused. Camera, scalar values and range stay fixed; only the visualization multiplier changes linearly from zero to the requested scale. Preserve the manifest's visualizationOnly:true / loadHistory:false and image labels; this is not a physical loading history.
+
+GUI GIF selection preserves the chosen animation. Range/scale requests share the queue, revision/lease guards, cancellation, hashed artifact retrieval and release lifecycle. Success/cancel/error restore the original view; no partial artifact is delivered. [Localhost actual MCP/Chrome evidence](../evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json) uses small 11-frame thermal and 3N/6N elastic cases: API artifact, external 24-frame decode/total delays, GUI preview/cancel/restart and unchanged input/cases/result/comparison states. Public HTTPS, general geometry and OS download completion remain unverified.

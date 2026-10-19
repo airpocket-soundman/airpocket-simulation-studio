@@ -6,7 +6,7 @@ import {resolveSharedTime} from '../view-compare-layout.js';
 import {createComparisonRenderer} from '../view-compare-renderer.js';
 const T = {
  '保存時刻のずれ許容は0以上の数値で指定してください。':'Stored-time offset tolerance must be a number zero or greater.',
- '出力形式':'Output format','GIFは24枚の固定フレームで共通カメラを回転します。640×320・256色で、時刻と変形動画には対応しません。':'GIF orbits the shared camera using24 fixed frames at640×320 with256 colors. Time/deformation GIF is unsupported.',
+ '出力形式':'Output format','GIFは640×320・256色の固定24フレームです。回転は一周手前、時間と表示倍率は両端を含みます。':'GIF uses 24 fixed frames at 640×320 with 256 colors. Orbit stops before one full turn; time and visualization scale include both endpoints.',
   '保存変位の倍率変化（片道）':'Saved displacement scale (one way)','変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':'Deformation video fixes the saved linear-elastic result and changes only its visualization multiplier linearly from zero to the requested scale, one way. It is not a physical load history.',
   '保存時刻のずれ許容（秒、空欄は制限なし）':'Stored-time offset tolerance (seconds, blank for no limit)','動画の種類':'Video type','共通カメラの回転':'Shared camera orbit','保存時刻の時間変化':'Stored-frame time history','開始物理時刻（秒）':'Start physical time (seconds)','終了物理時刻（秒）':'End physical time (seconds)',
   '時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'Time video fixes the camera and shows nearest stored frames within the requested physical range, with actual times and offsets; no interpolation.',
@@ -68,7 +68,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
   for(const control of videoInputs)control.oninput=()=>clearInputError(control);
   function clearVideo(){gifPreview.src='';gifPreview.hidden=true;videoPreview.pause?.();videoPreview.removeAttribute?.('src');videoPreview.src='';videoPreview.load?.();videoPreview.hidden=true;videoDownload.removeAttribute?.('href');videoDownload.href='';videoDownload.hidden=true;if(videoUrl){URLApi.revokeObjectURL(videoUrl);videoUrl=undefined;}}
   function videoCapability(){try{return videoApi?.capabilities?.({format:videoFormat.value})??{supported:false,reason:tr('このブラウザでは比較動画を作成できません。')};}catch(error){return {supported:false,reason:error.message};}}
-  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoFormat.disabled=!!videoActive;videoKind.disabled=!!videoActive||videoFormat.value==='gif';videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoFormat.value==='gif'||videoKind.value!=='time';videoNote.textContent=tr(videoFormat.value==='gif'?'GIFは24枚の固定フレームで共通カメラを回転します。640×320・256色で、時刻と変形動画には対応しません。':videoKind.value==='deformation'?'変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
+  function syncVideoCapability(){const capability=videoCapability();videoStart.disabled=!!videoActive||!capability.supported;videoSeconds.disabled=!!videoActive;videoFormat.disabled=!!videoActive;videoKind.disabled=!!videoActive;videoFrom.disabled=videoTo.disabled=videoTolerance.disabled=!!videoActive||videoKind.value!=='time';videoNote.textContent=(videoFormat.value==='gif'?tr('GIFは640×320・256色の固定24フレームです。回転は一周手前、時間と表示倍率は両端を含みます。')+' ':'')+tr(videoKind.value==='deformation'?'変形動画は固定した線形弾性結果を使い、表示倍率だけを0から指定倍率へ片道で線形に変えます。物理的な載荷履歴ではありません。':videoKind.value==='time'?'時間動画はカメラを固定し、入力した物理時間内の近い保存フレームを表示します。実時刻とずれを表示し、補間しません。':'比較動画は共通カメラの回転です。選択した保存時刻は固定されます。');videoCancel.disabled=!videoActive;if(!capability.supported&&!videoActive)videoStatus.textContent=tr('このブラウザでは比較動画を作成できません。');}
   videoFormat.onchange=()=>{if(!videoActive)clearVideo();syncVideoCapability();};
   videoKind.onchange=()=>{if(!videoActive)clearVideo();syncVideoCapability();};
   videoStart.onclick=async()=>{
@@ -77,7 +77,7 @@ export function createViewCompareUi({$, document: doc = globalThis.document, anc
     try{
       const capability=videoCapability();if(!capability.supported)throw Error(tr('このブラウザでは比較動画を作成できません。'));
       const seconds=Number(videoSeconds.value);if(!Number.isInteger(seconds)||seconds<1||seconds>15)throw inputError(videoSeconds,tr('長さは1〜15秒の整数で指定してください。'));
-      const format=videoFormat.value,animation=format==='gif'?'orbit':videoKind.value;let state,range={};
+      const format=videoFormat.value,animation=videoKind.value;let state,range={};
       if(animation==='time'){
         const startTimeSeconds=Number(videoFrom.value),endTimeSeconds=Number(videoTo.value);
         if(videoFrom.value===''||videoTo.value===''||!Number.isFinite(startTimeSeconds)||!Number.isFinite(endTimeSeconds)||startTimeSeconds<0||endTimeSeconds<=startTimeSeconds)throw inputError(videoFrom.value===''||!Number.isFinite(startTimeSeconds)||startTimeSeconds<0?videoFrom:videoTo,tr('開始・終了の物理時刻を0以上の増加する範囲で指定してください。'));

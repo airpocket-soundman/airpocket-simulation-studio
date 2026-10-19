@@ -2,19 +2,25 @@
 
 [English](en/task-critical-path.md)
 
-2026-10-18今回公開候補は167件のうち公開済み133件、未完34件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
+2026-10-19時点、171件のうち公開済み133件、未完38件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
-| 自律実装・検証可能（12） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
-| 外部・実機等の条件あり（7） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
+| 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
+| 外部・実機等の条件あり（8） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
 | 親エピック（15） | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | 子機能の公開だけで全体完了にしない。既存受入条件と共通完了判定を維持。 |
 
 ## 依存と今回のまとまり
 
 P0→P1→P3、およびP0→P4が公開ワークフローの主要経路。P5はP1/P2/P3/P4すべてに依存する。公開マイルストーンは6ゲート中5ゲートが未完で、完了済みゲートも候補固有の証拠である。最終候補を揃えず製品全体の公開完了とはしない。
 
-今回のまとまりはCFDPORT1の限定半空間capとGUI/API一巡です。利用者がpoint/外向き単位normal/seedを明示し、同じ意味的APIで入力・メッシュ・保存再読込の整合を確認します。任意開口wire認識/局所蓋/一般複数体積結合は残作業で、限定capを一般流体対応に昇格させません。CFDPORT1はbuilding、133released/34未完（自律12/外部7/親15）を維持。直近確定CI baselineはPR123/main1557件（1554成功・3skip・失敗0）、今回最終CIは別証拠に記録します。
+今回のまとまりはREG2の球面寸法領域、VIEWCOMPAREの時間/変形GIF、UIIMPROVE1の解析前チェックと修正導線です。CAD面積と荷重保存、物理時刻と表示倍率の区別、既存preflightとの一致と入力版をそれぞれ検証してから一括公開します。範囲外の一般曲面、MP4、物理精度や親タスクの完了には広げません。直近確定CI baselineはPR124/main1570件（1567成功・3skip・失敗0）で、今回の最終CIは別証拠です。
+
+既存の未公開計画からAGENTACP1、AGENTCHAT1、RESULTCURVE1、FINITEVISCO1を追加計上しました。元の編集中ファイルと既存MOD1の状態は維持し、4件ともqueuedです。既存残34件から新規4件を加えた38件で、完了の後退ではありません。[照合記録](evidence/2026-10-19-planning-reconciliation.json)。次の開発順は既存API/MCP・モジュール境界を土台にACP/会話接続と版付き載荷段階データを進めます。有限粘弾塑性の校正・実験比較は入力データと段階検証を要し、既存J2/Neo-Hookeanや表示倍率で代替しません。
+
+## 履歴: PR124の限定開口とUI研究
+
+CFDPORT1の限定半空間capをGUI/API/MCPへ接続し、実Chromeの入力/抽出/面選択/保存復元と、別Nodeホストの正式MCP一巡を区別して公開しました。任意開口wire認識/局所蓋/一般複数体積結合は残作業。UIRESEARCH1は版固定一次資料による比較研究のみ完了し、実機6ケースや負担の測定はUIIMPROVE1に残しています。公開済み133/残34（自律12/外部7/親15）です。
 
 ## 履歴: PR123の時間履歴/診断/CFD調査
 

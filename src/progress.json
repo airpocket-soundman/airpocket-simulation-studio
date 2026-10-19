@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-18T01:26:24.981Z",
+  "updatedAt": "2026-10-19T04:36:11.354Z",
   "release": {
     "version": "v0.44",
-    "date": "2026-10-18",
-    "testCount": 1557,
-    "description": "公開済み133件・残34件。CFDPORT1の明示半空間capをGUI/意味的API/MCP一巡として統合する公開候補。point/外向き単位normal/seedを明示し、幾何と保存の整合を検証。任意wire認識/局所蓋/一般複数体積結合・流体物理精度は未完でbuilding維持。1557件はPR123/main確定CI（1554成功・3skip・失敗0）のbaselineで、今回最終CI件数ではない。 UIRESEARCH1は版付き一次資料による共通例題比較を完了、実機比較と定量操作負担はUIIMPROVE1に残す。",
-    "descriptionEn": "133released/34unfinished. Publication candidate integrates explicit CFDPORT1 half-space caps through GUI/semantic API/MCP. Users declare point,outward unit normal and seed;geometry/persistence consistency is checked. Arbitrary wires/local lids/general multi-volume joins/fluid physical accuracy remain open;building.1557 is completed PR123/main CI baseline(1554passed,3skipped,0failed),not this candidate final CI count. UIRESEARCH1 completes versioned primary-document common-task comparison;hands-on comparisons and measured burden remain UIIMPROVE1 work."
+    "date": "2026-10-19",
+    "testCount": 1570,
+    "description": "公開済み133件・残38件（171件）。既存未公開計画AGENTACP1/AGENTCHAT1/RESULTCURVE1/FINITEVISCO1をqueuedとして追加計上し、元の編集中ファイルと既存タスク状態は保持。今回のまとまりはREG2球面領域、VIEWCOMPARE時間/変形GIF、UIIMPROVE1解析前チェック。1570件はPR124/main確定CI（1567成功・3skip・失敗0）のbaselineであり、今回の最終CIは別記録。",
+    "descriptionEn": "133 released/38 unfinished of171. Reconciled existing unpublished AGENTACP1/AGENTCHAT1/RESULTCURVE1/FINITEVISCO1 plans as queued, preserving original working files and existing statuses. This batch groups REG2 spherical regions, VIEWCOMPARE time/deformation GIF and UIIMPROVE1 GUI preflight.1570 is the completed PR124/main CI baseline(1567passed,3skipped,0failed),not this candidate final CI."
   },
   "tasks": [
     {
@@ -104,13 +104,13 @@
       "status": "building",
       "category": "3D",
       "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
-      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。 2026-10-16 円錐領域: 既存の円筒領域指定に任意の終端半径を追加し、STEPの円錐で荷重保存・面積検証・保存/復元をテスト、実Chromeでも円錐STEPの受理と誤った終端半径の拒否(メッシュ時)を確認。球・一般曲面(UV矩形)は未着手。円錐STEPで終端半径を空欄にした場合の条件文の表示は要確認。",
+      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。 2026-10-16 円錐領域: 既存の円筒領域指定に任意の終端半径を追加し、STEPの円錐で荷重保存・面積検証・保存/復元をテスト、実Chromeでも円錐STEPの受理と誤った終端半径の拒否(メッシュ時)を確認。球面帯sectorは2026-10-19追加（下記）。一般UV矩形は未実装。円錐STEPで終端半径を空欄にした場合の条件文の表示は要確認。",
       "titleEn": "Apply dimensional regions exactly to CAD boundaries",
       "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
-      "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing. 2026-10-16 Cones: an optional end radius on the existing cylindrical region, tested on a STEP cone (force conservation, area verification, save/restore) and in real Chrome (cone STEP accepted, wrong end radius refused at mesh time). Spheres and general curved faces (UV rectangles) not started. The condition text for a blank end radius on a cone needs a check.",
-      "lastUpdate": "平面矩形のCAD分割と面積・荷重保存を実装中。曲面の厳密な部分分割は残作業。",
-      "lastUpdateEn": "Implementing exact CAD fragmentation of planar rectangles with conserved area and loads. Exact curved patches remain outstanding.",
-      "evidence": "src/boundaries.js"
+      "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing. 2026-10-16 Cones: an optional end radius on the existing cylindrical region, tested on a STEP cone (force conservation, area verification, save/restore) and in real Chrome (cone STEP accepted, wrong end radius refused at mesh time). Spherical sectors added2026-10-19 (below); general UV rectangles remain unimplemented. The condition text for a blank end radius on a cone needs a check.",
+      "lastUpdate": "2026-10-19: 単一STEP/組込み球の緯度経度sectorを意味API/MCPへ追加。CAD解析面積、極cap/全球/任意軸、2サイズ再メッシュ、123N/37W保存、実STEP Worker反力、JSONケース復元と改変拒否を確認。新GUI selectorなし。一般UV/複数体積/STL/流体/球面接触熱抵抗、SolidCraft0.16連携と公開Workerは対象外/未実証でbuilding維持。 localhost正式MCP inspect/editで418表示三角形/123N条件と寸法を保持、GUI JSON text→保存ファイルMCP再読で入力版一致。browser mesh/solve、GUIファイル再取込は未確認。",
+      "lastUpdateEn": "2026-10-19: Added semantic API/MCP latitude/longitude sectors on one STEP/built-in sphere. Verified analytic CAD area, polar caps/full sphere/arbitrary frame, two mesh sizes,123N/37W conservation, real STEP Worker reaction, JSON case restoration and tamper refusal. No new graphical selector. General UV/multiple solids/STL/fluid/spherical thermal contact, SolidCraft0.16 integration and deployed Worker are unsupported/unverified;building retained. Localhost actual paired MCP inspect/edit preserves418 display triangles/123N condition/dimensions;GUI JSON text→saved-file MCP reload matches input revision. Browser mesh/solve and file-chooser reimport remain unverified.",
+      "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json"
     },
     {
       "id": "WASM1",
@@ -1287,9 +1287,9 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
-      "lastUpdate": "2026-10-18: 比較と動画の入力エラーで対象へフォーカスしaria-invalid/errormessageを設定、修正入力で解除。実Chromeの日英・390px・キーボード復旧を確認。修正後の出力成功はunitのみ、Chrome全出力の再成功・全受入は未確認のためbuilding。 UIRESEARCH1の資料研究完了後も共通6caseの実機取込/領域対応/診断復旧/stale/取消/比較出力再読込、keyboard/locale/狭画面と定量負担比較を残条件として維持。 cap非交差等core solver診断の全日英翻訳も残作業。",
-      "lastUpdateEn": "2026-10-18: Comparison/video input errors focus the offending control and set aria-invalid/errormessage; editing clears them. Real Chrome verifies JP/EN,390px and keyboard recovery. Successful output after correction is unit-tested only;complete Chrome output reruns and full acceptance remain open;building. UIRESEARCH1 literature completion leaves common six-case hands-on import/region mapping/diagnostic recovery/stale/cancel/compare-export-reopen,keyboard/locale/narrow layouts and measured burden open. Full JP/EN core-solver diagnostic translation,including nonintersecting caps,remains open.",
-      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json"
+      "lastUpdate": "2026-10-19: 共有preflightの解析/メッシュ検査パネルを追加。mode/allowed/provisional、診断code/pointer/提案/後続確認と既知入力へのfocusを表示。入力/options/言語変更・古い非同期報告を無効化し、未登録物性draftを区別。既存gate/物理基準は不変、completePreflight:false。localhost実Chromeのlegacy表示、無効size→focus→keyboard修正→stale解除→再check、材料欄展開、EN→JA→EN/390pxを確認。provisional:trueとAPI無変更一致はunit根拠のみ。一般6caseの操作数/誤設定復帰の比較と公開検証、全診断の翻訳は未完でbuilding維持。",
+      "lastUpdateEn": "2026-10-19: Added shared-preflight Solve/Mesh panel with mode/allowed/provisional,diagnostic code/pointer/suggestions/remaining checks and focus to known controls. Input/options/language changes and stale async responses invalidate reports;unregistered material drafts are distinguished. Existing gating/physical criteria and completePreflight:false remain. Localhost Chrome verifies legacy labels,invalid size→focus→keyboard repair→stale clearing→recheck,material-section opening,EN→JA→EN and390px. Provisional:true and API/no-mutation parity have unit evidence only. Common six-case interaction/recovery measurements,publication checks and complete diagnostic translation remain open;building retained.",
+      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json"
     },
     {
       "id": "AGENTEDIT1",
@@ -1381,13 +1381,13 @@
       "titleEn": "Synchronized side-by-side case viewer and video export",
       "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
       "detailEn": "Arrange cases in one view with shared camera, color range, deformation scale and time or load fraction; label conditions/units and export images/videos.",
-      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。任意のブラウザ内自動保存（1件・128 KiB）と再読込後候補の明示復元を追加し、ケース本体・画像/動画・資格情報は保存しない。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。localhost実Chromeで任意自動保存・実再読込後の候補保持・新IDケース再取込後の明示復元・無効化/削除と再読込後の候補非復活を確認し、メイン表示/入力/ケースは不変。保存先の強制障害は自動テストのみ。熱温度/過渡音響の保存時刻WebM（共通カメラ・全期間色範囲固定、近傍保存時刻とずれ表示、明示物理開始/終了）を追加。localhost実Chromeの熱時間動画はAPI VP9/1280x640/SHA照合・4フレーム/画像4種、GUI作成/再生/中止/再作成と元2.01秒補間表示を含む4状態の完全一致を確認。実機音響は未確認。線形弾性2ケースの変位/応力の表示倍率を0→指定値へ片道linearで動かす変形WebMを追加（固定カメラ/色/保存結果、物理載荷履歴ではない、前回部分検証を保持し今回のAPI証跡で補完）。比較orbit GIFを追加（固定24枚・640×320・RGB332256色、localhost実ChromeでAPI成果物SHA/外部decode24画像とGUI作成/中止/再作成・元4状態一致を確認）。time/deformation GIF・MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。 追加localhost実Chromeの低負荷検証でAPI24,858bytes/SHA照合・VP9/1280x640・外部decode4frame/4画像、凡例を除く独立形状変化と元4状態一致、GUI再生終了2.125秒を確認。前回partialは履歴として保持。 受理済みジョブは元開始命令期限から分離。15秒要求が15,725msで成功し92,321bytes/SHA/17frame17画像/形状変化/元4状態一致を実Chromeで確認。録画中実機切断は未試験（自動テストのみ）。",
-      "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF and MP4 are not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
+      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。任意のブラウザ内自動保存（1件・128 KiB）と再読込後候補の明示復元を追加し、ケース本体・画像/動画・資格情報は保存しない。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。localhost実Chromeで任意自動保存・実再読込後の候補保持・新IDケース再取込後の明示復元・無効化/削除と再読込後の候補非復活を確認し、メイン表示/入力/ケースは不変。保存先の強制障害は自動テストのみ。熱温度/過渡音響の保存時刻WebM（共通カメラ・全期間色範囲固定、近傍保存時刻とずれ表示、明示物理開始/終了）を追加。localhost実Chromeの熱時間動画はAPI VP9/1280x640/SHA照合・4フレーム/画像4種、GUI作成/再生/中止/再作成と元2.01秒補間表示を含む4状態の完全一致を確認。実機音響は未確認。線形弾性2ケースの変位/応力の表示倍率を0→指定値へ片道linearで動かす変形WebMを追加（固定カメラ/色/保存結果、物理載荷履歴ではない、前回部分検証を保持し今回のAPI証跡で補完）。比較orbit GIFを追加（固定24枚・640×320・RGB332256色、localhost実ChromeでAPI成果物SHA/外部decode24画像とGUI作成/中止/再作成・元4状態一致を確認）。時間/表示倍率GIFは2026-10-19追加（最新欄参照）。MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。 追加localhost実Chromeの低負荷検証でAPI24,858bytes/SHA照合・VP9/1280x640・外部decode4frame/4画像、凡例を除く独立形状変化と元4状態一致、GUI再生終了2.125秒を確認。前回partialは履歴として保持。 受理済みジョブは元開始命令期限から分離。15秒要求が15,725msで成功し92,321bytes/SHA/17frame17画像/形状変化/元4状態一致を実Chromeで確認。録画中実機切断は未試験（自動テストのみ）。",
+      "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF added2026-10-19 (latest update); MP4 is not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-17: 比較の回転GIFを追加しました。24枚・640×320・256色で、実Chromeで成果物と画像プレビュー・中止・再作成、元表示への復元を確認しました。公開サイトからの接続や一般形状、保存完了は未確認です。時間/変形GIFとMP4は対象外です。",
-      "lastUpdateEn": "2026-10-17: Added comparison orbit GIF with24 frames at640x320 in256 colors. Real Chrome verified artifact, image preview/cancel/restart and original-view restoration. Public-site pairing, general geometry and download completion remain unverified; time/deformation GIF and MP4 are excluded.",
-      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json"
+      "lastUpdate": "2026-10-19: 比較GIFをorbit/time/deformationへ拡張。24枚/640×320/RGB332、time/倍率は両端、整数delay合計を保持。正式MCP＋localhost実Chromeの小規模熱/弾性caseで外部24枚decode/2秒、GUI作成・取消・再作成、元4状態一致を確認。物理時刻は近傍保存のみ/全期間色固定、変形は表示倍率で載荷履歴ではない。MP4/公開HTTPS/一般形状/OS保存完了は未確認、building維持。",
+      "lastUpdateEn": "2026-10-19: Comparison GIF supports orbit/time/deformation:24 frames,640x320,RGB332,endpoint-inclusive time/scale and exact total integer delays. Actual stdio MCP/local Chrome small thermal/elastic cases verify24 decoded frames/2s,GUI create/cancel/restart and original four-state equality. Time uses nearest stored frames/global range;deformation is visualization scale,not load history. MP4/public HTTPS/general geometry/OS download completion remain open;building retained.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json"
     },
     {
       "id": "VIEWTIME",
@@ -2649,6 +2649,72 @@
       "lastUpdate": "2026-10-18: 実Chromeの再接続/再読込と実reset後の有界診断・明示復旧を確認し、8c57e16で公開済み。公開CI・manifest・注釈タグ・進捗historyを照合しました。原因未確定、自動再送なし。関連親と公開ゲートは未完です。",
       "lastUpdateEn": "2026-10-18: Real Chrome verified reconnect/reload and bounded diagnosis/explicit recovery after an observed reset. Published in 8c57e16 with CI, manifest, annotated tag and progress history verified. Cause remains unknown; no automatic replay. Related parents and publication gates remain incomplete.",
       "evidence": "docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-browser-reset-real-chrome.json; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/evidence/2026-10-18-publication-8c57e16.json"
+    },
+    {
+      "id": "AGENTACP1",
+      "title": "自分のCodexをACPで接続するローカル基盤",
+      "titleEn": "Local ACP connection to the user's Codex",
+      "category": "共通",
+      "status": "queued",
+      "depends": [
+        "P0",
+        "P3",
+        "BROWSERCONNECTOR1"
+      ],
+      "detail": "既存ブラウザ接続にACPエージェントの検出・起動・停止とChatGPTログイン案内を追加する計画。第一段階はCodex。会話はACP、操作は既存MCPを利用し、サブスクとAPI認証を区別する。未着手。",
+      "detailEn": "Plan ACP agent discovery, lifecycle and ChatGPT sign-in guidance in the existing browser connector, starting with Codex. ACP handles conversation; existing MCP handles operations. Distinguish plan and API authentication. Not started.",
+      "acceptance": "docs/roadmap.mdのAGENTACP1に従い、Windows標準ブラウザの公開HTTPS/ローカル実接続、認証・scope・失効・取消・再接続・重複実行防止を検証。専門SKILLへ導入/復旧手順を記録。",
+      "acceptanceEn": "Follow AGENTACP1 in docs/en/roadmap.md. Verify real public HTTPS/local Windows browser connections, authentication, scopes, expiry, cancellation, reconnect and duplicate prevention; document setup/recovery in the specialist skill."
+    },
+    {
+      "id": "AGENTCHAT1",
+      "title": "AIの選択・接続設定とアプリ内チャット",
+      "titleEn": "Agent selection, connection settings and in-app chat",
+      "category": "共通",
+      "status": "queued",
+      "depends": [
+        "AGENTACP1"
+      ],
+      "detail": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。",
+      "detailEn": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started.",
+      "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
+      "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md."
+    },
+    {
+      "id": "RESULTCURVE1",
+      "title": "段階載荷データと静止グラフを取得・比較",
+      "titleEn": "Retrieve and compare incremental loading data and static curves",
+      "status": "queued",
+      "category": "結果",
+      "depends": [
+        "P3",
+        "P4",
+        "MOD1",
+        "RESULTCONTROL1"
+      ],
+      "detail": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。",
+      "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
+      "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
+      "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js"
+    },
+    {
+      "id": "FINITEVISCO1",
+      "title": "有限変形の粘弾塑性・損傷と引張曲線を検証",
+      "titleEn": "Validate finite-strain viscoelastic-plasticity, damage and tensile curves",
+      "status": "queued",
+      "category": "構造",
+      "depends": [
+        "P1",
+        "P3",
+        "MOD1",
+        "RESULTCURVE1"
+      ],
+      "detail": "docs/roadmap.mdのFINITEVISCO1を参照。実験校正を前提に、有限ひずみ粘弾性（一般化Maxwell/PronyまたはPRF相当）、有限変形塑性/粘塑性、損傷を段階分け。まず材料点/単要素の載荷・保持・除荷・再載荷ループと散逸/残留を検証後、変形後断面・くびれ・メッシュ正則化を含むダンベルへ進む。既存Neo-Hookeanゴム機能や微小ひずみJ2を対応済みとみなさない。Abaqus PRFは参考モデル、外部CAEは導入依存にしない。",
+      "detailEn": "See FINITEVISCO1 in docs/en/roadmap.md. With experimental calibration, stage finite-strain viscoelasticity (generalized Maxwell/Prony or PRF-like), finite-deformation plasticity/viscoplasticity and damage separately. First validate material-point/single-element load, hold, unload and reload loops, dissipation and residual strain; only then advance to dumbbell analysis with deformed area, necking and mesh regularization. Existing rubber Neo-Hookean and small-strain J2 are not completion evidence. Abaqus PRF is a reference model, not a required external dependency.",
+      "acceptance": "保存した試験条件/根拠から材料パラメータを校正し、単要素の載荷速度・保持・除荷・再載荷応力、残留ひずみ、散逸を同条件実験と照合。対応する構造経路で段階ごとの反力/変位・Cauchy応力・変形後断面・入力版を保持し、メッシュ/時間刻み感度、要素反転、損傷正則化を検証。未校正材料・未対応組合せ・限界超過は拒否または暫定表示。ダンベルのくびれ/荷重低下は実験比較と収束根拠が揃う場合のみ受け入れる。",
+      "acceptanceEn": "Calibrate from saved test conditions/evidence and compare single-element loading-rate, hold, unload/reload stress, residual strain and dissipation against experiments at matching conditions. In the structural path retain stepwise reactions/displacements, Cauchy stress, deformed area and input revision; assess mesh/time-step sensitivity, element inversion and damage regularization. Reject or mark provisional uncalibrated materials, unsupported combinations and exceeded limits. Accept dumbbell necking/post-peak force only with experimental comparison and convergence evidence.",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; docs/hyperelasticity.md; src/plasticity-core.js"
     }
   ],
   "solvers": [

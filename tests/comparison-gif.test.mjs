@@ -13,3 +13,9 @@ test('cancel/source guard during encoding yields discard output and free scratch
 });
 
 test('GIF capability requires a usable 2D canvas and catches disabled contexts',()=>{assert.equal(comparisonGifCapabilities().supported,false);assert.equal(comparisonGifCapabilities({createCanvas:()=>({getContext:()=>null})}).supported,false);assert.equal(comparisonGifCapabilities({createCanvas:()=>{throw Error('blocked');}}).supported,false);assert.equal(comparisonGifCapabilities({createCanvas:()=>({getContext:()=>({})})}).supported,true);});
+
+for(const animation of ['time','deformation'])test(`GIF ${animation} includes endpoints with a fixed camera and no input mutation`,async()=>{
+ const f=fixture(),before=structuredClone(camera),phases=[];
+ const blob=await renderComparisonGif({camera,animation,seconds:1,renderFrame:(next,frame)=>{assert.deepEqual(next,before);assert.equal(frame.animation,animation);phases.push(frame.phase);next.position[0]=999;return {width:1280,height:640};}},f.env);
+ assert.equal(blob.type,'image/gif');assert.deepEqual(camera,before);assert.equal(phases.length,24);assert.equal(phases[0],0);assert.equal(phases.at(-1),1);assert.equal(phases[1],1/23);assert.equal(f.canvas.width,0);
+});

@@ -24,7 +24,7 @@ export function prepareFluidDomainProject(project,args){
   source=internalFluidSource({...original,sourceModel:solid},{enclosure:options.enclosure,seedPoint:options.seedPoint,portPlanes:options.portPlanes,openingCaps:options.openingCaps});
  }else throw Error('Invalid fluid domain mode');
  const candidate={...original,name:options.name??original.name,sourceModel:source,study:{kind:'fluidDomain'},materialProperties:{},meshSettings:{refinements:[]},conditions:[],selection:original.meshes.map(()=>[])};
- for(const key of ['inputProvenance','analysisIntent','planarRegion','cylindricalRegion'])delete candidate[key];
+ for(const key of ['inputProvenance','analysisIntent','planarRegion','cylindricalRegion','sphericalRegion'])delete candidate[key];
  return candidate;
 }
 function domainSummary(mesh){

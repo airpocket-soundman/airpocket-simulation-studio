@@ -25,6 +25,13 @@ export interface RegionSelection {
   triangles: number[];
 }
 
+/** Exact sphere latitude/longitude sector in mm/degrees; axis/reference are normalized and orthogonalized at runtime. */
+export interface SphericalRegion {
+  mesh: number; exactCad: true; center: Vector3; axis: Vector3; reference: Vector3;
+  radius: number; tolerance: number; latitudeMin: number; latitudeMax: number;
+  startDegrees: number; sweepDegrees: number;
+}
+
 /** Current serialized boundary shape; field-specific physical rules are runtime checked. */
 export interface ProjectCondition {
   type: BoundaryConditionType;
@@ -36,6 +43,7 @@ export interface ProjectCondition {
   frame?: unknown;
   planarRegion?: unknown;
   cylindricalRegion?: unknown;
+  sphericalRegion?: SphericalRegion;
   cadUpdateRequired?: unknown;
 }
 
@@ -279,6 +287,7 @@ export interface SavedProject extends SavedProjectBase {
   study?: AnalysisStudy;
   sourceModel?: ProjectSource;
   selection?: number[][];
+  sphericalRegion?: SphericalRegion;
   units?: ProjectUnits;
   analysisIntent?: AnalysisIntent;
   inputProvenance?: InputProvenance;

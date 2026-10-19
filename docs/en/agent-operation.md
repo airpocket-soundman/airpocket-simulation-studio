@@ -43,3 +43,7 @@ Freeze active run inputs. Prepare changes for a new run, cancel when appropriate
 Provide typed units/ranges/enumerations, available actions and reasons, both composable and workflow operations, stable semantic identities, documented defaults, provenance/assumptions, repair guidance and separate summary/detail retrieval. Tie numerical fields and media to result revisions.
 
 Verify a bracket workflow entirely through MCP: clarification, setup, solve, failure repair, revision, comparison and video export. Test GUI consistency, cancellation, disconnects, duplicate requests, stale revisions and invalid inputs. Measure coverage, completion, manual interventions, calls/payload, repair success, cold/warm latency, cache reuse and reproducibility.
+
+## Inspect the same preflight from the GUI
+
+The pre-analysis panel offers Solve/Mesh-only inspection without starting a job. Known pointers open/focus inputs; input/options/language changes invalidate old reports. Unregistered material drafts are excluded. Allowed is not accuracy approval;completePreflight:false remains. See [automation](automation.md) for the contract and limited actual-Chrome evidence. Sphere sectors are selected through semantic API/MCP;there is no new graphical selector.

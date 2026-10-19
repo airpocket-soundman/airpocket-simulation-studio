@@ -76,7 +76,18 @@ startCompareExportのWebMでanimation:"deformation"を指定します。対象�
 
 ## 比較の回転GIF
 
-startCompareExportはformat:"gif"でorbitのみを受け付けます。固定24枚・640×320・RGB332の256色（非可逆）で、secondsは整数1〜15（API既定5秒・GUI既定2秒）。各フレームのdelayは整数centisecondに配分し合計seconds×100を保ちます。位相i/24の固定スケジュールで、実時間録画や目標24fpsとは別です。GIFは無限ループ指定ですが実際の再生時間はプレーヤーに依存します。manifestは出力/元描画の解像度・delay・色/フレーム条件を区別します。比較専用comparisonGifExportで対応を通知し、単一ビューformats.gifは非対応のままです。GUI形式選択でGIFを選ぶと書出しだけorbitに固定し、元の時間/変形モードやportable設定は変えません。画像プレビュー・明示保存・中止・再作成は同じ共有キュー/成果物SHA/解放を使います。time/deformation GIFは拒否。
 
 
 2026-10-17 localhost実Chromeの[比較GIF証跡](evidence/2026-10-17-comparison-gif-real-chrome.json): API成果物5,574,849 bytesをSHA-256 e171333e…で照合。外部デコードで640×320・24枚/画像24種、Pillowでdelay80/90ms・合計2,000ms・loop0を確認しました。GUIの画像プレビュー・中止・再作成は成功し、各後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。最初の接続reset/timeoutは履歴に保持し原因を断定しません。公開HTTPS・一般形状・他プレーヤーの滑らかさ・GUIダウンロード完了は未確認です。
+
+## 比較GIFの時間・表示倍率（2026-10-19）
+
+`startCompareExport`は`format:"gif"`で`animation:"orbit"|"time"|"deformation"`を受理します。新toolは増やさず、MCPは35 default/37 paired、live91操作、minimal connector3のまま。実登録schemaと`exportCapabilities().comparisonGifExport`を先に確認してください。単一ビューの`formats.gif`とMP4は非対応です。
+
+固定24枚、640×320、RGB332の256色（非可逆）。`seconds`は整数1〜15（API既定5、GUI既定2）で、整数centisecondのdelay合計は`seconds*100`。orbitは既存`i/24`、time/deformationは`i/23`で両端を含みます。無限loop指定であり、プレーヤーの再生精度や滑らかな24fpsを保証しません。
+
+時間は両ケースに保存温度または瞬時音圧が必要で、両時間軸内の明示`startTimeSeconds < endTimeSeconds`を指定します。`timeSeconds`や最終熱流束との併用は拒否。固定カメラ・全区間で選択可能な保存フレームの共通色範囲を使い、近傍保存フレームだけを表示し、実時刻と符号付きoffsetを描きます。補間や追加の物理解法は行いません。任意`toleranceSeconds`は全区間で点検します。
+
+変形は2つの線形弾性結果の変位/応力に限り、非零の保存変位と明示した正の`deformScale`が必要。時間引数と非線形結果は拒否。カメラ・結果値・色範囲を固定し、表示倍率だけ0→指定倍率へ線形に変えます。manifestの`visualizationOnly:true`/`loadHistory:false`と画像ラベルを維持し、載荷履歴として解釈しません。
+
+GUIの動画種類はGIF選択後も維持し、時間範囲/表示倍率は同じ共有queue・revision/lease・取消・SHA付きartifact取得・解放経路を通します。成功/取消/失敗後に元表示へ復元し、部分成果物は受け渡しません。[localhost正式MCP＋実Chrome証拠](evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json)は小規模な熱11保存フレームと線形弾性3N/6Nに限定し、API成果物・外部decode24枚・総delay・GUIプレビュー/取消/再作成・入力/ケース/表示/比較設定の一致を確認。公開HTTPS、一般形状、OSダウンロード完了は未確認です。

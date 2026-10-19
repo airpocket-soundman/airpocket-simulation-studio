@@ -45,3 +45,11 @@ Discover concrete positional schemas for `setInputProvenance` and `setAnalysisIn
 ### Experimental native external flow
 
 See docs/su2-native.md and native-flow.md before using nativeFlowApi or the optional seven native MCP tools. Existing full MCP can add them with --native-flow-config; the native-only entry is studio-native-flow-mcp.mjs. This is a separate approved-case SU2 native path, not a browser WASM solver or existing case archive. Discover actually registered tools first. Preserve approved air/velocity/mesh/SA wall settings and original hashes. Pressure stopping alone does not establish complete numerical convergence: inspect residualChecks and diagnostics, especially SU2_WALL_MODEL_NOT_CONVERGED. Direct/Studio/MCP equality proves reproducibility only; near-wall mesh and quantitative accuracy remain unverified. Do not substitute Stokes flow or remove warnings to claim success.
+
+## GUI report is a shared preflight view
+
+The GUI pre-analysis panel calls the existing preflight for Solve or Mesh only. It displays mode/allowed/provisional, diagnostic code/severity/pointer/suggestions and remaining checks; known targets can receive focus. It starts no solver and cannot confirm evidence or fill missing values. Unregistered material drafts are explicitly outside its registered-input report. Changed input/options/operation/language invalidate old reports; stale asynchronous reports are discarded. The local GUI snapshot counter is not an MCP SHA revision.
+
+Use current semantic preflight and its exact input revision for agent decisions. GUI allowed:true still means completePreflight:false; preserve legacy limits, exploratory assumptions/provisional status and quantitative confirmation requirements. Mesh quality, boundary transfer, convergence and physical applicability remain subsequent checks. No new tool or physics threshold is introduced.
+
+Localhost Chrome evidence `docs/evidence/2026-10-19-preflight-gui-spherical-browser.json` covers legacy/incomplete/revision labels,invalid mesh size→focus→keyboard repair→stale clearing→recheck,material-section focus,EN→JA→EN and 390px layout. Provisional:true and exact API/no-input-mutation parity are unit-covered only. Do not upgrade these observations to complete physical validation or a public-deployment claim.

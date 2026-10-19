@@ -16,16 +16,15 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
  const available=()=>{if(isBusy())throw Error('Viewer is busy');};
  return {
   async prepare(request,{guard=()=>true}={}){
-   if(request.format==='gif'&&request.animation!=='orbit')throw Error('Comparison GIF supports orbit only');
    const check=()=>{if(!guard())throw Error('Comparison export expired');available();};check();
    const defaults=structuredClone(getDefaults()),view={...defaults,camera:camera(structuredClone(request.camera??defaults.camera)),deformScale:request.deformScale??defaults.deformScale};
    if(!Number.isFinite(view.deformScale)||view.deformScale<0)throw Error('Invalid comparison deformation scale');
    const sources=[];
    for(const reference of request.references){sources.push(await cases.readSource(reference,{guard}));check();}
-   const timeMode=request.format==='webm'&&request.animation==='time';
+   const timeMode=['webm','gif'].includes(request.format)&&request.animation==='time';
    if(timeMode&&request.timeSeconds!==undefined)throw Error('Comparison time video uses startTimeSeconds/endTimeSeconds, not a fixed timeSeconds');
    const timePlan=timeMode?createComparisonTimePlan(sources.map(s=>s.output),request):null;
-   const deformationMode=request.format==='webm'&&request.animation==='deformation';
+   const deformationMode=['webm','gif'].includes(request.format)&&request.animation==='deformation';
    if(deformationMode&&!Object.hasOwn(request,'deformScale'))throw Error('Deformation comparison requires an explicit positive deformScale');
    const deformationPlan=deformationMode?createComparisonDeformationPlan(sources.map(s=>s.output),request):null;
    if(request.field==='heatFlux'&&request.timeSeconds!==undefined&&sources.some(source=>source.output.result.kind==='thermal'))throw Error('Thermal heat flux comparison is final-step only; omit timeSeconds');
@@ -35,10 +34,10 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
    if(JSON.stringify(getDefaults())!==JSON.stringify(defaults))throw Error('Viewer changed while preparing comparison');
    const renderAt=(nextCamera,timeSeconds,colorRange,deformScale=view.deformScale)=>renderComparison({cases:sources.map(source=>({caseId:source.caseId,label:source.name,source:source.output})),field:request.field,camera:nextCamera,deformScale,timeSeconds,toleranceSeconds:request.toleranceSeconds,colorRange,visualDeformation:deformationMode});
    const rendered=renderAt(view.camera,timePlan?timePlan.atPhase(0).timeSeconds:request.timeSeconds,timePlan?.colorRange,deformationPlan?0:view.deformScale);
-   if(request.format==='gif'){if(request.animation!=='orbit')throw Error('Comparison GIF supports orbit only');view.sourceResolution={width:rendered.canvas.width,height:rendered.canvas.height};view.resolution={width:640,height:320};}
+   if(request.format==='gif'){view.sourceResolution={width:rendered.canvas.width,height:rendered.canvas.height};view.resolution={width:640,height:320};}
    if(request.format==='webm')view.resolution={width:rendered.canvas.width,height:rendered.canvas.height};
    assertCurrent();
-   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{}),...(request.format==='gif'?{gifAnimation:{frames:24,width:640,height:320,palette:'RGB332',colors:256,phasePolicy:'i/24',lossy:true,loop:0}}:{})};
+   const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{}),...(request.format==='gif'?{gifAnimation:{frames:24,width:640,height:320,palette:'RGB332',colors:256,phasePolicy:request.animation==='orbit'?'i/24':'i/23',lossy:true,loop:0}}:{})};
    const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode||deformationMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange,deformationPlan?deformationPlan.atPhase(phase).deformScale:view.deformScale);assertSources();return frame.canvas;};
    return {view,comparison,context:{canvas:rendered.canvas,assertCurrent,assertSources,renderFrame}};
   },

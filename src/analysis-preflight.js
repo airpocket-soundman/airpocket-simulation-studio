@@ -91,7 +91,7 @@ export function preflightProject(project,options={}, {target='browser',operation
    const base='/conditions/'+index;
    // Supports are physical intent too; all serialized boundary definitions need evidence.
    for(const key of ['type','value','direction','regions'])requiredPointers.push(base+'/'+key);
-   for(const key of ['frame','planarRegion','cylindricalRegion'])if(condition?.[key]!==undefined)requiredPointers.push(base+'/'+key);
+   for(const key of ['frame','planarRegion','cylindricalRegion','sphericalRegion'])if(condition?.[key]!==undefined)requiredPointers.push(base+'/'+key);
    if(!['fixed','displacement','force','pressure','normalTraction'].includes(condition?.type))add('CONDITION_DISCIPLINE_MISMATCH',base+'/type','Boundary condition is not structural',{type:condition?.type},['Use conditions belonging to the intended structural study']);
   });
   if(!conditions.some(condition=>['fixed','displacement'].includes(condition?.type)&&!condition.cadUpdateRequired&&condition.regions?.length))add('STRUCTURAL_SUPPORT_MISSING','/conditions','No fixed or displacement support was specified',{supportCount:0},['Specify intended supports; do not add artificial constraints only to make the solve converge']);

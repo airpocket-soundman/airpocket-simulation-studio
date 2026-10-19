@@ -81,3 +81,11 @@ The flat report also includes full-project SHA-256 revision, meshIndex, units:{g
 Aggregate signed-volume numerical overflow is refused, including finite-triangle cases; do not reinterpret range refusal as an ordinary open-surface null volume.
 
 For page consistency, pin meshIndex and the first returned toleranceMm along with project revision; equal revisions alone do not guarantee equal problem sets when tolerance changes.
+
+## Exact spherical sectors
+
+Use semantic `selectSphericalRegion(meshIndex,spec)` in saved preview/edit or paired `edit`/`previewEdit`, then `addCondition`. Required spec: `{exactCad:true,center:[x,y,z],axis:[ax,ay,az],reference:[rx,ry,rz],radius,tolerance,latitudeMin,latitudeMax,startDegrees,sweepDegrees}`. Lengths/tolerance are mm; angles degrees. Latitude is equator-based, -90<=min<max<=90; sweep is 0<width<=360. Axis is normalized and reference orthogonalized; zero/parallel frames and overflow refuse. Tolerance affects display radius selection only, not CAD validation. Use explicit user-intended dimensions, never infer a load region from solver success.
+
+One built-in sphere or STEP solid is supported, with analytic area R²Δλ(sinφmax−sinφmin), shared 20-region limit and existing curved faceting 3% maximum. Re-mesh using saved condition sphericalRegion; sphericalPatches/triangle labels are validated on case restore, with equivalent JSON key ordering accepted. Total force/heat power are conserved; per-area loads retain existing faceted integration. Wrong geometry/area/labels refuse. No new graphical selector, general UV, STL, fluid-domain or spherical thermal-contact support. `docs/evidence/2026-10-19-spherical-cad-region.json` separates CAD/Node Worker/stdio MCP verification from unverified deployed Worker and SolidCraft0.16 integration. Counts remain35 default/37 paired tools and 91 live operations; discover the actual server schema.
+
+Localhost paired Chrome proof (inspect/edit scopes only): `docs/evidence/2026-10-19-preflight-gui-spherical-browser.json` records sphere selection418 triangles/exact157.07963267948963mm², 123N condition and descriptor retention. Bounded GUI JSON text→saved-file MCP reload preserves the exact input revision. This is not browser mesh/solve or a GUI file-import roundtrip; download/file-chooser waits timed out. No SolidCraft integration is established.

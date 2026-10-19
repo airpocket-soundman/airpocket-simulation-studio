@@ -30,7 +30,7 @@ function unitFor(path,project,allowProvenance=true){
  }
  if(root==='conditions'){
   const c=project.conditions?.[key];if(third==='value')return {fixed:'mm',displacement:'mm',force:'N',pressure:'Pa',normalTraction:'Pa',temperature:'degC',heatFlux:'W/m2',heatPower:'W',convection:'W/(m2*K)',radiation:'1',thermalContact:'W/(m2*K)',acousticPressure:'Pa',acousticImpedance:'Pa*s/m'}[c?.type];
-  if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
+  if(third==='sphericalRegion'){if(['center','radius'].includes(fourth))return 'mm';if(['axis','reference'].includes(fourth))return '1';if(['latitudeMin','latitudeMax','startDegrees','sweepDegrees'].includes(fourth))return 'deg';}if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
  }
  if(root==='meshes'&&third==='positions')return 'mm';
  const indices=parts=>parts.every(part=>/^(0|[1-9]\d*)$/.test(part));

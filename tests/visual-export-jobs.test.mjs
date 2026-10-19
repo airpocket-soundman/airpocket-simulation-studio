@@ -163,3 +163,14 @@ test('result and comparison status expose only bounded WebM lifecycle failure co
   assert.throws(()=>api.artifact(job),/unavailable/);api.release(job);
  }
 });
+
+for(const animation of ['time','deformation'])test(`comparison GIF ${animation} manifest preserves physical meaning and fixed-frame endpoints`,async()=>{
+ const b=new Uint8Array(14);b.set(new TextEncoder().encode('GIF89a'));b[6]=128;b[7]=2;b[8]=64;b[9]=1;b[13]=59;
+ const snapshot=compareSnapshot();snapshot.view.resolution={width:640,height:320};snapshot.view.sourceResolution={width:1280,height:640};snapshot.comparison[animation==='time'?'timeAnimation':'deformationAnimation']=animation==='time'?{initial:{timeSeconds:0},final:{timeSeconds:10},interpolated:false}:{visualizationOnly:true,loadHistory:false,startScale:0,endScale:20};
+ const api=createVisualExportJobs({render:()=>{},prepareCompare:()=>snapshot,renderCompare:()=>new Blob([b],{type:'image/gif'})});
+ const args={...compareArgs(),format:'gif',animation,seconds:2,...(animation==='time'?{startTimeSeconds:0,endTimeSeconds:10}:{field:'displacement',deformScale:20})};delete args.timeSeconds;if(animation==='deformation')delete args.toleranceSeconds;
+ const done=await terminal(api,await api.startCompare(args));assert.equal(done.state,'completed');const m=done.artifact.manifest;
+ assert.equal(m.time.animation,animation);assert.equal(m.time.phasePolicy,'i/23');assert.equal(m.time.camera,'fixed');assert.equal(m.time.frameCount,24);assert.equal(m.time.delayCentiseconds.reduce((a,b)=>a+b),200);
+ if(animation==='time'){assert.deepEqual(m.time.requestedRangeSeconds,{start:0,end:10});assert.equal(m.comparison.timeAnimation.interpolated,false);}else assert.equal(m.comparison.deformationAnimation.loadHistory,false);
+ api.release({jobId:done.jobId});
+});

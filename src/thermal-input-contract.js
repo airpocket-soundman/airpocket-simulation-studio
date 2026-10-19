@@ -46,7 +46,7 @@ export function inspectThermalInputContract(project,options={}, {mode='legacy'}=
    require(base+'/value',c.value,physicalValue,'Invalid thermal boundary value or value below absolute zero',boundaryUnit);
    const validRegions=regions=>Array.isArray(regions)&&regions.length>0&&regions.every(region=>object(region)&&Number.isInteger(region.mesh)&&region.mesh>=0&&Array.isArray(project.meshes)&&object(project.meshes[region.mesh])&&Array.isArray(region.triangles)&&region.triangles.length>0&&region.triangles.every(triangle=>Number.isInteger(triangle)&&triangle>=0&&triangle<(project.meshes[region.mesh].faceIds?.length??0)));
    require(base+'/regions',c.regions,validRegions,'Thermal boundary requires valid nonempty display regions');
-   for(const key of ['planarRegion','cylindricalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
+   for(const key of ['planarRegion','cylindricalRegion','sphericalRegion'])if(c[key]!==undefined)requiredPointers.push(base+'/'+key);
    if(['convection','radiation'].includes(c.type))require(base+'/ambientTemperature',c.ambientTemperature,value=>Number.isFinite(value)&&value>=-273.15,'Ambient temperature must be finite and at least absolute zero in degC');
    if(c.type==='thermalContact'&&(!validRegions(c.regions)||c.regions.length!==2||c.regions[0].mesh===c.regions[1].mesh))add('THERMAL_CONTACT_INVALID',base+'/regions','Thermal contact requires two distinct part regions');
    if(['temperature','convection','radiation'].includes(c.type)&&physicalValue(c.value)&&validRegions(c.regions)&&!c.cadUpdateRequired&&(!['convection','radiation'].includes(c.type)||Number.isFinite(c.ambientTemperature)&&c.ambientTemperature>=-273.15))anchored=true;

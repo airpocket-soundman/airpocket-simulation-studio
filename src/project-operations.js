@@ -9,7 +9,7 @@ const object=plain;
 const string=value=>typeof value==='string';
 const selectors={
   selectTriangles:[integer,value=>Array.isArray(value)&&value.every(integer),object],selectCadFace:[integer,integer],
-  selectPlanarRegion:[integer,object],selectCylindricalRegion:[integer,object],
+  selectPlanarRegion:[integer,object],selectCylindricalRegion:[integer,object],selectSphericalRegion:[integer,object],
   clearSelection:[],addCondition:[object],removeCondition:[integer],selectCondition:[integer],
   replaceConditionRegion:[integer],reapplyConditionRegion:[integer],
   applyCatalogMaterial:[object],setMaterial:[string],setMaterialProperties:[object],setMaterialPreset:[string,object],

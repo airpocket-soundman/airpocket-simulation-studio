@@ -9,6 +9,7 @@ import {createCaseStore} from '../src/cases.js';
 import {createCaseOperations} from '../src/case-operations.js';
 import {createCaseComparisonApi} from '../src/case-comparison.js';
 import {createRuntimeIdentity} from '../src/runtime-identity.js';
+import {createStudioApi} from '../src/studio-api.js';
 import {createProjectFromBuiltin} from '../src/project-import.js';
 import {validateMaterialProperties} from '../src/materials.js';
 import {inspectThermalInputContract} from '../src/thermal-input-contract.js';
@@ -291,6 +292,13 @@ test('project unit and material fixture examples stay aligned with runtime valid
     {temperature: 20, youngModulus: 2e11, poissonRatio: 0.3},
     {temperature: 100, youngModulus: 1.9e11, poissonRatio: 0.31},
   ]}}));
+});
+
+test('contract parity: spherical dimensions come from shared semantic runtime output',()=>{
+  const api=createStudioApi();api.loadProject(createProjectFromBuiltin({source:{kind:'sphere',center:[0,0,0],radius:10}}));
+  api.selectSphericalRegion(0,{exactCad:true,center:[0,0,0],axis:[0,0,1],reference:[1,0,0],radius:10,tolerance:.01,latitudeMin:-30,latitudeMax:30,startDegrees:315,sweepDegrees:90});
+  assert.equal(declared('SavedProject').fields.get('sphericalRegion').type,'SphericalRegion');assertParity('SphericalRegion',api.exportProject().sphericalRegion);
+  api.addCondition({type:'force',value:1,direction:[1,0,0]});assert.equal(declared('ProjectCondition').fields.get('sphericalRegion').type,'SphericalRegion');assertParity('SphericalRegion',api.exportProject().conditions[0].sphericalRegion);
 });
 
 // Must stay last: it summarises what the samples above actually exercised.
