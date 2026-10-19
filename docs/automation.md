@@ -105,7 +105,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## 結果ビューとケースの意味的操作
 
-接続モードの`getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})`は、結果全体を送らず`resultRevision`、物理量と表示単位、現在の表示設定、保存時刻/モードのページ（各最大50件）を返します。`setResultView({expectedResultRevision,settings})`で変更します。
+接続モードの`getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})`は、結果全体を送らず`resultRevision`、物理量と表示単位、現在の表示設定、保存時刻/モードのページ（各最大50件）を返します。保存時間履歴の`snapshotInfo`を持つ結果（検証済みmetadata）には加算的に`snapshotStorage`が付きます。`requested`/`count`/`bytes`/`budgetBytes`と`unit:"byte"`、`bytesPerScalar:8`、`meaning:"stored-scalar-values-only"`、除外対象`excludes:[objects,rendering,observations,receiver-traces,peak-memory]`、`warningCount`のみを返し、保存step配列・警告本文・物理配列は含みません。整合しないmetadataは黙って無視せず明示的に拒否し、`snapshotInfo`を持たない旧結果は`snapshotStorage`を付けません。`setResultView({expectedResultRevision,settings})`で変更します。
 
 `settings`は`field`、`deformScale`、`surface`、`surfaceWire`、`volumeWire`、`section`、`modeIndex`、`frameIndex`または`timeSeconds`、`camera`、`colorRange`です。カメラはmmの`position`/`target`と`up`、度の`fov`。固定色は`{field,minimum,maximum}`、自動範囲はnull。値の単位は返却されたfield単位（応力はMPa、温度はdegC等）に従い、範囲外は端の色に固定します。物理量を変更して新範囲を指定しなければ自動範囲へ戻ります。
 

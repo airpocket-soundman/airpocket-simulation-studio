@@ -105,7 +105,7 @@ Reads verify SHA-256, input revision and mesh identity, returning physical secon
 
 ## Semantic result views and cases
 
-Connector `getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})` returns a resultRevision, fields/display units, current settings and stored time/mode metadata pages (at most 50 each), without large result arrays. Use `setResultView({expectedResultRevision,settings})`.
+Connector `getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})` returns a resultRevision, fields/display units, current settings and stored time/mode metadata pages (at most 50 each), without large result arrays. Results that carry validated time-history `snapshotInfo` additionally include a bounded `snapshotStorage` summary: `requested`/`count`/`bytes`/`budgetBytes` plus `unit:"byte"`, `bytesPerScalar:8`, `meaning:"stored-scalar-values-only"`, `excludes:[objects,rendering,observations,receiver-traces,peak-memory]` and `warningCount` only; no stored-step lists, warning texts or physical arrays. Inconsistent metadata is refused explicitly rather than dropped, and legacy results without `snapshotInfo` omit the field. Use `setResultView({expectedResultRevision,settings})`.
 
 Settings: field, deformScale, surface, surfaceWire, volumeWire, section, modeIndex, frameIndex or timeSeconds, camera and colorRange. Camera position/target are mm, up is a direction and fov is degrees. Fixed colorRange is `{field,minimum,maximum}` in the reported display unit (stress MPa, temperature degC, etc.); null selects automatic ranges. Values outside a fixed range use endpoint colors. Changing fields resets automatic range unless a valid new range is supplied.
 
