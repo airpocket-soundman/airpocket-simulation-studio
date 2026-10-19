@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "taskId": "AGENTACP1",
+  "workOrder": "19-AGENTACP1",
+  "scope": "ACP v1 stdio initialize probe: own exactly one configured agent child, initialize it, and stop it safely. No session/prompt, authentication execution, MCP delegation, model selection, or browser spawn.",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "baseRef": "origin/main",
+  "branch": "codex/opencode-agentacp1",
+  "protocolReference": {
+    "transportsUrl": "https://agentclientprotocol.com/protocol/v1/transports",
+    "initializationUrl": "https://agentclientprotocol.com/protocol/v1/initialization",
+    "schemaPageUrl": "https://agentclientprotocol.com/protocol/v1/schema",
+    "releaseUrl": "https://github.com/agentclientprotocol/agent-client-protocol/releases/tag/schema-v1.26.0",
+    "tag": "schema-v1.26.0",
+    "tagObjectSha": "3fdcc2cb717e1dfa50f2efcaeae88cb69a6504cd",
+    "taggedCommitSha": "e2d83349bc9e28a4059ea3acefa1c91c966f74e2",
+    "schemaUrl": "https://github.com/agentclientprotocol/agent-client-protocol/releases/download/schema-v1.26.0/schema.json",
+    "schemaSha256": "4bcd1d2051ff7ed379bd9b234fb9b09c5ab9245478698e9fab805bd9b52a33a6",
+    "schemaSizeBytes": 255170,
+    "retrievedAt": "2026-10-19",
+    "negotiatedProtocolVersion": 1,
+    "draftVersionsMixed": false
+  },
+  "addedFiles": [
+    "scripts/acp-client-process.mjs",
+    "scripts/probe-acp-agent.mjs",
+    "tests/acp-client-process.test.mjs",
+    "tests/fixtures/acp-agent-stub.mjs",
+    "docs/agent-acp-probe.md"
+  ],
+  "changedExistingFiles": [],
+  "sourceSha256": {
+    "scripts/acp-client-process.mjs": "9c04944b9524b671b0c9bd76414d419489916ce8b60c0c1ee535182756cb823c",
+    "scripts/probe-acp-agent.mjs": "b6684bd8c7c667bcf787286f84ca503eba8fa52864f66946e7463b2b7291e880",
+    "tests/acp-client-process.test.mjs": "a7c617e23088224a7c8061c2cc9b55a9cd3eb91029373381f9de111d7bc3b517",
+    "tests/fixtures/acp-agent-stub.mjs": "9c88549681ac49da3d9fefc76fb74590d560eca97578ee7872ee6033249e171a",
+    "docs/agent-acp-probe.md": "ca6b296219368c27c37a8b4f0542baa902db9cacdc0593469cc706e9fda8f12c"
+  },
+  "implementationLimits": {
+    "concurrentOwnedChildren": 1,
+    "initializeTimeoutMs": 10000,
+    "stopGraceMs": 2000,
+    "forceKillWaitMs": 2000,
+    "maxStdoutRecordBytes": 1048576,
+    "maxStderrRetentionBytes": 65536,
+    "clientCapabilitiesAdvertised": "none (all false)",
+    "stateMachine": ["idle", "starting", "initializing", "ready", "stopping", "stopped", "failed"]
+  },
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass",
+      "note": "22 packages added, 0 vulnerabilities; dependencies were absent in this worktree",
+      "measured": { "addedPackages": 22, "vulnerabilities": 0 }
+    },
+    {
+      "command": "node --test tests/acp-client-process.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 20, "pass": 20, "fail": 0, "skipped": 0, "cancelled": 0, "todo": 0, "durationMs": 2505.85 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    },
+    {
+      "command": "git diff --cached --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    },
+    {
+      "command": "node scripts/probe-acp-agent.mjs --config=<sanitized temp config pointing at tests/fixtures/acp-agent-stub.mjs>",
+      "result": "pass",
+      "measured": { "ready": true, "protocolVersion": 1, "state": "stopped", "stopExited": true, "stopForced": false, "exitCode": 0 },
+      "note": "Synthetic stub only; the stub advertises an auth method that the probe records but never selects."
+    },
+    {
+      "command": "node scripts/probe-acp-agent.mjs --config=<relative executable config>",
+      "result": "expected-fail",
+      "measured": { "exitCode": 1, "message": "ACP agent executable must be an absolute path (no implicit PATH search)" }
+    },
+    {
+      "command": "node scripts/probe-acp-agent.mjs --config=<protocolVersion 2 stub config>",
+      "result": "expected-fail",
+      "measured": { "exitCode": 1 }
+    }
+  ],
+  "fixtureCoverage": {
+    "splitUtf8AcrossChunks": true,
+    "twoRecordsInOneChunk": true,
+    "invalidJsonRecord": true,
+    "strayStdoutLogging": true,
+    "wrongResponseId": true,
+    "unsupportedProtocolVersion": true,
+    "secondStartRejected": true,
+    "stopIdempotent": true,
+    "initializeTimeout": true,
+    "forceStopOfNonExitingChild": true,
+    "neverExitExplicitFailure": true,
+    "agentToClientRequestRejected": true,
+    "stdoutRecordLimit": true,
+    "stderrRetentionBound": true,
+    "environmentNotExposed": true
+  },
+  "terminatedChildConfirmation": {
+    "perTestAssertion": "Each test asserts activeChildPid === null after stop (normal, force-stop, and timeout paths).",
+    "processScanAfterRuns": "Get-CimInstance Win32_Process filtered for command line matching acp-agent-stub returned 0 node processes after the test run and two CLI runs.",
+    "observedRemainingStubProcesses": 0,
+    "scope": "owned direct child only",
+    "grandchildTreeTerminationProven": false,
+    "killOnlyGrandchildClaim": false
+  },
+  "secretsHandling": {
+    "environmentLogged": false,
+    "argvPrinted": false,
+    "rawStderrStored": false,
+    "tokensOrCredentialsRecorded": false
+  },
+  "unconfirmed": [
+    "No real ACP agent (including Codex) was launched; the real Codex ACP entry point is unverified and no command was guessed.",
+    "Only ACP v1 protocolVersion 1 is implemented; v2 draft compatibility is untested and not claimed.",
+    "Termination of grandchild processes on Windows is not proven; only the owned direct child is targeted.",
+    "stderr retention beyond the 64 KiB cap is truncated, not fully validated against a real agent's logging volume.",
+    "Parent SIGINT/SIGTERM handling is unit-verified via installed listeners, not by sending a real console signal during CI.",
+    "No authentication flow, session creation, prompt turn, MCP delegation, or model selection exists.",
+    "Browser-connector and MCP schema permissions were not touched."
+  ],
+  "progressBoard": {
+    "srcProgressJsonChanged": false,
+    "parentTaskStatus": "unchanged",
+    "proposal": "Keep AGENTACP1 parent as queued/unfinished. Record only that the initialize/owned-child sub-unit is implemented via scripts/acp-client-process.mjs + scripts/probe-acp-agent.mjs with the pinned ACP v1 schema-v1.26.0 reference; authentication, real-agent connection, conversation, and public HTTPS remain open."
+  }
+}
