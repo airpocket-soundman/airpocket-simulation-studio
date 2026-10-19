@@ -47,3 +47,9 @@ window.fluidDomainApi.prepareでmode:internalと箱・seed・portPlanesを指定
 ### GUIの限定cap一巡
 
 内部流体パネルで最大6件のID/point/外向き単位normalを入力。未入力値は補完しない。法線不正時は対象へfocus/aria-invalidで復帰し、箱範囲補助は未完成draftを保持、新モデルはdraftをリセット。適用済みsourceだけをProject JSONに保存し再読込で行を復元する。mesh失敗時は適用sourceを戻し入力draftを保持。[実Chrome証拠](evidence/2026-10-18-fluid-opening-caps-gui.json)は2cap・4021.239mm3・2ports、107面三角形選択、JSON厳密往復、日英390px/keyboardを確認。非交差capのcore診断は英語のままで、全solver診断翻訳はUIIMPROVE1の残作業。公開Worker/任意wire/一般join/物理解析の実証ではない。
+
+## 平行平板の壁面層配置計画
+
+一般3D境界層mesherの前段として、平行平板の両壁から境界層を積む座標計画を純粋module `src/channel-layer-plan.js` に用意しました。入力は gapMm / firstHeightMm / growthRatio / layersPerWall / maxLayers（すべてmm、暗黙の単位変換なし）。h_i=h0*r^i の層厚列、0とgapを厳密に保つ単調増加座標、両壁から各層までの距離、中央の未層領域幅、総枚数を返します。両壁層が接触・交差する場合、中央幅が0以下、隣接座標が同値になる場合は削減・正規化せず拒否します。
+
+これは座標計画であり、実Gmshのprism/tet要素生成、壁面tag対応、流れ解析、y+保証ではありません。そのためUI・mesh-core・solverへは接続していません。実メッシュ化の際は壁ID保持とtet反転検査が必要です。親CFDMESH1は未完了のままです。
