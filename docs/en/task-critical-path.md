@@ -10,6 +10,10 @@ As of 2026-10-19, there are171 tasks,133 released and38 unfinished. Classificati
 | External/device conditions(8) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
 | Parent epics(15) | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | Publishing a slice does not complete its parent. Keep existing acceptance and common completion criteria. |
 
+## 2026-10-21: independent OpenCode PR review
+
+Eighteen exact PR heads were reviewed: eleven accepted for integration, seven requiring changes. Two newest PRs remain untouched as potentially in progress. Integration resolves shared UI conflicts and passes129 targeted tests plus five contract declarations. Combined full CI, normal merge and publication verification remain distinct stages. See [review reproductions](../evidence/2026-10-21-opencode-pr-review.json) and [next twenty work orders](../opencode-work-orders-2026-10-21/README.md). Preserve171 tasks,133 released,38 unfinished; parent acceptance is not closed and unmerged physics/connectivity is not advertised.
+
 ## Dependencies and current batch
 
 P0->P1->P3 and P0->P4 are key publication-workflow paths. P5 depends on all P1/P2/P3/P4. Five of six publication gates remain open; completed evidence is candidate-specific and must align on the final candidate before product publication is considered complete.

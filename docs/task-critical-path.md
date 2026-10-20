@@ -2,13 +2,17 @@
 
 [English](en/task-critical-path.md)
 
-2026-10-19時点、171件のうち公開済み133件、未完38件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
+2026-10-21時点、171件のうち公開済み133件、未完38件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
 | 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
 | 外部・実機等の条件あり（8） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
 | 親エピック（15） | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | 子機能の公開だけで全体完了にしない。既存受入条件と共通完了判定を維持。 |
+
+## 2026-10-21: OpenCode PRの独立レビュー
+
+18件を固定headでレビューし、11件を統合候補、7件を修正待ちとしました。最新2件は制作中の可能性があるため変更していません。入力導線・直交異方性警告・計測系列・保存量metadataなどの限定成果を取り込み、共通UIの競合を解消。統合対象の129試験と型5宣言が成功しています。全体CI・通常merge・公開確認は別段階です。[レビューと7件の再現条件](evidence/2026-10-21-opencode-pr-review.json)、[次の20作業](opencode-work-orders-2026-10-21/README.md)。既存親の受入条件と171件/133公開/38未完を維持し、未mergeの新物理・接続機能は対応済みとしません。
 
 ## 依存と今回のまとまり
 

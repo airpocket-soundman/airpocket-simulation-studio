@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-21",
+  "reviewBase": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "reviewedCount": 18,
+  "approvedCount": 11,
+  "changesRequiredCount": 7,
+  "heldCount": 2,
+  "entries": [
+    {
+      "number": 126,
+      "title": "Show input-correction links for preflight required pointers (UIIMPROVE1)",
+      "headRefName": "codex/opencode-uiimprove1",
+      "headRefOid": "452d878a4568812523d2d566c32f153fdfe0df24",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/126",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 127,
+      "title": "preflight: 直交異方性Eの桁警告を既存規則へ接続 (AGENTINPUT1)",
+      "headRefName": "codex/opencode-agentinput1",
+      "headRefOid": "26b97a9433c64481ac70b1c5dfd3b014f9a5eec4",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/127",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 128,
+      "title": "fix(perf-browser): separate UASM and JS-heap memory series (PERF1)",
+      "headRefName": "codex/opencode-perf1",
+      "headRefOid": "75c1e30a1530b5df132f1d9fdfbb9f7b5fcc8778",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/128",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 129,
+      "title": "Restore spherical input units in bounded input inspection (P1-16)",
+      "headRefName": "codex/opencode-p1",
+      "headRefOid": "cbfc99cb99a1069e71b847e26a8e9689676fd02a",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/129",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 130,
+      "title": "P4/18: 独立PNG/GIF export readback CLI",
+      "headRefName": "codex/opencode-p4",
+      "headRefOid": "a4d7aebc2268ca512f66c73e6e73d3849c9d62cd",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/130",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 131,
+      "title": "P3: identify restored requestId by canonical startup-condition digest",
+      "headRefName": "codex/opencode-p3",
+      "headRefOid": "f0c9accf000731193fd279e86e7aef4321283558",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/131",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "scripts/analysis-job-service.mjs",
+          "line": 104,
+          "reproduction": "Concurrent valid A and invalid B using one requestId can persist B startupDigest on successful A.",
+          "requestedFix": "Bind reservations to an owner token before awaiting; never allow a failed competing request to overwrite another job digest."
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "title": "MOD1 slice: extract DOM-free analysis options conversion (14)",
+      "headRefName": "codex/opencode-mod1",
+      "headRefOid": "fcdd83b22d721732b706ad5e9389ea4a8b00d033",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/132",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 133,
+      "title": "AGENTACP1: ACP v1 initialize probe with owned-child lifecycle",
+      "headRefName": "codex/opencode-agentacp1",
+      "headRefOid": "80d70688cb67f07c4e60e5e38b58d26ef7058970",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/133",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "scripts/acp-client-process.mjs",
+          "line": 328,
+          "reproduction": "JSON-RPC response with jsonrpc WRONG and id 1 is accepted as initialized/ready.",
+          "requestedFix": "Validate envelope version, response exclusivity and initialization response types before ready; close owned child on rejection."
+        }
+      ]
+    },
+    {
+      "number": 134,
+      "title": "RESULTCURVE1: revisioned increment step table from real elastic results",
+      "headRefName": "codex/opencode-resultcurve1",
+      "headRefOid": "68687a675e4c9f63ff305980852ef331fdc7f207",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/134",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/increment-curve-data.js",
+          "line": 160,
+          "reproduction": "Controlled force 999 N with applied force 100 N and reaction -100 N is accepted as a converged row.",
+          "requestedFix": "Validate controlled quantity against measured output and bind geometry/material/input identities to actual inputs."
+        }
+      ]
+    },
+    {
+      "number": 135,
+      "title": "VIEWTIME: bounded snapshotStorage metadata on getResultView",
+      "headRefName": "codex/opencode-viewtime",
+      "headRefOid": "aa242bd30dbb670ef5ee32a5020d8a2c2886fe42",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/135",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 136,
+      "title": "test: transient-acoustic comparison time GIF from real solver cases (VIEWCOMPARE 04)",
+      "headRefName": "codex/opencode-viewcompare",
+      "headRefOid": "c7ef1e5625ce3ce4266ca7a8a12c3448558e6a21",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/136",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 137,
+      "title": "feat(diagnostics): pair execution diagnostics with escaped JSON Pointers (15-P0)",
+      "headRefName": "codex/opencode-p0",
+      "headRefOid": "40bc553df0203940ffa346a526215657f5d215e5",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/137",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 138,
+      "title": "test: slice png-sequence 3-frame reference (BROWSEREXPORT1)",
+      "headRefName": "codex/opencode-browserexport1",
+      "headRefOid": "0c7f75e3e05f1d2e9a12d375a7d5dc0157a560d3",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/138",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 139,
+      "title": "CFDPORT1: triangle-surface opening-loop candidate detector",
+      "headRefName": "codex/opencode-cfdport1",
+      "headRefOid": "d7b568dc53b936bd52f5e95fddb7afe95a76f4e8",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/139",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/opening-loop-candidates.js",
+          "line": 51,
+          "reproduction": "Two identical same-winding triangles produce closedShell true with no rejection.",
+          "requestedFix": "Reject duplicate faces and invalid edge orientations; retain non-convex and degenerate rejection."
+        }
+      ]
+    },
+    {
+      "number": 140,
+      "title": "feat(couple3): 非一致平面間の保守的熱流転送演算子",
+      "headRefName": "codex/opencode-couple3",
+      "headRefOid": "2130a8f12ce262d93d63c3945ea958377f89e6eb",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/140",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/planar-heat-transfer.js",
+          "line": 76,
+          "reproduction": "Finite 1e6 mm edges and 1e308 W/m2 flux overflow into sourceW Infinity and target/balance NaN returned as success.",
+          "requestedFix": "Reject nonfinite intermediates and final accumulated integrals; preserve normal-scale conservation."
+        }
+      ]
+    },
+    {
+      "number": 141,
+      "title": "REG2: limited spherical sector GUI over the existing API",
+      "headRefName": "codex/opencode-reg2",
+      "headRefOid": "7adf7f44f43db2c76be1f3591cff58a67bdf0e46",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/141",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/ui/spherical-region-ui.js",
+          "line": 63,
+          "reproduction": "English-generated dynamic status stays English after switching to Japanese.",
+          "requestedFix": "Keep source text or render dynamic status from saved state on locale changes; test real translation scanner."
+        }
+      ]
+    },
+    {
+      "number": 142,
+      "title": "CFDMESH1: parallel-plate wall-layer placement plan (coordinate plan only)",
+      "headRefName": "codex/opencode-cfdmesh1",
+      "headRefOid": "ba39088cbf0d7d9fb2bf1d006fe742823660405b",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/142",
+      "disposition": "approved-for-integrated-ci"
+    },
+    {
+      "number": 143,
+      "title": "CONTACT1 step 1: one-degree-of-freedom unilateral penalty contact reference solver",
+      "headRefName": "codex/opencode-contact1",
+      "headRefOid": "bf0cc946ab99f4c09fce413ce876a7a88ca69bdb",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/143",
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/unilateral-contact-reference.js",
+          "line": 54,
+          "reproduction": "Tolerance 1e-30 and maxIterations 1e20 permit stagnation at residual 8.5265e-14 without bounded termination.",
+          "requestedFix": "Bound safe iteration count; detect stagnation/nonfinite values; test in a child process with a watchdog."
+        }
+      ]
+    },
+    {
+      "number": 144,
+      "title": "COUPLE4B: conservative curved-pressure nodal transfer (facet integral)",
+      "headRefName": "codex/opencode-couple4b",
+      "headRefOid": "7f3be4bcec0bef9f79066c0d59c461034e97515e",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/144",
+      "disposition": "held-as-potentially-in-progress-not-reviewed"
+    },
+    {
+      "number": 145,
+      "title": "20 AGENTCHAT1: 接続状態と利用可能範囲を画面で正確に示す（第一段階）",
+      "headRefName": "codex/opencode-agentchat1",
+      "headRefOid": "f0741c5d02891e8b996b09f621f3a360c873ce69",
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/145",
+      "disposition": "held-as-potentially-in-progress-not-reviewed"
+    }
+  ],
+  "integrationResolution": "Retained PR126 correctionButton and requiredPointers actions with PR137 pointerOf(issue); retained all PR126/132/137 tests. Combined UI, reset and layer suite: 48 passed.",
+  "verificationLimits": [
+    "Original PR verify CI passed for all 18. This is not proof of correctness.",
+    "Real Chrome, public mutation and heavy numerical paths were not independently reexecuted by reviewers.",
+    "One ACP focused test initially timed out and passed alone; not treated as a stability fix.",
+    "P3 symlink test skipped for local permission; full CI remains required."
+  ],
+  "reviewContract": "Only approved exact heads are included; failed heads are not ancestors of the integration branch. Final combined CI and normal protected merge are required.",
+  "integrationVerification": {
+    "uiResetAndLayers": {
+      "pass": 48,
+      "fail": 0
+    },
+    "acceptedFeatures": {
+      "pass": 64,
+      "fail": 0
+    },
+    "progressAndHistory": {
+      "pass": 17,
+      "fail": 0
+    },
+    "contractDeclarationFiles": 5,
+    "fullLocalRepeated": false,
+    "fullCombinedCi": "required before merge"
+  }
+}
