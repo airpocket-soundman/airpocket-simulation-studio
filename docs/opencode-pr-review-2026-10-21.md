@@ -2,17 +2,17 @@
 
 [English](en/opencode-pr-review-2026-10-21.md)
 
-[機械可読の固定head・再現条件](evidence/2026-10-21-opencode-pr-review.json) / [次の20作業](opencode-work-orders-2026-10-21/README.md)
+[固定headと再現条件](evidence/2026-10-21-opencode-pr-review.json) / [次の20作業](opencode-work-orders-2026-10-21/README.md)
 
-18件を独立レビューし、11件を統合候補、7件を修正待ちとした。#144/#145は制作中の可能性があるため未レビュー・変更なし。PRの個別CI成功とコードの正しさを分離して判定した。
+利用者が20件すべてレビュー可能と確認したため、全20件を独立レビュー。11件を統合候補、9件を修正待ちとした。個別CI成功とコードの正しさは区別した。
 
 ## 統合候補11件
 
-#126、#127、#128、#129、#130、#132、#135、#136、#137、#138、#142。各固定headはJSONに記録。親タスクの全受入を完了したものではない。新しい試験の一部は描画stubであり、実Chrome描画の成功とは扱わない。
+#126, #127, #128, #129, #130, #132, #135, #136, #137, #138, #142。
 
-#126/#132/#137の共通UIとテストの競合は、requiredPointersの導線、JSON Pointer優先、共通options読取の全てを保持して解消した。統合対象129試験と型5宣言が成功。最終の全体CI・保護された通常merge・公開検証は別途必要。
+共通UIの競合は必要入力の導線、JSON Pointer優先、共通options読取を全て保持。統合129試験と型5宣言が成功。同じ採用コードはa366の全体CIでも1641件中1638成功・3skip・失敗0。レビュー範囲更新後headの最終CI、通常merge、公開検証は別段階。
 
-## 修正待ち7件
+## 修正待ち9件
 
 | PR | 場所 | 問題と再現 | 修正指示 |
 |---|---|---|---|
@@ -23,12 +23,14 @@
 | [#140](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/140) | `src/planar-heat-transfer.js:76` | Finite 1e6 mm edges and 1e308 W/m2 flux overflow into sourceW Infinity and target/balance NaN returned as success. | [30](opencode-work-orders-2026-10-21/30-COUPLE3.md) |
 | [#141](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/141) | `src/ui/spherical-region-ui.js:63` | English-generated dynamic status stays English after switching to Japanese. | [37](opencode-work-orders-2026-10-21/37-REG2.md) |
 | [#143](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/143) | `src/unilateral-contact-reference.js:54` | Tolerance 1e-30 and maxIterations 1e20 permit stagnation at residual 8.5265e-14 without bounded termination. | [38](opencode-work-orders-2026-10-21/38-CONTACT1.md) |
+| [#144](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/144) | `src/curved-pressure-transfer.js:48` | Finite 1e6 mm triangle edges and pressure real1e308 Pa return resultant -Infinity and NaN moment. A 10 mm triangle with finite uz1e308 m returns volume Infinity although expected5e303 m3 is finite, and virtual-work relativeError NaN. | [39](opencode-work-orders-2026-10-21/39-COUPLE4B.md) |
+| [#145](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/145) | `src/ui/agent-connection-status-ui.js:96` | With the actual installLanguage scanner, English-start aria-label Connection status notifications switches to Japanese briefly but returns to English on the next scan. | [40](opencode-work-orders-2026-10-21/40-AGENTCHAT1.md) |
 
-修正PRのheadが変わった場合、このレビュー結果を流用せず反例と差分を再確認する。修正待ちのcommitを統合候補へ混入させない。
+head更新時は反例と差分を再確認する。要修正9件のcommitは統合しない。次の20指示は修正9件と次段階11件。
 
 ## 検証上の限界
 
-- 実ブラウザの追加確認と一般物理精度を、本レビューで新たに証明したものではない。
-- ACPの1試験は最初3秒timeout、単独再実行で成功。安定性解決の根拠としない。
-- P3のローカルsymlink試験は権限条件でskip。CIと区別する。
-- 利用者の元の5ファイル、各OpenCode作業場所、制作中扱いの2件は変更しない。
+- 限定prototypeと描画stubを実Chrome・一般物理精度の証明としない。親タスクは未完を維持。
+- ACPの単独再実行成功を安定性の根治としない。P3のローカルsymlink権限skipはCIと区別。
+- 統合初回CIは新資料の英語対不足で1件失敗。相互リンク付き英語版を追加し、次の全体CIは成功。
+- 元の利用者ファイルと各ownerの作業場所は変更しない。

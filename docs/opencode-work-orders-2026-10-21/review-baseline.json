@@ -1,12 +1,10 @@
 {
   "date": "2026-10-21",
+  "workOrderRevision": 2,
   "reviewBase": "d2d20c09b3dbbf568c596a503276c187267fc490",
   "approvedCount": 11,
-  "changesRequiredCount": 7,
-  "heldPrs": [
-    144,
-    145
-  ],
+  "changesRequiredCount": 9,
+  "heldPrs": [],
   "entries": [
     {
       "number": 126,
@@ -221,7 +219,16 @@
       "headRefName": "codex/opencode-couple4b",
       "headRefOid": "7f3be4bcec0bef9f79066c0d59c461034e97515e",
       "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/144",
-      "disposition": "held-as-potentially-in-progress-not-reviewed"
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/curved-pressure-transfer.js",
+          "line": 48,
+          "reproduction": "Finite 1e6 mm triangle edges and pressure real1e308 Pa return resultant -Infinity and NaN moment. A 10 mm triangle with finite uz1e308 m returns volume Infinity although expected5e303 m3 is finite, and virtual-work relativeError NaN.",
+          "requestedFix": "Use stable area-weighted accumulation where possible; reject nonfinite intermediates or final values. Add finite-overflow and ordinary phase/conjugate-work regression tests."
+        }
+      ]
     },
     {
       "number": 145,
@@ -229,8 +236,17 @@
       "headRefName": "codex/opencode-agentchat1",
       "headRefOid": "f0741c5d02891e8b996b09f621f3a360c873ce69",
       "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/145",
-      "disposition": "held-as-potentially-in-progress-not-reviewed"
+      "disposition": "changes-required",
+      "findings": [
+        {
+          "priority": "P2",
+          "file": "src/ui/agent-connection-status-ui.js",
+          "line": 96,
+          "reproduction": "With the actual installLanguage scanner, English-start aria-label Connection status notifications switches to Japanese briefly but returns to English on the next scan.",
+          "requestedFix": "Create attributes with Japanese source text or explicitly assign translation ownership; test actual scanner re-entry and preserve scope/teardown guards."
+        }
+      ]
     }
   ],
-  "warning": "This records review disposition, not proof of publication. Read current remote state before execution."
+  "warning": "All20 now reviewed. This is review disposition, not proof of publication. Read current remote state."
 }

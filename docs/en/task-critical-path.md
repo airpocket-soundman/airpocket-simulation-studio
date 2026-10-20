@@ -12,7 +12,7 @@ As of 2026-10-19, there are171 tasks,133 released and38 unfinished. Classificati
 
 ## 2026-10-21: independent OpenCode PR review
 
-Eighteen exact PR heads were reviewed: eleven accepted for integration, seven requiring changes. Two newest PRs remain untouched as potentially in progress. Integration resolves shared UI conflicts and passes129 targeted tests plus five contract declarations. Combined full CI, normal merge and publication verification remain distinct stages. See [review reproductions](../evidence/2026-10-21-opencode-pr-review.json) and [next twenty work orders](../opencode-work-orders-2026-10-21/README.md). Preserve171 tasks,133 released,38 unfinished; parent acceptance is not closed and unmerged physics/connectivity is not advertised.
+All twenty exact PR heads were reviewed after user clarification: eleven accepted for integration, nine requiring changes. Integration resolves shared UI conflicts and passes129 targeted tests plus five contract declarations. Combined full CI, normal merge and publication verification remain distinct stages. See [review reproductions](../evidence/2026-10-21-opencode-pr-review.json) and [next twenty work orders](../opencode-work-orders-2026-10-21/README.md). Preserve171 tasks,133 released,38 unfinished; parent acceptance is not closed and unmerged physics/connectivity is not advertised.
 
 ## Dependencies and current batch
 

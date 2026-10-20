@@ -2,7 +2,7 @@
 
 ## 開始・読む順
 
-1. [00-COMMON.md](00-COMMON.md)、特に「元PRを修正する7件の特別手順」を読む。
+1. [00-COMMON.md](00-COMMON.md)、特に「元PRを修正する9件の特別手順」を読む。
 2. レビュー対象 head は `bf0cc946ab99f4c09fce413ce876a7a88ca69bdb`。実行時 `gh pr view 143 --json headRefName,headRefOid,state` と fetch で再確認する。変化していたら修正済みか再評価し、古い差分を上書きしない。
 3. 未mergeなら取得した最新元 head から自分の `codex/opencode-repair-38` / `D:/github/airpocket-soundman/studio-opencode-repair-38` を新設。owner worktree は読取のみ。primary/thermal-compare/UI2/他PRの編集は禁止。
 4. 反例 test→失敗確認→最小修正→対象試験。無限ループの反例は子プロセスを timeout で隔離する。既にmerge済みなら最新main起点の修正PRとする。

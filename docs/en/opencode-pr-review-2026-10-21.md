@@ -4,15 +4,15 @@
 
 [Exact reviewed heads and reproductions](../evidence/2026-10-21-opencode-pr-review.json) / [Twenty next work orders](../opencode-work-orders-2026-10-21/README.md)
 
-Eighteen exact PR heads were independently reviewed: eleven accepted for integration and seven requiring changes. PRs144 and145 remain untouched as potentially in progress. Passing original PR CI is distinguished from code correctness.
+All twenty PRs were reviewed after the user confirmed readiness: eleven accepted for integration and nine requiring changes. Passing original PR CI is distinct from code correctness.
 
 ## Eleven integration candidates
 
-PRs126,127,128,129,130,132,135,136,137,138 and142. Exact heads are recorded in the JSON. These are bounded increments, not completed parent epics. Rendering stubs are not evidence of real-Chrome pixel output.
+#126, #127, #128, #129, #130, #132, #135, #136, #137, #138, #142。
 
-Conflicts among126/132/137 preserve required-pointer actions, JSON Pointer precedence and the common analysis-options reader.129 integrated targeted tests and five type declarations pass. Final combined CI, normal protected merge and publication verification remain separate gates.
+Shared UI conflicts preserve required-pointer correction, JSON Pointer precedence and common options.129 integrated targeted tests and five type declarations pass. The unchanged accepted code also passed full CI at a366:1641 total,1638 passed,3 skipped. Final updated-head CI and normal merge/publication remain required.
 
-## Seven changes required
+## Nine changes required
 
 | PR | Location | Reproduction | Work order |
 |---|---|---|---|
@@ -23,12 +23,14 @@ Conflicts among126/132/137 preserve required-pointer actions, JSON Pointer prece
 | [#140](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/140) | `src/planar-heat-transfer.js:76` | Finite 1e6 mm edges and 1e308 W/m2 flux overflow into sourceW Infinity and target/balance NaN returned as success. | [30](../opencode-work-orders-2026-10-21/30-COUPLE3.md) |
 | [#141](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/141) | `src/ui/spherical-region-ui.js:63` | English-generated dynamic status stays English after switching to Japanese. | [37](../opencode-work-orders-2026-10-21/37-REG2.md) |
 | [#143](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/143) | `src/unilateral-contact-reference.js:54` | Tolerance 1e-30 and maxIterations 1e20 permit stagnation at residual 8.5265e-14 without bounded termination. | [38](../opencode-work-orders-2026-10-21/38-CONTACT1.md) |
+| [#144](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/144) | `src/curved-pressure-transfer.js:48` | Finite 1e6 mm triangle edges and pressure real1e308 Pa return resultant -Infinity and NaN moment. A 10 mm triangle with finite uz1e308 m returns volume Infinity although expected5e303 m3 is finite, and virtual-work relativeError NaN. | [39](../opencode-work-orders-2026-10-21/39-COUPLE4B.md) |
+| [#145](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/145) | `src/ui/agent-connection-status-ui.js:96` | With the actual installLanguage scanner, English-start aria-label Connection status notifications switches to Japanese briefly but returns to English on the next scan. | [40](../opencode-work-orders-2026-10-21/40-AGENTCHAT1.md) |
 
-Recheck differences and regression reproductions after a PR head changes. Do not include excluded heads in the integration candidate.
+Recheck changed heads. Excluded commits are not included. Twenty next work orders comprise nine repairs and eleven next steps.
 
 ## Verification limits
 
-- Reviewers did not establish new general physical accuracy or real/public browser verification.
-- One ACP test initially hit a three-second timeout and passed alone; this is not a stability fix.
-- One local P3 symlink test was skipped due to permissions; CI is distinct.
-- Preserve the five original user files, each OpenCode workspace and the two potentially unfinished PRs.
+- Bounded prototypes and rendering stubs do not establish real browser or general physical accuracy. Parents remain incomplete.
+- One ACP focused timeout passed alone; it is not a stability fix. A local P3 symlink test was skipped for permissions.
+- Initial integration CI failed only because this new review document lacked its English counterpart. Fixed with reciprocal links; the next full CI succeeded.
+- Preserve original user files and other owners workspaces.

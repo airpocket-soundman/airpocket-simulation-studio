@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-20T23:04:44.905982+00:00",
+  "updatedAt": "2026-10-20T23:24:20.547035+00:00",
   "release": {
     "version": "v0.44",
     "date": "2026-10-21",
     "testCount": 1594,
-    "description": "OpenCodeの18 PRを独立レビューし、11件を統合候補へ、7件を修正待ちに分離。最新2件は制作中の可能性があるため保留。親タスク完了の昇格なし。1594件はPR125の確定baselineで、統合版の最終CIは別確認。",
-    "descriptionEn": "Independently reviewed 18 OpenCode PRs: 11 accepted for integration and 7 require changes; 2 newest PRs held as possibly in progress. Parent tasks are not promoted to completion.1594 is the PR125 baseline; final combined CI is checked separately."
+    "description": "OpenCodeの20 PRを独立レビュー。11件を統合候補、9件を修正待ちに分離し、修正9件＋次段階11件の指示を作成。親タスク完了の昇格なし。1594件はPR125のbaseline。統合コードa366で1641件中1638成功・3skip・失敗0、レビュー範囲更新後headの最終CIは別確認。",
+    "descriptionEn": "Reviewed all20 OpenCode PRs:11 accepted for integration,9 require changes. Added9 repair and11 next-step work orders without completing parents.1594 is PR125 baseline; combined code at a366 passed1638 of1641 tests with3 skips and0 failures. Final updated-head CI is checked separately."
   },
   "tasks": [
     {
@@ -914,7 +914,10 @@
       "detail": "曲面間の保守的な場の転送、荷重に対する周波数応答・減衰、音圧を構造へ戻す作用を実装し、連成参照解で検証。",
       "detailEn": "Implement conservative curved-interface transfer, forced frequency response/damping and acoustic pressure feedback, and verify coupled references.",
       "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
-      "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance."
+      "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance.",
+      "lastUpdate": "2026-10-21: 利用者確認後にPR #144も独立レビューし、修正が必要な問題を確認。今回のマージから除外し、再現条件と修正指示をレビュー記録および次作業指示へ記載。既存公開機能と親の未完状態を維持します。",
+      "lastUpdateEn": "2026-10-21: User confirmed PR #144 was ready for review; independent review found a required fix. Excluded from this merge batch. Reproduction and next work order are recorded; existing released behavior and unfinished parent status are preserved.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
     },
     {
       "id": "CFDPORT1",
@@ -2690,7 +2693,10 @@
       "detail": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。",
       "detailEn": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started.",
       "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
-      "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md."
+      "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md.",
+      "lastUpdate": "2026-10-21: 利用者確認後にPR #145も独立レビューし、修正が必要な問題を確認。今回のマージから除外し、再現条件と修正指示をレビュー記録および次作業指示へ記載。既存公開機能と親の未完状態を維持します。",
+      "lastUpdateEn": "2026-10-21: User confirmed PR #145 was ready for review; independent review found a required fix. Excluded from this merge batch. Reproduction and next work order are recorded; existing released behavior and unfinished parent status are preserved.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
     },
     {
       "id": "RESULTCURVE1",
