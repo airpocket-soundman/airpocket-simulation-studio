@@ -759,7 +759,7 @@ GUIの動画種類はGIF選択後も維持し、時間範囲/表示倍率は同�
 
 GUIの`#analysis-preflight`で対象（解析/メッシュのみ）を選び、`#preflight-run`で現在の登録入力を検査します。`#preflight-status`と`#preflight-diagnostics`は共有`api.preflight`のmode/allowed/provisional、診断code・severity・pointer・提案、requiredPointers/remainingChecksを表示します。ジョブを開始せず、物性・荷重・根拠を変更しません。未登録の物性draftは検査対象外である旨を表示します。
 
-入力/option/操作種別/言語が変わると古い報告を無効化し、非同期応答もsnapshot不一致なら破棄します。表示の入力版はGUIローカルrevisionと入力/options snapshotの照合であり、MCPのSHA入力revisionとは別です。既知の入力pointerには「入力箇所へ」を表示し、閉じた欄を開いてkeyboard focusへ移動。対応先がない/無効な場合はpointerを残し、自動補完や別領域への置換をしません。計算中は再検査を拒否します。
+入力/option/操作種別/言語が変わると古い報告を無効化し、非同期応答もsnapshot不一致なら破棄します。表示の入力版はGUIローカルrevisionと入力/options snapshotの照合であり、MCPのSHA入力revisionとは別です。既知の入力pointerには「入力箇所へ」を表示し、閉じた欄を開いてkeyboard focusへ移動。対応先がない/無効な場合はpointerを残し、自動補完や別領域への置換をしません。診断行とrequiredPointers行は同じ導線を使い、値や単位を変換しません。計算中は再検査を拒否します。
 
 `allowed:true`を物理精度・メッシュ・収束の合格と扱わず、`completePreflight:false`と後続確認を保持します。legacyは根拠全体未点検、exploratoryは明示仮定があれば暫定、quantitativeの根拠確認規則は従来どおりです。新たな物理基準や根拠の自動確認は追加しません。
 
