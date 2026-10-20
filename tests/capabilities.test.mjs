@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
+import {getCapabilities,diagnoseExecution,toJsonPointer} from '../src/capabilities.js';
 import {createStudioApi} from '../src/studio-api.js';
 import {callStudioTool} from '../scripts/studio-mcp.mjs';
 test('discovery separates host support, candidates and unavailable live MCP',async()=>{
@@ -24,4 +24,18 @@ test('diagnostics distinguish valid engine choice from unsupported study and mat
  assert.equal(diagnoseExecution({study:{kind:'thermal'}},{method:'mfem-wasm'}).diagnostics[0].code,'ENGINE_STUDY_UNSUPPORTED');
  assert.equal(diagnoseExecution(p,{method:'webgpu-pcg'},'node').diagnostics[0].code,'EXECUTION_METHOD_UNSUPPORTED');
  assert.equal(diagnoseExecution({study:{kind:'fluidDomain'}}).diagnostics[0].code,'DOMAIN_MESH_ONLY');
+});
+test('known diagnostics add an escaped JSON pointer while unknown targets stay pointer-free without changing the legacy shape',()=>{
+ const method=diagnoseExecution({study:{kind:'structural'}},{method:'webgpu-pcg'},'node').diagnostics[0];
+ assert.equal(method.code,'EXECUTION_METHOD_UNSUPPORTED');assert.equal(method.target,'options.method');assert.equal(method.pointer,'/options/method');assert.equal(method.severity,'error');
+ const study=diagnoseExecution({study:{kind:'unknownStudy'}}).diagnostics[0];
+ assert.equal(study.code,'STUDY_UNSUPPORTED');assert.equal(study.target,'study.kind');assert.equal(study.pointer,'/study/kind');
+ const adaptive=diagnoseExecution({study:{kind:'thermal'}},{adaptive:true}).diagnostics.find(issue=>issue.code==='ADAPTIVE_STUDY_UNSUPPORTED');
+ assert.equal(adaptive.target,'options.adaptive');assert.equal(adaptive.pointer,'/options/adaptive');
+ const material=diagnoseExecution({study:{kind:'structural'},materialProperties:{orthotropic:{}}},{method:'mfem-wasm'}).diagnostics[0];
+ assert.equal(material.code,'MATERIAL_COMBINATION_UNSUPPORTED');assert.equal(material.target,'materialProperties.orthotropic');assert.equal(material.pointer,'/materialProperties/orthotropic');
+ for(const issue of [method,study,adaptive,material])assert.deepEqual(Object.keys(issue).filter(key=>key!=='pointer'),['code','severity','target','message','evidence','suggestions','requiresUserIntent']);
+ const combination=diagnoseExecution({study:{kind:'structural',modalAnalysis:{}},materialProperties:{hyperelastic:{}}}).diagnostics.find(issue=>issue.code==='MODAL_COMBINATION_UNSUPPORTED');
+ assert.equal(combination.target,'execution.combination');assert.equal(Object.hasOwn(combination,'pointer'),false);
+ assert.equal(toJsonPointer('a/b~c'),'/a~1b~0c');assert.equal(toJsonPointer('options','method'),'/options/method');
 });
