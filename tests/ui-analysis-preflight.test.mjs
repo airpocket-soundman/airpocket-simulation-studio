@@ -1,4 +1,5 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';
+const main=await readFile(new URL('../src/main.js',import.meta.url),'utf8');
 function element(tag){return {tagName:tag.toUpperCase(),children:[],style:{},attributes:{},append(...v){for(const c of v){this.children.push(c);c.parentElement=this;}},replaceChildren(...v){this.children=[];this.append(...v);},setAttribute(k,v){this.attributes[k]=v;},focus(){this.focused=true;}};}
 const all=e=>[e,...e.children.flatMap(all)],find=(e,id)=>all(e).find(c=>c.id===id);
 const report={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',message:'Mesh size must be positive',suggestions:['Set intended size']},{code:'INPUT_REQUIRED',target:'/unmapped/input',message:'Evidence missing'}],requiredPointers:['/materialProperties/youngModulus'],remainingChecks:['Mesh quality']};
@@ -21,3 +22,12 @@ test('stale required-pointer correction is discarded instead of moving focus',as
 test('disabled required target keeps the pointer and reports failure without focus',async()=>{const size=element('input');size.value='4';size.disabled=true;const reportOverride={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:[],requiredPointers:['/options/size'],remainingChecks:[]};const f=setupControls({'mesh-size':size},reportOverride);await f.ui.check();const button=all(f.host).find(e=>e.textContent==='Go to input');assert.ok(button);button.onclick();assert.equal(size.focused,undefined);assert.equal(size.value,'4');assert.match(find(f.host,'preflight-status').textContent,/Input is unavailable/);});
 
 test('diagnostic and required buttons for the same pointer each focus once',async()=>{const size=element('input');size.value='4';const reportOverride={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',message:'Mesh size must be positive'}],requiredPointers:['/options/size'],remainingChecks:[]};const f=setupControls({'mesh-size':size},reportOverride);await f.ui.check();const buttons=all(f.host).filter(e=>e.textContent==='Go to input');assert.equal(buttons.length,2);buttons[0].onclick();assert.equal(size.focused,true);size.focused=false;buttons[1].onclick();assert.equal(size.focused,true);assert.equal(size.value,'4');});
+
+test('preflight and solve read the same single delegated analysis options reader',()=>{
+ assert.ok(main.includes("import {analysisOptionsFromValues} from './ui/analysis-options.js';"));
+ assert.equal(main.split('function currentAnalysisOptions()').length-1,1,'exactly one shared reader must exist');
+ assert.ok(main.includes('function currentAnalysisOptions(){return analysisOptionsFromValues({'),'shared reader must delegate to the pure converter');
+ assert.ok(main.includes("const options=currentAnalysisOptions();const output=await(guiAnalysis.run({operation:solve?'solve':'mesh',options}));"));
+ assert.ok(main.includes("preflight:operation=>api.preflight(currentAnalysisOptions(),{target:'browser',operation})"));
+ assert.ok(main.includes('snapshot:()=>({revision:projectRevision,project:api.exportProject(),options:currentAnalysisOptions()})'));
+});
