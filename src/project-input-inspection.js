@@ -5,6 +5,8 @@ const fail=(code,message)=>Object.assign(new TypeError(message),{code});
 const argument=message=>fail('INPUT_INSPECTION_ARGUMENT_INVALID',message);
 const escape=v=>v.replace(/~/g,'~0').replace(/\//g,'~1');
 const materialUnits={youngModulus:'Pa',poissonRatio:'1',density:'kg/m3',strength:'Pa',conductivity:'W/(m*K)',specificHeat:'J/(kg*K)',expansion:'1/K',temperatureMin:'degC',temperatureMax:'degC'};
+const sphericalDimensionUnits={center:'mm',radius:'mm',tolerance:'mm',axis:'1',reference:'1',latitudeMin:'deg',latitudeMax:'deg',startDegrees:'deg',sweepDegrees:'deg'};
+const sphericalDimensionUnit=key=>Object.hasOwn(sphericalDimensionUnits,key)?sphericalDimensionUnits[key]:undefined;
 const studyUnits={thermalSnapshotCount:'count',thermalSnapshotBudgetBytes:'byte',acousticSnapshotCount:'count',acousticSnapshotBudgetBytes:'byte',temperature:'degC',referenceTemperature:'degC',materialTemperature:'degC',gravity:'m/s2',initialTemperature:'degC',timeStep:'s',volumetricSource:'W/m3',frequency:'Hz',soundSpeed:'m/s',airDensity:'kg/m3',lossFactor:'1',referencePressurePa:'Pa',acousticDuration:'s',pulseWidth:'s',acousticTimeStep:'s',dampingRate:'1/s',directivityDistanceMm:'mm',freeStreamVelocity:'m/s',referenceLengthMm:'mm',pressureDropPa:'Pa',dynamicViscosity:'Pa*s',fluidDensity:'kg/m3',fluidSoundSpeed:'m/s'};
 function tokens(pointer){
  if(typeof pointer!=='string'||pointer.length>2048||pointer!==''&&!pointer.startsWith('/')||/~(?:[^01]|$)/.test(pointer))throw argument('Use an absolute JSON Pointer with ~0/~1 escapes (maximum 2048 characters)');
@@ -30,9 +32,10 @@ function unitFor(path,project,allowProvenance=true){
  }
  if(root==='conditions'){
   const c=project.conditions?.[key];if(third==='value')return {fixed:'mm',displacement:'mm',force:'N',pressure:'Pa',normalTraction:'Pa',temperature:'degC',heatFlux:'W/m2',heatPower:'W',convection:'W/(m2*K)',radiation:'1',thermalContact:'W/(m2*K)',acousticPressure:'Pa',acousticImpedance:'Pa*s/m'}[c?.type];
-  if(third==='sphericalRegion'){if(['center','radius'].includes(fourth))return 'mm';if(['axis','reference'].includes(fourth))return '1';if(['latitudeMin','latitudeMax','startDegrees','sweepDegrees'].includes(fourth))return 'deg';}if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
+  if(third==='sphericalRegion')return sphericalDimensionUnit(fourth);if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
  }
  if(root==='meshes'&&third==='positions')return 'mm';
+ if(root==='sphericalRegion')return sphericalDimensionUnit(key);
  const indices=parts=>parts.every(part=>/^(0|[1-9]\d*)$/.test(part));
  if(root==='sourceModel'&&['bounds','boxes','center','radius','outerRadius','innerRadius','length','seedPoint'].includes(key)&&indices(path.slice(2)))return 'mm';
  if(root==='sourceModel'&&key==='openingCaps'&&/^(0|[1-9]\d*)$/.test(third)&&['point','normal'].includes(fourth)&&indices(path.slice(4)))return fourth==='point'?'mm':'1';
