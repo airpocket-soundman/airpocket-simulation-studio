@@ -79,6 +79,59 @@ test('a closed shell returns zero candidates and is distinguished from a shape w
  assert.equal(broken.closedShell,false);assert.ok(broken.rejected.length>0);
 });
 
+test('duplicate faces over the same vertex triple never form a closed shell',()=>{
+ const same={nodes:[0,0,0, 1,0,0, 0,1,0],triangles:[[0,1,2],[0,1,2]],toleranceMm:1e-6},before=structuredClone(same);
+ const sameResult=extractOpeningLoopCandidates(same);
+ assert.deepEqual(same,before);
+ assert.equal(sameResult.boundaryEdgeCount,0);
+ assert.equal(sameResult.closedShell,false);
+ assert.deepEqual(sameResult.candidates,[]);
+ assert.deepEqual(sameResult.rejected.map(r=>r.code),['OPENING_LOOP_DUPLICATE_FACE']);
+ assert.deepEqual(sameResult.rejected[0].nodeIndices,[0,1,2]);
+
+ const flipped=extractOpeningLoopCandidates({nodes:[0,0,0, 1,0,0, 0,1,0],triangles:[[0,1,2],[0,2,1]],toleranceMm:1e-6});
+ assert.equal(flipped.boundaryEdgeCount,0);assert.equal(flipped.closedShell,false);
+ assert.deepEqual(flipped.candidates,[]);
+ assert.deepEqual(flipped.rejected.map(r=>r.code),['OPENING_LOOP_DUPLICATE_FACE_REVERSED']);
+});
+
+test('a same-direction shared edge and a collinear triangle are refused before any loop',()=>{
+ const sameDir=extractOpeningLoopCandidates({nodes:[0,0,0, 1,0,0, 0,1,0, 0,0,1],triangles:[[0,1,2],[0,1,3]],toleranceMm:1e-6});
+ assert.deepEqual(sameDir.candidates,[]);
+ assert.equal(sameDir.closedShell,false);
+ assert.ok(sameDir.rejected.some(r=>r.code==='OPENING_LOOP_EDGE_DIRECTION_CONFLICT'));
+ assert.deepEqual(sameDir.rejected.find(r=>r.code==='OPENING_LOOP_EDGE_DIRECTION_CONFLICT').nodeIndices,[0,1]);
+ assert.ok(sameDir.rejected.some(r=>r.code==='OPENING_LOOP_UNHEALTHY_COMPONENT'));
+
+ const collinear=extractOpeningLoopCandidates({nodes:[0,0,0, 1,0,0, 2,0,0],triangles:[[0,1,2]],toleranceMm:1e-6});
+ assert.deepEqual(collinear.candidates,[]);
+ assert.equal(collinear.closedShell,false);
+ assert.equal(collinear.rejected[0].code,'OPENING_LOOP_DEGENERATE_TRIANGLE');
+ assert.ok(collinear.rejected.some(r=>r.code==='OPENING_LOOP_UNHEALTHY_COMPONENT'));
+});
+
+test('a planar non-convex 5-point opening loop is refused instead of returned as a candidate',()=>{
+ const nodes=[0,0,0, 2,0,0, 1,1,0, 2,2,0, 0,2,0, 1,1,1];
+ const triangles=[[5,0,1],[5,1,2],[5,2,3],[5,3,4],[5,4,0]];
+ const input={nodes,triangles,toleranceMm:1e-6},before=structuredClone(input);
+ const result=extractOpeningLoopCandidates(input);
+ assert.deepEqual(input,before);
+ assert.equal(result.boundaryEdgeCount,5);
+ assert.equal(result.closedShell,false);
+ assert.deepEqual(result.candidates,[]);
+ assert.deepEqual(result.rejected.map(r=>r.code),['OPENING_LOOP_NONCONVEX']);
+ assert.deepEqual(result.rejected[0].nodeIndices,[0,1,2,3,4]);
+});
+
+test('a collinear-overlap boundary polygon is refused instead of returned as a candidate',()=>{
+ const nodes=[0,0,0, 2,0,0, 1,0,0, 1,1,0, 1,0.5,1];
+ const triangles=[[4,0,1],[4,1,2],[4,2,3],[4,3,0]];
+ const result=extractOpeningLoopCandidates({nodes,triangles,toleranceMm:1e-6});
+ assert.deepEqual(result.candidates,[]);
+ assert.deepEqual(result.rejected.map(r=>r.code),['OPENING_LOOP_NONCONVEX']);
+ assert.deepEqual(result.rejected[0].nodeIndices,[0,1,2,3]);
+});
+
 test('malformed input, non-finite coordinates, repeated vertices and non-positive tolerance are rejected',()=>{
  const bad={nodes:[0,0,0, 1,0,0, 0,1,0],triangles:[[0,1,2]],toleranceMm:1e-6};
  assert.throws(()=>extractOpeningLoopCandidates({...bad,nodes:[0,0,0,1,0,0,0,NaN]}));
