@@ -259,30 +259,91 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
       'Measurements, not support limits or guarantees.',
       'Times are host-observed through connector polling (jobEvents/jobStatus), not in-page performance.now(); they include connector round trips and poll granularity.',
       'cold = first job of the case in the loaded page session; warm = later jobs in the same page (no reload).',
-      'GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged.'
+      'GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged.',
+      'Merged memory is reported per series (uasm = measureUserAgentSpecificMemory, jsHeap = performance.memory.usedJSHeapSize). The series cover different scopes and are never summed; neither is total process or peak RAM.'
     ]
   };
 }
 
 // --- memory probe merge -----------------------------------------------------------------------------------
-export function mergeMemory(report, probe) {
+// A probe sample may carry two measurements that cover different scopes:
+//   uasmBytes       performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent)
+//   usedJSHeapSize  performance.memory.usedJSHeapSize (non-standard, coarse; JS heap only)
+// They are merged as separate series. A value is never substituted per sample from one series to the other, the
+// two series are never summed, and no series peak is reported as total process/peak RAM. Only finite, non-negative
+// byte values are measurements; NaN/Infinity/-1/null mean "not measured" and are never coerced to 0.
+export const MEMORY_SERIES = [
+  {key: 'uasm', name: 'measureUserAgentSpecificMemory', field: 'uasmBytes',
+    source: 'performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)'},
+  {key: 'jsHeap', name: 'performance.memory.usedJSHeapSize', field: 'usedJSHeapSize',
+    source: 'performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)'}
+];
+export const MEMORY_SETTLE_MS = 3000;
+
+const byteValue = v => (typeof v === 'number' && Number.isFinite(v) && v >= 0) ? v : null;
+
+function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs}) {
+  const valueOf = s => byteValue(s?.[def.field]);
+  const inWindow = inside.filter(s => valueOf(s) !== null);
+  const peak = inWindow.length ? Math.max(...inWindow.map(valueOf)) : null;
+  const beforeWindow = all.filter(s => s.t < startEpochMs && valueOf(s) !== null);
+  const baseline = beforeWindow.length ? valueOf(beforeWindow.at(-1)) : null;
+  const afterSettleMs = endEpochMs + settleMs;
+  const afterCancelMs = Number.isFinite(cancelSettledEpochMs) ? cancelSettledEpochMs + settleMs : null;
+  const afterSettle = all.filter(s => s.t >= afterSettleMs && valueOf(s) !== null)[0] ?? null;
+  const afterCancel = afterCancelMs === null ? null : (all.filter(s => s.t >= afterCancelMs && valueOf(s) !== null)[0] ?? null);
+  const unavailable = {};
+  if (peak === null) unavailable.peakBytesSampled = 'no ' + def.name + ' sample inside the case window';
+  if (baseline === null) unavailable.baselineBytes = 'no ' + def.name + ' sample before the case window';
+  if (afterCancel === null) unavailable.afterCancelBytes = afterCancelMs === null ? 'case has no cancel-settled timestamp' : 'no ' + def.name + ' sample at or after cancelSettledEpochMs + ' + settleMs + ' ms';
+  if (afterSettle === null) unavailable.afterSettleBytes = 'no ' + def.name + ' sample at or after endEpochMs + ' + settleMs + ' ms';
+  return {
+    name: def.name, source: def.source, field: def.field,
+    available: peak !== null,
+    sampleCount: inWindow.length, intervalMs,
+    baselineBytes: baseline,
+    peakBytesSampled: peak,
+    afterCancelBytes: afterCancel === null ? null : valueOf(afterCancel),
+    afterSettleBytes: afterSettle === null ? null : valueOf(afterSettle),
+    unavailable
+  };
+}
+
+// Mutates `report` in place (the existing contract) and returns it. `probe` is read-only.
+export function mergeMemory(report, probe, {settleMs = MEMORY_SETTLE_MS} = {}) {
   if (!probe || !Array.isArray(probe.samples)) throw Error('Probe file has no samples array');
-  const val = s => s.uasmBytes ?? s.usedJSHeapSize ?? null;
-  const source = probe.samples.some(s => s.uasmBytes != null) ? 'measureUserAgentSpecificMemory' : 'performance.memory.usedJSHeapSize (coarse, non-standard)';
-  const samples = probe.samples.filter(s => Number.isFinite(s.t) && val(s) !== null).sort((a, b) => a.t - b.t);
-  const after = (t, settleMs = 3000) => samples.find(s => s.t >= t + settleMs);
+  const intervalMs = (typeof probe.intervalMs === 'number' && Number.isFinite(probe.intervalMs) && probe.intervalMs > 0) ? probe.intervalMs : null;
+  const all = probe.samples.filter(s => s && Number.isFinite(s.t)).sort((a, b) => a.t - b.t);
   for (const c of report.cases) {
     if (c.status !== 'ok' || !c.window) continue;
     const {startEpochMs, endEpochMs, cancelSettledEpochMs} = c.window;
-    const inside = samples.filter(s => s.t >= startEpochMs && s.t <= endEpochMs);
+    const inside = all.filter(s => s.t >= startEpochMs && s.t <= endEpochMs);
     if (!inside.length) { c.memory = null; c.memoryReason = 'no probe samples inside the case window (probe interval may exceed the case duration)'; continue; }
-    const before = [...samples].reverse().find(s => s.t < startEpochMs);
+    const series = {};
+    for (const def of MEMORY_SERIES) series[def.key] = mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs});
+    const measured = MEMORY_SERIES.filter(d => series[d.key].available);
+    if (!measured.length) {
+      c.memory = null;
+      c.memoryReason = 'probe samples inside the case window carry no finite non-negative byte value for any series (' + MEMORY_SERIES.map(d => d.key).join(', ') + ')';
+      continue;
+    }
+    // Flat fields are an explicit single-series view (`primarySeries`) kept for compatibility; they never combine series.
+    const primary = measured[0];
     c.memory = {
-      available: true, source, baselineBytes: before ? val(before) : null, peakBytesSampled: Math.max(...inside.map(val)),
-      afterCancelBytes: cancelSettledEpochMs ? (after(cancelSettledEpochMs) ? val(after(cancelSettledEpochMs)) : null) : null,
-      afterSettleBytes: after(endEpochMs) ? val(after(endEpochMs)) : null,
-      samples: {intervalMs: probe.intervalMs ?? null, count: inside.length},
-      note: 'peak is the max of periodic samples (approximation); the probe itself uses memory'
+      available: true,
+      primarySeries: primary.key,
+      source: series[primary.key].source,
+      baselineBytes: series[primary.key].baselineBytes,
+      peakBytesSampled: series[primary.key].peakBytesSampled,
+      afterCancelBytes: series[primary.key].afterCancelBytes,
+      afterSettleBytes: series[primary.key].afterSettleBytes,
+      samples: {intervalMs, count: series[primary.key].sampleCount},
+      intervalMs,
+      sampleCount: inside.length,
+      order: MEMORY_SERIES.map(d => d.key),
+      measuredSeries: measured.map(d => d.key),
+      series,
+      note: 'peakBytesSampled is the maximum of periodic samples (an approximation) computed per series from that series\u2019 own samples only. Do not add the series together and do not report either series as total process or peak RAM. The probe itself uses memory.'
     };
     delete c.memoryReason;
   }
@@ -350,7 +411,12 @@ async function main() {
     const file = path.resolve(o.out);
     const report = mergeMemory(JSON.parse(readFileSync(file, 'utf8')), JSON.parse(readFileSync(path.resolve(o.mergeMemory), 'utf8')));
     writeReport(report, o.out);
-    for (const c of report.cases) console.log(c.id.padEnd(20), c.memory ? `peak ${c.memory.peakBytesSampled} B (${c.memory.source})` : 'memory: ' + c.memoryReason);
+    for (const c of report.cases) {
+      if (!c.memory) { console.log(c.id.padEnd(20), 'memory: ' + c.memoryReason); continue; }
+      // List every series separately; never print a summed or combined peak as total RAM.
+      const parts = c.memory.order.map(k => { const s = c.memory.series[k]; return s.available ? `${k} sampled-max ${s.peakBytesSampled} B` : `${k} unavailable`; });
+      console.log(c.id.padEnd(20), 'memory (per series, not a total): ' + parts.join('; '));
+    }
     return 0;
   }
   const ids = o.cases.split(',');
