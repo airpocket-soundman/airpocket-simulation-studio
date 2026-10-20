@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "opencode-work-order-evidence",
+  "workOrder": "07-PERF1",
+  "targetId": "PERF1",
+  "recordedAt": "2026-10-19",
+  "base": {
+    "branch": "origin/main",
+    "sha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "worktreeBranch": "codex/opencode-perf1"
+  },
+  "summary": "scripts/perf-browser.mjs の mergeMemory が sample 単位で uasmBytes ?? usedJSHeapSize と fallback し、異なる計測範囲(UASM と JS heap)を1つの peak に混在させていた問題を、系列分離に修正した。報告の解釈と検証のみの変更で、solver/物理/CI timeout は変更していない。",
+  "changeScope": [
+    "scripts/perf-browser.mjs: mergeMemory を系列(uasm / jsHeap)分離に変更。byte 値は finite かつ非負のみ採用。peak/baseline/afterCancel/afterSettle を同一系列のサンプルからのみ算出。片系列のみでも計測名を保持し他方は available:false + 理由。series を合算しない。フラット互換項目は primarySeries 1系列のみを指す。--merge-memory のCLI表示も系列単位に変更し総RAM表示をしない。runBrowserPerf の notes に系列非合算を追記。",
+    "tests/perf-browser.test.mjs: 混在/欠測/single-series/NaN・Infinity・負値/window・cancel後欠測/受入のための系列分離テストを追加・更新。",
+    "docs/perf-browser-plan.md, docs/en/perf-browser-plan.md: メモリ系列のスキーマと扱いを追記。",
+    "docs/performance-measurement.md, docs/en/performance-measurement.md: ブラウザ memory 系列の説明を追記。",
+    "docs/evidence/2026-10-19-opencode-perf1.json: 本証拠ファイル(新規)。"
+  ],
+  "notChanged": [
+    "solver / mesh 限界 / physical 基準 / CI timeout",
+    "src/progress.json",
+    "REPORT_SCHEMA_VERSION (=1 を維持。系列分離は加算的変更)",
+    "src/ 配下のモジュール(新規モジュールなし)"
+  ],
+  "migrationNote": "memory ブロックは系列分離のため形状が変わる。既存のフラット項目(available/source/baselineBytes/peakBytesSampled/afterCancelBytes/afterSettleBytes/samples)は primarySeries が指す単一系列の値として残し、series に uasm/jsHeap を追加した。schemaVersion は 1 のまま変更していない(勝手な version 上書きをしない)。既存の in-repo consumer は scripts/perf-browser.mjs の --merge-memory 表示と tests/perf-browser.test.mjs のみ。",
+  "commands": [
+    {
+      "cmd": "npm ci",
+      "result": "added 22 packages; 0 vulnerabilities"
+    },
+    {
+      "cmd": "node scripts/build-kernel.mjs",
+      "result": "public/fem-kernel.wasm を生成 (229 bytes, gitignore 対象)。perf-measure.test.mjs のビルド成果物不足を解消するためローカル生成。native 取得はしていない。"
+    },
+    {
+      "cmd": "node --test tests/perf-browser.test.mjs",
+      "result": "pass 12 / fail 0 / skip 0 (duration_ms 1652.98)"
+    },
+    {
+      "cmd": "node --test tests/perf-browser.test.mjs tests/perf-measure.test.mjs",
+      "result": "pass 16 / fail 0 / skip 0 / cancelled 0 (duration_ms 13342.62)"
+    },
+    {
+      "cmd": "node scripts/check-contract-types.mjs",
+      "result": "Contract declarations type-check (5 declaration files) exit=0"
+    },
+    {
+      "cmd": "git diff --check",
+      "result": "exit=0 (whitespace エラーなし)"
+    }
+  ],
+  "fixture": {
+    "kind": "synthetic (合成) — 測定値ではない。数値付き受入の検証用に tests/perf-browser.test.mjs に埋め込んだ。",
+    "window": {
+      "startEpochMs": 100000,
+      "endEpochMs": 110000,
+      "cancelSettledEpochMs": 108000
+    },
+    "samples": [
+      {"t": 95000, "uasmBytes": 900, "usedJSHeapSize": 100},
+      {"t": 100000, "uasmBytes": 1000, "usedJSHeapSize": 200},
+      {"t": 101000, "uasmBytes": null, "usedJSHeapSize": 250},
+      {"t": 102000, "uasmBytes": 1200, "usedJSHeapSize": 300},
+      {"t": 103000, "uasmBytes": 1100, "usedJSHeapSize": null},
+      {"t": 109000, "uasmBytes": 800, "usedJSHeapSize": 150},
+      {"t": 111500, "uasmBytes": 1050, "usedJSHeapSize": 220},
+      {"t": 114000, "uasmBytes": 950, "usedJSHeapSize": 190}
+    ],
+    "expected": {
+      "series.uasm.peakBytesSampled_bytes": 1200,
+      "series.jsHeap.peakBytesSampled_bytes": 300,
+      "series.uasm.baselineBytes_bytes": 900,
+      "series.jsHeap.baselineBytes_bytes": 100,
+      "series.uasm.afterCancelBytes_bytes": 1050,
+      "series.jsHeap.afterCancelBytes_bytes": 220,
+      "series.uasm.afterSettleBytes_bytes": 950,
+      "series.jsHeap.afterSettleBytes_bytes": 190,
+      "series.uasm.sampleCount": 4,
+      "series.jsHeap.sampleCount": 4,
+      "noTotal": "1200+300=1500 は report のどの項目にも現れない (memory.totalBytes/totalPeakBytes は undefined)"
+    }
+  },
+  "formulas": {
+    "peakBytesSampled": "max(その系列の field が finite かつ >=0 の case window 内サンプル)。単位 bytes。intervalMs 間隔の周期的サンプル最大値による近似であり真の瞬間 peak ではない。",
+    "baselineBytes": "window 開始より前の最後の、その系列が finite かつ >=0 のサンプル。単位 bytes。",
+    "afterCancelBytes": "cancelSettledEpochMs + 3000 ms 以降の最初の、その系列が finite かつ >=0 のサンプル。単位 bytes。",
+    "afterSettleBytes": "endEpochMs + 3000 ms 以降の最初の、その系列が finite かつ >=0 のサンプル。単位 bytes。",
+    "intervalMs": "probe.intervalMs (probe が正の有限値のとき)。fixture では 1000 ms。"
+  },
+  "series": {
+    "uasm": "performance.measureUserAgentSpecificMemory().bytes — cross-origin isolated のみ、意味論的エージェント全体",
+    "jsHeap": "performance.memory.usedJSHeapSize — 非標準・粗い・JS ヒープのみ"
+  },
+  "realChrome": {
+    "performed": false,
+    "reason": "このセッションにデスクトップブラウザが接続されていない (browser.tabs.list が browser.disconnected を返した)。perf-browser の実測は専用プロファイルで接続UIの対話的ペアリングを要し、自動では実行できない。",
+    "apiAvailabilityObserved": null,
+    "memoryValueMeasured": false,
+    "note": "実 Chrome の memory(UASM/JS heap)値は未測定。推測値を測定値として記録していない。dev server は起動確認のみ行い停止した (127.0.0.1:5173, node pid 18264 を Stop-Process)。"
+  },
+  "unverified": [
+    "実ブラウザでの uasm / jsHeap 実測(メモリ値そのもの)",
+    "実 Chrome での crossOriginIsolated と performance.measureUserAgentSpecificMemory の可否",
+    "他ブラウザ・実機差・peak RAM・対応上限",
+    "thermal 側の時間/取消(既存証拠どおり未完)"
+  ],
+  "secrets": "token・接続コード・環境変数・全ログは本ファイルに含めない。"
+}

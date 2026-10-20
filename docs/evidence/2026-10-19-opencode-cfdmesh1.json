@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-19",
+  "workOrder": "09-CFDMESH1",
+  "parentTask": "CFDMESH1",
+  "parentStatus": "queued",
+  "agentModel": "OpenCode / DeepSeek v4.1 Flash",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-cfdmesh1",
+  "workspace": "D:/github/airpocket-soundman/studio-opencode-cfdmesh1",
+  "scope": {
+    "added": [
+      "src/channel-layer-plan.js",
+      "tests/channel-layer-plan.test.mjs"
+    ],
+    "modified": [
+      "src/module-layers.json",
+      "docs/internal-fluid.md"
+    ],
+    "unchangedBehavior": [
+      "src/mesh-core.js",
+      "src/mesh-validity.js",
+      "src/internal-stokes-boundary.js",
+      "src/fluid-domain.js",
+      "src/progress.json"
+    ]
+  },
+  "outputKind": "coordinate-placement-plan",
+  "outputIsNotAMesh": true,
+  "notClaimed": [
+    "real Gmsh prism/tet mesh",
+    "wall face tag mapping to a mesh",
+    "flow solve or mass balance",
+    "y+ or wall shear stress",
+    "general 3D boundary-layer mesher"
+  ],
+  "units": {
+    "length": "mm",
+    "implicitConversion": "forbidden"
+  },
+  "contract": {
+    "inputs": ["gapMm", "firstHeightMm", "growthRatio", "layersPerWall", "maxLayers"],
+    "defaults": {"maxLayers": 512},
+    "formula": "h_i = firstHeightMm * growthRatio^i ; oneSideThicknessMm = sum(h_i)",
+    "returns": [
+      "layerHeightsMm",
+      "oneSideThicknessMm",
+      "centreBandMm {lowerMm,upperMm,widthMm}",
+      "coordinatesMm (strictly increasing, endpoints exactly 0 and gapMm)",
+      "totalLayerCount",
+      "walls[0,1] {wallId,positionMm,thicknessMm,heightsMm,coordinatesMm}",
+      "layers[] {wallId,index,heightMm,innerMm,outerMm,distanceFromLowerWallMm,distanceFromUpperWallMm}"
+    ]
+  },
+  "fixtures": [
+    {
+      "name": "reference-growth",
+      "source": "synthetic, from work order 09-CFDMESH1 numeric reference",
+      "inputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 3},
+      "unit": "mm",
+      "expected": {
+        "layerHeightsMm": [0.1, 0.2, 0.4],
+        "oneSideThicknessMm": 0.7,
+        "centreWidthMm": 8.6,
+        "coordinatesMm": [0, 0.1, 0.3, 0.7, 9.3, 9.7, 9.9, 10],
+        "totalLayerCount": 6
+      },
+      "observedAbsoluteErrorMm": "<= 1e-12",
+      "observedMirrorSymmetryErrorMm": "<= 1e-12"
+    },
+    {
+      "name": "uniform-growth",
+      "source": "synthetic, from work order 09-CFDMESH1 numeric reference",
+      "inputs": {"gapMm": 2, "firstHeightMm": 0.1, "growthRatio": 1, "layersPerWall": 3},
+      "unit": "mm",
+      "expected": {"oneSideThicknessMm": 0.3, "centreWidthMm": 1.4},
+      "observedAbsoluteErrorMm": "<= 1e-12",
+      "note": "coordinatesMm observed as [0,0.1,0.2,0.30000000000000004,1.7,1.8,1.9,2], within 1e-12 of the reference"
+    }
+  ],
+  "rejectionExamples": [
+    {"inputs": {"gapMm": 1, "firstHeightMm": 0.2, "growthRatio": 2, "layersPerWall": 2}, "reason": "one-side 0.6 mm over a 1 mm gap contacts/crosses"},
+    {"inputs": {"gapMm": 1, "firstHeightMm": 0.25, "growthRatio": 1, "layersPerWall": 2}, "reason": "centre width is exactly 0"},
+    {"inputs": {"gapMm": 1, "firstHeightMm": 4.9406564584124654e-324, "growthRatio": 1, "layersPerWall": 1}, "reason": "adjacent coordinates become equal (non-increasing)"},
+    {"inputs": {"gapMm": 1, "firstHeightMm": 1e308, "growthRatio": 2, "layersPerWall": 2}, "reason": "exponential layer height overflow"},
+    {"inputs": {"gapMm": 1e308, "firstHeightMm": 1e308, "growthRatio": 1, "layersPerWall": 2}, "reason": "accumulated thickness not finite"},
+    {"inputs": {"gapMm": "NaN", "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 3}, "reason": "non-finite gap"},
+    {"inputs": {"gapMm": 10, "firstHeightMm": 0, "growthRatio": 2, "layersPerWall": 3}, "reason": "non-positive first height"},
+    {"inputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 0.5, "layersPerWall": 3}, "reason": "growth ratio below 1"},
+    {"inputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 2.5}, "reason": "non-integer layer count"},
+    {"inputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 3, "maxLayers": 5}, "reason": "total 6 layers exceed maxLayers"},
+    {"inputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 3, "unknown": 1}, "reason": "unsupported setting key"}
+  ],
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass",
+      "detail": "added 22 packages; worktree-local node_modules; shared node_modules untouched"
+    },
+    {
+      "command": "node --test tests/channel-layer-plan.test.mjs tests/internal-stokes-boundary.test.mjs",
+      "result": "pass",
+      "detail": "tests 11 / pass 11 / fail 0 / skipped 0 / duration_ms 1372"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "result": "pass",
+      "detail": "tests 19 / pass 19 / fail 0"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "exit code 0, no whitespace errors"
+    }
+  ],
+  "notRun": [
+    "full npm test / native kernel build (out of scope for this unit)",
+    "real Gmsh prism/tet meshing",
+    "any flow solve, wall shear, y+ or Reynolds-number use",
+    "browser/UI verification (no UI change in this unit)"
+  ],
+  "unverified": [
+    "npm run build",
+    "full test suite tests/*.test.mjs",
+    "coupling of this plan to mesh-core / worker / GUI (intentionally not connected)",
+    "wall face tag retention and tetrahedron inversion checks for a future mesher"
+  ],
+  "progressProposal": {
+    "id": "CFDMESH1",
+    "statusSuggested": "keep queued",
+    "lastUpdateJa": "2026-10-19: 平行平板の両壁層配置計画を純粋module src/channel-layer-plan.js として追加（座標計画のみ、実メッシュ・流れ解析・y+は対象外）。参照値と拒否境界を確認。一般3D mesher、壁tag対応、実Gmsh prism/tet、品質・収束は残作業。",
+    "lastUpdateEn": "2026-10-19: Added the pure parallel-plate wall-layer placement plan (src/channel-layer-plan.js, coordinate plan only; no real mesh, flow solve or y+). Reference values and rejection boundaries checked. General 3D mesher, wall tag mapping, real Gmsh prism/tet and quality/convergence remain outstanding."
+  },
+  "noSelfSha": true,
+  "noSecrets": true
+}

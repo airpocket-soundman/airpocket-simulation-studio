@@ -16,4 +16,6 @@
 
 2026-10-17 localhost実Chrome証跡: `evidence/2026-10-17-thermal-time-api-real-chrome.json`。実`solveThermal`による小規模四面体結果（T = 20 + t）で、APIの5/10/2秒選択（25/30/22 degC）、途中時刻の熱流束省略と最終時刻の熱流束、無効指定・古い版の拒否を確認しました。PNG連番は0/5/10秒とハッシュを照合し2秒へ復元、比較パネルも5秒表示後に2秒へ復元しました。小規模localhost条件の確認であり、公開環境・任意メッシュは未確認です。補間表示の復元と一般設定変更は自動テストのみです。ブラウザのダウンロードはイベント待機のタイムアウトとデバッガ切断により未確認です。
 
+2026-10-19 断面PNG連番の参照確認: `evidence/2026-10-19-opencode-browserexport1.json`。実`solve`（直方体10×10×40 mm、E=1 GPa、ポアソン0.3、z=0面固定・z=40面に+Z 100 N、mesh size 5 mm、elastic wasm-pcg）の体積メッシュの軸範囲0〜10 mmに対し、`format:"png-sequence", animation:"slice", frames:3`で`slicePosition` 0/5/10 mm（phase 0/0.5/1）のZIPを作りました。独立STORE readerでmanifestと3枚のCRC-32・SHA-256・PNG IHDR（canvas値320×316）を照合し、renderへ渡った`clip-position`とmanifestの`slicePosition`が一致、同じ凍結表示・locale・resultでの再実行はバイト一致しました。取消後は断面位置・断面表示・カメラ・controlsを元へ戻し、部分ZIPは`exportArtifact`で取得不可です。ただしこれはNodeのunit/helper確認で、frameピクセルはtest doubleのPNGであり、実canvasの描画差や実Chrome/MCPの`startExport`→artifactページ全取得→SHA照合は未実施です。120枚成功・4 MiB/24 MiB上限・一般形状の受入は未確認のままです。`manifest.json`は`slicePosition`の単位欄を持たず、mmは形状単位（組み込み形状はmm）に従います。
+
 比較GIFの24枚/端点/delay/物理時刻/倍率と検証範囲は[比較仕様](view-compare-design.md)を参照。単一ビューの実時間熱WebM非対応と、比較の熱時間GIF/WebM対応は別契約です。
