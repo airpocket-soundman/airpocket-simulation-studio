@@ -32,6 +32,7 @@ async function referenceModel(){
       caseIdentity:{name:'synthetic uniform bar 10x10x40 mm',synthetic:true},
       rowIdentity:{materialKey:'synthetic-linear-elastic-E1e9-nu0',geometryKey:'synthetic-box-10x10x40',gaugeKey:'synthetic-end-faces'},
       input:{synthetic:true,note:'synthetic reference input for the RESULTCURVE1 unit tests',study:{kind:'structural'},materialProperties:{youngModulus:reference.youngModulus,poissonRatio:reference.poissonRatio},sourceModel:{kind:'box',bounds:reference.bounds},meshSize:reference.size},
+      mesh,
       axis:[0,0,1],
       nodeCount,
       initialGaugeLengthMm:reference.gaugeLengthMm,
@@ -48,7 +49,9 @@ function solveAt(model,forceN){
   const forces=loadedFaceTractionForces(model.mesh,{spec:model.spec,totalForceN:forceN});
   return solveElastic(model.mesh,{youngModulus:reference.youngModulus,poissonRatio:reference.poissonRatio},{fixed:model.fixedNodes,forces});
 }
-function step(model,result,forceN,index=0){return {stepId:'F'+String(forceN)+'N-step'+String(index),controlledQuantity:'force',controlledValue:forceN,converged:true,provisional:false,rowIdentity:{...model.spec.rowIdentity},result};}
+function calculation(forceN){return {kind:'synthetic-independent-linear-elastic-solve',controlledQuantity:'force',controlledValue:forceN,controlledUnit:'N',plasticHistory:false};}
+function output(model,result,forceN){return {input:model.spec.input,mesh:model.mesh,calculation:calculation(forceN),result};}
+function step(model,result,forceN,index=0){return {stepId:'F'+String(forceN)+'N-step'+String(index),controlledQuantity:'force',controlledValue:forceN,converged:true,provisional:false,rowIdentity:{...model.spec.rowIdentity},output:output(model,result,forceN)};}
 function referenceCurve(){
   if(curvePromise)return curvePromise;
   curvePromise=(async()=>{
@@ -78,9 +81,17 @@ test('the step table is versioned, revisioned, unit-labelled and marked as indep
   const {curve}=await referenceCurve();
   assert.equal(curve.schemaVersion,1);
   assert.match(curve.inputRevision,/^sha256:[0-9a-f]{64}$/);
-  for(const row of curve.steps){assert.match(row.resultRevision,/^sha256:[0-9a-f]{64}$/);assert.equal(row.controlledUnit,'N');}
+  assert.match(curve.meshRevision,/^sha256:[0-9a-f]{64}$/);
+  for(const row of curve.steps){
+    for(const key of ['inputRevision','meshRevision','calculationRevision','resultRevision'])assert.match(row[key],/^sha256:[0-9a-f]{64}$/,key);
+    assert.equal(row.inputRevision,curve.inputRevision);
+    assert.equal(row.meshRevision,curve.meshRevision);
+    assert.equal(row.controlledUnit,'N');
+  }
   assert.equal(curve.analysis.kind,'independent-linear-solves');
   assert.equal(curve.analysis.plasticHistory,false);
+  assert.equal(curve.tolerances.controlledForceAbsoluteN,1e-5);
+  assert.equal(curve.tolerances.forceBalanceAbsoluteN,1e-5);
   assert.equal(curve.units.engineeringStressPa,'Pa');
   assert.equal(curve.units.engineeringStrain,'dimensionless');
   assert.equal(curve.units.forceN,'N');
@@ -117,7 +128,7 @@ test('a failed step records only its state and is never interpolated into later 
   assert.deepEqual(curve.steps.map(row=>row.stepIndex),[0,1,2]);
   const failed=curve.steps[1];
   assert.equal(failed.status,'failed');assert.equal(failed.converged,false);assert.equal(failed.provisional,true);
-  for(const key of ['resultRevision','reactionAxisN','tensileForceN','appliedAxisN','forceBalanceErrorNAxialN','extensionMm','engineeringStressPa','engineeringStrain'])assert.equal(failed[key],null,key+' must be null for a failed step');
+  for(const key of ['inputRevision','meshRevision','calculationRevision','resultRevision','reactionAxisN','tensileForceN','appliedAxisN','forceBalanceErrorNAxialN','extensionMm','engineeringStressPa','engineeringStrain'])assert.equal(failed[key],null,key+' must be null for a failed step');
   assert.ok(relError(curve.steps[0].extensionMm,0.01)<=1e-6);
   assert.ok(relError(curve.steps[2].extensionMm,0.04)<=1e-6);
 });
@@ -128,9 +139,14 @@ test('unsupported geometries, weights, axis and node lists are rejected',async()
   assert.throws(()=>validateIncrementSpec(invalid({initialAreaMm2:0})),/initialAreaMm2/);
   assert.throws(()=>validateIncrementSpec(invalid({initialAreaMm2:-1})),/initialAreaMm2/);
   assert.throws(()=>validateIncrementSpec(invalid({initialGaugeLengthMm:0})),/initialGaugeLengthMm/);
+  assert.throws(()=>validateIncrementSpec(invalid({initialGaugeLengthMm:20})),/Gauge initial length/);
   assert.throws(()=>validateIncrementSpec(invalid({axis:[0,0,2]})),/unit vector/);
+  assert.throws(()=>validateIncrementSpec(invalid({axis:[1,0,0]})),/Gauge initial length/);
+  assert.throws(()=>validateIncrementSpec(invalid({axis:[0,0,-1]})),/Gauge initial length/);
   assert.throws(()=>validateIncrementSpec(invalid({axis:[0,0,Number.NaN]})),/finite/);
   assert.throws(()=>validateIncrementSpec(invalid({nodeCount:0})),/nodeCount/);
+  assert.throws(()=>validateIncrementSpec(invalid({mesh:undefined})),/spec.mesh/);
+  assert.throws(()=>validateIncrementSpec(invalid({mesh:{nodes:model.mesh.nodes.slice(0,3)}})),/spec.mesh/);
   assert.throws(()=>validateIncrementSpec(invalid({fixedNodes:[...model.spec.fixedNodes,model.spec.fixedNodes[0]]})),/duplicated/);
   assert.throws(()=>validateIncrementSpec(invalid({loadedNodes:[model.spec.nodeCount]})),/in-range/);
   assert.throws(()=>validateIncrementSpec(invalid({loadedNodes:[model.spec.fixedNodes[0]]})),/cannot also be a fixed node/);
@@ -149,7 +165,11 @@ test('unsupported or inconsistent step rows are rejected',async()=>{
   const base=step(model,results[3],100);
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[]}),/at least one step/);
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[base,{...base}]}),/Duplicated step id/);
-  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',result:undefined}]}),/requires its result/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',output:undefined}]}),/requires its output/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',output:{...base.output,result:undefined}}]}),/requires its result/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',output:{...base.output,input:undefined}}]}),/output input/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',output:{...base.output,mesh:undefined}}]}),/output mesh/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',output:{...base.output,calculation:undefined}}]}),/output calculation/);
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',converged:'yes'}]}),/converged flag/);
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',provisional:undefined}]}),/provisional flag/);
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'x',controlledQuantity:'pressure'}]}),/controlledQuantity/);
@@ -159,7 +179,43 @@ test('unsupported or inconsistent step rows are rejected',async()=>{
     await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[base,mixed]}),/mixes a different material, geometry or gauge/);
   }
   const unbalanced=structuredClone(results[3]);unbalanced.applied=[0,0,0];
-  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'unbalanced',result:unbalanced}]}),/does not balance/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'unbalanced',output:{...base.output,result:unbalanced}}]}),/does not balance/);
+  const misplacedCalculation={...base.output.calculation,controlledValue:99};
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'calculation',output:{...base.output,calculation:misplacedCalculation}}]}),/calculation controlledValue/);
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'plastic',output:{...base.output,calculation:{...base.output.calculation,plasticHistory:true}}}]}),/plasticHistory:false/);
+});
+
+test('force control must match the real applied axial force and displacement control is refused',async()=>{
+  const {model,results}=await referenceCurve();
+  const base=step(model,results[3],100);
+  assert.equal(base.output.result.applied[2],100);
+  const claimed999={...base,stepId:'claimed-999N',controlledValue:999,output:{...base.output,calculation:{...base.output.calculation,controlledValue:999}}};
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[claimed999]}),/applied axial force/);
+  const wrongSign={...base,stepId:'declared-minus-100N',controlledValue:-100,output:{...base.output,calculation:{...base.output.calculation,controlledValue:-100}}};
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[wrongSign]}),/applied axial force/);
+  const displaced={...base,stepId:'prescribed-0.04mm',controlledQuantity:'displacement',controlledValue:0.04,output:{...base.output,calculation:{...base.output.calculation,controlledQuantity:'displacement',controlledValue:0.04,controlledUnit:'mm'}}};
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[displaced]}),error=>{
+    assert.match(error.message,/Displacement-controlled increments are not supported/);
+    assert.ok(!error.message.includes('controlledUnit=mm'),'no successful mm control label');
+    return true;
+  });
+});
+
+test('mixed material, reordered mesh and caller-supplied revision strings are refused or ignored',async()=>{
+  const {model,results}=await referenceCurve();
+  const base=step(model,results[3],100);
+  const otherInput=structuredClone(model.spec.input);
+  otherInput.materialProperties.youngModulus=2e9;
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'E2e9',output:{...base.output,input:otherInput}}]}),/output input differs/);
+  const reorderedMesh=structuredClone(model.mesh);
+  for(let k=0;k<3;k++){const first=reorderedMesh.nodes[k];reorderedMesh.nodes[k]=reorderedMesh.nodes[3+k];reorderedMesh.nodes[3+k]=first;}
+  await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'reordered',output:{...base.output,mesh:reorderedMesh}}]}),/output mesh differs/);
+  const fake='sha256:'+'0'.repeat(64);
+  const spoofed={...base,stepId:'spoofed',inputRevision:fake,meshRevision:fake,calculationRevision:fake,resultRevision:fake,output:{...base.output,inputRevision:fake,meshRevision:fake,calculationRevision:fake,resultRevision:fake}};
+  const curve=await buildIncrementCurve({spec:model.spec,steps:[spoofed]});
+  for(const key of ['inputRevision','meshRevision','calculationRevision','resultRevision'])assert.notEqual(curve.steps[0][key],fake,key+' must be derived from content');
+  assert.equal(curve.steps[0].inputRevision,curve.inputRevision);
+  assert.equal(curve.steps[0].meshRevision,curve.meshRevision);
 });
 
 test('modal, plasticity-history and maximum-only results are refused instead of becoming a gauge curve',async()=>{
@@ -186,10 +242,10 @@ test('the result revision follows the real result content',async()=>{
   const {model,results}=await referenceCurve();
   const base=step(model,results[3],100);
   const first=await buildIncrementCurve({spec:model.spec,steps:[base]});
-  const repeat=await buildIncrementCurve({spec:model.spec,steps:[{...base,result:structuredClone(results[3])}]});
+  const repeat=await buildIncrementCurve({spec:model.spec,steps:[{...base,output:{...base.output,result:structuredClone(results[3])}}]});
   assert.equal(first.steps[0].resultRevision,repeat.steps[0].resultRevision,'identical content hashes identically');
   const tampered=structuredClone(results[3]);tampered.displacement[model.loadedNodes[0]*3+2]+=1e-6;
-  const changed=await buildIncrementCurve({spec:model.spec,steps:[{...base,result:tampered}]});
+  const changed=await buildIncrementCurve({spec:model.spec,steps:[{...base,output:{...base.output,result:tampered}}]});
   assert.notEqual(first.steps[0].resultRevision,changed.steps[0].resultRevision,'changed content must change the revision');
 });
 

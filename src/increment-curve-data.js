@@ -7,10 +7,14 @@ import {getProjectRevision,getPhysicalRevision} from './project-revision.js';
 export const INCREMENT_CURVE_SCHEMA_VERSION=1;
 export const AXIS_UNIT_TOLERANCE=1e-9;
 export const GAUGE_WEIGHT_TOLERANCE=1e-9;
-// Acceptance criterion of the work order: axial reaction must balance the applied load to this absolute error.
+// Acceptance criteria of the work order: axial reaction must balance the applied load, and a force-controlled
+// step must match the applied axial load, both to this absolute error in N.
 export const FORCE_BALANCE_TOLERANCE_N=1e-5;
+export const CONTROLLED_FORCE_TOLERANCE_N=1e-5;
+// Initial gauge length and axis are checked against the actual mesh node coordinates in mm.
+export const GAUGE_GEOMETRY_TOLERANCE_MM=1e-6;
 // The controlled quantity is recorded, not solved here: extraction reads reactions and displacement identically.
-// Only the force-controlled independent linear path is verified in this unit.
+// Only the force-controlled independent linear path is verified in this unit; displacement control is refused.
 export const CONTROLLED_QUANTITIES=Object.freeze({force:'N',displacement:'mm'});
 
 const plain=value=>value!==null&&typeof value==='object'&&(Object.getPrototypeOf(value)===Object.prototype||Object.getPrototypeOf(value)===null);
@@ -49,6 +53,22 @@ function requireWeightedNodeSet(side,label,nodeCount){
   if(Math.abs(weightSum-1)>GAUGE_WEIGHT_TOLERANCE)throw Error(label+' weights must sum to 1');
   return {nodes:side.nodes.slice(),weights:side.weights.slice()};
 }
+function weightedCentroid(mesh,side){
+  const point=[0,0,0];
+  for(let i=0;i<side.nodes.length;i++){
+    const base=side.nodes[i]*3,weight=side.weights[i];
+    for(let k=0;k<3;k++)point[k]+=weight*mesh.nodes[base+k];
+  }
+  return point;
+}
+// Labels alone must not stand in for the geometry: the declared initial gauge length is measured by projecting
+// the weighted gauge-point separation on the declared axis, so a gauge on another face, a shorter gauge or a
+// reversed axis fails here. The mesh content hash separately rejects a reordered mesh.
+function requireGaugeGeometry(mesh,gauge,axis,lengthMm){
+  const a=weightedCentroid(mesh,gauge.a),b=weightedCentroid(mesh,gauge.b);
+  const delta=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],axial=sum3(delta,axis);
+  if(Math.abs(axial-lengthMm)>GAUGE_GEOMETRY_TOLERANCE_MM)throw Error('Gauge initial length along the axis does not match initialGaugeLengthMm on the mesh');
+}
 
 /** Validate and normalise the immutable increment-curve input. Throws on any unsupported or ambiguous input. */
 export function validateIncrementSpec(spec){
@@ -59,6 +79,7 @@ export function validateIncrementSpec(spec){
   if(!plain(spec.rowIdentity)||!['materialKey','geometryKey','gaugeKey'].every(key=>typeof spec.rowIdentity[key]==='string'&&spec.rowIdentity[key].trim()))throw Error('rowIdentity must declare materialKey, geometryKey and gaugeKey');
   if(!plain(spec.input))throw Error('spec.input is required to derive the input revision');
   if(!Number.isInteger(spec.nodeCount)||spec.nodeCount<1)throw Error('nodeCount must be a positive integer');
+  if(!plain(spec.mesh)||!Array.isArray(spec.mesh.nodes)||spec.mesh.nodes.length!==spec.nodeCount*3||!spec.mesh.nodes.every(finite))throw Error('spec.mesh must provide three finite coordinates per declared node');
   const axis=requireUnitAxis(spec.axis),nodeCount=spec.nodeCount;
   const initialGaugeLengthMm=requirePositive(spec.initialGaugeLengthMm,'initialGaugeLengthMm');
   const initialAreaMm2=requirePositive(spec.initialAreaMm2,'initialAreaMm2');
@@ -70,6 +91,7 @@ export function validateIncrementSpec(spec){
   const gauge={a:requireWeightedNodeSet(spec.gauge.a,'gauge.a',nodeCount),b:requireWeightedNodeSet(spec.gauge.b,'gauge.b',nodeCount)};
   const first=new Set(gauge.a.nodes);
   for(const node of gauge.b.nodes)if(first.has(node))throw Error('The two gauge points must not share a node: '+String(node));
+  requireGaugeGeometry(spec.mesh,gauge,axis,initialGaugeLengthMm);
   return {axis,nodeCount,initialGaugeLengthMm,initialAreaMm2,fixedNodes,loadedNodes,gauge,rowIdentity:{materialKey:spec.rowIdentity.materialKey,geometryKey:spec.rowIdentity.geometryKey,gaugeKey:spec.rowIdentity.gaugeKey}};
 }
 
@@ -87,6 +109,30 @@ function requireResult(result,nodeCount){
     reactions.set(entry.node,entry.force);
   }
   return reactions;
+}
+
+// Minimal provenance contract for one converged step: the actual input, mesh, calculation and result are hashed
+// here. Any caller-supplied revision string is ignored, and a missing output input is a hard rejection.
+function requireStepOutput(output,stepId){
+  if(!plain(output))throw Error('Converged step '+stepId+' requires its output');
+  if(!plain(output.input))throw Error('Step '+stepId+' output input is required to derive the input revision');
+  if(!plain(output.mesh))throw Error('Step '+stepId+' output mesh is required to derive the mesh revision');
+  if(!plain(output.calculation))throw Error('Step '+stepId+' output calculation is required to derive the calculation revision');
+  if(!plain(output.result))throw Error('Converged step '+stepId+' requires its result');
+  return output;
+}
+function requireCalculation(calculation,stepId,controlledQuantity,controlledValue,controlledUnit){
+  if(calculation.controlledQuantity!==controlledQuantity)throw Error('Step '+stepId+' output calculation controlledQuantity does not match the step');
+  if(!finite(calculation.controlledValue)||calculation.controlledValue!==controlledValue)throw Error('Step '+stepId+' output calculation controlledValue does not match the step');
+  if(calculation.controlledUnit!==controlledUnit)throw Error('Step '+stepId+' output calculation controlledUnit does not match the step');
+  if(calculation.plasticHistory!==false)throw Error('Step '+stepId+' output calculation must declare plasticHistory:false');
+}
+// Force control is accepted only when the declared value equals both the real applied axial resultant and the
+// tensile axial reaction, sign included, within the explicit absolute tolerance in N.
+function requireControlledForce(step,measurement){
+  if(step.controlledQuantity!=='force')return;
+  if(Math.abs(measurement.appliedAxisN-step.controlledValue)>CONTROLLED_FORCE_TOLERANCE_N)throw Error('Step '+step.stepId+' controlledValue does not match the applied axial force within '+CONTROLLED_FORCE_TOLERANCE_N+' N');
+  if(Math.abs(measurement.tensileForceN-step.controlledValue)>CONTROLLED_FORCE_TOLERANCE_N)throw Error('Step '+step.stepId+' controlledValue does not match the axial reaction within '+CONTROLLED_FORCE_TOLERANCE_N+' N');
 }
 
 /** Reduce one real linear-elastic result to the axial reaction, gauge extension and engineering stress/strain.
@@ -148,7 +194,7 @@ function deepFreeze(value){
 export async function buildIncrementCurve({spec,steps}={}){
   const validated=validateIncrementSpec(spec);
   if(!Array.isArray(steps)||!steps.length)throw Error('Increment curve requires at least one step');
-  const inputRevision=await getProjectRevision(spec.input),rows=[],stepIds=new Set();
+  const [inputRevision,meshRevision]=await Promise.all([getProjectRevision(spec.input),getProjectRevision(spec.mesh)]),rows=[],stepIds=new Set();
   for(let index=0;index<steps.length;index++){
     const step=steps[index];
     if(!plain(step))throw Error('Each step must be a plain object');
@@ -160,17 +206,26 @@ export async function buildIncrementCurve({spec,steps}={}){
     if(!plain(step.rowIdentity)||Object.keys(validated.rowIdentity).some(key=>step.rowIdentity[key]!==validated.rowIdentity[key]))throw Error('Step '+step.stepId+' mixes a different material, geometry or gauge');
     if(!Object.hasOwn(CONTROLLED_QUANTITIES,step.controlledQuantity))throw Error('controlledQuantity must be force or displacement');
     if(!finite(step.controlledValue))throw Error('Each step requires a finite controlledValue');
+    // There is no verified prescribed-displacement result contract here, so no success row may claim mm control.
+    if(step.controlledQuantity==='displacement')throw Error('Displacement-controlled increments are not supported: the prescribed displacement and nodal reactions cannot be verified');
     const row={stepIndex:index,stepId:step.stepId,controlledQuantity:step.controlledQuantity,controlledValue:step.controlledValue,controlledUnit:CONTROLLED_QUANTITIES[step.controlledQuantity],converged:step.converged,provisional:step.provisional};
     if(!step.converged){
-      rows.push({...row,status:'failed',resultRevision:null,reactionAxisN:null,tensileForceN:null,appliedAxisN:null,forceBalanceErrorNAxialN:null,extensionMm:null,engineeringStressPa:null,engineeringStrain:null});
+      rows.push({...row,status:'failed',inputRevision:null,meshRevision:null,calculationRevision:null,resultRevision:null,reactionAxisN:null,tensileForceN:null,appliedAxisN:null,forceBalanceErrorNAxialN:null,extensionMm:null,engineeringStressPa:null,engineeringStrain:null});
       continue;
     }
-    if(step.result===undefined||step.result===null)throw Error('Converged step '+step.stepId+' requires its result');
-    const measurement=extractIncrementMeasurement({spec,result:step.result});
+    const output=requireStepOutput(step.output,step.stepId),controlledUnit=CONTROLLED_QUANTITIES[step.controlledQuantity];
+    requireCalculation(output.calculation,step.stepId,step.controlledQuantity,step.controlledValue,controlledUnit);
+    const stepInputRevision=await getProjectRevision(output.input);
+    if(stepInputRevision!==inputRevision)throw Error('Step '+step.stepId+' output input differs from the curve input revision');
+    const stepMeshRevision=await getProjectRevision(output.mesh);
+    if(stepMeshRevision!==meshRevision)throw Error('Step '+step.stepId+' output mesh differs from the curve mesh revision');
+    const measurement=extractIncrementMeasurement({spec,result:output.result});
     if(Math.abs(measurement.forceBalanceErrorNAxialN)>FORCE_BALANCE_TOLERANCE_N)throw Error('Step '+step.stepId+' axial reaction does not balance the applied load within '+FORCE_BALANCE_TOLERANCE_N+' N');
-    const resultRevision=await getPhysicalRevision({result:step.result});
+    requireControlledForce(step,measurement);
+    const resultRevision=await getPhysicalRevision({result:output.result});
     if(typeof resultRevision!=='string'||!resultRevision)throw Error('Missing result revision for step '+step.stepId);
-    rows.push({...row,status:'converged',resultRevision,...measurement});
+    const calculationRevision=await getProjectRevision(output.calculation);
+    rows.push({...row,status:'converged',inputRevision:stepInputRevision,meshRevision:stepMeshRevision,calculationRevision,resultRevision,...measurement});
   }
   return deepFreeze({
     schemaVersion:INCREMENT_CURVE_SCHEMA_VERSION,
@@ -178,6 +233,8 @@ export async function buildIncrementCurve({spec,steps}={}){
     caseIdentity:structuredClone(spec.caseIdentity),
     analysis:{kind:'independent-linear-solves',plasticHistory:false,note:'Each row is the reduction of one independent linear-elastic solve along the same axis. This is not a plastic load/unload history and no row is interpolated.'},
     inputRevision,
+    meshRevision,
+    tolerances:{controlledForceAbsoluteN:CONTROLLED_FORCE_TOLERANCE_N,forceBalanceAbsoluteN:FORCE_BALANCE_TOLERANCE_N,gaugeGeometryMm:GAUGE_GEOMETRY_TOLERANCE_MM},
     axis:validated.axis,
     initialGaugeLengthMm:validated.initialGaugeLengthMm,
     initialAreaMm2:validated.initialAreaMm2,
