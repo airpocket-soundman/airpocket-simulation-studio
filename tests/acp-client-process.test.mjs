@@ -28,6 +28,29 @@ const configFor = (mode, overrides = {}) => ({
   ...overrides
 });
 
+// Malformed envelopes must fail without ready, with every pending/timer/signal
+// resource released and the owned child already stopped when start() rejects.
+async function expectProtocolFailure(mode, pattern) {
+  const baselineSignals = process.listenerCount('SIGINT');
+  const client = new AcpClientProcess(configFor(mode, { installSignalHandlers: true, initializeTimeoutMs: 3000 }));
+  const states = [];
+  client.on('state', event => states.push(event.state));
+  try {
+    await assert.rejects(client.start(), pattern);
+    assert.equal(client.state, 'failed');
+    assert.equal(states.includes('ready'), false);
+    assert.equal(client.activeChildPid, null);
+    const diagnostics = client.diagnostics();
+    assert.equal(diagnostics.activeChild, false);
+    assert.equal(diagnostics.activeTimers, 0);
+    assert.equal(diagnostics.pendingRequests, 0);
+    assert.equal(diagnostics.signalHandlersInstalled, false);
+    assert.equal(process.listenerCount('SIGINT'), baselineSignals);
+  } finally {
+    await client.stop().catch(() => {});
+  }
+}
+
 test('pins the ACP v1 schema release, tag, and schema hash', () => {
   assert.equal(ACP_PROTOCOL_VERSION, 1);
   assert.equal(ACP_SCHEMA_REFERENCE.tag, 'schema-v1.26.0');
@@ -53,10 +76,59 @@ test('validateInitializeResult enforces the v1 required shape', () => {
   assert.throws(() => validateInitializeResult({}), /integer protocolVersion/);
   assert.throws(() => validateInitializeResult({ protocolVersion: 2 }), /unsupported protocolVersion 2/);
   assert.throws(() => validateInitializeResult({ protocolVersion: 1, authMethods: 'x' }), /authMethods must be an array/);
-  const ok = validateInitializeResult({ protocolVersion: 1, authMethods: [] });
+  assert.throws(() => validateInitializeResult({ protocolVersion: 1, agentCapabilities: null }), /agentCapabilities must be an object/);
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentCapabilities: { loadSession: 'yes' } }),
+    /agentCapabilities\.loadSession must be a boolean/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentCapabilities: { promptCapabilities: { image: 1 } } }),
+    /promptCapabilities\.image must be a boolean/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentCapabilities: { mcpCapabilities: { http: 'yes' } } }),
+    /mcpCapabilities\.http must be a boolean/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentCapabilities: { sessionCapabilities: { list: true } } }),
+    /sessionCapabilities\.list must be an object or null/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentInfo: { name: 'x' } }),
+    /agentInfo\.version must be a string/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, agentInfo: { name: 'x', version: '1', title: 2 } }),
+    /agentInfo\.title must be a string or null/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, authMethods: [{}] }),
+    /authMethods\[0\]\.id must be a string/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, authMethods: [{ id: 'x', name: 'X', type: 'terminal', args: [1] }] }),
+    /authMethods\[0\]\.args must be an array of strings/
+  );
+  assert.throws(
+    () => validateInitializeResult({ protocolVersion: 1, authMethods: [{ id: 'x', name: 'X', type: 'terminal', env: { A: 1 } }] }),
+    /authMethods\[0\]\.env\.A must be a string/
+  );
+  const ok = validateInitializeResult({
+    protocolVersion: 1,
+    agentCapabilities: {
+      loadSession: false,
+      promptCapabilities: { image: true, audio: false, embeddedContext: false },
+      mcpCapabilities: { http: false, sse: false },
+      sessionCapabilities: { list: {}, delete: null, resume: {}, close: null, additionalDirectories: {} },
+      auth: { logout: {} },
+      extensionField: { preserved: true }
+    },
+    agentInfo: { name: 'x', title: null, version: '1' },
+    authMethods: [{ id: 'agent', name: 'Agent', description: null }, { id: 'term', name: 'Terminal', type: 'terminal', args: ['--login'], env: { A: 'B' } }]
+  });
   assert.equal(ok.protocolVersion, 1);
-  assert.deepEqual(ok.authMethods, []);
-  assert.equal(ok.agentInfo, null);
+  assert.deepEqual(ok.authMethods.map(method => method.id), ['agent', 'term']);
+  assert.equal(ok.agentInfo.name, 'x');
 });
 
 test('initialize reaches ready with a v1 state history and one owned child', async () => {
@@ -120,6 +192,38 @@ test('rejects a response whose id does not match the outstanding request', async
   await assert.rejects(client.start(), /does not match any outstanding request/);
   assert.equal(client.state, 'failed');
   assert.equal(client.activeChildPid, null);
+});
+
+test('rejects a record whose jsonrpc value is not exactly "2.0"', async () => {
+  await expectProtocolFailure('wrong-jsonrpc', /must declare jsonrpc "2\.0"/);
+});
+
+test('rejects a record that omits jsonrpc', async () => {
+  await expectProtocolFailure('missing-jsonrpc', /must declare jsonrpc "2\.0"/);
+});
+
+test('rejects a numeric jsonrpc value', async () => {
+  await expectProtocolFailure('numeric-jsonrpc', /must declare jsonrpc "2\.0"/);
+});
+
+test('rejects a response that carries both result and error', async () => {
+  await expectProtocolFailure('result-and-error', /exactly one of result or error/);
+});
+
+test('rejects a record that mixes a method with a response result', async () => {
+  await expectProtocolFailure('method-and-result', /mixes a method with a response result\/error/);
+});
+
+test('rejects a non-boolean loadSession capability', async () => {
+  await expectProtocolFailure('capability-string', /agentCapabilities\.loadSession must be a boolean/);
+});
+
+test('rejects an auth method item that is not a v1 AuthMethod', async () => {
+  await expectProtocolFailure('auth-method-invalid', /authMethods\[0\]\.id must be a string/);
+});
+
+test('rejects a stdout record containing invalid UTF-8 bytes', async () => {
+  await expectProtocolFailure('invalid-utf8', /not valid UTF-8/);
 });
 
 test('does not become ready on an unsupported protocol version', async () => {

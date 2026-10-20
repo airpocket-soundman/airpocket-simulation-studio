@@ -66,11 +66,53 @@ function respondToInitialize(id) {
     case 'invalid-json':
       process.stdout.write('this is not valid JSON\n');
       break;
+    case 'invalid-utf8':
+      // A raw 0xFF byte is never valid UTF-8. A replacement decoder would turn
+      // it into U+FFFD and JSON.parse would succeed, so this fixture proves the
+      // fatal decoder path rather than a JSON syntax error.
+      process.stdout.write(Buffer.concat([
+        Buffer.from(`{"jsonrpc":"2.0","id":${JSON.stringify(id)},"result":{"protocolVersion":1,"agentInfo":{"name":"`),
+        Buffer.from([0xff]),
+        Buffer.from('","version":"0.0.0"}}}\n')
+      ]));
+      break;
     case 'noise':
       process.stdout.write('acp-stub: synthetic startup log line\n');
       break;
     case 'wrong-id':
       writeLine({ ...readyResponse, id: 9999 });
+      break;
+    case 'wrong-jsonrpc':
+      writeLine({ jsonrpc: 'WRONG', id, result: readyResponse.result });
+      break;
+    case 'missing-jsonrpc':
+      writeLine({ id, result: readyResponse.result });
+      break;
+    case 'numeric-jsonrpc':
+      writeLine({ jsonrpc: 2.0, id, result: readyResponse.result });
+      break;
+    case 'result-and-error':
+      writeLine({ jsonrpc: '2.0', id, result: readyResponse.result, error: { code: -32000, message: 'synthetic' } });
+      break;
+    case 'method-and-result':
+      writeLine({ jsonrpc: '2.0', id, method: 'initialize', result: readyResponse.result });
+      break;
+    case 'capability-string':
+      writeLine({
+        jsonrpc: '2.0',
+        id,
+        result: {
+          ...readyResponse.result,
+          agentCapabilities: { ...readyResponse.result.agentCapabilities, loadSession: 'yes' }
+        }
+      });
+      break;
+    case 'auth-method-invalid':
+      writeLine({
+        jsonrpc: '2.0',
+        id,
+        result: { ...readyResponse.result, authMethods: [{}] }
+      });
       break;
     case 'version2':
       writeLine({ jsonrpc: '2.0', id, result: { protocolVersion: 2, agentCapabilities: {}, agentInfo: { name: 'acp-stub-v2', version: '0.0.0' }, authMethods: [] } });

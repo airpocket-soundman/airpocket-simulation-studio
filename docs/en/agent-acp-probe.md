@@ -51,8 +51,19 @@ The response is validated by `validateInitializeResult`:
 - `result.protocolVersion` must be an integer and must equal `1`. Any other
   version (for example the v2 draft value `2`) makes the client stop and fail
   instead of reporting `ready`.
-- `agentCapabilities` (if present) must be an object; `agentInfo` (if present)
-  must be an object or `null`; `authMethods` (if present) must be an array.
+- `agentCapabilities` (if present) must be an object, and the fields the schema
+  names are type-checked: `loadSession`,
+  `promptCapabilities.image`/`audio`/`embeddedContext`, and
+  `mcpCapabilities.http`/`sse` must be booleans; known `sessionCapabilities`
+  entries and `auth.logout` must be objects or `null`.
+  `agentCapabilities:{loadSession:"yes"}` is rejected. Extension fields the
+  schema allows, including `_meta`, are not rejected without cause.
+- `agentInfo` must be an object or `null`. When it is an object, `name` and
+  `version` must be strings and `title` must be a string or `null`.
+- `authMethods` must be an array. Each item must be an object with string `id`
+  and `name` and a string-or-`null` `description`. For `type:"terminal"`,
+  `args` must be an array of strings and `env` must be an object of strings.
+  `authMethods:[{}]` is rejected.
 - `authMethods` are **recorded, never used**. The probe never calls
   `authenticate`, so it never selects an advertised or unadvertised method.
 
@@ -65,12 +76,17 @@ ACP stdio is newline-delimited UTF-8 JSON-RPC. Newlines never occur inside a
 UTF-8 sequence, so the parser buffers raw bytes and splits on the `0x0a` byte.
 This keeps multibyte characters intact when one character spans two chunks, and
 handles several records arriving in a single chunk. A trailing `\r` is stripped.
+Each record is decoded with a fatal UTF-8 decoder, so invalid bytes cannot become
+U+FFFD and then pass as valid JSON.
 
-Any stdout record that is not a valid JSON-RPC object is a protocol violation:
-an empty record, non-JSON text (stray logging), or a shape that is neither a
-request (`method` + `id`), a notification (`method`), nor a response
-(`id` + `result`/`error`). A response whose `id` does not match an outstanding
-request is also a violation.
+Every record must declare `jsonrpc` exactly `"2.0"`; a missing, non-string, or
+different value is a protocol violation. Any stdout record that is not a valid
+JSON-RPC object is also a protocol violation. Request (`method` + `id`),
+notification (`method` only), and response (`id` plus exactly one of
+`result`/`error`) are mutually exclusive. A method mixed with `result`/`error`, a
+response with both `result` and `error`, an invalid `id` type, or a response
+whose `id` does not match an outstanding request is rejected. Empty records and
+non-JSON text (stray logging) are violations too.
 
 Agent-to-client requests are rejected with JSON-RPC method-not-found (`-32601`),
 because no client-side ACP method is implemented in this probe. Notifications

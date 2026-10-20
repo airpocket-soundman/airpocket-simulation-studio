@@ -37,16 +37,18 @@ ACP **v1**（整数`protocolVersion` `1`）だけを交渉する。v2 draftは�
 
 - `result`はJSON objectであること。
 - `result.protocolVersion`は整数で`1`と等しいこと。それ以外（例: v2 draftの`2`）は`ready`にせず停止して失敗する。
-- `agentCapabilities`があればobject、`agentInfo`があればobjectまたは`null`、`authMethods`があればarrayであること。
+- `agentCapabilities`は（あれば）objectで、schemaが名付けるfieldを型検査する。`loadSession`、`promptCapabilities.image`/`audio`/`embeddedContext`、`mcpCapabilities.http`/`sse`はboolean、`sessionCapabilities`の既知項目と`auth.logout`はobjectまたは`null`。`agentCapabilities:{loadSession:"yes"}`は拒否する。schemaが許す未知の拡張fieldと`_meta`は無根拠に禁止しない。
+- `agentInfo`はobjectまたは`null`。objectなら`name`と`version`はstring、`title`はstringまたは`null`。
+- `authMethods`はarray。各項目はobjectで`id`と`name`がstring、`description`はstringまたは`null`。`type:"terminal"`では`args`はstring配列、`env`はstring値のobject。`authMethods:[{}]`は拒否する。
 - `authMethods`は**記録するだけで使わない**。`authenticate`を呼ばないため、広告された方法・されない方法のどちらも選択しない。
 
 実装するのはinitializationの形だけである。session・content・tool-callのschemaは作らず、読めないfieldを推測しない。
 
 ## stdio framing
 
-ACP stdioは改行区切りのUTF-8 JSON-RPCである。改行はUTF-8の途中に現れないため、parserは生バイトをbufferし`0x0a`で分割する。これにより、1文字が2 chunkにまたがっても多バイト文字が壊れず、複数recordが1 chunkで来ても処理できる。末尾の`\r`は除く。
+ACP stdioは改行区切りのUTF-8 JSON-RPCである。改行はUTF-8の途中に現れないため、parserは生バイトをbufferし`0x0a`で分割する。これにより、1文字が2 chunkにまたがっても多バイト文字が壊れず、複数recordが1 chunkで来ても処理できる。末尾の`\r`は除く。各recordはfatal UTF-8 decoderでdecodeし、不正byteをU+FFFDへ置換してJSON成功扱いにしない。
 
-有効なJSON-RPC objectでないstdout recordはプロトコル違反とする。空record、JSONでないtext（stray logging）、request（`method`+`id`）・notification（`method`）・response（`id`+`result`/`error`）のいずれでもない形が該当する。未完了requestの`id`と一致しないresponseも違反である。
+すべてのrecordは`jsonrpc`が厳密に`"2.0"`であることを要求する。欠落、別型、別版はプロトコル違反である。有効なJSON-RPC objectでないstdout recordも違反とする。request（`method`+`id`）・notification（`method`のみ）・response（`id`+`result`/`error`の片方だけ）は排他的に判定し、`method`と`result`/`error`の同居、`result`と`error`の同居、`id`の不正型、未完了requestの`id`と一致しないresponseを拒否する。空recordやJSONでないtext（stray logging）も違反である。
 
 agentからclientへのrequestはJSON-RPC method-not-found（`-32601`）で拒否する。このprobeはclient側ACP methodを実装していないためである。agentからのnotificationは無視する（応答しない）。
 

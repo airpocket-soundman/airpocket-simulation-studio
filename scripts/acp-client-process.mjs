@@ -17,9 +17,14 @@
 import { spawn } from 'node:child_process';
 import { EventEmitter } from 'node:events';
 import { isAbsolute } from 'node:path';
+import { TextDecoder } from 'node:util';
 
 // Only the v1 integer protocol version is implemented.
 export const ACP_PROTOCOL_VERSION = 1;
+
+// ACP stdio is UTF-8. Decoding fatally prevents invalid bytes from becoming
+// U+FFFD and then passing JSON.parse as if the record were well formed.
+const UTF8_DECODER = new TextDecoder('utf-8', { fatal: true });
 
 export const ACP_SCHEMA_REFERENCE = Object.freeze({
   releaseUrl: 'https://github.com/agentclientprotocol/agent-client-protocol/releases/tag/schema-v1.26.0',
@@ -75,7 +80,111 @@ export function buildInitializeRequest(id) {
 
 // Validate the initialize response against the required v1 shape. Unknown fields
 // are preserved via the returned object only where the v1 schema names them; no
-// session or authentication schema is invented here.
+// session or authentication schema is invented here. Extension fields the v1
+// schema allows (for example _meta and unrecognized capability keys) are not
+// rejected, but every field the schema does name is type-checked.
+const isPlainObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const isJsonRpcId = id => typeof id === 'string' || (typeof id === 'number' && Number.isFinite(id));
+
+function initializeError(message) {
+  return new Error(`initialize response ${message}`);
+}
+
+function assertOptionalMeta(container, label) {
+  if (!Object.hasOwn(container, '_meta')) return;
+  if (container._meta !== null && !isPlainObject(container._meta)) {
+    throw initializeError(`${label}._meta must be an object or null when present`);
+  }
+}
+
+function assertOptionalBoolean(container, key, label) {
+  if (!Object.hasOwn(container, key)) return;
+  if (typeof container[key] !== 'boolean') {
+    throw initializeError(`${label}.${key} must be a boolean when present`);
+  }
+}
+
+function validatePromptCapabilities(value, label) {
+  if (!isPlainObject(value)) throw initializeError(`${label} must be an object when present`);
+  for (const key of ['image', 'audio', 'embeddedContext']) assertOptionalBoolean(value, key, label);
+  assertOptionalMeta(value, label);
+}
+
+function validateMcpCapabilities(value, label) {
+  if (!isPlainObject(value)) throw initializeError(`${label} must be an object when present`);
+  for (const key of ['http', 'sse']) assertOptionalBoolean(value, key, label);
+  assertOptionalMeta(value, label);
+}
+
+function validateAgentCapabilities(value) {
+  if (!isPlainObject(value)) throw initializeError('agentCapabilities must be an object when present');
+  assertOptionalBoolean(value, 'loadSession', 'agentCapabilities');
+  if (Object.hasOwn(value, 'promptCapabilities')) {
+    validatePromptCapabilities(value.promptCapabilities, 'agentCapabilities.promptCapabilities');
+  }
+  if (Object.hasOwn(value, 'mcpCapabilities')) {
+    validateMcpCapabilities(value.mcpCapabilities, 'agentCapabilities.mcpCapabilities');
+  }
+  if (Object.hasOwn(value, 'sessionCapabilities')) {
+    const session = value.sessionCapabilities;
+    const label = 'agentCapabilities.sessionCapabilities';
+    if (!isPlainObject(session)) throw initializeError(`${label} must be an object when present`);
+    for (const key of ['list', 'delete', 'additionalDirectories', 'resume', 'close']) {
+      if (!Object.hasOwn(session, key)) continue;
+      if (session[key] !== null && !isPlainObject(session[key])) {
+        throw initializeError(`${label}.${key} must be an object or null when present`);
+      }
+    }
+    assertOptionalMeta(session, label);
+  }
+  if (Object.hasOwn(value, 'auth')) {
+    const auth = value.auth;
+    const label = 'agentCapabilities.auth';
+    if (!isPlainObject(auth)) throw initializeError(`${label} must be an object when present`);
+    if (Object.hasOwn(auth, 'logout') && auth.logout !== null && !isPlainObject(auth.logout)) {
+      throw initializeError(`${label}.logout must be an object or null when present`);
+    }
+    assertOptionalMeta(auth, label);
+  }
+  assertOptionalMeta(value, 'agentCapabilities');
+}
+
+function validateAgentInfo(value) {
+  if (!isPlainObject(value)) throw initializeError('agentInfo must be an object or null when present');
+  if (typeof value.name !== 'string') throw initializeError('agentInfo.name must be a string when present');
+  if (typeof value.version !== 'string') throw initializeError('agentInfo.version must be a string when present');
+  if (Object.hasOwn(value, 'title') && value.title !== null && typeof value.title !== 'string') {
+    throw initializeError('agentInfo.title must be a string or null when present');
+  }
+  assertOptionalMeta(value, 'agentInfo');
+}
+
+function validateAuthMethod(method, index) {
+  const label = `authMethods[${index}]`;
+  if (!isPlainObject(method)) throw initializeError(`${label} must be an object`);
+  if (typeof method.id !== 'string') throw initializeError(`${label}.id must be a string when present`);
+  if (typeof method.name !== 'string') throw initializeError(`${label}.name must be a string when present`);
+  if (Object.hasOwn(method, 'description') && method.description !== null && typeof method.description !== 'string') {
+    throw initializeError(`${label}.description must be a string or null when present`);
+  }
+  if (Object.hasOwn(method, 'type')) {
+    if (typeof method.type !== 'string') throw initializeError(`${label}.type must be a string when present`);
+    if (method.type === 'terminal') {
+      if (Object.hasOwn(method, 'args')
+        && (!Array.isArray(method.args) || method.args.some(arg => typeof arg !== 'string'))) {
+        throw initializeError(`${label}.args must be an array of strings when present`);
+      }
+      if (Object.hasOwn(method, 'env')) {
+        if (!isPlainObject(method.env)) throw initializeError(`${label}.env must be an object when present`);
+        for (const [key, value] of Object.entries(method.env)) {
+          if (typeof value !== 'string') throw initializeError(`${label}.env.${key} must be a string when present`);
+        }
+      }
+    }
+  }
+  assertOptionalMeta(method, label);
+}
+
 export function validateInitializeResult(result) {
   if (result === null || typeof result !== 'object' || Array.isArray(result)) {
     throw new Error('initialize response "result" must be a JSON object');
@@ -87,16 +196,16 @@ export function validateInitializeResult(result) {
   if (protocolVersion !== ACP_PROTOCOL_VERSION) {
     throw new Error(`unsupported protocolVersion ${protocolVersion}: this probe implements ACP v1 (protocolVersion ${ACP_PROTOCOL_VERSION}) only`);
   }
-  if ('agentCapabilities' in result && result.agentCapabilities !== null
-    && (typeof result.agentCapabilities !== 'object' || Array.isArray(result.agentCapabilities))) {
-    throw new Error('initialize response agentCapabilities must be an object when present');
+  if (Object.hasOwn(result, 'agentCapabilities')) validateAgentCapabilities(result.agentCapabilities);
+  if (Object.hasOwn(result, 'agentInfo') && result.agentInfo !== null) validateAgentInfo(result.agentInfo);
+  if (Object.hasOwn(result, 'authMethods')) {
+    if (!Array.isArray(result.authMethods)) {
+      throw new Error('initialize response authMethods must be an array when present');
+    }
+    result.authMethods.forEach((method, index) => validateAuthMethod(method, index));
   }
-  if ('agentInfo' in result && result.agentInfo !== null
-    && (typeof result.agentInfo !== 'object' || Array.isArray(result.agentInfo))) {
-    throw new Error('initialize response agentInfo must be an object when present');
-  }
-  if ('authMethods' in result && !Array.isArray(result.authMethods)) {
-    throw new Error('initialize response authMethods must be an array when present');
+  if (Object.hasOwn(result, '_meta') && result._meta !== null && !isPlainObject(result._meta)) {
+    throw new Error('initialize response _meta must be an object or null when present');
   }
   return Object.freeze({
     protocolVersion,
@@ -314,9 +423,16 @@ export class AcpClientProcess extends EventEmitter {
       this.#violation('ACP stdout contained an empty record');
       return;
     }
+    let text;
+    try {
+      text = UTF8_DECODER.decode(line);
+    } catch {
+      this.#violation('ACP stdout contained a record that is not valid UTF-8');
+      return;
+    }
     let message;
     try {
-      message = JSON.parse(line.toString('utf8'));
+      message = JSON.parse(text);
     } catch {
       this.#violation('ACP stdout contained a record that is not valid JSON');
       return;
@@ -325,19 +441,41 @@ export class AcpClientProcess extends EventEmitter {
       this.#violation('ACP stdout record is not a JSON-RPC object');
       return;
     }
-    const hasMethod = typeof message.method === 'string';
-    const hasId = Object.hasOwn(message, 'id') && message.id !== null && message.id !== undefined;
-    const hasResult = Object.hasOwn(message, 'result');
-    const hasError = Object.hasOwn(message, 'error');
-    if (hasMethod && hasId) {
-      this.#rejectClientRequest(message);
+    if (!Object.hasOwn(message, 'jsonrpc') || message.jsonrpc !== '2.0') {
+      this.#violation('ACP stdout record must declare jsonrpc "2.0"');
       return;
     }
+    const hasMethod = Object.hasOwn(message, 'method');
+    const hasId = Object.hasOwn(message, 'id');
+    const hasResult = Object.hasOwn(message, 'result');
+    const hasError = Object.hasOwn(message, 'error');
+    if (hasMethod && typeof message.method !== 'string') {
+      this.#violation('ACP stdout record "method" must be a string');
+      return;
+    }
+    if (hasId && !isJsonRpcId(message.id)) {
+      this.#violation('ACP stdout record "id" must be a string or number');
+      return;
+    }
+    // Request, notification, and response are mutually exclusive. A method must
+    // never carry a response result/error, and a response must carry exactly one.
     if (hasMethod) {
+      if (hasResult || hasError) {
+        this.#violation('ACP stdout record mixes a method with a response result/error');
+        return;
+      }
+      if (hasId) {
+        this.#rejectClientRequest(message);
+        return;
+      }
       this.emit('notification', { method: message.method });
       return;
     }
-    if (hasId && (hasResult || hasError)) {
+    if (hasId) {
+      if (hasResult === hasError) {
+        this.#violation('ACP stdout response must contain exactly one of result or error');
+        return;
+      }
       this.#resolveResponse(message);
       return;
     }
