@@ -1,5 +1,7 @@
 # OpenCode PRレビュー（2026-10-21）
 
+[English](en/opencode-pr-review-2026-10-21.md)
+
 [機械可読の固定head・再現条件](evidence/2026-10-21-opencode-pr-review.json) / [次の20作業](opencode-work-orders-2026-10-21/README.md)
 
 18件を独立レビューし、11件を統合候補、7件を修正待ちとした。#144/#145は制作中の可能性があるため未レビュー・変更なし。PRの個別CI成功とコードの正しさを分離して判定した。

@@ -254,5 +254,16 @@
     "contractDeclarationFiles": 5,
     "fullLocalRepeated": false,
     "fullCombinedCi": "required before merge"
-  }
+  },
+  "ciAttempts": [
+    {
+      "run": 39513288291,
+      "head": "27ff273b356081295ce707b5f619739fd5d96f96",
+      "total": 1641,
+      "pass": 1637,
+      "skip": 3,
+      "fail": 1,
+      "cause": "New root-level review document lacked required English counterpart and reciprocal links. No merge performed. Add English counterpart and reciprocal links, then run a fresh exact-head CI."
+    }
+  ]
 }
