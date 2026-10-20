@@ -1,114 +1,75 @@
-# ACP initialize probe and owned-child lifecycle (AGENTACP1)
+# ACP initializeプローブと所有childのライフサイクル（AGENTACP1）
 
-Scope: a Node host that owns exactly **one** user-specified ACP agent child, runs
-the `initialize` handshake over the ACP stdio transport, and stops that child
-safely. Everything else in ACP is deliberately out of scope for this unit:
-`session/new`, `session/prompt`, authentication execution, MCP delegation, and
-model selection are follow-ups. Nothing here is spawned from the browser.
+[English](en/agent-acp-probe.md)
 
-The real Codex ACP invocation is **not confirmed**. There is no `codex --acp`
-guess, no PATH search, no install, no login, and no implicit restart anywhere in
-this code.
+範囲: 利用者が指定した**1個だけ**のACP agent childをNodeホストが所有し、ACP stdioトランスポートで`initialize`ハンドシェイクを1回実行し、そのchildを安全に停止する。ACPのそれ以外はこの単位の対象外である。`session/new`、`session/prompt`、認証の実行、MCP委任、モデル選択は後続とする。ブラウザからは何もspawnしない。
 
-## Fixed protocol reference (retrieved 2026-10-19)
+実在するCodexのACP起動方法は**未確認**である。`codex --acp`のような推測、PATH探索、install、login、暗黙の再起動はこのコードのどこにも無い。
 
-Only ACP **v1** (integer `protocolVersion` `1`) is negotiated. The v2 draft is
-never mixed in.
+## 固定した一次資料（2026-10-19取得）
 
-| Item | Value |
+ACP **v1**（整数`protocolVersion` `1`）だけを交渉する。v2 draftは混在させない。
+
+| 項目 | 値 |
 | --- | --- |
 | stdio transport | https://agentclientprotocol.com/protocol/v1/transports |
 | initialization | https://agentclientprotocol.com/protocol/v1/initialization |
 | schema page | https://agentclientprotocol.com/protocol/v1/schema |
-| schema release | `schema-v1.26.0` — https://github.com/agentclientprotocol/agent-client-protocol/releases/tag/schema-v1.26.0 |
+| schema release | `schema-v1.26.0`（https://github.com/agentclientprotocol/agent-client-protocol/releases/tag/schema-v1.26.0） |
 | tag object SHA | `3fdcc2cb717e1dfa50f2efcaeae88cb69a6504cd` |
 | tagged commit SHA | `e2d83349bc9e28a4059ea3acefa1c91c966f74e2` |
 | schema.json URL | https://github.com/agentclientprotocol/agent-client-protocol/releases/download/schema-v1.26.0/schema.json |
 | schema.json SHA-256 | `4bcd1d2051ff7ed379bd9b234fb9b09c5ab9245478698e9fab805bd9b52a33a6` |
 | schema.json size | 255170 bytes |
 
-These constants live in `scripts/acp-client-process.mjs` as `ACP_SCHEMA_REFERENCE`
-so a future change to the pinned release is explicit.
+これらの定数は`scripts/acp-client-process.mjs`の`ACP_SCHEMA_REFERENCE`に置き、固定releaseの変更が明示的になるようにする。
 
-## What initialize sends and requires
+## initializeが送る内容と要求
 
-The `initialize` request is built by `buildInitializeRequest(id)`:
+`buildInitializeRequest(id)`が作る要求:
 
-- `jsonrpc: "2.0"`, integer `id`.
-- `params.protocolVersion = 1`.
-- `params.clientCapabilities`: every field is `false`
-  (`fs.readTextFile`, `fs.writeTextFile`, `terminal`, `auth.terminal`). The probe
-  advertises **nothing it cannot serve**; ACP treats omitted capabilities as
-  unsupported, so the explicit `false` values match the schema default without
-  claiming filesystem, terminal, or terminal-auth support.
-- `params.clientInfo`: probe name/title/version. No secret is placed here.
+- `jsonrpc: "2.0"`、整数`id`。
+- `params.protocolVersion = 1`。
+- `params.clientCapabilities`は全fieldが`false`（`fs.readTextFile`、`fs.writeTextFile`、`terminal`、`auth.terminal`）。提供できない能力を宣言しない。ACPは省略を未対応として扱うため、明示的な`false`はschema既定と一致し、filesystem・terminal・terminal-authの対応を主張しない。
+- `params.clientInfo`はprobeのname/title/version。秘密を入れない。
 
-The response is validated by `validateInitializeResult`:
+`validateInitializeResult`が応答を検査する:
 
-- `result` must be a JSON object.
-- `result.protocolVersion` must be an integer and must equal `1`. Any other
-  version (for example the v2 draft value `2`) makes the client stop and fail
-  instead of reporting `ready`.
-- `agentCapabilities` (if present) must be an object; `agentInfo` (if present)
-  must be an object or `null`; `authMethods` (if present) must be an array.
-- `authMethods` are **recorded, never used**. The probe never calls
-  `authenticate`, so it never selects an advertised or unadvertised method.
+- `result`はJSON objectであること。
+- `result.protocolVersion`は整数で`1`と等しいこと。それ以外（例: v2 draftの`2`）は`ready`にせず停止して失敗する。
+- `agentCapabilities`があればobject、`agentInfo`があればobjectまたは`null`、`authMethods`があればarrayであること。
+- `authMethods`は**記録するだけで使わない**。`authenticate`を呼ばないため、広告された方法・されない方法のどちらも選択しない。
 
-Only the initialization shape is implemented. No session, content, or tool-call
-schema is created here; unreadable fields are not guessed.
+実装するのはinitializationの形だけである。session・content・tool-callのschemaは作らず、読めないfieldを推測しない。
 
 ## stdio framing
 
-ACP stdio is newline-delimited UTF-8 JSON-RPC. Newlines never occur inside a
-UTF-8 sequence, so the parser buffers raw bytes and splits on the `0x0a` byte.
-This keeps multibyte characters intact when one character spans two chunks, and
-handles several records arriving in a single chunk. A trailing `\r` is stripped.
+ACP stdioは改行区切りのUTF-8 JSON-RPCである。改行はUTF-8の途中に現れないため、parserは生バイトをbufferし`0x0a`で分割する。これにより、1文字が2 chunkにまたがっても多バイト文字が壊れず、複数recordが1 chunkで来ても処理できる。末尾の`\r`は除く。
 
-Any stdout record that is not a valid JSON-RPC object is a protocol violation:
-an empty record, non-JSON text (stray logging), or a shape that is neither a
-request (`method` + `id`), a notification (`method`), nor a response
-(`id` + `result`/`error`). A response whose `id` does not match an outstanding
-request is also a violation.
+有効なJSON-RPC objectでないstdout recordはプロトコル違反とする。空record、JSONでないtext（stray logging）、request（`method`+`id`）・notification（`method`）・response（`id`+`result`/`error`）のいずれでもない形が該当する。未完了requestの`id`と一致しないresponseも違反である。
 
-Agent-to-client requests are rejected with JSON-RPC method-not-found (`-32601`),
-because no client-side ACP method is implemented in this probe. Notifications
-from the agent are ignored (no response).
+agentからclientへのrequestはJSON-RPC method-not-found（`-32601`）で拒否する。このprobeはclient側ACP methodを実装していないためである。agentからのnotificationは無視する（応答しない）。
 
-## Lifecycle and limits
+## ライフサイクルと上限
 
-State machine: `idle → starting → initializing → ready → stopping → stopped`.
-Any protocol violation, unexpected exit, or unconfirmed termination becomes
-`failed`. `ready` means only that the initialize handshake succeeded; it does
-**not** mean authenticated or able to converse, and no session exists.
+状態機械: `idle → starting → initializing → ready → stopping → stopped`。プロトコル違反、予期しない終了、終了の未確認は`failed`になる。`ready`はinitializeハンドシェイクが成功したことだけを意味し、認証済み・会話可能を意味しない。sessionは存在しない。
 
-| Concern | Value |
+| 項目 | 値 |
 | --- | --- |
-| Concurrent owned children | 1 (a second `start()` is rejected and does not spawn) |
+| 同時に所有するchild | 1（2回目の`start()`は拒否しspawnしない） |
 | initialize timeout | 10000 ms |
-| stop grace (stdin EOF) | 2000 ms |
+| stop grace（stdin EOF） | 2000 ms |
 | force-kill wait | 2000 ms |
-| stdout per-record cap | 1 MiB (exceeding it disconnects and fails) |
-| stderr retention cap | 64 KiB (oldest bytes dropped; raw stderr is never surfaced) |
+| stdout 1 record上限 | 1 MiB（超過で切断し失敗） |
+| stderr保持上限 | 64 KiB（古いバイトから破棄。raw stderrは外へ出さない） |
 
-`stop()` closes the child's stdin, waits the grace period, then force-kills and
-waits again. If the owned child still has not exited, the result reports
-`exited: false` and the state becomes `failed`. `stop()` is idempotent: a second
-call returns the first shutdown's result. Parent `SIGINT`/`SIGTERM` trigger the
-same shutdown (handlers are installed only when `installSignalHandlers` is not
-`false`, and are removed once the child closes).
+`stop()`はchildのstdinを閉じ、graceを待ち、force-killして再度待つ。所有childがなお終了しなければ`exited: false`を返し状態を`failed`にする。`stop()`は冪等で、2回目は最初のshutdown結果を返す。親の`SIGINT`/`SIGTERM`も同じshutdownを起こす（handlerは`installSignalHandlers`が`false`でない場合だけ設置し、child close後に外す）。
 
-Ownership is limited to the child this process spawned. Terminating that child
-with `kill()` does **not** prove that any grandchild process tree on Windows is
-also gone; this unit makes **no such claim**. After a confirmed close, no timers
-or signal listeners remain (`diagnostics()` reports `activeTimers` and
-`signalHandlersInstalled`).
+所有の範囲はこのprocessがspawnしたchildだけである。`kill()`で終了させても、Windowsの孫process-tree全体が消えたことは**証明しない**。この単位はそのような主張をしない。close確認後、timerもsignal listenerも残らない（`diagnostics()`が`activeTimers`と`signalHandlersInstalled`を返す）。
 
-## Secrets
+## 秘密
 
-The child inherits the parent environment so it can run, but the environment is
-never stored on the client, logged, emitted, or returned. `describe()` and
-`diagnostics()` expose only state, pid, negotiated protocol info, bounded stderr
-byte counts, and failure text. Raw stderr is never placed into evidence.
+childは実行のため親の環境を継承するが、その環境をclientへ保存・log・emit・返却しない。`describe()`と`diagnostics()`が返すのは状態、pid、交渉したプロトコル情報、上限付きstderrバイト数、失敗文だけである。raw stderrは証拠へ入れない。
 
 ## CLI
 
@@ -116,7 +77,7 @@ byte counts, and failure text. Raw stderr is never placed into evidence.
 node scripts/probe-acp-agent.mjs --config=<absolute path to config.json>
 ```
 
-Config JSON (only these fields are accepted):
+config JSONが受け付けるfieldは次のとおりだけ:
 
 ```json
 {
@@ -129,26 +90,17 @@ Config JSON (only these fields are accepted):
 }
 ```
 
-The CLI initializes once and stops, then prints a sanitized JSON report
-(reference, ready flag, negotiated version, bounded `agentInfo`, auth method
-**ids** only, state, stop result). It never prints argv, the environment, or raw
-stderr. Exit code is `0` only when initialize succeeded and the child exited.
+CLIは1回initializeして停止し、sanitizeしたJSON report（reference、ready flag、交渉version、上限付き`agentInfo`、auth methodの**idのみ**、state、stop結果）を表示する。argv、環境、raw stderrは表示しない。exit codeはinitialize成功かつchild終了のときだけ`0`である。
 
-## Status: real agent not connected
+## 状態: 実agentは未接続
 
-Only the synthetic fixture `tests/fixtures/acp-agent-stub.mjs` is used. No
-production ACP agent (including Codex) has been launched, because the real
-invocation is unverified. Connecting a real agent requires a primary-source
-reference for that agent's ACP entry point; guessing a command is prohibited.
+使うのは合成fixture `tests/fixtures/acp-agent-stub.mjs`だけである。実在するACP agent（Codexを含む）は起動していない。実起動方法が未確認だからである。実agentの接続には、そのagentのACP入口について一次資料の参照が必要で、commandの推測は禁止する。
 
-## Tests
+## テスト
 
 ```
 node --test tests/acp-client-process.test.mjs
 git diff --check
 ```
 
-The fixture is a real Node subprocess. The single test that exercises the
-"owned child never exits" branch injects a no-op kill on purpose, and its result
-proves only the explicit failure reporting — not that a real process can survive
-termination.
+fixtureは実Node subprocessである。「所有childが終了しない」分岐を試す1件は、意図的にno-op killを注入しており、その結果が示すのは明示的な失敗報告だけである。実processが終了に耐えられることの証明ではない。
