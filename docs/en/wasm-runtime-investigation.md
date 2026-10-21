@@ -2,6 +2,29 @@
 
 [日本語](../wasm-runtime-investigation.md)
 
+## 2026-10-21: Fixed-source Linux comparisons completed; fatal not reproduced
+
+Two manual workflow runs used the existing annotated tag `release-56576af6bd26d510c3166edf69c1cd73ffcb9703`, pointing at published source `56576af6bd26d510c3166edf69c1cd73ffcb9703`. Both run head SHAs match. The observed runtime was Linux x64 / Node **v24.22.0** / V8 **13.6.233.17-node.57**. The workflow still requests `ubuntu-latest` and `node-version: 24`; this investigation did not pin or change the production runtime.
+
+| Target | Mode | Iterations | Pass/fail/skip | Test-child ms | Exit / signal |
+| --- | --- | --- | --- | --- | --- |
+| analysis-jobs | default | 1 | 8 / 0 / 0 | 3627 | 0 / null |
+| analysis-jobs | disabled | 1 | 8 / 0 / 0 | 3754 | 0 / null |
+| material-catalog | default | 1 | 7 / 0 / 0 | 3953 | 0 / null |
+| material-catalog | disabled | 1 | 7 / 0 / 0 | 3788 | 0 / null |
+
+[Analysis-jobs run 39543750219](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543750219) and [material-catalog run 39543753492](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543753492) succeeded. No cell hit its 30-second timeout, output cap, cancellation or signal termination. Allocation-erase and `jit_page.has_value()` signatures were each absent. Within each pair, concurrency 4, target tests, 269 source hashes, 16 resolved assets and the Node executable hash match. The only argv difference is the disabled mode's explicit `--no-wasm-code-gc` prefix.
+
+The [summary and acceptance mapping](../evidence/2026-10-21-runtime-linux-comparison.json) retain environment, source/runtime fingerprints, exit/signal/timeout, test counts and stdout/stderr hashes per mode. [Unmodified downloaded originals](../evidence/2026-10-21-runtime-linux-raw/) retain each run's comparison JSON and default/disabled reports, including their raw stdout/stderr. GitHub artifacts expire after 14 days; retained file byte lengths and SHA-256 hashes are recorded in the summary.
+
+After dispatch, takeover inspection found an earlier successful [material-catalog run 39542239219](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39542239219). Although its source is identical, it used Node **v24.21.0** / V8 **13.6.233.17-node.53** and passed seven tests in each mode. It is preserved as separate history and is not pooled with the current 24.22.0 pair's 30 tests. Only the two requested fresh runs were launched; no further repetitions were justified or performed after neither produced a difference or fatal.
+
+**RUNTIMEWASM1 remains checking.** Non-reproduction in four cells establishes neither mitigation, root-cause equivalence, inclusion of a particular upstream fix, nor safety. These single runs execute default before disabled, do not control CI host load for a performance comparison, and do not measure RSS or memory cost. Diagnostic children remove `NODE_OPTIONS`; flag forwarding into separately spawned processes and termination of the entire descendant tree remain unproven. Confirmed close covers the owned diagnostic runner.
+
+There is no basis here for changing product source, numerical tolerances, standard CI, default runtime/flags or task status. A future natural fatal still needs exact source/runtime and pre-exit Worker ownership checkpoints, separated by signature, before reducing a minimal real teardown sequence. Further bounded comparisons require a concrete reproduction or difference. The upstream issue/backport notes below are dated historical investigations; their current state was not refreshed by these runs.
+
+Local validation reused existing WASM files read-only without a new runtime download, native build, full suite or Chrome work. Fifteen focused diagnostic tests and five contract declaration files passed. Fake/stub cleanup tests remain distinct from a native-fatal reproducer.
+
 ## 2026-10-18: Bounded diagnostic comparison
 
 The first Linux/Node24.21.0 full verification of PR122 failed with `Check failed: jit_page.has_value()`; a same-source rerun passed. Record this separately from allocation-erase failures, without claiming a shared cause or a root fix.

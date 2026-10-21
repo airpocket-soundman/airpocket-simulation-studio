@@ -1,0 +1,522 @@
+{
+  "schemaVersion": 1,
+  "taskId": "RUNTIMEWASM1",
+  "date": "2026-10-21",
+  "sourceRevision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "immutableDispatchRef": "release-56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "sourceTagObject": "baf0d067282fe7cc535ead9aa7825c9627cb8ac4",
+  "dispatchRationale": "Execute the requested analysis-jobs and material-catalog pair against one existing immutable release tag. A pre-existing material-catalog run was discovered after dispatch and retained separately; no additional trials or retries were launched.",
+  "runs": [
+    {
+      "runId": 39543750219,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543750219",
+      "role": "requested-frozen-source-comparison",
+      "event": "workflow_dispatch",
+      "workflowRef": "release-56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "headSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T04:23:17Z",
+      "target": "analysis-jobs",
+      "iterationsPerMode": 1,
+      "testConcurrency": 4,
+      "timeoutMs": 30000,
+      "childRuntime": {
+        "executable": "/opt/hostedtoolcache/node/24.22.0/x64/bin/node",
+        "node": "v24.22.0",
+        "v8": "13.6.233.17-node.57",
+        "platform": "linux",
+        "arch": "x64",
+        "release": "node"
+      },
+      "runtimeBinarySha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c",
+      "sourceFingerprint": "sha256:069626704b628175d9bfe7118676de448b25400e33afee0617e4cb5661b53c9c",
+      "sourceFileHashCount": 269,
+      "runtimeAssetHashCount": 16,
+      "withinRunIdentityMatched": true,
+      "comparisonOnlyArgvDifference": "--no-wasm-code-gc prefix in disabled mode",
+      "nodeOptionsPresent": false,
+      "flagScope": {
+        "mode": "default",
+        "nodeOptions": "removed from diagnostic children",
+        "testRunner": "explicit CLI flags",
+        "testWorkers": "Node test runner inherits supported execArgv",
+        "workerThreads": "inherit execArgv unless overridden",
+        "separateProcesses": "not guaranteed;spawned process must explicitly forward flags",
+        "rootFixProven": false
+      },
+      "cleanupScope": "Owned diagnostic runner only;descendant process-tree termination is not proven",
+      "artifact": {
+        "id": 12320074676,
+        "name": "wasm-runtime-comparison-39543750219",
+        "archiveBytesAsReported": 30600,
+        "archiveDigestAsReported": "sha256:200bdf6dfa27965b35814931ee259c18b424a254a945153c0e6fe1f5de7271ab",
+        "retentionDays": 14
+      },
+      "originals": [
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json",
+          "bytes": 1303,
+          "sha256": "5f2dd89f1b0ef7d7fba1eea8597afabbb4a2ce408cb03412f25ef0343bc8b931",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.default.json",
+          "bytes": 36414,
+          "sha256": "72a5ae9219d3b920401a171c70dff68cc17402d77eca76c82c4dfabfb60cd520",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.disabled.json",
+          "bytes": 36439,
+          "sha256": "9e1c9acad4da3d529e34cfd0d81c9382624625fc2b4db11414e68573b97311a1",
+          "unmodifiedDownload": true
+        }
+      ],
+      "modes": [
+        {
+          "mode": "default",
+          "argv": [
+            "--test",
+            "--test-concurrency=4",
+            "tests/analysis-job-service.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 3627,
+          "tests": {
+            "total": 8,
+            "pass": 8,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 1046,
+            "sha256": "5b9fca657f62e8fa85ac477c4a7a37b63846d35b7d5de64711fbe616c15eafc3",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        },
+        {
+          "mode": "disabled",
+          "argv": [
+            "--no-wasm-code-gc",
+            "--test",
+            "--test-concurrency=4",
+            "tests/analysis-job-service.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 3754,
+          "tests": {
+            "total": 8,
+            "pass": 8,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 1045,
+            "sha256": "811460ba1a9a1d7920f29ff9aece21c811b328beecc76d826959b41c10e0764a",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/analysis-39543750219/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        }
+      ]
+    },
+    {
+      "runId": 39543753492,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543753492",
+      "role": "requested-frozen-source-comparison",
+      "event": "workflow_dispatch",
+      "workflowRef": "release-56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "headSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T04:23:19Z",
+      "target": "material-catalog",
+      "iterationsPerMode": 1,
+      "testConcurrency": 4,
+      "timeoutMs": 30000,
+      "childRuntime": {
+        "executable": "/opt/hostedtoolcache/node/24.22.0/x64/bin/node",
+        "node": "v24.22.0",
+        "v8": "13.6.233.17-node.57",
+        "platform": "linux",
+        "arch": "x64",
+        "release": "node"
+      },
+      "runtimeBinarySha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c",
+      "sourceFingerprint": "sha256:d8c410c97cee9dc5da9b613ef085a786b851b8fa2b063f5b4cb077fc7a149120",
+      "sourceFileHashCount": 269,
+      "runtimeAssetHashCount": 16,
+      "withinRunIdentityMatched": true,
+      "comparisonOnlyArgvDifference": "--no-wasm-code-gc prefix in disabled mode",
+      "nodeOptionsPresent": false,
+      "flagScope": {
+        "mode": "default",
+        "nodeOptions": "removed from diagnostic children",
+        "testRunner": "explicit CLI flags",
+        "testWorkers": "Node test runner inherits supported execArgv",
+        "workerThreads": "inherit execArgv unless overridden",
+        "separateProcesses": "not guaranteed;spawned process must explicitly forward flags",
+        "rootFixProven": false
+      },
+      "cleanupScope": "Owned diagnostic runner only;descendant process-tree termination is not proven",
+      "artifact": {
+        "id": 12320686288,
+        "name": "wasm-runtime-comparison-39543753492",
+        "archiveBytesAsReported": 30433,
+        "archiveDigestAsReported": "sha256:c6f6a2e69b9e263a9aa8b89060b9d2531bfb8af75bf5dd643822f5d81dcb7379",
+        "retentionDays": 14
+      },
+      "originals": [
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json",
+          "bytes": 1303,
+          "sha256": "3bf8f55064708025ca03d4927a87b917503c3d44ad3d44d19b0d1c0dc13520fe",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.default.json",
+          "bytes": 36204,
+          "sha256": "1f915e6916eb0c0806d60ef39319565e0b4a4d3e530b5f15fb1af20c2da1e7fc",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.disabled.json",
+          "bytes": 36232,
+          "sha256": "cb854cc0f611bc4d62794600ccd297aac646308a95a1d2aeec0472ef4a4498bb",
+          "unmodifiedDownload": true
+        }
+      ],
+      "modes": [
+        {
+          "mode": "default",
+          "argv": [
+            "--test",
+            "--test-concurrency=4",
+            "tests/material-catalog.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 3953,
+          "tests": {
+            "total": 7,
+            "pass": 7,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 850,
+            "sha256": "eac384fa77827bcd0a4fdbf892639fef7148ba3e9d77f0c7d7fea3b2a6b0e93e",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        },
+        {
+          "mode": "disabled",
+          "argv": [
+            "--no-wasm-code-gc",
+            "--test",
+            "--test-concurrency=4",
+            "tests/material-catalog.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 3788,
+          "tests": {
+            "total": 7,
+            "pass": 7,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 852,
+            "sha256": "b297519022dad618854cc2665729fc646670b279be728527dbdeb11b638027ae",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/material-39543753492/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        }
+      ]
+    },
+    {
+      "runId": 39542239219,
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39542239219",
+      "role": "pre-existing-before-takeover-history-only",
+      "event": "workflow_dispatch",
+      "workflowRef": "codex/release-44",
+      "headSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T04:06:52Z",
+      "target": "material-catalog",
+      "iterationsPerMode": 1,
+      "testConcurrency": 4,
+      "timeoutMs": 30000,
+      "childRuntime": {
+        "executable": "/opt/hostedtoolcache/node/24.21.0/x64/bin/node",
+        "node": "v24.21.0",
+        "v8": "13.6.233.17-node.53",
+        "platform": "linux",
+        "arch": "x64",
+        "release": "node"
+      },
+      "runtimeBinarySha256": "7fde7b8afa198da66257f42ee2001d874c7355631e6d1579a5fb5ef1f246df4c",
+      "sourceFingerprint": "sha256:d8c410c97cee9dc5da9b613ef085a786b851b8fa2b063f5b4cb077fc7a149120",
+      "sourceFileHashCount": 269,
+      "runtimeAssetHashCount": 16,
+      "withinRunIdentityMatched": true,
+      "comparisonOnlyArgvDifference": "--no-wasm-code-gc prefix in disabled mode",
+      "nodeOptionsPresent": false,
+      "flagScope": {
+        "mode": "default",
+        "nodeOptions": "removed from diagnostic children",
+        "testRunner": "explicit CLI flags",
+        "testWorkers": "Node test runner inherits supported execArgv",
+        "workerThreads": "inherit execArgv unless overridden",
+        "separateProcesses": "not guaranteed;spawned process must explicitly forward flags",
+        "rootFixProven": false
+      },
+      "cleanupScope": "Owned diagnostic runner only;descendant process-tree termination is not proven",
+      "artifact": {
+        "id": 12320002024,
+        "name": "wasm-runtime-comparison-39542239219",
+        "archiveBytesAsReported": 30428,
+        "archiveDigestAsReported": "sha256:160be7141a4cae76b580bd8a74a7f193d676f0f6d210152df9668e2febf41b15",
+        "retentionDays": 14
+      },
+      "originals": [
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json",
+          "bytes": 1303,
+          "sha256": "572e8f1472df9a51da3bf909d73f23386799eef12cdb505d9eaf3042633e5539",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.default.json",
+          "bytes": 36205,
+          "sha256": "9cd7a78041b0508220adb284b48b90d67f426d315d55522863a1b385841b9cf9",
+          "unmodifiedDownload": true
+        },
+        {
+          "path": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.disabled.json",
+          "bytes": 36232,
+          "sha256": "1cf3f89bf64c4e2c7043ef53e125d0f37b690109bdcff7ffdcf48d4d03d59189",
+          "unmodifiedDownload": true
+        }
+      ],
+      "modes": [
+        {
+          "mode": "default",
+          "argv": [
+            "--test",
+            "--test-concurrency=4",
+            "tests/material-catalog.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 4708,
+          "tests": {
+            "total": 7,
+            "pass": 7,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 851,
+            "sha256": "f841fc92efd0336ef0467aa3bcd4b0183b82c4dbdc1613ddcc3766ee0c646db7",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.default.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        },
+        {
+          "mode": "disabled",
+          "argv": [
+            "--no-wasm-code-gc",
+            "--test",
+            "--test-concurrency=4",
+            "tests/material-catalog.test.mjs"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimited": false,
+          "runnerCleanupConfirmed": true,
+          "childDurationMs": 4874,
+          "tests": {
+            "total": 7,
+            "pass": 7,
+            "fail": 0,
+            "skip": 0
+          },
+          "fatalSignatures": {
+            "allocationErase": false,
+            "jitPageHasValue": false,
+            "genericFatalOrCheck": false
+          },
+          "stdout": {
+            "bytes": 852,
+            "sha256": "5b8ec409c3613fe4ac4f940688f2effa9fa538b0de22403aac20a076558f38a8",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stdout"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawReport": "docs/evidence/2026-10-21-runtime-linux-raw/prior-material-39542239219/wasm-comparison.json.disabled.json",
+            "jsonPointer": "/results/0/stderr"
+          }
+        }
+      ]
+    }
+  ],
+  "currentComparisons": {
+    "runs": 2,
+    "modes": 4,
+    "tests": 30,
+    "pass": 30,
+    "fail": 0,
+    "skip": 0,
+    "allocationEraseFatalCount": 0,
+    "jitPageFatalCount": 0,
+    "conclusion": "not reproduced in these bounded cells; no mitigation effect or root fix established"
+  },
+  "historicalRunSeparation": "Prior material-catalog run used Node v24.21.0 / V8 node.53, while the requested pair used Node v24.22.0 / V8 node.57. Do not pool their timings or treat them as the same runtime.",
+  "localValidation": {
+    "hostNode": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64",
+    "targetCommand": "node --test tests/reproduce-wasm-runtime.test.mjs tests/compare-wasm-runtime.test.mjs tests/wasm-runtime-provenance.test.mjs",
+    "tests": 15,
+    "pass": 15,
+    "fail": 0,
+    "skip": 0,
+    "contracts": {
+      "declarationFiles": 5,
+      "result": "pass"
+    },
+    "runtimeAssetPreparation": "Reused existing public MFEM/kernel assets read-only from thermal-compare and copied Gmsh assets from this worktree installed package into this worktree ignored public cache. No local native build or new runtime download; no edits to source/cache owner.",
+    "docsTests": {
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "acceptance": [
+    {
+      "item": "Frozen source and complete paired mode reports",
+      "status": "verified"
+    },
+    {
+      "item": "Same target, iteration count, concurrency, source hashes, resolved assets and runtime binary within each pair",
+      "status": "verified"
+    },
+    {
+      "item": "Separate allocation-erase and jit-page signature classification, exits, signals and timeouts",
+      "status": "verified; neither signature reproduced"
+    },
+    {
+      "item": "Original stdout/stderr retained with hashes in unmodified mode reports",
+      "status": "verified"
+    },
+    {
+      "item": "Root-cause reproduction and matching teardown lifetime",
+      "status": "unresolved; no fatal in this run"
+    },
+    {
+      "item": "Mitigation effect, memory cost and production runtime change",
+      "status": "not established; not changed"
+    }
+  ],
+  "limits": [
+    "One iteration per requested target/mode is not a frequency estimate or proof of safety.",
+    "Default runs before disabled; timing is not a controlled performance comparison. No process RSS or memory-cost comparison was collected.",
+    "Explicit flags target the selected Node test process and supported inherited execArgv. Separate spawned process forwarding is not proven.",
+    "Confirmed cleanup covers the owned diagnostic runner close, not an entire descendant process tree.",
+    "Linux hosted workflow uses ubuntu-latest and floating Node24; actual executable identity is recorded. This is not a globally pinned Node24 release policy.",
+    "No upstream issue/backport status was refreshed. Older dated upstream notes remain historical.",
+    "No product source, test tolerance, production runtime, NODE_OPTIONS, standard CI flags or task status changed. RUNTIMEWASM1 remains checking."
+  ],
+  "nextSteps": [
+    "Capture the next natural fatal with its exact source/runtime and pre-exit worker/code ownership checkpoint; keep allocation-erase and jit-page signatures separate.",
+    "Only if a reproducible difference emerges, run a justified bounded follow-up (at most3 iterations per target/mode) or a minimal real Worker/WASM teardown sequence.",
+    "Assess memory/throughput and explicit flag propagation before proposing any default change; require independent root-cause and release-inclusion evidence."
+  ],
+  "secretsAudit": {
+    "rawFiles": 9,
+    "credentialLikePatternsFound": 0,
+    "nodeOptionsPresentInAllModeReports": false,
+    "environmentDumpInModeReports": false,
+    "stderrEmptyInAllModeReports": true,
+    "scope": "Fixed-shape downloaded diagnostic JSONs and embedded test stdout/stderr inspected; no complete CI setup environment logs committed."
+  },
+  "rawBytePreservation": "Scoped raw-directory .gitattributes disables JSON text conversion to preserve downloaded bytes across Windows checkouts."
+}
