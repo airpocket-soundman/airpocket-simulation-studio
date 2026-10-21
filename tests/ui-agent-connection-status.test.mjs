@@ -123,7 +123,9 @@ test('the dictionary drives headings, states, actions and the live label in Engl
  assert.match(f.find('agent-connection-next').textContent,/Allow selected operations and connect/);
  assert.match(f.find('agent-connection-scopes-denied').textContent,/Inspect input and results/);
  assert.match(f.find('agent-connection-acp').textContent,/AI agent connection \(ACP\): Not supported/);
- assert.equal(f.find('agent-connection-status-live').attributes['aria-label'],'Connection status notifications');
+ // The live aria-label stays the JP source in every language: installLanguage's scanner owns
+ // attribute translation (see tests/ui-agent-connection-status-scanner.test.mjs for the real scan).
+ assert.equal(f.find('agent-connection-status-live').attributes['aria-label'],'接続状態の通知');
  f.setLanguage('ja');
  f.listeners['studio-language'][0]();
  const back=[f.find('agent-connection-status-heading').textContent,f.find('agent-connection-method').textContent,f.find('agent-connection-next').textContent,f.find('agent-connection-status-live').attributes['aria-label']];

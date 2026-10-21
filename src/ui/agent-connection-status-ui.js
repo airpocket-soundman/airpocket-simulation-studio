@@ -93,7 +93,12 @@ export function createAgentConnectionStatusUi({host,document:doc=globalThis.docu
   scopeNote.textContent=tr('許可範囲は接続時に選んだ4項目だけです。この表示から自動で増やしません。');
   acp.textContent=tr('AIエージェント連携（ACP）')+': '+tr(ACP_LABELS[acpState.state])+' '+tr(ACP_SEPARATE_NOTE);
   live.textContent=LIVE_ANNOUNCEMENTS[connection.state]?tr(LIVE_ANNOUNCEMENTS[connection.state])+(connection.state==='failed'&&detail?' — '+detail:''):'';
-  live.setAttribute('aria-label',tr('接続状態の通知'));
+  // Attribute ownership: installLanguage's scanner keeps the first attribute value it sees as the
+  // translation source. Writing an already-translated value here would freeze "Connection status
+  // notifications" as that source on an EN start and every later scan would restore English over JP.
+  // So the attribute is always the JP source and translation is delegated to the scanner, the same
+  // way static markup is handled.
+  live.setAttribute('aria-label','接続状態の通知');
   return true;
  }
  render();

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "task": "40 AGENTCHAT1",
+  "pr": 145,
+  "prUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/145",
+  "branch": "codex/opencode-agentchat1",
+  "baseCommit": "f0741c5d02891e8b996b09f621f3a360c873ce69",
+  "scope": "Only the live region's aria-label ownership in src/ui/agent-connection-status-ui.js, the EN assertion in tests/ui-agent-connection-status.test.mjs and a new real-scanner regression test. No i18n.js, scope, connection, ACP, main.js or progress changes.",
+  "blocker": {
+    "summary": "The status module wrote the already-translated aria-label. installLanguage's scanner stores the first attribute value it sees as the translation source, so an EN start froze 'Connection status notifications' as the source and every later scan restored English after the JP handler had written JP.",
+    "preFixReproduction": {
+      "harness": "Node DOM harness with the real installLanguage, TreeWalker and a MutationObserver whose queued records are flushed like the browser microtask delivery",
+      "startLanguage": "en",
+      "afterModuleLanguageHandler": "接続状態の通知",
+      "afterNextScan": "Connection status notifications",
+      "expected": "接続状態の通知",
+      "result": "tests/ui-agent-connection-status-scanner.test.mjs failed at the EN->JP rescan assertion before the source change"
+    }
+  },
+  "fix": {
+    "ownership": "attribute is always generated as the JP source and translation is delegated to the installLanguage scanner (same ownership as static markup); the module no longer translates this attribute, so there is no double translation",
+    "file": "src/ui/agent-connection-status-ui.js",
+    "line": "live.setAttribute('aria-label','接続状態の通知')"
+  },
+  "changedFiles": {
+    "src/ui/agent-connection-status-ui.js": "626c99017dc12d86157c43dd3c83d7c1a80c0893d12bee78d7245265d0d85e44",
+    "tests/ui-agent-connection-status.test.mjs": "17a40821e3f87bba9534621ca22483826cf7e65947a83293bf55e384ffacd97e",
+    "tests/ui-agent-connection-status-scanner.test.mjs": "8dc9be95c7a1a50643fffe2cc66ca34a125db49c4c9839afa7840d110e0c068c"
+  },
+  "observedAriaLabel": {
+    "method": "real installLanguage + scanner, synthetic connected event sessionId=synthetic-session-40 scopes=[inspect]; values are the strict-equality assertion actuals",
+    "enStart": [
+      {"scan": "initial EN scan", "ariaLabel": "Connection status notifications", "live": "Connected.", "heading": "Connection status"},
+      {"scan": "EN->JP next scan", "ariaLabel": "接続状態の通知", "live": "接続しました。", "heading": "接続状態"},
+      {"scan": "JP->EN next scan", "ariaLabel": "Connection status notifications", "live": "Connected.", "heading": "Connection status"},
+      {"scan": "EN->JP second scan", "ariaLabel": "接続状態の通知", "live": "接続しました。", "heading": "接続状態"}
+    ],
+    "jpStart": [
+      {"scan": "initial JP scan", "ariaLabel": "接続状態の通知", "heading": "接続状態"},
+      {"scan": "JP->EN next scan", "ariaLabel": "Connection status notifications", "heading": "Connection status"},
+      {"scan": "EN->JP next scan", "ariaLabel": "接続状態の通知", "heading": "接続状態"}
+    ],
+    "otherStates": [
+      {"state": "connecting", "enAriaLabel": "Connection status notifications", "jaAriaLabel": "接続状態の通知"},
+      {"state": "failed", "enAriaLabel": "Connection status notifications", "jaAriaLabel": "接続状態の通知", "enPhase": "The connection failed — Browser bridge refused (403)"},
+      {"state": "disconnected", "enAriaLabel": "Connection status notifications", "jaAriaLabel": "接続状態の通知", "jaLive": "接続を解除しました。"}
+    ]
+  },
+  "invariantsChecked": [
+    "locale changes keep connection.state, sessionId=synthetic-session-40 and scopes=[inspect]",
+    "inspect alone is permitted; edit/analyze/view stay in the not-permitted list in both languages",
+    "ACP stays unavailable and is not rewritten as a connected session",
+    "no token, pairing code or endpoint is added to the DOM, tests or this evidence",
+    "a settled panel produces no further observer records and refresh() returns false",
+    "teardown removes the real studio-language listener; later report/setAcp/refresh return false",
+    "existing teardown/no-rewrite test in tests/ui-agent-connection-status.test.mjs is unchanged"
+  ],
+  "tests": {
+    "command": "node --test tests/ui-agent-connection-status.test.mjs tests/ui-agent-connection-status-scanner.test.mjs tests/browser-connection-diagnostics.test.mjs tests/browser-connection-errors.test.mjs tests/module-boundaries.test.mjs tests/i18n.test.mjs",
+    "result": "42 pass / 0 fail / 0 skip / 0 todo",
+    "breakdown": {
+      "tests/ui-agent-connection-status.test.mjs": "9 pass (one EN attribute assertion updated to the JP source; no test removed or skipped)",
+      "tests/ui-agent-connection-status-scanner.test.mjs": "5 pass (new: EN start rescan, full text/scopes/ACP, JP start, state round-trip, settle/teardown)",
+      "otherFourFiles": "28 pass"
+    },
+    "contracts": "npm run check:contracts -> Contract declarations type-check (5 declaration files)",
+    "whitespace": "git diff --check -> exit 0"
+  },
+  "realChrome": {
+    "executed": false,
+    "reason": "No frozen localhost build was started for this single-file blocker fix; only the Node DOM harness with the real installLanguage/scanner ran.",
+    "notVerified": [
+      "real browser accessible name via the accessibility tree",
+      "full Studio boot with installBrowserSession",
+      "public HTTPS behavior"
+    ]
+  },
+  "unconfirmed": [
+    "real Chrome EN->JP->EN accessible-name check",
+    "CI result on the pushed commit",
+    "screen reader announcement behavior beyond role=status/aria-live=polite"
+  ],
+  "notes": [
+    "No i18n.js change was needed, so other panels keep their scanner behavior.",
+    "Parent AGENTCHAT1 remains incomplete: conversation, authentication and model selection are still unimplemented."
+  ]
+}
