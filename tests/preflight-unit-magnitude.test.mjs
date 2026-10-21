@@ -39,6 +39,29 @@ test('absent, null, non-array and non-finite directional moduli keep the existin
  assert.deepEqual(warnings(ortho([0,NaN,Infinity])),[]);
 });
 
+test('synthetic [210,220,230] Pa warns once per component, keeps the array and the invalid-material refusal',()=>{
+  const project=structuralContractProject('orthotropic');
+  project.materialProperties.orthotropic.youngModuliPa=[210,220,230];
+  const before=structuredClone(project),found=warnings(project);
+  assert.deepEqual(found.map(d=>d.target),['/materialProperties/orthotropic/youngModuliPa/0','/materialProperties/orthotropic/youngModuliPa/1','/materialProperties/orthotropic/youngModuliPa/2']);
+  assert.deepEqual(found.map(d=>d.evidence.value),[210,220,230]);
+  assert.deepEqual(found.map(d=>d.evidence.unit),['Pa','Pa','Pa']);
+  assert.deepEqual(project,before);
+  // The warning is not an error and never supplies a conversion: the existing
+  // input contract still rejects these values as invalid material constants.
+  const report=preflightProject(project);
+  assert.equal(report.allowed,false);
+  assert.deepEqual(report.diagnostics.filter(d=>d.code==='UNIT_MAGNITUDE_SUSPECT').map(d=>d.target),['/materialProperties/orthotropic/youngModuliPa/0','/materialProperties/orthotropic/youngModuliPa/1','/materialProperties/orthotropic/youngModuliPa/2']);
+  assert.ok(report.diagnostics.some(d=>d.code==='MATERIAL_INVALID'&&d.target==='/materialProperties'));
+  assert.deepEqual(project,before);
+  // Synthetic in-range moduli stay quiet; the rule is not reused for shear or Poisson.
+  const clean=structuralContractProject('orthotropic');
+  assert.deepEqual(warnings(clean),[]);
+  clean.materialProperties.orthotropic.shearModuliPa=[210,220,230];
+  clean.materialProperties.orthotropic.poissonRatios=[.3,.3,.3];
+  assert.deepEqual(warnings(clean),[]);
+});
+
 test('a valid orthotropic project keeps allowed/provisional and only gains the warning diagnostics',()=>{
  const build=(youngModuliPa,shearModuliPa,poissonRatios)=>{const p=structuralContractProject('orthotropic');Object.assign(p.materialProperties.orthotropic,{youngModuliPa,shearModuliPa,poissonRatios});return documentStructuralContract(p);};
  const clean=build([1e9,2e9,3e9],[4e8,5e8,6e8],[0,0,0]);

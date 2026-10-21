@@ -23,6 +23,67 @@ test('disabled required target keeps the pointer and reports failure without foc
 
 test('diagnostic and required buttons for the same pointer each focus once',async()=>{const size=element('input');size.value='4';const reportOverride={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',message:'Mesh size must be positive'}],requiredPointers:['/options/size'],remainingChecks:[]};const f=setupControls({'mesh-size':size},reportOverride);await f.ui.check();const buttons=all(f.host).filter(e=>e.textContent==='Go to input');assert.equal(buttons.length,2);buttons[0].onclick();assert.equal(size.focused,true);size.focused=false;buttons[1].onclick();assert.equal(size.focused,true);assert.equal(size.value,'4');});
 
+const orthoPointer=index=>'/materialProperties/orthotropic/youngModuliPa/'+index;
+const orthoWarnings={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[210,220,230].map((value,index)=>({code:'UNIT_MAGNITUDE_SUSPECT',severity:'warning',target:orthoPointer(index),message:'Value magnitude is unusual for the fixed input unit; no conversion was applied',evidence:{value,unit:'Pa',plausibleRange:[1e5,1e13]},suggestions:['Confirm the value is expressed in Pa']})),requiredPointers:[],remainingChecks:[]};
+function orthoSetup({report=orthoWarnings,language='ja',controls={}}={}){
+ const host=element('div'),details=element('details'),events={},nodes={...controls};
+ for(const control of Object.values(nodes))details.append(control);
+ const status=element('p');status.id='material-status';status.textContent='直交異方性を登録済み';status.focusCalls=0;status.focus=function(){this.focusCalls++;this.focused=true;};details.append(status);nodes['material-status']=status;
+ let state={revision:11,project:{materialProperties:{orthotropic:{youngModuliPa:[210,220,230]}}}};
+ const ui=createAnalysisPreflightUi({host,document:{createElement:element,addEventListener:(name,fn)=>events[name]=fn},preflight:()=>structuredClone(report),snapshot:()=>state,language:()=>language,getControl:id=>nodes[id]??null,translate:()=>{}});
+ return {host,ui,status,details,nodes,events,project:()=>state.project,change(){state={...state,revision:12};}};
+}
+const correctionButtons=host=>all(host).filter(e=>e.textContent==='Go to input'||e.textContent==='入力箇所へ');
+test('three orthotropic Young warnings guide each exact component to the existing material-status note once',async()=>{
+ const f=orthoSetup(),report=await f.ui.check(),buttons=correctionButtons(f.host),before=structuredClone(f.project());
+ assert.deepEqual(report,orthoWarnings);assert.equal(buttons.length,3);
+ buttons.forEach((button,index)=>{
+  assert.equal(button.parentElement.children.some(c=>c.textContent==='専用編集欄は未実装。API/保存入力で該当成分（index '+index+'）を確認してください。'),true);
+  button.onclick();
+  assert.equal(f.status.focusCalls,index+1,'each click focuses the guide exactly once');
+  assert.equal(f.status.focused,true);assert.equal(f.details.open,true);
+  assert.equal(f.status.textContent,'直交異方性を登録済み');
+ });
+ assert.deepEqual(f.project(),before);
+ assert.deepEqual(f.project().materialProperties.orthotropic.youngModuliPa,[210,220,230]);
+ assert.equal(f.ui.getReport(),report);
+ assert.match(find(f.host,'preflight-status').textContent,/入力版: 11/);
+});
+test('the orthotropic guide is bilingual and never claims a component editor exists',async()=>{
+ const f=orthoSetup({language:'en'}),report=await f.ui.check(),buttons=correctionButtons(f.host);
+ assert.equal(buttons.length,3);
+ const text=all(f.host).map(e=>e.textContent).join(' ');
+ for(const index of [0,1,2])assert.match(text,new RegExp('No dedicated component editor is implemented; confirm component index '+index+' in the API or saved input.'));
+ assert.equal(/専用編集欄は未実装/.test(text),false);
+ buttons[1].onclick();assert.equal(f.status.focusCalls,1);assert.equal(f.ui.getReport(),report);
+});
+test('stale orthotropic warnings discard the guide action instead of moving focus',async()=>{
+ const f=orthoSetup();await f.ui.check();const button=correctionButtons(f.host)[0];f.change();button.onclick();
+ assert.equal(f.ui.getReport(),null);assert.equal(f.status.focusCalls,0);assert.equal(f.status.focused,undefined);
+ assert.match(find(f.host,'preflight-status').textContent,/もう一度チェック/);
+});
+test('disabled or hidden material-status rejects the orthotropic guide without focusing',async()=>{
+ const f=orthoSetup();await f.ui.check();const button=correctionButtons(f.host)[0];
+ f.status.disabled=true;button.onclick();assert.equal(f.status.focusCalls,0);assert.match(find(f.host,'preflight-status').textContent,/表示できません/);
+ f.status.disabled=false;f.status.hidden=true;button.onclick();assert.equal(f.status.focusCalls,0);assert.match(find(f.host,'preflight-status').textContent,/表示できません/);
+});
+test('unknown index, deeper paths, the whole array and shear components are not mapped by prefix',async()=>{
+ const tempting={'mat-orthotropic-youngModuliPa-3':element('input'),'mat-orthotropic-shearModuliPa-0':element('input'),'mat-orthotropic-youngModuliPa-0-extra':element('input')};
+ const report={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:['/materialProperties/orthotropic/youngModuliPa/3','/materialProperties/orthotropic/youngModuliPa/0/extra','/materialProperties/orthotropic/youngModuliPa','/materialProperties/orthotropic/shearModuliPa/0'].map(pointer=>({code:'UNIT_MAGNITUDE_SUSPECT',severity:'warning',target:pointer,message:'unusual magnitude'})),requiredPointers:[],remainingChecks:[]};
+ const f=orthoSetup({report,controls:tempting});await f.ui.check();
+ assert.equal(correctionButtons(f.host).length,0);
+ for(const control of Object.values(tempting))assert.equal(control.focused,undefined);
+ assert.equal(f.status.focusCalls,0);
+ const text=all(f.host).map(e=>e.textContent).join(' ');
+ for(const pointer of report.diagnostics.map(d=>d.target))assert.ok(text.includes(pointer),pointer);
+});
+test('a dedicated component editor, when it resolves, is the only target for its exact pointer',async()=>{
+ const controls={};[210,220,230].forEach((value,index)=>{const input=element('input');input.value=String(value);input.focusCalls=0;input.focus=function(){this.focusCalls++;this.focused=true;};controls['mat-orthotropic-youngModuliPa-'+index]=input;});
+ const f=orthoSetup({controls});await f.ui.check();const buttons=correctionButtons(f.host);
+ assert.equal(buttons.length,3);assert.equal(all(f.host).some(e=>typeof e.textContent==='string'&&e.textContent.includes('専用編集欄は未実装')),false);
+ buttons.forEach((button,index)=>{button.onclick();assert.equal(controls['mat-orthotropic-youngModuliPa-'+index].focusCalls,1);assert.equal(f.status.focusCalls,0);assert.equal(controls['mat-orthotropic-youngModuliPa-'+index].value,String([210,220,230][index]));});
+});
+
 test('preflight and solve read the same single delegated analysis options reader',()=>{
  assert.ok(main.includes("import {analysisOptionsFromValues} from './ui/analysis-options.js';"));
  assert.equal(main.split('function currentAnalysisOptions()').length-1,1,'exactly one shared reader must exist');
