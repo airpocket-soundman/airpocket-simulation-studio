@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {inspectProjectInput as inspect} from '../src/project-input-inspection.js';
 import {getProjectRevision} from '../src/project-revision.js';
 import {createStudioApi} from '../src/studio-api.js';
+import {planarRegionFromEuler,validatePlanarRegion} from '../src/planar-region.js';
+import {cylindricalFrame} from '../src/cylindrical-region.js';
 const model=()=>({version:1,name:'Existing input',sourceModel:{kind:'box',bounds:[0,0,0,10,10,40]},study:{kind:'structural',gravityEnabled:false},materialProperties:{youngModulus:1e9,poissonRatio:.3,source:'Explicit reference data'},meshSettings:{refinements:[]},meshes:[{positions:[0,0,0,2,0,0,0,2,0,10,0,0,12,0,0,10,2,0],faceIds:[0,1]}],conditions:[{type:'fixed',value:0,direction:[0,0,1],regions:[{mesh:0,triangles:[0]}]},{type:'force',value:100,direction:[0,0,1],regions:[{mesh:0,triangles:[1]}]}],selection:[[]]});
 test('inspection reveals existing material and condition values with exact input revision and known units',async()=>{
  const p=model(),before=structuredClone(p),revision=await getProjectRevision(p),r=await inspect(p,{section:'material',expectedRevision:revision});assert.equal(r.revision,revision);assert.equal(r.pointer,'/materialProperties');assert.equal(r.exists,true);assert.equal(r.descriptor.type,'object');assert.equal(r.descriptor.omitted,true);assert.equal(r.descriptor.value,undefined);assert.deepEqual(r.page.entries.map(e=>e.pointer),['/materialProperties/poissonRatio','/materialProperties/source','/materialProperties/youngModulus']);assert.equal(r.page.entries.find(e=>e.pointer.endsWith('youngModulus')).value,1e9);assert.equal(r.units['/materialProperties/youngModulus'],'Pa');assert.equal(r.page.entries.find(e=>e.type==='string').unit,undefined);
@@ -66,5 +68,78 @@ test('spherical selection, saved condition and provenance expose the same known 
  assert.equal((await inspect(p,{pointer:'/sphericalRegion/diameter'})).exists,false);
  const reloaded=JSON.parse(JSON.stringify(p)),reloadedSelection=await inspect(reloaded,{pointer:'/sphericalRegion'}),reloadedCondition=await inspect(reloaded,{pointer:'/conditions/2/sphericalRegion'});
  assert.deepEqual(reloadedSelection.units,selection.units);assert.deepEqual(reloadedCondition.units,condition.units);
+ assert.deepEqual(p,before);
+});
+test('planar rectangle descriptors expose saved mm, degrees and axis index units on selection, condition and provenance',async()=>{
+ const planar={...planarRegionFromEuler(2,10,[0,0,30],[0,0],[20,30]),mesh:0};validatePlanarRegion(planar);
+ const p=model();p.planarRegion=planar;p.conditions.push({type:'force',value:50,direction:[0,0,-1],regions:[{mesh:0,triangles:[0]}],planarRegion:{...planar}});
+ p.inputProvenance={schemaVersion:1,entries:[{pointer:'/planarRegion/position',value:10,status:'unconfirmed',assumption:'Synthetic planar position'},{pointer:'/conditions/2/planarRegion/max/1',value:30,status:'unconfirmed',assumption:'Synthetic planar extent'}]};
+ const before=structuredClone(p),revision=await getProjectRevision(p);
+ const selection=await inspect(p,{pointer:'/planarRegion',expectedRevision:revision}),condition=await inspect(p,{pointer:'/conditions/2/planarRegion',expectedRevision:revision});
+ for(const [field,unit] of [['position','mm'],['min','mm'],['max','mm'],['rotationDegrees','deg'],['axis','1']])assert.equal(selection.units['/planarRegion/'+field],unit,field);
+ assert.equal(selection.units['/planarRegion/mesh'],undefined);assert.equal(selection.descriptor.unit,undefined);
+ for(const field of ['position','min','max','rotationDegrees','axis','mesh'])assert.equal(selection.units['/planarRegion/'+field],condition.units['/conditions/2/planarRegion/'+field],field);
+ const frame=await inspect(p,{pointer:'/planarRegion/frame'}),conditionFrame=await inspect(p,{pointer:'/conditions/2/planarRegion/frame'});
+ assert.equal(frame.descriptor.unit,undefined);assert.equal(frame.units['/planarRegion/frame/origin'],'mm');assert.equal(frame.units['/planarRegion/frame/u'],'1');assert.equal(frame.units['/planarRegion/frame/v'],'1');assert.deepEqual(frame.units,Object.fromEntries(Object.entries(conditionFrame.units).map(([key,unit])=>[key.replace('/conditions/2',''),unit])));
+ const position=await inspect(p,{pointer:'/planarRegion/position'}),axis=await inspect(p,{pointer:'/planarRegion/axis'});
+ assert.equal(position.descriptor.value,10);assert.equal(position.descriptor.unit,'mm');assert.equal(axis.descriptor.value,2);assert.equal(axis.descriptor.unit,'1');
+ const min=await inspect(p,{pointer:'/planarRegion/min'}),rotation=await inspect(p,{pointer:'/planarRegion/rotationDegrees'}),origin=await inspect(p,{pointer:'/planarRegion/frame/origin'});
+ assert.equal(min.descriptor.unit,'mm');assert.deepEqual(min.page.entries.map(e=>[e.value,e.unit]),[[0,'mm'],[0,'mm']]);
+ assert.deepEqual(rotation.page.entries.map(e=>[e.value,e.unit]),[[0,'deg'],[0,'deg'],[30,'deg']]);
+ assert.deepEqual(origin.page.entries.map(e=>[e.value,e.unit]),[[0,'mm'],[0,'mm'],[10,'mm']]);
+ assert.equal((await inspect(p,{pointer:'/planarRegion/max'})).descriptor.unit,'mm');
+ assert.equal((await inspect(p,{pointer:'/conditions/2/planarRegion/max/1'})).descriptor.unit,'mm');
+ const provenPosition=await inspect(p,{pointer:'/inputProvenance/entries/0/value'}),provenExtent=await inspect(p,{pointer:'/inputProvenance/entries/1/value'});
+ assert.equal(provenPosition.descriptor.value,10);assert.equal(provenPosition.descriptor.unit,'mm');assert.equal(provenExtent.descriptor.value,30);assert.equal(provenExtent.descriptor.unit,'mm');
+ const fixture={...p,planarRegion:{...planar,radius:5,tolerance:.1,position:10,legacyScale:2}};
+ assert.equal((await inspect(fixture,{pointer:'/planarRegion/radius'})).descriptor.unit,undefined);assert.equal((await inspect(fixture,{pointer:'/planarRegion/tolerance'})).descriptor.unit,undefined);assert.equal((await inspect(fixture,{pointer:'/planarRegion/legacyScale'})).descriptor.unit,undefined);assert.equal((await inspect(fixture,{pointer:'/planarRegion/position'})).descriptor.unit,'mm');
+ assert.deepEqual(p,before);
+});
+test('cylindrical and conical descriptors expose saved mm, degrees and direction units without mm on mesh or CAD flags',async()=>{
+ const cone={origin:[0,0,0],axis:[0,1,0],reference:[1,0,0],radius:12,tolerance:.3,axialMin:-10,axialMax:10,startDegrees:315,sweepDegrees:90,radiusAtMax:15,exactCad:true,mesh:0};
+ const cylindrical={origin:[0,0,0],axis:[0,1,0],reference:[1,0,0],radius:12,tolerance:.3,axialMin:-10,axialMax:10,startDegrees:315,sweepDegrees:90,exactCad:false,mesh:0};
+ cylindricalFrame(cone);cylindricalFrame(cylindrical);
+ const p=model();p.cylindricalRegion=cone;p.conditions.push({type:'force',value:75,direction:[1,0,0],regions:[{mesh:0,triangles:[1]}],cylindricalRegion:{...cylindrical}});
+ p.inputProvenance={schemaVersion:1,entries:[{pointer:'/conditions/2/cylindricalRegion/tolerance',value:.3,status:'unconfirmed',assumption:'Synthetic radial tolerance'},{pointer:'/conditions/2/cylindricalRegion/sweepDegrees',value:90,status:'unconfirmed',assumption:'Synthetic angular sweep'}]};
+ const before=structuredClone(p),revision=await getProjectRevision(p);
+ const selection=await inspect(p,{pointer:'/cylindricalRegion',expectedRevision:revision}),condition=await inspect(p,{pointer:'/conditions/2/cylindricalRegion',expectedRevision:revision});
+ for(const [field,unit] of [['origin','mm'],['radius','mm'],['tolerance','mm'],['axialMin','mm'],['axialMax','mm'],['radiusAtMax','mm'],['axis','1'],['reference','1'],['startDegrees','deg'],['sweepDegrees','deg']])assert.equal(selection.units['/cylindricalRegion/'+field],unit,field);
+ assert.equal(selection.units['/cylindricalRegion/exactCad'],undefined);assert.equal(selection.units['/cylindricalRegion/mesh'],undefined);assert.equal(selection.descriptor.unit,undefined);
+ assert.equal(condition.units['/conditions/2/cylindricalRegion/radiusAtMax'],undefined);
+ for(const field of ['origin','radius','tolerance','axialMin','axialMax','axis','reference','startDegrees','sweepDegrees','exactCad','mesh'])assert.equal(selection.units['/cylindricalRegion/'+field],condition.units['/conditions/2/cylindricalRegion/'+field],field);
+ const origin=await inspect(p,{pointer:'/cylindricalRegion/origin'}),axis=await inspect(p,{pointer:'/cylindricalRegion/axis'}),reference=await inspect(p,{pointer:'/cylindricalRegion/reference'});
+ assert.equal(origin.descriptor.unit,'mm');assert.deepEqual(origin.page.entries.map(e=>[e.value,e.unit]),[[0,'mm'],[0,'mm'],[0,'mm']]);
+ assert.equal(axis.descriptor.unit,'1');assert.deepEqual(axis.page.entries.map(e=>[e.value,e.unit]),[[0,'1'],[1,'1'],[0,'1']]);
+ assert.equal(reference.descriptor.unit,'1');assert.deepEqual(reference.page.entries.map(e=>e.unit),['1','1','1']);
+ for(const [field,value,unit] of [['radius',12,'mm'],['axialMin',-10,'mm'],['axialMax',10,'mm'],['tolerance',.3,'mm'],['startDegrees',315,'deg'],['sweepDegrees',90,'deg'],['radiusAtMax',15,'mm']]){const entry=await inspect(p,{pointer:'/cylindricalRegion/'+field});assert.equal(entry.descriptor.value,value,field);assert.equal(entry.descriptor.unit,unit,field);}
+ assert.equal((await inspect(p,{pointer:'/conditions/2/cylindricalRegion/radius'})).descriptor.value,12);
+ const provenTolerance=await inspect(p,{pointer:'/inputProvenance/entries/0/value'}),provenSweep=await inspect(p,{pointer:'/inputProvenance/entries/1/value'});
+ assert.equal(provenTolerance.descriptor.value,.3);assert.equal(provenTolerance.descriptor.unit,'mm');assert.equal(provenSweep.descriptor.value,90);assert.equal(provenSweep.descriptor.unit,'deg');
+ const fixture={...p,cylindricalRegion:{...cone,position:10,min:[0,0],legacyScale:2}};
+ assert.equal((await inspect(fixture,{pointer:'/cylindricalRegion/position'})).descriptor.unit,undefined);assert.equal((await inspect(fixture,{pointer:'/cylindricalRegion/min'})).descriptor.unit,undefined);assert.equal((await inspect(fixture,{pointer:'/cylindricalRegion/legacyScale'})).descriptor.unit,undefined);
+ assert.deepEqual(p,before);
+});
+test('region unit pages stay consistent across offsets and JSON roundtrips without converting or mutating saved values',async()=>{
+ const planar={...planarRegionFromEuler(2,10,[0,0,0],[0,0],[20,30]),mesh:0},cylindrical={origin:[0,0,0],axis:[0,1,0],reference:[1,0,0],radius:12,tolerance:.3,axialMin:-10,axialMax:10,startDegrees:315,sweepDegrees:90,exactCad:false,mesh:0};
+ validatePlanarRegion(planar);cylindricalFrame(cylindrical);
+ const p=model();p.planarRegion=planar;p.conditions.push({type:'force',value:50,direction:[0,0,-1],regions:[{mesh:0,triangles:[0]}],planarRegion:{...planar}},{type:'force',value:75,direction:[1,0,0],regions:[{mesh:0,triangles:[1]}],cylindricalRegion:{...cylindrical}});
+ const before=structuredClone(p),revision=await getProjectRevision(p),pointer='/conditions/2/planarRegion';
+ const full=await inspect(p,{pointer,expectedRevision:revision}),pages=[];
+ for(let offset=0;offset<8;offset=pages.at(-1)?.page.nextOffset??0){const page=await inspect(p,{pointer,offset,limit:3});pages.push(page);if(page.page.nextOffset===null)break;}
+ assert.equal(pages.length,3);assert.deepEqual(pages.map(page=>page.page.offset),[0,3,6]);assert.deepEqual(pages.map(page=>page.page.nextOffset),[3,6,null]);
+ for(const page of pages)for(const [key,unit] of Object.entries(page.units))assert.equal(unit,full.units[key],key);
+ assert.equal(full.units[pointer+'/min'],'mm');assert.equal(pages[0].units[pointer+'/max'],'mm');assert.equal(pages[1].units[pointer+'/position'],'mm');assert.equal(pages[2].units[pointer+'/rotationDegrees'],'deg');
+ const cylindricalPointer='/conditions/3/cylindricalRegion',cylindricalFull=await inspect(p,{pointer:cylindricalPointer}),cylindricalPages=[];
+ for(let offset=0;offset<12;offset=cylindricalPages.at(-1)?.page.nextOffset??0){const page=await inspect(p,{pointer:cylindricalPointer,offset,limit:4});cylindricalPages.push(page);if(page.page.nextOffset===null)break;}
+ assert.equal(cylindricalPages.length,3);assert.deepEqual(cylindricalPages.map(page=>page.page.offset),[0,4,8]);assert.deepEqual(cylindricalPages.map(page=>page.page.nextOffset),[4,8,null]);
+ for(const page of cylindricalPages)for(const [key,unit] of Object.entries(page.units))assert.equal(unit,cylindricalFull.units[key],key);
+ assert.equal(cylindricalFull.units[cylindricalPointer+'/radius'],'mm');assert.equal(cylindricalPages[0].units[cylindricalPointer+'/axialMin'],'mm');assert.equal(cylindricalPages[2].units[cylindricalPointer+'/startDegrees'],'deg');
+ const partial=await inspect(p,{pointer:cylindricalPointer+'/origin',offset:1,limit:2}),whole=await inspect(p,{pointer:cylindricalPointer+'/origin'});
+ assert.deepEqual(partial.page.entries.map(e=>[e.value,e.unit]),whole.page.entries.slice(1,3).map(e=>[e.value,e.unit]));assert.deepEqual(partial.page.entries.map(e=>e.unit),['mm','mm']);
+ const reloaded=JSON.parse(JSON.stringify(p)),saved=(value)=>JSON.parse(JSON.stringify(value));
+ assert.deepEqual(reloaded.conditions[2].planarRegion,saved(planar));assert.deepEqual(reloaded.conditions[3].cylindricalRegion,saved(cylindrical));
+ assert.equal(reloaded.conditions[2].planarRegion.position,10);assert.deepEqual(reloaded.conditions[2].planarRegion.max,[20,30]);assert.equal(reloaded.conditions[3].cylindricalRegion.radius,12);assert.equal(reloaded.conditions[3].cylindricalRegion.tolerance,.3);assert.equal(reloaded.conditions[3].cylindricalRegion.axialMin,-10);assert.equal(reloaded.conditions[3].cylindricalRegion.startDegrees,315);
+ assert.deepEqual(await inspect(reloaded,{pointer}),full);assert.deepEqual(await inspect(reloaded,{pointer:cylindricalPointer}),cylindricalFull);
+ assert.equal((await inspect(reloaded,{pointer:'/planarRegion'})).revision,revision);
  assert.deepEqual(p,before);
 });

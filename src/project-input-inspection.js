@@ -7,6 +7,14 @@ const escape=v=>v.replace(/~/g,'~0').replace(/\//g,'~1');
 const materialUnits={youngModulus:'Pa',poissonRatio:'1',density:'kg/m3',strength:'Pa',conductivity:'W/(m*K)',specificHeat:'J/(kg*K)',expansion:'1/K',temperatureMin:'degC',temperatureMax:'degC'};
 const sphericalDimensionUnits={center:'mm',radius:'mm',tolerance:'mm',axis:'1',reference:'1',latitudeMin:'deg',latitudeMax:'deg',startDegrees:'deg',sweepDegrees:'deg'};
 const sphericalDimensionUnit=key=>Object.hasOwn(sphericalDimensionUnits,key)?sphericalDimensionUnits[key]:undefined;
+// Planar `axis` is a coordinate-axis index, not a length; frame axes are saved direction cosines.
+const planarDimensionUnits={position:'mm',min:'mm',max:'mm',rotationDegrees:'deg',axis:'1'};
+const planarFrameUnits={origin:'mm',u:'1',v:'1'};
+// Cylindrical `axis`/`reference` are direction vectors; radiusAtMax exists only for cones.
+const cylindricalDimensionUnits={origin:'mm',radius:'mm',tolerance:'mm',axialMin:'mm',axialMax:'mm',radiusAtMax:'mm',axis:'1',reference:'1',startDegrees:'deg',sweepDegrees:'deg'};
+const planarDimensionUnit=key=>Object.hasOwn(planarDimensionUnits,key)?planarDimensionUnits[key]:undefined;
+const planarFrameUnit=key=>Object.hasOwn(planarFrameUnits,key)?planarFrameUnits[key]:undefined;
+const cylindricalDimensionUnit=key=>Object.hasOwn(cylindricalDimensionUnits,key)?cylindricalDimensionUnits[key]:undefined;
 const studyUnits={thermalSnapshotCount:'count',thermalSnapshotBudgetBytes:'byte',acousticSnapshotCount:'count',acousticSnapshotBudgetBytes:'byte',temperature:'degC',referenceTemperature:'degC',materialTemperature:'degC',gravity:'m/s2',initialTemperature:'degC',timeStep:'s',volumetricSource:'W/m3',frequency:'Hz',soundSpeed:'m/s',airDensity:'kg/m3',lossFactor:'1',referencePressurePa:'Pa',acousticDuration:'s',pulseWidth:'s',acousticTimeStep:'s',dampingRate:'1/s',directivityDistanceMm:'mm',freeStreamVelocity:'m/s',referenceLengthMm:'mm',pressureDropPa:'Pa',dynamicViscosity:'Pa*s',fluidDensity:'kg/m3',fluidSoundSpeed:'m/s'};
 function tokens(pointer){
  if(typeof pointer!=='string'||pointer.length>2048||pointer!==''&&!pointer.startsWith('/')||/~(?:[^01]|$)/.test(pointer))throw argument('Use an absolute JSON Pointer with ~0/~1 escapes (maximum 2048 characters)');
@@ -32,10 +40,12 @@ function unitFor(path,project,allowProvenance=true){
  }
  if(root==='conditions'){
   const c=project.conditions?.[key];if(third==='value')return {fixed:'mm',displacement:'mm',force:'N',pressure:'Pa',normalTraction:'Pa',temperature:'degC',heatFlux:'W/m2',heatPower:'W',convection:'W/(m2*K)',radiation:'1',thermalContact:'W/(m2*K)',acousticPressure:'Pa',acousticImpedance:'Pa*s/m'}[c?.type];
-  if(third==='sphericalRegion')return sphericalDimensionUnit(fourth);if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
+  if(third==='sphericalRegion')return sphericalDimensionUnit(fourth);if(third==='planarRegion')return fourth==='frame'?planarFrameUnit(path[4]):planarDimensionUnit(fourth);if(third==='cylindricalRegion')return cylindricalDimensionUnit(fourth);if(third==='direction')return '1';if(third==='ambientTemperature')return 'degC';if(third==='reactance')return 'Pa*s/m';if(third==='frame')return fourth==='origin'?'mm':fourth==='axes'?'1':undefined;
  }
  if(root==='meshes'&&third==='positions')return 'mm';
  if(root==='sphericalRegion')return sphericalDimensionUnit(key);
+ if(root==='planarRegion')return key==='frame'?planarFrameUnit(third):planarDimensionUnit(key);
+ if(root==='cylindricalRegion')return cylindricalDimensionUnit(key);
  const indices=parts=>parts.every(part=>/^(0|[1-9]\d*)$/.test(part));
  if(root==='sourceModel'&&['bounds','boxes','center','radius','outerRadius','innerRadius','length','seedPoint'].includes(key)&&indices(path.slice(2)))return 'mm';
  if(root==='sourceModel'&&key==='openingCaps'&&/^(0|[1-9]\d*)$/.test(third)&&['point','normal'].includes(fourth)&&indices(path.slice(4)))return fourth==='point'?'mm':'1';
