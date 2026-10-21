@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "AGENTINPUT1",
+  "workOrder": 46,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "scope": "Bounded actual Chrome GUI acceptance; parent remains incomplete",
+  "browser": {
+    "brand": "Google Chrome",
+    "provider": "extension",
+    "version": "not read; browser inventory confirms brand only",
+    "origin": "http://127.0.0.1:5188",
+    "viewportOverride": {
+      "width": 390,
+      "height": 844
+    },
+    "documentClientWidth": 375,
+    "documentScrollWidth": 375
+  },
+  "instructionCorrection": {
+    "originalYoungModuliPa": [
+      210,
+      220,
+      230
+    ],
+    "officialSavedApiLoad": "refused by existing Young/shear lower bound 1000 Pa",
+    "rawPreflightWarnings": 3,
+    "guiAcceptedYoungModuliPa": [
+      1000,
+      2000,
+      3000
+    ],
+    "reason": "Preserve validator. Exact originally requested values cannot be imported by the production GUI. Accepted unusual values exercise the same three exact warning pointer mappings.",
+    "acceptanceClaim": "Accepted valid-warning GUI path verified. Exact210/220/230 GUI path intentionally unfulfilled; raw invalid-project diagnostics remain Node-only."
+  },
+  "verified": {
+    "threeGuiWarnings": 3,
+    "pointerIndices": [
+      0,
+      1,
+      2
+    ],
+    "keyboardActivation": "Each correction button received Enter; all activeElement=material-status",
+    "closedMaterialDetailsOpened": true,
+    "inputExportBytesEqual": true,
+    "revisionBeforeAndAfter": 3,
+    "jaAndEnFreshChecks": true,
+    "meshEditInvalidatesOldGuide": true,
+    "staleGuideCount": 0,
+    "freshGuideCount": 3,
+    "inrangeYoungModuliPa": [
+      1000000000.0,
+      2000000000.0,
+      3000000000.0
+    ],
+    "inrangeWarnings": 0
+  },
+  "nodeValidation": {
+    "tests": 43,
+    "pass": 43,
+    "fail": 0,
+    "skip": 0,
+    "contracts": "pass",
+    "unknownIndexAndDisabledHidden": "covered by existing focused Node tests; not injected into production GUI"
+  },
+  "retainedFiles": [
+    "docs/evidence/review46-chrome/browser-readbacks.json",
+    "docs/evidence/review46-chrome/english-warning-panel.png",
+    "docs/evidence/review46-chrome/invalid-requested.json",
+    "docs/evidence/review46-chrome/official-api-fixture-check.json",
+    "docs/evidence/review46-chrome/valid-inrange.json",
+    "docs/evidence/review46-chrome/valid-warning.json"
+  ],
+  "unverified": [
+    "Exact210/220/230Pa cannot reach production GUI due to legitimate validation.",
+    "Formal paired-browser MCP was not used; official Node API and real GUI preflight are separately identified.",
+    "Browser version and pixel-outline measurement not captured.",
+    "No claim of dedicated component editor or parent completion."
+  ],
+  "cleanup": {
+    "ownedTabClosed": true,
+    "viewportReset": true,
+    "ownedServerStopped": true,
+    "pairingOrScopesChanged": false
+  }
+}

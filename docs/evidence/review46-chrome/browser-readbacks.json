@@ -1,0 +1,595 @@
+{
+  "focusChecks": [
+    {
+      "activeId": "material-status",
+      "detailsOpen": true,
+      "status": "入力版: 3 / 現在の入力と一致 / legacy / 事前拒否なし / 暫定フラグなし"
+    },
+    {
+      "activeId": "material-status",
+      "detailsOpen": true,
+      "status": "入力版: 3 / 現在の入力と一致 / legacy / 事前拒否なし / 暫定フラグなし"
+    },
+    {
+      "activeId": "material-status",
+      "detailsOpen": true,
+      "status": "入力版: 3 / 現在の入力と一致 / legacy / 事前拒否なし / 暫定フラグなし"
+    }
+  ],
+  "beforeProject": {
+    "version": 1,
+    "name": "Synthetic orthotropic QA valid-warning",
+    "material": "金属",
+    "materialProperties": {
+      "orthotropic": {
+        "model": "linear-orthotropic",
+        "youngModuliPa": [
+          1000,
+          2000,
+          3000
+        ],
+        "poissonRatios": [
+          0,
+          0,
+          0
+        ],
+        "shearModuliPa": [
+          400000000,
+          500000000,
+          600000000
+        ],
+        "axes": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "source": "Synthetic axial reference, not measured material data",
+        "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios"
+      }
+    },
+    "sourceModel": {
+      "kind": "box",
+      "bounds": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ]
+    },
+    "meshSettings": {
+      "refinements": []
+    },
+    "study": {
+      "kind": "structural",
+      "modalAnalysis": false,
+      "modeCount": 2,
+      "modalIterations": 60,
+      "acousticTransient": false,
+      "acousticDuration": 0.004,
+      "pulseWidth": 0.0002,
+      "acousticTimeStep": 0,
+      "dampingRate": 0,
+      "exteriorRadiation": false,
+      "directivityEnabled": false,
+      "directivityAxis": 2,
+      "directivityPoints": 36,
+      "directivityDistanceMm": 1000,
+      "nonlinearLoadSteps": 10,
+      "maxNewtonIterations": 30,
+      "materialTemperature": 20,
+      "flowAxis": 1,
+      "pressureDropPa": 0.01,
+      "dynamicViscosity": 0.001,
+      "fluidDensity": 1000,
+      "fluidSoundSpeed": 1500,
+      "stokesVelocityElement": "P1",
+      "freeStreamVelocity": [
+        0.001,
+        0,
+        0
+      ],
+      "maxRadiationIterations": 30,
+      "thermalStress": false,
+      "temperature": 80,
+      "referenceTemperature": 20,
+      "gravityEnabled": false,
+      "gravity": [
+        0,
+        -9.80665,
+        0
+      ],
+      "transient": false,
+      "timeStep": 1,
+      "steps": 10,
+      "initialTemperature": 20,
+      "volumetricSource": 0,
+      "frequency": 2000,
+      "soundSpeed": 343,
+      "airDensity": 1.2,
+      "lossFactor": 0.01,
+      "referencePressurePa": 0.00002,
+      "sweep": false,
+      "sweepStart": 500,
+      "sweepEnd": 5000,
+      "sweepCount": 12,
+      "receiverPoint": [
+        5,
+        5,
+        20
+      ]
+    },
+    "meshes": [
+      {
+        "positions": [
+          10,
+          10,
+          40,
+          10,
+          0,
+          40,
+          10,
+          10,
+          0,
+          10,
+          0,
+          40,
+          10,
+          0,
+          0,
+          10,
+          10,
+          0,
+          0,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          40,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          10,
+          40,
+          0,
+          10,
+          0,
+          0,
+          10,
+          40,
+          10,
+          10,
+          0,
+          0,
+          10,
+          40,
+          10,
+          10,
+          40,
+          10,
+          10,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          10,
+          0,
+          40,
+          0,
+          0,
+          0,
+          10,
+          0,
+          0,
+          10,
+          0,
+          40,
+          0,
+          10,
+          40,
+          0,
+          0,
+          40,
+          10,
+          10,
+          40,
+          0,
+          0,
+          40,
+          10,
+          0,
+          40,
+          10,
+          10,
+          40,
+          10,
+          10,
+          0,
+          10,
+          0,
+          0,
+          0,
+          10,
+          0,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          0
+        ],
+        "faceIds": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          5,
+          5
+        ],
+        "kind": "cad"
+      }
+    ],
+    "conditions": [
+      {
+        "type": "fixed",
+        "value": 0,
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "regions": [
+          {
+            "mesh": 0,
+            "triangles": [
+              10,
+              11
+            ]
+          }
+        ]
+      },
+      {
+        "type": "force",
+        "value": 100,
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "regions": [
+          {
+            "mesh": 0,
+            "triangles": [
+              8,
+              9
+            ]
+          }
+        ]
+      }
+    ],
+    "selection": [
+      []
+    ]
+  },
+  "afterProject": {
+    "version": 1,
+    "name": "Synthetic orthotropic QA valid-warning",
+    "material": "金属",
+    "materialProperties": {
+      "orthotropic": {
+        "model": "linear-orthotropic",
+        "youngModuliPa": [
+          1000,
+          2000,
+          3000
+        ],
+        "poissonRatios": [
+          0,
+          0,
+          0
+        ],
+        "shearModuliPa": [
+          400000000,
+          500000000,
+          600000000
+        ],
+        "axes": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "source": "Synthetic axial reference, not measured material data",
+        "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios"
+      }
+    },
+    "sourceModel": {
+      "kind": "box",
+      "bounds": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ]
+    },
+    "meshSettings": {
+      "refinements": []
+    },
+    "study": {
+      "kind": "structural",
+      "modalAnalysis": false,
+      "modeCount": 2,
+      "modalIterations": 60,
+      "acousticTransient": false,
+      "acousticDuration": 0.004,
+      "pulseWidth": 0.0002,
+      "acousticTimeStep": 0,
+      "dampingRate": 0,
+      "exteriorRadiation": false,
+      "directivityEnabled": false,
+      "directivityAxis": 2,
+      "directivityPoints": 36,
+      "directivityDistanceMm": 1000,
+      "nonlinearLoadSteps": 10,
+      "maxNewtonIterations": 30,
+      "materialTemperature": 20,
+      "flowAxis": 1,
+      "pressureDropPa": 0.01,
+      "dynamicViscosity": 0.001,
+      "fluidDensity": 1000,
+      "fluidSoundSpeed": 1500,
+      "stokesVelocityElement": "P1",
+      "freeStreamVelocity": [
+        0.001,
+        0,
+        0
+      ],
+      "maxRadiationIterations": 30,
+      "thermalStress": false,
+      "temperature": 80,
+      "referenceTemperature": 20,
+      "gravityEnabled": false,
+      "gravity": [
+        0,
+        -9.80665,
+        0
+      ],
+      "transient": false,
+      "timeStep": 1,
+      "steps": 10,
+      "initialTemperature": 20,
+      "volumetricSource": 0,
+      "frequency": 2000,
+      "soundSpeed": 343,
+      "airDensity": 1.2,
+      "lossFactor": 0.01,
+      "referencePressurePa": 0.00002,
+      "sweep": false,
+      "sweepStart": 500,
+      "sweepEnd": 5000,
+      "sweepCount": 12,
+      "receiverPoint": [
+        5,
+        5,
+        20
+      ]
+    },
+    "meshes": [
+      {
+        "positions": [
+          10,
+          10,
+          40,
+          10,
+          0,
+          40,
+          10,
+          10,
+          0,
+          10,
+          0,
+          40,
+          10,
+          0,
+          0,
+          10,
+          10,
+          0,
+          0,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          40,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          10,
+          40,
+          0,
+          10,
+          0,
+          0,
+          10,
+          40,
+          10,
+          10,
+          0,
+          0,
+          10,
+          40,
+          10,
+          10,
+          40,
+          10,
+          10,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          10,
+          0,
+          40,
+          0,
+          0,
+          0,
+          10,
+          0,
+          0,
+          10,
+          0,
+          40,
+          0,
+          10,
+          40,
+          0,
+          0,
+          40,
+          10,
+          10,
+          40,
+          0,
+          0,
+          40,
+          10,
+          0,
+          40,
+          10,
+          10,
+          40,
+          10,
+          10,
+          0,
+          10,
+          0,
+          0,
+          0,
+          10,
+          0,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10,
+          0
+        ],
+        "faceIds": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          5,
+          5
+        ],
+        "kind": "cad"
+      }
+    ],
+    "conditions": [
+      {
+        "type": "fixed",
+        "value": 0,
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "regions": [
+          {
+            "mesh": 0,
+            "triangles": [
+              10,
+              11
+            ]
+          }
+        ]
+      },
+      {
+        "type": "force",
+        "value": 100,
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "regions": [
+          {
+            "mesh": 0,
+            "triangles": [
+              8,
+              9
+            ]
+          }
+        ]
+      }
+    ],
+    "selection": [
+      []
+    ]
+  },
+  "inputBytesEqual": true,
+  "englishPreflightText": "Pre-analysis check\nSolve\nMesh only\nCheck current inputs\n\nInput snapshot: 3 / matches current inputs / legacy / No preflight refusal / No provisional flag\n\nLegacy input mode: full input provenance is not checked.\n\nThis check is incomplete. It does not establish physical validity, mesh quality, convergence or accuracy.\n\nwarning / PREFLIGHT_CONTRACT_LIMITED / /study / Required-input provenance contract is not implemented for this study/material combination\n\nUse the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run\n\nwarning / UNIT_MAGNITUDE_SUSPECT / /materialProperties/orthotropic/youngModuliPa/0 / Value magnitude is unusual for the fixed input unit; no conversion was applied\n\nConfirm the value is expressed in Pa; convert and record the conversion if it is not\n\nGo to input\n\nNo dedicated component editor is implemented; confirm component index 0 in the API or saved input.\n\nwarning / UNIT_MAGNITUDE_SUSPECT / /materialProperties/orthotropic/youngModuliPa/1 / Value magnitude is unusual for the fixed input unit; no conversion was applied\n\nConfirm the value is expressed in Pa; convert and record the conversion if it is not\n\nGo to input\n\nNo dedicated component editor is implemented; confirm component index 1 in the API or saved input.\n\nwarning / UNIT_MAGNITUDE_SUSPECT / /materialProperties/orthotropic/youngModuliPa/2 / Value magnitude is unusual for the fixed input unit; no conversion was applied\n\nConfirm the value is expressed in Pa; convert and record the conversion if it is not\n\nGo to input\n\nNo dedicated component editor is implemented; confirm component index 2 in the API or saved input.\n\nRemaining check: Mesh quality and element validity after generation\n\nRemaining check: Boundary-region transfer and constraint rank/rigid-body modes after meshing\n\nRemaining check: Source applicability, convergence, mesh dependence and physical accuracy"
+}
