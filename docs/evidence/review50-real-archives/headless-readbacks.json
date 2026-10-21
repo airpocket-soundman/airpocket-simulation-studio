@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "helperSha256": "a16a5400e529726d0dd818ac5cba5870436138aaa57493c8064261e12eb72829",
+  "node": "v24.11.1",
+  "scope": "Actual synthetic headless process solves. Not browser rendering, not MCP export acceptance or independent material validation.",
+  "archiveSha256": "78cc38e1ca766245613957d54de25ea984959cd57f65920a62ed9ea7a4f8a61f",
+  "archiveBytes": 257612,
+  "records": [
+    {
+      "amplitude": 100,
+      "inputSha256": "3e6c498a92117bf59e84ecdd287c3e082ebc8d14210377ef7aa0ce6cea7ba55d",
+      "nodeCount": 94,
+      "frameCount": 0,
+      "runtime": {
+        "schemaVersion": 1,
+        "target": "node",
+        "isolation": "process",
+        "build": {
+          "status": "available",
+          "version": "0.44.0",
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "dirty": true,
+          "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0"
+        },
+        "engine": {
+          "requestedMethod": "pcg",
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      }
+    }
+  ],
+  "cleanup": "Owned child processes settled before each analyzeProject resolved; no browser or server started."
+}
