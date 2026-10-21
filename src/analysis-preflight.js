@@ -1,3 +1,4 @@
+import {requirePrintedEquivalentStudy} from './printed-equivalent-material.js';
 import {inspectThermalStressInputContract} from './thermal-stress-input-contract.js';
 import {inspectNonlinearInputContract} from './nonlinear-input-contract.js';
 import {inspectModalInputContract} from './modal-input-contract.js';
@@ -47,6 +48,7 @@ export function preflightProject(project,options={}, {target='browser',operation
  try{diagnostics.push(...diagnoseExecution(operation==='mesh'?{study:{kind:'structural'}}:project,options,target).diagnostics);}catch(error){add('EXECUTION_OPTIONS_INVALID','/options','Invalid execution options',{message:error.message},['Use the selected target capability contract']);}
  try{validateProject(project);}catch(error){add('PROJECT_INVALID','/','Project validation failed',{message:error.message},['Repair the indicated saved input; preserve intended physics']);}
  try{validateMaterialProperties(project.materialProperties??{});}catch(error){add('MATERIAL_INVALID','/materialProperties','Material validation failed',{message:error.message},['Correct material values and their documented applicable ranges']);}
+ if(operation==='solve')try{requirePrintedEquivalentStudy(project);}catch(error){add('PRINTED_EQUIVALENT_INVALID','/materialProperties/printedEquivalent',error.message,{},['Use a supported printed equivalent material within its explicit validity range']);}
  if(operation==='solve')try{requireResolvedCadConditions(project);}catch(error){add('CAD_REGIONS_UNRESOLVED','/conditions','CAD regions require resolution',{message:error.message},['Reselect or explicitly reapply the affected regions']);}
  if(!object(project.sourceModel))add('SOURCE_MODEL_REQUIRED','/sourceModel','Original solid source is required for meshing',{available:false},['Reload the original STEP/STL source or provide a supported solid definition']);
  if(project.units!==undefined){

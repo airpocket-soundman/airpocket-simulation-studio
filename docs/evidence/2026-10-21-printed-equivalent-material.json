@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-21",
+  "task": "PRINT2",
+  "order": 42,
+  "base": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "sourceSha256": {
+    "src/printed-equivalent-material.js": "c36ecdea415be92b0616a3d8500d3a9886078d5ed362a4786e62992d16f59247",
+    "src/materials.js": "0d1434470318f54a5b3fbc308315b9a511c6345170dabdadaab0ba8e6b675d6e",
+    "src/regions.js": "a925f3bd1849b31b7cd25cb9fb866c262bc83114d339f52326e11ac9c50907af",
+    "src/material-dependence.js": "7cd9f981a27e58ecd6a462b0693d2627b01c7760e4d1ed087aa8828d68220880",
+    "src/analysis-preflight.js": "f873c890dbc5c008e67150d1938af82f1722f788c4fff114fdfe13f79afb4b81",
+    "tests/printed-equivalent-material.test.mjs": "a550c94ebd99df5b07d6bac256aa3e7d2e7386fb842fc8047316f04bb8ea7817",
+    "tests/fixtures/printed-equivalent-material.mjs": "050117176989c61a75ff92ecd3bf7dab8996307d5b1dccf2ec6f741be3e270db"
+  },
+  "scope": "Limited metadata/validity contract for existing orthotropic equivalent solver; no parent completion",
+  "dataBasis": {
+    "kind": "synthetic-assumed",
+    "physicalMeasurementsSupplied": false,
+    "identificationPerformed": false,
+    "independentPhysicalValidationPerformed": false,
+    "datasetReferenceChecks": "Synthetic IDs test separation only; same revision labels across different dataset IDs are allowed; references are not measurement authentication"
+  },
+  "implementation": {
+    "savedValidation": "Existing createStudioApi.loadProject/exportProject via material/project validators",
+    "runtimeValidation": "preflight and actual Worker resolveElasticMaterial both check applicability",
+    "metadata": "Units, specimen dimensions, material batch/printer, build orientation, layer height, explicit null unknown wall thickness, wall count, infill, constants/axes and basis kept",
+    "mutualExclusion": "printedStructure is refused alone (unsupported explicit solver) and with printedEquivalent (no double stiffness)",
+    "legacy": "No-record orthotropic input unchanged"
+  },
+  "environment": {
+    "platform": "win32",
+    "node": "v24.11.1",
+    "guiChanged": false,
+    "downloadsPerformed": false
+  },
+  "actualWorkerRoundtrip": {
+    "inputRevisionBefore": "sha256:ece62206ab73abe4b8530b2820da979a519b328882a32f9a8dc86f7416dc62a1",
+    "inputRevisionAfter": "sha256:ece62206ab73abe4b8530b2820da979a519b328882a32f9a8dc86f7416dc62a1",
+    "recordId": "synthetic-assumption-v1",
+    "materialAxes": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "expectedDisplacementMm": 0.013333333333333334,
+    "actualDisplacementMm": 0.01333333333639636,
+    "absoluteErrorMm": 3.063025527660912e-12,
+    "displacementToleranceMm": 1e-8,
+    "expectedReactionN": -100,
+    "actualReactionN": -100.00000000863474,
+    "reactionErrorN": 8.63474269863218e-9,
+    "reactionToleranceN": 0.000001,
+    "restoredDisplacementExactlyEqual": true,
+    "restoredMaterialRecordExactlyEqual": true,
+    "method": "pcg",
+    "sizeMm": 5,
+    "source": "Synthetic10x10x40mm axial bar with Ez3e9Pa,zeroPoisson,100N; not printed specimen"
+  },
+  "validation": {
+    "initialOrderedRun": {
+      "total": 44,
+      "pass": 42,
+      "fail": 2,
+      "reason": "Own public/fem-kernel.wasm was absent; two pre-existing WASM checks failed ENOENT"
+    },
+    "preparation": "node scripts/build-kernel.mjs compiled existing small WAT using prepared wabt into own ignored public artifact; no SDK/native acquisition",
+    "affectedRerun": {
+      "command": "node --test tests/orthotropic.test.mjs tests/orthotropic-integration.test.mjs",
+      "total": 11,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0
+    },
+    "newContractTests": {
+      "total": 5,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "independentDatasetRevisionRegression": {
+      "total": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "docs": {
+      "total": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    "contracts": "Five declaration files type-check",
+    "moduleBoundaries": "228 files566 edges; existing7 allowlisted violations unchanged",
+    "diffCheck": "pass"
+  },
+  "unverified": [
+    "No actual printed calibration or independent measured specimen data",
+    "No detailed layer/wall/infill solver or measurement-device implementation",
+    "No GUI/Chrome/public HTTPS QA: no GUI changes",
+    "Required final CI, review, merge and publication remain separate",
+    "PRINT2 parent remains building; no progress.json change"
+  ],
+  "measurementFollowup": [
+    "Printer/material batch/build direction/environment and actual layer/wall/infill dimensions",
+    "Calibrated force, displacement and dimensional metrology plus raw stress-strain and instrument versions",
+    "Identification dataset, procedure/revision and valid temperature/rate/process envelope",
+    "Independent specimens excluded from fitting, validation errors and measurement uncertainty"
+  ]
+}

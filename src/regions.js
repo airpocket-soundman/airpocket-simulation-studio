@@ -1,3 +1,4 @@
+import {requirePrintedEquivalentStudy} from './printed-equivalent-material.js';
 import {validateHistorySettings} from './time-history-plan.js';
 import {validateStlSource} from './stl-source.js';
 import {validatePendingCadCondition} from './cad-update-state.js';
@@ -38,6 +39,7 @@ export function validateProject(project) {
   let total=0;
   if(project.meshSettings){const r=project.meshSettings.refinements;if(!Array.isArray(r)||r.length>160||r.some(v=>!Array.isArray(v.center)||v.center.length!==3||!v.center.every(Number.isFinite)||![v.size,v.radius].every(x=>Number.isFinite(x)&&x>0)))throw Error("Invalid local mesh settings");}
   if(project.materialProperties!==undefined)validateMaterialProperties(project.materialProperties);
+  requirePrintedEquivalentStudy(project);
   validatePlasticLoadFractions(project.study);
   if(project.study?.kind==='creepingFlow'){
    validateStokesStudy(project.study);
