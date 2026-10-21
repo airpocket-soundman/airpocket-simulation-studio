@@ -1,0 +1,109 @@
+{
+  "task": "COUPLE3",
+  "title": "Conservative heat-flux transfer between overlapping non-matching planar triangles",
+  "scope": "limited acceptance unit only (operator); parent COUPLE3 stays queued",
+  "date": "2026-10-19",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-couple3",
+  "branch": "codex/opencode-couple3",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "baseRef": "origin/main",
+  "node": "v24.11.1",
+  "changedFiles": [
+    "src/planar-heat-transfer.js (new: pure operator)",
+    "src/triangle-overlap.js (new: shared clipPolygon/barycentric2 extracted from thermal-contact.js)",
+    "src/thermal-contact.js (imports the extracted helper; overlap math unchanged)",
+    "src/module-layers.json (registered the two new domain modules)",
+    "tests/planar-heat-transfer.test.mjs (new)",
+    "docs/evidence/2026-10-19-opencode-couple3.json (this file)"
+  ],
+  "designNotes": {
+    "orientation": "triangle winding defines the outward normal; A-outward and B-inward are recorded positive; A and B outward normals must be anti-parallel (cos <= -1+1e-6), same-facing pairs are rejected and never auto-flipped",
+    "units": "mesh coordinates in mm; projected overlap areas converted mm^2 -> m^2 with 1e-6 exactly once; returned nodeHeatW values are nodal heat in W, never labelled W/m^2",
+    "quadrature": "centroid rule for the affine source q (exact); 3 edge-midpoint rule for the quadratic q*N_j target integrand (exact on triangles)",
+    "coverage": "total-area ratio and per-face covered/area must match within coverageTolerance (default 1e-6); holes are never filled by nearest-point snapping"
+  },
+  "fixtures": {
+    "origin": "synthetic hand-built planar meshes inside the test (no CAD, no solver, no measured data)",
+    "referenceInterface": "10x10 mm square at z=0; A = 2 triangles split by the P00-P11 diagonal; B = 4 triangles meeting at centre (5,5); separate node sets 0-3 and 4-8",
+    "singleTriangle": "right triangle (0,0)-(10,0)-(0,10) mm, A outward +z, B outward -z"
+  },
+  "commands": [
+    {
+      "cmd": "npm ci",
+      "result": "added 22 packages, 0 vulnerabilities"
+    },
+    {
+      "cmd": "node scripts/build-kernel.mjs",
+      "result": "public/fem-kernel.wasm produced (needed by the pre-existing thermal-contact test)"
+    },
+    {
+      "cmd": "node --test tests/planar-heat-transfer.test.mjs tests/thermal-contact.test.mjs",
+      "result": "tests 11, pass 11, fail 0, skip 0"
+    },
+    {
+      "cmd": "npm run check:contracts",
+      "result": "Contract declarations type-check (5 declaration files)"
+    },
+    {
+      "cmd": "node --test tests/module-boundaries.test.mjs",
+      "result": "tests 19, pass 19, fail 0 (new modules classified in the domain layer)"
+    },
+    {
+      "cmd": "git diff --check",
+      "result": "exit 0"
+    }
+  ],
+  "measured": [
+    {
+      "case": "constant q=1000 W/m^2 over non-matching interface",
+      "inputs": "q=1000 W/m^2, 10x10 mm, tol=1e-6 mm",
+      "expected": "coveredAreaM2=1e-4; sourceW=targetW=0.1 W; |balanceErrorW|<=1e-12 W",
+      "measured": "coveredAreaM2=0.00009999999999999999 m^2; sourceW=0.09999999999999999 W; targetW=0.09999999999999998 W; targetOutwardW=-0.09999999999999998 W; balanceErrorW=1.3877787807814457e-17 W"
+    },
+    {
+      "case": "linear q(x)=1000+100000*x W/m^2 (x in m), x=0..0.01 m",
+      "inputs": "base=1000 W/m^2, gradient=[100000,0,0] W/m^2/m",
+      "expected": "sourceW=targetW=0.15 W; sourceW+targetOutwardW=0; |balanceErrorW|<=1e-12 W",
+      "measured": "sourceW=0.15 W; targetW=0.14999999999999997 W; targetOutwardW=-0.14999999999999997 W; balanceErrorW=2.7755575615628914e-17 W"
+    },
+    {
+      "case": "analytic nodal integral, single matching triangle",
+      "inputs": "base=1000, gradient=[100000,0,0]; triangle (0,0)-(10,0)-(0,10) mm",
+      "expected": "node(0,0)=0.020833333333333332 W; node(0,10)=0.020833333333333332 W; node(10,0)=0.025 W; total=0.06666666666666667 W",
+      "measured": "each within 1e-12 W of the analytic values (assertions pass)"
+    },
+    {
+      "case": "small total, absolute-error check (no 0/0 relative error)",
+      "inputs": "q=1e-9 W/m^2",
+      "expected": "sourceW=1e-13 W; |balanceErrorW|<=1e-18 W (absolute)",
+      "measured": "sourceW=1e-13 W; balanceErrorW=1.262177448353619e-29 W"
+    },
+    {
+      "case": "looser plane tolerance 0.02 mm accepts a 0.01 mm offset",
+      "inputs": "B offset 0.01 mm in z, toleranceMm=0.02",
+      "expected": "|balanceErrorW|<=1e-12 W",
+      "measured": "passes"
+    }
+  ],
+  "rejections": [
+    "shared node indices between A and B -> /separate nodes/",
+    "1% area deficit (B scaled 0.99) -> /coverage/",
+    "duplicate B triangle -> /coverage/",
+    "1% hole (one B triangle dropped) -> /coverage/",
+    "equal total area but internal hole + overlap (one B triangle shifted 0.5 mm) -> /coverage/",
+    "0.01 mm plane offset with default tol 1e-6 -> /coincident/",
+    "degenerate (collinear) face -> /Degenerate/",
+    "non-finite heat flux density (base NaN, gradient Infinity) -> /finite heat flux/",
+    "same-facing normals (B wound +z) -> /same-facing/ (not auto-flipped)"
+  ],
+  "notVerified": [
+    "solid/fluid production coupling not implemented or attempted",
+    "fluid advection solver not implemented (no claim of a finished advection solver)",
+    "temperature / heat-flux coupling iteration not implemented",
+    "non-planar and curved interfaces not supported",
+    "no GUI / API / MCP / worker wiring; module is not connected to any solver path",
+    "no real-browser verification (not required for this pure module)",
+    "no numerical value was hidden by widening a tolerance, swapping a fixture or skipping a test"
+  ],
+  "parentStatus": "COUPLE3 remains queued; src/progress.json not modified in this unit"
+}

@@ -1,5 +1,7 @@
 # OpenCode PRレビュー（2026-10-21）
 
+追記: 前回要修正9件は修正版を再レビューして合格。#139の位置依存判定を統合側で追加修正。[修正版のレビュー記録](evidence/2026-10-21-repaired-pr-review.json)。以下は初回レビュー時点の記録。
+
 [English](en/opencode-pr-review-2026-10-21.md)
 
 [固定headと再現条件](evidence/2026-10-21-opencode-pr-review.json) / [次の20作業](opencode-work-orders-2026-10-21/README.md)

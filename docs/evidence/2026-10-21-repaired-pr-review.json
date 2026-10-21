@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-21",
+  "base": "b1ee3ac07c68b8983604a907dc2cec65cab23a10",
+  "scope": "Nine repaired PRs from the previous20-PR review; original source PR workspaces and primary dirty files untouched.",
+  "entries": [
+    {
+      "pr": 131,
+      "task": "P3",
+      "head": "04e939ca6ae192ba2052862d5e9895c41287a14e",
+      "verdict": "approved",
+      "summary": "Startup reservations precede awaits; only the owner persists its startup digest. Concurrent, failed and restored requests verified."
+    },
+    {
+      "pr": 133,
+      "task": "AGENTACP1",
+      "head": "982d856444cb781370c78326b6b46ec1b3adcaf2",
+      "verdict": "approved",
+      "summary": "Validates JSON-RPC envelopes and known capability/auth types; malformed responses never become ready."
+    },
+    {
+      "pr": 134,
+      "task": "RESULTCURVE1",
+      "head": "36153ae1c32bbb90cb8f283a513f75430d2ef67b",
+      "verdict": "approved",
+      "summary": "Binds curve rows to actual force, input, mesh, calculation and result identities; rejects mismatched control forces."
+    },
+    {
+      "pr": 139,
+      "task": "CFDPORT1",
+      "head": "43ec37f432f301e9a089b93de570a1e27adcb271",
+      "verdict": "approved-with-integration-repair",
+      "summary": "Rejects duplicate faces and non-convex openings. Integration also repairs origin-dependent degeneracy found during re-review."
+    },
+    {
+      "pr": 140,
+      "task": "COUPLE3",
+      "head": "e486fa38969e6d11d3e3f8d5078e1537d7aa9ae0",
+      "verdict": "approved",
+      "summary": "Explicitly rejects non-finite intermediate and final heat-transfer values while retaining conservation tests."
+    },
+    {
+      "pr": 141,
+      "task": "REG2",
+      "head": "59087800c88fcd62bcb5bff81c4edfe5254c4d79",
+      "verdict": "approved",
+      "summary": "Verified spherical GUI dynamic status through JP/EN round trips using the actual language scanner."
+    },
+    {
+      "pr": 143,
+      "task": "CONTACT1",
+      "head": "86a396fc4bbfeecf9fea70a89f126fe7084e3771",
+      "verdict": "approved",
+      "summary": "Adds a safe iteration cap and stagnation termination; rejects huge budgets and stops tightly tolerated stalled solves."
+    },
+    {
+      "pr": 144,
+      "task": "COUPLE4B",
+      "head": "366c95557e8cf77ab896c87dd4d9a03faf712df3",
+      "verdict": "approved",
+      "summary": "Rejects unrepresentable pressure-transfer results and preserves finite volume integrals for extreme displacements."
+    },
+    {
+      "pr": 145,
+      "task": "AGENTCHAT1",
+      "head": "ce5ec68a354198bc8414130770592c4340b0edb9",
+      "verdict": "approved",
+      "summary": "Verifies connection status and aria-label language round trips and scan convergence with the actual scanner."
+    }
+  ],
+  "integrationRepair": {
+    "pr": 139,
+    "file": "src/opening-loop-candidates.js",
+    "problem": "Face degeneracy threshold used absolute coordinates, rejecting healthy translated geometry.",
+    "repair": "Use normalized local edges and relative cross-product area.",
+    "regression": "2x2x10mm tube translated1e7mm and1mm tetra translated1e6mm preserve topology."
+  },
+  "reviewTests": {
+    "p3": {
+      "pass": 21,
+      "skip": 1,
+      "skipReason": "Windows symlink permission"
+    },
+    "acp": {
+      "pass": 28,
+      "independentMalformedCases": 8
+    },
+    "curve": {
+      "pass": 11
+    },
+    "openingWithIntegrationRepair": {
+      "pass": 11
+    },
+    "heat": {
+      "pass": 7
+    },
+    "sphericalUi": {
+      "pass": 10
+    },
+    "contact": {
+      "pass": 13
+    },
+    "pressure": {
+      "pass": 11
+    },
+    "connectionUi": {
+      "pass": 14
+    }
+  },
+  "limits": [
+    "Approvals concern bounded first-stage implementations, not full parent-task completion.",
+    "Source PR139 additionally requires the integration repair included in this batch.",
+    "Final integrated CI and public verification are required before publication."
+  ],
+  "integrationValidation": {
+    "focusedBatch": {
+      "total": 116,
+      "pass": 115,
+      "skip": 1,
+      "fail": 0
+    },
+    "boardAndSharedThermal": {
+      "total": 34,
+      "pass": 34,
+      "fail": 0
+    },
+    "contracts": "5 declarations passed",
+    "diffCheck": "passed",
+    "mergeConflictResolution": "Retained triangle-overlap and unilateral-contact-reference plus both spherical-region and connection-status UI registrations."
+  }
+}

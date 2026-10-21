@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "13-RESULTCURVE1",
+  "parentTaskId": "RESULTCURVE1",
+  "parentTaskStatusAfterWork": "queued",
+  "scope": "First acceptance unit only: a pure module that reduces real solveElastic results into axial reaction, gauge extension and engineering stress/strain, plus a revisioned independent-linear-solve step table. Static graph UI, API, MCP, CSV, history persistence, nonlinear hysteresis and the parent task remain out of scope.",
+  "baseCommit": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-resultcurve1",
+  "changedFilesHashBasis": "sha256 of the committed blob bytes (LF line endings)",
+  "changedFiles": {
+    "src/increment-curve-data.js": {
+      "status": "added",
+      "sha256": "e16ac2a84e47b137ced8c0d5acfc26912f06b7a26e9fcc4218029116e4558583"
+    },
+    "tests/increment-curve-data.test.mjs": {
+      "status": "added",
+      "sha256": "effd5ecf784adccc710a8bcabc28edd07c4f54a833fb796a8577b0b6c8ae849e"
+    },
+    "src/module-layers.json": {
+      "status": "modified",
+      "change": "one line: register increment-curve-data.js in the domain layer (mayImport contract)",
+      "sha256": "ebf39687be16421adc252929dad07b1178d93456b38ca36e9516714fc29bb926"
+    }
+  },
+  "environment": {
+    "node": "v24.11.1",
+    "dependencyInstall": "npm ci in the dedicated worktree (22 packages)",
+    "gmshWasmArtifact": "node_modules/@loumalouomega/gmsh-wasm 0.3.0 present; real Gmsh WASM meshing and real solveElastic CPU solves were executed, no mock",
+    "existingSolverChanged": false,
+    "plasticityHistoryFormatChanged": false,
+    "archiveApiMcpGuiChanged": false,
+    "progressJsonChanged": false
+  },
+  "fixture": {
+    "origin": "synthetic; the same reference bar already used by tests/elastic.test.mjs, not a measured specimen",
+    "geometryMm": "box 10 x 10 x 40 (bounds 0,0,0,10,10,40), mesh size 4 mm",
+    "nodes": 171,
+    "tetrahedra": 428,
+    "fixedNodes": 20,
+    "loadedNodes": 20,
+    "youngModulusPa": 1000000000,
+    "poissonRatio": 0,
+    "initialAreaMm2": 100,
+    "initialGaugeLengthMm": 40,
+    "axis": [0, 0, 1],
+    "gauge": "gauge a = equally weighted fixed-face nodes, gauge b = equally weighted loaded-face nodes (explicit weights summing to 1)",
+    "controlledQuantity": "force",
+    "loadRouteN": [0, 25, 50, 100, 50, 0],
+    "boundary": "area-weighted traction on the loaded face triangles, driven through loadedFaceTractionForces from the same declared axis and loaded nodes, so the total applied axial force equals the requested force",
+    "solve": "six independent solveElastic CPU solves (no load history, no display scaling)",
+    "units": {
+      "force": "N",
+      "length": "mm",
+      "area": "mm^2",
+      "engineeringStress": "Pa",
+      "engineeringStrain": "dimensionless"
+    }
+  },
+  "expected": {
+    "extensionMmAt100N": 0.04,
+    "engineeringStressPaAt100N": 1000000,
+    "engineeringStrainAt100N": 0.001,
+    "supportReactionNAt100N": -100,
+    "extensionMmAt50N": 0.02,
+    "extensionMmAt0N": 0,
+    "relativeErrorTolerance": 1e-6,
+    "forceBalanceAbsoluteToleranceN": 1e-5,
+    "definitions": "engineeringStressPa = tensileForceN / (initialAreaMm2 * 1e-6); engineeringStrain = extensionMm / initialGaugeLengthMm; tensileForceN = -(sum of support reaction projected on the axis) so tension is positive; no true stress/strain is emitted"
+  },
+  "measured": {
+    "method": "same synthetic spec and route as the test file, printed from a throwaway script outside the repository",
+    "row100N": {
+      "reactionAxisN": -100.00000000140884,
+      "tensileForceN": 100.00000000140884,
+      "forceBalanceErrorNAxialN": -1.4088357147556962e-9,
+      "extensionMm": 0.04000000000017234,
+      "engineeringStressPa": 1000000.0000140885,
+      "engineeringStrain": 0.0010000000000043086,
+      "resultRevision": "sha256:3941c60f022b1a2df1ef0763c96ca9e40cff953d4e7507d511a8bc0f70e4f5c3"
+    },
+    "relativeErrorsRow100N": {
+      "extension": 4.3085535139653075e-12,
+      "engineeringStress": 1.4088508137888311e-11,
+      "engineeringStrain": 4.3085535139653075e-12,
+      "tensileForce": 1.4088286093283386e-11
+    },
+    "supportReactionAbsoluteErrorNAt100N": 1.4088357147556962e-9,
+    "maxForceBalanceAbsoluteErrorNAcrossAllRows": 1.4088357147556962e-9,
+    "return50N": {
+      "extensionMm": 0.02000000000008617,
+      "relativeErrorTo0.02": 4.3085535139653075e-12,
+      "note": "rows 2 and 4 are two separate solves of the same route point; both 0.02000000000008617 mm. This linear round trip is on one straight route and is not claimed as plastic hysteresis."
+    },
+    "terminal0N": {
+      "extensionMm": 0
+    },
+    "immutability": {
+      "curveFrozen": true,
+      "stepsFrozen": true,
+      "gaugeWeightsFrozen": true,
+      "jsonRoundTripEqual": true,
+      "inputSpecUnchanged": true
+    },
+    "revisions": {
+      "scheme": "existing project revision functions only: getProjectRevision(canonicalJson) for spec.input and getPhysicalRevision for each step result; no hand-written hash strings",
+      "identicalContentSameRevision": true,
+      "changedDisplacementChangesRevision": true
+    }
+  },
+  "rejectionsVerifiedByTest": [
+    "initialAreaMm2 <= 0",
+    "initialGaugeLengthMm <= 0",
+    "non-unit axis",
+    "non-finite axis component",
+    "nodeCount < 1",
+    "duplicated or out-of-range fixed/loaded node id",
+    "a loaded node that is also fixed",
+    "gauge weights not summing to 1, wrong weight count, duplicated gauge node, gauge points sharing a node",
+    "incomplete rowIdentity or unsupported schema version",
+    "missing spec.input (revision cannot be derived)",
+    "duplicated step id, non-boolean converged/provisional, unknown controlledQuantity, non-finite controlledValue, converged step without its result",
+    "rows mixing a different materialKey, geometryKey or gaugeKey",
+    "axial reaction that does not balance the applied load within 1e-5 N",
+    "modal result (normalized shapes)",
+    "result carrying plasticity history or hyperelastic state (a J2 result is not accepted as a step)",
+    "result exposing only maxVonMisesPa/maxDisplacementMm (no gauge or reaction data)",
+    "result without constraint reactions or with a non-finite displacement",
+    "no fallback that substitutes a maximum value for the gauge stress/strain"
+  ],
+  "tests": {
+    "command": "node --test tests/increment-curve-data.test.mjs tests/elastic.test.mjs",
+    "total": 11,
+    "pass": 11,
+    "fail": 0,
+    "skip": 0,
+    "newFileTests": 9,
+    "existingElasticTests": 2
+  },
+  "otherCommands": {
+    "node --test tests/module-boundaries.test.mjs": {
+      "pass": 19,
+      "fail": 0,
+      "reason": "verify the new src module is registered exactly once in the domain layer"
+    },
+    "npm run check:contracts": {
+      "result": "Contract declarations type-check (5 declaration files). exit 0"
+    },
+    "git diff --check": {
+      "result": "clean"
+    }
+  },
+  "notVerified": [
+    "static force-displacement / stress-strain graph rendering",
+    "GUI, HTTP API and MCP exposure of the step table",
+    "CSV/JSON/image export and case history persistence (next unit)",
+    "load-unload hysteresis: only independent linear solves exist; plasticity history rows do not carry per-step displacement or reactions",
+    "nonlinear or displacement-controlled increments",
+    "non-uniform bar mesh convergence of the gauge averages (single synthetic mesh only)",
+    "real browser verification (not required for this unit)",
+    "parent RESULTCURVE1 acceptance (GUI/API/MCP/save-restore agreement, LLM reconstruction of the curve) is untouched"
+  ],
+  "progressProposal": {
+    "id": "RESULTCURVE1",
+    "status": "queued",
+    "note": "src/progress.json was not modified. Proposed note for the board maintainer: RESULTCURVE1 first unit landed a pure, revisioned independent-linear-solve step table (src/increment-curve-data.js) verified against the analytical uniform bar; static graph UI/API/MCP/CSV/history and nonlinear hysteresis remain open, so the parent stays queued."
+  }
+}

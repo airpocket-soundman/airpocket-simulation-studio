@@ -72,7 +72,7 @@ studioApi.selectConicalRegion(0, {
 
 ## 球面帯sector（2026-10-19）
 
-`selectSphericalRegion(meshIndex, spec)`を意味操作の`edit`/`previewEdit`から利用できます。球面領域を作る新GUIはありません。対応は単一体積の組込み`sphere`またはSTEP上の球面で、一般UV矩形ではありません。
+`selectSphericalRegion(meshIndex, spec)`を意味操作の`edit`/`previewEdit`から利用できます。2026-10-19に限定GUI(`src/ui/spherical-region-ui.js`、02領域を選ぶ→「球面を緯度・経度で選ぶ」)を追加し、mesh・center・axis・reference・radius・tolerance・緯度上下・開始経度・幅をmm/degreeで入力して既存APIを呼びます。GUIは選択計算も面積式も持たず、空欄/非有限はAPI呼出し前に拒否し、失敗時は入力draftを保持します。対応は単一体積の組込み`sphere`またはSTEP上の球面で、一般UV矩形ではありません。
 
 ```js
 { exactCad: true, center: [0,0,0], axis: [0,0,1], reference: [1,0,0],
@@ -86,7 +86,7 @@ studioApi.selectConicalRegion(0, {
 
 CAD面積照合は既存1e-7、曲面三角形の面積誤差は既存min(3%,許容)を維持。総力/総熱量を指定した場合は合計を保存します。圧力・熱流束など単位面積量は既存の三角形積分であり、厳密な曲面積分や応力収束を保証しません。合計20領域・単一CAD体積、STL/流体領域/球面thermalContact不可という境界は維持します。
 
-[機械可読証拠](evidence/2026-10-19-spherical-cad-region.json)と`tests/spherical-{cad,wiring}.test.mjs`で、任意軸、折返し経度、北/南cap・全周帯・全球のCAD面積、2サイズ再メッシュ、123N/37Wの保存、STEP球の実Worker反力とケースJSON復元を確認。粗いcapメッシュの5.1%誤差は拒否し、細分化後に受理しました。正式stdio MCPのschema発見→preview/edit→保存入力保持も確認。SolidCraft 0.16連携・公開Worker・新GUI selector・一般曲面は未実証/未対応です。REG2全体はbuildingを維持します。
+[機械可読証拠](evidence/2026-10-19-spherical-cad-region.json)と`tests/spherical-{cad,wiring}.test.mjs`で、任意軸、折返し経度、北/南cap・全周帯・全球のCAD面積、2サイズ再メッシュ、123N/37Wの保存、STEP球の実Worker反力とケースJSON復元を確認。粗いcapメッシュの5.1%誤差は拒否し、細分化後に受理しました。正式stdio MCPのschema発見→preview/edit→保存入力保持も確認。SolidCraft 0.16連携・公開Worker・一般曲面は未実証/未対応です。球面の限定GUIは`tests/ui-spherical-region.test.mjs`で空欄/非有限の原子拒否・復元・reset・失敗時のdraft保持・JA/EN可逆ラベル・既存APIとの一致(418三角形/157.07963267948966 mm²)を確認しましたが、実ChromeでのGUI操作は今回未確認です。REG2全体はbuildingを維持します。
 
-球面は同Chromeへの正式stdio MCP inspect/editで418表示三角形・面積157.07963267948963mm²・123N条件と寸法保存を確認し、GUI JSON textを有界取得して保存ファイルMCPへ再読込、入力revision/descriptor一致を確認。browser側mesh/solve、新GUI selector、GUI download完了・file chooser経由の再importは未確認です。
+球面は同Chromeへの正式stdio MCP inspect/editで418表示三角形・面積157.07963267948963mm²・123N条件と寸法保存を確認し、GUI JSON textを有界取得して保存ファイルMCPへ再読込、入力revision/descriptor一致を確認。browser側mesh/solve、GUI download完了・file chooser経由の再importは未確認です。新GUI selectorはソースとNodeテストで確認済みで、実Chrome確認は別途必要です。
 実機部分の根拠: [Chrome＋保存MCP](evidence/2026-10-19-preflight-gui-spherical-browser.json)。

@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "AGENTACP1",
+  "workOrder": "27-AGENTACP1",
+  "scope": "PR #133 blocker fix only: ACP v1 JSON-RPC envelope exclusivity, strict jsonrpc/UTF-8 decoding, and initialize-result schema checks. No real agent connection, session/prompt, authentication execution, MCP delegation, or model selection was added.",
+  "pr": 133,
+  "branch": "codex/opencode-agentacp1",
+  "baseRef": "origin/main",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "reviewHeadSha": "80d70688cb67f07c4e60e5e38b58d26ef7058970",
+  "startingHeadSha": "80d70688cb67f07c4e60e5e38b58d26ef7058970",
+  "originMainObservedSha": "882edf354676c38e45c103b00d84fcdfa3518bd0",
+  "protocolReference": {
+    "tag": "schema-v1.26.0",
+    "schemaSha256": "4bcd1d2051ff7ed379bd9b234fb9b09c5ab9245478698e9fab805bd9b52a33a6",
+    "schemaSizeBytes": 255170,
+    "sha256ReverifiedBeforeWork": true,
+    "negotiatedProtocolVersion": 1,
+    "v2OrCustomSchemaMixed": false
+  },
+  "changedFiles": [
+    "scripts/acp-client-process.mjs",
+    "tests/acp-client-process.test.mjs",
+    "tests/fixtures/acp-agent-stub.mjs",
+    "docs/agent-acp-probe.md",
+    "docs/en/agent-acp-probe.md",
+    "docs/evidence/2026-10-21-opencode-next-27.json"
+  ],
+  "implemented": [
+    "Every stdout record must carry jsonrpc exactly equal to the string \"2.0\" (missing, numeric, or other strings are protocol failures).",
+    "Request (method + id), notification (method only), and response (id + exactly one of result/error) are classified exclusively; method+result/error, result+error, invalid id type, and unknown response id fail the protocol.",
+    "initialize result checks pinned v1 AgentCapabilities booleans, nested prompt/mcp/session/auth fields, agentInfo name/version/title, and each AuthMethod id/name/description plus terminal args/env.",
+    "Allowed extension fields (including _meta and unrecognized capability keys) are not rejected merely for being unknown.",
+    "stdout records are decoded with a fatal UTF-8 TextDecoder so invalid bytes cannot become U+FFFD and pass JSON.parse.",
+    "A malformed record during initialize emits no ready state; start() rejects only after pending requests, timers, and signal handlers are released and the owned child has been stopped and awaited.",
+    "Normal v1 initialize then stop and the -32601 agent-to-client request rejection are unchanged."
+  ],
+  "counterexamples": [
+    {
+      "input": "{\"jsonrpc\":\"WRONG\",\"id\":1,\"result\":{\"protocolVersion\":1}}",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: ACP stdout record must declare jsonrpc \"2.0\""
+    },
+    {
+      "input": "{\"id\":1,\"result\":{\"protocolVersion\":1}}",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: ACP stdout record must declare jsonrpc \"2.0\""
+    },
+    {
+      "input": "{\"jsonrpc\":2.0,\"id\":1,\"result\":{\"protocolVersion\":1}}",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: ACP stdout record must declare jsonrpc \"2.0\""
+    },
+    {
+      "input": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":1},\"error\":{\"code\":-32000,\"message\":\"synthetic\"}}",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: ACP stdout response must contain exactly one of result or error"
+    },
+    {
+      "input": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"result\":{\"protocolVersion\":1}}",
+      "beforeFix": "not recognized as a response; initialize timed out after 3000ms",
+      "afterFix": "protocol failure: ACP stdout record mixes a method with a response result/error"
+    },
+    {
+      "input": "initialize result with agentCapabilities:{loadSession:\"yes\"}",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: initialize response agentCapabilities.loadSession must be a boolean when present"
+    },
+    {
+      "input": "initialize result with authMethods:[{}]",
+      "beforeFix": "start() resolved ready (test failed: missing expected rejection)",
+      "afterFix": "protocol failure: initialize response authMethods[0].id must be a string when present"
+    },
+    {
+      "input": "real Node stub writes a raw 0xFF byte inside the JSON string of the initialize response",
+      "beforeFix": "replacement decode produced U+FFFD and JSON.parse succeeded; start() resolved ready",
+      "afterFix": "protocol failure: ACP stdout contained a record that is not valid UTF-8"
+    }
+  ],
+  "malformedCleanupVerification": {
+    "checkedForEveryMalformedEnvelopeTest": true,
+    "readyStateEmitted": false,
+    "activeChild": false,
+    "activeChildPid": null,
+    "activeTimers": 0,
+    "pendingRequests": 0,
+    "signalHandlersInstalled": false,
+    "sigintListenerCountRestoredToBaseline": true,
+    "startRejectsOnlyAfterOwnedChildStopAwaited": true
+  },
+  "commands": [
+    {
+      "command": "node --test tests/acp-client-process.test.mjs (new tests against starting HEAD 80d7068 before the source fix)",
+      "result": "fail",
+      "measured": { "tests": 28, "pass": 19, "fail": 9 },
+      "note": "The 9 failures were the 8 new counterexample tests plus the expanded existing validateInitializeResult test."
+    },
+    {
+      "command": "node --test tests/acp-client-process.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 28, "pass": 28, "fail": 0, "skipped": 0, "cancelled": 0, "todo": 0, "durationMs": 3709.4167 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "preservedBehavior": {
+    "normalV1InitializeThenStop": "pass",
+    "splitUtf8FourByteEmojiAcrossChunks": "pass",
+    "twoRecordsInOneChunk": "pass",
+    "agentToClientRequestRejectedWith32601": "pass",
+    "noAuthenticateOrSessionMethodSent": "pass"
+  },
+  "secretsHandling": {
+    "environmentLogged": false,
+    "argvPrinted": false,
+    "rawStderrStored": false,
+    "tokensOrCredentialsRecorded": false,
+    "selfReferentialCommitShaRecorded": false
+  },
+  "unconfirmed": [
+    "No real ACP agent (including Codex) was launched; the synthetic Node stub is not proof of real-agent compatibility.",
+    "Only ACP v1 protocolVersion 1 is implemented; v2 draft compatibility is not tested or claimed.",
+    "Termination of grandchild process trees on Windows is not proven; only the owned direct child is targeted.",
+    "Authentication execution, session creation, prompt turns, filesystem/terminal methods, and model selection remain unimplemented.",
+    "PR CI status and reviewer approval after this push were not verified in this work unit."
+  ]
+}
