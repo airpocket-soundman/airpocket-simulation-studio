@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-21",
+  "workOrder": "31-CFDMESH1",
+  "parentTask": "CFDMESH1",
+  "parentStatus": "incomplete",
+  "agentModel": "OpenCode / DeepSeek v4.1 Flash",
+  "repository": "D:/github/airpocket-soundman/studio-opencode-next-31",
+  "branch": "codex/opencode-next-31",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "baseRef": "origin/main",
+  "codeCommitSha": "d052fe9091d9f3966eb243191cc2e2d9fe909802",
+  "prerequisiteCheck": {
+    "statusCleanBeforeWork": true,
+    "ancestorCheck": "git merge-base --is-ancestor ba39088cbf0d7d9fb2bf1d006fe742823660405b HEAD -> exit 0",
+    "pr142ContentPresent": true,
+    "note": "The fixed review HEAD of PR #142 is an ancestor of origin/main af2314a, so src/channel-layer-plan.js was reused, not recreated."
+  },
+  "scope": {
+    "added": [
+      "src/channel-layer-cell-quality.js",
+      "tests/channel-layer-cell-quality.test.mjs"
+    ],
+    "modified": [
+      "src/module-layers.json"
+    ],
+    "notModified": [
+      "src/channel-layer-plan.js",
+      "src/mesh-core.js",
+      "src/mesh-validity.js",
+      "src/tetra-geometry.js",
+      "src/progress.json",
+      "docs/opencode-work-orders-2026-10-21/00-COMMON.md",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "outputKind": "orthogonal-cell-geometry-report",
+  "outputIsNotAMesh": true,
+  "notClaimed": [
+    "Gmsh mesh or Gmsh element quality",
+    "Tet4 or prism element generation",
+    "element orientation, incidence or wall face tag retention",
+    "flow solve, wall shear stress, y+ or Reynolds number",
+    "general 3D boundary-layer mesher",
+    "mesh-core / worker / solver / GUI / schema integration"
+  ],
+  "units": {
+    "length": "mm",
+    "volume": "mm3",
+    "implicitConversion": "forbidden"
+  },
+  "contract": {
+    "function": "createChannelLayerCellQuality(input)",
+    "inputs": ["plan", "lengthMm", "widthMm", "maxAspectRatio", "minimumCellHeightMm"],
+    "planChecked": [
+      "units==='mm' and output==='coordinate-placement-plan'",
+      "coordinatesMm finite, strictly increasing, start exactly at 0 and end exactly at gapMm",
+      "exactly 2*layersPerWall+2 coordinates",
+      "wallId 0 and wallId 1 identities exist exactly once, with positions 0 and gapMm",
+      "wall coordinate arrays, thickness and one-side thickness match the plan coordinates",
+      "centre band lower/upper/width match the coordinate interval and stay positive",
+      "plan.layers has exactly 2*layersPerWall unique (wallId,index) keys with matching inner/outer/height"
+    ],
+    "returns": [
+      "units, volumeUnits, output, status",
+      "gapMm, lengthMm, widthMm, maxAspectRatio, minimumCellHeightMm",
+      "layersPerWall, totalLayerCount, cellCount",
+      "cells[] {index,region,wallId,layerIndex,lowerYMm,upperYMm,heightMm,lengthMm,widthMm,volumeMm3,shortestEdgeMm,longestEdgeMm,aspectRatio}",
+      "centreBandMm {lowerMm,upperMm,widthMm}",
+      "minimumObservedHeightMm, maximumObservedAspectRatio",
+      "totalVolumeMm3, expectedVolumeMm3, relativeVolumeError",
+      "scope {meshProduced:false, solverConnected:false, unsupported[], deferredChecks[]}"
+    ],
+    "regionMapping": {
+      "lower-wall": "cells 0..layersPerWall-1, wallId 0, layerIndex = cell index",
+      "centre": "cell layersPerWall, wallId null, layerIndex null",
+      "upper-wall": "cells layersPerWall+1..2*layersPerWall, wallId 1, layerIndex = 2*layersPerWall-cell index"
+    }
+  },
+  "fixtures": [
+    {
+      "name": "reference-growth-2x1mm",
+      "source": "synthetic, from work order 31-CFDMESH1 numeric reference",
+      "planInputs": {"gapMm": 10, "firstHeightMm": 0.1, "growthRatio": 2, "layersPerWall": 3},
+      "qualityInputs": {"lengthMm": 2, "widthMm": 1, "maxAspectRatio": 20, "minimumCellHeightMm": 0.1},
+      "expected": {
+        "cellCount": 7,
+        "heightMm": [0.1, 0.2, 0.4, 8.6, 0.4, 0.2, 0.1],
+        "volumeMm3": [0.2, 0.4, 0.8, 17.2, 0.8, 0.4, 0.2],
+        "totalVolumeMm3": 20,
+        "relativeVolumeErrorMax": 1e-12,
+        "thinnestAspectRatio": 20,
+        "centreAspectRatio": 8.6
+      },
+      "observed": {
+        "cellCount": 7,
+        "heightMm": [0.1, 0.20000000000000004, 0.4, 8.600000000000001, 0.3999999999999986, 0.20000000000000107, 0.09999999999999964],
+        "volumeMm3": [0.2, 0.4000000000000001, 0.8, 17.200000000000003, 0.7999999999999972, 0.40000000000000213, 0.1999999999999993],
+        "regions": ["lower-wall", "lower-wall", "lower-wall", "centre", "upper-wall", "upper-wall", "upper-wall"],
+        "wallIds": [0, 0, 0, null, 1, 1, 1],
+        "layerIndices": [0, 1, 2, null, 2, 1, 0],
+        "aspectRatios": [20, 9.999999999999998, 5, 8.600000000000001, 5.000000000000018, 9.999999999999947, 20.00000000000007],
+        "totalVolumeMm3": 20,
+        "expectedVolumeMm3": 20,
+        "relativeVolumeError": 0,
+        "minimumObservedHeightMm": 0.09999999999999964,
+        "maximumObservedAspectRatio": 20.00000000000007
+      },
+      "absoluteToleranceMm": 1e-12
+    },
+    {
+      "name": "json-roundtripped-plan",
+      "source": "synthetic, JSON.parse(JSON.stringify(reference plan))",
+      "observed": "accepted; the report deep-equals the report from the original plan"
+    }
+  ],
+  "rejectionExamples": [
+    {"case": "maxAspectRatio=19.9", "reason": "Cell 0 aspect ratio 20.00000000000007 exceeds 19.9", "hasCellIndex": true},
+    {"case": "minimumCellHeightMm=0.11", "reason": "Cell 0 height 0.1 mm is below the minimum cell height 0.11 mm", "hasCellIndex": true},
+    {"case": "lengthMm=1 widthMm=0.5 maxAspectRatio=10", "reason": "only Cell 3 (centre) violates: aspect 17.200000000000003", "hasCellIndex": true},
+    {"case": "lengthMm 0, -1, NaN, Infinity, -Infinity or non-number", "reason": "Channel length must be a positive finite length in mm"},
+    {"case": "widthMm 0, -1, NaN, Infinity, -Infinity or non-number", "reason": "Channel width must be a positive finite length in mm"},
+    {"case": "maxAspectRatio 0, -1, 0.5, NaN, Infinity or non-number", "reason": "Maximum aspect ratio must be a finite number >= 1"},
+    {"case": "minimumCellHeightMm 0, -0.1, NaN, Infinity or non-number", "reason": "Minimum cell height must be a positive finite length in mm"},
+    {"case": "missing or unknown input key / null / array", "reason": "Unsupported channel layer cell quality setting"},
+    {"case": "duplicate y (coordinatesMm[3]=coordinatesMm[2])", "reason": "coordinates must be strictly increasing (duplicate or reversed interval)"},
+    {"case": "reversed adjacent y", "reason": "coordinates must be strictly increasing (duplicate or reversed interval)"},
+    {"case": "last coordinate 9.99 mm with gap 10 mm", "reason": "plan must end at exactly the gap 10 mm"},
+    {"case": "coordinate NaN", "reason": "coordinate index is not a finite length in mm"},
+    {"case": "one coordinate removed", "reason": "coordinates must contain exactly 8 increasing coordinates"},
+    {"case": "gapMm changed to 9.99", "reason": "plan must end at exactly the gap 9.99 mm / one-side thickness mismatch"},
+    {"case": "plan units changed to m", "reason": "plan units must be mm"},
+    {"case": "layer wallId changed", "reason": "duplicate (wallId,index) or no matching cell interval"},
+    {"case": "layer index changed to 9", "reason": "index is outside 0..2"},
+    {"case": "wall coordinate changed", "reason": "wall identity coordinate does not match the plan coordinates"},
+    {"case": "wallId removed from wall identities", "reason": "exactly one wall identity for wallId 0 and one for wallId 1 is required"},
+    {"case": "centre band lowerMm or widthMm changed", "reason": "centre band identity/width does not match the coordinate interval"},
+    {"case": "layer innerMm/heightMm changed or layer removed", "reason": "layer interval/height mismatch or wrong layer count"},
+    {"case": "lengthMm=widthMm=1e200", "reason": "cell volume length*width*height is not finite (overflow)"},
+    {"case": "lengthMm=1e308 widthMm=1e308 maxAspectRatio=1e308", "reason": "cell aspect ratio is not finite"},
+    {"case": "lengthMm=widthMm=sqrt(1.9e307)", "reason": "each cell volume is finite but the accumulated total volume is not finite"},
+    {"case": "negative volume", "reason": "not reachable from positive length/width/height; zero/negative length and width are refused before volume computation"}
+  ],
+  "commands": [
+    {
+      "command": "node --test tests/channel-layer-cell-quality.test.mjs tests/channel-layer-plan.test.mjs",
+      "result": "pass",
+      "detail": "tests 12 / pass 12 / fail 0 / skipped 0 / duration_ms 148.2439 (7 new cell-quality tests, 5 existing plan tests)"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "result": "pass",
+      "detail": "tests 19 / pass 19 / fail 0"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "pass",
+      "detail": "227 files, 561 local edges, 7 allowlisted violation(s)"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "exit code 0, no whitespace errors"
+    }
+  ],
+  "notRun": [
+    "full npm test and native kernel build (out of scope for this unit)",
+    "real Gmsh meshing and Gmsh element quality",
+    "Tet4/prism element generation, orientation, incidence and wall face tags",
+    "any flow solve, wall shear stress, y+ or Reynolds-number use",
+    "browser/Chrome and GUI verification (no UI change in this unit)",
+    "mesh-core / worker / solver / GUI / schema integration"
+  ],
+  "unverified": [
+    "conversion of this quality report into a real Tet4/prism mesh",
+    "wall face tag retention when a future mesher consumes this report",
+    "tetrahedron orientation and incidence checks after Tet4 conversion",
+    "flow convergence, mass balance, wall shear and y+ accuracy",
+    "general 3D boundary-layer meshing and moving walls",
+    "full test suite and production build"
+  ],
+  "progressProposal": {
+    "id": "CFDMESH1",
+    "statusSuggested": "keep incomplete",
+    "applied": false,
+    "lastUpdateJa": "2026-10-21: 壁層座標計画から直交セル寸法・体積・edge aspectを検査する純粋module src/channel-layer-cell-quality.js を追加（hex幾何報告のみ、実メッシュ・流れ・y+は対象外）。参照値、閾値境界、wallId/中央帯改変、非有限演算を確認。Tet4化時のorientation/incidence/壁tag生成と収束精度は残作業。",
+    "lastUpdateEn": "2026-10-21: Added a pure orthogonal cell geometry/quality report (src/channel-layer-cell-quality.js) over the retained wall-layer plan (hex geometry only; no real mesh, flow solve or y+). Reference values, threshold boundaries, wallId/centre-band tampering and non-finite arithmetic were checked. Tet4 orientation/incidence/wall tags and convergence accuracy remain outstanding."
+  },
+  "noSelfSha": true,
+  "noSecrets": true
+}
