@@ -12,8 +12,8 @@
 | 46 入力案内 | [PR163](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/163): 実Chrome390px、3成分focus、入力不変、日英、stale | 元の210/220/230Paはvalidatorが拒否。正規1000/2000/3000Paで検証。MCPとfocus画素は未確認 |
 | 47 adaptive | [PR164](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/164): 公式API診断、実GUIの非対応欄無効化、対応欄のSpace/Tab/stale | API診断とGUI観測は別。非対応欄の強制有効化なし |
 | 49 履歴 | 実熱94節点/3枚2256byte、音響335節点/7枚18760byte。保存再読込・実Chrome・正式MCPの要約と結果版が一致。29focused試験成功 | 全親タスクの完了とは別判定 |
-| 50/51 出力 | 実構造100N/94節点、実音響1Pa/2Pa各335節点の保存結果と再実行helperを用意 | 実PNG ZIP/GIF取得・decode・状態復元を続行 |
-| 42 印刷材料 | 造形条件付き等価材料recordの実装を開始 | 校正・独立実測は提供なし。合成根拠と区別 |
+| 50/51 出力 | [PR170](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/170)・[PR171](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/171): 実構造100N/94節点、実音響1Pa/2Pa各335節点の保存結果と再実行helper | Chrome接続断で実PNG ZIP/GIF取得・decode・状態復元は未実施。既知の所有プロセスは終了確認済み、所有タブ2枚の明示終了のみ未確認 |
+| 42 印刷材料 | [PR169](https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/169): 造形条件付き等価材料record、正規保存復元・範囲外拒否・明示壁/infillとの排他、実Worker復元後の変位一致 | 校正・独立実測は提供なし。合成根拠と区別 |
 | 41/48 | 未着手のまま引継ぎ対象へ保持 | CFD実参照比較、実Chromeの分離メモリ計測 |
 
 PR提出・CI成功・merge・公開確認は別の段階として扱う。上表のPRは提出時点のリンクであり、この記録だけでmergeや公開を主張しない。公開済み134/全171件の数は維持し、親の受入条件を短縮しない。進捗カードには実装中・確認済み・未確認を記載する。
