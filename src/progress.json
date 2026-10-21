@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-20T23:24:20.547035+00:00",
+  "updatedAt": "2026-10-20T23:42:56.006803+00:00",
   "release": {
     "version": "v0.44",
     "date": "2026-10-21",
-    "testCount": 1594,
-    "description": "OpenCodeの20 PRを独立レビュー。11件を統合候補、9件を修正待ちに分離し、修正9件＋次段階11件の指示を作成。親タスク完了の昇格なし。1594件はPR125のbaseline。統合コードa366で1641件中1638成功・3skip・失敗0、レビュー範囲更新後headの最終CIは別確認。",
-    "descriptionEn": "Reviewed all20 OpenCode PRs:11 accepted for integration,9 require changes. Added9 repair and11 next-step work orders without completing parents.1594 is PR125 baseline; combined code at a366 passed1638 of1641 tests with3 skips and0 failures. Final updated-head CI is checked separately."
+    "testCount": 1641,
+    "description": "20件のPRレビューをボードへ反映。取り込み・公開確認11件、要修正9件。9件は修正中へ移し、各カードに再現概要・元PR・追加指示への導線を追加。全171件・公開済み133件・未完38件。1641件は882edf35の検証記録。",
+    "descriptionEn": "Board reflects20 reviewed PRs:11 merged/published,9 requiring changes. Nine tasks are fixing, with reproduction summaries, original PRs and follow-up instructions.171 tasks,133 released,38 unfinished.1641 tests is the verified882edf35 baseline."
   },
   "tasks": [
     {
@@ -101,16 +101,24 @@
     {
       "id": "REG2",
       "title": "寸法領域をCAD境界へ厳密に反映",
-      "status": "building",
+      "status": "fixing",
       "category": "3D",
       "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
       "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。 2026-10-16 円錐領域: 既存の円筒領域指定に任意の終端半径を追加し、STEPの円錐で荷重保存・面積検証・保存/復元をテスト、実Chromeでも円錐STEPの受理と誤った終端半径の拒否(メッシュ時)を確認。球面帯sectorは2026-10-19追加（下記）。一般UV矩形は未実装。円錐STEPで終端半径を空欄にした場合の条件文の表示は要確認。",
       "titleEn": "Apply dimensional regions exactly to CAD boundaries",
       "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
       "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing. 2026-10-16 Cones: an optional end radius on the existing cylindrical region, tested on a STEP cone (force conservation, area verification, save/restore) and in real Chrome (cone STEP accepted, wrong end radius refused at mesh time). Spherical sectors added2026-10-19 (below); general UV rectangles remain unimplemented. The condition text for a blank end radius on a cone needs a check.",
-      "lastUpdate": "2026-10-21: PR #141の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #141 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。球面GUIの動的statusが言語切替で戻らない問題。実翻訳scannerを使って回帰確認。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. English-generated dynamic status stays English after switching to Japanese.",
+      "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 141,
+        "head": "7adf7f44f43db2c76be1f3591cff58a67bdf0e46",
+        "summary": "球面GUIの動的statusが言語切替で戻らない問題。実翻訳scannerを使って回帰確認。",
+        "summaryEn": "English-generated dynamic status stays English after switching to Japanese.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/37-REG2.md"
+      }
     },
     {
       "id": "WASM1",
@@ -528,15 +536,22 @@
       "id": "CFDMESH1",
       "title": "流体境界層メッシュ",
       "category": "流体",
-      "status": "queued",
+      "status": "building",
       "detail": "壁面解像度と品質、境界条件の対応を検証。",
       "acceptance": "壁面解像度と品質、境界条件の対応を検証。",
       "titleEn": "Generate fluid boundary-layer meshes",
       "detailEn": "Validate wall resolution, quality and boundary-condition mapping.",
       "acceptanceEn": "Validate wall resolution, quality and boundary-condition mapping.",
-      "lastUpdate": "2026-10-21: PR #142の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #142 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。平行平板の壁層座標計画を追加。体積メッシュや流れ解析には未接続。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #142 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 142,
+        "head": "ba39088cbf0d7d9fb2bf1d006fe742823660405b",
+        "summary": "平行平板の壁層座標計画を追加。体積メッシュや流れ解析には未接続。",
+        "summaryEn": "PR #142 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "CFD2",
@@ -622,15 +637,23 @@
       "id": "COUPLE3",
       "title": "固体と流体の共役熱伝達",
       "category": "連成",
-      "status": "queued",
+      "status": "fixing",
       "detail": "境界の熱流・温度を転送し、エネルギー保存を検証。",
       "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。",
       "titleEn": "Couple solid/fluid heat transfer",
       "detailEn": "Transfer temperatures/heat flux and verify energy conservation.",
       "acceptanceEn": "Transfer temperatures/heat flux and verify energy conservation.",
-      "lastUpdate": "2026-10-21: PR #140の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #140 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。有限の入力からInfinity/NaNを成功結果として返す問題。積分途中と最終値の非有限を拒否。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Finite 1e6 mm edges and 1e308 W/m2 flux overflow into sourceW Infinity and target/balance NaN returned as success.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 140,
+        "head": "2130a8f12ce262d93d63c3945ea958377f89e6eb",
+        "summary": "有限の入力からInfinity/NaNを成功結果として返す問題。積分途中と最終値の非有限を拒否。",
+        "summaryEn": "Finite 1e6 mm edges and 1e308 W/m2 flux overflow into sourceW Infinity and target/balance NaN returned as success.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/30-COUPLE3.md"
+      }
     },
     {
       "id": "COUPLE4",
@@ -691,15 +714,23 @@
       "id": "CONTACT1",
       "title": "接触・摩擦・ボルトを扱う",
       "category": "構造",
-      "status": "queued",
+      "status": "fixing",
       "detail": "接触収束と反力・摩擦条件を検証。",
       "acceptance": "接触収束と反力・摩擦条件を検証。",
       "titleEn": "Support contact, friction and bolts",
       "detailEn": "Validate contact convergence, reactions and friction conditions.",
       "acceptanceEn": "Validate contact convergence, reactions and friction conditions.",
-      "lastUpdate": "2026-10-21: PR #143の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #143 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。極小許容値と巨大反復上限で停滞し続ける問題。安全上限と停滞停止を追加。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Tolerance 1e-30 and maxIterations 1e20 permit stagnation at residual 8.5265e-14 without bounded termination.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 143,
+        "head": "bf0cc946ab99f4c09fce413ce876a7a88ca69bdb",
+        "summary": "極小許容値と巨大反復上限で停滞し続ける問題。安全上限と停滞停止を追加。",
+        "summaryEn": "Tolerance 1e-30 and maxIterations 1e20 permit stagnation at residual 8.5265e-14 without bounded termination.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/38-CONTACT1.md"
+      }
     },
     {
       "id": "QA1",
@@ -725,9 +756,16 @@
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
       "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "lastUpdate": "2026-10-21: PR #128の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #128 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed."
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。UASMとJS heapを別系列として集計。実ブラウザの追加計測は未完。 親タスク全体の完了ではありません。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #128 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 128,
+        "head": "75c1e30a1530b5df132f1d9fdfbb9f7b5fcc8778",
+        "summary": "UASMとJS heapを別系列として集計。実ブラウザの追加計測は未完。",
+        "summaryEn": "PR #128 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "ADAPT1",
@@ -906,7 +944,7 @@
       "id": "COUPLE4B",
       "title": "曲面・強制振動・双方向の音響連成",
       "titleEn": "Curved interfaces, forced vibration and two-way acoustics",
-      "status": "queued",
+      "status": "fixing",
       "category": "連成",
       "depends": [
         "COUPLE4"
@@ -915,15 +953,23 @@
       "detailEn": "Implement conservative curved-interface transfer, forced frequency response/damping and acoustic pressure feedback, and verify coupled references.",
       "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
       "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance.",
-      "lastUpdate": "2026-10-21: 利用者確認後にPR #144も独立レビューし、修正が必要な問題を確認。今回のマージから除外し、再現条件と修正指示をレビュー記録および次作業指示へ記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: User confirmed PR #144 was ready for review; independent review found a required fix. Excluded from this merge batch. Reproduction and next work order are recorded; existing released behavior and unfinished parent status are preserved.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。曲面圧力・虚仕事の演算でInfinity/NaNを返す問題。安定した積・累積と有限性検査を追加。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Finite 1e6 mm triangle edges and pressure real1e308 Pa return resultant -Infinity and NaN moment. A 10 mm triangle with finite uz1e308 m returns volume Infinity although expected5e303 m3 is finite, and virtual-work relativeError NaN.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 144,
+        "head": "7f3be4bcec0bef9f79066c0d59c461034e97515e",
+        "summary": "曲面圧力・虚仕事の演算でInfinity/NaNを返す問題。安定した積・累積と有限性検査を追加。",
+        "summaryEn": "Finite 1e6 mm triangle edges and pressure real1e308 Pa return resultant -Infinity and NaN moment. A 10 mm triangle with finite uz1e308 m returns volume Infinity although expected5e303 m3 is finite, and virtual-work relativeError NaN.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/39-COUPLE4B.md"
+      }
     },
     {
       "id": "CFDPORT1",
       "title": "任意方向の開口閉鎖・流体体積の結合",
       "titleEn": "Arbitrary opening caps and fluid-volume joining",
-      "status": "building",
+      "status": "fixing",
       "category": "流体",
       "depends": [
         "CFDDOM1"
@@ -932,9 +978,17 @@
       "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, published Worker remain incomplete.",
       "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
       "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
-      "lastUpdate": "2026-10-21: PR #139の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #139 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。重複した同向三角形を正常な閉殻と誤判定する問題。重複・向き・退化を拒否。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Two identical same-winding triangles produce closedShell true with no rejection.",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 139,
+        "head": "d7b568dc53b936bd52f5e95fddb7afe95a76f4e8",
+        "summary": "重複した同向三角形を正常な閉殻と誤判定する問題。重複・向き・退化を拒否。",
+        "summaryEn": "Two identical same-winding triangles produce closedShell true with no rejection.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/29-CFDPORT1.md"
+      }
     },
     {
       "id": "VIEW2",
@@ -1148,9 +1202,16 @@
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
       "depends": [],
-      "lastUpdate": "2026-10-21: PR #132の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #132 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed."
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。解析と事前検査が共用するoptions変換を分離。 親タスク全体の完了ではありません。",
+      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #132 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 132,
+        "head": "fcdd83b22d721732b706ad5e9389ea4a8b00d033",
+        "summary": "解析と事前検査が共用するoptions変換を分離。",
+        "summaryEn": "PR #132 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "P0",
@@ -1163,9 +1224,16 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdate": "2026-10-21: PR #137の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #137 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed."
+      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。診断にJSON Pointerを併記し、既知の入力欄へ案内。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #137 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 137,
+        "head": "40bc553df0203940ffa346a526215657f5d215e5",
+        "summary": "診断にJSON Pointerを併記し、既知の入力欄へ案内。",
+        "summaryEn": "PR #137 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "P1",
@@ -1180,9 +1248,16 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
       "acceptanceEn": "Meet P1 and common completion gates in docs/en/roadmap.md; retain evidence. This diagnostic increment has automated/independent solver-reference evidence; live GUI verification was not performed.",
-      "lastUpdate": "2026-10-21: PR #129の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #129 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。球面寸法の値・単位・根拠の点検を整合。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #129 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 129,
+        "head": "cbfc99cb99a1069e71b847e26a8e9689676fd02a",
+        "summary": "球面寸法の値・単位・根拠の点検を整合。",
+        "summaryEn": "PR #129 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "P2",
@@ -1202,7 +1277,7 @@
       "id": "P3",
       "title": "共通ジョブとブラウザセッション接続",
       "titleEn": "Shared jobs and live browser sessions",
-      "status": "building",
+      "status": "fixing",
       "category": "共通",
       "depends": [
         "P0",
@@ -1212,9 +1287,17 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-21: PR #131の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #131 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。同時要求で、失敗した要求のdigestが成功jobへ保存される問題。要求の所有権を固定して再検証。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Concurrent valid A and invalid B using one requestId can persist B startupDigest on successful A.",
+      "evidence": "docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 131,
+        "head": "f0c9accf000731193fd279e86e7aef4321283558",
+        "summary": "同時要求で、失敗した要求のdigestが成功jobへ保存される問題。要求の所有権を固定して再検証。",
+        "summaryEn": "Concurrent valid A and invalid B using one requestId can persist B startupDigest on successful A.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/34-P3.md"
+      }
     },
     {
       "id": "P4",
@@ -1229,9 +1312,16 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-21: PR #130の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #130 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。PNG/GIFのバイト数・SHA・ヘッダー照合CLIを追加。完全decodeの保証ではありません。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #130 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 130,
+        "head": "a4d7aebc2268ca512f66c73e6e73d3849c9d62cd",
+        "summary": "PNG/GIFのバイト数・SHA・ヘッダー照合CLIを追加。完全decodeの保証ではありません。",
+        "summaryEn": "PR #130 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "P5",
@@ -1299,9 +1389,16 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
-      "lastUpdate": "2026-10-21: PR #126の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #126 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。必要な入力から該当欄へ移動する導線を取り込み済み。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #126 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 126,
+        "head": "452d878a4568812523d2d566c32f153fdfe0df24",
+        "summary": "必要な入力から該当欄へ移動する導線を取り込み済み。",
+        "summaryEn": "PR #126 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "AGENTEDIT1",
@@ -1383,9 +1480,16 @@
       "detailEn": "18 MCP tools and 17 atomic edit operations cover imports, builtins, face IDs, provenance, assumptions, limited linear-static preflight, persisted provisional labels and bounded intermediate reads.",
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
-      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs; docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdate": "2026-10-21: PR #127の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #127 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed."
+      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs; docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。直交異方性の3成分へ既存の物性桁警告を適用。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #127 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 127,
+        "head": "26b97a9433c64481ac70b1c5dfd3b014f9a5eec4",
+        "summary": "直交異方性の3成分へ既存の物性桁警告を適用。",
+        "summaryEn": "PR #127 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "VIEWCOMPARE",
@@ -1397,9 +1501,16 @@
       "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF added2026-10-19 (latest update); MP4 is not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-21: PR #136の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #136 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。実音響solverケースの比較GIF参照テストを追加。描画はstub、実Chromeの追加検証は未完。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #136 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 136,
+        "head": "c7ef1e5625ce3ce4266ca7a8a12c3448558e6a21",
+        "summary": "実音響solverケースの比較GIF参照テストを追加。描画はstub、実Chromeの追加検証は未完。",
+        "summaryEn": "PR #136 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "VIEWTIME",
@@ -1411,9 +1522,16 @@
       "acceptanceEn": "Verify solve/storage/display-time distinctions against thermal/acoustic reference fields, fixed ranges, persistence, memory limits, API time control and fixed-frame export. Implemented: bounded opt-in thermal nodal history, thermal/acoustic sliders and interpolated playback, displayed-time probes/stills, stored-frame API selection and thermal PNG sequences. Real Chrome on 2026-10-17 checked stored-time temperatures against 20+t/20+2t, a 0/5/10 s sequence and hashes, restoration to 2 s, and 5 s named-view/measurement persistence, replay and tamper refusal. Legacy v1 remains compatible; arbitrary interpolated-time API selection/persistence is refused. General-geometry propagation accuracy,total peak RAM and public HTTPS remain open. Storage-density/scalar-budget APIs and Japanese UI have bounded real-Chrome evidence from2026-10-18.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-21: PR #135の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #135 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed.",
-      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。getResultViewに有界な保存量metadataを追加。peak RAM保証ではありません。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #135 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "merged",
+        "pr": 135,
+        "head": "aa242bd30dbb670ef5ee32a5020d8a2c2886fe42",
+        "summary": "getResultViewに有界な保存量metadataを追加。peak RAM保証ではありません。",
+        "summaryEn": "PR #135 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "BROWSERBRIDGE1",
@@ -1551,9 +1669,16 @@
       "detailEn": "Revision/view-pinned PNG/WebM start/status/cancel/release and hashed base64 pages. Optional connector:28 methods. 32 MiB/four jobs/64 KiB page limits.",
       "acceptance": "現在の確認範囲: 2026-10-17: 実Chromeで熱の0/5/10秒3枚PNG連番、画像差・ZIP/画像ハッシュ・物理時刻・出力後2秒復元を確認。小規模ローカル試験のみ。補間表示の復元は自動テストで確認。slice/容量上限/120枚/公開HTTPSは未確認。 過去の検証履歴（以下の状態・未解決記述は各記録時点のもの）: 全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化は未完了。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。 2026-10-16: 固定フレームPNG連番(ZIP、2〜120枚、軌道/変形/時間)をmainへ反映(PR63)。実Chromeで構造・過渡音響のZIP解析、CRC、フレームSHA、中止後の表示復元、拒否、非選択タブでの完走を確認。軌道のmanifestが初回のみ最終桁で異なる不具合を見つけコードで修正済み(単体テストのみ、実Chrome再確認は未実施)。slice、容量上限境界、120枚成功、MP4/GIFは未検証。 2026-10-16 追記: 実Chromeで再確認。軌道書き出しは同一結果内でZIP完全一致(修正済み)、構造結果へのtime指定は開始時に拒否。ただし同じデモを解き直すとresultRevisionが変わりZIPも変わる(保存済み結果ごとの決定性のみ。原因未調査)。重い環境では8枚の書き出しに20〜180秒、開始が15秒の接続上限でタイムアウトし、ジョブが残って上限到達する場面があった。checking維持。 2026-10-16 実Chromeで再確認: 解き直しても軌道書出しのZIPが一致(physicalRevision、manifest v2)。ただしページ言語状態の変化でキャプション文字が変わると1枚目が変わる。slice、容量上限境界、120枚成功、MP4/GIFは未検証。checking維持。",
       "acceptanceEn": "Current verified scope: 2026-10-17: Real Chrome verified a 3-frame thermal PNG sequence at 0/5/10 s, distinct images, ZIP/frame hashes, physical times and restore to 2 s. Small local fixture only; interpolation restore is automated-test coverage. Slice/size-limit/120-frame/public-HTTPS checks remain pending. Historical verification (statuses and unresolved observations below describe their recording dates): 370 passed, three skipped of373. Real MCP/Chrome verified hashed PNG77944 bytes/two pages, WebM8795 bytes, cancellation restoration and artifact refusal. Background one-second video had two frames. Fixed-frame export, MP4/GIF and persistence remain unfinished. Published-HTTPS verification is tracked in PUBLICHTTPS1. 2026-10-16: Fixed-frame PNG sequence (ZIP, 2-120 frames, orbit/deformation/time) merged (PR 63). Real Chrome verified ZIP parsing, CRCs, frame hashes, cancel restoration, refusals and an undriven-tab run for structural and transient acoustic results. An orbit manifest last-digit difference on the first export was fixed in code (unit-tested only; real-Chrome re-check pending). slice, size-limit boundaries, a 120-frame success and MP4/GIF are not verified. 2026-10-16 addendum: re-checked in real Chrome. Orbit exports are byte-identical ZIPs within one stored result (fixed) and time on a structural result is refused at start. A fresh solve of the same demo gives a different resultRevision and therefore a different ZIP (determinism holds per stored result only; cause not investigated). On a loaded machine an 8-frame export took 20-180 s, and start calls hit the 15 s connector limit, leaving held jobs until the page was reloaded. Stays checking. 2026-10-16 Re-verified in real Chrome: orbit export ZIPs are identical across fresh solves (physicalRevision, manifest v2); caption text can still change with the page language state (e.g. browser translation). slice, size-limit boundaries, a 120-frame success and MP4/GIF are unverified. Stays checking.",
-      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json; docs/evidence/2026-10-15-browserexport-real-chrome-3.json; docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdate": "2026-10-21: PR #138の限定実装を固定headで独立レビューし、統合候補へ取り込みました。共通UI競合は両方の機能を保持して解消。対象の詳細と検証限界はレビュー記録を参照。親タスク全体の完了・物理精度や実Chrome確認の追加証明ではありません。",
-      "lastUpdateEn": "2026-10-21: Independently reviewed the exact head of PR #138 and included its bounded scope in the integration candidate. Shared UI conflicts preserve both behaviors. See review evidence for limits; parent completion, general physical accuracy and new real-Chrome verification are not claimed."
+      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json; docs/evidence/2026-10-15-browserexport-real-chrome-3.json; docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdate": "2026-10-21: PRのマージ・公開確認済み（882edf35）。slice PNG3枚の出力・取消復元の参照テストを追加。実Chromeの追加検証は未完。 親タスク全体の完了ではありません。",
+      "lastUpdateEn": "2026-10-21: Merged and published in882edf35. PR #138 merged and published in882edf35. Bounded scope only; parent acceptance remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 138,
+        "head": "0c7f75e3e05f1d2e9a12d375a7d5dc0157a560d3",
+        "summary": "slice PNG3枚の出力・取消復元の参照テストを追加。実Chromeの追加検証は未完。",
+        "summaryEn": "PR #138 merged and published in882edf35. Bounded scope only; parent acceptance remains open."
+      }
     },
     {
       "id": "NAMEDVIEWS1",
@@ -2667,7 +2792,7 @@
       "title": "自分のCodexをACPで接続するローカル基盤",
       "titleEn": "Local ACP connection to the user's Codex",
       "category": "共通",
-      "status": "queued",
+      "status": "fixing",
       "depends": [
         "P0",
         "P3",
@@ -2677,16 +2802,24 @@
       "detailEn": "Plan ACP agent discovery, lifecycle and ChatGPT sign-in guidance in the existing browser connector, starting with Codex. ACP handles conversation; existing MCP handles operations. Distinguish plan and API authentication. Not started.",
       "acceptance": "docs/roadmap.mdのAGENTACP1に従い、Windows標準ブラウザの公開HTTPS/ローカル実接続、認証・scope・失効・取消・再接続・重複実行防止を検証。専門SKILLへ導入/復旧手順を記録。",
       "acceptanceEn": "Follow AGENTACP1 in docs/en/roadmap.md. Verify real public HTTPS/local Windows browser connections, authentication, scopes, expiry, cancellation, reconnect and duplicate prevention; document setup/recovery in the specialist skill.",
-      "lastUpdate": "2026-10-21: PR #133の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #133 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。不正なJSON-RPC応答でも初期化済みになる問題。応答の構造・版・型を検査して拒否。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. JSON-RPC response with jsonrpc WRONG and id 1 is accepted as initialized/ready.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 133,
+        "head": "80d70688cb67f07c4e60e5e38b58d26ef7058970",
+        "summary": "不正なJSON-RPC応答でも初期化済みになる問題。応答の構造・版・型を検査して拒否。",
+        "summaryEn": "JSON-RPC response with jsonrpc WRONG and id 1 is accepted as initialized/ready.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/27-AGENTACP1.md"
+      }
     },
     {
       "id": "AGENTCHAT1",
       "title": "AIの選択・接続設定とアプリ内チャット",
       "titleEn": "Agent selection, connection settings and in-app chat",
       "category": "共通",
-      "status": "queued",
+      "status": "fixing",
       "depends": [
         "AGENTACP1"
       ],
@@ -2694,15 +2827,23 @@
       "detailEn": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started.",
       "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
       "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md.",
-      "lastUpdate": "2026-10-21: 利用者確認後にPR #145も独立レビューし、修正が必要な問題を確認。今回のマージから除外し、再現条件と修正指示をレビュー記録および次作業指示へ記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: User confirmed PR #145 was ready for review; independent review found a required fix. Excluded from this merge batch. Reproduction and next work order are recorded; existing released behavior and unfinished parent status are preserved.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json"
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。接続状態の読み上げラベルが言語再走査で英語へ戻る問題。実翻訳scannerで回帰確認。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. With the actual installLanguage scanner, English-start aria-label Connection status notifications switches to Japanese briefly but returns to English on the next scan.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "review": {
+        "status": "changes-required",
+        "pr": 145,
+        "head": "f0741c5d02891e8b996b09f621f3a360c873ce69",
+        "summary": "接続状態の読み上げラベルが言語再走査で英語へ戻る問題。実翻訳scannerで回帰確認。",
+        "summaryEn": "With the actual installLanguage scanner, English-start aria-label Connection status notifications switches to Japanese briefly but returns to English on the next scan.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/40-AGENTCHAT1.md"
+      }
     },
     {
       "id": "RESULTCURVE1",
       "title": "段階載荷データと静止グラフを取得・比較",
       "titleEn": "Retrieve and compare incremental loading data and static curves",
-      "status": "queued",
+      "status": "fixing",
       "category": "結果",
       "depends": [
         "P3",
@@ -2714,9 +2855,17 @@
       "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
       "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
       "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
-      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json",
-      "lastUpdate": "2026-10-21: PR #134の独立レビューで修正が必要な問題を確認したため、今回のマージ対象から除外。再現条件・該当箇所・修正指示はレビュー記録と次作業指示に記載。既存公開機能と親の未完状態を維持します。",
-      "lastUpdateEn": "2026-10-21: PR #134 requires changes after independent review and is excluded from this merge batch. Reproduction, location and fixes are recorded in the review and next work orders. Existing published behavior and unfinished parent status are preserved."
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json",
+      "lastUpdate": "2026-10-21: レビューNG・修正待ち。制御値999 Nと実測100 Nを同じ収束行として受理する問題。入力版と実結果の整合を確認。 元PRへ修正をpushして再レビュー。",
+      "lastUpdateEn": "2026-10-21: Changes required. Controlled force 999 N with applied force 100 N and reaction -100 N is accepted as a converged row.",
+      "review": {
+        "status": "changes-required",
+        "pr": 134,
+        "head": "68687a675e4c9f63ff305980852ef331fdc7f207",
+        "summary": "制御値999 Nと実測100 Nを同じ収束行として受理する問題。入力版と実結果の整合を確認。",
+        "summaryEn": "Controlled force 999 N with applied force 100 N and reaction -100 N is accepted as a converged row.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/28-RESULTCURVE1.md"
+      }
     },
     {
       "id": "FINITEVISCO1",
