@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "workOrder": "28-RESULTCURVE1",
+  "parentTaskId": "RESULTCURVE1",
+  "parentTaskStatusAfterWork": "queued",
+  "pullRequest": 134,
+  "branch": "codex/opencode-resultcurve1",
+  "baseCommit": "68687a675e4c9f63ff305980852ef331fdc7f207",
+  "headBeforeFix": "68687a675e4c9f63ff305980852ef331fdc7f207",
+  "scope": "Blocker fix only: force-control value must match the real applied axial resultant and axial reaction with an explicit N tolerance; each converged step is tied to actual input/mesh/calculation/result content by content-derived revisions; mixed material E, reordered mesh, gauge/mesh mismatch and missing output input are rejected; displacement control is refused explicitly. No solver, UI, API, MCP, schema, CSV, save archive or progress change.",
+  "changedFiles": [
+    "src/increment-curve-data.js",
+    "tests/increment-curve-data.test.mjs",
+    "docs/evidence/2026-10-21-opencode-next-28.json"
+  ],
+  "contract": {
+    "stepOutputFields": [
+      "input",
+      "mesh",
+      "calculation",
+      "result"
+    ],
+    "curveSpecAddedField": "mesh (actual reference mesh; must provide three finite coordinates per declared node)",
+    "revisionSource": "src/project-revision.js getProjectRevision/getPhysicalRevision only; canonical content is hashed. Caller-supplied revision strings are ignored.",
+    "rowRevisions": [
+      "inputRevision",
+      "meshRevision",
+      "calculationRevision",
+      "resultRevision"
+    ],
+    "forceControlCheck": "controlledValue must equal appliedAxisN and tensileForceN, sign included, within an absolute 1e-5 N tolerance",
+    "forceBalanceToleranceN": 1e-5,
+    "controlledForceToleranceN": 1e-5,
+    "gaugeGeometryToleranceMm": 1e-6,
+    "gaugeGeometryCheck": "weighted gauge point separation projected on the declared axis must equal initialGaugeLengthMm within 1e-6 mm",
+    "displacementControl": "explicitly refused; no successful controlledUnit=mm row is emitted"
+  },
+  "counterexample": {
+    "fixture": "synthetic uniform bar 10x10x40 mm, E=1e9 Pa, nu=0, A=100 mm2, L=40 mm, axis [0,0,1], real Gmsh WASM mesh and real solveElastic CPU solve at 100 N",
+    "inputControlledValueN": 999,
+    "actualAppliedAxisN": 100,
+    "actualReactionAxisN": -100,
+    "actualExtensionMm": 0.04,
+    "beforeFix": {
+      "accepted": true,
+      "status": "converged",
+      "controlledValue": 999,
+      "controlledUnit": "N",
+      "appliedAxisN": 100,
+      "reactionAxisN": -100,
+      "extensionMm": 0.04,
+      "method": "throwaway probe outside the repository against review HEAD 68687a6"
+    },
+    "afterFix": {
+      "accepted": false,
+      "message": "Step claimed999 controlledValue does not match the applied axial force within 0.00001 N",
+      "regressionTests": [
+        "controls are rejected when controlledValue is 999 N for a 100 N solve",
+        "controls are rejected when the declared sign is -100 N for a +100 N solve",
+        "displacement control is refused with no successful mm unit"
+      ]
+    },
+    "otherRejectionsAfterFix": {
+      "materialE2e9Pa": "Step E2e9 output input differs from the curve input revision",
+      "reorderedMeshNodesSameCount": "Step reordered output mesh differs from the curve mesh revision",
+      "gaugeLength20MmAgainst40MmMesh": "Gauge initial length along the axis does not match initialGaugeLengthMm on the mesh",
+      "missingOutputInput": "Step x output input is required to derive the input revision",
+      "displacementControl": "Displacement-controlled increments are not supported: the prescribed displacement and nodal reactions cannot be verified"
+    }
+  },
+  "measured": {
+    "row100N": {
+      "status": "converged",
+      "controlledValue": 100,
+      "controlledUnit": "N",
+      "appliedAxisN": 100,
+      "reactionAxisN": -100.00000000140884,
+      "tensileForceN": 100.00000000140884,
+      "forceBalanceErrorNAxialN": -1.4088357147556962e-9,
+      "extensionMm": 0.04000000000017234,
+      "engineeringStressPa": 1000000.0000140885,
+      "engineeringStrain": 0.0010000000000043086,
+      "inputRevision": "sha256:44999e72c0e3cb32aba3f79861e912630d0c401756e474d8b1b86cd47fc448cb",
+      "meshRevision": "sha256:8c3e2ca3142f7b6124be4b5e4f4850e4993968c71dfc365f557c673e08acc5b6",
+      "calculationRevision": "sha256:5815836dd6d330d095ebd90cbf21f6c487e6f65b814d1b1331440f84c886f631",
+      "resultRevision": "sha256:3941c60f022b1a2df1ef0763c96ca9e40cff953d4e7507d511a8bc0f70e4f5c3"
+    },
+    "relativeErrorTolerance": 1e-6,
+    "forceBalanceAbsoluteToleranceN": 1e-5,
+    "jsonRoundTripEqual": true,
+    "inputSpecUnchanged": true,
+    "curveFrozen": true,
+    "analysis": {
+      "kind": "independent-linear-solves",
+      "plasticHistory": false
+    }
+  },
+  "commands": {
+    "node --test tests/increment-curve-data.test.mjs tests/elastic.test.mjs": {
+      "total": 13,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "newFileTests": 11,
+      "existingElasticTests": 2
+    },
+    "npm run check:contracts": {
+      "exitCode": 0,
+      "result": "Contract declarations type-check (5 declaration files)."
+    },
+    "git diff --check": {
+      "exitCode": 0,
+      "result": "clean (only CRLF conversion warnings from the worktree configuration)"
+    }
+  },
+  "notVerified": [
+    "A caller can still supply a self-consistent output.input/calculation that does not match the solver invocation; the hashes bind content provenance, not an execution signature.",
+    "Displacement-controlled increments are not implemented; all such steps are refused.",
+    "Nonlinear, plastic, modal, hyperelastic and maximum-only results remain unsupported.",
+    "GUI, HTTP API, MCP, CSV, static graph rendering, save/restore and case history are out of scope and unchanged.",
+    "Only the synthetic uniform-bar mesh was checked; non-uniform mesh convergence of gauge averages is untouched.",
+    "No real browser verification was performed.",
+    "Parent RESULTCURVE1 acceptance remains open."
+  ],
+  "notes": {
+    "selfReference": "This evidence intentionally contains no SHA of its own commit and no secret/token/environment dump.",
+    "progressJsonChanged": false,
+    "packageLockChanged": false
+  }
+}
