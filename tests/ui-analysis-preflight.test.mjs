@@ -1,10 +1,10 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createAnalysisPreflightUi} from '../src/ui/analysis-preflight-ui.js';import {createStudioApi} from '../src/studio-api.js';import {diagnoseExecution} from '../src/capabilities.js';
 const main=await readFile(new URL('../src/main.js',import.meta.url),'utf8');
 function element(tag){return {tagName:tag.toUpperCase(),children:[],style:{},attributes:{},append(...v){for(const c of v){this.children.push(c);c.parentElement=this;}},replaceChildren(...v){this.children=[];this.append(...v);},setAttribute(k,v){this.attributes[k]=v;},focus(){this.focused=true;}};}
 const all=e=>[e,...e.children.flatMap(all)],find=(e,id)=>all(e).find(c=>c.id===id);
 const report={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',pointer:'/options/size',message:'Mesh size must be positive',suggestions:['Set intended size']},{code:'INPUT_REQUIRED',target:'/unmapped/input',message:'Evidence missing'}],requiredPointers:['/materialProperties/youngModulus'],remainingChecks:['Mesh quality']};
 function setup(overrides={}){const host=element('div'),details=element('details'),input=element('input');details.append(input);let state={revision:7};const translations={},events={},ui=createAnalysisPreflightUi({host,document:{createElement:element,addEventListener:(name,fn)=>events[name]=fn},preflight:()=>structuredClone(report),snapshot:()=>state,language:()=> 'en',getControl:id=>id==='mesh-size'?input:null,translate:m=>Object.assign(translations,m),...overrides});return {host,ui,input,details,translations,events,change(){state={revision:8};}};}
-function setupControls(controls,reportOverride){const host=element('div'),events={};let state={revision:7};const ui=createAnalysisPreflightUi({host,document:{createElement:element,addEventListener:(name,fn)=>events[name]=fn},preflight:()=>structuredClone(reportOverride),snapshot:()=>state,language:()=> 'en',getControl:id=>controls[id]??null,translate:()=>{}});return {host,ui,controls,events,change(){state={revision:8};}};}
+function setupControls(controls,reportOverride){const host=element('div'),events={};let state={revision:7};const ui=createAnalysisPreflightUi({host,document:{createElement:element,addEventListener:(name,fn)=>events[name]=fn},preflight:()=>structuredClone(reportOverride),snapshot:()=>state,language:()=> 'en',getControl:id=>controls[id]??null,translate:()=>{}});return {host,ui,controls,events,state:()=>state,change(){state={revision:8};}};}
 test('shared report is preserved and provisional,incomplete,pointers and reasons remain explicit',async()=>{const f=setup();assert.deepEqual(await f.ui.check(),report);assert.deepEqual(f.ui.getReport(),report);const text=all(f.host).map(e=>e.textContent).join(' ');assert.match(text,/Provisional/);assert.match(text,/incomplete/);assert.match(text,/\/unmapped\/input/);assert.match(text,/Mesh quality/);assert.match(text,/7/);assert.equal(all(f.host).filter(e=>e.textContent==='Go to input').length,1);const jump=all(f.host).find(e=>e.textContent==='Go to input');jump.onclick();assert.equal(f.details.open,true);assert.equal(f.input.focused,true);});
 test('changed inputs invalidate old diagnoses and old correction actions',async()=>{const f=setup();await f.ui.check();const jump=all(f.host).find(e=>e.textContent==='Go to input');f.change();jump.onclick();assert.equal(f.ui.getReport(),null);assert.equal(f.input.focused,undefined);assert.match(find(f.host,'preflight-status').textContent,/Check again/);});
 test('async check changing while pending never publishes a stale report',async()=>{let finish;const f=setup({preflight:()=>new Promise(r=>finish=r)}),pending=f.ui.check();f.ui.invalidate();finish(report);await pending;assert.equal(f.ui.getReport(),null);assert.equal(find(f.host,'preflight-run').disabled,false);assert.match(find(f.host,'preflight-status').textContent,/Check again/);});
@@ -23,6 +23,67 @@ test('disabled required target keeps the pointer and reports failure without foc
 
 test('diagnostic and required buttons for the same pointer each focus once',async()=>{const size=element('input');size.value='4';const reportOverride={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:[{code:'MESH_SIZE_INVALID',severity:'error',target:'/options/size',message:'Mesh size must be positive'}],requiredPointers:['/options/size'],remainingChecks:[]};const f=setupControls({'mesh-size':size},reportOverride);await f.ui.check();const buttons=all(f.host).filter(e=>e.textContent==='Go to input');assert.equal(buttons.length,2);buttons[0].onclick();assert.equal(size.focused,true);size.focused=false;buttons[1].onclick();assert.equal(size.focused,true);assert.equal(size.value,'4');});
 
+const orthoPointer=index=>'/materialProperties/orthotropic/youngModuliPa/'+index;
+const orthoWarnings={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[210,220,230].map((value,index)=>({code:'UNIT_MAGNITUDE_SUSPECT',severity:'warning',target:orthoPointer(index),message:'Value magnitude is unusual for the fixed input unit; no conversion was applied',evidence:{value,unit:'Pa',plausibleRange:[1e5,1e13]},suggestions:['Confirm the value is expressed in Pa']})),requiredPointers:[],remainingChecks:[]};
+function orthoSetup({report=orthoWarnings,language='ja',controls={}}={}){
+ const host=element('div'),details=element('details'),events={},nodes={...controls};
+ for(const control of Object.values(nodes))details.append(control);
+ const status=element('p');status.id='material-status';status.textContent='直交異方性を登録済み';status.focusCalls=0;status.focus=function(){this.focusCalls++;this.focused=true;};details.append(status);nodes['material-status']=status;
+ let state={revision:11,project:{materialProperties:{orthotropic:{youngModuliPa:[210,220,230]}}}};
+ const ui=createAnalysisPreflightUi({host,document:{createElement:element,addEventListener:(name,fn)=>events[name]=fn},preflight:()=>structuredClone(report),snapshot:()=>state,language:()=>language,getControl:id=>nodes[id]??null,translate:()=>{}});
+ return {host,ui,status,details,nodes,events,project:()=>state.project,change(){state={...state,revision:12};}};
+}
+const correctionButtons=host=>all(host).filter(e=>e.textContent==='Go to input'||e.textContent==='入力箇所へ');
+test('three orthotropic Young warnings guide each exact component to the existing material-status note once',async()=>{
+ const f=orthoSetup(),report=await f.ui.check(),buttons=correctionButtons(f.host),before=structuredClone(f.project());
+ assert.deepEqual(report,orthoWarnings);assert.equal(buttons.length,3);
+ buttons.forEach((button,index)=>{
+  assert.equal(button.parentElement.children.some(c=>c.textContent==='専用編集欄は未実装。API/保存入力で該当成分（index '+index+'）を確認してください。'),true);
+  button.onclick();
+  assert.equal(f.status.focusCalls,index+1,'each click focuses the guide exactly once');
+  assert.equal(f.status.focused,true);assert.equal(f.details.open,true);
+  assert.equal(f.status.textContent,'直交異方性を登録済み');
+ });
+ assert.deepEqual(f.project(),before);
+ assert.deepEqual(f.project().materialProperties.orthotropic.youngModuliPa,[210,220,230]);
+ assert.equal(f.ui.getReport(),report);
+ assert.match(find(f.host,'preflight-status').textContent,/入力版: 11/);
+});
+test('the orthotropic guide is bilingual and never claims a component editor exists',async()=>{
+ const f=orthoSetup({language:'en'}),report=await f.ui.check(),buttons=correctionButtons(f.host);
+ assert.equal(buttons.length,3);
+ const text=all(f.host).map(e=>e.textContent).join(' ');
+ for(const index of [0,1,2])assert.match(text,new RegExp('No dedicated component editor is implemented; confirm component index '+index+' in the API or saved input.'));
+ assert.equal(/専用編集欄は未実装/.test(text),false);
+ buttons[1].onclick();assert.equal(f.status.focusCalls,1);assert.equal(f.ui.getReport(),report);
+});
+test('stale orthotropic warnings discard the guide action instead of moving focus',async()=>{
+ const f=orthoSetup();await f.ui.check();const button=correctionButtons(f.host)[0];f.change();button.onclick();
+ assert.equal(f.ui.getReport(),null);assert.equal(f.status.focusCalls,0);assert.equal(f.status.focused,undefined);
+ assert.match(find(f.host,'preflight-status').textContent,/もう一度チェック/);
+});
+test('disabled or hidden material-status rejects the orthotropic guide without focusing',async()=>{
+ const f=orthoSetup();await f.ui.check();const button=correctionButtons(f.host)[0];
+ f.status.disabled=true;button.onclick();assert.equal(f.status.focusCalls,0);assert.match(find(f.host,'preflight-status').textContent,/表示できません/);
+ f.status.disabled=false;f.status.hidden=true;button.onclick();assert.equal(f.status.focusCalls,0);assert.match(find(f.host,'preflight-status').textContent,/表示できません/);
+});
+test('unknown index, deeper paths, the whole array and shear components are not mapped by prefix',async()=>{
+ const tempting={'mat-orthotropic-youngModuliPa-3':element('input'),'mat-orthotropic-shearModuliPa-0':element('input'),'mat-orthotropic-youngModuliPa-0-extra':element('input')};
+ const report={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:['/materialProperties/orthotropic/youngModuliPa/3','/materialProperties/orthotropic/youngModuliPa/0/extra','/materialProperties/orthotropic/youngModuliPa','/materialProperties/orthotropic/shearModuliPa/0'].map(pointer=>({code:'UNIT_MAGNITUDE_SUSPECT',severity:'warning',target:pointer,message:'unusual magnitude'})),requiredPointers:[],remainingChecks:[]};
+ const f=orthoSetup({report,controls:tempting});await f.ui.check();
+ assert.equal(correctionButtons(f.host).length,0);
+ for(const control of Object.values(tempting))assert.equal(control.focused,undefined);
+ assert.equal(f.status.focusCalls,0);
+ const text=all(f.host).map(e=>e.textContent).join(' ');
+ for(const pointer of report.diagnostics.map(d=>d.target))assert.ok(text.includes(pointer),pointer);
+});
+test('a dedicated component editor, when it resolves, is the only target for its exact pointer',async()=>{
+ const controls={};[210,220,230].forEach((value,index)=>{const input=element('input');input.value=String(value);input.focusCalls=0;input.focus=function(){this.focusCalls++;this.focused=true;};controls['mat-orthotropic-youngModuliPa-'+index]=input;});
+ const f=orthoSetup({controls});await f.ui.check();const buttons=correctionButtons(f.host);
+ assert.equal(buttons.length,3);assert.equal(all(f.host).some(e=>typeof e.textContent==='string'&&e.textContent.includes('専用編集欄は未実装')),false);
+ buttons.forEach((button,index)=>{button.onclick();assert.equal(controls['mat-orthotropic-youngModuliPa-'+index].focusCalls,1);assert.equal(f.status.focusCalls,0);assert.equal(controls['mat-orthotropic-youngModuliPa-'+index].value,String([210,220,230][index]));});
+});
+
 test('preflight and solve read the same single delegated analysis options reader',()=>{
  assert.ok(main.includes("import {analysisOptionsFromValues} from './ui/analysis-options.js';"));
  assert.equal(main.split('function currentAnalysisOptions()').length-1,1,'exactly one shared reader must exist');
@@ -35,3 +96,13 @@ test('preflight and solve read the same single delegated analysis options reader
 test('JSON pointer is preferred over the legacy dot target when focusing a known control',async()=>{const details=element('details'),solver=element('input');details.append(solver);const methodReport={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[{code:'EXECUTION_METHOD_UNSUPPORTED',severity:'error',target:'options.method',pointer:'/options/method',message:'Execution method is unavailable',evidence:{},suggestions:['Use the documented CPU configuration']}],requiredPointers:[],remainingChecks:[]};const f=setup({preflight:()=>structuredClone(methodReport),getControl:id=>id==='solver'?solver:null});await f.ui.check();const text=all(f.host).map(e=>e.textContent).join(' ');assert.match(text,/\/options\/method/);assert.equal(/options\.method/.test(text),false);assert.match(text,/Execution method is unavailable/);const jump=all(f.host).find(e=>e.textContent==='Go to input');assert.ok(jump);jump.onclick();assert.equal(details.open,true);assert.equal(solver.focused,true);assert.deepEqual(f.ui.getReport(),methodReport);});
 
 test('an unmapped diagnostic shows its target only and never focuses or looks up another control',async()=>{let controlLookups=0;const combinationReport={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics:[{code:'MODAL_COMBINATION_UNSUPPORTED',severity:'error',target:'execution.combination',message:'Modal prototype requires linear CPU structure',evidence:{},suggestions:['Use linear CPU structure']}],requiredPointers:[],remainingChecks:[]};const f=setup({preflight:()=>structuredClone(combinationReport),getControl:()=>{controlLookups++;return element('input');}});await f.ui.check();const text=all(f.host).map(e=>e.textContent).join(' ');assert.match(text,/execution\.combination/);assert.match(text,/Modal prototype requires/);assert.equal(all(f.host).some(e=>e.textContent==='Go to input'),false);assert.equal(controlLookups,0);});
+
+test('preflight mapping is explicit for /options/adaptive and introduces no dotted-path conversion',async()=>{const source=await readFile(new URL('../src/ui/analysis-preflight-ui.js',import.meta.url),'utf8');assert.ok(source.includes("'/options/adaptive':'adaptive-run'"));assert.equal(source.includes("split('.')"),false);assert.equal(source.includes("startsWith('/options/')"),false);});
+
+test('real adaptive non-structural diagnostic focuses the existing checkbox without unchecking it or changing options and input version',async()=>{const details=element('details'),adaptive=element('input');details.append(adaptive);adaptive.checked=true;const options={size:5,method:'wasm-pcg',adaptive:true,maxRounds:3},before=structuredClone(options);const diagnostics=diagnoseExecution({study:{kind:'thermal'}},{method:'wasm-pcg',adaptive:true}).diagnostics,issue=diagnostics.find(e=>e.code==='ADAPTIVE_STUDY_UNSUPPORTED');assert.equal(issue.target,'options.adaptive');assert.equal(issue.pointer,'/options/adaptive');const reportOverride={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics,requiredPointers:[],remainingChecks:[]};const f=setupControls({'adaptive-run':adaptive},reportOverride);await f.ui.check();const text=all(f.host).map(e=>e.textContent).join(' ');assert.match(text,/\/options\/adaptive/);assert.match(text,/Adaptive refinement supports structure only/);const jump=all(f.host).find(e=>e.textContent==='Go to input');assert.ok(jump);jump.onclick();assert.equal(details.open,true);assert.equal(adaptive.focused,true);assert.equal(adaptive.checked,true);assert.deepEqual(options,before);assert.equal(f.state().revision,7);assert.deepEqual(f.ui.getReport(),reportOverride);});
+
+test('simultaneous method and adaptive diagnostics focus the solver select and adaptive checkbox separately',async()=>{const details=element('details'),solver=element('select'),adaptive=element('input');details.append(solver,adaptive);adaptive.checked=true;const diagnostics=diagnoseExecution({study:{kind:'thermal'}},{method:'mfem-wasm',adaptive:true}).diagnostics;assert.deepEqual(diagnostics.map(e=>e.pointer),['/options/method','/options/adaptive']);const reportOverride={mode:'exploratory',allowed:false,provisional:true,completePreflight:false,diagnostics,requiredPointers:[],remainingChecks:[]};const f=setupControls({solver,'adaptive-run':adaptive},reportOverride);await f.ui.check();const buttons=all(f.host).filter(e=>e.textContent==='Go to input');assert.equal(buttons.length,2);buttons[0].onclick();assert.equal(solver.focused,true);assert.equal(adaptive.focused,undefined);solver.focused=false;buttons[1].onclick();assert.equal(adaptive.focused,true);assert.equal(solver.focused,false);assert.equal(adaptive.checked,true);});
+
+test('hidden or disabled adaptive control is rejected safely while the issue and checked state remain',async()=>{const diagnostics=diagnoseExecution({study:{kind:'thermal'}},{method:'wasm-pcg',adaptive:true}).diagnostics;const reportOverride={mode:'exploratory',allowed:false,completePreflight:false,diagnostics,requiredPointers:[],remainingChecks:[]};for(const mode of ['hidden','disabled']){const adaptive=element('input');adaptive.checked=true;adaptive[mode]=true;const f=setupControls({'adaptive-run':adaptive},reportOverride);await f.ui.check();const jump=all(f.host).find(e=>e.textContent==='Go to input');assert.ok(jump,mode);jump.onclick();assert.equal(adaptive.focused,undefined,mode);assert.equal(adaptive.checked,true,mode);assert.match(find(f.host,'preflight-status').textContent,/Input is unavailable/,mode);assert.deepEqual(f.ui.getReport(),reportOverride);}});
+
+test('legacy target options.adaptive without a pointer is never guessed into a control',async()=>{const adaptive=element('input');let lookups=0;const legacyReport={mode:'exploratory',allowed:false,completePreflight:false,diagnostics:[{code:'ADAPTIVE_STUDY_UNSUPPORTED',severity:'error',target:'options.adaptive',message:'legacy shape'}],requiredPointers:[],remainingChecks:[]};const f=setup({preflight:()=>structuredClone(legacyReport),getControl:id=>{lookups++;return id==='adaptive-run'?adaptive:null;}});await f.ui.check();const text=all(f.host).map(e=>e.textContent).join(' ');assert.match(text,/options\.adaptive/);assert.match(text,/legacy shape/);assert.equal(all(f.host).some(e=>e.textContent==='Go to input'),false);assert.equal(lookups,0);});

@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "VIEWCOMPARE",
+  "workOrder": "36-VIEWCOMPARE",
+  "scope": "Real localhost browser generation, retrieval and decode of a 2 s / 24 frame acoustic time-comparison GIF from two real transient acoustic cases (1 Pa and 2 Pa source). GUI and official stdio MCP paths were both exercised. No product source or test was changed because no inconsistency was found.",
+  "branch": "codex/opencode-next-36",
+  "baseRef": "origin/main",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "sourceFrozen": {
+    "worktree": "D:\\github\\airpocket-soundman\\studio-opencode-next-36",
+    "origin": "http://127.0.0.1:5177",
+    "locale": "en",
+    "dirtyAtStart": false,
+    "hmrOrSourceEditDuringChecks": false,
+    "browser": {
+      "product": "OpenCode desktop browser (Electron 44.4.5), Chromium 152.0.7977.130",
+      "brandedGoogleChrome": false,
+      "crossOriginIsolated": true
+    },
+    "runtime": {
+      "node": "v24.11.1",
+      "platform": "win32",
+      "arch": "x64"
+    }
+  },
+  "analysisAssessment": {
+    "mode": "legacy",
+    "completePreflight": false,
+    "provisional": false,
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "study": {
+    "name": "Acoustic domain reference sample",
+    "kind": "acoustic",
+    "transient": true,
+    "frequencyHz": 4000,
+    "soundSpeedMPerS": 343,
+    "airDensityKgPerM3": 1.2,
+    "pulseWidthSeconds": 0.0001,
+    "durationSeconds": 0.0012,
+    "timeStepSeconds": 0.0000018691588785046728,
+    "steps": 642,
+    "dampingRate": 0,
+    "snapshotCount": 25,
+    "snapshotBudgetBytes": 2097152,
+    "meshSizeMm": 2,
+    "displayMesh": {
+      "nodes": 741,
+      "tetrahedra": 2672,
+      "volumeMm3": 4000,
+      "quality": 0.313,
+      "qualityBelow02Elements": 0
+    },
+    "savedCaseMesh": {
+      "nodes": 741,
+      "coordinateValues": 2223,
+      "tetrahedra": 2672
+    },
+    "pressureSamplesPerFrame": 741,
+    "amplitudeConventionNote": "The saved case mesh.nodes array contains 2223 flattened XYZ coordinate values, representing 741 volume nodes. The pressure field and comparison color range use 741 scalars per frame, matching the node count and the UI summary of 741 nodes / 2672 tetrahedra. No partial-field storage or mesh/field node-count mismatch is inferred.",
+    "boundary": {
+      "sourceConditions": {
+        "type": "acousticPressure",
+        "regionMesh": 0,
+        "regionTriangles": [10, 11],
+        "direction": [1, 0, 0]
+      },
+      "impedanceConditions": {
+        "type": "acousticImpedance",
+        "value": 411.6,
+        "reactance": 0,
+        "regionMesh": 0,
+        "regionTriangles": [8, 9],
+        "direction": [1, 0, 0]
+      }
+    }
+  },
+  "cases": [
+    {
+      "label": "acoustic-time-1Pa",
+      "caseId": "7553dc63-3645-4856-88c0-046f520c86f8",
+      "caseRevision": "sha256:a1e51b2d3f29536491f0c47aa0e6c979169a420f2c9e288b9ba3d965649f945a",
+      "resultRevision": "sha256:ce877ac69a8f63dbbc0c55be052a5db859b893079db2ec18353f3142e70227aa",
+      "physicalRevision": "sha256:de6b377d586b34254b7a4db804b7f0e942926f9eebf66b0f8e56c937f248c817",
+      "sourceAmplitudePa": 1,
+      "kind": "acousticTransient",
+      "maxPressurePa": 1.004477483073753,
+      "receiverPeakPa": 1.0017183122673479,
+      "snapshotCount": 25,
+      "snapshotStorage": {
+        "requested": 25,
+        "count": 25,
+        "bytes": 148200,
+        "bytesPerScalar": 8,
+        "budgetBytes": 2097152,
+        "warningCount": 0
+      },
+      "frameTimesSeconds": [
+        0,
+        0.00005046728971962616,
+        0.00010093457943925232,
+        0.00014953271028037381,
+        0.00019999999999999998,
+        0.00025046728971962615,
+        0.0003009345794392523,
+        0.0003495327102803738,
+        0.00039999999999999996,
+        0.00045046728971962613,
+        0.0005009345794392523,
+        0.0005495327102803738,
+        0.0006,
+        0.0006504672897196262,
+        0.0007009345794392523,
+        0.0007495327102803738,
+        0.0007999999999999999,
+        0.0008504672897196262,
+        0.0009009345794392523,
+        0.0009495327102803738,
+        0.001,
+        0.0010504672897196261,
+        0.0011009345794392522,
+        0.0011495327102803738,
+        0.0012
+      ]
+    },
+    {
+      "label": "acoustic-time-2Pa",
+      "caseId": "1688891f-8890-4822-b87d-0f654ae0b16d",
+      "caseRevision": "sha256:ba9e108217634d1a31eaffee1f83cd0e70ce92480132e0f24ba0a09630a1879a",
+      "resultRevision": "sha256:f9d8e4860ab218c67e39be859a10a3e81e9b57e1c808c23903774daf9bfc2352",
+      "physicalRevision": "sha256:48e10f9e283b26252b70da651ef267a65e3f7fef553c4e53879c27be07dc57eb",
+      "sourceAmplitudePa": 2,
+      "kind": "acousticTransient",
+      "maxPressurePa": 2.008954966147506,
+      "receiverPeakPa": 2.0034366245346957,
+      "snapshotCount": 25,
+      "snapshotStorage": {
+        "requested": 25,
+        "count": 25,
+        "bytes": 148200,
+        "bytesPerScalar": 8,
+        "budgetBytes": 2097152,
+        "warningCount": 0
+      },
+      "frameTimesSeconds": [
+        0,
+        0.00005046728971962616,
+        0.00010093457943925232,
+        0.00014953271028037381,
+        0.00019999999999999998,
+        0.00025046728971962615,
+        0.0003009345794392523,
+        0.0003495327102803738,
+        0.00039999999999999996,
+        0.00045046728971962613,
+        0.0005009345794392523,
+        0.0005495327102803738,
+        0.0006,
+        0.0006504672897196262,
+        0.0007009345794392523,
+        0.0007495327102803738,
+        0.0007999999999999999,
+        0.0008504672897196262,
+        0.0009009345794392523,
+        0.0009495327102803738,
+        0.001,
+        0.0010504672897196261,
+        0.0011009345794392522,
+        0.0011495327102803738,
+        0.0012
+      ]
+    }
+  ],
+  "linearity": {
+    "maxPressureRatio": 2,
+    "receiverPeakRatio": 2,
+    "maxPressureComparison": {
+      "amplitudesPa": [1, 2],
+      "valuesPa": [1.004477483073753, 2.008954966147506],
+      "ratio": 2
+    },
+    "receiverPeakComparison": {
+      "amplitudesPa": [1, 2],
+      "valuesPa": [1.0017183122673479, 2.0034366245346957],
+      "ratio": 2
+    },
+    "note": "The same model, display mesh, volume mesh, boundary and stored-frame schedule were used; only the source amplitude was changed from 1 Pa to 2 Pa. The linear acoustic solver therefore gives an exact factor-of-two response."
+  },
+  "commonColorRange": {
+    "field": "instantPressure",
+    "unit": "Pa",
+    "minimum": -1.020051886396336,
+    "maximum": 2.003543095981178,
+    "scalarCount": 37050,
+    "scalarCountFormula": "2 cases x 25 frames x 741 pressure samples",
+    "fixedForAllFrames": true,
+    "matchesManifest": true
+  },
+  "guiPath": {
+    "selection": {
+      "caseAIndex": 0,
+      "caseBIndex": 1,
+      "field": "instantPressure",
+      "format": "gif",
+      "animation": "time",
+      "startTimeSeconds": 0,
+      "endTimeSeconds": 0.0012,
+      "toleranceSeconds": null,
+      "displaySeconds": 2
+    },
+    "status": "Video ready. Play it to review, then use the save link.",
+    "elapsedMs": 20545,
+    "blobType": "image/gif",
+    "bytes": 5574849,
+    "sha256": "sha256:3c7ce9abe4440e44c9958dc42fbcfc9b78c9b293bc2aa64d744e48b90a97e7de",
+    "header": {
+      "signature": "GIF89a",
+      "width": 640,
+      "height": 320,
+      "trailer": 59
+    },
+    "decode": {
+      "decoder": "browser ImageDecoder (WebCodecs) on the GUI blob",
+      "frameCount": 24,
+      "width": 640,
+      "height": 320,
+      "rgbaBytesPerFrame": 819200,
+      "delayCentiseconds": [8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8],
+      "delaySumCentiseconds": 200,
+      "delaySumSeconds": 2,
+      "distinctPixelHashes": 24,
+      "first": { "index": 0, "delayCentiseconds": 8, "rgbaFnv1a": "0x1d9406cc" },
+      "middle": { "index": 12, "delayCentiseconds": 8, "rgbaFnv1a": "0x57f48a34" },
+      "last": { "index": 23, "delayCentiseconds": 8, "rgbaFnv1a": "0x1a8b6566" },
+      "note": "Every frame was decoded; the first/middle/last pixel hashes are recorded, and all 24 hashes were distinct."
+    }
+  },
+  "officialMcpPath": {
+    "pairing": "localhost loopback pairing through the app connection UI",
+    "scopes": ["inspect", "view"],
+    "mcpServer": "scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5177",
+    "discoveryTool": "studio_browser_sessions",
+    "callTool": "studio_browser_call",
+    "methods": ["startCompareExport", "exportStatus", "exportArtifact", "releaseExport"],
+    "request": {
+      "requestId": "acoustic-time-2s-mcp",
+      "references": [
+        { "caseId": "7553dc63-3645-4856-88c0-046f520c86f8", "expectedRevision": "sha256:a1e51b2d3f29536491f0c47aa0e6c979169a420f2c9e288b9ba3d965649f945a" },
+        { "caseId": "1688891f-8890-4822-b87d-0f654ae0b16d", "expectedRevision": "sha256:ba9e108217634d1a31eaffee1f83cd0e70ce92480132e0f24ba0a09630a1879a" }
+      ],
+      "field": "instantPressure",
+      "format": "gif",
+      "animation": "time",
+      "seconds": 2,
+      "startTimeSeconds": 0,
+      "endTimeSeconds": 0.0012
+    },
+    "jobId": "d5eb540f-3015-4905-8bf7-dfb948ab13eb",
+    "state": "completed",
+    "artifactPages": 86,
+    "artifactBytes": 5574849,
+    "artifactSha256": "sha256:3c7ce9abe4440e44c9958dc42fbcfc9b78c9b293bc2aa64d744e48b90a97e7de",
+    "assembledBytes": 5574849,
+    "assembledSha256": "sha256:3c7ce9abe4440e44c9958dc42fbcfc9b78c9b293bc2aa64d744e48b90a97e7de",
+    "guiAndMcpByteIdentical": true,
+    "releaseExport": true,
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "gif",
+      "container": "gif",
+      "mimeType": "image/gif",
+      "sha256": "sha256:3c7ce9abe4440e44c9958dc42fbcfc9b78c9b293bc2aa64d744e48b90a97e7de",
+      "totalBytes": 5574849,
+      "resolution": { "width": 640, "height": 320 },
+      "sourceResolution": { "width": 1280, "height": 640 },
+      "comparison": {
+        "field": "instantPressure",
+        "unit": "Pa",
+        "cases": [
+          {
+            "caseId": "7553dc63-3645-4856-88c0-046f520c86f8",
+            "label": "acoustic-time-1Pa",
+            "revision": "sha256:a1e51b2d3f29536491f0c47aa0e6c979169a420f2c9e288b9ba3d965649f945a",
+            "resultRevision": "sha256:ce877ac69a8f63dbbc0c55be052a5db859b893079db2ec18353f3142e70227aa"
+          },
+          {
+            "caseId": "1688891f-8890-4822-b87d-0f654ae0b16d",
+            "label": "acoustic-time-2Pa",
+            "revision": "sha256:ba9e108217634d1a31eaffee1f83cd0e70ce92480132e0f24ba0a09630a1879a",
+            "resultRevision": "sha256:f9d8e4860ab218c67e39be859a10a3e81e9b57e1c808c23903774daf9bfc2352"
+          }
+        ],
+        "colorRange": {
+          "field": "instantPressure",
+          "minimum": -1.020051886396336,
+          "maximum": 2.003543095981178
+        },
+        "gifAnimation": {
+          "palette": "RGB332",
+          "colors": 256,
+          "lossy": true,
+          "frames": 24,
+          "width": 640,
+          "height": 320,
+          "loop": 0,
+          "phasePolicy": "i/23"
+        },
+        "timeAnimation": {
+          "kind": "acousticTransient",
+          "field": "instantPressure",
+          "startTimeSeconds": 0,
+          "endTimeSeconds": 0.0012,
+          "interpolated": false,
+          "timeSelection": "nearest-stored-frames-only",
+          "rangeBasis": "all-selectable-stored-frames",
+          "camera": "fixed",
+          "selectedFrameCounts": [25, 25],
+          "maxAbsOffsetSeconds": [0.00002523364485981311, 0.00002523364485981311],
+          "initial": {
+            "timeSeconds": 0,
+            "panels": [
+              { "frameIndex": 0, "offsetSeconds": 0, "timeSeconds": 0 },
+              { "frameIndex": 0, "offsetSeconds": 0, "timeSeconds": 0 }
+            ]
+          },
+          "final": {
+            "timeSeconds": 0.0012,
+            "panels": [
+              { "frameIndex": 24, "offsetSeconds": 0, "timeSeconds": 0.0012 },
+              { "frameIndex": 24, "offsetSeconds": 0, "timeSeconds": 0.0012 }
+            ]
+          }
+        }
+      },
+      "view": {
+        "language": "en",
+        "camera": {
+          "position": [61.00000000000001, 41, 84],
+          "target": [5, 5, 20],
+          "up": [0, 1, 0],
+          "fov": 40
+        },
+        "deformScale": 1,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "resolution": { "width": 640, "height": 320 },
+        "sourceResolution": { "width": 1280, "height": 640 }
+      },
+      "time": {
+        "animation": "time",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "recording": "fixed-frame",
+        "realtime": false,
+        "frameCount": 24,
+        "frameCountGuaranteed": true,
+        "phasePolicy": "i/23",
+        "camera": "fixed",
+        "frameSelection": "nearest-stored-frames-only",
+        "requestedRangeSeconds": { "start": 0, "end": 0.0012 },
+        "delayCentiseconds": [8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8],
+        "loop": "infinite"
+      },
+      "gif": {
+        "palette": "RGB332",
+        "colors": 256,
+        "lossy": true
+      }
+    }
+  },
+  "gifStructureWalk": {
+    "parser": "Node.js independent byte walk: header, global color table, extension blocks, image descriptors, delay fields and trailer",
+    "bytes": 5574849,
+    "sha256": "sha256:3c7ce9abe4440e44c9958dc42fbcfc9b78c9b293bc2aa64d744e48b90a97e7de",
+    "signature": "GIF89a",
+    "width": 640,
+    "height": 320,
+    "globalColorTable": true,
+    "colorCount": 256,
+    "paletteFirstRgb": [0, 0, 0],
+    "paletteLastRgb": [255, 255, 255],
+    "loop": 0,
+    "loopMeaning": "infinite",
+    "imageCount": 24,
+    "imageDescriptors": {
+      "allFullCanvas": true,
+      "left": 0,
+      "top": 0,
+      "width": 640,
+      "height": 320
+    },
+    "delaysCentiseconds": [8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8, 8, 9, 8],
+    "delaySumCentiseconds": 200,
+    "trailer": 59,
+    "manifestMatchesBytes": true
+  },
+  "stateRestoration": {
+    "checked": ["input/project", "saved cases archive", "result view", "comparison settings and compare UI controls"],
+    "beforeAfterEqual": {
+      "project": true,
+      "cases": true,
+      "resultView": true,
+      "comparisonSettings": true,
+      "compareUiControls": true
+    },
+    "archiveRevisionBeforeAfter": "sha256:e367561677483fa7880e049dcd8759f518dc1617e81a911cf958cc0808d9358a",
+    "resultRevisionBeforeAfter": "sha256:f9d8e4860ab218c67e39be859a10a3e81e9b57e1c808c23903774daf9bfc2352",
+    "comparisonViewRevisionBeforeAfter": "sha256:7d53f50a30e7cb2dee6ab8982b1f8bf7e0f6e201f8dc5d83ff511a0b6428dcbe",
+    "comparisonViewReason": "Enter the shared physical time.",
+    "compareUiBeforeAfter": {
+      "left": "0",
+      "right": "1",
+      "format": "gif",
+      "kind": "time",
+      "from": "0",
+      "to": "0.0012",
+      "tolerance": "",
+      "seconds": "2",
+      "field": "instantPressure"
+    },
+    "inputAndCaseRevisionCountChanges": 0,
+    "note": "The static comparison preview preset remained the existing 'Enter the shared physical time' state; the time-video path used the explicit 0..0.0012 s range and did not mutate that preset. Both the preset and the compare UI controls were compared before/after."
+  },
+  "cancelCheck": {
+    "requestId": "acoustic-time-cancel-mid",
+    "jobId": "436421cf-63e7-4dd5-b1f5-d1cc1d0ad448",
+    "requestedFrames": 24,
+    "beforeCancel": { "state": "running", "progressFraction": 0.125 },
+    "cancelState": "cancelled",
+    "terminalState": "cancelled",
+    "terminalProgressFraction": 0.125,
+    "artifactRead": "refused",
+    "artifactErrorMessage": "Visual export artifact is unavailable",
+    "stateRestored": true,
+    "released": true,
+    "busyAfter": {
+      "compareVideoStartDisabled": false,
+      "cancelRunDisabled": true
+    },
+    "note": "A second cancellation immediately after start, at progress 0, also ended cancelled, refused the artifact and restored all four states."
+  },
+  "invalidRequestChecks": [
+    {
+      "name": "stale case revision",
+      "rejected": true,
+      "message": "Case content changed; list cases again"
+    },
+    {
+      "name": "single time",
+      "rejected": true,
+      "message": "Comparison time video requires an explicit increasing physical time range without timeSeconds"
+    },
+    {
+      "name": "reversed range",
+      "rejected": true,
+      "message": "Comparison time video requires an explicit increasing physical time range without timeSeconds"
+    },
+    {
+      "name": "tolerance 0 unsaved intermediate time",
+      "rejected": true,
+      "message": "Comparison time interval exceeds stored-frame tolerance"
+    }
+  ],
+  "commands": [
+    {
+      "command": "node --test tests/comparison-acoustic-time-gif.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 3, "pass": 3, "fail": 0, "cancelled": 0, "skipped": 0, "durationMs": 802.9916 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "changedFiles": [
+    "docs/evidence/2026-10-21-opencode-viewcompare-acoustic-chrome.json"
+  ],
+  "result": "Two real transient acoustic cases with the same model, display mesh, volume mesh, boundary and 25 stored frames (source amplitudes 1 Pa and 2 Pa) produced an exact linear factor-of-two pressure response. GUI and official MCP produced byte-identical 5,574,849-byte GIFs with SHA-256 3c7ce9..., 24 full-canvas 640x320 frames, RGB332/256 colors, loop 0 and 8/9-centisecond delays summing to 200 centiseconds. A real browser ImageDecoder decoded all 24 frames with distinct pixel hashes. The manifest's common color range matches the actual stored-field min/max, the camera is fixed, interpolation is false, and only nearest stored frames are selected. Success and mid-run cancellation restored input, cases, result and comparison settings; cancellation refused the partial artifact. Stale revision, single time, reversed range and zero-tolerance unsaved time were rejected. No source or test change was needed.",
+  "unconfirmed": [
+    "The browser is the OpenCode desktop Electron/Chromium build, not branded Google Chrome.",
+    "Only localhost was used; public HTTPS, OS download and cross-origin deployment were not verified.",
+    "Only one acoustic model/mesh and one pair of source amplitudes were checked. There is no general acoustic-accuracy, convergence, mesh-independence or full-suite/post-push-CI claim.",
+    "The GIF is lossy RGB332 with 256 colors; pixel hashes are over decoded RGB output, not a proof of pressure-value accuracy.",
+    "The GIF is 5,574,849 bytes, above the 5 MiB single-file transfer limit. Full bytes were retrieved through 86 official MCP artifact pages; a direct one-file browser transfer was not used and is not claimed.",
+    "GUI and MCP GIFs were byte-identical in this one run. No multi-run determinism distribution was measured.",
+    "The original evidence mislabeled 2223 flattened XYZ coordinate values as 2223 volume nodes. Corrected saved-mesh count is 741 nodes, matching the 741 pressure scalars per frame and UI summary. The raw coordinate-array length is retained separately; no distinct mesh/field storage boundary is asserted.",
+    "The static comparison-view preset remained 'Enter the shared physical time' because the time-video path used the explicit start/end fields; the preset and the video controls were both unchanged before/after.",
+    "The parent VIEWCOMPARE unit remains incomplete; this is a bounded real-browser verification slice."
+  ],
+  "secretsHandling": {
+    "pairingCodeRecorded": false,
+    "tokensOrCredentialsRecorded": false,
+    "environmentDumped": false,
+    "physicalArraysCopiedIntoEvidence": false,
+    "userModelUploaded": false
+  },
+  "evidenceCorrection": {
+    "date": "2026-10-21",
+    "scope": "Integration-only factual terminology correction; no source or measurement rerun",
+    "originalReportedSavedCaseMeshNodes": 2223,
+    "preservedRawCoordinateArrayLength": 2223,
+    "coordinateLayout": "flat XYZ, three coordinate values per node",
+    "correctedSavedCaseMeshNodes": 741,
+    "pressureSamplesPerFrame": 741,
+    "fieldLengthMatchesNodeCount": true,
+    "sourceReferences": [
+      "src/intermediate-results.js:5",
+      "src/case-comparison.js:78"
+    ],
+    "note": "The original numerical raw count is retained as savedCaseMesh.coordinateValues. The previous claim of a distinct 2223-node mesh with 741 pressure values is removed. GUI/MCP/decode observations remain the original bounded Electron/Chromium report; no new artifact, Chrome run or cleanup is claimed."
+  }
+}

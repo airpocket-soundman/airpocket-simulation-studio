@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 // Independent readback of a retained visual-export artifact against its
-// schemaVersion-1 manifest. It checks identity (exact byte length and SHA-256)
-// and the container header only. It never decodes pixels, counts GIF frames,
-// verifies a frame schedule or re-derives physical results, and it is not a
-// substitute for the browser export tests.
+// schemaVersion-1 manifest. It checks identity (exact byte length and SHA-256),
+// the container header, and the container's structural boundaries: every PNG
+// chunk (length/type/data/CRC-32 per the PNG specification) and every GIF
+// block (logical screen descriptor, color tables, extension/image sub-blocks,
+// trailer). Structure success is not a pixel decode: it never decodes LZW or
+// PNG image data, counts drawable frames, verifies a frame schedule or
+// re-derives physical results, and it is not a substitute for the browser
+// export tests.
 //
 // Container contract taken from the real schemaVersion-1 producers in
 // src/visual-export-jobs.js (buildManifest / comparisonManifest):
@@ -51,6 +55,7 @@ function baseReport(manifestPath, artifactPath) {
     artifactPath,
     identityVerified: false,
     containerHeaderVerified: false,
+    structureVerified: false,
     frameCountVerified: false,
   };
 }
@@ -116,6 +121,125 @@ function readGifHeader(bytes) {
   return {kind: 'gif', brand, width, height};
 }
 
+// PNG CRC-32 as specified by the PNG specification (ISO/IEC 15948, 5.5):
+// the CRC-32 of the chunk type and data bytes, using the ISO 3309 / ITU-T V.42
+// reflected polynomial 0xedb88320 with an initial and final inversion.
+const PNG_CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+function pngCrc32(bytes, start, end) {
+  let crc = 0xffffffff;
+  for (let index = start; index < end; index++) crc = PNG_CRC_TABLE[(crc ^ bytes[index]) & 255] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+// Walk the whole PNG chunk sequence. Every declared length is bounds-checked
+// against the remaining file bytes before it is used, so a forged 0xffffffff
+// length is refused without allocating or scanning. IHDR must be first and
+// 13 bytes long, IDAT chunks must exist and be consecutive, IEND must be
+// 0 bytes and the final bytes of the file, and each stored CRC must match.
+function walkPngChunks(bytes, header) {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  let offset = PNG_SIGNATURE.length, chunkCount = 0, idatChunks = 0, idatClosed = false;
+  for (;;) {
+    if (offset === bytes.length) invalid('PNG ends without an IEND chunk');
+    if (offset + 8 > bytes.length) invalid(`PNG chunk header is truncated at byte ${offset}`);
+    const length = view.getUint32(offset);
+    const type = String.fromCharCode(bytes[offset + 4], bytes[offset + 5], bytes[offset + 6], bytes[offset + 7]);
+    if (!/^[A-Za-z]{4}$/.test(type)) invalid(`PNG chunk type at byte ${offset} is not four ASCII letters`);
+    if (length > 0x7fffffff) invalid(`PNG chunk ${type} declares ${length} data bytes, over the specification maximum of 2147483647`);
+    const dataStart = offset + 8, dataEnd = dataStart + length;
+    if (dataEnd + 4 > bytes.length) invalid(`PNG chunk ${type} declares ${length} data bytes but only ${Math.max(0, bytes.length - dataStart)} remain, so its data and CRC are truncated`);
+    const storedCrc = view.getUint32(dataEnd);
+    const computedCrc = pngCrc32(bytes, offset + 4, dataEnd);
+    if (storedCrc !== computedCrc) invalid(`PNG chunk ${type} CRC is 0x${storedCrc.toString(16)}, computed 0x${computedCrc.toString(16)}`);
+    if (chunkCount === 0) {
+      if (type !== 'IHDR') invalid(`PNG first chunk must be IHDR, not ${type}`);
+      if (length !== 13) invalid(`PNG IHDR length must be 13, not ${length}`);
+      if (view.getUint32(dataStart) !== header.width || view.getUint32(dataStart + 4) !== header.height) invalid('PNG IHDR dimensions differ from the parsed header');
+    } else if (type === 'IHDR') {
+      invalid(`PNG IHDR must appear only as the first chunk, found again at byte ${offset}`);
+    }
+    if (type === 'IDAT') {
+      if (idatClosed) invalid('PNG IDAT chunks must be consecutive before IEND');
+      idatChunks++;
+    } else if (idatChunks) {
+      idatClosed = true;
+    }
+    chunkCount++;
+    offset = dataEnd + 4;
+    if (type === 'IEND') {
+      if (length !== 0) invalid(`PNG IEND length must be 0, not ${length}`);
+      if (offset !== bytes.length) invalid(`PNG has ${bytes.length - offset} trailing bytes after IEND`);
+      break;
+    }
+  }
+  if (!idatChunks) invalid('PNG has no IDAT chunk');
+  return {format: 'png', chunkCount, idatChunkCount: idatChunks, crcVerified: true, iendAtEnd: true};
+}
+
+// Walk the whole GIF block sequence after the 13-byte logical screen
+// descriptor. Sub-block sizes are bounds-checked against the remaining file
+// bytes before advancing. The trailer must be the very last byte. LZW data is
+// walked as sub-blocks only; it is never decoded.
+function walkGifBlocks(bytes) {
+  if (bytes.length < 13) invalid(`GIF is ${bytes.length} bytes, shorter than the 13-byte logical screen descriptor`);
+  const packed = bytes[10];
+  let offset = 13, images = 0, extensions = 0, subBlocks = 0, localColorTables = 0, sawTrailer = false;
+  const globalColorTableBytes = packed & 0x80 ? 3 * (1 << ((packed & 7) + 1)) : 0;
+  if (offset + globalColorTableBytes > bytes.length) invalid(`GIF global color table declares ${globalColorTableBytes} bytes but only ${bytes.length - offset} remain`);
+  offset += globalColorTableBytes;
+  const walkSubBlocks = label => {
+    for (;;) {
+      if (offset >= bytes.length) invalid(`GIF ${label} sub-block size is missing at byte ${offset} (truncated before the 0 terminator)`);
+      const size = bytes[offset++];
+      if (size === 0) return;
+      if (offset + size > bytes.length) invalid(`GIF ${label} sub-block declares ${size} bytes but only ${bytes.length - offset} remain`);
+      offset += size;
+      subBlocks++;
+    }
+  };
+  while (offset < bytes.length) {
+    const markerAt = offset, marker = bytes[offset++];
+    if (marker === 0x3b) {
+      sawTrailer = true;
+      if (offset !== bytes.length) invalid(`GIF has ${bytes.length - offset} trailing bytes after the 0x3b trailer at byte ${markerAt}`);
+      break;
+    }
+    if (marker === 0x21) {
+      if (offset >= bytes.length) invalid(`GIF extension label is missing after the 0x21 marker at byte ${markerAt}`);
+      offset++;
+      extensions++;
+      walkSubBlocks('extension');
+      continue;
+    }
+    if (marker === 0x2c) {
+      if (offset + 9 > bytes.length) invalid(`GIF image descriptor is truncated at byte ${markerAt}`);
+      const imagePacked = bytes[offset + 8];
+      offset += 9;
+      const localBytes = imagePacked & 0x80 ? 3 * (1 << ((imagePacked & 7) + 1)) : 0;
+      if (localBytes) localColorTables++;
+      if (offset + localBytes > bytes.length) invalid(`GIF local color table declares ${localBytes} bytes but only ${bytes.length - offset} remain`);
+      offset += localBytes;
+      if (offset >= bytes.length) invalid('GIF LZW minimum code size is missing');
+      offset++;
+      walkSubBlocks('image data');
+      images++;
+      continue;
+    }
+    invalid(`GIF block marker 0x${marker.toString(16).padStart(2, '0')} at byte ${markerAt} is not an extension (0x21), image descriptor (0x2c) or trailer (0x3b)`);
+  }
+  if (!sawTrailer) invalid('GIF ends without the 0x3b trailer');
+  if (!images) invalid('GIF has no image descriptor');
+  return {format: 'gif', imageDescriptorCount: images, extensionCount: extensions, subBlockCount: subBlocks, globalColorTableBytes, localColorTableCount: localColorTables, trailerAtEnd: true};
+}
+
 /** Read manifest + artifact and compare identity and container header. Never throws for input problems. */
 export async function verifyExportArtifact({manifestPath, artifactPath}) {
   const report = baseReport(manifestPath, artifactPath);
@@ -179,6 +303,12 @@ export async function verifyExportArtifact({manifestPath, artifactPath}) {
     report.reason = `artifact header is ${header.width}x${header.height} but manifest resolution is ${manifest.resolution.width}x${manifest.resolution.height}`;
     return report;
   }
+  try {
+    report.structure = manifest.format === 'png' ? walkPngChunks(bytes, header) : walkGifBlocks(bytes);
+  } catch (error) {
+    return failed(report, error);
+  }
+  report.structureVerified = true;
   report.status = 'verified';
   return report;
 }
@@ -206,7 +336,7 @@ export async function main(argv = process.argv.slice(2), {stdout = process.stdou
   try {
     args = parseArgs(argv);
   } catch (error) {
-    stdout.write(JSON.stringify({schemaVersion: 1, status: 'invalid', reason: error.message, identityVerified: false, containerHeaderVerified: false, frameCountVerified: false}) + '\n');
+    stdout.write(JSON.stringify({schemaVersion: 1, status: 'invalid', reason: error.message, identityVerified: false, containerHeaderVerified: false, structureVerified: false, frameCountVerified: false}) + '\n');
     return EXIT_CODES.invalid;
   }
   const manifestPath = resolve(args.manifest), artifactPath = resolve(args.artifact);

@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "UIIMPROVE1",
+  "workOrder": "21-UIIMPROVE1",
+  "scope": "Limited browser acceptance for existing requiredPointers correction links. No source change was needed; the existing focus, stale-invalidation, unknown-pointer, and disabled-target behavior already had Node tests. This evidence verifies those behaviors in a real Chromium session.",
+  "branch": "codex/opencode-next-21",
+  "baseRef": "origin/main",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "sourceAtVerification": {
+    "analysisPreflightUi": "src/ui/analysis-preflight-ui.js",
+    "focusAndCorrectionImplementationLines": "12-13",
+    "existingNodeTests": [
+      "tests/ui-analysis-preflight.test.mjs:18 required pointers reach known controls without converting values and keep unknown pointers",
+      "tests/ui-analysis-preflight.test.mjs:20 stale required-pointer correction is discarded instead of moving focus",
+      "tests/ui-analysis-preflight.test.mjs:22 disabled required target keeps the pointer and reports failure without focus"
+    ]
+  },
+  "browser": {
+    "product": "OpenCode desktop browser (Electron 44.4.5), Chromium 152.0.7977.130",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.0.32 Chrome/152.0.7977.130 Electron/44.4.5 Safari/537.36",
+    "brandedGoogleChrome": false,
+    "origin": "http://127.0.0.1:5174",
+    "sourceFrozen": true,
+    "hmrResetObserved": false,
+    "viewportCssPx": { "width": 800, "height": 654, "devicePixelRatio": 1 },
+    "viewport390EmulationAvailable": false
+  },
+  "syntheticInput": {
+    "sample": "解析サンプル",
+    "youngModulus": { "displayedValue": 1000, "displayedUnit": "MPa", "equivalentPa": 1000000000 },
+    "meshSizeMm": 4,
+    "conditions": [
+      { "kind": "fixed", "count": 1, "description": "全方向の変位を拘束" },
+      { "kind": "load", "count": 2, "valueN": 100, "direction": [0, 0, 1] }
+    ],
+    "conditionCount": 2,
+    "preflightRevision": 11,
+    "preflightMode": "legacy",
+    "completePreflight": false
+  },
+  "verified": [
+    {
+      "check": "known pointer opens closed details and focuses the exact input by click",
+      "pointer": "/materialProperties/youngModulus",
+      "result": "pass",
+      "activeElementId": "mat-youngModulus",
+      "activeElementTag": "INPUT",
+      "detailsOpen": true,
+      "detailsSummary": "材料物性を入力",
+      "valueBefore": "1000",
+      "valueAfter": "1000"
+    },
+    {
+      "check": "known pointer is reachable by keyboard focus plus Enter",
+      "result": "pass",
+      "buttonFocused": true,
+      "key": "Enter",
+      "activeElementId": "mat-youngModulus",
+      "detailsOpen": true
+    },
+    {
+      "check": "correction click does not mutate values, input revision, or conditions",
+      "result": "pass",
+      "valuesUnchanged": true,
+      "revisionBefore": "11",
+      "revisionAfter": "11",
+      "revisionState": "現在の入力と一致",
+      "conditionCountBefore": 2,
+      "conditionCountAfter": 2
+    },
+    {
+      "check": "editing mesh size 4 to 5 invalidates the old snapshot and removes the old correction link",
+      "result": "pass",
+      "meshSizeAfterEditMm": 5,
+      "statusAfterEdit": "入力が変わりました。もう一度チェックしてください。",
+      "oldLinkCountAfterEdit": 0,
+      "activeElementAfterAttemptedOldClick": "mesh-size",
+      "focusMovedToOldTarget": false
+    },
+    {
+      "check": "a new check re-enables the correction link and it focuses the target again",
+      "result": "pass",
+      "activeElementId": "mat-youngModulus",
+      "detailsOpen": true
+    },
+    {
+      "check": "unknown pointer has no correction button",
+      "pointer": "/study/gravityEnabled",
+      "result": "pass",
+      "rowPresent": true,
+      "buttonPresent": false
+    },
+    {
+      "check": "English and Japanese correction labels",
+      "result": "pass",
+      "jaLabel": "入力箇所へ",
+      "enLabel": "Go to input"
+    },
+    {
+      "check": "correction button size at the available viewport",
+      "result": "pass",
+      "buttonCssPx": { "width": 96.640625, "height": 39, "right": 115.640625 },
+      "documentScrollWidthCssPx": 785,
+      "horizontalOverflow": false
+    }
+  ],
+  "findingNotFixed": {
+    "summary": "Switching the UI language from Japanese to English and back invalidated an otherwise current preflight snapshot; the status changed to the stale message even though the model inputs were not edited.",
+    "observed": [
+      "JP current report: 入力版: 11 / 現在の入力と一致",
+      "EN then JP: Inputs changed. Check again. / 入力が変わりました。もう一度チェックしてください。"
+    ],
+    "whyNotFixed": "The snapshot identity is supplied by main.js wiring (project + currentAnalysisOptions), which this work order marks read-only. Excluding a language field inside the preflight UI would be a workaround and could mask real input changes.",
+    "followUp": "Check whether api.exportProject() or currentAnalysisOptions() contains locale-dependent state and exclude it from the preflight identity in a separately approved main.js change.",
+    "independentReviewAnnotation": {
+      "reviewedAt": "2026-10-21",
+      "classification": "Observed locale-triggered report invalidation is explicitly implemented existing behavior; the proposed main.js snapshot-identity cause is unproven.",
+      "sourceEvidence": "src/ui/analysis-preflight-ui.js explicitly registers doc.addEventListener?.('studio-language',invalidate). The existing test named 'locale event clears dynamic diagnostics instead of retaining an old-language report' asserts this behavior.",
+      "rawObservationsRetained": true,
+      "scope": "The observed stale message does not prove project or options identity changed. Do not exclude locale fields from identity based on this observation alone.",
+      "followUp": "If changing the locale UX is desired, first define whether to clear, rerun or translate the report while retaining stale-input protection. This is a separate behavior decision, not a confirmed main.js defect.",
+      "acceptanceRemaining": [
+        "Branded Google Chrome acceptance was not recorded.",
+        "390 CSS px layout and visible keyboard focus were not recorded."
+      ]
+    }
+  },
+  "commands": [
+    {
+      "command": "node --test tests/ui-analysis-preflight.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 14, "pass": 14, "fail": 0, "skipped": 0, "durationMs": 192.3508 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "changedFiles": [
+    "docs/evidence/2026-10-21-opencode-next-21.json"
+  ],
+  "unconfirmed": [
+    "The browser is the OpenCode desktop Electron/Chromium build, not branded Google Chrome. A branded Chrome run was not performed.",
+    "A true 390 CSS px viewport could not be emulated with the available browser controls; measurements were taken at 800x654 CSS px.",
+    "Focus-visible outline pixels and screen-reader announcements were not measured; keyboard focus and activeElement were verified.",
+    "The language-switch invalidation finding was not fixed because main.js wiring is out of scope for this order.",
+    "The full repository suite, production build, public HTTPS, and post-push CI were not verified in this unit."
+  ],
+  "secretsHandling": {
+    "pairingCodeRecorded": false,
+    "tokensOrCredentialsRecorded": false,
+    "environmentDumped": false,
+    "userModelUploaded": false,
+    "selfReferentialCommitShaRecorded": false
+  }
+}

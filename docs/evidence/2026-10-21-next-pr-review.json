@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-21",
+  "base": "21d5e7a48fad8026c378218b44fbc72eeb5bee51",
+  "reviewedThisBatch": 11,
+  "acceptedBounded": 11,
+  "priorReviewedPrs": 20,
+  "latestPerTaskReviewRecords": 20,
+  "entries": [
+    {
+      "pr": 150,
+      "order": 25,
+      "task": "MOD1",
+      "head": "54e73b1df1e6caa4c0bc227604ff7930b8a82cc0",
+      "verdict": "accepted-bounded",
+      "summary": "Extracts time-history count/budget conversion into a pure helper while preserving conversion and masking.",
+      "remainingQaInstruction": null
+    },
+    {
+      "pr": 151,
+      "order": 24,
+      "task": "P1",
+      "head": "72bda22cc2f59a86ad3a8093c70d7ffbd4717210",
+      "verdict": "accepted-bounded",
+      "summary": "Declares planar/cylindrical dimension metadata in mm/deg separately from material units.",
+      "remainingQaInstruction": null
+    },
+    {
+      "pr": 152,
+      "order": 22,
+      "task": "AGENTINPUT1",
+      "head": "541b042e3a510cb65e4bf96db03fee40df1c0a73",
+      "verdict": "accepted-bounded",
+      "summary": "Guides three orthotropic Young warnings to the existing material-status note; actual Chrome API verification of all three remains.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/46-AGENTINPUT1.md"
+    },
+    {
+      "pr": 153,
+      "order": 26,
+      "task": "P0",
+      "head": "c2ecf98914b86fd723a2c4af9705f061af47fc08",
+      "verdict": "accepted-bounded",
+      "summary": "Adds exact adaptive diagnostic mapping, retains disabled unsupported GUI controls and leaves actual API/Chrome verification open.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/47-P0.md"
+    },
+    {
+      "pr": 154,
+      "order": 31,
+      "task": "CFDMESH1",
+      "head": "ee98287e58980a091541b437e42974f9fa7fec55",
+      "verdict": "accepted-bounded-with-integration-correction",
+      "summary": "Checks limited orthogonal wall-layer cells; integration repairs the Infinity comparison bypass and verifies238 invalid metadata cases.",
+      "remainingQaInstruction": null
+    },
+    {
+      "pr": 155,
+      "order": 33,
+      "task": "P4",
+      "head": "4c4fc45cd71cabe97cb008c806014e3a4a723692",
+      "verdict": "accepted-bounded",
+      "summary": "Adds bounded PNG chunk/CRC and GIF block verification; this does not establish full decoding or physical accuracy.",
+      "remainingQaInstruction": null
+    },
+    {
+      "pr": 156,
+      "order": 21,
+      "task": "UIIMPROVE1",
+      "head": "0d50e73987a719848827054bd76c05b60d57c546",
+      "verdict": "accepted-bounded-with-integration-correction",
+      "summary": "Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks.",
+      "remainingQaInstruction": null
+    },
+    {
+      "pr": 157,
+      "order": 23,
+      "task": "PERF1",
+      "head": "306ffe0b21b1e4c445b2ec28edf7d12daa69582d",
+      "verdict": "accepted-bounded",
+      "summary": "Records separated memory series for one small structural Electron/Chromium case; branded Chrome replay, raw evidence and cleanup remain.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/48-PERF1.md"
+    },
+    {
+      "pr": 159,
+      "order": 35,
+      "task": "VIEWTIME",
+      "head": "ce710bb7ceba99383ca377d30bed8bff81eaaa51",
+      "verdict": "accepted-bounded-with-integration-correction",
+      "summary": "Adds bounded stored-history observations and corrects513 coordinate values to171 nodes; branded Chrome and replay artifacts remain.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/49-VIEWTIME.md"
+    },
+    {
+      "pr": 160,
+      "order": 32,
+      "task": "BROWSEREXPORT1",
+      "head": "4ef7009ffa30cb7fb82e5e4e0735328c2552ed36",
+      "verdict": "accepted-bounded",
+      "summary": "Adds Electron/Chromium three-slice PNG comparison observations; branded Chrome and independently decodable artifacts remain.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/50-BROWSEREXPORT1.md"
+    },
+    {
+      "pr": 161,
+      "order": 36,
+      "task": "VIEWCOMPARE",
+      "head": "eaf318cdd88fee736a5a050dae277890d657e5a3",
+      "verdict": "accepted-bounded-with-integration-correction",
+      "summary": "Records bounded Electron/Chromium acoustic GIF comparison and corrects2223 coordinate values to741 nodes; branded Chrome and raw artifacts remain.",
+      "remainingQaInstruction": "docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md"
+    }
+  ],
+  "integrationCorrections": [
+    {
+      "pr": 154,
+      "issue": "Non-finite identity metadata passed through Infinity<=Infinity comparator.",
+      "fix": "Require finite number operands;34metadata paths x7invalid types/values refused; independent second review approved."
+    },
+    {
+      "pr": 156,
+      "issue": "Locale invalidation was misattributed to project identity.",
+      "fix": "Preserve raw observation; annotate intentional existing studio-language invalidation and unproven identity hypothesis."
+    },
+    {
+      "prs": [
+        159,
+        161
+      ],
+      "issue": "Flat xyz coordinate count was mislabeled as node count and used to claim a nonexistent field mismatch.",
+      "fix": "Preserve original values as coordinate counts:513/3=171 nodes and2223/3=741 nodes; remove false mismatch boundary with correction annotation."
+    }
+  ],
+  "mergeResolution": "Retain orthotropic exact mappings plus adaptive mapping. Reword non-executable comment that otherwise triggered a source-text assertion.",
+  "validation": {
+    "changedCodeIntegration": {
+      "pass": 100,
+      "fail": 0
+    },
+    "independentSourceTests": {
+      "MOD1": 29,
+      "P1": 22,
+      "P4": 23,
+      "PERF1": 12,
+      "VIEWTIME": 20,
+      "BROWSEREXPORT1": 30,
+      "VIEWCOMPARE": 3,
+      "wallLayerAfterRepair": 13,
+      "uiCombined": 43
+    },
+    "actualChrome390": {
+      "browser": "Chrome via extension",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "actualRequiredPointer": "/materialProperties/youngModulus",
+      "keyboard": "Tab five times from actual check button, then Enter",
+      "focusedId": "mat-youngModulus",
+      "detailsOpened": true,
+      "focusVisible": true,
+      "inputOriginalUnchanged": true,
+      "inputSha256": "29b45cc099b554cbef9b798cfa52012cc2ca86a0199c0eacfa7dcb318ec91f31",
+      "meshChange": {
+        "from": 5,
+        "to": 4,
+        "staleStatus": "Inputs changed; check again",
+        "oldGuideCount": 0,
+        "recheckGuideCount": 6
+      },
+      "localeRoundTrip": "JP to EN to JP explicitly invalidates report; fresh EN recheck restores six guides",
+      "formValuesBeforeLocale": {
+        "force": "100",
+        "mat-youngModulus": "",
+        "mesh-size": "4",
+        "physics": "structural"
+      },
+      "limits": [
+        "No live MCP mutation, orthotropic three-component API setup or unsupported-adaptive browser payload performed.",
+        "Initial fixture is default synthetic cylinder with missing explicit material; no solver run or physical accuracy claimed."
+      ]
+    },
+    "sourceSha256": {
+      "src/ui/analysis-preflight-ui.js": "f6e5b0fa7bacde8d5ff82834f42b4b3ba07b1d03775baf80629f2158727997c4",
+      "src/channel-layer-cell-quality.js": "4c90bc29522e0a2222a49f92ef2ab6d69280667327783f706de25efeb71d6ba5"
+    },
+    "boardDocsAndProgress": {
+      "pass": 19,
+      "fail": 0
+    },
+    "contractDeclarations": 5
+  },
+  "limits": [
+    "The six remaining QA orders are not completed by merging bounded implementation/evidence.",
+    "Electron/Chromium author observations are not relabeled as branded Chrome or independently re-decoded raw artifacts.",
+    "No parent task is promoted to released;171total134released37unfinished remain.",
+    "No general CFD mesh, physical convergence, full decoder validation or complete viewer/agent workflow is claimed."
+  ],
+  "finalReview": {
+    "decision": "approved-bounded",
+    "independentReviewer": "review_repairs_protocol",
+    "wallLayerRepairIndependentReviewer": "review_repairs_ui_contact",
+    "noParentPromotion": true,
+    "priorCIconPreserved": true
+  }
+}
