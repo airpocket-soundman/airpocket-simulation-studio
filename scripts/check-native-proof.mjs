@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {mkdtempSync,writeFileSync,openSync,closeSync,unlinkSync,rmdirSync} from 'node:fs';
+import {tmpdir} from 'node:os';
 import {resolve,basename,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
@@ -40,7 +42,14 @@ function execute(command,args,options={}){
 }
 export function runProof(binary,input,{wasm=false}={}){
  if(!wasm)assert.ok(!/\.(?:mjs|cjs|js|wasm)$/i.test(binary),'Host proof must be a native executable');
- return spawnSync(wasm?process.execPath:binary,wasm?[binary]:[],{input,encoding:'utf8',windowsHide:true,timeout:30000,cwd:root});
+ // Emscripten's synchronous Node stdin can observe EAGAIN on a large pipe.
+ // A regular file gives both runtimes the same complete bytes, including the
+ // oversized-record rejection cases; it does not relax their input limits.
+ const directory=mkdtempSync(join(tmpdir(),'airpocket-proof-input-')),path=join(directory,'stdin');let fd;
+ try{
+  writeFileSync(path,input,{flag:'wx'});fd=openSync(path,'r');
+  return spawnSync(wasm?process.execPath:binary,wasm?[binary]:[],{stdio:[fd,'pipe','pipe'],encoding:'utf8',windowsHide:true,timeout:30000,cwd:root});
+ }finally{if(fd!==undefined)closeSync(fd);try{unlinkSync(path);}catch(error){if(error.code!=='ENOENT')throw error;}rmdirSync(directory);}
 }
 export async function verifyPinnedSource(paths,python=process.env.PYTHON||(process.platform==='win32'?'python':'python3')){
  const source=resolve(paths.mfem),archive=join(root,'.native-cache','mfem.tar.gz');
