@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "PERF1",
+  "workOrder": "23-PERF1",
+  "scope": "One real-browser structural-tiny measurement through the existing stdio connector and perf-browser driver, plus a separate operator JS-heap probe. This is a localhost sample, not a product-wide performance or physical accuracy claim. No product source change was made.",
+  "branch": "codex/opencode-next-23",
+  "baseRef": "origin/main",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "gitAtRun": {
+    "revision": "af2314aa7d4675129932386fa1c07ce03f726579",
+    "branch": "codex/opencode-next-23",
+    "dirty": false
+  },
+  "sourceFrozen": {
+    "origin": "http://127.0.0.1:5174",
+    "locale": "en",
+    "hmrOrSourceEditDuringWindow": false,
+    "gmshAssets": {
+      "copiedBeforeSuccessfulRun": true,
+      "gmshCoreWasmBytes": 41430673,
+      "note": "The first attempt failed before the job because public/gmsh was empty; node scripts/copy-cad.mjs populated it. This is environment setup, not a product-source change."
+    }
+  },
+  "browser": {
+    "product": "OpenCode desktop browser (Electron 44.4.5), Chromium 152.0.7977.130",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.0.32 Chrome/152.0.7977.130 Electron/44.4.5 Safari/537.36",
+    "brandedGoogleChrome": false,
+    "crossOriginIsolated": true
+  },
+  "hostEnvironment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpuModel": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+    "cpuCount": 6,
+    "totalMemMiB": 32577
+  },
+  "loadedInput": {
+    "name": "Axial bar reference sample",
+    "sourceBoundsMm": [0, 0, 0, 10, 10, 40],
+    "studyKind": "structural",
+    "youngModulusPa": 1000000000,
+    "poissonRatio": 0,
+    "conditionCount": 2,
+    "meshCount": 1,
+    "material": "金属",
+    "inputRevision": "sha256:b5793256ba8fe084f1211e3da4c674767a9b83fc0b5ce4a171d4262a69758d28",
+    "driverCase": "structural-tiny",
+    "driverMeshSizeMm": 8,
+    "operatorDisclaimer": "The perf driver does not verify the loaded physics; the operator loaded the axial bar reference sample and confirmed structural kind, E=1e9 Pa, two conditions and one mesh before pairing."
+  },
+  "auxiliaryWarmupNotPartOfPerfWindow": {
+    "performed": true,
+    "why": "Before the successful driver run, the operator ran one ordinary GUI solve to warm the WASM/Gmsh path after the failed attempts.",
+    "elapsedMs": 7327,
+    "mesh": "171 nodes / 428 tetrahedra; 4000.00 mm3; quality 0.632; below 0.2: 0 elements",
+    "maxDisplacementMm": 0.04,
+    "maxVonMisesMPa": 1.0,
+    "residual": 7.1e-9,
+    "reactionN": [0, -0, -100],
+    "appliedForceN": [0, 0, 100],
+    "excludedFromReportedTimings": true
+  },
+  "measurement": {
+    "case": "structural-tiny",
+    "repeats": 1,
+    "pollIntervalMs": 50,
+    "cold": {
+      "state": "succeeded",
+      "totalMs": 8764.407,
+      "firstEventMs": 579.611,
+      "meshMs": 7101.933,
+      "solvePhaseMs": 0.008,
+      "eventCount": 14,
+      "jobElapsedMs": 8555,
+      "startEpochMs": 1792547081721,
+      "endEpochMs": 1792547090485
+    },
+    "warm": {
+      "state": "succeeded",
+      "runCount": 1,
+      "totalMs": 8854.292,
+      "firstEventMs": 444.297,
+      "meshMs": 7295.636,
+      "solvePhaseMs": 175.971,
+      "eventCount": 14,
+      "jobElapsedMs": 8518,
+      "startEpochMs": 1792547090570,
+      "endEpochMs": 1792547099424,
+      "note": "One warm run only; the warm total was not lower than cold, so no speedup is claimed."
+    },
+    "cancel": {
+      "baselineWarmTotalMs": 8854.292,
+      "firstEvent": {
+        "state": "cancelled",
+        "requestedAfterMs": 1361.948,
+        "latencyMs": 599.833,
+        "totalMs": 1961.781
+      },
+      "halfWarmTotal": {
+        "state": "cancelled",
+        "requestedAfterMs": 4580.406,
+        "latencyMs": 408.672,
+        "totalMs": 4989.079
+      },
+      "recoveredAfterCancel": true,
+      "latencyScope": "cancelJob request to observed terminal plus executionSettled through connector polling; includes 50 ms poll granularity"
+    },
+    "window": {
+      "startEpochMs": 1792547081721,
+      "endEpochMs": 1792547116832,
+      "cancelSettledEpochMs": 1792547106578
+    },
+    "memory": {
+      "primarySeries": "jsHeap",
+      "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+      "baselineBytes": 27721386,
+      "peakBytesSampled": 30904636,
+      "afterCancelBytes": 25409750,
+      "afterSettleBytes": 23916115,
+      "sampleIntervalMs": 1000,
+      "sampleCountInWindow": 35,
+      "uasm": {
+        "available": false,
+        "sampleCount": 0,
+        "reason": "No measureUserAgentSpecificMemory sample was produced inside the case window even though the page reported crossOriginIsolated true. UASM is not merged into the JS-heap series."
+      },
+      "rules": [
+        "Do not add uasm and jsHeap together.",
+        "peakBytesSampled is a periodic-sample maximum, not total process or peak RAM.",
+        "The probe itself uses memory."
+      ]
+    }
+  },
+  "runHistory": [
+    {
+      "attempt": 1,
+      "result": "failed-before-job",
+      "error": "Failed to fetch dynamically imported module: http://127.0.0.1:5174/gmsh/gmsh.mjs",
+      "cause": "public/gmsh was empty in the dedicated worktree",
+      "fix": "node scripts/copy-cad.mjs",
+      "countsAsMeasurement": false
+    },
+    {
+      "attempt": 2,
+      "result": "failed-browser-disconnected",
+      "error": "Browser disconnected during the structural-tiny cold run",
+      "observed": "The page stayed alive; its connector poll later reported ERR_PROXY_CONNECTION_FAILED to the MCP port. No assertion detail or product stack trace was captured.",
+      "causeProven": false,
+      "countsAsMeasurement": false
+    },
+    {
+      "attempt": 3,
+      "result": "success",
+      "prerequisite": "One ordinary GUI solve warmed WASM/Gmsh, then a fresh pairing with inspect+analyze scopes",
+      "countsAsMeasurement": true
+    }
+  ],
+  "commands": [
+    {
+      "command": "node scripts/perf-browser.mjs --origin http://127.0.0.1:5174 --cases structural-tiny --repeats 1 --out .qa/perf-next23.json",
+      "result": "ok",
+      "note": "Run with the existing stdio connector; pairing code was entered through the local connection UI and is not recorded."
+    },
+    {
+      "command": "node scripts/perf-browser.mjs --merge-memory .qa/perf-next23-probe.json --out .qa/perf-next23-merged.json",
+      "result": "ok",
+      "measured": {
+        "primarySeries": "jsHeap",
+        "sampleCount": 35,
+        "uasmAvailable": false
+      }
+    },
+    {
+      "command": "node --test tests/perf-browser.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 12, "pass": 12, "fail": 0, "skipped": 0, "durationMs": 1962.0724 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "changedFiles": [
+    "docs/evidence/2026-10-21-opencode-next-23.json"
+  ],
+  "unconfirmed": [
+    "The browser is the OpenCode desktop Electron/Chromium build, not branded Google Chrome.",
+    "Only the structural-tiny case was measured, with repeats=1. There is no multi-run distribution, and the single warm run is not a stable baseline.",
+    "UASM was unavailable; only the coarse JS-heap series is reported.",
+    "The measured timings cover localhost connector polling and include the 50 ms poll interval; they are not solver-only timings.",
+    "GPU/WebGPU, MFEM, thermal, acoustic, channel-flow, public HTTPS, OS download and full-suite/post-push CI were not measured in this unit.",
+    "The second attempt's disconnect cause was not proven, and it is not attributed to product code.",
+    "Parent PERF1 remains incomplete; this is one limited localhost case."
+  ],
+  "secretsHandling": {
+    "pairingCodeRecorded": false,
+    "tokensOrCredentialsRecorded": false,
+    "environmentDumped": false,
+    "userModelUploaded": false,
+    "selfReferentialCommitShaRecorded": false
+  }
+}
