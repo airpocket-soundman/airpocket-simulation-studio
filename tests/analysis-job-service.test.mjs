@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,readFile,writeFile,rm,stat,readdir} from 'node:fs/promises';
+import {mkdtemp,mkdir,readFile,writeFile,rm,stat,readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
@@ -83,5 +83,103 @@ test('restart startup-condition digest separates identical from changed conditio
   assert.equal(workerStarts,0);
   assert.deepEqual((await readdir(dir)).sort(),['result.json','store']);
   await restart.closeAsync();
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+// Regression: two concurrent starts share one request ID while the second one is still
+// before its async input read. Neither the accepted job's persisted digest nor its jobId may
+// be taken over by the competing startup conditions, in either dispatch order.
+test('concurrent starts never persist the competing startup digest for the accepted job',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-race-digest-'));
+ try{
+  const validPath=join(dir,'valid.json'),missingPath=join(dir,'missing.json'),missingOutput=join(dir,'result-b.json');
+  await writeFile(validPath,JSON.stringify(project()));
+  const a={path:validPath,outputPath:join(dir,'result-a.json'),requestId:'race-01',operation:'mesh',size:5,method:'wasm-pcg'};
+  const b={path:missingPath,outputPath:missingOutput,requestId:'race-01',operation:'mesh',size:5,method:'wasm-pcg'};
+  const digestA=startupConditionDigest(a),digestB=startupConditionDigest(b);
+  assert.notEqual(digestA,digestB);
+  for(const [order,tag] of [[['A','B'],'a-first'],[['B','A'],'b-first']]){
+   const store=join(dir,'store-'+tag);let workerStarts=0;
+   const service=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('synthetic worker startup failure');}});
+   try{
+    const results=await Promise.allSettled(order.map(name=>service.start(name==='A'?a:b)));
+    const byName=Object.fromEntries(order.map((name,index)=>[name,results[index]]));
+    assert.equal(byName.A.status,'fulfilled',JSON.stringify(byName.A.reason));
+    assert.equal(byName.B.status,'rejected');
+    const accepted=byName.A.value;
+    const done=await terminal(service,accepted.jobId);assert.equal(done.state,'failed');
+    assert.equal(workerStarts,1);
+    const names=await readdir(store),raw=await readFile(join(store,accepted.jobId+'.json'),'utf8'),persisted=JSON.parse(raw);
+    assert.equal(persisted.requestId,'race-01');
+    assert.equal(persisted.startupDigest,digestA);
+    assert.ok(Buffer.byteLength(raw)<=8192);
+    assert.deepEqual(names,[accepted.jobId+'.json']);
+    const records=await Promise.all(names.map(name=>readFile(join(store,name),'utf8').then(JSON.parse)));
+    assert.equal(records.filter(record=>record.startupDigest===digestB).length,0);
+    assert.equal(records.filter(record=>record.startupDigest===digestA).length,1);
+    const restart=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('worker must not start for a refused replay');}});
+    try{
+     await assert.rejects(restart.start(a),error=>error.code==='ANALYSIS_JOB_REQUEST_RESTORED'&&error.message.includes(accepted.jobId));
+     await assert.rejects(restart.start(b),error=>error.code==='ANALYSIS_JOB_REQUEST_CONFLICT'&&error.message.includes(accepted.jobId));
+     const restored=restart.get(accepted.jobId);assert.equal(restored.restored,true);assert.equal(restored.resultAvailable,false);
+     assert.equal(workerStarts,1);
+    }finally{await restart.closeAsync();}
+   }finally{await service.closeAsync();}
+  }
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+test('same-condition concurrent retries share one job while changed conditions are refused before any read',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-concurrent-retry-')),store=join(dir,'store');let workerStarts=0;
+ const service=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('synthetic worker startup failure');}});
+ try{
+  const path=join(dir,'input.json');await writeFile(path,JSON.stringify(project()));
+  const args={path,outputPath:join(dir,'result.json'),requestId:'retry-01',operation:'mesh',size:5};
+  const [first,second]=await Promise.all([service.start(args),service.start({...args})]);
+  assert.equal(first.jobId,second.jobId);
+  assert.equal((await terminal(service,first.jobId)).state,'failed');
+  assert.equal(workerStarts,1);
+  const digest=startupConditionDigest(args),persisted=JSON.parse(await readFile(join(store,first.jobId+'.json'),'utf8'));
+  assert.equal(persisted.startupDigest,digest);
+  // A changed condition on the same request ID is an explicit refusal, not an accepted replay.
+  const changed={...args,size:6},foreignDigest=startupConditionDigest(changed);
+  await assert.rejects(service.start(changed),error=>error.code==='ANALYSIS_JOB_REQUEST_CONFLICT');
+  assert.equal((await readdir(store)).length,1);
+  assert.notEqual(foreignDigest,digest);
+  assert.equal(service.release(first.jobId).released,true);
+  assert.deepEqual(await readdir(store),[]);
+  const again=await service.start(args);assert.notEqual(again.jobId,first.jobId);
+  assert.equal((await terminal(service,again.jobId)).state,'failed');
+  assert.equal(workerStarts,2);
+ }finally{await service.closeAsync();await rm(dir,{recursive:true,force:true});}
+});
+
+test('starts that fail before owning a job release their reservation; 32 failures do not block the same request ID',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-failed-starts-')),store=join(dir,'store'),missingPath=join(dir,'missing.json');let workerStarts=0;
+ const service=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('synthetic worker startup failure');}});
+ try{
+  for(let i=0;i<32;i++)await assert.rejects(service.start({path:missingPath,outputPath:join(dir,'absent-'+i+'.json'),requestId:'fail-'+i,operation:'mesh'}),{code:'ENOENT'});
+  assert.equal(workerStarts,0);assert.deepEqual(await readdir(store),[]);
+  const path=join(dir,'input.json');await writeFile(path,JSON.stringify(project()));
+  const args={path,outputPath:join(dir,'result.json'),requestId:'fail-31',operation:'mesh',size:5};
+  const job=await service.start(args);assert.equal((await terminal(service,job.jobId)).state,'failed');
+  assert.equal(workerStarts,1);assert.equal(JSON.parse(await readFile(join(store,job.jobId+'.json'),'utf8')).startupDigest,startupConditionDigest(args));
+  assert.equal(service.release(job.jobId).released,true);
+  const reused=await service.start({...args,outputPath:join(dir,'result-2.json')});assert.notEqual(reused.jobId,job.jobId);
+  await terminal(service,reused.jobId);assert.equal(workerStarts,2);
+ }finally{await service.closeAsync();await rm(dir,{recursive:true,force:true});}
+});
+
+test('a legacy record without a startup digest stays restored-only and never starts a worker',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-legacy-digest-')),store=join(dir,'store'),path=join(dir,'input.json');let workerStarts=0;
+ try{
+  await mkdir(store,{recursive:true});await writeFile(path,JSON.stringify(project()));
+  await writeFile(join(store,'legacy-01.json'),JSON.stringify({schemaVersion:1,kind:'analysis-job-record',jobId:'legacy-01',inputRevision:'old',operation:'mesh',origin:'api',state:'succeeded',requestId:'legacy-01',startedAt:1,updatedAt:2,executionSettled:true}));
+  const service=createHeadlessJobService({jobStore:store,isolation:'process',createProcessWorker:()=>{workerStarts+=1;throw Error('worker must not start for a legacy replay');}});
+  try{
+   await assert.rejects(service.start({path,outputPath:join(dir,'result.json'),requestId:'legacy-01',operation:'mesh',size:5}),error=>error.code==='ANALYSIS_JOB_REQUEST_RESTORED'&&error.message.includes('legacy-01'));
+   const restored=service.get('legacy-01');assert.equal(restored.restored,true);assert.equal(restored.resultAvailable,false);assert.equal(restored.result,undefined);
+   assert.equal(workerStarts,0);
+  }finally{await service.closeAsync();}
  }finally{await rm(dir,{recursive:true,force:true});}
 });

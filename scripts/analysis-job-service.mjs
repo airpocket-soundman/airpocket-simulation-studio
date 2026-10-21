@@ -30,10 +30,26 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
  const store=jobStore===undefined?undefined:createJobStore(jobStore,{onDiagnostic:entry=>process.stderr.write('Job store: '+JSON.stringify(entry)+'\n')}),restored=store?store.load():new Map();
  const destinations=new Map(),artifacts=new Map(),outputPaths=new Map();
  // Canonical startup-condition digests for jobs started in this process, keyed by requestId, so
- // even the first `running` record carries the digest. An entry that owns a live jobId is never
- // overwritten by a rejected duplicate request.
- const startupDigests=store?new Map():undefined,requestIdByJobId=store?new Map():undefined;
- const onRecord=store?((view,meta)=>{const entry=meta&&typeof meta.requestId==='string'?startupDigests.get(meta.requestId):undefined;const startupDigest=entry&&(!entry.jobId||entry.jobId===view?.jobId)?entry.digest:undefined;store.persist(view,{...meta,...(startupDigest?{startupDigest}:{})});}):undefined;
+ // even the first `running` record carries the digest. A reservation is created before the first
+ // async input read and is never replaced while claimed: identical concurrent conditions share it
+ // (the requestId idempotency still yields one job), a different condition waits for that claim to
+ // own a job (explicit conflict) or to be released. A rejected request therefore cannot detach or
+ // rewrite another request's reservation, digest or jobId.
+ const startupDigests=store?new Map():undefined,reservationsByJobId=store?new Map():undefined;
+ let startingReservation;
+ const notify=reservation=>{const waiters=reservation.waiters;reservation.waiters=[];for(const wake of waiters)wake();};
+ const conflict=message=>Object.assign(Error(message),{code:'ANALYSIS_JOB_REQUEST_CONFLICT'});
+ async function claim(requestId,startupDigest){
+  for(;;){
+   const existing=startupDigests.get(requestId);
+   if(!existing){const reservation={requestId,digest:startupDigest,jobId:null,claims:1,waiters:[]};startupDigests.set(requestId,reservation);return reservation;}
+   if(existing.digest===startupDigest){existing.claims+=1;return existing;}
+   if(existing.jobId)throw conflict('Request ID '+requestId+' belongs to active job '+existing.jobId+' with different startup conditions; wait for that job or choose a new request ID');
+   await new Promise(wake=>existing.waiters.push(wake));
+  }
+ }
+ const onRecord=store?((view,meta)=>{const reservation=(view?.jobId?reservationsByJobId.get(view.jobId):undefined)??(startingReservation&&meta&&meta.requestId===startingReservation.requestId&&(!startingReservation.jobId||startingReservation.jobId===view?.jobId)?startingReservation:undefined);const startupDigest=reservation?.digest;store.persist(view,{...meta,...(startupDigest?{startupDigest}:{})});}):undefined;
+ const forgetReservation=jobId=>{const reservation=reservationsByJobId?.get(jobId);if(!reservation)return;reservationsByJobId.delete(jobId);if(startupDigests.get(reservation.requestId)===reservation)startupDigests.delete(reservation.requestId);};
  const jobs=createAnalysisJobs({id:randomUUID,timeoutMs,maxJobs,maxEvents,...(onRecord?{onRecord}:{}),execute:async({project,options,operation,context,inputRevision,jobId,signal,onEvent,beginCommit})=>{
   const {outputPath,includeFields}=context,key=process.platform==='win32'?outputPath.toLowerCase():outputPath;
   if(destinations.has(key))throw Error('Analysis output is already reserved by another job');
@@ -101,13 +117,32 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
     if(!prior.startupDigest||prior.startupDigest===startupDigest)throw Object.assign(Error('Request ID belongs to restored job '+prior.jobId+'. Inspect that job before explicitly releasing it or choosing a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_RESTORED'});
     throw Object.assign(Error('Request ID '+requestId+' belongs to restored job '+prior.jobId+' with different startup conditions (input/output path, operation, size, method, adaptive or includeFields). Inspect that job, then explicitly release it or choose a new request ID; restored results are metadata only.'),{code:'ANALYSIS_JOB_REQUEST_CONFLICT'});
    }
-   if(store){const registered=startupDigests.get(requestId);if(!registered||!registered.jobId)startupDigests.set(requestId,{digest:startupDigest,jobId:null});}
-   if((await stat(path)).size>100_000_000)throw Error('JSON file exceeds 100 MB');
-   const api=createStudioApi();api.loadProject(JSON.parse(await readFile(path,'utf8')));
-   const project=api.exportProject();
-   const resolvedOutput=resolve(outputPath),job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision:await getProjectRevision(project),requestId,context:{outputPath:resolvedOutput,includeFields}});outputPaths.set(job.jobId,resolvedOutput);
-   if(store){const owned=startupDigests.get(requestId);if(owned&&!owned.jobId)owned.jobId=job.jobId;requestIdByJobId.set(job.jobId,requestId);}
-   return job;
+   // Claim before any async read, so this call owns its digest independently of later requests.
+   const reservation=store?await claim(requestId,startupDigest):undefined;
+   try{
+    if((await stat(path)).size>100_000_000)throw Error('JSON file exceeds 100 MB');
+    const api=createStudioApi();api.loadProject(JSON.parse(await readFile(path,'utf8')));
+    const project=api.exportProject();
+    const resolvedOutput=resolve(outputPath),inputRevision=await getProjectRevision(project);
+    // Bind only around the synchronous jobs.start call: its first `running` record is emitted
+    // inside it, before the owning jobId is returned to this request.
+    startingReservation=reservation;
+    let job;
+    try{job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision,requestId,context:{outputPath:resolvedOutput,includeFields}});}
+    finally{startingReservation=undefined;}
+    outputPaths.set(job.jobId,resolvedOutput);
+    if(store){
+     if(!reservation.jobId){reservation.jobId=job.jobId;notify(reservation);}
+     else if(reservation.jobId!==job.jobId)throw conflict('Request ID '+requestId+' belongs to active job '+reservation.jobId+'; choose a new request ID');
+     reservationsByJobId.set(job.jobId,reservation);
+    }
+    return job;
+   }finally{
+    if(reservation){
+     reservation.claims-=1;
+     if(!reservation.jobId&&reservation.claims<=0&&startupDigests.get(requestId)===reservation){startupDigests.delete(requestId);notify(reservation);}
+    }
+   }
   },
   listArtifacts(jobId,args={}){
    const job=jobs.get(jobId);if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['offset','limit'].includes(key)))throw Error('Invalid artifact catalog page');
@@ -136,7 +171,9 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
   },
   get:jobs.get,events:jobs.events,cancel:jobs.cancel,drain:jobs.drain,
   async meshOutput(jobId){const job=jobs.get(jobId),path=outputPaths.get(jobId);if(!path||job.state!=='succeeded'||job.executionSettled!==true||job.operation!=='mesh')throw Error('A successful, settled retained mesh-only job is required');if((await stat(path)).size>100_000_000)throw Error('Mesh output exceeds 100 MB');const bytes=await readFile(path);if(bytes.length!==job.result?.outputBytes||createHash('sha256').update(bytes).digest('hex')!==job.result?.outputSha256)throw Object.assign(Error('Mesh output integrity check failed'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});const output=JSON.parse(bytes.toString('utf8'));if(output.job?.jobId!==jobId||output.job?.inputRevision!==job.inputRevision)throw Object.assign(Error('Mesh output identity does not match its retained job'),{code:'ANALYSIS_MESH_PREFLIGHT_OUTPUT_INTEGRITY'});return output;},
-  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);outputPaths.delete(jobId);return result;},close:jobs.close,async closeAsync(){jobs.close();return jobs.drain();}
+  release(jobId){const result=jobs.release(jobId);artifacts.delete(jobId);outputPaths.delete(jobId);forgetReservation(jobId);return result;},
+  close(){jobs.close();if(store)for(const [requestId,reservation] of startupDigests)if(!reservation.jobId&&reservation.claims<=0){startupDigests.delete(requestId);notify(reservation);}},
+  async closeAsync(){service.close();return jobs.drain();}
  };
 if(!store)return Object.freeze(service);
  // Opt-in restart recovery: restored records are metadata only (no result, events or artifacts).
@@ -149,6 +186,6 @@ if(!store)return Object.freeze(service);
   listArtifacts(jobId,args={}){const view=restoredView(jobId);if(!view)return service.listArtifacts(jobId,args);return {schemaVersion:1,jobId,inputRevision:view.inputRevision,jobState:view.state,provisional:true,artifacts:[],total:0,nextOffset:null};},
   async artifact(jobId,artifactId,options){if(restored.has(jobId))throw Error('Intermediate artifacts are not restored after a restart');return service.artifact(jobId,artifactId,options);},
   async meshOutput(jobId){if(restored.has(jobId))throw Error('A successful, settled retained mesh-only job is required');return service.meshOutput(jobId);},
-  release(jobId){if(restored.has(jobId)){restored.delete(jobId);store.remove(jobId);return {jobId,released:true};}const result=service.release(jobId);store.remove(jobId);const requestId=requestIdByJobId.get(jobId);if(requestId!==undefined){requestIdByJobId.delete(jobId);startupDigests.delete(requestId);}return result;}
+  release(jobId){if(restored.has(jobId)){restored.delete(jobId);store.remove(jobId);return {jobId,released:true};}const result=service.release(jobId);store.remove(jobId);return result;}
  });
 }
