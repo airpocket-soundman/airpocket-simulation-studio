@@ -85,3 +85,25 @@ test('rejects non-finite input, face-count mismatch, degenerate and duplicate fa
  assert.throws(()=>validateCurvedPressure({...triangle,pressure:[{real:1000,imag:500}],triangles:[[0,1,2]],surface:'Open'}),/open or closed surface/);
  assert.throws(()=>faceNormalDisplacementIntegral(triangle,{real:Array(9).fill(0),imag:Array(8).fill(0)}),/finite complex nodal displacement/);
 });
+
+test('numeric-limit counterexample: all-finite 1e308 Pa on a 1e6 mm open triangle is rejected with a typed limit instead of returning Infinity/NaN',()=>{
+ const load={lengthUnit:'mm',pressureUnit:'Pa',surface:'open',nodes:[0,0,0,1e6,0,0,0,1e6,0],triangles:[[0,1,2]],pressure:[{real:1e308,imag:0}]};
+ assert.ok(load.nodes.every(Number.isFinite)&&Number.isFinite(load.pressure[0].real)&&Number.isFinite(load.pressure[0].imag));
+ const displacement={real:Array(9).fill(0),imag:Array(9).fill(0)};
+ for(const run of [()=>pressureNodalForces(load),()=>virtualWorkIdentity(load,displacement)])assert.throws(run,error=>error.code==='CURVED_PRESSURE_NUMERIC_LIMIT'&&/finite numeric range/.test(error.message));
+});
+
+test('numeric-limit counterexample: 1e308 m nodal displacement on the 10 mm triangle keeps the area-3 weighted integral finite at 5e303 m^3 and the conjugate work finite',()=>{
+ const displacement={real:Array(9).fill(0),imag:Array(9).fill(0)};
+ for(const i of [2,5,8])displacement.real[i]=1e308;
+ const expected=50e-6*1e308,vol=faceNormalDisplacementIntegral(triangle,displacement);
+ assert.ok(Number.isFinite(vol.volumeReal[0])&&Number.isFinite(vol.volumeImag[0]));
+ assert.ok(Math.abs(vol.volumeReal[0]-expected)/expected<1e-12);
+ assert.ok(Math.abs(vol.totalVolumeReal-expected)/expected<1e-12&&vol.totalVolumeImag===0);
+ const w=virtualWorkIdentity(triangle,displacement);
+ assert.ok(Number.isFinite(w.nodalWork.real)&&Number.isFinite(w.nodalWork.imag)&&Number.isFinite(w.pressureWork.real)&&Number.isFinite(w.pressureWork.imag));
+ assert.ok(Math.abs(w.nodalWork.real-(-5e306))/5e306<1e-12);
+ assert.ok(Math.abs(w.pressureWork.real-(-5e306))/5e306<1e-12);
+ assert.ok(Math.abs(w.pressureWork.imag-(-2.5e306))/2.5e306<1e-12);
+ assert.ok(Number.isFinite(w.absoluteErrorJ)&&Number.isFinite(w.relativeErrorJ)&&w.relativeErrorJ<=1e-12);
+});

@@ -7,14 +7,22 @@
 
 const LENGTH_UNITS=['mm'],PRESSURE_UNITS=['Pa'],SURFACES=['open','closed'];
 
+// Typed rejection for finite inputs whose intermediate or output value cannot be represented in a double.
+// No clamping, NaN->0, pressure/displacement rescaling or tolerance loosening: the caller must reduce the input.
+function numericLimit(what){const error=Error(`Curved pressure transfer rejects a result outside the finite numeric range (${what})`);error.code='CURVED_PRESSURE_NUMERIC_LIMIT';return error;}
+const finiteValue=(value,what)=>{if(!Number.isFinite(value))throw numericLimit(what);return value;};
+
 function facetGeometry(load){
   const {nodes,triangles}=load,normals=[],areasMm2=[],faces=new Set();
   for(const t of triangles){
     const key=[...t].sort((a,b)=>a-b).join(',');
     if(faces.has(key))throw Error('Curved pressure transfer rejects a duplicate face');faces.add(key);
-    const [a,b,c]=t.map(i=>nodes.slice(3*i,3*i+3)),u=b.map((v,k)=>v-a[k]),w=c.map((v,k)=>v-a[k]),cross=[u[1]*w[2]-u[2]*w[1],u[2]*w[0]-u[0]*w[2],u[0]*w[1]-u[1]*w[0]],length=Math.hypot(...cross);
-    if(!(length>0)||!Number.isFinite(length))throw Error('Curved pressure transfer rejects a degenerate face');
-    normals.push(cross.map(v=>v/length));areasMm2.push(length*.5);
+    const [a,b,c]=t.map(i=>nodes.slice(3*i,3*i+3)),u=b.map((v,k)=>finiteValue(v-a[k],'coordinate difference')),w=c.map((v,k)=>finiteValue(v-a[k],'coordinate difference')),
+      cross=[finiteValue(u[1]*w[2]-u[2]*w[1],'cross product'),finiteValue(u[2]*w[0]-u[0]*w[2],'cross product'),finiteValue(u[0]*w[1]-u[1]*w[0],'cross product')],
+      length=Math.hypot(...cross);
+    if(!(length>0))throw Error('Curved pressure transfer rejects a degenerate face');
+    finiteValue(length,'edge length');
+    normals.push(cross.map(v=>finiteValue(v/length,'unit normal')));areasMm2.push(finiteValue(length*.5,'face area'));
   }
   if(load.surface==='closed'){
     const edges=new Map();
@@ -44,15 +52,20 @@ export function pressureNodalForces(load){
   validateCurvedPressure(load);
   const {nodes,triangles,pressure}=load,{nodeCount,faceCount,normals,areasMm2}=facetGeometry(load),forceReal=Array(nodeCount*3).fill(0),forceImag=Array(nodeCount*3).fill(0);
   for(let f=0;f<faceCount;f++){
-    const weight=areasMm2[f]*1e-6/3,n=normals[f],tr=-pressure[f].real,ti=-pressure[f].imag;
-    for(const i of triangles[f])for(let k=0;k<3;k++){forceReal[i*3+k]+=weight*n[k]*tr;forceImag[i*3+k]+=weight*n[k]*ti;}
+    const weight=finiteValue(areasMm2[f]*1e-6/3,'area weight'),n=normals[f],tr=finiteValue(-weight*pressure[f].real,'complex pressure force'),ti=finiteValue(-weight*pressure[f].imag,'complex pressure force');
+    for(const i of triangles[f])for(let k=0;k<3;k++){
+      forceReal[i*3+k]=finiteValue(forceReal[i*3+k]+finiteValue(tr*n[k],'nodal force'),'nodal force accumulation');
+      forceImag[i*3+k]=finiteValue(forceImag[i*3+k]+finiteValue(ti*n[k],'nodal force'),'nodal force accumulation');
+    }
   }
   const resultantReal=[0,0,0],resultantImag=[0,0,0],momentReal=[0,0,0],momentImag=[0,0,0];
   for(let i=0;i<nodeCount;i++){
-    const r=nodes.slice(3*i,3*i+3).map(v=>v*1e-3),fr=forceReal.slice(3*i,3*i+3),fi=forceImag.slice(3*i,3*i+3),mr=cross(r,fr),mi=cross(r,fi);
-    for(let k=0;k<3;k++){resultantReal[k]+=fr[k];resultantImag[k]+=fi[k];momentReal[k]+=mr[k];momentImag[k]+=mi[k];}
+    const r=nodes.slice(3*i,3*i+3).map(v=>finiteValue(v*1e-3,'position in metres')),fr=forceReal.slice(3*i,3*i+3),fi=forceImag.slice(3*i,3*i+3),
+      mr=cross(r,fr).map(v=>finiteValue(v,'origin moment')),mi=cross(r,fi).map(v=>finiteValue(v,'origin moment'));
+    for(let k=0;k<3;k++){resultantReal[k]=finiteValue(resultantReal[k]+fr[k],'resultant accumulation');resultantImag[k]=finiteValue(resultantImag[k]+fi[k],'resultant accumulation');momentReal[k]=finiteValue(momentReal[k]+mr[k],'moment accumulation');momentImag[k]=finiteValue(momentImag[k]+mi[k],'moment accumulation');}
   }
-  return {forceReal,forceImag,normals,areasMm2,totalAreaMm2:areasMm2.reduce((s,v)=>s+v,0),resultantReal,resultantImag,momentReal,momentImag,metadata:{lengthUnit:'mm',pressureUnit:'Pa',surface:load.surface,nodeCount,faceCount,transfer:'facet-fixed complex pressure / equal area-3 nodal distribution'}};
+  let totalAreaMm2=0;for(const area of areasMm2)totalAreaMm2=finiteValue(totalAreaMm2+area,'total area accumulation');
+  return {forceReal,forceImag,normals,areasMm2,totalAreaMm2,resultantReal,resultantImag,momentReal,momentImag,metadata:{lengthUnit:'mm',pressureUnit:'Pa',surface:load.surface,nodeCount,faceCount,transfer:'facet-fixed complex pressure / equal area-3 nodal distribution'}};
 }
 
 /** Transpose of the load operator: complex nodal displacement (m) -> per-face normal-displacement integral (m^3) with the same area-3 weights. */
@@ -62,20 +75,34 @@ export function faceNormalDisplacementIntegral(load,displacement){
   if(!displacement||!Array.isArray(displacement.real)||!Array.isArray(displacement.imag)||displacement.real.length!==nodes||displacement.imag.length!==nodes||!displacement.real.every(Number.isFinite)||!displacement.imag.every(Number.isFinite))throw Error('Curved pressure transfer requires a finite complex nodal displacement in metres');
   const volumeReal=[],volumeImag=[];
   for(let f=0;f<faceCount;f++){
-    const weight=areasMm2[f]*1e-6/3,n=normals[f];let vr=0,vi=0;
-    for(const i of triangles[f])for(let k=0;k<3;k++){vr+=displacement.real[i*3+k]*n[k];vi+=displacement.imag[i*3+k]*n[k];}
-    volumeReal.push(weight*vr);volumeImag.push(weight*vi);
+    // Apply the shared area/3 weight to each contribution before summing so a finite final integral
+    // (e.g. 1e308 m over a 50 mm^2 face -> 5e303 m^3) does not overflow in an intermediate sum.
+    const weight=finiteValue(areasMm2[f]*1e-6/3,'area weight'),n=normals[f];let vr=0,vi=0;
+    for(const i of triangles[f])for(let k=0;k<3;k++){
+      vr=finiteValue(vr+finiteValue(finiteValue(weight*displacement.real[i*3+k],'weighted displacement')*n[k],'normal displacement'),'normal displacement accumulation');
+      vi=finiteValue(vi+finiteValue(finiteValue(weight*displacement.imag[i*3+k],'weighted displacement')*n[k],'normal displacement'),'normal displacement accumulation');
+    }
+    volumeReal.push(vr);volumeImag.push(vi);
   }
-  return {volumeReal,volumeImag,totalVolumeReal:volumeReal.reduce((s,v)=>s+v,0),totalVolumeImag:volumeImag.reduce((s,v)=>s+v,0),unit:'m^3'};
+  let totalVolumeReal=0,totalVolumeImag=0;
+  for(let f=0;f<faceCount;f++){totalVolumeReal=finiteValue(totalVolumeReal+volumeReal[f],'total volume accumulation');totalVolumeImag=finiteValue(totalVolumeImag+volumeImag[f],'total volume accumulation');}
+  return {volumeReal,volumeImag,totalVolumeReal,totalVolumeImag,unit:'m^3'};
 }
 
 /** Conjugate virtual work: Sigma conj(u).f must equal -Sigma p*conj(integral u.n dA), both in J. */
 export function virtualWorkIdentity(load,displacement){
   const forces=pressureNodalForces(load),volume=faceNormalDisplacementIntegral(load,displacement),pressure=load.pressure;
   let urf=0,uif=0;
-  for(let i=0;i<forces.forceReal.length;i++){urf+=displacement.real[i]*forces.forceReal[i]+displacement.imag[i]*forces.forceImag[i];uif+=displacement.real[i]*forces.forceImag[i]-displacement.imag[i]*forces.forceReal[i];}
+  for(let i=0;i<forces.forceReal.length;i++){
+    urf=finiteValue(urf+finiteValue(displacement.real[i]*forces.forceReal[i],'nodal work')+finiteValue(displacement.imag[i]*forces.forceImag[i],'nodal work'),'nodal work accumulation');
+    uif=finiteValue(uif+finiteValue(displacement.real[i]*forces.forceImag[i],'nodal work')-finiteValue(displacement.imag[i]*forces.forceReal[i],'nodal work'),'nodal work accumulation');
+  }
   let prf=0,pif=0;
-  for(let f=0;f<volume.volumeReal.length;f++){const pr=pressure[f].real,pi=pressure[f].imag,ir=volume.volumeReal[f],ii=volume.volumeImag[f];prf-=pr*ir+pi*ii;pif-=pi*ir-pr*ii;}
-  const absoluteErrorJ=Math.hypot(urf-prf,uif-pif),scale=Math.hypot(prf,pif);
-  return {nodalWork:{real:urf,imag:uif},pressureWork:{real:prf,imag:pif},absoluteErrorJ,relativeErrorJ:scale>0?absoluteErrorJ/scale:absoluteErrorJ,unit:'J'};
+  for(let f=0;f<volume.volumeReal.length;f++){
+    const pr=pressure[f].real,pi=pressure[f].imag,ir=volume.volumeReal[f],ii=volume.volumeImag[f];
+    prf=finiteValue(prf-finiteValue(pr*ir,'pressure work')-finiteValue(pi*ii,'pressure work'),'pressure work accumulation');
+    pif=finiteValue(pif-finiteValue(pi*ir,'pressure work')+finiteValue(pr*ii,'pressure work'),'pressure work accumulation');
+  }
+  const absoluteErrorJ=finiteValue(Math.hypot(urf-prf,uif-pif),'work identity error'),scale=finiteValue(Math.hypot(prf,pif),'work identity scale');
+  return {nodalWork:{real:urf,imag:uif},pressureWork:{real:prf,imag:pif},absoluteErrorJ,relativeErrorJ:finiteValue(scale>0?absoluteErrorJ/scale:absoluteErrorJ,'work identity relative error'),unit:'J'};
 }

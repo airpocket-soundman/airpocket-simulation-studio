@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-21",
+  "workOrder": "39-COUPLE4B",
+  "parentTask": "COUPLE4B",
+  "parentStatus": "incomplete (unchanged; this unit only fixes the PR #144 overflow blocker)",
+  "pr": 144,
+  "branch": "codex/opencode-couple4b",
+  "reviewFixedHead": "7f3be4bcec0bef9f79066c0d59c461034e97515e",
+  "baseSha": "7f3be4bcec0bef9f79066c0d59c461034e97515e",
+  "scope": "src/curved-pressure-transfer.js and tests/curved-pressure-transfer.test.mjs only; no solver, worker, MCP, GUI, module-layer, purity or limit changes",
+  "implemented": [
+    "Typed numeric-limit rejection (error.code CURVED_PRESSURE_NUMERIC_LIMIT) instead of returning Infinity/NaN from finite inputs; no clamping, NaN->0, pressure/displacement rescaling or tolerance loosening",
+    "Finite checks on coordinate difference, cross product, edge length, unit normal, face area, one-time mm^2->m^2 area weight, complex pressure force, nodal force accumulation, position, origin moment, resultant/moment accumulation, total area, weighted displacement, normal-displacement accumulation, face volume, total volume, nodal/pressure work terms and accumulations, work error, scale and relative error",
+    "faceNormalDisplacementIntegral applies the shared area/3 weight to each nodal contribution before summing, so the finite 5e303 m^3 integral no longer overflows in the unweighted intermediate sum; normal sign, single mm^2->m^2 conversion and transpose integration weights are unchanged"
+  ],
+  "changedFiles": [
+    "src/curved-pressure-transfer.js",
+    "tests/curved-pressure-transfer.test.mjs",
+    "docs/evidence/2026-10-21-opencode-next-39.json"
+  ],
+  "counterexamples": {
+    "pressureOverflow": {
+      "input": {
+        "lengthUnit": "mm",
+        "pressureUnit": "Pa",
+        "surface": "open",
+        "nodesMm": [[0, 0, 0], [1000000, 0, 0], [0, 1000000, 0]],
+        "triangles": [[0, 1, 2]],
+        "pressurePa": { "real": 1e308, "imag": 0 }
+      },
+      "allInputsFinite": true,
+      "beforeFix": "pressureNodalForces returned successfully with resultantReal [0,0,-Infinity] and momentReal [NaN,NaN,0]",
+      "expected": "true force magnitude is about 5e313 N (area 5e11 mm^2 = 5e5 m^2 times 1e308 Pa), outside the double range, so the stable operator must reject",
+      "observed": {
+        "pressureNodalForces": "throws error.code CURVED_PRESSURE_NUMERIC_LIMIT; message 'Curved pressure transfer rejects a result outside the finite numeric range (complex pressure force)'",
+        "virtualWorkIdentity": "throws error.code CURVED_PRESSURE_NUMERIC_LIMIT"
+      }
+    },
+    "displacementIntegralOverflow": {
+      "input": {
+        "lengthUnit": "mm",
+        "pressureUnit": "Pa",
+        "surface": "open",
+        "nodesMm": [[0, 0, 0], [10, 0, 0], [0, 10, 0]],
+        "triangles": [[0, 1, 2]],
+        "pressurePa": { "real": 1000, "imag": 500 },
+        "displacementRealM": [0, 0, 1e308, 0, 0, 1e308, 0, 0, 1e308],
+        "displacementImagM": [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      },
+      "allInputsFinite": true,
+      "beforeFix": "volumeReal [Infinity], pressureWork.real -Infinity, relativeErrorJ NaN",
+      "expectedVolumeM3": 5e303,
+      "observedVolumeM3": 5e303,
+      "observedTotalVolumeM3": 5e303,
+      "observedTotalVolumeImagM3": 0,
+      "observedVolumeRelativeError": 0,
+      "observedNodalWorkJ": { "real": -4.9999999999999987e306, "imag": -2.4999999999999993e306 },
+      "observedPressureWorkJ": { "real": -5e306, "imag": -2.5e306 },
+      "observedAbsoluteErrorJ": 1.3946358138605798e291,
+      "observedRelativeErrorJ": 2.4948003869183995e-16,
+      "note": "Synthetic guard values only; they are not material, measurement or deformation references"
+    }
+  },
+  "commands": [
+    {
+      "cmd": "node --test tests/curved-pressure-transfer.test.mjs",
+      "beforeFix": { "tests": 11, "pass": 9, "fail": 2, "skip": 0, "note": "the two new counterexample tests failed as intended" },
+      "afterFix": { "tests": 11, "pass": 11, "fail": 0, "skip": 0 }
+    },
+    {
+      "cmd": "node --test tests/vibration-source.test.mjs",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "note": "existing wasm kernel was present; run serially, no native fetch or rebuild"
+    },
+    {
+      "cmd": "npm run check:contracts",
+      "result": "Contract declarations type-check (5 declaration files).",
+      "pass": true
+    },
+    {
+      "cmd": "git diff --check",
+      "result": "no whitespace errors (only core.autocrlf LF->CRLF notices)",
+      "pass": true
+    }
+  ],
+  "preservedReferences": [
+    "10 mm right triangle: area 50 mm^2, normal [0,0,1], resultant -0.05-0.025i N, vertex force -1/60-i/120 N",
+    "reversed winding: normal [0,0,-1], resultant +0.05+0.025i N",
+    "phase 0 vs 90 deg keeps distinct real/imaginary force",
+    "closed octahedron total area 400*sqrt(3) mm^2 and ~zero uniform-pressure force/moment",
+    "per-face complex pressure conjugate virtual work relative error <= 1e-12 (measured 2.49e-16 in the counterexample, existing octahedron reference still passes)",
+    "input contract objects are not mutated"
+  ],
+  "rejections": [
+    "all-finite 1e308 Pa on a 1e6 mm triangle -> typed CURVED_PRESSURE_NUMERIC_LIMIT (mathematical force 5e313 N unrepresentable)",
+    "existing non-finite node/pressure and displacement validation kept unchanged"
+  ],
+  "notVerified": [
+    "Full repository test suite, build, browser/UI/MCP path and real solver coupling not run in this unit",
+    "Review-time 9-pass baseline was the documented fixed HEAD; it was not re-read as a separate checkout",
+    "No smooth curved-surface projection/accuracy claim; discrete faceted integral only",
+    "Parent COUPLE4B remains incomplete (no forced response, damping or two-way coupling)"
+  ],
+  "notes": [
+    "Evidence deliberately contains no self-referential commit SHA and no secrets or full logs.",
+    "Work tree was clean at the review-fixed HEAD 7f3be4b before editing."
+  ]
+}
