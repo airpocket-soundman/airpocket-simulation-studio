@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-19",
+  "order": "04",
+  "id": "VIEWCOMPARE",
+  "scope": "Node verification of the transient-acoustic comparison time GIF produced by the production comparison-export adapter, comparison-time plan and real GIF encoder, driven by two real solveAcousticTransient cases. Reusable real-solver fixture + self-contained GIF byte inspection. No real Chrome, no public HTTPS, no wave-accuracy claim.",
+  "branch": "codex/opencode-viewcompare",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-viewcompare",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "runtime": {"node": "v24.11.1", "platform": "win32"},
+  "changedFiles": [
+    "tests/fixtures/comparison-acoustic-time-gif.mjs (new)",
+    "tests/comparison-acoustic-time-gif.test.mjs (new)",
+    "docs/evidence/2026-10-19-opencode-viewcompare.json (new)",
+    "docs/view-compare-design.md (limited evidence note)",
+    "docs/en/view-compare-design.md (limited evidence note)"
+  ],
+  "runtimeChanges": "none; tests + fixture + evidence/docs only",
+  "fixture": {
+    "path": "tests/fixtures/comparison-acoustic-time-gif.mjs",
+    "solver": "src/acoustic-transient.js solveAcousticTransient (real solver)",
+    "mesh": {"nodes": 12, "tetrahedra": 1, "edgeMm": 1, "note": "minimal unit-tet air cavity reused from tests/acoustic-transient.test.mjs; no new mesh generator"},
+    "study": {
+      "kind": "acoustic",
+      "acousticTransient": true,
+      "frequencyHz": 4000,
+      "soundSpeedMPerS": 343,
+      "airDensityKgPerM3": 1.2,
+      "lossFactor": 0,
+      "pulseWidthS": 0.0001,
+      "acousticDurationS": 0.0012,
+      "receiverPointMm": [0.1, 0.1, 0.1],
+      "acousticSnapshotCount": 25
+    },
+    "boundary": "prescribed node pressure = amplitude*pulse(t) Pa at node 0; stiff-rigid elsewhere",
+    "sourceAmplitudesPa": [1, 2],
+    "storedFramesPerCase": 25,
+    "timeStepS": 1.0704727921498661e-06,
+    "stableTimeStepS": 1.07120542687311e-06,
+    "solverDerived": true,
+    "syntheticDisplayNote": "The GIF 2D destination canvas is a byte-level stub (blank RGBA); the GIF bytes are produced by the real encoder, but frame imagery is synthetic/blank, not a rendered field."
+  },
+  "acceptance": {
+    "formatGifAnimationTimeSeconds2": "pass (request format=gif, animation=time, seconds=2)",
+    "frames24": "pass (structural GIF walk + Pillow)",
+    "resolution640x320": "pass",
+    "paletteRGB332_colors256": "pass (7/8/4 bits per channel, GCT 256, white=last index)",
+    "delayTotal200centiseconds": "pass (delays exactly gifFrameDelays(2); sum 200 => 2000 ms)",
+    "firstPhase0_lastPhase1": "pass (phases 0..1 with step 1/23)",
+    "physicalTimeFromStoredFrames_noInterpolation": "pass (every panel timeSeconds is a stored snapshot time; color range = min/max of saved fields in range)",
+    "signedOffsetSeconds": "pass (offsetSeconds = storedTime - requestedTime, sign preserved)",
+    "toleranceZeroRefused": "pass (toleranceSeconds=0 -> 'Comparison time interval exceeds stored-frame tolerance')",
+    "staleRevisionRefused": "pass (expectedRevision mismatch -> 'Case content changed; list cases again' before any render)",
+    "staticAcousticFieldRefused": "pass (non-transient acoustic result refused)",
+    "startGreaterOrEqualEndRefused": "pass",
+    "singleFixedTimeSecondsRefused": "pass",
+    "cancelNoArtifact": "pass (render rejects /cancelled/, no bytes delivered, host lock released)",
+    "fourStatesIdenticalAfterCancelAndSuccess": "pass (input, cases, saved result arrays and comparison request byte-identical)",
+    "solverValuesNotRewritten": "pass (deep-equal before/after; amplitude ratio case2/case1 = 2 within 1e-9)",
+    "measuredPlan": {
+      "colorRange": {"field": "instantPressure", "minimumPa": -0.9841877180117152, "maximumPa": 2.002906404103789},
+      "startTimeSeconds": 0,
+      "endTimeSeconds": 0.0012,
+      "selectedFrameCounts": [25, 25],
+      "maxAbsOffsetSeconds": [0.00002515611061552187, 0.00002515611061552187],
+      "initialFrameIndices": [0, 0],
+      "finalFrameIndices": [24, 24],
+      "timeSelection": "nearest-stored-frames-only",
+      "interpolated": false,
+      "camera": "fixed"
+    }
+  },
+  "tests": {
+    "targetedCommand": "node --test tests/comparison-acoustic-time-gif.test.mjs tests/acoustic-transient.test.mjs tests/comparison-time-plan.test.mjs tests/comparison-gif.test.mjs",
+    "targeted": {"pass": 19, "fail": 0, "skipped": 0, "durationMs": 3660},
+    "newTestOnly": {"pass": 3, "fail": 0, "skipped": 0},
+    "checkContracts": "pass (Contract declarations type-check (5 declaration files))",
+    "gitDiffCheck": "clean (exit 0)",
+    "note": "public/fem-kernel.wasm is gitignored and was absent; rebuilt with `node scripts/build-kernel.mjs` to run the unchanged tests/acoustic-transient.test.mjs WASM parity case."
+  },
+  "gifArtifact": {
+    "source": "tests/fixtures/comparison-acoustic-time-gif.mjs via src/ui/comparison-gif.js + src/gif-encoder.js (real encoder)",
+    "bytes": 5574849,
+    "sha256": "03d1441daa660b46d408cfe5df9acad0b5eedbaf531b8cb056e9e79a1033c3d7",
+    "committed": false,
+    "reasonNotCommitted": "Blank stub canvas repeats one image; SHA is deterministic but the binary carries no field information."
+  },
+  "externalDecoder": {
+    "tool": "Python 3.12.7 + Pillow 12.2.0 (PIL.Image / ImageSequence)",
+    "frames": 24,
+    "size": [640, 320],
+    "mode": "RGB",
+    "durationsMs": [80, 90, 80, 80, 90, 80, 80, 90, 80, 80, 90, 80, 80, 90, 80, 80, 90, 80, 80, 90, 80, 80, 90, 80],
+    "totalMs": 2000,
+    "uniqueImages": 1,
+    "uniqueNote": "Only one unique image because the destination canvas stub is blank; this verifies container structure, not wave propagation."
+  },
+  "unverified": [
+    "Real Chrome: browser tooling returned 'No desktop browser is connected' this session; no live app/MCP pairing performed.",
+    "Official MCP export of an acoustic time GIF: artifact bytes/SHA and manifest on a real case not obtained.",
+    "GUI preview, cancel and re-create for acoustic time GIF; four-state restoration in the live UI.",
+    "External decode of a real-rendered acoustic GIF (unique frames / visible wave motion).",
+    "Public HTTPS, general geometry, OS download completion, player smoothness.",
+    "Physical wave accuracy or time-integration accuracy (24 stub frames prove nothing physical)."
+  ],
+  "parentState": {"VIEWCOMPARE": "building", "note": "src/progress.json not modified; board proposal in the handoff report."},
+  "secretsIncluded": false,
+  "selfShaRecorded": false
+}

@@ -25,6 +25,10 @@ UIの条件登録・削除・再選択・保存復元はこのAPIを経由する
 
 進捗更新: `npm run task:status -- ID STATUS "記録" [証跡]` を実行し、src/progress.jsonをcommit・pushします。開発管理ボードは表示中に20秒ごとに取得します。更新は実際の作業の区切りで行い、バックグラウンドで自動開発する仕組みではありません。
 
+### 画像・アニメーション出力の独立readback
+
+`node scripts/verify-export-artifact.mjs --manifest <manifest.json> --artifact <artifact>` は、保持済みの単一PNGまたはGIFを、既存exportとは別のCLIから読み戻して照合する。manifestのschemaVersion 1と必須field（format・container・mimeType・sha256・totalBytes。対応形式ではresolution）を検査し、artifactの実byte長とSHA-256をmanifestへ照合し、PNG signature/IHDRまたはGIF87a/89aとlogical screen dimensionsをmanifestのresolutionと照合する。stdoutへ構造化JSON（identityVerified・containerHeaderVerified・frameCountVerified）を出し、一致でexit 0、照合不一致で1、不正で2、unsupportedで3。`--report <新規path>`は新規fileにのみ同じreportを書き、既存fileと入力を上書きしない。manifestは64KiB、artifactは100MiB、通常fileのみを読む。ZIP（png-sequence）とWebMはunsupportedとして拒否し、拡張子では形式を判定しない。**このCLIはcontainer headerとidentityだけを読み、画素の完全decode、GIFのframe数・duration、物理結果の正しさ、manifest version・表現の妥当性を検証・保証しない。** 単一PNGとGIFのreadbackを足すだけで、P4全体の操作・出力保証の完了を意味しない。
+
 計算APIと検証例は[解析ガイド](analysis-guide.md)を参照。体積メッシュ・構造・熱・適応ループもNodeから直接検証する。
 
 v0.33の[J2微小ひずみ塑性](plasticity.md)は、正の線形等方硬化と単調載荷を対象にします。`tests/plasticity.test.mjs`は材料応答、整合接線の数値微分、静水圧で降伏しないこと、材料点の除荷、柱の参照解を検証します。`node --test tests/plasticity-integration.test.mjs`は画面と同じWorkerから実Gmsh/WASMを使い、10×10×40 mm柱の参照応力251.7412935 MPa、相当塑性ひずみ0.0017412935、上端反力25174.12935 N、収束履歴・保存復元・点測定・不正な塑性状態の原子的拒否を確認します。MFEM/WebGPU、適応解析、固有振動、熱応力との組み合わせも拒否します。材料点の除荷テストはFE繰返し載荷や疲労への対応を意味しません。Nodeテストは公開UIの操作確認やTet4のロッキングに対する精度保証とは別です。

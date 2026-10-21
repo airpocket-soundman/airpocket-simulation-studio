@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "05-VIEWTIME",
+  "outcome": "passed-node-only-bounded-snapshot-storage-metadata",
+  "scope": "Additive bounded snapshotStorage summary on the existing getResultView operation; no new method/tool, no solver/physical change, parent VIEWTIME remains building",
+  "base": {
+    "branch": "codex/opencode-viewtime",
+    "originMainSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "worktree": "D:/github/airpocket-soundman/studio-opencode-viewtime"
+  },
+  "changedFiles": [
+    "src/result-view-api.js",
+    "src/browser-operation-view-contracts.js",
+    "tests/result-view-api.test.mjs",
+    "docs/automation.md",
+    "docs/en/automation.md",
+    "skills/airpocket-studio/references/result-views.md"
+  ],
+  "behaviour": {
+    "field": "snapshotStorage",
+    "shape": {
+      "requested": "integer, echoed from validated snapshotInfo",
+      "count": "integer stored frames",
+      "bytes": "integer stored-scalar estimate",
+      "budgetBytes": "integer byte budget",
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": [
+        "objects",
+        "rendering",
+        "observations",
+        "receiver-traces",
+        "peak-memory"
+      ],
+      "warningCount": "integer, replaces the unbounded warning texts"
+    },
+    "validation": "reuses existing validateHistoryMetadata; a result with malformed snapshotInfo is refused explicitly instead of dropping the field",
+    "compatibility": "results without snapshotInfo omit snapshotStorage; frames offset/limit, storedFrameIndex and thermal state.frameIndex=null unchanged; returned object is freshly built (detached) so caller edits cannot rewrite the result"
+  },
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "ok, 22 packages, 0 vulnerabilities",
+      "note": "no pre-existing node_modules in this worktree"
+    },
+    {
+      "command": "node --test tests/result-view-api.test.mjs tests/time-history-plan.test.mjs tests/result-frames.test.mjs",
+      "pass": 27,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "durationMs": 254.1472
+    },
+    {
+      "command": "node --test tests/measurement*.test.mjs tests/named-result-views.test.mjs tests/browser-named-view-session.test.mjs tests/case-view-bundle.test.mjs tests/browser-operation-contracts.test.mjs",
+      "pass": 77,
+      "fail": 0,
+      "skip": 0,
+      "note": "extra regression for other consumers of createResultViewApi"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "pass",
+      "detail": "216 files, 555 local edges, 7 allowlisted violations"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "pass": 19,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "no whitespace errors"
+    }
+  ],
+  "measuredValues": {
+    "thermal": {
+      "basis": "synthetic geometry fixture reusing createHistoryPlan(10, 94, {requested:11, budgetBytes:2400})",
+      "nodes": 94,
+      "frames": 3,
+      "bytesPerScalar": 8,
+      "bytesFormula": "94 * 3 * 8 = 2256",
+      "bytes": 2256,
+      "unit": "byte",
+      "requested": 11,
+      "budgetBytes": 2400,
+      "warningCount": 1
+    },
+    "acoustic": {
+      "basis": "synthetic geometry fixture reusing createHistoryPlan(2138, 741, {requested:7, budgetBytes:65536, prefix:'acoustic'})",
+      "nodes": 741,
+      "frames": 7,
+      "bytesPerScalar": 8,
+      "bytesFormula": "741 * 7 * 8 = 41496",
+      "bytes": 41496,
+      "unit": "byte",
+      "requested": 7,
+      "budgetBytes": 65536,
+      "warningCount": 0
+    },
+    "responseBound": "no array longer than 8 elements is returned at frameLimit=0 (no stored frames, step lists or nodal field arrays leak)"
+  },
+  "refusals": [
+    "snapshotInfo.bytes != nodes*count*8 (2264 vs 2256) refused",
+    "snapshotInfo.count != stored frames (2 vs 3) refused",
+    "snapshotInfo.requested < 2 (1) refused",
+    "snapshotInfo.budgetBytes < bytes (2248 vs 2256) refused",
+    "snapshotInfo.steps endpoint != total solved steps ([0,5,9] vs 10) refused",
+    "tampered final stored field (last snapshot temperature != result.temperature) refused"
+  ],
+  "unverified": [
+    "Real Chrome / registered MCP getResultView was not executed in this run; all results are Node-hosted unit test observations (real Chrome unverified, not claimed)",
+    "The exact 2026-10-18 real 94-node and 741-node solved meshes were not reproduced; the byte arithmetic was regenerated through createHistoryPlan with synthetic geometry (field counts marked synthetic)",
+    "No peak-RAM guarantee; snapshotStorage is a stored-scalar estimate only",
+    "No public HTTPS verification",
+    "No solver, dt, default density or 64 MiB budget change; not claimed as physical validation"
+  ],
+  "progressProposal": "Keep VIEWTIME (parent) as building; keep 171/133/open-38 unchanged. Optional note on the existing VIEWTIME card: bounded snapshotStorage summary (requested/count/bytes/budgetBytes, unit byte, bytesPerScalar 8, excludes objects/rendering/observations/receiver-traces/peak-memory, warningCount) is now exposed additively on getResultView for results with validated snapshotInfo; no new method/tool; real-Chrome and peak-RAM remain unverified. src/progress.json was not modified by this work order.",
+  "limits": [
+    "solver implementation untouched",
+    "no unbounded copy of snapshots/steps/warnings",
+    "legacy snapshotInfo-free archives accepted unchanged"
+  ]
+}

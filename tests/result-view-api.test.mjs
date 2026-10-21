@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createResultViewApi,resultFields,displayRange,colorFraction} from '../src/result-view-api.js';
 import {sampleDisplayedResult} from '../src/probe.js';
+import {createHistoryPlan} from '../src/time-history-plan.js';
 
 const camera=()=>({position:[50,40,60],target:[0,0,0],up:[0,1,0],fov:40});
 function harness(kind='thermal'){
@@ -115,4 +116,55 @@ test('thermal setters reject stale or busy commands and restore exact interpolat
  await assert.rejects(h.api.set({expectedResultRevision:'stale',settings:{frameIndex:0}}),/revision conflict/);h.setBusy(true);await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0}}),/busy/);h.setBusy(false);
  await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0}},{guard:()=>false}),/expired/);assert.equal(h.sets,0);
  h.failNext();await assert.rejects(h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:0,surface:false}}),/Thermal renderer failed/);assert.deepEqual(h.time,before);assert.deepEqual(h.state,state);
+});
+
+// VIEWTIME: bounded snapshotStorage metadata. Geometry here is synthetic; only the stored-scalar arithmetic is
+// reproduced from the 2026-10-18 evidence tuples (94 nodes x 3 frames x 8 = 2256 bytes, requested 11, budget 2400;
+// 741 nodes x 7 frames x 8 = 41496 bytes, budget 65536) through the existing createHistoryPlan.
+const maxArrayLength=value=>{let max=0;const walk=v=>{if(Array.isArray(v)){max=Math.max(max,v.length);v.forEach(walk);}else if(v&&typeof v==='object')Object.values(v).forEach(walk);};walk(value);return max;};
+function storageHarness(result){
+ let state={field:resultFields(result)[0].id,modeIndex:null,frameIndex:result.kind==='acousticTransient'?0:null,deformScale:1,surface:true,surfaceWire:false,volumeWire:false,section:true,colorRange:null,camera:camera()};
+ let output={input:{version:1},mesh:{nodes:[0,0,0,1,0,0,0,1,0,0,0,1],tetrahedra:[[0,1,2,3]]},result};
+ const api=createResultViewApi({getAnalysis:()=>output,get:()=>state,isBusy:()=>false,set:next=>{state=structuredClone(next);}});
+ return {api,get output(){return output;}};
+}
+function thermalStorageFixture(){
+ const plan=createHistoryPlan(10,94,{requested:11,budgetBytes:2400});
+ const result={kind:'thermal',transient:true,history:Array.from({length:10},(_,i)=>({time:i+1})),snapshots:plan.indices.map(step=>({step,time:step===0?0:step,temperature:Array(94).fill(20+step)})),temperature:Array(94).fill(30)};
+ result.snapshotInfo={requested:plan.requested,count:plan.count,steps:plan.indices,bytes:plan.bytes,budgetBytes:plan.budgetBytes,warnings:plan.warnings};
+ return result;
+}
+function acousticStorageFixture(){
+ const steps=2138,timeStep=.004/steps,plan=createHistoryPlan(steps,741,{requested:7,budgetBytes:65536,prefix:'acoustic'});
+ return {kind:'acousticTransient',steps,timeStep,duration:steps*timeStep,time:steps*timeStep,pressure:Array(741).fill(5),snapshots:plan.indices.map(step=>({time:step*timeStep,pressure:Array(741).fill(step===steps?5:step)})),snapshotInfo:{requested:plan.requested,count:plan.count,steps:plan.indices,bytes:plan.bytes,budgetBytes:plan.budgetBytes,warnings:plan.warnings}};
+}
+test('getResultView reports a bounded thermal scalar-storage summary and no physical arrays or step lists',async()=>{
+ const h=storageHarness(thermalStorageFixture()),before=structuredClone(h.output),s=await h.api.get({frameLimit:0});
+ assert.deepEqual(s.snapshotStorage,{requested:11,count:3,bytes:2256,budgetBytes:2400,unit:'byte',bytesPerScalar:8,meaning:'stored-scalar-values-only',excludes:['objects','rendering','observations','receiver-traces','peak-memory'],warningCount:1});
+ assert.equal(s.frameCount,3);assert.deepEqual(s.frames,[]);assert.equal(s.snapshotStorage.steps,undefined);assert.equal(s.snapshotStorage.warnings,undefined);assert.ok(maxArrayLength(s)<=8);
+ assert.deepEqual(h.output,before);
+});
+test('getResultView reports the acoustic scalar-storage summary without leaking pressure frames',async()=>{
+ const h=storageHarness(acousticStorageFixture()),s=await h.api.get({frameLimit:0});
+ assert.deepEqual(s.snapshotStorage,{requested:7,count:7,bytes:41496,budgetBytes:65536,unit:'byte',bytesPerScalar:8,meaning:'stored-scalar-values-only',excludes:['objects','rendering','observations','receiver-traces','peak-memory'],warningCount:0});
+ assert.ok(maxArrayLength(s)<=8);
+});
+test('legacy results without snapshotInfo keep the previous get/set shape and behaviour',async()=>{
+ const h=harness('thermal'),s=await h.api.get();
+ assert.equal(Object.hasOwn(s,'snapshotStorage'),false);
+ const next=await h.api.set({expectedResultRevision:s.resultRevision,settings:{frameIndex:null,surface:false}});
+ assert.equal(Object.hasOwn(next,'snapshotStorage'),false);assert.equal(next.state.surface,false);
+});
+test('tampered time-history metadata is refused explicitly and snapshotStorage stays detached from the result',async()=>{
+ for(const patch of [{bytes:2264},{count:2},{requested:1},{budgetBytes:2248},{steps:[0,5,9]}]){
+  const r=thermalStorageFixture();Object.assign(r.snapshotInfo,patch);
+  await assert.rejects(storageHarness(r).api.get(),/saved time history storage metadata|saved time history endpoint/);
+ }
+ const bad=thermalStorageFixture();bad.snapshots.at(-1).temperature=Array(94).fill(1e9);
+ await assert.rejects(storageHarness(bad).api.get(),/Invalid saved time history/);
+ const h=storageHarness(thermalStorageFixture()),before=JSON.stringify(h.output),rev=(await h.api.get()).resultRevision,phys=(await h.api.get()).physicalRevision;
+ const first=await h.api.get();first.snapshotStorage.bytes=0;first.snapshotStorage.count=99;first.snapshotStorage.excludes.push('mutated');
+ const again=await h.api.get();
+ assert.equal(again.snapshotStorage.bytes,2256);assert.equal(again.snapshotStorage.count,3);assert.deepEqual(again.snapshotStorage.excludes,['objects','rendering','observations','receiver-traces','peak-memory']);
+ assert.equal(again.resultRevision,rev);assert.equal(again.physicalRevision,phys);assert.equal(JSON.stringify(h.output),before);
 });

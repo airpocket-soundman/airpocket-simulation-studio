@@ -2,12 +2,23 @@ import {framesOf} from './result-frames.js';
 import {getProjectRevision} from './project-operations.js';
 import {getPhysicalRevision} from './project-revision.js';
 import {sampleDisplayedResult} from './probe.js';
+import {validateHistoryMetadata} from './time-history-plan.js';
 
 const fieldsByKind={elastic:['displacement','stress'],modal:['displacement'],thermal:['temperature','heatFlux'],acousticTransient:['instantPressure'],acoustic:['pressure','spl','phase'],channelFlow:['speed','fluidPressure'],stokes:['speed','fluidPressure']};
 const units={displacement:'mm',stress:'MPa',plasticStrain:'%',temperature:'degC',heatFlux:'W/m2',instantPressure:'Pa',pressure:'Pa peak',spl:'dB RMS',phase:'rad',speed:'m/s',fluidPressure:'Pa gauge'};
 export function resultFields(result){const fields=[...(fieldsByKind[result?.kind]||[])];if(result?.kind==='elastic'&&result.plasticity)fields.push('plasticStrain');return fields.map(id=>({id,unit:units[id]}));}
 export function displayRange(minimum,maximum,range,field){if(range&&range.field===field)return {min:range.minimum,max:range.maximum,mode:'fixed'};return {min:minimum,max:maximum,mode:'auto'};}
 export function colorFraction(value,minimum,maximum){return maximum>minimum?Math.max(0,Math.min(1,(value-minimum)/(maximum-minimum))):0;}
+// Optional bounded scalar-storage summary for results that carry saved time-history snapshotInfo (VIEWTIME).
+// It reports the stored-scalar estimate only: one detached JSON object derived from validated metadata,
+// never the physical arrays, the per-frame step list or the unbounded warning texts.
+const snapshotStorageExcludes=Object.freeze(['objects','rendering','observations','receiver-traces','peak-memory']);
+function snapshotStorage(result){
+ if(result?.snapshotInfo===undefined)return {};
+ validateHistoryMetadata(result);
+ const info=result.snapshotInfo;
+ return {snapshotStorage:{requested:info.requested,count:info.count,bytes:info.bytes,budgetBytes:info.budgetBytes,unit:'byte',bytesPerScalar:8,meaning:'stored-scalar-values-only',excludes:[...snapshotStorageExcludes],warningCount:info.warnings.length}};
+}
 // The single result colormap (HSL, blue at the minimum to red at the maximum), shared by the 3D view and legends.
 export function colormapHsl(fraction){return [(1-fraction)*.65,.8,.5];}
 const vector=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
@@ -45,7 +56,7 @@ export function createResultViewApi(adapter){
  // Thermal state.frameIndex remains null for legacy named-view consumers; physical-time metadata describes the actual display.
  const frameDisplay=()=>adapter.frameDisplay?.()||{};
  function thermalTime(output){if(output.result.kind!=='thermal')return {};const d=frameDisplay(),frames=framesOf(output.result),index=frames&&!d.interpolated?frames.times.indexOf(d.frameTime):-1;return d.frameTime===undefined?{}:{physicalTimeSeconds:d.frameTime,interpolated:!!d.interpolated,timeSelection:index>=0?'stored-frames-only':'viewer-slider-only',...(index>=0?{storedFrameIndex:index}:{})};}
- function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...thermalTime(context.output),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
+ function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...snapshotStorage(r),...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...thermalTime(context.output),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){
    const c=await current();if(expectedResultRevision!==undefined&&expectedResultRevision!==c.revision)throw Error('Displayed result revision conflict');const state=read(c.output),r=c.output.result;

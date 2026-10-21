@@ -91,3 +91,5 @@ startCompareExportのWebMでanimation:"deformation"を指定します。対象�
 変形は2つの線形弾性結果の変位/応力に限り、非零の保存変位と明示した正の`deformScale`が必要。時間引数と非線形結果は拒否。カメラ・結果値・色範囲を固定し、表示倍率だけ0→指定倍率へ線形に変えます。manifestの`visualizationOnly:true`/`loadHistory:false`と画像ラベルを維持し、載荷履歴として解釈しません。
 
 GUIの動画種類はGIF選択後も維持し、時間範囲/表示倍率は同じ共有queue・revision/lease・取消・SHA付きartifact取得・解放経路を通します。成功/取消/失敗後に元表示へ復元し、部分成果物は受け渡しません。[localhost正式MCP＋実Chrome証拠](evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json)は小規模な熱11保存フレームと線形弾性3N/6Nに限定し、API成果物・外部decode24枚・総delay・GUIプレビュー/取消/再作成・入力/ケース/表示/比較設定の一致を確認。公開HTTPS、一般形状、OSダウンロード完了は未確認です。
+
+2026-10-19 実solveAcousticTransient（単位四面体空気キャビティ、c=343 m/s・rho=1.2 kg/m³、4 kHz、0.1 msパルス、1.2 ms、明示source振幅1/2 Pa、25保存フレーム）の2ケースを、[音響time GIF検証fixture/test](evidence/2026-10-19-opencode-viewcompare.json)でproduction adapter＋timePlan＋実GIF encoderに通しました。24枚・640×320・RGB332・delay合計200 centiseconds（2000 ms）、phase i/23の両端、共通色範囲=保存瞬時音圧の範囲（Pa、−0.984…〜2.003…）、近傍保存フレーム選択と符号付きoffset、tolerance 0・stale revision・静的音響・start>=endの拒否、取消時に成果物なし・入力/ケース/結果/比較設定の一致を確認。外部Pillow decodeは24枚/640×320/合計2000 msを確認（canvas stubのため24枚は同一画像）。実Chrome実機・GUIプレビュー/取消/再作成・公開HTTPS・波動精度は未確認です。
