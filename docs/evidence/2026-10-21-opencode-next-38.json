@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "workOrder": "docs/opencode-work-orders-2026-10-21/38-CONTACT1.md",
+  "parentTask": "CONTACT1",
+  "scope": "Bounded repair of the one-degree-of-freedom unilateral penalty contact reference module only. Node mathematical reference; not production 3D contact, friction, bolt, Tet4, worker, schema, UI or browser verification.",
+  "branch": "codex/opencode-contact1",
+  "baseCommit": "bf0cc946ab99f4c09fce413ce876a7a88ca69bdb",
+  "reviewHeadBeforeWork": "bf0cc946ab99f4c09fce413ce876a7a88ca69bdb",
+  "changedFiles": [
+    "src/unilateral-contact-reference.js",
+    "tests/unilateral-contact-reference.test.mjs",
+    "docs/evidence/2026-10-21-opencode-next-38.json (this file)"
+  ],
+  "problem": {
+    "reviewObservation": "maxIterations was validated with Number.isInteger only, so 1e20 was accepted; with toleranceN=1e-30 the Newton residual stalls near 8.5265e-14 N because next === u after rounding, and the loop does not return.",
+    "counterexampleInput": {
+      "springNPerMm": 100,
+      "penaltyNPerMm": 10000,
+      "gapMm": 1,
+      "forceN": 200,
+      "toleranceN": 1e-30,
+      "maxIterations": 1e20
+    },
+    "stalledResidualN": 8.526512829121202e-14
+  },
+  "iterationBudget": {
+    "value": 10000,
+    "kind": "computational resource ceiling, not a physical convergence threshold",
+    "rationale": [
+      "The reference fixture in tests/unilateral-contact-reference.test.mjs and the documented reference values use maxIterations=50 and need only 3 active-set iterations for the contact case.",
+      "Other bounded solvers in this repository cap iterations at 100 (modal-core), 2500 (pcg/gpu-pcg) and 5000 (stokes-core); a scalar 1-DOF Newton reference never needs more.",
+      "10000 is therefore a strict upper bound above all existing usage while still bounding CPU time; larger safe integers are refused instead of merely allowing MAX_SAFE_INTEGER."
+    ],
+    "validation": "Number.isSafeInteger plus 1 <= maxIterations <= 10000; 0/negative/fraction/Infinity/NaN/1e20/10001/MAX_SAFE_INTEGER -> CONTACT_MAX_ITERATIONS_INVALID with details.limit=10000"
+  },
+  "stagnationHandling": {
+    "policy": "A non-finite residual, tangent or iterate is refused as CONTACT_NON_FINITE with finite-only details. A finite next===u or a next iterate already seen is refused as CONTACT_NOT_CONVERGED with details.reason='stagnation'. The seen-iterate set is bounded by the 10000 iteration budget. A state that does not satisfy toleranceN is never returned as converged.",
+    "residualWidening": false,
+    "existingCodeCompatibility": "CONTACT_NOT_CONVERGED and all pre-existing input refusal codes are retained; the iteration-limit refusal adds details.reason='iteration-limit' without changing its code."
+  },
+  "commands": [
+    {
+      "command": "pre-fix isolated run of the review counterexample against HEAD bf0cc94 (2000 ms wall-clock limit)",
+      "result": "timeout: killed after 2091 ms, no stdout; confirms the non-terminating stall"
+    },
+    {
+      "command": "node --test tests/unilateral-contact-reference.test.mjs",
+      "result": "pass: 13 tests, 13 pass, 0 fail, 0 skipped, 0 todo; duration_ms 363.691"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass: Contract declarations type-check (5 declaration files), exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass: exit 0 (Git reported only expected LF->CRLF working-copy warnings)"
+    }
+  ],
+  "counterexampleResults": {
+    "units": {
+      "springNPerMm": "N/mm",
+      "penaltyNPerMm": "N/mm",
+      "gapMm": "mm",
+      "forceN": "N",
+      "toleranceN": "N",
+      "u": "mm",
+      "residualN": "N"
+    },
+    "maxIterations1e20": {
+      "refusedCode": "CONTACT_MAX_ITERATIONS_INVALID",
+      "details": {"key": "maxIterations", "limit": 10000},
+      "iterationsExecuted": 0,
+      "childLatencyMs": 0.3313,
+      "wallClockLimitMs": 2000
+    },
+    "withinBudgetStagnation": {
+      "inputOverride": {"maxIterations": 10000},
+      "refusedCode": "CONTACT_NOT_CONVERGED",
+      "details": {"iterations": 3, "residualN": 8.526512829121202e-14, "toleranceN": 1e-30, "reason": "stagnation"},
+      "childLatencyMs": 0.069,
+      "wallClockLimitMs": 2000
+    }
+  },
+  "overflowRefusals": {
+    "cases": [
+      {"input": {"springNPerMm": 1e308, "penaltyNPerMm": 1e308, "gapMm": 1, "forceN": 1.5e308, "maxIterations": 10}, "expected": "CONTACT_NON_FINITE (tangent 2e308 overflows)"},
+      {"input": {"springNPerMm": 1, "penaltyNPerMm": 100, "gapMm": 0, "forceN": 1e308, "maxIterations": 10}, "expected": "CONTACT_NON_FINITE (second-iteration residual overflows)"}
+    ],
+    "detailsContainOnlyFiniteNumbers": true,
+    "normalResultJsonIsFinite": true
+  },
+  "referenceRegression": {
+    "fixture": "synthetic reference problem, not measured data: k=100 N/mm, kp=10000 N/mm, gap=1 mm, F=200 N, toleranceN=1e-9 N",
+    "solution": {"u": 1.0099009900990099, "contactReactionN": -99.0099009900991, "residualN": 8.526512829121202e-14},
+    "toleranceSatisfied": "abs(residualN) <= 1e-9 N",
+    "existingTestsRetained": [
+      "non-contact u=F/k",
+      "contact u=(F+kp*gap)/(k+kp)",
+      "contact onset",
+      "negative force sign",
+      "zero gap",
+      "penalty stiffness sweep",
+      "typed refusal matrix",
+      "fixed non-convergence at maxIterations=1",
+      "input not mutated and result shape"
+    ],
+    "testsDeletedSkippedOrRelaxed": false
+  },
+  "newTests": [
+    "review counterexample with maxIterations=1e20 is refused in bounded time in a child process",
+    "within-budget 1e-30 stagnation is refused finitely with CONTACT_NOT_CONVERGED",
+    "maxIterations budget boundary: 10000 accepted; 10001, 1e6, MAX_SAFE_INTEGER, 1e20 refused",
+    "finite extreme stiffness/force overflow is refused without NaN/Infinity details",
+    "NaN maxIterations refusal added to the existing invalid-input test"
+  ],
+  "notVerified": [
+    "production 3D contact, active-set assembly, interface search, surface load distribution or Tet4 coupling",
+    "friction, bolt pretension, large sliding or thermal contact conductance",
+    "analysis worker, studio API, MCP tools, schema, preflight, progress board or GUI wiring",
+    "browser or deployed HTTPS verification of any kind",
+    "universal convergence or physical accuracy of the reference model"
+  ],
+  "parentStatus": "CONTACT1 remains queued/incomplete. This repair only closes the reported iteration-limit blocker; it does not complete the parent task."
+}

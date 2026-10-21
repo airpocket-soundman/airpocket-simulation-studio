@@ -1,6 +1,22 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
 import {solveUnilateralContact} from '../src/unilateral-contact-reference.js';
+
+const MODULE_URL = new URL('../src/unilateral-contact-reference.js', import.meta.url).href;
+// Isolate the unbounded-iteration counterexample in a child process with a hard 2 s wall
+// clock limit so the parent test process is never trapped by a non-terminating loop.
+function runIsolated(input, timeout = 2000) {
+  const script = `import {solveUnilateralContact} from ${JSON.stringify(MODULE_URL)};
+const started = process.hrtime.bigint();
+try {
+  const result = solveUnilateralContact(${JSON.stringify(input)});
+  console.log(JSON.stringify({outcome: 'success', result, latencyMs: Number(process.hrtime.bigint() - started) / 1e6}));
+} catch (error) {
+  console.log(JSON.stringify({outcome: 'refusal', code: error?.code, details: error?.details, latencyMs: Number(process.hrtime.bigint() - started) / 1e6}));
+}`;
+  return spawnSync(process.execPath, ['--input-type=module', '-e', script], {timeout, encoding: 'utf8', windowsHide: true});
+}
 
 // Synthetic reference problem (not measured data): k = 100 N/mm, stop gap = 1 mm, kp = 10000 N/mm.
 const base = {springNPerMm: 100, penaltyNPerMm: 10000, gapMm: 1, forceN: 50, toleranceN: 1e-9, maxIterations: 50};
@@ -104,12 +120,80 @@ test('invalid stiffness, gap, force, tolerance and iteration counts are refused'
   assert.throws(() => solve({maxIterations: -3}), refusal('CONTACT_MAX_ITERATIONS_INVALID'));
   assert.throws(() => solve({maxIterations: 1.5}), refusal('CONTACT_MAX_ITERATIONS_INVALID'));
   assert.throws(() => solve({maxIterations: Infinity}), refusal('CONTACT_MAX_ITERATIONS_INVALID'));
+  assert.throws(() => solve({maxIterations: NaN}), refusal('CONTACT_MAX_ITERATIONS_INVALID'));
+  assert.throws(() => solve({maxIterations: 1e20}), refusal('CONTACT_MAX_ITERATIONS_INVALID'));
   assert.throws(() => solveUnilateralContact(null), refusal('CONTACT_INPUT_INVALID'));
   assert.throws(() => solveUnilateralContact([]), refusal('CONTACT_INPUT_INVALID'));
   assert.throws(() => solve({frictionCoefficient: 0.3}), refusal('CONTACT_INPUT_UNKNOWN_KEY'));
   assert.throws(() => solve({tieBreak: 1}), refusal('CONTACT_INPUT_UNKNOWN_KEY'));
   const {gapMm, ...missing} = base;
   assert.throws(() => solveUnilateralContact({...missing, forceN: 50}), refusal('CONTACT_INPUT_MISSING_KEY'));
+});
+
+test('review counterexample is rejected in bounded time and never allowed to iterate 1e20 times', () => {
+  const counterexample = {springNPerMm: 100, penaltyNPerMm: 10000, gapMm: 1, forceN: 200, toleranceN: 1e-30, maxIterations: 1e20};
+  const child = runIsolated(counterexample);
+  assert.equal(child.error, undefined, `child error: ${child.error?.message}`);
+  assert.equal(child.status, 0, `child stderr: ${child.stderr}`);
+  const observed = JSON.parse(child.stdout.trim());
+  assert.equal(observed.outcome, 'refusal');
+  assert.equal(observed.code, 'CONTACT_MAX_ITERATIONS_INVALID');
+  assert.ok(observed.latencyMs < 2000, `child latency=${observed.latencyMs} ms`);
+});
+
+test('a within-budget stagnation (tolerance 1e-30 N) is refused finitely instead of looping', () => {
+  const counterexample = {springNPerMm: 100, penaltyNPerMm: 10000, gapMm: 1, forceN: 200, toleranceN: 1e-30, maxIterations: 10000};
+  const child = runIsolated(counterexample);
+  assert.equal(child.error, undefined, `child error: ${child.error?.message}`);
+  assert.equal(child.status, 0, `child stderr: ${child.stderr}`);
+  const observed = JSON.parse(child.stdout.trim());
+  assert.equal(observed.outcome, 'refusal');
+  assert.equal(observed.code, 'CONTACT_NOT_CONVERGED');
+  assert.equal(observed.details.reason, 'stagnation');
+  assert.ok(Number.isInteger(observed.details.iterations) && observed.details.iterations < 100, `iterations=${observed.details.iterations}`);
+  assert.ok(Number.isFinite(observed.details.residualN), `residual=${observed.details.residualN}`);
+  assert.ok(Math.abs(observed.details.residualN) > 1e-30);
+  assert.ok(observed.latencyMs < 2000, `child latency=${observed.latencyMs} ms`);
+});
+
+test('maxIterations budget boundary: 10000 is accepted, larger safe integers and 1e20 are refused', () => {
+  const boundary = solve({maxIterations: 10000});
+  assert.equal(boundary.converged, true);
+  assert.ok(Math.abs(boundary.residualN) <= 1e-9);
+  for (const maxIterations of [10001, 1e6, Number.MAX_SAFE_INTEGER, 1e20]) {
+    assert.throws(() => solve({maxIterations}), error => {
+      assert.equal(error.refusal, true);
+      assert.equal(error.code, 'CONTACT_MAX_ITERATIONS_INVALID');
+      assert.equal(error.details.limit, 10000);
+      return true;
+    });
+  }
+});
+
+test('finite extreme stiffness/force that overflow residual or tangent are refused without NaN/Infinity details', () => {
+  const assertFiniteDetails = details => {
+    const walk = value => {
+      if (typeof value === 'number') assert.ok(Number.isFinite(value), `non-finite detail ${value}`);
+      else if (value && typeof value === 'object') for (const nested of Object.values(value)) walk(nested);
+    };
+    walk(details);
+  };
+  const overflowCases = [
+    // residual and tangent are both finite at u=0, but the contact tangent 2e308 overflows.
+    {springNPerMm: 1e308, penaltyNPerMm: 1e308, gapMm: 1, forceN: 1.5e308},
+    // the second iteration residual 1e308 + 100*1e308 - 1e308 overflows.
+    {springNPerMm: 1, penaltyNPerMm: 100, gapMm: 0, forceN: 1e308}
+  ];
+  for (const overflow of overflowCases) {
+    assert.throws(() => solve({...overflow, maxIterations: 10}), error => {
+      assert.equal(error.refusal, true);
+      assert.equal(error.code, 'CONTACT_NON_FINITE');
+      assertFiniteDetails(error.details);
+      return true;
+    });
+  }
+  const normal = solve({forceN: 200});
+  assert.ok(!/NaN|Infinity/.test(JSON.stringify(normal)));
 });
 
 test('fixed non-convergence condition (F=200 N, maxIterations=1) returns a typed refusal, not a success', () => {
