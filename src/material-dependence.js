@@ -1,3 +1,4 @@
+import {requirePrintedEquivalentEvaluation} from './printed-equivalent-material.js';
 import {validateOrthotropic} from './orthotropic-material.js';
 const finiteTemperature=t=>Number.isFinite(t)&&t>=-273.15;
 export function validateMaterialDependence(d){
@@ -19,6 +20,7 @@ export function checkMaterialTemperature(properties,temperature){
  if(values.some(t=>properties.temperatureMin!=null&&t<properties.temperatureMin-1e-6||properties.temperatureMax!=null&&t>properties.temperatureMax+1e-6))throw Error('Temperature is outside the registered material validity range');
 }
 export function resolveElasticMaterial(properties,temperature=20){
+ requirePrintedEquivalentEvaluation(properties,temperature);
  validateOrthotropic(properties.orthotropic);const d=properties.dependence;validateMaterialDependence(d);checkMaterialTemperature(properties,temperature);
  if(d?.rateDependent)throw Error('Rate-dependent structural constitutive models are not supported');
  if(d?.directionality==='orthotropic'&&!properties.orthotropic)throw Error('Orthotropic structural constitutive models are not supported');
