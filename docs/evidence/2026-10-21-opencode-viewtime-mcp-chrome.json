@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "VIEWTIME",
+  "workOrder": "35-VIEWTIME",
+  "scope": "Real localhost browser verification of the existing getResultView snapshotStorage summary for one transient thermal result and one transient acoustic result. The in-page API, the official stdio MCP browser path, and a thermal case save/reload cycle were compared. No product source was changed because no real inconsistency was found.",
+  "branch": "codex/opencode-next-35",
+  "baseRef": "origin/main",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "sourceFrozen": {
+    "worktree": "D:\\github\\airpocket-soundman\\studio-opencode-next-35",
+    "origin": "http://127.0.0.1:5175",
+    "locale": "en",
+    "hmrOrSourceEditDuringChecks": false,
+    "browser": {
+      "product": "OpenCode desktop browser (Electron 44.4.5), Chromium 152.0.7977.130",
+      "brandedGoogleChrome": false,
+      "crossOriginIsolated": true
+    },
+    "runtime": {
+      "node": "v24.11.1",
+      "platform": "win32",
+      "arch": "x64",
+      "kernelAssetBytes": 229,
+      "kernelAssetSha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+      "gmshAssetBytes": 41430673,
+      "gmshAssetSha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23"
+    }
+  },
+  "officialPath": {
+    "pairing": "localhost loopback pairing through the app connection UI; inspect scope only",
+    "scopes": ["inspect"],
+    "mcpServer": "scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5175",
+    "discoveryTool": "studio_browser_sessions",
+    "callTool": "studio_browser_call",
+    "method": "getResultView",
+    "arguments": [
+      { "frameLimit": 50 },
+      { "frameLimit": 0 }
+    ],
+    "pairingSecretsRecorded": false
+  },
+  "thermal": {
+    "caseName": "Heat conduction reference sample",
+    "kind": "thermal",
+    "transient": true,
+    "timeStepSeconds": 0.1,
+    "solveSteps": 20,
+    "meshSizeMm": 4,
+    "displayMeshNodes": 513,
+    "displayMeshTetrahedra": 428,
+    "storedScalarsPerFrame": 171,
+    "resultRevision": "sha256:74ddc53462976ebafa423ee672a4ab45aafaf5ce03a8fbd3d863dd2778df5686",
+    "physicalRevision": "sha256:e166c46b3cb45a43a947c37064b5b41870b4140091c2ca61e3ca31f92b4d3af0",
+    "frameCount": 4,
+    "frames": [
+      { "index": 0, "timeSeconds": 0 },
+      { "index": 1, "timeSeconds": 0.7000000000000001 },
+      { "index": 2, "timeSeconds": 1.3 },
+      { "index": 3, "timeSeconds": 2 }
+    ],
+    "snapshotStorage": {
+      "requested": 4,
+      "count": 4,
+      "bytes": 5472,
+      "budgetBytes": 2097152,
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": ["objects", "rendering", "observations", "receiver-traces", "peak-memory"],
+      "warningCount": 0
+    },
+    "arithmetic": {
+      "storedScalarsPerFrame": 171,
+      "count": 4,
+      "bytesPerScalar": 8,
+      "computedBytes": 5472,
+      "withinBudget": true,
+      "countAtLeast2": true,
+      "note": "bytes uses the stored scalar-array length (171), not the 513-node saved display mesh. The display mesh and the stored scalar field are distinct here; the existing UI labels the value as a scalar estimate."
+    },
+    "uiStorageText": "Stored frames: 4 / scalar estimate 5472 bytes / budget 2097152 bytes. Solve steps and display interpolation are separate; objects, rendering, observations and peak memory are excluded."
+  },
+  "acoustic": {
+    "caseName": "Acoustic domain reference sample",
+    "kind": "acousticTransient",
+    "frequencyHz": 4000,
+    "durationSeconds": 0.004,
+    "pulseWidthSeconds": 0.0002,
+    "solveSteps": 2138,
+    "meshSizeMm": 2,
+    "meshNodes": 741,
+    "meshTetrahedra": 2672,
+    "solveTimeMs": 367.7,
+    "browserElapsedMsIncludingMeshAndWorker": 10181,
+    "resultRevision": "sha256:4402758fb0acab1c3c94018662e2489916c161dd2f39abe7b7739b6dc2ae9bc7",
+    "physicalRevision": "sha256:874608321c08e99d1ceb03bdfd8a04458e1d7ad686c24cfbb0e982a706167f16",
+    "frameCount": 7,
+    "frames": [
+      { "index": 0, "timeSeconds": 0 },
+      { "index": 1, "timeSeconds": 0.000666043030869972 },
+      { "index": 2, "timeSeconds": 0.001333956969130028 },
+      { "index": 3, "timeSeconds": 0.002 },
+      { "index": 4, "timeSeconds": 0.0026660430308699723 },
+      { "index": 5, "timeSeconds": 0.0033339569691300283 },
+      { "index": 6, "timeSeconds": 0.004 }
+    ],
+    "snapshotStorage": {
+      "requested": 7,
+      "count": 7,
+      "bytes": 41496,
+      "budgetBytes": 65536,
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": ["objects", "rendering", "observations", "receiver-traces", "peak-memory"],
+      "warningCount": 0
+    },
+    "arithmetic": {
+      "storedScalarsPerFrame": 741,
+      "count": 7,
+      "bytesPerScalar": 8,
+      "computedBytes": 41496,
+      "withinBudget": true,
+      "countAtLeast2": true,
+      "matchesReferenceFixture": {
+        "nodes": 741,
+        "requested": 7,
+        "budgetBytes": 65536,
+        "count": 7,
+        "bytes": 41496
+      }
+    },
+    "uiStorageText": "Stored frames: 7 / scalar estimate 41496 bytes / budget 65536 bytes. Solve steps and display interpolation are separate; objects, rendering, observations and peak memory are excluded."
+  },
+  "internalVersusMcp": {
+    "thermal": {
+      "frameLimit50": {
+        "deepEqual": true,
+        "diffKeys": [],
+        "resultRevisionMatches": true,
+        "physicalRevisionMatches": true,
+        "snapshotStorageMatches": true,
+        "framesMatch": true
+      },
+      "frameLimit0": {
+        "deepEqual": true,
+        "diffKeys": [],
+        "framesEmpty": true,
+        "frameCount": 4,
+        "hasSteps": false,
+        "hasWarnings": false,
+        "hasPhysicalArrays": false,
+        "maximumArrayLength": 5
+      }
+    },
+    "acoustic": {
+      "frameLimit50": {
+        "deepEqual": true,
+        "diffKeys": [],
+        "resultRevisionMatches": true,
+        "physicalRevisionMatches": true,
+        "snapshotStorageMatches": true,
+        "framesMatch": true
+      },
+      "frameLimit0": {
+        "deepEqual": true,
+        "diffKeys": [],
+        "framesEmpty": true,
+        "frameCount": 7,
+        "hasSteps": false,
+        "hasWarnings": false,
+        "hasPhysicalArrays": false,
+        "maximumArrayLength": 5
+      }
+    },
+    "exactMetadata": {
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": ["objects", "rendering", "observations", "receiver-traces", "peak-memory"]
+    }
+  },
+  "saveReload": {
+    "kind": "thermal",
+    "caseName": "viewtime-thermal",
+    "savedCaseRevision": "sha256:9c4472b3108f8ee6a44722b9a2ad9830759daa6b19d382aa47c66c7ea3516dc2",
+    "savedCaseIdBeforeReload": "32e0b7cc-3b63-463c-9233-e825dc2bbc56",
+    "importedCaseIdAfterReload": "70b38b92-cf87-4b69-93d9-3444a0c9947d",
+    "caseIdChangesOnImport": true,
+    "archiveRevision": "sha256:377c64a09a300df2b3c409dce83f5ac16f73c438d54a99949c4833ef76950665",
+    "localStoragePayloadBytes": 81083,
+    "reloadMethod": "browser.reload of the same localhost tab",
+    "importMethod": "window.caseOperations.importArchive with the exported case archive",
+    "viewMethod": "window.caseOperations.view with the imported caseId and case revision",
+    "resultRevisionBefore": "sha256:74ddc53462976ebafa423ee672a4ab45aafaf5ce03a8fbd3d863dd2778df5686",
+    "resultRevisionAfter": "sha256:74ddc53462976ebafa423ee672a4ab45aafaf5ce03a8fbd3d863dd2778df5686",
+    "physicalRevisionBefore": "sha256:e166c46b3cb45a43a947c37064b5b41870b4140091c2ca61e3ca31f92b4d3af0",
+    "physicalRevisionAfter": "sha256:e166c46b3cb45a43a947c37064b5b41870b4140091c2ca61e3ca31f92b4d3af0",
+    "snapshotStorageEqual": true,
+    "framesEqual": true,
+    "kindEqual": "thermal",
+    "note": "The imported case received a new browser caseId, while the case revision, result revision, physical revision and snapshotStorage stayed identical. No server-side persistence is claimed."
+  },
+  "readOnlyChecks": {
+    "thermal": {
+      "sameProjectBeforeAfter": true,
+      "sameCaseArchiveBeforeAfter": true,
+      "sameSetupViewBeforeAfter": true,
+      "sameFullResultBeforeAfter": true
+    },
+    "acoustic": {
+      "sameProjectBeforeAfter": true,
+      "sameCaseArchiveBeforeAfter": true,
+      "sameSetupViewBeforeAfter": true,
+      "sameFullResultBeforeAfter": true
+    },
+    "note": "Two getResultView calls (frameLimit 50 and 0) were made between the snapshots. The case import/view step is intentionally a display mutation and is excluded from this read-only check."
+  },
+  "legacyAndTamper": {
+    "testFile": "tests/result-view-api.test.mjs",
+    "result": "20/20 pass, 0 fail, 0 skipped",
+    "durationMs": 319.0649,
+    "legacyTest": "legacy results without snapshotInfo keep the previous get/set shape and behaviour",
+    "tamperTest": "tampered time-history metadata is refused explicitly and snapshotStorage stays detached from the result",
+    "tamperCasesCovered": [
+      "bytes + 8 (2256 -> 2264)",
+      "count changed",
+      "requested changed",
+      "budget changed",
+      "steps changed",
+      "last snapshot temperature changed"
+    ],
+    "scope": "These invalid/legacy fixtures were verified by the existing Node unit tests, not by a real browser solve. The valid thermal and acoustic results above were verified in the real browser and official MCP path."
+  },
+  "commands": [
+    {
+      "command": "node --test tests/result-view-api.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 20, "pass": 20, "fail": 0, "skipped": 0, "durationMs": 319.0649 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "browserActions": [
+    "window.analysisApi.loadThermalExample(); set transient heat, 20 steps of 0.1 s, 4 requested thermal snapshots and a 2 MiB thermal history budget; run the GUI solve.",
+    "window.analysisApi.loadTransientAcousticExample(); keep 4 kHz, 0.004 s, 0.0002 s pulse and mesh size 2; set 7 requested acoustic snapshots and a 0.0625 MiB (65536 byte) history budget; run the GUI solve.",
+    "For each kind, read window.resultViewApi.get({frameLimit:50}) and get({frameLimit:0}).",
+    "Pair a new localhost MCP session with inspect scope only and call studio_browser_call getResultView with frameLimit 50 and 0.",
+    "Save the thermal result as 'viewtime-thermal', export its case archive, reload the tab, import the archive, view the imported case, and re-read resultViewApi."
+  ],
+  "changedFiles": [
+    "docs/evidence/2026-10-21-opencode-viewtime-mcp-chrome.json"
+  ],
+  "result": "No real inconsistency was found. The existing snapshotStorage summary, its arithmetic, frameLimit 0 behavior, case save/reload compatibility and read-only behavior matched across the in-page API and the official MCP getResultView path for both thermal and acoustic transient results. No source or test change was needed.",
+  "unconfirmed": [
+    "The browser is the OpenCode desktop Electron/Chromium build, not branded Google Chrome.",
+    "Only localhost was used; public HTTPS, OS download and cross-origin deployment were not verified.",
+    "The thermal case does not reproduce the 94-node / requested 11 / 2400-byte reference fixture. Its real display mesh has 513 nodes and its stored scalar field has 171 values; requested 4, count 4, bytes 5472 and budget 2097152 are the actual values. The arithmetic 171 x 4 x 8 = 5472 is recorded, and no claim is made that the 94/2256 tuple was reproduced.",
+    "The acoustic case did reproduce the 741-node / requested 7 / 65536-byte / count 7 / 41496-byte reference tuple exactly.",
+    "The save/reload check used a browser case archive in localStorage and a single tab reload, not a server-side or cross-device persistence guarantee. The imported caseId changed.",
+    "Legacy and tampered metadata were verified by existing Node unit tests; no invalid saved result was injected into the real browser.",
+    "Only one thermal result and one acoustic result were checked. There is no multi-run distribution and no full-suite/post-push CI claim.",
+    "The thermal summary uses the stored scalar-array size (171) while the saved display mesh has 513 nodes. This is recorded as an observed distinction, not asserted to be a solver or display defect.",
+    "The VIEWTIME parent remains incomplete; this is a bounded verification unit."
+  ],
+  "secretsHandling": {
+    "pairingCodeRecorded": false,
+    "tokensOrCredentialsRecorded": false,
+    "environmentDumped": false,
+    "physicalArraysCopiedIntoEvidence": false,
+    "userModelUploaded": false
+  }
+}
