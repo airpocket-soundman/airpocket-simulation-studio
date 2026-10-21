@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "task": "CFDPORT1",
+  "scope": "triangle-surface opening-loop candidate detection (pure unit only)",
+  "baseCommit": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-cfdport1",
+  "runtime": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "changeScope": {
+    "added": [
+      "src/opening-loop-candidates.js",
+      "tests/opening-loop-candidates.test.mjs"
+    ],
+    "edited": [
+      "src/module-layers.json (one domain-layer entry for the new file)"
+    ],
+    "untouched": [
+      "src/fluid-opening-caps.js",
+      "src/internal-fluid.js",
+      "src/fluid-domain.js",
+      "src/mesh-validity.js",
+      "src/progress.json",
+      "package.json / lockfile / main.js / shared docs"
+    ],
+    "notADetectorFor": [
+      "STEP/OCC arbitrary opening-wire recognition",
+      "local lid generation on a CAD face",
+      "fluid coupling / solver / volume joining"
+    ]
+  },
+  "sourceFilesSha256": {
+    "src/opening-loop-candidates.js": "448314a0ac82b32b2cd377bffd38c7b51f48b7e40e7f558b0401b863e345fd81",
+    "tests/opening-loop-candidates.test.mjs": "262e5d31bf1cb08dd105aa826cc85d14205838d6e865072fa0bd25e6b9cc122e",
+    "src/module-layers.json": "1618c4aa851ba12210ff9bed41c0bd34e4d7556c609874eafb118b155980fdf3"
+  },
+  "fixtures": {
+    "origin": "synthetic hand-written indexed triangle surfaces; not STEP/OCC/Gmsh output",
+    "units": {
+      "nodes": "mm",
+      "toleranceMm": "mm",
+      "areaMm2": "mm^2",
+      "residualMm": "mm",
+      "normal": "1 (unit)"
+    },
+    "rectangularTubeWall": {
+      "description": "square tube x,y=+-1 mm, z=0/10 mm, 8 nodes, 8 triangles; two open ends",
+      "expectedLoops": 2,
+      "expectedPointsPerLoop": 4,
+      "expectedAreaMm2": 4,
+      "measuredAreaAbsoluteErrorMm2": 0,
+      "measuredPlaneResidualMm": 0,
+      "measuredPerimeterAbsoluteErrorMm": 0,
+      "expectedNormalExample": [0, 0, 1],
+      "outwardField": "undetermined"
+    },
+    "closedShell": {
+      "description": "tetrahedron, 4 nodes, 4 triangles",
+      "expectedCandidates": 0,
+      "expectedRejected": 0,
+      "expectedBoundaryEdgeCount": 0,
+      "measuredClosedShell": true
+    }
+  },
+  "rejectionCases": [
+    "one opening vertex shifted by 0.01 mm in z -> OPENING_LOOP_NONPLANAR (other end loop still a candidate)",
+    "boundary vertex degree not 2 (two triangles sharing one vertex) -> OPENING_LOOP_BOUNDARY_BRANCH",
+    "undirected edge incidence 3 -> OPENING_LOOP_NONMANIFOLD_EDGE",
+    "same coordinates under distinct node ids (un-welded seam) -> OPENING_LOOP_UNWELDED_SEAM, no candidates",
+    "self-intersecting bow-tie boundary polygon -> OPENING_LOOP_SELF_INTERSECTING",
+    "throws: NaN/Infinity node, nodes length not multiple of 3, triangle with repeated index, out-of-range index, non-integer index, empty triangle array, toleranceMm 0 / negative / NaN"
+  ],
+  "canonicalIdentity": {
+    "claim": "triangle array order, winding and cycle start do not change the candidate id or area",
+    "verifiedInTest": "tests/opening-loop-candidates.test.mjs"
+  },
+  "commands": [
+    {
+      "command": "node --test tests/opening-loop-candidates.test.mjs tests/fluid-opening-caps.test.mjs",
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --test tests/fluid-opening-caps-cad.test.mjs",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "note": "existing CAD reference; not modified by this work"
+    },
+    {
+      "command": "node --test tests/internal-fluid-step-connectivity-cad.test.mjs",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "note": "existing CAD regression; not modified by this work"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "tests": 19,
+      "pass": 19,
+      "fail": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "pass": true,
+      "note": "5 declaration files type-check"
+    },
+    {
+      "command": "git diff --check",
+      "pass": true,
+      "exitCode": 0
+    },
+    {
+      "command": "node --test tests/internal-fluid.test.mjs",
+      "status": "not run to completion",
+      "reason": "requires generated public/fem-kernel.wasm in this fresh worktree; ENOENT, not an assertion failure"
+    }
+  ],
+  "notVerified": [
+    "real STEP opening-wire extraction or OCC wire recognition",
+    "local lid generation or any fluid-volume joining",
+    "solver/fluid coupling, GUI, API, Worker or published HTTPS path",
+    "performance on large boundaries (self-intersection check is O(n^2) in loop length)",
+    "non-exact coincident-coordinate seams (only exactly equal coordinates are refused)"
+  ],
+  "parentTaskStatus": "CFDPORT1 stays building; arbitrary wire recognition, local lids, general volume joins, published Worker and physical accuracy remain open"
+}
