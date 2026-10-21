@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T04:34:46.986Z",
+  "updatedAt": "2026-10-21T05:00:33.244Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-21",
@@ -1361,9 +1361,9 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-21: 準備済みTet4の共通host/WASM入力と変位・反力・収支検証を実装しPR #165へ。入力hash競合と非対応依存材料の受理をレビューで修正。実WASMは確認、実host/Linux CIは確認中。本番native経路と条件転送は未完。",
+      "lastUpdate": "2026-10-21: 準備済みTet4の共通host/WASM入力と変位・反力・収支検証を実装しPR #165へ。入力hash競合と非対応依存材料の受理をレビューで修正。実WASMを確認し、実host/Linux CIの一致も公開条件にした。本番native経路と条件転送は未完。",
       "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md; docs/evidence/2026-10-21-native-tet4-prepared-record.json",
-      "lastUpdateEn": "2026-10-21: PR #165 adds prepared Tet4 host/WASM input, displacement, reactions and balance. Review fixed a hash race and unsupported dependent materials. Actual WASM verified; host/Linux CI pending. Production native integration and condition transfer remain open.",
+      "lastUpdateEn": "2026-10-21: PR #165 adds prepared Tet4 host/WASM input, displacement, reactions and balance. Review fixed a hash race and unsupported dependent materials. Actual WASM verified; actual host/Linux parity is also a publication gate. Production native integration and condition transfer remain open.",
       "review": {
         "status": "merged",
         "pr": 165,
