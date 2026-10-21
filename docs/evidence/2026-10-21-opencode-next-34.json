@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "workOrder": "34-P3",
+  "pr": 131,
+  "status": "verified-local-awaiting-review",
+  "baseSha": "f0c9accf000731193fd279e86e7aef4321283558",
+  "headSha": "1b0a25c71bd50ee3d6777a03f55862e598b9fe31",
+  "branch": "codex/opencode-p3",
+  "scope": "Concurrent start() calls that share one requestId no longer let a competing (rejected) start replace the accepted job's startupDigest or jobId. Ownership is reserved before the first async input stat/read and bound to the job that owns it; store schema is unchanged.",
+  "changedFiles": [
+    "scripts/analysis-job-service.mjs",
+    "tests/analysis-job-service.test.mjs",
+    "docs/evidence/2026-10-21-opencode-next-34.json"
+  ],
+  "design": {
+    "reservation": "requestId -> {requestId,digest,jobId,claims,waiters}; created before the first async stat/read, never replaced while claimed",
+    "sameConditionsConcurrent": "claims the same reservation; existing src/analysis-jobs.js requestId+fingerprint idempotency still returns one jobId and starts execute at most once",
+    "differentConditionsInFlight": "waits for the in-flight claim to bind a job (ANALYSIS_JOB_REQUEST_CONFLICT) or to be released, then claims; never overwrites the other claim",
+    "differentConditionsOwned": "explicit ANALYSIS_JOB_REQUEST_CONFLICT before any input read",
+    "digestBinding": "onRecord resolves the digest from reservationsByJobId(jobId); the first `running` record emitted inside the synchronous jobs.start call uses the call's own startingReservation",
+    "rejectedRequestCleanup": "a rejected request only decrements its shared claim; it never deletes or mutates another request's reservation, digest or jobId",
+    "release": "forgetReservation(jobId) removes the reservation and its requestId entry only when the map still holds that same object",
+    "close": "drops unowned, unclaimed reservations; owned reservations stay until their terminal record is released",
+    "failureOnly": "when every claimant fails before owning a job, the reservation is deleted; distinct requestId failures do not grow the map",
+    "storeSchema": "unchanged: schemaVersion 1, optional startupDigest, maxRecords 256, maxRecordBytes 8192, no raw paths or result arrays"
+  },
+  "counterexample": {
+    "requestId": "race-01",
+    "operation": "mesh",
+    "size": 5,
+    "aInput": "existing synthetic box fixture (absolute temp path)",
+    "bInput": "non-existent absolute temp path",
+    "worker": "injected process worker factory that throws immediately (synthetic worker startup failure)",
+    "beforeFix": [
+      {"order": "A,B", "aStatus": "fulfilled", "bStatus": "rejected", "records": 1, "workerStarts": 1, "persistedDigestMatchesA": false, "persistedDigestMatchesB": true, "bDigestRecords": 1, "restartA": "ANALYSIS_JOB_REQUEST_CONFLICT", "restartB": "ANALYSIS_JOB_REQUEST_RESTORED", "resultAvailable": false},
+      {"order": "B,A", "aStatus": "fulfilled", "bStatus": "rejected", "records": 1, "workerStarts": 1, "persistedDigestMatchesA": true, "persistedDigestMatchesB": false, "bDigestRecords": 0, "restartA": "ANALYSIS_JOB_REQUEST_RESTORED", "restartB": "ANALYSIS_JOB_REQUEST_CONFLICT", "resultAvailable": false}
+    ],
+    "beforeFixNote": "A-first persisted the B digest (review counterexample reproduced: matchesA false / matchesB true, restart decisions reversed). B-first only appeared correct before the fix because A overwrote B's in-flight slot.",
+    "afterFix": [
+      {"order": "A,B", "aStatus": "fulfilled", "bStatus": "rejected", "records": 1, "workerStarts": 1, "persistedDigestMatchesA": true, "persistedDigestMatchesB": false, "bDigestRecords": 0, "restartA": "ANALYSIS_JOB_REQUEST_RESTORED", "restartB": "ANALYSIS_JOB_REQUEST_CONFLICT", "resultAvailable": false},
+      {"order": "B,A", "aStatus": "fulfilled", "bStatus": "rejected", "records": 1, "workerStarts": 1, "persistedDigestMatchesA": true, "persistedDigestMatchesB": false, "bDigestRecords": 0, "restartA": "ANALYSIS_JOB_REQUEST_RESTORED", "restartB": "ANALYSIS_JOB_REQUEST_CONFLICT", "resultAvailable": false}
+    ],
+    "afterFixNote": "Both dispatch orders: accepted job's record digest is A, 0 records match B, restart classifies A as RESTORED and B as CONFLICT; restored resultAvailable=false."
+  },
+  "regressionTestsAdded": [
+    "concurrent starts never persist the competing startup digest for the accepted job (A/B orders, digest attribution, record count, restart verdicts, worker count)",
+    "same-condition concurrent retries share one job while changed conditions are refused before any read (same jobId, worker starts max 1, conflict code, release then re-start)",
+    "starts that fail before owning a job release their reservation; 32 failures do not block the same request ID (32 distinct ENOENT failures, 0 records, normal start/release with the last failed requestId)",
+    "a legacy record without a startup digest stays restored-only and never starts a worker (RESTORED, resultAvailable=false, worker starts 0)"
+  ],
+  "verification": {
+    "node": "v24.11.1",
+    "targetCommand": "node --test tests/analysis-job-service.test.mjs tests/analysis-job-store.test.mjs tests/mcp-restored-request-id.test.mjs tests/analysis-jobs.test.mjs",
+    "baseline": {"total": 28, "passed": 27, "failed": 0, "skipped": 1},
+    "target": {"total": 32, "passed": 31, "failed": 0, "skipped": 1},
+    "targetSkipReason": "Windows symlink unavailable (existing 'a symlinked record is not followed' test)",
+    "preFixWithNewTests": {"command": "node --test tests/analysis-job-service.test.mjs", "total": 8, "passed": 6, "failed": 2, "failure1": "persisted record startupDigest matched B instead of A", "failure2": "changed conditions raised the generic 'Request ID already used with different input' instead of ANALYSIS_JOB_REQUEST_CONFLICT"},
+    "postFixServiceOnly": {"total": 8, "passed": 8, "failed": 0, "skipped": 0},
+    "contractsCommand": "npm run check:contracts",
+    "contractsResult": "Contract declarations type-check (5 declaration files), exit 0",
+    "diffCheckCommand": "git diff --check",
+    "diffCheckResult": "clean, exit 0",
+    "notRun": "full npm test suite and browser/public HTTPS checks were not run for this one-blocker repair"
+  },
+  "measuredValues": [
+    "same-condition concurrent 2 starts: identical jobId, process worker factory invocations 1",
+    "A/B concurrent starts: accepted jobs 1, rejected starts 1, persisted records 1, records matching B digest 0",
+    "A/B concurrent start worker factory invocations 1 in both orders",
+    "restart after A/B race: A conditions -> ANALYSIS_JOB_REQUEST_RESTORED, B conditions -> ANALYSIS_JOB_REQUEST_CONFLICT, resultAvailable false",
+    "32 all-failed starts with distinct requestIds: persisted records 0, worker factory invocations 0, then requestId 'fail-31' start/release/re-start succeeded",
+    "record bytes with digest remain <= 8192"
+  ],
+  "limits": [
+    "A waiter with different startup conditions waits for the in-flight claimant to own a job or release; a filesystem stat/read that never settles would delay that waiter (no timeout added in this repair)",
+    "Digest is still not a file-content hash and does not detect same-path input changes",
+    "No automatic resumption, result restoration, event/artifact restoration or re-analysis",
+    "Verified locally on Node 24.11.1 only; no browser, public HTTPS, or full-suite verification",
+    "P3 parent remains incomplete; completePreflight remains false"
+  ],
+  "boardProposal": "No board edit in this repair. Review focus: concurrent requestId ownership (reservation/claim), rejected-request cleanup, release/close headroom, no store schema change."
+}

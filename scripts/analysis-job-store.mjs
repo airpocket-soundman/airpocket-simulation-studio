@@ -19,22 +19,25 @@ export function validateJobStoreDirectory(directory){
  if(parse(full).root===full)throw Error('--job-store must not be a filesystem root');
  return full;
 }
-function toRecord(view,{requestId}={}){
+function toRecord(view,{requestId,startupDigest}={}){
  const error=view.error&&typeof view.error==='object'?{code:clip(view.error.code),message:clip(view.error.message)}:undefined;
  const executionErrorCode=clip(view.executionError?.code);
  const result=view.result&&typeof view.result==='object'&&Number.isSafeInteger(view.result.outputBytes)&&typeof view.result.outputSha256==='string'&&/^[0-9a-f]{64}$/.test(view.result.outputSha256)?{outputBytes:view.result.outputBytes,outputSha256:view.result.outputSha256}:undefined;
- return {schemaVersion:1,kind:'analysis-job-record',jobId:view.jobId,inputRevision:view.inputRevision,operation:view.operation,origin:view.origin,state:view.state,...(requestId?{requestId}:{}),startedAt:view.startedAt,updatedAt:view.updatedAt,executionSettled:view.executionSettled===true,...(error?{error}:{}),...(executionErrorCode?{executionErrorCode}:{}),...(result?{resultDigest:result}:{})};
+ // startupDigest is an optional, additive field: the SHA-256 of the canonical startup
+ // condition descriptor, never the file contents or the raw paths themselves.
+ return {schemaVersion:1,kind:'analysis-job-record',jobId:view.jobId,inputRevision:view.inputRevision,operation:view.operation,origin:view.origin,state:view.state,...(requestId?{requestId}:{}),...(typeof startupDigest==='string'&&/^[0-9a-f]{64}$/.test(startupDigest)?{startupDigest}:{}),startedAt:view.startedAt,updatedAt:view.updatedAt,executionSettled:view.executionSettled===true,...(error?{error}:{}),...(executionErrorCode?{executionErrorCode}:{}),...(result?{resultDigest:result}:{})};
 }
 function validateRecord(value,name){
  const fail=reason=>{throw Error(reason);};
  if(!value||typeof value!=='object'||Array.isArray(value))fail('record is not an object');
- const allowed=new Set(['schemaVersion','kind','jobId','inputRevision','operation','origin','state','requestId','startedAt','updatedAt','executionSettled','error','executionErrorCode','resultDigest']);
+ const allowed=new Set(['schemaVersion','kind','jobId','inputRevision','operation','origin','state','requestId','startupDigest','startedAt','updatedAt','executionSettled','error','executionErrorCode','resultDigest']);
  for(const key of Object.keys(value))if(!allowed.has(key))fail('unknown field '+key);
  if(value.schemaVersion!==1||value.kind!=='analysis-job-record')fail('unsupported schema');
  if(typeof value.jobId!=='string'||!idPattern.test(value.jobId)||value.jobId!==name)fail('job ID does not match file name');
  if(typeof value.inputRevision!=='string'||!value.inputRevision||value.inputRevision.length>200)fail('invalid inputRevision');
  if(!['mesh','elastic'].includes(value.operation)||!['gui','api'].includes(value.origin)||!states.has(value.state))fail('invalid operation, origin or state');
  if(value.requestId!==undefined&&(typeof value.requestId!=='string'||!value.requestId||value.requestId.length>200))fail('invalid requestId');
+ if(value.startupDigest!==undefined&&(typeof value.startupDigest!=='string'||!/^[0-9a-f]{64}$/.test(value.startupDigest)))fail('invalid startupDigest');
  if(!isTime(value.startedAt)||!isTime(value.updatedAt)||typeof value.executionSettled!=='boolean')fail('invalid timestamps');
  if(value.error!==undefined&&(!value.error||typeof value.error!=='object'||Object.keys(value.error).some(k=>!['code','message'].includes(k))||value.error.code!==undefined&&typeof value.error.code!=='string'||value.error.message!==undefined&&typeof value.error.message!=='string'))fail('invalid error');
  if(value.executionErrorCode!==undefined&&typeof value.executionErrorCode!=='string')fail('invalid executionErrorCode');

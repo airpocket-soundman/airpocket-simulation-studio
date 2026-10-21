@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join,sep} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {BoxGeometry} from 'three';
-import {createHeadlessJobService} from '../scripts/analysis-job-service.mjs';
+import {createHeadlessJobService,startupConditionDigest} from '../scripts/analysis-job-service.mjs';
 import {createJobStore,jobStoreLimits,validateJobStoreDirectory,INTERRUPTED_CODE,restoredJobView} from '../scripts/analysis-job-store.mjs';
 
 function project(){
@@ -31,6 +31,7 @@ test('record round trip: atomic metadata-only record, restored as metadata after
   const raw=await readFile(join(store,files[0]),'utf8'),rec=JSON.parse(raw);
   assert.ok(Buffer.byteLength(raw)<=jobStoreLimits.maxRecordBytes);
   assert.equal(rec.state,'succeeded');assert.equal(rec.requestId,'rt-1');assert.equal(rec.inputRevision,started.inputRevision);
+  assert.match(rec.startupDigest,/^[0-9a-f]{64}$/);assert.equal(rec.startupDigest,startupConditionDigest({path,outputPath}));
   assert.match(rec.resultDigest.outputSha256,/^[0-9a-f]{64}$/);assert.ok(rec.resultDigest.outputBytes>0);
   assert.ok(!('result' in rec)&&!raw.includes('positions')&&!raw.includes(outputPath)&&!raw.includes(path),'no result body, project data or paths');
   await first.closeAsync();
@@ -202,4 +203,32 @@ test('escape-heavy restored metadata uses byte-bounded pages with a progressing 
   }while(offset!==null);
   assert.deepEqual(seen,Array.from({length:20},(_,index)=>id(index+1)));
  }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('startup digest is order-independent, additive and validated while legacy records still load',async()=>{
+ const dir=await temp(),store=join(dir,'store');await mkdir(store);const restore=quiet();
+ try{
+  const input=join(dir,'input.json'),output=join(dir,'output.json'),digest=startupConditionDigest({path:input,outputPath:output});
+  assert.match(digest,/^[0-9a-f]{64}$/);
+  // omitted fields use the same defaults as a real start, and object key order does not matter.
+  assert.equal(startupConditionDigest({path:input,outputPath:output,operation:'solve',size:5,method:'wasm-pcg',adaptive:false,includeFields:false}),digest);
+  assert.equal(startupConditionDigest({includeFields:false,adaptive:false,method:'wasm-pcg',size:5,operation:'solve',outputPath:output,path:input}),digest);
+  for(const change of [{method:'pcg'},{size:6},{operation:'mesh'},{adaptive:true},{includeFields:true},{outputPath:join(dir,'other.json')},{path:join(dir,'other.json')}])assert.notEqual(startupConditionDigest({path:input,outputPath:output,...change}),digest);
+  await writeFile(join(store,id(1)+'.json'),JSON.stringify(record(1,{requestId:'digest-01',startupDigest:digest,state:'succeeded',executionSettled:true})));
+  await writeFile(join(store,id(2)+'.json'),JSON.stringify(record(2,{requestId:'legacy-02'})));
+  await writeFile(join(store,id(3)+'.json'),JSON.stringify(record(3,{requestId:'invalid-03',startupDigest:'not-a-digest'})));
+  await writeFile(join(store,id(4)+'.json'),JSON.stringify(record(4,{requestId:'unknown-04',startupConditions:digest})));
+  const service=createHeadlessJobService({jobStore:store});
+  assert.equal(service.get(id(1)).state,'succeeded');
+  assert.equal(service.get(id(2)).state,'interrupted');
+  assert.throws(()=>service.get(id(3)),/Unknown job/);
+  assert.throws(()=>service.get(id(4)),/Unknown job/);
+  assert.equal(service.jobStoreDiagnostics().filter(d=>d.code==='ANALYSIS_JOB_STORE_CORRUPT_RECORD').length,2);
+  const kept=await readFile(join(store,id(1)+'.json'),'utf8');
+  assert.equal(JSON.parse(kept).startupDigest,digest);
+  assert.ok(!kept.includes(input)&&!kept.includes(output),'only the digest, never the raw paths');
+  assert.equal(JSON.parse(await readFile(join(store,id(2)+'.json'),'utf8')).startupDigest,undefined,'legacy classification stays compatible');
+  await service.closeAsync();
+ }finally{restore();await rm(dir,{recursive:true,force:true});}
 });
