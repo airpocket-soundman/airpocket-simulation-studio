@@ -7,9 +7,9 @@
   "sourceSha256": {
     "native/native-proof/main.cpp": "17cd4c379a1c2841e8caaac4b611e2359a80dcf1cfc461970ddd7a3a2922bb94",
     "native/native-proof/tet4-record.hpp": "b46ced4ea953eb3410ca2d946b1980f61199f8abb9520e36984a87f5cfbb17c1",
-    "scripts/native-tet4-contract.mjs": "a69416310891e1e528d0b559f820b7a9caa4468ec136c203fde3c680b25d5314",
+    "scripts/native-tet4-contract.mjs": "5737d2be85cccc840f7ce6267195efddd6d2d9eaf7a4afba4148d3ca640c4e44",
     "scripts/check-native-proof.mjs": "24fcbfea23243d235596fc199420679041945bd5fd11ec3b59f9c89a1f24e6ca",
-    "tests/native-tet4-contract.test.mjs": "4a4e7e66884fbcdbeec2656bd89d7289f6f1e36596dfa15dcca61ea2548ad3d5",
+    "tests/native-tet4-contract.test.mjs": "529da7c5b55f9dd9d1803945b2d958b4de188d7b038178b816d1f681319d2359",
     "tests/fixtures/native-tet4-record.mjs": "5600e6b8acff6d0ce06a8941fac8f956cd31fe33f519cd32abd0982db35169c0"
   },
   "implementation": {
@@ -26,7 +26,15 @@
       "forceN": 1000000000000,
       "youngPa": 1000000000000000
     },
-    "nativeRuntimeGate": "Linux native-proof CI: actual host executable header + same-source v1/v2 parity; unrun locally"
+    "nativeRuntimeGate": "Linux native-proof CI: actual host executable header + same-source v1/v2 parity; unrun locally",
+    "materialAllowlist": [
+      "youngModulus",
+      "poissonRatio",
+      "source",
+      "grade",
+      "notes"
+    ],
+    "unsupportedPhysics": "All material dependence, temperature validity/evaluation, rate/failure/phase and unknown material/study fields refused"
   },
   "environment": {
     "platform": "win32",
@@ -47,8 +55,8 @@
         "sourceInputRevision": "sha256:5afb991d7ae64d9e0ff506489ba94f78da2339f16d3db1b502e63fd3b8432012",
         "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
         "recordRevision": "sha256:6eb62236dacfb5899a03ed9e1dc7fd30f3b9d52c69fd736f98d3d3bb056feebb",
-        "topDisplacementM": 0.000007499999999999996,
-        "expectedUniformBarDisplacementM": 0.0000075,
+        "topDisplacementM": 7.499999999999996e-06,
+        "expectedUniformBarDisplacementM": 7.5e-06,
         "appliedN": [
           0,
           0,
@@ -68,8 +76,8 @@
         "sourceInputRevision": "sha256:5afb991d7ae64d9e0ff506489ba94f78da2339f16d3db1b502e63fd3b8432012",
         "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
         "recordRevision": "sha256:49328a84311eb2f755343b69c466457a2d835d54b66a7f357a20c98f378453cf",
-        "topDisplacementM": -0.000007499999999999996,
-        "expectedUniformBarDisplacementM": -0.0000075,
+        "topDisplacementM": -7.499999999999996e-06,
+        "expectedUniformBarDisplacementM": -7.5e-06,
         "appliedN": [
           0,
           0,
@@ -110,7 +118,7 @@
         "sourceInputRevision": "sha256:08e949dce763283ee30012c77eea3049503ccc16d45740813476fbf4910bf391",
         "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
         "recordRevision": "sha256:752d94d37e19f1d2463e4177fac6769004c530c5bdf1d81e8e7d82a31bcad2b9",
-        "topDisplacementM": 0.000006994513592217928,
+        "topDisplacementM": 6.994513592217928e-06,
         "expectedUniformBarDisplacementM": null,
         "appliedN": [
           0,
@@ -137,8 +145,8 @@
     },
     "contractsAndDocs": {
       "command": "AIRPOCKET_NATIVE_PROOF_WASM=<owned WASM loader> node --test tests/native-tet4-contract.test.mjs tests/native-proof-contract.test.mjs tests/docs.test.mjs",
-      "total": 12,
-      "pass": 9,
+      "total": 13,
+      "pass": 10,
       "skip": 3,
       "fail": 0,
       "skips": "Actual host/WASM legacy parity, prepared parity and malformed-diagnostic parity need actual host executable"

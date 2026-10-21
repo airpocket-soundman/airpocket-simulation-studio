@@ -25,6 +25,13 @@ test('prepared contract refuses unsupported physics, wrong units, indices, degen
  await assert.rejects(createNativeTet4Record({...f,input:{...f.input,materialProperties:{...f.input.materialProperties,plasticity:{}}}}));
 });
 function syntheticOutput(record,recordRevision){return {schemaVersion:2,kind:record.kind,engine:'mfem-native',runtime:'host-native',mfemVersion:41000,recordRevision,sourceInputRevision:record.sourceInputRevision,meshRevision:record.meshRevision,units:'m-N',nodeCount:8,elementCount:6,converged:true,iterations:1,verifiedResidual:0,displacementM:Array(24).fill(0),reactionsN:[0,0,-75,...Array(21).fill(0)],appliedN:[0,0,75],balanceN:[0,0,0]};}
+test('saved material dependence and evaluation envelopes cannot be silently discarded',async()=>{
+ const f=await nativeTet4Fixture();
+ const temperatureTable=[{temperature:0,youngModulus:1e9,poissonRatio:0},{temperature:100,youngModulus:3e9,poissonRatio:0}];
+ for(const patch of [{dependence:{elasticTemperatureTable:temperatureTable}},{dependence:{rateDependent:true}},{dependence:{strainRateMin:1}},{temperatureMin:0},{temperatureMax:100},{phaseChange:{latentHeat:1}},{density:1000},{fractureData:null}])await assert.rejects(createNativeTet4Record({...f,input:{...f.input,materialProperties:{...f.input.materialProperties,...patch}}}));
+ for(const key of ['materialTemperature','temperature','referenceTemperature'])await assert.rejects(createNativeTet4Record({...f,input:{...f.input,study:{...f.input.study,[key]:20}}}));
+ const accepted=await createNativeTet4Record({...f,input:{...f.input,materialProperties:{...f.input.materialProperties,source:'constant synthetic reference',grade:'synthetic',notes:'No temperature or rate evaluation'}}});assert.equal(accepted.youngPa,2e9);
+});
 test('result contract refuses runtime substitution, wrong identity, nonfinite fields and force imbalance',async()=>{
  const {record}=await nativeTet4Fixture(),{recordRevision}=await serializeNativeTet4Record(record),out=syntheticOutput(record,recordRevision),options={record,recordRevision,runtime:'host-native'};verifyNativeTet4Output(out,options);
  for(const patch of [{runtime:'wasm-development-check'},{recordRevision:'fake'},{meshRevision:'fake'},{nodeCount:9},{units:'mm-N'},{converged:false},{verifiedResidual:NaN},{verifiedResidual:2e-8},{displacementM:Array(24).fill(Infinity)},{appliedN:[0,0,999]},{balanceN:[0,0,10]}])assert.throws(()=>verifyNativeTet4Output({...out,...patch},options));

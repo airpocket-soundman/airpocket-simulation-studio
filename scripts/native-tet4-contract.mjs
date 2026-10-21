@@ -39,7 +39,8 @@ export async function createNativeTet4Record({input,mesh,fixedNodes,forces}={}){
  const validation=createStudioApi();validation.loadProject(input);input=validation.exportProject();
  requireValue(object(input)&&input.version===1&&input.study?.kind==='structural','Native Tet4 supports saved structural input only');
  const m=input.materialProperties;
- requireValue(object(m)&&!['orthotropic','plasticity','hyperelastic'].some(k=>m[k]!==undefined)&&!['modalAnalysis','thermalStress'].some(k=>input.study[k])&&!input.study.gravityEnabled&&!input.study.gravity?.some(x=>x!==0),'Unsupported native Tet4 physics; gravity/temperature/advanced materials are not transferred');
+ const materialKeys=['youngModulus','poissonRatio','source','grade','notes'],studyKeys=['kind','gravityEnabled','gravity','modalAnalysis','thermalStress'];
+ requireValue(object(m)&&Object.keys(m).every(k=>materialKeys.includes(k))&&Object.keys(input.study).every(k=>studyKeys.includes(k))&&!['modalAnalysis','thermalStress'].some(k=>input.study[k])&&!input.study.gravityEnabled&&!input.study.gravity?.some(x=>x!==0),'Unsupported native Tet4 physics; only constant isotropic material is transferred (no temperature, rate dependence, failure or phase models)');
  const r={schemaVersion:2,kind:'prepared-isotropic-tet4',units:'mm-Pa-N',sourceInputRevision:await getProjectRevision(input),meshRevision:await getProjectRevision(mesh),youngPa:m.youngModulus,poissonRatio:m.poissonRatio,nodes:structuredClone(mesh.nodes),tets:structuredClone(mesh.tets),fixedNodes:structuredClone(fixedNodes),forces:structuredClone(forces)};
  return validateNativeTet4Record(r);
 }

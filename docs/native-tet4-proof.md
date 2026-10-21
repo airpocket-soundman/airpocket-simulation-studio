@@ -17,3 +17,5 @@ C++はmm→mを境界で1回だけ行い既存solve_elasticを使用。独立剛
 合成参照は平行移動した20×15×60mm棒、E2e9Pa、nu0、+75/-75/0N。75Nの理論伸び7.5e-6m。許容値は変位1e-10m＋相対1e-7、収支1e-8N＋相対1e-7、残差2e-8未満。追加nu0.3のWASM例は収束のみ確認する。[local証拠](evidence/2026-10-21-native-tet4-prepared-record.json)でWASM実行とlocal実host未検証を分離する。
 
 P6全体は未完。任意保存入力準備、CAD条件転送、広い物理/材料、メッシュ品質/物理妥当性、製品backendは残る。runtime一致だけで一般的な物理精度を保証しない。
+
+材料の許可keyはyoungModulus、poissonRatio、source、grade、notesだけ。dependence、有効温度、density、破壊、将来の相モデルを含む他keyは全て拒否する。studyもkind、無効なmodalAnalysis/thermalStress、無効なgravityと任意の零gravityベクトルだけを許可し、温度評価や未知keyを黙って落とさない。
