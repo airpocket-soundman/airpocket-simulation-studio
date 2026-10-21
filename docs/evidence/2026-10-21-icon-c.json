@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-21",
+  "selection": "C: 3D curved surface with blue-to-red heatmap, chosen by user",
+  "generation": "Built-in image generation; edited selected concept C into one transparent isolated mark.",
+  "prompt": "Extract only concept C, preserve curved geometry/camera/heatmap, transparent square, no labels or tile, reduce contours, precise edges and no exterior glow.",
+  "sourceImage": "public/icons/airpocket-master.png",
+  "derivatives": "Pillow LANCZOS resizing and ICO encoding only; no creative changes during format conversion.",
+  "assets": {
+    "airpocket-192.png": {
+      "bytes": 24313,
+      "sha256": "87e7fc381ca2c130b3df96bd0ce773730d9fff117c1c442fc2f42b2398d565c7"
+    },
+    "airpocket-512.png": {
+      "bytes": 125884,
+      "sha256": "7df7e45d1b5e50b85aa8fd4dced31548218277ff804bd58157269e05b258ce3d"
+    },
+    "airpocket-master.png": {
+      "bytes": 621997,
+      "sha256": "a13aaaf391d0fcd201f52249a306169b0f9ded7bff1295c45ce90075b4397b83"
+    },
+    "apple-touch-icon.png": {
+      "bytes": 21808,
+      "sha256": "2d28ed1956638914c9aefb0372d70abb18c38105438ca5768578d8d37d926aa5"
+    },
+    "favicon-16.png": {
+      "bytes": 632,
+      "sha256": "d69940a2819448e98401e79d7bd5167ccce383c33a75db7911f82f832b262c7f"
+    },
+    "favicon-32.png": {
+      "bytes": 1655,
+      "sha256": "252bcbb21f758e6a677aeee4dac6dce59b7b0afddaee9bac18571634826e6539"
+    },
+    "favicon.ico": {
+      "bytes": 65199,
+      "sha256": "f075da87e565bd2c97f3391cc0f660cc76df5f301385918f6943b60f2355787f"
+    }
+  },
+  "verification": {
+    "localBrowser": {
+      "appIconLoaded": true,
+      "appIconCssPx": 40,
+      "boardIconLoaded": true,
+      "boardIconCssPx": 36,
+      "appScreenshot": ".qa/icon-c/local-app.png"
+    },
+    "assets": "Both page icon/manifest links returnedHTTP200; PNG dimensions and alpha, ICO16/32/48/64 frames verified",
+    "existingTests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "diffCheck": "passed"
+  }
+}
