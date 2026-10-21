@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "workOrder": "03-REG2",
+  "id": "opencode-reg2",
+  "base": {
+    "branch": "codex/opencode-reg2",
+    "originMainSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "worktree": "D:/github/airpocket-soundman/studio-opencode-reg2",
+    "preservedRootEdits": false
+  },
+  "scope": {
+    "implemented": "Limited GUI panel for the existing exact spherical sector API (src/ui/spherical-region-ui.js) plus minimal main.js mount/restore hook, module-layer registration, tests and REG2 doc updates.",
+    "notImplemented": [
+      "General UV surfaces",
+      "Spherical math/CAD/semantic API/MCP/save-restore (already implemented, untouched)",
+      "Fluid, STL, multi-volume, spherical thermalContact",
+      "New MCP tool or new public studio API method"
+    ]
+  },
+  "changedFiles": [
+    "src/ui/spherical-region-ui.js (new)",
+    "tests/ui-spherical-region.test.mjs (new)",
+    "src/main.js",
+    "src/module-layers.json",
+    "docs/reg2-curved-regions.md",
+    "docs/en/reg2-curved-regions.md"
+  ],
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass",
+      "observed": "added 22 packages, 0 vulnerabilities"
+    },
+    {
+      "command": "node --test tests/ui-spherical-region.test.mjs tests/spherical-cad.test.mjs tests/spherical-wiring.test.mjs",
+      "result": "pass",
+      "observed": "tests 13, pass 13, fail 0, skipped 0, duration 15546.129 ms",
+      "notes": "spherical-wiring emitted 4 pre-existing MaxListenersExceededWarning lines from the Worker/socket path; no test skipped or relaxed."
+    },
+    {
+      "command": "node --test tests/ui-spherical-region.test.mjs",
+      "result": "pass",
+      "observed": "tests 7, pass 7, fail 0"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs tests/ui-spherical-region.test.mjs",
+      "result": "pass",
+      "observed": "tests 25, pass 25, fail 0 (new module classified in module-layers.json ui layer)"
+    },
+    {
+      "command": "node --test tests/operation-correspondence-gui.test.mjs tests/ui-analysis-preflight.test.mjs tests/contracts.test.mjs",
+      "result": "pass",
+      "observed": "tests 21, pass 21, fail 0"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "observed": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "observed": "exit 0, no whitespace errors"
+    },
+    {
+      "command": "node --check src/main.js ; node --check src/ui/spherical-region-ui.js",
+      "result": "pass",
+      "observed": "no syntax errors"
+    },
+    {
+      "command": "npx vite build",
+      "result": "pass",
+      "observed": "built in 3.28 s; dist/assets/app-BdclP387.js 1644.40 kB output bundled without import errors"
+    }
+  ],
+  "measurements": {
+    "builtinSphereDisplayTriangles": {
+      "value": 418,
+      "unit": "triangles",
+      "source": "GUI default spec through api.selectSphericalRegion on the built-in sphere (radius 10 mm)"
+    },
+    "exactSphericalAreaMm2": {
+      "value": 157.07963267948966,
+      "unit": "mm2",
+      "formula": "R^2 * deltaLambda * (sin(latitudeMax) - sin(latitudeMin))",
+      "guiApiDifference": "< 1e-9 mm2 (asserted)"
+    },
+    "guiDefaultSpec": {
+      "exactCad": true,
+      "center": [0, 0, 0],
+      "axis": [0, 0, 1],
+      "reference": [1, 0, 0],
+      "radius": 10,
+      "tolerance": 0.01,
+      "latitudeMin": -30,
+      "latitudeMax": 30,
+      "startDegrees": 315,
+      "sweepDegrees": 90
+    },
+    "guiValidation": "blank/non-blank numeric checks reject empty, non-finite and non-integer mesh before any API call; range/frame refusals (zero axis, parallel reference, latitude reversal, radius 0, sweep 361) come from the existing API and leave the saved project JSON byte-identical",
+    "conditionPath": "existing api.addCondition after GUI selection stores conditions[0].sphericalRegion deep-equal to {...spec, mesh:0}"
+  },
+  "verification": {
+    "nodeUnit": "verified",
+    "browser": "unverified: browser.tabs.list returned browser.disconnected (no desktop Chrome connected to this session); JA/EN switch, 390 px width and Tab/Enter were not exercised in a real browser this round"
+  },
+  "unverified": [
+    "Real Chrome: JA->EN->JA label/aria switch, 390 px layout, Tab/Enter keyboard path, older model spec non-residue across model load",
+    "GUI JSON download completion and file-chooser reimport",
+    "Browser mesh/solve (out of scope)",
+    "GUI result equality against a real Worker run"
+  ],
+  "blockers": [
+    "No connected desktop browser in this session, so the real-Chrome acceptance steps could not be run."
+  ],
+  "progressProposal": {
+    "id": "REG2",
+    "state": "building (unchanged; src/progress.json not modified)",
+    "suggestedNote": "Spherical sector: limited GUI panel added and wired to the existing selectSphericalRegion; Node tests cover blank refusal, restore/reset, draft retention on failure, reversible JA/EN labels and API parity (418 triangles, 157.07963267948966 mm2). Real-Chrome GUI/JA-EN/390px and general UV surfaces remain open."
+  }
+}
