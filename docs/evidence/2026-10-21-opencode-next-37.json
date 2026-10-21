@@ -1,0 +1,108 @@
+{
+  "task": "37-REG2",
+  "pr": 141,
+  "prHeadRef": "codex/opencode-reg2",
+  "reviewedHead": "7adf7f44f43db2c76be1f3591cff58a67bdf0e46",
+  "baseCommit": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "originMainObserved": "b1ee3ac07c68b8983604a907dc2cec65cab23a10",
+  "date": "2026-10-21",
+  "defect": {
+    "summary": "run()/fail() wrote the already translated status into the DOM, so the real i18n scanner stored English as the original text and JP-after-EN stayed English.",
+    "counterExample": "EN start -> successful spherical selection -> switch JP -> next scan keeps 'Spherical region selected.'",
+    "rootCause": "src/ui/spherical-region-ui.js:63 (review time) used tr() for status.textContent; installLanguage() records nodeValue as source when it differs from the previous output, so the EN output became the source."
+  },
+  "change": {
+    "files": [
+      "src/ui/spherical-region-ui.js",
+      "tests/ui-spherical-region-scanner.test.mjs",
+      "docs/evidence/2026-10-21-opencode-next-37.json"
+    ],
+    "behavior": "Status text is always produced in the Japanese source form and the installed scanner owns translation; the raw failure message is appended untranslated. Only status text nodes changed; aria-label/aria-invalid/aria-errormessage, drafts, focus, spec and selection callback count are untouched.",
+    "notChanged": [
+      "src/main.js",
+      "src/i18n.js (no scanner change needed; other UIs unaffected)",
+      "geometry/area/solver/API"
+    ]
+  },
+  "statusStrings": {
+    "success": {
+      "en": "Spherical region selected.",
+      "ja": "球面の数値領域を選択しました。"
+    },
+    "failure": {
+      "en": "Selection failed. The draft was retained. synthetic selection failure",
+      "ja": "選択に失敗しました。入力は保持しています。 synthetic selection failure",
+      "note": "Only the fixed sentence is translated; the appended raw error text stays raw."
+    },
+    "blankRadius": {
+      "en": "Enter every field as a non-blank finite number.",
+      "ja": "全ての項目を空欄でない有限の数値で入力してください。"
+    },
+    "ariaLabelRadius": {
+      "en": "Radius (mm)",
+      "ja": "半径（mm）"
+    }
+  },
+  "commands": [
+    {
+      "command": "node --test tests/ui-spherical-region-scanner.test.mjs",
+      "when": "before fix (src reverted to 7adf7f4 content, new test kept)",
+      "tests": 3,
+      "pass": 0,
+      "fail": 3,
+      "skipped": 0,
+      "observed": [
+        "success: EN after JP switch stayed 'Spherical region selected.'",
+        "failure: EN after JP switch stayed 'Selection failed. The draft was retained. synthetic selection failure'",
+        "blank radius: EN after JP switch stayed 'Enter every field as a non-blank finite number.'"
+      ]
+    },
+    {
+      "command": "node --test tests/ui-spherical-region-scanner.test.mjs",
+      "when": "after fix",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --test tests/i18n.test.mjs tests/ui-spherical-region.test.mjs tests/ui-spherical-region-scanner.test.mjs",
+      "when": "after fix",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "exit 0"
+    }
+  ],
+  "fixture": {
+    "kind": "synthetic",
+    "mesh": 0,
+    "radiusMm": 10,
+    "latitudeDeg": [-30, 30],
+    "startDegrees": 315,
+    "sweepDegrees": 90,
+    "toleranceMm": 0.01,
+    "center": [0, 0, 0],
+    "axis": [0, 0, 1],
+    "reference": [1, 0, 0],
+    "selectionCallsAfterRoundTrip": 1,
+    "specUnchangedAfterRoundTrip": true
+  },
+  "testMethod": "tests/ui-spherical-region-scanner.test.mjs imports the real installLanguage() from src/i18n.js and drives its real language-switch handlers. The test supplies only a minimal DOM (text nodes, attributes) and a manual MutationObserver flush; original-text tracking, dictionary lookup and round trips are the production scanner code, not a translation stub.",
+  "unverified": [
+    "Real Chrome: no browser session was used, so the EN->JP->EN status/aria-label at 390 px and by keyboard is not browser-verified; the evidence is Node plus the real scanner path only.",
+    "Public HTTPS: not checked.",
+    "Screen-reader announcement of role=status is unchanged and untested."
+  ],
+  "selfSha": null
+}

@@ -42,7 +42,8 @@ export function createSphericalRegionUi({host,document:doc=globalThis.document,l
  host.append(select,status);
  const clearMarks=()=>{for(const control of Object.values(fields)){control.removeAttribute?.('aria-invalid');control.removeAttribute?.('aria-errormessage');}};
  // Mark the offending control, expose the message through the shared status line and throw.
- const fail=(control,message)=>{clearMarks();status.textContent=tr(message);if(control){control.setAttribute('aria-invalid','true');control.setAttribute('aria-errormessage',status.id);control.focus?.();}throw Error(tr(message));};
+ // The status keeps the Japanese source; the installed scanner owns its translation.
+ const fail=(control,message)=>{clearMarks();status.textContent=message;if(control){control.setAttribute('aria-invalid','true');control.setAttribute('aria-errormessage',status.id);control.focus?.();}throw Error(tr(message));};
  // Blank or non-finite drafts are refused here, before any API call, so Number('')=0 never leaks.
  const pick=id=>{const control=fields[id],raw=control.value;if(typeof raw!=='string'||!raw.trim()||!Number.isFinite(Number(raw)))fail(control,'全ての項目を空欄でない有限の数値で入力してください。');return Number(raw);};
  function read(){
@@ -60,7 +61,9 @@ export function createSphericalRegionUi({host,document:doc=globalThis.document,l
   }
   const source=spec??defaults;fields['spherical-mesh'].value=String(source.mesh);for(const [prefix,key]of vectors)source[key].forEach((value,i)=>fields[prefix+'-'+'xyz'[i]].value=String(value));for(const [id,key]of scalars)fields[id].value=String(source[key]);clearMarks();status.textContent='';
  }
- async function run(){let parsed;try{parsed=read();}catch{return;}try{await onSelect(parsed.mesh,parsed.spec);status.textContent=tr('球面の数値領域を選択しました。');}catch(error){status.textContent=tr('選択に失敗しました。入力は保持しています。')+' '+error.message;}}
+ // Status text stays in the Japanese source so the installed scanner can translate it back
+ // and forth; the raw failure message is appended untranslated on purpose.
+ async function run(){let parsed;try{parsed=read();}catch{return;}try{await onSelect(parsed.mesh,parsed.spec);status.textContent='球面の数値領域を選択しました。';}catch(error){status.textContent='選択に失敗しました。入力は保持しています。 '+error.message;}}
  select.onclick=run;
  return Object.freeze({read,restore,run});
 }
