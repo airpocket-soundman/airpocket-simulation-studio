@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "status": "completed",
+  "startedAt": "2026-10-21T04:24:01.750Z",
+  "purpose": "bounded diagnostics;not root-fix/default-migration evidence",
+  "nodeOptionsRemoved": true,
+  "cleanupScope": "Owned diagnostic runner only;descendant process-tree termination is not proven",
+  "results": [
+    {
+      "mode": "default",
+      "timedOut": false,
+      "cancelled": false,
+      "code": 0,
+      "signal": null,
+      "cleanupConfirmed": true,
+      "durationMs": 4533,
+      "output": "/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/.qa/wasm-comparison.json.default.json",
+      "status": "completed",
+      "fatalSignatures": [
+        {
+          "allocation": false,
+          "jitPage": false
+        }
+      ]
+    },
+    {
+      "mode": "disabled",
+      "timedOut": false,
+      "cancelled": false,
+      "code": 0,
+      "signal": null,
+      "cleanupConfirmed": true,
+      "durationMs": 4203,
+      "output": "/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/.qa/wasm-comparison.json.disabled.json",
+      "status": "completed",
+      "fatalSignatures": [
+        {
+          "allocation": false,
+          "jitPage": false
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-10-21T04:24:10.597Z",
+  "allPassed": true
+}
