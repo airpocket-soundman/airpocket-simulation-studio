@@ -1,0 +1,159 @@
+{
+  "thermal": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+    "physicalRevision": "sha256:97dc9986eb45145a822128c331fda9a217c86228a92e9e5a8854f3e550a3efec",
+    "kind": "thermal",
+    "fields": [
+      {
+        "id": "temperature",
+        "unit": "degC"
+      },
+      {
+        "id": "heatFlux",
+        "unit": "W/m2"
+      }
+    ],
+    "state": {
+      "field": "temperature",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 3,
+    "snapshotStorage": {
+      "requested": 11,
+      "count": 3,
+      "bytes": 2256,
+      "budgetBytes": 2400,
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": [
+        "objects",
+        "rendering",
+        "observations",
+        "receiver-traces",
+        "peak-memory"
+      ],
+      "warningCount": 1
+    },
+    "physicalTimeSeconds": 10,
+    "interpolated": false,
+    "timeSelection": "stored-frames-only",
+    "storedFrameIndex": 2,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "frames": [],
+    "modes": []
+  },
+  "acoustic": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:d30f8303ea3632d93af8e36a94d9324b5499e7ee545f0ce253848f034ea9f13d",
+    "physicalRevision": "sha256:ca82ae1458cf17f1b31ed90afe7c048aab10c51aa02a8a21d6c2a7179d3f488c",
+    "kind": "acousticTransient",
+    "fields": [
+      {
+        "id": "instantPressure",
+        "unit": "Pa"
+      }
+    ],
+    "state": {
+      "field": "instantPressure",
+      "modeIndex": null,
+      "frameIndex": 4,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 7,
+    "snapshotStorage": {
+      "requested": 7,
+      "count": 7,
+      "bytes": 18760,
+      "budgetBytes": 65536,
+      "unit": "byte",
+      "bytesPerScalar": 8,
+      "meaning": "stored-scalar-values-only",
+      "excludes": [
+        "objects",
+        "rendering",
+        "observations",
+        "receiver-traces",
+        "peak-memory"
+      ],
+      "warningCount": 0
+    },
+    "physicalTimeSeconds": 0.0007999999999999999,
+    "timeSelection": "stored-frames-only",
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "frames": [],
+    "modes": []
+  },
+  "recoveryNote": "Browser extension reconnected; new inspect-only session and same saved archive imported."
+}

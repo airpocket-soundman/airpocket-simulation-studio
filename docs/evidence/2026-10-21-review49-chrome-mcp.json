@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "VIEWTIME",
+  "workOrder": 49,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "scope": "Actual process-isolated solves, official archive validation, real Chrome GUI and formal inspect-only stdio MCP result-view reads",
+  "browser": {
+    "brand": "Google Chrome",
+    "provider": "extension",
+    "version": "not read; inventory confirms brand only",
+    "origin": "http://127.0.0.1:5188",
+    "permissionScopes": [
+      "inspect"
+    ],
+    "extraScopesGranted": false
+  },
+  "cases": [
+    {
+      "kind": "thermal",
+      "nodeCount": 94,
+      "snapshotStorage": {
+        "requested": 11,
+        "count": 3,
+        "bytes": 2256,
+        "budgetBytes": 2400,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 1
+      },
+      "mcpResultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65"
+    },
+    {
+      "kind": "acoustic",
+      "nodeCount": 335,
+      "snapshotStorage": {
+        "requested": 7,
+        "count": 7,
+        "bytes": 18760,
+        "budgetBytes": 65536,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 0
+      },
+      "mcpResultRevision": "sha256:d30f8303ea3632d93af8e36a94d9324b5499e7ee545f0ce253848f034ea9f13d"
+    }
+  ],
+  "verified": {
+    "guiSummaryMatchesMcp": true,
+    "nodeResultViewSummaryMatchesMcp": true,
+    "frameLimitZeroFramesEmpty": true,
+    "summaryOmitsPhysicalArraysStepsAndWarningText": true,
+    "thermalRepeatedReadInputCasesViewUnchanged": true,
+    "actualReloadThenSeparateArchiveImport": true,
+    "newInspectOnlyConnectionAfterReload": true,
+    "bothStorageSummariesAndResultRevisionsEqualAfterReload": true,
+    "noSolverRerunInBrowser": true
+  },
+  "recovery": {
+    "initialReloadReadInterrupted": "MCP timeout followed by Chrome extension reconnect; failed reads were not treated as success.",
+    "recovered": "Latest inventory and same owned tab; fresh inspect-only connection and same archive import produced verified matching reads.",
+    "signedZero": "Node JSON comparison normalizes signed zero; no physical fields rewritten."
+  },
+  "reproduction": {
+    "helper": "scripts/qa-review49-archives.mjs",
+    "helperSha256": "b73adbe04e7c3ef0a9ea59e2cd97320b504cc807abfc640c02ac8fe262bcd3a6",
+    "initialHeadlessReadbacksRetainedUnchanged": true,
+    "independentReplayReport": "docs/evidence/review49-real-archives/independent-replay-readbacks.json",
+    "focusedTests": 29,
+    "focusedPass": 29,
+    "focusedFail": 0,
+    "contracts": "5 declaration files pass"
+  },
+  "limitations": [
+    "Synthetic references are not material calibration or general physical accuracy proof.",
+    "Legacy/no-snapshotInfo and tampered metadata paths remain covered by existing Node tests, not injected into production browser.",
+    "Parent VIEWTIME remains incomplete.",
+    "Chrome version was not read."
+  ],
+  "cleanup": {
+    "guiSessionDisconnected": true,
+    "freshOwnedConnectorPid": 17792,
+    "freshOwnedConnectorExitCode": 0,
+    "owned5188ServerStopped": true,
+    "primaryOwnedTabClosed": true,
+    "extraOwnedTabId": "1867813957",
+    "extraOwnedTabClose": "Debugger unattached prevented explicit close; no running commands/recording. Tab unmarked for automatic cleanup.",
+    "tokensPersisted": false,
+    "secretOrPairingCodeInEvidence": false
+  }
+}
