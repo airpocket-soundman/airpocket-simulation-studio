@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "task": "26-P0 — bind optional diagnostic pointer /options/adaptive to the existing adaptive-run checkbox",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-next-26",
+  "branch": "codex/opencode-next-26",
+  "base": {
+    "ref": "origin/main",
+    "sha": "af2314aa7d4675129932386fa1c07ce03f726579"
+  },
+  "head": "delivery commit on codex/opencode-next-26 (SHA intentionally not self-referenced here)",
+  "worktreeStateAtStart": "clean; HEAD == origin/main == af2314a",
+  "prerequisite": {
+    "requiredCommit": "40bc553df0203940ffa346a526215657f5d215e5",
+    "command": "git merge-base --is-ancestor 40bc553df0203940ffa346a526215657f5d215e5 HEAD",
+    "exitCode": 0,
+    "result": "pass"
+  },
+  "runtime": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "changeScope": {
+    "edited": [
+      "src/ui/analysis-preflight-ui.js",
+      "tests/ui-analysis-preflight.test.mjs"
+    ],
+    "added": [
+      "docs/evidence/2026-10-21-opencode-next-26.json"
+    ],
+    "untouched": [
+      "src/main.js",
+      "src/capabilities.js",
+      "solver rejection conditions",
+      "adaptive solver implementation",
+      "options defaults",
+      "tool/API counts",
+      "UI2",
+      "src/progress.json",
+      "shared docs and skills"
+    ]
+  },
+  "preAddCheck": {
+    "command": "node -e import('./src/ui/analysis-preflight-ui.js') -> Object.keys(preflightControlIds)",
+    "mappingEntriesBefore": 28,
+    "hadOptionsAdaptive": false,
+    "note": "confirmed unregistered before adding the explicit entry"
+  },
+  "implementedBehavior": {
+    "mapping": "preflightControlIds['/options/adaptive'] = 'adaptive-run' (explicit entry in the frozen id map)",
+    "noGenericConversion": "no prefix match on '/options/' and no split('.')/dot-to-pointer conversion was introduced; the existing '/conditions/' prefix special case is unchanged",
+    "diagnosticSource": "existing diagnoseExecution non-structural adaptive rejection (ADAPTIVE_STUDY_UNSUPPORTED, target options.adaptive, pointer /options/adaptive); no new refusal was added",
+    "focusContract": "clicking the correction button re-checks identity, opens ancestor details, focuses the checkbox and never toggles checked; checked, options object and snapshot revision stay unchanged",
+    "multiDiagnostic": "simultaneous /options/method and /options/adaptive diagnostics produce two buttons that focus the solver select and the adaptive checkbox respectively",
+    "safety": "unknown pointer, legacy target-only options.adaptive, hidden control, disabled control and stale input version are refused without focus or mutation",
+    "legacyPreserved": "legacy target/code/severity/order output shape, RFC 6901 escaping and pointer-free unknown targets remain; #126 requiredPointers correction button tests remain in the suite"
+  },
+  "measured": {
+    "mappingEntriesAfter": 29,
+    "adaptiveMappingAfter": "adaptive-run",
+    "adaptiveOnlyDiagnostic": {
+      "code": "ADAPTIVE_STUDY_UNSUPPORTED",
+      "target": "options.adaptive",
+      "pointer": "/options/adaptive",
+      "severity": "error",
+      "input": "synthetic project {study:{kind:'thermal'}} with options {method:'wasm-pcg',adaptive:true}"
+    },
+    "simultaneousDiagnostics": [
+      {
+        "code": "ENGINE_STUDY_UNSUPPORTED",
+        "target": "options.method",
+        "pointer": "/options/method"
+      },
+      {
+        "code": "ADAPTIVE_STUDY_UNSUPPORTED",
+        "target": "options.adaptive",
+        "pointer": "/options/adaptive"
+      }
+    ],
+    "syntheticUiAssertions": {
+      "correctionButtonCountAdaptiveOnly": 1,
+      "activeElementAfterClick": "adaptive-run",
+      "adaptiveCheckedAfterClick": true,
+      "optionsDeepEqualBeforeAfter": true,
+      "snapshotRevisionBeforeAfter": 7,
+      "hiddenControlFocus": "refused",
+      "disabledControlFocus": "refused",
+      "unknownLegacyTargetLookups": 0
+    }
+  },
+  "commands": [
+    {
+      "command": "node --test tests/ui-analysis-preflight.test.mjs tests/capabilities.test.mjs tests/capabilities-combinations.test.mjs",
+      "tests": 26,
+      "pass": 26,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "durationMs": 383,
+      "breakdown": {
+        "tests/ui-analysis-preflight.test.mjs": 19,
+        "tests/capabilities.test.mjs": 3,
+        "tests/capabilities-combinations.test.mjs": 4
+      }
+    },
+    {
+      "command": "npm run check:contracts",
+      "exitCode": 0,
+      "result": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "result": "no whitespace errors"
+    }
+  ],
+  "browser": {
+    "attempted": true,
+    "available": false,
+    "toolResult": "browser.disconnected: No desktop browser is connected to this session",
+    "realChrome": "not run; no desktop browser connection and no dev server was started",
+    "adaptiveGuiPath": "in the current GUI, src/ui/discipline-controls-ui.js disables and unchecks adaptive-run for non-structural studies, so the real end-user path cannot produce ADAPTIVE_STUDY_UNSUPPORTED; that file and main.js are outside this work order's allowed changes",
+    "note": "the new focus behavior for /options/adaptive is verified with the synthetic UI harness in Node only"
+  },
+  "notVerified": [
+    "real Chrome preflight -> Tab/Enter -> adaptive-run focus was not executed (browser disconnected)",
+    "real user-driven true -> false stale invalidation and post-recheck resolution were not executed in a browser",
+    "Japanese/English rendering at 390 px and checkbox label/focus visibility were not checked in a browser",
+    "the adaptive diagnostic is not reachable from the current supported GUI because discipline controls disable the checkbox outside structural analysis; fixing that would require changes outside this scope",
+    "the full test suite and CI were not run in this worktree"
+  ],
+  "parentTaskStatus": "26-P0 limited acceptance only; parent P0 is not complete or released. The adaptive mapping and its synthetic focus contract are delivered; real-browser acceptance and GUI reachability remain open.",
+  "boardUpdateDraft": "26-P0: /options/adaptive を既存 adaptive-run checkbox へ明示 mapping。Node合成UI 19件を含む対象26件、契約検査、diff check は通過。実Chrome・390px・stale再チェックは未確認。非構造では既存UIが adaptive-run を無効化・解除するため実GUI到達性は未解決（main.js/UI2 は範囲外）。親P0は未完。"
+}
