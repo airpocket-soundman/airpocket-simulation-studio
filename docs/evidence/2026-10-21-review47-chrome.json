@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "P0",
+  "workOrder": 47,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "scope": "Bounded adaptive API/GUI QA; parent remains incomplete",
+  "browser": {
+    "brand": "Google Chrome",
+    "provider": "extension",
+    "version": "not read; inventory confirms brand only",
+    "origin": "http://127.0.0.1:5188",
+    "servedSourceWorktree": "studio-review-46 at identical56576af6",
+    "viewportOverride": {
+      "width": 390,
+      "height": 844
+    },
+    "documentClientWidth": 375
+  },
+  "officialNodeApi": {
+    "entry": "createStudioApi().loadProject / diagnoseExecution / exportProject",
+    "study": "thermal",
+    "options": {
+      "method": "wasm-pcg",
+      "adaptive": true
+    },
+    "diagnostic": "ADAPTIVE_STUDY_UNSUPPORTED",
+    "pointer": "/options/adaptive",
+    "inputUnchanged": true,
+    "pairedBrowserMcp": false
+  },
+  "actualChromeGui": {
+    "structuralCheckboxEnabled": true,
+    "checkedTrueToSpaceFalse": true,
+    "activeElementAfterSpace": "adaptive-run",
+    "oldPreflightStale": true,
+    "recheckCurrent": true,
+    "tabFromAdaptive": "adaptive-rounds",
+    "shiftTabBack": "adaptive-run",
+    "thermalCheckboxDisabled": true,
+    "thermalCheckboxUnchecked": true,
+    "jaAndEnLabelConfirmed": true,
+    "englishLabel": "Refine locally and solve again using results",
+    "unsupportedCheckboxForceEnabled": false
+  },
+  "disabledFocusRefusal": {
+    "coverage": "Existing focused Node UI test with actual diagnostic and disabled checkbox",
+    "actualProductionGui": "No unsupported adaptive:true report can be produced by current GUI, which correctly disables and clears the unsupported request. No hidden-state/report injection performed.",
+    "claim": "API diagnostic and supported GUI path are separate observations."
+  },
+  "tests": {
+    "combinedFocused": 43,
+    "pass": 43,
+    "fail": 0,
+    "skip": 0,
+    "contracts": "pass"
+  },
+  "unverified": [
+    "Formal paired-browser MCP not used.",
+    "Disabled correction click is covered by Node, not claimed as actual production GUI.",
+    "Browser version and pixel-outline measurement not captured.",
+    "Parent P0 and all capability acceptance remain incomplete."
+  ],
+  "cleanup": {
+    "ownedTabClosed": true,
+    "viewportReset": true,
+    "owned5188ServerStopped": true,
+    "scopesExpanded": false
+  }
+}

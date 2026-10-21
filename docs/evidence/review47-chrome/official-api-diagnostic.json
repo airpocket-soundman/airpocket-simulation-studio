@@ -1,0 +1,25 @@
+{
+  "scope": "Node official saved API diagnoseExecution; not paired-browser MCP",
+  "options": {
+    "method": "wasm-pcg",
+    "adaptive": true
+  },
+  "diagnostics": [
+    {
+      "code": "ADAPTIVE_STUDY_UNSUPPORTED",
+      "severity": "error",
+      "target": "options.adaptive",
+      "pointer": "/options/adaptive",
+      "message": "Adaptive refinement supports structure only",
+      "evidence": {
+        "kind": "thermal"
+      },
+      "suggestions": [
+        "Disable adaptive refinement"
+      ],
+      "requiresUserIntent": false
+    }
+  ],
+  "inputUnchanged": true,
+  "inputSha256": "9a294a8dd4da6d601f97aa6ed18ba80290897f1ce6637fb5774ee59bd327e313"
+}
