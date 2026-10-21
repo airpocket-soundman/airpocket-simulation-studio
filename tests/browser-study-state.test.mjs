@@ -62,3 +62,38 @@ test('time history density and exact-byte budgets survive GUI study normalizatio
  const defaults=serialize(initial());for(const key of ['thermalSnapshotBudgetBytes','acousticSnapshotCount','acousticSnapshotBudgetBytes'])assert.equal(Object.hasOwn(defaults,key),false);
  const c=initial();c.physics='thermal';c['transient-heat']=true;c['thermal-snapshots']='1';assert.equal(serialize(c).thermalSnapshotCount,1,'invalid count is not silently converted to disabled history');
 });
+test('history inputs convert MiB to exact bytes at 1 MiB = 1048576 B and restore the original MiB',()=>{
+ const thermal=initial();Object.assign(thermal,{physics:'thermal','transient-heat':true,'thermal-snapshots':'9','thermal-history-budget':'2'});
+ const t=serialize(thermal);assert.equal(t.thermalSnapshotCount,9,'count is a frame count, not a byte quantity');assert.equal(t.thermalSnapshotBudgetBytes,2097152);assert.equal(t.thermalSnapshotBudgetBytes/1048576,2);
+ const tBack=apply(t,thermal);assert.equal(tBack.controlValues['thermal-snapshots'],'9');assert.equal(Number(tBack.controlValues['thermal-history-budget']),2);
+ const acoustic=initial();Object.assign(acoustic,{physics:'acoustic','transient-acoustic':true,'acoustic-snapshots':'7','acoustic-history-budget':'0.5'});
+ const a=serialize(acoustic);assert.equal(a.acousticSnapshotCount,7);assert.equal(a.acousticSnapshotBudgetBytes,524288);assert.equal(a.acousticSnapshotBudgetBytes/1048576,.5);
+ const aBack=apply(a,acoustic);assert.equal(aBack.controlValues['acoustic-snapshots'],'7');assert.equal(Number(aBack.controlValues['acoustic-history-budget']),.5);
+ for(const [study,prefix]of [[t,'thermal'],[a,'acoustic']]){
+  assert.deepEqual(JSON.parse(JSON.stringify(study)),study);assert.equal(round(study).study[prefix+'SnapshotBudgetBytes'],study[prefix+'SnapshotBudgetBytes']);assert.equal(round(study).study[prefix+'SnapshotCount'],study[prefix+'SnapshotCount']);
+ }
+});
+test('history field omission, HTML sanitization and refusal keep their existing meaning',()=>{
+ const c=initial();c.physics='thermal';c['transient-heat']=true;
+ c['thermal-snapshots']='0';c['thermal-history-budget']='';
+ const zero=serialize(c);assert.equal(Object.hasOwn(zero,'thermalSnapshotCount'),false,'count 0 means disabled and omits the field');assert.equal(Object.hasOwn(zero,'thermalSnapshotBudgetBytes'),false,'blank budget omits the field');
+ c['thermal-snapshots']='';assert.equal(Object.hasOwn(serialize(c),'thermalSnapshotCount'),false,'empty number input is 0');
+ c['thermal-snapshots']=null;assert.equal(Object.hasOwn(serialize(c),'thermalSnapshotCount'),false,'null is the HTML empty value');
+ c['thermal-snapshots']='abc';const junkCount=serialize(c);assert.equal(Object.hasOwn(junkCount,'thermalSnapshotCount'),true);assert.ok(Number.isNaN(junkCount.thermalSnapshotCount),'invalid characters are not silently read as disabled history');
+ c['thermal-snapshots']='9';c['thermal-history-budget']='abc';assert.ok(Number.isNaN(serialize(c).thermalSnapshotBudgetBytes),'invalid budget characters are preserved as NaN for plan validation');
+ c['thermal-history-budget']=null;assert.throws(()=>serialize(c),TypeError,'a null budget is still not coerced');
+ c['thermal-history-budget']='0';c['thermal-snapshots']='62';const raw=serialize(c);assert.equal(raw.thermalSnapshotCount,62,'count is not clamped here');assert.equal(raw.thermalSnapshotBudgetBytes,0,'budget is not clamped here');
+ c['thermal-history-budget']='-1';assert.equal(serialize(c).thermalSnapshotBudgetBytes,-1048576,'the serializer adds no new rejection');
+ for(const patch of [{'transient-heat':false},{physics:'structural'}]){const s=serialize({...c,...patch});for(const key of ['thermalSnapshotCount','thermalSnapshotBudgetBytes','acousticSnapshotCount','acousticSnapshotBudgetBytes'])assert.equal(Object.hasOwn(s,key),false,key+' '+JSON.stringify(patch));}
+ const acousticOff=serialize({...c,physics:'acoustic','transient-acoustic':false,acousticSnapshotCount:7,acousticSnapshotBudgetBytes:524288});for(const key of ['acousticSnapshotCount','acousticSnapshotBudgetBytes'])assert.equal(Object.hasOwn(acousticOff,key),false,key);
+ const restored=apply({kind:'thermal',thermalSnapshotCount:null,thermalSnapshotBudgetBytes:null},c);assert.equal(restored.controlValues['thermal-snapshots'],'0');assert.equal(restored.controlValues['thermal-history-budget'],'0','null bytes still render as 0 MiB, unchanged');
+ const absent=apply({kind:'thermal'},c);assert.equal(absent.controlValues['thermal-snapshots'],'0');assert.equal(absent.controlValues['thermal-history-budget'],'');
+});
+test('history controls stay read-only inputs and legacy studies without the fields keep their defaults',()=>{
+ const c=initial(),rawControls=structuredClone(c),candidate={version:1,name:'History',meshes:[{positions:[0,0,0],faceIds:[]}],conditions:[],analysisIntent:{mode:'exploratory'},study:{kind:'acoustic',acousticTransient:true,acousticSnapshotCount:7,acousticSnapshotBudgetBytes:524288}};
+ const out=normalize(candidate,initial());assert.equal(out.study.acousticSnapshotCount,7);assert.equal(out.study.acousticSnapshotBudgetBytes,524288);assert.equal(out.name,'History');assert.deepEqual(out.analysisIntent,{mode:'exploratory'});
+ apply(out.study,c);assert.deepEqual(c,rawControls,'apply must not mutate the raw control snapshot');
+ const legacy=normalize({version:1,name:'Legacy',conditions:[],study:{kind:'thermal',transient:true,timeStep:1,steps:10}},initial());
+ for(const key of ['thermalSnapshotCount','thermalSnapshotBudgetBytes','acousticSnapshotCount','acousticSnapshotBudgetBytes'])assert.equal(Object.hasOwn(legacy.study,key),false,key);
+ assert.equal(legacy.name,'Legacy');assert.equal(legacy.study.transient,true);assert.equal(legacy.study.timeStep,1);assert.deepEqual(round(legacy.study).study,legacy.study,'a legacy study stays stable across another roundtrip');
+});

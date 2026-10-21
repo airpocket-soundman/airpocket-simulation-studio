@@ -22,6 +22,28 @@ function htmlValue(id,value){
  if(type.type==='number')return /^-?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(text)&&Number.isFinite(Number(text))?text:'';
  return text.replace(/[\r\n]/g,'');
 }
+// Time-history storage controls. The saved study keeps exact bytes; the HTML
+// number inputs show MiB. These helpers translate only those two values and
+// keep the branch masking, so no clamp/default/range rule is added here
+// (time-history-plan and the input contracts own validation).
+const historyFieldSpecs=Object.freeze([
+ Object.freeze({kind:'thermal',enabled:'transient-heat',prefix:'thermal',count:'thermal-snapshots',budget:'thermal-history-budget'}),
+ Object.freeze({kind:'acoustic',enabled:'transient-acoustic',prefix:'acoustic',count:'acoustic-snapshots',budget:'acoustic-history-budget'})
+]);
+const BYTES_PER_MIB=1048576;
+function historyStudyFields(values){
+ const fields={};
+ for(const spec of historyFieldSpecs){
+  if(values.physics!==spec.kind||!values[spec.enabled])continue;
+  const count=Number(values[spec.count]);
+  if(count!==0)fields[spec.prefix+'SnapshotCount']=count;
+  if(values[spec.budget].trim())fields[spec.prefix+'SnapshotBudgetBytes']=Number(values[spec.budget])*BYTES_PER_MIB;
+ }
+ return fields;
+}
+function historyInputValues(study){
+ return historyFieldSpecs.map(spec=>[[spec.count,study[spec.prefix+'SnapshotCount']??0],[spec.budget,study[spec.prefix+'SnapshotBudgetBytes']===undefined?'':study[spec.prefix+'SnapshotBudgetBytes']/BYTES_PER_MIB]]).flat();
+}
 function plasticHistory(values,materialProperties){
  const raw=values['plastic-load-fractions'].trim();if(!raw||values.physics!=='structural'||!materialProperties?.plasticity)return {};
  const tokens=raw.split(','),fractions=tokens.map(Number);
@@ -31,7 +53,7 @@ function plasticHistory(values,materialProperties){
 export function serializeBrowserStudy(controlValues,{temperatureSource=null,vibrationSource=null,materialProperties={}}={}){
  const c=controlValues,n=id=>Number(c[id]),kind=c.physics;
  return {kind,...(kind==='acoustic'&&vibrationSource?{vibrationSource:{...structuredClone(vibrationSource),amplitudeMm:n('vibration-amplitude'),phaseDeg:n('vibration-phase')}}:{}),
- modalAnalysis:kind==='structural'&&c['modal-enabled'],modeCount:n('modal-count'),modalIterations:n('modal-iterations'),acousticTransient:kind==='acoustic'&&c['transient-acoustic'],acousticDuration:n('acoustic-duration')*.001,pulseWidth:n('pulse-width')*.001,acousticTimeStep:n('acoustic-time-step')*1e-6,dampingRate:n('acoustic-damping'),exteriorRadiation:kind==='acoustic'&&c['exterior-radiation'],directivityEnabled:kind==='acoustic'&&c['directivity-enabled'],directivityAxis:n('directivity-axis'),directivityPoints:n('directivity-points'),directivityDistanceMm:n('directivity-distance'),nonlinearLoadSteps:n('nonlinear-steps'),...plasticHistory(c,materialProperties),maxNewtonIterations:n('nonlinear-iterations'),materialTemperature:n('material-temperature'),flowAxis:n('flow-axis'),pressureDropPa:n('flow-pressure-drop'),dynamicViscosity:n('flow-viscosity'),fluidDensity:n('flow-density'),fluidSoundSpeed:n('flow-sound-speed'),stokesVelocityElement:c['stokes-element'],freeStreamVelocity:['stokes-velocity-x','stokes-velocity-y','stokes-velocity-z'].map(n),...(c['stokes-reference-length'].trim()?{referenceLengthMm:n('stokes-reference-length')}:{}),maxRadiationIterations:n('radiation-iterations'),...(temperatureSource?{temperatureSource:structuredClone(temperatureSource)}:{}),thermalStress:c['thermal-stress'],temperature:n('solid-temperature'),referenceTemperature:n('reference-temperature'),gravityEnabled:c['gravity-enabled'],gravity:['gravity-x','gravity-y','gravity-z'].map(n),transient:c['transient-heat'],timeStep:n('time-step'),steps:n('time-steps'),initialTemperature:n('initial-temperature'),volumetricSource:n('volumetric-source'),...(kind==='thermal'&&c['transient-heat']&&n('thermal-snapshots')!==0?{thermalSnapshotCount:n('thermal-snapshots')}:{}),...(kind==='thermal'&&c['transient-heat']&&c['thermal-history-budget'].trim()?{thermalSnapshotBudgetBytes:n('thermal-history-budget')*1048576}:{}),...(kind==='acoustic'&&c['transient-acoustic']&&n('acoustic-snapshots')!==0?{acousticSnapshotCount:n('acoustic-snapshots')}:{}),...(kind==='acoustic'&&c['transient-acoustic']&&c['acoustic-history-budget'].trim()?{acousticSnapshotBudgetBytes:n('acoustic-history-budget')*1048576}:{}),frequency:n('acoustic-frequency'),soundSpeed:n('sound-speed'),airDensity:n('air-density'),lossFactor:n('acoustic-loss'),referencePressurePa:n('reference-pressure'),sweep:c['acoustic-sweep'],sweepStart:n('sweep-start'),sweepEnd:n('sweep-end'),sweepCount:n('sweep-count'),receiverPoint:['receiver-x','receiver-y','receiver-z'].map(n)};
+ modalAnalysis:kind==='structural'&&c['modal-enabled'],modeCount:n('modal-count'),modalIterations:n('modal-iterations'),acousticTransient:kind==='acoustic'&&c['transient-acoustic'],acousticDuration:n('acoustic-duration')*.001,pulseWidth:n('pulse-width')*.001,acousticTimeStep:n('acoustic-time-step')*1e-6,dampingRate:n('acoustic-damping'),exteriorRadiation:kind==='acoustic'&&c['exterior-radiation'],directivityEnabled:kind==='acoustic'&&c['directivity-enabled'],directivityAxis:n('directivity-axis'),directivityPoints:n('directivity-points'),directivityDistanceMm:n('directivity-distance'),nonlinearLoadSteps:n('nonlinear-steps'),...plasticHistory(c,materialProperties),maxNewtonIterations:n('nonlinear-iterations'),materialTemperature:n('material-temperature'),flowAxis:n('flow-axis'),pressureDropPa:n('flow-pressure-drop'),dynamicViscosity:n('flow-viscosity'),fluidDensity:n('flow-density'),fluidSoundSpeed:n('flow-sound-speed'),stokesVelocityElement:c['stokes-element'],freeStreamVelocity:['stokes-velocity-x','stokes-velocity-y','stokes-velocity-z'].map(n),...(c['stokes-reference-length'].trim()?{referenceLengthMm:n('stokes-reference-length')}:{}),maxRadiationIterations:n('radiation-iterations'),...(temperatureSource?{temperatureSource:structuredClone(temperatureSource)}:{}),thermalStress:c['thermal-stress'],temperature:n('solid-temperature'),referenceTemperature:n('reference-temperature'),gravityEnabled:c['gravity-enabled'],gravity:['gravity-x','gravity-y','gravity-z'].map(n),transient:c['transient-heat'],timeStep:n('time-step'),steps:n('time-steps'),initialTemperature:n('initial-temperature'),volumetricSource:n('volumetric-source'),...historyStudyFields(c),frequency:n('acoustic-frequency'),soundSpeed:n('sound-speed'),airDensity:n('air-density'),lossFactor:n('acoustic-loss'),referencePressurePa:n('reference-pressure'),sweep:c['acoustic-sweep'],sweepStart:n('sweep-start'),sweepEnd:n('sweep-end'),sweepCount:n('sweep-count'),receiverPoint:['receiver-x','receiver-y','receiver-z'].map(n)};
 }
 export function applyBrowserStudy(study,currentControlValues){
  const c=structuredClone(currentControlValues),set=(id,v)=>{c[id]=htmlValue(id,v);};
@@ -45,7 +67,7 @@ export function applyBrowserStudy(study,currentControlValues){
  if(study?.gravity)study.gravity.forEach((v,k)=>set(['gravity-x','gravity-y','gravity-z'][k],v));
  if(!study){set('physics','structural');set('modal-enabled',false);}
  if(study){
-  set('physics',study.kind);set('modal-enabled',!!study.modalAnalysis);set('modal-count',study.modeCount??2);set('modal-iterations',study.modalIterations??60);set('exterior-radiation',!!study.exteriorRadiation);set('directivity-enabled',!!study.directivityEnabled);set('transient-heat',!!study.transient);set('thermal-snapshots',study.thermalSnapshotCount??0);set('thermal-history-budget',study.thermalSnapshotBudgetBytes===undefined?'':study.thermalSnapshotBudgetBytes/1048576);set('acoustic-snapshots',study.acousticSnapshotCount??0);set('acoustic-history-budget',study.acousticSnapshotBudgetBytes===undefined?'':study.acousticSnapshotBudgetBytes/1048576);
+  set('physics',study.kind);set('modal-enabled',!!study.modalAnalysis);set('modal-count',study.modeCount??2);set('modal-iterations',study.modalIterations??60);set('exterior-radiation',!!study.exteriorRadiation);set('directivity-enabled',!!study.directivityEnabled);set('transient-heat',!!study.transient);for(const [id,value]of historyInputValues(study))set(id,value);
   for(const [key,id]of Object.entries(numericFields))if(!['modeCount','modalIterations'].includes(key)&&study[key]!==undefined)set(id,study[key]);
   if(study.referenceLengthMm!==undefined)set('stokes-reference-length',study.referenceLengthMm);
  }

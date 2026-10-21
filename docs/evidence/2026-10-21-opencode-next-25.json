@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-21",
+  "order": "25",
+  "id": "MOD1",
+  "scope": "Limited acceptance unit: extract the thermal/acoustic SnapshotCount and SnapshotBudgetBytes serialization/application in src/browser-study-state.js into pure module-private helpers, keeping the existing branch masking, HTML number-input sanitization order and MiB-to-byte conversion. Node-only conversion tests; no real Chrome, no public HTTPS, no solver or physics change.",
+  "branch": "codex/opencode-next-25",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-next-25",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "contentHeadSha": "32ef86a182237e6e1b3203503876f8d5cbb8a221",
+  "contentHeadNote": "Commit holding the implementation and tests before this evidence file; not self-referencing.",
+  "prerequisite": {
+    "requiredCommit": "fcdd83b22d721732b706ad5e9389ea4a8b00d033",
+    "originMainAtStart": "af2314aa7d4675129932386fa1c07ce03f726579",
+    "mergeBaseIsAncestor": true,
+    "dirtyBeforeStart": false
+  },
+  "runtime": {"node": "v24.11.1", "platform": "win32"},
+  "changedFiles": [
+    "src/browser-study-state.js (helpers historyFieldSpecs, historyStudyFields, historyInputValues; serialize/apply call them)",
+    "tests/browser-study-state.test.mjs (3 added tests, 14 total)",
+    "docs/evidence/2026-10-21-opencode-next-25.json (new)"
+  ],
+  "implementation": {
+    "helpers": "historyStudyFields(controlValues) -> {thermal|acoustic}SnapshotCount/BudgetBytes; historyInputValues(study) -> [[controlId, inputValue]]; one frozen spec list drives both directions.",
+    "preservedOrder": "serialize: kind/transient mask -> Number(count) (non-zero only) -> trimmed budget -> bytes. apply: htmlValue number sanitization still runs on every set, at the same position before numericFields.",
+    "notChanged": "main.js, DOM ids, solver, time-history-plan validation, defaults, public schema, study-form-ui, analysisOptions. No clamp, default or new rejection added; no seconds/ms/us conversion or physical calculation touched.",
+    "serializerUnit": "1 MiB = 1048576 bytes; saved field is exact bytes, restored control value is MiB.",
+    "applyCallbackNote": "historyInputValues returns plain pairs, so applyBrowserStudy remains the only writer and still clones the incoming control snapshot."
+  },
+  "measuredValues": {
+    "thermal": {"countFrames": 9, "budgetInputMiB": 2, "savedBudgetBytes": 2097152, "restoredCountInput": "9", "restoredBudgetInputMiB": 2},
+    "acoustic": {"countFrames": 7, "budgetInputMiB": 0.5, "savedBudgetBytes": 524288, "restoredCountInput": "7", "restoredBudgetInputMiB": 0.5},
+    "exactByteRoundtripBytes": 123456,
+    "omission": {"countZero": "field absent", "blankBudget": "field absent", "emptyCountInput": "field absent (HTML empty number = 0)", "nullCount": "field absent"},
+    "characteristicInputs": {"countAbc": "thermalSnapshotCount = NaN (not silently disabled)", "budgetAbc": "thermalSnapshotBudgetBytes = NaN", "budgetNull": "TypeError (unchanged)", "count62": "62 (not clamped)", "budget0Bytes": "0 (not clamped)", "budgetNegative": "-1048576 (no new rejection)"},
+    "applyNull": {"countInput": "0", "budgetInput": "0"},
+    "applyAbsent": {"countInput": "0", "budgetInput": ""},
+    "note": "All values are synthetic control/study inputs; no measurement or material property was invented."
+  },
+  "commands": [
+    {"command": "node --test tests/browser-study-state.test.mjs tests/ui-study-form.test.mjs tests/time-history-plan.test.mjs tests/ui-analysis-options.test.mjs", "result": "pass", "tests": 29, "fail": 0, "skipped": 0},
+    {"command": "node --test tests/browser-study-state.test.mjs", "result": "pass", "tests": 14, "fail": 0, "skipped": 0},
+    {"command": "node --test tests/example-study-reset.test.mjs", "result": "pass", "tests": 3, "fail": 0, "skipped": 0, "note": "extra consumer of browser-study-state.js, run because it imports the changed module"},
+    {"command": "npm run check:contracts", "result": "pass", "detail": "Contract declarations type-check (5 declaration files)."},
+    {"command": "node scripts/check-module-boundaries.mjs", "result": "pass", "detail": "226 files, 561 local edges, 7 allowlisted violations"},
+    {"command": "git diff --check", "result": "pass", "detail": "no whitespace errors"}
+  ],
+  "acceptance": {
+    "helperLimitedToFourFields": "pass",
+    "normalizeAndHtmlSanitizationOrderKept": "pass",
+    "thermal9Frames2MiB": "pass (2097152 bytes)",
+    "acoustic7FramesHalfMiB": "pass (524288 bytes)",
+    "restoreOriginalMiB": "pass (2 and 0.5)",
+    "countZeroOmits": "pass",
+    "blankBudgetOmits": "pass",
+    "transientFalseAndStructuralOmit": "pass (all four fields)",
+    "emptyNullInvalidCharacteristic": "pass",
+    "noClampDefaultNewRejection": "pass",
+    "jsonRoundtrip": "pass",
+    "rawControlsUnchanged": "pass",
+    "nonStudyCandidateFieldsPreserved": "pass",
+    "legacyStudyWithoutNewFields": "pass (fields absent, roundtrip stable)",
+    "secondsMsUsAndPhysicsUnchanged": "pass by code scope (only the four conversion fields moved)"
+  },
+  "fail": [],
+  "skipped": [],
+  "browser": {
+    "realChromeOperated": false,
+    "guiRegressionVerified": false,
+    "note": "No browser or GUI session was run for this unit. Node conversion tests only; real Chrome restore of these controls remains unverified."
+  },
+  "unverified": [
+    "Real Chrome restore of thermal/acoustic snapshot count and budget inputs (manual GUI regression).",
+    "Full repository test suite and production build were not run; only the ordered target tests, the extra consumer test, contracts and module boundaries.",
+    "Behavior after a real project save/load through the Studio API or file dialogs was not exercised in a browser."
+  ],
+  "parent": {
+    "id": "MOD1",
+    "status": "incomplete",
+    "note": "This is one limited unit. Parent MOD1 is not complete or released. Suggested progress note: browser-study-state.js now has pure thermal/acoustic snapshot count/budget helpers with Node characteristic tests; real Chrome restore and full acceptance remain."
+  },
+  "secrets": "none recorded; no credentials, tokens, pairing codes or environment dumps."
+}
