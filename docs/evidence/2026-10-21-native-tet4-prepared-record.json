@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-21",
+  "task": "P6",
+  "order": 43,
+  "scope": "Bounded prepared saved-input/isotropic Tet4 contract; P6 parent remains building",
+  "base": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "sourceSha256": {
+    "native/native-proof/main.cpp": "17cd4c379a1c2841e8caaac4b611e2359a80dcf1cfc461970ddd7a3a2922bb94",
+    "native/native-proof/tet4-record.hpp": "b46ced4ea953eb3410ca2d946b1980f61199f8abb9520e36984a87f5cfbb17c1",
+    "scripts/native-tet4-contract.mjs": "5737d2be85cccc840f7ce6267195efddd6d2d9eaf7a4afba4148d3ca640c4e44",
+    "scripts/check-native-proof.mjs": "24fcbfea23243d235596fc199420679041945bd5fd11ec3b59f9c89a1f24e6ca",
+    "tests/native-tet4-contract.test.mjs": "529da7c5b55f9dd9d1803945b2d958b4de188d7b038178b816d1f681319d2359",
+    "tests/fixtures/native-tet4-record.mjs": "5600e6b8acff6d0ce06a8941fac8f956cd31fe33f519cd32abd0982db35169c0"
+  },
+  "implementation": {
+    "legacyV1Preserved": true,
+    "savedInputValidator": "createStudioApi.loadProject/exportProject",
+    "callTimeSnapshots": "Both create and serialize snapshot canonical JSON before hash awaits",
+    "units": "Saved coordinates mm -> adapter coordinates m once; nodal forces N; material Pa",
+    "boundaryTransfer": "Caller supplies explicit fixed nodes/nodal forces; no CAD-condition equivalence or inference",
+    "limits": {
+      "nodes": 512,
+      "elements": 1024,
+      "inputBytes": 262144,
+      "coordinateMm": 1000000,
+      "forceN": 1000000000000,
+      "youngPa": 1000000000000000
+    },
+    "nativeRuntimeGate": "Linux native-proof CI: actual host executable header + same-source v1/v2 parity; unrun locally",
+    "materialAllowlist": [
+      "youngModulus",
+      "poissonRatio",
+      "source",
+      "grade",
+      "notes"
+    ],
+    "unsupportedPhysics": "All material dependence, temperature validity/evaluation, rate/failure/phase and unknown material/study fields refused"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.11.1",
+    "hostCompilerAvailable": false,
+    "downloadsPerformed": false,
+    "existingMfemLibraryReusedReadOnly": true
+  },
+  "wasmDevelopment": {
+    "actualRuntime": "wasm-development-check",
+    "loaderSha256": "fda663c1b84b02888ac946349c715654b76f13e7c2ea10ef3b8fc15afb71dca9",
+    "moduleSha256": "00f222510d733f76ec1ea87778b24ced8df8a2cba65d9ee84dcf738189013585",
+    "results": [
+      {
+        "loadN": 75,
+        "poissonRatio": 0,
+        "sourceInputRevision": "sha256:5afb991d7ae64d9e0ff506489ba94f78da2339f16d3db1b502e63fd3b8432012",
+        "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
+        "recordRevision": "sha256:6eb62236dacfb5899a03ed9e1dc7fd30f3b9d52c69fd736f98d3d3bb056feebb",
+        "topDisplacementM": 7.499999999999996e-06,
+        "expectedUniformBarDisplacementM": 7.5e-06,
+        "appliedN": [
+          0,
+          0,
+          75
+        ],
+        "balanceN": [
+          3.850006789346974e-16,
+          -3.8718895756224136e-15,
+          5.684341886080802e-14
+        ],
+        "verifiedResidual": 1.5666122504069175e-15,
+        "iterations": 10
+      },
+      {
+        "loadN": -75,
+        "poissonRatio": 0,
+        "sourceInputRevision": "sha256:5afb991d7ae64d9e0ff506489ba94f78da2339f16d3db1b502e63fd3b8432012",
+        "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
+        "recordRevision": "sha256:49328a84311eb2f755343b69c466457a2d835d54b66a7f357a20c98f378453cf",
+        "topDisplacementM": -7.499999999999996e-06,
+        "expectedUniformBarDisplacementM": -7.5e-06,
+        "appliedN": [
+          0,
+          0,
+          -75
+        ],
+        "balanceN": [
+          -3.850006789346974e-16,
+          3.8718895756224136e-15,
+          -5.684341886080802e-14
+        ],
+        "verifiedResidual": 1.5666122504069175e-15,
+        "iterations": 10
+      },
+      {
+        "loadN": 0,
+        "poissonRatio": 0,
+        "sourceInputRevision": "sha256:5afb991d7ae64d9e0ff506489ba94f78da2339f16d3db1b502e63fd3b8432012",
+        "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
+        "recordRevision": "sha256:e52703d001cdd3a0d471c869946eed046a9000f6491af7019e51d2909b243cae",
+        "topDisplacementM": 0,
+        "expectedUniformBarDisplacementM": 0,
+        "appliedN": [
+          0,
+          0,
+          0
+        ],
+        "balanceN": [
+          0,
+          0,
+          0
+        ],
+        "verifiedResidual": 0,
+        "iterations": 0
+      },
+      {
+        "loadN": 75,
+        "poissonRatio": 0.3,
+        "sourceInputRevision": "sha256:08e949dce763283ee30012c77eea3049503ccc16d45740813476fbf4910bf391",
+        "meshRevision": "sha256:63579c3b0fc3d0dbd21df98f22181c2aba2297d5e5c9c366cde3ea3a31bcf57a",
+        "recordRevision": "sha256:752d94d37e19f1d2463e4177fac6769004c530c5bdf1d81e8e7d82a31bcad2b9",
+        "topDisplacementM": 6.994513592217928e-06,
+        "expectedUniformBarDisplacementM": null,
+        "appliedN": [
+          0,
+          0,
+          75
+        ],
+        "balanceN": [
+          -3.552713678800501e-15,
+          4.263256414560601e-14,
+          1.4210854715202004e-14
+        ],
+        "verifiedResidual": 2.408834192212336e-15,
+        "iterations": 10
+      }
+    ]
+  },
+  "validation": {
+    "legacyWasm": {
+      "command": "AIRPOCKET_NATIVE_PROOF=<owned WASM loader> node --test tests/native-proof.test.mjs",
+      "total": 2,
+      "pass": 2,
+      "skip": 0,
+      "fail": 0
+    },
+    "contractsAndDocs": {
+      "command": "AIRPOCKET_NATIVE_PROOF_WASM=<owned WASM loader> node --test tests/native-tet4-contract.test.mjs tests/native-proof-contract.test.mjs tests/docs.test.mjs",
+      "total": 13,
+      "pass": 10,
+      "skip": 3,
+      "fail": 0,
+      "skips": "Actual host/WASM legacy parity, prepared parity and malformed-diagnostic parity need actual host executable"
+    },
+    "contractTypes": "npm run check:contracts: five declaration files pass",
+    "diffCheck": "git diff --check: pass"
+  },
+  "unverified": [
+    "Actual host-native execution on this Windows machine; no host C++ compiler available",
+    "Linux native-proof and application required CI on final commit remain pending",
+    "CAD condition transfer, arbitrary saved-project runner, full mesh overlap/quality validation, broader physics, production native backend and P6 parent completion",
+    "Browser functionality/public HTTPS not exercised by this CLI-only change"
+  ],
+  "cleanup": {
+    "children": "Synchronous owned proof children exited; existing 30s child timeout retained",
+    "files": "Own ignored .qa/native-tet4 contains generated WASM loader/module; no primary source/cache deletion"
+  }
+}

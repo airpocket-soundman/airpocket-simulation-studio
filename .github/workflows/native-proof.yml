@@ -6,12 +6,16 @@ on:
       - 'native/**'
       - 'scripts/*native*'
       - 'tests/native-proof*'
+      - 'tests/native-tet4*'
+      - 'tests/fixtures/native-tet4*'
       - '.github/workflows/native-proof.yml'
   pull_request:
     paths:
       - 'native/**'
       - 'scripts/*native*'
       - 'tests/native-proof*'
+      - 'tests/native-tet4*'
+      - 'tests/fixtures/native-tet4*'
       - '.github/workflows/native-proof.yml'
   workflow_dispatch:
 permissions:

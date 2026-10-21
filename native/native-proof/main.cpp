@@ -7,6 +7,7 @@
 #include <string>
 extern "C" int solve_elastic(const char*,double,double,const double*,const double*,int,const int*,const double*,double*,double*);
 extern "C" const char* last_error();
+#include "tet4-record.hpp"
 
 // Deliberately narrow native proof: a 10 x 10 x 40 mm axial bar, nu=0.
 // stdin: airpocket-native-proof-v1 <Young modulus Pa> <axial load N>
@@ -18,8 +19,12 @@ int main() {
 #else
   const char* runtime="host-native";
 #endif
+  std::string payload;char byte;while(std::cin.get(byte)){if(payload.size()>=262144)throw std::runtime_error("Native proof input exceeds 262144 bytes");payload+=byte;}
+  std::istringstream in(payload);
   std::string protocol,extra;double young=0,load=0;
-  if(!(std::cin>>protocol>>young>>load)||protocol!="airpocket-native-proof-v1"||!std::isfinite(young)||young<=0||!std::isfinite(load)||std::cin>>extra)throw std::runtime_error("Expected airpocket-native-proof-v1 youngPa loadN");
+  if(!(in>>protocol))throw std::runtime_error("Expected airpocket-native-proof-v1 youngPa loadN");
+  if(protocol=="airpocket-native-tet4-v2")return run_tet4_record(in,runtime);
+  if(!(in>>young>>load)||protocol!="airpocket-native-proof-v1"||!std::isfinite(young)||young<=0||!std::isfinite(load)||in>>extra)throw std::runtime_error("Expected airpocket-native-proof-v1 youngPa loadN");
   const std::string text="MFEM mesh v1.0\n\ndimension\n3\n\nelements\n6\n1 4 0 1 2 6\n1 4 0 2 3 6\n1 4 0 3 7 6\n1 4 0 7 4 6\n1 4 0 4 5 6\n1 4 0 5 1 6\n\nboundary\n0\n\nvertices\n8\n3\n0 0 0\n.01 0 0\n.01 .01 0\n0 .01 0\n0 0 .04\n.01 0 .04\n.01 .01 .04\n0 .01 .04\n";
   double bases[72]={},force[24]={},values[12]={},u[24]={},stats[2]={};int fixed[12];
   for(int n=0;n<8;n++)for(int k=0;k<3;k++)bases[n*9+k*3+k]=1;
