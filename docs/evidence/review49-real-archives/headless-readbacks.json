@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "node": "v24.11.1",
+  "scope": "Real synthetic headless process-isolated solves, saved archive reload and actual result-view adapter. Chrome and paired MCP are separate acceptance.",
+  "records": [
+    {
+      "kind": "thermal",
+      "elapsedMs": 1221,
+      "inputSha256": "5bf848dd266be506d3f345d174cdaa474be22f0aa6d69853e2fcb2d24ee46e6a",
+      "archiveSha256": "d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b",
+      "archiveBytes": 117499,
+      "nodeCount": 94,
+      "summary": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+        "physicalRevision": "sha256:97dc9986eb45145a822128c331fda9a217c86228a92e9e5a8854f3e550a3efec",
+        "kind": "thermal",
+        "fields": [
+          {
+            "id": "temperature",
+            "unit": "degC"
+          },
+          {
+            "id": "heatFlux",
+            "unit": "W/m2"
+          }
+        ],
+        "state": {
+          "field": "temperature",
+          "modeIndex": null,
+          "frameIndex": null,
+          "deformScale": 1,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": false,
+          "colorRange": null,
+          "camera": {
+            "position": [
+              50,
+              60,
+              70
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          }
+        },
+        "modeCount": 0,
+        "frameCount": 3,
+        "snapshotStorage": {
+          "requested": 11,
+          "count": 3,
+          "bytes": 2256,
+          "budgetBytes": 2400,
+          "unit": "byte",
+          "bytesPerScalar": 8,
+          "meaning": "stored-scalar-values-only",
+          "excludes": [
+            "objects",
+            "rendering",
+            "observations",
+            "receiver-traces",
+            "peak-memory"
+          ],
+          "warningCount": 1
+        },
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "frames": [],
+        "modes": []
+      },
+      "calculation": {
+        "operation": "elastic",
+        "options": {
+          "size": 5,
+          "method": "pcg",
+          "adaptive": false,
+          "maxRounds": 3
+        },
+        "runtimeIdentity": {
+          "schemaVersion": 1,
+          "target": "node",
+          "isolation": "process",
+          "build": {
+            "status": "available",
+            "version": "0.44.0",
+            "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+            "dirty": true,
+            "sourceFingerprint": "sha256:f3a65273a004bd12437f16d2ab7b0ead57d14874f8df73ff356e8adee22a3dad"
+          },
+          "engine": {
+            "requestedMethod": "pcg",
+            "actualEngine": "Airpocket Heat Tet4 / JavaScript CPU"
+          },
+          "assets": [
+            {
+              "role": "gmsh",
+              "bytes": 41430673,
+              "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+              "status": "observed"
+            }
+          ]
+        },
+        "execution": {
+          "isolation": "process"
+        }
+      }
+    },
+    {
+      "kind": "acoustic",
+      "elapsedMs": 1405,
+      "inputSha256": "bff82d22cf87ce83e10c9f0a121d436af9cec00c9abf4fc5bff1ba1744d6727d",
+      "archiveSha256": "d019f708abd2bae7302cda74c43000c7cdbf99e2980b31693ec014230b60aae4",
+      "archiveBytes": 373283,
+      "nodeCount": 335,
+      "summary": {
+        "schemaVersion": 1,
+        "resultRevision": "sha256:d30f8303ea3632d93af8e36a94d9324b5499e7ee545f0ce253848f034ea9f13d",
+        "physicalRevision": "sha256:ca82ae1458cf17f1b31ed90afe7c048aab10c51aa02a8a21d6c2a7179d3f488c",
+        "kind": "acousticTransient",
+        "fields": [
+          {
+            "id": "instantPressure",
+            "unit": "Pa"
+          }
+        ],
+        "state": {
+          "field": "instantPressure",
+          "modeIndex": null,
+          "frameIndex": 0,
+          "deformScale": 1,
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": false,
+          "colorRange": null,
+          "camera": {
+            "position": [
+              50,
+              60,
+              70
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ],
+            "fov": 40
+          }
+        },
+        "modeCount": 0,
+        "frameCount": 7,
+        "snapshotStorage": {
+          "requested": 7,
+          "count": 7,
+          "bytes": 18760,
+          "budgetBytes": 65536,
+          "unit": "byte",
+          "bytesPerScalar": 8,
+          "meaning": "stored-scalar-values-only",
+          "excludes": [
+            "objects",
+            "rendering",
+            "observations",
+            "receiver-traces",
+            "peak-memory"
+          ],
+          "warningCount": 0
+        },
+        "physicalTimeSeconds": 0,
+        "timeSelection": "stored-frames-only",
+        "analysisAssessment": {
+          "schemaVersion": 1,
+          "mode": "legacy",
+          "provisional": false,
+          "completePreflight": false,
+          "remainingChecks": [
+            "Mesh quality and element validity after generation",
+            "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+            "Source applicability, convergence, mesh dependence and physical accuracy"
+          ]
+        },
+        "frames": [],
+        "modes": []
+      },
+      "calculation": {
+        "operation": "elastic",
+        "options": {
+          "size": 3,
+          "method": "pcg",
+          "adaptive": false,
+          "maxRounds": 3
+        },
+        "runtimeIdentity": {
+          "schemaVersion": 1,
+          "target": "node",
+          "isolation": "process",
+          "build": {
+            "status": "available",
+            "version": "0.44.0",
+            "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+            "dirty": true,
+            "sourceFingerprint": "sha256:f3a65273a004bd12437f16d2ab7b0ead57d14874f8df73ff356e8adee22a3dad"
+          },
+          "engine": {
+            "requestedMethod": "pcg",
+            "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU"
+          },
+          "assets": [
+            {
+              "role": "gmsh",
+              "bytes": 41430673,
+              "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+              "status": "observed"
+            }
+          ]
+        },
+        "execution": {
+          "isolation": "process"
+        }
+      }
+    }
+  ]
+}

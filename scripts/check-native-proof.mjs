@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {mkdtempSync,writeFileSync,openSync,closeSync,unlinkSync,rmdirSync} from 'node:fs';
+import {tmpdir} from 'node:os';
 import {resolve,basename,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
@@ -40,7 +42,14 @@ function execute(command,args,options={}){
 }
 export function runProof(binary,input,{wasm=false}={}){
  if(!wasm)assert.ok(!/\.(?:mjs|cjs|js|wasm)$/i.test(binary),'Host proof must be a native executable');
- return spawnSync(wasm?process.execPath:binary,wasm?[binary]:[],{input,encoding:'utf8',windowsHide:true,timeout:30000,cwd:root});
+ // Emscripten's synchronous Node stdin can observe EAGAIN on a large pipe.
+ // A regular file gives both runtimes the same complete bytes, including the
+ // oversized-record rejection cases; it does not relax their input limits.
+ const directory=mkdtempSync(join(tmpdir(),'airpocket-proof-input-')),path=join(directory,'stdin');let fd;
+ try{
+  writeFileSync(path,input,{flag:'wx'});fd=openSync(path,'r');
+  return spawnSync(wasm?process.execPath:binary,wasm?[binary]:[],{stdio:[fd,'pipe','pipe'],encoding:'utf8',windowsHide:true,timeout:30000,cwd:root});
+ }finally{if(fd!==undefined)closeSync(fd);try{unlinkSync(path);}catch(error){if(error.code!=='ENOENT')throw error;}rmdirSync(directory);}
 }
 export async function verifyPinnedSource(paths,python=process.env.PYTHON||(process.platform==='win32'?'python':'python3')){
  const source=resolve(paths.mfem),archive=join(root,'.native-cache','mfem.tar.gz');
@@ -61,12 +70,18 @@ export async function checkNativeProof({build=false,hostBinary,wasmBinary,python
  const hostBytes=await readFile(host);verifyHostExecutable(hostBytes);
  // The pre-existing native test remains a mandatory, non-skipped host execution gate.
  const env={...process.env,AIRPOCKET_NATIVE_PROOF:host,AIRPOCKET_NATIVE_PROOF_WASM:wasm};
- execute(process.execPath,['--test','tests/native-proof.test.mjs','tests/native-proof-contract.test.mjs'],{env,stdio:'inherit'});
+ execute(process.execPath,['--test','tests/native-proof.test.mjs','tests/native-proof-contract.test.mjs','tests/native-tet4-contract.test.mjs'],{env,stdio:'inherit'});
  const results=[];
  for(const fixture of proofFixtures){const [young,load]=fixture,input=`airpocket-native-proof-v1 ${young} ${load}\n`,outputs=[];for(const [binary,isWasm,runtime] of [[host,false,'host-native'],[wasm,true,'wasm-development-check']]){const result=runProof(binary,input,{wasm:isWasm});assert.ifError(result.error);assert.equal(result.status,0,result.stderr);const output=JSON.parse(result.stdout);verifyProofOutput(output,{runtime,young,load});outputs.push(output);}verifyNativeWasmPair(...outputs,fixture);results.push({fixture,host:outputs[0],wasm:outputs[1]});}
  for(const binary of [host,wasm])for(const input of invalidProofInputs){const result=runProof(binary,input,{wasm:binary===wasm});assert.ifError(result.error);assert.notEqual(result.status,0);assert.equal(result.stdout,'');assert.match(result.stderr,/Expected airpocket-native-proof-v1/);}
- const sourceHashes={};for(const file of ['native/native-proof/main.cpp','native/mfem-adapter/adapter.cpp'])sourceHashes[file]=createHash('sha256').update(await readFile(join(root,file))).digest('hex');
- const report={schemaVersion:1,verifiedAt:new Date().toISOString(),platform:process.platform,architecture:process.arch,nodeVersion:process.version,pin:nativeProofPin,sourceHashes,hostBinary:host,hostSha256:createHash('sha256').update(hostBytes).digest('hex'),wasmBinary:wasm,wasmLoaderSha256:createHash('sha256').update(await readFile(wasm)).digest('hex'),wasmModuleSha256:createHash('sha256').update(await readFile(wasm.replace(/\.(?:cjs|mjs)$/i,'.wasm'))).digest('hex'),fixtures:results,invalidInputCases:invalidProofInputs.length,hostNativeVerified:true,wasmParityVerified:true,scope:'10 x 10 x 40 mm axial Tet4 bar only; arbitrary saved projects and production native backend remain unverified'};
+ const {nativeTet4Fixture}=await import('../tests/fixtures/native-tet4-record.mjs'),{serializeNativeTet4Record,verifyNativeTet4Output}=await import('./native-tet4-contract.mjs'),preparedTet4Fixtures=[];
+ for(const load of [75,-75,0]){
+  const {record}=await nativeTet4Fixture({load}),{wire,recordRevision}=await serializeNativeTet4Record(record),outputs=[];
+  for(const [binary,isWasm,runtime] of [[host,false,'host-native'],[wasm,true,'wasm-development-check']]){const r=runProof(binary,wire,{wasm:isWasm});assert.ifError(r.error);assert.equal(r.status,0,r.stderr);outputs.push(verifyNativeTet4Output(JSON.parse(r.stdout),{record,recordRevision,runtime}));}
+  preparedTet4Fixtures.push({recordRevision,sourceInputRevision:record.sourceInputRevision,meshRevision:record.meshRevision,loadN:load,host:outputs[0],wasm:outputs[1]});
+ }
+ const sourceHashes={};for(const file of ['native/native-proof/main.cpp','native/mfem-adapter/adapter.cpp','native/native-proof/tet4-record.hpp','scripts/native-tet4-contract.mjs'])sourceHashes[file]=createHash('sha256').update(await readFile(join(root,file))).digest('hex');
+ const report={schemaVersion:1,verifiedAt:new Date().toISOString(),platform:process.platform,architecture:process.arch,nodeVersion:process.version,pin:nativeProofPin,sourceHashes,hostBinary:host,hostSha256:createHash('sha256').update(hostBytes).digest('hex'),wasmBinary:wasm,wasmLoaderSha256:createHash('sha256').update(await readFile(wasm)).digest('hex'),wasmModuleSha256:createHash('sha256').update(await readFile(wasm.replace(/\.(?:cjs|mjs)$/i,'.wasm'))).digest('hex'),fixtures:results,invalidInputCases:invalidProofInputs.length,hostNativeVerified:true,wasmParityVerified:true,preparedTet4ContractVerified:true,preparedTet4Fixtures,scope:'Legacy fixed bar and bounded explicit prepared isotropic Tet4 records; CAD condition transfer, arbitrary physics and production native backend remain unsupported'};
  await mkdir(join(root,'.native-cache'),{recursive:true});await writeFile(join(root,'.native-cache','native-proof-report.json'),JSON.stringify(report,null,2)+'\n');console.log('Host-native execution and same-source WASM parity verified; report: .native-cache/native-proof-report.json');return report;
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){

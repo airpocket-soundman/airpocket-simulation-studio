@@ -77,3 +77,11 @@ A completed gate writes `.native-cache/native-proof-report.json`, uploaded as
 runtime's numerical outputs. Workflow creation alone is not evidence of a passed
 host run: inspect the completed Actions run and its artifact. This gate only proves
 the axial fixture; it does not complete the saved-project native backend or P6.
+
+## Prepared Tet4 record (v2)
+
+The same executable additionally accepts `airpocket-native-tet4-v2`: bounded
+isotropic Tet4 mesh/support/nodal-force records with validated saved input
+identity. See [the contract](../../docs/en/native-tet4-proof.md). No CAD condition
+transfer or arbitrary saved-project execution is implied. The mandatory CI also
+runs translated-bar v2 references and invalid records in host/WASM processes.

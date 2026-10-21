@@ -2,6 +2,29 @@
 
 [English](en/wasm-runtime-investigation.md)
 
+## 2026-10-21: 固定Linux比較の完了（非再現・未解決）
+
+公開済みsource `56576af6bd26d510c3166edf69c1cd73ffcb9703` を指す既存注釈タグ `release-56576af6bd26d510c3166edf69c1cd73ffcb9703` から、手動workflowを対象ごとに1回実行しました。各runのhead SHAも同じです。実環境はLinux x64 / Node **v24.22.0** / V8 **13.6.233.17-node.57**。workflow指定は `ubuntu-latest` と `node-version: 24` で、固定Node版の設定に変更していません。
+
+| 対象 | mode | 反復 | 成功/失敗/skip | 試験子プロセス ms | exit / signal |
+| --- | --- | --- | --- | --- | --- |
+| analysis-jobs | default | 1 | 8 / 0 / 0 | 3627 | 0 / null |
+| analysis-jobs | disabled | 1 | 8 / 0 / 0 | 3754 | 0 / null |
+| material-catalog | default | 1 | 7 / 0 / 0 | 3953 | 0 / null |
+| material-catalog | disabled | 1 | 7 / 0 / 0 | 3788 | 0 / null |
+
+[analysis-jobs run 39543750219](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543750219) と [material-catalog run 39543753492](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39543753492) は成功。全cellで30秒期限・出力制限・取消・signalによる停止はなく、`allocations_.erase(addr)` と `jit_page.has_value()` の検出はそれぞれ0件でした。各pairは並列数4、同じ対象試験、269件のsource hash、16件の解決済み資産、Node binary hashが一致しています。argvの差はdisabled側の明示 `--no-wasm-code-gc` だけです。
+
+[比較要約と受入判定](evidence/2026-10-21-runtime-linux-comparison.json) に環境、source/runtime指紋、各modeのexit・signal・timeout・試験件数・stdout/stderrのSHAを保存しました。[ダウンロード原本](evidence/2026-10-21-runtime-linux-raw/) はrunごとの比較JSONとdefault/disabled各JSONを変更せず保存し、stdout/stderrを内包します。GitHub artifactは14日保持なので、原本ファイルのbyte数/SHAも要約に記録しています。
+
+引継ぎ後のdispatchで、停止前に成功していた [material-catalog run 39542239219](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39542239219) を発見しました。これは同sourceでもNode **v24.21.0** / V8 **13.6.233.17-node.53**、default/disabled各7件成功の別履歴です。今回の24.22.0の30試験へ合算せず、原本と実runtimeを別記しました。新規実行は指定の2runだけで、差異・再現が出なかったため追加反復はしていません。
+
+**RUNTIMEWASM1はcheckingのままです。** 4cellの非再現は軽減効果、停止原因の同一性、特定上流修正の包含、安全性を証明しません。default→disabledの順序、単発実行、CI host負荷を制御した性能比較ではなく、RSS・メモリ増加も未測定です。`NODE_OPTIONS`は診断子から除去していますが、別spawn processへのflag伝播と全子孫process終了は未証明です。close確認の対象は所有する診断runnerです。
+
+製品source・数値許容差・通常CI・既定runtime/flag・進捗状態を変更する根拠は得られませんでした。次の自然発生fatalを固定source/runtimeとWorker終了直前の所有権checkpoint付きで捕捉し、2署名を分離して最小終了列へ落とす条件が残ります。再現差が得られた時だけ理由付きの有界追加比較を検討します。下の上流issue/backportに関する記述は過去の日付の調査記録で、今回その現在状態を再照合していません。
+
+ローカルでは既存WASM資産を読取り再利用し、新たなruntime取得・native build・全体suite・Chrome作業を行わず、診断器の対象試験15件と契約型5ファイルを確認しました。Fake/stubによる終了制御試験はnative fatalの再現試験とは別です。
+
 ## 2026-10-18: 有界な比較診断
 
 PR122の初回Linux/Node24.21.0全体検証で `Check failed: jit_page.has_value()` が発生し、同じソースの再実行は成功しました。従来のallocation-erase署名とは分離して記録し、同じ原因とも根治済みとも扱いません。

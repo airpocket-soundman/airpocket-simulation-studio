@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "name": "Synthetic orthotropic QA valid-inrange",
+  "material": "金属",
+  "materialProperties": {
+    "orthotropic": {
+      "model": "linear-orthotropic",
+      "youngModuliPa": [
+        1000000000,
+        2000000000,
+        3000000000
+      ],
+      "poissonRatios": [
+        0,
+        0,
+        0
+      ],
+      "shearModuliPa": [
+        400000000,
+        500000000,
+        600000000
+      ],
+      "axes": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source": "Synthetic axial reference, not measured material data",
+      "testConditions": "10 x 10 x 40 mm bar, 100 N axial force, zero Poisson ratios"
+    }
+  },
+  "study": {
+    "kind": "structural",
+    "gravityEnabled": false
+  },
+  "sourceModel": {
+    "kind": "box",
+    "bounds": [
+      0,
+      0,
+      0,
+      10,
+      10,
+      40
+    ]
+  },
+  "meshes": [
+    {
+      "positions": [
+        10,
+        10,
+        40,
+        10,
+        0,
+        40,
+        10,
+        10,
+        0,
+        10,
+        0,
+        40,
+        10,
+        0,
+        0,
+        10,
+        10,
+        0,
+        0,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10,
+        40,
+        0,
+        0,
+        0,
+        0,
+        0,
+        40,
+        0,
+        10,
+        40,
+        0,
+        10,
+        0,
+        0,
+        10,
+        40,
+        10,
+        10,
+        0,
+        0,
+        10,
+        40,
+        10,
+        10,
+        40,
+        10,
+        10,
+        0,
+        0,
+        0,
+        40,
+        0,
+        0,
+        0,
+        10,
+        0,
+        40,
+        0,
+        0,
+        0,
+        10,
+        0,
+        0,
+        10,
+        0,
+        40,
+        0,
+        10,
+        40,
+        0,
+        0,
+        40,
+        10,
+        10,
+        40,
+        0,
+        0,
+        40,
+        10,
+        0,
+        40,
+        10,
+        10,
+        40,
+        10,
+        10,
+        0,
+        10,
+        0,
+        0,
+        0,
+        10,
+        0,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10,
+        0
+      ],
+      "faceIds": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "fixed",
+      "value": 0,
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "regions": [
+        {
+          "mesh": 0,
+          "triangles": [
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "type": "force",
+      "value": 100,
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "mesh": 0,
+          "triangles": [
+            8,
+            9
+          ]
+        }
+      ]
+    }
+  ],
+  "selection": [
+    []
+  ]
+}

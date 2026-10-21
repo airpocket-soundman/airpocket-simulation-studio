@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "helperSha256": "a16a5400e529726d0dd818ac5cba5870436138aaa57493c8064261e12eb72829",
+  "node": "v24.11.1",
+  "scope": "Actual synthetic headless process solves. Not browser rendering, not MCP export acceptance or independent material validation.",
+  "archiveSha256": "bd30abd84f1b8c7fce85018feb476d44d7d88cef934b8edb45867ec45362a0b7",
+  "archiveBytes": 1183210,
+  "records": [
+    {
+      "amplitude": 1,
+      "inputSha256": "33174ce63737270113c994f7e87152aad5ec4a8ad24a76056478c57abfa7e06e",
+      "nodeCount": 335,
+      "frameCount": 24,
+      "runtime": {
+        "schemaVersion": 1,
+        "target": "node",
+        "isolation": "process",
+        "build": {
+          "status": "available",
+          "version": "0.44.0",
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "dirty": true,
+          "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0"
+        },
+        "engine": {
+          "requestedMethod": "pcg",
+          "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "amplitude": 2,
+      "inputSha256": "d1270ce3047472530a17f96da9fa406dab72acb9b47ff1ad711e1794239d0c42",
+      "nodeCount": 335,
+      "frameCount": 24,
+      "runtime": {
+        "schemaVersion": 1,
+        "target": "node",
+        "isolation": "process",
+        "build": {
+          "status": "available",
+          "version": "0.44.0",
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "dirty": true,
+          "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0"
+        },
+        "engine": {
+          "requestedMethod": "pcg",
+          "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      }
+    }
+  ],
+  "cleanup": "Owned child processes settled before each analyzeProject resolved; no browser or server started."
+}

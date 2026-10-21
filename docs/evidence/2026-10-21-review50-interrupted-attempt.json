@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "BROWSEREXPORT1",
+  "workOrder": 50,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "status": "incomplete; no image export job or decoded artifact produced in this attempt",
+  "prepared": [
+    "Real94-node structural100N saved archive prepared by qa-review-export-archives.mjs.",
+    "Archive imported by real Chrome GUI and saved result displayed before interruption."
+  ],
+  "permissions": {
+    "origin": "http://127.0.0.1:5188",
+    "explicitGuiScopes": [
+      "inspect",
+      "view"
+    ],
+    "editGranted": false,
+    "analyzeGranted": false,
+    "purpose": "User-authorized synthetic PNG sequence QA; temporary owned local connector only"
+  },
+  "interruption": {
+    "firstAttempt": "Default browser connected and scoped correctly. Initial formal read timed out before export; Chrome extension then reported unavailable.",
+    "diagnosticCounters": {
+      "originHostRefused": 0,
+      "authRefused": 0,
+      "scopeRefused": 0,
+      "commandTimeouts": 1
+    },
+    "boundedRecovery": "Latest inventory and same owned tab were rebound. Reconnected page had reset; fresh connector initialization then timed out and the browser automation session reset.",
+    "cause": "Unproven. Observed browser automation connection interruption does not establish application, network or permission cause."
+  },
+  "notPerformed": [
+    "startExport png-sequence frames3 slice",
+    "ZIP retrieval, SHA, CRC and PNG decoder checks",
+    "Successful/cancelled export state restoration",
+    "No synthetic IDAT or Node canvas stub was presented as real Chrome output."
+  ],
+  "cleanup": {
+    "ownedViteSession": 39985,
+    "ownedViteStopped": true,
+    "knownConnectorPids": [
+      37724,
+      20356
+    ],
+    "bothConnectorsAlreadyExitedOnCheck": true,
+    "noOtherProcessStopped": true,
+    "ownedBrowserTabId": "1867813961",
+    "explicitTabClose": "unconfirmed after automation session reset; unmarked for turn-end cleanup",
+    "tokenOrCodePersisted": false
+  },
+  "nextStep": "Resume with a stable documented Chrome connection, same retained real archive and inspect+view only. Inspect current state before any retry. Do not mark parent or this QA complete."
+}

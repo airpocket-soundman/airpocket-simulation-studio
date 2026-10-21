@@ -1,0 +1,155 @@
+[
+  {
+    "name": "invalid-requested",
+    "values": [
+      210,
+      220,
+      230
+    ],
+    "load": {
+      "accepted": false,
+      "message": "Orthotropic elasticity requires three Young/shear moduli in Pa, cyclic Poisson ratios and unit material axes"
+    },
+    "rawPreflight": [
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/0",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 210,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/1",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 220,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/2",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 230,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      }
+    ]
+  },
+  {
+    "name": "valid-warning",
+    "values": [
+      1000,
+      2000,
+      3000
+    ],
+    "load": {
+      "accepted": true
+    },
+    "rawPreflight": [
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/0",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 1000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/1",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 2000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/2",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 3000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      }
+    ]
+  },
+  {
+    "name": "valid-inrange",
+    "values": [
+      1000000000,
+      2000000000,
+      3000000000
+    ],
+    "load": {
+      "accepted": true
+    },
+    "rawPreflight": []
+  }
+]

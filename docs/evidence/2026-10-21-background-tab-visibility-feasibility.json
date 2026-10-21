@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "EXPORTBACKGROUND1",
+  "workOrder": "45-EXPORTBACKGROUND1",
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "scope": "Feasibility of genuine foreground-to-hidden transitions using documented browser automation only; no recording acceptance performed.",
+  "browser": {
+    "brand": "Google Chrome",
+    "provider": "extension",
+    "observedBrowserId": "1",
+    "versionVerified": false
+  },
+  "observations": [
+    {
+      "action": "Create owned blank tab A",
+      "tabId": "1867813942",
+      "visibilityState": "visible",
+      "hidden": false
+    },
+    {
+      "action": "Create owned blank tab B",
+      "tabA": {
+        "visibilityState": "visible",
+        "hidden": false
+      },
+      "tabB": {
+        "visibilityState": "visible",
+        "hidden": false
+      }
+    },
+    {
+      "action": "Read selected tab and visibility again",
+      "selectedTabId": "1867813945",
+      "tabA": {
+        "visibilityState": "visible",
+        "hidden": false
+      },
+      "tabB": {
+        "visibilityState": "visible",
+        "hidden": false
+      }
+    }
+  ],
+  "interpretation": "Provider-selected tab metadata did not produce document.hidden=true on the previous tab. A selected tab ID alone is insufficient proof of actual native background visibility.",
+  "navigationAttempt": {
+    "url": "about:blank#background-qa-b",
+    "result": "Rejected by browser URL policy: navigation accepts only HTTP/HTTPS. No alternate execution or navigation workaround attempted."
+  },
+  "availableDocumentedControls": [
+    "tabs.new",
+    "tabs.get",
+    "tabs.selected",
+    "tab.goto",
+    "tab.close"
+  ],
+  "blocker": "No documented browser tab activation method was available in the inspected core API; owned tab creation left both documents visible. Genuine hidden/unselected recording scenarios remain unverified.",
+  "notPerformed": [
+    "No fake visibility event dispatch or hidden override.",
+    "No native-app input or unrelated user-tab interaction.",
+    "No localhost server or recording process started.",
+    "No foreground/hidden WebM start, cancel, expiry, lock release, partial-artifact refusal or original-view restoration acceptance performed."
+  ],
+  "cleanup": {
+    "ownedTabAClosed": true,
+    "ownedTabBClosed": true,
+    "serverCreated": false,
+    "probeCreated": false,
+    "connectionCreated": false
+  },
+  "status": "checking; actual hidden acceptance remains blocked with this documented control surface",
+  "nextStep": "Use a documented control that demonstrably causes a real document.visibilityState=hidden transition before starting the recording matrix. Do not infer completion from selected-tab metadata or synthetic fixtures.",
+  "userManualAssistanceRequested": false
+}

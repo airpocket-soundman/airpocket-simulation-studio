@@ -1,3 +1,4 @@
+import {validatePrintedEquivalentMaterial} from './printed-equivalent-material.js';
 import {validateOrthotropic} from './orthotropic-material.js';
 import {validateCatalogSelection} from './catalog-provenance.js';
 import {validatePlasticity} from './plasticity-material.js';
@@ -22,6 +23,7 @@ export function validateMaterialProperties(p){
  if(p.temperatureMin!=null&&p.temperatureMax!=null&&p.temperatureMin>p.temperatureMax)throw Error('有効温度の上下限が逆です。');
  for(const k of ['source','grade','notes'])if(p[k]!==undefined&&(typeof p[k]!=='string'||p[k].length>10000))throw Error('材料の記録が不正です。');
  validateOrthotropic(p.orthotropic);
+ validatePrintedEquivalentMaterial(p);
  if(p.orthotropic&&(p.plasticity||p.hyperelastic||p.fractureData||p.fatigueData||p.dependence?.elasticTemperatureTable))throw Error('Orthotropic elasticity cannot be combined with isotropic nonlinear, failure or temperature-table models');
  if(p.orthotropic&&p.dependence?.directionality==='isotropic')throw Error('Orthotropic constants conflict with isotropic directionality');
  if(p.orthotropic&&p.dependence?.axes&&p.dependence.axes.some((v,i)=>v.some((x,j)=>Math.abs(x-p.orthotropic.axes[i][j])>1e-8)))throw Error('Orthotropic material axes conflict with registered dependence axes');
