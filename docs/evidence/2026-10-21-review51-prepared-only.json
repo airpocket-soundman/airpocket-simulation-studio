@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "VIEWCOMPARE",
+  "workOrder": 51,
+  "sourceSha": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+  "status": "real source cases prepared; Chrome/MCP GIF acceptance not started",
+  "realPreparedCases": {
+    "amplitudesPa": [
+      1,
+      2
+    ],
+    "nodeCountEach": 335,
+    "storedFramesEach": 24,
+    "requestedFrames": 25,
+    "budgetBytes": 65536,
+    "reasonForReduction": "Existing solver snapshot budget:335*24*8=64320 bytes;25 frames would exceed65536. No field or count rewritten.",
+    "sameMeshAndTwiceAmplitude": "Verified by real headless generation helper assertions"
+  },
+  "retained": [
+    "docs/evidence/review51-real-archives/cases.json",
+    "docs/evidence/review51-real-archives/headless-readbacks.json",
+    "scripts/qa-review-export-archives.mjs"
+  ],
+  "notPerformed": [
+    "Real Chrome two-case rendering",
+    "FormalMCP comparison time GIF export",
+    "Retrieval/SHA/decoder/24frame dimensions and uniform delays",
+    "Actual viewer state restoration and cancellation"
+  ],
+  "reason": "Browser automation connection repeatedly disconnected during preceding task50; sequential heavy QA stopped rather than retrying blindly. No51 browser, connector or server was started.",
+  "cleanup": {
+    "browserCreatedFor51": false,
+    "connectorCreatedFor51": false,
+    "serverCreatedFor51": false,
+    "tokensPersisted": false
+  },
+  "acceptance": "Parent and bounded GIF QA remain incomplete; actual solver result preparation is not actual browser image validation."
+}
