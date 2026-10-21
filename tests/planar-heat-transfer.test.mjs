@@ -84,6 +84,25 @@ test('rejects shared nodes, deficits, duplicates, holes, plane offset, degenerat
   assert.throws(()=>planarHeatTransfer(mesh,facesA,[{nodes:[4,5,8]},{nodes:[5,6,8]},{nodes:[6,7,8]},{nodes:[7,4,8]}],1000),/same-facing/);
 });
 
+test('rejects finite inputs whose intermediate or accumulated value leaves the finite range',()=>{
+  // Synthetic guard case, not a physical model: 1e6 mm triangles with q=1e308 W/m^2
+  // keep every input finite but make areaM2*q overflow.
+  const overflow={nodes:[0,0,0, 1e6,0,0, 0,1e6,0, 0,0,0, 0,1e6,0, 1e6,0,0]};
+  assert.throws(()=>planarHeatTransfer(overflow,[{nodes:[0,1,2]}],[{nodes:[3,4,5]}],1e308),/finite numeric range/);
+  // A coordinate difference of two finite but huge coordinates also overflows.
+  const huge={nodes:[1e308,0,0, -1e308,0,0, 0,1e308,0, 0,0,0, 0,1e6,0, 1e6,0,0]};
+  assert.throws(()=>planarHeatTransfer(huge,[{nodes:[0,1,2]}],[{nodes:[3,4,5]}],1000),/finite numeric range/);
+  // Ordinary zero and negative fluxes are physical inputs, not overflow, and must still work.
+  const {mesh,facesA,facesB}=reference();
+  const zero=planarHeatTransfer(mesh,facesA,facesB,0);
+  assert.equal(zero.sourceW,0);
+  assert.equal(zero.targetW,0);
+  assert.equal(zero.balanceErrorW,0);
+  const negative=planarHeatTransfer(mesh,facesA,facesB,-1000);
+  assert.ok(Math.abs(negative.sourceW+0.1)<1e-12,String(negative.sourceW));
+  assert.ok(Math.abs(negative.balanceErrorW)<=1e-12,String(negative.balanceErrorW));
+});
+
 test('does not mutate the mesh, faces or flux',()=>{
   const {mesh,facesA,facesB}=reference();
   const flux={base:1000,gradient:[100000,0,0]};
