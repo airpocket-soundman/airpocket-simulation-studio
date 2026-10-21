@@ -31,4 +31,5 @@
 - JSONにsourceSHA、実visibility遷移、操作/停止時刻、開始/解放lock状態、終了理由、成果物の採否、元表示復元を残す。
 - 模擬試験、実foreground、実hidden、未実行を明確に分け、日英docsと小さいPRで提出する。自己merge・force pushは禁止。
 - 操作環境が不足する間はcheckingを維持し、必要な実機操作だけをblocking条件として残す。
+- 2026-10-21の実Chrome調査では、所有タブ2枚を作っても両方のdocument.visibilityStateはvisibleのままだった。選択タブIDの変化はhiddenの証拠にしない。記録: `../evidence/2026-10-21-background-tab-visibility-feasibility.json`。所有タブは終了済み。手動操作ができない利用者へ同じ依頼を繰り返さず、実hiddenを生じる正規操作が利用可能になるまで当該マトリクスを未確認として保持する。
 - 全条件を実確認してもVIEWCOMPARE/BROWSEREXPORT1/P3や公開ゲート全体は別判定。親タスクを自動releasedにしない。

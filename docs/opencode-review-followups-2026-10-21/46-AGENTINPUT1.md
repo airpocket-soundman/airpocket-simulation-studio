@@ -9,7 +9,7 @@
 - `node --test tests/preflight-unit-magnitude.test.mjs tests/ui-analysis-preflight.test.mjs tests/ui-material-form.test.mjs`
 
 ## 実施と数値入り受入
-1. branded Google Chromeの390 CSS pxで正規APIから合成直交異方性入力を設定する。Young成分=[210,220,230] Pa。ほかの定数/軸はfixtureと単位を明記する。
+1. branded Google Chromeの390 CSS pxで正規APIから合成直交異方性入力を設定する。Young成分=[1000,2000,3000] Pa。ほかの定数/軸はfixtureと単位を明記する。旧指示の[210,220,230] Paは既存材料validatorの下限1000 Paを満たさず、正規保存入力の読み込みで拒否される。旧値の拒否を別途記録し、validatorを緩めたり隠れた状態へ注入したりしない。
 2. 正式preflightで3警告のpointer末尾0/1/2とPa値を確認する。不正材料等の併存拒否は隠さない。
 3. 3ボタンを順にTab→Enterし、各1回だけ`document.activeElement.id === 'material-status'`となることを記録する。閉じた親detailsが開き、focusが見えることも確認する。
 4. 「専用編集欄は未実装、API/保存入力で該当indexを確認」という案内を日英それぞれ新規checkで読む。等方E欄/依存JSONへ誘導されない。

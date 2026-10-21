@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T03:11:25.329195+00:00",
+  "updatedAt": "2026-10-21T04:29:39.331Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-21",
-    "testCount": 1758,
-    "description": "追加11 PRを独立レビューし、壁層品質の非有限値拒否と証拠誤記を統合側で修正。実Chrome390pxの入力案内も確認。6件の追加QAは指示書へ残し、親は未完を維持。全171件・公開済134件・未完37件。1758試験は21d5e7a4の公開検証記録。",
-    "descriptionEn": "Independently reviewed11 additional PRs; integration repairs non-finite wall-layer validation and evidence errors. Actual Chrome390px input guidance verified. Six QA follow-ups remain and parents stay incomplete.171total134released37unfinished.1758 tests records published21d5e7a4."
+    "testCount": 1787,
+    "description": "レート制限で停止した作業を引継ぎ。実Chrome入力案内・adaptive確認、実熱/音響の保存/MCP照合、Linux両設定比較を追加。Tet4実装と造形条件材料を進行中。未確認とCI待ちは各カードへ明記。全171件・公開済134件・未完37件。1787試験は公開56576af6の記録。",
+    "descriptionEn": "Resumed work stopped by rate limits: actual Chrome input/adaptive QA, thermal/acoustic save/MCP comparisons and Linux runtime comparisons. Tet4 and print-conditioned materials are in progress. Cards distinguish pending CI and unverified work.171total134released37unfinished;1787 tests records published56576af6."
   },
   "tasks": [
     {
@@ -885,8 +885,8 @@
       "titleEn": "Simulate layers and infill",
       "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
       "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
-      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 42-PRINT2.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
-      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 42-PRINT2.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task.",
+      "lastUpdate": "2026-10-21: 停止時の専用フォルダを引き継ぎ、造形条件付き等価異方性recordの実装を開始。正規保存復元、適用範囲拒否、明示壁/infillとの排他を接続中。実測校正・独立実測の提供はなく、完成扱いにしない。",
+      "lastUpdateEn": "2026-10-21: Resumed the stopped worktree and began a print-conditioned equivalent orthotropic record, connecting saved validation, applicability refusal and exclusion of explicit wall/infill models. Physical calibration and independent measurements are unavailable; no completion claim.",
       "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs; docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md"
     },
     {
@@ -1225,8 +1225,8 @@
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/47-P0.md",
-      "lastUpdate": "2026-10-21: 追加PR #153 を限定成果として取り込み対象。adaptive診断の完全一致mappingを追加。非対応GUIのdisabledは維持し、実API/Chrome確認を残す。 親タスク全体は未完。",
-      "lastUpdateEn": "2026-10-21: Additional PR #153 accepted for bounded integration. Adds exact adaptive diagnostic mapping, retains disabled unsupported GUI controls and leaves actual API/Chrome verification open. Full parent acceptance remains incomplete.",
+      "lastUpdate": "2026-10-21: 追加PR #164で非対応adaptiveの公式API診断と、実Chromeでの熱解析disabled/uncheckedを別々に確認。対応構造解析ではSpace変更・Tab移動・stale破棄を確認。非対応欄を強制有効化せず、親全体は未完。",
+      "lastUpdateEn": "2026-10-21: PR #164 separately verifies the official unsupported-adaptive diagnostic and actual Chrome thermal disabled/unchecked controls. Supported structure passed Space, Tab and stale checks. Unsupported controls were not force-enabled; the parent remains open.",
       "review": {
         "status": "merged",
         "pr": 153,
@@ -1354,9 +1354,9 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 43-P6.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
+      "lastUpdate": "2026-10-21: 準備済みTet4の共通host/WASM入力と変位・反力・収支検証を実装しPR #165へ。入力hash競合と非対応依存材料の受理をレビューで修正。実WASMは確認、実host/Linux CIは確認中。本番native経路と条件転送は未完。",
       "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md",
-      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 43-P6.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task."
+      "lastUpdateEn": "2026-10-21: PR #165 adds prepared Tet4 host/WASM input, displacement, reactions and balance. Review fixed a hash race and unsupported dependent materials. Actual WASM verified; host/Linux CI pending. Production native integration and condition transfer remain open."
     },
     {
       "id": "UIRESEARCH1",
@@ -1483,8 +1483,8 @@
       "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Remaining: complete all-physics preflight, magnitude rules for fluid/orthotropic/nonlinear/modal inputs, general-mesh quality and convergence/accuracy follow-up, and a Skill-only full loop. Existing input/provenance/intermediate-result acceptance remains. Historical verification: 317 tests passed, three skipped; 26 local runtime checks passed. Browser checks cover 13 import/restore scenarios plus five provisional-input checks: 0.04 mm/-100 N, JP/EN labels and saved-case display. All-physics preflight and live transport remain pending. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs; docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/46-AGENTINPUT1.md",
-      "lastUpdate": "2026-10-21: 追加PR #152 を限定成果として取り込み対象。直交異方性Young3成分の診断を既存material-statusへ案内。実ChromeでのAPI3成分確認は残る。 親タスク全体は未完。",
-      "lastUpdateEn": "2026-10-21: Additional PR #152 accepted for bounded integration. Guides three orthotropic Young warnings to the existing material-status note; actual Chrome API verification of all three remains. Full parent acceptance remains incomplete.",
+      "lastUpdate": "2026-10-21: 追加PR #163で実Chrome390pxの3成分案内・Enter focus・入力不変・日英・stale破棄を記録。旧指定210/220/230Paは正規validatorが拒否するため、1000/2000/3000Paで同じ警告経路を検証。正式MCP・focus描画の未確認は残す。",
+      "lastUpdateEn": "2026-10-21: PR #163 records actual Chrome390px three-component guidance, Enter focus, unchanged input, languages and stale invalidation. Existing validation rejects210/220/230Pa; valid1000/2000/3000Pa exercised the same warnings. Paired MCP and focus-pixel evidence remain open.",
       "review": {
         "status": "merged",
         "pr": 152,
@@ -1524,8 +1524,8 @@
       "acceptanceEn": "Verify solve/storage/display-time distinctions against thermal/acoustic reference fields, fixed ranges, persistence, memory limits, API time control and fixed-frame export. Implemented: bounded opt-in thermal nodal history, thermal/acoustic sliders and interpolated playback, displayed-time probes/stills, stored-frame API selection and thermal PNG sequences. Real Chrome on 2026-10-17 checked stored-time temperatures against 20+t/20+2t, a 0/5/10 s sequence and hashes, restoration to 2 s, and 5 s named-view/measurement persistence, replay and tamper refusal. Legacy v1 remains compatible; arbitrary interpolated-time API selection/persistence is refused. General-geometry propagation accuracy,total peak RAM and public HTTPS remain open. Storage-density/scalar-budget APIs and Japanese UI have bounded real-Chrome evidence from2026-10-18.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-21: 追加PR #159 を限定成果として取り込み対象。保存履歴の限定実測記録を追加。513座標値=171節点へ証拠訂正。正式Chromeと再実行資料は残る。 親タスク全体は未完。",
-      "lastUpdateEn": "2026-10-21: Additional PR #159 accepted for bounded integration. Adds bounded stored-history observations and corrects513 coordinate values to171 nodes; branded Chrome and replay artifacts remain. Full parent acceptance remains incomplete.",
+      "lastUpdate": "2026-10-21: 実熱94節点/3枚2256byte・音響335節点/7枚18760byteを保存・再読込。実Chrome/正式MCPのreload前後で履歴要約・結果版が一致。途中のChrome切断は復旧して再pair確認。親全体は未完。",
+      "lastUpdateEn": "2026-10-21: Actual thermal94nodes/3frames2256bytes and acoustic335nodes/7frames18760bytes saved and reloaded. Actual Chrome and paired MCP summaries/result revisions matched before and after reload. Connection interruption recovered and new inspect pairing verified; parent remains open.",
       "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/49-VIEWTIME.md",
       "review": {
         "status": "merged",
@@ -1747,8 +1747,8 @@
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution. 2026-10-16 Tracking: upstream nodejs/node#66366 attributes the crash to a V8 race (WasmImportWrapperCache MaybeGet takes a ref before checking is_dying); V8 fixes 68210d500a/9b8ca54d5a, but the 24.x backport (PR 66376) is unmerged and neither 24.21.0 nor 24.22.0 contains it (CHANGELOG checked). Our Windows runs (Node 24.11.1, 24.22.0, 22.23.3, 26.12.0 and --no-wasm-code-gc; the five files that died in CI; 93 runs) produced 0 V8 fatals, so which operation of ours triggers it is not identified (hypothesis only: wasm kept alive across worker.terminate()). Recommendation: move the CI pin to the first 24.x release with the fix. Interim --no-wasm-code-gc (0/20 in the upstream report) needs an approved CI change. Stays checking.",
       "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json; docs/opencode-release-work-orders-2026-10-21/44-RUNTIMEWASM1.md",
-      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 44-RUNTIMEWASM1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
-      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 44-RUNTIMEWASM1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task."
+      "lastUpdate": "2026-10-21: 固定56576af6で実Linux比較を各1回実行。analysis-jobsは両設定8件、material-catalogは両設定7件が成功。致命署名・timeoutなし。元障害の再現や軽減効果・根治は未証明のためchecking維持。",
+      "lastUpdateEn": "2026-10-21: Real Linux comparisons at frozen56576af6 passed once per target:8 analysis-jobs tests and7 material-catalog tests in each mode. No fatal signature or timeout. Root failure reproduction, mitigation effectiveness and resolution remain unproven."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -2768,9 +2768,9 @@
       "category": "結果表示",
       "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 45-EXPORTBACKGROUND1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。 現在利用者は手動操作不可。実hiddenの確認は操作環境待ち。",
-      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 45-EXPORTBACKGROUND1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task. Actual hidden-tab QA remains blocked on an available operating environment; the user cannot operate now.",
-      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md"
+      "lastUpdate": "2026-10-21: 実Chrome所有タブ2枚を調査しても両方visible。選択ID変更だけで実hiddenと判定しない。タブは終了済み。利用者の手動操作不可を尊重し、背景録画マトリクスは未確認のまま。",
+      "lastUpdateEn": "2026-10-21: Both owned Chrome tabs remained visible during the feasibility check. Selected-tab identity alone is not hidden-state evidence. Tabs closed. Genuine background recording remains unverified; manual user assistance is unavailable.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md; docs/evidence/2026-10-21-background-tab-visibility-feasibility.json"
     },
     {
       "id": "BROWSERRESET1",
