@@ -13,6 +13,7 @@ import {createGifEncoder} from '../src/gif-encoder.js';
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const CLI = join(ROOT, 'scripts', 'verify-export-artifact.mjs');
 const revision = 'sha256:' + 'a'.repeat(64);
+const sha256Of = bytes => 'sha256:' + createHash('sha256').update(bytes).digest('hex');
 
 function runCli(args) {
   const result = spawnSync(process.execPath, [CLI, ...args], {encoding: 'utf8', timeout: 180000});
@@ -136,7 +137,9 @@ test('valid PNG and GIF read back identity and header while frame count stays un
   assert.equal(pngReport.status, 'verified');
   assert.equal(pngReport.identityVerified, true);
   assert.equal(pngReport.containerHeaderVerified, true);
+  assert.equal(pngReport.structureVerified, true);
   assert.equal(pngReport.frameCountVerified, false);
+  assert.deepEqual(pngReport.structure, {format: 'png', chunkCount: 3, idatChunkCount: 1, crcVerified: true, iendAtEnd: true});
   assert.equal(pngReport.format, 'png');
   assert.equal(pngReport.container, 'png');
   assert.equal(pngReport.mimeType, 'image/png');
@@ -161,9 +164,13 @@ test('valid PNG and GIF read back identity and header while frame count stays un
   assert.equal(gifReport.mimeType, 'image/gif');
   assert.equal(gifReport.identityVerified, true);
   assert.equal(gifReport.containerHeaderVerified, true);
+  assert.equal(gifReport.structureVerified, true);
   assert.equal(gifReport.frameCountVerified, false);
   assert.equal(gifReport.header.brand.startsWith('GIF8'), true);
   assert.deepEqual({width: gifReport.width, height: gifReport.height}, {width: 640, height: 320});
+  // Structural image descriptors, not drawable or decoded frames.
+  assert.deepEqual(gifReport.structure, {format: 'gif', imageDescriptorCount: 24, extensionCount: 25, subBlockCount: gifReport.structure.subBlockCount, globalColorTableBytes: 768, localColorTableCount: 0, trailerAtEnd: true});
+  assert.equal(gifReport.structure.subBlockCount > 24, true);
 });
 
 test('one-byte change, truncation, SHA change and a width offset are each rejected', async () => {
@@ -282,4 +289,69 @@ test('report goes only to a new path and never modifies inputs or an existing re
 
   assert.deepEqual(await readFile(manifestPath), beforeManifest);
   assert.deepEqual(await readFile(artifactPath), beforeArtifact);
+});
+
+// Each malformed artifact keeps a manifest from the real schemaVersion-1
+// producer (the same resolution/format contract) but with totalBytes and
+// sha256 recomputed over the malformed bytes. The rejection therefore comes
+// from the structure walk, not from identity.
+function withRecomputedIdentity(manifest, bytes) {
+  return {...manifest, sha256: sha256Of(bytes), totalBytes: bytes.length};
+}
+async function assertStructureRejected(dir, name, bytes, baseManifest) {
+  const manifest = withRecomputedIdentity(baseManifest, bytes);
+  assert.equal(manifest.totalBytes, bytes.length, name);
+  assert.equal(manifest.sha256, sha256Of(bytes), name);
+  const manifestPath = await writeFixture(dir, `${name}.manifest.json`, Buffer.from(JSON.stringify(manifest)));
+  const artifactPath = await writeFixture(dir, `${name}.artifact`, bytes);
+  const run = runCli(['--manifest', manifestPath, '--artifact', artifactPath]);
+  assert.notEqual(run.status, 0, name);
+  const report = reportOf(run);
+  assert.equal(report.status, 'invalid', `${name}: ${report.reason}`);
+  assert.equal(report.identityVerified, true, name);
+  assert.equal(report.structureVerified, false, name);
+  assert.equal(typeof report.reason, 'string', name);
+  return report;
+}
+
+test('PNG chunk walk rejects truncation, missing IEND, forged length and bad CRC with recomputed manifests', async () => {
+  const dir = await workspace();
+  const png = makePng(2, 2);
+  const baseManifest = await pngManifest(png);
+  const idatStart = 8 + 12 + 13;
+  assert.equal(png.readUInt32BE(idatStart), png.length - idatStart - 24);
+  const badCrc = Buffer.from(png);
+  badCrc[badCrc.length - 13] ^= 0xff;
+  const hugeLength = Buffer.from(png);
+  hugeLength.writeUInt32BE(0xffffffff, idatStart);
+
+  const cases = [
+    ['png-ihdr-mid', png.subarray(0, 20)],
+    ['png-idat-mid', png.subarray(0, idatStart + 8 + 10)],
+    ['png-iend-missing', png.subarray(0, png.length - 12)],
+    ['png-chunk-length-ffffffff', hugeLength],
+    ['png-idat-crc', badCrc],
+    ['png-trailing-byte', Buffer.concat([png, Buffer.from([0])])],
+  ];
+  for (const [name, bytes] of cases) await assertStructureRejected(dir, name, bytes, baseManifest);
+});
+
+test('GIF block walk rejects color-table/sub-block truncation, missing trailer, unknown markers and trailing bytes', async () => {
+  const dir = await workspace();
+  const gif = await makeGif(640, 320, 24);
+  const baseManifest = await gifManifest(gif);
+  const globalColorTableEnd = 13 + 3 * 256;
+  assert.equal(gif[globalColorTableEnd], 0x21);
+  const unknownMarker = Buffer.from(gif);
+  unknownMarker[globalColorTableEnd] = 0x99;
+
+  const cases = [
+    ['gif-color-table-mid', gif.subarray(0, globalColorTableEnd - 10)],
+    ['gif-subblock-mid', gif.subarray(0, gif.length - 50)],
+    ['gif-subblock-short-1', gif.subarray(0, gif.length - 3)],
+    ['gif-trailer-missing', gif.subarray(0, gif.length - 1)],
+    ['gif-unknown-marker', unknownMarker],
+    ['gif-trailing-byte', Buffer.concat([gif, Buffer.from([0])])],
+  ];
+  for (const [name, bytes] of cases) await assertStructureRejected(dir, name, bytes, baseManifest);
 });

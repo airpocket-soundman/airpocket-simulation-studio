@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "task": "33 P4 — PNG/GIF structural boundaries and truncation",
+  "parentTask": "P4 (remains incomplete; this unit is only the independent PNG/GIF structure walk)",
+  "baseCommit": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "baseReference": "origin/main at start; a4d7aebc2268ca512f66c73e6e73d3849c9d62cd is an ancestor of HEAD (git merge-base --is-ancestor exit 0)",
+  "branch": "codex/opencode-next-33",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-next-33",
+  "commitNote": "This evidence is committed with the change, so it does not record its own commit SHA.",
+  "scope": "scripts/verify-export-artifact.mjs structure walk, tests/verify-export-artifact.test.mjs fixtures, and the guarantee-scope paragraphs in docs/testing.md and docs/en/testing.md. No encoder, manifest producer, solver, public tool, progress.json or other common docs were changed.",
+  "fixtureProvenance": {
+    "png": "tests/verify-export-artifact.test.mjs makePng(2,2): independent standards-conformant PNG (signature, IHDR 13 bytes, zlib-compressed IDAT, IEND). Its manifest still comes from the real schemaVersion-1 producer createVisualExportJobs/buildManifest.",
+    "gif": "src/gif-encoder.js createGifEncoder({width:640,height:320,frames:24}) with 24 synthetic RGBA frames; the manifest still comes from the real comparisonManifest producer via startCompare.",
+    "manifestRecomputation": "For malformed bytes the producer manifest was kept (same format/container/mimeType/resolution) and totalBytes plus sha256 were recomputed over the malformed byte string with node:crypto SHA-256, matching what the producer does. The manifest producer was not modified.",
+    "syntheticInputs": "All pixel inputs and malformed byte strings are synthetic test data, not measurements."
+  },
+  "implementation": {
+    "file": "scripts/verify-export-artifact.mjs",
+    "pngWalk": "After the 8-byte signature, every chunk is walked. length/type/data/CRC must lie inside the file before any offset advances; a length above the PNG maximum 0x7fffffff is refused immediately. Chunk CRC-32 is computed over chunk type+data with the reflected polynomial 0xedb88320 and initial/final inversion (PNG specification, ISO/IEC 15948 §5.5 CRC-32, ISO 3309/ITU-T V.42), and compared with the stored CRC. IHDR must be the first chunk with length 13 and must match the parsed dimensions; IDAT must exist and be consecutive; IEND must have length 0 and end exactly at EOF; bytes after IEND are refused.",
+    "gifWalk": "13-byte logical screen descriptor, global color table from the packed field, then extensions (0x21 label + sub-blocks), image descriptors (0x2c + 9 bytes + optional local color table + LZW minimum code size + sub-blocks) and the 0x3b trailer. Every declared sub-block length is compared with the remaining bytes before advancing; unknown markers, EOF, missing trailer and bytes after the trailer are refused. LZW data is never decoded and pixel counts are not checked.",
+    "reportAdditions": "structureVerified (boolean) and structure details: PNG chunkCount, idatChunkCount, crcVerified, iendAtEnd; GIF imageDescriptorCount, extensionCount, subBlockCount, globalColorTableBytes, localColorTableCount, trailerAtEnd. imageDescriptorCount is a structural block count, not drawable/decoded frame count; frameCountVerified remains false and its meaning is unchanged. identityVerified, containerHeaderVerified, unsupported handling and exit codes are unchanged.",
+    "ordering": "Identity mismatch and header/resolution mismatch keep their existing status 'mismatch' and return before the structure walk, so existing behavior is preserved. With a correctly recomputed manifest identity the structure walk runs and a malformed container returns status 'invalid'."
+  },
+  "observedFixtures": [
+    {"name": "PNG normal 2x2", "bytes": 83, "sha256": "sha256:7e7a665691215c623da26a5e3a627402a621f0b05ee4e5408b093b36a9d30015", "status": "verified", "structureVerified": true, "structure": {"format": "png", "chunkCount": 3, "idatChunkCount": 1, "crcVerified": true, "iendAtEnd": true}, "reason": null},
+    {"name": "PNG IHDR truncated mid", "bytes": 20, "sha256": "sha256:40a4340a9ff673fe6fb41913250bc0931ac67e15851a9025bcafdb213bffad9a", "status": "invalid", "structureVerified": false, "reason": "artifact does not carry a valid PNG container header"},
+    {"name": "PNG IDAT truncated mid", "bytes": 51, "sha256": "sha256:ee303666364c892462f782deee94c5f808a6dd942e5153514d300a92f554984c", "status": "invalid", "structureVerified": false, "reason": "PNG chunk IDAT declares 26 data bytes but only 10 remain, so its data and CRC are truncated"},
+    {"name": "PNG IEND missing", "bytes": 71, "sha256": "sha256:9f25509bc4916daaf5c123cfefa0205010c359a47ebe9f7534801f47177b623b", "status": "invalid", "structureVerified": false, "reason": "PNG ends without an IEND chunk"},
+    {"name": "PNG IDAT chunk length 0xffffffff", "bytes": 83, "sha256": "sha256:ce11876db5722b93961d7206304ceeb198f10c08c8f3820e8c2dc1952ac43539", "status": "invalid", "structureVerified": false, "reason": "PNG chunk IDAT declares 4294967295 data bytes, over the specification maximum of 2147483647", "elapsedMs": 0.872},
+    {"name": "PNG IDAT CRC flipped", "bytes": 83, "sha256": "sha256:00584d10696e5ecae8477532225d9d6b2e2172acaca136e2c171cffa375503fa", "status": "invalid", "structureVerified": false, "reason": "PNG chunk IDAT CRC is 0xcf9e2b73, computed 0xcf9e2b8c"},
+    {"name": "PNG normal + 1 trailing byte", "bytes": 84, "sha256": "sha256:6b5591dc45d8a135605406caf9427ea6410e87d8c8ff95af0d5086b8963df65b", "status": "invalid", "structureVerified": false, "reason": "PNG has 1 trailing bytes after IEND"},
+    {"name": "GIF normal 640x320 24 frames", "bytes": 5574849, "sha256": "sha256:c90304314158b0663419f91f41d454faea8b45806a61483c86e1eabd3265062d", "status": "verified", "structureVerified": true, "structure": {"format": "gif", "imageDescriptorCount": 24, "extensionCount": 25, "subBlockCount": 21818, "globalColorTableBytes": 768, "localColorTableCount": 0, "trailerAtEnd": true}, "reason": null},
+    {"name": "GIF global color table truncated mid", "bytes": 771, "sha256": "sha256:03ba7688752309269b375e1022761f1f44a4832da3c113dca96512323f057ea3", "status": "invalid", "structureVerified": false, "reason": "GIF global color table declares 768 bytes but only 758 remain"},
+    {"name": "GIF data sub-block truncated mid", "bytes": 5574799, "sha256": "sha256:856ee85e5e234fdd2f56cf5c340d185f066b702a414a60b14b8ebd0d35651182", "status": "invalid", "structureVerified": false, "reason": "GIF image data sub-block declares 255 bytes but only 247 remain"},
+    {"name": "GIF sub-block short by exactly 1 byte", "bytes": 5574846, "sha256": "sha256:c567d6bca0b391c1cdbb51381baa75701ab219bf3ebda4ce8226c91212b5a902", "status": "invalid", "structureVerified": false, "reason": "GIF image data sub-block declares 39 bytes but only 38 remain", "elapsedMs": 28.161},
+    {"name": "GIF trailer missing", "bytes": 5574848, "sha256": "sha256:94ff5de0733bdf37ab893650ba9e4baeb4a5fcd0cc4bf2c86d471ba682c1139b", "status": "invalid", "structureVerified": false, "reason": "GIF ends without the 0x3b trailer"},
+    {"name": "GIF unknown block marker 0x99", "bytes": 5574849, "sha256": "sha256:466bf9df8c2ee041ee2f1bd19c8ace53def80a61f478790b40ca5cbbf1f7be27", "status": "invalid", "structureVerified": false, "reason": "GIF block marker 0x99 at byte 781 is not an extension (0x21), image descriptor (0x2c) or trailer (0x3b)"},
+    {"name": "GIF normal + 1 trailing byte", "bytes": 5574850, "sha256": "sha256:d640bc66650ba0d2a25e62b31e8128a81274f341b6771ff45d51e81646b01e63", "status": "invalid", "structureVerified": false, "reason": "GIF has 1 trailing bytes after the 0x3b trailer at byte 5574848"}
+  ],
+  "observedMsNote": "The probe elapsed values for 0xffffffff PNG (0.872 ms) and GIF short-by-1 (28.161 ms) are from the in-process verifyExportArtifact call, including SHA-256 of the 5.5 MB GIF; both return in finite time without allocating the declared length.",
+  "mutationLocations": {
+    "pngIdatStart": "byte 33 (8 signature + 25 IHDR chunk)",
+    "pngIhdrMid": "bytes 0..19 (20 bytes; truncates inside IHDR data)",
+    "pngIdatMid": "bytes 0..50 (cuts 10 bytes into IDAT data)",
+    "pngIendMissing": "bytes 0..70 (removes the 12-byte IEND chunk)",
+    "pngHugeLength": "IDAT length field at byte 33 overwritten with 0xffffffff",
+    "pngBadCrc": "last IDAT CRC byte (file length - 13) XOR 0xff",
+    "gifGlobalColorTable": "bytes 13..780 (768-byte global color table); truncated at byte 770",
+    "gifSubBlocks": "LZW image-data sub-block chains; cut 50 bytes and 3 bytes from the end, or 1 byte (trailer) removed",
+    "gifUnknownMarker": "byte 781 (first 0x21 extension marker) replaced with 0x99",
+    "trailingByte": "one 0x00 byte appended after IEND or after the GIF trailer"
+  },
+  "changedFiles": {
+    "hashBasis": "SHA-256 of the committed git blob (LF-normalized), reproducible with: git cat-file blob <commit>:<path> | sha256sum",
+    "scripts/verify-export-artifact.mjs": "26fe7c3e7fb71968271dc079f3cf754160f918f43a1edb01c7d27b1d2c890c53",
+    "tests/verify-export-artifact.test.mjs": "b53e6fcad9cb125a7248088366959bb86d52e07550ee1903b7feeb6f986641ac",
+    "docs/testing.md": "258ed2d05197b59b61c3a07dabd95c66942af9af83fe6a128956838bfd93c375",
+    "docs/en/testing.md": "5cc50e64606d87123b8b980db8aac30257091626a7a97f8d3259b17911cc81cb"
+  },
+  "tests": {
+    "command": "node --test tests/verify-export-artifact.test.mjs tests/visual-export-fixed-frame.test.mjs",
+    "result": "tests 23, pass 23, fail 0, cancelled 0, skipped 0, todo 0, duration_ms 4124.6884",
+    "verifyExportArtifactFile": "6 tests pass; 2 new structure tests plus the 4 existing tests retained without weakening",
+    "environmentSetup": "public/fem-kernel.wasm was absent after npm ci; node scripts/build-kernel.mjs (wabt compile of src/fem-kernel.wat, gitignored output) was run once so the pre-existing real-solve test in visual-export-fixed-frame.test.mjs could run. No test was skipped or removed.",
+    "contracts": "npm run check:contracts -> Contract declarations type-check (5 declaration files)",
+    "whitespace": "git diff --check -> exit 0"
+  },
+  "limitsPreserved": [
+    "manifest 64 KiB and artifact 100 MiB limits, regular-file-only checks, empty-file checks and input immutability are unchanged",
+    "ZIP (png-sequence) and WebM stay unsupported with exit 3",
+    "network/external access, credentials, tokens and real measurement data are not used or recorded"
+  ],
+  "unconfirmed": [
+    "PNG/GIF pixel data are not decoded (no zlib inflate of IDAT, no LZW decode, no pixel-count or palette-index validation); structural completeness is not image-quality or physical validity",
+    "GIF imageDescriptorCount is a structural block count and is not proven drawable, timed or equal to the manifest frame time semantics",
+    "real Chrome/browser export was not run for this CLI-only unit",
+    "CI result on the pushed commit is not known",
+    "The IHDR-truncated fixture is refused by the existing header check before the chunk walk; the reason is recorded above"
+  ],
+  "notes": [
+    "Parent P4 remains incomplete; this unit only adds independent structural readback.",
+    "No encoder, manifest producer, solver, public tool, progress.json or common docs other than the testing guarantee paragraphs were modified."
+  ]
+}
