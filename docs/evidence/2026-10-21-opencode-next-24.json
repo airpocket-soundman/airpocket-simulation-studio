@@ -1,0 +1,235 @@
+{
+  "task": "24-P1",
+  "title": "Planar and cylindrical saved-input unit metadata for inspectInput",
+  "branch": "codex/opencode-next-24",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-next-24",
+  "date": "2026-10-21",
+  "baseCommit": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "originMainObserved": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "prerequisite": {
+    "commit": "cbfc99cb99a1069e71b847e26a8e9689676fd02a",
+    "check": "git merge-base --is-ancestor cbfc99cb99a1069e71b847e26a8e9689676fd02a HEAD",
+    "result": "pass (exit 0)"
+  },
+  "preconditions": {
+    "worktreeStatusBeforeWork": "clean (`git status --short` empty)",
+    "headAtStart": "af2314aa7d4675129932386fa1c07ce03f726579",
+    "originMainAfterFetch": "af2314aa7d4675129932386fa1c07ce03f726579",
+    "fetchNote": "git fetch origin also reported a new tag release-af2314aa7d4675129932386fa1c07ce03f726579; no branch or worktree content changed.",
+    "primaryAndOtherWorktrees": "not edited"
+  },
+  "change": {
+    "files": [
+      "src/project-input-inspection.js",
+      "tests/project-input-inspection.test.mjs",
+      "docs/evidence/2026-10-21-opencode-next-24.json"
+    ],
+    "behavior": "inspectInput now states existing units for saved planarRegion/cylindricalRegion descriptors at top level and under conditions/<i>/, using the same exact-key lookup style as sphericalRegion. Only listed keys receive units; unknown keys, mesh indices, exactCad, legacyScale and other region-specific names stay unitless. Saved values are not converted or rewritten.",
+    "unitTables": {
+      "planar": {
+        "position": "mm",
+        "min": "mm (array and each scalar element)",
+        "max": "mm (array and each scalar element)",
+        "rotationDegrees": "deg (array and each scalar element)",
+        "axis": "1 (coordinate-axis index, not a length)",
+        "frame.origin": "mm (array and each scalar element)",
+        "frame.u": "1",
+        "frame.v": "1"
+      },
+      "cylindrical": {
+        "origin": "mm (array and each scalar element)",
+        "radius": "mm",
+        "tolerance": "mm",
+        "axialMin": "mm",
+        "axialMax": "mm",
+        "radiusAtMax": "mm (only when present)",
+        "axis": "1 (direction vector)",
+        "reference": "1 (direction vector)",
+        "startDegrees": "deg",
+        "sweepDegrees": "deg"
+      },
+      "intentionallyUnitless": [
+        "planarRegion.mesh",
+        "planarRegion.legacyScale",
+        "planarRegion.radius (unknown for planar)",
+        "planarRegion.tolerance (unknown for planar)",
+        "cylindricalRegion.mesh",
+        "cylindricalRegion.exactCad",
+        "cylindricalRegion.legacyScale",
+        "cylindricalRegion.position (unknown; planar-only name)",
+        "cylindricalRegion.min (unknown; planar-only name)"
+      ]
+    },
+    "notChanged": [
+      "geometry, CAD fragmentation, solver and boundary transfer",
+      "selection operations and saved project values",
+      "API/tool counts, src/main.js, UI2",
+      "public contract declarations (no additional contract text was required; ProjectUnits already represents mm/deg/1)",
+      "src/progress.json and shared work-order docs"
+    ]
+  },
+  "fixture": {
+    "kind": "synthetic",
+    "note": "Synthetic descriptors only; no measured or physical claim. Both specs are checked with the production validators validatePlanarRegion() and cylindricalFrame().",
+    "planar": {
+      "axis": 2,
+      "axisUnit": "1",
+      "positionMm": 10,
+      "minMm": [0, 0],
+      "maxMm": [20, 30],
+      "rotationDegrees": [0, 0, 30],
+      "frameOriginMm": [0, 0, 10],
+      "frameU": [0.8660254037844387, 0.5, 0],
+      "frameV": [-0.5, 0.8660254037844387, 0],
+      "mesh": 0
+    },
+    "planarRoundTripVariant": {
+      "rotationDegrees": [0, 0, 0],
+      "frameOriginMm": [0, 0, 10],
+      "note": "frameFromEuler() produces -0 components; JSON save/restore writes them as 0. canonicalJson() serialises -0 as 0, so revision and hashes stayed identical."
+    },
+    "cylindrical": {
+      "originMm": [0, 0, 0],
+      "axis": [0, 1, 0],
+      "axisUnit": "1",
+      "reference": [1, 0, 0],
+      "referenceUnit": "1",
+      "radiusMm": 12,
+      "toleranceMm": 0.3,
+      "axialMinMm": -10,
+      "axialMaxMm": 10,
+      "startDegrees": 315,
+      "sweepDegrees": 90,
+      "exactCad": false,
+      "mesh": 0
+    },
+    "conical": {
+      "radiusAtMaxMm": 15,
+      "exactCad": true,
+      "note": "Top-level descriptor in the test; condition descriptor omits radiusAtMax and must not gain that unit."
+    }
+  },
+  "commands": [
+    {
+      "command": "node --test tests/project-input-inspection.test.mjs tests/planar-region.test.mjs tests/cylindrical-region.test.mjs",
+      "result": "pass",
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 3365.2906,
+      "note": "project-input-inspection: 12/12 (9 pre-existing + 3 added); planar-region: 4/4; cylindrical-region: 6/6."
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "detail": "Contract declarations type-check (5 declaration files)."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "detail": "exit 0"
+    },
+    {
+      "command": "node --test tests/contracts.test.mjs tests/spherical-wiring.test.mjs tests/input-provenance.test.mjs",
+      "result": "pass",
+      "tests": 21,
+      "pass": 21,
+      "fail": 0,
+      "skipped": 0,
+      "note": "Regression check for existing unit/contract/provenance behavior. Node emitted MaxListenersExceededWarning (49 unpipe/error/close/finish listeners) during a native STEP fixture; it did not change the test result."
+    },
+    {
+      "command": "node --test tests/regions.test.mjs",
+      "result": "pass",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "git merge-base --is-ancestor cbfc99cb99a1069e71b847e26a8e9689676fd02a HEAD",
+      "result": "pass",
+      "detail": "exit 0 before and after implementation"
+    }
+  ],
+  "measured": {
+    "planarSelectionUnits": {
+      "/planarRegion/position": "mm",
+      "/planarRegion/min": "mm",
+      "/planarRegion/max": "mm",
+      "/planarRegion/rotationDegrees": "deg",
+      "/planarRegion/axis": "1",
+      "/planarRegion/frame/origin": "mm",
+      "/planarRegion/frame/u": "1",
+      "/planarRegion/frame/v": "1",
+      "/planarRegion/mesh": "no unit"
+    },
+    "conditionParity": "Every tested key under /conditions/2/planarRegion and /conditions/3/cylindricalRegion reported the same unit as the top-level descriptor.",
+    "cylindricalSelectionUnits": {
+      "/cylindricalRegion/origin": "mm",
+      "/cylindricalRegion/radius": "mm",
+      "/cylindricalRegion/tolerance": "mm",
+      "/cylindricalRegion/axialMin": "mm",
+      "/cylindricalRegion/axialMax": "mm",
+      "/cylindricalRegion/radiusAtMax": "mm",
+      "/cylindricalRegion/axis": "1",
+      "/cylindricalRegion/reference": "1",
+      "/cylindricalRegion/startDegrees": "deg",
+      "/cylindricalRegion/sweepDegrees": "deg",
+      "/cylindricalRegion/exactCad": "no unit",
+      "/cylindricalRegion/mesh": "no unit"
+    },
+    "scalarAndArrayValues": {
+      "planarPosition": 10,
+      "planarMin": [0, 0],
+      "planarMax": [20, 30],
+      "planarRotationDegrees": [0, 0, 30],
+      "planarFrameOrigin": [0, 0, 10],
+      "planarAxis": 2,
+      "cylindricalOrigin": [0, 0, 0],
+      "cylindricalAxis": [0, 1, 0],
+      "cylindricalReference": [1, 0, 0],
+      "cylindricalRadius": 12,
+      "cylindricalTolerance": 0.3,
+      "cylindricalAxialMin": -10,
+      "cylindricalAxialMax": 10,
+      "cylindricalStartDegrees": 315,
+      "cylindricalSweepDegrees": 90,
+      "conicalRadiusAtMax": 15,
+      "conversionApplied": "none (values returned unchanged)"
+    },
+    "paging": {
+      "planarConditionPointer": "/conditions/2/planarRegion",
+      "planarOffsets": [0, 3, 6],
+      "planarNextOffsets": [3, 6, null],
+      "planarPages": 3,
+      "cylindricalConditionPointer": "/conditions/3/cylindricalRegion",
+      "cylindricalOffsets": [0, 4, 8],
+      "cylindricalNextOffsets": [4, 8, null],
+      "cylindricalPages": 3,
+      "arrayWindow": "origin offset 1 limit 2 returned [0,0] mm, matching the full array page slice",
+      "unitConsistencyAcrossPages": true
+    },
+    "roundTrip": {
+      "jsonSaveRestore": "values unchanged; -0 direction cosines became 0; revision and descriptor sha256 unchanged",
+      "revisionBeforeAfter": "identical",
+      "inputMutationAfterInspect": "none (structuredClone deep-equal in every added test)"
+    },
+    "provenance": {
+      "/inputProvenance/entries/0/value -> /conditions/2/planarRegion/max/1": "30 mm",
+      "/planarRegion/position provenance": "10 mm",
+      "/conditions/2/cylindricalRegion/tolerance provenance": "0.3 mm",
+      "/conditions/2/cylindricalRegion/sweepDegrees provenance": "90 deg"
+    }
+  },
+  "unverified": [
+    "Real Chrome: no browser session was started, so inspectInput unit display in the GUI and any browser/MCP end-to-end path are not verified. Browser version, origin and live input revision are therefore not recorded.",
+    "Public HTTPS deployment: not checked.",
+    "MCP live inspection test (tests/mcp-input-inspection.test.mjs) was not run because it requires a browser-connector origin and a running Studio server.",
+    "No unit conversion or localized unit suffix in UI2 was added or checked; this change only labels already-saved values.",
+    "Parent P1 remains incomplete; this evidence covers only the limited planar/cylindrical unit acceptance item.",
+    "Full npm test / production build was not run; only the targeted suites and contract type-check listed above."
+  ],
+  "selfSha": null
+}
