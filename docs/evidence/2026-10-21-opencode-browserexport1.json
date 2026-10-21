@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "taskId": "BROWSEREXPORT1",
+  "workOrder": "32-BROWSEREXPORT1",
+  "scope": "Real localhost browser export of a three-frame slice PNG sequence for the 10 x 10 x 40 mm axial bar at 5 mm mesh, E=1e9 Pa and nu=0.3. The in-page production API and the official stdio MCP export path were both exercised. No product source was changed because all checks passed.",
+  "branch": "codex/opencode-next-32",
+  "baseRef": "origin/main",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "sourceFrozen": {
+    "worktree": "D:\\github\\airpocket-soundman\\studio-opencode-next-32",
+    "origin": "http://127.0.0.1:5176",
+    "locale": "en",
+    "dirtyAtStart": false,
+    "hmrOrSourceEditDuringChecks": false,
+    "browser": {
+      "product": "OpenCode desktop browser (Electron 44.4.5), Chromium 152.0.7977.130",
+      "brandedGoogleChrome": false,
+      "crossOriginIsolated": true
+    },
+    "runtime": {
+      "node": "v24.11.1",
+      "platform": "win32",
+      "arch": "x64"
+    }
+  },
+  "model": {
+    "name": "Axial bar reference sample",
+    "kind": "elastic",
+    "boundsMm": [0, 0, 0, 10, 10, 40],
+    "youngModulusPa": 1000000000,
+    "poissonRatio": 0.3,
+    "meshSizeMm": 5,
+    "meshNodes": 94,
+    "meshTetrahedra": 218,
+    "meshVolumeMm3": 4000,
+    "meshQuality": 0.347,
+    "meshQualityBelow02Elements": 0,
+    "conditions": [
+      { "type": "fixed", "direction": [1, 0, 0], "value": 0 },
+      { "type": "force", "direction": [0, 0, 1], "value": 100 }
+    ],
+    "resultRevision": "sha256:df0603154188821e46b8432893ad101a3bbc576ee61bebc8bdf885c63d930791",
+    "physicalRevision": "sha256:3dfc84491758a19b70f637024238f4b1f3edef56e2ca4ab4f0797a987bbf40ec",
+    "analysisAssessment": {
+      "mode": "legacy",
+      "completePreflight": false,
+      "provisional": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    }
+  },
+  "initialViewerState": {
+    "sectionAxis": "X",
+    "sectionAxisValue": 0,
+    "sectionPositionMm": 4,
+    "sectionEnabled": false,
+    "resultViewSectionFlag": true,
+    "camera": {
+      "position": [61, 41, 84],
+      "target": [5, 5, 20],
+      "up": [0, 1, 0],
+      "fov": 40
+    },
+    "note": "The section-plane control (clipEnabled) was false with axis X and position 4 mm. The result-view 'section' visibility flag was true. These are separate state fields and both were restored."
+  },
+  "exportRequest": {
+    "requestId": "browser-export-32-slice-3",
+    "format": "png-sequence",
+    "animation": "slice",
+    "frames": 3,
+    "expectedResultRevision": "sha256:df0603154188821e46b8432893ad101a3bbc576ee61bebc8bdf885c63d930791",
+    "jobId": "b7b96125-11b9-4d57-9e7e-1f384cfef177",
+    "state": "completed",
+    "progressFraction": 1
+  },
+  "artifact": {
+    "container": "zip",
+    "compression": "store",
+    "bytes": 110730,
+    "sha256": "sha256:b1acfb7de0938c1ca5ee60a7e08869de24ca1ac7f102906d58d5d06d73c44fa9",
+    "artifactPages": 2,
+    "pageChunkBytes": 65536,
+    "manifestEntry": {
+      "name": "manifest.json",
+      "bytes": 1718,
+      "crc32": "330dbf30",
+      "sha256": "sha256:e727d300e97ae4729c597597e0bad5f156b37acddbde17001cf3061deb8dcf6e"
+    },
+    "entries": [
+      {
+        "name": "manifest.json",
+        "bytes": 1718,
+        "crc32": "330dbf30",
+        "sha256": "sha256:e727d300e97ae4729c597597e0bad5f156b37acddbde17001cf3061deb8dcf6e"
+      },
+      {
+        "name": "frame-0000.png",
+        "bytes": 37978,
+        "crc32": "25db2391",
+        "sha256": "sha256:4bd9ec48618c3056f3926e2a575caef1788631c4b8fa42177fce002805b0f201"
+      },
+      {
+        "name": "frame-0001.png",
+        "bytes": 46886,
+        "crc32": "3441fca2",
+        "sha256": "sha256:5f3fb55095564a3d6b26f67c2db47c31e9926ad25b09baaed087bc6a1bd62733"
+      },
+      {
+        "name": "frame-0002.png",
+        "bytes": 23712,
+        "crc32": "6f5193f6",
+        "sha256": "sha256:90c98457c66fcac8158f8829b0e83f2d34e3f17bee86cc1b03aee6221087d93a"
+      }
+    ],
+    "manifest": {
+      "kind": "airpocket-fixed-frame-png-sequence",
+      "schemaVersion": 2,
+      "frameCount": 3,
+      "resolution": { "width": 555, "height": 573 },
+      "frames": [
+        { "index": 0, "phase": 0, "slicePosition": 0, "width": 555, "height": 573, "bytes": 37978, "sha256": "sha256:4bd9ec48618c3056f3926e2a575caef1788631c4b8fa42177fce002805b0f201" },
+        { "index": 1, "phase": 0.5, "slicePosition": 5, "width": 555, "height": 573, "bytes": 46886, "sha256": "sha256:5f3fb55095564a3d6b26f67c2db47c31e9926ad25b09baaed087bc6a1bd62733" },
+        { "index": 2, "phase": 1, "slicePosition": 10, "width": 555, "height": 573, "bytes": 23712, "sha256": "sha256:90c98457c66fcac8158f8829b0e83f2d34e3f17bee86cc1b03aee6221087d93a" }
+      ],
+      "physicalRevision": "sha256:3dfc84491758a19b70f637024238f4b1f3edef56e2ca4ab4f0797a987bbf40ec",
+      "view": {
+        "field": "displacement",
+        "deformScale": 1,
+        "camera": { "position": [61, 41, 84], "target": [5, 5, 20], "up": [0, 1, 0], "fov": 40 }
+      },
+      "schedule": {
+        "basis": "fixed",
+        "phase": "index/(frameCount-1)",
+        "realtime": false,
+        "timeBasis": "frame index",
+        "wallClockIndependent": true
+      }
+    }
+  },
+  "independentZipAndPngChecks": {
+    "zipParser": "Node.js DataView: EOCD, central directory and local headers; STORE method only; independent CRC32 table",
+    "zipSha256": "sha256:b1acfb7de0938c1ca5ee60a7e08869de24ca1ac7f102906d58d5d06d73c44fa9",
+    "entryCount": 4,
+    "allEntryCrc32Match": true,
+    "allEntryLengthsMatch": true,
+    "allFrameSha256MatchManifest": true,
+    "pngSignatureAndIhdrCheckedInNode": true,
+    "ihdrWidth": 555,
+    "ihdrHeight": 573,
+    "manifestFrameCount": 3,
+    "manifestPhases": [0, 0.5, 1],
+    "manifestSlicePositionsMm": [0, 5, 10],
+    "phaseAndPositionFormula": "index/(frameCount-1), with slicePosition = min + (max-min)*phase over the solved X range 0..10 mm",
+    "decoder": "browser createImageBitmap + 2D canvas getImageData (general PNG decoder), not a manifest-only check",
+    "decodedFrames": [
+      { "name": "frame-0000.png", "width": 555, "height": 573, "rgbaBytes": 1272060, "rgbaFnv1a": "0xba940bc7" },
+      { "name": "frame-0001.png", "width": 555, "height": 573, "rgbaBytes": 1272060, "rgbaFnv1a": "0x2bdab25b" },
+      { "name": "frame-0002.png", "width": 555, "height": 573, "rgbaBytes": 1272060, "rgbaFnv1a": "0x788bb8b0" }
+    ],
+    "allPixelHashesDistinct": true,
+    "allPngBytesAndHashesDistinct": true
+  },
+  "officialMcpPath": {
+    "pairing": "localhost loopback pairing through the app connection UI",
+    "scopes": ["inspect", "view"],
+    "mcpServer": "scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5176",
+    "discoveryTool": "studio_browser_sessions",
+    "callTool": "studio_browser_call",
+    "methods": ["startExport", "exportStatus", "exportArtifact", "releaseExport"],
+    "requestId": "browser-export-32-mcp-slice-3",
+    "jobId": "4bda5718-4ba9-49be-a4b8-8a960e4de9c3",
+    "state": "completed",
+    "artifactSha256": "sha256:b1acfb7de0938c1ca5ee60a7e08869de24ca1ac7f102906d58d5d06d73c44fa9",
+    "assembledSha256": "sha256:b1acfb7de0938c1ca5ee60a7e08869de24ca1ac7f102906d58d5d06d73c44fa9",
+    "artifactBytes": 110730,
+    "assembledBytes": 110730,
+    "artifactPages": 2,
+    "mcpExportEqualsInPageExport": true,
+    "releaseExport": true,
+    "note": "The MCP export and the in-page export are byte-identical (same ZIP SHA-256). This is a stronger result than a structural comparison."
+  },
+  "stateRestoration": {
+    "checked": ["input/project", "saved-case archive", "result view", "comparison settings", "setup view", "section/axis/position/enabled", "camera"],
+    "beforeAfterEqual": {
+      "project": true,
+      "cases": true,
+      "resultView": true,
+      "comparisonSettings": true,
+      "setupView": true,
+      "sectionControls": true
+    },
+    "clipAfter": { "axis": "0", "position": "4", "enabled": false },
+    "resultRevisionAfter": "sha256:df0603154188821e46b8432893ad101a3bbc576ee61bebc8bdf885c63d930791",
+    "comparisonRevisionAfter": "sha256:b5741026f74d0a32d14c023c4196521ad8528f5d38f4802916a962674a83a517",
+    "note": "The result-view section visibility flag and camera were part of the compared result-view JSON. The section-plane control was disabled before and after."
+  },
+  "cancelCheck": {
+    "requestId": "browser-export-32-cancel",
+    "jobId": "3ea9e72f-2fdd-46c4-9c27-78a383ceb572",
+    "requestedFrames": 12,
+    "cancelledAtProgressFraction": 0.08166666666666667,
+    "terminalState": "cancelled",
+    "artifactRead": "refused",
+    "artifactErrorMessage": "Visual export artifact is unavailable",
+    "stateRestored": true,
+    "released": true
+  },
+  "invalidRequestChecks": [
+    {
+      "name": "frames=1",
+      "rejected": true,
+      "message": "png-sequence frames must be an integer from 2 through 120"
+    },
+    {
+      "name": "png-sequence+seconds",
+      "rejected": true,
+      "message": "png-sequence is fixed-frame; seconds is not accepted, use frames"
+    },
+    {
+      "name": "stale revision",
+      "rejected": true,
+      "message": "Displayed result revision conflict"
+    }
+  ],
+  "commands": [
+    {
+      "command": "node --test tests/visual-export-slice-reference.test.mjs tests/browser-export-session.test.mjs tests/visual-export-fixed-frame.test.mjs",
+      "result": "pass",
+      "measured": { "tests": 30, "pass": 30, "fail": 0, "cancelled": 0, "skipped": 0, "durationMs": 3759.4314 }
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "pass",
+      "measured": { "declarationFiles": 5, "exitCode": 0 }
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "measured": { "exitCode": 0 }
+    }
+  ],
+  "changedFiles": [
+    "docs/evidence/2026-10-21-opencode-browserexport1.json"
+  ],
+  "result": "The real browser produced a valid three-frame slice ZIP with phases 0/0.5/1 and X slice positions 0/5/10 mm. The ZIP and all four STORE entries independently verified by CRC32 and SHA-256; all three PNGs decoded in the browser to 555 x 573 RGBA images with distinct pixel hashes. The official MCP startExport/exportStatus/exportArtifact/releaseExport path produced a byte-identical ZIP. The four states and section/camera controls were restored. Cancellation was terminal and refused the partial artifact. Invalid frame count, seconds with png-sequence, and stale revision were rejected. No source change was needed.",
+  "unconfirmed": [
+    "The browser is the OpenCode desktop Electron/Chromium build, not branded Google Chrome.",
+    "Only localhost was used; public HTTPS, OS download and cross-origin deployment were not verified.",
+    "Only one model and one successful three-frame export were checked. There is no multi-run distribution and no full-suite/post-push CI claim.",
+    "The section-plane control was disabled initially; the result-view 'section' visibility flag was true. Both fields were restored and are recorded separately.",
+    "The pixel hash is FNV-1a over decoded RGBA bytes, not a cryptographic hash; PNG and ZIP integrity use SHA-256. The decoder was the browser's createImageBitmap/canvas, not a Node PNG library.",
+    "The cancellation request used 12 frames and was cancelled at 8.17%; other frame counts and cancellation timings were not exhaustively tested.",
+    "The MCP path used inspect+view scopes because startExport is a view operation; the in-page path used the production visualExportApi directly.",
+    "The parent BROWSEREXPORT1 unit remains incomplete; this is a bounded verification slice."
+  ],
+  "secretsHandling": {
+    "pairingCodeRecorded": false,
+    "tokensOrCredentialsRecorded": false,
+    "environmentDumped": false,
+    "physicalArraysCopiedIntoEvidence": false,
+    "userModelUploaded": false
+  }
+}
