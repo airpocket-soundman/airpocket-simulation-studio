@@ -2,13 +2,17 @@
 
 [English](en/task-critical-path.md)
 
-2026-10-21時点、171件のうち公開済み133件、未完38件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
+2026-10-21時点、171件のうち公開済み134件、未完37件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
 | 分類 | 既存ID | 条件 |
 |---|---|---|
 | 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |
-| 外部・実機等の条件あり（8） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
+| 外部・実機等の条件あり（7） | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, EXPORTBACKGROUND1, FINITEVISCO1 | 試作/材料実測、V8再現/上流修正、登録済SDK確認、ブラウザ版を含む公開接続証拠が必要。ソフト側で独立して進められる部分は待たず進める。 |
 | 親エピック（15） | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | 子機能の公開だけで全体完了にしない。既存受入条件と共通完了判定を維持。 |
+
+## 2026-10-21: 対象外6件の最終確認と追加指示
+
+既存21〜40の20 IDを除外して着手済み6件を全数監査。MCPARGUMENTTYPES1は現在の登録済SDKと実呼び出しを確認し完了（[証拠](evidence/2026-10-21-registered-sdk-argument-types.json)）。残5件は実装・実測・実機等の条件があるため未完を維持し、[追加指示41〜45](opencode-release-work-orders-2026-10-21/README.md)に残条件と公開判定を記載。以下の20 PR初回レビューの9 NGは修正版を再レビューし、PR148で全件取り込み済み。子機能の成功は親完了にしない。
 
 ## 2026-10-21: OpenCode PRの独立レビュー
 

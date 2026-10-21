@@ -1,0 +1,242 @@
+{
+  "date": "2026-10-21",
+  "task": "MCPARGUMENTTYPES1",
+  "verdict": "registered-sdk-verified",
+  "hostGeneratedDeclarations": [
+    {
+      "name": "mcp__airpocket_studio__studio_edit_project",
+      "description": "Atomically apply semantic setup operations to saved JSON and publish a new outputPath. Requires the revision from studio_inspect_project; stale revisions and unsupported methods are rejected. Never alters the input or an open browser. Returns a compact summary, not the full model.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_edit_project(args: {\n  // Optional exact resulting input revision from studio_preview_edit; rejects a different transaction result before publication.\n  expectedResultingRevision?: string;\n  expectedRevision: string;\n  operations: Array<{\n  // Typed positional JSON arguments of the selected semantic method. Numbers, strings, booleans, null, records and nested arrays are represented explicitly; exact method arity and physical/nested data remain runtime-validated.\n  args: Array<number | string | boolean | null | { [key: string]: unknown; } | Array<number | string | boolean | null | { [key: string]: unknown; } | Array<number | string | boolean | null | { [key: string]: unknown; } | Array<unknown>>>>;\n  method: \"selectTriangles\" | \"selectCadFace\" | \"selectPlanarRegion\" | \"selectCylindricalRegion\" | \"clearSelection\" | \"addCondition\" | \"removeCondition\" | \"selectCondition\" | \"replaceConditionRegion\" | \"reapplyConditionRegion\" | \"setMaterial\" | \"setMaterialProperties\" | \"setMaterialPreset\" | \"applyCatalogMaterial\" | \"setStudy\" | \"setMeshSettings\" | \"setInputProvenance\" | \"setAnalysisIntent\";\n}>;\n  // Absolute local JSON file path\n  outputPath: string;\n  // Absolute local JSON file path\n  path: string;\n}): Promise<CallToolResult>; };\n```"
+    },
+    {
+      "name": "mcp__airpocket_studio__studio_preview_edit",
+      "description": "Preview semantic input edits without writing files or changing a browser. Returns the exact resulting input revision, bounded changed JSON pointers, compact summary and Node physical preflight. A valid edit can return preflight.allowed false with missing-input diagnostics. Nested operation payloads remain validated by the actual semantic methods; no physical input is inferred.\n\nexec tool declaration:\n```ts\ndeclare const tools: { mcp__airpocket_studio__studio_preview_edit(args: {\n  expectedRevision: string;\n  method?: \"wasm-pcg\" | \"pcg\" | \"pcg-strict\" | \"mfem-wasm\";\n  mode?: \"legacy\" | \"quantitative\" | \"exploratory\";\n  operation?: \"solve\" | \"mesh\";\n  operations: Array<{\n  // Positional arguments of the selected semantic method; nested material, boundary and provenance validation is runtime-only.\n  args: Array<number | string | boolean | null | { [key: string]: unknown; } | Array<number | string | boolean | null | { [key: string]: unknown; } | Array<number | string | boolean | null | { [key: string]: unknown; } | Array<unknown>>>>;\n  method: \"selectTriangles\" | \"selectCadFace\" | \"selectPlanarRegion\" | \"selectCylindricalRegion\" | \"clearSelection\" | \"addCondition\" | \"removeCondition\" | \"selectCondition\" | \"replaceConditionRegion\" | \"reapplyConditionRegion\" | \"setMaterial\" | \"setMaterialProperties\" | \"setMaterialPreset\" | \"applyCatalogMaterial\" | \"setStudy\" | \"setMeshSettings\" | \"setInputProvenance\" | \"setAnalysisIntent\";\n}>;\n  // Absolute local JSON file path\n  path: string;\n  size?: number;\n}): Promise<CallToolResult>; };\n```"
+    }
+  ],
+  "liveContractDeclarations": [
+    {
+      "method": "edit",
+      "argsSchema": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": true
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "description": "Any deeper finite JSON value; detailed nested validation is performed by the semantic method."
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "description": "Positional arguments of the selected semantic method. selectTriangles(meshIndex,triangleIndices,optional flags); selectCadFace(meshIndex,faceId); selectPlanarRegion/selectCylindricalRegion(meshIndex,descriptor); clearSelection(); condition methods(index or definition); material/study/provenance setters use their documented payload objects. Nested descriptor validation remains runtime-only."
+      },
+      "declarationOnly": true
+    },
+    {
+      "method": "previewEdit",
+      "argsSchema": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": true
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "description": "Any deeper finite JSON value; detailed nested validation is performed by the semantic method."
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "description": "Typed positional JSON arguments of the selected semantic method. Numbers, strings, booleans, null, records and nested arrays are represented explicitly; exact method arity and physical/nested data remain runtime-validated."
+      },
+      "declarationOnly": true
+    }
+  ],
+  "registeredToolCalls": {
+    "sourceRevision": "sha256:4419cf1a16773ba4604bdeba9dbd9ba39c896d5d6a1cd347ca5338dea33863e2",
+    "previewRevision": "sha256:77a79b52698bfaab074ec179f5a3082c83dee9172f4975b965252b8edfa6ddd9",
+    "editRevision": "sha256:77a79b52698bfaab074ec179f5a3082c83dee9172f4975b965252b8edfa6ddd9",
+    "operationCount": 4,
+    "forceN": 150,
+    "direction": [
+      0,
+      0,
+      1
+    ],
+    "regions": [
+      {
+        "mesh": 0,
+        "triangles": [
+          0,
+          1
+        ]
+      }
+    ],
+    "inputSha256BeforeAndAfter": "83c664796cf374beda96c911c221c24af578f94c3409c2704374542caf499b5b",
+    "invalidCalls": [
+      {
+        "case": "string mesh index",
+        "rejected": true,
+        "message": "Invalid arguments for selectTriangles."
+      },
+      {
+        "case": "string triangle indices",
+        "rejected": true,
+        "message": "Invalid arguments for selectTriangles."
+      },
+      {
+        "case": "string material record",
+        "rejected": true,
+        "message": "Invalid arguments for setMaterialProperties."
+      }
+    ],
+    "preflightAllowed": false,
+    "preflightMeaning": "Synthetic schema/runtime fixture intentionally lacks supports, gravity intent and provenance; no physical validation or solve claimed."
+  },
+  "limits": [
+    "Generated registered tool declaration inspected directly in the current host; no claim that every new method is registered.",
+    "Live contract discovery is declaration-only and does not grant browser permissions. Actual same-region live preview/commit remains covered by the targeted real adapter test.",
+    "No actual browser pairing, solver accuracy, root V8 fix or hidden-tab validation is implied."
+  ],
+  "priorEvidence": [
+    "docs/evidence/2026-10-15-operation-contracts-full.json",
+    "docs/evidence/2026-10-15-input-inspection-full.json"
+  ],
+  "finalReview": {
+    "decision": "approved",
+    "scope": "Original bounded saved/live positional JSON argument-type acceptance",
+    "independentReviewer": "review_repairs_protocol",
+    "targetedCurrentTests": {
+      "passed": 2,
+      "failed": 0,
+      "file": "tests/mcp-typed-operation-schema.test.mjs"
+    },
+    "boardAndDocsTests": {
+      "passed": 15,
+      "failed": 0
+    },
+    "sourceForTargetedTests": "7aa1e45e7dcca6b529e085c557d04dc8bfe23910"
+  }
+}

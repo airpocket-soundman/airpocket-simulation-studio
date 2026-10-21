@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-21",
+  "exclusionSet": "docs/opencode-work-orders-2026-10-21/README.md",
+  "auditedStartedOutsideCount": 6,
+  "completedByFinalVerification": [
+    "MCPARGUMENTTYPES1"
+  ],
+  "remainingWork": [
+    {
+      "task": "CFD1",
+      "instruction": "41-CFD1.md",
+      "requiresExternalEvidence": false
+    },
+    {
+      "task": "PRINT2",
+      "instruction": "42-PRINT2.md",
+      "requiresExternalEvidence": true
+    },
+    {
+      "task": "P6",
+      "instruction": "43-P6.md",
+      "requiresExternalEvidence": false
+    },
+    {
+      "task": "RUNTIMEWASM1",
+      "instruction": "44-RUNTIMEWASM1.md",
+      "requiresExternalEvidence": true
+    },
+    {
+      "task": "EXPORTBACKGROUND1",
+      "instruction": "45-EXPORTBACKGROUND1.md",
+      "requiresExternalEvidence": true
+    }
+  ],
+  "totalTasks": 171,
+  "released": 134,
+  "unfinished": 37,
+  "publication": "Normal PR/required CI/merge/publication verification required; instruction creation is not task completion."
+}
