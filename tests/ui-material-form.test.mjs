@@ -43,6 +43,16 @@ test('writeForm status: thermal, missing, plasticity, orthotropic (language), hy
  assert.match(p.nodes['material-status'].textContent,/^圧縮性Neo-Hookean/);assert.equal(p.nodes['hyperelastic-curve'].value,'[1,2]');assert.equal(p.nodes['hyperelastic-mu'].value,1);assert.equal(p.nodes['material-notes'].value,'h');
 });
 
+test('orthotropic status states that no dedicated component editor exists without using isotropic or dependence fields',()=>{
+ const s=setup({props:{orthotropic:{youngModuliPa:[210,220,230]}}});allFields(s);s.ui.writeForm();
+ assert.match(s.nodes['material-status'].textContent,/専用の成分編集欄は未実装/);
+ assert.match(s.nodes['material-status'].textContent,/APIまたは保存入力で各成分を確認/);
+ assert.equal(s.nodes['mat-youngModulus'].value,'');assert.equal(s.nodes['material-dependence'].value,'');
+ s.state.language='en';s.ui.writeForm();
+ assert.match(s.nodes['material-status'].textContent,/Orthotropic elasticity registered/);
+ assert.match(s.nodes['material-status'].textContent,/No dedicated per-component editor is implemented/);
+});
+
 test('readForm builds the registered shape and preserves orthotropic/fracture data by clone',()=>{
  const ortho={a:1},s=setup({props:{orthotropic:ortho,fractureData:{k:2}}});allFields(s);
  s.nodes['mat-youngModulus'].value='210';s.nodes['material-grade'].value='g';s.nodes['fatigue-enabled'].checked=true;

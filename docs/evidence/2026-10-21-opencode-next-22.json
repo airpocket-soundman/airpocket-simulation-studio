@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "targetId": "AGENTINPUT1",
+  "workOrder": "docs/opencode-work-orders-2026-10-21/22-AGENTINPUT1.md",
+  "branch": "codex/opencode-next-22",
+  "baseSha": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "headShaAtTest": "af2314aa7d4675129932386fa1c07ce03f726579",
+  "headNote": "Evidence was written before the commit; the evidence commit SHA is not embedded here to avoid self-reference. See the branch/PR for the final SHA.",
+  "prerequisiteChecks": {
+    "worktree": "D:/github/airpocket-soundman/studio-opencode-next-22",
+    "initialGitStatusShort": "clean (empty)",
+    "ancestorCheck": "git merge-base --is-ancestor 26b97a9433c64481ac70b1c5dfd3b014f9a5eec4 HEAD -> true (PR #127 base present)",
+    "originMainAtStart": "af2314aa7d4675129932386fa1c07ce03f726579"
+  },
+  "runtimeCheckForDedicatedEditor": {
+    "question": "Do existing per-component edit fields for /materialProperties/orthotropic/youngModuliPa/0..2 exist?",
+    "method": "Read src/main.js material markup and grep for youngModuliPa; read src/ui/material-form-ui.js installFields/writeForm",
+    "finding": "No dedicated 3-component editor exists. The material form only creates one input per materialFields key plus isotropic/plastic/hyperelastic/fatigue/dependence fields. material-dependence is a different dependence JSON and is not used. The isotropic E field (mat-youngModulus) is not used.",
+    "resultingBehavior": "The three exact warning pointers are guided to the existing #material-status note. The UI states that no dedicated editor is implemented and to confirm the component in the API or saved input; it never claims a component editor was opened."
+  },
+  "change": {
+    "files": [
+      "src/ui/analysis-preflight-ui.js",
+      "src/ui/material-form-ui.js",
+      "tests/preflight-unit-magnitude.test.mjs",
+      "tests/ui-analysis-preflight.test.mjs",
+      "tests/ui-material-form.test.mjs",
+      "docs/evidence/2026-10-21-opencode-next-22.json"
+    ],
+    "mapping": "Fixed three-entry literal table: /materialProperties/orthotropic/youngModuliPa/0 -> index 0, /1 -> 1, /2 -> 2. No prefix match, no split('.'), no range mapping. Unknown index (e.g. /3), deeper paths, the whole array and shear component pointers remain unmapped.",
+    "dedicatedEditor": "A component control id is used only if it resolves at runtime (getControl). None resolves today, so the fallback guide is taken.",
+    "focus": "Existing focus() helper is reused: disabled/hidden rejected, parent DETAILS opened, tabindex -1 for non-form target, scrollIntoView and focus.",
+    "staleGuard": "Existing identity guard is reused; a changed input invalidates the report and does not move focus.",
+    "warningOnly": "No Pa range, warning severity, conversion, save format, solver or main.js/i18n change. Invalid orthotropic constants remain rejected by the existing contract.",
+    "units": "All synthetic Young moduli are Pa; no unit conversion is applied.",
+    "notUsed": ["isotropic /materialProperties/youngModulus", "/materialProperties/orthotropic/shearModuliPa", "/materialProperties/orthotropic/poissonRatios", "material-dependence"]
+  },
+  "syntheticCases": {
+    "orientationModuliPa": [210, 220, 230],
+    "warningCount": 3,
+    "warningTargets": [
+      "/materialProperties/orthotropic/youngModuliPa/0",
+      "/materialProperties/orthotropic/youngModuliPa/1",
+      "/materialProperties/orthotropic/youngModuliPa/2"
+    ],
+    "warningEvidenceValues": [210, 220, 230],
+    "warningEvidenceUnit": "Pa",
+    "plausibleRangePa": [100000, 10000000000000],
+    "apiPreflight": {
+      "allowed": false,
+      "unitMagnitudeWarnings": 3,
+      "invalidMaterialDiagnostic": "MATERIAL_INVALID at /materialProperties retained; PROJECT_INVALID at / retained",
+      "arrayAfterPreflight": [210, 220, 230],
+      "inputObjectUnchanged": true
+    },
+    "cleanOrientationModuliPa": [1000000000, 2000000000, 3000000000],
+    "cleanWarningCount": 0,
+    "shearPoissonReuse": false,
+    "uiButtons": 3,
+    "guideTargetId": "material-status",
+    "focusCallsPerClick": "1 (cumulative 1,2,3 across the three buttons)",
+    "guideTextJa": "専用編集欄は未実装。API/保存入力で該当成分（index N）を確認してください。",
+    "guideTextEn": "No dedicated component editor is implemented; confirm component index N in the API or saved input.",
+    "inputRevisionUnchanged": "11 before and after all three clicks; array [210,220,230] unchanged",
+    "rejectedCases": {
+      "unknownIndex3": "no button, no focus",
+      "deeperPath": "/materialProperties/orthotropic/youngModuliPa/0/extra -> no button, no focus",
+      "wholeArray": "/materialProperties/orthotropic/youngModuliPa -> no button, no focus",
+      "shearComponent": "/materialProperties/orthotropic/shearModuliPa/0 -> no button, no focus",
+      "stale": "report cleared, status asks to check again, focus not moved",
+      "disabled": "no focus, existing unavailable message",
+      "hidden": "no focus, existing unavailable message"
+    }
+  },
+  "commands": [
+    {"command": "node --test tests/preflight-unit-magnitude.test.mjs tests/ui-analysis-preflight.test.mjs tests/ui-material-form.test.mjs", "result": "pass", "tests": 31, "pass": 31, "fail": 0, "skip": 0, "cancelled": 0, "durationMs": 239.64},
+    {"command": "npm run check:contracts", "result": "pass", "detail": "node scripts/check-contract-types.mjs: Contract declarations type-check (5 declaration files)"},
+    {"command": "git diff --check", "result": "pass"}
+  ],
+  "testBreakdown": {
+    "preflight-unit-magnitude.test.mjs": "5 pass (1 new: synthetic [210,220,230] Pa per-component warnings, unchanged array, invalid-material refusal retained)",
+    "ui-analysis-preflight.test.mjs": "20 pass (6 new: three guide buttons/focus per click and unchanged input; bilingual text; stale; disabled/hidden; unknown index/deeper/array/shear; runtime dedicated editor only)",
+    "ui-material-form.test.mjs": "6 pass (1 new: orthotropic status states no dedicated component editor; isotropic E and dependence fields untouched)"
+  },
+  "browser": {
+    "attempted": true,
+    "method": "browser.tabs.list",
+    "result": "disconnected: no desktop browser connected to this session",
+    "realChromeVerification": "not performed",
+    "unverified": [
+      "Real Chrome API->preflight->button flow with activeElement and JA/EN text was not verified",
+      "No browser screenshot, source freeze, localhost server or input revision captured in a browser",
+      "390px/Tab/Enter keyboard behavior in a real browser was not verified"
+    ]
+  },
+  "parentStatus": "AGENTINPUT1 is NOT complete and must not be marked complete/released by this unit. The 3-component editor GUI, real-browser acceptance and the remaining parent conditions are still outstanding.",
+  "boardUpdateDraft": {
+    "id": "AGENTINPUT1",
+    "status": "building",
+    "latest": "2026-10-21: 3成分Eの単位警告から既存material-status案内へ限定導線を追加（専用編集欄は未実装、API/保存入力で成分確認）。Node 31 pass、contracts/diff pass。実Chrome・3成分GUI・親受入は未完了。"
+  },
+  "limitations": [
+    "Dedicated youngModuliPa component editing does not exist; the guide is informational and no value can be edited from the detected warning.",
+    "Node fixtures are not a browser or physical validation; completePreflight stays false and the warning remains non-converting.",
+    "No secret, token, pairing code or environment dump is included in this evidence."
+  ]
+}
