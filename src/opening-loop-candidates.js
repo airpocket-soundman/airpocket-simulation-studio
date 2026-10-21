@@ -67,8 +67,12 @@ export function extractOpeningLoopCandidates(input){
  for(let i=0;i<tri.length;i++){
   const t=tri[i],a=points[t[0]],b=points[t[1]],c=points[t[2]];
   const u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],v=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];
-  const doubleArea=Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]),s=scale([...a,...b,...c]);
-  if(!(doubleArea>1e-12*s*s)){
+  // Shape health depends on local edge lengths, never on distance from the origin.
+  // Normalize before crossing to avoid overflow when finite edges are very large.
+  const edgeScale=Math.max(...u.map(Math.abs),...v.map(Math.abs));
+  const un=u.map(x=>x/edgeScale),vn=v.map(x=>x/edgeScale);
+  const relativeArea=Math.hypot(un[1]*vn[2]-un[2]*vn[1],un[2]*vn[0]-un[0]*vn[2],un[0]*vn[1]-un[1]*vn[0]);
+  if(!finite(edgeScale)||!(edgeScale>0)||!finite(relativeArea)||!(relativeArea>1e-12)){
    faceDefects.set(i,'OPENING_LOOP_DEGENERATE_TRIANGLE');
    rejected.push({code:'OPENING_LOOP_DEGENERATE_TRIANGLE',nodeIndices:[...t],detail:'triangle '+i+' has zero or non-finite area'});
   }

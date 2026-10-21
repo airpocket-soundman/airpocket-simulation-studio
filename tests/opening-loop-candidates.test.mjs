@@ -132,6 +132,25 @@ test('a collinear-overlap boundary polygon is refused instead of returned as a c
  assert.deepEqual(result.rejected[0].nodeIndices,[0,1,2,3]);
 });
 
+test('face health and opening geometry survive translation away from the origin',()=>{
+ const original=tube(),baseline=extractOpeningLoopCandidates(original);
+ const moved={...original,nodes:original.nodes.map(x=>x+1e7)},before=structuredClone(moved);
+ const result=extractOpeningLoopCandidates(moved);
+ assert.deepEqual(moved,before);
+ assert.deepEqual(result.rejected,[]);
+ assert.deepEqual(loopIds(result),loopIds(baseline));
+ for(let i=0;i<result.candidates.length;i++){
+  const actual=result.candidates[i],expected=baseline.candidates[i];
+  assert.equal(actual.areaMm2,4);assert.equal(actual.perimeterMm,8);
+  assert.deepEqual(actual.normal,expected.normal);
+  assert.deepEqual(actual.triangleIndices,expected.triangleIndices);
+  assert.ok(actual.plane.residualMm<=moved.toleranceMm);
+ }
+ const closed={nodes:[0,0,0,1,0,0,0,1,0,0,0,1].map(x=>x+1e6),triangles:[[0,2,1],[0,1,3],[0,3,2],[1,2,3]],toleranceMm:1e-6};
+ const shell=extractOpeningLoopCandidates(closed);
+ assert.equal(shell.closedShell,true);assert.deepEqual(shell.rejected,[]);assert.deepEqual(shell.candidates,[]);
+});
+
 test('malformed input, non-finite coordinates, repeated vertices and non-positive tolerance are rejected',()=>{
  const bad={nodes:[0,0,0, 1,0,0, 0,1,0],triangles:[[0,1,2]],toleranceMm:1e-6};
  assert.throws(()=>extractOpeningLoopCandidates({...bad,nodes:[0,0,0,1,0,0,0,NaN]}));

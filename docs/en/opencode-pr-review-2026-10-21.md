@@ -1,5 +1,7 @@
 # OpenCode PR review — 2026-10-21
 
+Update: All9 previously rejected PRs passed re-review. The integration additionally repairs origin-dependent degeneracy in #139. [Repair review record](../evidence/2026-10-21-repaired-pr-review.json). The remainder records the initial review.
+
 [日本語](../opencode-pr-review-2026-10-21.md)
 
 [Exact reviewed heads and reproductions](../evidence/2026-10-21-opencode-pr-review.json) / [Twenty next work orders](../opencode-work-orders-2026-10-21/README.md)
