@@ -52,10 +52,11 @@
     "trailingByte": "one 0x00 byte appended after IEND or after the GIF trailer"
   },
   "changedFiles": {
-    "scripts/verify-export-artifact.mjs": "09e6c89dbc527fc19f8edb40925b78add3a4d21b556b33dc97957cffc0e72e79",
-    "tests/verify-export-artifact.test.mjs": "0d428c833b0690bb5e02f31a794024619763168e95ed2301e3f34b93ea66dde5",
-    "docs/testing.md": "c3dc406b47e9f2cc4950a3063904abd6efd5c421a6fa3062e5e6167843c91e37",
-    "docs/en/testing.md": "a52aa3e05b15dfe7bfcc111ffbc417d0bacc631d6dcb801831559eac3c4ccce4"
+    "hashBasis": "SHA-256 of the committed git blob (LF-normalized), reproducible with: git cat-file blob <commit>:<path> | sha256sum",
+    "scripts/verify-export-artifact.mjs": "26fe7c3e7fb71968271dc079f3cf754160f918f43a1edb01c7d27b1d2c890c53",
+    "tests/verify-export-artifact.test.mjs": "b53e6fcad9cb125a7248088366959bb86d52e07550ee1903b7feeb6f986641ac",
+    "docs/testing.md": "258ed2d05197b59b61c3a07dabd95c66942af9af83fe6a128956838bfd93c375",
+    "docs/en/testing.md": "5cc50e64606d87123b8b980db8aac30257091626a7a97f8d3259b17911cc81cb"
   },
   "tests": {
     "command": "node --test tests/verify-export-artifact.test.mjs tests/visual-export-fixed-frame.test.mjs",
