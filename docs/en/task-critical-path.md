@@ -2,13 +2,17 @@
 
 [日本語](../task-critical-path.md)
 
-As of 2026-10-19, there are171 tasks,133 released and38 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
+As of 2026-10-21, there are171 tasks,134 released and37 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
 
 | Classification | Existing IDs | Conditions |
 |---|---|---|
 | Autonomous implementation/verification(15) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
-| External/device conditions(8) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, MCPARGUMENTTYPES1, EXPORTBACKGROUND1, FINITEVISCO1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
+| External/device conditions(7) | PRINT2, PRINTMEASURE1, PRINTMEASURE2, PRINTMEASURE3, RUNTIMEWASM1, EXPORTBACKGROUND1, FINITEVISCO1 | Physical prototypes/material calibration, V8 reproduction/upstream fixes, registered SDK verification and public-browser version evidence. Continue independent software work while waiting. |
 | Parent epics(15) | MESH1, CFD1, COUPLE1, FAIL1, CFD2, CFD3, COUPLE5, MOD1, P0, P1, P2, P3, P4, P5, P6 | Publishing a slice does not complete its parent. Keep existing acceptance and common completion criteria. |
+
+## 2026-10-21: Six started tasks outside the existing orders
+
+Audited all six started tasks outside IDs21–40. MCPARGUMENTTYPES1 completes after actual registered SDK declarations and tool calls were verified ([evidence](../evidence/2026-10-21-registered-sdk-argument-types.json)). Five retain implementation, measurement or device conditions; [orders41–45](../opencode-release-work-orders-2026-10-21/README.md) specify their remaining work and release gates. The nine initial review rejections described below were repaired, re-reviewed and merged through PR148. A successful slice does not complete its parent.
 
 ## 2026-10-21: independent OpenCode PR review
 

@@ -223,3 +223,8 @@ VIEWTIME implements explicit stored-frame density/scalar-storage budgets while s
 ## Internal-fluid cap workflow and UI literature research
 
 Explicit half-space caps now connect JP/EN GUI,persistence and semantic API/MCP,with real-Chrome and Node-hosted CPU-Worker evidence kept separate. Arbitrary wires/local lids/general joins/deployed Worker/physical accuracy remain open;CFDPORT1 building. UIRESEARCH1 completes versioned COMSOL6.3/Mechanical2025R2 primary-document research,common six-case planning and nine proposals only. Hands-on comparison/recovery/keyboard/measured burden/core diagnostic translation remain UIIMPROVE1 work.133released/34unfinished(12autonomous/7external/15parents). Final candidate CI lives in publication evidence.
+
+
+## 2026-10-21: Registered SDK positional types verified
+
+MCPARGUMENTTYPES1 completes after current registered declarations, actual MCP150 N preview/exact commit, invalid-type refusal and unchanged input were verified ([evidence](../evidence/2026-10-21-registered-sdk-argument-types.json)). This updates historical unverified-projection statements; the whole Skill, whole-catalog freshness and other parents remain separate. [Additional orders](../opencode-release-work-orders-2026-10-21/README.md) cover the five remaining started tasks outside the existing20.

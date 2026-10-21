@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T00:38:27.339535+00:00",
+  "updatedAt": "2026-10-21T00:47:01.995536+00:00",
   "release": {
     "version": "v0.44",
     "date": "2026-10-21",
     "testCount": 1647,
-    "description": "前回要修正の9 PRを再レビューして修正を確認。開口検出の位置依存判定も統合側で修正。全20件の取り込み対象が揃い、要修正0件。親タスクは部分実装として未完38件を維持。1647試験は公開済みb1ee3ac0の検証記録。",
-    "descriptionEn": "Re-reviewed all9 repaired PRs; also repaired origin-dependent opening detection during integration. All20 review records are accepted,0 requiring changes. Parent work remains partial with38 unfinished tasks.1647 tests records published baseline b1ee3ac0."
+    "description": "20 PRの取り込みに続き、既存20指示以外の着手済み6件を監査。登録済SDKの位置引数型を実呼び出しで最終確認し1件完了、残5件に公開条件付き追加指示を作成。全171件・公開済134件・未完37件。1647試験はb1ee3ac0時点の検証記録。",
+    "descriptionEn": "After accepting20 PRs, audited six started tasks outside the existing20 orders. Completed registered SDK positional types through actual tool calls; five tasks receive additional release work orders.171 total,134 released,37 unfinished.1647 tests is the b1ee3ac0 baseline."
   },
   "tasks": [
     {
@@ -226,9 +226,9 @@
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work. 2026-10-16: The opt-in SU2 path (explicit download with a pinned SHA-256, not bundled, LGPL-2.1 notice) is merged (PR 7). Experimental; the open items above are unchanged.",
-      "lastUpdate": "独立モジュールCFDINTERNAL1で内部低Re流路の速度境界とP1/P2参照を検証中。一般Navier–Stokes・UI/Worker接続は未完了。",
-      "lastUpdateEn": "Independent module CFDINTERNAL1 is verifying internal low-Re channel velocity boundaries and P1/P2 references. General Navier-Stokes and UI/Worker integration remain incomplete.",
-      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json"
+      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 41-CFD1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
+      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 41-CFD1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task.",
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md"
     },
     {
       "id": "GPU1",
@@ -885,9 +885,9 @@
       "titleEn": "Simulate layers and infill",
       "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
       "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
-      "lastUpdate": "直交異方性の9定数・材料軸を静的線形CPU解析へ接続。理論棒変形、回転共変性、せん断、JS/WASM一致、Workerと保存結果検証を追加。印刷条件の校正、壁・層・インフィル詳細と実測検証は未完了。",
-      "lastUpdateEn": "Connected nine orthotropic constants and material axes to static linear CPU analysis. Added analytical bar, rotation covariance, shear, JS/WASM parity, Worker and archive validation. Print-condition calibration, wall/layer/infill detail and measured validation remain unfinished.",
-      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs"
+      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 42-PRINT2.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
+      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 42-PRINT2.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task.",
+      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs; docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md"
     },
     {
       "id": "CFDCHAN1",
@@ -1354,7 +1354,9 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "NATIVEPROOF1のLinuxホスト実行とWASM比較が成功。固定棒5条件・不正入力8件の範囲であり、P6全体は未完了。"
+      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 43-P6.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
+      "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md",
+      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 43-P6.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task."
     },
     {
       "id": "UIRESEARCH1",
@@ -1744,9 +1746,9 @@
       "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode 24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode 24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration. The publication-progress defaultNode 24 full run reproduced the same fatal in analysis-job-service (883reported/879passed/onefailure/3skipped). Affected file alone3passed;same-sourceNode26 comparison881passed/3skipped of884. No default migration or root-fix proof.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution. 2026-10-16 Tracking: upstream nodejs/node#66366 attributes the crash to a V8 race (WasmImportWrapperCache MaybeGet takes a ref before checking is_dying); V8 fixes 68210d500a/9b8ca54d5a, but the 24.x backport (PR 66376) is unmerged and neither 24.21.0 nor 24.22.0 contains it (CHANGELOG checked). Our Windows runs (Node 24.11.1, 24.22.0, 22.23.3, 26.12.0 and --no-wasm-code-gc; the five files that died in CI; 93 runs) produced 0 V8 fatals, so which operation of ours triggers it is not identified (hypothesis only: wasm kept alive across worker.terminate()). Recommendation: move the CI pin to the first 24.x release with the fix. Interim --no-wasm-code-gc (0/20 in the upstream report) needs an approved CI change. Stays checking.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json",
-      "lastUpdate": "2026-10-18: Node24.11.1の全体試験でmcp-artifact-catalogのV8 JIT CHECK停止を再観測しました。単独1回は成功しましたが原因や根治は未確認です。設定を変えず失敗を保存し、最終CIとは別の未解決事項として検証中を維持します。 PR122初回CI Node24.21.0でjit_page.has_value() fatalを記録、同source再実行は成功。旧erase署名と分離して検出し、明示no-wasm-code-gcとのbounded比較/手動Linux workflowを追加。Windows限定smokeは両mode成功、Linux比較・原因一致・軽減/根治は未確認、checking維持。",
-      "lastUpdateEn": "2026-10-18: Full tests on Node24.11.1 again hit a V8 JIT CHECK in mcp-artifact-catalog. One isolated retry passed; cause/root fix remain unknown. No flags changed; failure is retained separately from final CI and this task stays checking. PR122 initial CI on Node24.21.0 hit jit_page.has_value();same-source retry passed. Added separate signature detection and bounded explicit no-wasm-code-gc comparison/manual Linux workflow. Both Windows smoke modes pass;Linux comparison,cause equivalence,mitigation/root fix remain unproven;checking."
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json; docs/opencode-release-work-orders-2026-10-21/44-RUNTIMEWASM1.md",
+      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 44-RUNTIMEWASM1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
+      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 44-RUNTIMEWASM1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task."
     },
     {
       "id": "CADUPDATEAPI1",
@@ -2441,18 +2443,18 @@
       "id": "MCPARGUMENTTYPES1",
       "title": "MCP位置引数のJSON型を明示する",
       "titleEn": "Declare semantic MCP positional argument JSON types",
-      "status": "checking",
+      "status": "released",
       "category": "共通",
       "depends": [
         "P0"
       ],
       "detail": "保存/ライブのedit・previewで数値・record・配列を共有schemaに明示。実行時の意味・拒否条件は維持する。",
       "detailEn": "Share explicit number,record and nested-array schemas across saved/live edit and preview while preserving runtime semantics and refusals.",
-      "acceptance": "追加2/最終対象30件成功。実MCP/ライブで150N案と同領域適用、不正位置型拒否を検証。全体897は型宣言変更前。実登録SDKの型生成改善は再登録後の確認を残す。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
-      "acceptanceEn": "Two new/thirty final targeted checks pass,including real MCP/live150N preview/same-region commit and invalid positional types. Full897 preceded declaration changes. Generated registered-SDK projection still requires refreshed-registration verification. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
-      "evidence": "src/semantic-operation-schema.js; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-operation-contracts-full.json",
-      "lastUpdate": "2026-10-15 独立確認: mcp-typed-operation-schema含む8ファイル45件成功。再登録後の実SDK型生成確認が残るためchecking維持。公開HTTPSはPUBLICHTTPS1。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "2026-10-15 independent check: 8 files incl. mcp-typed-operation-schema, 45 pass. Registered-SDK type generation after re-registration still unverified, so stays checking. Published HTTPS tracked in PUBLICHTTPS1. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "acceptance": "位置引数JSON型を保存/ライブedit・previewに宣言。現在登録済みSDKの型投影と実MCPの150 N preview/確定、不正位置型の拒否、入力不変、実live adapterの同一領域commitを検証。公開HTTPS接続と新規method全体の登録鮮度は別判定。",
+      "acceptanceEn": "Declare positional JSON types for saved/live edit and preview. Verify the current registered SDK projection, actual MCP150 N preview/exact commit, invalid positional types, unchanged input and actual live-adapter same-region commit. Published HTTPS and whole-catalog method freshness are separate.",
+      "evidence": "src/semantic-operation-schema.js; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-21-registered-sdk-argument-types.json",
+      "lastUpdate": "2026-10-21: 最終確認完了。現在の登録済みSDKで位置引数のJSON型を確認し、実MCPの150 Nプレビュー/同一版確定、不正型3件の拒否、元ファイル不変を検証。実live adapterの同一領域commit試験も成功。新規method全体の再登録や物理精度は別判定。",
+      "lastUpdateEn": "2026-10-21: Final verification passed: actual registered SDK positional JSON types, real MCP150 N preview/exact commit, three invalid-type refusals and unchanged input bytes. Actual live-adapter same-region commit test passed. Whole-catalog freshness and physical accuracy remain separate."
     },
     {
       "id": "BROWSERCONNECTOR1",
@@ -2766,9 +2768,9 @@
       "category": "結果表示",
       "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-18: 利用者は今は操作不可。実hiddenの手動確認待ちとしてcheckingを維持し、ほかの実装/検証を先行します。停止監視実装の公開と実機確認の未完を分離。",
-      "lastUpdateEn": "2026-10-18: User cannot operate now;actual hidden manual QA remains checking while other work proceeds. Published monitoring is distinct from unverified real hidden behavior.",
-      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json"
+      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 45-EXPORTBACKGROUND1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。 現在利用者は手動操作不可。実hiddenの確認は操作環境待ち。",
+      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 45-EXPORTBACKGROUND1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task. Actual hidden-tab QA remains blocked on an available operating environment; the user cannot operate now.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md"
     },
     {
       "id": "BROWSERRESET1",

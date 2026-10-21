@@ -226,3 +226,8 @@ VIEWTIMEは保存フレーム密度とscalar保存量予算を明示し、計算
 ## 内部流体capの操作一巡とUI資料研究
 
 明示半空間capを日英GUI・保存復元・意味的API/MCPへ接続し、実ChromeとNodehosted CPU Workerの証拠を別々に保存。任意wire認識/局所蓋/一般join/公開Worker/物理精度を残しCFDPORT1はbuilding。UIRESEARCH1はCOMSOL6.3/Mechanical2025R2の版付き一次資料・共通6case計画・9改善案で研究のみ完了、実機比較/復旧/keyboard/定量負担とcore診断翻訳はUIIMPROVE1へ残る。133released/34未完（自律12/外部7/親15）。今回最終CIは公開証拠を参照。
+
+
+## 2026-10-21: 登録済SDKの位置引数型を最終確認
+
+MCPARGUMENTTYPES1は現在の登録済みツール宣言と実MCPの150 N preview/同一版確定、不正型拒否、元入力不変を確認して完了。[証拠](evidence/2026-10-21-registered-sdk-argument-types.json)。以下の過去記録の登録済投影未確認を本項で更新する。Skill全体・新規method全体の登録鮮度・他の親タスクは別判定。既存20指示以外の残5件は[追加指示](opencode-release-work-orders-2026-10-21/README.md)を参照。
