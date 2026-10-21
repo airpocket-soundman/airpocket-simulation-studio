@@ -18,7 +18,7 @@ export const channelLayerCellQualityScope=Object.freeze({
 const INPUT_KEYS=Object.freeze(['plan','lengthMm','widthMm','maxAspectRatio','minimumCellHeightMm']);
 const RELATIVE_TOLERANCE=1e-12;
 /** Compares lengths/thresholds without inventing a coarser tolerance. */
-const close=(actual,expected)=>Math.abs(actual-expected)<=RELATIVE_TOLERANCE*Math.max(1,Math.abs(actual),Math.abs(expected));
+const close=(actual,expected)=>typeof actual==='number'&&Number.isFinite(actual)&&typeof expected==='number'&&Number.isFinite(expected)&&Math.abs(actual-expected)<=RELATIVE_TOLERANCE*Math.max(1,Math.abs(actual),Math.abs(expected));
 
 function positiveLength(value,label){
  if(typeof value!=='number'||!Number.isFinite(value)||value<=0)throw Error(label+' must be a positive finite length in mm');

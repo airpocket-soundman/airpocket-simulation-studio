@@ -115,6 +115,24 @@ test('wall identity, layer wallId/index and centre band tampering are refused',(
  assert.throws(tamper(plan=>{plan.walls[1].thicknessMm=0.5;}),/thickness does not match/);
 });
 
+test('retained wall, layer and centre metadata require finite numbers without coercion',()=>{
+ const paths=[['oneSideThicknessMm'],['centreBandMm','lowerMm'],['centreBandMm','upperMm'],['centreBandMm','widthMm']];
+ const plan=basePlan();
+ for(let wall=0;wall<plan.walls.length;wall++){
+  paths.push(['walls',wall,'positionMm'],['walls',wall,'thicknessMm']);
+  for(let coordinate=0;coordinate<plan.walls[wall].coordinatesMm.length;coordinate++)paths.push(['walls',wall,'coordinatesMm',coordinate]);
+ }
+ for(let layer=0;layer<plan.layers.length;layer++)for(const key of ['innerMm','outerMm','heightMm'])paths.push(['layers',layer,key]);
+ for(const path of paths){
+  const parent=path.slice(0,-1).reduce((value,key)=>value[key],plan),key=path.at(-1),original=parent[key];
+  for(const invalid of [Infinity,-Infinity,NaN,String(original),null,false,undefined]){
+   const changed=clone(plan),target=path.slice(0,-1).reduce((value,key)=>value[key],changed);target[key]=invalid;
+   assert.throws(()=>quality({...baseInput(),plan:changed}),undefined,path.join('.')+' must reject '+String(invalid));
+  }
+ }
+ assert.equal(quality({...baseInput(),plan}).totalVolumeMm3,20,'valid numeric metadata retains the reference volume');
+});
+
 test('finite factors whose product is not finite are refused as overflow',()=>{
  assert.throws(()=>quality({...baseInput(),lengthMm:1e200,widthMm:1e200}),/volume is not a positive finite value|overflow/);
  assert.throws(()=>quality({...baseInput(),lengthMm:1e308,widthMm:10}),/volume is not a positive finite value|overflow/);

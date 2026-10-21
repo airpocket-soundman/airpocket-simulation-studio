@@ -57,11 +57,12 @@
       "qualityBelow02Elements": 0
     },
     "savedCaseMesh": {
-      "nodes": 2223,
+      "nodes": 741,
+      "coordinateValues": 2223,
       "tetrahedra": 2672
     },
     "pressureSamplesPerFrame": 741,
-    "amplitudeConventionNote": "The saved case mesh contains 2223 volume nodes but the stored pressure field and the comparison color range use 741 scalars per frame. The UI summary shows 741 nodes / 2672 tetrahedra. This evidence does not claim pressure storage at all 2223 mesh nodes.",
+    "amplitudeConventionNote": "The saved case mesh.nodes array contains 2223 flattened XYZ coordinate values, representing 741 volume nodes. The pressure field and comparison color range use 741 scalars per frame, matching the node count and the UI summary of 741 nodes / 2672 tetrahedra. No partial-field storage or mesh/field node-count mismatch is inferred.",
     "boundary": {
       "sourceConditions": {
         "type": "acousticPressure",
@@ -507,7 +508,7 @@
     "The GIF is lossy RGB332 with 256 colors; pixel hashes are over decoded RGB output, not a proof of pressure-value accuracy.",
     "The GIF is 5,574,849 bytes, above the 5 MiB single-file transfer limit. Full bytes were retrieved through 86 official MCP artifact pages; a direct one-file browser transfer was not used and is not claimed.",
     "GUI and MCP GIFs were byte-identical in this one run. No multi-run determinism distribution was measured.",
-    "The saved case mesh has 2223 volume nodes while pressure arrays and the comparison range use 741 scalars per frame; the UI summary shows 741 nodes / 2672 tetrahedra. This distinction is recorded, not generalized.",
+    "The original evidence mislabeled 2223 flattened XYZ coordinate values as 2223 volume nodes. Corrected saved-mesh count is 741 nodes, matching the 741 pressure scalars per frame and UI summary. The raw coordinate-array length is retained separately; no distinct mesh/field storage boundary is asserted.",
     "The static comparison-view preset remained 'Enter the shared physical time' because the time-video path used the explicit start/end fields; the preset and the video controls were both unchanged before/after.",
     "The parent VIEWCOMPARE unit remains incomplete; this is a bounded real-browser verification slice."
   ],
@@ -517,5 +518,20 @@
     "environmentDumped": false,
     "physicalArraysCopiedIntoEvidence": false,
     "userModelUploaded": false
+  },
+  "evidenceCorrection": {
+    "date": "2026-10-21",
+    "scope": "Integration-only factual terminology correction; no source or measurement rerun",
+    "originalReportedSavedCaseMeshNodes": 2223,
+    "preservedRawCoordinateArrayLength": 2223,
+    "coordinateLayout": "flat XYZ, three coordinate values per node",
+    "correctedSavedCaseMeshNodes": 741,
+    "pressureSamplesPerFrame": 741,
+    "fieldLengthMatchesNodeCount": true,
+    "sourceReferences": [
+      "src/intermediate-results.js:5",
+      "src/case-comparison.js:78"
+    ],
+    "note": "The original numerical raw count is retained as savedCaseMesh.coordinateValues. The previous claim of a distinct 2223-node mesh with 741 pressure values is removed. GUI/MCP/decode observations remain the original bounded Electron/Chromium report; no new artifact, Chrome run or cleanup is claimed."
   }
 }

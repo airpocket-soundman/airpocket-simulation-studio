@@ -112,7 +112,19 @@
       "EN then JP: Inputs changed. Check again. / 入力が変わりました。もう一度チェックしてください。"
     ],
     "whyNotFixed": "The snapshot identity is supplied by main.js wiring (project + currentAnalysisOptions), which this work order marks read-only. Excluding a language field inside the preflight UI would be a workaround and could mask real input changes.",
-    "followUp": "Check whether api.exportProject() or currentAnalysisOptions() contains locale-dependent state and exclude it from the preflight identity in a separately approved main.js change."
+    "followUp": "Check whether api.exportProject() or currentAnalysisOptions() contains locale-dependent state and exclude it from the preflight identity in a separately approved main.js change.",
+    "independentReviewAnnotation": {
+      "reviewedAt": "2026-10-21",
+      "classification": "Observed locale-triggered report invalidation is explicitly implemented existing behavior; the proposed main.js snapshot-identity cause is unproven.",
+      "sourceEvidence": "src/ui/analysis-preflight-ui.js explicitly registers doc.addEventListener?.('studio-language',invalidate). The existing test named 'locale event clears dynamic diagnostics instead of retaining an old-language report' asserts this behavior.",
+      "rawObservationsRetained": true,
+      "scope": "The observed stale message does not prove project or options identity changed. Do not exclude locale fields from identity based on this observation alone.",
+      "followUp": "If changing the locale UX is desired, first define whether to clear, rerun or translate the report while retaining stale-input protection. This is a separate behavior decision, not a confirmed main.js defect.",
+      "acceptanceRemaining": [
+        "Branded Google Chrome acceptance was not recorded.",
+        "390 CSS px layout and visible keyboard focus were not recorded."
+      ]
+    }
   },
   "commands": [
     {
