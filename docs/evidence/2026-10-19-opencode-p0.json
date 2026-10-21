@@ -1,0 +1,76 @@
+{
+  "workOrder": "15-P0",
+  "date": "2026-10-19",
+  "base": {
+    "repository": "airpocket-simulation-studio",
+    "baseRef": "origin/main",
+    "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "branch": "codex/opencode-p0",
+    "worktree": "D:/github/airpocket-soundman/studio-opencode-p0"
+  },
+  "scope": {
+    "inScope": "Add an optional RFC 6901 JSON Pointer to existing diagnoseExecution issue objects in src/capabilities.js and prefer it in src/ui/analysis-preflight-ui.js, without removing or renaming the legacy dot-form target.",
+    "outOfScope": "No new universal preflight, no capability-list change, no diagnostic code/severity/order change, no project/options mutation, no src/progress.json change, no new module or module-boundary registration.",
+    "parentTaskState": "P0 parent remains incomplete; completePreflight stays false everywhere."
+  },
+  "pointerContract": {
+    "escape": "RFC 6901 escaping applied in order: '~' -> '~0', '/' -> '~1' (src/capabilities.js pointerToken).",
+    "origin": "'/options/*' addresses the execution options argument; '/study/*' and '/materialProperties/*' address the project. Only a known target maps; any other target keeps target only with no fabricated pointer.",
+    "generation": "Pointer is generated only from the explicit per-target token table, never by splitting the dot-form target string.",
+    "mapping": [
+      {"code": "EXECUTION_METHOD_UNSUPPORTED", "target": "options.method", "pointer": "/options/method"},
+      {"code": "STUDY_UNSUPPORTED", "target": "study.kind", "pointer": "/study/kind"},
+      {"code": "DOMAIN_MESH_ONLY", "target": "study.kind", "pointer": "/study/kind"},
+      {"code": "ENGINE_STUDY_UNSUPPORTED", "target": "options.method", "pointer": "/options/method"},
+      {"code": "MATERIAL_COMBINATION_UNSUPPORTED", "target": "materialProperties.orthotropic", "pointer": "/materialProperties/orthotropic"},
+      {"code": "MATERIAL_COMBINATION_UNSUPPORTED", "target": "materialProperties.plasticity", "pointer": "/materialProperties/plasticity"},
+      {"code": "MATERIAL_COMBINATION_UNSUPPORTED", "target": "materialProperties.hyperelastic", "pointer": "/materialProperties/hyperelastic"},
+      {"code": "MODAL_METHOD_UNSUPPORTED", "target": "options.method", "pointer": "/options/method"},
+      {"code": "ADAPTIVE_STUDY_UNSUPPORTED", "target": "options.adaptive", "pointer": "/options/adaptive"},
+      {"code": "MODAL_COMBINATION_UNSUPPORTED", "target": "execution.combination", "pointer": null},
+      {"code": "HYPERELASTIC_COMBINATION_UNSUPPORTED", "target": "execution.combination", "pointer": null}
+    ],
+    "unmappedReason": "Shared combination rules (src/execution-combination-rules.js, not modified) pass the synthetic target 'execution.combination', which is not a project or options path; no pointer is emitted and the GUI shows the target text with no focus link."
+  },
+  "changedFiles": [
+    "src/capabilities.js",
+    "src/ui/analysis-preflight-ui.js",
+    "tests/capabilities.test.mjs",
+    "tests/capabilities-combinations.test.mjs",
+    "tests/ui-analysis-preflight.test.mjs",
+    "docs/evidence/2026-10-19-opencode-p0.json"
+  ],
+  "commands": [
+    {"cmd": "npm ci", "result": "added 22 packages, 0 vulnerabilities (own worktree; shared node_modules untouched)"},
+    {"cmd": "node --test tests/capabilities.test.mjs tests/capabilities-combinations.test.mjs tests/ui-analysis-preflight.test.mjs tests/contracts-types.test.mjs", "result": "tests 17 / pass 17 / fail 0 / cancelled 0 / skipped 0 (duration_ms 896.88)"},
+    {"cmd": "npm run check:contracts", "result": "exit 0; 'Contract declarations type-check (5 declaration files).'"},
+    {"cmd": "git diff --check", "result": "exit 0 (no whitespace errors)"},
+    {"cmd": "node --test tests/execution-combination-parity.test.mjs tests/observation-profiles.test.mjs tests/analysis-preflight.test.mjs tests/analysis-preflight-physics.test.mjs tests/mcp-runtime-info.test.mjs tests/studio-mcp.test.mjs tests/docs.test.mjs tests/module-boundaries.test.mjs tests/contracts.test.mjs tests/assessment-preflight.test.mjs tests/thermal-preflight.test.mjs tests/wave-fluid-preflight.test.mjs tests/structural-model-preflight.test.mjs tests/advanced-structural-preflight.test.mjs tests/project-input-inspection.test.mjs", "result": "pass 99 / fail 1; the failure is 'rule table is the single source of the worker messages' (ERR_ASSERTION plasticity mfem: Cannot find module public/mfem/mfem.mjs), a missing build artifact unrelated to this change. The sibling test in the same file ('worker validation and diagnoseExecution agree on every execution combination') passed."},
+    {"cmd": "node --test tests/project-edit-preview.test.mjs tests/browser-edit-preview.test.mjs tests/mcp-edit-preview.test.mjs tests/gui-analysis-jobs.test.mjs tests/mcp-assessment-preflight.test.mjs tests/analysis-job-failure.test.mjs tests/mcp-execution-failure.test.mjs tests/preflight-solver-alignment.test.mjs tests/preflight-observation-profiles.test.mjs tests/input-provenance.test.mjs tests/browser-job-settlement.test.mjs tests/analysis-client.test.mjs", "result": "tests 60 / pass 60 / fail 0"},
+    {"cmd": "node scripts/build-kernel.mjs", "result": "created gitignored public/fem-kernel.wasm so worker-backed tests could run; no native/MFEM build performed."}
+  ],
+  "valueAcceptance": {
+    "method": "target 'options.method' kept and pointer '/options/method' added (tests/capabilities.test.mjs)",
+    "study": "pointer '/study/kind' added",
+    "adaptive": "pointer '/options/adaptive' added",
+    "escapeFixture": "toJsonPointer('a/b~c') === '/a~1b~0c' and toJsonPointer('options','method') === '/options/method'",
+    "guiKnownPointer": "GUI prefers issue.pointer over issue.target, opens the closed <details>, focuses the mapped control; the shared API report is returned unchanged",
+    "guiUnmapped": "An 'execution.combination' diagnostic shows its target text, produces no focus link and performs 0 control lookups",
+    "legacyShape": "For each known diagnostic Object.keys minus 'pointer' equals ['code','severity','target','message','evidence','suggestions','requiresUserIntent']; code/severity/target unchanged; completePreflight remains false; diagnostic order unchanged",
+    "projectMutation": "The GUI module only reads snapshot()/getControl(); tests/ui-analysis-preflight.test.mjs test 'GUI calls same API without input mutation...' asserts api.exportProject() is deep-equal before and after a check whose MESH_SIZE_INVALID now carries pointer '/options/size'"
+  },
+  "unknownFixtures": [
+    {"code": "MODAL_COMBINATION_UNSUPPORTED", "target": "execution.combination", "pointerExpected": "absent", "verifiedIn": "tests/capabilities.test.mjs, tests/capabilities-combinations.test.mjs"},
+    {"code": "HYPERELASTIC_COMBINATION_UNSUPPORTED", "target": "execution.combination", "pointerExpected": "absent", "verifiedIn": "tests/capabilities-combinations.test.mjs"}
+  ],
+  "unverified": [
+    "Real-browser (Chrome) GUI focus/click not verified: no desktop browser is connected to this session (browser.tabs.open returned 'No desktop browser is connected'), so browser.evaluate could not run the synthetic localhost fixture.",
+    "MFEM/native asset not built; tests/execution-combination-parity.test.mjs 'rule table is the single source of the worker messages' fails on missing public/mfem/mfem.mjs. This is a pre-existing missing build artifact, not caused by the pointer change.",
+    "Full repository test suite and production build were not run; only the targeted and related test files above were executed."
+  ],
+  "notClaimed": [
+    "No claim that P0 as a whole is complete, executable or physically valid.",
+    "No claim of real-browser verification, solver accuracy, convergence, mesh quality or physical validity.",
+    "completePreflight remains false in capabilities and preflight reports."
+  ]
+}

@@ -15,7 +15,7 @@ Reuse the existing real-Chrome driver pattern: browser actions go through the co
 
 ### Page prerequisites
 
-- The page must be `crossOriginIsolated === true`; `performance.measureUserAgentSpecificMemory()` works only under cross-origin isolation. The app gets isolation from `public/coi-serviceworker.js` and the headers in `vite.config.js`. If not isolated, the memory block records `null` with reason `not-cross-origin-isolated` and only time and cancel are measured (never silently reported as success).
+- The page must be `crossOriginIsolated === true`; `performance.measureUserAgentSpecificMemory()` (the `uasm` series, semantic whole-agent bytes) works only under cross-origin isolation. The app gets isolation from `public/coi-serviceworker.js` and the headers in `vite.config.js`. If not isolated, the `uasm` series is unavailable and only the coarse `performance.memory.usedJSHeapSize` (`jsHeap` series, JS heap only) is recorded as its own series (never silently reported as success, never substituted for the other series).
 - Reads happen through in-page `evaluate`; app source is not modified.
 
 ### Operations called
@@ -24,7 +24,7 @@ Reuse the existing real-Chrome driver pattern: browser actions go through the co
 2. Load the case: the existing demo buttons, or project JSON load (exported from the `perf-measure.mjs` cases); set the mesh size in the settings field.
 3. Solve: click `#solve-run` and wait until `#status` shows completion. Time is taken in-page with `performance.now()` (a start mark set by `evaluate` just before the click, and a `MutationObserver` on `#status`); host RPC round trips are excluded.
 4. Cancel: click the page's cancel control while the solve runs (the same path a user takes, not a connector-side `cancel`), and measure in-page the time until `#status` shows cancelled and execution stops. Cancel points match the Node harness: (a) after the first progress display, (b) at 50% of that case's median warm total.
-5. Memory: call `await performance.measureUserAgentSpecificMemory()` at (i) just after load (baseline), (ii) just after solve, (iii) just after cancel, (iv) a few seconds later, after requesting GC only where available. Record `bytes` and the Worker-attributed part of `breakdown` separately. `performance.memory.usedJSHeapSize` (non-standard, coarse) goes in a separate reference field. Peak is approximated by the maximum of sampling at a fixed interval (e.g. 200 ms); record the interval and sample count, and note that sampling itself uses memory.
+5. Memory: call `await performance.measureUserAgentSpecificMemory()` at (i) just after load (baseline), (ii) just after solve, (iii) just after cancel, (iv) a few seconds later, after requesting GC only where available. Record `bytes` and the Worker-attributed part of `breakdown` separately. `performance.memory.usedJSHeapSize` (non-standard, coarse) goes in a separate `jsHeap` series. **The `uasm` series (semantic whole-agent) and the `jsHeap` series (JS heap only) cover different scopes: never mix them with a per-sample fallback, never substitute one when the other is missing, and never sum them.** Peak is approximated by the maximum of sampling at a fixed interval (e.g. 200 ms/1000 ms); record the interval and sample count, and note that sampling itself uses memory.
 
 ### Cases and repeats
 
@@ -44,7 +44,10 @@ Reuse the existing real-Chrome driver pattern: browser actions go through the co
   cases: [{
     id, physics, meshSize, status: "ok"|"failed", error?,
     cold: {totalMs, solveMs, ...}, warm: {runs: [...], summary: {totalMs: {median,min,max,n}}},
-    memory: {available, reason?, baselineBytes, afterSolveBytes, afterCancelBytes, afterSettleBytes, peakBytesSampled, samples: {intervalMs, count}},
+    memory: {available, primarySeries, intervalMs, sampleCount,
+             series: {uasm:  {available, source, baselineBytes, peakBytesSampled, afterCancelBytes, afterSettleBytes, sampleCount, unavailable},
+                      jsHeap: {available, source, baselineBytes, peakBytesSampled, afterCancelBytes, afterSettleBytes, sampleCount, unavailable}},
+             note},
     cancel: {points: {"first-progress": {latencyMs: {median,min,max,n}, states: {...}}, "half-warm-total": {...}},
              recoveredAfterCancel: boolean},
     notes: [...]
@@ -54,6 +57,10 @@ Reuse the existing real-Chrome driver pattern: browser actions go through the co
 ```
 
 Final states are `cancelled` / `completed-before-cancel` / `error`, the same vocabulary as the Node harness. All values are measurements.
+
+### Memory series handling (implementation: `mergeMemory`)
+
+`memory.series` keeps series of different scope separate. `uasm` = `performance.measureUserAgentSpecificMemory().bytes` (cross-origin isolated only, semantic whole-agent), `jsHeap` = `performance.memory.usedJSHeapSize` (non-standard, coarse, JS heap only). Per series, `peakBytesSampled` (an approximation from the maximum of periodic samples), the baseline (the last sample before the case window) and `afterCancelBytes`/`afterSettleBytes` (the first sample at `cancelSettledEpochMs`/`endEpochMs` + 3000 ms) are taken from that series' own samples only. **Series are never summed, a mixed maximum is never called total RAM, and a missing series is never substituted by the other.** `NaN`/`Infinity`/negative/`null` values are not adopted as measurements. Even when only one series has values, `series` keeps both; the empty one has `available:false` and an `unavailable` reason. If no sample is usable inside the window, `memory` is `null` with a `memoryReason`. Flat compatibility fields (only the single series named by `primarySeries`) coexist with `series` and never combine series. `mergeMemory` mutates `report` in place and returns it (the existing contract); `probe` is read-only. `schemaVersion` stays 1 (series separation is additive).
 
 ## Safety rules
 

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "order": "18",
+  "id": "P4",
+  "parent": "P4 (Viewer operations and reproducible export APIs) remains building",
+  "workOrder": "docs/opencode-work-orders-2026-10-19/18-P4.md",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-p4",
+  "scope": "Add an independent CLI that reads back a retained single PNG or GIF export and compares identity (exact byte length and SHA-256) and the container header against the schemaVersion-1 manifest. ZIP (png-sequence) and WebM are refused as unsupported. No encoder, viewer, solver or manifest version was changed.",
+  "changes": [
+    "scripts/verify-export-artifact.mjs (new CLI)",
+    "tests/verify-export-artifact.test.mjs (new)",
+    "docs/testing.md (new readback section)",
+    "docs/en/testing.md (new readback section)"
+  ],
+  "contract": {
+    "requiredManifestFieldsSchemaVersion1": ["schemaVersion", "format", "container", "mimeType", "sha256", "totalBytes"],
+    "supported": {"png": {"container": "png", "mimeType": "image/png"}, "gif": {"container": "gif", "mimeType": "image/gif"}},
+    "unsupported": {"webm": {"container": "webm"}, "png-sequence": {"container": "zip", "mimeType": "application/zip"}},
+    "limits": {"manifestBytes": 65536, "artifactBytes": 104857600, "regularFilesOnly": true},
+    "exitCodes": {"verified": 0, "mismatch": 1, "invalid": 2, "unsupported": 3}
+  },
+  "fixtureProvenance": {
+    "manifest": "Real schemaVersion-1 manifests produced at test time by src/visual-export-jobs.js (buildManifest for PNG, comparisonManifest for GIF); no manifest fields were fabricated.",
+    "png": "Genuine 2x2 PNG built in the test with zlib-deflated IDAT and CRC32 (there is no in-repo Node PNG encoder; PNG export in the app is browser canvas.toBlob only), so the bytes are a real PNG, not a header-only stub.",
+    "gif": "Real 640x320 GIF built with the existing application encoder src/gif-encoder.js (createGifEncoder, 24 frames)."
+  },
+  "commands": [
+    {"command": "npm ci", "result": "added 22 packages; 0 vulnerabilities"},
+    {"command": "node --test tests/verify-export-artifact.test.mjs tests/visual-export-jobs.test.mjs tests/visual-export-fixed-frame.test.mjs", "result": "tests 48, pass 48, fail 0, skipped 0, todo 0; duration_ms 2989.9504"},
+    {"command": "node --test tests/docs.test.mjs", "result": "tests 2, pass 2, fail 0, skipped 0"},
+    {"command": "npm run check:contracts", "result": "Contract declarations type-check (5 declaration files)"},
+    {"command": "git diff --check", "result": "exit 0 (no whitespace errors)"}
+  ],
+  "testTotals": {"pass": 50, "fail": 0, "skip": 0, "note": "48 in the target test command plus 2 in tests/docs.test.mjs. The new tests/verify-export-artifact.test.mjs contributes 4 of the 48; it spawns the CLI as a separate Node process and checks exit code, stdout and file invariance."},
+  "measuredValues": {
+    "pngFixture": {"format": "png", "width": 2, "height": 2, "identityVerified": true, "containerHeaderVerified": true, "frameCountVerified": false},
+    "gifFixture": {"format": "gif", "brand": "GIF89a", "width": 640, "height": 320, "manifestFrameCountMetadata": 24, "frameCountVerified": false},
+    "reportSha256": "sha256: plus 64 lowercase hex digits (asserted by regex and against node:crypto)",
+    "reportTotalBytes": "artifactBytes and manifestTotalBytes both equal the exact artifact file length (asserted)"
+  },
+  "rejectionsVerified": [
+    "artifact last byte changed -> status mismatch, identityVerified false, exit 1",
+    "artifact truncated by 1 byte -> status mismatch, identityVerified false, exit 1",
+    "manifest sha256 replaced with zeros -> status mismatch, identityVerified false, exit 1",
+    "manifest resolution width one higher -> status mismatch, identityVerified true, containerHeaderVerified false, exit 1",
+    "empty artifact -> status invalid, exit 2",
+    "invalid JSON manifest -> status invalid, exit 2",
+    "arbitrary JSON (hello:world) treated as invalid, not as a manifest, exit 2",
+    "manifest over 64 KiB (70000 byte file) -> status invalid, exit 2",
+    "artifact over 100 MiB (104857601 byte file) -> status invalid, exit 2",
+    "format webm / container webm -> status unsupported, exit 3",
+    "format png-sequence / container zip -> status unsupported, exit 3",
+    "--report equal to the artifact path -> exit 2, artifact unchanged",
+    "--report equal to the manifest path -> exit 2, manifest unchanged",
+    "--report to an existing file -> exit 2, existing file byte-identical (KEEP)",
+    "successful --report run leaves manifest and artifact byte-identical to before"
+  ],
+  "environmentNote": "To run the listed target test file tests/visual-export-fixed-frame.test.mjs (which includes one real solve), public/mfem, public/gmsh and public/fem-kernel.wasm were copied read-only from the preservation checkout D:/github/airpocket-soundman/airpocket-simulation-studio/public into this worktree. They are gitignored and were not committed. No fresh native build was performed for this unit.",
+  "unverified": [
+    "No browser (real Chrome) export was executed for this unit; the PNG fixture bytes are not from a browser canvas.",
+    "GIF frame count, duration, pixels and physical-result correctness are not verified by this CLI (frameCountVerified is always false).",
+    "ZIP (png-sequence) and WebM readback are not implemented; they are refused as unsupported, not verified.",
+    "Header identity only: the CLI does not fully decode pixels or prove visual correctness, so it is not full-decode or visual verification.",
+    "Public HTTPS, the full Skill loop and P4 parent acceptance are out of scope and remain open; completePreflight and P4 status are unchanged."
+  ]
+}

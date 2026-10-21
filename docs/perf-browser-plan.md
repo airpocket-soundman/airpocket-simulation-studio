@@ -15,7 +15,7 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 
 ### ページ側の前提
 
-- ページは`crossOriginIsolated === true`であること。メモリ測定の`performance.measureUserAgentSpecificMemory()`はクロスオリジン分離下でのみ使える。アプリは`public/coi-serviceworker.js`と`vite.config.js`のヘッダーで分離を得る。分離されていなければ、メモリ欄は`null`、理由`not-cross-origin-isolated`を記録し、時間と中止だけを測る(黙って成功扱いにしない)。
+- ページは`crossOriginIsolated === true`であること。メモリ測定の`performance.measureUserAgentSpecificMemory()`(系列`uasm`、意味論的なエージェント全体バイト)はクロスオリジン分離下でのみ使える。アプリは`public/coi-serviceworker.js`と`vite.config.js`のヘッダーで分離を得る。分離されていなければ`uasm`系列はunavailableとし、粗い`performance.memory.usedJSHeapSize`(系列`jsHeap`、JSヒープのみ)だけを別系列として記録する(黙って成功扱いにせず、他系列で代用しない)。
 - 計測用の読み出しはページ内`evaluate`で行い、アプリのソースは変更しない。
 
 ### 呼び出す操作
@@ -24,7 +24,7 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 2. ケースの読込: 既存のデモ読込ボタン、または`perf-measure.mjs`のケースをエクスポートしたプロジェクトJSONの読込。メッシュサイズは画面の設定欄で指定する。
 3. 解析: `#solve-run`をクリックし、`#status`が完了表示になるまで待つ。時間はページ内の`performance.now()`で取る(クリック直前に`evaluate`で開始印を設定し、`#status`の変化を`MutationObserver`で検出)。ホスト側のRPC往復は含めない。
 4. 中止: 解析の実行中に、ページの中止操作をクリックする(コネクター側の`cancel`ではなく、利用者と同じ経路)。`#status`が中止表示になり実行が止まるまでの時間を、ページ内の`performance.now()`で測る。中止点はNodeと揃える: (a) 最初の進捗表示後、(b) 同ケースの温間総時間中央値の50%経過時点。
-5. メモリ: 各段階で`await performance.measureUserAgentSpecificMemory()`を呼ぶ。(i)読込直後(基準)、(ii)解析完了直後、(iii)中止直後、(iv)数秒後(GC要求が可能な場合のみ要求した後)。`bytes`と、`breakdown`のうちWorker由来の分を分けて記録する。補助として`performance.memory.usedJSHeapSize`(非標準・粗い)を参考欄に別記する。ピークは一定間隔(例: 200 ms)のサンプリングの最大値で近似し、間隔と回数を記録する(測定自体もメモリを使う旨を併記)。
+5. メモリ: 各段階で`await performance.measureUserAgentSpecificMemory()`を呼ぶ。(i)読込直後(基準)、(ii)解析完了直後、(iii)中止直後、(iv)数秒後(GC要求が可能な場合のみ要求した後)。`bytes`と、`breakdown`のうちWorker由来の分を分けて記録する。補助として`performance.memory.usedJSHeapSize`(非標準・粗い)を別系列`jsHeap`として記録する。**`uasm`(意味論的エージェント全体)と`jsHeap`(JSヒープのみ)は計測範囲が異なるため、sample単位のfallbackで混ぜず、片方が欠測でも他方で置換せず、合算しない。** ピークは一定間隔(例: 200 ms/1000 ms)のサンプリングの最大値で近似し、間隔と回数を記録する(測定自体もメモリを使う旨を併記)。
 
 ### ケースと反復
 
@@ -44,7 +44,10 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
   cases: [{
     id, physics, meshSize, status: "ok"|"failed", error?,
     cold: {totalMs, solveMs, ...}, warm: {runs: [...], summary: {totalMs: {median,min,max,n}}},
-    memory: {available, reason?, baselineBytes, afterSolveBytes, afterCancelBytes, afterSettleBytes, peakBytesSampled, samples: {intervalMs, count}},
+    memory: {available, primarySeries, intervalMs, sampleCount,
+             series: {uasm:  {available, source, baselineBytes, peakBytesSampled, afterCancelBytes, afterSettleBytes, sampleCount, unavailable},
+                      jsHeap: {available, source, baselineBytes, peakBytesSampled, afterCancelBytes, afterSettleBytes, sampleCount, unavailable}},
+             note},
     cancel: {points: {"first-progress": {latencyMs: {median,min,max,n}, states: {...}}, "half-warm-total": {...}},
              recoveredAfterCancel: boolean},
     notes: [...]
@@ -54,6 +57,10 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 ```
 
 最終状態は`cancelled` / `completed-before-cancel` / `error`(Node側と同じ語彙)。値はすべて測定値である。
+
+### メモリ系列の扱い(実装: `mergeMemory`)
+
+`memory.series`は計測範囲の異なる系列を分けて持つ。`uasm`= `performance.measureUserAgentSpecificMemory().bytes`(クロスオリジン分離時のみ・意味論的なエージェント全体)、`jsHeap`=`performance.memory.usedJSHeapSize`(非標準・粗い・JSヒープのみ)。系列ごとに、case window内のその系列自身のsampleだけから`peakBytesSampled`(一定間隔サンプルの最大値による近似)・baseline(window直前の最後のsample)・`afterCancelBytes`/`afterSettleBytes`(それぞれ`cancelSettledEpochMs`/`endEpochMs`の+3000 ms以降の最初のsample)を取る。**系列を合算せず、混在最大を総RAMと呼ばず、片方の欠測を他方で置換しない。** `NaN`/`Infinity`/負値/`null`は測定値として採用しない。片方の系列しか値が無い場合も`series`には両方を残し、値の無い系列は`available:false`と`unavailable`の理由を持つ。window内に有効なsampleが1つも無ければ`memory`は`null`と`memoryReason`になる。互換用のフラット項目(`primarySeries`が指す1系列のみ)と`series`を同時に持ち、フラット項目は系列を合算しない。`mergeMemory`は既存契約どおり`report`をその場で更新して返し、`probe`は読み取り専用である。`schemaVersion`は1のまま(系列分離は加算的な変更)。
 
 ## 安全規則
 

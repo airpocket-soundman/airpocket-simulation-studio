@@ -1,0 +1,135 @@
+{
+  "title": "BROWSEREXPORT1 slice png-sequence reference (3 frames, unit/helper delivery)",
+  "date": "2026-10-19",
+  "status": "partial",
+  "workOrder": "docs/opencode-work-orders-2026-10-19/06-BROWSEREXPORT1.md",
+  "base": {
+    "originMain": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "branch": "codex/opencode-browserexport1",
+    "worktree": "D:/github/airpocket-soundman/studio-opencode-browserexport1"
+  },
+  "environment": {
+    "runtime": "Node v24.11.1, npm 11.6.2",
+    "dependencies": "npm ci in the worktree (22 packages)",
+    "prerequisite": "public/fem-kernel.wasm built with node scripts/build-kernel.mjs (same prerequisite as npm test); public/cad and public/gmsh were not needed for this box solve",
+    "browser": "No desktop browser was connected to this session (browser.tabs.list returned [browser.disconnected]); no studio MCP pairing was attempted. No real-Chrome verification was run."
+  },
+  "scope": {
+    "added": [
+      "tests/visual-export-slice-reference.test.mjs"
+    ],
+    "docs": [
+      "docs/visual-export.md",
+      "docs/en/visual-export.md",
+      "docs/evidence/2026-10-19-opencode-browserexport1.json"
+    ],
+    "runtime": "none (no source change; no reproduced blocking defect in the slice path)",
+    "unchanged": "src/progress.json was not edited"
+  },
+  "referenceInput": {
+    "kind": "real headless solve, not a synthetic result",
+    "geometry": "built-in box bounds [0,0,0,10,10,40] mm",
+    "material": "youngModulus 1e9 Pa, poissonRatio 0.3",
+    "conditions": "fixed +Z face at z=0; force 100 N in +Z on the z=40 face",
+    "solver": "analyzeProject (scripts/headless-analysis.mjs), elastic, options {size:5, method:'wasm-pcg', adaptive:false, maxRounds:3}, default worker isolation",
+    "mesh": "volume mesh; coordinate ranges measured by the test: X 0..10 mm, Y 0..10 mm, Z 0..40 mm",
+    "assessment": "analysisAssessment.completePreflight is false"
+  },
+  "commands": [
+    {
+      "command": "node scripts/build-kernel.mjs",
+      "result": "passed (public/fem-kernel.wasm)"
+    },
+    {
+      "command": "npm ci",
+      "result": "passed (22 packages, 0 vulnerabilities)"
+    },
+    {
+      "command": "node --test tests/visual-export-slice-reference.test.mjs tests/visual-export-fixed-frame.test.mjs tests/browser-export-session.test.mjs",
+      "result": "passed: tests 30, pass 30, fail 0, cancelled 0, skipped 0 (new file 7, pre-existing 23; baseline of the two pre-existing files was 23 pass / 0 fail before the change)"
+    },
+    {
+      "command": "node --test tests/visual-export-adapter.test.mjs",
+      "result": "passed: tests 14, pass 14, fail 0"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "passed: 'Contract declarations type-check (5 declaration files).'"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed (no output, exit 0)"
+    }
+  ],
+  "checks": [
+    {
+      "id": "schedule-endpoints",
+      "result": "passed",
+      "detail": "fixedFrameSchedule({animation:'slice',frames:3,state:animationState,min:0,max:10}) gives index 0/1/2, phase 0/0.5/1 and slicePosition 0/5/10 (mm). Repeated calls are deep-equal (pure). animationState slice at phase 0/0.5/1 with min 2 max 6 gives 2/4/6."
+    },
+    {
+      "id": "range-from-solved-mesh",
+      "result": "passed",
+      "detail": "The 0..10 mm X range equals the solved volume mesh node extremes (X 0..10, Y 0..10, Z 0..40), i.e. the range comes from the solved mesh on the selected clip axis, not a UI default. Built-in coordinates are documented as mm in src/project-import.js."
+    },
+    {
+      "id": "three-frame-zip-and-manifest",
+      "result": "passed",
+      "detail": "render({format:'png-sequence',animation:'slice',frames:3}) returns application/zip. Independent STORE reader sees exactly manifest.json + frame-0000..0002.png; central and local method are 0; per-entry CRC-32 recomputed from the bytes matches; local offsets are contiguous. Manifest: kind airpocket-fixed-frame-png-sequence, animation slice, frameCount 3, schemaVersion 1, resultRevision recorded, resolution {width:320,height:316} (the test canvas 320x200 + 116 caption band), schedule phase 'index/(frameCount-1)', timeBasis 'frame index', realtime false, wallClockIndependent true, per-frame phase 0/0.5/1 and slicePosition 0/5/10."
+    },
+    {
+      "id": "render-vs-manifest",
+      "result": "passed",
+      "detail": "A recording renderer observed clip-position 0/5/10 for the three captured frames while clip-enabled was true and clip-axis stayed 0, matching manifest.frames[].slicePosition exactly."
+    },
+    {
+      "id": "png-headers-and-hashes",
+      "result": "passed",
+      "detail": "Each frame entry's sha256 matches node:crypto SHA-256 of the ZIP data; frame.bytes equals the stored size; each frame parses as PNG signature + IHDR with a valid IHDR CRC and reports 320x316, equal to manifest.resolution. The three frames have three distinct SHA-256 values and three distinct payloads. NOTE: the frame bytes are produced by the test double's PNG encoder, not by a browser canvas rasteriser; distinct frames only prove per-frame state is carried, not section-physics accuracy."
+    },
+    {
+      "id": "determinism",
+      "result": "passed-with-condition",
+      "detail": "Two exports from the same frozen result and locale produced byte-identical ZIPs. Condition recorded: caption/locale text is drawn into the canvas by the real capture() but the test double draws no text, so bytes can differ in a real browser when locale or captions change; determinism here is scoped to identical frozen view/locale/result (and to schemaVersion 1 resultRevision, which embeds wall-clock solveMs, so a fresh solve changes the bytes unless physicalRevision is used)."
+    },
+    {
+      "id": "axis-meaning",
+      "result": "passed",
+      "detail": "With clip-axis 2 the same 3-frame export produced slicePosition and observed clip-position 0/20/40 mm, showing the range follows the selected axis (Z 0..40 mm) rather than a fixed X range."
+    },
+    {
+      "id": "job-layer",
+      "result": "passed",
+      "detail": "createVisualExportJobs: png-sequence with seconds is refused ('png-sequence is fixed-frame; seconds is not accepted, use frames'); frames 1 is refused; the completed job artifact is application/zip, frameCount 3, container zip, compression store, time.animation slice, time.frameSelection 'deterministic schedule', resolution 320x316. Reassembled artifact pages hash to artifact.sha256 and the inner manifest.json entry hash/size match. A result without a volume mesh fails the job with 'Generate a volume mesh first.' and the artifact is unavailable with 0 frames rendered."
+    },
+    {
+      "id": "cancel-restore",
+      "result": "passed",
+      "detail": "Cancelling the slice job after the first frame settles as cancelled, artifact() throws 'Visual export artifact is unavailable', exactly 1 frame was captured (no partial ZIP), and clip-position (4), clip-enabled (false), controls.enabled/enableDamping and isActive were restored. Verified only through the job/adapter layer in Node, not in a real browser."
+    },
+    {
+      "id": "caps-unchanged",
+      "result": "passed",
+      "detail": "FIXED_FRAME_LIMITS is still {minFrames:2,maxFrames:120,defaultFrames:24,maxFrameBytes:4 MiB,maxTotalBytes:24 MiB} and FIXED_FRAME_ANIMATIONS is still orbit/deformation/time/slice. No limit was loosened and no ZIP/CRC/physicalRevision mechanism was reimplemented."
+    }
+  ],
+  "observationsNotFixed": [
+    {
+      "id": "spread-min-max-node-limit",
+      "detail": "src/visual-export.js renderSequence computes min/max with Math.min(...coordinates)/Math.max(...coordinates) over the clip-axis coordinates. Measured with Node v24.11.1: 65536 and 100000 arguments are accepted, 125000 throws RangeError 'Maximum call stack size exceeded'. A mesh with roughly 125000 or more nodes on the export path would therefore fail png-sequence export instead of exporting or refusing explicitly. Reproduced only with synthetic arrays of numbers, not with a real mesh solve, and not fixed here: it is a runtime change outside the small slice-reference delivery and is reported for a separate minimal fix plus regression test."
+    },
+    {
+      "id": "manifest-slice-unit",
+      "detail": "The in-ZIP manifest records frames[].slicePosition but no per-frame unit label for the section position; mm is implied by the project geometry (built-in coordinates and display units are mm). No runtime change was made because nothing is ambiguous in the tested scenarios, but it is a documentation gap worth a follow-up if API consumers read slicePosition without project units."
+    }
+  ],
+  "notVerified": [
+    "Real Chrome: no desktop browser was connected to this session, so MCP startExport -> artifact page retrieval -> SHA comparison for slice was not run.",
+    "Real browser canvas value for the three slice frames, and whether the three real frames differ (the unit test's distinct hashes come from a test PNG encoder).",
+    "GUI cancellation of a slice export and on-screen section/camera/time restoration in a real browser.",
+    "120-frame success, 24 MiB archive and 4 MiB per-frame boundary refusals, and maximum RAM.",
+    "General (non-box) shapes and arbitrary mesh sizes on the slice path.",
+    "The same-reference byte identity of a fresh solve (resultRevision embeds wall-clock solveMs); physicalRevision behaviour on the slice path relies on the existing fixed-frame coverage.",
+    "The Math.min(...coordinates) node-count limit against a real large mesh."
+  ]
+}

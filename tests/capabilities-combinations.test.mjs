@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {getCapabilities} from '../src/capabilities.js';
+import {getCapabilities,diagnoseExecution} from '../src/capabilities.js';
 import {executionCombinationRules} from '../src/execution-combination-rules.js';
 import {createStudioApi} from '../src/studio-api.js';
 import {callStudioTool} from '../scripts/studio-mcp.mjs';
@@ -29,4 +29,11 @@ test('browser API and MCP entry points return the same combinations field',async
  assert.deepEqual(node.combinations,getCapabilities({target:'node'}).combinations);
  assert.deepEqual(createStudioApi().getCapabilities().combinations,getCapabilities({target:'browser'}).combinations);
  assert.deepEqual(node.combinations,createStudioApi().getCapabilities().combinations);
+});
+test('shared combination diagnostics keep their code, severity and target and never fabricate a pointer',()=>{
+ const cases=[['MODAL_COMBINATION_UNSUPPORTED',{study:{kind:'structural',modalAnalysis:{}},materialProperties:{hyperelastic:{}}}],['HYPERELASTIC_COMBINATION_UNSUPPORTED',{study:{kind:'structural',thermalStress:true},materialProperties:{hyperelastic:{model:'neo-hookean-log',shearModulus:5e5,bulkModulus:2e6,testCurve:[[.8,-2e5],[1,0],[1.2,2e5]]}}}]];
+ for(const [code,project] of cases){
+  const issue=diagnoseExecution(project,{method:'wasm-pcg'}).diagnostics.find(entry=>entry.code===code);
+  assert.ok(issue,code);assert.equal(issue.severity,'error');assert.equal(issue.target,'execution.combination');assert.equal(Object.hasOwn(issue,'pointer'),false);
+ }
 });

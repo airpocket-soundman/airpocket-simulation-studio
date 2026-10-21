@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "targetId": "UIIMPROVE1",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "scope": "GUI preflight presentation only; no solver, physical threshold, allowed decision, provenance rule, MCP/tool count or Skill change",
+  "change": {
+    "requiredPointersCorrectionAction": "Known requiredPointer rows now show the same '入力箇所へ'/'Go to input' button as diagnostic rows via a shared correctionButton(pointer) helper",
+    "reusedRules": "same preflightControlIds mapping, same focus() (disabled/hidden/visibility check, open collapsed DETAILS, keyboard focus), same stale identity guard",
+    "noValueConversion": true,
+    "unknownPointer": "pointer text retained; no button and no focus invented"
+  },
+  "cases": {
+    "requiredPointersKnown": {
+      "requiredPointers": ["/materialProperties/youngModulus", "/options/size"],
+      "buttons": 2,
+      "focus": ["mat-youngModulus", "mesh-size"],
+      "units": {"youngModulus": "Pa", "meshSize": "mm"},
+      "valuesUnchanged": ["1e2", "4"]
+    },
+    "unknownPointerRetained": {
+      "pointer": "/options/unknown",
+      "button": 0,
+      "focusReportsSuccess": false
+    },
+    "staleCorrectionDiscarded": {
+      "revisionChange": "7 -> 8",
+      "result": "report cleared; focus not moved; status shows Check again"
+    },
+    "disabledTarget": {
+      "control": "mesh-size",
+      "disabled": true,
+      "buttonPresent": true,
+      "focus": false,
+      "valueUnchanged": "4",
+      "message": "Input is unavailable; inspect the pointer."
+    },
+    "diagnosticAndRequiredSamePointer": {
+      "pointer": "/options/size",
+      "buttons": 2,
+      "focusPerClick": "each button focuses once",
+      "valueUnchanged": "4"
+    },
+    "noInputMutation": "project JSON before/after unchanged (createStudioApi.preflight parity test)"
+  },
+  "commands": [
+    {"command": "node --test tests/ui-analysis-preflight.test.mjs", "result": "11 pass, 0 fail, 0 skip"},
+    {"command": "node scripts/check-contract-types.mjs", "result": "pass (5 declaration files)"},
+    {"command": "git diff --check", "result": "pass"}
+  ],
+  "environment": {
+    "node": "v24.11.1",
+    "npm": "11.6.2",
+    "installed": "npm ci in dedicated worktree (22 packages); shared node_modules untouched"
+  },
+  "unverified": [
+    "Real Chrome JA/EN and 390px Tab/Enter focus movement not run in this unit; behaviour rests on the node unit fixture only",
+    "Parent UIIMPROVE1 remains building: the general 6-case task/operation-count and misconfiguration-recovery comparison and public verification are incomplete",
+    "No real-browser screenshot or published-scope change for this unit"
+  ],
+  "parentStatus": "UIIMPROVE1 stays building; task totals 171/133/unfinished 38 unchanged by this unit"
+}

@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-19",
+  "workOrder": "docs/opencode-work-orders-2026-10-19/14-MOD1.md",
+  "id": "14 MOD1",
+  "branch": "codex/opencode-mod1",
+  "baseRevision": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "baseRef": "origin/main",
+  "scope": "Extract the mesh/adaptive analysis-option value conversion out of main.js into a DOM-free pure function (src/ui/analysis-options.js); the existing currentAnalysisOptions() stays the single wrapper used by both runAnalysis and the preflight UI.",
+  "outOfScope": [
+    "MOD1 parent completion",
+    "React migration",
+    "full TypeScript conversion",
+    "solver changes",
+    "src/progress.json (proposal only)",
+    "browser verification"
+  ],
+  "changes": [
+    "New src/ui/analysis-options.js exporting analysisOptionsFromValues(values): pure Number()/percent conversion of the 8 mesh/adaptive keys, no DOM access.",
+    "src/main.js: currentAnalysisOptions() now only reads the element values and delegates conversion to analysisOptionsFromValues; runAnalysis and createAnalysisPreflightUi still call the same wrapper.",
+    "src/module-layers.json: register ui/analysis-options.js in the ui layer.",
+    "tests/ui-analysis-options.test.mjs: new unit tests for exact conversion, percent ratios, type passthrough, no input mutation, fresh output per call, and unchanged empty/non-numeric/zero/negative handling.",
+    "tests/ui-analysis-preflight.test.mjs: add a regression that runAnalysis and the preflight UI share the single delegated options reader."
+  ],
+  "optionKeys": {
+    "count": 8,
+    "list": [
+      {"key": "size", "source": "#mesh-size", "conversion": "Number(value)"},
+      {"key": "method", "source": "#solver", "conversion": "string passthrough"},
+      {"key": "adaptive", "source": "#adaptive-run", "conversion": "boolean passthrough (checked)"},
+      {"key": "maxRounds", "source": "#adaptive-rounds", "conversion": "Number(value)"},
+      {"key": "maxAdaptiveElements", "source": "#adaptive-elements", "conversion": "Number(value)"},
+      {"key": "maxAdaptiveSeconds", "source": "#adaptive-seconds", "conversion": "Number(value)"},
+      {"key": "tolerance", "source": "#adaptive-tolerance", "conversion": "Number(value)/100"},
+      {"key": "stressTolerance", "source": "#adaptive-stress-tolerance", "conversion": "Number(value)/100"}
+    ],
+    "note": "Key count unchanged from the pre-change main.js literal; no key added or dropped."
+  },
+  "commands": [
+    {
+      "command": "node --test tests/ui-analysis-options.test.mjs tests/ui-analysis-preflight.test.mjs tests/example-study-reset.test.mjs tests/ui-study-form.test.mjs tests/module-boundaries.test.mjs",
+      "tests": 41,
+      "pass": 41,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "durationMs": 991.2193,
+      "exit": 0
+    },
+    {"command": "npm run check:contracts", "result": "Contract declarations type-check (5 declaration files).", "exit": 0},
+    {"command": "node scripts/check-module-boundaries.mjs", "result": "module boundary check passed: 217 files, 555 local edges, 7 allowlisted violation(s)", "exit": 0},
+    {"command": "git diff --check", "result": "no whitespace errors", "exit": 0}
+  ],
+  "acceptance": {
+    "size5_rounds3_elements10000_seconds60": "Number-exact",
+    "tolerance2p5_to_0p025": true,
+    "stressTolerance4_to_0p04": true,
+    "adaptive_boolean_and_method_string_preserved": true,
+    "input_object_deepEqual_unchanged": true,
+    "fresh_output_object_per_call": true,
+    "preflight_and_solve_options_deepEqual": true,
+    "empty_nonNumeric_zero_negative_unchanged": true
+  },
+  "unverified": [
+    "Browser execution not performed for this slice; the value conversion is covered by Node tests only.",
+    "MOD1 parent remains incomplete (building); this slice does not complete MOD1.",
+    "Full test suite and build not run here; delegated to the 00-COMMON integration procedure."
+  ],
+  "files": {
+    "src/ui/analysis-options.js": {"bytes": 654, "sha256": "fd6260419842515000547d84e20d0b713a65b932fee78dd55f5b3aa42f3acbbe"},
+    "src/main.js": {"bytes": 179015, "sha256": "2a699c2af7a336d0b44c0b09fa68fb7e076860a5b9d75f1ebd90d0ab669667d7"},
+    "src/module-layers.json": {"bytes": 10573, "sha256": "9538aa618ca9d735374afaebb26f39335cb967f756433b722057374782a12a47"},
+    "tests/ui-analysis-options.test.mjs": {"bytes": 2783, "sha256": "cb7c33f7d233fa39c2e64da46e61fb1ea281a52a6416c1ccc011fed31ebb5fe5"},
+    "tests/ui-analysis-preflight.test.mjs": {"bytes": 6287, "sha256": "e8527ecd4f8fc99e1e3bd3faea4a6303e2a80ee2c24079db407118d2f31bdfd3"}
+  },
+  "environment": {"node": "v24.11.1", "npm": "11.6.2", "os": "win32"},
+  "executedAt": "2026-10-19T16:33:50+09:00"
+}

@@ -45,3 +45,26 @@ test('provenance snapshots reuse original known units and uncertainty labels rem
  const p=model();p.inputProvenance={schemaVersion:1,entries:[{pointer:'/materialProperties/youngModulus',value:1e9,status:'unconfirmed',assumption:'Reference only'}]};const r=await inspect(p,{section:'provenance',pointer:'/inputProvenance/entries/0'});assert.equal(r.page.entries.find(e=>e.pointer.endsWith('/value')).unit,'Pa');assert.equal(r.page.entries.find(e=>e.pointer.endsWith('/status')).value,'unconfirmed');
  const s=await inspect(p,{section:'source',pointer:'/sourceModel/kind'});assert.equal(s.descriptor.unit,undefined);
 });
+test('spherical selection, saved condition and provenance expose the same known dimensions with units',async()=>{
+ const spec={exactCad:true,center:[0,0,0],axis:[0,0,1],reference:[1,0,0],radius:10,tolerance:.01,latitudeMin:-30,latitudeMax:30,startDegrees:315,sweepDegrees:90};
+ const p=model();p.sphericalRegion={...spec,mesh:0};p.conditions.push({type:'force',value:123,direction:[-1,0,0],regions:[{mesh:0,triangles:[1]}],sphericalRegion:{...spec,mesh:0}});
+ p.inputProvenance={schemaVersion:1,entries:[{pointer:'/sphericalRegion/radius',value:10,status:'unconfirmed',assumption:'Synthetic boundary reference'},{pointer:'/conditions/2/sphericalRegion/tolerance',value:.01,status:'unconfirmed',assumption:'Synthetic display tolerance'}]};
+ const before=structuredClone(p),revision=await getProjectRevision(p),fixture={...p,sphericalRegion:{...p.sphericalRegion,legacyScale:2}};
+ const selection=await inspect(p,{pointer:'/sphericalRegion',expectedRevision:revision}),condition=await inspect(p,{pointer:'/conditions/2/sphericalRegion',expectedRevision:revision});
+ assert.equal(selection.units['/sphericalRegion/center'],'mm');assert.equal(selection.units['/sphericalRegion/radius'],'mm');assert.equal(selection.units['/sphericalRegion/tolerance'],'mm');
+ assert.equal(selection.units['/sphericalRegion/axis'],'1');assert.equal(selection.units['/sphericalRegion/reference'],'1');
+ for(const angle of ['latitudeMin','latitudeMax','startDegrees','sweepDegrees'])assert.equal(selection.units['/sphericalRegion/'+angle],'deg');
+ assert.equal(selection.units['/sphericalRegion/mesh'],undefined);assert.equal(selection.descriptor.unit,undefined);
+ for(const field of ['center','radius','tolerance','axis','reference','latitudeMin','latitudeMax','startDegrees','sweepDegrees'])assert.equal(selection.units['/sphericalRegion/'+field],condition.units['/conditions/2/sphericalRegion/'+field]);
+ const centerPage=await inspect(p,{pointer:'/sphericalRegion/center'}),radiusEntry=await inspect(p,{pointer:'/sphericalRegion/radius'});
+ assert.equal(centerPage.descriptor.unit,'mm');assert.deepEqual(centerPage.page.entries.map(e=>e.unit),['mm','mm','mm']);assert.deepEqual(centerPage.page.entries.map(e=>e.value),[0,0,0]);
+ assert.equal(radiusEntry.descriptor.value,10);assert.equal(radiusEntry.descriptor.unit,'mm');
+ const conditionValue=await inspect(p,{pointer:'/conditions/2/value'});assert.equal(conditionValue.descriptor.value,123);assert.equal(conditionValue.descriptor.unit,'N');
+ const radius=await inspect(p,{pointer:'/inputProvenance/entries/0/value'}),tolerance=await inspect(p,{pointer:'/inputProvenance/entries/1/value'});
+ assert.equal(radius.descriptor.value,10);assert.equal(radius.descriptor.unit,'mm');assert.equal(tolerance.descriptor.value,.01);assert.equal(tolerance.descriptor.unit,'mm');
+ const unknownKey=await inspect(fixture,{pointer:'/sphericalRegion/legacyScale'});assert.equal(unknownKey.descriptor.value,2);assert.equal(unknownKey.descriptor.unit,undefined);
+ assert.equal((await inspect(p,{pointer:'/sphericalRegion/diameter'})).exists,false);
+ const reloaded=JSON.parse(JSON.stringify(p)),reloadedSelection=await inspect(reloaded,{pointer:'/sphericalRegion'}),reloadedCondition=await inspect(reloaded,{pointer:'/conditions/2/sphericalRegion'});
+ assert.deepEqual(reloadedSelection.units,selection.units);assert.deepEqual(reloadedCondition.units,condition.units);
+ assert.deepEqual(p,before);
+});

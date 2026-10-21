@@ -1,0 +1,84 @@
+{
+  "workOrder": "docs/opencode-work-orders-2026-10-19/02-AGENTINPUT1.md",
+  "targetId": "AGENTINPUT1",
+  "date": "2026-10-19",
+  "baseSha": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "branch": "codex/opencode-agentinput1",
+  "worktree": "D:/github/airpocket-soundman/studio-opencode-agentinput1",
+  "scope": {
+    "behavior": "Reuse the existing Young's modulus Pa magnitude rule for /materialProperties/orthotropic/youngModuliPa/0..2 when an orthotropic material is present. Warning only (UNIT_MAGNITUDE_SUSPECT, severity warning), no conversion, allowed/provisional unchanged, other arrays untouched.",
+    "changedFiles": [
+      "src/preflight-unit-magnitude.js",
+      "tests/preflight-unit-magnitude.test.mjs",
+      "docs/automation.md",
+      "docs/en/automation.md"
+    ],
+    "notChanged": [
+      "src/analysis-preflight.js (no change needed; inspectUnitMagnitude is already called on solve)",
+      "src/orthotropic-input-contract.js",
+      "solver / material laws / positive-definiteness check / unit definitions",
+      "src/progress.json"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm ci",
+      "result": "pass",
+      "note": "22 packages, node v24.11.1; 0 vulnerabilities"
+    },
+    {
+      "command": "node --test tests/preflight-unit-magnitude.test.mjs tests/analysis-preflight-physics.test.mjs tests/advanced-structural-preflight.test.mjs",
+      "result": "pass",
+      "pass": 19,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "durationMs": 436.7
+    },
+    {
+      "command": "node --test tests/orthotropic-input-contract.test.mjs",
+      "result": "pass",
+      "pass": 10,
+      "fail": 0,
+      "skipped": 0,
+      "note": "existing orthotropic contract tests (E in range) unchanged"
+    },
+    {
+      "command": "node --test tests/module-boundaries.test.mjs",
+      "result": "pass",
+      "pass": 19,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node scripts/check-contract-types.mjs",
+      "result": "pass",
+      "note": "Contract declarations type-check (5 declaration files)"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "note": "no whitespace errors"
+    }
+  ],
+  "measurements": {
+    "unit": "Pa",
+    "orthotropicYoungModuliPa_210_210_210": {"warnings": 3, "targets": ["/materialProperties/orthotropic/youngModuliPa/0", "/materialProperties/orthotropic/youngModuliPa/1", "/materialProperties/orthotropic/youngModuliPa/2"], "severity": "warning", "code": "UNIT_MAGNITUDE_SUSPECT", "plausibleRange": [1e5, 1e13], "conversionApplied": false},
+    "orthotropicYoungModuliPa_210e9_200e9_190e9": {"warnings": 0},
+    "orthotropicYoungModuliPa_1e5_1e13_2e11": {"warnings": 0, "note": "bounds inclusive"},
+    "orthotropicShearModuliPa_001_poissonRatios_03": {"warnings": 0, "note": "shear moduli and Poisson ratios stay out of scope"},
+    "preflightValidOrthotropic_youngModuliPa_5000_6000_7000_Pa": {"allowed": true, "provisional": false, "unitWarnings": 3, "note": "allowed/provisional identical to the same valid fixture with in-range moduli; diagnostics differ only by the three warnings"},
+    "projectMutation": {"inputDeepEqual": true, "provenanceUnchanged": true, "meshesUnchanged": true},
+    "order": "stable index 0 -> 1 -> 2, one warning per component"
+  },
+  "unverified": [
+    "Real Chrome / live GUI check was not run for this work order (pure preflight change); no GUI value/unit was observed.",
+    "docs/api-coverage.md (ja/en) still describes only youngModulus in the unit-magnitude table; not edited because it is outside the 変更可能 range. Suggested follow-up.",
+    "Full npm test (ensure-native/build-kernel/wasm) was not run; only the targeted Node tests above.",
+    "MCP process-isolated orthotropic provenance test not re-run in this work order."
+  ],
+  "notes": [
+    "validateOrthotropic requires youngModuliPa in [1e3,1e13], while the unit rule range is [1e5,1e13]; the band 1e3..1e5 is contract-valid but warns, and was used for the valid-fixture test.",
+    "warning is an input-value confirmation request, not a numerical accuracy or solvability pass; completePreflight stays false."
+  ]
+}

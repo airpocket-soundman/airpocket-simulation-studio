@@ -105,7 +105,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## 結果ビューとケースの意味的操作
 
-接続モードの`getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})`は、結果全体を送らず`resultRevision`、物理量と表示単位、現在の表示設定、保存時刻/モードのページ（各最大50件）を返します。`setResultView({expectedResultRevision,settings})`で変更します。
+接続モードの`getResultView({frameOffset?,frameLimit?,modeOffset?,modeLimit?})`は、結果全体を送らず`resultRevision`、物理量と表示単位、現在の表示設定、保存時刻/モードのページ（各最大50件）を返します。保存時間履歴の`snapshotInfo`を持つ結果（検証済みmetadata）には加算的に`snapshotStorage`が付きます。`requested`/`count`/`bytes`/`budgetBytes`と`unit:"byte"`、`bytesPerScalar:8`、`meaning:"stored-scalar-values-only"`、除外対象`excludes:[objects,rendering,observations,receiver-traces,peak-memory]`、`warningCount`のみを返し、保存step配列・警告本文・物理配列は含みません。整合しないmetadataは黙って無視せず明示的に拒否し、`snapshotInfo`を持たない旧結果は`snapshotStorage`を付けません。`setResultView({expectedResultRevision,settings})`で変更します。
 
 `settings`は`field`、`deformScale`、`surface`、`surfaceWire`、`volumeWire`、`section`、`modeIndex`、`frameIndex`または`timeSeconds`、`camera`、`colorRange`です。カメラはmmの`position`/`target`と`up`、度の`fov`。固定色は`{field,minimum,maximum}`、自動範囲はnull。値の単位は返却されたfield単位（応力はMPa、温度はdegC等）に従い、範囲外は端の色に固定します。物理量を変更して新範囲を指定しなければ自動範囲へ戻ります。
 
@@ -441,7 +441,7 @@ quantitative/exploratoryの`modal-isotropic-structure`は、CPUの等方線形�
 
 固有振動はfixedまたは零変位の支持を必要とし、force/pressure/normalTractionは厳密に零だけを許可します。全条件のtype/value/direction/regionsと存在するframe/planarRegion/cylindricalRegionが根拠対象です。fixedのvalue/directionは保存形式の有限値として保持しますが、ソルバーは全方向零固定として扱います。重力・非零荷重・非零強制変位・塑性・超弾性・直交異方性・adaptive・MFEM/WebGPUは対象外です。モード形状は最大変位1 mmの任意正規化で、動的応答振幅や疲労荷重ではありません。
 
-`static-orthotropic-linear-structure`はCPUの静的直交異方線形弾性です。`materialProperties.orthotropic`のmodel、youngModuliPa、poissonRatios、shearModuliPa、右手正規直交axes、source、testConditionsをすべて明示して根拠登録します。定数・軸・コンプライアンスの妥当性を検査し、等方定数で補いません。study.kindとgravityEnabled、全構造境界のtype/value/direction/regionsと存在する選択・局所座標定義が必須です。重力有効時はgravityと正のdensity、材料の温度範囲がある場合や温度を指定する場合はmaterialTemperatureと登録範囲も必要です。dependenceがあればその根拠も登録します。速度依存構成則や正の最小ひずみ速度、等方温度表、熱応力、固有振動、非線形材料、MFEM/WebGPUは拒否します。対応CPU経路のadaptiveは利用できます。
+`static-orthotropic-linear-structure`はCPUの静的直交異方線形弾性です。`materialProperties.orthotropic`のmodel、youngModuliPa、poissonRatios、shearModuliPa、右手正規直交axes、source、testConditionsをすべて明示して根拠登録します。定数・軸・コンプライアンスの妥当性を検査し、等方定数で補いません。study.kindとgravityEnabled、全構造境界のtype/value/direction/regionsと存在する選択・局所座標定義が必須です。重力有効時はgravityと正のdensity、材料の温度範囲がある場合や温度を指定する場合はmaterialTemperatureと登録範囲も必要です。dependenceがあればその根拠も登録します。速度依存構成則や正の最小ひずみ速度、等方温度表、熱応力、固有振動、非線形材料、MFEM/WebGPUは拒否します。対応CPU経路のadaptiveは利用できます。solve時のpreflightは、等方youngModulusと同じ既存のPa桁警告（`UNIT_MAGNITUDE_SUSPECT`、severity warning、絶対値1e5〜1e13 Pa、値の変換なし、`allowed`不変）を、`youngModuliPa`の3成分それぞれへ`/materialProperties/orthotropic/youngModuliPa/0`〜`/2`として適用します。shearModuliPa・Poisson比・その他の配列には広げません。warningは入力値の確認依頼であり、数値解析の精度や可解性の合格ではありません。
 
 実行時の物理値は保存入力の代わりになりません。modalのstudy指定は保存値と同じ場合だけ許可し、runtime材料・荷重・境界の注入は拒否します。orthotropicも異なるstudy/材料/conditionsを拒否し、solver用boundary/fixed/forces等の直接指定は空でも拒否します。`null`で未設定の物理入力を上書きすることも認めません。根拠付きprojectを編集し、再検査してください。
 
@@ -759,7 +759,7 @@ GUIの動画種類はGIF選択後も維持し、時間範囲/表示倍率は同�
 
 GUIの`#analysis-preflight`で対象（解析/メッシュのみ）を選び、`#preflight-run`で現在の登録入力を検査します。`#preflight-status`と`#preflight-diagnostics`は共有`api.preflight`のmode/allowed/provisional、診断code・severity・pointer・提案、requiredPointers/remainingChecksを表示します。ジョブを開始せず、物性・荷重・根拠を変更しません。未登録の物性draftは検査対象外である旨を表示します。
 
-入力/option/操作種別/言語が変わると古い報告を無効化し、非同期応答もsnapshot不一致なら破棄します。表示の入力版はGUIローカルrevisionと入力/options snapshotの照合であり、MCPのSHA入力revisionとは別です。既知の入力pointerには「入力箇所へ」を表示し、閉じた欄を開いてkeyboard focusへ移動。対応先がない/無効な場合はpointerを残し、自動補完や別領域への置換をしません。計算中は再検査を拒否します。
+入力/option/操作種別/言語が変わると古い報告を無効化し、非同期応答もsnapshot不一致なら破棄します。表示の入力版はGUIローカルrevisionと入力/options snapshotの照合であり、MCPのSHA入力revisionとは別です。既知の入力pointerには「入力箇所へ」を表示し、閉じた欄を開いてkeyboard focusへ移動。対応先がない/無効な場合はpointerを残し、自動補完や別領域への置換をしません。診断行とrequiredPointers行は同じ導線を使い、値や単位を変換しません。計算中は再検査を拒否します。
 
 `allowed:true`を物理精度・メッシュ・収束の合格と扱わず、`completePreflight:false`と後続確認を保持します。legacyは根拠全体未点検、exploratoryは明示仮定があれば暫定、quantitativeの根拠確認規則は従来どおりです。新たな物理基準や根拠の自動確認は追加しません。
 

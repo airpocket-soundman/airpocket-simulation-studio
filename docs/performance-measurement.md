@@ -44,11 +44,13 @@ node scripts/perf-browser.mjs --print-probe        # メモリ用プローブを
 node scripts/perf-browser.mjs --merge-memory <probe.json> --out .qa/perf-browser-report.json
 ```
 
-手順(オペレーター): (1) 開発サーバーを起動し専用プロファイル・専用タブで`<origin>/?lang=en`を開き、10x10x40 mm直方体と測定する物理の設定を読み込む。(2) 任意のメモリ測定: DevToolsに`--print-probe`のスニペットを貼る(`window.__perfProbe`が1秒間隔で`measureUserAgentSpecificMemory`(クロスオリジン分離時のみ)または`performance.memory`を記録する)。(3) 対話端末で上記コマンドを実行する。端末に出るendpointとペアリングコードをアプリの接続UIに入力し、**inspectとanalyzeのscopeだけ**を許可する。コードは端末にのみ表示され、ファイル・レポート・ログには書かれない(stdoutが端末でない場合は表示しない)。(4) セッションが現れると自動で測定が始まる。完了までページを操作しない。(5) メモリ: 完了後に`copy(__perfProbe.report())`の内容を`.qa/probe.json`に保存し、`--merge-memory`で取り込む。プローブが無ければレポートの`memory`は`null`、`memoryReason`は`probe-absent...`となる(測定していないと明記する)。
+手順(オペレーター): (1) 開発サーバーを起動し専用プロファイル・専用タブで`<origin>/?lang=en`を開き、10x10x40 mm直方体と測定する物理の設定を読み込む。(2) 任意のメモリ測定: DevToolsに`--print-probe`のスニペットを貼る(`window.__perfProbe`が1秒間隔で`measureUserAgentSpecificMemory`(系列`uasm`、クロスオリジン分離時のみ)を、補助として`performance.memory.usedJSHeapSize`(系列`jsHeap`、粗い)を別々に記録する。計測範囲が異なるため混ぜない)。(3) 対話端末で上記コマンドを実行する。端末に出るendpointとペアリングコードをアプリの接続UIに入力し、**inspectとanalyzeのscopeだけ**を許可する。コードは端末にのみ表示され、ファイル・レポート・ログには書かれない(stdoutが端末でない場合は表示しない)。(4) セッションが現れると自動で測定が始まる。完了までページを操作しない。(5) メモリ: 完了後に`copy(__perfProbe.report())`の内容を`.qa/probe.json`に保存し、`--merge-memory`で取り込む。プローブが無ければレポートの`memory`は`null`、`memoryReason`は`probe-absent...`となる(測定していないと明記する)。
 
 ケースごとに入力リビジョンを固定し、`startJob`(options.sizeはケースのメッシュサイズ)を冷間1回・温間`--repeats`回行い、`jobStatus`(`executionSettled`)がタイムアウト内に決着するのを待つ。段階時間は`jobEvents`の受信時刻から求める。中止は`cancelJob`を(a)最初のイベント後、(b)温間総時間の中央値の50%経過時点で各`--repeats`回要求し、要求から決着(終端状態かつ`executionSettled`)の観測までの遅延を記録する(ポーリング間隔`--poll-ms`、既定50 msの粒度を含む)。その後に再解析が成功するか(`recoveredAfterCancel`)も記録する。決着しないジョブはケースを`failed`(`timedOut`)とし、終了コードは1になる。物理の種類(熱・音響)はページに読み込まれた入力に依存し、スクリプトは検証しない: `--cases thermal-steady`は熱の設定を読み込んでから実行する。
 
 レポートは`schemaVersion: 1`、`scope: "browser via connector; localhost; real browser"`、リビジョン、ブラウザUA(inspectが返さない場合はプローブ由来、無ければ`null`)、ケースごとの`cold`/`warm`/`cancel`/`memory`を持つ。時間はホストが接続経由で観測した値でありページ内の`performance.now()`ではない。GPU・ネットワーク・他ブラウザ・メモリ上限は測定しない。テスト`tests/perf-browser.test.mjs`は偽コネクターでスキーマ・拒否・タイムアウト・トークン非出力を検証する。
+
+`--merge-memory`の`memory`欄は計測範囲の異なる系列を分けて持つ。`uasm`=`performance.measureUserAgentSpecificMemory().bytes`(クロスオリジン分離時のみ・意味論的エージェント全体)、`jsHeap`=`performance.memory.usedJSHeapSize`(非標準・粗い・JSヒープのみ)。各系列の`peakBytesSampled`は一定間隔サンプルの最大値(近似)で、同じ系列自身のsampleから取る。**系列を合算せず、混在最大を総RAMと呼ばず、片方の欠測を他方で置換しない。** `NaN`/`Infinity`/負値/`null`は測定値にしない。片方しか値が無くても両系列を残し、他方は`available:false`と理由を持つ。window内に有効なsampleが無ければ`memory`は`null`と`memoryReason`になる。`mergeMemory`は`report`をその場で更新して返し、`probe`は読み取り専用である。`schemaVersion`は1のまま。
 
 ## 解釈上の注意
 
