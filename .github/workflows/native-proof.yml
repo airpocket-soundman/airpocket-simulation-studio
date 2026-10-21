@@ -8,6 +8,8 @@ on:
       - 'tests/native-proof*'
       - 'tests/native-tet4*'
       - 'tests/fixtures/native-tet4*'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/native-proof.yml'
   pull_request:
     paths:
@@ -16,6 +18,8 @@ on:
       - 'tests/native-proof*'
       - 'tests/native-tet4*'
       - 'tests/fixtures/native-tet4*'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/native-proof.yml'
   workflow_dispatch:
 permissions:
@@ -32,6 +36,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: npm
+      - name: Install locked JavaScript dependencies for saved-project fixtures
+        run: npm ci
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
