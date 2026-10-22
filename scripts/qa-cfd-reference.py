@@ -9,6 +9,7 @@ import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -18,6 +19,13 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / '.qa/cfd-reference-20261022'
 PLAN = ROOT / 'docs/evidence/2026-10-22-cfd-reference-plan.json'
 EVIDENCE = ROOT / 'docs/evidence/2026-10-22-cfd-reference-run.json'
+REPLAY_LABEL = os.environ.get('QA_CFD_LABEL')
+if REPLAY_LABEL is not None:
+    if not re.fullmatch(r'[a-z0-9-]{1,40}', REPLAY_LABEL):
+        raise RuntimeError('QA_CFD_LABEL must be 1..40 lowercase letters/digits/hyphens')
+    OUT = ROOT / f'.qa/cfd-reference-{REPLAY_LABEL}'
+    PLAN = OUT / 'plan.json'
+    EVIDENCE = OUT / 'run.json'
 EXE = Path(os.environ.get('SU2_EXE', r'C:\Users\yamashita_y00031\.codex\worktrees\external-flow-su2\airpocket-simulation-studio\.native-cache\su2-8.5.0\runtime\bin\SU2_CFD.exe'))
 EXE_SHA = '3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248'
 
@@ -29,6 +37,14 @@ def sha(data):
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+
+def read_history(path):
+    # SU2 pads headers before opening quotes, unlike an ordinary strict CSV.
+    with Path(path).open() as stream:
+        return [{k.strip().strip('"'): float(v) for k, v in row.items()}
+                for row in csv.DictReader(stream, skipinitialspace=True)
+                if all(v is not None and v.strip() for v in row.values())]
 
 
 def mesh_bytes(angular, outer):
@@ -61,6 +77,8 @@ def mesh_bytes(angular, outer):
 
 
 def prepare():
+    if PLAN.exists():
+        raise RuntimeError('Refusing to overwrite a saved plan; use a fresh QA_CFD_LABEL')
     if OUT.exists():
         raise RuntimeError('Refusing to overwrite existing QA directory')
     if not EXE.is_file() or sha(EXE.read_bytes()) != EXE_SHA:
@@ -125,8 +143,7 @@ def run():
         rows = []
         history = directory / 'history.csv'
         if history.exists():
-            with history.open() as stream:
-                rows = [{k.strip(): float(v) for k, v in row.items()} for row in csv.DictReader(stream) if all(v.strip() for v in row.values())]
+            rows = read_history(history)
         last = rows[-1] if rows else {}
         cd_key = next((k for k in last if k in ['CD', 'Drag_Coefficient']), None)
         cd = last.get(cd_key) if cd_key else None
@@ -153,10 +170,57 @@ def run():
     write_json(EVIDENCE, record)
 
 
+def assess():
+    """Re-read immutable solver bytes; correct CSV padding without rerunning SU2."""
+    import shutil
+    plan = json.loads(PLAN.read_text(encoding='utf-8'))
+    record = json.loads(EVIDENCE.read_text(encoding='utf-8'))
+    if sha(PLAN.read_bytes()) != record['planSha256']:
+        raise RuntimeError('Pre-run plan changed')
+    evidence_dir = OUT/'evidence' if REPLAY_LABEL is not None else ROOT/'docs/evidence/cfd-reference-20261022'
+    evidence_dir.mkdir(exist_ok=True)
+    for result in record['results']:
+        directory = OUT / result['name']
+        for name, artifact in result['artifacts'].items():
+            if sha((directory/name).read_bytes()) != artifact['sha256']:
+                raise RuntimeError(f'Captured artifact changed: {name}')
+        rows = read_history(directory/'history.csv')
+        last = rows[-1]
+        cd = last['CD']
+        residuals = {k: v for k, v in last.items() if k.startswith('rms[')}
+        window = [row['CD'] for row in rows[-100:]]
+        drag_range = (max(window)-min(window))/abs(cd)
+        result.update(finalHistory=last, residuals=residuals, dragCoefficient=cd, dragRelativeError=abs(cd/plan['reference']['dragCoefficient']-1), last100DragRelativeRange=drag_range)
+        if result['exitCode'] != 0:
+            if result['mass'] is not None:
+                result['checkpointMassObservation'] = result['mass']
+            result['mass'] = None
+            result['massLimitation'] = 'Interrupted run: VTU can be an earlier OUTPUT_WRT_FREQ=100 checkpoint. It is not final-history mass balance.'
+        result['checks'].update(allResiduals=bool(residuals) and all(v <= plan['acceptance']['allReportedResidualsLog10Maximum'] for v in residuals.values()), dragReference=result['dragRelativeError'] <= plan['acceptance']['dragRelativeErrorMaximum'], dragSettled=len(window) == 100 and drag_range <= plan['acceptance']['last100DragRelativeRangeMaximum'], massBalance=result['mass'] is not None and result['mass']['relativeImbalance'] <= plan['acceptance']['nodalFarfieldMassImbalanceRelativeMaximum'])
+        result['accepted'] = all(result['checks'].values())
+        target = evidence_dir / result['name']
+        target.mkdir(exist_ok=True)
+        for name in ['history.csv', 'case.cfg', 'input.json', 'solver.log']:
+            shutil.copyfile(directory/name, target/name)
+    baseline = record['results'][0]['dragCoefficient']
+    record['relativeDragDependencies'] = {r['name']: abs(r['dragCoefficient']/baseline-1) for r in record['results'][1:]}
+    record['dependencyChecks'] = {k: v <= (0.01 if k == 'iterations' else 0.03) for k, v in record['relativeDragDependencies'].items()}
+    record['allScenariosAccepted'] = all(r['accepted'] for r in record['results'])
+    record['referenceStudyAccepted'] = record['allScenariosAccepted'] and all(record['dependencyChecks'].values())
+    record['assessment'] = dict(command='python scripts/qa-cfd-reference.py assess', rawSolverRerun=False, correction='CSV has spaces before quoted header cells; strip padding/quotes. Preserve original raw hashes and execution timings. Discard interrupted checkpoint mass as final-state evidence.', executionHarnessSha256=plan['harnessSha256'], executionHarnessCommit='bbd0241fd62a6ec05a9eb480dff0264e552cbec7' if plan['harnessSha256'] == '5153de492dae59ec3e2294dc4241304bde534a6dd3514f3b6fbd9e16618df558' else None, assessmentHarnessSha256=sha(Path(__file__).read_bytes()), massHelperSha256=sha((ROOT/'scripts/qa-cfd-reference-mass.mjs').read_bytes()))
+    limitation = 'Mesh-budget timeout preserves partial history and an earlier VTU checkpoint; it is a failed scenario and cannot establish converged mesh dependence.'
+    if limitation not in record['limitations']:
+        record['limitations'].append(limitation)
+    write_json(EVIDENCE, record)
+    print(json.dumps({'referenceStudyAccepted': record['referenceStudyAccepted'], 'scenarios': [{'name':r['name'], 'CD':r['dragCoefficient'], 'accepted':r['accepted']} for r in record['results']]}))
+
+
 if __name__ == '__main__':
     if sys.argv[1:] == ['prepare']:
         prepare()
     elif sys.argv[1:] == ['run']:
         run()
+    elif sys.argv[1:] == ['assess']:
+        assess()
     else:
-        raise SystemExit('Usage: python scripts/qa-cfd-reference.py prepare|run')
+        raise SystemExit('Usage: python scripts/qa-cfd-reference.py prepare|run|assess')
