@@ -93,3 +93,5 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 2026-10-22 follow-up: schemaVersion=2のprobeではtRequested/tResolvedの欠落・null・逆順・非有限値・tとの不一致をUASMの全phaseから除外する。schema1/tのみの履歴互換とは区別し、report.memoryProbeAuditで件数を記録する。同期JS heapは独立に扱う。
 
 成功solveのcold/warm/recoveredは正式MCP jobStatus.result.meshのnodeCount/elementCountとjobId/inputRevisionをmeshObservationへ保存する。未提供・無効な数はnullと理由を保存し、sizeから推測しない。compact summaryにはmesh内容hashがないためmeshRevision=nullを明記し、同じ節点数だけで同じmeshと判定しない。QA_PERF_CASES=structural-tiny,structural-mediumで既存48再実行helperを2規模に指定できる。追加試験はmock契約確認であり、新probe/2規模の実Chrome計測はこの変更では実施していない。
+
+2026-10-22追記: 遅いUASMを待つ間も同期JS heapは各tickで独立sampleを記録する。source=jsHeapとsource=uasmは別sampleで他系列の値をnullにし、時刻や値を混ぜない。排他するのはUASM要求だけで、停止後に完了したUASMは破棄する。

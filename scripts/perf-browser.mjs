@@ -32,10 +32,12 @@ const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'timed_out']);
 
 export const PROBE_SNIPPET = `(()=>{window.__perfProbe?.stop?.();const p=window.__perfProbe={schemaVersion:2,intervalMs:1000,userAgent:navigator.userAgent,crossOriginIsolated:window.crossOriginIsolated===true,samples:[]};
 let inflight=false,stopped=false;
-const tick=async()=>{if(inflight||stopped)return;inflight=true;const tRequested=Date.now(),s={t:tRequested,tRequested,tResolved:null,usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null};
-try{if(p.crossOriginIsolated&&performance.measureUserAgentSpecificMemory){try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}}s.tResolved=Date.now();if(!stopped)p.samples.push(s);}finally{inflight=false;}};
+const tick=async()=>{if(stopped)return;const t=Date.now();p.samples.push({source:'jsHeap',t,tRequested:t,tResolved:t,usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null});
+if(inflight||!p.crossOriginIsolated||!performance.measureUserAgentSpecificMemory)return;inflight=true;const s={source:'uasm',t,tRequested:t,tResolved:null,usedJSHeapSize:null,uasmBytes:null};
+try{try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}s.tResolved=Date.now();if(!stopped)p.samples.push(s);}finally{inflight=false;}};
 const timer=setInterval(tick,p.intervalMs);tick();p.stop=()=>{stopped=true;clearInterval(timer);};
-p.report=()=>JSON.stringify({schemaVersion:p.schemaVersion,intervalMs:p.intervalMs,userAgent:p.userAgent,crossOriginIsolated:p.crossOriginIsolated,samples:p.samples});})();`;
+p.report=()=>JSON.stringify({schemaVersion:p.schemaVersion,intervalMs:p.intervalMs,userAgent:p.userAgent,crossOriginIsolated:p.crossOriginIsolated,samples:[...p.samples].sort((a,b)=>a.t-b.t)});})();`;
+
 
 const median = a => { const s = [...a].sort((x, y) => x - y), k = s.length >> 1; return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2; };
 const r3 = v => Number.isFinite(v) ? Math.round(v * 1000) / 1000 : null;

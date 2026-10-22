@@ -8,16 +8,19 @@ import {CASES, MEMORY_SERIES, MEMORY_SETTLE_MS, PROBE_SNIPPET, PerfTimeoutError,
 
 const TOKEN = 'SECRET-PAIRING-TOKEN-0123456789';
 
-test('actual probe snippet serializes slow UASM calls and records both times; stop discards pending samples',async()=>{
+test('heap ticks continue during slow UASM; sources retain independent times and stop discards pending UASM',async()=>{
  let time=1000,tick,resolve,requests=0,clears=0;
  const window={crossOriginIsolated:true},performance={memory:{usedJSHeapSize:42},measureUserAgentSpecificMemory:()=>{requests++;return new Promise(r=>{resolve=r;});}};
  const context={window,performance,navigator:{userAgent:'ProbeTest'},Date:{now:()=>time},setInterval:fn=>{tick=fn;return 7;},clearInterval:id=>{assert.equal(id,7);clears++;}};
  runInNewContext(PROBE_SNIPPET,context);const p=window.__perfProbe;
  assert.equal(requests,1);time=2000;await tick();assert.equal(requests,1,'no overlapping UASM calls');
+ assert.equal(p.samples.length,2,'heap must be sampled on every tick before UASM resolves');
  time=3500;resolve({bytes:99});await new Promise(r=>setImmediate(r));
- assert.deepEqual(JSON.parse(p.report()).samples,[{t:1000,tRequested:1000,tResolved:3500,usedJSHeapSize:42,uasmBytes:99}]);
+ const samples=JSON.parse(p.report()).samples;
+ assert.deepEqual(samples.filter(s=>s.source==='jsHeap'),[1000,2000].map(t=>({source:'jsHeap',t,tRequested:t,tResolved:t,usedJSHeapSize:42,uasmBytes:null})));
+ assert.deepEqual(samples.filter(s=>s.source==='uasm'),[{source:'uasm',t:1000,tRequested:1000,tResolved:3500,usedJSHeapSize:null,uasmBytes:99}]);
  time=4000;const pending=tick();assert.equal(requests,2);p.stop();time=5000;resolve({bytes:100});await pending;await tick();
- assert.equal(p.samples.length,1,'stop must not publish a measurement resolved after cleanup');assert.equal(requests,2);assert.equal(clears,1);
+ assert.equal(p.samples.length,4,'stop discards pending UASM but preserves the prior synchronous heap tick');assert.equal(requests,2);assert.equal(clears,1);
 });
 
 test('probe reinstall stops the owned previous probe; rejected UASM retains null and timing',async()=>{
@@ -25,7 +28,7 @@ test('probe reinstall stops the owned previous probe; rejected UASM retains null
  runInNewContext(PROBE_SNIPPET,{window,navigator:{userAgent:'ProbeTest'},Date:{now:()=>1000},performance:{measureUserAgentSpecificMemory:async()=>{throw Error('not available');}},setInterval:fn=>{tick=fn;return 1;},clearInterval:()=>{}});
  await new Promise(r=>setImmediate(r));assert.equal(stops,1);
  const sample=JSON.parse(window.__perfProbe.report()).samples[0];assert.equal(sample.uasmBytes,null);assert.equal(sample.tRequested,1000);assert.equal(sample.tResolved,1000);
- window.__perfProbe.stop();await tick();assert.equal(window.__perfProbe.samples.length,1);
+ window.__perfProbe.stop();await tick();assert.equal(window.__perfProbe.samples.length,2);
 });
 
 test('UASM intervals crossing phase boundaries are excluded without discarding synchronous heap samples',()=>{
