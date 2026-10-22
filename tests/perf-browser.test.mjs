@@ -52,7 +52,7 @@ function fake({duration = 400, never = false, settleDelay = 30} = {}) {
   const methods = {
     inspect: () => ({revision: 'sha256:' + 'a'.repeat(64), project: {loaded: true, name: 'block'}}),
     startJob: a => { const j = {id: 'job-' + ++n, t0: clock.t, cancelAt: null, args: a}; jobs.set(j.id, j); return {jobId: j.id, state: 'running'}; },
-    jobStatus: a => ({jobId: a.jobId, ...view(jobs.get(a.jobId))}),
+    jobStatus: a => {const j=jobs.get(a.jobId);return {jobId:a.jobId,inputRevision:j.args.inputRevision,...view(j),result:{mesh:{nodeCount:j.args.options.size===8?94:300,elementCount:j.args.options.size===8?218:1000}}};},
     jobEvents: a => {
       const j = jobs.get(a.jobId), age = clock.t - j.t0, all = [];
       if (age >= 10) all.push({sequence: 1, elapsedMs: 10, type: 'progress', stage: 'progress', message: 'Meshing'});
@@ -98,6 +98,13 @@ test('fake run produces schema v1 with cold, warm, cancel and null memory with a
   for (const c of report.cases) {
     assert.equal(c.status, 'ok');
     assert.equal(c.meshSize, CASES[c.id].size);
+    for(const run of [c.cold,...c.warm.runs,c.recovered]){
+      assert.equal(run.meshObservation.nodeCount,c.meshSize===8?94:300);
+      assert.equal(run.meshObservation.elementCount,c.meshSize===8?218:1000);
+      assert.equal(run.meshObservation.inputRevision,report.revision);
+      assert.match(run.meshObservation.jobId,/^job-/);
+      assert.equal(run.meshObservation.meshRevision,null,'summary must not invent a geometry hash');
+    }
     assert.ok(c.cold.totalMs >= 400 && c.cold.firstEventMs >= 10 && c.cold.meshMs >= 0);
     assert.equal(c.warm.runs.length, 2);
     assert.equal(c.warm.summary.totalMs.n, 2);
@@ -320,4 +327,31 @@ test('stdio client spawns studio-mcp, hands pairing only to announce, and closes
     assert.deepEqual(await client.call('studio_browser_sessions', {}), {sessions: []});
     await assert.rejects(createStdioClient({origin: 'https://example.com'}), /Refusing/);
   } finally { await client.close(); }
+});
+
+
+test('schema2 UASM timing fails closed while valid heap and legacy samples stay independent',()=>{
+ const report=()=>({browser:{},cases:[{status:'ok',window:{startEpochMs:100,endEpochMs:200,cancelSettledEpochMs:150}}]});
+ const malformed=[{},{tRequested:null,tResolved:null},{tRequested:130},{tResolved:140},{tRequested:140,tResolved:120},{tRequested:130,tResolved:Infinity},{tRequested:130,tResolved:140},{tRequested:-1,tResolved:140}];
+ for(const timing of malformed){
+  const r=report();mergeMemory(r,{schemaVersion:2,intervalMs:1000,samples:[{t:50,uasmBytes:999,usedJSHeapSize:10,...timing},{t:120,uasmBytes:999,usedJSHeapSize:10,...timing},{t:3200,uasmBytes:999,usedJSHeapSize:10,...timing}]});
+  assert.equal(r.cases[0].memory.series.uasm.available,false);
+  assert.equal(r.cases[0].memory.series.uasm.baselineBytes,null);
+  assert.equal(r.cases[0].memory.series.uasm.afterCancelBytes,null);
+  assert.equal(r.cases[0].memory.series.jsHeap.peakBytesSampled,10);
+  assert.equal(r.memoryProbeAudit.invalidUasmTimingSamples,3);
+  assert.equal(r.memoryProbeAudit.legacyRequestTimeSamples,0);
+ }
+ const valid=report();mergeMemory(valid,{schemaVersion:2,samples:[{t:120,tRequested:120,tResolved:140,uasmBytes:20}]});assert.equal(valid.cases[0].memory.series.uasm.peakBytesSampled,20);assert.equal(valid.memoryProbeAudit.invalidUasmTimingSamples,0);
+ const legacy=report();mergeMemory(legacy,{schemaVersion:1,samples:[{t:120,uasmBytes:30}]});assert.equal(legacy.cases[0].memory.series.uasm.peakBytesSampled,30);assert.equal(legacy.memoryProbeAudit.legacyRequestTimeSamples,1);
+ for(const schemaVersion of [3,null,'2'])assert.throws(()=>mergeMemory(report(),{schemaVersion,samples:[]}),/Unsupported memory probe schema/);
+});
+
+test('missing or invalid final mesh counts remain unavailable and stale job input is rejected',async()=>{
+ for(const stale of [false,true]){
+  const f=fake(),original=f.client.call;f.client.call=async(tool,args)=>{const out=await original(tool,args);if(args.method==='jobStatus'){out.result.mesh={nodeCount:0,elementCount:1.5};if(stale)out.inputRevision='sha256:'+ 'b'.repeat(64);}return out;};
+  const r=await runBrowserPerf({client:f.client,sessionId:'s1',cases:['structural-tiny'],repeats:1,timeoutMs:5000,...f.opts});
+  if(stale){assert.equal(r.cases[0].status,'failed');assert.match(r.cases[0].error,/input revision mismatch/);}
+  else{const m=r.cases[0].cold.meshObservation;assert.equal(m.nodeCount,null);assert.equal(m.elementCount,null);assert.match(m.unavailableReason,/absent or invalid/);}
+ }
 });

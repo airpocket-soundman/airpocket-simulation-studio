@@ -89,3 +89,7 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 [実測証拠](evidence/2026-10-18-browser-performance-real-chrome.json)。既存の10×10×40mm構造参照入力を実Chromeでsize8/3/2mmの順に測定。coldは各ケースの初回（同一ページ/既存runtime、ブラウザ/HTTPキャッシュ未統制）で905.563/885.355/1182.657ms、warm各n1は775.220/775.162/1080.749ms。各ケースfirst-event/half-warmの取消は6回ともcancelled、request→terminalかつexecutionSettledの観測149.076〜172.910ms、後続solveも成功。これはコネクタ往復・100ms polling込みのホスト観測値で、上限/保証ではありません。
 
 熱size3mmはcommand timeoutで中断、readonly inspect/listJobsもtimeout（後者delivered:false）。別担当が同タブの初期画面/入力喪失・接続閉を観察しましたがreset原因は未確定。再試行せず失敗を保持しました。メモリは正式semantic診断で未提供のため未観測。peakRAM・対応上限・他ブラウザ・熱時間/取消の値はなく、PERF1はbuildingを維持します。
+
+2026-10-22 follow-up: schemaVersion=2のprobeではtRequested/tResolvedの欠落・null・逆順・非有限値・tとの不一致をUASMの全phaseから除外する。schema1/tのみの履歴互換とは区別し、report.memoryProbeAuditで件数を記録する。同期JS heapは独立に扱う。
+
+成功solveのcold/warm/recoveredは正式MCP jobStatus.result.meshのnodeCount/elementCountとjobId/inputRevisionをmeshObservationへ保存する。未提供・無効な数はnullと理由を保存し、sizeから推測しない。compact summaryにはmesh内容hashがないためmeshRevision=nullを明記し、同じ節点数だけで同じmeshと判定しない。QA_PERF_CASES=structural-tiny,structural-mediumで既存48再実行helperを2規模に指定できる。追加試験はmock契約確認であり、新probe/2規模の実Chrome計測はこの変更では実施していない。
