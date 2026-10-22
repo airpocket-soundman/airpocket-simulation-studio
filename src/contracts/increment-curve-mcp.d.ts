@@ -24,6 +24,7 @@ export interface IncrementCurveMcpRow {
  status: 'converged' | 'failed';
  [key: string]: unknown;
 }
+/** Serialized tool data value <=64 KiB UTF-8 JSON; duplicated MCP representations and JSON-RPC envelope are separate. */
 export interface IncrementCurveMcpSingleResult {
  schemaVersion: 1;
  kind: 'increment-curve';
@@ -31,6 +32,7 @@ export interface IncrementCurveMcpSingleResult {
  curve: {schemaVersion: 1; curveId: string; inputRevision: string; meshRevision: string; analysis: {kind: 'independent-linear-solves'; plasticHistory: false}; [key: string]: unknown};
  page: {offset: number; limit: number; total: number; nextOffset: number | null; steps: IncrementCurveMcpRow[]};
  artifacts: Record<'csv' | 'json' | 'svg', IncrementCurveArtifactDescriptor>;
+ /** responseBytes applies to JSON.stringify(this value), not the complete MCP response. */
  limits: {inputBytes: number; responseBytes: number; artifactBytes: number; bundleBytes: number; rows: number};
  limitations: string[];
  outputPath?: string;

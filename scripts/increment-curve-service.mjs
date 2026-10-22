@@ -3,6 +3,7 @@ import {open,lstat} from 'node:fs/promises';
 import {isAbsolute,resolve} from 'node:path';
 import {publishJson} from './json-artifacts.mjs';
 
+// responseBytes bounds serialized tool data only, excluding MCP duplicated representations and JSON-RPC envelope.
 export const INCREMENT_CURVE_MCP_LIMITS=Object.freeze({inputBytes:1048576,responseBytes:65536,artifactBytes:2097152,bundleBytes:8388608,rows:50});
 export const INCREMENT_CURVE_MCP_COMPARISON_LIMITS=Object.freeze({...INCREMENT_CURVE_MCP_LIMITS,inputBytes:2097152,perBundleInputBytes:1048576,curves:4});
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -56,7 +57,7 @@ export async function readIncrementCurve(args={}, {publish=publishJson}={}){
  }
  const result={schemaVersion:1,...payload,source:{path:inputPath,bytes:bytes.length,sha256:hash(bytes),meaning:'raw-utf8-input-snapshot'},artifacts:descriptors,limits,limitations:['Independent force-controlled linear solves only; not a plastic load/unload history or physical validation.','No browser state is read or changed. Artifact strings are retained only in an explicitly requested output bundle.']};
  if(outputPath)result.outputPath=outputPath;
- if(Buffer.byteLength(JSON.stringify(result),'utf8')>INCREMENT_CURVE_MCP_LIMITS.responseBytes-2048)fail('Increment curve response exceeds its byte bound; request fewer rows');
+ if(Buffer.byteLength(JSON.stringify(result),'utf8')>INCREMENT_CURVE_MCP_LIMITS.responseBytes-2048)fail('Increment curve response exceeds its serialized tool-data value byte bound; request fewer rows');
  if(outputPath){
   const publication={schemaVersion:1,kind:comparisonMode?'increment-curve-comparison-artifacts':'increment-curve-artifacts',source:result.source,...artifacts};
   if(Buffer.byteLength(JSON.stringify(publication)+'\n','utf8')>limits.bundleBytes)fail('Increment curve output bundle exceeds its byte bound');
