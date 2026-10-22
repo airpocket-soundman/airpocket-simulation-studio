@@ -15,6 +15,7 @@ const savedTools=[
   "studio_edit_project",
   "studio_import_print",
   "studio_import_project",
+  "studio_increment_curve",
   "studio_inspect_case",
   "studio_inspect_print",
   "studio_inspect_project",

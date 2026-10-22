@@ -109,3 +109,11 @@ const cappedFluidSource: ProjectSource = {kind: 'fluidDomain', solid: {kind: 'cy
 // @ts-expect-error cap normals must have exactly three coordinates.
 const badCapNormal: ProjectSource = {kind: 'fluidDomain', solid: {kind: 'cylinder'}, enclosure: [-20, -40, -20, 40, 80, 40], openingCaps: [{id: 'inlet', point: [0, -10, 0], normal: [0, -1]}]};
 void [cappedFluidSource, badCapNormal];
+
+import type {IncrementCurveMcpRequest, IncrementCurveMcpRow} from '../../src/contracts/increment-curve-mcp';
+const curveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', offset: 0, limit: 20};
+// @ts-expect-error pagination limit must be numeric
+const badCurveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', limit: '50'};
+// @ts-expect-error the bounded curve tool does not expose displacement control
+const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'displacement';
+void [curveRequest, badCurveRequest, badCurveControl];
