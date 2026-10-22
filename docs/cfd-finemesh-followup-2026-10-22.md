@@ -34,3 +34,5 @@
 新しい専用worktreeで `python scripts/replay-cfd-finemesh.py unique-label prepare`、plan確認後、同じlabelで `run`。新規出力は `.qa/cfd-finemesh-unique-label/` のみで、公開済み記録へ上書きしない。実行物は固定SHA、追加downloadなし。今回の再現経路確認は新labelのprepareまでで、2回目のsolverは起動していない。
 
 残るのはメッシュ依存許容の達成、離散質量流束、host/MCP比較、牛の壁面116点未収束・速度/乱流残差・境界層・領域/精度検証。公開済み件数やCFD1のreleased状態を変更する根拠にはしない。
+
+Python回帰2件は `python tests/replay-cfd-finemesh.test.py` と `python tests/qa-cfd-reference.test.py` の各1件を別々に実行した合計。

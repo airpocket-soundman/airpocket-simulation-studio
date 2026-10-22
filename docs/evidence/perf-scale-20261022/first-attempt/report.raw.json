@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "scope": "browser via connector; localhost; real browser",
+  "generatedAt": "2026-10-22T09:47:40.757Z",
+  "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+  "origin": "http://127.0.0.1:18444",
+  "git": {
+    "revision": "e19f43693b30ca8ffb31a14f710931599e514b1c",
+    "branch": "codex/continue-development-2026-10-22",
+    "dirty": false
+  },
+  "browser": {
+    "userAgent": null,
+    "userAgentNote": "not exposed by inspect; filled by --merge-memory when a probe is supplied",
+    "crossOriginIsolated": null
+  },
+  "hostEnvironment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpuModel": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+    "cpuCount": 6,
+    "totalMemMiB": 32577
+  },
+  "repeats": 1,
+  "pollIntervalMs": 50,
+  "timeoutMs": 60000,
+  "loadedInput": {
+    "loaded": true,
+    "name": "Synthetic PERF scale 100N nu0",
+    "meshCount": 1,
+    "selectedTriangles": 0,
+    "selectedAreaMm2": 0,
+    "conditionCount": 2,
+    "material": "金属"
+  },
+  "cases": [
+    {
+      "id": "structural-tiny",
+      "physics": "structural",
+      "meshSize": 8,
+      "status": "ok",
+      "repeats": 1,
+      "notes": [
+        "loaded input physics is not verified by the script; the operator must load the matching study"
+      ],
+      "cold": {
+        "state": "succeeded",
+        "ok": true,
+        "totalMs": 2615.965,
+        "firstEventMs": 58.679,
+        "meshMs": 1737.264,
+        "solvePhaseMs": 123.175,
+        "eventCount": 14,
+        "jobElapsedMs": 2538,
+        "startEpochMs": 1792662448053,
+        "endEpochMs": 1792662450669
+      },
+      "warm": {
+        "runs": [
+          {
+            "state": "succeeded",
+            "ok": true,
+            "totalMs": 1061.571,
+            "firstEventMs": 55.441,
+            "meshMs": 637.919,
+            "solvePhaseMs": 33.173,
+            "eventCount": 14,
+            "jobElapsedMs": 990,
+            "startEpochMs": 1792662450683,
+            "endEpochMs": 1792662451745
+          }
+        ],
+        "summary": {
+          "totalMs": {
+            "median": 1061.571,
+            "min": 1061.571,
+            "max": 1061.571,
+            "n": 1
+          },
+          "firstEventMs": {
+            "median": 55.441,
+            "min": 55.441,
+            "max": 55.441,
+            "n": 1
+          },
+          "meshMs": {
+            "median": 637.919,
+            "min": 637.919,
+            "max": 637.919,
+            "n": 1
+          },
+          "solvePhaseMs": {
+            "median": 33.173,
+            "min": 33.173,
+            "max": 33.173,
+            "n": 1
+          },
+          "jobElapsedMs": {
+            "median": 990,
+            "min": 990,
+            "max": 990,
+            "n": 1
+          }
+        }
+      },
+      "cancel": {
+        "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+        "pollIntervalMs": 50,
+        "baselineWarmTotalMs": 1061.571,
+        "points": {
+          "first-event": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 109.441,
+              "min": 109.441,
+              "max": 109.441,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 106.052,
+              "min": 106.052,
+              "max": 106.052,
+              "n": 1
+            }
+          },
+          "half-warm-total": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 113.753,
+              "min": 113.753,
+              "max": 113.753,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 564.624,
+              "min": 564.624,
+              "max": 564.624,
+              "n": 1
+            },
+            "note": "cancel requested at 50% of the median warm total"
+          }
+        },
+        "runs": [
+          {
+            "trigger": "first-event",
+            "state": "cancelled",
+            "requestedAfterMs": 106.052,
+            "latencyMs": 109.441,
+            "totalMs": 215.493,
+            "startEpochMs": 1792662451761,
+            "endEpochMs": 1792662451976
+          },
+          {
+            "trigger": "half-warm-total",
+            "state": "cancelled",
+            "requestedAfterMs": 564.624,
+            "latencyMs": 113.753,
+            "totalMs": 678.377,
+            "startEpochMs": 1792662451988,
+            "endEpochMs": 1792662452667
+          }
+        ],
+        "recoveredAfterCancel": true
+      },
+      "window": {
+        "startEpochMs": 1792662448053,
+        "endEpochMs": 1792662453811,
+        "cancelSettledEpochMs": 1792662452667
+      },
+      "memory": null,
+      "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+    },
+    {
+      "id": "structural-medium",
+      "physics": "structural",
+      "meshSize": 3,
+      "status": "ok",
+      "repeats": 1,
+      "notes": [
+        "loaded input physics is not verified by the script; the operator must load the matching study"
+      ],
+      "cold": {
+        "state": "succeeded",
+        "ok": true,
+        "totalMs": 2743.935,
+        "firstEventMs": 61.545,
+        "meshMs": 1432.965,
+        "solvePhaseMs": 218.046,
+        "eventCount": 17,
+        "jobElapsedMs": 2672,
+        "startEpochMs": 1792662453831,
+        "endEpochMs": 1792662456575
+      },
+      "warm": {
+        "runs": [
+          {
+            "state": "succeeded",
+            "ok": true,
+            "totalMs": 1373.862,
+            "firstEventMs": 50.852,
+            "meshMs": 823.014,
+            "solvePhaseMs": 186.004,
+            "eventCount": 17,
+            "jobElapsedMs": 1302,
+            "startEpochMs": 1792662456587,
+            "endEpochMs": 1792662457961
+          }
+        ],
+        "summary": {
+          "totalMs": {
+            "median": 1373.862,
+            "min": 1373.862,
+            "max": 1373.862,
+            "n": 1
+          },
+          "firstEventMs": {
+            "median": 50.852,
+            "min": 50.852,
+            "max": 50.852,
+            "n": 1
+          },
+          "meshMs": {
+            "median": 823.014,
+            "min": 823.014,
+            "max": 823.014,
+            "n": 1
+          },
+          "solvePhaseMs": {
+            "median": 186.004,
+            "min": 186.004,
+            "max": 186.004,
+            "n": 1
+          },
+          "jobElapsedMs": {
+            "median": 1302,
+            "min": 1302,
+            "max": 1302,
+            "n": 1
+          }
+        }
+      },
+      "cancel": {
+        "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+        "pollIntervalMs": 50,
+        "baselineWarmTotalMs": 1373.862,
+        "points": {
+          "first-event": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 151.906,
+              "min": 151.906,
+              "max": 151.906,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 73.71,
+              "min": 73.71,
+              "max": 73.71,
+              "n": 1
+            }
+          },
+          "half-warm-total": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 151.496,
+              "min": 151.496,
+              "max": 151.496,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 704.683,
+              "min": 704.683,
+              "max": 704.683,
+              "n": 1
+            },
+            "note": "cancel requested at 50% of the median warm total"
+          }
+        },
+        "runs": [
+          {
+            "trigger": "first-event",
+            "state": "cancelled",
+            "requestedAfterMs": 73.71,
+            "latencyMs": 151.906,
+            "totalMs": 225.617,
+            "startEpochMs": 1792662457976,
+            "endEpochMs": 1792662458201
+          },
+          {
+            "trigger": "half-warm-total",
+            "state": "cancelled",
+            "requestedAfterMs": 704.683,
+            "latencyMs": 151.496,
+            "totalMs": 856.179,
+            "startEpochMs": 1792662458219,
+            "endEpochMs": 1792662459075
+          }
+        ],
+        "recoveredAfterCancel": true
+      },
+      "window": {
+        "startEpochMs": 1792662453831,
+        "endEpochMs": 1792662460742,
+        "cancelSettledEpochMs": 1792662459075
+      },
+      "memory": null,
+      "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+    }
+  ],
+  "notes": [
+    "Measurements, not support limits or guarantees.",
+    "Times are host-observed through connector polling (jobEvents/jobStatus), not in-page performance.now(); they include connector round trips and poll granularity.",
+    "cold = first job of the case in the loaded page session; warm = later jobs in the same page (no reload).",
+    "GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged.",
+    "Merged memory is reported per series (uasm = measureUserAgentSpecificMemory, jsHeap = performance.memory.usedJSHeapSize). The series cover different scopes and are never summed; neither is total process or peak RAM."
+  ]
+}

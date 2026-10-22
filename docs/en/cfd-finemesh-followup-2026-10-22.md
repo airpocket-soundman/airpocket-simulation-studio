@@ -34,3 +34,5 @@ The [pre-run plan](../evidence/cfd-finemesh-followup-20261022/plan.json), [run r
 In a fresh dedicated worktree use `python scripts/replay-cfd-finemesh.py unique-label prepare`, inspect the plan, then `run` with the same label. New outputs remain under `.qa/cfd-finemesh-unique-label/`; published history is never overwritten. The executable must match its pinned hash; no downloads occur. The replay path was tested through preparation only, without launching a second solver.
 
 Remaining work includes mesh-dependence acceptance, discrete mass flux, host/MCP equivalence, and the cow's116 unconverged wall points, velocity/turbulence residuals, boundary-layer/domain/accuracy verification. These results do not justify changing CFD1 to released or increasing the released count.
+
+The two Python regressions are one test each from `python tests/replay-cfd-finemesh.test.py` and `python tests/qa-cfd-reference.test.py`, executed separately.
