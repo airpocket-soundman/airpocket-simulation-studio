@@ -1,6 +1,6 @@
 # 増分曲線の限定出力
 
-[English](en/increment-curve-export.md)
+[English](en/increment-curve-export.md) / [画面での使い方](increment-curve-ui.md)
 
 `createIncrementCurveArtifacts({spec,steps})` は独立した線形弾性解析の荷重・標点データを再検証し、`{curve,csv,json,svg}` を返す非同期のpure service。後ろ3項目は文字列で、ファイル保存やDOM変更は行わない。呼び出し元が提示した曲線表は受け入れない。
 

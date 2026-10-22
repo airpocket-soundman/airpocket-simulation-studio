@@ -1,6 +1,6 @@
 # Limited increment-curve artifacts
 
-[日本語](../increment-curve-export.md)
+[日本語](../increment-curve-export.md) / [GUI instructions](increment-curve-ui.md)
 
 The asynchronous pure service `createIncrementCurveArtifacts({spec,steps})` revalidates load/gauge data from independent linear-elastic solve outputs and returns `{curve,csv,json,svg}`. The last three are strings. It performs no file writes or DOM changes and never trusts a caller-supplied curve table.
 
