@@ -1,5 +1,7 @@
 # Static increment curves
 
+See the [multi-curve UI](increment-comparison-ui.md) to compare 2–4 color-coded force–extension and engineering stress–strain curves.
+
 [日本語](../increment-curve-ui.md) / [Shared CSV/JSON/SVG service](increment-curve-export.md) / [Result viewer requirements](result-viewer-direction.md) / [Increment data contract](../../src/increment-curve-data.js)
 
 Open **Static increment curves** beside the result/case controls. Paste a JSON bundle containing only `spec` and `steps`, or choose a JSON file, then press **Validate and show static curve**. File selection alone does not draw. This tool never applies or changes the current project, cases or analysis result.

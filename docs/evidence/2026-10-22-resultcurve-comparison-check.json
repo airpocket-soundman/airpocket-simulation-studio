@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-22T12:09:21.045Z",
+  "browser": "Codex in-app browser",
+  "operations": [
+    "Loaded real axial reference project",
+    "Executed WASM solve: extension 0.040000mm, force -100N",
+    "Saved Case1",
+    "Exported current project and case JSON through GUI",
+    "Selected A/B JSON files together through multiple filechooser",
+    "Validated 2 curves with 2 failed gaps",
+    "Re-exported project/cases via GUI: byte-identical",
+    "Downloaded CSV/JSON/SVG: byte-identical to pure service"
+  ],
+  "sourceCommits": [
+    "969a224",
+    "5b928fb",
+    "f6ad3a6",
+    "f8de1c7"
+  ],
+  "artifacts": {
+    "csv": {
+      "bytes": 3352,
+      "sha256": "1e80b53b060be26efbf063f76395a4d8347f0ef6b937f3420829ef438536d066"
+    },
+    "json": {
+      "bytes": 10915,
+      "sha256": "fc1a9385138c6a4b8d3f0d58f499ac0b26c33521f0c90515244be32055c11396"
+    },
+    "svg": {
+      "bytes": 9951,
+      "sha256": "2f8e1598158d2d787a8336eaa3ef9411c8ea7f48e476aa7bce64206b1735e0af"
+    }
+  },
+  "curves": [
+    {
+      "id": "synthetic-tet-a",
+      "inputRevision": "sha256:e0e351ab17df81254187608b73fa98f2fbb8d9527a91c53d0e309ab5852eb669",
+      "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+      "steps": 4,
+      "failed": 1,
+      "last": {
+        "stepIndex": 3,
+        "stepId": "step3",
+        "controlledQuantity": "force",
+        "controlledValue": 20,
+        "controlledUnit": "N",
+        "converged": true,
+        "provisional": false,
+        "status": "converged",
+        "inputRevision": "sha256:e0e351ab17df81254187608b73fa98f2fbb8d9527a91c53d0e309ab5852eb669",
+        "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+        "calculationRevision": "sha256:abe0c1bc90ae80e1c04cedeb3063367d346eb4a04a1b37a690c9abb995e6eec2",
+        "resultRevision": "sha256:81325aa7cdee29082681760f91fc0d86e56ff5c5efc6f2c86c8d077565334b23",
+        "reactionAxisN": -20,
+        "tensileForceN": 20,
+        "appliedAxisN": 20,
+        "forceBalanceErrorNAxialN": 0,
+        "extensionMm": 0.011999999999999999,
+        "engineeringStressPa": 400000.00000000006,
+        "engineeringStrain": 0.0012
+      }
+    },
+    {
+      "id": "synthetic-tet-b",
+      "inputRevision": "sha256:3bf39ecb3868ac648697f9d71fe81085ac6cf0447214505a6746552e2a844062",
+      "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+      "steps": 4,
+      "failed": 1,
+      "last": {
+        "stepIndex": 3,
+        "stepId": "step3",
+        "controlledQuantity": "force",
+        "controlledValue": 40,
+        "controlledUnit": "N",
+        "converged": true,
+        "provisional": false,
+        "status": "converged",
+        "inputRevision": "sha256:3bf39ecb3868ac648697f9d71fe81085ac6cf0447214505a6746552e2a844062",
+        "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+        "calculationRevision": "sha256:4d43d1cad5fcdcf29d4a4859d33e885e75c64c19027158b2c57d3b1e75dabc13",
+        "resultRevision": "sha256:08bf536cf05a3bd7116ef4bc8829c83c7fd4b1c2c103f4f53712d704c5ed7a72",
+        "reactionAxisN": -40,
+        "tensileForceN": 40,
+        "appliedAxisN": 40,
+        "forceBalanceErrorNAxialN": 0,
+        "extensionMm": 0.011999999999999999,
+        "engineeringStressPa": 800000.0000000001,
+        "engineeringStrain": 0.0012
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic single tetrahedron is not a general specimen validation or nonlinear history.",
+    "No displacement-controlled or stateful nonlinear curve is accepted.",
+    "Full-size Blob navigation was blocked by browser-tool URL policy (http/https only); the navigation itself is not claimed as verified. Inline SVG load and downloaded SVG bytes were verified."
+  ],
+  "stateProof": {
+    "project": {
+      "unchanged": true,
+      "bytes": 1860,
+      "sha256": "7489dcbd0354b85ef65e9ff3a3d28c2db76dd45f2520d778c21a27299b5b19aa"
+    },
+    "cases": {
+      "unchanged": true,
+      "bytes": 200011,
+      "sha256": "faff5b9bf489475b7bd7a429fdb201f92ff41fbb0f32db3008751e8b9a3e62dd"
+    }
+  },
+  "additionalUiChecks": [
+    "EN switch retains validated comparison",
+    "Input edit immediately hides old image and removes old download hrefs",
+    "Invalid {} comparison refused without artifacts",
+    "Full-size graph link targets the validated SVG Blob with noopener"
+  ],
+  "reviews": {
+    "pure": "root: no blocking findings",
+    "ui": "review_runtime_20261022: accepted",
+    "mcp": "next_tasks_20261022: accepted",
+    "integration": "review_exports_20261022: no blocking findings"
+  }
+}

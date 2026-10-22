@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-22T10:35:33.212Z",
+  "updatedAt": "2026-10-22T12:10:46.771Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
-    "testCount": 1811,
-    "description": "段階載荷グラフをGUI/MCPへ接続。検証済みJSONから荷重–標点伸びを静止表示しCSV/JSON/SVG保存。同梱実solverサンプルと失敗点の非補間に対応。RESULTCURVE1の複数曲線比較・自動段階生成は継続。全171件/公開134/未完37。試験件数1811は前回f45ab2bの記録。",
-    "descriptionEn": "Connected validated increment curves to GUI/MCP: force/gauge-extension plots and CSV/JSON/SVG export, a bundled real-solver synthetic example and failed-step gaps. RESULTCURVE1 multiple-curve comparison and automatic increment capture remain.171 tasks/134 released/37 unfinished;1811 tests refer to previous f45ab2b."
+    "testCount": 1828,
+    "description": "2〜4曲線の荷重–標点伸び/工学SS比較、番号付き凡例、GUI複数JSON読込・3形式保存、MCP比較ページを追加。実画面で解析入力・保存ケース不変と出力一致を確認。自動段階取得・変位制御は継続。全171件/公開134/未完37。試験件数1828は前回34f679fの記録。",
+    "descriptionEn": "Added 2–4 curve force/extension and engineering stress–strain comparison, numbered legends, multiple JSON import, three-format downloads and MCP comparison pages. Actual browser checks confirmed unchanged analysis project/case and matching exports. Automatic capture/displacement control remain.171 tasks/134 released/37 unfinished;1828 tests refer to previous34f679f."
   },
   "tasks": [
     {
@@ -2885,9 +2885,9 @@
       "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
       "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
       "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
-      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json",
-      "lastUpdate": "2026-10-22: 段階JSON読込→検証済み荷重–標点伸びSVG→CSV/JSON/SVG保存をGUIへ接続。実solverサンプル、失敗点の線分断、日英UI、保存ファイルMCP studio_increment_curveを追加。複数曲線比較・解析からの段階自動生成・履歴材料対応は残作業。",
-      "lastUpdateEn": "2026-10-22: Connected increment JSON import, validated force/gauge-extension SVG and CSV/JSON/SVG downloads to the GUI. Added a real-solver synthetic sample, failed-step gaps, bilingual UI and saved-file MCP studio_increment_curve. Multiple-curve comparison, automatic increment capture and history-dependent materials remain.",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json",
+      "lastUpdate": "2026-10-22: 検証済み2〜4曲線を荷重–標点伸びと工学SSの2図で比較し、番号・色・線種付き凡例と失敗点の線分断を保持。GUIの複数JSON読込、CSV/JSON/SVG保存・拡大リンク、同じMCPの比較ページを追加。実画面で既存プロジェクトと実解析保存ケースの不変、3形式の内容一致を確認。解析からの自動段階取得・変位制御・状態履歴材料への接続は継続。",
+      "lastUpdateEn": "2026-10-22: Compare 2–4 validated curves in force/gauge-extension and engineering stress–strain panels with numbered/color/dash legends and failed-step gaps. Added multiple-file GUI import, CSV/JSON/SVG downloads, a full-size link and comparison pages in the existing MCP tool. Browser checks confirmed unchanged project/saved real-analysis case and matching artifact bytes. Automatic increment capture, displacement control and state-history materials remain.",
       "review": {
         "status": "merged",
         "pr": 134,

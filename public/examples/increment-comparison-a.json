@@ -1,0 +1,606 @@
+{
+  "spec": {
+    "schemaVersion": 1,
+    "curveId": "synthetic-tet-a",
+    "caseIdentity": {
+      "name": "synthetic single tetrahedron",
+      "synthetic": true
+    },
+    "rowIdentity": {
+      "materialKey": "synthetic-E1e9",
+      "geometryKey": "unit-tet",
+      "gaugeKey": "nodes0-3"
+    },
+    "input": {
+      "study": {
+        "kind": "structural"
+      },
+      "materialProperties": {
+        "youngModulus": 1000000000,
+        "poissonRatio": 0
+      }
+    },
+    "mesh": {
+      "nodes": [
+        0,
+        0,
+        0,
+        10,
+        0,
+        0,
+        0,
+        10,
+        0,
+        0,
+        0,
+        10
+      ],
+      "tetrahedra": [
+        [
+          0,
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    "axis": [
+      0,
+      0,
+      1
+    ],
+    "nodeCount": 4,
+    "initialGaugeLengthMm": 10,
+    "initialAreaMm2": 50,
+    "fixedNodes": [
+      0,
+      1,
+      2
+    ],
+    "loadedNodes": [
+      3
+    ],
+    "gauge": {
+      "a": {
+        "nodes": [
+          0
+        ],
+        "weights": [
+          1
+        ]
+      },
+      "b": {
+        "nodes": [
+          3
+        ],
+        "weights": [
+          1
+        ]
+      }
+    }
+  },
+  "steps": [
+    {
+      "stepId": "step0",
+      "controlledQuantity": "force",
+      "controlledValue": 0,
+      "converged": true,
+      "provisional": false,
+      "rowIdentity": {
+        "materialKey": "synthetic-E1e9",
+        "geometryKey": "unit-tet",
+        "gaugeKey": "nodes0-3"
+      },
+      "output": {
+        "input": {
+          "study": {
+            "kind": "structural"
+          },
+          "materialProperties": {
+            "youngModulus": 1000000000,
+            "poissonRatio": 0
+          }
+        },
+        "mesh": {
+          "nodes": [
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10
+          ],
+          "tetrahedra": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        "calculation": {
+          "controlledQuantity": "force",
+          "controlledValue": 0,
+          "controlledUnit": "N",
+          "plasticHistory": false
+        },
+        "result": {
+          "kind": "elastic",
+          "engine": "Airpocket Tet4 / JavaScript CPU",
+          "method": "pcg",
+          "thermalStrains": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "referenceTemperature": null,
+          "displacement": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "magnitudes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "stresses": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "strains": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "vonMises": [
+            0
+          ],
+          "principal": [
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "reaction": [
+            0,
+            0,
+            0
+          ],
+          "applied": [
+            0,
+            0,
+            0
+          ],
+          "forceBalanceErrorN": [
+            0,
+            0,
+            0
+          ],
+          "constraintRegionReactions": [],
+          "constraintReactions": [
+            {
+              "node": 0,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "node": 1,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "node": 2,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "bodyLoadN": [
+            0,
+            0,
+            0
+          ],
+          "iterations": 0,
+          "residual": 0,
+          "maxDisplacementMm": 0,
+          "maxVonMisesPa": 0
+        }
+      }
+    },
+    {
+      "stepId": "step1",
+      "controlledQuantity": "force",
+      "controlledValue": 10,
+      "converged": true,
+      "provisional": false,
+      "rowIdentity": {
+        "materialKey": "synthetic-E1e9",
+        "geometryKey": "unit-tet",
+        "gaugeKey": "nodes0-3"
+      },
+      "output": {
+        "input": {
+          "study": {
+            "kind": "structural"
+          },
+          "materialProperties": {
+            "youngModulus": 1000000000,
+            "poissonRatio": 0
+          }
+        },
+        "mesh": {
+          "nodes": [
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10
+          ],
+          "tetrahedra": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        "calculation": {
+          "controlledQuantity": "force",
+          "controlledValue": 10,
+          "controlledUnit": "N",
+          "plasticHistory": false
+        },
+        "result": {
+          "kind": "elastic",
+          "engine": "Airpocket Tet4 / JavaScript CPU",
+          "method": "pcg",
+          "thermalStrains": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "referenceTemperature": null,
+          "displacement": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.005999999999999999
+          ],
+          "magnitudes": [
+            0,
+            0,
+            0,
+            0.005999999999999999
+          ],
+          "stresses": [
+            [
+              0,
+              0,
+              600000,
+              0,
+              0,
+              0
+            ]
+          ],
+          "strains": [
+            [
+              0,
+              0,
+              0.0006,
+              0,
+              0,
+              0
+            ]
+          ],
+          "vonMises": [
+            600000
+          ],
+          "principal": [
+            [
+              600000,
+              0,
+              0
+            ]
+          ],
+          "reaction": [
+            0,
+            0,
+            -10
+          ],
+          "applied": [
+            0,
+            0,
+            10
+          ],
+          "forceBalanceErrorN": [
+            0,
+            0,
+            0
+          ],
+          "constraintRegionReactions": [],
+          "constraintReactions": [
+            {
+              "node": 0,
+              "force": [
+                0,
+                0,
+                -10
+              ]
+            },
+            {
+              "node": 1,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "node": 2,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "bodyLoadN": [
+            0,
+            0,
+            0
+          ],
+          "iterations": 1,
+          "residual": 0,
+          "maxDisplacementMm": 0.005999999999999999,
+          "maxVonMisesPa": 600000
+        }
+      }
+    },
+    {
+      "stepId": "step2",
+      "controlledQuantity": "force",
+      "controlledValue": 15,
+      "converged": false,
+      "provisional": true,
+      "rowIdentity": {
+        "materialKey": "synthetic-E1e9",
+        "geometryKey": "unit-tet",
+        "gaugeKey": "nodes0-3"
+      }
+    },
+    {
+      "stepId": "step3",
+      "controlledQuantity": "force",
+      "controlledValue": 20,
+      "converged": true,
+      "provisional": false,
+      "rowIdentity": {
+        "materialKey": "synthetic-E1e9",
+        "geometryKey": "unit-tet",
+        "gaugeKey": "nodes0-3"
+      },
+      "output": {
+        "input": {
+          "study": {
+            "kind": "structural"
+          },
+          "materialProperties": {
+            "youngModulus": 1000000000,
+            "poissonRatio": 0
+          }
+        },
+        "mesh": {
+          "nodes": [
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10,
+            0,
+            0,
+            0,
+            10
+          ],
+          "tetrahedra": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        "calculation": {
+          "controlledQuantity": "force",
+          "controlledValue": 20,
+          "controlledUnit": "N",
+          "plasticHistory": false
+        },
+        "result": {
+          "kind": "elastic",
+          "engine": "Airpocket Tet4 / JavaScript CPU",
+          "method": "pcg",
+          "thermalStrains": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "referenceTemperature": null,
+          "displacement": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.011999999999999999
+          ],
+          "magnitudes": [
+            0,
+            0,
+            0,
+            0.011999999999999999
+          ],
+          "stresses": [
+            [
+              0,
+              0,
+              1200000,
+              0,
+              0,
+              0
+            ]
+          ],
+          "strains": [
+            [
+              0,
+              0,
+              0.0012,
+              0,
+              0,
+              0
+            ]
+          ],
+          "vonMises": [
+            1200000
+          ],
+          "principal": [
+            [
+              1200000,
+              0,
+              0
+            ]
+          ],
+          "reaction": [
+            0,
+            0,
+            -20
+          ],
+          "applied": [
+            0,
+            0,
+            20
+          ],
+          "forceBalanceErrorN": [
+            0,
+            0,
+            0
+          ],
+          "constraintRegionReactions": [],
+          "constraintReactions": [
+            {
+              "node": 0,
+              "force": [
+                0,
+                0,
+                -20
+              ]
+            },
+            {
+              "node": 1,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "node": 2,
+              "force": [
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "bodyLoadN": [
+            0,
+            0,
+            0
+          ],
+          "iterations": 1,
+          "residual": 0,
+          "maxDisplacementMm": 0.011999999999999999,
+          "maxVonMisesPa": 1200000
+        }
+      }
+    }
+  ]
+}

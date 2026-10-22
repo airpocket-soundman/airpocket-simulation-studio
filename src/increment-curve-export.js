@@ -7,7 +7,8 @@ const plain=value=>value!==null&&typeof value==='object'&&(Object.getPrototypeOf
 const bytes=value=>new TextEncoder().encode(value).length;
 const xml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
 
-function checkedSnapshot(bundle){
+/** Shared bounded JSON snapshot; runs synchronously without invoking accessors. */
+export function snapshotIncrementCurveBundle(bundle){
   if(!plain(bundle)||Reflect.ownKeys(bundle).length!==2||!Object.hasOwn(bundle,'spec')||!Object.hasOwn(bundle,'steps'))throw Error('Curve export bundle must contain only spec and steps');
   let count=0;
   const ancestors=new Set();
@@ -120,7 +121,7 @@ ${points.join('\n')}
 export async function createIncrementCurveArtifacts(bundle){
   // Snapshot synchronously before hashing awaits: caller mutation cannot replace
   // the input/mesh/results between validation and the derived artifact revisions.
-  const snapshot=checkedSnapshot(bundle);
+  const snapshot=snapshotIncrementCurveBundle(bundle);
   const curve=await buildIncrementCurve(snapshot);
   const csv=makeCsv(curve),json=JSON.stringify(curve,null,2)+'\n',svg=makeSvg(curve);
   for(const artifact of [csv,json,svg])if(bytes(artifact)>INCREMENT_CURVE_EXPORT_LIMITS.artifactBytes)throw Error('Curve export artifact exceeds size limit');
