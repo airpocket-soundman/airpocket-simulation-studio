@@ -32,10 +32,12 @@ const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'timed_out']);
 
 export const PROBE_SNIPPET = `(()=>{window.__perfProbe?.stop?.();const p=window.__perfProbe={schemaVersion:2,intervalMs:1000,userAgent:navigator.userAgent,crossOriginIsolated:window.crossOriginIsolated===true,samples:[]};
 let inflight=false,stopped=false;
-const tick=async()=>{if(inflight||stopped)return;inflight=true;const tRequested=Date.now(),s={t:tRequested,tRequested,tResolved:null,usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null};
-try{if(p.crossOriginIsolated&&performance.measureUserAgentSpecificMemory){try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}}s.tResolved=Date.now();if(!stopped)p.samples.push(s);}finally{inflight=false;}};
+const tick=async()=>{if(stopped)return;const t=Date.now();p.samples.push({source:'jsHeap',t,tRequested:t,tResolved:t,usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null});
+if(inflight||!p.crossOriginIsolated||!performance.measureUserAgentSpecificMemory)return;inflight=true;const s={source:'uasm',t,tRequested:t,tResolved:null,usedJSHeapSize:null,uasmBytes:null};
+try{try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}s.tResolved=Date.now();if(!stopped)p.samples.push(s);}finally{inflight=false;}};
 const timer=setInterval(tick,p.intervalMs);tick();p.stop=()=>{stopped=true;clearInterval(timer);};
-p.report=()=>JSON.stringify({schemaVersion:p.schemaVersion,intervalMs:p.intervalMs,userAgent:p.userAgent,crossOriginIsolated:p.crossOriginIsolated,samples:p.samples});})();`;
+p.report=()=>JSON.stringify({schemaVersion:p.schemaVersion,intervalMs:p.intervalMs,userAgent:p.userAgent,crossOriginIsolated:p.crossOriginIsolated,samples:[...p.samples].sort((a,b)=>a.t-b.t)});})();`;
+
 
 const median = a => { const s = [...a].sort((x, y) => x - y), k = s.length >> 1; return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2; };
 const r3 = v => Number.isFinite(v) ? Math.round(v * 1000) / 1000 : null;
@@ -178,7 +180,13 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
       const settled = await pollUntil(job, {deadlineAt: t0 + timeoutMs});
       const ph = phases(settled.events, t0, settled.settledAt);
       const jobElapsedMs = settled.events.reduce((m, {e}) => Math.max(m, field(e, 'elapsedMs') ?? 0), 0);
-      return {state: settled.status.state, ok: settled.status.state === 'succeeded', ...ph, jobElapsedMs: jobElapsedMs || null, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch, ...(settled.status.state !== 'succeeded' ? {error: settled.status.error?.message ?? settled.status.state} : {})};
+      if (settled.status.jobId !== job.jobId) throw Error('Performance job identity mismatch');
+      const summary = settled.status.result?.mesh;
+      const count = key => Number.isSafeInteger(summary?.[key]) && summary[key] > 0 ? summary[key] : null;
+      const meshObservation = {source: 'jobStatus.result.mesh', jobId: job.jobId, inputRevision: revision, requestedSizeMm: caseDef.size, nodeCount: count('nodeCount'), elementCount: count('elementCount'), meshRevision: null, identityLimitation: 'Retained job and input identity only; compact job summary does not expose a mesh-content hash.'};
+      if (settled.status.inputRevision !== undefined && settled.status.inputRevision !== revision) throw Error('Performance job input revision mismatch');
+      if (meshObservation.nodeCount === null || meshObservation.elementCount === null) meshObservation.unavailableReason = 'Compact final mesh counts are absent or invalid; do not infer counts from requested size.';
+      return {meshObservation, state: settled.status.state, ok: settled.status.state === 'succeeded', ...ph, jobElapsedMs: jobElapsedMs || null, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch, ...(settled.status.state !== 'succeeded' ? {error: settled.status.error?.message ?? settled.status.state} : {})};
     } catch (err) { if (err instanceof PerfTimeoutError) await bestEffortCancel(job); throw err; }
     finally { await release(job).catch(() => {}); }
   }
@@ -230,6 +238,7 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
       const cancelRuns = [];
       for (const trigger of CANCEL_POINTS) for (let i = 0; i < repeats; i++) cancelRuns.push(await m.runCancel(revision, def, trigger, halfMs));
       const recovered = await m.runSolve(revision, def, id + '-recover');
+      rec.recovered = round(recovered);
       rec.cold = round(cold); rec.warm = {runs: warm.map(round), summary};
       rec.cancel = {
         note: 'latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity',
@@ -282,14 +291,16 @@ export const MEMORY_SETTLE_MS = 3000;
 
 const byteValue = v => (typeof v === 'number' && Number.isFinite(v) && v >= 0) ? v : null;
 
-function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs}) {
+function mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion}) {
   const valueOf = s => byteValue(s?.[def.field]);
   // UASM is asynchronous. An interval crossing a phase boundary cannot be
   // assigned to either side using only its request time. Legacy probes carry
   // only t and retain their historical request-time interpretation explicitly.
   const bounds = s => {
-    if(def.key!=='uasm'||(!('tRequested' in s)&&!('tResolved' in s)))return [s.t,s.t];
-    return Number.isFinite(s.tRequested)&&Number.isFinite(s.tResolved)&&s.tResolved>=s.tRequested?[s.tRequested,s.tResolved]:[NaN,NaN];
+    if(def.key!=='uasm')return [s.t,s.t];
+    const legacy=!('tRequested' in s)&&!('tResolved' in s);
+    if(legacy&&probeSchemaVersion!==2)return [s.t,s.t];
+    return Number.isFinite(s.tRequested)&&s.tRequested>=0&&Number.isFinite(s.tResolved)&&s.tResolved>=s.tRequested&&s.t===s.tRequested?[s.tRequested,s.tResolved]:[NaN,NaN];
   };
   const inWindow = all.filter(s => {const [a,b]=bounds(s);return a>=startEpochMs&&b<=endEpochMs&&valueOf(s)!==null;});
   const peak = inWindow.length ? Math.max(...inWindow.map(valueOf)) : null;
@@ -308,7 +319,7 @@ function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSe
     name: def.name, source: def.source, field: def.field,
     available: peak !== null,
     sampleCount: inWindow.length, intervalMs,
-    timing: def.key==='uasm' ? (all.some(s=>!('tRequested' in s)&&!('tResolved' in s)) ? 'legacy request timestamps present; asynchronous completion is unknown for those samples' : 'request/resolution interval must fit wholly within the selected phase') : 'synchronous JS heap at request time',
+    timing: def.key==='uasm' ? (probeSchemaVersion!==2&&all.some(s=>!('tRequested' in s)&&!('tResolved' in s)) ? 'legacy request timestamps present; asynchronous completion is unknown for those samples' : 'request/resolution interval must fit wholly within the selected phase') : 'synchronous JS heap at request time',
     baselineBytes: baseline,
     peakBytesSampled: peak,
     afterCancelBytes: afterCancel === null ? null : valueOf(afterCancel),
@@ -320,15 +331,20 @@ function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSe
 // Mutates `report` in place (the existing contract) and returns it. `probe` is read-only.
 export function mergeMemory(report, probe, {settleMs = MEMORY_SETTLE_MS} = {}) {
   if (!probe || !Array.isArray(probe.samples)) throw Error('Probe file has no samples array');
+  const probeSchemaVersion = probe.schemaVersion === undefined ? 1 : probe.schemaVersion;
+  if (![1,2].includes(probeSchemaVersion)) throw Error('Unsupported memory probe schema');
   const intervalMs = (typeof probe.intervalMs === 'number' && Number.isFinite(probe.intervalMs) && probe.intervalMs > 0) ? probe.intervalMs : null;
-  const all = probe.samples.filter(s => s && Number.isFinite(s.t)).sort((a, b) => a.t - b.t);
+  const all = probe.samples.filter(s => s && Number.isFinite(s.t) && s.t>=0).sort((a, b) => a.t - b.t);
+  const legacy = s => !('tRequested' in s)&&!('tResolved' in s);
+  const validInterval = s => Number.isFinite(s.tRequested)&&s.tRequested>=0&&Number.isFinite(s.tResolved)&&s.tResolved>=s.tRequested&&s.t===s.tRequested;
+  report.memoryProbeAudit = {schemaVersion: probeSchemaVersion, totalSamples: probe.samples.length, invalidTimestampSamples: probe.samples.length-all.length, legacyRequestTimeSamples: probeSchemaVersion===1?all.filter(legacy).length:0, invalidUasmTimingSamples: all.filter(s=>!(probeSchemaVersion===1&&legacy(s))&&!validInterval(s)).length, note: 'Invalid UASM timing is excluded from every phase; valid synchronous heap timestamps remain independent.'};
   for (const c of report.cases) {
     if (c.status !== 'ok' || !c.window) continue;
     const {startEpochMs, endEpochMs, cancelSettledEpochMs} = c.window;
     const inside = all.filter(s => s.t >= startEpochMs && s.t <= endEpochMs);
     if (!inside.length) { c.memory = null; c.memoryReason = 'no probe samples inside the case window (probe interval may exceed the case duration)'; continue; }
     const series = {};
-    for (const def of MEMORY_SERIES) series[def.key] = mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs});
+    for (const def of MEMORY_SERIES) series[def.key] = mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion});
     const measured = MEMORY_SERIES.filter(d => series[d.key].available);
     if (!measured.length) {
       c.memory = null;

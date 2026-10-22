@@ -1,0 +1,354 @@
+{
+  "date": "2026-10-22",
+  "taskId": "PERF1",
+  "workOrder": "03-PERF1-SCALE",
+  "status": "bounded-two-size-measurement-complete",
+  "sourceRevision": "1ae8dcf8f58177b65e91900f00b79aa453c4307d",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "crossOriginIsolated": true,
+  "nodeVersion": "v24.11.1",
+  "repeats": 1,
+  "measurements": [
+    {
+      "id": "structural-tiny",
+      "mesh": {
+        "source": "jobStatus.result.mesh",
+        "jobId": "508d17cc-56c2-40af-8645-ce71e62be107",
+        "inputRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+        "requestedSizeMm": 8,
+        "nodeCount": 60,
+        "elementCount": 121,
+        "meshRevision": null,
+        "identityLimitation": "Retained job and input identity only; compact job summary does not expose a mesh-content hash."
+      },
+      "coldMs": 1809.459,
+      "warm": {
+        "median": 1624.154,
+        "min": 1624.154,
+        "max": 1624.154,
+        "n": 1
+      },
+      "cancellation": {
+        "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+        "pollIntervalMs": 50,
+        "baselineWarmTotalMs": 1624.154,
+        "points": {
+          "first-event": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 110.919,
+              "min": 110.919,
+              "max": 110.919,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 93.009,
+              "min": 93.009,
+              "max": 93.009,
+              "n": 1
+            }
+          },
+          "half-warm-total": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 393.763,
+              "min": 393.763,
+              "max": 393.763,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 907.613,
+              "min": 907.613,
+              "max": 907.613,
+              "n": 1
+            },
+            "note": "cancel requested at 50% of the median warm total"
+          }
+        },
+        "runs": [
+          {
+            "trigger": "first-event",
+            "state": "cancelled",
+            "requestedAfterMs": 93.009,
+            "latencyMs": 110.919,
+            "totalMs": 203.928,
+            "startEpochMs": 1792662631604,
+            "endEpochMs": 1792662631808
+          },
+          {
+            "trigger": "half-warm-total",
+            "state": "cancelled",
+            "requestedAfterMs": 907.613,
+            "latencyMs": 393.763,
+            "totalMs": 1301.376,
+            "startEpochMs": 1792662631827,
+            "endEpochMs": 1792662633128
+          }
+        ],
+        "recoveredAfterCancel": true
+      },
+      "memory": {
+        "available": true,
+        "primarySeries": "jsHeap",
+        "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+        "baselineBytes": 31754772,
+        "peakBytesSampled": 33255669,
+        "afterCancelBytes": 31366889,
+        "afterSettleBytes": 32461135,
+        "samples": {
+          "intervalMs": 1000,
+          "count": 6
+        },
+        "intervalMs": 1000,
+        "sampleCount": 7,
+        "order": [
+          "uasm",
+          "jsHeap"
+        ],
+        "measuredSeries": [
+          "jsHeap"
+        ],
+        "series": {
+          "uasm": {
+            "name": "measureUserAgentSpecificMemory",
+            "source": "performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)",
+            "field": "uasmBytes",
+            "available": false,
+            "sampleCount": 0,
+            "intervalMs": 1000,
+            "timing": "request/resolution interval must fit wholly within the selected phase",
+            "baselineBytes": null,
+            "peakBytesSampled": null,
+            "afterCancelBytes": 53933349,
+            "afterSettleBytes": 53933349,
+            "unavailable": {
+              "peakBytesSampled": "no measureUserAgentSpecificMemory sample inside the case window",
+              "baselineBytes": "no measureUserAgentSpecificMemory sample before the case window"
+            }
+          },
+          "jsHeap": {
+            "name": "performance.memory.usedJSHeapSize",
+            "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+            "field": "usedJSHeapSize",
+            "available": true,
+            "sampleCount": 6,
+            "intervalMs": 1000,
+            "timing": "synchronous JS heap at request time",
+            "baselineBytes": 31754772,
+            "peakBytesSampled": 33255669,
+            "afterCancelBytes": 31366889,
+            "afterSettleBytes": 32461135,
+            "unavailable": {}
+          }
+        },
+        "note": "peakBytesSampled is the maximum of periodic samples (an approximation) computed per series from that series’ own samples only. Do not add the series together and do not report either series as total process or peak RAM. The probe itself uses memory."
+      }
+    },
+    {
+      "id": "structural-medium",
+      "mesh": {
+        "source": "jobStatus.result.mesh",
+        "jobId": "03e49fc4-b798-4132-89a7-5b6e0a0e411c",
+        "inputRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+        "requestedSizeMm": 3,
+        "nodeCount": 335,
+        "elementCount": 1006,
+        "meshRevision": null,
+        "identityLimitation": "Retained job and input identity only; compact job summary does not expose a mesh-content hash."
+      },
+      "coldMs": 1543.11,
+      "warm": {
+        "median": 1686.913,
+        "min": 1686.913,
+        "max": 1686.913,
+        "n": 1
+      },
+      "cancellation": {
+        "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+        "pollIntervalMs": 50,
+        "baselineWarmTotalMs": 1686.913,
+        "points": {
+          "first-event": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 125.22,
+              "min": 125.22,
+              "max": 125.22,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 68.236,
+              "min": 68.236,
+              "max": 68.236,
+              "n": 1
+            }
+          },
+          "half-warm-total": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 125.224,
+              "min": 125.224,
+              "max": 125.224,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 890.104,
+              "min": 890.104,
+              "max": 890.104,
+              "n": 1
+            },
+            "note": "cancel requested at 50% of the median warm total"
+          }
+        },
+        "runs": [
+          {
+            "trigger": "first-event",
+            "state": "cancelled",
+            "requestedAfterMs": 68.236,
+            "latencyMs": 125.22,
+            "totalMs": 193.456,
+            "startEpochMs": 1792662637926,
+            "endEpochMs": 1792662638120
+          },
+          {
+            "trigger": "half-warm-total",
+            "state": "cancelled",
+            "requestedAfterMs": 890.104,
+            "latencyMs": 125.224,
+            "totalMs": 1015.327,
+            "startEpochMs": 1792662638143,
+            "endEpochMs": 1792662639159
+          }
+        ],
+        "recoveredAfterCancel": true
+      },
+      "memory": {
+        "available": true,
+        "primarySeries": "uasm",
+        "source": "performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)",
+        "baselineBytes": 53177129,
+        "peakBytesSampled": 53933349,
+        "afterCancelBytes": 53731752,
+        "afterSettleBytes": 53731752,
+        "samples": {
+          "intervalMs": 1000,
+          "count": 1
+        },
+        "intervalMs": 1000,
+        "sampleCount": 9,
+        "order": [
+          "uasm",
+          "jsHeap"
+        ],
+        "measuredSeries": [
+          "uasm",
+          "jsHeap"
+        ],
+        "series": {
+          "uasm": {
+            "name": "measureUserAgentSpecificMemory",
+            "source": "performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)",
+            "field": "uasmBytes",
+            "available": true,
+            "sampleCount": 1,
+            "intervalMs": 1000,
+            "timing": "request/resolution interval must fit wholly within the selected phase",
+            "baselineBytes": 53177129,
+            "peakBytesSampled": 53933349,
+            "afterCancelBytes": 53731752,
+            "afterSettleBytes": 53731752,
+            "unavailable": {}
+          },
+          "jsHeap": {
+            "name": "performance.memory.usedJSHeapSize",
+            "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+            "field": "usedJSHeapSize",
+            "available": true,
+            "sampleCount": 7,
+            "intervalMs": 1000,
+            "timing": "synchronous JS heap at request time",
+            "baselineBytes": 29383073,
+            "peakBytesSampled": 32461135,
+            "afterCancelBytes": 29924895,
+            "afterSettleBytes": 29957555,
+            "unavailable": {}
+          }
+        },
+        "note": "peakBytesSampled is the maximum of periodic samples (an approximation) computed per series from that series’ own samples only. Do not add the series together and do not report either series as total process or peak RAM. The probe itself uses memory."
+      }
+    }
+  ],
+  "firstAttempt": {
+    "sourceRevision": "e19f43693b30ca8ffb31a14f710931599e514b1c",
+    "issue": "A long pending UASM request suppressed synchronous heap ticks; the tiny case window contained no probe request. Retained separately as a real defect reproduction.",
+    "path": "docs/evidence/perf-scale-20261022/first-attempt/"
+  },
+  "files": {
+    "input.json": {
+      "bytes": 791,
+      "sha256": "57faf0118c8cec7fc71740addab04e972dcd28ee54b730ce3be67667dc9fdee6"
+    },
+    "mesh-observations.json": {
+      "bytes": 2651,
+      "sha256": "1a07c92421f0fd4faf4f7b877a0c69689683340a80b34d0de53d626f6ad79154"
+    },
+    "plan.json": {
+      "bytes": 349,
+      "sha256": "ab091ec4e2b9f213aa30e7aa82745beb1c35cdef82e3341b230849b6915428d2"
+    },
+    "probe-capture.json": {
+      "bytes": 7991,
+      "sha256": "c460dd1b1bec219aebb8e14ae51390a296a033de61831fe027feb0aa40d6adc4"
+    },
+    "report.merged.json": {
+      "bytes": 17954,
+      "sha256": "921b5fae046ce5436cfcbffd0861ad059a4b57b6b0cfd6c96ea1eb109cd6402c"
+    },
+    "report.raw.json": {
+      "bytes": 13476,
+      "sha256": "c7454988f22d01d07c499585c58b2f886ed7d7f1cf8269f62938066301e9c781"
+    }
+  },
+  "cleanup": {
+    "probeStopped": true,
+    "ownedTabsClosed": true,
+    "mcpClientsClosed": true,
+    "ownedViteStopped": true,
+    "credentialHandoffFileRemoved": true
+  },
+  "limitations": [
+    "Synthetic single geometry, one repeat per size; not a maximum supported size or a scaling law.",
+    "Both series are sampled; tiny-window UASM has no complete in-window sample and stays unavailable.",
+    "Compact mesh summaries provide counts and job/input IDs, not a mesh-content revision.",
+    "Localhost Chrome; no claim for Electron, other browsers, GPU/RSS or public HTTPS.",
+    "New comparison manifest code is covered by adapter tests, not this structural performance run.",
+    "Tiny afterCancel/afterSettle samples occur during the following medium case; they are not independent idle-recovery memory values. Future measurement needs an inter-case idle interval.",
+    "Node/element budgets were predeclared, not runtime cutoffs. Observed maxima335 nodes/1006 elements stayed below5000/20000."
+  ],
+  "parentTaskReleased": false,
+  "replay": {
+    "helpers": "docs/evidence/perf-scale-20261022/replay/",
+    "destination": ".qa/perf-scale-v2/",
+    "sourceRevision": "1ae8dcf8f58177b65e91900f00b79aa453c4307d",
+    "input": "docs/evidence/perf-scale-20261022/input.json",
+    "note": "Copy helpers and input to destination in a dedicated fixed-source worktree, start Vite port18444 and the Node driver, then use the visible page controls to load synthetic input/start probe/pair inspect+analyze/stop and retrieve probe. Never preserve the temporary pairing file."
+  },
+  "inputIdentity": {
+    "submittedInputFile": "docs/evidence/perf-scale-20261022/input.json",
+    "observedBrowserRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+    "normalizedBrowserInputSnapshotRetained": false,
+    "note": "The submitted fixture and live job revision are retained separately. Browser input normalization was not exported as a complete snapshot; do not claim the fixture file hashes to the observed browser revision."
+  }
+}

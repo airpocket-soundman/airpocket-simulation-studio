@@ -14,6 +14,8 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:5174';
 const out = path.resolve(ROOT, process.env.QA_OUT || '.qa');
 const casesPath = path.resolve(ROOT, process.env.QA_CASES || 'docs/evidence/review50-real-archives/cases.json');
+const perfCases = (process.env.QA_PERF_CASES || 'structural-tiny').split(',');
+if (!perfCases.length || new Set(perfCases).size !== perfCases.length || perfCases.some(id => !['structural-tiny','structural-medium'].includes(id))) throw Error('QA_PERF_CASES supports distinct bounded structural-tiny/structural-medium cases only');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 mkdirSync(out, {recursive: true});
 
@@ -72,7 +74,7 @@ try {
   const report = await runBrowserPerf({
     client,
     sessionId: session.sessionId,
-    cases: ['structural-tiny'],
+    cases: perfCases,
     repeats: 1,
     pollMs: 50,
     timeoutMs: 300000,
@@ -115,7 +117,8 @@ try {
       study: {kind: project.study.kind, gravityEnabled: project.study.gravityEnabled},
       conditions: project.conditions.map((condition) => ({type: condition.type, value: condition.value, direction: condition.direction})),
       meshCount: project.meshes.length,
-      requestedMeshSize: 8,
+      requestedMeshSize: report.cases.length === 1 ? report.cases[0].meshSize : null,
+      requestedMeshSizes: report.cases.map(entry => ({caseId: entry.id, sizeMm: entry.meshSize})),
     },
     probe: {
       installedAt,
@@ -133,7 +136,7 @@ try {
   writeFileSync(path.join(out, 'qa-summary.json'), JSON.stringify(summary, null, 2) + '\n');
   console.log(JSON.stringify({
     inputChecks,
-    status: report.cases.map((entry) => ({id: entry.id, status: entry.status, coldMs: entry.cold?.totalMs, warmMedianMs: entry.warm?.summary?.totalMs?.median, recovered: entry.cancel?.recoveredAfterCancel})),
+    status: report.cases.map((entry) => ({id: entry.id, status: entry.status, coldMs: entry.cold?.totalMs, warmMedianMs: entry.warm?.summary?.totalMs?.median, recovered: entry.cancel?.recoveredAfterCancel, meshObservation: entry.cold?.meshObservation})),
     probeSamples: probe.samples.length,
     loaded: loaded.loaded,
   }, null, 2));

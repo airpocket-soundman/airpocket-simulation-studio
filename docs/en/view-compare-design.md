@@ -2,6 +2,14 @@
 
 [日本語](../view-compare-design.md) / Related: [Result viewer and export requirements](result-viewer-direction.md)
 
+## 2026-10-22: Per-panel time records in animation manifests
+
+Completed time-comparison GIF manifests add `time.frameTimings.entries` beside the existing endpoint summary. Each entry records `renderIndex`, `phase`, `requestedTimeSeconds`, and each panel's `caseIndex`, saved `frameIndex`, actual stored `timeSeconds`, and signed `offsetSeconds` (stored minus requested, in seconds). `caseIndex` indexes `comparison.cases` in the same manifest, binding the panel to caseId, saved-case revision and resultRevision SHA. No physical state is interpolated or newly solved.
+
+GIF records the encoder's 24 render calls in output order, including intermediate frames. WebM preserves the existing endpoint and selection-policy summary and does not provide an individual rendered/encoded frame-time ledger. MediaRecorder may duplicate or drop encoded frames; smooth fps and frame counts remain unguaranteed.
+
+The ledger is bounded to 2048 renders and 60 KiB; the complete manifest is bounded to 64 KiB. Overflow fails the export, releases the host lock and exposes no partial artifact, rather than truncating evidence. This ledger applies only to fixed 24-frame GIFs and imposes no new render-count or ledger-byte limit on existing WebM exports. Existing PNG/etc. 4 KiB limits, request/schemaVersion and summary metadata are preserved. Regression tests cover different nonuniform time axes through the actual adapter, shared queue and manifest; GIF uses the real encoder. Fresh real-Chrome/WebM-decode verification is still pending, and this does not complete the VIEWCOMPARE parent task.
+
 The first two increments below are historical records from 2026-10-16. See later additions and [Automation API](automation.md) for current behavior and limitations.
 
 Date: 2026-10-16. Only the pure computation module `src/view-compare-layout.js` (domain layer; no DOM, three.js or case store) and its unit tests are implemented. **No GUI, no PNG/video export and no MCP/API operations exist yet**; the VIEWCOMPARE board task remains open.

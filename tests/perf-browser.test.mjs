@@ -8,16 +8,19 @@ import {CASES, MEMORY_SERIES, MEMORY_SETTLE_MS, PROBE_SNIPPET, PerfTimeoutError,
 
 const TOKEN = 'SECRET-PAIRING-TOKEN-0123456789';
 
-test('actual probe snippet serializes slow UASM calls and records both times; stop discards pending samples',async()=>{
+test('heap ticks continue during slow UASM; sources retain independent times and stop discards pending UASM',async()=>{
  let time=1000,tick,resolve,requests=0,clears=0;
  const window={crossOriginIsolated:true},performance={memory:{usedJSHeapSize:42},measureUserAgentSpecificMemory:()=>{requests++;return new Promise(r=>{resolve=r;});}};
  const context={window,performance,navigator:{userAgent:'ProbeTest'},Date:{now:()=>time},setInterval:fn=>{tick=fn;return 7;},clearInterval:id=>{assert.equal(id,7);clears++;}};
  runInNewContext(PROBE_SNIPPET,context);const p=window.__perfProbe;
  assert.equal(requests,1);time=2000;await tick();assert.equal(requests,1,'no overlapping UASM calls');
+ assert.equal(p.samples.length,2,'heap must be sampled on every tick before UASM resolves');
  time=3500;resolve({bytes:99});await new Promise(r=>setImmediate(r));
- assert.deepEqual(JSON.parse(p.report()).samples,[{t:1000,tRequested:1000,tResolved:3500,usedJSHeapSize:42,uasmBytes:99}]);
+ const samples=JSON.parse(p.report()).samples;
+ assert.deepEqual(samples.filter(s=>s.source==='jsHeap'),[1000,2000].map(t=>({source:'jsHeap',t,tRequested:t,tResolved:t,usedJSHeapSize:42,uasmBytes:null})));
+ assert.deepEqual(samples.filter(s=>s.source==='uasm'),[{source:'uasm',t:1000,tRequested:1000,tResolved:3500,usedJSHeapSize:null,uasmBytes:99}]);
  time=4000;const pending=tick();assert.equal(requests,2);p.stop();time=5000;resolve({bytes:100});await pending;await tick();
- assert.equal(p.samples.length,1,'stop must not publish a measurement resolved after cleanup');assert.equal(requests,2);assert.equal(clears,1);
+ assert.equal(p.samples.length,4,'stop discards pending UASM but preserves the prior synchronous heap tick');assert.equal(requests,2);assert.equal(clears,1);
 });
 
 test('probe reinstall stops the owned previous probe; rejected UASM retains null and timing',async()=>{
@@ -25,7 +28,7 @@ test('probe reinstall stops the owned previous probe; rejected UASM retains null
  runInNewContext(PROBE_SNIPPET,{window,navigator:{userAgent:'ProbeTest'},Date:{now:()=>1000},performance:{measureUserAgentSpecificMemory:async()=>{throw Error('not available');}},setInterval:fn=>{tick=fn;return 1;},clearInterval:()=>{}});
  await new Promise(r=>setImmediate(r));assert.equal(stops,1);
  const sample=JSON.parse(window.__perfProbe.report()).samples[0];assert.equal(sample.uasmBytes,null);assert.equal(sample.tRequested,1000);assert.equal(sample.tResolved,1000);
- window.__perfProbe.stop();await tick();assert.equal(window.__perfProbe.samples.length,1);
+ window.__perfProbe.stop();await tick();assert.equal(window.__perfProbe.samples.length,2);
 });
 
 test('UASM intervals crossing phase boundaries are excluded without discarding synchronous heap samples',()=>{
@@ -52,7 +55,7 @@ function fake({duration = 400, never = false, settleDelay = 30} = {}) {
   const methods = {
     inspect: () => ({revision: 'sha256:' + 'a'.repeat(64), project: {loaded: true, name: 'block'}}),
     startJob: a => { const j = {id: 'job-' + ++n, t0: clock.t, cancelAt: null, args: a}; jobs.set(j.id, j); return {jobId: j.id, state: 'running'}; },
-    jobStatus: a => ({jobId: a.jobId, ...view(jobs.get(a.jobId))}),
+    jobStatus: a => {const j=jobs.get(a.jobId);return {jobId:a.jobId,inputRevision:j.args.inputRevision,...view(j),result:{mesh:{nodeCount:j.args.options.size===8?94:300,elementCount:j.args.options.size===8?218:1000}}};},
     jobEvents: a => {
       const j = jobs.get(a.jobId), age = clock.t - j.t0, all = [];
       if (age >= 10) all.push({sequence: 1, elapsedMs: 10, type: 'progress', stage: 'progress', message: 'Meshing'});
@@ -98,6 +101,13 @@ test('fake run produces schema v1 with cold, warm, cancel and null memory with a
   for (const c of report.cases) {
     assert.equal(c.status, 'ok');
     assert.equal(c.meshSize, CASES[c.id].size);
+    for(const run of [c.cold,...c.warm.runs,c.recovered]){
+      assert.equal(run.meshObservation.nodeCount,c.meshSize===8?94:300);
+      assert.equal(run.meshObservation.elementCount,c.meshSize===8?218:1000);
+      assert.equal(run.meshObservation.inputRevision,report.revision);
+      assert.match(run.meshObservation.jobId,/^job-/);
+      assert.equal(run.meshObservation.meshRevision,null,'summary must not invent a geometry hash');
+    }
     assert.ok(c.cold.totalMs >= 400 && c.cold.firstEventMs >= 10 && c.cold.meshMs >= 0);
     assert.equal(c.warm.runs.length, 2);
     assert.equal(c.warm.summary.totalMs.n, 2);
@@ -320,4 +330,31 @@ test('stdio client spawns studio-mcp, hands pairing only to announce, and closes
     assert.deepEqual(await client.call('studio_browser_sessions', {}), {sessions: []});
     await assert.rejects(createStdioClient({origin: 'https://example.com'}), /Refusing/);
   } finally { await client.close(); }
+});
+
+
+test('schema2 UASM timing fails closed while valid heap and legacy samples stay independent',()=>{
+ const report=()=>({browser:{},cases:[{status:'ok',window:{startEpochMs:100,endEpochMs:200,cancelSettledEpochMs:150}}]});
+ const malformed=[{},{tRequested:null,tResolved:null},{tRequested:130},{tResolved:140},{tRequested:140,tResolved:120},{tRequested:130,tResolved:Infinity},{tRequested:130,tResolved:140},{tRequested:-1,tResolved:140}];
+ for(const timing of malformed){
+  const r=report();mergeMemory(r,{schemaVersion:2,intervalMs:1000,samples:[{t:50,uasmBytes:999,usedJSHeapSize:10,...timing},{t:120,uasmBytes:999,usedJSHeapSize:10,...timing},{t:3200,uasmBytes:999,usedJSHeapSize:10,...timing}]});
+  assert.equal(r.cases[0].memory.series.uasm.available,false);
+  assert.equal(r.cases[0].memory.series.uasm.baselineBytes,null);
+  assert.equal(r.cases[0].memory.series.uasm.afterCancelBytes,null);
+  assert.equal(r.cases[0].memory.series.jsHeap.peakBytesSampled,10);
+  assert.equal(r.memoryProbeAudit.invalidUasmTimingSamples,3);
+  assert.equal(r.memoryProbeAudit.legacyRequestTimeSamples,0);
+ }
+ const valid=report();mergeMemory(valid,{schemaVersion:2,samples:[{t:120,tRequested:120,tResolved:140,uasmBytes:20}]});assert.equal(valid.cases[0].memory.series.uasm.peakBytesSampled,20);assert.equal(valid.memoryProbeAudit.invalidUasmTimingSamples,0);
+ const legacy=report();mergeMemory(legacy,{schemaVersion:1,samples:[{t:120,uasmBytes:30}]});assert.equal(legacy.cases[0].memory.series.uasm.peakBytesSampled,30);assert.equal(legacy.memoryProbeAudit.legacyRequestTimeSamples,1);
+ for(const schemaVersion of [3,null,'2'])assert.throws(()=>mergeMemory(report(),{schemaVersion,samples:[]}),/Unsupported memory probe schema/);
+});
+
+test('missing or invalid final mesh counts remain unavailable and stale job input is rejected',async()=>{
+ for(const stale of [false,true]){
+  const f=fake(),original=f.client.call;f.client.call=async(tool,args)=>{const out=await original(tool,args);if(args.method==='jobStatus'){out.result.mesh={nodeCount:0,elementCount:1.5};if(stale)out.inputRevision='sha256:'+ 'b'.repeat(64);}return out;};
+  const r=await runBrowserPerf({client:f.client,sessionId:'s1',cases:['structural-tiny'],repeats:1,timeoutMs:5000,...f.opts});
+  if(stale){assert.equal(r.cases[0].status,'failed');assert.match(r.cases[0].error,/input revision mismatch/);}
+  else{const m=r.cases[0].cold.meshObservation;assert.equal(m.nodeCount,null);assert.equal(m.elementCount,null);assert.match(m.unavailableReason,/absent or invalid/);}
+ }
 });
