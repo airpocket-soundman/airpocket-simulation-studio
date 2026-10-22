@@ -26,7 +26,7 @@ export function createIncrementCurveUi({anchor,document=globalThis.document,lang
  if(!anchor||!document?.createElement)throw TypeError('Increment curve UI requires a host');
  translate(messages);const tr=text=>language()==='en'?(messages[text]??text):text;
  const url=env.URL??globalThis.URL,BlobType=env.Blob??globalThis.Blob;
- const labels=[];const el=(tag,id,text)=>{const node=document.createElement(tag);if(id)node.id=id;if(text){labels.push([node,text]);node.textContent=tr(text);}return node;};
+ const labels=[];const el=(tag,id,text)=>{const node=document.createElement(tag);if(id)node.id=id;if(tag==='a'){node.style.color='#67e8d9';node.style.textDecoration='underline';node.style.textUnderlineOffset='3px';}if(text){labels.push([node,text]);node.textContent=tr(text);}return node;};
  const host=el('details','increment-curve-panel'),summary=el('summary',null,'段階データの静止グラフ');
  host.style.minWidth='0';host.setAttribute('data-no-translate','true');
  const note=el('p',null,'独立した線形弾性結果の標点伸び（mm）と反力由来の引張力（N）です。塑性の載荷・除荷履歴ではありません。未収束・失敗段階の線はつなぎません。');

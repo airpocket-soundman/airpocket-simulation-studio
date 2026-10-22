@@ -29,6 +29,8 @@ test('real service DOM integration derives SVG and three matching artifacts, pre
 test('bundled solver sample is available through a native download link and validates through file selection',async()=>{
  const h=setup(),text=readFileSync(new URL('../public/examples/increment-curve-reference.json',import.meta.url),'utf8');
  assert.equal(h.get('sample').href,'./examples/increment-curve-reference.json');assert.equal(h.get('sample').download,'increment-curve-reference.json');
+ const links=[];const walk=node=>{if(node.tag==='a')links.push(node);for(const child of node.children??[])walk(child);};walk(h.ui.host);
+ assert.equal(links.length,5);assert.ok(links.every(link=>link.style.color==='#67e8d9'&&link.style.textDecoration==='underline'));
  h.get('file').files=[{size:new TextEncoder().encode(text).length,text:async()=>text}];await h.get('file').onchange();assert.equal(h.get('preview').hidden,true);
  const curve=await h.get('run').onclick();assert.ok(curve,h.get('status').textContent);assert.equal(curve.steps.length,4);assert.equal(curve.steps[2].status,'failed');
 });
