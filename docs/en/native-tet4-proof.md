@@ -1,5 +1,7 @@
 # Prepared Tet4 host/WASM proof
 
+2026-10-22: The output validator now checks rotational equilibrium as well as net force. Lever arms are relative to the first node, converted from mm to m, avoiding dependence on global translation. Each axis allows 1e-8 N m plus 1e-7 times the sum of absolute force/reaction moment terms. Spurious reaction couples with unchanged net force are refused. This necessary check alone does not establish correctness of the displacement field or general physical validity.
+
 [日本語](../native-tet4-proof.md)
 
 2026-10-21. P6 gains a bounded prepared-record entry beside the unchanged v1 fixed-bar CLI. This is static isotropic Tet4 support, not a production backend or general saved-project runner.
