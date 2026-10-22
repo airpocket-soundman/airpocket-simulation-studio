@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "CFD1",
+  "status": "fixed-before-execution",
+  "sourceSha": "e19f43693b30ca8ffb31a14f710931599e514b1c",
+  "harnessSha256": "daa803f3d6651655a7255cdf45960d568e967950775df1dad8348e6d97273b5c",
+  "helpersSha256": {
+    "scripts/qa-cfd-reference.py": "17577a19cd400165096e5ded90d08df6cbee8b8badc2d55c881e1414d8629275",
+    "scripts/qa-cfd-reference-mass.mjs": "90e0ef8523abe5aea3ed15796c1b41817ef252613fca582c95a55da9b868905a"
+  },
+  "previousPlanSha256": "be83ccd1392e86660a350c6f0995e3e3771af1b6c67aae40dacf9f0e2d337b25",
+  "previousScenario": "mesh",
+  "unchangedFiles": {
+    "mesh.su2": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6",
+    "input.json": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5",
+    "case.cfg": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+  },
+  "geometry": {
+    "angular": 128,
+    "radialLayers": 56,
+    "points": 7296,
+    "quadrilaterals": 7168,
+    "outerRadiusM": 50.5,
+    "wallRadiusM": 0.5,
+    "firstCellHeightM": 0.02454369260617026,
+    "growth": 1.1
+  },
+  "input": {
+    "schemaVersion": 1,
+    "kind": "steady-incompressible-laminar",
+    "meshUnits": "m",
+    "densityKgM3": 1,
+    "dynamicViscosityPaS": 0.1,
+    "velocityMps": [
+      4,
+      0,
+      0
+    ],
+    "wallMarker": "cylinder",
+    "farfieldMarker": "farfield",
+    "cflNumber": 10,
+    "multigridLevels": 0,
+    "maxIterations": 1200,
+    "residualLog10Target": -10
+  },
+  "changedCondition": {
+    "timeoutSeconds": {
+      "before": 90,
+      "after": 240
+    }
+  },
+  "limits": {
+    "timeoutSeconds": 240,
+    "memoryRssLimitBytes": 1073741824,
+    "threads": 1,
+    "solverLaunchesMaximum": 1,
+    "maxIterations": 1200,
+    "restart": false
+  },
+  "acceptance": {
+    "dragRelativeErrorMaximum": 0.05,
+    "allReportedResidualsLog10Maximum": -6,
+    "last100DragRelativeRangeMaximum": 0.005,
+    "nodalFarfieldMassImbalanceRelativeMaximum": 0.001,
+    "meshAndDomainRelativeDragDifferenceMaximum": 0.03,
+    "iterationBudgetRelativeDragDifferenceMaximum": 0.01,
+    "requireNoWallWarning": true,
+    "qualification": "Engineering QA tolerances selected before execution, not uncertainty bounds from the reference. Coarse grids may fail; preserve failures.",
+    "massQualification": "Trapezoidal integral of nodal farfield velocity, not SU2 discrete face-flux conservation."
+  },
+  "reference": {
+    "url": "https://economon.github.io/docs/AIAA-2018-3111.pdf",
+    "doi": "10.2514/6.2018-3111",
+    "section": "IV.G, printed pp.19-20",
+    "kind": "published SU2 numerical reference, not an experiment or analytic solution",
+    "reynoldsNumber": 40,
+    "machNumber": null,
+    "machReason": "Incompressible constant-density solver; no acoustic Mach input",
+    "diameterM": 1,
+    "densityKgM3": 1,
+    "speedMps": 4,
+    "dynamicViscosityPaS": 0.1,
+    "dragCoefficient": 1.507,
+    "wall": "adiabatic no-slip",
+    "farfield": "circular freestream boundary 50 diameters from wall; QA outer radius 50.5m",
+    "grid": "O-grid quadrilaterals, first radial step pi/N, growth 1.1"
+  },
+  "previousFailures": [
+    "Coarse baseline Cd error 5.2714% exceeds 5% tolerance",
+    "Previous fine mesh stopped at 90s",
+    "Mesh sensitivity was 4.1226%, beyond 3% tolerance"
+  ],
+  "parentTaskReleased": false
+}

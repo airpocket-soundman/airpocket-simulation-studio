@@ -9,6 +9,19 @@ test('native flow requires explicit units, physics and distinct mesh boundaries'
 test('pressure stopping criterion never hides unconverged velocity or wall warnings',()=>{
  const result=assessSu2Run({'rms[P]':-6,'rms[U]':-3,'rms[nu]':-4},-5,'Warning: Computation of wall coefficients (y+) did not converge in 116 points.');assert.equal(result.pressureCriterionMet,true);assert.equal(result.numericallyConverged,false);assert.equal(result.allReportedResidualsMet,false);assert.equal(result.diagnostics[0].lastAffectedPoints,116);assert.ok(result.diagnostics[0].suggestions.length);
 });
+
+test('missing velocity or turbulence residuals never imply numerical convergence',()=>{
+ const pressureOnly=assessSu2Run({'rms[P]':-10},-6);
+ assert.equal(pressureOnly.pressureCriterionMet,true);assert.equal(pressureOnly.allReportedResidualsMet,true);
+ assert.equal(pressureOnly.numericallyConverged,false);assert.deepEqual(pressureOnly.missingResiduals,['rms[U]','rms[V]']);
+ const planar={'rms[P]':-10,'rms[U]':-9,'rms[V]':-9};
+ assert.equal(assessSu2Run(planar,-6,'',{dimension:2,kind:'steady-incompressible-laminar'}).numericallyConverged,true);
+ const spatial=assessSu2Run(planar,-6,'',{dimension:3,kind:'steady-incompressible-laminar'});
+ assert.equal(spatial.numericallyConverged,false);assert.deepEqual(spatial.missingResiduals,['rms[W]']);
+ const rans=assessSu2Run({...planar,'rms[W]':-9},-6,'',{dimension:3,kind:'steady-incompressible-rans-sa'});
+ assert.equal(rans.numericallyConverged,false);assert.deepEqual(rans.missingResiduals,['rms[nu]']);
+ assert.equal(assessSu2Run({...planar,'rms[W]':-9,'rms[nu]':-8},-6,'',{dimension:3,kind:'steady-incompressible-rans-sa'}).numericallyConverged,true);
+});
 test('RANS requires explicit SA wall treatment and freestream setting',()=>{
  const rans={...input,kind:'steady-incompressible-rans-sa',turbulenceModel:'SA',wallTreatment:'standard-wall-function',turbulentViscosityRatio:10};assert.match(buildSu2Config(rans),/SOLVER= INC_RANS/);assert.match(buildSu2Config(rans),/INC_NONDIM= DIMENSIONAL/);assert.throws(()=>buildSu2Config({...rans,wallTreatment:undefined}),e=>e.code==='SU2_TURBULENCE_REQUIRED');
 });

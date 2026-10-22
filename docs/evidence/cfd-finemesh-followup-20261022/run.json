@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "CFD1",
+  "planSha256": "f9bc05986c2c0fee595a2b00c8adab5730a0b952c9d478aad1487c5a4117281c",
+  "command": [
+    "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+    "case.cfg",
+    "-t",
+    "1"
+  ],
+  "executableVersion": "8.5.0",
+  "executableSha256": "3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248",
+  "elapsedSeconds": 89.07799999997951,
+  "peakRssBytes": 36368384,
+  "exitCode": 0,
+  "executionSettled": true,
+  "solverLaunches": 1,
+  "stopReason": "iteration-budget",
+  "finalHistory": {
+    "Time_Iter": 0.0,
+    "Outer_Iter": 0.0,
+    "Inner_Iter": 1199.0,
+    "rms[P]": -7.983410684,
+    "rms[U]": -7.120148337,
+    "rms[V]": -7.23097823,
+    "RefForce": 8.0,
+    "CD": 1.521036488,
+    "CL": -5.527533726e-16,
+    "CSF": 0.0,
+    "CMx": 0.0,
+    "CMy": 0.0,
+    "CMz": 1.476558575e-17,
+    "CFx": 1.521036488,
+    "CFy": -5.527533726e-16,
+    "CFz": 0.0,
+    "CEff": -3.634057282e-16
+  },
+  "residuals": {
+    "rms[P]": -7.983410684,
+    "rms[U]": -7.120148337,
+    "rms[V]": -7.23097823
+  },
+  "dragCoefficient": 1.521036488,
+  "dragRelativeError": 0.00931419243530196,
+  "last100DragRelativeRange": 3.884850920138237e-06,
+  "mass": {
+    "method": "nodal-trapezoid-outer-boundary",
+    "discreteSolverFlux": false,
+    "densityKgM3": 1,
+    "unit": "kg/(s*m span)",
+    "vertices": 128,
+    "outward": 403.10860838447763,
+    "inward": 402.9272993836703,
+    "net": 0.1813090008073459,
+    "relativeImbalance": 0.0004497770502445254
+  },
+  "solverStoppingResidualTarget": -10,
+  "qaAcceptanceResidualTarget": -6,
+  "adapterAssessmentAtSolverTarget": {
+    "pressureCriterionMet": false,
+    "allReportedResidualsMet": false,
+    "requiredResiduals": [
+      "rms[P]",
+      "rms[U]",
+      "rms[V]"
+    ],
+    "missingResiduals": [],
+    "requiredResidualsPresent": true,
+    "numericallyConverged": false,
+    "residualChecks": [
+      {
+        "name": "rms[P]",
+        "value": -7.983410684,
+        "target": -10,
+        "met": false
+      },
+      {
+        "name": "rms[U]",
+        "value": -7.120148337,
+        "target": -10,
+        "met": false
+      },
+      {
+        "name": "rms[V]",
+        "value": -7.23097823,
+        "target": -10,
+        "met": false
+      }
+    ],
+    "diagnostics": [],
+    "physicalValidationComplete": false
+  },
+  "checks": {
+    "exitZero": true,
+    "withinLimits": true,
+    "allRequiredResidualsPresent": true,
+    "allReportedResidualsAtQaTarget": true,
+    "dragReference": true,
+    "dragSettled": true,
+    "massBalance": true,
+    "noWallWarning": true
+  },
+  "fineMeshScenarioAccepted": true,
+  "meshRelativeDragDifference": 0.04122695900983009,
+  "meshDependencyAccepted": false,
+  "referenceStudyAccepted": false,
+  "parentTaskReleased": false,
+  "physicalAccuracyVerified": false,
+  "artifacts": {
+    "case.cfg": {
+      "bytes": 955,
+      "sha256": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+    },
+    "flow.vtu": {
+      "bytes": 677839,
+      "sha256": "ce4e42fea7f2c85b498ff4d01b37eb45f89a87b36fd61765f747fe02cd6d3f88"
+    },
+    "history.csv": {
+      "bytes": 366305,
+      "sha256": "73aaedd70e783ea0971d9b3675fc2f6bb244f8135965151dfd97e678c8ef4b8c"
+    },
+    "input.json": {
+      "bytes": 358,
+      "sha256": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5"
+    },
+    "mesh.su2": {
+      "bytes": 479539,
+      "sha256": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6"
+    },
+    "solver.log": {
+      "bytes": 86015,
+      "sha256": "432968584be164d6cc9e19ec11160b10a9da7c30f4f8c773fd2eb24944e75277"
+    },
+    "surface_flow.vtu": {
+      "bytes": 12851,
+      "sha256": "4c135df3618644d666de12709b2d3b3de981afa1a64b9b04c9a52b5bb3bd534c"
+    }
+  },
+  "limitations": [
+    "One fine-mesh run only. A passing fine-mesh scenario does not cure the coarse baseline or mesh-dependence failure.",
+    "All SU2 configured convergence fields refers only to RMS_PRESSURE in this fixed config. QA tests pressure/U/V separately at the prior -6 target.",
+    "Nodal farfield mass quadrature is not discrete solver flux.",
+    "Cow wall116 and velocity/turbulence residual deficiencies remain."
+  ],
+  "validation": {
+    "kind": "post-run-source-and-regression-audit",
+    "productAssessmentSource": "scripts/su2-native.mjs",
+    "productAssessmentCanonicalLfSha256": "91040984ec044582e92f86dc3c4ecf352c9ed4288dc8ff1ecb8a8f700e4c9175",
+    "executedHelpers": {
+      "scripts/qa-cfd-reference.py": {
+        "executionBytesSha256": "17577a19cd400165096e5ded90d08df6cbee8b8badc2d55c881e1414d8629275",
+        "canonicalLfSha256": "17577a19cd400165096e5ded90d08df6cbee8b8badc2d55c881e1414d8629275"
+      },
+      "scripts/qa-cfd-reference-mass.mjs": {
+        "executionBytesSha256": "90e0ef8523abe5aea3ed15796c1b41817ef252613fca582c95a55da9b868905a",
+        "canonicalLfSha256": "90e0ef8523abe5aea3ed15796c1b41817ef252613fca582c95a55da9b868905a"
+      }
+    },
+    "focusedTests": {
+      "passed": 11,
+      "failed": 0
+    },
+    "pythonRegressionTests": {
+      "passed": 2,
+      "failed": 0
+    },
+    "replayPreparationOnly": true,
+    "additionalSolverRuns": 0
+  }
+}
