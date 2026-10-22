@@ -118,7 +118,7 @@
 | `studio_inspect_print` | read-only | `printInspect` | 関連（別処理）: `#print-report` `#print-view` — 読込済みの内容を表示する。保存した解析済みJSONは開けない | `references/geometry-imports.md` |
 | `studio_preview_cad_update` | read-only | `previewCadUpdate` | 同一経路: `#cad-update-file` `#cad-update-report` — 同じplanCadUpdateで照合する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
 | `studio_apply_cad_update` | write/execute | `applyCadUpdate` | 同一経路: `#cad-update-apply` — 同じplanCadUpdateで適用する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
-| `studio_increment_curve` | write/execute | なし — 保存ファイル専用、browser methodなし | 同一経路: 段階データの静止グラフ — GUIとcreateIncrementCurveArtifactsを共有。MCPは明示的な保存bundleを読み、任意指定で別名新artifact-bundle JSONを出版する。ブラウザ状態は読取・変更しない | `SKILL.md` |
+| `studio_increment_curve` | write/execute | なし — 保存ファイル専用、browser methodなし | 同一経路: 段階データの静止グラフ — GUIとcreateIncrementCurveArtifacts / createIncrementCurveComparisonを共有。MCPは明示的な保存bundleを読み、任意指定で別名新artifact-bundle JSONを出版する。ブラウザ状態は読取・変更しない | `SKILL.md` |
 | `studio_assess_result` | write/execute | `evaluateAssessment` | 関連（別処理）: `#fatigue-evaluate` `#fracture-evaluate` — 同じevaluateFatigue/evaluateFractureを使う。保存解析ファイルからの評価ではない | `references/physics-provenance.md` |
 | `studio_assessment` | read-only | `getAssessment` | 関連（別処理）: `#fatigue-summary` `#fracture-summary` — 表示中の結果の評価を描画する。保存ファイルの読み出しではない | `references/physics-provenance.md` |
 | `studio_import_project` | write/execute | none | 同一経路: `#model` `#unit` — 同じcreateProjectFromStep/createProjectFromStlで読む。GUIは開いて表示する。JSON保存は別ボタン`#save` | `references/saved-inputs.md` |

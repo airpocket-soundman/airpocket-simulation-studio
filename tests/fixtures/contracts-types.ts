@@ -117,3 +117,19 @@ const badCurveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json'
 // @ts-expect-error the bounded curve tool does not expose displacement control
 const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'displacement';
 void [curveRequest, badCurveRequest, badCurveControl];
+
+import type {IncrementCurveMcpResult} from '../../src/contracts/increment-curve-mcp';
+function curveResponseKind(value: IncrementCurveMcpResult) {
+ if(value.kind === 'increment-curve-comparison') {
+  const offset: number = value.requestedOffset;
+  const curves: number = value.pages.length;
+  // @ts-expect-error comparison has per-curve pages rather than a single page
+  value.page;
+  return offset + curves;
+ }
+ const total: number = value.page.total;
+ // @ts-expect-error the single-curve response has no comparison pages
+ value.pages;
+ return total;
+}
+void curveResponseKind;
