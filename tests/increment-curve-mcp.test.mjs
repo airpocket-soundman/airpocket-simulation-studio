@@ -69,3 +69,15 @@ test('real stdio discovery and curve calls use bounded formal schemas and the sa
   const saved=JSON.parse(await readFile(outputPath));assert.equal(saved.curve.analysis.plasticHistory,false);assert.equal(saved.kind,'increment-curve-artifacts');assert.match(saved.csv,/"'=SUM/);assert.ok(!saved.svg.includes('<script>'));assert.ok(saved.svg.includes('&lt;script&gt;'));
  }finally{await rm(dir,{recursive:true,force:true});}
 });
+
+
+test('published files remain successful and response stays bounded after an injected large cleanup warning',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-curve-warning-'));
+ try{
+  const path=join(dir,'source.json'),outputPath=join(dir,'artifacts.json');await writeFile(path,await readFile(fixture));
+  const {publishJson}=await import('../scripts/json-artifacts.mjs');
+  const value=await readIncrementCurve({path,outputPath},{publish:async(...args)=>({...await publishJson(...args),cleanupWarning:{code:'ARTIFACT_TEMP_CLEANUP_FAILED',path:'\u0001'.repeat(100000),message:'\u0002'.repeat(100000)}})});
+  assert.equal(value.cleanupWarning.detailsTruncated,true);assert.equal(value.cleanupWarning.pathOmitted,true);assert.equal(value.cleanupWarning.path,undefined);assert.equal(value.cleanupWarning.pathPreview.length,128);assert.equal(value.cleanupWarning.message.length,128);
+  assert.ok(Buffer.byteLength(JSON.stringify(value))<=65536);const saved=await readFile(outputPath);assert.equal(value.outputSha256,hash(saved));assert.equal(JSON.parse(saved).kind,'increment-curve-artifacts');
+ }finally{await rm(dir,{recursive:true,force:true});}
+});

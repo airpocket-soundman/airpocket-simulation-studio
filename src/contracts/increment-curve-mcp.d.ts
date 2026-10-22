@@ -36,5 +36,5 @@ export interface IncrementCurveMcpResult {
  outputPath?: string;
  outputBytes?: number;
  outputSha256?: string;
- cleanupWarning?: {code: 'ARTIFACT_TEMP_CLEANUP_FAILED'; path: string; message: string};
+ cleanupWarning?: {code: 'ARTIFACT_TEMP_CLEANUP_FAILED'; path?: string; pathPreview?: string; pathOmitted?: true; message: string; detailsTruncated: boolean};
 }

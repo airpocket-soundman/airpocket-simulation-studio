@@ -10,7 +10,8 @@ const absolute=value=>typeof value==='string'&&value.length>0&&value.length<=409
 
 // A bounded saved-file adapter. It never executes analysis, changes a browser,
 // or accepts filesystem paths from the physical bundle itself.
-export async function readIncrementCurve(args={}){
+// Optional publisher is a private host test seam, never an MCP argument.
+export async function readIncrementCurve(args={}, {publish=publishJson}={}){
  if(!args||typeof args!=='object'||Array.isArray(args)||Reflect.ownKeys(args).some(key=>!['path','outputPath','offset','limit'].includes(key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(args,key),'value')))fail('Invalid increment curve arguments');
  const {offset=0,limit=20}=args;
  if(!absolute(args.path)||args.outputPath!==undefined&&!absolute(args.outputPath)||!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>INCREMENT_CURVE_MCP_LIMITS.rows)fail('Use absolute increment curve paths and bounded offset/limit');
@@ -42,7 +43,15 @@ export async function readIncrementCurve(args={}){
  if(outputPath){
   const publication={schemaVersion:1,kind:'increment-curve-artifacts',source:result.source,...artifacts};
   if(Buffer.byteLength(JSON.stringify(publication)+'\n','utf8')>INCREMENT_CURVE_MCP_LIMITS.bundleBytes)fail('Increment curve output bundle exceeds its byte bound');
-  Object.assign(result,await publishJson(outputPath,publication,{includeIntegrity:true}));
+  const saved=await publish(outputPath,publication,{includeIntegrity:true});
+  result.outputBytes=saved.outputBytes;result.outputSha256=saved.outputSha256;
+  if(saved.cleanupWarning){
+   const path=String(saved.cleanupWarning.path??''),message=String(saved.cleanupWarning.message??'');
+   result.cleanupWarning={code:'ARTIFACT_TEMP_CLEANUP_FAILED',message:message.slice(0,128),...(path.length<=128?{path}:{pathPreview:path.slice(0,128),pathOmitted:true}),detailsTruncated:message.length>128||path.length>128};
+   // Publication already succeeded: omit warning detail rather than turning a
+   // complete publication into a failure or returning an oversized response.
+   if(Buffer.byteLength(JSON.stringify(result),'utf8')>INCREMENT_CURVE_MCP_LIMITS.responseBytes)result.cleanupWarning={code:'ARTIFACT_TEMP_CLEANUP_FAILED',message:'Cleanup warning details omitted to preserve the response bound.',detailsTruncated:true};
+  }
  }
  return result;
 }
