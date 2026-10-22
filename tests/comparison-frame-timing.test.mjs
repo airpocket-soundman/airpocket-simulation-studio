@@ -16,14 +16,14 @@ function fixture(format,{overflow=false,cancel=false}={}){
   if(overflow){for(let i=0;i<=COMPARISON_TIMING_LIMITS.frames;i++)args.renderFrame(camera,{phase:0});}
   if(cancel)throw Error('Comparison GIF cancelled');
   return renderComparisonGif(args,createGifCanvasEnv());
- },recordVideo:async args=>{for(const phase of [.125,.5,.825,1])args.renderFrame(camera,{phase});return new Blob([Uint8Array.of(26,69,223,163)],{type:'video/webm'});}});
+ },recordVideo:async args=>{for(let i=0;i<3000;i++)args.renderFrame(camera,{phase:i/2999});return new Blob([Uint8Array.of(26,69,223,163)],{type:'video/webm'});}});
  const queue=createVisualExportJobs({render:()=>{},prepareCompare:(...args)=>adapter.prepare(...args),renderCompare:args=>adapter.render(args)});
  const request={requestId:'trace-'+format,references:outputs.map((_,i)=>({caseId:String(i),expectedRevision:sha(i+1)})),field:'temperature',format,animation:'time',seconds:2,startTimeSeconds:0,endTimeSeconds:10};
  return {outputs,renders,queue,request,get releases(){return releases;}};
 }
 async function complete(h){const job=await h.queue.startCompare(h.request);await h.queue.waitForSettled(job);return h.queue.status(job);}
 
-for(const format of ['gif','webm'])test(format+' actual adapter/queue manifest binds each intermediate request to both nonuniform stored time axes',async()=>{
+for(const format of ['gif'])test(format+' actual adapter/queue manifest binds each intermediate request to both nonuniform stored time axes',async()=>{
  const h=fixture(format),before=structuredClone(h.outputs),done=await complete(h);assert.equal(done.state,'completed',done.error);
  const manifest=done.artifact.manifest,trace=manifest.time.frameTimings;
  assert.equal(trace.interpolated,false);assert.equal(trace.timeSelection,'nearest-stored-frames-only');
@@ -43,6 +43,15 @@ for(const format of ['gif','webm'])test(format+' actual adapter/queue manifest b
  const exposed=h.queue.artifact({jobId:done.jobId,length:1});exposed.manifest.time.frameTimings.entries[0].panels[0].timeSeconds=999;
  assert.equal(h.queue.status(done).artifact.manifest.time.frameTimings.entries[0].panels[0].timeSeconds,0,'returned manifests cannot mutate retained trace');
  assert.ok(new TextEncoder().encode(JSON.stringify(manifest)).length<=4096+COMPARISON_TIMING_LIMITS.bytes);
+});
+
+test('WebM with many render callbacks preserves existing success and policy summary without a per-render ledger',async()=>{
+ const h=fixture('webm'),done=await complete(h);assert.equal(done.state,'completed',done.error);
+ assert.equal(h.renders.length,3001);assert.equal(done.artifact.manifest.time.frameTimings,undefined);
+ assert.equal(done.artifact.manifest.comparison.timeAnimation.interpolated,false);
+ assert.equal(done.artifact.manifest.comparison.timeAnimation.timeSelection,'nearest-stored-frames-only');
+ assert.equal(done.artifact.manifest.time.fps.frameCountGuaranteed,false);assert.equal(h.releases,1);
+ assert.ok(new TextEncoder().encode(JSON.stringify(done.artifact.manifest)).length<=4096);
 });
 
 test('timing overflow refuses the artifact and releases the host lock rather than truncating evidence',async()=>{

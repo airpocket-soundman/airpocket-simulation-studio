@@ -2,7 +2,7 @@
 
 [日本語](../visual-export.md)
 
-Time-comparison GIF/WebM manifests include `time.frameTimings`, binding each render request and panel's stored time/offset to case/result identity. See [details and bounds](view-compare-design.md). GIF records 24 output frames; WebM records the initial canvas and render callbacks without guaranteeing a one-to-one mapping to encoded frames. Overflow fails without returning a partial artifact.
+Time-comparison GIF manifests include `time.frameTimings`, binding each render request and panel's stored time/offset to case/result identity. See [details and bounds](view-compare-design.md). GIF records 24 output frames; WebM retains its existing endpoint/policy summary without an individual frame ledger. Overflow fails without returning a partial artifact.
 
 Open **Save images and animations** to save the current view as PNG or animation as WebM. Model-only PNG and orbit are supported. Images include model name, range/units and section information, with a maximum width of 1920 pixels.
 

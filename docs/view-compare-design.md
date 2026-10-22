@@ -4,11 +4,11 @@
 
 ## 2026-10-22: 時間出力の各panel時刻をmanifestへ記録
 
-時間アニメーションの完了manifestは、既存の開始/終了概要に加えて `time.frameTimings.entries` を持つ。各entryの `renderIndex`、`phase`、`requestedTimeSeconds` と、各panelの `caseIndex`、保存 `frameIndex`、実保存 `timeSeconds`、符号付き `offsetSeconds`（保存−要求、秒）を記録する。`caseIndex` は同じmanifestの `comparison.cases` を参照し、caseId・保存case revision・resultRevision SHAに結び付く。物理状態を補間・新規解析していない。
+時間比較GIFの完了manifestは、既存の開始/終了概要に加えて `time.frameTimings.entries` を持つ。各entryの `renderIndex`、`phase`、`requestedTimeSeconds` と、各panelの `caseIndex`、保存 `frameIndex`、実保存 `timeSeconds`、符号付き `offsetSeconds`（保存−要求、秒）を記録する。`caseIndex` は同じmanifestの `comparison.cases` を参照し、caseId・保存case revision・resultRevision SHAに結び付く。物理状態を補間・新規解析していない。
 
-GIFでは実エンコード経路が呼ぶ24描画を出力順に記録し、途中frameも検査できる。WebMでは初期capture canvasと、その後のrender callbackを記録する。MediaRecorderが重複/脱落させる可能性があるため、これは実デコードframe一覧や滑らかなfpsの保証ではない。WebMの描画要求と符号化frameの1対1対応を宣言しない。
+GIFでは実エンコード経路が呼ぶ24描画を出力順に記録し、途中frameも検査できる。WebMは既存の開始/終了と選択方針の概要を維持し、個別の描画/符号化frame時刻ledgerは提供しない。MediaRecorderが重複/脱落させる可能性があり、滑らかなfpsやframe枚数を保証しない。
 
-ledgerは最大2048描画かつ60KiB、全manifestは最大64KiB。途中で上限を超えた場合は切り捨てずexportを失敗させ、host lockを解放して部分成果物を公開しない。高頻度/長時間WebMではこの上限に達する可能性がある。既存PNG等の4KiB制限、requestとschemaVersion、概要metadataは維持する。非等間隔の異なる2caseについて実adapter→共通queue→manifest経路を試験し、GIFは実encoderを使う。新コードの実Chrome/WebMデコード再検証は未実施であり、VIEWCOMPARE親の全面完了を意味しない。
+ledgerは最大2048描画かつ60KiB、全manifestは最大64KiB。途中で上限を超えた場合は切り捨てずexportを失敗させ、host lockを解放して部分成果物を公開しない。このledgerは固定24frameのGIFだけに適用し、既存WebMへ新たな描画回数/ledger byte上限を課さない。既存PNG等の4KiB制限、requestとschemaVersion、概要metadataは維持する。非等間隔の異なる2caseについて実adapter→共通queue→manifest経路を試験し、GIFは実encoderを使う。新コードの実Chrome/WebMデコード再検証は未実施であり、VIEWCOMPARE親の全面完了を意味しない。
 
 以下の第1・第2段階は2026-10-16時点の履歴です。現在の実装と制限は末尾の追加記録および[自動化API](automation.md)を参照してください。
 

@@ -2,7 +2,7 @@
 
 [English](en/visual-export.md)
 
-時間比較GIF/WebMのmanifestには、各描画要求と各panelの実保存時刻/ずれ/case・結果識別を結ぶ `time.frameTimings` がある。[詳細・上限](view-compare-design.md)。GIFは24出力frame、WebMは初期canvasと描画callbackを記録し、符号化frameへの1対1対応は保証しない。上限超過は失敗して部分成果物を返さない。
+時間比較GIFのmanifestには、各描画要求と各panelの実保存時刻/ずれ/case・結果識別を結ぶ `time.frameTimings` がある。[詳細・上限](view-compare-design.md)。GIFは24出力frameを記録する。WebMは既存の端点・方針概要を維持し、個別frame ledgerは提供しない。上限超過は失敗して部分成果物を返さない。
 
 結果表示の「画像・アニメーションを保存」から現在の表示をPNG、アニメーションをWebMで保存できます。モデルだけのPNGと回転にも対応します。画像にはモデル名、表示範囲・単位、断面情報を添えます。最大幅は1920ピクセルです。
 
