@@ -45,6 +45,13 @@ test('duplicate ids, self-reported comparison/SVG, malformed JSON and oversized 
  }
 });
 
+test('four individual raw files retain all curve identities and both plot panels',async()=>{
+ const h=setup(),bundles=Array.from({length:4},(_,i)=>syntheticIncrementUiBundle({curveId:'tet-'+i,loads:[0,10+i,15,20+i],youngModulus:1e9*(i+1)}));
+ h.get('file').files=bundles.map(bundle=>file(JSON.stringify(bundle)));await h.get('file').onchange();
+ const comparison=await h.ui.validate();assert.ok(comparison,h.get('status').textContent);assert.deepEqual(comparison.curves.map(curve=>curve.curveId),['tet-0','tet-1','tet-2','tet-3']);
+ const svg=await h.blobs.get(h.get('svg').href).text();assert.match(svg,/data-panel="force-displacement"/);assert.match(svg,/data-panel="engineering-stress-strain"/);
+});
+
 test('file count and aggregate size refuse before reading; stale multi-file and validation completion cannot overwrite newer input',async()=>{
  const h=setup();let reads=0;const entry=size=>({size,text:async()=>{reads++;return '{}';}});
  for(const selected of [[entry(2)],Array.from({length:5},()=>entry(2)),[entry(INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES),entry(1)]]){h.get('file').files=selected;await h.get('file').onchange();assert.equal(reads,0);assert.equal(h.get('file').attributes['aria-invalid'],'true');}
