@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T05:00:33.244Z",
+  "updatedAt": "2026-10-22T08:34:57.867Z",
   "release": {
     "version": "v0.44",
-    "date": "2026-10-21",
+    "date": "2026-10-22",
     "testCount": 1787,
-    "description": "レート制限停止分を引継ぎ、準備済みTet4共通契約と造形条件付き材料recordを実装。実Chrome入力/adaptive、履歴保存/reloadの正式MCP照合、Linux両設定比較を追加。PNG/GIFの実出力は接続不安定で未確認。全171件・公開済134件・未完37件。1787試験は公開56576af6の記録。",
-    "descriptionEn": "Resumed stopped work: implemented prepared Tet4 contracts and print-conditioned material records; added actual Chrome input/adaptive QA, paired MCP history reload checks and Linux runtime comparisons. Actual PNG/GIF export remains unverified due to unstable connection.171total134released37unfinished;1787 tests records published56576af6."
+    "description": "実ChromeのPNG連番ZIP・音響比較GIFを独立decodeし、背景録画とメモリ系列の証拠をレビュー修正。次の指示を作成してP6契約修正を継続。全171件・公開済134件・未完37件。1787試験は過去公開版の記録で、今回候補のCIは別途確認。",
+    "descriptionEn": "Reviewed real Chrome PNG ZIP/acoustic GIF decoding, background recording and separate memory measurements; corrected replay/evidence defects. Next work orders and P6 contract work continue. 171 tasks, 134 released, 37 unfinished. Test count1787 is historical; candidate CI is verified separately."
   },
   "tasks": [
     {
@@ -756,15 +756,15 @@
       "titleEn": "Measure supported model sizes",
       "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
       "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
-      "lastUpdate": "2026-10-21: 追加PR #157 を限定成果として取り込み対象。Electron/Chromiumの小構造1例を系列分離して計測。正式Chromeの再実行・原資料とcleanup記録を残条件へ。 親タスク全体は未完。",
-      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/48-PERF1.md",
-      "lastUpdateEn": "2026-10-21: Additional PR #157 accepted for bounded integration. Records separated memory series for one small structural Electron/Chromium case; branded Chrome replay, raw evidence and cleanup remain. Full parent acceptance remains incomplete.",
+      "lastUpdate": "2026-10-22: PR #174。実Chrome小構造1例でUASM/JS heapを別系列として記録し取消復旧を確認。rawコピーを含む再実行手順を修正。周期sample最大であり真のpeakではない。複数規模・他ブラウザの上限は未確認。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/48-PERF1.md; docs/evidence/2026-10-22-review48-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review48-real-chrome.json; docs/pr-review-2026-10-22.md",
+      "lastUpdateEn": "2026-10-22: PR #174. One real Chrome small structural case records separate UASM/JS heap series and cancellation recovery. Replay instructions corrected to copy raw report. Sampled maxima are not true peaks; multiple model sizes and other browsers remain.",
       "review": {
         "status": "merged",
-        "pr": 157,
-        "head": "306ffe0b21b1e4c445b2ec28edf7d12daa69582d",
-        "summary": "追加PRの限定成果をレビュー承認。Electron/Chromiumの小構造1例を系列分離して計測。正式Chromeの再実行・原資料とcleanup記録を残条件へ。",
-        "summaryEn": "Additional PR accepted as a bounded increment. Records separated memory series for one small structural Electron/Chromium case; branded Chrome replay, raw evidence and cleanup remain."
+        "pr": 174,
+        "head": "fa2f03373428bddbebf693f125abc37b54e0444b",
+        "summary": "実Chrome小構造1例でUASM/JS heapを別系列として記録し取消復旧を確認。rawコピーを含む再実行手順を修正。周期sample最大であり真のpeakではない。複数規模・他ブラウザの上限は未確認。",
+        "summaryEn": "One real Chrome small structural case records separate UASM/JS heap series and cancellation recovery. Replay instructions corrected to copy raw report. Sampled maxima are not true peaks; multiple model sizes and other browsers remain."
       }
     },
     {
@@ -1517,15 +1517,15 @@
       "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF added2026-10-19 (latest update); MP4 is not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-21: 実音響1Pa/2Paの同一335節点meshを計算し、全保存圧力の2倍関係を検証。履歴25要求は65536byte予算で24枚へ正規削減。実Chrome GIF取得・decode・delay・状態保持は接続不安定により未実行。",
-      "lastUpdateEn": "2026-10-21: Actual acoustic1Pa/2Pa solves share335node meshes; saved pressures verified at2x. Requested25frames legitimately reduced to24 by65536byte budget. Actual Chrome GIF acquisition, decoding, delays and state preservation not run due to unstable connection.",
-      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md",
+      "lastUpdate": "2026-10-22: PR #173。実Chromeの音響2ケース24枚GIFを独立decode。2000msの8/9cs配分、共通範囲、成功/取消/拒否後の状態保持を確認。中間panel時刻の個別manifest記録・一般形状・MP4は残る。",
+      "lastUpdateEn": "2026-10-22: PR #173. Real Chrome acoustic two-case 24-frame GIF independently decoded; 2000ms in 8/9cs delays, shared range and state retention checked. Per-panel intermediate timestamps, general geometry and MP4 remain.",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md; docs/evidence/2026-10-22-review51-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review51-real-chrome.json; docs/pr-review-2026-10-22.md",
       "review": {
         "status": "merged",
-        "pr": 161,
-        "head": "eaf318cdd88fee736a5a050dae277890d657e5a3",
-        "summary": "追加PRの限定成果をレビュー承認。Electron/Chromiumの音響GIF比較を記録。2223座標値=741節点へ訂正。正式Chrome・原成果物は残る。",
-        "summaryEn": "Additional PR accepted as a bounded increment. Records bounded Electron/Chromium acoustic GIF comparison and corrects2223 coordinate values to741 nodes; branded Chrome and raw artifacts remain."
+        "pr": 173,
+        "head": "43bd455d6abf5177be7ed1a80b63b49935f0b5d9",
+        "summary": "実Chromeの音響2ケース24枚GIFを独立decode。2000msの8/9cs配分、共通範囲、成功/取消/拒否後の状態保持を確認。中間panel時刻の個別manifest記録・一般形状・MP4は残る。",
+        "summaryEn": "Real Chrome acoustic two-case 24-frame GIF independently decoded; 2000ms in 8/9cs delays, shared range and state retention checked. Per-panel intermediate timestamps, general geometry and MP4 remain."
       }
     },
     {
@@ -1685,15 +1685,15 @@
       "detailEn": "Revision/view-pinned PNG/WebM start/status/cancel/release and hashed base64 pages. Optional connector:28 methods. 32 MiB/four jobs/64 KiB page limits.",
       "acceptance": "現在の確認範囲: 2026-10-17: 実Chromeで熱の0/5/10秒3枚PNG連番、画像差・ZIP/画像ハッシュ・物理時刻・出力後2秒復元を確認。小規模ローカル試験のみ。補間表示の復元は自動テストで確認。slice/容量上限/120枚/公開HTTPSは未確認。 過去の検証履歴（以下の状態・未解決記述は各記録時点のもの）: 全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化は未完了。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。 2026-10-16: 固定フレームPNG連番(ZIP、2〜120枚、軌道/変形/時間)をmainへ反映(PR63)。実Chromeで構造・過渡音響のZIP解析、CRC、フレームSHA、中止後の表示復元、拒否、非選択タブでの完走を確認。軌道のmanifestが初回のみ最終桁で異なる不具合を見つけコードで修正済み(単体テストのみ、実Chrome再確認は未実施)。slice、容量上限境界、120枚成功、MP4/GIFは未検証。 2026-10-16 追記: 実Chromeで再確認。軌道書き出しは同一結果内でZIP完全一致(修正済み)、構造結果へのtime指定は開始時に拒否。ただし同じデモを解き直すとresultRevisionが変わりZIPも変わる(保存済み結果ごとの決定性のみ。原因未調査)。重い環境では8枚の書き出しに20〜180秒、開始が15秒の接続上限でタイムアウトし、ジョブが残って上限到達する場面があった。checking維持。 2026-10-16 実Chromeで再確認: 解き直しても軌道書出しのZIPが一致(physicalRevision、manifest v2)。ただしページ言語状態の変化でキャプション文字が変わると1枚目が変わる。slice、容量上限境界、120枚成功、MP4/GIFは未検証。checking維持。",
       "acceptanceEn": "Current verified scope: 2026-10-17: Real Chrome verified a 3-frame thermal PNG sequence at 0/5/10 s, distinct images, ZIP/frame hashes, physical times and restore to 2 s. Small local fixture only; interpolation restore is automated-test coverage. Slice/size-limit/120-frame/public-HTTPS checks remain pending. Historical verification (statuses and unresolved observations below describe their recording dates): 370 passed, three skipped of373. Real MCP/Chrome verified hashed PNG77944 bytes/two pages, WebM8795 bytes, cancellation restoration and artifact refusal. Background one-second video had two frames. Fixed-frame export, MP4/GIF and persistence remain unfinished. Published-HTTPS verification is tracked in PUBLICHTTPS1. 2026-10-16: Fixed-frame PNG sequence (ZIP, 2-120 frames, orbit/deformation/time) merged (PR 63). Real Chrome verified ZIP parsing, CRCs, frame hashes, cancel restoration, refusals and an undriven-tab run for structural and transient acoustic results. An orbit manifest last-digit difference on the first export was fixed in code (unit-tested only; real-Chrome re-check pending). slice, size-limit boundaries, a 120-frame success and MP4/GIF are not verified. 2026-10-16 addendum: re-checked in real Chrome. Orbit exports are byte-identical ZIPs within one stored result (fixed) and time on a structural result is refused at start. A fresh solve of the same demo gives a different resultRevision and therefore a different ZIP (determinism holds per stored result only; cause not investigated). On a loaded machine an 8-frame export took 20-180 s, and start calls hit the 15 s connector limit, leaving held jobs until the page was reloaded. Stays checking. 2026-10-16 Re-verified in real Chrome: orbit export ZIPs are identical across fresh solves (physicalRevision, manifest v2); caption text can still change with the page language state (e.g. browser translation). slice, size-limit boundaries, a 120-frame success and MP4/GIF are unverified. Stays checking.",
-      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json; docs/evidence/2026-10-15-browserexport-real-chrome-3.json; docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/50-BROWSEREXPORT1.md",
-      "lastUpdate": "2026-10-21: 実構造100N/94節点の保存結果と再実行helperを用意。実Chromeで読込後、出力要求前に接続断。PNG sequenceの実ZIP取得/decodeと成功・取消後の状態復元は未確認。接続失敗を製品成功扱いにしない。",
-      "lastUpdateEn": "2026-10-21: Actual structural100N/94node archive and replay helper prepared. Chrome disconnected after import and before the export request. Actual PNG ZIP acquisition, decoding and success/cancel restoration remain unverified. Connection failure is not product success.",
+      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json; docs/evidence/2026-10-15-browserexport-real-chrome-3.json; docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/50-BROWSEREXPORT1.md; docs/evidence/2026-10-22-review50-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review50-real-chrome.json; docs/pr-review-2026-10-22.md",
+      "lastUpdate": "2026-10-22: PR #172。実Chromeの3枚PNG ZIPを独立decodeし、CRC/SHA・slice位置・成功/取消後の状態復元を確認。要素数の誤集計を218へ修正。一般形状・上限付近・公開HTTPSの一巡は残る。",
+      "lastUpdateEn": "2026-10-22: PR #172. Real Chrome three-PNG ZIP independently decoded; CRC/SHA, slice positions and success/cancel restoration checked. Corrected element count to 218. General geometry, near-limit and public HTTPS workflows remain.",
       "review": {
         "status": "merged",
-        "pr": 160,
-        "head": "4ef7009ffa30cb7fb82e5e4e0735328c2552ed36",
-        "summary": "追加PRの限定成果をレビュー承認。Electron/Chromiumのslice PNG3枚比較記録を追加。正式Chromeと再decode可能な成果物を残条件へ。",
-        "summaryEn": "Additional PR accepted as a bounded increment. Adds Electron/Chromium three-slice PNG comparison observations; branded Chrome and independently decodable artifacts remain."
+        "pr": 172,
+        "head": "4de8ea575379848a8cd53c450751848f152d579b",
+        "summary": "実Chromeの3枚PNG ZIPを独立decodeし、CRC/SHA・slice位置・成功/取消後の状態復元を確認。要素数の誤集計を218へ修正。一般形状・上限付近・公開HTTPSの一巡は残る。",
+        "summaryEn": "Real Chrome three-PNG ZIP independently decoded; CRC/SHA, slice positions and success/cancel restoration checked. Corrected element count to 218. General geometry, near-limit and public HTTPS workflows remain."
       }
     },
     {
@@ -2789,9 +2789,16 @@
       "category": "結果表示",
       "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
       "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
-      "lastUpdate": "2026-10-21: 実Chrome所有タブ2枚を調査しても両方visible。選択ID変更だけで実hiddenと判定しない。タブは終了済み。利用者の手動操作不可を尊重し、背景録画マトリクスは未確認のまま。",
-      "lastUpdateEn": "2026-10-21: Both owned Chrome tabs remained visible during the feasibility check. Selected-tab identity alone is not hidden-state evidence. Tabs closed. Genuine background recording remains unverified; manual user assistance is unavailable.",
-      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md; docs/evidence/2026-10-21-background-tab-visibility-feasibility.json"
+      "lastUpdate": "2026-10-22: PR #175。実Chromeのvisible→hiddenとhidden開始拒否、通常取消、foreground成果物を確認。停止期限はfault injection。セッション失効と日英実機マトリクスは残る。",
+      "lastUpdateEn": "2026-10-22: PR #175. Real Chrome visible-to-hidden interruption, hidden-start refusal, ordinary cancellation and foreground artifact observed. Stop timeout uses fault injection. Session expiry and bilingual real-browser matrix remain.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md; docs/evidence/2026-10-21-background-tab-visibility-feasibility.json; docs/evidence/2026-10-22-review45-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review45-real-chrome.json; docs/pr-review-2026-10-22.md",
+      "review": {
+        "status": "merged",
+        "pr": 175,
+        "head": "94b63f63ac7b8b1f2e2f7df0aca54e3c7ae79ed8",
+        "summary": "実Chromeのvisible→hiddenとhidden開始拒否、通常取消、foreground成果物を確認。停止期限はfault injection。セッション失効と日英実機マトリクスは残る。",
+        "summaryEn": "Real Chrome visible-to-hidden interruption, hidden-start refusal, ordinary cancellation and foreground artifact observed. Stop timeout uses fault injection. Session expiry and bilingual real-browser matrix remain."
+      }
     },
     {
       "id": "BROWSERRESET1",
