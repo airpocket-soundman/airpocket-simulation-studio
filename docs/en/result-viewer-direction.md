@@ -4,6 +4,8 @@
 
 Date: 2026-10-14. Proposed product requirements: make results understandable, useful for design decisions and easy to communicate. Visualization does not establish support for an unimplemented analysis.
 
+See [Static increment curves](increment-curve-ui.md) for the bounded UI validating independent linear-elastic step bundles and generating a static plot plus CSV/JSON/SVG. It does not generate plastic histories or automatically produce steps from an analysis.
+
 Current features include surface results, surface/internal meshes, sections, probes, PNG/WebM, fixed-frame PNG sequences (STORE ZIP with manifest.json, independent of real time) and orbit/deformation/stored transient-acoustic/moving-section animations. Single-view GIF, MP4, streamlines and particle animations remain unsupported; comparison GIF supports orbit/time/visualization scale.
 
 ## Layers and interaction
