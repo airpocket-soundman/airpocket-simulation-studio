@@ -119,7 +119,7 @@ const evidence = {
   },
   commands: [
     'node scripts/qa-review-51-chrome.mjs',
-    'python scripts/qa-review-51-decode.py .qa/review51/artifact.gif .qa/review51/export-summary.json',
+    'python scripts/qa-review-51-decode.py .qa/review51/artifact.gif .qa/review51/export-summary.json > .qa/review51/decode.json',
     'node scripts/qa-review-51-evidence.mjs',
   ],
   cases: summary.cases.map((entry, index) => ({

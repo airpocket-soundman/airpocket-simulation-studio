@@ -24,7 +24,7 @@
 4. 正式MCPは所有localhostのinspect+viewのみ。edit/analyzeを追加せずcodeはメモリ保持する。
 5. GUI/APIで同じ2case、instantPressure、time animation、共通固定rangeとcameraを設定する。input/result/cases/compareの原状態を保存する。
 6. 2秒・24frame・640×320のGIFを正式startCompareExportから作る。timeout時は状態確認を優先し、正常artifactを捏造しない。
-7. 全artifact byteとmanifestを取得しSHA/長さを検査。`python scripts/qa-review-51-decode.py .qa/review51/artifact.gif .qa/review51/export-summary.json` で全24frame・各640×320・delay・loopを検証する。
+7. 全artifact byteとmanifestを取得しSHA/長さを検査。`python scripts/qa-review-51-decode.py .qa/review51/artifact.gif .qa/review51/export-summary.json > .qa/review51/decode.json` で全24frame・各640×320・delay・loopを検証する。
 8. `node scripts/qa-review-51-evidence.mjs` でchecksを通し、`docs/evidence/2026-10-22-review51-real-chrome.json` を生成する。
 9. 先頭/中間/末尾画素、2倍振幅と共通rangeを確認。cameraやsource結果を一致のために変更しない。
 10. 成功/取消前後の4状態・camera復元とstale/逆範囲拒否を確認。rawGIF・manifest・decode結果を保持する。
@@ -36,3 +36,5 @@
 - manifestは先頭/末尾のpanel時刻を明示するが、中間panel時刻は個別に出力しない。24 frameのpixel hashが全て異なり、i/23 nearest-only方針と実装試験で中間phaseを補完する。
 - GIFはlossy RGB332のため画素比較は定性評価。圧力値と共通rangeは保存fieldとmanifestから確認した。
 - 親タスクVIEWCOMPAREのstatus/releasedは変更していない。
+
+証拠生成器は保存済みsource `070ec8f885f0e15c889cacaed3c151292c1cc506` のraw記録専用である。異なるsourceで再測定した記録は別の証拠ファイルに残し、今回の合格記録を上書きしない。
