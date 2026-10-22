@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-22",
+  "measurementSource": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "reviewScope": "Independent retained-raw and artifact review; no new Chrome capture of this integration candidate.",
+  "prs": [
+    {
+      "taskId": "PERF1",
+      "pr": 174,
+      "head": "fa2f03373428bddbebf693f125abc37b54e0444b",
+      "decision": "accepted-after-correction"
+    },
+    {
+      "taskId": "VIEWCOMPARE",
+      "pr": 173,
+      "head": "43bd455d6abf5177be7ed1a80b63b49935f0b5d9",
+      "decision": "accepted-after-correction"
+    },
+    {
+      "taskId": "BROWSEREXPORT1",
+      "pr": 172,
+      "head": "4de8ea575379848a8cd53c450751848f152d579b",
+      "decision": "accepted-after-correction"
+    },
+    {
+      "taskId": "EXPORTBACKGROUND1",
+      "pr": 175,
+      "head": "94b63f63ac7b8b1f2e2f7df0aca54e3c7ae79ed8",
+      "decision": "accepted-after-correction"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/evidence/2026-10-22-review45-real-chrome.json",
+      "sha256": "7450b15cae61125c5694e1e1fb5d1a9e104aa280644b238e6671b8f2928b04b8",
+      "bytes": 14309,
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/2026-10-22-review48-real-chrome.json",
+      "sha256": "5d915b5477cc2069079902297f3b25592444a6c0373fa4ede1085aeaf205b00c",
+      "bytes": 9058,
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/2026-10-22-review50-real-chrome.json",
+      "sha256": "1763ce533cac615763c78a022a0e9f675bdf6cec272ff1833ef5459c34176131",
+      "bytes": 9169,
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/2026-10-22-review51-real-chrome.json",
+      "sha256": "df0c1e04aa8fd446f60243883964b5d4f71f7212eee7e0a4c5c6f8a12c4acd8c",
+      "bytes": 20099,
+      "status": "passed"
+    }
+  ],
+  "corrections": [
+    "PNG tetrahedron count 54.5 to 218; array-of-elements is not a flat index array",
+    "Python decoder stdout redirected into required decode.json",
+    "Memory replay initializes copied report before merge-memory",
+    "Historical page/MCP cleanup is unverified, not successful",
+    "Hidden timing origin and per-run restoration scope narrowed",
+    "Async UASM timestamp attribution explicitly approximate"
+  ],
+  "validation": {
+    "focused": {
+      "total": 82,
+      "passed": 82,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contracts": {
+      "declarations": 5,
+      "passed": true
+    },
+    "fullSuite": "recorded separately in candidate CI"
+  },
+  "counts": {
+    "released": 134,
+    "queued": 12,
+    "building": 21,
+    "checking": 4
+  },
+  "remaining": [
+    "Background session expiry and bilingual real-browser matrix",
+    "Performance model-scale/browser limits",
+    "General geometry/near-limit/public HTTPS export workflows",
+    "Individual intermediate comparison panel timestamps"
+  ],
+  "publication": "Candidate CI, normal merge and published identity verification are required separately."
+}
