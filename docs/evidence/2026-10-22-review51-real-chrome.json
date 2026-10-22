@@ -1,0 +1,723 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "VIEWCOMPARE",
+  "workOrder": 51,
+  "status": "passed",
+  "parentTaskReleased": false,
+  "note": "This record closes only the requested real-Chrome comparison GIF follow-up; the parent VIEWCOMPARE task remains unreleased.",
+  "sourceSha": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "environment": {
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "browserProduct": "Chrome/155.0.8059.86",
+    "browserVersion": "Chrome/155.0.0.0",
+    "debugPort": 9333,
+    "origin": "http://127.0.0.1:5201",
+    "pairing": "formal stdio MCP with inspect+view only"
+  },
+  "commands": [
+    "node scripts/qa-review-51-chrome.mjs",
+    "python scripts/qa-review-51-decode.py .qa/review51/artifact.gif .qa/review51/export-summary.json > .qa/review51/decode.json",
+    "node scripts/qa-review-51-evidence.mjs"
+  ],
+  "cases": [
+    {
+      "caseId": "6a77f957-6afd-4a62-afb2-e192529512a5",
+      "revision": "sha256:399c6ec17f9aa36f8a890bc8a960cba4c7e03b8126311d828129368328960dd0",
+      "name": "Synthetic acoustic 1Pa",
+      "viewed": true,
+      "study": {
+        "kind": "acoustic",
+        "acousticTransient": true,
+        "frequency": 4000,
+        "soundSpeed": 343,
+        "airDensity": 1.2,
+        "lossFactor": 0,
+        "pulseWidth": 0.0001,
+        "acousticDuration": 0.0012,
+        "receiverPoint": [
+          5,
+          5,
+          20
+        ],
+        "acousticSnapshotCount": 25,
+        "acousticSnapshotBudgetBytes": 65536
+      },
+      "sourceAmplitudePa": 1,
+      "storedSnapshotCount": 24,
+      "maxPressurePa": 1.8974017701825454,
+      "receiverPeakPa": 0.9505644525907234,
+      "mesh": {
+        "nodeCount": 335,
+        "size": 3
+      }
+    },
+    {
+      "caseId": "b8169769-96d3-4585-b5f6-c6fb22bc9b56",
+      "revision": "sha256:b2ea0a40991a3e60d12e4f231b3030d74255194eaccc58ec51654b4d088011fc",
+      "name": "Synthetic acoustic 2Pa",
+      "study": {
+        "kind": "acoustic",
+        "acousticTransient": true,
+        "frequency": 4000,
+        "soundSpeed": 343,
+        "airDensity": 1.2,
+        "lossFactor": 0,
+        "pulseWidth": 0.0001,
+        "acousticDuration": 0.0012,
+        "receiverPoint": [
+          5,
+          5,
+          20
+        ],
+        "acousticSnapshotCount": 25,
+        "acousticSnapshotBudgetBytes": 65536
+      },
+      "sourceAmplitudePa": 2,
+      "storedSnapshotCount": 24,
+      "maxPressurePa": 3.794803540365091,
+      "receiverPeakPa": 1.9011289051814468,
+      "mesh": {
+        "nodeCount": 335,
+        "size": 3
+      }
+    }
+  ],
+  "comparison": {
+    "field": "instantPressure",
+    "unit": "Pa",
+    "colorRange": {
+      "field": "instantPressure",
+      "maximum": 3.532363432716448,
+      "minimum": -3.4066020347578125
+    },
+    "gifAnimation": {
+      "colors": 256,
+      "frames": 24,
+      "height": 320,
+      "loop": 0,
+      "lossy": true,
+      "palette": "RGB332",
+      "phasePolicy": "i/23",
+      "width": 640
+    },
+    "timeAnimation": {
+      "camera": "fixed",
+      "endTimeSeconds": 0.0012,
+      "field": "instantPressure",
+      "final": {
+        "panels": [
+          {
+            "frameIndex": 23,
+            "offsetSeconds": 0,
+            "timeSeconds": 0.0012
+          },
+          {
+            "frameIndex": 23,
+            "offsetSeconds": 0,
+            "timeSeconds": 0.0012
+          }
+        ],
+        "timeSeconds": 0.0012
+      },
+      "initial": {
+        "panels": [
+          {
+            "frameIndex": 0,
+            "offsetSeconds": 0,
+            "timeSeconds": 0
+          },
+          {
+            "frameIndex": 0,
+            "offsetSeconds": 0,
+            "timeSeconds": 0
+          }
+        ],
+        "timeSeconds": 0
+      },
+      "interpolated": false,
+      "kind": "acousticTransient",
+      "maxAbsOffsetSeconds": [
+        0.000027272727272727263,
+        0.000027272727272727263
+      ],
+      "rangeBasis": "all-selectable-stored-frames",
+      "selectedFrameCounts": [
+        24,
+        24
+      ],
+      "startTimeSeconds": 0,
+      "timeSelection": "nearest-stored-frames-only"
+    },
+    "camera": {
+      "fov": 40,
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ]
+    },
+    "requestedCamera": {
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    }
+  },
+  "artifact": {
+    "mimeType": "image/gif",
+    "bytes": 5574849,
+    "sha256": "sha256:411fdb299169b999647a71bddb74cf03ade676af294e0d0e270173ba1e7de648",
+    "resolution": {
+      "width": 640,
+      "height": 320
+    },
+    "durationSeconds": 2,
+    "timeBasis": "display time",
+    "realtime": false,
+    "requestedRangeSeconds": {
+      "start": 0,
+      "end": 0.0012
+    },
+    "frameSelection": "nearest-stored-frames-only",
+    "loop": "infinite",
+    "delaysCentiseconds": [
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8,
+      8,
+      9,
+      8
+    ],
+    "delayTotalMs": 2000
+  },
+  "decode": {
+    "format": "GIF",
+    "width": 640,
+    "height": 320,
+    "frameCount": 24,
+    "loop": 0,
+    "frames": [
+      {
+        "index": 0,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "467c201bee958e252ad35584b6f3414af7d83420f151863fcdf7ae4363e64cd6"
+      },
+      {
+        "index": 1,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "46e985684122366a3c3c80efce91c767aaf73693803570098e069f5fb85d5a55"
+      },
+      {
+        "index": 2,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "3ff715267d8ae2de889f20b14f591e2a6845ddb9f5bd359b45bd41b64290a5fc"
+      },
+      {
+        "index": 3,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "c4fe75932d4d652953938a0d7f6bd97d3df2fabcba74b8d4078a17cb8b828f8d"
+      },
+      {
+        "index": 4,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "5215435e0ccfc5879d6dd26c2737fffc25553ff39094fe645e31635cbd503b7f"
+      },
+      {
+        "index": 5,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "b9b1f99e960c1327e3242e2f40f05d1cec6345f6225f1b63ba89a59809e1f5d2"
+      },
+      {
+        "index": 6,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "3913f6c7071ade93fd9d56daafc2dcdfda28c4e8fdb3fd4922f2b1f49a538606"
+      },
+      {
+        "index": 7,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "11cbee575d9fb292fef00cc4257606bfd6ebd1337fdd572af337d20e69e365c0"
+      },
+      {
+        "index": 8,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "361da12bf870220008004e0882651f512b16dbdbb6b79c05d0a5f6627aec2f55"
+      },
+      {
+        "index": 9,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "5e019c9a89f0da4fbcf8a57d6be2cdbf5f2120aaeb77bcffab2084493b098109"
+      },
+      {
+        "index": 10,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "53e0a6c62bb0b034b2b8f29ce94daba78bd83b5cbe611476561c675317c7d1c6"
+      },
+      {
+        "index": 11,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "7e58035430fc7b58cd50d499829e5818ab64dd6b0a77326d44029ac391515ffa"
+      },
+      {
+        "index": 12,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "a27b6c91b321313077beb1c0ff17d438d5430d6cab3971391dae181d0597b05a"
+      },
+      {
+        "index": 13,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "801cdca704c6f4632f2bf6af7bde7b504ad0611b67948d208cbd0516222f6316"
+      },
+      {
+        "index": 14,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "c3bee5cb832ac516f1ef3d9ccbe22f6f14a8e73f0e9064a3cf944387210288a1"
+      },
+      {
+        "index": 15,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "879ddce1d920ec8d56356a5e6b272f7cd7cfadf4d4fef917876e16693b891963"
+      },
+      {
+        "index": 16,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "eb1f537aadb5a26029825b0f5e06b7f380ac35fff9df7336c307099568d49835"
+      },
+      {
+        "index": 17,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "e43a7ca5fc5f839a3c837692bc903f38999953c42191f50729444c0f64226a94"
+      },
+      {
+        "index": 18,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "59bba0ba49999857ff75152249caa69b88115da83bc19d0960b81eb710670228"
+      },
+      {
+        "index": 19,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "2682bff69522eba6efdf9eb889e7af66d1bb3128405cfbd1de5e9f525939b4ee"
+      },
+      {
+        "index": 20,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "2061d982ba17e745fe9ea072d07a0d091b36069bbe678740ae34d68dc83e4b08"
+      },
+      {
+        "index": 21,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "77a184d48d4cabd3a1855ee85f45bec0b4ce06013472738844d260f2ad0c05ca"
+      },
+      {
+        "index": 22,
+        "durationMs": 90,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "5dee16a2b4168becc5bf043546a2ef45abb46a7222d28bab49c02b7470bc6bec"
+      },
+      {
+        "index": 23,
+        "durationMs": 80,
+        "width": 640,
+        "height": 320,
+        "pixelSha256": "f87a0c29fb8296adcca1f5d0084e21a5f85517c8963d11cde1bfdf6b2b82a850"
+      }
+    ],
+    "checks": {
+      "gifHeader": true,
+      "dimensions": true,
+      "allFrames640x320": true,
+      "frameCount": true,
+      "loop": true,
+      "delayMs": [
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80,
+        80,
+        90,
+        80
+      ],
+      "delayCentiseconds": [
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8
+      ],
+      "manifestDelayCentiseconds": [
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8,
+        8,
+        9,
+        8
+      ],
+      "delaysMatchManifest": true,
+      "totalDurationMs": 2000,
+      "totalDurationMatchesTwoSeconds": true,
+      "pixelHashes": [
+        "467c201bee958e252ad35584b6f3414af7d83420f151863fcdf7ae4363e64cd6",
+        "46e985684122366a3c3c80efce91c767aaf73693803570098e069f5fb85d5a55",
+        "3ff715267d8ae2de889f20b14f591e2a6845ddb9f5bd359b45bd41b64290a5fc",
+        "c4fe75932d4d652953938a0d7f6bd97d3df2fabcba74b8d4078a17cb8b828f8d",
+        "5215435e0ccfc5879d6dd26c2737fffc25553ff39094fe645e31635cbd503b7f",
+        "b9b1f99e960c1327e3242e2f40f05d1cec6345f6225f1b63ba89a59809e1f5d2",
+        "3913f6c7071ade93fd9d56daafc2dcdfda28c4e8fdb3fd4922f2b1f49a538606",
+        "11cbee575d9fb292fef00cc4257606bfd6ebd1337fdd572af337d20e69e365c0",
+        "361da12bf870220008004e0882651f512b16dbdbb6b79c05d0a5f6627aec2f55",
+        "5e019c9a89f0da4fbcf8a57d6be2cdbf5f2120aaeb77bcffab2084493b098109",
+        "53e0a6c62bb0b034b2b8f29ce94daba78bd83b5cbe611476561c675317c7d1c6",
+        "7e58035430fc7b58cd50d499829e5818ab64dd6b0a77326d44029ac391515ffa",
+        "a27b6c91b321313077beb1c0ff17d438d5430d6cab3971391dae181d0597b05a",
+        "801cdca704c6f4632f2bf6af7bde7b504ad0611b67948d208cbd0516222f6316",
+        "c3bee5cb832ac516f1ef3d9ccbe22f6f14a8e73f0e9064a3cf944387210288a1",
+        "879ddce1d920ec8d56356a5e6b272f7cd7cfadf4d4fef917876e16693b891963",
+        "eb1f537aadb5a26029825b0f5e06b7f380ac35fff9df7336c307099568d49835",
+        "e43a7ca5fc5f839a3c837692bc903f38999953c42191f50729444c0f64226a94",
+        "59bba0ba49999857ff75152249caa69b88115da83bc19d0960b81eb710670228",
+        "2682bff69522eba6efdf9eb889e7af66d1bb3128405cfbd1de5e9f525939b4ee",
+        "2061d982ba17e745fe9ea072d07a0d091b36069bbe678740ae34d68dc83e4b08",
+        "77a184d48d4cabd3a1855ee85f45bec0b4ce06013472738844d260f2ad0c05ca",
+        "5dee16a2b4168becc5bf043546a2ef45abb46a7222d28bab49c02b7470bc6bec",
+        "f87a0c29fb8296adcca1f5d0084e21a5f85517c8963d11cde1bfdf6b2b82a850"
+      ],
+      "allFramesDifferFromPrevious": true,
+      "frame0PanelHashes": {
+        "left": "32ba997e68236cb2f0c484d7cb60e38c460e2845ae00a44cfda4b4915eebdc57",
+        "right": "62e929627f22425fe81f11e6c279babef922ba5c0f94adf990cbe2cec4561735",
+        "panelsDiffer": true
+      },
+      "frame12PanelHashes": {
+        "left": "874dde041e5070aa670b8b9c56597f6d7fadeb14893c132208b316816f115b13",
+        "right": "c6a7cbe85748f5c6373adac5d2d5b2c515404e29478760987ddf32e4f3fc9336",
+        "panelsDiffer": true
+      },
+      "frame23PanelHashes": {
+        "left": "92010a7bf287f74ee5450395afb987e7229dd6b4797444f2e4a18bdd39d7c90b",
+        "right": "3f56d1c35dcc5e48c473caf17a7d45363fb57ddf0b9e4bf071454d51d572b7f6",
+        "panelsDiffer": true
+      },
+      "pixelDiffFrame0To12": {
+        "changedPixels": 11196,
+        "totalPixels": 204800
+      },
+      "pixelDiffFrame0To23": {
+        "changedPixels": 9506,
+        "totalPixels": 204800
+      },
+      "manifestDurationSeconds": 2,
+      "manifestTimeBasis": "display time",
+      "manifestFrameSelection": "nearest-stored-frames-only",
+      "manifestCamera": "fixed",
+      "manifestPhasePolicy": "i/23",
+      "manifestLoop": "infinite"
+    }
+  },
+  "phaseSamples": [
+    {
+      "frame": 0,
+      "phase": 0,
+      "requestedTimeSeconds": 0,
+      "panelFrames": [
+        {
+          "frameIndex": 0,
+          "timeSeconds": 0,
+          "offsetSeconds": 0
+        },
+        {
+          "frameIndex": 0,
+          "timeSeconds": 0,
+          "offsetSeconds": 0
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "phase": 0.5217391304347826,
+      "requestedTimeSeconds": 0.0006260869565217391,
+      "panelFrames": [
+        {
+          "frameIndex": 12,
+          "timeSeconds": 0.0006259740259740259,
+          "offsetSeconds": -1.1293054771313246e-7
+        },
+        {
+          "frameIndex": 12,
+          "timeSeconds": 0.0006259740259740259,
+          "offsetSeconds": -1.1293054771313246e-7
+        }
+      ]
+    },
+    {
+      "frame": 23,
+      "phase": 1,
+      "requestedTimeSeconds": 0.0012,
+      "panelFrames": [
+        {
+          "frameIndex": 23,
+          "timeSeconds": 0.0012,
+          "offsetSeconds": 0
+        },
+        {
+          "frameIndex": 23,
+          "timeSeconds": 0.0012,
+          "offsetSeconds": 0
+        }
+      ]
+    }
+  ],
+  "refusals": [
+    {
+      "name": "stale-case-revision",
+      "refused": true,
+      "code": "CASE_REVISION_CONFLICT",
+      "message": "Case content changed; list cases again"
+    },
+    {
+      "name": "single-time",
+      "refused": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Comparison time video requires an explicit increasing physical time range without timeSeconds"
+    },
+    {
+      "name": "reversed-range",
+      "refused": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Comparison time video requires an explicit increasing physical time range without timeSeconds"
+    },
+    {
+      "name": "outside-range",
+      "refused": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Comparison time range must lie within both saved time axes"
+    },
+    {
+      "name": "stale-comparison-view-revision",
+      "refused": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Comparison settings revision conflict"
+    }
+  ],
+  "cancellation": {
+    "state": "cancelled",
+    "artifact": {
+      "rejected": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Visual export artifact is unavailable"
+    }
+  },
+  "restoration": {
+    "refusals": {
+      "inputRevision": true,
+      "caseArchiveRevision": true,
+      "caseIds": true,
+      "caseList": true,
+      "compareRevision": true,
+      "compareArchive": true,
+      "compareApiRevision": true,
+      "compareApiArchive": true,
+      "comparisonCamera": true,
+      "resultRevision": true,
+      "resultCamera": true
+    },
+    "success": {
+      "inputRevision": true,
+      "caseArchiveRevision": true,
+      "caseIds": true,
+      "caseList": true,
+      "compareRevision": true,
+      "compareArchive": true,
+      "compareApiRevision": true,
+      "compareApiArchive": true,
+      "comparisonCamera": true,
+      "resultRevision": true,
+      "resultCamera": true
+    },
+    "cancel": {
+      "inputRevision": true,
+      "caseArchiveRevision": true,
+      "caseIds": true,
+      "caseList": true,
+      "compareRevision": true,
+      "compareArchive": true,
+      "compareApiRevision": true,
+      "compareApiArchive": true,
+      "comparisonCamera": true,
+      "resultRevision": true,
+      "resultCamera": true
+    }
+  },
+  "checks": {
+    "sourceTreeUnchanged": true,
+    "brandedChrome": true,
+    "formalStdioPairing": true,
+    "twoAcousticCases": true,
+    "caseRevisions": true,
+    "studyValues": true,
+    "sourceAmplitudes": true,
+    "amplitudeRatio": true,
+    "storedSnapshots": true,
+    "comparisonField": true,
+    "commonColorRange": true,
+    "gifManifest": true,
+    "timeManifest": true,
+    "comparisonTimeManifest": true,
+    "gifBytes": true,
+    "gifSha": true,
+    "decodedFrames": true,
+    "gifDelays": true,
+    "phaseEndpoints": true,
+    "panelPixels": true,
+    "cameraFixed": true,
+    "refusals": true,
+    "successStateRestored": true,
+    "refusalStateRestored": true,
+    "cancelStateRestored": true,
+    "cancelledWithoutArtifact": true
+  },
+  "limitations": [
+    "The saved case stores 24 of the 25 requested snapshots because of the snapshot budget warning; the GIF uses those 24 stored frames and synthesizes no additional frame.",
+    "The manifest itemizes panel times at the first and last frame; intermediate panel times are not separately exported, while the 24 frame hashes differ and the i/23 nearest-only policy is recorded. The implementation tests cover each intermediate phase.",
+    "The GIF is lossy RGB332. Pixel comparisons are qualitative; pressure values and the common range come from the saved fields and the manifest.",
+    "The parent VIEWCOMPARE status in src/progress.json was not changed."
+  ]
+}
