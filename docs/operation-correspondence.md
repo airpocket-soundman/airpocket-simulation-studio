@@ -2,7 +2,7 @@
 
 [English](en/operation-correspondence.md)
 
-[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作91件とMCPツール37件（既定35件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
+[API・MCP対応表](api-coverage.md)の補助資料。ブラウザ操作91件とMCPツール38件（既定36件＋ブラウザ接続時2件）を1行ずつ掲載する。`tests/operation-correspondence.test.mjs`がソースの操作名・ツール名と照合し、表の欠落・重複を検出する。
 
 - 範囲/権限: ブラウザ操作は`src/browser-operation-names.js`の範囲（inspect/edit/analyze/view）。MCPツールは注釈の読み取り専用/書き込み・実行。
 - GUI: 各操作について、GUIを組み立てるソース（`src/main.js`・`src/ui/*.js`・`src/*-ui.js`・`src/visual-export.js`）と、操作の実体（`src/browser-session.js`・各`*-operations.js`・MCPは`scripts/studio-mcp.mjs`）を読み、呼び出す関数を突き合わせて分類した。`同一経路`はGUI操作が同じ共有関数を呼ぶもの、`関連（別処理）`は近いが別の処理をするもの（理由を併記）、`connector only — no GUI control by design`はGUIから呼ぶ経路がコードに無いもの（機能が不要という意味ではなく、GUIを足す余地はある）。行ごとに生成されるボタンはid・classが無いため、ボタン名と親のidで示した。限界: 静的に読んだ結果で、実ブラウザでの操作確認ではない。分類は関数の共有を見ており、引数・リビジョン確認・権限の同等性までは保証しない。`tests/operation-correspondence-gui.test.mjs`がGUI列のid・data属性・classがソースに存在することだけを確認する（分類の正しさは検証しない）。
@@ -118,6 +118,7 @@
 | `studio_inspect_print` | read-only | `printInspect` | 関連（別処理）: `#print-report` `#print-view` — 読込済みの内容を表示する。保存した解析済みJSONは開けない | `references/geometry-imports.md` |
 | `studio_preview_cad_update` | read-only | `previewCadUpdate` | 同一経路: `#cad-update-file` `#cad-update-report` — 同じplanCadUpdateで照合する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
 | `studio_apply_cad_update` | write/execute | `applyCadUpdate` | 同一経路: `#cad-update-apply` — 同じplanCadUpdateで適用する（GUIは開いている入力が対象） | `references/geometry-imports.md` |
+| `studio_increment_curve` | write/execute | なし — 保存ファイル専用、browser methodなし | 同一経路: 段階データの静止グラフ — GUIとcreateIncrementCurveArtifactsを共有。MCPは明示的な保存bundleを読み、任意指定で別名新artifact-bundle JSONを出版する。ブラウザ状態は読取・変更しない | `SKILL.md` |
 | `studio_assess_result` | write/execute | `evaluateAssessment` | 関連（別処理）: `#fatigue-evaluate` `#fracture-evaluate` — 同じevaluateFatigue/evaluateFractureを使う。保存解析ファイルからの評価ではない | `references/physics-provenance.md` |
 | `studio_assessment` | read-only | `getAssessment` | 関連（別処理）: `#fatigue-summary` `#fracture-summary` — 表示中の結果の評価を描画する。保存ファイルの読み出しではない | `references/physics-provenance.md` |
 | `studio_import_project` | write/execute | none | 同一経路: `#model` `#unit` — 同じcreateProjectFromStep/createProjectFromStlで読む。GUIは開いて表示する。JSON保存は別ボタン`#save` | `references/saved-inputs.md` |
