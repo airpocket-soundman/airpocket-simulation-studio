@@ -220,7 +220,7 @@ try {
   });
 
   result.after = {visibility: await a.cdp.evaluate('document.visibilityState'), status: await a.cdp.evaluate('document.querySelector("#compare-video-status").textContent')};
-  result.cleanup = {pageClosed: true, mcpClosed: true};
+  result.cleanup = {pageClosed: null, mcpClosed: null, note: 'Written before finally; closure is attempted but not independently observed.'};
   writeFileSync(path.join(out, 'qa-summary.json'), JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify({browserProduct: result.browserProduct, scopes: result.sessionScopes, runs: result.runs.map((run) => ({kind: run.kind, settleMs: run.settleMs, error: run.error, artifact: run.artifact, hiddenAt: run.hiddenAt && {visibility: run.hiddenAt.visibility, hidden: run.hiddenAt.hidden, recorders: run.hiddenAt.recorders, streams: run.hiddenAt.streams}, after: run.after && {visibility: run.after.visibility, startDisabled: run.after.startDisabled, cancelDisabled: run.after.cancelDisabled, downloadHidden: run.after.downloadHidden, streams: run.after.streams, recorders: run.after.recorders}, unchanged: run.unchanged}))}, null, 2));
 } finally {

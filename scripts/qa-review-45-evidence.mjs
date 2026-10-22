@@ -53,7 +53,6 @@ const checks = {
     && video[0] === 0x1a && video[1] === 0x45 && video[2] === 0xdf && video[3] === 0xa3
     && /^video\/webm/.test(success.artifact.mime)
     && createHash('sha256').update(video).digest('hex') === success.artifact.sha256,
-  cleanup: summary.cleanup.pageClosed === true && summary.cleanup.mcpClosed === true,
 };
 const passed = Object.values(checks).every(Boolean);
 const evidence = {
@@ -88,6 +87,8 @@ const evidence = {
     unchanged: run.unchanged ?? null,
     artifact: run.artifact ?? null,
   })),
+  timingNote: 'hidden-mid-recording settleMs starts at the post-switch hiddenAt snapshot, not the visibility event. Event-to-settled is separately derived below.',
+  hiddenEventToSettledMs: hidden.settled.t - hidden.after.visibilityEvents.find((event) => event.state === 'hidden').t,
   artifact: {
     file: `docs/evidence/review45-real-chrome/${success.artifact.file}`,
     bytes: success.artifact.bytes,
@@ -95,12 +96,14 @@ const evidence = {
     mime: success.artifact.mime,
     note: 'Synthetic foreground success sample from the two exported synthetic acoustic cases; not user data.',
   },
+  cleanup: {pageClosed: null, mcpClosed: null, note: 'Historical closure flags were written before finally; actual closure was not independently verified.'},
   checks,
   limitations: [
+    'Page and MCP closure were attempted after the summary was written, but not independently verified; cleanup is not an acceptance assertion.',
     'The hidden state was created by CDP Page.bringToFront selecting another real tab. The page observed its own document.visibilityState/visibilitychange; no DOM event was dispatched by the test.',
     'This verifies the installed Chrome 155 on Windows. It does not claim Electron, Firefox, Safari or mobile behaviour.',
     'The stop-timeout run is a controlled fault injection that drops onstop; it is not a hidden-tab result.',
-    'An explicit recording session-expiry path was not exercised. The source/result/camera/comparison state was checked before and after each completed run.',
+    'An explicit recording session-expiry path was not exercised. Full input/cases/compare/result restoration was checked for hidden interruption; foreground success checked input/cases/compare/result, while explicit cancel checked input/compare. Hidden-at-start and stop-timeout checked UI/resource recovery only.',
     'The foreground WebM is a short synthetic sample; this is not a claim of visual fidelity or production encoding quality.',
     'The parent EXPORTBACKGROUND1 status in src/progress.json is unchanged and no release/merge action is part of this record.',
   ],

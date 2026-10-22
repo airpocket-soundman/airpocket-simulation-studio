@@ -27,3 +27,7 @@
 - 録画セッションの失効経路は個別実行していない。停止期限はfault injectionであり、実停止の再現ではない。
 - foreground WebMは短い合成サンプルで、画質・本番エンコード品質の評価ではない。
 - 親タスク `EXPORTBACKGROUND1` のstatus/releasedは変更していない。
+
+レビュー補足: page/MCPの終了フラグはfinally実行前に記録されていたため、歴史記録を未確認（null）へ訂正した。終了処理は試行されるが独立観測はしていない。測定値は再実行せず保持した。
+
+Timing clarification: 977 ms starts at the post-switch hidden snapshot. The observed visibilitychange event to settled observation is 1,149 ms. Neither is a recorder callback timestamp. Full state restoration was asserted for hidden interruption, with narrower checks for other runs; session expiry remains untested.
