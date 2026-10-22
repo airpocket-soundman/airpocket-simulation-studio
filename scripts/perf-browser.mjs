@@ -30,11 +30,11 @@ export const DEFAULT_CASES = ['structural-tiny', 'structural-medium', 'structura
 export const CANCEL_POINTS = ['first-event', 'half-warm-total'];
 const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'timed_out']);
 
-export const PROBE_SNIPPET = `(()=>{const p=window.__perfProbe={schemaVersion:1,intervalMs:1000,userAgent:navigator.userAgent,crossOriginIsolated:window.crossOriginIsolated===true,samples:[]};
-const tick=async()=>{const s={t:Date.now(),usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null};
-if(p.crossOriginIsolated&&performance.measureUserAgentSpecificMemory){try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}}
-p.samples.push(s);};
-const timer=setInterval(tick,p.intervalMs);tick();p.stop=()=>clearInterval(timer);
+export const PROBE_SNIPPET = `(()=>{window.__perfProbe?.stop?.();const p=window.__perfProbe={schemaVersion:2,intervalMs:1000,userAgent:navigator.userAgent,crossOriginIsolated:window.crossOriginIsolated===true,samples:[]};
+let inflight=false,stopped=false;
+const tick=async()=>{if(inflight||stopped)return;inflight=true;const tRequested=Date.now(),s={t:tRequested,tRequested,tResolved:null,usedJSHeapSize:performance.memory?performance.memory.usedJSHeapSize:null,uasmBytes:null};
+try{if(p.crossOriginIsolated&&performance.measureUserAgentSpecificMemory){try{s.uasmBytes=(await performance.measureUserAgentSpecificMemory()).bytes;}catch{}}s.tResolved=Date.now();if(!stopped)p.samples.push(s);}finally{inflight=false;}};
+const timer=setInterval(tick,p.intervalMs);tick();p.stop=()=>{stopped=true;clearInterval(timer);};
 p.report=()=>JSON.stringify({schemaVersion:p.schemaVersion,intervalMs:p.intervalMs,userAgent:p.userAgent,crossOriginIsolated:p.crossOriginIsolated,samples:p.samples});})();`;
 
 const median = a => { const s = [...a].sort((x, y) => x - y), k = s.length >> 1; return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2; };
@@ -284,14 +284,21 @@ const byteValue = v => (typeof v === 'number' && Number.isFinite(v) && v >= 0) ?
 
 function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs}) {
   const valueOf = s => byteValue(s?.[def.field]);
-  const inWindow = inside.filter(s => valueOf(s) !== null);
+  // UASM is asynchronous. An interval crossing a phase boundary cannot be
+  // assigned to either side using only its request time. Legacy probes carry
+  // only t and retain their historical request-time interpretation explicitly.
+  const bounds = s => {
+    if(def.key!=='uasm'||(!('tRequested' in s)&&!('tResolved' in s)))return [s.t,s.t];
+    return Number.isFinite(s.tRequested)&&Number.isFinite(s.tResolved)&&s.tResolved>=s.tRequested?[s.tRequested,s.tResolved]:[NaN,NaN];
+  };
+  const inWindow = all.filter(s => {const [a,b]=bounds(s);return a>=startEpochMs&&b<=endEpochMs&&valueOf(s)!==null;});
   const peak = inWindow.length ? Math.max(...inWindow.map(valueOf)) : null;
-  const beforeWindow = all.filter(s => s.t < startEpochMs && valueOf(s) !== null);
+  const beforeWindow = all.filter(s => bounds(s)[1] < startEpochMs && valueOf(s) !== null);
   const baseline = beforeWindow.length ? valueOf(beforeWindow.at(-1)) : null;
   const afterSettleMs = endEpochMs + settleMs;
   const afterCancelMs = Number.isFinite(cancelSettledEpochMs) ? cancelSettledEpochMs + settleMs : null;
-  const afterSettle = all.filter(s => s.t >= afterSettleMs && valueOf(s) !== null)[0] ?? null;
-  const afterCancel = afterCancelMs === null ? null : (all.filter(s => s.t >= afterCancelMs && valueOf(s) !== null)[0] ?? null);
+  const afterSettle = all.filter(s => bounds(s)[0] >= afterSettleMs && valueOf(s) !== null)[0] ?? null;
+  const afterCancel = afterCancelMs === null ? null : (all.filter(s => bounds(s)[0] >= afterCancelMs && valueOf(s) !== null)[0] ?? null);
   const unavailable = {};
   if (peak === null) unavailable.peakBytesSampled = 'no ' + def.name + ' sample inside the case window';
   if (baseline === null) unavailable.baselineBytes = 'no ' + def.name + ' sample before the case window';
@@ -301,6 +308,7 @@ function mergeMemorySeries(def, all, inside, {startEpochMs, endEpochMs, cancelSe
     name: def.name, source: def.source, field: def.field,
     available: peak !== null,
     sampleCount: inWindow.length, intervalMs,
+    timing: def.key==='uasm' ? (all.some(s=>!('tRequested' in s)&&!('tResolved' in s)) ? 'legacy request timestamps present; asynchronous completion is unknown for those samples' : 'request/resolution interval must fit wholly within the selected phase') : 'synchronous JS heap at request time',
     baselineBytes: baseline,
     peakBytesSampled: peak,
     afterCancelBytes: afterCancel === null ? null : valueOf(afterCancel),

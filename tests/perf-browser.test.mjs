@@ -3,9 +3,40 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, readFileSync, readdirSync, rmSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {CASES, MEMORY_SERIES, MEMORY_SETTLE_MS, PerfTimeoutError, REPORT_SCOPE, assertLocalOrigin, createStdioClient, mergeMemory, parseArgs, runBrowserPerf, waitForSession, writeReport} from '../scripts/perf-browser.mjs';
+import {runInNewContext} from 'node:vm';
+import {CASES, MEMORY_SERIES, MEMORY_SETTLE_MS, PROBE_SNIPPET, PerfTimeoutError, REPORT_SCOPE, assertLocalOrigin, createStdioClient, mergeMemory, parseArgs, runBrowserPerf, waitForSession, writeReport} from '../scripts/perf-browser.mjs';
 
 const TOKEN = 'SECRET-PAIRING-TOKEN-0123456789';
+
+test('actual probe snippet serializes slow UASM calls and records both times; stop discards pending samples',async()=>{
+ let time=1000,tick,resolve,requests=0,clears=0;
+ const window={crossOriginIsolated:true},performance={memory:{usedJSHeapSize:42},measureUserAgentSpecificMemory:()=>{requests++;return new Promise(r=>{resolve=r;});}};
+ const context={window,performance,navigator:{userAgent:'ProbeTest'},Date:{now:()=>time},setInterval:fn=>{tick=fn;return 7;},clearInterval:id=>{assert.equal(id,7);clears++;}};
+ runInNewContext(PROBE_SNIPPET,context);const p=window.__perfProbe;
+ assert.equal(requests,1);time=2000;await tick();assert.equal(requests,1,'no overlapping UASM calls');
+ time=3500;resolve({bytes:99});await new Promise(r=>setImmediate(r));
+ assert.deepEqual(JSON.parse(p.report()).samples,[{t:1000,tRequested:1000,tResolved:3500,usedJSHeapSize:42,uasmBytes:99}]);
+ time=4000;const pending=tick();assert.equal(requests,2);p.stop();time=5000;resolve({bytes:100});await pending;await tick();
+ assert.equal(p.samples.length,1,'stop must not publish a measurement resolved after cleanup');assert.equal(requests,2);assert.equal(clears,1);
+});
+
+test('probe reinstall stops the owned previous probe; rejected UASM retains null and timing',async()=>{
+ let stops=0,tick;const window={crossOriginIsolated:true,__perfProbe:{stop:()=>stops++}};
+ runInNewContext(PROBE_SNIPPET,{window,navigator:{userAgent:'ProbeTest'},Date:{now:()=>1000},performance:{measureUserAgentSpecificMemory:async()=>{throw Error('not available');}},setInterval:fn=>{tick=fn;return 1;},clearInterval:()=>{}});
+ await new Promise(r=>setImmediate(r));assert.equal(stops,1);
+ const sample=JSON.parse(window.__perfProbe.report()).samples[0];assert.equal(sample.uasmBytes,null);assert.equal(sample.tRequested,1000);assert.equal(sample.tResolved,1000);
+ window.__perfProbe.stop();await tick();assert.equal(window.__perfProbe.samples.length,1);
+});
+
+test('UASM intervals crossing phase boundaries are excluded without discarding synchronous heap samples',()=>{
+ const report={browser:{},cases:[{status:'ok',window:{startEpochMs:100,endEpochMs:200,cancelSettledEpochMs:150}}]};
+ const sample=(t,end,bytes)=>({t,tRequested:t,tResolved:end,uasmBytes:bytes,usedJSHeapSize:10});
+ mergeMemory(report,{samples:[sample(50,120,900),sample(110,190,20),sample(180,220,800),sample(3200,3300,30),sample(3150,3200,40)],intervalMs:1000});
+ const m=report.cases[0].memory;
+ assert.equal(m.series.uasm.baselineBytes,null,'cross-start UASM cannot be baseline');assert.equal(m.series.uasm.peakBytesSampled,20);assert.equal(m.series.uasm.sampleCount,1);
+ assert.equal(m.series.jsHeap.sampleCount,2);assert.equal(m.series.uasm.afterSettleBytes,30);assert.equal(m.series.uasm.afterCancelBytes,40);
+ assert.match(m.series.uasm.timing,/wholly/);
+});
 
 // Fake connector on a simulated clock: sleep() advances time, jobs settle after `duration` simulated ms.
 function fake({duration = 400, never = false, settleDelay = 30} = {}) {

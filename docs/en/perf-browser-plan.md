@@ -2,6 +2,8 @@
 
 Japanese: [../perf-browser-plan.md](../perf-browser-plan.md)
 
+2026-10-22 probe correction: the new snippet permits only one outstanding UASM request and records `tRequested` and `tResolved`. Samples resolving after `stop()` are discarded; reinstalling stops the previous probe. JS heap is synchronous at request time; UASM spans an asynchronous interval. Baseline and in-window peak accept a UASM interval only when it fits wholly within that phase. Legacy `t`-only samples retain their historical interpretation with completion explicitly unknown. This change does not rerun earlier measurements.
+
 **Current: real-Chrome timing/cancellation measured for three structural sizes; thermal interrupted by reset/timeout. Memory,other browsers and support limits remain unobserved.** See the2026-10-18 evidence below. The following is historical design; actual scripts/perf-browser.mjs uses host-observed connector timing. It does not mean CDP/hidden-global memory measurements were performed.
 
 ## Goal and scope
