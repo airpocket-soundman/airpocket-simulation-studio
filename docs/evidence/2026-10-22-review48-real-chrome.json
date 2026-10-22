@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "PERF1",
+  "workOrder": 48,
+  "status": "passed",
+  "parentTaskReleased": false,
+  "note": "This record closes only the requested real-Chrome structural-tiny performance/memory follow-up; the parent PERF1 task remains unreleased.",
+  "sourceSha": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "environment": {
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "browserProduct": "Chrome/155.0.8059.86",
+    "debugPort": 9333,
+    "origin": "http://127.0.0.1:5198",
+    "scopes": [
+      "inspect",
+      "analyze"
+    ],
+    "engine": "real branded Chrome via CDP and formal stdio MCP"
+  },
+  "commands": [
+    "node scripts/qa-review-48-chrome.mjs",
+    "node scripts/perf-browser.mjs --merge-memory .qa/perf-probe.json --out .qa/perf-followup48.json",
+    "node scripts/qa-review-48-evidence.mjs"
+  ],
+  "input": {
+    "name": "Synthetic structural 100N nu0",
+    "sourceModel": {
+      "kind": "box",
+      "bounds": [
+        0,
+        0,
+        0,
+        10,
+        10,
+        40
+      ]
+    },
+    "materialProperties": {
+      "youngModulus": 1000000000,
+      "poissonRatio": 0
+    },
+    "study": {
+      "kind": "structural",
+      "gravityEnabled": false
+    },
+    "conditions": [
+      {
+        "type": "fixed",
+        "value": 0,
+        "direction": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "force",
+        "value": 100,
+        "direction": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "meshCount": 1,
+    "requestedMeshSize": 8
+  },
+  "inputChecks": {
+    "source": true,
+    "material": true,
+    "structural": true,
+    "fixedZ0": true,
+    "forceZ40": true
+  },
+  "measurement": {
+    "case": "structural-tiny",
+    "meshSizeMm": 8,
+    "repeats": 1,
+    "pollIntervalMs": 50,
+    "timeoutMs": 300000,
+    "coldMs": 849.974,
+    "warmRuns": [
+      {
+        "state": "succeeded",
+        "ok": true,
+        "totalMs": 1276.975,
+        "firstEventMs": 45.856,
+        "meshMs": 804.431,
+        "solvePhaseMs": 102.043,
+        "eventCount": 14,
+        "jobElapsedMs": 1177,
+        "startEpochMs": 1792647939507,
+        "endEpochMs": 1792647940784
+      }
+    ],
+    "warmSummary": {
+      "totalMs": {
+        "median": 1276.975,
+        "min": 1276.975,
+        "max": 1276.975,
+        "n": 1
+      },
+      "firstEventMs": {
+        "median": 45.856,
+        "min": 45.856,
+        "max": 45.856,
+        "n": 1
+      },
+      "meshMs": {
+        "median": 804.431,
+        "min": 804.431,
+        "max": 804.431,
+        "n": 1
+      },
+      "solvePhaseMs": {
+        "median": 102.043,
+        "min": 102.043,
+        "max": 102.043,
+        "n": 1
+      },
+      "jobElapsedMs": {
+        "median": 1177,
+        "min": 1177,
+        "max": 1177,
+        "n": 1
+      }
+    },
+    "cancel": {
+      "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+      "pollIntervalMs": 50,
+      "baselineWarmTotalMs": 1276.975,
+      "points": {
+        "first-event": {
+          "n": 1,
+          "states": {
+            "cancelled": 1
+          },
+          "latencyMs": {
+            "median": 110.575,
+            "min": 110.575,
+            "max": 110.575,
+            "n": 1
+          },
+          "requestedAfterMs": {
+            "median": 56.175,
+            "min": 56.175,
+            "max": 56.175,
+            "n": 1
+          }
+        },
+        "half-warm-total": {
+          "n": 1,
+          "states": {
+            "cancelled": 1
+          },
+          "latencyMs": {
+            "median": 107.484,
+            "min": 107.484,
+            "max": 107.484,
+            "n": 1
+          },
+          "requestedAfterMs": {
+            "median": 658.399,
+            "min": 658.399,
+            "max": 658.399,
+            "n": 1
+          },
+          "note": "cancel requested at 50% of the median warm total"
+        }
+      },
+      "runs": [
+        {
+          "trigger": "first-event",
+          "state": "cancelled",
+          "requestedAfterMs": 56.175,
+          "latencyMs": 110.575,
+          "totalMs": 166.75,
+          "startEpochMs": 1792647940796,
+          "endEpochMs": 1792647940963
+        },
+        {
+          "trigger": "half-warm-total",
+          "state": "cancelled",
+          "requestedAfterMs": 658.399,
+          "latencyMs": 107.484,
+          "totalMs": 765.883,
+          "startEpochMs": 1792647940973,
+          "endEpochMs": 1792647941739
+        }
+      ],
+      "recoveredAfterCancel": true
+    },
+    "window": {
+      "startEpochMs": 1792647938644,
+      "endEpochMs": 1792647942554,
+      "cancelSettledEpochMs": 1792647941739
+    }
+  },
+  "probe": {
+    "installedAt": 1792647923260,
+    "firstSampleAt": 1792647923234,
+    "lastSampleAt": 1792647950243,
+    "intervalMs": 1000,
+    "crossOriginIsolated": true,
+    "totalSamples": 28,
+    "baselineSamples": 16,
+    "insideSamples": 4,
+    "afterCancelSamples": 6,
+    "afterSettleSamples": 5,
+    "baselineLast": {
+      "t": 1792647938238,
+      "usedJSHeapSize": 23035266,
+      "uasmBytes": 50409095
+    },
+    "inside": [
+      {
+        "t": 1792647939243,
+        "usedJSHeapSize": 24972926,
+        "uasmBytes": 50409095
+      },
+      {
+        "t": 1792647940235,
+        "usedJSHeapSize": 22335052,
+        "uasmBytes": 50576673
+      },
+      {
+        "t": 1792647941243,
+        "usedJSHeapSize": 24152955,
+        "uasmBytes": 50576673
+      },
+      {
+        "t": 1792647942238,
+        "usedJSHeapSize": 24657294,
+        "uasmBytes": 50576673
+      }
+    ],
+    "afterCancelFirst": {
+      "t": 1792647945239,
+      "usedJSHeapSize": 23215719,
+      "uasmBytes": 50569985
+    },
+    "afterSettleFirst": {
+      "t": 1792647946236,
+      "usedJSHeapSize": 23280635,
+      "uasmBytes": 50569985
+    }
+  },
+  "memory": {
+    "note": "Sampled maxima, not true peak/RSS. Series are reported separately and are never added or substituted.",
+    "primarySeries": "uasm",
+    "baselineBytes": 50409095,
+    "peakBytesSampled": 50576673,
+    "afterCancelBytes": 50569985,
+    "afterSettleBytes": 50569985,
+    "intervalMs": 1000,
+    "sampleCount": 4,
+    "series": {
+      "uasm": {
+        "name": "measureUserAgentSpecificMemory",
+        "source": "performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)",
+        "field": "uasmBytes",
+        "available": true,
+        "sampleCount": 4,
+        "intervalMs": 1000,
+        "baselineBytes": 50409095,
+        "peakBytesSampled": 50576673,
+        "afterCancelBytes": 50569985,
+        "afterSettleBytes": 50569985,
+        "unavailable": {}
+      },
+      "jsHeap": {
+        "name": "performance.memory.usedJSHeapSize",
+        "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+        "field": "usedJSHeapSize",
+        "available": true,
+        "sampleCount": 4,
+        "intervalMs": 1000,
+        "baselineBytes": 23035266,
+        "peakBytesSampled": 24972926,
+        "afterCancelBytes": 23215719,
+        "afterSettleBytes": 23280635,
+        "unavailable": {}
+      }
+    }
+  },
+  "checks": {
+    "sourceFrozen": true,
+    "gitClean": true,
+    "brandedChrome": true,
+    "ownedOrigin": true,
+    "scopes": true,
+    "inputSource": true,
+    "inputMaterial": true,
+    "inputStructural": true,
+    "inputConditions": true,
+    "requestedSize8": true,
+    "caseSucceeded": true,
+    "cancellations": true,
+    "probeIsolated": true,
+    "probeTiming": true,
+    "memoryAvailable": true,
+    "separateSeries": true,
+    "perSeriesSamples": true,
+    "cleanup": true
+  },
+  "limitations": [
+    "The parent PERF1 status in src/progress.json was not changed.",
+    "The browser probe observes periodic samples; peakBytesSampled is an approximation, not a process RSS, GPU or true peak measurement.",
+    "UASM and usedJSHeapSize cover different scopes and are not summed; neither is total process memory.",
+    "The size-8 mm value is the startJob option used by structural-tiny; the script does not independently report the resulting element count."
+  ]
+}
