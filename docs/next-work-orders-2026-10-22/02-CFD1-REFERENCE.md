@@ -1,6 +1,6 @@
 # 02 CFD1 — 固定参照ケースの実SU2検証
 
-状態: 未実行。既存41-CFD1の後続。#172〜#175と重複しない。
+状態: 実SU2の4条件を実行済み、総合不合格。実結果は [検証記録](../cfd-reference-2026-10-22.md) と [raw評価](../evidence/2026-10-22-cfd-reference-run.json)。基準誤差5.2714%、細mesh90秒期限のため未完を維持。次は細mesh完走・収束性と離散流束の確認。既存41-CFD1の後続。#172〜#175と重複しない。
 
 1. `docs/opencode-release-work-orders-2026-10-21/41-CFD1.md`、`docs/su2-native.md`、`scripts/su2-native.mjs`、`scripts/native-flow-host.mjs`を読む。41の作業場所の古い指定は使わず `D:/worktrees/studio-cfd-reference-20261022` に専用treeを作る。
 2. 既存牛ケースの設定・残差・未達警告を保存する。対応できる公開参照問題を公式一次資料から1件選び、問題のURL、適用Re/Mach、形状、境界条件、許容差、反復/時間/メモリ上限を実行前のJSONへ固定する。

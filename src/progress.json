@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-22T08:34:57.867Z",
+  "updatedAt": "2026-10-22T08:47:24.083Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -226,9 +226,9 @@
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work. 2026-10-16: The opt-in SU2 path (explicit download with a pinned SHA-256, not bundled, LGPL-2.1 notice) is merged (PR 7). Experimental; the open items above are unchanged.",
-      "lastUpdate": "2026-10-21: 既存20指示の対象外として残条件を監査。追加指示 41-CFD1.md に実装・検証・親完了の条件を明記。指示書作成だけでは完了にしない。",
-      "lastUpdateEn": "2026-10-21: Audited outside the existing20 work orders. Additional order 41-CFD1.md records implementation, verification and full parent acceptance. Instructions alone do not complete this task.",
-      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md"
+      "lastUpdate": "2026-10-22: 実SU28.5.0で事前固定Re40円柱4条件を実行。基準Cd誤差5.2714%は許容5%外、細meshは90秒期限、総合不合格。領域変更のみ単独合格。raw/入力SHA・予算・残差を保存し、未収束を成功にしない。牛ケース・離散質量流束・host/MCP統合は残る。",
+      "lastUpdateEn": "2026-10-22: Actual SU2 8.5.0 ran four predeclared Re40 cylinder cases. Baseline Cd error5.2714% exceeds5%; refined mesh hit90s timeout; study failed overall. Only larger-domain case passed individually. Raw/input hashes, budgets and residuals retained. Cow validation, discrete mass flux and host/MCP integration remain.",
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md; docs/cfd-reference-2026-10-22.md; docs/evidence/2026-10-22-cfd-reference-run.json"
     },
     {
       "id": "GPU1",
