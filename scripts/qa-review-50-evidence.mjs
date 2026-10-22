@@ -77,7 +77,7 @@ const evidence = {
     sourceModel: input.sourceModel,
     materialProperties: input.materialProperties,
     conditions: input.conditions.map(({type, value, direction}) => ({type, value, direction})),
-    mesh: {size: mesh.size, nodeCount: mesh.nodes.length / 3, tetrahedronCount: mesh.tetrahedra.length / 4, engine: mesh.engine},
+    mesh: {size: mesh.size, nodeCount: mesh.nodes.length / 3, tetrahedronCount: mesh.tetrahedra.length, engine: mesh.engine},
     camera: summary.before.resultView.state.camera,
     sectionBefore: summary.before.view,
     sectionRequested: summary.afterSetView.view,
