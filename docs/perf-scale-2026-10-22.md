@@ -17,3 +17,5 @@
 
 再現は専用worktreeを上記sourceへ固定し、`replay/`の4ファイルと`input.json`を`.qa/perf-scale-v2/`へコピーする。Viteを127.0.0.1:18444で起動し、`node .qa/perf-scale-v2/driver.mjs`を実行。所有Chromeで`/.qa/perf-scale-v2/perf.html?lang=en`を開き、合成入力読込、probe開始、接続欄でinspect/analyzeだけを明示許可する。driverの一時pairingファイルは入力後削除し、URL・証拠・commitへ入れない。完了後3000ms以上のsampleを確保してStop probeからJSONを回収し、現行mergeMemoryで結合する。probe・所有タブ・MCP・Viteを終了する。今回これらの終了を確認した。
 
+
+監査上の限定: tinyの終了/取消3秒後sampleは後続mediumの実行中に重なるため、tiny単独のidle復旧メモリとは扱わない。提出fixtureとlive jobの入力revisionは保持したが、正規化後のbrowser exportProject全snapshotは保存していない。fixture自体のhashが観測revisionと一致するとはしない。次の規模比較ではcase間のidle待ちと正規化入力snapshot取得が必要。

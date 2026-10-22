@@ -17,3 +17,5 @@ The first attempt reproduced a slow UASM request suppressing synchronous heap ti
 
 For replay, pin a dedicated worktree to the source above; copy the four replay files and input.json to `.qa/perf-scale-v2/`. Run Vite on127.0.0.1:18444 and `node .qa/perf-scale-v2/driver.mjs`. Open the owned Chrome page `/.qa/perf-scale-v2/perf.html?lang=en`, load the synthetic input, start the probe and explicitly grant only inspect/analyze in the connection UI. Delete the temporary pairing handoff file after entry; never put its code in URLs, evidence or commits. Retain samples at least3000ms after settlement, stop and retrieve probe JSON, then merge using current mergeMemory. Stop the owned probe/tab/MCP/Vite; all were confirmed closed in this run.
 
+
+Audit limits: tiny samples at least3s after cancellation/settlement overlap the following medium run and are not independent idle-recovery memory. The submitted fixture and live input revision are retained, but no complete normalized browser exportProject snapshot was saved. Do not claim the fixture hashes to that live revision. Future runs need an inter-case idle interval and a normalized input snapshot.

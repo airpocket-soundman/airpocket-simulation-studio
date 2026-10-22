@@ -14,3 +14,5 @@
 6. `node --test tests/perf-browser.test.mjs tests/perf-measure.test.mjs`。owned probe timer/接続/serverのみcleanupする。
 
 出口: 2規模の実測値とモデル/mesh識別、未測定のGPU/RSSなどの限界、失敗も記録してレビューへ。2点だけから対応最大モデル規模や一般的なスケーリング則を保証せずPERF1の残条件を更新する。
+
+独立監査で、tinyの3秒後sampleが後続mediumと重なること、および正規化後browser入力全snapshot未保存を残条件へ追加。次回はcase間idle待ち・明示snapshotで補完する。今回の2規模の計算/取消/実mesh数と独立heap修正の証拠は保持し、単独idleメモリの証明に拡大しない。

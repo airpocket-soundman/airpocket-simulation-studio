@@ -333,7 +333,9 @@
     "Both series are sampled; tiny-window UASM has no complete in-window sample and stays unavailable.",
     "Compact mesh summaries provide counts and job/input IDs, not a mesh-content revision.",
     "Localhost Chrome; no claim for Electron, other browsers, GPU/RSS or public HTTPS.",
-    "New comparison manifest code is covered by adapter tests, not this structural performance run."
+    "New comparison manifest code is covered by adapter tests, not this structural performance run.",
+    "Tiny afterCancel/afterSettle samples occur during the following medium case; they are not independent idle-recovery memory values. Future measurement needs an inter-case idle interval.",
+    "Node/element budgets were predeclared, not runtime cutoffs. Observed maxima335 nodes/1006 elements stayed below5000/20000."
   ],
   "parentTaskReleased": false,
   "replay": {
@@ -342,5 +344,11 @@
     "sourceRevision": "1ae8dcf8f58177b65e91900f00b79aa453c4307d",
     "input": "docs/evidence/perf-scale-20261022/input.json",
     "note": "Copy helpers and input to destination in a dedicated fixed-source worktree, start Vite port18444 and the Node driver, then use the visible page controls to load synthetic input/start probe/pair inspect+analyze/stop and retrieve probe. Never preserve the temporary pairing file."
+  },
+  "inputIdentity": {
+    "submittedInputFile": "docs/evidence/perf-scale-20261022/input.json",
+    "observedBrowserRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+    "normalizedBrowserInputSnapshotRetained": false,
+    "note": "The submitted fixture and live job revision are retained separately. Browser input normalization was not exported as a complete snapshot; do not claim the fixture file hashes to the observed browser revision."
   }
 }
