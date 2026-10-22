@@ -113,6 +113,7 @@ const evidence = {
   cleanup: {pageClosed: null, mcpClosed: null, note: 'Historical closure flags were written before finally; actual closure was not independently verified.', probeStopped: summary.cleanup.probeStopped === true},
   checks,
   limitations: [
+    'UASM timestamps mark asynchronous measurement requests, not resolution; interval sampling can overlap and window attribution is approximate.',
     'Page and MCP closure were attempted after the summary was written, but not independently verified; cleanup is not an acceptance assertion.',
     'The parent PERF1 status in src/progress.json was not changed.',
     'The browser probe observes periodic samples; peakBytesSampled is an approximation, not a process RSS, GPU or true peak measurement.',
