@@ -18,4 +18,6 @@ C++はmm→mを境界で1回だけ行い既存solve_elasticを使用。独立剛
 
 P6全体は未完。任意保存入力準備、CAD条件転送、広い物理/材料、メッシュ品質/物理妥当性、製品backendは残る。runtime一致だけで一般的な物理精度を保証しない。
 
+2026-10-22: 出力validatorは力の釣合いに加え、各軸のモーメント釣合いを検査する。腕は第1節点を原点としてmm→mへ変換し、全体平行移動の影響を避ける。許容値は1e-8 N m＋各軸の荷重/反力の積算絶対項×1e-7。合力を変えない誤反力の偶力も拒否する。この必要条件だけでは変位場の正しさや一般的な物理妥当性を保証しない。
+
 材料の許可keyはyoungModulus、poissonRatio、source、grade、notesだけ。dependence、有効温度、density、破壊、将来の相モデルを含む他keyは全て拒否する。studyもkind、無効なmodalAnalysis/thermalStress、無効なgravityと任意の零gravityベクトルだけを許可し、温度評価や未知keyを黙って落とさない。

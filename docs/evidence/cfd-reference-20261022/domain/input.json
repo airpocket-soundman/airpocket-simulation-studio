@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "kind": "steady-incompressible-laminar",
+  "meshUnits": "m",
+  "densityKgM3": 1,
+  "dynamicViscosityPaS": 0.1,
+  "velocityMps": [
+    4,
+    0,
+    0
+  ],
+  "wallMarker": "cylinder",
+  "farfieldMarker": "farfield",
+  "cflNumber": 10,
+  "multigridLevels": 0,
+  "maxIterations": 1200,
+  "residualLog10Target": -10
+}

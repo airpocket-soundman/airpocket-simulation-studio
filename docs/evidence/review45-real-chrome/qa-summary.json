@@ -1,0 +1,600 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "EXPORTBACKGROUND1",
+  "workOrder": 45,
+  "parentTaskReleased": false,
+  "origin": "http://127.0.0.1:5199",
+  "sourceSha": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "browserProduct": "Chrome/155.0.8059.86",
+  "realVisibilityMethod": "CDP Page.bringToFront changes the real active tab; document.visibilityState/visibilitychange are observed. No DOM event is dispatched by this harness.",
+  "runs": [
+    {
+      "kind": "foreground-success",
+      "sequence": 1,
+      "before": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ]
+      },
+      "started": {
+        "t": 1792649890976,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "settled": {
+        "t": 1792649892269,
+        "status": "Video ready. Play it to review, then use the save link.",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": false,
+        "previewHidden": false,
+        "recorders": [
+          {
+            "state": "inactive"
+          }
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [],
+        "settleMs": 1292
+      },
+      "settleMs": 1293,
+      "artifact": {
+        "file": "foreground-success.webm",
+        "bytes": 18662,
+        "sha256": "45ea12d2ceaa0a770c906a1e90f862e178f3f54dcc272e9c4b65aadc640a0865",
+        "mime": "video/webm;codecs=vp9"
+      },
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": false,
+        "previewHidden": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "cases": true,
+        "compareApi": true,
+        "result": true
+      }
+    },
+    {
+      "kind": "hidden-mid-recording",
+      "sequence": 2,
+      "before": {
+        "visibility": "visible",
+        "hidden": false,
+        "startDisabled": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ]
+      },
+      "started": {
+        "t": 1792649893747,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "tStart": 1792649893748,
+      "hiddenAt": {
+        "t": 1792649894272,
+        "visibility": "hidden",
+        "hidden": true,
+        "status": "Creating video. 6%",
+        "cancelDisabled": false,
+        "recorders": [
+          "inactive"
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [
+          {
+            "t": 1792649894100,
+            "state": "hidden",
+            "hidden": true
+          }
+        ]
+      },
+      "settled": {
+        "t": 1792649895249,
+        "status": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "recorders": [
+          {
+            "state": "inactive"
+          }
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [
+          {
+            "t": 1792649894100,
+            "state": "hidden",
+            "hidden": true
+          }
+        ],
+        "settleMs": 976
+      },
+      "settleMs": 977,
+      "error": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+      "after": {
+        "visibility": "visible",
+        "hidden": false,
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ],
+        "visibilityEvents": [
+          {
+            "t": 1792649894100,
+            "state": "hidden",
+            "hidden": true
+          },
+          {
+            "t": 1792649895256,
+            "state": "visible",
+            "hidden": false
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "cases": true,
+        "compareApi": true,
+        "result": true,
+        "compareMcp": true,
+        "caseList": true
+      }
+    },
+    {
+      "kind": "explicit-cancel",
+      "sequence": 3,
+      "started": {
+        "t": 1792649896674,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "settled": {
+        "t": 1792649897569,
+        "status": "Video creation cancelled.",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "recorders": [
+          {
+            "state": "inactive"
+          }
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [],
+        "settleMs": 199
+      },
+      "settleMs": 895,
+      "error": "Video creation cancelled.",
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "compareApi": true
+      }
+    },
+    {
+      "kind": "hidden-at-start",
+      "sequence": 4,
+      "startedAt": {
+        "t": 1792649898733,
+        "visibility": "hidden",
+        "hidden": true,
+        "startDisabled": false
+      },
+      "settled": {
+        "t": 1792649899263,
+        "status": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "recorders": [],
+        "streams": [],
+        "events": [
+          {
+            "t": 1792649898230,
+            "state": "hidden",
+            "hidden": true
+          }
+        ],
+        "settleMs": 48
+      },
+      "settleMs": 530,
+      "error": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [],
+        "recorders": []
+      }
+    },
+    {
+      "kind": "stop-timeout-fault-injection",
+      "sequence": 5,
+      "started": {
+        "t": 1792649901178,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "settled": {
+        "t": 1792649904414,
+        "status": "Video creation stopped because recording did not finish. Please retry.",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "recorders": [
+          {
+            "state": "inactive"
+          }
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [],
+        "settleMs": 3236
+      },
+      "settleMs": 3236,
+      "error": "Video creation stopped because recording did not finish. Please retry.",
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "name": "Synthetic acoustic 1Pa",
+      "caseId": "5b06d6df-36b1-4bf7-8234-f9cf812c0297",
+      "revision": "sha256:399c6ec17f9aa36f8a890bc8a960cba4c7e03b8126311d828129368328960dd0"
+    },
+    {
+      "name": "Synthetic acoustic 2Pa",
+      "caseId": "a583efc8-5d7d-4b1e-888c-cfed7a206c49",
+      "revision": "sha256:b2ea0a40991a3e60d12e4f231b3030d74255194eaccc58ec51654b4d088011fc"
+    }
+  ],
+  "viewed": true,
+  "compareApplied": {
+    "schemaVersion": 1,
+    "revision": "sha256:602aeff0ca6d592fb00a2222a3ea9cc46f79c7aa85210dd984952e4b7777b95b",
+    "archive": {
+      "kind": "comparison-view",
+      "settings": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "field": "instantPressure",
+        "timeSeconds": 0
+      },
+      "sources": [
+        {
+          "revision": "sha256:399c6ec17f9aa36f8a890bc8a960cba4c7e03b8126311d828129368328960dd0"
+        },
+        {
+          "revision": "sha256:b2ea0a40991a3e60d12e4f231b3030d74255194eaccc58ec51654b4d088011fc"
+        }
+      ],
+      "version": 1
+    }
+  },
+  "sessionScopes": [
+    "inspect",
+    "view"
+  ],
+  "beforeVisible": {
+    "visibility": "visible",
+    "startDisabled": false,
+    "compareRevision": "sha256:602aeff0ca6d592fb00a2222a3ea9cc46f79c7aa85210dd984952e4b7777b95b",
+    "disabledIds": [
+      "adaptive-run",
+      "agent-connect",
+      "agent-endpoint",
+      "agent-token",
+      "animation-stop",
+      "cad-update-apply",
+      "cad-update-file",
+      "cancel-run",
+      "compare-persistence-remove",
+      "compare-persistence-restore",
+      "compare-png",
+      "compare-video-cancel",
+      "compare-video-from",
+      "compare-video-to",
+      "compare-video-tolerance",
+      "fixed",
+      "load",
+      "plastic-load-fractions",
+      "print-export",
+      "print-text-show"
+    ]
+  },
+  "after": {
+    "visibility": "visible",
+    "status": "Video creation stopped because recording did not finish. Please retry."
+  },
+  "cleanup": {
+    "pageClosed": null,
+    "mcpClosed": null,
+    "note": "Historical summary set closure flags before finally; actual closure was not independently verified."
+  }
+}

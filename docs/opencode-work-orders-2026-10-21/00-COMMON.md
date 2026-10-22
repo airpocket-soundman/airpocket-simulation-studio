@@ -19,8 +19,8 @@
 
 ```powershell
 git -C D:/github/airpocket-soundman/airpocket-simulation-studio fetch origin
-git -C D:/github/airpocket-soundman/airpocket-simulation-studio worktree add -b codex/opencode-next-uiimprove1 D:/github/airpocket-soundman/studio-opencode-next-uiimprove1 origin/main
-Set-Location D:/github/airpocket-soundman/studio-opencode-next-uiimprove1
+git -C D:/github/airpocket-soundman/airpocket-simulation-studio worktree add -b codex/opencode-next-uiimprove1 D:/worktrees/studio-opencode-next-uiimprove1 origin/main
+Set-Location D:/worktrees/studio-opencode-next-uiimprove1
 git status --short
 git rev-parse HEAD
 ```
@@ -89,3 +89,5 @@ git rev-parse HEAD
 8. 元PRが既にmerge済みなら、最新mainを基点に修正PRを作り、元レビュー指摘との対応を記す。
 
 利用者が20件すべてのレビュー可能を確認した。#144（COUPLE4B）と#145（AGENTCHAT1）も要修正であり、39/40の指示で元PRを修正する。別ownerの作業場所を上書きしない規則は同じ。
+
+2026-10-22: GitHub所有者フォルダは実リポジトリ専用。作業用worktreeは `D:/worktrees` またはCodex管理フォルダへ配置する。

@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "CFD1",
+  "status": "completed-with-assessment",
+  "planSha256": "be83ccd1392e86660a350c6f0995e3e3771af1b6c67aae40dacf9f0e2d337b25",
+  "results": [
+    {
+      "name": "baseline",
+      "command": [
+        "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+        "case.cfg",
+        "-t",
+        "1"
+      ],
+      "elapsedSeconds": 35.828000000095926,
+      "peakRssBytes": 22257664,
+      "exitCode": 0,
+      "executionSettled": true,
+      "stopReason": "solver-termination-see-history",
+      "finalHistory": {
+        "Time_Iter": 0.0,
+        "Outer_Iter": 0.0,
+        "Inner_Iter": 820.0,
+        "rms[P]": -10.00679268,
+        "rms[U]": -9.145668932,
+        "rms[V]": -9.08159036,
+        "RefForce": 8.0,
+        "CD": 1.58644061,
+        "CL": -2.093594395e-16,
+        "CSF": 0.0,
+        "CMx": 0.0,
+        "CMy": 0.0,
+        "CMz": -1.362663492e-16,
+        "CFx": 1.58644061,
+        "CFy": -2.093594395e-16,
+        "CFz": 0.0,
+        "CEff": -1.319680284e-16
+      },
+      "residuals": {
+        "rms[P]": -10.00679268,
+        "rms[U]": -9.145668932,
+        "rms[V]": -9.08159036
+      },
+      "dragCoefficient": 1.58644061,
+      "dragRelativeError": 0.052714406104844125,
+      "last100DragRelativeRange": 1.9540599204946504e-08,
+      "mass": {
+        "method": "nodal-trapezoid-outer-boundary",
+        "discreteSolverFlux": false,
+        "densityKgM3": 1,
+        "unit": "kg/(s*m span)",
+        "vertices": 64,
+        "outward": 403.12699763184895,
+        "inward": 402.9490018536429,
+        "net": 0.17799577820602508,
+        "relativeImbalance": 0.0004415377269487112
+      },
+      "checks": {
+        "exitZero": true,
+        "withinLimits": true,
+        "expectedVersion": true,
+        "allResiduals": true,
+        "dragReference": false,
+        "dragSettled": true,
+        "massBalance": true,
+        "noWallWarning": true
+      },
+      "accepted": false,
+      "artifacts": {
+        "case.cfg": {
+          "bytes": 955,
+          "sha256": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+        },
+        "flow.vtu": {
+          "bytes": 298254,
+          "sha256": "d7295c76c207ca23c0970a588400bdbe630136d9bee50e8e947d96cf6a6b8e74"
+        },
+        "history.csv": {
+          "bytes": 250710,
+          "sha256": "8a06a5e6c1dcda09269aefa6931d1e54e2dc2b0848f173ccab3574e25c569f48"
+        },
+        "input.json": {
+          "bytes": 358,
+          "sha256": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5"
+        },
+        "mesh.su2": {
+          "bytes": 206565,
+          "sha256": "690481cfae260d5dce292fe1a5e49ec1d1da120100aa7b2364d40a3d3e9a08aa"
+        },
+        "solver.log": {
+          "bytes": 63285,
+          "sha256": "11a92033842eb395bedc00d4f73d7d6ab47976780b880d476282e3a5678b9acd"
+        },
+        "surface_flow.vtu": {
+          "bytes": 7407,
+          "sha256": "7d6f9e2c9d4f3547a120a90641aa81b9452f4fbc2b58f2f4c140feb93857912b"
+        }
+      },
+      "logHeader": "\n-------------------------------------------------------------------------\n|    ___ _   _ ___                                                      |\n|   / __| | | |_  )   Release 8.5.0 \"Harrier\"                           |\n|   \\__ \\ |_| |/ /                                                      |\n|   |___/\\___//___|   Suite (Computational Fluid Dynamics Code)         |\n|                                                                       |\n-------------------------------------------------------------------------\n| SU2 Project Website: https://su2code.github.io                        |\n|                                                                       |\n| The SU2 Project is maintained by the SU2 Foundation                   |\n| (http://su2foundation.org)                                            |\n-------------------------------------------------------------------------\n| Copyright 2012-2026, SU2 Contributors                                 |\n|                                                                       |\n| SU2 is free software; you can redistribute it and/or                  |\n| modify it under the terms of the GNU Lesser General Public            |\n| License as published by the Free Software Foundation; either          |\n| version 2.1 of the License, or (at your option) any later version.    |\n|                                                                       |\n| SU2 is distributed in the hope that it will be useful,                |\n| but WITHOUT ANY WARRANTY; without even the implied warranty of        |\n| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |\n| Lesser General Public License for more details.                       |\n|                                                                       |\n| You should have received a copy of the GNU Lesser General Public      |\n| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |\n-------------------------------------------------------------------------\n\nParsing config file for zone 0\n\n----------------- Physical Case Definition ( Zone 0 ) -------------------\nIncompressible Laminar Navier-Stokes' equations.\nNo restart solution, use the values at infinity (freestream).\nDimensional simulation.\nThe reference area is 1 m^2.\nThe semi-span will be computed using the max y(3D) value.\nThe reference length is 1 m.\nReference origin for moment evaluation is (0, 0, 0).\nSurface(s) where the force coefficients are evaluated: cylinder.\n\nSurface(s) plotted in the output file: cylinder.\nInput mesh file name: mesh.su2\n\n--------------- Space Numerical Integration ( Zone 0 ) ------------------\nFlux difference splitting (FDS) upwind scheme for the flow inviscid terms.\nSecond order integration in space, with slope limiter.\nNo slope-limiting method. \nAverage of gradients with correction (viscous flow terms).\nGradient for upwind reconstruction: Green-Gauss.\nGradient for viscous and source terms: Green-Gauss.\n\n--------------- Time Numerical Integration  ( Zone ",
+      "logTail": "low.vtu                           |\n|Paraview surface                   |surface_flow.vtu                   |\n+-----------------------------------------------------------------------+\n+---------------------------------------------------+\n|  Inner_Iter|      rms[P]|      rms[U]|          CD|\n+---------------------------------------------------+\n|         801|   -9.872836|   -9.151085|    1.586441|\n|         802|   -9.889171|   -9.197122|    1.586441|\n|         803|   -9.903666|   -9.226633|    1.586441|\n|         804|   -9.915762|   -9.232726|    1.586441|\n|         805|   -9.925125|   -9.216450|    1.586441|\n|         806|   -9.931713|   -9.185850|    1.586441|\n|         807|   -9.935782|   -9.149921|    1.586441|\n|         808|   -9.937836|   -9.114885|    1.586441|\n|         809|   -9.938537|   -9.084060|    1.586441|\n|         810|   -9.938601|   -9.058917|    1.586441|\n|         811|   -9.938721|   -9.039975|    1.586441|\n|         812|   -9.939504|   -9.027321|    1.586441|\n|         813|   -9.941450|   -9.020881|    1.586441|\n|         814|   -9.944944|   -9.020547|    1.586441|\n|         815|   -9.950259|   -9.026234|    1.586441|\n|         816|   -9.957564|   -9.037911|    1.586441|\n|         817|   -9.966936|   -9.055604|    1.586441|\n|         818|   -9.978354|   -9.079393|    1.586441|\n|         819|   -9.991710|   -9.109387|    1.586441|\n|         820|  -10.006793|   -9.145669|    1.586441|\n\n----------------------------- Solver Exit -------------------------------\nAll convergence criteria satisfied.\n+-----------------------------------------------------------------------+\n|      Convergence Field     |     Value    |   Criterion  |  Converged |\n+-----------------------------------------------------------------------+\n|                      rms[P]|      -10.0068|         < -10|         Yes|\n+-----------------------------------------------------------------------+\n-------------------------------------------------------------------------\n+-----------------------------------------------------------------------+\n|        File Writing Summary       |              Filename             |\n+-----------------------------------------------------------------------+\n|Paraview                           |flow.vtu                           |\n|Paraview surface                   |surface_flow.vtu                   |\n+-----------------------------------------------------------------------+\n\n--------------------------- Finalizing Solver ---------------------------\nDeleted CNumerics container.\nDeleted CIntegration container.\nDeleted CSolver container.\nDeleted CIteration container.\nDeleted CInterface container.\nDeleted CGeometry container.\nDeleted CFreeFormDefBox class.\nDeleted CSurfaceMovement class.\nDeleted CVolumetricMovement class.\nDeleted CConfig container.\nDeleted nInst container.\nDeleted COutput class.\n-------------------------------------------------------------------------\n\n------------------------- Exit Success (SU2_CFD) ------------------------\n\n"
+    },
+    {
+      "name": "mesh",
+      "command": [
+        "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+        "case.cfg",
+        "-t",
+        "1"
+      ],
+      "elapsedSeconds": 90.21900000004098,
+      "peakRssBytes": 36364288,
+      "exitCode": 1,
+      "executionSettled": true,
+      "stopReason": "wall-clock-limit",
+      "finalHistory": {
+        "Time_Iter": 0.0,
+        "Outer_Iter": 0.0,
+        "Inner_Iter": 1131.0,
+        "rms[P]": -7.660258014,
+        "rms[U]": -6.700000309,
+        "rms[V]": -6.692641454,
+        "RefForce": 8.0,
+        "CD": 1.521037509,
+        "CL": -7.182839393e-18,
+        "CSF": 0.0,
+        "CMx": 0.0,
+        "CMy": 0.0,
+        "CMz": 2.58790331e-18,
+        "CFx": 1.521037509,
+        "CFy": -7.182839393e-18,
+        "CFz": 0.0,
+        "CEff": -4.722328903e-18
+      },
+      "residuals": {
+        "rms[P]": -7.660258014,
+        "rms[U]": -6.700000309,
+        "rms[V]": -6.692641454
+      },
+      "dragCoefficient": 1.521037509,
+      "dragRelativeError": 0.009314869940278747,
+      "last100DragRelativeRange": 8.11617065784319e-06,
+      "mass": null,
+      "checks": {
+        "exitZero": false,
+        "withinLimits": false,
+        "expectedVersion": true,
+        "allResiduals": true,
+        "dragReference": true,
+        "dragSettled": true,
+        "massBalance": false,
+        "noWallWarning": true
+      },
+      "accepted": false,
+      "artifacts": {
+        "case.cfg": {
+          "bytes": 955,
+          "sha256": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+        },
+        "flow.vtu": {
+          "bytes": 677839,
+          "sha256": "b9b10644f89b0105c541514d8dd09f69ef5f83bb4b078564ea676ff2ac735ac0"
+        },
+        "history.csv": {
+          "bytes": 345565,
+          "sha256": "31a90b822b93fab3f5b1bb4ba0210ef487ceffa2e563f2ad741527b8fac387f0"
+        },
+        "input.json": {
+          "bytes": 358,
+          "sha256": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5"
+        },
+        "mesh.su2": {
+          "bytes": 479539,
+          "sha256": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6"
+        },
+        "solver.log": {
+          "bytes": 78168,
+          "sha256": "dd78d75a29486569b3399b5629bcc49f4cc48172bf309f2918e08ffa1e5b6a17"
+        },
+        "surface_flow.vtu": {
+          "bytes": 12851,
+          "sha256": "b357881e5c6fdae78c770346737a3c2f307714d2803b612b0ded8cb9d8141f21"
+        }
+      },
+      "logHeader": "\n-------------------------------------------------------------------------\n|    ___ _   _ ___                                                      |\n|   / __| | | |_  )   Release 8.5.0 \"Harrier\"                           |\n|   \\__ \\ |_| |/ /                                                      |\n|   |___/\\___//___|   Suite (Computational Fluid Dynamics Code)         |\n|                                                                       |\n-------------------------------------------------------------------------\n| SU2 Project Website: https://su2code.github.io                        |\n|                                                                       |\n| The SU2 Project is maintained by the SU2 Foundation                   |\n| (http://su2foundation.org)                                            |\n-------------------------------------------------------------------------\n| Copyright 2012-2026, SU2 Contributors                                 |\n|                                                                       |\n| SU2 is free software; you can redistribute it and/or                  |\n| modify it under the terms of the GNU Lesser General Public            |\n| License as published by the Free Software Foundation; either          |\n| version 2.1 of the License, or (at your option) any later version.    |\n|                                                                       |\n| SU2 is distributed in the hope that it will be useful,                |\n| but WITHOUT ANY WARRANTY; without even the implied warranty of        |\n| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |\n| Lesser General Public License for more details.                       |\n|                                                                       |\n| You should have received a copy of the GNU Lesser General Public      |\n| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |\n-------------------------------------------------------------------------\n\nParsing config file for zone 0\n\n----------------- Physical Case Definition ( Zone 0 ) -------------------\nIncompressible Laminar Navier-Stokes' equations.\nNo restart solution, use the values at infinity (freestream).\nDimensional simulation.\nThe reference area is 1 m^2.\nThe semi-span will be computed using the max y(3D) value.\nThe reference length is 1 m.\nReference origin for moment evaluation is (0, 0, 0).\nSurface(s) where the force coefficients are evaluated: cylinder.\n\nSurface(s) plotted in the output file: cylinder.\nInput mesh file name: mesh.su2\n\n--------------- Space Numerical Integration ( Zone 0 ) ------------------\nFlux difference splitting (FDS) upwind scheme for the flow inviscid terms.\nSecond order integration in space, with slope limiter.\nNo slope-limiting method. \nAverage of gradients with correction (viscous flow terms).\nGradient for upwind reconstruction: Green-Gauss.\nGradient for viscous and source terms: Green-Gauss.\n\n--------------- Time Numerical Integration  ( Zone ",
+      "logTail": "521032|\n|        1043|   -7.333041|   -6.569019|    1.521032|\n|        1044|   -7.336311|   -6.549271|    1.521032|\n|        1045|   -7.338699|   -6.527502|    1.521033|\n|        1046|   -7.340274|   -6.505224|    1.521033|\n|        1047|   -7.341139|   -6.483526|    1.521034|\n|        1048|   -7.341415|   -6.463142|    1.521034|\n|        1049|   -7.341240|   -6.444533|    1.521035|\n|        1050|   -7.340758|   -6.427974|    1.521035|\n|        1051|   -7.340116|   -6.413615|    1.521036|\n|        1052|   -7.339456|   -6.401531|    1.521036|\n|        1053|   -7.338910|   -6.391745|    1.521037|\n|        1054|   -7.338600|   -6.384258|    1.521037|\n|        1055|   -7.338635|   -6.379056|    1.521038|\n|        1056|   -7.339108|   -6.376118|    1.521038|\n|        1057|   -7.340099|   -6.375428|    1.521039|\n|        1058|   -7.341672|   -6.376971|    1.521039|\n|        1059|   -7.343880|   -6.380738|    1.521040|\n|        1060|   -7.346759|   -6.386728|    1.521040|\n|        1061|   -7.350334|   -6.394946|    1.521040|\n|        1062|   -7.354617|   -6.405405|    1.521041|\n|        1063|   -7.359606|   -6.418121|    1.521041|\n|        1064|   -7.365289|   -6.433114|    1.521041|\n|        1065|   -7.371638|   -6.450399|    1.521042|\n|        1066|   -7.378615|   -6.469986|    1.521042|\n|        1067|   -7.386167|   -6.491860|    1.521042|\n|        1068|   -7.394226|   -6.515972|    1.521042|\n|        1069|   -7.402711|   -6.542207|    1.521042|\n|        1070|   -7.411526|   -6.570349|    1.521042|\n|        1071|   -7.420561|   -6.600023|    1.521042|\n|        1072|   -7.429693|   -6.630618|    1.521042|\n|        1073|   -7.438786|   -6.661203|    1.521042|\n|        1074|   -7.447698|   -6.690445|    1.521042|\n|        1075|   -7.456284|   -6.716598|    1.521042|\n|        1076|   -7.464398|   -6.737641|    1.521042|\n|        1077|   -7.471905|   -6.751646|    1.521042|\n|        1078|   -7.478685|   -6.757321|    1.521042|\n|        1079|   -7.484640|   -6.754463|    1.521041|\n|        1080|   -7.489705|   -6.744042|    1.521041|\n|        1081|   -7.493847|   -6.727836|    1.521041|\n|        1082|   -7.497069|   -6.707887|    1.521041|\n|        1083|   -7.499412|   -6.686060|    1.521040|\n|        1084|   -7.500951|   -6.663826|    1.521040|\n|        1085|   -7.501787|   -6.642245|    1.521040|\n|        1086|   -7.502045|   -6.622023|    1.521039|\n|        1087|   -7.501863|   -6.603602|    1.521039|\n|        1088|   -7.501386|   -6.587244|    1.521039|\n|        1089|   -7.500761|   -6.573094|    1.521038|\n|        1090|   -7.500127|   -6.561218|    1.521038|\n|        1091|   -7.499617|   -6.551640|    1.521038|\n|        1092|   -7.499352|   -6.544356|    1.521037|\n|        1093|   -7.499438|   -6.539353|    1.521037|\n|        1094|   -7.499968|   -6.536610|    1.521037|\n|        1095|   -7.501020|   -6.536110|    1.521036|\n|        1096|   -7.502658|   -6.537839|    1.521036|\n|        1097|   -7.504931|   -6.541789|    1.521036|\n|        1098|   -7.50",
+      "checkpointMassObservation": {
+        "method": "nodal-trapezoid-outer-boundary",
+        "discreteSolverFlux": false,
+        "densityKgM3": 1,
+        "unit": "kg/(s*m span)",
+        "vertices": 128,
+        "outward": 403.1086355231621,
+        "inward": 402.9272111495775,
+        "net": 0.18142437358460484,
+        "relativeImbalance": 0.00045006322761889937
+      },
+      "massLimitation": "Interrupted run: VTU can be an earlier OUTPUT_WRT_FREQ=100 checkpoint. It is not final-history mass balance."
+    },
+    {
+      "name": "domain",
+      "command": [
+        "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+        "case.cfg",
+        "-t",
+        "1"
+      ],
+      "elapsedSeconds": 45.561999999918044,
+      "peakRssBytes": 23830528,
+      "exitCode": 0,
+      "executionSettled": true,
+      "stopReason": "solver-termination-see-history",
+      "finalHistory": {
+        "Time_Iter": 0.0,
+        "Outer_Iter": 0.0,
+        "Inner_Iter": 1022.0,
+        "rms[P]": -10.00402278,
+        "rms[U]": -9.135991021,
+        "rms[V]": -9.076216386,
+        "RefForce": 8.0,
+        "CD": 1.580804881,
+        "CL": -3.124670661e-16,
+        "CSF": 0.0,
+        "CMx": 0.0,
+        "CMy": 0.0,
+        "CMz": -2.962352751e-17,
+        "CFx": 1.580804881,
+        "CFy": -3.124670661e-16,
+        "CFz": 0.0,
+        "CEff": -1.976632726e-16
+      },
+      "residuals": {
+        "rms[P]": -10.00402278,
+        "rms[U]": -9.135991021,
+        "rms[V]": -9.076216386
+      },
+      "dragCoefficient": 1.580804881,
+      "dragRelativeError": 0.048974705374916994,
+      "last100DragRelativeRange": 1.075401542508185e-08,
+      "mass": {
+        "method": "nodal-trapezoid-outer-boundary",
+        "discreteSolverFlux": false,
+        "densityKgM3": 1,
+        "unit": "kg/(s*m span)",
+        "vertices": 64,
+        "outward": 803.1698899927161,
+        "inward": 802.9982493884078,
+        "net": 0.1716406043083225,
+        "relativeImbalance": 0.0002137039827400391
+      },
+      "checks": {
+        "exitZero": true,
+        "withinLimits": true,
+        "expectedVersion": true,
+        "allResiduals": true,
+        "dragReference": true,
+        "dragSettled": true,
+        "massBalance": true,
+        "noWallWarning": true
+      },
+      "accepted": true,
+      "artifacts": {
+        "case.cfg": {
+          "bytes": 955,
+          "sha256": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+        },
+        "flow.vtu": {
+          "bytes": 339919,
+          "sha256": "9ead04b4dbcd6220da479f2e8eadcb14ea9c7cfdbc88bb7508b782d241be7acd"
+        },
+        "history.csv": {
+          "bytes": 312320,
+          "sha256": "5f176b9c3a3eb3048adfe80659aeed7bb412fa7cae9c3fba485756463866364e"
+        },
+        "input.json": {
+          "bytes": 358,
+          "sha256": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5"
+        },
+        "mesh.su2": {
+          "bytes": 235988,
+          "sha256": "b1ed1777fb1c1cbf87b4b1eccbd5a7590aed8c40aafd6f65bb52bd11783a0cf8"
+        },
+        "solver.log": {
+          "bytes": 75627,
+          "sha256": "a3abe1ea92a4f4265e97aa2cff67395dc879615d404c8c778e73f1029ebffdcd"
+        },
+        "surface_flow.vtu": {
+          "bytes": 7407,
+          "sha256": "dc3079bc9653f7b8d458d15a1b081609a6566b879a42d40d38eebefbfe88fd13"
+        }
+      },
+      "logHeader": "\n-------------------------------------------------------------------------\n|    ___ _   _ ___                                                      |\n|   / __| | | |_  )   Release 8.5.0 \"Harrier\"                           |\n|   \\__ \\ |_| |/ /                                                      |\n|   |___/\\___//___|   Suite (Computational Fluid Dynamics Code)         |\n|                                                                       |\n-------------------------------------------------------------------------\n| SU2 Project Website: https://su2code.github.io                        |\n|                                                                       |\n| The SU2 Project is maintained by the SU2 Foundation                   |\n| (http://su2foundation.org)                                            |\n-------------------------------------------------------------------------\n| Copyright 2012-2026, SU2 Contributors                                 |\n|                                                                       |\n| SU2 is free software; you can redistribute it and/or                  |\n| modify it under the terms of the GNU Lesser General Public            |\n| License as published by the Free Software Foundation; either          |\n| version 2.1 of the License, or (at your option) any later version.    |\n|                                                                       |\n| SU2 is distributed in the hope that it will be useful,                |\n| but WITHOUT ANY WARRANTY; without even the implied warranty of        |\n| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |\n| Lesser General Public License for more details.                       |\n|                                                                       |\n| You should have received a copy of the GNU Lesser General Public      |\n| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |\n-------------------------------------------------------------------------\n\nParsing config file for zone 0\n\n----------------- Physical Case Definition ( Zone 0 ) -------------------\nIncompressible Laminar Navier-Stokes' equations.\nNo restart solution, use the values at infinity (freestream).\nDimensional simulation.\nThe reference area is 1 m^2.\nThe semi-span will be computed using the max y(3D) value.\nThe reference length is 1 m.\nReference origin for moment evaluation is (0, 0, 0).\nSurface(s) where the force coefficients are evaluated: cylinder.\n\nSurface(s) plotted in the output file: cylinder.\nInput mesh file name: mesh.su2\n\n--------------- Space Numerical Integration ( Zone 0 ) ------------------\nFlux difference splitting (FDS) upwind scheme for the flow inviscid terms.\nSecond order integration in space, with slope limiter.\nNo slope-limiting method. \nAverage of gradients with correction (viscous flow terms).\nGradient for upwind reconstruction: Green-Gauss.\nGradient for viscous and source terms: Green-Gauss.\n\n--------------- Time Numerical Integration  ( Zone ",
+      "logTail": "|\n+-----------------------------------------------------------------------+\n+---------------------------------------------------+\n|  Inner_Iter|      rms[P]|      rms[U]|          CD|\n+---------------------------------------------------+\n|        1001|   -9.885099|   -9.142381|    1.580805|\n|        1002|   -9.899461|   -9.190332|    1.580805|\n|        1003|   -9.912404|   -9.226215|    1.580805|\n|        1004|   -9.923423|   -9.241761|    1.580805|\n|        1005|   -9.932156|   -9.234059|    1.580805|\n|        1006|   -9.938450|   -9.208071|    1.580805|\n|        1007|   -9.942384|   -9.172515|    1.580805|\n|        1008|   -9.944255|   -9.134806|    1.580805|\n|        1009|   -9.944530|   -9.099456|    1.580805|\n|        1010|   -9.943772|   -9.068696|    1.580805|\n|        1011|   -9.942573|   -9.043450|    1.580805|\n|        1012|   -9.941490|   -9.023988|    1.580805|\n|        1013|   -9.941018|   -9.010299|    1.580805|\n|        1014|   -9.941564|   -9.002272|    1.580805|\n|        1015|   -9.943450|   -8.999784|    1.580805|\n|        1016|   -9.946907|   -9.002745|    1.580805|\n|        1017|   -9.952088|   -9.011111|    1.580805|\n|        1018|   -9.959070|   -9.024895|    1.580805|\n|        1019|   -9.967859|   -9.044165|    1.580805|\n|        1020|   -9.978388|   -9.069028|    1.580805|\n|        1021|   -9.990516|   -9.099610|    1.580805|\n|        1022|  -10.004023|   -9.135991|    1.580805|\n\n----------------------------- Solver Exit -------------------------------\nAll convergence criteria satisfied.\n+-----------------------------------------------------------------------+\n|      Convergence Field     |     Value    |   Criterion  |  Converged |\n+-----------------------------------------------------------------------+\n|                      rms[P]|       -10.004|         < -10|         Yes|\n+-----------------------------------------------------------------------+\n-------------------------------------------------------------------------\n+-----------------------------------------------------------------------+\n|        File Writing Summary       |              Filename             |\n+-----------------------------------------------------------------------+\n|Paraview                           |flow.vtu                           |\n|Paraview surface                   |surface_flow.vtu                   |\n+-----------------------------------------------------------------------+\n\n--------------------------- Finalizing Solver ---------------------------\nDeleted CNumerics container.\nDeleted CIntegration container.\nDeleted CSolver container.\nDeleted CIteration container.\nDeleted CInterface container.\nDeleted CGeometry container.\nDeleted CFreeFormDefBox class.\nDeleted CSurfaceMovement class.\nDeleted CVolumetricMovement class.\nDeleted CConfig container.\nDeleted nInst container.\nDeleted COutput class.\n-------------------------------------------------------------------------\n\n------------------------- Exit Success (SU2_CFD) ------------------------\n\n"
+    },
+    {
+      "name": "iterations",
+      "command": [
+        "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+        "case.cfg",
+        "-t",
+        "1"
+      ],
+      "elapsedSeconds": 23.811999999918044,
+      "peakRssBytes": 22257664,
+      "exitCode": 0,
+      "executionSettled": true,
+      "stopReason": "solver-termination-see-history",
+      "finalHistory": {
+        "Time_Iter": 0.0,
+        "Outer_Iter": 0.0,
+        "Inner_Iter": 820.0,
+        "rms[P]": -10.00679268,
+        "rms[U]": -9.145668932,
+        "rms[V]": -9.08159036,
+        "RefForce": 8.0,
+        "CD": 1.58644061,
+        "CL": -2.093594395e-16,
+        "CSF": 0.0,
+        "CMx": 0.0,
+        "CMy": 0.0,
+        "CMz": -1.362663492e-16,
+        "CFx": 1.58644061,
+        "CFy": -2.093594395e-16,
+        "CFz": 0.0,
+        "CEff": -1.319680284e-16
+      },
+      "residuals": {
+        "rms[P]": -10.00679268,
+        "rms[U]": -9.145668932,
+        "rms[V]": -9.08159036
+      },
+      "dragCoefficient": 1.58644061,
+      "dragRelativeError": 0.052714406104844125,
+      "last100DragRelativeRange": 1.9540599204946504e-08,
+      "mass": {
+        "method": "nodal-trapezoid-outer-boundary",
+        "discreteSolverFlux": false,
+        "densityKgM3": 1,
+        "unit": "kg/(s*m span)",
+        "vertices": 64,
+        "outward": 403.12699763184895,
+        "inward": 402.9490018536429,
+        "net": 0.17799577820602508,
+        "relativeImbalance": 0.0004415377269487112
+      },
+      "checks": {
+        "exitZero": true,
+        "withinLimits": true,
+        "expectedVersion": true,
+        "allResiduals": true,
+        "dragReference": false,
+        "dragSettled": true,
+        "massBalance": true,
+        "noWallWarning": true
+      },
+      "accepted": false,
+      "artifacts": {
+        "case.cfg": {
+          "bytes": 955,
+          "sha256": "d6621cbae6559a82a5ea3dc8cb04c6146a6a5b0f1960c1d93479a493d30fd1b1"
+        },
+        "flow.vtu": {
+          "bytes": 298254,
+          "sha256": "d7295c76c207ca23c0970a588400bdbe630136d9bee50e8e947d96cf6a6b8e74"
+        },
+        "history.csv": {
+          "bytes": 250710,
+          "sha256": "8a06a5e6c1dcda09269aefa6931d1e54e2dc2b0848f173ccab3574e25c569f48"
+        },
+        "input.json": {
+          "bytes": 358,
+          "sha256": "2799b85e90907e533f1f0928a70cc22e8d3497e98283c29341867d09862fe972"
+        },
+        "mesh.su2": {
+          "bytes": 206565,
+          "sha256": "690481cfae260d5dce292fe1a5e49ec1d1da120100aa7b2364d40a3d3e9a08aa"
+        },
+        "solver.log": {
+          "bytes": 63285,
+          "sha256": "c325e645ce1ebcfcdadacff0aa337ec941ac4daffb1c9398129be442783ebd67"
+        },
+        "surface_flow.vtu": {
+          "bytes": 7407,
+          "sha256": "7d6f9e2c9d4f3547a120a90641aa81b9452f4fbc2b58f2f4c140feb93857912b"
+        }
+      },
+      "logHeader": "\n-------------------------------------------------------------------------\n|    ___ _   _ ___                                                      |\n|   / __| | | |_  )   Release 8.5.0 \"Harrier\"                           |\n|   \\__ \\ |_| |/ /                                                      |\n|   |___/\\___//___|   Suite (Computational Fluid Dynamics Code)         |\n|                                                                       |\n-------------------------------------------------------------------------\n| SU2 Project Website: https://su2code.github.io                        |\n|                                                                       |\n| The SU2 Project is maintained by the SU2 Foundation                   |\n| (http://su2foundation.org)                                            |\n-------------------------------------------------------------------------\n| Copyright 2012-2026, SU2 Contributors                                 |\n|                                                                       |\n| SU2 is free software; you can redistribute it and/or                  |\n| modify it under the terms of the GNU Lesser General Public            |\n| License as published by the Free Software Foundation; either          |\n| version 2.1 of the License, or (at your option) any later version.    |\n|                                                                       |\n| SU2 is distributed in the hope that it will be useful,                |\n| but WITHOUT ANY WARRANTY; without even the implied warranty of        |\n| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |\n| Lesser General Public License for more details.                       |\n|                                                                       |\n| You should have received a copy of the GNU Lesser General Public      |\n| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |\n-------------------------------------------------------------------------\n\nParsing config file for zone 0\n\n----------------- Physical Case Definition ( Zone 0 ) -------------------\nIncompressible Laminar Navier-Stokes' equations.\nNo restart solution, use the values at infinity (freestream).\nDimensional simulation.\nThe reference area is 1 m^2.\nThe semi-span will be computed using the max y(3D) value.\nThe reference length is 1 m.\nReference origin for moment evaluation is (0, 0, 0).\nSurface(s) where the force coefficients are evaluated: cylinder.\n\nSurface(s) plotted in the output file: cylinder.\nInput mesh file name: mesh.su2\n\n--------------- Space Numerical Integration ( Zone 0 ) ------------------\nFlux difference splitting (FDS) upwind scheme for the flow inviscid terms.\nSecond order integration in space, with slope limiter.\nNo slope-limiting method. \nAverage of gradients with correction (viscous flow terms).\nGradient for upwind reconstruction: Green-Gauss.\nGradient for viscous and source terms: Green-Gauss.\n\n--------------- Time Numerical Integration  ( Zone ",
+      "logTail": "low.vtu                           |\n|Paraview surface                   |surface_flow.vtu                   |\n+-----------------------------------------------------------------------+\n+---------------------------------------------------+\n|  Inner_Iter|      rms[P]|      rms[U]|          CD|\n+---------------------------------------------------+\n|         801|   -9.872836|   -9.151085|    1.586441|\n|         802|   -9.889171|   -9.197122|    1.586441|\n|         803|   -9.903666|   -9.226633|    1.586441|\n|         804|   -9.915762|   -9.232726|    1.586441|\n|         805|   -9.925125|   -9.216450|    1.586441|\n|         806|   -9.931713|   -9.185850|    1.586441|\n|         807|   -9.935782|   -9.149921|    1.586441|\n|         808|   -9.937836|   -9.114885|    1.586441|\n|         809|   -9.938537|   -9.084060|    1.586441|\n|         810|   -9.938601|   -9.058917|    1.586441|\n|         811|   -9.938721|   -9.039975|    1.586441|\n|         812|   -9.939504|   -9.027321|    1.586441|\n|         813|   -9.941450|   -9.020881|    1.586441|\n|         814|   -9.944944|   -9.020547|    1.586441|\n|         815|   -9.950259|   -9.026234|    1.586441|\n|         816|   -9.957564|   -9.037911|    1.586441|\n|         817|   -9.966936|   -9.055604|    1.586441|\n|         818|   -9.978354|   -9.079393|    1.586441|\n|         819|   -9.991710|   -9.109387|    1.586441|\n|         820|  -10.006793|   -9.145669|    1.586441|\n\n----------------------------- Solver Exit -------------------------------\nAll convergence criteria satisfied.\n+-----------------------------------------------------------------------+\n|      Convergence Field     |     Value    |   Criterion  |  Converged |\n+-----------------------------------------------------------------------+\n|                      rms[P]|      -10.0068|         < -10|         Yes|\n+-----------------------------------------------------------------------+\n-------------------------------------------------------------------------\n+-----------------------------------------------------------------------+\n|        File Writing Summary       |              Filename             |\n+-----------------------------------------------------------------------+\n|Paraview                           |flow.vtu                           |\n|Paraview surface                   |surface_flow.vtu                   |\n+-----------------------------------------------------------------------+\n\n--------------------------- Finalizing Solver ---------------------------\nDeleted CNumerics container.\nDeleted CIntegration container.\nDeleted CSolver container.\nDeleted CIteration container.\nDeleted CInterface container.\nDeleted CGeometry container.\nDeleted CFreeFormDefBox class.\nDeleted CSurfaceMovement class.\nDeleted CVolumetricMovement class.\nDeleted CConfig container.\nDeleted nInst container.\nDeleted COutput class.\n-------------------------------------------------------------------------\n\n------------------------- Exit Success (SU2_CFD) ------------------------\n\n"
+    }
+  ],
+  "parentTaskReleased": false,
+  "physicalAccuracyVerified": false,
+  "relativeDragDependencies": {
+    "mesh": 0.041226315430742844,
+    "domain": 0.0035524361671502858,
+    "iterations": 0.0
+  },
+  "allScenariosAccepted": false,
+  "dependencyChecks": {
+    "mesh": false,
+    "domain": true,
+    "iterations": true
+  },
+  "referenceStudyAccepted": false,
+  "limitations": [
+    "No new cow simulation",
+    "No host/MCP comparison for this reference",
+    "No full CFD1 physical validation",
+    "Nodal farfield mass quadrature is not discrete solver mass-flux verification.",
+    "The older cow result retains 116 unconverged wall points and incomplete velocity/turbulence residuals.",
+    "Mesh-budget timeout preserves partial history and an earlier VTU checkpoint; it is a failed scenario and cannot establish converged mesh dependence."
+  ],
+  "assessment": {
+    "command": "python scripts/qa-cfd-reference.py assess",
+    "rawSolverRerun": false,
+    "correction": "CSV has spaces before quoted header cells; strip padding/quotes. Preserve original raw hashes and execution timings. Discard interrupted checkpoint mass as final-state evidence.",
+    "executionHarnessSha256": "5153de492dae59ec3e2294dc4241304bde534a6dd3514f3b6fbd9e16618df558",
+    "executionHarnessCommit": "bbd0241fd62a6ec05a9eb480dff0264e552cbec7",
+    "assessmentHarnessSha256": "17577a19cd400165096e5ded90d08df6cbee8b8badc2d55c881e1414d8629275",
+    "massHelperSha256": "90e0ef8523abe5aea3ed15796c1b41817ef252613fca582c95a55da9b868905a"
+  }
+}

@@ -63,5 +63,18 @@ export function verifyNativeTet4Output(output,{record,recordRevision,runtime}){
   const applied=record.forces.reduce((sum,v,i)=>sum+(i%3===k?v:0),0),reaction=output.reactionsN.reduce((sum,v,i)=>sum+(i%3===k?v:0),0),tol=1e-8+Math.abs(applied)*1e-7;
   requireValue(Math.abs(output.appliedN[k]-applied)<=tol&&Math.abs(output.balanceN[k]-(applied+reaction))<=tol&&Math.abs(output.balanceN[k])<=tol,'Native Tet4 force balance failed');
  }
+ // Test rotational equilibrium as well: equal/opposite reaction errors can
+ // preserve total force while introducing a spurious couple. Use a local
+ // origin to avoid cancellation from the saved model's global translation.
+ const moment=[0,0,0],scale=[0,0,0],origin=record.nodes.slice(0,3);
+ for(let node=0;node<n;node++){
+  const [x,y,z]=record.nodes.slice(3*node,3*node+3).map((v,k)=>(v-origin[k])*1e-3);
+  for(const force of [record.forces,output.reactionsN]){
+   const [fx,fy,fz]=force.slice(3*node,3*node+3);
+   const terms=[[y*fz,z*fy],[z*fx,x*fz],[x*fy,y*fx]];
+   for(let k=0;k<3;k++){moment[k]+=terms[k][0]-terms[k][1];scale[k]+=Math.abs(terms[k][0])+Math.abs(terms[k][1]);}
+  }
+ }
+ requireValue(moment.every((v,k)=>finite(v)&&finite(scale[k])&&Math.abs(v)<=1e-8+scale[k]*1e-7),'Native Tet4 moment balance failed');
  return output;
 }

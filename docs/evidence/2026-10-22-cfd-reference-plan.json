@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "taskId": "CFD1",
+  "date": "2026-10-22",
+  "status": "planned-before-execution",
+  "sourceSha": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "harnessSha256": "5153de492dae59ec3e2294dc4241304bde534a6dd3514f3b6fbd9e16618df558",
+  "executable": {
+    "version": "8.5.0",
+    "sha256": "3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248",
+    "localPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\external-flow-su2\\airpocket-simulation-studio\\.native-cache\\su2-8.5.0\\runtime\\bin\\SU2_CFD.exe",
+    "archiveSha256": "4466fe21aedb5e0bad57afd45f829acbdec6ec79fe8c3f8954ddea06a4b4bc11"
+  },
+  "reference": {
+    "url": "https://economon.github.io/docs/AIAA-2018-3111.pdf",
+    "doi": "10.2514/6.2018-3111",
+    "section": "IV.G, printed pp.19-20",
+    "kind": "published SU2 numerical reference, not an experiment or analytic solution",
+    "reynoldsNumber": 40,
+    "machNumber": null,
+    "machReason": "Incompressible constant-density solver; no acoustic Mach input",
+    "diameterM": 1,
+    "densityKgM3": 1,
+    "speedMps": 4,
+    "dynamicViscosityPaS": 0.1,
+    "dragCoefficient": 1.507,
+    "wall": "adiabatic no-slip",
+    "farfield": "circular freestream boundary 50 diameters from wall; QA outer radius 50.5m",
+    "grid": "O-grid quadrilaterals, first radial step pi/N, growth 1.1"
+  },
+  "acceptance": {
+    "dragRelativeErrorMaximum": 0.05,
+    "allReportedResidualsLog10Maximum": -6,
+    "last100DragRelativeRangeMaximum": 0.005,
+    "nodalFarfieldMassImbalanceRelativeMaximum": 0.001,
+    "meshAndDomainRelativeDragDifferenceMaximum": 0.03,
+    "iterationBudgetRelativeDragDifferenceMaximum": 0.01,
+    "requireNoWallWarning": true,
+    "qualification": "Engineering QA tolerances selected before execution, not uncertainty bounds from the reference. Coarse grids may fail; preserve failures.",
+    "massQualification": "Trapezoidal integral of nodal farfield velocity, not SU2 discrete face-flux conservation."
+  },
+  "scenarios": [
+    {
+      "name": "baseline",
+      "geometry": {
+        "angular": 64,
+        "radialLayers": 49,
+        "points": 3200,
+        "quadrilaterals": 3136,
+        "outerRadiusM": 50.5,
+        "wallRadiusM": 0.5,
+        "firstCellHeightM": 0.04908738521234052,
+        "growth": 1.1
+      },
+      "maxIterations": 1200,
+      "timeoutSeconds": 90,
+      "memoryRssLimitBytes": 1073741824,
+      "threads": 1,
+      "input": {
+        "schemaVersion": 1,
+        "kind": "steady-incompressible-laminar",
+        "meshUnits": "m",
+        "densityKgM3": 1,
+        "dynamicViscosityPaS": 0.1,
+        "velocityMps": [
+          4,
+          0,
+          0
+        ],
+        "wallMarker": "cylinder",
+        "farfieldMarker": "farfield",
+        "cflNumber": 10,
+        "multigridLevels": 0,
+        "maxIterations": 1200,
+        "residualLog10Target": -10
+      },
+      "files": {
+        "mesh.su2": "690481cfae260d5dce292fe1a5e49ec1d1da120100aa7b2364d40a3d3e9a08aa",
+        "input.json": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5",
+        "case.cfg": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+      }
+    },
+    {
+      "name": "mesh",
+      "geometry": {
+        "angular": 128,
+        "radialLayers": 56,
+        "points": 7296,
+        "quadrilaterals": 7168,
+        "outerRadiusM": 50.5,
+        "wallRadiusM": 0.5,
+        "firstCellHeightM": 0.02454369260617026,
+        "growth": 1.1
+      },
+      "maxIterations": 1200,
+      "timeoutSeconds": 90,
+      "memoryRssLimitBytes": 1073741824,
+      "threads": 1,
+      "input": {
+        "schemaVersion": 1,
+        "kind": "steady-incompressible-laminar",
+        "meshUnits": "m",
+        "densityKgM3": 1,
+        "dynamicViscosityPaS": 0.1,
+        "velocityMps": [
+          4,
+          0,
+          0
+        ],
+        "wallMarker": "cylinder",
+        "farfieldMarker": "farfield",
+        "cflNumber": 10,
+        "multigridLevels": 0,
+        "maxIterations": 1200,
+        "residualLog10Target": -10
+      },
+      "files": {
+        "mesh.su2": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6",
+        "input.json": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5",
+        "case.cfg": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+      }
+    },
+    {
+      "name": "domain",
+      "geometry": {
+        "angular": 64,
+        "radialLayers": 56,
+        "points": 3648,
+        "quadrilaterals": 3584,
+        "outerRadiusM": 100.5,
+        "wallRadiusM": 0.5,
+        "firstCellHeightM": 0.04908738521234052,
+        "growth": 1.1
+      },
+      "maxIterations": 1200,
+      "timeoutSeconds": 90,
+      "memoryRssLimitBytes": 1073741824,
+      "threads": 1,
+      "input": {
+        "schemaVersion": 1,
+        "kind": "steady-incompressible-laminar",
+        "meshUnits": "m",
+        "densityKgM3": 1,
+        "dynamicViscosityPaS": 0.1,
+        "velocityMps": [
+          4,
+          0,
+          0
+        ],
+        "wallMarker": "cylinder",
+        "farfieldMarker": "farfield",
+        "cflNumber": 10,
+        "multigridLevels": 0,
+        "maxIterations": 1200,
+        "residualLog10Target": -10
+      },
+      "files": {
+        "mesh.su2": "b1ed1777fb1c1cbf87b4b1eccbd5a7590aed8c40aafd6f65bb52bd11783a0cf8",
+        "input.json": "d299806e915874803e811624a2c62c65fef05563bfebf77fab795395f21d82d5",
+        "case.cfg": "428c08fbb2141f7453569cd133259b3b1b4c8a4f020c0b7411c5199c19cda79a"
+      }
+    },
+    {
+      "name": "iterations",
+      "geometry": {
+        "angular": 64,
+        "radialLayers": 49,
+        "points": 3200,
+        "quadrilaterals": 3136,
+        "outerRadiusM": 50.5,
+        "wallRadiusM": 0.5,
+        "firstCellHeightM": 0.04908738521234052,
+        "growth": 1.1
+      },
+      "maxIterations": 2400,
+      "timeoutSeconds": 90,
+      "memoryRssLimitBytes": 1073741824,
+      "threads": 1,
+      "input": {
+        "schemaVersion": 1,
+        "kind": "steady-incompressible-laminar",
+        "meshUnits": "m",
+        "densityKgM3": 1,
+        "dynamicViscosityPaS": 0.1,
+        "velocityMps": [
+          4,
+          0,
+          0
+        ],
+        "wallMarker": "cylinder",
+        "farfieldMarker": "farfield",
+        "cflNumber": 10,
+        "multigridLevels": 0,
+        "maxIterations": 2400,
+        "residualLog10Target": -10
+      },
+      "files": {
+        "mesh.su2": "690481cfae260d5dce292fe1a5e49ec1d1da120100aa7b2364d40a3d3e9a08aa",
+        "input.json": "2799b85e90907e533f1f0928a70cc22e8d3497e98283c29341867d09862fe972",
+        "case.cfg": "d6621cbae6559a82a5ea3dc8cb04c6146a6a5b0f1960c1d93479a493d30fd1b1"
+      }
+    }
+  ],
+  "limits": {
+    "totalWallClockSecondsMaximum": 360,
+    "maxSimultaneousSolvers": 1,
+    "newDownloads": false,
+    "arbitraryConfigOrCommands": false
+  },
+  "existingCow": {
+    "source": "docs/evidence/2026-10-15-cow-flow-equivalence.json",
+    "assessment": {
+      "schemaVersion": 1,
+      "solver": "SU2",
+      "expectedVersion": "8.5.0",
+      "inputRevision": "sha256:15192ef4993638c7eb3e085ea2886fe58b864cc776b1a3cdb0b30b090684325b",
+      "executionSettled": true,
+      "numericallyConverged": false,
+      "convergenceCriterion": "solver pressure residual only",
+      "provisional": true,
+      "physicalValidationComplete": false,
+      "history": {
+        "Time_Iter": 0,
+        "Outer_Iter": 0,
+        "Inner_Iter": 184,
+        "rms[P]": -5.021495891,
+        "rms[U]": -3.73859823,
+        "rms[V]": -3.844614565,
+        "rms[W]": -3.957408212,
+        "rms[nu]": -4.862592819
+      },
+      "artifacts": [
+        {
+          "name": "flow.vtu",
+          "bytes": 1406072,
+          "sha256": "sha256:76437cb6d1da0b7b10c78c9b7e160ab822ae3fedf1256ed9251242422df69e55"
+        },
+        {
+          "name": "surface_flow.vtu",
+          "bytes": 245316,
+          "sha256": "sha256:7d6db4e7ce6d5f2ff4670e2e2c51b00d5b17eef06d038ff8a913d945a7f40ad2"
+        },
+        {
+          "name": "history.csv",
+          "bytes": 24924,
+          "sha256": "sha256:ee0db5d6a5071462f5ae21323583d892c8a4db6c8b961e2f653195773a6b92df"
+        }
+      ],
+      "pressureCriterionMet": true,
+      "allReportedResidualsMet": false,
+      "residualChecks": [
+        {
+          "name": "rms[P]",
+          "value": -5.021495891,
+          "target": -5,
+          "met": true
+        },
+        {
+          "name": "rms[U]",
+          "value": -3.73859823,
+          "target": -5,
+          "met": false
+        },
+        {
+          "name": "rms[V]",
+          "value": -3.844614565,
+          "target": -5,
+          "met": false
+        },
+        {
+          "name": "rms[W]",
+          "value": -3.957408212,
+          "target": -5,
+          "met": false
+        },
+        {
+          "name": "rms[nu]",
+          "value": -4.862592819,
+          "target": -5,
+          "met": false
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+          "severity": "warning",
+          "occurrences": 369,
+          "lastAffectedPoints": 116,
+          "maximumAffectedPoints": 363,
+          "message": "Wall-function y+ computation did not converge at some points.",
+          "suggestions": [
+            "Inspect the wall y+ distribution and near-wall mesh.",
+            "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+            "Do not use this result as a validated drag or pressure prediction."
+          ]
+        }
+      ],
+      "assessmentOrigin": "Reassessed from the saved solver log; pressure-only termination is not full numerical convergence"
+    },
+    "physicalAccuracyVerified": false
+  },
+  "unexecuted": [
+    "No new cow simulation",
+    "No host/MCP comparison for this reference",
+    "No full CFD1 physical validation"
+  ],
+  "parentTaskReleased": false
+}

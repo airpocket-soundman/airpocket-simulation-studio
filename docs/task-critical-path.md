@@ -4,6 +4,8 @@
 
 2026-10-21時点、171件のうち公開済み134件、未完37件。以下は優先判断であり、実装/検証なしに状態を進める根拠ではない。
 
+2026-10-22: [PR172〜175のレビュー](pr-review-2026-10-22.md)で、実ChromeのPNG ZIP/音響GIFの独立decode、1構造例のメモリ系列、実hidden録画を確認した。要素数・再実行手順・cleanup確認範囲を訂正。背景録画の実hidden操作環境待ちは解消したが、セッション失効と日英実機マトリクスは残る。次は [3件の実行指示](next-work-orders-2026-10-22/README.md)に従いP6契約と計測を進める。親171件の状態と公開134件は、この限定検証だけで変更しない。
+
 | 分類 | 既存ID | 条件 |
 |---|---|---|
 | 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |

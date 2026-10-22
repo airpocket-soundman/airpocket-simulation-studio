@@ -2,7 +2,9 @@
 
 English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 
-**現在: 実Chromeの構造3サイズで時間/取消を部分実測済み、熱は接続reset/timeoutで中断。メモリ・他ブラウザ・対応上限は未観測です。** 末尾の2026-10-18証跡を参照。以下は当初設計の履歴で、現在の実装はscripts/perf-browser.mjs経由のホスト観測時間を使います。下記のCDP/hidden-global測定を今回実行したという意味ではありません。
+2026-10-22 probe契約修正: 新しいsnippetはUASMの同時要求を1つに制限し、要求時刻`tRequested`と完了時刻`tResolved`を保存する。`stop()`後に完了したsampleは破棄し、再設置時には前のprobeを停止する。JS heapは要求時刻の同期値、UASMは非同期区間であり、baseline/解析中のpeakは区間全体がそのphaseに含まれるsampleだけを使う。旧probeの`t`だけのsampleは歴史互換として残すが、完了時刻不明と明示する。この変更は以前の測定を再実行した意味ではない。
+
+**現在: 実Chromeの構造3サイズで時間/取消を部分実測済み、熱は接続reset/timeoutで中断。2026-10-22のPR174で小構造1例のUASM/JS heapを別系列として実測。新probeでの再測定、他ブラウザ・対応上限は未確認です。** 末尾の2026-10-18証跡を参照。以下は当初設計の履歴で、現在の実装はscripts/perf-browser.mjs経由のホスト観測時間を使います。下記のCDP/hidden-global測定を今回実行したという意味ではありません。
 
 ## 目的と範囲
 

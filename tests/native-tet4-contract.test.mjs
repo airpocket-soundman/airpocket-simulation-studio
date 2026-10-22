@@ -24,7 +24,18 @@ test('prepared contract refuses unsupported physics, wrong units, indices, degen
  await assert.rejects(createNativeTet4Record({...f,input:{...f.input,conditions:[{type:'force',value:'bad'}]}}));
  await assert.rejects(createNativeTet4Record({...f,input:{...f.input,materialProperties:{...f.input.materialProperties,plasticity:{}}}}));
 });
-function syntheticOutput(record,recordRevision){return {schemaVersion:2,kind:record.kind,engine:'mfem-native',runtime:'host-native',mfemVersion:41000,recordRevision,sourceInputRevision:record.sourceInputRevision,meshRevision:record.meshRevision,units:'m-N',nodeCount:8,elementCount:6,converged:true,iterations:1,verifiedResidual:0,displacementM:Array(24).fill(0),reactionsN:[0,0,-75,...Array(21).fill(0)],appliedN:[0,0,75],balanceN:[0,0,0]};}
+function syntheticOutput(record,recordRevision){return {schemaVersion:2,kind:record.kind,engine:'mfem-native',runtime:'host-native',mfemVersion:41000,recordRevision,sourceInputRevision:record.sourceInputRevision,meshRevision:record.meshRevision,units:'m-N',nodeCount:8,elementCount:6,converged:true,iterations:1,verifiedResidual:0,displacementM:Array(24).fill(0),reactionsN:[0,0,-25,0,0,-12.5,0,0,-25,0,0,-12.5,...Array(12).fill(0)],appliedN:[0,0,75],balanceN:[0,0,0]};}
+
+test('result contract rejects spurious reaction couples even when net force remains balanced',async()=>{
+ const {record}=await nativeTet4Fixture(),{recordRevision}=await serializeNativeTet4Record(record),options={record,recordRevision,runtime:'host-native'};
+ // z forces separated along y/x; x forces separated along y.
+ for(const [a,b] of [[2,11],[2,5],[0,9]]){
+  const out=syntheticOutput(record,recordRevision);out.reactionsN[a]+=10;out.reactionsN[b]-=10;
+  assert.throws(()=>verifyNativeTet4Output(out,options),/moment balance/);
+ }
+ const translated=structuredClone(record);for(let i=0;i<translated.nodes.length;i++)translated.nodes[i]+=[900000,-800000,700000][i%3];
+ verifyNativeTet4Output(syntheticOutput(translated,recordRevision),{...options,record:translated});
+});
 test('saved material dependence and evaluation envelopes cannot be silently discarded',async()=>{
  const f=await nativeTet4Fixture();
  const temperatureTable=[{temperature:0,youngModulus:1e9,poissonRatio:0},{temperature:100,youngModulus:3e9,poissonRatio:0}];
