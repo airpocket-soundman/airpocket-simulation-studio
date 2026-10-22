@@ -65,7 +65,7 @@ const evidence = {
   },
   commands: [
     'node scripts/qa-review-50-chrome.mjs',
-    'python scripts/qa-review-50-decode.py .qa/review50/artifact.zip',
+    'python scripts/qa-review-50-decode.py .qa/review50/artifact.zip > .qa/review50/decode.json',
     'node scripts/qa-review-50-evidence.mjs',
   ],
   input: {

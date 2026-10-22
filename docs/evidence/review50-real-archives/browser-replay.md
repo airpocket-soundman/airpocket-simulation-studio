@@ -20,9 +20,11 @@
 4. スクリプトは `cases.json` を専用pageへimportし、保存結果を表示する。`getResultView/getView/caseList/getCompareView` の原状態を保存する。
 5. section axisX・位置4mm・無効を正規`setView`で設定し、`expectedResultRevision` 付きで `format=png-sequence`、`animation=slice`、`frames=3` を実行する。
 6. terminal後にartifact全ページ取得、全ZIP SHA・STORE CRC・各frame SHAを独立検査する。
-7. `python scripts/qa-review-50-decode.py .qa/review50/artifact.zip` で一般PNG decoder（Pillow）を使い、3枚の寸法・画素差・phase/sliceを照合する。
+7. `python scripts/qa-review-50-decode.py .qa/review50/artifact.zip > .qa/review50/decode.json` で一般PNG decoder（Pillow）を使い、3枚の寸法・画素差・phase/sliceを照合する。
 8. `node scripts/qa-review-50-evidence.mjs` でchecksを通し、`docs/evidence/2026-10-22-review50-real-chrome.json` を生成する。
 9. 成功/取消でinput/result/cases/compare/camera/section復元、部分成果物拒否を確認し、原本ZIPとdecode結果を残す。
 10. QA page、stdio MCP、所有serverをcleanupする。接続が繰り返し切れる場合は未確認を保持し、盲目的retryをしない。
 
 再計算用の保存資料は実Node構造計算の結果であり、今回のPNG ZIPは実Chromeで別途取得した。Node fixtureをZIPの代用にしない。
+
+証拠生成器は保存済みsource `070ec8f885f0e15c889cacaed3c151292c1cc506` のraw記録専用である。異なるsourceで再測定した記録は別の証拠ファイルに残し、今回の合格記録を上書きしない。
