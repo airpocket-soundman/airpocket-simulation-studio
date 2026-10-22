@@ -11,6 +11,7 @@ const messages={
  '段階bundle JSONファイル（2〜4件を同時選択）':'Increment bundle JSON files (select 2–4 together)',
  '検証して比較グラフを表示':'Validate and compare curves',
  'CSVを保存':'Save CSV','JSONを保存':'Save JSON','SVGを保存':'Save SVG',
+ 'グラフを大きく開く':'Open full-size graph',
  '入力から再計算して検証します。自己申告のcurveや画像は受け付けません。現在の入力・ケース・解析結果は変更しません。':'Recomputes and validates from supplied inputs. Self-reported curves or images are refused. The current project, cases and analysis result are unchanged.',
  '比較グラフの使い方':'Curve comparison instructions',
  '参照Aを保存':'Save reference A',
@@ -42,13 +43,14 @@ export function createIncrementCurveComparisonUi({anchor,document=globalThis.doc
  const preview=el('img','increment-comparison-preview');preview.hidden=true;preview.style.width='100%';preview.style.maxWidth='100%';preview.style.height='auto';
  const downloads=el('div','increment-comparison-downloads');downloads.style.display='flex';downloads.style.flexWrap='wrap';downloads.style.gap='8px';
  const links={};for(const [kind,text]of [['csv','CSVを保存'],['json','JSONを保存'],['svg','SVGを保存']]){const link=el('a','increment-comparison-'+kind,text);link.hidden=true;link.download='increment-comparison.'+kind;links[kind]=link;downloads.append(link);}
+ const fullSize=el('a','increment-comparison-open','グラフを大きく開く');fullSize.target='_blank';fullSize.rel='noopener';fullSize.hidden=true;downloads.append(fullSize);
  const instructions=el('a',null,'比較グラフの使い方');instructions.target='_blank';instructions.rel='noopener';
  const sample=el('a','increment-comparison-sample','参照Aを保存');sample.href='./examples/increment-comparison-a.json';sample.download='increment-comparison-a.json';const sampleB=el('a','increment-comparison-sample-b','参照Bを保存');sampleB.href='./examples/increment-comparison-b.json';sampleB.download='increment-comparison-b.json';
  const samples=el('div');samples.style.display='flex';samples.style.flexWrap='wrap';samples.style.gap='8px';samples.append(sample,sampleB);
  host.append(summary,note,el('p',null,'色と凡例で曲線を区別します。材料・形状・標点が異なる場合も各曲線の識別を保持し、別の状態履歴へ結合しません。'),samples,el('p',null,'実solverの合成Tet4参照です。参照AとBを保存し、ファイル欄で2件を同時選択して検証してください。実測や塑性履歴ではありません。'),label('bundlesに2〜4件を含む比較JSON（合計最大2MiB）',input),label('段階bundle JSONファイル（2〜4件を同時選択）',file),run,el('p',null,'入力から再計算して検証します。自己申告のcurveや画像は受け付けません。現在の入力・ケース・解析結果は変更しません。'),instructions,status,preview,downloads);anchor.after(host);
  let epoch=0,urls=[],message='未検証です。検証後に保存できます。',errorDetail='',counts=null;
  const refresh=()=>{for(const [node,text]of labels)node.textContent=tr(text);status.textContent=tr(message)+errorDetail+(counts?(language()==='en'?` Curves: ${counts.total}; failed gaps: ${counts.failed}.`:` 曲線: ${counts.total}、失敗による空白: ${counts.failed}。`):'');preview.alt=tr('複数曲線の静止SVG。荷重–標点伸び mm・N、工学SS 1・Pa。');instructions.href='https://github.com/airpocket-soundman/airpocket-simulation-studio/blob/main/docs/'+(language()==='en'?'en/':'')+'increment-comparison-ui.md';};
- const clear=()=>{epoch++;for(const value of urls)url.revokeObjectURL(value);urls=[];counts=null;for(const link of Object.values(links)){link.hidden=true;link.removeAttribute('href');}preview.hidden=true;preview.removeAttribute('src');run.disabled=false;for(const control of [input,file]){control.removeAttribute('aria-invalid');control.removeAttribute('aria-errormessage');}errorDetail='';};
+ const clear=()=>{epoch++;for(const value of urls)url.revokeObjectURL(value);urls=[];counts=null;for(const link of [...Object.values(links),fullSize]){link.hidden=true;link.removeAttribute('href');}preview.hidden=true;preview.removeAttribute('src');run.disabled=false;for(const control of [input,file]){control.removeAttribute('aria-invalid');control.removeAttribute('aria-errormessage');}errorDetail='';};
  const invalidate=()=>{clear();message='入力が変更されました。再検証してください。';refresh();};
  const bounded=text=>{if(typeof text!=='string'||text.length>INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES||new TextEncoder().encode(text).length>INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES)throw Error(tr('比較JSONは合計最大2MiBです。'));return text;};
  const fail=(error,control)=>{message='検証できません: ';errorDetail=String(error?.message??error).slice(0,1000);control.setAttribute('aria-invalid','true');control.setAttribute('aria-errormessage',status.id);refresh();control.focus?.();};
@@ -58,7 +60,7 @@ export function createIncrementCurveComparisonUi({anchor,document=globalThis.doc
    if(current!==epoch)return null;
    const types={csv:'text/csv;charset=utf-8',json:'application/json',svg:'image/svg+xml'};
    for(const kind of ['csv','json','svg']){const href=url.createObjectURL(new BlobType([artifacts[kind]],{type:types[kind]}));urls.push(href);links[kind].href=href;links[kind].hidden=false;}
-   preview.src=links.svg.href;preview.hidden=false;counts={total:artifacts.comparison.curves.length,failed:artifacts.comparison.curves.reduce((sum,curve)=>sum+curve.steps.filter(step=>step.status==='failed').length,0)};message='検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。';refresh();return artifacts.comparison;
+   preview.src=links.svg.href;preview.hidden=false;fullSize.href=links.svg.href;fullSize.hidden=false;counts={total:artifacts.comparison.curves.length,failed:artifacts.comparison.curves.reduce((sum,curve)=>sum+curve.steps.filter(step=>step.status==='failed').length,0)};message='検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。';refresh();return artifacts.comparison;
   }catch(error){if(current===epoch){clear();fail(error,input);}return null;}finally{if(current===epoch)run.disabled=false;}
  }
  run.onclick=()=>validate();input.oninput=invalidate;

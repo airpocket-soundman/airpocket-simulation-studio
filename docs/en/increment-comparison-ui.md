@@ -10,6 +10,8 @@ The text field accepts only the wrapper `{"bundles":[{"spec":{},"steps":[]},...]
 
 Material, geometry and gauge differences remain attached to each curve. Curves are never connected to each other, and failed steps are never interpolated. CSV/JSON/SVG come from the same validated results. The current project, cases and displayed analysis result are unchanged. Editing input, selecting other files or failing validation clears previous previews and URLs; late async work cannot restore them.
 
+If the sidebar plot is too small, use **Open full-size graph** after validation to open the same SVG in another tab. This ordinary link is separate from downloads and does not regenerate the plot. Input edits, failures and disposal invalidate this link and release its previous Blob URL as well.
+
 Native details/buttons, labelled inputs and associated errors support keyboard use. Images shrink and links wrap at narrow widths; links use bright colors and underlines on the dark theme. Japanese/English switching does not change input or results.
 
 This bounded comparison increment does not complete RESULTCURVE1, physical calibration or nonlinear hysteresis support.

@@ -19,13 +19,16 @@ test('DOM comparison uses the real strict service, separates two curves, exposes
  const h=setup(),source=pair(),before=structuredClone(source);h.get('input').value=JSON.stringify(source);
  const comparison=await h.get('run').onclick();assert.ok(comparison,h.get('status').textContent);assert.equal(comparison.curves.length,2);assert.equal(comparison.analysis.plasticHistory,false);
  assert.equal(h.get('preview').hidden,false);assert.equal(h.get('preview').src,h.get('svg').href);
+ assert.equal(h.get('open').href,h.get('svg').href);assert.equal(h.get('open').hidden,false);assert.equal(h.get('open').target,'_blank');assert.equal(h.get('open').rel,'noopener');assert.equal(h.get('open').download,undefined);
  const saved=JSON.parse(await h.blobs.get(h.get('json').href).text());assert.deepEqual(saved,comparison);
  const svg=await h.blobs.get(h.get('svg').href).text();assert.match(svg,/tet-a/);assert.match(svg,/tet-b/);assert.ok(new Set([...svg.matchAll(/stroke="(#[0-9a-fA-F]{6})"/g)].map(m=>m[1])).size>=2);
  assert.match(h.get('status').textContent,/曲線: 2/);assert.match(h.get('status').textContent,/空白: 2/);
  assert.deepEqual(source,before);h.english();assert.match(h.get('status').textContent,/Curves: 2/);assert.match(h.get('preview').alt,/engineering stress/);assert.equal(h.get('input').value,JSON.stringify(source));
  assert.equal(h.get('file').multiple,true);assert.equal(h.get('run').type,'button');assert.equal(h.get('downloads').style.flexWrap,'wrap');
- const links=[];const walk=n=>{if(n.tag==='a')links.push(n);for(const child of n.children??[])walk(child);};walk(h.ui.host);assert.equal(links.length,6);assert.ok(links.every(a=>a.style.color==='#67e8d9'&&a.style.textDecoration==='underline'));
+ assert.equal(h.get('open').textContent,'Open full-size graph');
+ const links=[];const walk=n=>{if(n.tag==='a')links.push(n);for(const child of n.children??[])walk(child);};walk(h.ui.host);assert.equal(links.length,7);assert.ok(links.every(a=>a.style.color==='#67e8d9'&&a.style.textDecoration==='underline'));
  h.get('input').value='changed';h.get('input').oninput();assert.equal(h.revoked.length,3);assert.equal(h.get('preview').hidden,true);for(const kind of ['csv','json','svg'])assert.equal(h.get(kind).href,undefined);
+ assert.equal(h.get('open').hidden,true);assert.equal(h.get('open').href,undefined);
 });
 
 test('both public references are individually real solver bundles with differing material/load paths and can be selected together',async()=>{
