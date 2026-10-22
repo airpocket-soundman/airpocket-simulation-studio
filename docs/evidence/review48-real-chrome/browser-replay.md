@@ -27,3 +27,6 @@
 - `size=8mm` は `structural-tiny` のstartJobオプション。スクリプトは結果の要素数を独立記録しない。
 - UASMとusedJSHeapSizeは異なるscopeで、合計しない。sampled maxを真のpeak/RSS/GPU値と呼ばない。
 - 親タスクPERF1のstatus/releasedは変更していない。
+
+レビュー補足: page/MCPの終了フラグはfinally実行前に記録されていたため、歴史記録を未確認（null）へ訂正した。終了処理は試行されるが独立観測はしていない。測定値は再実行せず保持した。
+再実行スクリプトはrawを保持したまま `perf-followup48.json` も初期化する。`--merge-memory --out` は既存のoutを読み書きする仕様である。

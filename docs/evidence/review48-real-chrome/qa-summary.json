@@ -270,8 +270,9 @@
     "debugPort": 9333
   },
   "cleanup": {
-    "pageClosed": true,
-    "mcpClosed": true,
+    "pageClosed": null,
+    "mcpClosed": null,
+    "note": "Historical summary set closure flags before finally; actual closure was not independently verified.",
     "probeStopped": true
   }
 }

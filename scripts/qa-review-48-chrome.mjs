@@ -93,6 +93,8 @@ try {
   await cdp.evaluate('window.__perfProbe.stop()');
   writeFileSync(path.join(out, 'perf-probe.json'), JSON.stringify(probe, null, 2) + '\n');
   writeFileSync(path.join(out, 'perf-followup48.raw.json'), JSON.stringify(report, null, 2) + '\n');
+  // The merge-memory CLI reads and rewrites --out; initialize it while keeping raw immutable.
+  writeFileSync(path.join(out, 'perf-followup48.json'), JSON.stringify(report, null, 2) + '\n');
   const summary = {
     schemaVersion: 1,
     date: new Date().toISOString().slice(0, 10),
@@ -126,7 +128,7 @@ try {
       lastSampleAt: probe.samples.at(-1)?.t ?? null,
     },
     report,
-    cleanup: {pageClosed: true, mcpClosed: true, probeStopped: true},
+    cleanup: {pageClosed: null, mcpClosed: null, probeStopped: true, note: 'Written before finally; closure is attempted but not independently observed.'},
   };
   writeFileSync(path.join(out, 'qa-summary.json'), JSON.stringify(summary, null, 2) + '\n');
   console.log(JSON.stringify({
