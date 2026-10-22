@@ -1,0 +1,54 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createIncrementCurveComparisonUi,INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES} from '../src/ui/increment-curve-comparison.js';
+import {syntheticIncrementUiBundle} from './fixtures/increment-ui-reference.mjs';
+
+function element(tag){return {tag,children:[],style:{},attributes:{},value:'',textContent:'',append(...children){this.children.push(...children);},after(node){this.afterNode=node;},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];delete this[key];},focus(){this.focused=true;},remove(){this.removed=true;}};}
+const find=(node,id)=>node.id===id?node:node.children?.map(n=>find(n,id)).find(Boolean);
+function setup(){
+ let language='ja',next=0;const blobs=new Map(),revoked=[],events={};
+ const document={createElement:element,addEventListener:(name,fn)=>events[name]=fn,removeEventListener:name=>delete events[name]};
+ const ui=createIncrementCurveComparisonUi({anchor:element('div'),document,language:()=>language,env:{URL:{createObjectURL:blob=>{const key='blob:comparison-'+ ++next;blobs.set(key,blob);return key;},revokeObjectURL:key=>revoked.push(key)}}});
+ return {ui,blobs,revoked,get:id=>find(ui.host,'increment-comparison-'+id),english(){language='en';events['studio-language']();}};
+}
+const pair=()=>({bundles:[syntheticIncrementUiBundle({curveId:'tet-a'}),syntheticIncrementUiBundle({curveId:'tet-b',loads:[0,20,30,40],youngModulus:2e9})]});
+const file=(text,size=new TextEncoder().encode(text).length)=>({size,text:async()=>text});
+
+test('DOM comparison uses the real strict service, separates two curves, exposes consistent artifacts and keeps raw sources intact',async()=>{
+ const h=setup(),source=pair(),before=structuredClone(source);h.get('input').value=JSON.stringify(source);
+ const comparison=await h.get('run').onclick();assert.ok(comparison,h.get('status').textContent);assert.equal(comparison.curves.length,2);assert.equal(comparison.analysis.plasticHistory,false);
+ assert.equal(h.get('preview').hidden,false);assert.equal(h.get('preview').src,h.get('svg').href);
+ const saved=JSON.parse(await h.blobs.get(h.get('json').href).text());assert.deepEqual(saved,comparison);
+ const svg=await h.blobs.get(h.get('svg').href).text();assert.match(svg,/tet-a/);assert.match(svg,/tet-b/);assert.ok(new Set([...svg.matchAll(/stroke="(#[0-9a-fA-F]{6})"/g)].map(m=>m[1])).size>=2);
+ assert.match(h.get('status').textContent,/曲線: 2/);assert.match(h.get('status').textContent,/空白: 2/);
+ assert.deepEqual(source,before);h.english();assert.match(h.get('status').textContent,/Curves: 2/);assert.match(h.get('preview').alt,/engineering stress/);assert.equal(h.get('input').value,JSON.stringify(source));
+ assert.equal(h.get('file').multiple,true);assert.equal(h.get('run').type,'button');assert.equal(h.get('downloads').style.flexWrap,'wrap');
+ const links=[];const walk=n=>{if(n.tag==='a')links.push(n);for(const child of n.children??[])walk(child);};walk(h.ui.host);assert.equal(links.length,6);assert.ok(links.every(a=>a.style.color==='#67e8d9'&&a.style.textDecoration==='underline'));
+ h.get('input').value='changed';h.get('input').oninput();assert.equal(h.revoked.length,3);assert.equal(h.get('preview').hidden,true);for(const kind of ['csv','json','svg'])assert.equal(h.get(kind).href,undefined);
+});
+
+test('both public references are individually real solver bundles with differing material/load paths and can be selected together',async()=>{
+ const h=setup(),texts=['a','b'].map(id=>readFileSync(new URL('../public/examples/increment-comparison-'+id+'.json',import.meta.url),'utf8'));
+ assert.equal(h.get('sample').href,'./examples/increment-comparison-a.json');assert.equal(h.get('sample-b').href,'./examples/increment-comparison-b.json');
+ h.get('file').files=texts.map(text=>file(text));await h.get('file').onchange();assert.equal(h.get('preview').hidden,true);
+ const parsed=JSON.parse(h.get('input').value);assert.notEqual(parsed.bundles[0].spec.curveId,parsed.bundles[1].spec.curveId);
+ assert.notEqual(parsed.bundles[0].spec.input.materialProperties.youngModulus,parsed.bundles[1].spec.input.materialProperties.youngModulus);
+ const comparison=await h.ui.validate();assert.ok(comparison,h.get('status').textContent);assert.equal(comparison.curves[0].steps[3].tensileForceN,20);assert.equal(comparison.curves[1].steps[3].tensileForceN,40);
+ assert.equal(comparison.curves[0].steps[3].extensionMm,comparison.curves[1].steps[3].extensionMm,'double stiffness and double actual force solve yield the same extension');
+});
+
+test('duplicate ids, self-reported comparison/SVG, malformed JSON and oversized UTF8 input yield no downloadable output',async()=>{
+ const h=setup(),duplicate=pair();duplicate.bundles[1].spec.curveId=duplicate.bundles[0].spec.curveId;
+ for(const text of [JSON.stringify(duplicate),JSON.stringify({...pair(),comparison:{curves:[]},svg:'<svg onload="alert(1)"/>'}),'{',JSON.stringify({text:'あ'.repeat(INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES/2)})]){
+  h.get('input').value=text;assert.equal(await h.ui.validate(),null);assert.equal(h.blobs.size,0);assert.equal(h.get('preview').hidden,true);assert.equal(h.get('input').attributes['aria-invalid'],'true');assert.equal(h.get('input').attributes['aria-errormessage'],h.get('status').id);
+ }
+});
+
+test('file count and aggregate size refuse before reading; stale multi-file and validation completion cannot overwrite newer input',async()=>{
+ const h=setup();let reads=0;const entry=size=>({size,text:async()=>{reads++;return '{}';}});
+ for(const selected of [[entry(2)],Array.from({length:5},()=>entry(2)),[entry(INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES),entry(1)]]){h.get('file').files=selected;await h.get('file').onchange();assert.equal(reads,0);assert.equal(h.get('file').attributes['aria-invalid'],'true');}
+ let resolve;h.get('file').files=[{size:2,text:()=>new Promise(r=>resolve=r)},entry(2)];const pending=h.get('file').onchange();h.get('input').value='new';h.get('input').oninput();resolve('{}');await pending;assert.equal(h.get('input').value,'new');assert.equal(reads,0);
+ h.get('input').value=JSON.stringify(pair());const validating=h.ui.validate();h.get('input').oninput();assert.equal(await validating,null);assert.equal(h.blobs.size,0);
+ h.get('input').value=JSON.stringify(pair());await h.ui.validate();h.ui.destroy();assert.equal(h.revoked.length,3);assert.equal(h.ui.host.removed,true);
+});
