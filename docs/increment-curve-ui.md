@@ -1,6 +1,6 @@
 # 段階データの静止グラフ
 
-[English](en/increment-curve-ui.md) / [結果ビューア仕様](result-viewer-direction.md) / [段階データ契約](../src/increment-curve-data.js)
+[English](en/increment-curve-ui.md) / [共通CSV/JSON/SVGサービス](increment-curve-export.md) / [結果ビューア仕様](result-viewer-direction.md) / [段階データ契約](../src/increment-curve-data.js)
 
 結果・ケース欄の「段階データの静止グラフ」を開き、`spec` と `steps` だけを持つJSON bundleを貼り付けるか、JSONファイルを読み込んで「検証して静止グラフを表示」を押す。ファイル選択だけでは描画しない。現在のproject・ケース・解析結果を適用/変更する機能ではない。
 
