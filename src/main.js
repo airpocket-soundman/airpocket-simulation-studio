@@ -9,6 +9,7 @@ import {installComparisonSettingsPersistenceUi} from './ui/comparison-settings-p
 import {installNativeFlowPanel} from './native-flow-panel.js';
 import {createCaseListUi} from './ui/case-list-ui.js';
 import {createViewCompareUi} from './ui/view-compare-ui.js';
+import {createIncrementCurveUi} from './ui/increment-curve.js';
 import {createStatusUi} from './ui/status-ui.js';
 import {createFatigueUi} from './ui/fatigue-ui.js';
 import {createMaterialFormUi} from './ui/material-form-ui.js';
@@ -316,6 +317,7 @@ $('thermal-stress-demo').onclick=thermalStressExample;window.analysisApi.loadThe
 
 function applyThermalCase(index){const c=caseStore.at(index);if(!c||c.output.result.kind!=='thermal')throw Error('Choose a saved thermal case');if(c.output.result.contactTransfers?.length&&!c.output.mesh.nodeBodies)throw Error('Contact temperature transfer requires matching body identifiers');const p=getProject();if(!p.sourceModel||JSON.stringify(p.sourceModel)!==JSON.stringify(c.output.input.sourceModel))throw Error('Use the same solid geometry for temperature transfer');api.setStudy({...p.study,kind:'structural',thermalStress:true,temperatureSource:{...copySourceAssessment(c.output),name:c.name,mesh:{nodes:c.output.mesh.nodes,tetrahedra:c.output.mesh.tetrahedra,...(c.output.mesh.nodeBodies?{nodeBodies:c.output.mesh.nodeBodies}:{})},temperature:c.output.result.temperature}});$('thermal-source-name').textContent=c.name;return api.getSummary();}
 window.analysisApi.applyThermalCase=applyThermalCase;
+createIncrementCurveUi({anchor:$('case-list'),language:()=>language,translate:addTranslations});
 $('thermal-case-apply').onclick=()=>{try{applyThermalCase(Number($('thermal-case').value));}catch(e){status(e.message);}};
 $('thermal-case-clear').onclick=()=>{const p=getProject(),study={...p.study};delete study.temperatureSource;api.setStudy(study);$('thermal-source-name').textContent='';};
 

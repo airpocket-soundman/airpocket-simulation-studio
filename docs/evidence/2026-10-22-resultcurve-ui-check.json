@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "scope": "RESULTCURVE1 bounded independent-linear-solve artifacts",
+  "implementationCommits": [
+    "b5fe416",
+    "6d0835f",
+    "4090441",
+    "2943415",
+    "dbd761f"
+  ],
+  "browser": {
+    "name": "Chrome",
+    "source": "local Vite on candidate branch",
+    "sample": "public/examples/increment-curve-reference.json",
+    "actualActions": [
+      "Opened native details panel",
+      "Pasted bundled real-solver synthetic single-Tet4 JSON",
+      "Clicked validate and plot"
+    ],
+    "observed": {
+      "steps": 4,
+      "failed": 1,
+      "status": "Validated: N/mm/Pa/dimensionless",
+      "image": {
+        "complete": true,
+        "naturalWidth": 800,
+        "naturalHeight": 500
+      },
+      "csvJsonSvgLinksVisible": true
+    },
+    "limitations": [
+      "Blob downloadMedia is unsupported by the browser tool. A subsequent download event timed out; browser-saved bytes were not collected. Artifact byte equality is covered by real service/stdio tests, not claimed as an end-to-end Chrome download check.",
+      "The later EN click timed out, so language switching and narrow layout are covered by DOM integration/source checks, not claimed as completed real-Chrome checks.",
+      "Actual Chrome screenshot revealed dark link contrast; fixed by dbd761f. Final contrast is pending published-page verification."
+    ]
+  },
+  "review": {
+    "pureAndIntegration": "review_exports_20261022: no blockers",
+    "ui": "review_runtime_20261022: accepted",
+    "mcp": "next_tasks_20261022: cleanup-warning response-bound issue fixed and re-reviewed"
+  },
+  "remaining": [
+    "Compare multiple validated curves",
+    "Automatically capture supported solver increments",
+    "History-dependent materials/nonlinear hysteresis only with supported state-history solver",
+    "Complete actual browser download-byte, bilingual and narrow-screen verification"
+  ]
+}

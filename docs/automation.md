@@ -70,7 +70,7 @@ codex mcp add airpocket-studio -- node D:/github/airpocket-soundman/airpocket-si
 
 ## 一時ローカル接続（初期実装）
 
-`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の35ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
+`node scripts/studio-mcp.mjs --browser-origin=http://127.0.0.1:5174` と起動すると、通常の36ツールに加え `studio_browser_sessions` と `studio_browser_call` を公開します。Originは実際のページに合わせます。stdoutはMCP専用、stderrに接続先・接続コードを表示します。
 
 ブラウザの「自分のLLMに接続する」で接続先とコードを入力し、確認・編集・計算・表示の共有範囲を選んで許可します。初期選択は確認のみ。コードをURL・保存入力・公開文書へ含めません。サーバーは127.0.0.1限定で、Origin/Host/Bearerを検査します。ブラウザのpollが10分途切れると失効し、プロセス終了で全セッションを失います。切断は、その接続が開始した計算を中止します。再接続は新規許可であり実行中ジョブの復元ではありません。
 
@@ -93,7 +93,7 @@ manifestの任意フィールド `connector` は `{path:"assets/studio-browser-m
 
 MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https://airpocket-soundman.github.io` のように登録します。引数は実ページの正確なOrigin一つだけで、パスを含めません。公開ページのURL全体は `/airpocket-simulation-studio/` を含みますが、Originには含みません。stderrの `Browser connector:` にendpoint・origin・pairingTokenを出し、stdoutはJSON-RPC専用です。接続情報は上記のアプリ接続UIに入力し、必要なscopeだけを許可します。初期選択はinspectです。ローカル接続先の制限、Origin/Host/Bearer検査、期限切れの条件は既存接続と同じです。
 
-この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の35ツール／接続時37ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
+この単体版のツールは `studio_browser_contracts`、`studio_browser_sessions`、`studio_browser_call` の3個だけです。契約取得は権限を付与せず、呼出しには接続先の許可scopeが必要です。保存ファイル解析等を含む従来の36ツール／接続時38ツールのサーバーとは別のエントリです。終了時はアプリで切断して接続由来のジョブを中止し、MCPクライアントがstdinを閉じる（EOF）とサーバー・セッション・保留中の命令も終了します。再接続には新たな許可が必要です。
 
 ソース実装と、単一ファイルだけを隔離ディレクトリへ置いたNode 24でのstdio・HTTP模擬ブラウザ接続・scope拒否・EOF終了のテストは完了しています。公開0e53638のmanifest版・バイト数・SHA-256照合、取得ファイルだけの隔離起動・3ツール発見・EOF終了を確認しました。[公開ファイル検証](evidence/2026-10-15-public-browser-connector.json)を参照。確認専用の実HTTPS接続は到達エラーで失敗し、セッションは作成されませんでした。[試験記録](evidence/2026-10-15-public-https-inspect-failure.json)を参照。
 
@@ -117,7 +117,7 @@ MCPクライアントには `node studio-browser-mcp.mjs --browser-origin=https:
 
 ## PNG/WebM/連番PNGの出力ジョブ
 
-任意接続モードは91操作を公開します（通常35ツール、接続モード37ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。`formats["png-sequence"]`（`{supported,container:"zip",compression:"store",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}`、追加項目）は固定フレーム書き出しの可否と上限を示します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
+任意接続モードは91操作を公開します（通常36ツール、接続モード38ツール）。`exportCapabilities()`でPNG/WebMとアニメーション種別の実行可否を調べます。WebMは実行中ブラウザの録画対応に依存します。`formats["png-sequence"]`（`{supported,container:"zip",compression:"store",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}`、追加項目）は固定フレーム書き出しの可否と上限を示します。MP4/GIFは未対応としてfalseを返し、`formats.mp4`/`formats.gif`に`{supported,reason,alternatives}`（代替はwebm/png）を付けます。MediaRecorderがMP4録画を報告しても書き出しは未実装のため`supported`はfalseのままです。完了した書き出しの成果物メタデータには、結果リビジョン・表示時間/物理時間・解像度（PNG）・コーデック・SHA-256を含む上限付き`manifest`が付きます。
 
 `getResultView`で結果版を取得し、`startExport({requestId,expectedResultRevision,format,animation,seconds})`を呼びます。`format`は`png`または`webm`、`animation`は`orbit`、`deformation`、`time`、`slice`、`seconds`は1〜15の整数（省略時5）です。`format:"png-sequence"`は固定フレーム書き出しで、`frames`（2〜120の整数、省略時24）枚を実時間・タブの描画間引きに依存せず、フレームiを保存済みの表示状態（orbit/deformationは位相i/N、time/sliceは位相i/(N-1)、timeは保存済み過渡音響スナップショットに対応しNがその数を超えると拒否）から描画し、STORE方式（無圧縮）の単一ZIP（`manifest.json`と`frame-0000.png`…）として返します。`seconds`は指定できません。1フレーム4 MiB・全体24 MiB・フレーム数の上限超過は明示的に拒否され、取消・結果更新・失敗では成果物を作らずコントロールとカメラを元に戻します。ZIP内`manifest.json`（`schemaVersion` 2）は壁時計時間を含む`resultRevision`の代わりに`physicalRevision`（`performance`を除いた結果のハッシュ、`getResultView`も返す）を記録するため、同一計算なら同一バイトのZIPになり、フレームごとの位相/角度/物理時間/断面位置、解像度、SHA-256が入り、成果物メタデータの`manifest`には枚数・解像度・`manifest.json`のSHA-256を含む上限付き要約が付きます。開始時に結果版を照合し、結果表示・カメラ・層・断面等の設定を複製してジョブに固定します。同じrequestIdと同じ要求は保持中の同じジョブを返し、要求変更は競合として拒否します。
 
@@ -766,3 +766,7 @@ GUIの`#analysis-preflight`で対象（解析/メッシュのみ）を選び、`
 球面は新しいnested意味操作`selectSphericalRegion(meshIndex,spec)`で選択し、次のaddConditionが寸法を保存します。[球面契約](reg2-curved-regions.md)の必須値を明示し、previewの最終revisionを確認してeditへ渡してください。新GUI selectorや一般UV対応はありません。35/37 tools・live91は維持し、installed Skill同期と公開確認は別工程です。
 
 2026-10-19の[localhost実Chrome証拠](evidence/2026-10-19-preflight-gui-spherical-browser.json)で、legacy/非完全/入力版表示、無効mesh sizeの拒否→対象focus→keyboard修正→古い診断解除→再check、材料欄の展開/focus、EN起動→JA→EN、390px幅を確認。実機のprovisional:true経路やAPIとの無変更一致は今回unit側の根拠で、実機で全modeを検証した意味ではありません。球面は同Chromeへの正式stdio MCP inspect/editで418表示三角形・面積157.07963267948963mm²・123N条件と寸法保存を確認し、GUI JSON textを有界取得して保存ファイルMCPへ再読込、入力revision/descriptor一致を確認。browser側mesh/solve、新GUI selector、GUI download完了・file chooser経由の再importは未確認です。
+
+## 保存済み増分曲線（2026-10-22）
+
+full serverは既定36/接続38ツール。minimal3ツール・live91操作は不変。`studio_increment_curve({path,offset:0,limit:20,outputPath?})`は明示的な`{spec,steps}`保存bundleをGUIと同じpure serviceで検証する。入力1MiB、ページ1〜50行、応答JSON値64KiBまで（MCP envelopeで値は重複する）。原入力SHA/bytes、曲線metadata、行、CSV/JSON/SVGのUTF-8 SHA/bytesを返す。任意outputPathは`{schemaVersion,kind,source,curve,csv,json,svg}`を含む別名新JSONへ原子的に出版し、入力・既存出力を上書きしない。各artifact文字列2MiB・保存bundle8MiB上限。独立した力制御線形解析であり塑性履歴・物理精度検証ではない。ブラウザ状態の読取/変更はしない。登録toolを実際に確認すること。repo変更だけで登録済serverが自動更新されるわけではない。
