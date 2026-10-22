@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-22",
+  "taskId": "EXPORTBACKGROUND1",
+  "workOrder": 45,
+  "status": "passed",
+  "parentTaskReleased": false,
+  "note": "Only the real hidden-tab termination/cleanup QA requested by follow-up 45 is claimed. The parent EXPORTBACKGROUND1 status is unchanged.",
+  "sourceSha": "070ec8f885f0e15c889cacaed3c151292c1cc506",
+  "environment": {
+    "browserProduct": "Chrome/155.0.8059.86",
+    "origin": "http://127.0.0.1:5199",
+    "scopes": [
+      "inspect",
+      "view"
+    ],
+    "engine": "real branded Chrome via CDP and formal stdio MCP",
+    "visibilityMethod": "CDP Page.bringToFront changes the real active tab; document.visibilityState/visibilitychange are observed. No DOM event is dispatched by this harness."
+  },
+  "cases": [
+    {
+      "name": "Synthetic acoustic 1Pa",
+      "caseId": "5b06d6df-36b1-4bf7-8234-f9cf812c0297",
+      "revision": "sha256:399c6ec17f9aa36f8a890bc8a960cba4c7e03b8126311d828129368328960dd0"
+    },
+    {
+      "name": "Synthetic acoustic 2Pa",
+      "caseId": "a583efc8-5d7d-4b1e-888c-cfed7a206c49",
+      "revision": "sha256:b2ea0a40991a3e60d12e4f231b3030d74255194eaccc58ec51654b4d088011fc"
+    }
+  ],
+  "commands": [
+    "$env:QA_ORIGIN=\"http://127.0.0.1:5199\"; node scripts/qa-review-45-chrome.mjs",
+    "node scripts/qa-review-45-evidence.mjs"
+  ],
+  "runs": [
+    {
+      "kind": "foreground-success",
+      "settleMs": 1293,
+      "error": null,
+      "before": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ]
+      },
+      "started": {
+        "t": 1792649890976,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "hiddenAt": null,
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": false,
+        "previewHidden": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "cases": true,
+        "compareApi": true,
+        "result": true
+      },
+      "artifact": {
+        "file": "foreground-success.webm",
+        "bytes": 18662,
+        "sha256": "45ea12d2ceaa0a770c906a1e90f862e178f3f54dcc272e9c4b65aadc640a0865",
+        "mime": "video/webm;codecs=vp9"
+      }
+    },
+    {
+      "kind": "hidden-mid-recording",
+      "settleMs": 977,
+      "error": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+      "before": {
+        "visibility": "visible",
+        "hidden": false,
+        "startDisabled": false,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ]
+      },
+      "started": {
+        "t": 1792649893747,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "hiddenAt": {
+        "t": 1792649894272,
+        "visibility": "hidden",
+        "hidden": true,
+        "status": "Creating video. 6%",
+        "cancelDisabled": false,
+        "recorders": [
+          "inactive"
+        ],
+        "streams": [
+          [
+            "ended"
+          ]
+        ],
+        "events": [
+          {
+            "t": 1792649894100,
+            "state": "hidden",
+            "hidden": true
+          }
+        ]
+      },
+      "after": {
+        "visibility": "visible",
+        "hidden": false,
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ],
+        "visibilityEvents": [
+          {
+            "t": 1792649894100,
+            "state": "hidden",
+            "hidden": true
+          },
+          {
+            "t": 1792649895256,
+            "state": "visible",
+            "hidden": false
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "cases": true,
+        "compareApi": true,
+        "result": true,
+        "compareMcp": true,
+        "caseList": true
+      },
+      "artifact": null
+    },
+    {
+      "kind": "explicit-cancel",
+      "settleMs": 895,
+      "error": "Video creation cancelled.",
+      "before": null,
+      "started": {
+        "t": 1792649896674,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "hiddenAt": null,
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      },
+      "unchanged": {
+        "inputRevision": true,
+        "compareApi": true
+      },
+      "artifact": null
+    },
+    {
+      "kind": "hidden-at-start",
+      "settleMs": 530,
+      "error": "Video creation stopped because this page moved to the background. Keep it visible and retry.",
+      "before": {
+        "t": 1792649898733,
+        "visibility": "hidden",
+        "hidden": true,
+        "startDisabled": false
+      },
+      "started": null,
+      "hiddenAt": null,
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [],
+        "recorders": []
+      },
+      "unchanged": null,
+      "artifact": null
+    },
+    {
+      "kind": "stop-timeout-fault-injection",
+      "settleMs": 3236,
+      "error": "Video creation stopped because recording did not finish. Please retry.",
+      "before": null,
+      "started": {
+        "t": 1792649901178,
+        "status": "Creating video. 0%",
+        "cancelDisabled": false,
+        "recorders": [
+          "recording"
+        ],
+        "streams": 1
+      },
+      "hiddenAt": null,
+      "after": {
+        "visibility": "visible",
+        "startDisabled": false,
+        "cancelDisabled": true,
+        "downloadHidden": true,
+        "previewHidden": true,
+        "disabledIds": [
+          "adaptive-run",
+          "agent-connect",
+          "agent-endpoint",
+          "agent-token",
+          "animation-stop",
+          "cad-update-apply",
+          "cad-update-file",
+          "cancel-run",
+          "compare-persistence-remove",
+          "compare-persistence-restore",
+          "compare-png",
+          "compare-video-cancel",
+          "compare-video-from",
+          "compare-video-to",
+          "compare-video-tolerance",
+          "fixed",
+          "load",
+          "plastic-load-fractions",
+          "print-export",
+          "print-text-show"
+        ],
+        "streams": [
+          [
+            {
+              "kind": "video",
+              "readyState": "ended",
+              "enabled": true
+            }
+          ]
+        ],
+        "recorders": [
+          {
+            "state": "inactive",
+            "mimeType": "video/webm;codecs=vp9"
+          }
+        ]
+      },
+      "unchanged": null,
+      "artifact": null
+    }
+  ],
+  "artifact": {
+    "file": "docs/evidence/review45-real-chrome/foreground-success.webm",
+    "bytes": 18662,
+    "sha256": "45ea12d2ceaa0a770c906a1e90f862e178f3f54dcc272e9c4b65aadc640a0865",
+    "mime": "video/webm;codecs=vp9",
+    "note": "Synthetic foreground success sample from the two exported synthetic acoustic cases; not user data."
+  },
+  "checks": {
+    "sourceFrozen": true,
+    "brandedChrome": true,
+    "ownedOrigin": true,
+    "scopes": true,
+    "realVisibility": true,
+    "hiddenStopped": true,
+    "hiddenNoArtifact": true,
+    "hiddenStateRestored": true,
+    "backgroundAtStart": true,
+    "explicitCancel": true,
+    "stopDeadline": true,
+    "foregroundSuccess": true,
+    "artifact": true,
+    "cleanup": true
+  },
+  "limitations": [
+    "The hidden state was created by CDP Page.bringToFront selecting another real tab. The page observed its own document.visibilityState/visibilitychange; no DOM event was dispatched by the test.",
+    "This verifies the installed Chrome 155 on Windows. It does not claim Electron, Firefox, Safari or mobile behaviour.",
+    "The stop-timeout run is a controlled fault injection that drops onstop; it is not a hidden-tab result.",
+    "An explicit recording session-expiry path was not exercised. The source/result/camera/comparison state was checked before and after each completed run.",
+    "The foreground WebM is a short synthetic sample; this is not a claim of visual fidelity or production encoding quality.",
+    "The parent EXPORTBACKGROUND1 status in src/progress.json is unchanged and no release/merge action is part of this record."
+  ]
+}
