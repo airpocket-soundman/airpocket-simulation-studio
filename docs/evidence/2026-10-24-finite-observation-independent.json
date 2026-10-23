@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "ownerCommit": "1eef75a6dae30ba7f20c7f806602f6dbf7024d6f",
+  "source": {
+    "path": "src/finite-visco-observation-comparison.js",
+    "workingCRLFSha256": "8ca99d45585f230763b736a31ddba83791ce72f9b1c1bf1043cf1fc27743c6fd",
+    "gitBlobSha256": "1c2eeea92d362dc6dd094e386f2ddef1ecc3a5aaad6d57bb38b8b4afd6daf855"
+  },
+  "independentOracle": "Hydrostatic E=eI: dev(E)=0, Z=0, S=3KeI, energyDensity=K(3e)^2/2, dissipation=0. Two-step ramp/hold; nonzero volumetric branch complements owner shear oracle.",
+  "independentTests": 3,
+  "relatedPass": 9,
+  "fail": 0,
+  "skip": 0,
+  "ownership": "Two byteOffset subviews in a shared caller-owned ordinary ArrayBuffer copied before awaits; caller buffer zeroed immediately, history buffer/byteLength getters never invoked.",
+  "identity": "Compact and pretty histories have different raw SHA and identical independently sorted canonical SHA; matching raw accepted, mismatched raw refused.",
+  "initialFixtureCorrection": "Initial independent test chose K/mu=3.75 outside documented <=3 envelope and was correctly history-rejected; fixture mu corrected to 1e6 (ratio3). No product change or weakened assertion.",
+  "sourceFixes": 0,
+  "solverRuns": 0,
+  "codecRuns": 0,
+  "guiRuns": 0,
+  "limitations": [
+    "Synthetic provisional uncalibrated only",
+    "No tolerance acceptance, fitting, measured data, structure reactions or plasticity",
+    "Source-only rejection audit covers exact time/parameter/units/provenance and owner regression; no new physical calibration"
+  ]
+}
