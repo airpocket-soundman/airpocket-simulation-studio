@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-23",
+  "reviewedCommit": "f84b03b73106204028517dfa0bc87ef8ce0a1101",
+  "scope": "Independent synthetic material-point physics/numerics audit; no solver, calibration or production-material claim.",
+  "findings": [
+    {
+      "issue": "Array subclass map can return the original F; evaluate freezes caller geometry.",
+      "reproduced": true,
+      "resolution": "Require ordinary Array.prototype on matrix and rows; reject before invoking array methods.",
+      "regression": "outer and row subclasses, evaluate and step refuse without caller mutation or freezing"
+    },
+    {
+      "issue": "Draft small-x coefficient lacked x and draft metadata retained ancestors.",
+      "resolution": "Owner corrected both before reviewed final commit; no additional source change for these."
+    }
+  ],
+  "independentOracle": {
+    "method": "Gauss-Legendre 8 point quadrature of analytic ODE transient, without production coefficient helpers; 1-unit time-ratio segments through 64 and exponentially negligible tail beyond 64.",
+    "noncoaxial": true,
+    "timeRatios": [
+      0.000001,
+      0.00001,
+      0.001,
+      0.05,
+      0.099999,
+      0.1,
+      0.100001,
+      1,
+      10,
+      64,
+      100,
+      1000,
+      1000000
+    ],
+    "maximumNormalizedDissipationError": 7.853350154320484e-14,
+    "maximumNormalizedWorkError": 1.058076575092953e-15,
+    "gradient": "9 first-Piola components from Richardson energy differences h=1e-4 and 5e-5",
+    "maximumGradientErrorPa": 1.4291435945779085e-7,
+    "referenceBasisCovarianceSteps": 3
+  },
+  "verification": {
+    "focusedTests": 20,
+    "pass": 20,
+    "fail": 0,
+    "skip": 0,
+    "contractDeclarationFiles": 16,
+    "diffCheck": "pass",
+    "node": "v24.11.1",
+    "platform": "win32"
+  },
+  "limits": [
+    "Only in-process issued frozen states; JSON clone/restore is intentionally refused.",
+    "dt/tau restricted to [1e-6,1e6]; 4096 steps; 1 MiB per state, not a persisted trajectory.",
+    "No mesh, element, solver, material calibration, plasticity or necking validation."
+  ],
+  "summaryJa": "独立積分・エネルギー勾配・参照基底変換は成功。入力配列の所有権逸脱を再現して修正した。",
+  "summaryEn": "Independent integration, energy-gradient and reference-basis checks pass. Reproduced and fixed caller-array ownership violation."
+}

@@ -19,3 +19,5 @@ The exact update uses expm1 and small-x series. Dissipation uses a completed-squ
 Independent tests include2000-panel Simpson stress-power/dissipation integration, exponential hold, a separate large-x ramp primitive, all nine P components against Richardson energy gradients, large time-dependent rotations, noncoaxial material-basis changes, identical E-linear subdivision, smooth nonlinear-path time convergence, reduced stress-free recovery, capacity/provenance/invalid inputs and real runtime-import type fixtures. The quartic energy uses Richardson differences at h=1e-4/5e-5, checking P at1e-6Pa+1e-10 relative.
 
 [Measured evidence](../evidence/2026-10-23-finite-visco-reference.json) records numerical results and scope. Pure viscoelastic recovery is not permanent plasticity. Yield/damage/necking/fracture,FDM/material prediction,experimental calibration,element/structural integration and product publication remain absent.
+
+Input F requires dense 3×3 arrays with the ordinary Array.prototype. Array subclasses and custom prototypes are refused so caller methods cannot leak ownership or freeze caller geometry.

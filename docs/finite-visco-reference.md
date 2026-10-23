@@ -28,3 +28,5 @@ exact memory updateはexpm1と小x級数を使う。散逸積分はcompleted-squ
 独立検証はSimpson2000分割によるS:Edot/D積分、保持指数解、長時間rampの別primitive、9成分のenergy Richardson差分とP、時間依存大回転/参照基底変換/非共軸履歴、同じE-linear pathの分割同値、滑らかな曲線の刻み収束、stress-free reduced recovery、4096stepと不正/改ざん/型の拒否を含む。四次energyに対してh=1e-4/5e-5のRichardson差分を用い、Pを1e-6Pa+1e-10相対で照合する。
 
 [数値証拠](evidence/2026-10-23-finite-visco-reference.json)は実行環境、実測、期待値、限定範囲を保持する。完全緩和で回復する純粘弾性のため永久塑性、降伏/損傷/くびれ/破断、FDM/実材料の予測、実験校正、構造solver、製品公開は未実装/未検証。
+
+入力 F は通常の Array.prototype を持つ密な 3×3 配列に限定する。Array 派生型や独自 prototype は拒否し、呼出側配列のメソッドを経由した所有権の漏出や凍結を防ぐ。
