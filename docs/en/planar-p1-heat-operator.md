@@ -23,3 +23,5 @@ Mixed signs q=[1,0,−1,0] retain nonzero target loads[1/12,0,−1/12,0]×1e-6W 
 This is bounded synthetic planar-reference acceptance, not material identification,experimental calibration,general curved transfer,iterative coupling,publication or completion of the COUPLE3 parent.
 
 The inherited geometry validator retains its1e-6 coverage tolerance, but P1 additionally requires row/column moment balance at1e-18+1e-12·scale. A geometry passing the looser coverage test can still be refused by the stricter P1 coefficient acceptance; no gap heat is invented.
+
+Independent review reproduced apply accepting null,boolean or string coordinates on unused nodes while build refused them. The fix requires every coordinate to be explicitly numeric and finite before identity checks, including unused nodes. An independently constructed reverse transfer matches all16 coefficients of the transpose crossing matrix; flux entry order preserves revision and nodal loads. [Audit evidence](../evidence/2026-10-23-planar-p1-independent-audit.json).
