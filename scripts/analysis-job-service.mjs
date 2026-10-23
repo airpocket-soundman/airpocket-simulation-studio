@@ -183,8 +183,8 @@ if(!store)return Object.freeze(service);
   get:jobId=>restoredView(jobId)??service.get(jobId),
   events(jobId,{afterSequence=0,limit=50}={}){const view=restoredView(jobId);if(!view)return service.events(jobId,{afterSequence,limit});if(!Number.isSafeInteger(afterSequence)||afterSequence!==0||!Number.isInteger(limit)||limit<1||limit>100)throw Error('Invalid job event cursor or limit');return {...view,events:[],truncated:false,nextSequence:0,hasMore:false,eventPageBytes:0};},
   cancel(jobId){const view=restoredView(jobId);return view?{...view,cancelled:false}:service.cancel(jobId);},
-  listArtifacts(jobId,args={}){const view=restoredView(jobId);if(!view)return service.listArtifacts(jobId,args);return {schemaVersion:1,jobId,inputRevision:view.inputRevision,jobState:view.state,provisional:true,artifacts:[],total:0,nextOffset:null};},
-  async artifact(jobId,artifactId,options){if(restored.has(jobId))throw Error('Intermediate artifacts are not restored after a restart');return service.artifact(jobId,artifactId,options);},
+  listArtifacts(jobId,args={}){const view=restoredView(jobId);if(!view)return service.listArtifacts(jobId,args);return {schemaVersion:1,jobId,inputRevision:view.inputRevision,jobState:view.state,provisional:true,artifacts:[],total:0,nextOffset:null,recovery:view.recovery};},
+  async artifact(jobId,artifactId,options){if(restored.has(jobId))throw Object.assign(Error('Intermediate artifacts are not restored after a restart. Start a new analysis with a new requestId and explicit input/output paths.'),{code:'ANALYSIS_JOB_ARTIFACT_NOT_RESTORED'});return service.artifact(jobId,artifactId,options);},
   async meshOutput(jobId){if(restored.has(jobId))throw Error('A successful, settled retained mesh-only job is required');return service.meshOutput(jobId);},
   release(jobId){if(restored.has(jobId)){restored.delete(jobId);store.remove(jobId);return {jobId,released:true};}const result=service.release(jobId);store.remove(jobId);return result;}
  });
