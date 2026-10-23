@@ -25,3 +25,11 @@ mesh-sizeを6に変えると旧diagnosticsは空になり、fresh checkで3件�
 既存cone生成法とreview46 fixtureを、公開 `studioApi.loadProject` のQAボタンから読み込み、mainの既存 `cylinder-*` / `preflight-run` / `preflight-diagnostics` / `material-status` を操作する。診断の正規値・受入手順は `docs/opencode-review-followups-2026-10-21/46-AGENTINPUT1.md` と `docs/evidence/review46-chrome/replay.md` を参照する。資格情報を含むdriverのコピーや自動再接続は保存しない。
 
 所有stdio childの終了と一時pairing file削除を[cleanup](evidence/reg2-agentinput-iab-20261023/driver-cleanup.json)で確認。GUIは切断しendpoint/codeを空にし、所有tabとserverを終了した。編集要求・実solverはなし。i18n修正 `115ff39` 後、外部流体の現説明全文が実EN DOMで英語になることもrootが確認したが、画像は未保存なので画像証拠とは呼ばない。
+
+## 後続修正の実画面確認
+
+先行画像のJA欄に英語が残った事実は、当時の記録として保持する。後続locale修正 `111d876`（原本 `1dc0aef`）を含むsource `17731eb` で、rootが実IABを再確認した。[追補JSON](evidence/2026-10-23-material-locale-fixed-iab.json)と[原観測](evidence/material-locale-fixed-20261023/observed.json)を新規保存した。
+
+warning fixtureのEN初期表示→JAで、直交異方性の説明全文が日本語となり、`material-status` のfocus=trueを確認。ENへ戻すと初期英語全文と完全一致した。[JA画像](evidence/material-locale-fixed-20261023/fixed-ja.jpg) / [EN画像](evidence/material-locale-fixed-20261023/fixed-en.jpg)。別試験ではgrade=`owned draft retained`を保持したまま、未登録statusがEN/JAで切り替わった。後者は汎用draft表示の確認であり、直交異方性本文の確認と混同しない。
+
+正式MCPは今回再実行していない。先行の正式pairing・revision一致証拠は、その時点の記録として維持する。実solverなし、所有tab/serverは終了。原観測と画像はbyteコピーし、専用`.gitattributes`でtext正規化を無効にしてGit blobのbytes/hashを照合した。未完37件と進捗原本は変更していない。
