@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-23",
+  "baseSha": "497d3d10171dc0fdf29775d45ae0a0fd92c16c5f",
+  "scope": "MOD1 private result export preparation/render handoff extracted from main",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "syntheticInput": {
+    "analysis": {
+      "result": {
+        "kind": "thermal"
+      }
+    },
+    "physicalTimeSeconds": 0.123456789,
+    "artifactPayload": "synthetic-png; fixture bytes, not a physical PNG validation"
+  },
+  "measured": {
+    "artifactBytes": 13,
+    "artifactSha256": "294ad7145322ec19f8250cca8480a933f1ce8c9e2ad1038e7ae8930d55a6598a",
+    "jobState": "completed",
+    "recordedPhysicalTimeSeconds": 0.123456789,
+    "adapterBusyAfterSettlement": false
+  },
+  "compatibility": {
+    "oldInlineVersusExtractedSnapshot": true,
+    "oldInlineVersusExtractedArtifactStatusAndHash": true,
+    "publicWindowApiShapeUnchanged": true,
+    "savedFormatUnchanged": true,
+    "borrowedSelectionStateNotDisposed": true
+  },
+  "regressions": [
+    "A to B to identical A during prepare and before render",
+    "Cancellation discards prepare result but retains lock until await settlement",
+    "Linked render abort preserves exclusion until ignored abort eventually settles",
+    "Dispose aborts pending/rendered work and rejects future operations",
+    "Busy/revision/exception refusals release only owned state",
+    "Actual visual export job cancellation and late artifact exclusion",
+    "Normal synthetic old/new artifact and metadata equality"
+  ],
+  "tests": [
+    {
+      "command": "node --test tests/result-export-preparation.test.mjs tests/result-export-preparation-types.test.mjs tests/result-view-selection.test.mjs tests/visual-export-jobs.test.mjs tests/docs.test.mjs",
+      "passed": 45,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 16
+    },
+    {
+      "command": "node --check src/main.js",
+      "passed": true
+    },
+    {
+      "command": "node node_modules/vite/bin/vite.js build --outDir .qa-mod1-vite-build",
+      "passed": true,
+      "seconds": 3.35,
+      "qualification": "Static frontend bundle only; native assets not prepared or accepted",
+      "warnings": [
+        "Existing large bundle chunk warning; no limit changed"
+      ]
+    },
+    {
+      "command": "In-memory module boundary check with proposed session registration",
+      "passed": true,
+      "files": 242,
+      "edges": 588,
+      "problems": []
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "integrationRequired": [
+    "Root must add result-export-preparation.js to src/module-layers.json session.files; no shared table edited"
+  ],
+  "unverified": [
+    "Live browser interaction and bfcache navigation",
+    "Native/physical solver acceptance",
+    "Full production build and publication",
+    "All tests beyond focused set"
+  ],
+  "solverExecutions": 0
+}
