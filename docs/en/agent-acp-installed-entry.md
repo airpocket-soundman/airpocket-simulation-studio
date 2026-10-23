@@ -1,0 +1,15 @@
+# Read-only diagnosis of the installed ACP entry
+
+[日本語](../agent-acp-installed-entry.md)
+
+On 2026-10-23, at base `001cb3b9775f25910426609b0b3fb83f33af0d18`, the already installed `@agentclientprotocol/codex-acp` 2.2.2 successfully completed a real ACP v1 initialize through the existing `AcpSessionClient.start()`. [Execution evidence](../evidence/2026-10-23-acp-installed-initialize.json). Earlier documents describe the historical lack of a confirmed entry; this limited diagnosis establishes one.
+
+The PATH Codex CLI is 0.146.1 and its help advertises no ACP entry. The separately installed adapter's local README explains that it translates ACP stdio into Codex App Server operations. Its bundled CLI reports 0.160.1 when invoked directly. The [official App Server documentation](https://learn.chatgpt.com/docs/app-server) describes thread/turn APIs, distinct from the ACP session API consumed by our client. App Server alone is not represented as an ACP agent.
+
+Existing package, README and bundled source established the entry. `--version` exits before server startup; no `--help` branch exists, so that option was not executed. Even `codex-acp cli --version` is captured by the outer version branch and prints the adapter version, not its dependency version. A read-only login status was classified only as ChatGPT signed in. No raw status, identifiers, credential files or environment inventory were retained. This does not establish model access or conversation authorization.
+
+The existing adapter bundle was passed by absolute path to Node, in a dedicated empty synthetic cwd. No installation, SDK acquisition, permission expansion or authentication change occurred. Optional raw logging, automatic authentication requests and executable/config overrides were disabled only inside the diagnostic Node process. No session/new, prompt, model selection, file operation or tool grant was performed. The client still reports `authentication:not-performed` and `realAgentVerified:false`; initialization is not conversation success.
+
+Initialization and shutdown diagnosis took 3965 ms. EOF alone did not stop the child; the existing bounded shutdown forced termination and confirmed exit. Three owned processes (adapter, CLI wrapper and native process) observed using only process ID, parent ID and executable name were absent afterward. Final activeChild=false, timers=0, pending=0, retained text=0 and no installed signal listeners. This covers observed processes and does not claim a general Windows process-tree termination guarantee.
+
+Remaining conditions include real-adapter session/new and update compatibility, explicitly authorized conversation/cancellation trials, and production browser transport/main integration. No conversation or user-data transmission to an external AI occurred. Synthetic regressions, reproducible entry diagnosis and accurate read-only status are independently executable next steps. Production transport and model prompts require a separate scope decision. Shared progress was not marked complete.

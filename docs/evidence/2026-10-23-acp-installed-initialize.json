@@ -1,0 +1,85 @@
+{
+  "operation": "Existing AcpSessionClient initialize only",
+  "sessionCreated": false,
+  "promptSent": false,
+  "authenticationChanged": false,
+  "optionalAdapterLogsDisabled": true,
+  "initialized": {
+    "state": "initialized",
+    "sessionCreated": false,
+    "activePrompt": false,
+    "cancelling": false,
+    "failureCode": null,
+    "authentication": "not-performed",
+    "realAgentVerified": false
+  },
+  "observedOwnedProcessCount": 3,
+  "closeResult": {
+    "exited": true,
+    "forced": true,
+    "failureCode": null
+  },
+  "final": {
+    "state": "closed",
+    "sessionCreated": false,
+    "activePrompt": false,
+    "cancelling": false,
+    "failureCode": null,
+    "authentication": "not-performed",
+    "realAgentVerified": false,
+    "transport": {
+      "state": "stopped",
+      "activeChild": false,
+      "activeTimers": 0,
+      "pendingRequests": 0,
+      "stdoutRetainedBytes": 0,
+      "stderrRetainedBytes": 0,
+      "stderrTruncated": false,
+      "signalHandlersInstalled": false
+    },
+    "retainedTextBytes": 0,
+    "retainedUpdates": 0,
+    "cancelTimerActive": false,
+    "earlyUpdateCount": 0
+  },
+  "elapsedMs": 3965,
+  "observedOwnedProcessesStillRunning": 0,
+  "date": "2026-10-23",
+  "base": "001cb3b9775f25910426609b0b3fb83f33af0d18",
+  "branch": "codex/acp-installed-entry-audit",
+  "installed": {
+    "pathCodex": "0.146.1",
+    "adapter": "@agentclientprotocol/codex-acp 2.2.2",
+    "adapterBundledCodex": "0.160.1",
+    "adapterBundleSha256": "6b1bb4e7e9caaf4aeca1042ae4aec2dc2433b0b0e4b1614b38a4d41699902aaa",
+    "adapterReadmeSha256": "4dcbade129cbe32acfff276b7147a0b365ea894c57479fdf58e75ba3a29dd87d",
+    "entry": "node.exe <existing npm root>/@agentclientprotocol/codex-acp/dist/index.js",
+    "protocolVersion": 1
+  },
+  "officialSource": "https://learn.chatgpt.com/docs/app-server",
+  "authDiagnostic": {
+    "operation": "codex login status",
+    "status": "ChatGPT signed in",
+    "rawRetained": false,
+    "modelEntitlementVerified": false,
+    "credentialValuesExposed": false
+  },
+  "verification": {
+    "syntheticClientAndDocsTests": {
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contractDeclarations": 17
+  },
+  "notExecuted": [
+    "adapter --help (starts server, no help branch)",
+    "session/new",
+    "session/prompt",
+    "authenticate",
+    "browser transport",
+    "main connection",
+    "installation or SDK download"
+  ],
+  "scopeLimit": "Observed-process cleanup only; general process-tree guarantee is not established"
+}
