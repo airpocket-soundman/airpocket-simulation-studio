@@ -123,6 +123,7 @@ export const dictionary={
  '登録した材料の有効温度範囲外です。':'Temperature is outside the registered material validity range',
  '温度依存の弾性物性には一様温度が必要です。':'Temperature-dependent elasticity currently requires a uniform temperature',
  '速度依存の構造モデルは未対応です。':'Rate-dependent structural constitutive models are not supported',
+ '直交異方性を登録済み。静的・線形のCPU解析に対応。方向別の物性と材料軸を結果へ保存します。専用の成分編集欄は未実装です。APIまたは保存入力で各成分を確認してください。':'Orthotropic elasticity registered. Static linear CPU analysis only. Constants and material axes are retained in saved results. No dedicated per-component editor is implemented; confirm each component in the API or saved input.',
  '直交異方性の構造モデルは未対応です。':'Orthotropic structural constitutive models are not supported',
  '静解析のひずみ速度0が登録した試験範囲外です。':'Static structure has zero strain rate, outside the registered test envelope',
 
