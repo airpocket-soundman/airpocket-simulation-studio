@@ -73,9 +73,10 @@ export async function createStdioClient({origin, spawnImpl = spawn, announce = (
   const onExit=()=>{exitConfirmed=true;rejectPending(failure('STDIO_CHILD_EXITED'));for(const notify of [...exitWaiters])notify(true);};
   const onError=()=>rejectPending(failure('STDIO_CHILD_ERROR'));
   const onStdinError=()=>rejectPending(failure('STDIO_TRANSPORT_FAILED'));
-  child.on('exit',onExit);child.on('close',onExit);child.on('error',onError);child.stdin.on('error',onStdinError);
+  child.on('exit',onExit);child.on('close',onExit);child.on('error',onError);for(const stream of [child.stdin,child.stdout,child.stderr])stream.on('error',onStdinError);
   const redact = text => token ? String(text).split(token).join('[redacted]') : String(text);
   const lines = createInterface({input: child.stdout});
+  lines.on('error',onStdinError);
   const onLine=line=>{try{const m=JSON.parse(line),p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(redact(m.error.message))):p.resolve(m.result);}}catch{/* ignore non JSON-RPC lines */}};
   lines.on('line',onLine);
   const rpc = (method, params) => new Promise((resolve, reject) => {
@@ -98,7 +99,11 @@ export async function createStdioClient({origin, spawnImpl = spawn, announce = (
       return {exited:true,terminated,escalated};
     }finally{
       rejectPending(failure('STDIO_CLIENT_CLOSED'));lines.off('line',onLine);lines.close();
-      child.off('exit',onExit);child.off('close',onExit);child.off('error',onError);child.stdin.off('error',onStdinError);
+      child.off('exit',onExit);child.off('close',onExit);
+      if(exitConfirmed)child.off('error',onError);else child.once('close',()=>child.off('error',onError));
+      // destroy() may report pipe errors asynchronously. Keep each guard until
+      // that stream actually closes, then remove it without leaving a timer.
+      for(const stream of [child.stdin,child.stdout,child.stderr]){if(stream.closed)stream.off('error',onStdinError);else stream.once('close',()=>stream.off('error',onStdinError));}
       child.stdin.destroy();child.stdout.destroy();child.stderr.destroy();stderr='';token=null;
     }
   })();

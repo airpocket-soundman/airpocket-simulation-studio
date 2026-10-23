@@ -11,3 +11,5 @@ RPCの既定期限は30000ms。期限切れは `STDIO_RPC_TIMEOUT` であり、r
 fake7試験でEOF正常・遅延SIGTERM終了・SIGKILL終了・終了不能拒否・既終了・RPC期限/破棄・起動失敗を確認。既存perfを含め32試験成功。依存未導入の最初の試行では既存realstdio試験だけが起動失敗し、npm ci後に全成功した。検証対象をskipしたものではない。
 
 [実終了証拠](evidence/2026-10-24-stdio-confirmed-close.json): Win32/Node v24.11.1で別の1回のmetadata-only smokeを実行し、sessions=[]、通常close16ms、exit0/signalなし、exit/close両イベント確認、所有active handle0、stdout data listener0、stream全破棄を確認。GUIpair・solver・token出力/保存はなし。過去fresh評価の終了証拠へ遡及適用しない。
+
+独立監査で、実exit確認後の非同期stream destroyがEPIPEを返すと、error listenerの早期除去によりclose成功後に未処理errorでprocessが終了する反例を確認した。stdin/stdout/stderrとreadlineのtransport errorを処理し、各streamのguardは実closeまで保持してから除去する。子exit未確認でcloseが失敗した場合も、子のerror guardのみを後続closeまで保持する。RPC/timerは残さず、失敗を成功へ読み替えない。後続errorを含む4つの独立subprocess回帰で未処理errorとguard残留がないことを確認した。

@@ -11,7 +11,7 @@ function owned({eof=true,onKill,announce=true}={}){
  return {child,kills,exit,spawnImpl,get options(){return options;}};
 }
 const make=(f,budgets={})=>createStdioClient({origin,spawnImpl:f.spawnImpl,startupTimeoutMs:50,rpcTimeoutMs:1000,closeGraceMs:3,terminateGraceMs:25,killGraceMs:10,...budgets});
-function cleaned(f){assert.equal(f.child.stdout.destroyed,true);assert.equal(f.child.stdin.destroyed,true);assert.equal(f.child.stderr.destroyed,true);assert.equal(f.child.stdout.listenerCount('data'),0);for(const event of ['exit','close','error'])assert.equal(f.child.listenerCount(event),0);}
+function cleaned(f,unconfirmed=false){assert.equal(f.child.stdout.destroyed,true);assert.equal(f.child.stdin.destroyed,true);assert.equal(f.child.stderr.destroyed,true);assert.equal(f.child.stdout.listenerCount('data'),0);assert.equal(f.child.listenerCount('exit'),0);assert.equal(f.child.listenerCount('close'),unconfirmed?1:0);assert.equal(f.child.listenerCount('error'),unconfirmed?1:0);}
 test('EOF close confirms exit, is idempotent, hides Windows spawn and rejects pending RPCs',async()=>{
  const f=owned(),client=await make(f),pending=assert.rejects(client.call('unanswered'),e=>e.code==='STDIO_CLIENT_CLOSED'),a=client.close();assert.equal(a,client.close());assert.deepEqual(await a,{exited:true,terminated:false,escalated:false});await pending;assert.deepEqual(f.kills,[]);assert.equal(f.options.windowsHide,true);assert.equal(f.options.shell,false);cleaned(f);await assert.rejects(client.call('after-close'),e=>e.code==='STDIO_CLIENT_CLOSED');
 });
@@ -22,7 +22,7 @@ test('SIGKILL escalation also waits for confirmation',async()=>{
  const f=owned({eof:false,onKill:(signal,exit)=>{if(signal==='SIGKILL')setTimeout(()=>exit(signal),3);}}),client=await make(f,{terminateGraceMs:3});assert.deepEqual(await client.close(),{exited:true,terminated:true,escalated:true});assert.deepEqual(f.kills,['SIGTERM','SIGKILL']);cleaned(f);
 });
 test('no exit cannot become close success, even when both kill calls return true',async()=>{
- const f=owned({eof:false}),client=await make(f,{terminateGraceMs:3,killGraceMs:3});await assert.rejects(client.close(),e=>e.code==='STDIO_CHILD_EXIT_UNCONFIRMED');await assert.rejects(client.close(),e=>e.code==='STDIO_CHILD_EXIT_UNCONFIRMED');assert.deepEqual(f.kills,['SIGTERM','SIGKILL']);cleaned(f);
+ const f=owned({eof:false}),client=await make(f,{terminateGraceMs:3,killGraceMs:3});await assert.rejects(client.close(),e=>e.code==='STDIO_CHILD_EXIT_UNCONFIRMED');await assert.rejects(client.close(),e=>e.code==='STDIO_CHILD_EXIT_UNCONFIRMED');assert.deepEqual(f.kills,['SIGTERM','SIGKILL']);cleaned(f,true);
 });
 test('already exited child requires no signals and pending calls fail immediately',async()=>{
  const f=owned({eof:false}),client=await make(f);f.exit();assert.deepEqual(await client.close(),{exited:true,terminated:false,escalated:false});assert.deepEqual(f.kills,[]);cleaned(f);
@@ -32,4 +32,9 @@ test('bounded RPC expiry and later close remove readers and timers',async()=>{
 });
 test('startup timeout still closes its owned child and never announces credentials',async()=>{
  const f=owned({announce:false});await assert.rejects(make(f,{startupTimeoutMs:5}),e=>e.code==='STDIO_STARTUP_TIMEOUT');assert.equal(f.child.exitCode,0);cleaned(f);
+});
+
+test('late pipe and unconfirmed-child errors cannot crash owned teardown',async()=>{
+ const {spawnSync}=await import('node:child_process'),{fileURLToPath}=await import('node:url');
+ for(const stream of ['stdin','stdout','stderr','unconfirmed-child']){const result=spawnSync(process.execPath,[fileURLToPath(new URL('./fixtures/stdio-late-destroy.mjs',import.meta.url)),stream],{encoding:'utf8',timeout:10000,windowsHide:true});assert.ifError(result.error);assert.equal(result.status,0,stream+': '+result.stderr);assert.equal(JSON.parse(result.stdout)[stream==='unconfirmed-child'?'unconfirmedCloseRefused':'exited'],true);assert.equal(result.stderr,'');}
 });
