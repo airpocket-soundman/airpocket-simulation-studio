@@ -16,6 +16,35 @@ function fixture(options={}){
 }
 const args=()=>({requestId:'result-export',expectedResultRevision:revision,format:'png',view:{}});
 
+test('synchronous host callback reentry cannot admit a second preparation',async()=>{
+ for(const hook of ['isBusy','getAnalysis','captureSelection']){
+  let adapter,nested,entered=false,views=0;const wait=deferred(),output={result:{kind:'thermal'}};
+  const reenter=()=>{if(!entered){entered=true;nested=adapter.prepare(args());nested.catch(()=>{});}};
+  adapter=createResultExportPreparation({captureSelection:()=>{if(hook==='captureSelection')reenter();return ()=>true;},getAnalysis:()=>{if(hook==='getAnalysis')reenter();return output;},isBusy:()=>{if(hook==='isBusy')reenter();return false;},getResultView:()=>{views++;return wait.promise;},getSetupView:()=>({}),getLanguage:()=> 'en',preflight:()=>{},render:()=>new Blob()});
+  const pending=adapter.prepare(args());await assert.rejects(nested,/busy/);assert.equal(views,1);assert.equal(adapter.isBusy(),true);wait.resolve(view());await pending;assert.equal(adapter.isBusy(),false);
+ }
+});
+
+test('synchronous cancellation or disposal during render checks cannot start the renderer',async()=>{
+ for(const hook of ['selected','getAnalysis','isBusy'])for(const ending of ['cancel','dispose']){
+  let adapter,handoff=false,renders=0;const output={result:{kind:'thermal'}},interrupt=()=>{if(handoff)adapter[ending]();};
+  adapter=createResultExportPreparation({captureSelection:()=>()=>{if(hook==='selected')interrupt();return true;},getAnalysis:()=>{if(hook==='getAnalysis')interrupt();return output;},isBusy:()=>{if(hook==='isBusy')interrupt();return false;},getResultView:async()=>view(),getSetupView:()=>({}),getLanguage:()=> 'en',preflight:()=>{},render:()=>{renders++;return new Blob();}});
+  await adapter.prepare(args());handoff=true;await assert.rejects(adapter.render(args()),/expired/);assert.equal(renders,0);assert.equal(adapter.isBusy(),false);
+ }
+});
+
+test('synchronous preflight cancellation stops before asynchronous view inspection',async()=>{
+ let adapter,views=0;adapter=createResultExportPreparation({captureSelection:()=>()=>true,getAnalysis:()=>null,isBusy:()=>false,getResultView:async()=>{views++;return view();},getSetupView:()=>({}),getLanguage:()=> 'en',preflight:()=>adapter.cancel(),render:()=>new Blob()});
+ await assert.rejects(adapter.prepare({format:'png-sequence'}),/expired/);assert.equal(views,0);assert.equal(adapter.isBusy(),false);
+});
+
+test('bfcache-style pagehide invalidates pending preparation without permanently disposing the adapter',async()=>{
+ const wait=deferred(),h=fixture({getResultView:()=>wait.promise}),pending=h.adapter.prepare(args());
+ h.selection.invalidate();h.adapter.cancel();assert.equal(h.adapter.isBusy(),true);wait.resolve(view());await assert.rejects(pending,/expired/);
+ // pageshow reuses the same adapter and selection owner, with a newly captured guard.
+ await h.adapter.prepare(args());assert.equal(await (await h.adapter.render(args())).text(),'synthetic-png');assert.equal(h.adapter.isBusy(),false);
+});
+
 test('normal prepare preserves legacy thermal snapshot fields and detaches view/setup data',async()=>{
  const h=fixture(),snapshot=await h.adapter.prepare({format:'png-sequence'});
  assert.deepEqual(snapshot,{resultRevision:revision,physicalRevision:physical,view:{result:{...view().state,timeSeconds:view().physicalTimeSeconds},setup:{clipEnabled:false},language:'en'}});
