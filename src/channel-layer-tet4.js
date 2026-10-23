@@ -1,6 +1,10 @@
 import {createChannelLayerCellQuality} from './channel-layer-cell-quality.js';
 import {tetraVolume} from './tetra-geometry.js';
 
+// 512 wall layers plus one centre cell; callers cannot raise these hard caps.
+export const CHANNEL_TET4_MAX_WALL_LAYERS=512;
+export const CHANNEL_TET4_MAX_NODES=4*(CHANNEL_TET4_MAX_WALL_LAYERS+2);
+export const CHANNEL_TET4_MAX_ELEMENTS=6*(CHANNEL_TET4_MAX_WALL_LAYERS+1);
 const tolerance=1e-12;
 const faces=([a,b,c,d])=>[[b,c,d],[a,d,c],[a,b,d],[a,c,b]];
 const parity=face=>{let sign=1;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)if(face[i]>face[j])sign=-sign;return sign;};
@@ -13,6 +17,9 @@ const triangleArea=(nodes,face)=>{
 /** Strict read-only validation for this limited axis-aligned box, not a general mesh gate. */
 export function inspectChannelLayerTet4(mesh){
  const {nodes,tetrahedra,lengthMm,widthMm,gapMm}=mesh??{};
+ if(mesh?.units!=='mm')throw Error('Tet4 units must be mm');
+ if(mesh?.output!=='limited-channel-tet4')throw Error('Unsupported Tet4 output');
+ if(Array.isArray(nodes)&&nodes.length>3*CHANNEL_TET4_MAX_NODES||Array.isArray(tetrahedra)&&tetrahedra.length>CHANNEL_TET4_MAX_ELEMENTS)throw Error('Tet4 capacity exceeded');
  if(![lengthMm,widthMm,gapMm].every(v=>typeof v==='number'&&Number.isFinite(v)&&v>0))throw Error('Invalid finite channel dimensions');
  if(!Array.isArray(nodes)||nodes.length%3||!nodes.length||!nodes.every(v=>typeof v==='number'&&Number.isFinite(v)))throw Error('Invalid finite nodes');
  const positions=new Set();
@@ -51,6 +58,9 @@ export function inspectChannelLayerTet4(mesh){
 
 /** Six Freudenthal tetrahedra per retained orthogonal cell share global plane nodes. */
 export function createChannelLayerTet4(input){
+ const plan=input?.plan;
+ // Reject an oversized declared or retained plan before the quality reader allocates maps/cells.
+ if(plan&&(plan.layersPerWall>CHANNEL_TET4_MAX_WALL_LAYERS/2||Array.isArray(plan.coordinatesMm)&&plan.coordinatesMm.length>CHANNEL_TET4_MAX_WALL_LAYERS+2||Array.isArray(plan.layers)&&plan.layers.length>CHANNEL_TET4_MAX_WALL_LAYERS))throw Error('Tet4 plan capacity exceeded');
  const quality=createChannelLayerCellQuality(input);
  const {lengthMm,widthMm,gapMm}=quality;
  const ys=[quality.cells[0].lowerYMm,...quality.cells.map(c=>c.upperYMm)],nodes=[],tetrahedra=[];

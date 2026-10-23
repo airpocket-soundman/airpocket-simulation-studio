@@ -9,6 +9,12 @@ const baseInput=()=>({plan:basePlan(),lengthMm:2,widthMm:1,maxAspectRatio:20,min
 const quality=(input=baseInput())=>createChannelLayerCellQuality(input);
 const clone=value=>structuredClone(value);
 
+test('minimum height is relative even far below one millimetre',()=>{
+ const input={plan:createChannelLayerPlan({gapMm:1e-9,firstHeightMm:1e-14,growthRatio:1,layersPerWall:1}),lengthMm:1e-9,widthMm:1e-9,maxAspectRatio:100001,minimumCellHeightMm:5e-13};
+ const before=clone(input);assert.throws(()=>quality(input),/below the minimum/);assert.deepEqual(input,before);
+ input.minimumCellHeightMm=1e-14;assert.equal(quality(input).cellCount,3);
+});
+
 test('reference plan yields seven 2x1 mm cells with the documented heights, volumes and aspects',()=>{
  const report=quality();
  assert.equal(report.units,'mm');

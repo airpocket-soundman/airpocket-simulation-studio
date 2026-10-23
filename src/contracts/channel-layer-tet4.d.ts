@@ -6,6 +6,8 @@ export interface ChannelLayerTet4Input {
  minimumCellHeightMm: number;
 }
 export interface LimitedChannelTet4Geometry {
+ units: 'mm';
+ output: 'limited-channel-tet4';
  lengthMm: number;
  widthMm: number;
  gapMm: number;
@@ -28,3 +30,6 @@ export interface ChannelLayerTet4 extends LimitedChannelTet4Geometry {
 }
 export declare function createChannelLayerTet4(input: ChannelLayerTet4Input): ChannelLayerTet4;
 export declare function inspectChannelLayerTet4(mesh: LimitedChannelTet4Geometry): ChannelLayerTet4Inspection;
+export declare const CHANNEL_TET4_MAX_WALL_LAYERS: 512;
+export declare const CHANNEL_TET4_MAX_NODES: number;
+export declare const CHANNEL_TET4_MAX_ELEMENTS: number;
