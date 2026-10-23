@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "baseSha": "842fe553284a62383d9ed0a9b5f374f263d667bc",
+  "branch": "codex/planar-p1-heat-operator-20261023",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Limited coincident full-coverage planar continuous-P1 source nodal flux; no solver or product connection.",
+  "synthetic": true,
+  "geometry": {
+    "units": "mm",
+    "mesh": {
+      "nodes": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    "sourceFaces": [
+      {
+        "nodes": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "nodes": [
+          0,
+          2,
+          3
+        ]
+      }
+    ],
+    "targetFaces": [
+      {
+        "nodes": [
+          4,
+          7,
+          5
+        ]
+      },
+      {
+        "nodes": [
+          5,
+          7,
+          6
+        ]
+      }
+    ]
+  },
+  "sourceGeometryRevision": "sha256:ac4083818358e8d783c3d5dc135919ad02b0e73e3e6b0bfc8ce5297f69d68ae6",
+  "targetGeometryRevision": "sha256:8a18d81f1dcebbbb530badc3c0b4007e55cdbcb431a9ea015a06e51822288610",
+  "operatorRevision": "sha256:e2b17c4d0fc4e9c94e3a2fcc090d527a205809b4eb47ab17b5b1b390160ca2ac",
+  "limits": {
+    "nodes": 4096,
+    "facesPerSide": 512,
+    "terms": 16384,
+    "bytes": 1048576,
+    "values": 200000,
+    "depth": 20
+  },
+  "independentOracle": {
+    "derivedBy": "Separate reviewer before implementation: fixed common fan4 vertex values and exact triangle product integral, without production clip/barycentric.",
+    "formula": "integral(f*g)=A/12*((sum f)*(sum g)+sum(f_i*g_i))",
+    "targetBySourceMatrixM2": [
+      [
+        1.0416666666666665e-7,
+        2.083333333333333e-8,
+        2.083333333333333e-8,
+        2.083333333333333e-8
+      ],
+      [
+        1.0416666666666665e-7,
+        1.0416666666666665e-7,
+        1.0416666666666665e-7,
+        2.083333333333333e-8
+      ],
+      [
+        2.083333333333333e-8,
+        2.083333333333333e-8,
+        1.0416666666666665e-7,
+        2.083333333333333e-8
+      ],
+      [
+        1.0416666666666665e-7,
+        2.083333333333333e-8,
+        1.0416666666666665e-7,
+        1.0416666666666665e-7
+      ]
+    ],
+    "sourceBasisIntegralsM2": [
+      3.333333333333333e-7,
+      1.6666666666666665e-7,
+      3.333333333333333e-7,
+      1.6666666666666665e-7
+    ],
+    "hatTargetExpectedW": [
+      7.5e-7,
+      2.5e-7,
+      7.5e-7,
+      2.5e-7
+    ]
+  },
+  "actualMatrixM2": [
+    [
+      1.0416666666666667e-7,
+      2.083333333333333e-8,
+      2.083333333333333e-8,
+      2.083333333333333e-8
+    ],
+    [
+      1.0416666666666665e-7,
+      1.0416666666666667e-7,
+      1.0416666666666665e-7,
+      2.083333333333333e-8
+    ],
+    [
+      2.083333333333333e-8,
+      2.083333333333333e-8,
+      1.0416666666666667e-7,
+      2.083333333333333e-8
+    ],
+    [
+      1.0416666666666665e-7,
+      2.083333333333333e-8,
+      1.0416666666666665e-7,
+      1.0416666666666667e-7
+    ]
+  ],
+  "maxAbsoluteMatrixErrorM2": 1.3234889800848443e-23,
+  "cases": [
+    {
+      "qWPerM2": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "fluxRevision": "sha256:9c1f41e5e1a06e0dd97bbbea5cefd7f092fc660d2a1b3988791740e33e87b606",
+      "sourceW": 3.333333333333333e-7,
+      "targetW": 3.333333333333333e-7,
+      "targetOutwardW": -3.333333333333333e-7,
+      "balanceErrorW": 0,
+      "targetNodeHeatW": [
+        [
+          4,
+          2.083333333333333e-8
+        ],
+        [
+          5,
+          1.0416666666666665e-7
+        ],
+        [
+          6,
+          1.0416666666666667e-7
+        ],
+        [
+          7,
+          1.0416666666666665e-7
+        ]
+      ]
+    },
+    {
+      "qWPerM2": [
+        1,
+        0,
+        -1,
+        0
+      ],
+      "fluxRevision": "sha256:25b49dccb7bbf324bcc646c88e166804916bd9f2950c16016c6207d9c4969ee4",
+      "sourceW": 0,
+      "targetW": 0,
+      "targetOutwardW": 0,
+      "balanceErrorW": 0,
+      "targetNodeHeatW": [
+        [
+          4,
+          8.333333333333334e-8
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          -8.333333333333334e-8
+        ],
+        [
+          7,
+          0
+        ]
+      ]
+    },
+    {
+      "qWPerM2": [
+        -1,
+        0,
+        1,
+        0
+      ],
+      "fluxRevision": "sha256:f4adb60244d6b3679555c9fffe759e20760c806bb784d652186c3d5a05190729",
+      "sourceW": 0,
+      "targetW": 0,
+      "targetOutwardW": 0,
+      "balanceErrorW": 0,
+      "targetNodeHeatW": [
+        [
+          4,
+          -8.333333333333334e-8
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          8.333333333333334e-8
+        ],
+        [
+          7,
+          0
+        ]
+      ]
+    }
+  ],
+  "hat": {
+    "sourceW": 0.000002,
+    "targetW": 0.000002,
+    "nodeHeatW": [
+      [
+        5,
+        7.5e-7
+      ],
+      [
+        6,
+        2.5e-7
+      ],
+      [
+        7,
+        7.5e-7
+      ],
+      [
+        8,
+        2.5e-7
+      ]
+    ]
+  },
+  "persistence": {
+    "bytes": 1685,
+    "sha256": "a3b92193b0315426a715e91253052eee1ba71a08c417a4317bdfd7ad146473ea",
+    "loadedSource": {
+      "bytes": 1685,
+      "rawIdentity": "sha256:a3b92193b0315426a715e91253052eee1ba71a08c417a4317bdfd7ad146473ea",
+      "meaning": "input-operator-JSON-identity-not-authentication"
+    },
+    "serializeRoundtripIdentical": true
+  },
+  "validation": {
+    "command": "node --test tests/planar-p1-heat-operator.test.mjs tests/planar-heat-operator.test.mjs tests/planar-heat-transfer.test.mjs tests/planar-heat-independent-integral.test.mjs tests/docs.test.mjs tests/contracts.test.mjs tests/contracts-types.test.mjs",
+    "passed": 44,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 3877.6272,
+    "contractDeclarations": 18,
+    "actualRuntimeImportTypeFixture": "passed",
+    "capacity": {
+      "fan128Terms": 4672,
+      "fan256": "rejected before exceeding16384 sparse pairs",
+      "nodes4096Faces512": "accepted conforming case",
+      "raw1048576Bytes": "accepted",
+      "raw1048577Bytes": "rejected"
+    },
+    "oldAffineSourceUnchanged": true
+  },
+  "sourceHashes": {
+    "src/planar-p1-heat-operator.js": {
+      "bytes": 10577,
+      "sha256": "2b5fb603ca61876dcd85aafdb4b14a95939039e90f888c8037256b79c71146dc"
+    },
+    "src/planar-p1-heat-operator.d.ts": {
+      "bytes": 54,
+      "sha256": "c7ed8b54515efb6da0766038715c2f8d4f25b3141555020a0304dbab7ffdf4c9"
+    },
+    "src/contracts/planar-p1-heat-operator.d.ts": {
+      "bytes": 1938,
+      "sha256": "e4fe2986102110d345ca91af0e6e94824d438eb5381617969e6dc607dd86cb5b"
+    },
+    "tests/planar-p1-heat-operator.test.mjs": {
+      "bytes": 9732,
+      "sha256": "c238f476f7b0ae7a64c2200f370c8fc0ef7776ae763bd10b993373c94bedf411"
+    },
+    "tests/fixtures/planar-p1-heat-operator-types.ts": {
+      "bytes": 1103,
+      "sha256": "e78fb4b6c874a653dfd37ee970f9619281752be958ce8d98480411e1ec933be7"
+    }
+  },
+  "integrationRequired": [
+    "Root registers planar-p1-heat-operator.js in domain.files. Shared module-layers/progress/main not edited."
+  ],
+  "limitations": [
+    "Synthetic numerical reference; no experimental calibration or physical accuracy guarantee.",
+    "No curved or partial coverage,discontinuous per-face field,higher order,temperature mapping or coupled solver.",
+    "Row/column moment tolerance is stricter than inherited coverage tolerance; marginal geometries can be rejected.",
+    "SHA identities are not authentication/signatures.",
+    "No product UI/API/MCP or publication."
+  ],
+  "parentComplete": false
+}
