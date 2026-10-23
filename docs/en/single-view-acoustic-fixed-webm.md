@@ -16,3 +16,6 @@ GUI stop, MCP cancellation/disconnect, displayed-result replacement and codec fa
 
 
 On2026-10-24, normal main/IAB/EN and formal stdio MCP created exactly one2-second time WebM from the retained acoustic archive. Verified923,844bytes/SHA, independent VP8 decode48all-key/584×640/2s, complete physical ledger/terminal1.2ms offset0, five unchanged states, settled release and disconnect cleanup. [Raw evidence, failure history and limits](../evidence/2026-10-24-single-acoustic-webm-main/README.en.md). This is one archive/runtime verification, not GUI-download, other-engine or general physical-accuracy proof.
+
+
+Fixed PR195 head `eda94d0` passed [CI39991802155](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39991802155/job/120545136149): total2150,passed2142,failed0,skipped8 (288.012s),successful build and all28 local report checks (39.045s). Executed merge candidate was `5c5cbc4686eddfc7e85f57271a0e14d959419633`; deployment/public verification was skipped. [Automatic-artifact raw logs and hashes](../evidence/2026-10-24-pr195-ci/summary.json). This is a separate docs-only followup, not a CI retry.

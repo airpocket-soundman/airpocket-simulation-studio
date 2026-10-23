@@ -16,3 +16,6 @@ GUI stop、MCP取消/切断、表示結果の交代、codec失敗では部分成
 
 
 2026-10-24、通常main/IAB/EN・正式stdio MCPで保存済み音響archiveから2秒のtime WebMを1回作成した。923,844bytes/SHA、独立VP8復号48all-key/584×640/2秒、全物理ledgerと最終1.2ms・ずれ0、5状態不変、settled解放と切断cleanupを確認した。[生証拠・失敗履歴・限定範囲](evidence/2026-10-24-single-acoustic-webm-main/README.md)。これは1archive/runtimeの限定確認で、GUI download・他engine・一般物理精度等の証明ではない。
+
+
+PR195の固定head `eda94d0` は [CI39991802155](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39991802155/job/120545136149) で2150件中2142成功・0失敗・8skip（288.012秒）、build成功、local report28件成功（39.045秒）。実行されたmerge候補は `5c5cbc4686eddfc7e85f57271a0e14d959419633`。公開/deployはskip。[自動artifactの生ログ・hash](evidence/2026-10-24-pr195-ci/summary.json)。この追記は別基点のdocs-only記録で、CI再実行はしていない。
