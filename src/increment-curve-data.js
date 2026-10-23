@@ -11,10 +11,12 @@ export const GAUGE_WEIGHT_TOLERANCE=1e-9;
 // step must match the applied axial load, both to this absolute error in N.
 export const FORCE_BALANCE_TOLERANCE_N=1e-5;
 export const CONTROLLED_FORCE_TOLERANCE_N=1e-5;
+// Matches the existing constraint conflict tolerance of 1e-11 m, expressed in mm.
+export const CONTROLLED_DISPLACEMENT_TOLERANCE_MM=1e-8;
 // Initial gauge length and axis are checked against the actual mesh node coordinates in mm.
 export const GAUGE_GEOMETRY_TOLERANCE_MM=1e-6;
 // The controlled quantity is recorded, not solved here: extraction reads reactions and displacement identically.
-// Only the force-controlled independent linear path is verified in this unit; displacement control is refused.
+// Prescribed-displacement rows additionally verify their explicit boundary and every constrained end-node value.
 export const CONTROLLED_QUANTITIES=Object.freeze({force:'N',displacement:'mm'});
 
 const plain=value=>value!==null&&typeof value==='object'&&(Object.getPrototypeOf(value)===Object.prototype||Object.getPrototypeOf(value)===null);
@@ -135,10 +137,31 @@ function requireControlledForce(step,measurement){
   if(Math.abs(measurement.tensileForceN-step.controlledValue)>CONTROLLED_FORCE_TOLERANCE_N)throw Error('Step '+step.stepId+' controlledValue does not match the axial reaction within '+CONTROLLED_FORCE_TOLERANCE_N+' N');
 }
 
+// The boundary is retained verbatim from the independent solve. A label alone is not proof of mm control.
+function requireControlledDisplacement(step,output,validated){
+  const boundary=output.calculation.boundary,keys=['fixed','forces','displacements'];
+  if(!plain(boundary)||Object.keys(boundary).length!==keys.length||keys.some(key=>!Object.hasOwn(boundary,key)))throw Error('Displacement control requires an explicit fixed/forces/displacements solve boundary');
+  const fixed=new Set(validated.fixedNodes),loaded=new Set(validated.loadedNodes);
+  if(!Array.isArray(boundary.fixed)||boundary.fixed.length!==fixed.size||new Set(boundary.fixed).size!==fixed.size||!boundary.fixed.every(node=>fixed.has(node)))throw Error('Prescribed boundary fixed nodes differ from the spec');
+  if(!Array.isArray(boundary.forces)||boundary.forces.length!==0)throw Error('Prescribed displacement steps require no applied nodal forces');
+  if(!Array.isArray(boundary.displacements)||boundary.displacements.length!==loaded.size)throw Error('Prescribed boundary must constrain every loaded node exactly once');
+  const seen=new Set();
+  for(const entry of boundary.displacements){
+    if(!plain(entry)||Object.keys(entry).length!==3||!['node','direction','valueMm'].every(key=>Object.hasOwn(entry,key))||!loaded.has(entry.node)||seen.has(entry.node)||!Array.isArray(entry.direction)||entry.direction.length!==3||!entry.direction.every(finite)||entry.direction.some((v,k)=>Math.abs(v-validated.axis[k])>AXIS_UNIT_TOLERANCE)||entry.valueMm!==step.controlledValue)throw Error('Prescribed boundary displacement differs from the controlled axis/value');
+    seen.add(entry.node);
+  }
+  const reactions=requireResult(output.result,validated.nodeCount),u=output.result.displacement;
+  if(!finite(output.result.residual)||output.result.residual<0||output.result.residual>=1e-8)throw Error('Displacement control requires a converged finite solver residual');
+  if(reactions.size!==fixed.size+loaded.size||[...reactions.keys()].some(node=>!fixed.has(node)&&!loaded.has(node)))throw Error('Displacement control requires exactly the fixed and actuator nodal reactions');
+  for(const node of fixed)if(u.slice(node*3,node*3+3).some(v=>Math.abs(v)>CONTROLLED_DISPLACEMENT_TOLERANCE_MM))throw Error('Fixed node displacement does not match its zero constraint');
+  for(const node of loaded){const actual=sum3(u.slice(node*3,node*3+3),validated.axis);if(Math.abs(actual-step.controlledValue)>CONTROLLED_DISPLACEMENT_TOLERANCE_MM)throw Error('Loaded node displacement does not match the controlled value');}
+}
+
 /** Reduce one real linear-elastic result to the axial reaction, gauge extension and engineering stress/strain.
  * Sign convention: the gauge axis points from gauge point a to gauge point b, and tension is positive, so
  * tensileForceN = -(sum of support reaction projected on the axis). */
-export function extractIncrementMeasurement({spec,result}={}){
+export function extractIncrementMeasurement({spec,result,controlledQuantity='force'}={}){
+  if(typeof controlledQuantity!=='string'||!Object.hasOwn(CONTROLLED_QUANTITIES,controlledQuantity))throw Error('controlledQuantity must be force or displacement');
   const validated=validateIncrementSpec(spec);
   const {axis,nodeCount}=validated,reactions=requireResult(result,nodeCount),displacement=result.displacement;
   let reactionAxisN=0;
@@ -147,7 +170,13 @@ export function extractIncrementMeasurement({spec,result}={}){
     if(!force)throw Error('Fixed node '+String(node)+' has no constraint reaction in the result');
     reactionAxisN+=sum3(force,axis);
   }
-  const appliedAxisN=sum3(result.applied,axis);
+  const externalAppliedAxisN=sum3(result.applied,axis);
+  let actuatorReactionAxisN=0;
+  if(controlledQuantity==='displacement'){
+    if(result.applied.some(value=>value!==0))throw Error('Prescribed displacement result must have zero external applied load');
+    for(const node of validated.loadedNodes){const force=reactions.get(node);if(!force)throw Error('Loaded node '+node+' has no actuator reaction');actuatorReactionAxisN+=sum3(force,axis);}
+  }
+  const appliedAxisN=externalAppliedAxisN+actuatorReactionAxisN;
   const tensileForceN=-reactionAxisN;
   const forceBalanceErrorNAxialN=appliedAxisN+reactionAxisN;
   if(!finite(reactionAxisN)||!finite(tensileForceN)||!finite(forceBalanceErrorNAxialN))throw Error('Non-finite axial force');
@@ -156,7 +185,7 @@ export function extractIncrementMeasurement({spec,result}={}){
   const engineeringStressPa=tensileForceN/(validated.initialAreaMm2*1e-6);
   const engineeringStrain=extensionMm/validated.initialGaugeLengthMm;
   if(!finite(extensionMm)||!finite(engineeringStressPa)||!finite(engineeringStrain))throw Error('Non-finite gauge extension, stress or strain');
-  return Object.freeze({reactionAxisN:normalise(reactionAxisN),tensileForceN:normalise(tensileForceN),appliedAxisN:normalise(appliedAxisN),forceBalanceErrorNAxialN:normalise(forceBalanceErrorNAxialN),extensionMm:normalise(extensionMm),engineeringStressPa:normalise(engineeringStressPa),engineeringStrain:normalise(engineeringStrain)});
+  return Object.freeze({...(controlledQuantity==='displacement'?{actuatorReactionAxisN:normalise(actuatorReactionAxisN),externalAppliedAxisN:normalise(externalAppliedAxisN)}:{}),reactionAxisN:normalise(reactionAxisN),tensileForceN:normalise(tensileForceN),appliedAxisN:normalise(appliedAxisN),forceBalanceErrorNAxialN:normalise(forceBalanceErrorNAxialN),extensionMm:normalise(extensionMm),engineeringStressPa:normalise(engineeringStressPa),engineeringStrain:normalise(engineeringStrain)});
 }
 
 /** Area-weighted traction on the declared loaded surface. Boundary preparation for independent solves only;
@@ -204,10 +233,8 @@ export async function buildIncrementCurve({spec,steps}={}){
     if(typeof step.converged!=='boolean')throw Error('Each step requires a boolean converged flag');
     if(typeof step.provisional!=='boolean')throw Error('Each step requires a boolean provisional flag');
     if(!plain(step.rowIdentity)||Object.keys(validated.rowIdentity).some(key=>step.rowIdentity[key]!==validated.rowIdentity[key]))throw Error('Step '+step.stepId+' mixes a different material, geometry or gauge');
-    if(!Object.hasOwn(CONTROLLED_QUANTITIES,step.controlledQuantity))throw Error('controlledQuantity must be force or displacement');
+    if(typeof step.controlledQuantity!=='string'||!Object.hasOwn(CONTROLLED_QUANTITIES,step.controlledQuantity))throw Error('controlledQuantity must be force or displacement');
     if(!finite(step.controlledValue))throw Error('Each step requires a finite controlledValue');
-    // There is no verified prescribed-displacement result contract here, so no success row may claim mm control.
-    if(step.controlledQuantity==='displacement')throw Error('Displacement-controlled increments are not supported: the prescribed displacement and nodal reactions cannot be verified');
     const row={stepIndex:index,stepId:step.stepId,controlledQuantity:step.controlledQuantity,controlledValue:step.controlledValue,controlledUnit:CONTROLLED_QUANTITIES[step.controlledQuantity],converged:step.converged,provisional:step.provisional};
     if(!step.converged){
       rows.push({...row,status:'failed',inputRevision:null,meshRevision:null,calculationRevision:null,resultRevision:null,reactionAxisN:null,tensileForceN:null,appliedAxisN:null,forceBalanceErrorNAxialN:null,extensionMm:null,engineeringStressPa:null,engineeringStrain:null});
@@ -219,7 +246,8 @@ export async function buildIncrementCurve({spec,steps}={}){
     if(stepInputRevision!==inputRevision)throw Error('Step '+step.stepId+' output input differs from the curve input revision');
     const stepMeshRevision=await getProjectRevision(output.mesh);
     if(stepMeshRevision!==meshRevision)throw Error('Step '+step.stepId+' output mesh differs from the curve mesh revision');
-    const measurement=extractIncrementMeasurement({spec,result:output.result});
+    if(step.controlledQuantity==='displacement')requireControlledDisplacement(step,output,validated);
+    const measurement=extractIncrementMeasurement({spec,result:output.result,controlledQuantity:step.controlledQuantity});
     if(Math.abs(measurement.forceBalanceErrorNAxialN)>FORCE_BALANCE_TOLERANCE_N)throw Error('Step '+step.stepId+' axial reaction does not balance the applied load within '+FORCE_BALANCE_TOLERANCE_N+' N');
     requireControlledForce(step,measurement);
     const resultRevision=await getPhysicalRevision({result:output.result});
@@ -234,7 +262,7 @@ export async function buildIncrementCurve({spec,steps}={}){
     analysis:{kind:'independent-linear-solves',plasticHistory:false,note:'Each row is the reduction of one independent linear-elastic solve along the same axis. This is not a plastic load/unload history and no row is interpolated.'},
     inputRevision,
     meshRevision,
-    tolerances:{controlledForceAbsoluteN:CONTROLLED_FORCE_TOLERANCE_N,forceBalanceAbsoluteN:FORCE_BALANCE_TOLERANCE_N,gaugeGeometryMm:GAUGE_GEOMETRY_TOLERANCE_MM},
+    tolerances:{...(steps.some(step=>step.controlledQuantity==='displacement')?{controlledDisplacementAbsoluteMm:CONTROLLED_DISPLACEMENT_TOLERANCE_MM}:{}),controlledForceAbsoluteN:CONTROLLED_FORCE_TOLERANCE_N,forceBalanceAbsoluteN:FORCE_BALANCE_TOLERANCE_N,gaugeGeometryMm:GAUGE_GEOMETRY_TOLERANCE_MM},
     axis:validated.axis,
     initialGaugeLengthMm:validated.initialGaugeLengthMm,
     initialAreaMm2:validated.initialAreaMm2,

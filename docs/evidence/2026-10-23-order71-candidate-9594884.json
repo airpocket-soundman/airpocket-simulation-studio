@@ -1,0 +1,954 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-23T13:16:16.049Z",
+  "candidate": "959488461f446a5f19eb6383a402dd7ac180a7f4",
+  "scope": "Read-only order71 reconciliation. No source/progress changes. PR185 and its CI explicitly unverified.",
+  "orders": [
+    {
+      "number": 52,
+      "id": "RESULTCURVE1",
+      "status": "limited implementation verified",
+      "verified": "Real force and explicit displacement independent solves; replay/numeric/CLI/MCP/limits/type evidence.",
+      "remaining": "Final candidate CI/publication and browser artifact path; general nonlinear history remains a separate unimplemented feature.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-52-resultcurve1.json",
+          "sha256": "a892acd99a5824a62ef6a10dbc4a8ff4e7c096dc40ab6567ae233e1c32745b15"
+        },
+        {
+          "path": "docs/evidence/2026-10-23-resultcurve-displacement-control.json",
+          "sha256": "2cc8f9afed143faebfc064e357fee7d0768a0dea364d187583bda82fb1e7476e"
+        }
+      ],
+      "instruction": {
+        "name": "52-RESULTCURVE1.md",
+        "sha256": "01a6823a15d555d657c2196a5f1eb4ff982f47a3b58fadd7f50bfbc3b9f13a79"
+      }
+    },
+    {
+      "number": 53,
+      "id": "RESULTCURVE1",
+      "status": "partially verified existing implementation",
+      "verified": "JA/EN inline graph and keyboard historical Chrome evidence; complete Blob bytes/hash equals formal stdio in DOM fixture; late selection/disposal regression.",
+      "remaining": "Actual Chrome downloaded bytes/hash,390px,expanded tab,input/result/case revision snapshots; HTTPS candidate workflow.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-verification-completion.json",
+          "sha256": "aff6000b75e4dbf38fac8218b31db7b2bff22f1674c88e6229ebbba122233d65"
+        }
+      ],
+      "instruction": {
+        "name": "53-RESULTCURVE1.md",
+        "sha256": "aec8fd8e379a73020825e442044a54b02eea450a991365bc6c04d31fc5330aec"
+      }
+    },
+    {
+      "number": 54,
+      "id": "AGENTACP1",
+      "status": "limited implementation verified",
+      "verified": "Bounded ACP v1 text session with synthetic child; cancel/close/timeout/backpressure/late notifications and content bounds.",
+      "remaining": "Real agent ACP entry/authentication and production browser transport are external/unimplemented; not an authenticated AI workflow.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-54-agentacp1.json",
+          "sha256": "032f97cbd6dfa7d0f20875af59704b4b20d4b79abeb6e0d7e0d5eea269f04c66"
+        }
+      ],
+      "instruction": {
+        "name": "54-AGENTACP1.md",
+        "sha256": "f054d78516e5053e3aa158d428be8b1d121e8392f05614945a35ec35d2537c79"
+      }
+    },
+    {
+      "number": 55,
+      "id": "AGENTCHAT1",
+      "status": "limited implementation verified; production connection absent",
+      "verified": "Explicit-provider chat controller and unmounted DOM panel; synthetic ACP child; draft/provider ABA fixes; JA/EN fixture.",
+      "remaining": "Main mounting plus production session transport remain unimplemented. Real Chrome390px/keyboard and authenticated real AI workflow remain unverified.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-agent-chat-boundary.json",
+          "sha256": "a14794e9da0d97b982f5f902a504580590a1887cc8ab7038d7c1510d82b52268"
+        }
+      ],
+      "instruction": {
+        "name": "55-AGENTCHAT1.md",
+        "sha256": "ea3e262c6ceb66142db74ce57f1a0676f927c4848fce1cad3b1a14af8c7c2d8a"
+      }
+    },
+    {
+      "number": 56,
+      "id": "P3",
+      "status": "bounded work-order verification closed",
+      "verified": "Real stdio success/stop/restart/discovery/request digest refusal/new request; metadata-only recovery and stable artifact-not-restored code.",
+      "remaining": "Full result persistence is intentionally not implemented by this work order; broader P3 parent acceptance and final candidate CI/publication remain.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-verification-completion.json",
+          "sha256": "aff6000b75e4dbf38fac8218b31db7b2bff22f1674c88e6229ebbba122233d65"
+        }
+      ],
+      "instruction": {
+        "name": "56-P3.md",
+        "sha256": "31c8de104afa93d353b9dd8e05c1e7eeefd1425b0531effcc0ac03cffa533a8a"
+      }
+    },
+    {
+      "number": 57,
+      "id": "EXPORTBACKGROUND1",
+      "status": "simulated production-branch integration verified",
+      "verified": "JA/EN visible/simulated-hidden normal HTTP401 poll causes disconnect/owned recording cancel/artifact refusal/fresh-session success.",
+      "remaining": "Actual Chrome visible/hidden/unselected recording expiry and revision restoration matrix remain; simulated recorder is not real recording.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-export-expiry-integration.json",
+          "sha256": "e1c47f920959958a89c831a3eb5ce6b8be33203c8a28ca26c3c42f4cce1ef17a"
+        }
+      ],
+      "instruction": {
+        "name": "57-EXPORTBACKGROUND1.md",
+        "sha256": "cefee6aec3d0e4c540bddda1ea28fb71ba0b236d5caba112850283b256c49a49"
+      }
+    },
+    {
+      "number": 58,
+      "id": "PERF1",
+      "status": "instrumentation fixed; measurement partial",
+      "verified": "Snapshot/revision identity,active/idle isolation,post-cancel and settle3s filtering,UASM/heap separation; IAB tiny60nodes121Tet4 cold/warm/cancel/recovery.",
+      "remaining": "Same actual Chrome2-scale rerun required by58 remains. Medium/fine/thermal and added scale not measured; asynchronous idle UASM missing with reasons. Host/cache not controlled.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-perf-idle.json",
+          "sha256": "5059b6ccc9e50a39f10579a63367432e9328b801863e07badb1ff7dcfc81f6ad"
+        }
+      ],
+      "instruction": {
+        "name": "58-PERF1.md",
+        "sha256": "201b4bc0c43c94953d13436ff27eec99812a0250c5ed6a773a53b966086f93fc"
+      }
+    },
+    {
+      "number": 59,
+      "id": "PERF1",
+      "status": "separate surface only; second-browser acceptance pending",
+      "verified": "IAB separate surface succeeds with fixed input; Chrome-family155 UA.",
+      "remaining": "Different surface does not establish a second browser/engine. Chrome pairing timed out; Edge/Firefox comparison unmeasured. Retain unavailable capability reasons; no install required.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-perf-idle.json",
+          "sha256": "5059b6ccc9e50a39f10579a63367432e9328b801863e07badb1ff7dcfc81f6ad"
+        }
+      ],
+      "instruction": {
+        "name": "59-PERF1.md",
+        "sha256": "b8a5a2aa8b049788591889107006ae7afd74a93e51dd84afe9e1acfd81ff9120"
+      }
+    },
+    {
+      "number": 60,
+      "id": "CFD1",
+      "status": "bounded numerical investigation completed; acceptance fails",
+      "verified": "SU2 fixed fine mesh1200to2400iterations; exit0,1680iterations181.625s,RSS36372480bytes; iteration error distinguished.",
+      "remaining": "Cd grid difference4.1226447% exceeds unchanged3%; new mesh-series plan/budget and physical/mesh convergence acceptance remain.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-numeric-audit-summary.json",
+          "sha256": "cec62c9ad78648563280e04441ac8ed637f1bde687eafc92c5217bb71c32a903"
+        }
+      ],
+      "instruction": {
+        "name": "60-CFD1.md",
+        "sha256": "568785f609a8fe6388be8c1d745ea87f90d4ee13662c2b7d7ab1a7264b224130"
+      }
+    },
+    {
+      "number": 61,
+      "id": "CFD1",
+      "status": "unavailable contract/source discovery closed; numerical path absent",
+      "verified": "Pinned official source/discovery proves available SURFACE_MASSFLOW is nodal diagnostic; capability supported:false and stable refusal code.",
+      "remaining": "Dedicated solver numerical boundary-flux instrumentation/export and real-derived bounded parser absent. No actual discrete mass-balance acceptance.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-61-cfd1.json",
+          "sha256": "09e6539778d98919d4eefef00d12650f9b647b6764039bb321caa5688cf67f2b"
+        }
+      ],
+      "instruction": {
+        "name": "61-CFD1.md",
+        "sha256": "eaf46c045d9fc8cb2cf918eb14961d56d02917a93598826e53c208252e6cdc4e"
+      }
+    },
+    {
+      "number": 62,
+      "id": "P6",
+      "status": "limited implementation and host/WASM verification closed",
+      "verified": "Explicit prepared boundary selections become validated record; +/-75/0N actual WASM; PR184 host-and-wasm2+19tests no skips.",
+      "remaining": "Linux CI belongs to8c902f3, not final9594884. Product backend/CAD mapping/general material native support remain unimplemented.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-62-p6-boundary-selection.json",
+          "sha256": "08e94c5f8ee1d99c0d0f1841e2ce87eb6789b4198976522f26474dd8e3b38bcc"
+        }
+      ],
+      "instruction": {
+        "name": "62-P6.md",
+        "sha256": "f109742ffedb92f89c2da38f2cc3c959799fab5a3e20dc20a01b7122bd5beee8"
+      }
+    },
+    {
+      "number": 63,
+      "id": "PRINT2",
+      "status": "bounded dataset contract verified",
+      "verified": "Raw hash/units/specimen separation;exact2MB/100specimens/10000samples/type/independent compression oracle.",
+      "remaining": "Real measured/calibrated datasets are external. Material identification and GUI remain unimplemented.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-63-print2.json",
+          "sha256": "40a119c9fe0c5b6b0094c986ec8afab7621483f1b9fec92d180503b0d8124b2f"
+        },
+        {
+          "path": "docs/evidence/2026-10-23-verification-inventory.json",
+          "sha256": "63a54d421b09a1530e6942cffd059e3e3f38e3a73184843d89104161c5c50485"
+        }
+      ],
+      "instruction": {
+        "name": "63-PRINT2.md",
+        "sha256": "c500f2c00260c5ee306a1bbea9b94da131e5f28e208867fb7f8c5359b559385b"
+      }
+    },
+    {
+      "number": 64,
+      "id": "CFDPORT1",
+      "status": "bounded explicit confirmation verified",
+      "verified": "Mesh revision/id/explicit outward normal/interior point to existing halfspace cap; exact limits/type/input-preservation verified.",
+      "remaining": "General OCC local cap/arbitrary wire/multiple volumes/UI/solver are unimplemented.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-64-cfdport1.json",
+          "sha256": "5d9d81a59202a7352781bee708cffddf0147d05e2061f63097964adbd2a7dd34"
+        },
+        {
+          "path": "docs/evidence/2026-10-23-verification-inventory.json",
+          "sha256": "63a54d421b09a1530e6942cffd059e3e3f38e3a73184843d89104161c5c50485"
+        }
+      ],
+      "instruction": {
+        "name": "64-CFDPORT1.md",
+        "sha256": "6f996b3a26549ca2827d6bb36f76004f2200941057a07872838b46968f3c579c"
+      }
+    },
+    {
+      "number": 65,
+      "id": "CFDMESH1",
+      "status": "bounded Tet4 and downstream contract verified",
+      "verified": "Conforming positive Tet4/incidence/wall tags/capacity oracle; new revision-bound6-boundary manifest/BC/quality/distances with full reconstruction.",
+      "remaining": "General3D boundary layers/Gmsh/flow/y+/solver connection/shared-edge nodal BC precedence are unimplemented/unverified.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-65-cfdmesh1.json",
+          "sha256": "bc95c19fa1dde62f8032e52445adcb608b8f64feecc6e2baabdf98e0faf4dcaf"
+        },
+        {
+          "path": "docs/evidence/2026-10-23-channel-layer-boundary-transfer.json",
+          "sha256": "2023f77f00e74a73d9a42f4c92829ba12fce069d8ba2fde1b7d5b8dcbbd3207a"
+        }
+      ],
+      "instruction": {
+        "name": "65-CFDMESH1.md",
+        "sha256": "6bbef417b3bb4bcc746f7564573d6e7f81b45ca36fa052e6fe1f82ef5b0ffabe"
+      }
+    },
+    {
+      "number": 66,
+      "id": "COUPLE3",
+      "status": "bounded affine transfer work-order verification closed",
+      "verified": "Independent split-mesh nodal integrals/rotation/sign/unsupported quadratic rejection; persisted geometry-bound affine operator revalidated on read incl rehashed tampering and overlap/gap defects.",
+      "remaining": "Partial coverage is explicitly refused, not partially transferred; general thermal-fluid iteration/arbitrary nodal field/experimental comparison absent.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-couple3-persisted-operator.json",
+          "sha256": "04a11674a3d30c8274b58123092bdfe7ef735f07a9da8af6acab454a7eb0a0ce"
+        },
+        {
+          "path": "docs/evidence/2026-10-23-couple3-operator-review-fix.json",
+          "sha256": "9bcb5ab0add0da5bbbebad6a203dbcb5f242d3a9a9bda4ba4fc0c9182ef078e3"
+        }
+      ],
+      "instruction": {
+        "name": "66-COUPLE3.md",
+        "sha256": "faef57b0a4290550823a3e34a52bcfe60c8f311f9f690a0ad1c0ba30599a55bd"
+      }
+    },
+    {
+      "number": 67,
+      "id": "CONTACT1",
+      "status": "bounded reference work-order verification closed",
+      "verified": "Piecewise1DOF analytical penalty/contact/open/unload/iteration/overflow checks.",
+      "remaining": "General3D contact/friction/history and parent acceptance remain unimplemented.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-audit-180.json",
+          "sha256": "3edf62d26e4cf237cdc54ef1bc7095bf6c5da23eba30b1b5fcad8ac215e37270"
+        }
+      ],
+      "instruction": {
+        "name": "67-CONTACT1.md",
+        "sha256": "6a9d6ec334304d2fd3b5990dddc99304492ed9bd79e56a9ac137d7bea4d9fb5f"
+      }
+    },
+    {
+      "number": 68,
+      "id": "COUPLE4B",
+      "status": "bounded reference work-order verification closed",
+      "verified": "Noncoplanar complex facet force/moment/rigid translation+rotation virtual-work independent checks.",
+      "remaining": "General curved physical accuracy/production coupled solver/fluid-added response remain unimplemented/unverified.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-audit-180.json",
+          "sha256": "3edf62d26e4cf237cdc54ef1bc7095bf6c5da23eba30b1b5fcad8ac215e37270"
+        }
+      ],
+      "instruction": {
+        "name": "68-COUPLE4B.md",
+        "sha256": "e414cae2c39e30e0e0716bd3eb89b42985a104947f4ae31cbaa82926d52ff4d2"
+      }
+    },
+    {
+      "number": 69,
+      "id": "MOD1",
+      "status": "one-path extraction and normal Chrome regression verified",
+      "verified": "DOM-free generation/lifetime guard; auto ABA/cancel/reselect/dispose tests. Root read-only QA record verifies normal EN axialA/thermalB/saveA and JA EnterB/A in actual Chrome.",
+      "remaining": "Forced delayed ABA is automatic regression only.390px and exact browser project/result revision snapshots not exercised. Root committed normal-Chrome evidence in followup47bfd03; read-only inspected with original full head and committed source hashes.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-opencode-69-mod1.json",
+          "sha256": "c65e9578648a1ce90f2a2eade83516c3faf65f570c7d6c0cbf62f9ffe2115cb7"
+        }
+      ],
+      "instruction": {
+        "name": "69-MOD1.md",
+        "sha256": "9be7edede41551f5783e3fd8cd548dd4b534be191296dc9ad122d9e0f939ff65"
+      }
+    },
+    {
+      "number": 70,
+      "id": "P4",
+      "status": "bounded fresh independent Skill loop verified",
+      "verified": "New participant used final public recipe and real fresh stdio discovery/paging/3artifact hashes/readback/numerics/tamper/overwrite/input preservation/EOF without repair.",
+      "remaining": "Localhost/stdio only; published HTTPS and full specialist Skill workflow gates remain.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-skill70-independent-loop.json",
+          "sha256": "e6c17b8db24750ef790d2aa57b742e0bc81c250e76c2b36e41bfbf2fb81a6e7c"
+        }
+      ],
+      "instruction": {
+        "name": "70-P4.md",
+        "sha256": "a22126eb2f55373f8c40890374cd643acda155fd8238e0e57104843dde85a146"
+      }
+    },
+    {
+      "number": 71,
+      "id": "P0",
+      "status": "read-only candidate reconciliation; final gate incomplete",
+      "verified": "All20orders reconciled;171tasks134released37unfinished and6gates1complete5pending; PR180to184 pinned checks refreshed.",
+      "remaining": "PR185/final candidate CI unknown. Final manifest/verify and adopted PR-head linkage pending; no merge/deploy authorized by this audit.",
+      "evidence": [
+        {
+          "path": "docs/evidence/2026-10-23-verification-inventory.json",
+          "sha256": "63a54d421b09a1530e6942cffd059e3e3f38e3a73184843d89104161c5c50485"
+        }
+      ],
+      "instruction": {
+        "name": "71-P0.md",
+        "sha256": "709b981f53a4673f8f7e214060121ce1faa475cda7ad360e83c612cf80aee8cb"
+      }
+    }
+  ],
+  "progress": {
+    "sha256": "dda14c3c5123ebc92dbe12ba911e68fff8d7e34d0a69efe906aa674b7104b48b",
+    "total": 171,
+    "counts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "unfinished": [
+      {
+        "id": "MESH1",
+        "status": "queued",
+        "acceptance": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。"
+      },
+      {
+        "id": "REG2",
+        "status": "building",
+        "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。 2026-10-16 円錐領域: 既存の円筒領域指定に任意の終端半径を追加し、STEPの円錐で荷重保存・面積検証・保存/復元をテスト、実Chromeでも円錐STEPの受理と誤った終端半径の拒否(メッシュ時)を確認。球面帯sectorは2026-10-19追加（下記）。一般UV矩形は未実装。円錐STEPで終端半径を空欄にした場合の条件文の表示は要確認。"
+      },
+      {
+        "id": "CFD1",
+        "status": "building",
+        "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。 2026-10-16: SU2 任意経路(取得は明示実行・固定SHA-256、同梱しない、LGPL-2.1表示)をmainへ反映(PR7)。実験的で上記の未達は変わらない。"
+      },
+      {
+        "id": "COUPLE1",
+        "status": "queued",
+        "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。"
+      },
+      {
+        "id": "FAIL1",
+        "status": "queued",
+        "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。"
+      },
+      {
+        "id": "CFDMESH1",
+        "status": "building",
+        "acceptance": "壁面解像度と品質、境界条件の対応を検証。"
+      },
+      {
+        "id": "CFD2",
+        "status": "queued",
+        "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。"
+      },
+      {
+        "id": "CFD3",
+        "status": "queued",
+        "acceptance": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。"
+      },
+      {
+        "id": "COUPLE3",
+        "status": "building",
+        "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。"
+      },
+      {
+        "id": "COUPLE5",
+        "status": "queued",
+        "acceptance": "時間同期・力の保存・安定性を検証。"
+      },
+      {
+        "id": "CONTACT1",
+        "status": "building",
+        "acceptance": "接触収束と反力・摩擦条件を検証。"
+      },
+      {
+        "id": "PERF1",
+        "status": "building",
+        "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。"
+      },
+      {
+        "id": "PRINT2",
+        "status": "building",
+        "acceptance": "最終段階の任意機能。異方性の等価モデルから開始し、壁・層・インフィルの詳細化と試験データによる検証。"
+      },
+      {
+        "id": "COUPLE4B",
+        "status": "building",
+        "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。"
+      },
+      {
+        "id": "CFDPORT1",
+        "status": "building",
+        "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。"
+      },
+      {
+        "id": "MOD1",
+        "status": "building",
+        "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。"
+      },
+      {
+        "id": "P0",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "P1",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。"
+      },
+      {
+        "id": "P2",
+        "status": "queued",
+        "acceptance": "docs/roadmap.mdのP2の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "P3",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "P4",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "P5",
+        "status": "queued",
+        "acceptance": "docs/roadmap.mdのP5の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "P6",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。"
+      },
+      {
+        "id": "UIIMPROVE1",
+        "status": "building",
+        "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。"
+      },
+      {
+        "id": "AGENTINPUT1",
+        "status": "checking",
+        "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。"
+      },
+      {
+        "id": "VIEWCOMPARE",
+        "status": "building",
+        "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。任意のブラウザ内自動保存（1件・128 KiB）と再読込後候補の明示復元を追加し、ケース本体・画像/動画・資格情報は保存しない。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。localhost実Chromeで任意自動保存・実再読込後の候補保持・新IDケース再取込後の明示復元・無効化/削除と再読込後の候補非復活を確認し、メイン表示/入力/ケースは不変。保存先の強制障害は自動テストのみ。熱温度/過渡音響の保存時刻WebM（共通カメラ・全期間色範囲固定、近傍保存時刻とずれ表示、明示物理開始/終了）を追加。localhost実Chromeの熱時間動画はAPI VP9/1280x640/SHA照合・4フレーム/画像4種、GUI作成/再生/中止/再作成と元2.01秒補間表示を含む4状態の完全一致を確認。実機音響は未確認。線形弾性2ケースの変位/応力の表示倍率を0→指定値へ片道linearで動かす変形WebMを追加（固定カメラ/色/保存結果、物理載荷履歴ではない、前回部分検証を保持し今回のAPI証跡で補完）。比較orbit GIFを追加（固定24枚・640×320・RGB332256色、localhost実ChromeでAPI成果物SHA/外部decode24画像とGUI作成/中止/再作成・元4状態一致を確認）。時間/表示倍率GIFは2026-10-19追加（最新欄参照）。MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。 追加localhost実Chromeの低負荷検証でAPI24,858bytes/SHA照合・VP9/1280x640・外部decode4frame/4画像、凡例を除く独立形状変化と元4状態一致、GUI再生終了2.125秒を確認。前回partialは履歴として保持。 受理済みジョブは元開始命令期限から分離。15秒要求が15,725msで成功し92,321bytes/SHA/17frame17画像/形状変化/元4状態一致を実Chromeで確認。録画中実機切断は未試験（自動テストのみ）。"
+      },
+      {
+        "id": "VIEWTIME",
+        "status": "building",
+        "acceptance": "熱・音響の参照場で計算刻み・保存密度・表示補間を区別し、固定色範囲、保存復元、メモリ上限、API時間操作、固定フレーム出力を検証する。現在: 上限付きopt-in熱節点履歴、熱/音響スライダーと補間再生、表示時刻のプローブ・静止画、保存フレームのAPI選択、熱PNG連番を実装。2026-10-17実Chromeで解析式20+t/20+2tの保存時刻の温度、0/5/10秒PNG連番とハッシュ、出力後2秒復元、名前付きビュー/測定履歴の5秒保存復元・再検証・改ざん拒否を確認。旧v1互換を維持し任意補間時刻のAPI選択/保存は拒否。一般形状の伝播精度、公開HTTPS、一般形状の精度と全体peak RAMの確認は残る。保存密度/scalar予算APIと日本語UIは2026-10-18の限定実Chrome証拠を追加。"
+      },
+      {
+        "id": "PRINTMEASURE1",
+        "status": "queued",
+        "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。"
+      },
+      {
+        "id": "PRINTMEASURE2",
+        "status": "queued",
+        "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。"
+      },
+      {
+        "id": "PRINTMEASURE3",
+        "status": "queued",
+        "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "status": "checking",
+        "acceptance": "現在の確認範囲: 2026-10-17: 実Chromeで熱の0/5/10秒3枚PNG連番、画像差・ZIP/画像ハッシュ・物理時刻・出力後2秒復元を確認。小規模ローカル試験のみ。補間表示の復元は自動テストで確認。slice/容量上限/120枚/公開HTTPSは未確認。 過去の検証履歴（以下の状態・未解決記述は各記録時点のもの）: 全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化は未完了。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。 2026-10-16: 固定フレームPNG連番(ZIP、2〜120枚、軌道/変形/時間)をmainへ反映(PR63)。実Chromeで構造・過渡音響のZIP解析、CRC、フレームSHA、中止後の表示復元、拒否、非選択タブでの完走を確認。軌道のmanifestが初回のみ最終桁で異なる不具合を見つけコードで修正済み(単体テストのみ、実Chrome再確認は未実施)。slice、容量上限境界、120枚成功、MP4/GIFは未検証。 2026-10-16 追記: 実Chromeで再確認。軌道書き出しは同一結果内でZIP完全一致(修正済み)、構造結果へのtime指定は開始時に拒否。ただし同じデモを解き直すとresultRevisionが変わりZIPも変わる(保存済み結果ごとの決定性のみ。原因未調査)。重い環境では8枚の書き出しに20〜180秒、開始が15秒の接続上限でタイムアウトし、ジョブが残って上限到達する場面があった。checking維持。 2026-10-16 実Chromeで再確認: 解き直しても軌道書出しのZIPが一致(physicalRevision、manifest v2)。ただしページ言語状態の変化でキャプション文字が変わると1枚目が変わる。slice、容量上限境界、120枚成功、MP4/GIFは未検証。checking維持。"
+      },
+      {
+        "id": "RUNTIMEWASM1",
+        "status": "checking",
+        "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。"
+      },
+      {
+        "id": "EXPORTBACKGROUND1",
+        "status": "checking",
+        "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。"
+      },
+      {
+        "id": "AGENTACP1",
+        "status": "building",
+        "acceptance": "docs/roadmap.mdのAGENTACP1に従い、Windows標準ブラウザの公開HTTPS/ローカル実接続、認証・scope・失効・取消・再接続・重複実行防止を検証。専門SKILLへ導入/復旧手順を記録。"
+      },
+      {
+        "id": "AGENTCHAT1",
+        "status": "building",
+        "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。"
+      },
+      {
+        "id": "RESULTCURVE1",
+        "status": "building",
+        "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。"
+      },
+      {
+        "id": "FINITEVISCO1",
+        "status": "queued",
+        "acceptance": "保存した試験条件/根拠から材料パラメータを校正し、単要素の載荷速度・保持・除荷・再載荷応力、残留ひずみ、散逸を同条件実験と照合。対応する構造経路で段階ごとの反力/変位・Cauchy応力・変形後断面・入力版を保持し、メッシュ/時間刻み感度、要素反転、損傷正則化を検証。未校正材料・未対応組合せ・限界超過は拒否または暫定表示。ダンベルのくびれ/荷重低下は実験比較と収束根拠が揃う場合のみ受け入れる。"
+      }
+    ],
+    "gates": [
+      {
+        "id": "publication-infrastructure",
+        "status": "complete"
+      },
+      {
+        "id": "existing-input-contracts",
+        "status": "pending"
+      },
+      {
+        "id": "ordinary-browser-https",
+        "status": "pending"
+      },
+      {
+        "id": "saved-results-comparison",
+        "status": "pending"
+      },
+      {
+        "id": "reproducible-view-export",
+        "status": "pending"
+      },
+      {
+        "id": "skill-end-to-end",
+        "status": "pending"
+      }
+    ]
+  },
+  "pullRequests": [
+    {
+      "headRefOid": "fe2f6d92d6fd957b5265feba09cdb98d2cf38c7c",
+      "mergeCommit": null,
+      "number": 180,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:38:55Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925375224/job/120320335264",
+          "name": "verify",
+          "startedAt": "2026-10-23T08:32:35Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:38:55Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925375224/job/120322835460",
+          "name": "deploy",
+          "startedAt": "2026-10-23T08:38:56Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:38:55Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925375224/job/120322835724",
+          "name": "verify-published",
+          "startedAt": "2026-10-23T08:38:56Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        }
+      ],
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/180"
+    },
+    {
+      "headRefOid": "8f9e6701853180e8338dd8069519328677117bf2",
+      "mergeCommit": null,
+      "number": 181,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:42:13Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925796301/job/120321721881",
+          "name": "verify",
+          "startedAt": "2026-10-23T08:36:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:42:13Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925796301/job/120324163530",
+          "name": "deploy",
+          "startedAt": "2026-10-23T08:42:13Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T08:42:13Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39925796301/job/120324164753",
+          "name": "verify-published",
+          "startedAt": "2026-10-23T08:42:13Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        }
+      ],
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/181"
+    },
+    {
+      "headRefOid": "5647a6ff36e2ff5e5a886e770d9e2cb1829c5b72",
+      "mergeCommit": null,
+      "number": 182,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T10:20:09Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39937903774/job/120361865849",
+          "name": "verify",
+          "startedAt": "2026-10-23T10:16:18Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T10:20:09Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39937903774/job/120363391199",
+          "name": "deploy",
+          "startedAt": "2026-10-23T10:20:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T10:20:09Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39937903774/job/120363391703",
+          "name": "verify-published",
+          "startedAt": "2026-10-23T10:20:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        }
+      ],
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/182"
+    },
+    {
+      "headRefOid": "3dd42813a4f09d0ee1d5834d375b31d4ff00bef4",
+      "mergeCommit": null,
+      "number": 183,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T11:30:06Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39945861087/job/120388541284",
+          "name": "verify",
+          "startedAt": "2026-10-23T11:25:22Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T11:30:06Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39945861087/job/120390355829",
+          "name": "deploy",
+          "startedAt": "2026-10-23T11:30:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T11:30:06Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39945861087/job/120390356725",
+          "name": "verify-published",
+          "startedAt": "2026-10-23T11:30:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        }
+      ],
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/183"
+    },
+    {
+      "headRefOid": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+      "mergeCommit": null,
+      "number": 184,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T12:22:01Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39952210943/job/120409158550",
+          "name": "verify",
+          "startedAt": "2026-10-23T12:17:29Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T12:27:42Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39952211265/job/120409159583",
+          "name": "host-and-wasm",
+          "startedAt": "2026-10-23T12:17:30Z",
+          "status": "COMPLETED",
+          "workflowName": "Verify host-native MFEM proof"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T12:22:01Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39952210943/job/120411046320",
+          "name": "deploy",
+          "startedAt": "2026-10-23T12:22:02Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-23T12:22:01Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39952210943/job/120411046554",
+          "name": "verify-published",
+          "startedAt": "2026-10-23T12:22:02Z",
+          "status": "COMPLETED",
+          "workflowName": "Publish application"
+        }
+      ],
+      "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/184"
+    }
+  ],
+  "normalChrome69": {
+    "source": "C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/.qa/next-browser-selection.json",
+    "sha256": "e6f7dd5e221b1bc8b39bd37f49d483c70c3f32bde9897381f892cda06fe40889",
+    "committedAtCandidate": false,
+    "record": {
+      "head": "8c902f3",
+      "origin": "http://127.0.0.1:18463",
+      "browser": "Chrome extension browser3",
+      "engine": "pcg-strict",
+      "mesh": {
+        "nodes": 171,
+        "tets": 428,
+        "volumeMm3": 4000
+      },
+      "sequence": [
+        "EN axial100N solve→save A",
+        "EN thermal20/100 solve→save B",
+        "EN saved A",
+        "switch JA preserving A",
+        "JA saved B via Enter",
+        "JA saved A via Enter"
+      ],
+      "A": {
+        "maximumDisplacementMm": 0.04,
+        "maximumStressPa": 1000000,
+        "residual": 7.35e-11
+      },
+      "B": {
+        "minimumTemperatureC": 20,
+        "maximumTemperatureC": 100,
+        "residual": 6.29e-11
+      },
+      "screenshot": {
+        "path": ".qa/next-selection-ja.jpg",
+        "bytes": 106838,
+        "sha256": "3e40fca63196dc2907460df53f30dedd63ae3bea3aaf500a6a46117639977039",
+        "format": "JPEG"
+      },
+      "limitations": [
+        "normal selection flow only; delayed ABA refusal tested separately in automation",
+        "390px not exercised",
+        "no browser project/result revision snapshot comparison",
+        "no real AI chat connection"
+      ],
+      "initialNavigationTimeoutRecoveredByObservedTab": true,
+      "sourceModified": false
+    }
+  },
+  "native184": {
+    "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39952211265",
+    "head": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+    "observedLog": "Actual build host/WASM parity steps:2 tests+19 tests,0fail0skip; includes prepared Tet4 parity.",
+    "finalCandidateVerified": false
+  },
+  "priorities": [
+    {
+      "priority": 1,
+      "kind": "candidate integration verification",
+      "action": "PR185/final SHA verify+host-and-wasm; fix genuine failures; retain exact adopted-head chain. Normal Chrome69 evidence is fixed by followup47bfd03; reconcile stale inventory/progress details in JA/EN without promoting parents."
+    },
+    {
+      "priority": 2,
+      "kind": "existing implementation acceptance",
+      "action": "Restore operable browser pairing;53actual downloads/hash/390px/expand/revision snapshots;55real keyboard/390px after explicit provider UI exposure;57actual expiry matrix;58same Chrome2scales;59available second browser same hash. Do not relabel DOM/simulated/IAB as these proofs."
+    },
+    {
+      "priority": 3,
+      "kind": "new software implementation",
+      "action": "55production browser session transport/main integration;61solver numerical boundary flux instrumentation/parser;60new mesh-series numerical plan;64local cap/general wire;65solver/general-layer integration;66general coupling. Separate bounded feature delivery from parent completion."
+    },
+    {
+      "priority": 4,
+      "kind": "external evidence",
+      "action": "Actual authenticated ACP entry, calibrated printer/material experiments and finite-visco calibration; runtime failure cause/upstream proof. Missing physical/auth evidence cannot be manufactured by synthetic tests."
+    },
+    {
+      "priority": 5,
+      "kind": "publication",
+      "action": "Only after authorized integration/deploy, candidate SHA=served manifest and required verify-published; all6gates on same final candidate. Historical successful verify and local27checks do not replace this."
+    }
+  ],
+  "validation": {
+    "command": "node --test tests/progress.test.mjs tests/publication-milestone.test.mjs tests/docs.test.mjs",
+    "pass": 14,
+    "fail": 0,
+    "skip": 0,
+    "contractDeclarations": 15
+  },
+  "staleInventoryCorrections": [
+    52,
+    55,
+    62,
+    66,
+    69
+  ],
+  "nonClaims": [
+    "No PR185 check was inspected or inferred.",
+    "No source code was edited.",
+    "No remaining parent task was promoted.",
+    "Old numeric audit is historical; latest follow-on evidence supersedes its missing-feature descriptions."
+  ],
+  "followup": {
+    "head": "47bfd039e01e1d0591b861894d5b6de51bd8e2d2",
+    "selectionBrowser69": {
+      "path": "docs/evidence/2026-10-23-selection-browser.json",
+      "sha256": "9bd0e4a698f5c3913e56a4bfcf9d3e89c423757ba34e7111e59bd1518f115d23",
+      "record": {
+        "head": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+        "origin": "http://127.0.0.1:18463",
+        "browser": "Chrome extension browser3",
+        "engine": "pcg-strict",
+        "mesh": {
+          "nodes": 171,
+          "tets": 428,
+          "volumeMm3": 4000
+        },
+        "sequence": [
+          "EN axial100N solve→save A",
+          "EN thermal20/100 solve→save B",
+          "EN saved A",
+          "switch JA preserving A",
+          "JA saved B via Enter",
+          "JA saved A via Enter"
+        ],
+        "A": {
+          "maximumDisplacementMm": 0.04,
+          "maximumStressPa": 1000000,
+          "residual": 7.35e-11
+        },
+        "B": {
+          "minimumTemperatureC": 20,
+          "maximumTemperatureC": 100,
+          "residual": 6.29e-11
+        },
+        "screenshot": {
+          "path": "selection-browser-20261023/screen.jpg",
+          "bytes": 106838,
+          "sha256": "3e40fca63196dc2907460df53f30dedd63ae3bea3aaf500a6a46117639977039",
+          "format": "JPEG"
+        },
+        "limitations": [
+          "normal selection flow only; delayed ABA refusal tested separately in automation",
+          "390px not exercised",
+          "no browser project/result revision snapshot comparison",
+          "no real AI chat connection"
+        ],
+        "initialNavigationTimeoutRecoveredByObservedTab": true,
+        "sourceModified": false,
+        "committedSourceHashes": {
+          "src/main.js": "593b8a07e50defddd02c43c2529436581fa8c665bc51f370191d9d0641b2959b",
+          "src/result-selection-state.js": "77d1f432c9fa66534e596628c33cbdc6b6017d6e04ceafeeac31b6d89cd5e60e"
+        }
+      }
+    },
+    "pr185": "Created and CI pending per root message; not independently inspected and final result unverified."
+  }
+}

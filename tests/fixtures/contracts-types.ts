@@ -114,8 +114,8 @@ import type {IncrementCurveMcpRequest, IncrementCurveMcpRow} from '../../src/con
 const curveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', offset: 0, limit: 20};
 // @ts-expect-error pagination limit must be numeric
 const badCurveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', limit: '50'};
-// @ts-expect-error the bounded curve tool does not expose displacement control
-const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'displacement';
+// @ts-expect-error the bounded curve tool does not expose temperature control
+const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'temperature';
 void [curveRequest, badCurveRequest, badCurveControl];
 
 import type {IncrementCurveMcpResult} from '../../src/contracts/increment-curve-mcp';

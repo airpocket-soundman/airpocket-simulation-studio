@@ -13,17 +13,19 @@ export interface IncrementCurveArtifactDescriptor {
  sha256: string;
  encoding: 'utf-8';
 }
-export interface IncrementCurveMcpRow {
+interface IncrementCurveMcpRowCommon {
  stepIndex: number;
  stepId: string;
- controlledQuantity: 'force';
  controlledValue: number;
- controlledUnit: 'N';
  converged: boolean;
  provisional: boolean;
  status: 'converged' | 'failed';
  [key: string]: unknown;
 }
+export type IncrementCurveMcpRow = IncrementCurveMcpRowCommon & (
+ {controlledQuantity:'force'; controlledUnit:'N'} |
+ {controlledQuantity:'displacement'; controlledUnit:'mm'}
+);
 /** Serialized tool data value <=64 KiB UTF-8 JSON; duplicated MCP representations and JSON-RPC envelope are separate. */
 export interface IncrementCurveMcpSingleResult {
  schemaVersion: 1;

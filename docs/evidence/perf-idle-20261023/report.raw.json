@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "scope": "browser via connector; localhost; real browser",
+  "generatedAt": "2026-10-23T12:59:11.697Z",
+  "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+  "origin": "http://127.0.0.1:18558",
+  "git": {
+    "revision": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+    "branch": "codex/continued-completion-20261023",
+    "dirty": true
+  },
+  "browser": {
+    "userAgent": null,
+    "userAgentNote": "not exposed by inspect; filled by --merge-memory when a probe is supplied",
+    "crossOriginIsolated": null
+  },
+  "hostEnvironment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpuModel": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz",
+    "cpuCount": 6,
+    "totalMemMiB": 32577
+  },
+  "repeats": 1,
+  "pollIntervalMs": 50,
+  "timeoutMs": 60000,
+  "idleMs": 4000,
+  "inputSnapshot": {
+    "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+    "bytes": 1759,
+    "sha256": "621bde111750dfa4bedc22f4ea9f17da97c0e0951c1c8d1693bc307c947e874f",
+    "source": "caller-supplied exportProject JSON; revision matched to live inspect"
+  },
+  "meshBudget": {
+    "nodes": 5000,
+    "elements": 20000
+  },
+  "loadedInput": {
+    "loaded": true,
+    "name": "Synthetic PERF scale 100N nu0",
+    "meshCount": 1,
+    "selectedTriangles": 0,
+    "selectedAreaMm2": 0,
+    "conditionCount": 2,
+    "material": "金属"
+  },
+  "cases": [
+    {
+      "id": "structural-tiny",
+      "physics": "structural",
+      "meshSize": 8,
+      "status": "ok",
+      "repeats": 1,
+      "inputSnapshot": {
+        "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+        "bytes": 1759,
+        "sha256": "621bde111750dfa4bedc22f4ea9f17da97c0e0951c1c8d1693bc307c947e874f",
+        "source": "caller-supplied exportProject JSON; revision matched to live inspect"
+      },
+      "notes": [
+        "loaded input physics is not verified by the script; the operator must load the matching study"
+      ],
+      "cancelIdleWindow": {
+        "startEpochMs": 1792760342113,
+        "endEpochMs": 1792760346124,
+        "requestedMs": 4000
+      },
+      "recovered": {
+        "meshObservation": {
+          "source": "jobStatus.result.mesh",
+          "jobId": "96a89e5f-ab11-4f8f-a22e-77b7e17d3855",
+          "inputRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+          "requestedSizeMm": 8,
+          "nodeCount": 60,
+          "elementCount": 121,
+          "meshRevision": null,
+          "identityLimitation": "Retained job and input identity only; compact job summary does not expose a mesh-content hash."
+        },
+        "state": "succeeded",
+        "ok": true,
+        "totalMs": 1546.477,
+        "firstEventMs": 31.232,
+        "meshMs": 1195.607,
+        "solvePhaseMs": 29.41,
+        "eventCount": 14,
+        "jobElapsedMs": 1131,
+        "startEpochMs": 1792760346124,
+        "endEpochMs": 1792760347670
+      },
+      "cold": {
+        "meshObservation": {
+          "source": "jobStatus.result.mesh",
+          "jobId": "27275066-f257-45e9-a1d1-cd8c901ef4d2",
+          "inputRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+          "requestedSizeMm": 8,
+          "nodeCount": 60,
+          "elementCount": 121,
+          "meshRevision": null,
+          "identityLimitation": "Retained job and input identity only; compact job summary does not expose a mesh-content hash."
+        },
+        "state": "succeeded",
+        "ok": true,
+        "totalMs": 24344.473,
+        "firstEventMs": 63.837,
+        "meshMs": 19526.758,
+        "solvePhaseMs": 147.112,
+        "eventCount": 14,
+        "jobElapsedMs": 24231,
+        "startEpochMs": 1792760314054,
+        "endEpochMs": 1792760338399
+      },
+      "warm": {
+        "runs": [
+          {
+            "meshObservation": {
+              "source": "jobStatus.result.mesh",
+              "jobId": "6f4d1bdd-6107-4c79-9c74-a5768d756149",
+              "inputRevision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+              "requestedSizeMm": 8,
+              "nodeCount": 60,
+              "elementCount": 121,
+              "meshRevision": null,
+              "identityLimitation": "Retained job and input identity only; compact job summary does not expose a mesh-content hash."
+            },
+            "state": "succeeded",
+            "ok": true,
+            "totalMs": 2370.93,
+            "firstEventMs": 46.638,
+            "meshMs": 1568.999,
+            "solvePhaseMs": 35.518,
+            "eventCount": 14,
+            "jobElapsedMs": 2313,
+            "startEpochMs": 1792760338412,
+            "endEpochMs": 1792760340783
+          }
+        ],
+        "summary": {
+          "totalMs": {
+            "median": 2370.93,
+            "min": 2370.93,
+            "max": 2370.93,
+            "n": 1
+          },
+          "firstEventMs": {
+            "median": 46.638,
+            "min": 46.638,
+            "max": 46.638,
+            "n": 1
+          },
+          "meshMs": {
+            "median": 1568.999,
+            "min": 1568.999,
+            "max": 1568.999,
+            "n": 1
+          },
+          "solvePhaseMs": {
+            "median": 35.518,
+            "min": 35.518,
+            "max": 35.518,
+            "n": 1
+          },
+          "jobElapsedMs": {
+            "median": 2313,
+            "min": 2313,
+            "max": 2313,
+            "n": 1
+          }
+        }
+      },
+      "cancel": {
+        "note": "latency = cancelJob request to observed (state terminal and executionSettled) through connector polling; includes poll granularity",
+        "pollIntervalMs": 50,
+        "baselineWarmTotalMs": 2370.93,
+        "points": {
+          "first-event": {
+            "n": 1,
+            "states": {
+              "cancelled": 1
+            },
+            "latencyMs": {
+              "median": 144.96,
+              "min": 144.96,
+              "max": 144.96,
+              "n": 1
+            },
+            "requestedAfterMs": {
+              "median": 98.476,
+              "min": 98.476,
+              "max": 98.476,
+              "n": 1
+            }
+          },
+          "half-warm-total": {
+            "n": 1,
+            "states": {
+              "completed-before-cancel": 1
+            },
+            "latencyMs": null,
+            "requestedAfterMs": null,
+            "note": "cancel requested at 50% of the median warm total"
+          }
+        },
+        "runs": [
+          {
+            "trigger": "first-event",
+            "state": "cancelled",
+            "requestedAfterMs": 98.476,
+            "latencyMs": 144.96,
+            "totalMs": 243.436,
+            "startEpochMs": 1792760340799,
+            "endEpochMs": 1792760341042
+          },
+          {
+            "trigger": "half-warm-total",
+            "state": "completed-before-cancel",
+            "requestedAfterMs": null,
+            "latencyMs": null,
+            "totalMs": 1038.709,
+            "startEpochMs": 1792760341058,
+            "endEpochMs": 1792760342097
+          }
+        ],
+        "recoveredAfterCancel": true
+      },
+      "window": {
+        "startEpochMs": 1792760314054,
+        "endEpochMs": 1792760347670,
+        "cancelSettledEpochMs": 1792760342097
+      },
+      "activeWindows": [
+        {
+          "startEpochMs": 1792760314054,
+          "endEpochMs": 1792760338399
+        },
+        {
+          "startEpochMs": 1792760338412,
+          "endEpochMs": 1792760340783
+        },
+        {
+          "startEpochMs": 1792760340799,
+          "endEpochMs": 1792760341042
+        },
+        {
+          "startEpochMs": 1792760341058,
+          "endEpochMs": 1792760342097
+        },
+        {
+          "startEpochMs": 1792760346124,
+          "endEpochMs": 1792760347670
+        }
+      ],
+      "idleWindow": {
+        "startEpochMs": 1792760347687,
+        "endEpochMs": 1792760351688,
+        "requestedMs": 4000
+      },
+      "memory": null,
+      "memoryReason": "probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory"
+    }
+  ],
+  "notes": [
+    "Measurements, not support limits or guarantees.",
+    "Times are host-observed through connector polling (jobEvents/jobStatus), not in-page performance.now(); they include connector round trips and poll granularity.",
+    "cold = first job of the case in the loaded page session; warm = later jobs in the same page (no reload).",
+    "GPU, network, other browsers and memory limits are not measured. Memory is null unless an operator probe is merged.",
+    "Merged memory is reported per series (uasm = measureUserAgentSpecificMemory, jsHeap = performance.memory.usedJSHeapSize). The series cover different scopes and are never summed; neither is total process or peak RAM."
+  ]
+}

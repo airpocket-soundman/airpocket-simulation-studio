@@ -1,0 +1,15 @@
+{
+  "base": "8c902f3",
+  "origin": "http://127.0.0.1:18558",
+  "cases": [
+    "structural-tiny"
+  ],
+  "repeats": 1,
+  "perJobTimeoutMs": 60000,
+  "idleMs": 4000,
+  "meshBudget": {
+    "nodes": 5000,
+    "elements": 20000
+  },
+  "notes": "One added size only; sampled memory is not true peak. Same normalized synthetic exportProject snapshot; formal live inspect before/after every case."
+}

@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-23",
+  "reviewedCommit": "c02df501ef43b30fb8245c8e673b0c5445fcf5cc",
+  "finding": {
+    "summary": "Control enums used Object.hasOwn key coercion rather than requiring strings",
+    "counterexample": {
+      "location": "public force A failed row",
+      "controlledQuantity": [
+        "displacement"
+      ]
+    },
+    "before": "Pure buildIncrementCurve accepted an array-valued controlledQuantity with mm unit; artifact export later failed closed with an internal replaceAll TypeError",
+    "after": "Pure table, measurement extractor and artifact path reject non-string enums explicitly before interpretation",
+    "exportedInvalidArtifact": false
+  },
+  "fix": {
+    "runtimeChecks": [
+      "extractIncrementMeasurement controlledQuantity must be a string",
+      "buildIncrementCurve step controlledQuantity must be a string"
+    ],
+    "regressionValues": [
+      [
+        "force"
+      ],
+      [
+        "displacement"
+      ],
+      null,
+      1,
+      {}
+    ],
+    "inputImmutabilityChecked": true
+  },
+  "independentReview": {
+    "actualSolveBoundary": "Generator passes each valueMm constraint directly to solveElastic. Constraint assembly converts mm to m; result displacement returns mm.",
+    "sign": "Fixed-end axial reactions are negated for tensile force; actuator reactions supply the positive applied axial contribution for displacement control; external applied vector is zero.",
+    "units": "Controlled displacement mm; force N; engineering stress Pa and strain dimensionless.",
+    "invalidMixtures": "Request parser requires exactly one mode-specific sequence before meshing. Prescribed boundaries require no forces and exactly the fixed/actuator reaction node sets.",
+    "publicTypes": "Request union excludes opposite-mode arrays; MCP rows correlate control mode and unit. Actual-module fixture passes."
+  },
+  "forceCompatibility": {
+    "baseline": "8c902f3",
+    "legacyForceArtifactBytesUnchanged": true,
+    "artifacts": [
+      {
+        "case": "single-a",
+        "format": "csv",
+        "bytes": 1898,
+        "sha256": "827ff7b17bbae75e698b43230cacd23147b5eeb265e34780865f67ecaaea209d"
+      },
+      {
+        "case": "single-a",
+        "format": "json",
+        "bytes": 4679,
+        "sha256": "51d3215d3b02c7a30002ee14363b9b34b3dffb9d3c905a85ede6bdddcc39b41d"
+      },
+      {
+        "case": "single-a",
+        "format": "svg",
+        "bytes": 3212,
+        "sha256": "f7aad251cc9eeb48e35702faadaea381a3a20ef97e753d1de9717a6d4a94e6bc"
+      },
+      {
+        "case": "single-b",
+        "format": "csv",
+        "bytes": 1897,
+        "sha256": "378863ece48788cd4b30c824fbc5229fedc1fd28bffa635b9186c06e46cb5354"
+      },
+      {
+        "case": "single-b",
+        "format": "json",
+        "bytes": 4685,
+        "sha256": "cbf3f491258041f3f9514d4f99f460eac60de37ba737f83077373d62b7729400"
+      },
+      {
+        "case": "single-b",
+        "format": "svg",
+        "bytes": 3212,
+        "sha256": "3eabc75c2e83e530bb8b56d2752f8d447a22dcc5c58b2d63240bf25913ab9c49"
+      },
+      {
+        "case": "comparison",
+        "format": "csv",
+        "bytes": 3352,
+        "sha256": "1e80b53b060be26efbf063f76395a4d8347f0ef6b937f3420829ef438536d066"
+      },
+      {
+        "case": "comparison",
+        "format": "json",
+        "bytes": 10915,
+        "sha256": "fc1a9385138c6a4b8d3f0d58f499ac0b26c33521f0c90515244be32055c11396"
+      },
+      {
+        "case": "comparison",
+        "format": "svg",
+        "bytes": 9951,
+        "sha256": "2f8e1598158d2d787a8336eaa3ef9411c8ea7f48e476aa7bce64206b1735e0af"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "command": "node --test tests/increment-displacement-control.test.mjs tests/increment-curve-data.test.mjs tests/increment-curve-export.test.mjs",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 15
+    },
+    {
+      "command": "Legacy 8c902f3 data/export/comparison module evaluation versus current modules on public A/B",
+      "identicalArtifacts": 9
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "unverified": [
+    "General nonlinear or plastic history",
+    "Browser execution",
+    "Published deployment"
+  ]
+}

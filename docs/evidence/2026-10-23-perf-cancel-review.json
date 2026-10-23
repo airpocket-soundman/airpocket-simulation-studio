@@ -1,0 +1,31 @@
+{
+  "base": "dc985ff",
+  "fix": "111fb2e",
+  "scope": "Independent review of phase memory and cancellation identities",
+  "checks": {
+    "rawCorrectionAndMergedMemoryRecomputed": true,
+    "allEvidenceFileHashesVerified": true,
+    "quietIntervalVerified": true,
+    "uasmIdleMissingRetained": true
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "issue": "A failed or timed-out cancellation trial was recorded without failing the case",
+      "fixed": true
+    },
+    {
+      "severity": "P2",
+      "issue": "Cancellation polling could accept a different job or input revision",
+      "fixed": true
+    }
+  ],
+  "regression": {
+    "browserPerfTests": 25,
+    "pass": 25,
+    "fail": 0,
+    "skip": 0
+  },
+  "originalIabMeasurementInvalidated": false,
+  "note": "Original measurement has neither stale-identity nor failed cancellation responses; new gates are unit/integration regression verified, not a new browser measurement."
+}

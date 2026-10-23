@@ -185,7 +185,7 @@ test('unsupported or inconsistent step rows are rejected',async()=>{
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[{...base,stepId:'plastic',output:{...base.output,calculation:{...base.output.calculation,plasticHistory:true}}}]}),/plasticHistory:false/);
 });
 
-test('force control must match the real applied axial force and displacement control is refused',async()=>{
+test('force control must match applied force and unverified displacement relabeling is refused',async()=>{
   const {model,results}=await referenceCurve();
   const base=step(model,results[3],100);
   assert.equal(base.output.result.applied[2],100);
@@ -195,7 +195,7 @@ test('force control must match the real applied axial force and displacement con
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[wrongSign]}),/applied axial force/);
   const displaced={...base,stepId:'prescribed-0.04mm',controlledQuantity:'displacement',controlledValue:0.04,output:{...base.output,calculation:{...base.output.calculation,controlledQuantity:'displacement',controlledValue:0.04,controlledUnit:'mm'}}};
   await assert.rejects(buildIncrementCurve({spec:model.spec,steps:[displaced]}),error=>{
-    assert.match(error.message,/Displacement-controlled increments are not supported/);
+    assert.match(error.message,/Displacement control requires an explicit/);
     assert.ok(!error.message.includes('controlledUnit=mm'),'no successful mm control label');
     return true;
   });

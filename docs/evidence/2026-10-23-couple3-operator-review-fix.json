@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-23",
+  "reviewedCommit": "b7cb58f71a79fb50b193da10c970bc1c4d38dba8",
+  "finding": {
+    "priority": "P2",
+    "summary": "Per-face coverage sums accepted overlapping duplicated but geometrically different interfaces",
+    "syntheticGeometry": {
+      "units": "mm",
+      "mesh": {
+        "nodes": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "sourceFaces": [
+        {
+          "nodes": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "nodes": [
+            0,
+            1,
+            2
+          ]
+        }
+      ],
+      "targetFaces": [
+        {
+          "nodes": [
+            3,
+            5,
+            4
+          ]
+        },
+        {
+          "nodes": [
+            3,
+            5,
+            4
+          ]
+        }
+      ]
+    },
+    "inputSha256": "49b93a7dcf75f5c9ca2dd72f069e1f8f22d2e1637782547cb701adb45d3e1944",
+    "before": {
+      "accepted": true,
+      "coveredAreaM2": 0.000001,
+      "sourceW": 0.000001,
+      "nodeHeatW": [
+        [
+          3,
+          3.333333333333333e-7
+        ],
+        [
+          4,
+          5e-7
+        ],
+        [
+          5,
+          1.6666666666666665e-7
+        ]
+      ]
+    },
+    "independentGeometry": {
+      "sourceDistinctTriangleAreaMm2": 0.5,
+      "targetDistinctTriangleAreaMm2": 0.5,
+      "intersectionAreaMm2": 0.25,
+      "eachSideMultiplicity": 2,
+      "conclusion": "Each duplicated triangle accumulates two quarter-area intersections; apparent full per-face coverage hides real gaps and overlaps"
+    },
+    "after": {
+      "accepted": false,
+      "code": "PLANAR_HEAT_OPERATOR_INVALID",
+      "message": "Planar heat operator side contains overlapping faces"
+    }
+  },
+  "fix": {
+    "mechanism": "Reject interior geometric self-overlap on each side before compiling basis moments; bounded pairwise polygon intersection, independent of node IDs",
+    "maximumPairsPerSide": 130816,
+    "overlapAreaRoundoffMm2": "1e-12 + 1e-12*min(faceAreaA,faceAreaB)",
+    "existingCoverageToleranceUnchanged": true,
+    "applyRemainsCoefficientOnly": true
+  },
+  "reviewedProperties": [
+    "Persisted coefficients recompiled on load even after attacker rehashes",
+    "Separate source/target geometry identity and strict units",
+    "Independent P1 nodal integrals under translation/rotation/sign change",
+    "Zero-total affine field conservation without division by zero",
+    "Matching extreme-aspect and valid 512-face capacity regression"
+  ],
+  "tests": [
+    {
+      "command": "node --test tests/planar-heat-operator.test.mjs tests/planar-heat-transfer.test.mjs tests/planar-heat-independent-integral.test.mjs tests/docs.test.mjs",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 15
+    },
+    {
+      "command": "tsc strict noEmit on tests/fixtures/planar-heat-operator-types.ts",
+      "passed": true
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "unverified": [
+    "Fully coupled solver iteration",
+    "Browser performance and publication",
+    "Physical measurements"
+  ]
+}
