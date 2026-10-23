@@ -107,3 +107,52 @@ test('numeric-limit counterexample: 1e308 m nodal displacement on the 10 mm tria
  assert.ok(Math.abs(w.pressureWork.imag-(-2.5e306))/2.5e306<1e-12);
  assert.ok(Number.isFinite(w.absoluteErrorJ)&&Number.isFinite(w.relativeErrorJ)&&w.relativeErrorJ<=1e-12);
 });
+
+
+test('nonuniform skew-shell pressure matches independent centroid moments and complex rigid-mode work after translation',()=>{
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const dot=(a,b)=>a.reduce((total,v,i)=>total+v*b[i],0);
+ const add=(a,b)=>a.map((v,i)=>v+b[i]);
+ const close=(actual,expected)=>assert.ok(Math.abs(actual-expected)<=1e-12+1e-10*Math.abs(expected),`${actual} != ${expected}`);
+ const nodes=[2,3,5,22,3,5,2,33,5,2,3,45],triangles=[[0,2,1],[0,1,3],[1,2,3],[2,0,3]];
+ const pressure=triangles.map((_,i)=>({real:1000+350*i,imag:300-100*i}));
+ let previous;
+ for(const shiftMm of [[0,0,0],[1000,-2000,3000]]){
+  const load={lengthUnit:'mm',pressureUnit:'Pa',surface:'closed',nodes:nodes.map((v,i)=>v+shiftMm[i%3]),triangles,pressure};
+  const independent={resultantReal:[0,0,0],resultantImag:[0,0,0],momentReal:[0,0,0],momentImag:[0,0,0]};
+  for(let i=0;i<triangles.length;i++){
+   const [a,b,c]=triangles[i].map(node=>load.nodes.slice(3*node,3*node+3).map(v=>v/1000));
+   const areaVector=cross(b.map((v,k)=>v-a[k]),c.map((v,k)=>v-a[k])).map(v=>v/2);
+   const centroid=a.map((v,k)=>(v+b[k]+c[k])/3);
+   for(const [component,suffix] of [['real','Real'],['imag','Imag']]){
+    const force=areaVector.map(v=>-pressure[i][component]*v),moment=cross(centroid,force);
+    independent['resultant'+suffix]=add(independent['resultant'+suffix],force);
+    independent['moment'+suffix]=add(independent['moment'+suffix],moment);
+   }
+  }
+  const output=pressureNodalForces(load);
+  for(const key of Object.keys(independent))for(let k=0;k<3;k++)close(output[key][k],independent[key][k]);
+  const origin=[0.01,-0.02,0.03].map((v,k)=>v+shiftMm[k]/1000);
+  const t={real:[0.001,-0.002,0.003],imag:[-0.002,0.001,0.001]},theta={real:[0.01,-0.02,0.03],imag:[0.02,0.03,-0.01]};
+  const displacement={real:[],imag:[]};
+  for(let node=0;node<nodes.length/3;node++){
+   const arm=load.nodes.slice(node*3,node*3+3).map((v,k)=>v/1000-origin[k]);
+   for(const component of ['real','imag'])displacement[component].push(...add(t[component],cross(theta[component],arm)));
+  }
+  const mr=independent.momentReal.map((v,k)=>v-cross(origin,independent.resultantReal)[k]);
+  const mi=independent.momentImag.map((v,k)=>v-cross(origin,independent.resultantImag)[k]);
+  const expectedReal=dot(t.real,independent.resultantReal)+dot(t.imag,independent.resultantImag)+dot(theta.real,mr)+dot(theta.imag,mi);
+  const expectedImag=dot(t.real,independent.resultantImag)-dot(t.imag,independent.resultantReal)+dot(theta.real,mi)-dot(theta.imag,mr);
+  const work=virtualWorkIdentity(load,displacement);
+  close(work.nodalWork.real,expectedReal);close(work.nodalWork.imag,expectedImag);
+  close(work.pressureWork.real,expectedReal);close(work.pressureWork.imag,expectedImag);
+  assert.equal(work.unit,'J');assert.ok(work.absoluteErrorJ<=1e-12);
+  if(previous){
+   for(const suffix of ['Real','Imag']){
+    const change=cross(shiftMm.map(v=>v/1000),previous['resultant'+suffix]);
+    for(let k=0;k<3;k++)close(output['moment'+suffix][k],previous['moment'+suffix][k]+change[k]);
+   }
+  }
+  previous=output;
+ }
+});

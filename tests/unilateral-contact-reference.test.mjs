@@ -227,3 +227,20 @@ test('inputs are not mutated and the result carries no friction or history metad
   assert.equal(result.frictionCoefficient, undefined);
   assert.equal(result.history, undefined);
 });
+
+
+test('manufactured load-unload routes match the piecewise solution at three penalty stiffnesses',()=>{
+ // Independent equilibrium: k*u - contactReaction = F; stop reaction opposes positive travel.
+ for(const penaltyNPerMm of [100,1000,10000]){
+  for(const forceN of [0,50,100,150,100,50,0,-50]){
+   const result=solve({penaltyNPerMm,forceN});
+   const penetration=Math.max(0,(forceN-base.springNPerMm*base.gapMm)/(base.springNPerMm+penaltyNPerMm));
+   const expectedU=forceN<=100?forceN/base.springNPerMm:base.gapMm+penetration;
+   assert.ok(close(result.u,expectedU));
+   assert.ok(close(result.penetrationMm,penetration));
+   assert.ok(close(result.contactReactionN,-penaltyNPerMm*penetration));
+   assert.ok(Math.abs(result.springForceN-result.contactReactionN-forceN)<=base.toleranceN);
+   assert.ok(Math.abs(result.residualN)<=base.toleranceN);
+  }
+ }
+});
