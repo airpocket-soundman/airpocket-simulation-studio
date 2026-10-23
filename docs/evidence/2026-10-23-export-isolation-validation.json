@@ -1,0 +1,33 @@
+{
+  "head": "c4e12b54ea1ecfa569532f5293ed0feb5f075d52",
+  "scope": "Main-wired result export preparation isolation and reentrancy repair",
+  "focused": {
+    "tests": 102,
+    "pass": 102,
+    "fail": 0,
+    "skip": 0
+  },
+  "contracts": 16,
+  "build": true,
+  "localPublished": {
+    "checks": 28,
+    "passed": 28,
+    "elapsedMs": 42988.181599999996
+  },
+  "independentReview": {
+    "original": "26d0e2d06381e19c763193115d95f60bd1c71697",
+    "fix": "698443a34ed83e5f0b448bb900376932a03f158c",
+    "findings": [
+      "Reentrant getters accepted a second prepare before ownership was reserved",
+      "Synchronous cancel during pre-render callbacks could still start renderer"
+    ],
+    "resolved": true
+  },
+  "pythonGrid144": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0
+  },
+  "liveBrowser": "Curve UI layout evidence is separately fixed to2a5fab3; main export/bfcache live browser validation not performed for this refactor",
+  "publication": "Local checks only; public site not deployed"
+}
