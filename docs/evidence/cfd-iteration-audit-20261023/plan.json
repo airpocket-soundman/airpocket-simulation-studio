@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "5647a6f",
+  "sourceSha": "5647a6ff36e2ff5e5a886e770d9e2cb1829c5b72",
+  "harnessSha256": "5680d9eda67eb480eab7c6230a0730987a176f33facb0307108f722ec1ea0f70",
+  "executableSha256": "3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248",
+  "geometry": {
+    "angular": 128,
+    "radialLayers": 56,
+    "points": 7296,
+    "quadrilaterals": 7168,
+    "outerRadiusM": 50.5,
+    "wallRadiusM": 0.5,
+    "firstCellHeightM": 0.02454369260617026,
+    "growth": 1.1
+  },
+  "changedNumericalCondition": {
+    "maxIterations": {
+      "before": 1200,
+      "after": 2400
+    }
+  },
+  "files": {
+    "mesh.su2": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6",
+    "case.cfg": "d6621cbae6559a82a5ea3dc8cb04c6146a6a5b0f1960c1d93479a493d30fd1b1",
+    "input.json": "eb574a7cc44963c617cf717413f4f96872b82d4b99bc00508cc66db2a7fa1608"
+  },
+  "limits": {
+    "seconds": 240,
+    "rssBytes": 1073741824,
+    "threads": 1,
+    "launches": 1
+  },
+  "acceptance": {
+    "dragRelativeErrorMaximum": 0.05,
+    "allReportedResidualsLog10Maximum": -6,
+    "last100DragRelativeRangeMaximum": 0.005,
+    "nodalFarfieldMassImbalanceRelativeMaximum": 0.001,
+    "meshAndDomainRelativeDragDifferenceMaximum": 0.03,
+    "iterationBudgetRelativeDragDifferenceMaximum": 0.01,
+    "requireNoWallWarning": true,
+    "qualification": "Engineering QA tolerances selected before execution, not uncertainty bounds from the reference. Coarse grids may fail; preserve failures.",
+    "massQualification": "Trapezoidal integral of nodal farfield velocity, not SU2 discrete face-flux conservation."
+  },
+  "reference": {
+    "url": "https://economon.github.io/docs/AIAA-2018-3111.pdf",
+    "doi": "10.2514/6.2018-3111",
+    "section": "IV.G, printed pp.19-20",
+    "kind": "published SU2 numerical reference, not an experiment or analytic solution",
+    "reynoldsNumber": 40,
+    "machNumber": null,
+    "machReason": "Incompressible constant-density solver; no acoustic Mach input",
+    "diameterM": 1,
+    "densityKgM3": 1,
+    "speedMps": 4,
+    "dynamicViscosityPaS": 0.1,
+    "dragCoefficient": 1.507,
+    "wall": "adiabatic no-slip",
+    "farfield": "circular freestream boundary 50 diameters from wall; QA outer radius 50.5m",
+    "grid": "O-grid quadrilaterals, first radial step pi/N, growth 1.1"
+  },
+  "priorFineDrag": 1.521036488,
+  "question": "Does iteration truncation explain the 4.1227% baseline/fine drag discrepancy?",
+  "decision": "Run only one fine-mesh iteration extension. Preserve original converged baseline. Spatial convergence remains unaccepted unless its unchanged 3% threshold is met. No second launch or mesh substitution."
+}

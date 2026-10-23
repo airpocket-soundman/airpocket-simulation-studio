@@ -38,7 +38,10 @@ const ORIENTATION_TOLERANCE=1e-6;
 function fluxField(flux){
   let base,gradient;
   if(typeof flux==='number'){base=flux;gradient=[0,0,0];}
-  else if(flux&&typeof flux==='object'){base=flux.base;gradient=flux.gradient??[0,0,0];}
+  else if(flux&&typeof flux==='object'&&!Array.isArray(flux)){
+    if(Object.keys(flux).some(key=>!['base','gradient'].includes(key)))throw Error('Planar heat transfer requires a constant or linear heat flux density; unsupported field');
+    base=flux.base;gradient=flux.gradient??[0,0,0];
+  }
   else throw Error('Planar heat transfer requires a constant or linear heat flux density');
   if(!Number.isFinite(base)||!Array.isArray(gradient)||gradient.length!==3||!gradient.every(Number.isFinite))throw Error('Planar heat transfer requires a finite heat flux density');
   return metres=>{const q=base+dot(gradient,metres);if(!Number.isFinite(q))throw Error('Planar heat transfer requires a finite heat flux density');return q;};
