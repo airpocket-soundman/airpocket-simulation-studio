@@ -115,8 +115,8 @@
       "sha256": "e525c4b204516c668a3445e9f0ad385019478136558a3f014d7a7565f5ad146e"
     },
     "replay/driver.mjs": {
-      "bytes": 1711,
-      "sha256": "f2c40452bac379df7eef2a1ae43ab8e181c34115a39cdd6082bb6a6be1055e21"
+      "bytes": 1761,
+      "sha256": "dee82e62cfab99f298013f0ae4cf2d784100d71afafd1cd318ee0d45ba749e5c"
     },
     "replay/input.json": {
       "bytes": 791,
@@ -142,5 +142,6 @@
     "skipped": 0,
     "nodePerfTests": 4,
     "note": "Node harness four tests passed before quiet-window refinement; browser focused suite rerun after refinement"
-  }
+  },
+  "replay": "Copy replay files into .qa/perf-idle-20261023 and input.snapshot.json beside them. Start Vite on18558 and open the QA page. Run driver.mjs --second interactively for the IAB tiny plan; explicitly load/capture the owned synthetic input and install the probe. The helper was reconstructed after measurement to display pairing on TTY instead of a temporary credential file; it is not the byte-identical historical driver."
 }
