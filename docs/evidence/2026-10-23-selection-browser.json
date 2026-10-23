@@ -1,0 +1,46 @@
+{
+  "head": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+  "origin": "http://127.0.0.1:18463",
+  "browser": "Chrome extension browser3",
+  "engine": "pcg-strict",
+  "mesh": {
+    "nodes": 171,
+    "tets": 428,
+    "volumeMm3": 4000
+  },
+  "sequence": [
+    "EN axial100N solve→save A",
+    "EN thermal20/100 solve→save B",
+    "EN saved A",
+    "switch JA preserving A",
+    "JA saved B via Enter",
+    "JA saved A via Enter"
+  ],
+  "A": {
+    "maximumDisplacementMm": 0.04,
+    "maximumStressPa": 1000000,
+    "residual": 7.35e-11
+  },
+  "B": {
+    "minimumTemperatureC": 20,
+    "maximumTemperatureC": 100,
+    "residual": 6.29e-11
+  },
+  "screenshot": {
+    "path": "selection-browser-20261023/screen.jpg",
+    "bytes": 106838,
+    "sha256": "3e40fca63196dc2907460df53f30dedd63ae3bea3aaf500a6a46117639977039",
+    "format": "JPEG"
+  },
+  "limitations": [
+    "normal selection flow only; delayed ABA refusal tested separately in automation",
+    "390px not exercised",
+    "no browser project/result revision snapshot comparison",
+    "no real AI chat connection"
+  ],
+  "initialNavigationTimeoutRecoveredByObservedTab": true,
+  "sourceModified": false,
+  "committedSourceHashes": {
+    "src/main.js": "593b8a07e50defddd02c43c2529436581fa8c665bc51f370191d9d0641b2959b"
+  }
+}
