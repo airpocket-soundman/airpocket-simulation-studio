@@ -1,0 +1,7 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Printed measurement read-only fixture</title><link rel="stylesheet" href="../../src/style.css"><body><main style="max-width:390px;margin:0 auto;padding:16px;min-width:0"><h1>PRINT2 read-only fixture</h1><p>This fixture contains synthetic data only. No project or solver is connected.</p><label>Language<select id="locale"><option value="ja">日本語</option><option value="en">English</option></select></label><div id="inspection"></div></main><script type="module">
+import {createPrintedMeasurementUi} from '../../src/ui/printed-measurement-ui.js';
+const locale=document.getElementById('locale');locale.value=new URL(location.href).searchParams.get('lang')==='en'?'en':'ja';
+const ui=createPrintedMeasurementUi({host:document.getElementById('inspection'),language:()=>locale.value});
+locale.onchange=()=>document.dispatchEvent(new Event('studio-language'));
+window.addEventListener('pagehide',event=>{if(event.persisted)ui.invalidate();else ui.destroy();});
+</script></body></html>

@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-23",
+  "base": "2a5fab3",
+  "scope": "Mounted read-only measurement inspection; no material fitting or solver input mutation",
+  "sourceSha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+  "provenance": "synthetic",
+  "accuracyVerified": false,
+  "oracles": [
+    {
+      "id": "synthetic-Z",
+      "finalStressPa": 1000000,
+      "finalStrain": 0.01
+    },
+    {
+      "id": "synthetic-X",
+      "finalStressPa": 1000000,
+      "finalStrain": 0.01
+    }
+  ],
+  "bounds": {
+    "chartPoints": 201,
+    "tableRows": 50,
+    "parser": "Existing PRINTED_DATASET_LIMITS including UTF8 byte bound"
+  },
+  "validation": {
+    "focusedTests": {
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contractDeclarations": 16,
+    "typeFixture": "Passed strict tsc including forbidden material application",
+    "bundle": "Vite bundle-only build passed, 223 modules; no native acquisition",
+    "diffCheck": "Passed"
+  },
+  "independentAudit": "Source review and four additional adversarial tests passed; separate reviewer evidence pending",
+  "unverified": [
+    "Actual main IAB 390px JA/EN, Back restoration and project snapshots delegated to root; not claimed here",
+    "No physical measurement, device, certificate or experimental accuracy verification"
+  ],
+  "integration": {
+    "moduleLayerRegistration": "Root to register src/ui/printed-measurement-ui.js as UI",
+    "sharedProgressEdited": false
+  }
+}

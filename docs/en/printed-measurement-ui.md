@@ -1,0 +1,17 @@
+# Read-only printed-material measurement inspector
+
+[日本語](../printed-measurement-ui.md)
+
+Base `2a5fab3`. Main mounts an “Inspect printed-material measurements” accordion immediately after material-property entry. It provides JSON input, inspection, an explicitly synthetic example, specimen selection, a stress–strain plot, numeric table and source/normalized JSON download links. It neither registers project/case/solver data nor fits/applies material properties.
+
+`src/ui/printed-measurement-ui.js` directly uses existing `importPrintedMeasurementDataset`, retaining its units, exact-source SHA-256, provenance, instrument revisions, calibration report checks, nonfinite/count limits and2,000,000 UTF-8 byte ceiling. It does not duplicate normalization. Batch, direction, temperature, speed, dimensions, gauge and counts are visible; source hash/instrument/calibration details are collapsed. “Input validated” does not certify measurement accuracy or calibration certificates. Calibration status/evidence are reports inside the data, never verified equipment/certificates. Measured provenance is explicitly a user report; no real measurements were supplied in this delivery.
+
+Engineering stress is displayed in MPa and engineering strain as dimensionless1. Synthetic Z uses initial area1 mm² and gauge10 mm:1 N/0.1 mm yields1 MPa/0.01. The X example is also synthetic, with no invented fitted constants or calibration coefficients. The selected specimen's acquisition-order graph samples at most201 points and states that count. The table shows50 rows per page, total/range/omitted count and previous/next controls. All up to10,000 normalized samples remain in downloadable JSON.
+
+Input changes immediately remove prior validated output and owned URLs. Generations reject A→B→A, late hashes, replacements and post-destroy completion. Repeated inspection of the same pending input is refused. Programmatic text changes without input events are also detected before publication. Only this UI's blob URLs are revoked; destroy releases text, DOM and listeners. Persisted pagehide invalidates without permanently disposing; ordinary departure destroys. IDs, text and calibration reports use textContent, never HTML insertion.
+
+Native summary/buttons/select/textarea support keyboard use; Ctrl/⌘+Enter inspects. JA/EN changes preserve draft, hash, selected specimen and page. Responsive SVG and contained table scrolling have a390px [standalone synthetic fixture](../fixtures/printed-measurement-ui.html) and [JSON example](../fixtures/printed-measurement-synthetic.json). The standalone fixture supplements, not replaces, main mounting.
+
+Root IAB procedure: open main at390px → “03” analysis/material controls → inspector immediately after material-property details → inspect synthetic example → switch Z/X and check1 MPa/0.01 plus directions → edit JSON to`{` and confirm prior curve/download links disappear immediately → switch EN. Compare actual exportProject/case state before/after inspection. Standalone route: `/docs/fixtures/printed-measurement-ui.html?lang=en`. DOM regression results do not establish actual IAB/mobile acceptance.
+
+Links create JSON only; no automatic download occurs. Existing2 MB/100 specimen/10,000 total sample limits remain. Unsupported units, crosshead displacement, incomplete calibration evidence and invalid specimens are rejected by the existing parser. Coupled solvers, identification, instrument calibration, experimental accuracy and automatic material changes remain unimplemented.
