@@ -1,3 +1,4 @@
+import {fixedWebmFixture} from './fixtures/fixed-webm.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -32,7 +33,7 @@ test('controller discards tampered metadata, offsets, base64 and hashes and alwa
 
 
 test('controller time video forwards range while preserving captured single-time preset settings',async()=>{
- let received;const h=fixture({renderCompare:request=>{received=request;return blob();}}),input=capture(),before=structuredClone(input);await h.controller.start(input,{animation:'time',startTimeSeconds:0,endTimeSeconds:10,seconds:2});assert.equal(received.animation,'time');assert.equal(received.startTimeSeconds,0);assert.equal(received.endTimeSeconds,10);assert.equal(received.timeSeconds,undefined);assert.equal(received.toleranceSeconds,0);assert.deepEqual(input,before);assert.equal(h.released,1);
+ let received;const fixed=fixedWebmFixture(),h=fixture({prepareCompare:()=>({...prepared(),context:fixed.context}),renderCompare:request=>{received=request;return fixed.blob;}}),input=capture(),before=structuredClone(input);await h.controller.start(input,{animation:'time',startTimeSeconds:0,endTimeSeconds:10,seconds:2});assert.equal(received.animation,'time');assert.equal(received.startTimeSeconds,0);assert.equal(received.endTimeSeconds,10);assert.equal(received.timeSeconds,undefined);assert.equal(received.toleranceSeconds,0);assert.deepEqual(input,before);assert.equal(h.released,1);
 });
 
 test('controller invalid time range refuses before saved-source reads or queue admission',async()=>{
