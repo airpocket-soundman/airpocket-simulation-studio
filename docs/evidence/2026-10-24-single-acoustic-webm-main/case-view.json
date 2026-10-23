@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "caseId": "7cb2ead5-4087-4df1-b497-e30f3dca9678",
+  "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0",
+  "name": "Synthetic acoustic 1Pa",
+  "kind": "acousticTransient",
+  "metrics": [
+    {
+      "key": "receiverPeakPa",
+      "unit": "Pa peak",
+      "value": 0.9505644525907234
+    },
+    {
+      "key": "receiverRmsPa",
+      "unit": "Pa record RMS",
+      "value": 0.43079121890366395
+    }
+  ],
+  "runtimeIdentity": {
+    "assets": [
+      {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+      }
+    ],
+    "build": {
+      "dirty": true,
+      "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+      "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+      "status": "available",
+      "version": "0.44.0"
+    },
+    "engine": {
+      "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+      "requestedMethod": "pcg"
+    },
+    "isolation": "process",
+    "schemaVersion": 1,
+    "target": "node"
+  },
+  "analysisAssessment": {
+    "mode": "legacy",
+    "provisional": false,
+    "completePreflight": false
+  },
+  "displayed": true
+}

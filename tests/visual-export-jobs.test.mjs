@@ -36,7 +36,7 @@ test('prepare freezes revision/view and rechecks expiry before rendering',async(
  const wrong=createVisualExportJobs({prepare:async()=>({resultRevision:'other',view:{}}),render:()=>{renders++;}});await assert.rejects(wrong.start(args()),/revision conflict/);assert.equal(renders,0);
 });
 test('WebM metadata, renderer errors and invalid requests are explicit',async()=>{
- const api=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm;codecs=vp9'})}),job=await api.start({...args(),format:'webm',animation:'time',seconds:15});assert.equal((await terminal(api,job)).artifact.mimeType,'video/webm;codecs=vp9');
+ const api=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm;codecs=vp9'})}),job=await api.start({...args(),format:'webm',animation:'orbit',seconds:15});assert.equal((await terminal(api,job)).artifact.mimeType,'video/webm;codecs=vp9');
  for(const patch of [{requestId:''},{expectedResultRevision:'bad'},{format:'jpeg'},{animation:'random'},{seconds:16}])await assert.rejects(api.start({...args('bad'),...patch}));
  const broken=createVisualExportJobs({render:()=>{throw Error('encoder failed');}}),failed=await broken.start(args());assert.equal((await terminal(broken,failed)).error,'encoder failed');
  const mime=createVisualExportJobs({render:()=>new Blob(['x'],{type:'text/plain'})}),invalid=await mime.start(args());assert.equal((await terminal(mime,invalid)).state,'failed');
@@ -59,9 +59,9 @@ test('PNG artifact manifest carries only known fields, is bounded and leaves exi
  assert.ok(JSON.stringify(m).length<=4096);assert.equal(api.artifact(job).manifest.sha256,a.sha256);
  const bad=createVisualExportJobs({render:()=>new Blob(['png'],{type:'image/png'})}),plain=await terminal(bad,await bad.start(args()));assert.equal(plain.artifact.manifest.resolution,undefined);
 });
-test('WebM manifest separates display duration from stored physical frames and does not invent resolution',async()=>{
- const api=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm;codecs=vp9'})}),job=await api.start({...args(),format:'webm',animation:'time',seconds:7}),m=(await terminal(api,job)).artifact.manifest;
- assert.equal(m.container,'webm');assert.equal(m.codec,'vp9');assert.equal(m.time.durationSeconds,7);assert.equal(m.time.timeBasis,'display time');assert.equal(m.time.frameSelection,'stored-acoustic-frames-only');assert.match(m.time.physicalTime,/physical time/);assert.equal(m.time.fps.target,24);assert.equal(m.time.fps.frameCountGuaranteed,false);assert.equal(m.resolution,undefined);
+test('legacy realtime WebM manifest retains display duration and does not invent resolution or endpoint guarantee',async()=>{
+ const api=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm;codecs=vp9'})}),job=await api.start({...args(),format:'webm',animation:'orbit',seconds:7}),m=(await terminal(api,job)).artifact.manifest;
+ assert.equal(m.container,'webm');assert.equal(m.codec,'vp9');assert.equal(m.time.durationSeconds,7);assert.equal(m.time.timeBasis,'display time');assert.equal(m.time.frameSelection,undefined);assert.equal(m.time.physicalTime,undefined);assert.equal(m.time.fps.target,24);assert.equal(m.time.fps.frameCountGuaranteed,false);assert.equal(m.resolution,undefined);
  const orbit=createVisualExportJobs({render:()=>new Blob(['webm'],{type:'video/webm'})}),o=(await terminal(orbit,await orbit.start({...args(),format:'webm'}))).artifact.manifest;assert.equal(o.codec,undefined);assert.equal(o.time.physicalTime,undefined);
 });
 

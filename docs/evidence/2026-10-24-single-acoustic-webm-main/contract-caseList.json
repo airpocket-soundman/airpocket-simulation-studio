@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "caseList",
+      "scope": "inspect",
+      "description": "List compact saved-case identities, content revisions, archive revision and comparison metrics.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "At most 8 saved cases; does not return full physical arrays."
+      ]
+    }
+  ]
+}

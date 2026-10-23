@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "getCompareView",
+      "scope": "inspect",
+      "description": "Read the current two-case comparison panel as a portable preset plus its exact configuration revision.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "Incomplete or invalid panel selection returns archive:null and a reason while retaining a revision usable for compare-and-swap import.",
+        "Returns {schemaVersion:1,revision,archive,reason?}; portable sources identify saved case content hashes, not runtime case IDs. Does not render or change the panel."
+      ]
+    }
+  ]
+}

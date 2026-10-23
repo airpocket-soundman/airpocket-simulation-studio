@@ -1,3 +1,5 @@
+import {fixedCodecEnv} from './helpers/single-view-fixed-codec.mjs';
+import {getSingleViewAcousticTimeVerification} from '../src/single-view-time-webm.js';
 import {webmTestEnv} from './helpers/webm-test-env.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -12,7 +14,7 @@ class Vector {
  applyAxisAngle(){this.x+=10;return this;}
 }
 const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
-function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={}}={}){
+function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
  const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
@@ -30,9 +32,10 @@ function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv
  }
  globalThis.MediaRecorder=Recorder;
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
- const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind:'elastic'}};
- const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){},recordingEnv});
- return {order,api,canvas,controls,camera,tracks,elements,frames,draws,get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
+ const output={mesh:{nodes:[0,0,0,1,1,1]},result:acoustic?{kind:'acousticTransient',snapshots:[0,.2,.9,1.2].map(time=>({time,pressure:[time,2*time]}))}:{kind:'elastic'}};
+ let current=output;const physical={timeSeconds:.35,frameIndex:1};const selected=[];if(acoustic){element('acoustic-time-frame').value='1';element('acoustic-time-frame').dispatchEvent=()=>{selected.push(Number(element('acoustic-time-frame').value));physical.frameIndex=Number(element('acoustic-time-frame').value);physical.timeSeconds=output.result.snapshots[physical.frameIndex].time;};}
+ const api=installVisualExport({renderer:{domElement:{width:sourceWidth,height:sourceHeight},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic?{getTimeView:()=>structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,value);element('acoustic-time-frame').value=String(value.frameIndex);}}:{})});
+ return {order,api,canvas,controls,camera,tracks,elements,frames,draws,output,physical,selected,replaceOutput:value=>{current=value;},get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
 test('PNG export returns a PNG Blob with caption space and never initiates a download',async()=>{
@@ -94,4 +97,19 @@ test('single-viewer WebM background/stall rejects without a new frame and restor
 });
 test('single-viewer WebM missing stop event is bounded; hidden page still allows fixed PNG',async()=>{
  const clock=webmTestEnv(),f=fixture({recordingEnv:clock.env});try{const recording=f.api.render({format:'webm',animation:'orbit',seconds:1}),failure=assert.rejects(recording,{code:'WEBM_BACKGROUND_INTERRUPTED'});f.recorder.stop=()=>{f.recorder.state='inactive';};clock.hide();await Promise.resolve();await Promise.resolve();clock.advance(2000);await failure;assert.equal(f.tracks[0].stopped,true);assert.equal(f.controls.enabled,true);assert.equal(f.api.isActive(),false);assert.equal(clock.timers,0);const png=await f.api.render({format:'png'});assert.equal(png.type,'image/png');}finally{f.restore();}
+});
+
+
+for(const locale of ['ja','en'])test('single acoustic fixed-time export selects physical endpoints and restores interpolated time and UI ('+locale+')',async()=>{
+ const codec=fixedCodecEnv(),f=fixture({acoustic:true,locale,recordingEnv:codec.env,sourceWidth:3840,sourceHeight:2160});try{const saved={camera:f.camera.position.clone(),physical:structuredClone(f.physical),scale:f.elements.get('deform-scale').value,clip:f.elements.get('clip-position').value};f.elements.get('clip-position').disabled=true;
+ const blob=await f.api.render({format:'webm',animation:'time',seconds:1,expectedResultRevision:'sha256:'+'a'.repeat(64)});const proof=getSingleViewAcousticTimeVerification(blob);assert.equal(proof.frames[0].actualTimeSeconds,0);assert.equal(proof.frames.at(-1).actualTimeSeconds,1.2);assert.equal(f.selected[0],0);assert.equal(f.selected.at(-1),3);assert.equal(f.selected.length,24);assert.equal(f.frames.length,0,'fixed export never schedules requestAnimationFrame');assert.equal(f.recorder,undefined);assert.equal(f.clicks,0);assert.ok(f.canvas.width<=1280&&f.canvas.height<=640);assert.deepEqual(f.camera.position,saved.camera);assert.deepEqual(f.physical,saved.physical);assert.equal(f.elements.get('deform-scale').value,saved.scale);assert.equal(f.elements.get('clip-position').value,saved.clip);assert.equal(f.elements.get('clip-position').disabled,true);assert.equal(f.elements.get('agent-disconnect').disabled,false);assert.equal(f.elements.get('animation-stop').disabled,true);assert.equal(f.controls.enabled,true);assert.equal(f.controls.enableDamping,true);assert.equal(f.api.isActive(),false);assert.equal(f.api.capabilities().singleTimeWebmExport.supported,true);
+ }finally{f.restore();}
+});
+test('single acoustic fixed export abort/result replacement/stop refuses and restores host controls without downloads',async()=>{
+ for(const mode of ['abort','replace','stop']){const codec=fixedCodecEnv(),f=fixture({acoustic:true,recordingEnv:codec.env}),controller=new AbortController(),saved=structuredClone(f.physical);try{let fired=false;codec.stats.onEncode=()=>{if(fired)return;fired=true;if(mode==='abort')controller.abort();else if(mode==='replace')f.replaceOutput({result:{kind:'elastic'}});else f.api.stop();};await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1,signal:controller.signal}),/cancelled|changed/);assert.equal(f.clicks,0);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(f.elements.get('agent-disconnect').disabled,false);assert.equal(f.elements.get('deform-scale').disabled,false);assert.equal(codec.stats.codecClosed,1);if(mode!=='replace')assert.deepEqual(f.physical,saved);}finally{f.restore();}}
+});
+test('single fixed capability rejects before viewer changes and preview still uses the old rAF semantics',async()=>{
+ const f=fixture({acoustic:true});try{const saved=structuredClone(f.physical);assert.equal(f.api.capabilities().singleTimeWebmExport.supported,false);await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),{code:'WEBM_FIXED_UNSUPPORTED'});assert.equal(f.api.isActive(),false);assert.deepEqual(f.physical,saved);assert.equal(f.clicks,0);
+ f.elements.get('animation-kind').value='time';f.elements.get('animation-seconds').value='1';const preview=f.elements.get('animation-preview').onclick();assert.equal(f.api.isActive(),true);assert.equal(f.frames.length,1);f.frames.shift()(performance.now()+2000);await preview;assert.equal(f.selected.at(-1),3);assert.deepEqual(f.physical,saved);assert.equal(f.recorder,undefined);
+ }finally{f.restore();}
 });

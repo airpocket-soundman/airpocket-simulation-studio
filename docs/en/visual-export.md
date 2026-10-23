@@ -1,5 +1,7 @@
 # Images and animations
 
+Single-view transient-acoustic time WebM saving now uses fixed VP8 frames with full decoded-frame and source-endpoint verification. Preview and other WebM animations retain realtime behavior. [Scope, time ledger and limits](single-view-acoustic-fixed-webm.md).
+
 API/MCP visual-export start, status and cancel summaries include read-only `executionSettled`. It starts `false` and becomes `true` only after renderer and artifact processing settle and release shared renderer exclusion. Cancellation changes `state:"cancelled"` first; that state alone does not establish cleanup completion. Poll `exportStatus({jobId})` until `executionSettled:true` before `releaseExport`. This describes visual-export execution separately from analysis jobs; a timeout alone never marks an unresolved renderer settled.
 
 Disconnect cancels only exports started through that connection. The old session becomes unavailable. After explicit reconnection to the same page, a known retained jobId can be inspected through `exportStatus`; a cancelled artifact being unavailable is a state refusal, not a cross-session ownership refusal. GUI-started user exports are outside this connection-owned cancellation. Released job IDs remain unknown and cannot report settlement.

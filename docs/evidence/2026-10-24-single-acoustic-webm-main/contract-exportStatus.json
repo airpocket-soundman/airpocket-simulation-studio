@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "exportStatus",
+      "scope": "inspect",
+      "description": "Read retained visual-export job state and its read-only executionSettled boolean.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ]
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "executionSettled remains false until renderer and artifact processing have settled and shared renderer exclusion is released. Cancellation changes state immediately; cancelled does not imply cleanup has finished. The same boolean is returned by startExport/startCompareExport/cancelExport summaries. This describes visual-export execution only, not analysis job execution. Released jobs remain unknown."
+      ]
+    }
+  ]
+}
