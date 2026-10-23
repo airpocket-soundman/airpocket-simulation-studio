@@ -24,6 +24,7 @@ export async function encodeComparisonTimeWebm({initialCanvas,renderFrame,camera
  const check=()=>{if(disposed)throw fixedWebmError('WEBM_FIXED_CODEC_FAILURE','Fixed WebM operation is closed');if(signal?.aborted)throw cancelled();if(error)throw error;lifecycle?.check();assertCurrent();};
  const race=promise=>Promise.race([Promise.resolve(promise),failed]);
  const abort=()=>fail(cancelled());signal?.addEventListener('abort',abort,{once:true});
+ const submittedTimestamps=new Set(),submittedDecodeTimestamps=new Set();
  const packets=new Map(),expected=new Map(plan.map(p=>[p.timestamp,p]));
  try{
   check();timer=schedule(()=>fail(fixedWebmError('WEBM_FIXED_TIMEOUT','Fixed WebM exceeded its 120 second limit')),120000);
@@ -33,7 +34,7 @@ export async function encodeComparisonTimeWebm({initialCanvas,renderFrame,camera
   if(!enc?.supported||!dec?.supported)throw fixedWebmError('WEBM_FIXED_UNSUPPORTED','This browser cannot encode and verify stored-time VP8 WebM. Use comparison GIF instead.');
   encoder=new Encoder({error:e=>{if(!disposed)fail(e);},output:chunk=>{if(disposed)return;try{
    check();const p=expected.get(chunk.timestamp);
-   if(!p||packets.has(chunk.timestamp)||chunk.type!=='key'||!Number.isSafeInteger(chunk.byteLength)||chunk.byteLength<1||chunk.byteLength>FIXED_WEBM_LIMITS.bytes-65536-retained)throw fixedWebmError('WEBM_FIXED_OUTPUT_MISMATCH','Fixed WebM encoder returned missing, duplicate or unexpected frame data');
+   if(!p||!submittedTimestamps.has(chunk.timestamp)||packets.has(chunk.timestamp)||chunk.type!=='key'||!Number.isSafeInteger(chunk.byteLength)||chunk.byteLength<1||chunk.byteLength>FIXED_WEBM_LIMITS.bytes-65536-retained)throw fixedWebmError('WEBM_FIXED_OUTPUT_MISMATCH','Fixed WebM encoder returned missing, duplicate or unexpected frame data');
    if(chunk.duration!=null&&chunk.duration!==p.duration)throw fixedWebmError('WEBM_FIXED_OUTPUT_MISMATCH','Fixed WebM encoded frame duration changed');
    const data=new Uint8Array(chunk.byteLength);chunk.copyTo(data);retained+=data.length;packets.set(chunk.timestamp,{timestamp:p.timestamp,duration:p.duration,type:'key',data});lifecycle.progress();
   }catch(e){fail(e);}}});encoder.configure(config);let submitted=0;
@@ -41,7 +42,7 @@ export async function encodeComparisonTimeWebm({initialCanvas,renderFrame,camera
    check();while(encoder.encodeQueueSize>=FIXED_WEBM_LIMITS.queue||submitted-packets.size>=FIXED_WEBM_LIMITS.queue){await race(yieldControl());check();}
    const canvas=renderFrame(structuredClone(camera),{phase:entry.phase,animation:'time'});check();
    if(canvas?.width!==width||canvas?.height!==height)throw fixedWebmError('WEBM_FIXED_INVALID','Comparison fixed WebM canvas dimensions changed');
-   let frame;try{frame=new Frame(canvas,{timestamp:entry.timestamp,duration:entry.duration});submitted++;encoder.encode(frame,{keyFrame:true});}finally{frame?.close();}
+   let frame;try{frame=new Frame(canvas,{timestamp:entry.timestamp,duration:entry.duration});submittedTimestamps.add(entry.timestamp);submitted++;encoder.encode(frame,{keyFrame:true});}finally{frame?.close();}
    lifecycle.progress();onProgress({fraction:(entry.index+1)/plan.length,kind:'time',recording:'fixed-frame'});await race(yieldControl());
   }
   await race(encoder.flush());check();
@@ -50,9 +51,9 @@ export async function encodeComparisonTimeWebm({initialCanvas,renderFrame,camera
   const bytes=muxFixedWebm({width,height,seconds,packets:plan.map(p=>packets.get(p.timestamp))}),parsed=demuxFixedWebm(bytes);
   const decoded=new Set();
   decoder=new Decoder({error:e=>{if(!disposed)fail(e);},output:frame=>{try{if(disposed)return;
-   check();if(!expected.has(frame.timestamp)||decoded.has(frame.timestamp)||frame.codedWidth!==width||frame.codedHeight!==height)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Fixed WebM decoded frame identity or dimensions differ');decoded.add(frame.timestamp);lifecycle.progress();
+   check();if(!expected.has(frame.timestamp)||!submittedDecodeTimestamps.has(frame.timestamp)||decoded.has(frame.timestamp)||frame.codedWidth!==width||frame.codedHeight!==height)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Fixed WebM decoded frame identity or dimensions differ');decoded.add(frame.timestamp);lifecycle.progress();
   }catch(e){fail(e);}finally{frame.close();}}});decoder.configure(decoderConfig);let submittedDecode=0;
-  for(const packet of parsed.packets){check();while(decoder.decodeQueueSize>=FIXED_WEBM_LIMITS.queue||submittedDecode-decoded.size>=FIXED_WEBM_LIMITS.queue){await race(yieldControl());check();}submittedDecode++;decoder.decode(new Chunk(packet));await race(yieldControl());}
+  for(const packet of parsed.packets){check();while(decoder.decodeQueueSize>=FIXED_WEBM_LIMITS.queue||submittedDecode-decoded.size>=FIXED_WEBM_LIMITS.queue){await race(yieldControl());check();}submittedDecodeTimestamps.add(packet.timestamp);submittedDecode++;decoder.decode(new Chunk(packet));await race(yieldControl());}
   await race(decoder.flush());check();
   if(decoded.size!==plan.length||plan.some(p=>!decoded.has(p.timestamp)))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Fixed WebM could not decode every scheduled frame including the endpoint');
   onVerified({schemaVersion:1,codec:'vp8',frameCount:plan.length,encodedFrameCount:packets.size,decodedFrameCount:decoded.size,terminalTimestamp:plan.at(-1).timestamp,totalDurationMicroseconds:seconds*1000000,verification:'strict-webm-demux+video-decoder'});check();
