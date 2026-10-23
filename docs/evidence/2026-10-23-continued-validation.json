@@ -43,5 +43,28 @@
       "bytes": 1871,
       "sha256": "5264efe044bb85ca909f9c4eb3d1bd2160ad7f67c59ba05270772b7a89402afa"
     }
+  },
+  "reviewFollowup": {
+    "sourceHead": "111fb2e",
+    "focused": {
+      "total": 158,
+      "pass": 158,
+      "fail": 0,
+      "skip": 0
+    },
+    "firstRemoteCI": {
+      "run": 39959817035,
+      "head": "bebce5f",
+      "mergeCandidate": "529063a",
+      "tests": 1977,
+      "pass": 1969,
+      "fail": 0,
+      "nativeGatedSkipped": 8,
+      "status": "success",
+      "localPublishedChecks": 27,
+      "localPublishedSeconds": 34.52
+    },
+    "latestCandidateCI": "pending new push after review fixes",
+    "native": "No native source changed relative to184;184 host/WASM evidence retained separately, not a native execution at this head"
   }
 }
