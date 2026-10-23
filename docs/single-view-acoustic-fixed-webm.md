@@ -13,3 +13,6 @@
 GUI stop、MCP取消/切断、表示結果の交代、codec失敗では部分成果物を公開しない。camera/controls/scale/clipと元の補間時刻状態をfinallyで復元する。表示結果が交代した場合、新結果の時刻へ旧値を上書きしない。既存 `executionSettled` は実後片付けが終わるまでfalseで、取消状態だけを終了確認にしない。
 
 [自動試験の証拠](evidence/2026-10-24-single-view-acoustic-fixed-webm.json) はsynthetic codec/DOMによる限定検証であり、実browser出力・GUI download・実codec・物理精度の証拠ではない。元結果や親受入の状態は変更しない。
+
+
+2026-10-24、通常main/IAB/EN・正式stdio MCPで保存済み音響archiveから2秒のtime WebMを1回作成した。923,844bytes/SHA、独立VP8復号48all-key/584×640/2秒、全物理ledgerと最終1.2ms・ずれ0、5状態不変、settled解放と切断cleanupを確認した。[生証拠・失敗履歴・限定範囲](evidence/2026-10-24-single-acoustic-webm-main/README.md)。これは1archive/runtimeの限定確認で、GUI download・他engine・一般物理精度等の証明ではない。

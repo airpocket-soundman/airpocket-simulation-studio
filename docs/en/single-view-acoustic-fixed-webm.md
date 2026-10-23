@@ -13,3 +13,6 @@ Only encoder-issued Blobs receive a private WeakMap proof. Issuance uses a captu
 GUI stop, MCP cancellation/disconnect, displayed-result replacement and codec failures publish no partial artifact. Finally restores camera/controls/scale/clip and the original interpolated time state. If the displayed result changes, its new time is not overwritten with the old time. Existing `executionSettled` remains false until actual cleanup settles; cancelled state alone is insufficient.
 
 [Automated evidence](../evidence/2026-10-24-single-view-acoustic-fixed-webm.json) uses synthetic codec/DOM doubles. It does not establish real browser output, GUI download, real-codec success or physical accuracy. Source results and parent acceptance status are unchanged.
+
+
+On2026-10-24, normal main/IAB/EN and formal stdio MCP created exactly one2-second time WebM from the retained acoustic archive. Verified923,844bytes/SHA, independent VP8 decode48all-key/584×640/2s, complete physical ledger/terminal1.2ms offset0, five unchanged states, settled release and disconnect cleanup. [Raw evidence, failure history and limits](../evidence/2026-10-24-single-acoustic-webm-main/README.en.md). This is one archive/runtime verification, not GUI-download, other-engine or general physical-accuracy proof.

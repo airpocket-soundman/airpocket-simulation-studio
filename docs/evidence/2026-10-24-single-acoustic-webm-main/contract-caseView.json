@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "caseView",
+      "scope": "edit",
+      "description": "Restore a saved case input and display its validated physical result.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "caseId": {
+            "type": "string",
+            "description": "Opaque page-lifetime identity returned by the matching list/begin operation."
+          },
+          "expectedRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "caseId",
+          "expectedRevision"
+        ]
+      },
+      "sideEffects": [
+        "Replaces current input and displayed result."
+      ],
+      "revisionFields": [
+        "expectedRevision"
+      ],
+      "units": {},
+      "limitations": [
+        "Case IDs are page-local and invalidated by external archive replacement; list again after changes.",
+        "Host must be idle; revision checks do not establish physical accuracy."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "inspect",
+      "scope": "inspect",
+      "description": "Read current input revision, compact project summary, operation permissions and bounded page lifecycle/browser metadata.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "previousLifecycle": {
+            "type": "object",
+            "properties": {
+              "pageInstanceId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "connectionEpoch": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "inputRevision": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$",
+                "description": "Exact SHA-256 revision returned by the relevant inspection; never infer a revision."
+              }
+            },
+            "required": [
+              "pageInstanceId",
+              "connectionEpoch"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": []
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Optional previousLifecycle compares page identity and connection epoch, not the cause of a reset. Never automatically replay timed-out operations; inspect input and remaining jobs before explicit restoration.",
+        "Browser version is a bounded low-entropy navigator.userAgent self-report; reduced versions are labelled and fullVersionVerified is false.",
+        "This does not return the full project or prove physical validity."
+      ]
+    }
+  ]
+}
