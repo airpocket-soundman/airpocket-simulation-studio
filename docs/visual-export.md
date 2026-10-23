@@ -1,5 +1,9 @@
 # 画像・アニメーションの出力
 
+API/MCPの画像・動画出力ジョブは、開始・状態・取消の応答に読み取り専用の `executionSettled` を返します。初期値は `false` で、描画と成果物処理が終了し、共有出力キューの実行占有を解放した時点でだけ `true` になります。取消は先に `state:"cancelled"` へ移るため、その状態だけで後片付け完了と判断しないでください。保持中は `exportStatus({jobId})` で `executionSettled:true` を確認してから `releaseExport` します。これは解析ジョブとは別の出力実行の状態で、タイムアウトだけでは終了扱いにしません。
+
+接続解除はその接続から開始した出力だけを取り消します。旧sessionは失効します。同じページへ明示的に再接続した後は、保持中の既知jobIdを状態確認できます。取消済み成果物の取得拒否は利用不能状態を示し、session所有権による拒否ではありません。GUI利用者の出力はこの所有取消の対象外です。解放済みjobIdは従来どおり不明となり、終了状態も参照できません。
+
 [English](en/visual-export.md)
 
 時間比較GIFのmanifestには、各描画要求と各panelの実保存時刻/ずれ/case・結果識別を結ぶ `time.frameTimings` がある。[詳細・上限](view-compare-design.md)。GIFは24出力frameを記録する。WebMは既存の端点・方針概要を維持し、個別frame ledgerは提供しない。上限超過は失敗して部分成果物を返さない。
