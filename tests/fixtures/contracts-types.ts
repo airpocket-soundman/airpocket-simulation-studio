@@ -147,3 +147,13 @@ const invalidFixedPacket:FixedWebmContainer={width:16,height:16,seconds:1,packet
 // @ts-expect-error MediaRecorder realtime must not masquerade as fixed-frame verification.
 const invalidFixedProof:FixedWebmVerification={...fixedWebmProof,verification:'realtime'};
 void [fixedWebmContainer,fixedWebmProof,fixedWebmCapability,invalidFixedPacket,invalidFixedProof];
+// Resolve declarations from the public runtime .js import, not only the type directory.
+import {fixedWebmSchedule,muxFixedWebm,demuxFixedWebm,FIXED_WEBM_LIMITS,fixedWebmError} from '../../src/fixed-webm.js';
+const fixedRuntimeSchedule:number=fixedWebmSchedule(2)[0].timestamp;
+const fixedRuntimeBytes:Uint8Array=muxFixedWebm(fixedWebmContainer);
+const fixedRuntimeReload:FixedWebmContainer=demuxFixedWebm(fixedRuntimeBytes);
+const fixedRuntimeLimit:120=FIXED_WEBM_LIMITS.frames;
+const fixedRuntimeError:string=fixedWebmError('WEBM_FIXED_INVALID','invalid').code;
+// @ts-expect-error Runtime imports must reject a string presentation duration.
+fixedWebmSchedule('2');
+void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];

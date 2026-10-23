@@ -10,6 +10,8 @@ export interface ComparisonFixedWebmCapability {
  maxFrames:120; maxArtifactBytes:number; code?:'WEBM_FIXED_UNSUPPORTED'; reason?:string;
 }
 export type FixedWebmFailureCode='WEBM_FIXED_INVALID'|'WEBM_FIXED_UNSUPPORTED'|'WEBM_FIXED_CODEC_FAILURE'|'WEBM_FIXED_OUTPUT_MISMATCH'|'WEBM_FIXED_CANCELLED'|'WEBM_FIXED_TIMEOUT'|'WEBM_ENDPOINT_UNVERIFIED';
+export declare const FIXED_WEBM_LIMITS:Readonly<{frames:120;bytes:33554432;width:1280;height:640;seconds:15;queue:2}>;
+export declare function fixedWebmError(code:string,message:string):Error & {code:string};
 /** Integer microseconds; phase is physical selection, not timestamp/duration. N=min(seconds*24,120). */
 export declare function fixedWebmSchedule(seconds:number):FixedWebmFrame[];
 /** VP8-only keyframe container profile. Codec payload validity is verified by the browser decoder, not this pure parser. */
