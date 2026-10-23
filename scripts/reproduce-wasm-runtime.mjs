@@ -6,8 +6,8 @@ import {resolve,dirname,isAbsolute,relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const targets=Object.freeze({'analysis-jobs':['tests/analysis-job-service.test.mjs'],'material-catalog':['tests/material-catalog.test.mjs'],'advanced-structural-source':['tests/advanced-structural-source-execution.test.mjs']});
-const usage='Usage: node scripts/reproduce-wasm-runtime.mjs <iterations 1..100> <new-output.json> [--target=analysis-jobs|material-catalog|advanced-structural-source|full] [--concurrency=1..4] [--runtime=<absolute node executable>] [--wasm-code-gc=default|disabled]';
+const targets=Object.freeze({'analysis-jobs':['tests/analysis-job-service.test.mjs'],'analysis-job-store':['tests/analysis-job-store.test.mjs'],'material-catalog':['tests/material-catalog.test.mjs'],'advanced-structural-source':['tests/advanced-structural-source-execution.test.mjs']});
+const usage='Usage: node scripts/reproduce-wasm-runtime.mjs <iterations 1..100> <new-output.json> [--target=analysis-jobs|analysis-job-store|material-catalog|advanced-structural-source|full] [--concurrency=1..4] [--runtime=<absolute node executable>] [--wasm-code-gc=default|disabled]';
 export function parseReproductionArgs(argv,{defaultRuntime=process.execPath}={}){
  if(!Array.isArray(argv)||argv.some(value=>typeof value!=='string'))throw Error(usage);const [countText,output,...flags]=argv,iterations=Number(countText);
  if(!/^\d+$/.test(countText??'')||!Number.isInteger(iterations)||iterations<1||iterations>100||!output||output.startsWith('--')||output.includes('\0'))throw Error(usage);

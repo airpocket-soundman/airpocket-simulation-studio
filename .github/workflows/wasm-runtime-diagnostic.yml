@@ -4,7 +4,7 @@ on:
     inputs:
       target:
         type: choice
-        options: [analysis-jobs, material-catalog, advanced-structural-source, full]
+        options: [analysis-jobs, analysis-job-store, material-catalog, advanced-structural-source, full]
         default: analysis-jobs
       mode:
         description: Single runs exactly once with default runtime flags; compare retains both modes
