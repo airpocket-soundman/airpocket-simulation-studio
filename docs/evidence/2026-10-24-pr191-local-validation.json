@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "pullRequest": 191,
+  "head": "3aa69ad1eaf78a036237e20c29e830d4c20e69ac",
+  "environment": {"platform": "win32", "node": "v24.11.1"},
+  "focused": {"tests": 39, "passed": 39, "failed": 0, "skipped": 0, "scope": "perf-browser, stdio-close, progress, real contract compiler"},
+  "docs": {"tests": 2, "passed": 2},
+  "contractDeclarations": 19,
+  "build": "passed",
+  "localPublished": {"status": "passed", "checks": 27, "elapsedMs": 44187.5525, "checkedAtUtc": "2026-10-23T15:26:33.869Z"},
+  "initialBuildMismatch": "An earlier build started at b5ec169 while a documentation-only cherry-pick advanced HEAD to 3aa69ad. The first local check correctly rejected the stale asset revision; a complete rebuild at fixed 3aa69ad then passed all 27 checks. No assertion, candidate check or test was weakened.",
+  "independentFinalReview": "After c20be76 was integrated as b5ec169, the original owner independently reran seven fake lifecycle cases and four isolated late-error fixtures; all passed with no additional required findings. These are fake-owned-child regressions, not an additional real metadata smoke.",
+  "rawEvidence": {"fullSkillGitBlobsVerified": 89, "comparisonGifGitBlobsVerified": 39, "meaning": "Exact bytes and SHA-256 of committed blobs, not physical validation or signatures"},
+  "taskStatusChanged": false,
+  "deployed": false
+}
