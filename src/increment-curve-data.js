@@ -161,7 +161,7 @@ function requireControlledDisplacement(step,output,validated){
  * Sign convention: the gauge axis points from gauge point a to gauge point b, and tension is positive, so
  * tensileForceN = -(sum of support reaction projected on the axis). */
 export function extractIncrementMeasurement({spec,result,controlledQuantity='force'}={}){
-  if(!Object.hasOwn(CONTROLLED_QUANTITIES,controlledQuantity))throw Error('controlledQuantity must be force or displacement');
+  if(typeof controlledQuantity!=='string'||!Object.hasOwn(CONTROLLED_QUANTITIES,controlledQuantity))throw Error('controlledQuantity must be force or displacement');
   const validated=validateIncrementSpec(spec);
   const {axis,nodeCount}=validated,reactions=requireResult(result,nodeCount),displacement=result.displacement;
   let reactionAxisN=0;
@@ -233,7 +233,7 @@ export async function buildIncrementCurve({spec,steps}={}){
     if(typeof step.converged!=='boolean')throw Error('Each step requires a boolean converged flag');
     if(typeof step.provisional!=='boolean')throw Error('Each step requires a boolean provisional flag');
     if(!plain(step.rowIdentity)||Object.keys(validated.rowIdentity).some(key=>step.rowIdentity[key]!==validated.rowIdentity[key]))throw Error('Step '+step.stepId+' mixes a different material, geometry or gauge');
-    if(!Object.hasOwn(CONTROLLED_QUANTITIES,step.controlledQuantity))throw Error('controlledQuantity must be force or displacement');
+    if(typeof step.controlledQuantity!=='string'||!Object.hasOwn(CONTROLLED_QUANTITIES,step.controlledQuantity))throw Error('controlledQuantity must be force or displacement');
     if(!finite(step.controlledValue))throw Error('Each step requires a finite controlledValue');
     const row={stepIndex:index,stepId:step.stepId,controlledQuantity:step.controlledQuantity,controlledValue:step.controlledValue,controlledUnit:CONTROLLED_QUANTITIES[step.controlledQuantity],converged:step.converged,provisional:step.provisional};
     if(!step.converged){

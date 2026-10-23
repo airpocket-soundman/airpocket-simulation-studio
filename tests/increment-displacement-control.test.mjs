@@ -11,6 +11,7 @@ import {readIncrementCurve} from '../scripts/increment-curve-service.mjs';
 import {solveElastic} from '../src/fem-core.js';
 import {createIncrementCurveArtifacts} from '../src/increment-curve-export.js';
 import {createIncrementCurveComparison} from '../src/increment-curve-comparison.js';
+import {buildIncrementCurve,extractIncrementMeasurement} from '../src/increment-curve-data.js';
 const request=()=>({synthetic:true,curveId:'synthetic-displacement-reference',caseIdentity:{name:'synthetic bar'},rowIdentity:{materialKey:'E1e9-nu0',geometryKey:'10x10x40',gaugeKey:'end-faces'},boundsMm:[0,0,0,10,10,40],meshSizeMm:8,youngModulusPa:1e9,poissonRatio:0,axis:[0,0,1],initialGaugeLengthMm:40,initialAreaMm2:100,controlledQuantity:'displacement',displacementsMm:[0,.01,.04,.02,0,-.02]});
 const close=(actual,expected,abs=1e-7)=>assert.ok(Math.abs(actual-expected)<=abs,`${actual} versus ${expected}`);
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -56,6 +57,16 @@ test('invalid or mixed control requests refuse before meshing; legacy and explic
  }
  const force=request();delete force.controlledQuantity;delete force.displacementsMm;force.loadsN=[0,100];force.curveId='legacy-force';
  assert.deepEqual((await createIncrementCurveBundle(force)).bundle,(await createIncrementCurveBundle({...force,controlledQuantity:'force'})).bundle);
+});
+
+test('saved failed rows and direct measurements require string control enums without array coercion',async()=>{
+ const force=JSON.parse(await readFile(new URL('../public/examples/increment-comparison-a.json',import.meta.url),'utf8'));
+ for(const invalid of [['force'],['displacement'],null,1,{}]){
+  const bad=structuredClone(force);bad.steps.find(step=>!step.converged).controlledQuantity=invalid;
+  const before=structuredClone(bad);await assert.rejects(buildIncrementCurve(bad),/controlledQuantity must be force or displacement/);assert.deepEqual(bad,before);
+  await assert.rejects(createIncrementCurveArtifacts(bad),/controlledQuantity must be force or displacement/);
+  assert.throws(()=>extractIncrementMeasurement({spec:force.spec,result:force.steps.find(step=>step.converged).output.result,controlledQuantity:invalid}),/controlledQuantity must be force or displacement/);
+ }
 });
 
 test('failed displacement solves retain mm control but no forged output or measurement',async()=>{
