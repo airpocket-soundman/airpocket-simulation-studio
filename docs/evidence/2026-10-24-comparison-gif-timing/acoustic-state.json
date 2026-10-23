@@ -1,0 +1,962 @@
+{
+  "before": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:5c7afc15f9d2fe83a225a68cf5af63aab66a3671a7a913da4d3ff3b1ee45e7eb",
+      "project": {
+        "loaded": true,
+        "name": "Synthetic acoustic 1Pa",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 1,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "155.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "b27ac35f-6a46-4332-a5e5-dfdb608d6af4",
+        "connectionEpoch": 3,
+        "eventSequence": 7,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "connected",
+            "connectionEpoch": 1
+          },
+          {
+            "sequence": 4,
+            "kind": "disconnected",
+            "connectionEpoch": 1
+          },
+          {
+            "sequence": 5,
+            "kind": "connected",
+            "connectionEpoch": 2
+          },
+          {
+            "sequence": 6,
+            "kind": "disconnected",
+            "connectionEpoch": 2
+          },
+          {
+            "sequence": 7,
+            "kind": "connected",
+            "connectionEpoch": 3
+          }
+        ],
+        "relation": "unknown",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:5c7afc15f9d2fe83a225a68cf5af63aab66a3671a7a913da4d3ff3b1ee45e7eb",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 0
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "cases": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:fbeada2e331ef168fe31fbb57f0f919357f65a0889e6f3cd7220750e9e9689f3",
+      "cases": [
+        {
+          "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+          "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0",
+          "name": "Synthetic acoustic 1Pa",
+          "kind": "acousticTransient",
+          "metrics": [
+            {
+              "key": "receiverPeakPa",
+              "unit": "Pa peak",
+              "value": 0.9505644525907234
+            },
+            {
+              "key": "receiverRmsPa",
+              "unit": "Pa record RMS",
+              "value": 0.43079121890366395
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        },
+        {
+          "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+          "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55",
+          "name": "Synthetic acoustic 2Pa",
+          "kind": "acousticTransient",
+          "metrics": [
+            {
+              "key": "receiverPeakPa",
+              "unit": "Pa peak",
+              "value": 1.9011289051814468
+            },
+            {
+              "key": "receiverRmsPa",
+              "unit": "Pa record RMS",
+              "value": 0.8615824378073279
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        }
+      ]
+    },
+    "compare": {
+      "schemaVersion": 1,
+      "revision": "sha256:347d4ddddf3d8cf3af22cc9d4721ae6b3d9c2b9b402432d378129b69d003b943",
+      "archive": {
+        "kind": "comparison-view",
+        "settings": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              61,
+              41,
+              84
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "field": "instantPressure",
+          "timeSeconds": 0
+        },
+        "sources": [
+          {
+            "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+          },
+          {
+            "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+          }
+        ],
+        "version": 1
+      }
+    },
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+      "physicalRevision": "sha256:b632825e375c94988d4e09821967e3b96b05d7ae5cbb442715de5cc82fe970a9",
+      "kind": "acousticTransient",
+      "fields": [
+        {
+          "id": "instantPressure",
+          "unit": "Pa"
+        }
+      ],
+      "state": {
+        "field": "instantPressure",
+        "modeIndex": null,
+        "frameIndex": 15,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 24,
+      "snapshotStorage": {
+        "requested": 25,
+        "count": 24,
+        "bytes": 64320,
+        "budgetBytes": 65536,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 1
+      },
+      "physicalTimeSeconds": 0.0007818181818181818,
+      "timeSelection": "stored-frames-only",
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 0.000051948051948051944
+        },
+        {
+          "index": 2,
+          "timeSeconds": 0.00010389610389610389
+        },
+        {
+          "index": 3,
+          "timeSeconds": 0.00015584415584415584
+        },
+        {
+          "index": 4,
+          "timeSeconds": 0.00020779220779220778
+        },
+        {
+          "index": 5,
+          "timeSeconds": 0.00025974025974025974
+        },
+        {
+          "index": 6,
+          "timeSeconds": 0.00031428571428571427
+        },
+        {
+          "index": 7,
+          "timeSeconds": 0.0003662337662337662
+        },
+        {
+          "index": 8,
+          "timeSeconds": 0.00041818181818181814
+        },
+        {
+          "index": 9,
+          "timeSeconds": 0.0004701298701298701
+        },
+        {
+          "index": 10,
+          "timeSeconds": 0.0005220779220779221
+        },
+        {
+          "index": 11,
+          "timeSeconds": 0.000574025974025974
+        },
+        {
+          "index": 12,
+          "timeSeconds": 0.0006259740259740259
+        },
+        {
+          "index": 13,
+          "timeSeconds": 0.0006779220779220778
+        },
+        {
+          "index": 14,
+          "timeSeconds": 0.0007298701298701298
+        },
+        {
+          "index": 15,
+          "timeSeconds": 0.0007818181818181818
+        },
+        {
+          "index": 16,
+          "timeSeconds": 0.0008337662337662337
+        },
+        {
+          "index": 17,
+          "timeSeconds": 0.0008857142857142857
+        },
+        {
+          "index": 18,
+          "timeSeconds": 0.0009402597402597402
+        },
+        {
+          "index": 19,
+          "timeSeconds": 0.0009922077922077921
+        }
+      ],
+      "modes": []
+    },
+    "view": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  },
+  "after": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:5c7afc15f9d2fe83a225a68cf5af63aab66a3671a7a913da4d3ff3b1ee45e7eb",
+      "project": {
+        "loaded": true,
+        "name": "Synthetic acoustic 1Pa",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 1,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "155.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "b27ac35f-6a46-4332-a5e5-dfdb608d6af4",
+        "connectionEpoch": 3,
+        "eventSequence": 7,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "connected",
+            "connectionEpoch": 1
+          },
+          {
+            "sequence": 4,
+            "kind": "disconnected",
+            "connectionEpoch": 1
+          },
+          {
+            "sequence": 5,
+            "kind": "connected",
+            "connectionEpoch": 2
+          },
+          {
+            "sequence": 6,
+            "kind": "disconnected",
+            "connectionEpoch": 2
+          },
+          {
+            "sequence": 7,
+            "kind": "connected",
+            "connectionEpoch": 3
+          }
+        ],
+        "relation": "unknown",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:5c7afc15f9d2fe83a225a68cf5af63aab66a3671a7a913da4d3ff3b1ee45e7eb",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 1
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "cases": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:fbeada2e331ef168fe31fbb57f0f919357f65a0889e6f3cd7220750e9e9689f3",
+      "cases": [
+        {
+          "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+          "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0",
+          "name": "Synthetic acoustic 1Pa",
+          "kind": "acousticTransient",
+          "metrics": [
+            {
+              "key": "receiverPeakPa",
+              "unit": "Pa peak",
+              "value": 0.9505644525907234
+            },
+            {
+              "key": "receiverRmsPa",
+              "unit": "Pa record RMS",
+              "value": 0.43079121890366395
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        },
+        {
+          "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+          "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55",
+          "name": "Synthetic acoustic 2Pa",
+          "kind": "acousticTransient",
+          "metrics": [
+            {
+              "key": "receiverPeakPa",
+              "unit": "Pa peak",
+              "value": 1.9011289051814468
+            },
+            {
+              "key": "receiverRmsPa",
+              "unit": "Pa record RMS",
+              "value": 0.8615824378073279
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        }
+      ]
+    },
+    "compare": {
+      "schemaVersion": 1,
+      "revision": "sha256:347d4ddddf3d8cf3af22cc9d4721ae6b3d9c2b9b402432d378129b69d003b943",
+      "archive": {
+        "kind": "comparison-view",
+        "settings": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              61,
+              41,
+              84
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "field": "instantPressure",
+          "timeSeconds": 0
+        },
+        "sources": [
+          {
+            "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+          },
+          {
+            "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+          }
+        ],
+        "version": 1
+      }
+    },
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+      "physicalRevision": "sha256:b632825e375c94988d4e09821967e3b96b05d7ae5cbb442715de5cc82fe970a9",
+      "kind": "acousticTransient",
+      "fields": [
+        {
+          "id": "instantPressure",
+          "unit": "Pa"
+        }
+      ],
+      "state": {
+        "field": "instantPressure",
+        "modeIndex": null,
+        "frameIndex": 15,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 24,
+      "snapshotStorage": {
+        "requested": 25,
+        "count": 24,
+        "bytes": 64320,
+        "budgetBytes": 65536,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 1
+      },
+      "physicalTimeSeconds": 0.0007818181818181818,
+      "timeSelection": "stored-frames-only",
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 0.000051948051948051944
+        },
+        {
+          "index": 2,
+          "timeSeconds": 0.00010389610389610389
+        },
+        {
+          "index": 3,
+          "timeSeconds": 0.00015584415584415584
+        },
+        {
+          "index": 4,
+          "timeSeconds": 0.00020779220779220778
+        },
+        {
+          "index": 5,
+          "timeSeconds": 0.00025974025974025974
+        },
+        {
+          "index": 6,
+          "timeSeconds": 0.00031428571428571427
+        },
+        {
+          "index": 7,
+          "timeSeconds": 0.0003662337662337662
+        },
+        {
+          "index": 8,
+          "timeSeconds": 0.00041818181818181814
+        },
+        {
+          "index": 9,
+          "timeSeconds": 0.0004701298701298701
+        },
+        {
+          "index": 10,
+          "timeSeconds": 0.0005220779220779221
+        },
+        {
+          "index": 11,
+          "timeSeconds": 0.000574025974025974
+        },
+        {
+          "index": 12,
+          "timeSeconds": 0.0006259740259740259
+        },
+        {
+          "index": 13,
+          "timeSeconds": 0.0006779220779220778
+        },
+        {
+          "index": 14,
+          "timeSeconds": 0.0007298701298701298
+        },
+        {
+          "index": 15,
+          "timeSeconds": 0.0007818181818181818
+        },
+        {
+          "index": 16,
+          "timeSeconds": 0.0008337662337662337
+        },
+        {
+          "index": 17,
+          "timeSeconds": 0.0008857142857142857
+        },
+        {
+          "index": 18,
+          "timeSeconds": 0.0009402597402597402
+        },
+        {
+          "index": 19,
+          "timeSeconds": 0.0009922077922077921
+        }
+      ],
+      "modes": []
+    },
+    "view": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  }
+}

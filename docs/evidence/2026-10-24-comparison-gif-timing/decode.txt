@@ -1,0 +1,15 @@
+from PIL import Image
+from pathlib import Path
+import json,hashlib,sys
+root=Path('.qa/gif-timing191/out')
+for name in sys.argv[1:]:
+ s=json.loads((root/(name+'-raw-completed.json')).read_text());m=s['status']['artifact']['manifest'];p=root/(name+'.gif');im=Image.open(p);frames=[]
+ for i in range(im.n_frames):
+  im.seek(i);f=im.convert('RGBA');frames.append({'index':i,'durationMs':im.info.get('duration'),'sha256':hashlib.sha256(f.tobytes()).hexdigest(),'panelSha256':[hashlib.sha256(f.crop((x,0,x+320,320)).tobytes()).hexdigest()for x in [0,320]]})
+  if i in [0,12,23]:f.save(root/(name+'-frame-'+str(i).zfill(2)+'.png'))
+ assert im.format=='GIF' and im.size==(640,320) and len(frames)==24 and im.info['loop']==0
+ assert [f['durationMs']//10 for f in frames]==m['time']['delayCentiseconds']
+ assert sum(f['durationMs'] for f in frames)==2000
+ assert len(m['time']['frameTimings']['entries'])==len(frames)
+ (root/(name+'-decode.json')).write_text(json.dumps({'decoder':'Pillow '+Image.__version__,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'format':im.format,'width':im.width,'height':im.height,'frameCount':len(frames),'loop':im.info['loop'],'frames':frames,'allChecksPassed':True},indent=2))
+ print(name,'independent decode passed 24 frames')
