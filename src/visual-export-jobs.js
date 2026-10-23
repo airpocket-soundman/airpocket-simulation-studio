@@ -1,8 +1,9 @@
+import {singleViewAcousticTimeManifest} from './single-view-time-webm.js';
 import {canonicalJson} from './project-revision.js';
 import {FIXED_FRAME_LIMITS,readStoreZip,sha256Hex} from './visual-export-fixed-frame.js';
 import {COMPARISON_TIMING_LIMITS} from './comparison-frame-timing.js';
 import {fixedWebmSchedule,demuxFixedWebm,fixedWebmError} from './fixed-webm.js';
-const CHUNK=65536;
+const CHUNK=65536,readBlob=Blob.prototype.arrayBuffer;
 const copy=value=>structuredClone(value);
 function freeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;}
 function request(value){
@@ -89,7 +90,7 @@ async function sequenceManifest(job,mimeType,bytes,sha256){
  if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
-function buildManifest(job,mimeType,bytes,sha256){
+async function buildManifest(job,mimeType,bytes,sha256,blob){
  const {format,animation,seconds,expectedResultRevision}=job.request,result=job.view?.result&&typeof job.view.result==='object'?job.view.result:{},picked={};
  for(const key of RESULT_SETTINGS)if(typeof result[key]==='string'&&result[key].length<=64||finite(result[key]))picked[key]=result[key];
  if(result.camera&&typeof result.camera==='object'){const camera={};for(const key of ['position','target','up'])if(vector(result.camera[key]))camera[key]=vector(result.camera[key]);if(finite(result.camera.fov))camera.fov=result.camera.fov;if(Object.keys(camera).length)picked.camera=camera;}
@@ -99,7 +100,8 @@ function buildManifest(job,mimeType,bytes,sha256){
   scale:{units:{time:'second'},...(finite(picked.deformScale)?{deformScale:picked.deformScale,deformScaleKind:'visualization multiplier'}:{})}};
  if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
  else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
- if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
+ if(format==='webm'&&animation==='time'){const fixed=await singleViewAcousticTimeManifest(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
+ if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
@@ -117,7 +119,9 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
    const format=job.request.format,mime=format==='png'?'image/png':format==='png-sequence'?'application/zip':format==='gif'?'image/gif':'video/webm';
    if(!(blob instanceof Blob)||!blob.size||!(blob.type===mime||mime==='video/webm'&&blob.type.startsWith('video/webm;')))throw Error('Renderer returned an invalid visual artifact');
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
-   const bytes=new Uint8Array(await blob.arrayBuffer());
+   const strictSingleTime=job.request.target!=='comparison'&&format==='webm'&&job.request.animation==='time';
+   if(strictSingleTime&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic Blob reader was replaced');
+   const bytes=new Uint8Array(await (strictSingleTime?readBlob.call(blob):blob.arrayBuffer()));
    if(job.state!=='running'||!jobs.has(job.jobId))return;
    job.assertLifetime?.();
    // Reserve before hashing so overlapping completions share one exact byte budget.
@@ -127,7 +131,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
     if(job.state!=='running'||!jobs.has(job.jobId))return;
     job.assertLifetime?.();
-    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=job.request.target==='comparison'?comparisonManifest(job,blob.type,bytes,sha256):format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):buildManifest(job,blob.type,bytes,sha256);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`${job.request.target==='comparison'?'comparison':'result'}-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
+    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=job.request.target==='comparison'?comparisonManifest(job,blob.type,bytes,sha256):format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):await buildManifest(job,blob.type,bytes,sha256,blob);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`${job.request.target==='comparison'?'comparison':'result'}-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
    }finally{if(job.state!=='completed'&&job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}}
   })();
  }

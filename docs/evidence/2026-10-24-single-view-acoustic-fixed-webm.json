@@ -1,0 +1,617 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "base": "a6ead49",
+  "branch": "codex/single-acoustic-fixed-webm",
+  "scope": {
+    "realGuiExports": 0,
+    "realBrowserExports": 0,
+    "realCodecExecutions": 0,
+    "numericalSolverExecutionsReached": 0,
+    "sdkDownloads": 0,
+    "parentStatusChanged": false,
+    "sharedComparisonEncoderModified": false
+  },
+  "syntheticEvidence": {
+    "kind": "Fake-codec/DOM only; encoded packet payloads are unit doubles, not real VP8 or real decoder proof",
+    "sourceTimesSeconds": [
+      0,
+      0.2,
+      0.9,
+      1.2
+    ],
+    "plan": {
+      "storedTimes": [
+        0,
+        0.2,
+        0.9,
+        1.2
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "phase": 0,
+          "timestamp": 0,
+          "duration": 41667,
+          "snapshotIndex": 0,
+          "requestedTimeSeconds": 0,
+          "actualTimeSeconds": 0,
+          "offsetSeconds": 0
+        },
+        {
+          "index": 1,
+          "phase": 0.043478260869565216,
+          "timestamp": 41667,
+          "duration": 41666,
+          "snapshotIndex": 0,
+          "requestedTimeSeconds": 0.05217391304347826,
+          "actualTimeSeconds": 0,
+          "offsetSeconds": -0.05217391304347826
+        },
+        {
+          "index": 2,
+          "phase": 0.08695652173913043,
+          "timestamp": 83333,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.10434782608695652,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": 0.0956521739130435
+        },
+        {
+          "index": 3,
+          "phase": 0.13043478260869565,
+          "timestamp": 125000,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.15652173913043477,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": 0.043478260869565244
+        },
+        {
+          "index": 4,
+          "phase": 0.17391304347826086,
+          "timestamp": 166667,
+          "duration": 41666,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.20869565217391303,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.008695652173913021
+        },
+        {
+          "index": 5,
+          "phase": 0.21739130434782608,
+          "timestamp": 208333,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.2608695652173913,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.060869565217391286
+        },
+        {
+          "index": 6,
+          "phase": 0.2608695652173913,
+          "timestamp": 250000,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.31304347826086953,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.11304347826086952
+        },
+        {
+          "index": 7,
+          "phase": 0.30434782608695654,
+          "timestamp": 291667,
+          "duration": 41666,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.3652173913043478,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.16521739130434782
+        },
+        {
+          "index": 8,
+          "phase": 0.34782608695652173,
+          "timestamp": 333333,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.41739130434782606,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.21739130434782605
+        },
+        {
+          "index": 9,
+          "phase": 0.391304347826087,
+          "timestamp": 375000,
+          "duration": 41667,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.46956521739130436,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.26956521739130435
+        },
+        {
+          "index": 10,
+          "phase": 0.43478260869565216,
+          "timestamp": 416667,
+          "duration": 41666,
+          "snapshotIndex": 1,
+          "requestedTimeSeconds": 0.5217391304347826,
+          "actualTimeSeconds": 0.2,
+          "offsetSeconds": -0.3217391304347826
+        },
+        {
+          "index": 11,
+          "phase": 0.4782608695652174,
+          "timestamp": 458333,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.5739130434782609,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.32608695652173914
+        },
+        {
+          "index": 12,
+          "phase": 0.5217391304347826,
+          "timestamp": 500000,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.6260869565217391,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.27391304347826095
+        },
+        {
+          "index": 13,
+          "phase": 0.5652173913043478,
+          "timestamp": 541667,
+          "duration": 41666,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.6782608695652174,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.22173913043478266
+        },
+        {
+          "index": 14,
+          "phase": 0.6086956521739131,
+          "timestamp": 583333,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.7304347826086957,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.16956521739130437
+        },
+        {
+          "index": 15,
+          "phase": 0.6521739130434783,
+          "timestamp": 625000,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.782608695652174,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.11739130434782608
+        },
+        {
+          "index": 16,
+          "phase": 0.6956521739130435,
+          "timestamp": 666667,
+          "duration": 41666,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.8347826086956521,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.0652173913043479
+        },
+        {
+          "index": 17,
+          "phase": 0.7391304347826086,
+          "timestamp": 708333,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.8869565217391303,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": 0.013043478260869712
+        },
+        {
+          "index": 18,
+          "phase": 0.782608695652174,
+          "timestamp": 750000,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.9391304347826087,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": -0.03913043478260869
+        },
+        {
+          "index": 19,
+          "phase": 0.8260869565217391,
+          "timestamp": 791667,
+          "duration": 41666,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 0.9913043478260869,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": -0.09130434782608687
+        },
+        {
+          "index": 20,
+          "phase": 0.8695652173913043,
+          "timestamp": 833333,
+          "duration": 41667,
+          "snapshotIndex": 2,
+          "requestedTimeSeconds": 1.0434782608695652,
+          "actualTimeSeconds": 0.9,
+          "offsetSeconds": -0.14347826086956517
+        },
+        {
+          "index": 21,
+          "phase": 0.9130434782608695,
+          "timestamp": 875000,
+          "duration": 41667,
+          "snapshotIndex": 3,
+          "requestedTimeSeconds": 1.0956521739130434,
+          "actualTimeSeconds": 1.2,
+          "offsetSeconds": 0.10434782608695659
+        },
+        {
+          "index": 22,
+          "phase": 0.9565217391304348,
+          "timestamp": 916667,
+          "duration": 41666,
+          "snapshotIndex": 3,
+          "requestedTimeSeconds": 1.1478260869565218,
+          "actualTimeSeconds": 1.2,
+          "offsetSeconds": 0.05217391304347818
+        },
+        {
+          "index": 23,
+          "phase": 1,
+          "timestamp": 958333,
+          "duration": 41667,
+          "snapshotIndex": 3,
+          "requestedTimeSeconds": 1.2,
+          "actualTimeSeconds": 1.2,
+          "offsetSeconds": 0
+        }
+      ],
+      "startTimeSeconds": 0,
+      "endTimeSeconds": 1.2
+    },
+    "manifest": {
+      "time": {
+        "animation": "time",
+        "durationSeconds": 1,
+        "timeBasis": "display time",
+        "physicalTime": "nearest stored acoustic frames; no interpolation",
+        "recording": "fixed-frame",
+        "realtime": false,
+        "frameCount": 24,
+        "frameCountGuaranteed": true,
+        "camera": "fixed",
+        "phasePolicy": "i/(N-1)",
+        "frameSelection": "nearest-stored-frames-only",
+        "requestedRangeSeconds": {
+          "start": 0,
+          "end": 1.2
+        },
+        "storedFrameCount": 4,
+        "frameTimings": [
+          {
+            "index": 0,
+            "phase": 0,
+            "timestampMicroseconds": 0,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 0,
+            "requestedTimeSeconds": 0,
+            "actualTimeSeconds": 0,
+            "offsetSeconds": 0
+          },
+          {
+            "index": 1,
+            "phase": 0.043478260869565216,
+            "timestampMicroseconds": 41667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 0,
+            "requestedTimeSeconds": 0.05217391304347826,
+            "actualTimeSeconds": 0,
+            "offsetSeconds": -0.05217391304347826
+          },
+          {
+            "index": 2,
+            "phase": 0.08695652173913043,
+            "timestampMicroseconds": 83333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.10434782608695652,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": 0.0956521739130435
+          },
+          {
+            "index": 3,
+            "phase": 0.13043478260869565,
+            "timestampMicroseconds": 125000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.15652173913043477,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": 0.043478260869565244
+          },
+          {
+            "index": 4,
+            "phase": 0.17391304347826086,
+            "timestampMicroseconds": 166667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.20869565217391303,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.008695652173913021
+          },
+          {
+            "index": 5,
+            "phase": 0.21739130434782608,
+            "timestampMicroseconds": 208333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.2608695652173913,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.060869565217391286
+          },
+          {
+            "index": 6,
+            "phase": 0.2608695652173913,
+            "timestampMicroseconds": 250000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.31304347826086953,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.11304347826086952
+          },
+          {
+            "index": 7,
+            "phase": 0.30434782608695654,
+            "timestampMicroseconds": 291667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.3652173913043478,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.16521739130434782
+          },
+          {
+            "index": 8,
+            "phase": 0.34782608695652173,
+            "timestampMicroseconds": 333333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.41739130434782606,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.21739130434782605
+          },
+          {
+            "index": 9,
+            "phase": 0.391304347826087,
+            "timestampMicroseconds": 375000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.46956521739130436,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.26956521739130435
+          },
+          {
+            "index": 10,
+            "phase": 0.43478260869565216,
+            "timestampMicroseconds": 416667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 1,
+            "requestedTimeSeconds": 0.5217391304347826,
+            "actualTimeSeconds": 0.2,
+            "offsetSeconds": -0.3217391304347826
+          },
+          {
+            "index": 11,
+            "phase": 0.4782608695652174,
+            "timestampMicroseconds": 458333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.5739130434782609,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.32608695652173914
+          },
+          {
+            "index": 12,
+            "phase": 0.5217391304347826,
+            "timestampMicroseconds": 500000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.6260869565217391,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.27391304347826095
+          },
+          {
+            "index": 13,
+            "phase": 0.5652173913043478,
+            "timestampMicroseconds": 541667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.6782608695652174,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.22173913043478266
+          },
+          {
+            "index": 14,
+            "phase": 0.6086956521739131,
+            "timestampMicroseconds": 583333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.7304347826086957,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.16956521739130437
+          },
+          {
+            "index": 15,
+            "phase": 0.6521739130434783,
+            "timestampMicroseconds": 625000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.782608695652174,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.11739130434782608
+          },
+          {
+            "index": 16,
+            "phase": 0.6956521739130435,
+            "timestampMicroseconds": 666667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.8347826086956521,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.0652173913043479
+          },
+          {
+            "index": 17,
+            "phase": 0.7391304347826086,
+            "timestampMicroseconds": 708333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.8869565217391303,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": 0.013043478260869712
+          },
+          {
+            "index": 18,
+            "phase": 0.782608695652174,
+            "timestampMicroseconds": 750000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.9391304347826087,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": -0.03913043478260869
+          },
+          {
+            "index": 19,
+            "phase": 0.8260869565217391,
+            "timestampMicroseconds": 791667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 0.9913043478260869,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": -0.09130434782608687
+          },
+          {
+            "index": 20,
+            "phase": 0.8695652173913043,
+            "timestampMicroseconds": 833333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 2,
+            "requestedTimeSeconds": 1.0434782608695652,
+            "actualTimeSeconds": 0.9,
+            "offsetSeconds": -0.14347826086956517
+          },
+          {
+            "index": 21,
+            "phase": 0.9130434782608695,
+            "timestampMicroseconds": 875000,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 3,
+            "requestedTimeSeconds": 1.0956521739130434,
+            "actualTimeSeconds": 1.2,
+            "offsetSeconds": 0.10434782608695659
+          },
+          {
+            "index": 22,
+            "phase": 0.9565217391304348,
+            "timestampMicroseconds": 916667,
+            "durationMicroseconds": 41666,
+            "snapshotIndex": 3,
+            "requestedTimeSeconds": 1.1478260869565218,
+            "actualTimeSeconds": 1.2,
+            "offsetSeconds": 0.05217391304347818
+          },
+          {
+            "index": 23,
+            "phase": 1,
+            "timestampMicroseconds": 958333,
+            "durationMicroseconds": 41667,
+            "snapshotIndex": 3,
+            "requestedTimeSeconds": 1.2,
+            "actualTimeSeconds": 1.2,
+            "offsetSeconds": 0
+          }
+        ],
+        "verification": {
+          "schemaVersion": 1,
+          "codec": "vp8",
+          "frameCount": 24,
+          "encodedFrameCount": 24,
+          "decodedFrameCount": 24,
+          "terminalTimestamp": 958333,
+          "totalDurationMicroseconds": 1000000,
+          "verification": "strict-webm-demux+video-decoder"
+        }
+      },
+      "resolution": {
+        "width": 4,
+        "height": 4
+      },
+      "sha256": "sha256:49f6233ba700bf76d1dea51dbc882e7a58ac6f139171b3c374a7c8a68b3631ae",
+      "totalBytes": 556
+    },
+    "ownedResources": {
+      "inputFramesClosed": 24,
+      "decodedFramesClosed": 24,
+      "codecsClosed": 2
+    }
+  },
+  "verification": {
+    "focused": {
+      "command": "node --test tests/single-view-time-webm.test.mjs tests/single-view-time-webm-types.test.mjs tests/visual-export-adapter.test.mjs tests/visual-export-jobs.test.mjs tests/result-export-preparation.test.mjs tests/comparison-fixed-webm.test.mjs tests/comparison-fixed-webm-independent.test.mjs tests/browser-operation-contracts.test.mjs tests/docs.test.mjs",
+      "passed": 99,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contracts": {
+      "command": "npm run check:contracts",
+      "declarations": 22
+    },
+    "earlierOverbroadLegacyFileAttempt": {
+      "commandAdditionalFile": "tests/visual-export-fixed-frame.test.mjs",
+      "total": 116,
+      "passed": 115,
+      "failed": 1,
+      "failedTest": "two real solves differing only in solveMs yield different resultRevision, same physicalRevision and byte-identical ZIPs",
+      "errorCode": "ANALYSIS_PREPARATION_FAILED",
+      "reason": "ENOENT public/fem-kernel.wasm in dedicated worktree",
+      "realSolveRequestsAttemptedByMistake": 1,
+      "numericalSolveReached": false,
+      "workerPreparationAttempted": true,
+      "retryPerformed": false,
+      "dependencyBuildPerformed": false,
+      "note": "Preserved environment/preparation failure; not counted as a passing real-solver test. Subsequent focused command uses only checked pure/fake files."
+    }
+  },
+  "assertedOracles": [
+    "Independent nearest thresholds at physical0.1/0.55/1.05 over nonuniform0/0.2/0.9/1.2 axis",
+    "Exact source first/last, signed offsets, source revision/time snapshots",
+    "2048 stored-frame exact capacity and2049 refusal;120 presentation-frame bound",
+    "Same-schedule altered last packet rejects through original-byte SHA binding",
+    "Overridden Blob reader rejects; manifest bytes snapshot before SHA await",
+    "Missing/duplicate/future/undecoded endpoint refuses issuance",
+    "Probe capability refusal, flush abort, result replacement and GUI stop never publish partial artifact",
+    "JA/EN capture3840x2160 downscales caption-inclusive to <=1280x640; original interpolated0.35s restored",
+    "Preview keeps rAF/frame semantics; orbit/deformation/cancellation/queue regression retained"
+  ],
+  "sourceSha256": {
+    "src/single-view-time-webm.js": "f73587f6e6b08e08df3f329ce5d03df09bbb83e7ce520c19975c14637eb917b4",
+    "src/visual-export.js": "a1115dd638897749598e6a8858f57c56f6b802e4d3a142361bc5bb3999c9e9e5",
+    "src/visual-export-jobs.js": "0667f7bee13124d6854c9cf2cbb45c8653e639fb27bd432ee40540eed8b90bb3",
+    "src/result-export-preparation.js": "a735f7ce9fd2f081cf95d1767968a33e75e95417448825fbe5ae5605a50e8e96"
+  },
+  "integration": {
+    "moduleLayerRegistrationRequired": "Add single-view-time-webm.js to the same ui layer array as visual-export.js and ui/comparison-fixed-webm.js",
+    "publicTypeFixture": "tests/single-view-time-webm-types.test.mjs explicitly invokes strict tsc on the runtime .js import fixture",
+    "mainChanged": false,
+    "mainWiring": "Existing visualExport.capabilities spread exposes singleTimeWebmExport; existing GUI Save time and render WebM time routes are connected in visual-export.js",
+    "sharedProgressOrLayersChanged": false
+  },
+  "limitations": [
+    "No actual browser/codec/GUI-download acceptance was run.",
+    "Thermal time WebM unsupported; PNG sequence remains separate.",
+    "Preview and other WebM paths remain realtime without new endpoint guarantee.",
+    "No smoothness or physical integration/accuracy claim.",
+    "Independent reviewer confirmed payload/iterator counterexamples refuse; final commit-bound audit is separate."
+  ]
+}

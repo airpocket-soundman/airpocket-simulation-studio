@@ -100,3 +100,8 @@ test('normal export bytes and job metadata remain identical to the former inline
  const [a,b]=await Promise.all([legacy.start(args()),extracted.start(args())]);await Promise.all([legacy.waitForSettled(a),extracted.waitForSettled(b)]);
  assert.deepEqual(extracted.status(b),legacy.status(a));assert.deepEqual(extracted.artifact(b),legacy.artifact(a));
 });
+
+
+test('single-view time WebM preflights its new capability before the result-view handoff; other WebM stays unchanged',async()=>{
+ const fixed=fixture();await fixed.adapter.prepare({...args(),format:'webm',animation:'time'});assert.equal(fixed.preflights,1);const orbit=fixture();await orbit.adapter.prepare({...args(),format:'webm',animation:'orbit'});assert.equal(orbit.preflights,0);
+});

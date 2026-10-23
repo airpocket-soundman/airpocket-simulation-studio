@@ -1,0 +1,13 @@
+import type {FixedWebmFrame,FixedWebmVerification,ComparisonFixedWebmCapability} from './fixed-webm';
+export interface AcousticTimeOutput {result:{kind:'acousticTransient';snapshots:ReadonlyArray<{time:number;pressure?:ReadonlyArray<number>}>}}
+export interface AcousticTimeFrame extends FixedWebmFrame {snapshotIndex:number;requestedTimeSeconds:number;actualTimeSeconds:number;offsetSeconds:number}
+export interface AcousticTimePlan {readonly storedTimes:ReadonlyArray<number>;readonly frames:ReadonlyArray<Readonly<AcousticTimeFrame>>;readonly startTimeSeconds:number;readonly endTimeSeconds:number}
+export interface SingleViewTimeWebmCapability extends ComparisonFixedWebmCapability {resultKinds:ReadonlyArray<'acousticTransient'>;field:'instantPressure';timeSelection:'nearest-stored-frames-only';maxStoredFrames:number}
+export interface SingleViewTimeVerification {sourceResultRevision?:string;byteSha256:string;totalBytes:number;verification:FixedWebmVerification;storedTimes:number[];frames:AcousticTimeFrame[];resolution:{width:number;height:number}}
+export interface SingleViewTimeEncodeInput {output:AcousticTimeOutput;seconds:number;resultRevision?:string;initialCanvas:HTMLCanvasElement|OffscreenCanvas;renderFrame:(step:Readonly<AcousticTimeFrame>)=>HTMLCanvasElement|OffscreenCanvas;signal?:AbortSignal;onProgress?:(progress:{fraction:number;kind?:string;recording?:string})=>void;assertCurrent?:()=>void}
+export declare function singleViewTimeWebmCapabilities(env?:Record<string,unknown>):SingleViewTimeWebmCapability;
+export declare function createSingleViewAcousticTimePlan(output:AcousticTimeOutput,seconds:number):AcousticTimePlan;
+export declare function encodeSingleViewAcousticTimeWebm(input:SingleViewTimeEncodeInput,env?:Record<string,unknown>):Promise<Blob>;
+/** Detached diagnostics; this object is never accepted as an issued Blob proof. */
+export declare function getSingleViewAcousticTimeVerification(blob:Blob):SingleViewTimeVerification|null;
+export declare function singleViewAcousticTimeManifest(blob:Blob,bytes:Uint8Array,options:{seconds:number;resultRevision:string}):Promise<{time:{animation:'time';durationSeconds:number;timeBasis:'display time';physicalTime:string;recording:'fixed-frame';realtime:false;frameCount:number;frameCountGuaranteed:true;camera:'fixed';phasePolicy:'i/(N-1)';frameSelection:'nearest-stored-frames-only';requestedRangeSeconds:{start:number;end:number};storedFrameCount:number;frameTimings:Array<Omit<AcousticTimeFrame,'timestamp'|'duration'>&{timestampMicroseconds:number;durationMicroseconds:number}>;verification:FixedWebmVerification};resolution:{width:number;height:number};sha256:string;totalBytes:number}>;

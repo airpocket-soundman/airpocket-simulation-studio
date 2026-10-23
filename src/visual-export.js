@@ -1,3 +1,4 @@
+import {singleViewTimeWebmCapabilities,createSingleViewAcousticTimePlan,encodeSingleViewAcousticTimeWebm} from './single-view-time-webm.js';
 import {createWebmRecordingLifecycle,waitForWebmStop} from './ui/webm-recording-lifecycle.js';
 import {framesOf} from './result-frames.js';
 import {FIXED_FRAME_LIMITS,FIXED_FRAME_ANIMATIONS,validateFrameCount,fixedFrameSchedule,buildStoreZip,sha256Hex,pickViewFields,orbitCameraPosition} from './visual-export-fixed-frame.js';
@@ -37,8 +38,8 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  let active=null,downloadUrl;
  const message=(ja,en)=>$('visual-export-status').textContent=language()==='en'?en:ja;
  const canvas=document.createElement('canvas'),context=canvas.getContext('2d');
- function capture(){
-  renderer.render(scene,camera);const source=renderer.domElement,w=Math.min(1920,source.width),h=Math.max(1,Math.round(source.height*w/source.width));
+ function capture({maxWidth=1920,maxHeight=Infinity}={}){
+  renderer.render(scene,camera);const source=renderer.domElement,w=Math.max(1,Math.floor(Math.min(maxWidth,source.width,(maxHeight-116)*source.width/source.height))),h=Math.max(1,Math.round(source.height*w/source.width));
   if(canvas.width!==w||canvas.height!==h+116){canvas.width=w;canvas.height=h+116;}
   context.fillStyle='#102331';context.fillRect(0,0,w,h+116);context.drawImage(source,0,0,w,h);
   context.fillStyle='#edf6f8';context.font='15px sans-serif';
@@ -48,7 +49,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  function download(blob,name){if(downloadUrl)URL.revokeObjectURL(downloadUrl);downloadUrl=URL.createObjectURL(blob);const link=$('visual-export-download');link.href=downloadUrl;link.download=name;link.textContent=language()==='en'?'Download again':'もう一度ダウンロード';link.hidden=false;link.click();}
  const stop=()=>{if(active){active.stop=true;active.interrupt?.();}};$('animation-stop').onclick=stop;
  $('view-png').onclick=()=>{try{message('表示中の画像','Current view');capture().toBlob(blob=>{if(blob)download(blob,'simulation-view.png');else message('画像を作成できませんでした。','Image capture failed.');},'image/png');}catch(error){message(error.message,error.message);}};
- async function animate(record,{animation,seconds:requestedSeconds,signal,onProgress=()=>{},save=true}={}){
+ async function animate(record,{animation,seconds:requestedSeconds,signal,onProgress=()=>{},save=true,expectedResultRevision}={}){
   if(active)throw Error(language()==='en'?'Playback is already active.':'再生中です。');
   if(!$('cancel-run').disabled)throw Error(language()==='en'?'Wait for analysis to finish.':'解析の完了を待ってください。');
   const kind=animation??$('animation-kind').value,seconds=requestedSeconds??Number($('animation-seconds').value),output=getAnalysis(),result=output?.result;
@@ -60,6 +61,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(kind==='time'&&result?.kind==='thermal')throw Error(language()==='en'?'Time playback export is not supported for thermal results yet. Use the viewer slider and a still PNG or an orbit animation.':'熱結果の時間変化の書き出しはまだ未対応です。表示時刻スライダーとPNG静止画、または回転アニメーションを使ってください。');
   if(kind==='time'&&(result?.kind!=='acousticTransient'||!time))throw Error(language()==='en'?'Time playback requires transient acoustic frames.':'時間変化には過渡音響の結果が必要です。');
   if(kind==='slice'&&!output?.mesh)throw Error(language()==='en'?'Generate a volume mesh first.':'先に体積メッシュを生成してください。');
+  if(record&&kind==='time')return renderFixedAcousticTime({seconds,signal,onProgress,save,expectedResultRevision});
   const mime=WEBM_TYPES.find(type=>typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported(type));
   if(record&&(!mime||!canvas.captureStream))throw Error(language()==='en'?'WebM recording is unavailable in this browser.':'このブラウザはWebM録画に対応していません。');
   const axis=Number($('clip-axis').value),nodes=output?.mesh?.nodes||[],coordinates=nodes.filter((_,i)=>i%3===axis),saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time?.value,timeView:getTimeView?.()},state={stop:false};
@@ -89,8 +91,34 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  }
  for(const [id,record]of [['animation-preview',false],['animation-save',true]])$(id).onclick=()=>animate(record).catch(error=>message(error.message,error.message));
 
+
+ // Stored acoustic export uses the verified fixed codec; preview remains the existing real-time playback.
+ async function renderFixedAcousticTime({seconds,signal,onProgress=()=>{},save=false,expectedResultRevision}){
+  const output=getAnalysis(),time=$('acoustic-time-frame');createSingleViewAcousticTimePlan(output,seconds);
+  const capability=singleViewTimeWebmCapabilities(recordingEnv);if(!capability.supported)throw Object.assign(Error(language()==='en'?'Stored-time WebM needs video encoding and decoding support. Use PNG sequence instead.':capability.reason),{code:'WEBM_FIXED_UNSUPPORTED'});
+  const saved={position:camera.position.clone(),target:controls.target.clone(),damping:controls.enableDamping,enabled:controls.enabled,scale:$('deform-scale').value,clip:$('clip-enabled').checked,plane:$('clip-position').value,time:time.value,timeView:getTimeView?.()},controller=new AbortController(),state={stop:false,interrupt:()=>controller.abort()};
+  const abort=()=>{state.stop=true;controller.abort();};signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+  const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='animation-stop'&&el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);
+  active=state;controls.enabled=false;controls.enableDamping=false;locked.forEach(el=>{el.disabled=true;});$('animation-stop').disabled=false;
+  const check=()=>{if(state.stop||controller.signal.aborted)throw Object.assign(Error('Export cancelled'),{code:'WEBM_FIXED_CANCELLED'});if(getAnalysis()!==output||active!==state)throw Object.assign(Error('Displayed result changed during export'),{code:'WEBM_ENDPOINT_UNVERIFIED'});};let blob;
+  try{
+   check();const initialCanvas=capture({maxWidth:1280,maxHeight:640});
+   blob=await encodeSingleViewAcousticTimeWebm({output,seconds,resultRevision:expectedResultRevision,initialCanvas,signal:controller.signal,assertCurrent:check,onProgress,renderFrame:step=>{
+    check();time.value=step.snapshotIndex;time.dispatchEvent(new Event('input'));check();
+    message('実保存時刻 '+step.actualTimeSeconds.toPrecision(5)+' s · 要求 '+step.requestedTimeSeconds.toPrecision(5)+' s · ずれ '+step.offsetSeconds.toPrecision(4)+' s','Stored time '+step.actualTimeSeconds.toPrecision(5)+' s · requested '+step.requestedTimeSeconds.toPrecision(5)+' s · offset '+step.offsetSeconds.toPrecision(4)+' s');
+    return capture({maxWidth:1280,maxHeight:640});
+   }},recordingEnv);check();
+  }finally{
+   try{camera.position.copy(saved.position);camera.lookAt(saved.target);controls.target.copy(saved.target);controls.enabled=saved.enabled;controls.enableDamping=saved.damping;$('deform-scale').value=saved.scale;$('clip-enabled').checked=saved.clip;$('clip-position').value=saved.plane;
+    if(getAnalysis()===output){if(restoreTimeView&&saved.timeView!==undefined)restoreTimeView(saved.timeView);else{time.value=saved.time;time.dispatchEvent(new Event('input'));}if(output)redraw();$('clip-position').dispatchEvent(new Event('input'));}
+   }finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}
+  }
+  if(save)download(blob,'simulation-time.webm');message('動画の全フレームと終端を確認しました。','All video frames and the endpoint were verified.');return blob;
+ }
+
   // Same checks renderSequence runs, exposed so the job layer can refuse at start instead of failing after the job began.
- function preflight({animation='orbit',view}={}){
+ function preflight({animation='orbit',view,format,seconds=5}={}){
+  if(format==='webm'&&animation==='time'){createSingleViewAcousticTimePlan(getAnalysis(),seconds);const cap=singleViewTimeWebmCapabilities(recordingEnv);if(!cap.supported)throw Object.assign(Error(cap.reason),{code:'WEBM_FIXED_UNSUPPORTED'});return;}
   const output=getAnalysis(),result=output?.result;
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
   if(animation==='deformation'&&!['elastic','modal'].includes(result?.kind))throw Error('Deformation requires a structural or modal result.');
@@ -157,13 +185,13 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
   if(signal?.aborted)throw Error('Export cancelled');
   if(format==='png-sequence')return renderSequence({animation,frames,view,expectedResultRevision,physicalRevision,signal,onProgress});
-  if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false});
+  if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false,expectedResultRevision});
   if(format!=='png')throw Error('Unsupported export format');
   const state={stop:false};active=state;const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);locked.forEach(el=>{el.disabled=true;});
   try{message('表示中の画像','Current view');const frame=capture();onProgress({fraction:0});const blob=await new Promise((resolve,reject)=>frame.toBlob(value=>value?resolve(value):reject(Error('Image capture failed')),'image/png'));if(signal?.aborted||state.stop)throw Error('Export cancelled');onProgress({fraction:1});return blob;}finally{locked.forEach((el,i)=>{el.disabled=disabled[i];});active=null;}
  }
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
  const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],timeSelection:'stored-frames-only',timeAnimationResultKinds:['acousticTransient','thermal'],thermalTimeField:'temperature',recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
- const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
+ const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,singleTimeWebmExport:singleViewTimeWebmCapabilities(recordingEnv),png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }
