@@ -1,0 +1,11 @@
+# executionSettledの独立レビュー（2026-10-24）
+
+[English](en/visual-export-settled-independent-review-2026-10-24.md)
+
+PR194候補 `c26010082fa5d23ab3b910116ac0e60227041748` のread-only追補。原実装 `3ebda75f7f6745dfb943c5fbba418d7462926c81` を独立に読み、関連40試験を実行して全成功した。今回の文書化では重い再実行やruntime変更を行っていない。[機械可読記録](evidence/2026-10-24-export-settled-independent-review.json)。
+
+初期値はfalse。cancel/cancelAllはstateをcancelledにしabortするが、executionSettledをtrueにはしない。renderの後始末、artifact bytes取得、digest/manifest処理、catchまでのPromise chainが終わったfinallyで、renderActive=falseとexecutionSettled=trueを同一同期処理内に設定する。stateがcompleted/failedになった直後もfinally前はfalseの瞬間があり得る。終了判定はterminal stateとexecutionSettled=trueを別々に確認する。
+
+これは当該Promise chainとrenderer queue排他の終了であり、OS process、ブラウザcodec、GPU等の全resource終了を保証しない。returned summaryはbooleanを含むdetached copyで、利用者の書換えが内部状態に影響しない。running/completed/failed/cancelled、artifact取得条件、requestId整合、取消中の次render拒否、release後unknown-job規則を維持する。releaseは従来どおりjobを一覧から除くので、必要なsettlementはrelease前に確認する。
+
+40試験は取消直後false、deferred renderer finally/bytesの未終了、次render排他、成功/失敗、cancelAll/release、切断後新sessionからのstatus取得、readonly summaryを検証した。method/permissionの追加なし、必須不具合なし。実browser194bの失効/後始末証拠は別途待機中で、ここでは成功を先取りしない。進捗171件・未完37件と親受入は変更していない。

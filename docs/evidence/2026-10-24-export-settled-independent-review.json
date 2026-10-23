@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-24",
+  "candidate": "c26010082fa5d23ab3b910116ac0e60227041748",
+  "reviewedImplementation": "3ebda75f7f6745dfb943c5fbba418d7462926c81",
+  "initial": false,
+  "cancelDoesNotImplySettled": true,
+  "meaning": "Renderer/finish/catch Promise chain and queue-exclusion finally, not OS/codec/GPU resource teardown.",
+  "terminalStateMayPrecedeSettled": true,
+  "existingStatesAndPermissionsUnchanged": true,
+  "releaseRule": "Job becomes unknown; check settlement before release.",
+  "independentVerification": {
+    "command": "node --test tests/visual-export-execution-settled.test.mjs tests/visual-export-jobs.test.mjs tests/browser-session.test.mjs tests/browser-operation-contracts.test.mjs",
+    "tests": 40,
+    "pass": 40,
+    "fail": 0,
+    "skip": 0,
+    "runAtReviewedImplementation": true,
+    "heavyRerunForThisRecord": false,
+    "newSolverRuns": 0,
+    "newBrowserOrExportRuns": 0
+  },
+  "sourceHashes": {
+    "src/visual-export-jobs.js": "8f8d96ea16b9c91c62627b23838250127c65df45d3c4ed38747f5145258c40b3",
+    "src/browser-operation-view-contracts.js": "e2c64d14219aced2d34cb8264fc83a7be972dd278547242c0180aa1472f11ef0",
+    "tests/visual-export-execution-settled.test.mjs": "387cf35c1a84c7e43524cb7335e8589301cb80a882d16b5bf643f50c3b5c4c35"
+  },
+  "mandatoryFindings": [],
+  "actual194bEvidence": "pending, not credited",
+  "progressChanged": false,
+  "totalTasks": 171,
+  "unfinishedTasks": 37
+}
