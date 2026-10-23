@@ -1,0 +1,4 @@
+import fs from 'node:fs';import {muxFixedWebm,demuxFixedWebm,fixedWebmSchedule} from 'file:///C:/Users/yamashita_y00031/.codex/worktrees/cfdport64/airpocket-simulation-studio/src/fixed-webm.js';
+const frame=new Uint8Array(fs.readFileSync('.qa/webm193-audit/frame-1.vp8')),plan=fixedWebmSchedule(1),webm=muxFixedWebm({width:16,height:16,seconds:1,packets:plan.map(p=>({timestamp:p.timestamp,duration:p.duration,type:'key',data:frame}))});fs.writeFileSync('.qa/webm193-audit/own-mux.webm',webm);
+let touched=false;const source=new Uint8Array(webm);Object.defineProperty(source,Symbol.iterator,{value(){touched=true;return webm[Symbol.iterator]();}});demuxFixedWebm(source);console.log(JSON.stringify({ownIteratorExecuted:touched}));
+const shared=new SharedArrayBuffer(webm.length),sv=new Uint8Array(shared);sv.set(webm);Object.defineProperty(sv,'buffer',{value:new ArrayBuffer(webm.length)});console.log(JSON.stringify({spoofSharedAccepted:demuxFixedWebm(sv).packets.length}));

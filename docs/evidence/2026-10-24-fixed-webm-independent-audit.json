@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-24",
+  "reviewedCommit": "56f7a25f6ff9b08e24fc6183552a4c5703717c2e",
+  "sourceIdentity": {
+    "auditedOwnerWorkingCrlfSha256": "0e6ef2640315477a81a03915924d8e5b620a883de095de2b5d9ef961f90d952b",
+    "normalizedLfAndFinalGitBlobSha256": "6e44da80bdc5c8387601868c2233e5c623df95641bf9a8a635acdcf7488b6119",
+    "normalizedMatch": true,
+    "meaning": "Owner working CRLF bytes differ from Git LF bytes; comparison explicitly normalizes only CRLF to LF."
+  },
+  "preFix": {
+    "finding": "Ordinary Uint8Array on SharedArrayBuffer with own buffer=ordinary ArrayBuffer passed demux and returned24 packets.",
+    "reproducedPackets": 24,
+    "fullSourceSha256Recorded": false,
+    "vulnerableFragment": "abLength.call(value.buffer);length=value.byteLength; return new Uint8Array(value);",
+    "falseClaimExcluded": "Own iterator was not called by typed-array copying; not reported as an iterator bug."
+  },
+  "postFix": {
+    "intrinsicBufferAndLengthAccessors": true,
+    "arrayBufferBrandCheck": true,
+    "spoofSharedRefused": true,
+    "ownAccessorCalls": 0
+  },
+  "externalOracle": {
+    "generator": "Existing ffmpeg libvpx,16x16,24fps,24all-key frames; first12red,last12blue; no new software.",
+    "command": "ffmpeg -f lavfi -i color=red:size=16x16:rate=24:duration=1 -vf drawbox(...blue when n>=12...) -frames:v24 -pix_fmt yuv420p -c:v libvpx -g1 -deadline good -an -f ivf",
+    "muxedBytes": 1888,
+    "ffprobePackets": 24,
+    "allPacketsKey": true,
+    "exactPtsMicroseconds": "round(i*1000000/24)",
+    "formatDurationSeconds": 1,
+    "decodedFrames": 24,
+    "firstFrameMd5": "fa3464237391f22b0123f0d73be7ad16",
+    "lastFrameMd5": "449f1aa73405fb30c333533ce279a095",
+    "terminalBlueContentPreserved": true
+  },
+  "tests": {
+    "independent": 3,
+    "allPrefixTruncationsRefused": 1888,
+    "allSecondsSchedules": 15,
+    "adversarial": "Unknown finite-size sentinel,NaN duration,TimestampScale,track,relative time,lacing flag,zero width; separate intrinsic ownership tests.",
+    "focusedPassed": 22,
+    "failed": 0,
+    "skipped": 0,
+    "includesDocumentationTests": 2,
+    "contractDeclarationFiles": 20,
+    "diffCheck": "pass"
+  },
+  "limits": {
+    "realBrowserExportRuns": 0,
+    "solverRuns": 0,
+    "defaultDuration": "Nominal first frame duration; exact presentation PTS/differences and Segment duration are separate. External packet duration may be41667us where adjacent PTS differ41666us.",
+    "codecRole": "Pure strict demux checks its container profile; codec payload validity and decoded dimensions/timestamp collection are full pipeline decoder responsibilities.",
+    "oldMediaRecorder": "Historical partial artifact remains; no re-recording.",
+    "notGeneralWebmParser": true
+  },
+  "sources": [
+    "https://www.rfc-editor.org/rfc/rfc8794.html",
+    "https://www.rfc-editor.org/rfc/rfc9559.html",
+    "https://www.webmproject.org/docs/container/",
+    "https://www.w3.org/TR/2026/WD-webcodecs-20261019/"
+  ],
+  "files": {
+    "docs/evidence/fixed-webm-independent-20261024/red-blue-own-mux.webm": {
+      "bytes": 1888,
+      "sha256": "1a3b69e158e72a49547d8f72f4d9a90afaf21b9f66ed3b67074ec470b2020682"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/red-blue-ffprobe.json": {
+      "bytes": 11231,
+      "sha256": "d115a4b433e4b2dbc1bbbaf765df1a5371884c3fe90f9df08f4ae555aec6abd0"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/red-blue-decoded.md5": {
+      "bytes": 2132,
+      "sha256": "88c34b2410f4c66107bf9b3e235d114bc92cde44396abda72052693ed2f53ac4"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/ffmpeg-version.txt": {
+      "bytes": 92,
+      "sha256": "dad893ede96d06f882b4152e811aee862d80df6bfb230397f65a8e598f96bc75"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/ffprobe-version.txt": {
+      "bytes": 93,
+      "sha256": "2ca069637017e1f357ddea3aa77d11d45b165de1362d0ae405ed24807b357bf8"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/red-blue-mux.mjs": {
+      "bytes": 1522,
+      "sha256": "532d21f848ab117940fb75f37ed53f9f27195a0aaa8ac4c6906e7a49259765df"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/verify-external.mjs": {
+      "bytes": 885,
+      "sha256": "3ac127387de38ea5308ab4623f5f7a5f2cc51b77efb01df6669f83edb8bb8841"
+    },
+    "docs/evidence/fixed-webm-independent-20261024/mux-probe.mjs": {
+      "bytes": 977,
+      "sha256": "c8464b5c49cadbe578935fae501e557e67a1acd19aecbba4e53e98d21527aa46"
+    },
+    "tests/fixtures/fixed-webm-red-blue.ivf": {
+      "bytes": 1676,
+      "sha256": "72ff78d6faec9c38d4baa22f55805c19197a62f70590fc0f4bab2ce5e9ad2067"
+    }
+  },
+  "summaryJa": "最終pure sourceは監査後内容と一致。外部codec/containerの24frame・最終blueと全切断拒否を独立確認。実browserexportは未実施。",
+  "summaryEn": "Final pure source matches the audited content. Independent external codec/container checks preserve24frames and terminal blue; all prefixes refuse. No browser export was run."
+}
