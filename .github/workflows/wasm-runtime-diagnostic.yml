@@ -4,8 +4,13 @@ on:
     inputs:
       target:
         type: choice
-        options: [analysis-jobs, material-catalog, full]
+        options: [analysis-jobs, material-catalog, advanced-structural-source, full]
         default: analysis-jobs
+      mode:
+        description: Single runs exactly once with default runtime flags; compare retains both modes
+        type: choice
+        options: [compare, single]
+        default: compare
       iterations:
         type: choice
         options: ['1', '2', '3']
@@ -32,16 +37,24 @@ jobs:
       - run: npm ci
       - run: npm run native:build && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs
       - name: Compare explicit diagnostic modes
+        if: inputs.mode != 'single'
         env:
           TARGET: ${{ inputs.target }}
           ITERATIONS: ${{ inputs.iterations }}
         run: |
           mkdir -p .qa
           node scripts/compare-wasm-runtime.mjs "$ITERATIONS" .qa/wasm-comparison.json "--target=$TARGET" --concurrency=4
+      - name: Single default diagnostic run
+        if: inputs.mode == 'single'
+        env:
+          TARGET: ${{ inputs.target }}
+        run: |
+          mkdir -p .qa
+          node scripts/reproduce-wasm-runtime.mjs 1 .qa/wasm-single.json "--target=$TARGET"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: wasm-runtime-comparison-${{ github.run_id }}
-          path: .qa/wasm-comparison.json*
+          path: .qa/wasm-*.json*
           include-hidden-files: true
           retention-days: 14
