@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-23",
+  "ownerCommit": "7c2f691352b8322288f26604b39e6885d0cdb1ee",
+  "base": "fdfe355a317f06d9437b5b2030b8148b4567a422",
+  "fixedSourceSha256": "3f50144efd821673141139966befcec99801603a25a93093f25b5eb41153e793",
+  "finding": {"priority": "P2", "trigger": "Build a valid operator with an unused node, then apply with that unused coordinate replaced by null, true, or a string", "before": "All three accepted, sourceW=0.000001 W", "cause": "Math.abs bound coerced nonnumeric coordinate types; apply revisions intentionally cover only used nodes", "fix": "Explicit number and finite checks for every geometry coordinate", "regression": "Five nonnumeric values rejected by build and apply without input mutation"},
+  "independentOracle": {"method": "Fixed four quarter-square triangles; integral fg=A/12*((sum f)(sum g)+sum f_i*g_i), no production clip or barycentrics", "matrixNumerator": [[5,1,1,1],[5,5,5,1],[1,1,5,1],[5,1,5,5]], "matrixFactorM2": "1e-6/48", "reverseTransfer": "All sixteen coefficients match transpose", "zeroNetFlux": [1,0,-1,0], "targetLoadW": [8.333333333333333e-8,0,-8.333333333333333e-8,0], "fieldOrder": "Same fluxRevision and loads"},
+  "reviewed": ["Strict ordinary-data snapshot and persistence byte/depth/value bounds", "WeakSet-issued frozen operators; rehashed persisted coefficients rederived from geometry", "Sparse pair cap before inserting the 16385th term", "Existing affine full coverage and same-side overlap gates reused unchanged", "Geometry and field snapshots before asynchronous hashing", "Center hat, crossing matrix and mixed-sign total-zero references"],
+  "verification": {"focusedTests": 30, "failures": 0, "skipped": 0, "contractDeclarations": 19},
+  "limitations": ["Synthetic planar reference only", "No solver executed", "No material identification or physical calibration", "General curved transfer, iterative coupling and parent COUPLE3 remain incomplete"]
+}

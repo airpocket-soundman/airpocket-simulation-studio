@@ -31,14 +31,14 @@ test('writeForm shows defaults and scaled values',()=>{
  assert.equal(s.nodes['material-status'].textContent,'線形弾性の基本物性を登録済み。 N. 線形弾性のみ対応しています。');
 });
 
-test('writeForm status: thermal, missing, plasticity, orthotropic (language), hyperelastic precedence',()=>{
+test('writeForm status: thermal, missing, plasticity, orthotropic (canonical scanner source), hyperelastic precedence',()=>{
  const s=setup({physics:'thermal',readiness:()=>({thermalMissing:['k'],linearElasticMissing:[],note:''})});allFields(s);s.ui.writeForm();
  assert.equal(s.nodes['material-status'].textContent,'熱物性は不足しています。');
  const p=setup({props:{plasticity:{yieldStress:3e8,hardeningModulus:2e9,testConditions:'tc'}}});allFields(p);p.ui.writeForm();
  assert.equal(p.nodes['plastic-enabled'].checked,true);assert.equal(p.nodes['plastic-yield'].value,300);assert.equal(p.nodes['plastic-hardening'].value,2000);
  assert.equal(p.nodes['material-notes'].value,'tc');assert.match(p.nodes['material-status'].textContent,/^J2等方硬化/);
  p.state.props={orthotropic:{},plasticity:{yieldStress:1,hardeningModulus:1}};p.state.language='en';p.ui.writeForm();
- assert.match(p.nodes['material-status'].textContent,/^Orthotropic elasticity registered/);
+ assert.match(p.nodes['material-status'].textContent,/^直交異方性を登録済み/);
  p.state.props={orthotropic:{},hyperelastic:{shearModulus:1e6,bulkModulus:4e6,testCurve:[1,2],testConditions:'h'}};p.ui.writeForm();
  assert.match(p.nodes['material-status'].textContent,/^圧縮性Neo-Hookean/);assert.equal(p.nodes['hyperelastic-curve'].value,'[1,2]');assert.equal(p.nodes['hyperelastic-mu'].value,1);assert.equal(p.nodes['material-notes'].value,'h');
 });
@@ -49,8 +49,8 @@ test('orthotropic status states that no dedicated component editor exists withou
  assert.match(s.nodes['material-status'].textContent,/APIまたは保存入力で各成分を確認/);
  assert.equal(s.nodes['mat-youngModulus'].value,'');assert.equal(s.nodes['material-dependence'].value,'');
  s.state.language='en';s.ui.writeForm();
- assert.match(s.nodes['material-status'].textContent,/Orthotropic elasticity registered/);
- assert.match(s.nodes['material-status'].textContent,/No dedicated per-component editor is implemented/);
+ assert.match(s.nodes['material-status'].textContent,/直交異方性を登録済み/);
+ assert.match(s.nodes['material-status'].textContent,/専用の成分編集欄は未実装/);
 });
 
 test('readForm builds the registered shape and preserves orthotropic/fracture data by clone',()=>{

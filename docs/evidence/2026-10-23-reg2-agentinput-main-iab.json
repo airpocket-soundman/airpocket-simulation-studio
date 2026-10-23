@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "sourceHead": "35e5b0a",
+  "recordedBy": "root performed browser/MCP observations; independent agent packaged retained proof",
+  "environment": {
+    "browser": "Actual IAB2; user-agent reports Chrome155 family with reduced155.0.0.0 version",
+    "notBrandedChromeExtension": true,
+    "origin": "localhost owned QA main page; public studio API loading only",
+    "retainedScreenshots": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "reg2": {
+    "synthetic": true,
+    "sourceKind": "step",
+    "fixtureGenerator": "Existing tests/conical-wiring.test.mjs gmsh cone and Three display construction",
+    "blank": {
+      "radius": 10,
+      "omittedRadiusAtMax": true,
+      "toleranceMm": 2,
+      "axialMin": -10,
+      "axialMax": 10,
+      "startDegrees": 315,
+      "sweepDegrees": 90,
+      "selectedTriangles": 384,
+      "forceN": 100,
+      "reapplyRetainsBlank": true
+    },
+    "explicit": {
+      "radiusAtMax": 8,
+      "toleranceMm": 0.3,
+      "secondCondition": true
+    },
+    "observedJaAndEn": true,
+    "rawSavedSummary": {
+      "characters": 593069,
+      "conditions": [
+        {
+          "cylindricalRegion": {
+            "axialMax": 10,
+            "axialMin": -10,
+            "axis": [
+              0,
+              1,
+              0
+            ],
+            "exactCad": true,
+            "mesh": 0,
+            "origin": [
+              0,
+              0,
+              0
+            ],
+            "radius": 10,
+            "reference": [
+              1,
+              0,
+              0
+            ],
+            "startDegrees": 315,
+            "sweepDegrees": 90,
+            "tolerance": 2
+          },
+          "type": "force"
+        },
+        {
+          "cylindricalRegion": {
+            "axialMax": 10,
+            "axialMin": -10,
+            "axis": [
+              0,
+              1,
+              0
+            ],
+            "exactCad": true,
+            "mesh": 0,
+            "origin": [
+              0,
+              0,
+              0
+            ],
+            "radius": 10,
+            "radiusAtMax": 8,
+            "reference": [
+              1,
+              0,
+              0
+            ],
+            "startDegrees": 315,
+            "sweepDegrees": 90,
+            "tolerance": 0.3
+          },
+          "type": "force"
+        }
+      ],
+      "sourceKind": "step"
+    },
+    "fullSavedJsonBytesAndHashVerified": false,
+    "limitation": "CUA200k output limit truncated whole593069-character saved JSON and its parse failed. Only in-DOM JSON.parse condition/source summary was retained; no full-file byte/hash claim. No solver or CAD-mesh accuracy validation."
+  },
+  "agentinput": {
+    "inputFixture": "docs/evidence/review46-chrome/valid-warning.json",
+    "youngModuliPa": [
+      1000,
+      2000,
+      3000
+    ],
+    "conditionCount": 2,
+    "languages": [
+      "en",
+      "ja"
+    ],
+    "guiPointers": [
+      "/materialProperties/orthotropic/youngModuliPa/0",
+      "/materialProperties/orthotropic/youngModuliPa/1",
+      "/materialProperties/orthotropic/youngModuliPa/2"
+    ],
+    "threeFallbackMessages": true,
+    "keyboardTabReachedFirstButton": true,
+    "focusAllThreeBothLanguages": true,
+    "focusTarget": "material-status",
+    "outline": "rgb(16,16,16) auto1px; screenshots retained",
+    "formalStdioMcpInspectOnlyPaired": true,
+    "inspectEqualBothLanguages": true,
+    "revisions": [
+      "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+      "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+      "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+      "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d"
+    ],
+    "guiMcpDiagnosticTargetsMatch": true,
+    "invalidation": {
+      "afterMeshSizeChange": "",
+      "freshUnitWarnings": 3,
+      "inRangeUnitWarnings": 0,
+      "inRangeText": "従来入力モード: 設定全体の根拠確認は行っていません。このチェックは非完全です。物理的な妥当性・メッシュ品質・収束・精度の合格ではありません。warning / PREFLIGHT_CONTRACT_LIMITED / /study / Required-input provenance contract is not implemented for this study/material combinationUse the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run後続確認: Mesh quality and element validity after generation後続確認: Boundary-region transfer and constraint rank/rigid-body modes after meshing後続確認: Source applicability, convergence, mesh dependence and physical accuracy"
+    },
+    "cleanup": {
+      "ownedChildExited": true,
+      "noChildStarted": false,
+      "temporaryPairingFileRemoved": true,
+      "ownedBrowserTabClosed": true,
+      "ownedServerStopped": true
+    },
+    "guiDisconnectedAndEndpointCodeCleared": true,
+    "noSolver": true,
+    "noEditRequested": true,
+    "limitation": "JA fallback guidance is Japanese, but material-status focus text remained English in retained JA readback. This does not establish fully translated material status, all-physics preflight, branded Chrome or input-creation/solve/intermediate Skill workflow.",
+    "preflightEnJaExactlyEqual": true,
+    "diagnosticTargetCount": 3
+  },
+  "i18n": {
+    "fix": "115ff39",
+    "actualDomExteriorExplanationCompleteEnglish": true,
+    "screenshotRetained": false,
+    "meaning": "Text observation only; no screenshot claim."
+  },
+  "sourceGitBlobHashes": {
+    "src/main.js": {
+      "gitBlob": "e98037205f4466e83a9d8fefdf01049b1c18f0a3",
+      "sha256": "d52f02b5761d07f7d9fb30a0979bed14731f6d92878025f682f6a63d23526c10"
+    },
+    "src/i18n.js": {
+      "gitBlob": "9b2be2c82848a287e5618a21d4d46bcf75763195",
+      "sha256": "c1b54c28088010b3077843905df24e53bb01cbb0c777e78230bd9b577b3fd6d1"
+    },
+    "src/ui/analysis-preflight-ui.js": {
+      "gitBlob": "a9e6f486e9c4cc1a4bdfeccaeb53e35b42c1f7e3",
+      "sha256": "3de4cc6ef970b173946bb7f786010b42ab01b667bb6ebfa78d74d2848d86665d"
+    },
+    "src/ui/material-form-ui.js": {
+      "gitBlob": "f6b755625f3d85e877daa3bed1c971ddcc664fe9",
+      "sha256": "ac6a8dce4fd743cd1b4b7b76f69e61a8cfc641517bd9da7b6930dc4ec605dd1d"
+    },
+    "src/preflight-unit-magnitude.js": {
+      "gitBlob": "b4d0608ffde1c3dec702c298d5ca82c1e4ed2397",
+      "sha256": "b6d01af53dfba3fe19bddde157139bace78be6082b27fd1939429dd85f6b2686"
+    }
+  },
+  "files": {
+    "docs/evidence/reg2-agentinput-iab-20261023/agentinput-focus-en.jpg": {
+      "bytes": 107305,
+      "sha256": "3e3bf7cef458b1b6ee0d5e37f7cbfa991dcc1715d0dfc65674112d2c06df502d"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/agentinput-focus-ja.jpg": {
+      "bytes": 108878,
+      "sha256": "2a35540398bffafe6aa733724f7ed2f86c6d0b9b086a50b8cffc52caa488d715"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/driver-cleanup.json": {
+      "bytes": 97,
+      "sha256": "9df910c8f96f7ca1fbc2cac0ca019654c1d7158aec2b4e4305dc963d1cc4348a"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/driver-complete.json": {
+      "bytes": 133,
+      "sha256": "cd684f1dab92f0b79d6bf0372bd2f4fb7ce121c7c86996c3c1ca8a4f74668e4b"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/gui.json": {
+      "bytes": 5736,
+      "sha256": "2e2ea87bf77e6a0b25404ffb201cbcb8291c0f0bf23bf34fced33063bc51b5b3"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/invalidation.json": {
+      "bytes": 808,
+      "sha256": "5566ee812cf2f7479f6cecc5d0103368b11ef6f4a4ca9e79718ade0df6dbb9f7"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/mcp-contracts.json": {
+      "bytes": 4801,
+      "sha256": "a365efe8ba0f1ba3dc5454cb6303c330065f1bd3ce75621bb5c0334db05837d3"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/mcp-report-en.json": {
+      "bytes": 23741,
+      "sha256": "696d07493f3b579436e674a20b014ff73c90061ec9fbfecb24e0bd4d7d367d18"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/mcp-report-ja.json": {
+      "bytes": 23741,
+      "sha256": "14288d3431cfa74877ab5bc9f2a17aa1c9d295122e4a9d7177677358945d16d3"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/reg2-blank-and-explicit-en.jpg": {
+      "bytes": 94355,
+      "sha256": "67697f9484d74c7dd9c724da68e2a1185f5f4deef3220f6e7370e21235a4c6b2"
+    },
+    "docs/evidence/reg2-agentinput-iab-20261023/reg2-observed-text.json": {
+      "bytes": 2355,
+      "sha256": "62c219e3ada18b3efa3580a500dd08599b0dd794ffb3d829d5378879a80fc3e5"
+    }
+  },
+  "taskStatusChanged": false,
+  "unfinishedIdsRemain": 37,
+  "publicationVerified": false,
+  "bytePreservation": "Original retained capture bytes restored; no packaging newline added to GUI JSON. Nested -text attributes preserve checkout bytes."
+}

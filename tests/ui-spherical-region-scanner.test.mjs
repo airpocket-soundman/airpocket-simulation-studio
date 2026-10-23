@@ -87,3 +87,14 @@ test('real scanner: a blank radius keeps the draft, focus and aria error through
  assert.equal(radius.value,'');assert.equal(radius.attributes['aria-invalid'],'true');assert.equal(radius.focused,true);
  assert.equal(f.calls.length,0);
 });
+
+test('real scanner: current main exterior-fluid explanation fully translates and restores its original source',async()=>{
+ const {readFileSync}=await import('node:fs');
+ const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').match(/<p>(囲いの箱から[^<]+)<\/p>/)?.[1];assert.ok(source);
+ if(i18n.language!=='en')switchTo('en');const paragraph=document.createElement('p');paragraph.textContent=source;document.body.append(paragraph);flush();
+ const expected='Subtract the original solid from an enclosure box and mesh the remainder. Exclude sealed cavities from the exterior domain. Internal domains use a seed and box-plane caps. General 3D flow, arbitrary opening-wire recognition and fluid-volume joining remain unsupported.';
+ assert.equal(paragraph.textContent,expected);assert.doesNotMatch(paragraph.textContent,/[\u3040-\u30ff\u3400-\u9fff]/);
+ switchTo('ja');assert.equal(paragraph.textContent,source);switchTo('en');assert.equal(paragraph.textContent,expected);
+ const legacy='囲いの箱から元の部品体積を差し引いてメッシュを作ります。閉じた内部空洞は外部領域から除外します。内部領域は指定点と箱の端面で取り出せます。一般3D流体の計算と任意方向の開口閉鎖は未対応です。';
+ assert.equal(i18n.translate(legacy),'Subtract the original solid from an enclosure box and mesh the remainder. Exclude sealed cavities from the exterior domain. Internal domains use a seed and box-plane caps. General 3D flow and arbitrary-direction opening caps are unsupported.');
+});

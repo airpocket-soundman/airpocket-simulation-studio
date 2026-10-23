@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "sourceHead": "17731eb",
+  "localeFix": "111d876",
+  "originalFix": "1dc0aef",
+  "browser": "Actual IAB; same browser class as prior proof, not an independent Chrome-extension run",
+  "scope": "Root actual-browser follow-up; independent byte-preserving packaging only",
+  "orthotropicBody": {
+    "initialEn": "Orthotropic elasticity registered. Static linear CPU analysis only. Constants and material axes are retained in saved results. No dedicated per-component editor is implemented; confirm each component in the API or saved input.",
+    "ja": "直交異方性を登録済み。静的・線形のCPU解析に対応。方向別の物性と材料軸を結果へ保存します。専用の成分編集欄は未実装です。APIまたは保存入力で各成分を確認してください。",
+    "returnedEn": "Orthotropic elasticity registered. Static linear CPU analysis only. Constants and material axes are retained in saved results. No dedicated per-component editor is implemented; confirm each component in the API or saved input.",
+    "exactEnRoundTrip": true,
+    "jaMaterialStatusFocus": true
+  },
+  "separateDraftCheck": {
+    "en": "Material edits have not been registered.",
+    "ja": "未登録の物性変更があります。",
+    "grade": "owned draft retained"
+  },
+  "distinction": "Draft generic unregistered status and grade retention are a separate test; they are not evidence for the orthotropic body text.",
+  "formalMcpRepeated": false,
+  "priorFormalMcpEvidence": "docs/evidence/2026-10-23-reg2-agentinput-main-iab.json",
+  "solverExecuted": false,
+  "cleanup": {
+    "ownedTabClosed": true,
+    "ownedServerStopped": true
+  },
+  "historicalProofPreserved": true,
+  "taskStatusChanged": false,
+  "publicationVerified": false,
+  "files": {
+    "docs/evidence/material-locale-fixed-20261023/fixed-ja.jpg": {
+      "bytes": 107603,
+      "sha256": "c03ea8a0c2f0442685c1e7a200275d6ee36a5994ac5aaa32e3079dea4e1fced3"
+    },
+    "docs/evidence/material-locale-fixed-20261023/fixed-en.jpg": {
+      "bytes": 108602,
+      "sha256": "ea0a7340f1eadc7fec269ea3b33f5d74ee6d25e14d3cf2da9438e0428098f179"
+    },
+    "docs/evidence/material-locale-fixed-20261023/observed.json": {
+      "bytes": 1061,
+      "sha256": "67c60cc9c832966d566c0c31e6090e78690fda6d7583737e90c63d60aa4873ca"
+    }
+  },
+  "sourceGitBlobs": {
+    "src/ui/material-form-ui.js": "58673ede220a6c8a57c0910c7899771bb6ee9aa1",
+    "src/i18n.js": "3d5f8489ed116cce799f9b136386c74860d4c8a5"
+  },
+  "summaryJa": "直交異方性の本文を実IABでEN→JA→EN往復し、JA全文とfocus、EN完全一致を確認。未登録draft表示は独立した別試験。",
+  "summaryEn": "Actual IAB verifies orthotropic body EN/JA/EN, Japanese focus and exact English restoration. Unregistered draft text is a separate test."
+}
