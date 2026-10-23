@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "taskId": "EXPORTBACKGROUND1",
+  "status": "partial-completed-before-disconnect",
+  "acceptanceMet": false,
+  "runtimeSource": "c26010082fa5d23ab3b910116ac0e60227041748",
+  "executionSettledSource": "3ebda75f7f6745dfb943c5fbba418d7462926c81",
+  "origin": "http://127.0.0.1:5188",
+  "surface": "ordinary main IAB2 tab11, Japanese visible condition only",
+  "browser": {
+    "name": "Chrome",
+    "reportedVersion": "155.0.0.0",
+    "precision": "reduced",
+    "fullVersionVerified": false,
+    "source": "navigator.userAgent"
+  },
+  "freshSkillReproduction": false,
+  "budget": {
+    "newExports": 1,
+    "kind": "comparison orbit WebM",
+    "requestedSeconds": 15,
+    "watchdogMs": 120000,
+    "artifactBudgetBytes": 33554432,
+    "solverRuns": 0,
+    "retryExports": 0
+  },
+  "sessions": {
+    "sameChildPid": 12692,
+    "initial": {
+      "sessionId": "e67b8013-4fd1-479f-81ea-ab1992968493",
+      "scopes": [
+        "inspect",
+        "edit",
+        "view"
+      ]
+    },
+    "fresh": {
+      "sessionId": "3fc2ff1a-da93-4622-8383-77317847e247",
+      "scopes": [
+        "inspect",
+        "view"
+      ]
+    },
+    "samePageInstance": true,
+    "initialEpoch": 1,
+    "freshEpoch": 2
+  },
+  "timeline": {
+    "actorExportStart": 1792772314080,
+    "positiveRunningReceived": 1792772316758,
+    "positiveFraction": 0.14255533333619436,
+    "completedReceived": 1792772329719,
+    "oldSessionRejectionReceived": 1792772329924,
+    "completedReceivedAfterStartMs": 15639,
+    "oldSessionRejectionAfterStartMs": 15844,
+    "meaning": "Actor observation timestamps, not exact GUI-click timestamps. Completion was observed before connection refusal."
+  },
+  "criteria": {
+    "positiveRunningExecutionUnsettled": true,
+    "guiLockObservedWhileRunning": true,
+    "oldSessionUnavailable": true,
+    "newSessionCanReadOldJob": true,
+    "newState": "completed",
+    "newExecutionSettled": true,
+    "cancelledStateObserved": false,
+    "artifactUnavailable": false,
+    "physicalFiveStateUnchanged": true,
+    "selectedGuiControlsRestored": true,
+    "samePageReconnection": true,
+    "oldJobReleased": true
+  },
+  "artifact": {
+    "observedAvailable": true,
+    "readOffset": 0,
+    "readBytes": 1,
+    "reportedTotalBytes": 358336,
+    "reportedSha256": "sha256:b97c227fab169734654904cd2318f78f8f9965a0f0377b101514387ed447aa54",
+    "fullArtifactFetched": false,
+    "independentHashOrDecodeVerified": false,
+    "meaning": "Only a one-byte artifact page was read to distinguish availability; metadata hash is not an independently verified clip hash."
+  },
+  "refusalSemantics": {
+    "oldSession": "Broker unavailable after disconnect",
+    "freshArtifact": "No refusal: retained completed artifact is available through shared delegate",
+    "afterRelease": "Unknown visual export job because it was released",
+    "rawPrimaryRefusalBasisField": "Planned acceptance explanation for a cancelled job, not an observed refusal in this run",
+    "ownershipAclClaim": false
+  },
+  "cleanup": {
+    "formalFinalSessions": [],
+    "helperClose": {
+      "exited": true,
+      "terminated": false,
+      "escalated": false
+    },
+    "driverExitCode": 0,
+    "ownedChildPidAbsentAfterClose": true,
+    "privatePairFileAbsent": true,
+    "ownedJobReleased": true,
+    "ownedTransfersReleased": true
+  },
+  "limits": [
+    "This did not establish cancellation during active recording or cancelled/executionSettled cleanup.",
+    "GUI running/lock before the click does not prove the job remained running at the actual disconnect.",
+    "Selected controls restored after completed recording and same-page reconnection, not proven cancellation recovery.",
+    "Only JA foreground; no EN/hidden/expiry/all-browser matrix claim.",
+    "No media-byte integrity, decode, visual quality or full15second duration claim.",
+    "Historical completed outcome retained; no blind retry."
+  ]
+}
