@@ -163,6 +163,26 @@ test('a completed-before-cancel attempt is never reported as a cancellation sett
  const r=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny'],repeats:1,...f.opts}),c=r.cases[0];assert.equal(c.cancel.runs[1].state,'completed-before-cancel');assert.equal(c.window.cancelSettledEpochMs,c.cancel.runs[0].endEpochMs);assert.equal(c.cancel.runs[1].requestedAfterMs,null);
 });
 
+test('a failed or timed-out cancellation trial immediately fails the case and stops later jobs',async()=>{
+ for(const state of ['failed','timed_out']){
+  const f=fake(),original=f.client.call,cancelIds=new Set();
+  f.client.call=async(tool,args)=>{const result=await original(tool,args);if(args.method==='startJob'&&args.args.requestId.includes('cancel-'))cancelIds.add(result.jobId);if(args.method==='jobStatus'&&cancelIds.has(args.args.jobId))return {...result,state,executionSettled:true,error:{message:'trial failed'}};return result;};
+  const report=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny','structural-medium'],repeats:1,timeoutMs:5000,...f.opts});
+  assert.equal(report.cases.length,1);assert.equal(report.cases[0].status,'failed');assert.match(report.cases[0].error,/Cancellation run ended/);
+  assert.equal(f.calls.filter(([,a])=>a.method==='startJob').length,3,'only cold, warm and first cancellation trial start');
+ }
+});
+
+test('every cancellation status requires its exact job and input identity before settlement is accepted',async()=>{
+ for(const patch of [{jobId:'other-job'},{inputRevision:'sha256:'+'b'.repeat(64)},{inputRevision:undefined}])for(const terminal of [false,true]){
+  const f=fake(),original=f.client.call,cancelIds=new Set();
+  f.client.call=async(tool,args)=>{const result=await original(tool,args);if(args.method==='startJob'&&args.args.requestId.includes('cancel-'))cancelIds.add(result.jobId);if(args.method==='jobStatus'&&cancelIds.has(args.args.jobId))return {...result,state:terminal?'cancelled':'running',executionSettled:terminal,...patch};return result;};
+  const report=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny','structural-medium'],repeats:1,timeoutMs:5000,...f.opts});
+  assert.equal(report.cases.length,1);assert.equal(report.cases[0].status,'failed');assert.match(report.cases[0].error,/job (identity|input revision) mismatch/);
+  assert.equal(f.calls.filter(([,a])=>a.method==='startJob').length,3);assert.ok(f.calls.some(([,a])=>a.method==='cancelJob'),'best effort stop is directed at the job owned by this trial');
+ }
+});
+
 test('memory probe merge fills the memory block and user agent', async () => {
   const f = fake();
   const report = await runBrowserPerf({client: f.client, sessionId: 's1', cases: ['structural-tiny'], repeats: 1, timeoutMs: 5000, ...f.opts});

@@ -124,7 +124,7 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
   const call = (method, args = {}) => client.call('studio_browser_call', {sessionId, method, args});
   let counter = 0;
 
-  async function pollUntil(job, {onTick, deadlineAt}) {
+  async function pollUntil(job, {onTick, deadlineAt, expectedInputRevision}) {
     // Returns the settled status. Events are pulled by cursor; each is stamped with the host receive time.
     let cursor = 0;
     const events = [];
@@ -133,6 +133,10 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
       for (const e of page.events ?? []) events.push({e, receivedAt: now()});
       cursor = page.nextSequence ?? cursor;
       const status = await call('jobStatus', {jobId: job.jobId});
+      if(expectedInputRevision!==undefined){
+        if(status.jobId!==job.jobId)throw Error('Performance job identity mismatch');
+        if(status.inputRevision!==expectedInputRevision)throw Error('Performance job input revision mismatch');
+      }
       if (TERMINAL.has(status.state) && status.executionSettled === true) {
         // Drain any events that arrived with the final transition.
         const last = await call('jobEvents', {jobId: job.jobId, afterSequence: cursor, limit: 100});
@@ -199,14 +203,14 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
     let cancelAt = null, requestedAfterMs = null;
     const fire = async () => { if (cancelAt === null) { cancelAt = now(); requestedAfterMs = cancelAt - t0; await call('cancelJob', {jobId: job.jobId}); } };
     try {
-      const settled = await pollUntil(job, {deadlineAt: t0 + timeoutMs, onTick: async (events) => {
+      const settled = await pollUntil(job, {deadlineAt: t0 + timeoutMs, expectedInputRevision:revision, onTick: async (events) => {
         if (trigger === 'first-event' && events.length > 0) await fire();
         else if (trigger === 'half-warm-total' && now() - t0 >= halfMs) await fire();
       }});
       const state = settled.status.state === 'cancelled' ? 'cancelled' : settled.status.state === 'succeeded' ? 'completed-before-cancel' : 'error';
-      return {trigger, state, requestedAfterMs, latencyMs: cancelAt === null ? null : settled.settledAt - cancelAt, totalMs: settled.settledAt - t0, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch,
-        ...(state === 'error' ? {error: settled.status.error?.message ?? settled.status.state} : {})};
-    } catch (err) { if (err instanceof PerfTimeoutError) await bestEffortCancel(job); throw err; }
+      if(state==='error')throw Error('Cancellation run ended '+settled.status.state+(settled.status.error?.message?': '+settled.status.error.message:''));
+      return {trigger, state, requestedAfterMs, latencyMs: cancelAt === null ? null : settled.settledAt - cancelAt, totalMs: settled.settledAt - t0, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch};
+    } catch (err) { await bestEffortCancel(job); throw err; }
     finally { await release(job).catch(() => {}); }
   }
 
