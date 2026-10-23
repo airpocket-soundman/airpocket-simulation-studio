@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "task": "60 CFD1",
+  "sourceSha": "111fb2eb06226daacb8b7ef77b0fe31c85ce70ed",
+  "harnessSha256": "87cf5e42f40895756a01bbdc17a1d615e1d92b507b549503d9e86860cd585764",
+  "helperSha256": "32ce8c6c82e45f5da4b164596376d0cd7c28d0aff5c5bcd5aeec6289ab6b6db2",
+  "executableSha256": "3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248",
+  "executableVersion": "8.5.0",
+  "geometry": {
+    "angular": 144,
+    "radialLayers": 58,
+    "points": 8496,
+    "quadrilaterals": 8352,
+    "outerRadiusM": 50.5,
+    "wallRadiusM": 0.5,
+    "firstCellHeightM": 0.02181661564992912,
+    "growth": 1.1
+  },
+  "changedNumericalCondition": {
+    "angularResolution": {
+      "before": 128,
+      "after": 144
+    },
+    "derivedChanges": "first radial step pi/N and resulting radial count follow the unchanged O-grid rule"
+  },
+  "unchangedConfiguration": "Exact previous ITER2400 config and input bytes; no restart",
+  "priorResultSha256": "642bd4b1b1475a2accdd9bc37b80231bd4699d0076bff58441108571839910d1",
+  "priorFineDrag": 1.5210373,
+  "files": {
+    "mesh.su2": "410140c4c17125d8e6af04ae1787c2b804fa24f7dae643d58e9f39e572823dcc",
+    "case.cfg": "d6621cbae6559a82a5ea3dc8cb04c6146a6a5b0f1960c1d93479a493d30fd1b1",
+    "input.json": "eb574a7cc44963c617cf717413f4f96872b82d4b99bc00508cc66db2a7fa1608"
+  },
+  "limits": {
+    "seconds": 240,
+    "rssBytes": 1073741824,
+    "threads": 1,
+    "launches": 1,
+    "workOrderAdditionalLaunchOrdinal": 2,
+    "workOrderAdditionalLaunchMaximum": 2
+  },
+  "acceptance": {
+    "dragRelativeErrorMaximum": 0.05,
+    "allReportedResidualsLog10Maximum": -6,
+    "last100DragRelativeRangeMaximum": 0.005,
+    "nodalFarfieldMassImbalanceRelativeMaximum": 0.001,
+    "meshAndDomainRelativeDragDifferenceMaximum": 0.03,
+    "iterationBudgetRelativeDragDifferenceMaximum": 0.01,
+    "requireNoWallWarning": true,
+    "qualification": "Engineering QA tolerances selected before execution, not uncertainty bounds from the reference. Coarse grids may fail; preserve failures.",
+    "massQualification": "Trapezoidal integral of nodal farfield velocity, not SU2 discrete face-flux conservation."
+  },
+  "reference": {
+    "url": "https://economon.github.io/docs/AIAA-2018-3111.pdf",
+    "doi": "10.2514/6.2018-3111",
+    "section": "IV.G, printed pp.19-20",
+    "kind": "published SU2 numerical reference, not an experiment or analytic solution",
+    "reynoldsNumber": 40,
+    "machNumber": null,
+    "machReason": "Incompressible constant-density solver; no acoustic Mach input",
+    "diameterM": 1,
+    "densityKgM3": 1,
+    "speedMps": 4,
+    "dynamicViscosityPaS": 0.1,
+    "dragCoefficient": 1.507,
+    "wall": "adiabatic no-slip",
+    "farfield": "circular freestream boundary 50 diameters from wall; QA outer radius 50.5m",
+    "grid": "O-grid quadrilaterals, first radial step pi/N, growth 1.1"
+  },
+  "interpretation": "Report N128-to144 separately. Small refinement ratio cannot erase failed N64-to128 comparison or establish asymptotic/general grid convergence. No extra launch if timed out or failed."
+}

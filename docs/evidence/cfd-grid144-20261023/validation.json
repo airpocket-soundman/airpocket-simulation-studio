@@ -1,0 +1,38 @@
+{
+  "baseSha": "111fb2eb06226daacb8b7ef77b0fe31c85ce70ed",
+  "branch": "codex/cfd-grid144-validation",
+  "pythonRegressionTestsPassed": 8,
+  "pythonFailed": 0,
+  "docsPassed": 2,
+  "contractDeclarationsPassed": 15,
+  "diffCheck": "passed",
+  "solverLaunchesThisExperiment": 1,
+  "workOrderAdditionalLaunchesConsumed": 2,
+  "additionalLaunchesMaximum": 2,
+  "newDownloads": false,
+  "productSourceChanged": false,
+  "sharedProgressChanged": false,
+  "commands": [
+    "python docs/evidence/cfd-grid144-20261023/driver.py prepare",
+    "python docs/evidence/cfd-grid144-20261023/driver.py run",
+    "python docs/evidence/cfd-grid144-20261023/check-mesh.py",
+    "node docs/evidence/cfd-grid144-20261023/measure-mass.mjs",
+    "python docs/evidence/cfd-grid144-20261023/evaluate.py",
+    "python tests/qa-cfd-grid144.test.py",
+    "python tests/qa-cfd-iteration-audit.test.py",
+    "python tests/replay-cfd-finemesh.test.py",
+    "python tests/qa-cfd-reference.test.py",
+    "node --test tests/docs.test.mjs",
+    "npm ci --ignore-scripts",
+    "npm run check:contracts",
+    "git diff --check"
+  ],
+  "notClaimed": [
+    "Original N64-to128 3percent criterion",
+    "General/asymptotic grid convergence",
+    "Richardson order or GCI",
+    "Discrete solver mass flux",
+    "Experimental accuracy",
+    "CFD1 completion"
+  ]
+}
