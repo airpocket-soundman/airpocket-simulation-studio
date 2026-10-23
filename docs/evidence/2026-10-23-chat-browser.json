@@ -1,0 +1,47 @@
+{
+  "sourceHead": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+  "scope": "Actual IAB rendering of unmounted production panel module in owned synthetic-provider QA page; not real AI/main integration/Chrome extension",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "observedDocumentWidth": 390
+  },
+  "checks": [
+    "unavailable disables send/stop",
+    "ready provider enables send",
+    "English labels/status and polite aria-live",
+    "textarea Tab then Enter sends and disables duplicate send",
+    "Stop Enter retires provider and disables controls",
+    "explicit new provider restores ready",
+    "Japanese labels/status/history after language round-trip",
+    "asynchronous response preserves later typed draft",
+    "plain script-like user text remains text; history contains zero script nodes"
+  ],
+  "cleanup": {
+    "tabClosed": true,
+    "viewportReset": true,
+    "ownedServerStopped": true
+  },
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "index.html": {
+      "bytes": 1220,
+      "sha256": "85f76d3c80e5329a4e8301ef46d2004d90087eee9bdce6f4330b0ecf56942e18"
+    },
+    "screen-en.jpg": {
+      "bytes": 42421,
+      "sha256": "5746119d679fd00f8482318d7b4c55470b21671939d45b98f62a144184a782df"
+    },
+    "screen-ja.jpg": {
+      "bytes": 39843,
+      "sha256": "7cda31bd48117cd155187d21643078c635b4ca04555c1820e0dd8e6409626b93"
+    }
+  },
+  "sourceHashes": {
+    "src/ui/agent-chat-panel.js": "ac211d994de6ce69b2afec8b7e8764b24cb31553ba0e89f4f28045f77e996510",
+    "src/agent-chat-state.js": "a9a88d7555545e2b2ce5526e02eec3b3754ffc9ac1caa614403cffdc9fb70931"
+  }
+}

@@ -11,3 +11,5 @@
 進行中のproviderを差し替えるか取消した後は、その同じobjectの再採用を拒否し、新providerを要求する。旧取消がA→B→Aの新turnへ作用するのを防ぐ。接続変更/取消/破棄で世代を無効化し、古い応答や取消失敗が新しいsessionへ混ざらない。入力中の新draftは以前の応答到着で消さない。プロバイダーは明示的に差し替え、UIは所有していないclientのcloseを実行しない。active turnのcancelだけを要求し、所有者が最終closeを確認する。任意の不適合providerが取消を無視する場合の終了保証はせず、既存ACPクライアントの有界処理を前提とする。
 
 日英のラベル/aria-liveとplain-text表示をDOM fixtureで検証。textarea/通常buttonはキーボード操作可能な標準要素、幅は100%/box-sizing、本文は折返し。実Chrome・390px・本番接続成功は未検証であり、fixture結果を実画面合格にはしない。親AGENTCHAT1/AGENTACP1は未完を維持する。
+
+2026-10-23に実IAB・390×844・合成の明示providerで、日英ラベル/状態、キーボード送信/停止、provider差し替え、遅延応答時の新draft保持、plain textと横幅390pxを確認した。[証拠](evidence/2026-10-23-chat-browser.json)。Chrome拡張側、本番main接続、実AItransportはこの検証に含めない。
