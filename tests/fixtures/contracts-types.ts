@@ -137,6 +137,7 @@ void curveResponseKind;
 // Exercise the Node-only ACP session API declaration through the normal contract gate.
 import './acp-session-types';
 import './agent-chat-types';
+import './finite-visco-observation-comparison-types';
 
 import type {FixedWebmContainer,FixedWebmVerification,ComparisonFixedWebmCapability} from '../../src/contracts/fixed-webm';
 const fixedWebmContainer:FixedWebmContainer={width:1280,height:640,seconds:2,packets:[{timestamp:0,duration:41667,type:'key',data:new Uint8Array(1)}]};
