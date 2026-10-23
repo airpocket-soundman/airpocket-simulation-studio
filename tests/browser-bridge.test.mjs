@@ -119,6 +119,8 @@ test('bridge long-poll delivers a command sent while a poll is parked in well un
 });
 test('bridge long-poll keeps refusals unchanged and shutdown/disconnect/abort release parked polls without leaks',async t=>{
  const origin='https://studio.example';const bridge=await createBrowserBridge({origin,pollWaitMs:5000});
+ // Assertion failures must release the server too; otherwise this test process never exits.
+ t.after(()=>bridge.close());
  const f=(url,o={})=>fetch(url,{...o,headers:{...o.headers,Origin:origin}});
  const pair=async()=>(await (await f(bridge.endpoint+'/pair',{method:'POST',headers:{Authorization:'Bearer '+bridge.pairingToken,'Content-Type':'application/json'},body:JSON.stringify({scopes:['inspect']})})).json());
  let t0=Date.now();assert.equal((await fetch(bridge.endpoint+'/poll',{headers:{Origin:'https://evil.example',Authorization:'Bearer x'}})).status,403);assert.equal((await f(bridge.endpoint+'/poll',{headers:{Authorization:'Bearer wrong'}})).status,401);assert.ok(Date.now()-t0<500,'refusals never park');

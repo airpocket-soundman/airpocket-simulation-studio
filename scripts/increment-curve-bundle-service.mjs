@@ -7,7 +7,7 @@ import gmshInitialize from '@loumalouomega/gmsh-wasm';
 import {generateMesh} from '../src/mesh-core.js';
 import {solveElastic} from '../src/fem-core.js';
 import {loadedFaceTractionForces} from '../src/increment-curve-data.js';
-import {createIncrementCurveArtifacts} from '../src/increment-curve-export.js';
+import {createIncrementCurveArtifacts,snapshotIncrementCurveBundle} from '../src/increment-curve-export.js';
 import {publishJson} from './json-artifacts.mjs';
 
 export const INCREMENT_CURVE_BUNDLE_LIMITS=Object.freeze({
@@ -64,7 +64,9 @@ function snapshotRequest(value){
 }
 
 function validateRequest(input){
- const request=snapshotRequest(input),keys=Reflect.ownKeys(request);
+ const request=snapshotRequest(input);
+ if(!plain(request))fail('Increment curve request must be a plain object');
+ const keys=Reflect.ownKeys(request);
  if(keys.length!==REQUEST_KEYS.length||REQUEST_KEYS.some(key=>!Object.hasOwn(request,key)))fail('Increment curve request must contain exactly the documented fields');
  if(request.synthetic!==true)fail('This bounded generator only accepts synthetic:true reference requests');
  if(typeof request.curveId!=='string'||!request.curveId.trim()||request.curveId.length>100)fail('curveId must be a non-empty string of at most 100 characters');
@@ -91,7 +93,8 @@ function validateRequest(input){
 function equalWeights(nodes){return nodes.map(()=>1/nodes.length);}
 
 function makeSpec(request,mesh,axisIndex){
- const bounds=request.boundsMm.slice(),nodeCount=mesh.nodes.length/3;
+ // Request bounds are minima/maxima. Studio/Gmsh boxes use origin plus extents.
+ const bounds=request.boundsMm.slice(),boxBounds=[...bounds.slice(0,3),...bounds.slice(3).map((value,index)=>value-bounds[index])],nodeCount=mesh.nodes.length/3;
  const min=bounds[axisIndex],max=bounds[axisIndex+3],span=max-min,tolerance=1e-7*Math.max(1,span);
  const fixedNodes=[],loadedNodes=[];
  for(let node=0;node<nodeCount;node++){
@@ -108,7 +111,7 @@ function makeSpec(request,mesh,axisIndex){
   input:{
    synthetic:true,
    study:{kind:'structural'},
-   sourceModel:{kind:'box',bounds},
+   sourceModel:{kind:'box',bounds:boxBounds},
    meshSize:request.meshSizeMm,
    materialProperties:{youngModulus:request.youngModulusPa,poissonRatio:request.poissonRatio}
   },
@@ -125,34 +128,38 @@ function makeSpec(request,mesh,axisIndex){
 
 /** Generate a re-inputable {spec,steps} bundle from one explicit force route using independent real solves. */
 export async function createIncrementCurveBundle(input,{initialize=gmshInitialize,solve=solveElastic}={}){
- const {request,axisIndex}=validateRequest(input);
- const mesh=await generateMesh(initialize,{kind:'box',bounds:request.boundsMm.slice()},{size:request.meshSizeMm,maxElements:INCREMENT_CURVE_BUNDLE_LIMITS.elements});
+ const {request,axisIndex,extents}=validateRequest(input);
+ const mesh=await generateMesh(initialize,{kind:'box',bounds:[...request.boundsMm.slice(0,3),...extents]},{size:request.meshSizeMm,maxElements:INCREMENT_CURVE_BUNDLE_LIMITS.elements});
  const nodeCount=mesh.nodes.length/3;
  if(nodeCount>INCREMENT_CURVE_BUNDLE_LIMITS.nodes)fail('Generated mesh exceeds the 20,000-node curve limit');
  const spec=makeSpec(request,mesh,axisIndex);
- // Boundary preparation is fatal input/mesh validation, not a converged-step failure.
- const forceSets=request.loadsN.map(force=>loadedFaceTractionForces(mesh,{spec,totalForceN:force}));
  const steps=[],failures=[];
+ // Validate each accumulated interchange snapshot before accepting another solve.
+ // Mesh and input repeat per successful row in JSON, so node/step caps alone do not
+ // bound the eventual bundle size. This also checks non-finite vectors before JSON normalisation.
+ const appendStep=step=>{steps.push(step);snapshotIncrementCurveBundle({spec,steps});};
  for(let index=0;index<request.loadsN.length;index++){
   const force=request.loadsN[index],stepId=`step-${index}-${force}N`,rowIdentity={...spec.rowIdentity};
+  // Prepare only this row; boundary validation errors are fatal, not failed solves.
+  const forces=loadedFaceTractionForces(mesh,{spec,totalForceN:force});
   let solved;
   try{
-   solved=solve(mesh,{youngModulus:request.youngModulusPa,poissonRatio:request.poissonRatio},{fixed:spec.fixedNodes,forces:forceSets[index]});
+   solved=solve(mesh,{youngModulus:request.youngModulusPa,poissonRatio:request.poissonRatio},{fixed:spec.fixedNodes,forces});
   }catch(error){
    failures.push({stepIndex:index,stepId,loadN:force,message:String(error?.message??error).slice(0,300)});
-   steps.push({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
+   appendStep({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
    continue;
   }
   if(!plain(solved)||solved.kind!=='elastic')fail('Solver returned an unsupported result for '+stepId);
-  if(!finite(solved.residual)||solved.residual>=SOLVE_TOLERANCE){
+  if(!finite(solved.residual)||solved.residual<0||solved.residual>=SOLVE_TOLERANCE){
    failures.push({stepIndex:index,stepId,loadN:force,message:'Solver residual did not converge: '+String(solved.residual)});
-   steps.push({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
+   appendStep({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
    continue;
   }
   // Exact solved vectors only. The saved subset omits tensor/visual/performance arrays, but each value here is
   // the result of this load's own solve; no vector is multiplied by a load ratio or reused from another step.
   const result={kind:solved.kind,displacement:Array.from(solved.displacement),constraintReactions:structuredClone(solved.constraintReactions),applied:Array.from(solved.applied),residual:solved.residual};
-  steps.push({
+  appendStep({
    stepId,
    controlledQuantity:'force',
    controlledValue:force,

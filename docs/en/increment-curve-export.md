@@ -1,6 +1,7 @@
 # Limited increment-curve artifacts
 
-[日本語](../increment-curve-export.md) / [GUI instructions](increment-curve-ui.md)
+[日本語](../increment-curve-export.md)
+ / [GUI instructions](increment-curve-ui.md)
 
 The asynchronous pure service `createIncrementCurveArtifacts({spec,steps})` revalidates load/gauge data from independent linear-elastic solve outputs and returns `{curve,csv,json,svg}`. The last three are strings. It performs no file writes or DOM changes and never trusts a caller-supplied curve table.
 
@@ -25,3 +26,5 @@ The request is a dedicated JSON contract, not a normal Studio project. It requir
 Request and output are distinct absolute paths, and an existing destination is never overwritten. Limits are64KiB per request,20,000 nodes and30,000 elements, ±1,000,000mm bounds, and the shared service's1MiB bundle bound. A generation, shared-service validation or publication failure leaves no complete destination file. A non-converged solve is retained as a `failed` row with no `output`; no converged row is fabricated. The result is neither a normal project nor the verified table JSON and is never applied implicitly to current GUI state. Generate table JSON, CSV and SVG separately through the shared service or `studio_increment_curve`.
 
 For the synthetic10×10×40mm bar with E=1e9Pa and ν=0, the real solves reproduce0.04mm extension,1MPa engineering stress and0.001 strain at100N, and every saved vector is compared with an independent solve at the same load. This does not validate a measured specimen, plastic history, displacement control or arbitrary geometry.
+
+`boundsMm` is `[xmin,ymin,zmin,xmax,ymax,zmax]` in mm. Studio/Gmsh boxes take an origin and dimensions, so the generator converts to `[xmin,ymin,zmin,xmax-xmin,ymax-ymin,zmax-zmin]` at that boundary. Each appended step is checked against the shared bundle budget before another solve starts.

@@ -3,7 +3,7 @@
   "date": "2026-10-23",
   "workOrder": "52-RESULTCURVE1",
   "parentTaskId": "RESULTCURVE1",
-  "parentTaskStatusAfterWork": "queued",
+  "parentTaskStatusAfterWork": "building",
   "scope": "Bounded generator/CLI: an explicit synthetic force route is solved stage-by-stage with real Gmsh WASM meshing and independent solveElastic calls, producing a revisioned {spec,steps} re-input bundle. The existing common export service revalidates it before exclusive publication. This is not automatic project/analysis capture, a plastic history or parent RESULTCURVE1 acceptance.",
   "baseCommit": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
   "implementationCommit": "45296ddf761979d7f9eeb92b79077d1c5be7dda4",
@@ -181,8 +181,12 @@
   ],
   "progressProposal": {
     "id": "RESULTCURVE1",
-    "status": "queued",
-    "note": "Add a bounded explicit-force-route generator/CLI that creates a revalidated {spec,steps} bundle from real independent solves with exclusive publication and preserved failed rows. Parent remains queued: automatic capture from a saved project/analysis, displacement control, nonlinear history and full GUI/API/MCP acceptance remain open."
+    "status": "building",
+    "note": "Add a bounded explicit-force-route generator/CLI that creates a revalidated {spec,steps} bundle from real independent solves with exclusive publication and preserved failed rows. Parent remains building: automatic capture from a saved project/analysis, displacement control, nonlinear history and full GUI/API/MCP acceptance remain open."
+  },
+  "auditCorrection": {
+    "date": "2026-10-23",
+    "reviewedHead": "e170735e666155f4c13a90cb007c6f5b7a658d31",
+    "reason": "The fixed base main already marks RESULTCURVE1 building; queued was an incorrect report, not an actual progress.json transition. Historical test runs above remain the submitter runs, not the later audit runs."
   }
 }
-

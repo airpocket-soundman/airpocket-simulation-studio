@@ -218,3 +218,50 @@ test('request snapshot rejects accessors, cycles and unsupported values before s
  const hidden=clone();Object.defineProperty(hidden,'extra',{value:1});
  await assert.rejects(createIncrementCurveBundle(hidden),/hidden properties/);
 });
+
+
+test('translated bounds keep the requested box dimensions and end-face loads on every axis',async()=>{
+ for(const axisIndex of [0,1,2]){
+  const request=clone();
+  request.boundsMm=[5,7,11,15,17,51];
+  request.axis=[0,0,0];request.axis[axisIndex]=1;
+  request.initialGaugeLengthMm=[10,10,40][axisIndex];
+  request.initialAreaMm2=[400,400,100][axisIndex];
+  request.loadsN=[100];
+  const result=await createIncrementCurveBundle(request);
+  const {spec}=result.bundle;
+  assert.deepEqual(spec.input.sourceModel.bounds,[5,7,11,10,10,40]);
+  for(let k=0;k<3;k++){
+   const coords=spec.mesh.nodes.filter((_,index)=>index%3===k);
+   assert.ok(Math.abs(Math.min(...coords)-request.boundsMm[k])<1e-7);
+   assert.ok(Math.abs(Math.max(...coords)-request.boundsMm[k+3])<1e-7);
+  }
+  for(const node of spec.fixedNodes)assert.ok(Math.abs(spec.mesh.nodes[node*3+axisIndex]-request.boundsMm[axisIndex])<1e-7);
+  for(const node of spec.loadedNodes)assert.ok(Math.abs(spec.mesh.nodes[node*3+axisIndex]-request.boundsMm[axisIndex+3])<1e-7);
+  const expected=100*request.initialGaugeLengthMm/(request.youngModulusPa*request.initialAreaMm2*1e-6);
+  assert.equal(result.curve.steps[0].status,'converged');
+  assert.ok(relError(result.curve.steps[0].extensionMm,expected)<1e-6);
+ }
+});
+
+test('oversized routes stop before computing all rows and publish no file',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'studio-curve-bundle-budget-'));
+ try{
+  const requestPath=join(dir,'request.json'),outputPath=join(dir,'bundle.json');
+  const request=clone();request.loadsN=Array(128).fill(100);
+  await writeFile(requestPath,JSON.stringify(request));
+  let calls=0,cached;
+  await assert.rejects(writeIncrementCurveBundle({requestPath,outputPath},{create:input=>createIncrementCurveBundle(input,{solve:(...args)=>{calls++;return cached??=solveElastic(...args);}})}),/limit/);
+  assert.ok(calls<128,'bundle budget must stop subsequent solves; observed '+calls);
+  await assert.rejects(stat(outputPath),{code:'ENOENT'});
+ }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('invalid solver residuals never become converged rows',async()=>{
+ const request=clone();request.loadsN=[100,100,100];let index=0;
+ const result=await createIncrementCurveBundle(request,{solve:(...args)=>({...solveElastic(...args),residual:[-1,Infinity,1e-8][index++]})});
+ assert.deepEqual(result.curve.steps.map(step=>step.status),['failed','failed','failed']);
+ assert.equal(result.failures.length,3);
+ for(const step of result.bundle.steps)assert.equal(step.output,undefined);
+});

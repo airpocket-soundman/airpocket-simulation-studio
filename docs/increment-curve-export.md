@@ -1,6 +1,7 @@
 # 増分曲線の限定出力
 
-[English](en/increment-curve-export.md) / [画面での使い方](increment-curve-ui.md)
+[English](en/increment-curve-export.md)
+ / [画面での使い方](increment-curve-ui.md)
 
 `createIncrementCurveArtifacts({spec,steps})` は独立した線形弾性解析の荷重・標点データを再検証し、`{curve,csv,json,svg}` を返す非同期のpure service。後ろ3項目は文字列で、ファイル保存やDOM変更は行わない。呼び出し元が提示した曲線表は受け入れない。
 
@@ -25,3 +26,5 @@ requestは `synthetic:true`、`curveId`、`caseIdentity`、`rowIdentity`、`boun
 出力先は絶対パスでrequestと別にし、既存ファイルを上書きしない。requestは64KiB、meshは20,000節点・30,000要素、boundsは±1,000,000mm、bundleは共通serviceの1MiBに制限する。生成・共通serviceの再検証・出版のいずれかが失敗した場合は完成ファイルを残さない。計算が収束しなかった段階は `output` を持たない `failed` 行として保持し、偽の収束行を作らない。このbundleは通常projectでも検証済み表JSONでもなく、現在のGUI状態へ暗黙適用しない。表JSONとCSV/SVGは既存の共通serviceまたは `studio_increment_curve` で別に生成する。
 
 合成10×10×40mm、E=1e9Pa、ν=0、100Nでは標点伸び0.04mm、応力1MPa、ひずみ0.001を実solver結果から再現し、保存した各ベクトルを同じ荷重の独立再計算と照合する。実測試験片、塑性履歴、変位制御、任意形状の保証ではない。
+
+`boundsMm` は `[xmin,ymin,zmin,xmax,ymax,zmax]`（mm）。Studio/Gmshのboxは原点と寸法を取るため、生成境界で `[xmin,ymin,zmin,xmax-xmin,ymax-ymin,zmax-zmin]` へ変換する。各段階を追加するたびに共通bundle上限を検査し、超過後の解析を行わない。
