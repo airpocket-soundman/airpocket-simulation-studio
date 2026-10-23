@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "5647a6ff36e2ff5e5a886e770d9e2cb1829c5b72",
+  "sourceFiles": [
+    {
+      "path": "scripts/analysis-job-service.mjs",
+      "bytes": 19286,
+      "sha256": "1ddfa380030ef135bfb6888882a6febd99f888f3bfa0429d91a20bbcbb6233f8"
+    },
+    {
+      "path": "src/planar-heat-transfer.js",
+      "bytes": 9681,
+      "sha256": "4eda2b2e0efdd33150f3ebd4470b554c4ad65a703e2da9cfd60fe73e29950c20"
+    },
+    {
+      "path": "tests/mcp-restored-request-id.test.mjs",
+      "bytes": 9052,
+      "sha256": "37d1189267195d0e9737a439d9d18e9c057e26669d58d9873ee3eb34f014631a"
+    },
+    {
+      "path": "tests/ui-increment-curve.test.mjs",
+      "bytes": 6904,
+      "sha256": "93edf4e9a8657b20584d7c8cf8604bb32864359036fb47fc5b2b2f1fc6daef26"
+    },
+    {
+      "path": "tests/ui-increment-curve-comparison.test.mjs",
+      "bytes": 10380,
+      "sha256": "b0710ea57da73c2bc4f5b6490ee9fa532c549817cd8c843c3c594a4c343caf96"
+    },
+    {
+      "path": "skills/airpocket-studio/references/increment-curve-loop.md",
+      "bytes": 3409,
+      "sha256": "0a915ad6811bba58c0b9839e4a0df9f8c4f6fda0e4af84db53b835379bd6d6c5"
+    }
+  ],
+  "checks": {
+    "restart": {
+      "tests": 24,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 1,
+      "skipReason": "Windows symlink permission unavailable"
+    },
+    "curves": {
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "browser": false,
+      "formalStdio": true,
+      "allThreeArtifactBytes": true
+    },
+    "integratedDomainExpiryHeat": {
+      "tests": 35,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contracts": {
+      "declarations": 10
+    },
+    "independentReview": {
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "public": {
+      "passed": false,
+      "reason": "candidate not deployed",
+      "observedSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb"
+    },
+    "browser": {
+      "attempted": true,
+      "completed": false,
+      "reason": "file chooser notification timeout then Runtime.evaluate timeout",
+      "viewport390Verified": false,
+      "downloadsVerified": false
+    }
+  },
+  "relatedEvidence": [
+    "2026-10-23-verification-inventory.json",
+    "2026-10-23-windows-v8-validation.json",
+    "2026-10-23-numeric-audit-summary.json",
+    "2026-10-23-export-expiry-integration.json"
+  ],
+  "logs": [
+    {
+      "path": ".qa/restart-validation.log",
+      "bytes": 2753,
+      "sha256": "cb6cc0235a3d635d263a3f1865e2eb73a5b1dfe6cd247c70849e7ad485cc391e"
+    },
+    {
+      "path": ".qa/curve-validation.log",
+      "bytes": 2741,
+      "sha256": "41ca8af9a7e5ab4fdc5ba0700cc39892f3aa7d2c235ccaca1cda05766da8e393"
+    },
+    {
+      "path": ".qa/verification-integrated.log",
+      "bytes": 3690,
+      "sha256": "7e1eef8235f9644ee189f83bf136ffb5367b1ab4610dac1f774b41fa98acaa13"
+    },
+    {
+      "path": ".qa/verification-public.log",
+      "bytes": 293,
+      "sha256": "b63377c5e5c40d59e1e94a503f7f5dd3d680c8bce1761eeb3aaa477ebc2165f9"
+    }
+  ],
+  "parentProgressModified": false,
+  "physicalAccuracyVerified": false
+}

@@ -1,0 +1,21 @@
+{
+ "baseSha":"5647a6ff36e2ff5e5a886e770d9e2cb1829c5b72",
+ "branch":"codex/numeric-validation-60-66",
+ "environment":{"os":"Windows x64","node":"v24.11.1","pythonPsutil":"7.2.2","newSdkDownloads":false},
+ "changes":["single-launch pinned CFD iteration audit and preparation/tamper regressions","reject unsupported planar heat flux field keys","independent exact target nodal heat integration on nonmatching partitions"],
+ "results":{
+  "nodeNumericalContractTests":{"passed":24,"failed":0,"skipped":3,"skipReason":"host executable unavailable; host/WASM parity not claimed"},
+  "wasmCliTests":{"passed":2,"failed":0,"skipped":0},
+  "documentationTests":{"passed":2,"failed":0},
+  "pythonTests":{"passed":5,"failed":0,"commands":["python tests/qa-cfd-iteration-audit.test.py","python tests/replay-cfd-finemesh.test.py","python tests/qa-cfd-reference.test.py"]},
+  "contractDeclarations":{"passedFiles":10},
+  "diffCheck":"passed"
+ },
+ "heatOracle":{"kind":"synthetic manufactured affine field","areaMm2":1,"meanFluxWPerM2":2,"expectedTotalW":0.000002,"absoluteToleranceW":1e-18,"relativeTolerance":1e-12,"nodeIntegral":"A*(2*qi+qj+qk)/12","independentTargetTriangles":4,"checks":["all target nodal integrals","source/target outward balance","sign reversal","rotation and translation","saved-input reload","partial overlap rejection","unsupported quadratic rejection"]},
+ "cfdEvidence":"cfd-iteration-audit-20261023/run.json",
+ "wasmEvidence":"2026-10-23-numeric-audit-native-wasm.json",
+ "initialFailures":["Old cached WASM CLI did not support prepared Tet4 protocol; relinked current source using existing SDK/library and reran successfully","Unsupported quadratic field was silently ignored; new test failed before strict rejection fix"],
+ "incomplete":["60: 4.1226447% mesh drag difference still exceeds unchanged 3% tolerance","61: discrete solver boundary mass flux acquisition/parser and real conservation acceptance","62: explicit boundary selection to record transformation and host native execution/parity","66: partial coverage support, saved operator format, coupled solver and experimental comparison"],
+ "parentReleased":false,
+ "physicalAccuracyVerified":false
+}

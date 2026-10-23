@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-23",
+  "baseSha": "bef88b1ffc02c331cb9a16b6b9bef619fea7775d",
+  "recipe": {
+    "file": "skills/airpocket-studio/references/increment-curve-loop.md",
+    "bytes": 3409,
+    "sha256": "0a915ad6811bba58c0b9839e4a0df9f8c4f6fda0e4af84db53b835379bd6d6c5"
+  },
+  "execution": "Independent fresh local repository stdio process; recipe, discovered schema and public A/B only",
+  "runtime": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "server": {
+    "protocolVersion": "2025-11-25",
+    "capabilities": {
+      "tools": {}
+    },
+    "serverInfo": {
+      "name": "airpocket-simulation-studio",
+      "version": "0.44.0"
+    }
+  },
+  "source": [
+    {
+      "file": "public/examples/increment-comparison-a.json",
+      "bytes": 12060,
+      "sha256": "0af9f5e68c2a3858e9cd02c29ffca67835eace3b3dd9968b3b2a01fabb70b9fb"
+    },
+    {
+      "file": "public/examples/increment-comparison-b.json",
+      "bytes": 12099,
+      "sha256": "02fd2d76ab465dacfaf388723e87435086fc9c364f0753c2057f427149fcb55e"
+    }
+  ],
+  "requests": {
+    "initial": {
+      "offset": 0,
+      "limit": 1
+    },
+    "followupOffsets": [
+      1,
+      2,
+      3
+    ]
+  },
+  "curves": [
+    {
+      "id": "synthetic-tet-a",
+      "rows": 4,
+      "failed": 1,
+      "inputRevision": "sha256:e0e351ab17df81254187608b73fa98f2fbb8d9527a91c53d0e309ab5852eb669",
+      "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+      "lastForceN": 20,
+      "lastExtensionMm": 0.011999999999999999
+    },
+    {
+      "id": "synthetic-tet-b",
+      "rows": 4,
+      "failed": 1,
+      "inputRevision": "sha256:3bf39ecb3868ac648697f9d71fe81085ac6cf0447214505a6746552e2a844062",
+      "meshRevision": "sha256:8b216477c265cf39c3006dd11e73aeb1ace5ee66989f02ad735e51a8bf8aa863",
+      "lastForceN": 40,
+      "lastExtensionMm": 0.011999999999999999
+    }
+  ],
+  "artifacts": {
+    "csv": {
+      "bytes": 3352,
+      "sha256": "1e80b53b060be26efbf063f76395a4d8347f0ef6b937f3420829ef438536d066",
+      "encoding": "utf-8"
+    },
+    "json": {
+      "bytes": 10915,
+      "sha256": "fc1a9385138c6a4b8d3f0d58f499ac0b26c33521f0c90515244be32055c11396",
+      "encoding": "utf-8"
+    },
+    "svg": {
+      "bytes": 9951,
+      "sha256": "2f8e1598158d2d787a8336eaa3ef9411c8ea7f48e476aa7bce64206b1735e0af",
+      "encoding": "utf-8"
+    }
+  },
+  "savedFile": {
+    "bytes": 34070,
+    "sha256": "b02ed59789c7cd1c2e7f6b6b1633c2df7badfef2d2e1178d6d8e9b6cdb2b8cdb"
+  },
+  "csvRecords": 9,
+  "svgPanels": [
+    "force-displacement",
+    "engineering-stress-strain"
+  ],
+  "refusals": {
+    "tampered": "Curve comparison requires only bundles",
+    "existingOutput": "Increment curve output already exists"
+  },
+  "sourceBytesUnchanged": true,
+  "limitations": [
+    "Synthetic linear reference data; no physical accuracy or plastic-history claim",
+    "No browser pairing, downloads or open-project state inspected",
+    "Local repository server; registered connector capability not asserted",
+    "Recipe not revised during execution"
+  ],
+  "processExit": {
+    "code": 0,
+    "signal": null
+  },
+  "stderrBytes": 0
+}

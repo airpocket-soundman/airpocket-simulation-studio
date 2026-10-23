@@ -1,0 +1,91 @@
+{
+  "planSha256": "1f3ec129887694a498b0e8d359b799da74b97a2a4fe6c30d7781d21fbe06f58f",
+  "executableSha256": "3cb60646b31c08e468441be9f3497601960d4bb31349e6329982bcdeed599248",
+  "elapsedSeconds": 181.625,
+  "peakRssBytes": 36372480,
+  "exitCode": 0,
+  "stopReason": "configured-pressure-criterion",
+  "finalHistory": {
+    "Time_Iter": 0.0,
+    "Outer_Iter": 0.0,
+    "Inner_Iter": 1680.0,
+    "rms[P]": -10.00692637,
+    "rms[U]": -9.229230011,
+    "rms[V]": -9.181617225,
+    "RefForce": 8.0,
+    "CD": 1.5210373,
+    "CL": -5.765245052e-16,
+    "CSF": 0.0,
+    "CMx": 0.0,
+    "CMy": 0.0,
+    "CMz": 6.524605677e-17,
+    "CFx": 1.5210373,
+    "CFy": -5.765245052e-16,
+    "CFz": 0.0,
+    "CEff": -3.790337721e-16
+  },
+  "residuals": {
+    "rms[P]": -10.00692637,
+    "rms[U]": -9.229230011,
+    "rms[V]": -9.181617225
+  },
+  "dragCoefficient": 1.5210373,
+  "priorFineDrag": 1.521036488,
+  "baselineDrag": 1.58644061,
+  "meshRelativeDifference": 0.041226447172201475,
+  "iterationRelativeDifference": 5.338464963422496e-07,
+  "last100RelativeDragRange": 3.221485762214726e-08,
+  "nodalFarfieldMass": {
+    "method": "nodal-trapezoid-outer-boundary",
+    "discreteSolverFlux": false,
+    "densityKgM3": 1,
+    "unit": "kg/(s*m span)",
+    "vertices": 128,
+    "outward": 403.1086346302762,
+    "inward": 402.92725751083674,
+    "net": 0.18137711943944623,
+    "relativeImbalance": 0.0004499460042720295
+  },
+  "checks": {
+    "withinLimits": true,
+    "exitZero": true,
+    "allRequiredResidualsAtQaTarget": true,
+    "dragReference5Percent": true,
+    "meshDifference3Percent": false,
+    "iterationDifference1Percent": true,
+    "tailVariationHalfPercent": true
+  },
+  "artifacts": {
+    "case.cfg": {
+      "bytes": 955,
+      "sha256": "d6621cbae6559a82a5ea3dc8cb04c6146a6a5b0f1960c1d93479a493d30fd1b1"
+    },
+    "flow.vtu": {
+      "bytes": 677839,
+      "sha256": "1e05aa7ab9603fb8c2e3b64cb3d0bc57425502a4beb3ceeef0f64f0806463cfc"
+    },
+    "history.csv": {
+      "bytes": 513010,
+      "sha256": "8c6c640c160214096501f7516a0a325017bde85011833f0bab32679ba1ef2e5d"
+    },
+    "input.json": {
+      "bytes": 340,
+      "sha256": "eb574a7cc44963c617cf717413f4f96872b82d4b99bc00508cc66db2a7fa1608"
+    },
+    "mesh.su2": {
+      "bytes": 479539,
+      "sha256": "2ab642b5d0f3863492bfa18789eb22e719715e0105e2a62742d98bf21b24c7b6"
+    },
+    "solver.log": {
+      "bytes": 115508,
+      "sha256": "e8935c0128b48d3bbaeb0e88ea1742db570c40f84a0ca37676febdeab96e11e5"
+    },
+    "surface_flow.vtu": {
+      "bytes": 12851,
+      "sha256": "1e4bc93c486c85387dcde5f9deefaa9889fca089730a492be2f53c0841f302a3"
+    }
+  },
+  "parentReleased": false,
+  "discreteMassFluxVerified": false,
+  "physicalAccuracyVerified": false
+}

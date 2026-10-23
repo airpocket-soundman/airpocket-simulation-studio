@@ -49,3 +49,11 @@ test('file read is bounded before text(), clears prior data and cannot overwrite
  let resolve;h.get('file').files=[{size:2,text:()=>new Promise(r=>resolve=r)}];const pending=h.get('file').onchange();assert.equal(h.get('run').disabled,true);h.get('input').value='manually edited';h.get('input').oninput();resolve('{}');await pending;assert.equal(h.get('input').value,'manually edited');
  h.get('input').value=JSON.stringify(bundle());await h.ui.validate();h.ui.destroy();assert.equal(h.revoked.length,6);assert.equal(h.ui.host.removed,true);
 });
+
+for(const lateOutcome of ['resolve','reject','destroy'])test('late file '+lateOutcome+' cannot replace a newer selection or recreate downloads',async()=>{
+ const h=setup();let resolve,reject;h.get('file').files=[{size:2,text:()=>new Promise((a,b)=>{resolve=a;reject=b;})}];const old=h.get('file').onchange();
+ if(lateOutcome==='destroy'){h.ui.destroy();resolve('{}');await old;assert.equal(h.created.size,0);assert.equal(h.get('input').value,'');return;}
+ const fresh=JSON.stringify(bundle());h.get('file').files=[{size:Buffer.byteLength(fresh),text:async()=>fresh}];await h.get('file').onchange();await h.ui.validate();const href=h.get('svg').href,status=h.get('status').textContent;
+ if(lateOutcome==='reject')reject(Error('obsolete read failed'));else resolve('{}');await old;
+ assert.equal(h.get('input').value,fresh);assert.equal(h.get('svg').href,href);assert.equal(h.get('status').textContent,status);assert.equal(h.get('file').attributes['aria-invalid'],undefined);assert.equal(h.get('run').disabled,false);
+});
