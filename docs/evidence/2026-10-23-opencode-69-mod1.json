@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "69 MOD1",
+  "date": "2026-10-23",
+  "baseSha": "3dd42813a4f09d0ee1d5834d375b31d4ff00bef4",
+  "branch": "codex/opencode-69-selection-generation",
+  "problem": "While asynchronous result identity hashing is pending, A to B to the identical A satisfies the prior object/content check and can publish an obsolete inspection or edit.",
+  "before": {
+    "tests": 6,
+    "passed": 2,
+    "failed": 4,
+    "reason": "Expected rejections missing for ABA get/edit, cancelled probe and disposed edit"
+  },
+  "implementation": {
+    "pureBoundary": "src/result-selection-state.js: private identity lifetime capture/invalidate/dispose, no DOM or retained result payload",
+    "mainIntegration": [
+      "captureSelection injected into internal result view adapter",
+      "clearAnalysis invalidates, including synchronous saved-case load",
+      "GUI cancel invalidates presentation then calls existing analysis cancellation",
+      "pagehide invalidates while allowing future bfcache selection",
+      "color get/set handler carries original guard across both awaits and suppresses obsolete error effects"
+    ],
+    "publicCompatibility": "No public response/save schema/tool/visible message changes; optional internal adapter provider preserves legacy callers",
+    "moduleLayers": {
+      "domain": [
+        "result-selection-state.js",
+        "agent-chat-state.js"
+      ],
+      "ui": [
+        "ui/agent-chat-panel.js"
+      ]
+    },
+    "integrationDependency": "The two order55 chat modules were read-only copied from root into this worktree for graph verification. Their implementations are not included in this commit; root owns order55. Final module-layer verification requires those files to be integrated."
+  },
+  "syntheticInput": {
+    "kind": "thermal Tet4",
+    "nodes": 4,
+    "tetrahedra": 1,
+    "aTemperature": [
+      20,
+      30,
+      40,
+      50
+    ],
+    "bTemperature": [
+      25,
+      30,
+      40,
+      50
+    ],
+    "probePointMm": [
+      0.25,
+      0.25,
+      0.25
+    ],
+    "expectedFreshBTemperatureC": 36.25
+  },
+  "expectedAndObserved": [
+    "Old A guards remain false after A to B to identical A",
+    "Old get/probe/set reject without view mutation",
+    "Fresh request after cancellation/reselection succeeds",
+    "Disposed current/future guards remain false",
+    "Chained inspection/edit retains its original guard",
+    "Legacy and guarded normal API responses match deeply",
+    "Source input remains unchanged"
+  ],
+  "commands": [
+    {
+      "command": "node --test tests/result-view-selection.test.mjs tests/result-selection-types.test.mjs tests/result-view-api.test.mjs tests/time-view-state.test.mjs tests/ui-view-compare.test.mjs tests/module-boundaries.test.mjs tests/named-result-views.test.mjs tests/case-view.test.mjs tests/docs.test.mjs",
+      "passed": 95,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "passed, 10 declarations"
+    },
+    {
+      "command": "node --check src/main.js; node --check src/result-view-api.js",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "notVerified": [
+    "actual Chrome Japanese/English case switching",
+    "final integrated CI/build/publication",
+    "MOD1 parent completion"
+  ],
+  "parentStatus": "MOD1 remains building; no progress source edits.",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "fixtureSha256": "21e8295bbea21fa88f7cf7d93e6734b9461db94890d380d06d38d5c032c95630"
+}
