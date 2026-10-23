@@ -1,0 +1,33 @@
+{
+  "node": "v24.11.1",
+  "platform": "win32",
+  "elapsedMs": 7733,
+  "exitCode": 0,
+  "signal": null,
+  "errorCode": null,
+  "stdoutBytes": 896,
+  "stderrBytes": 0,
+  "base": "bb6f24c1ad40ee88ff2297963e6149da17c186ed",
+  "targetSourceSha256": "2a19c5aabaca822171e1bbf29dde7e292f15f644d754a4c8142df51993a2830c",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "tests/advanced-structural-source-execution.test.mjs"
+  ],
+  "executionCount": 1,
+  "observedTestCounts": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cleanup": "Owned Node child exited; analyzeProject awaits worker termination",
+  "scope": "Previously authorized single run of identical source before diagnostic-only changes; no additional solver execution",
+  "diagnosticRegression": {
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0
+  },
+  "contractDeclarations": 17,
+  "linuxDispatch": "pending; no Linux success claimed"
+}

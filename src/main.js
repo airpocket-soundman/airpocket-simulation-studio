@@ -14,6 +14,7 @@ import {createIncrementCurveComparisonUi} from './ui/increment-curve-comparison.
 import {createStatusUi} from './ui/status-ui.js';
 import {createFatigueUi} from './ui/fatigue-ui.js';
 import {createMaterialFormUi} from './ui/material-form-ui.js';
+import {createPrintedMeasurementUi} from './ui/printed-measurement-ui.js';
 import {createStudyFormUi} from './ui/study-form-ui.js';
 import {createDisciplineControlsUi} from './ui/discipline-controls-ui.js';
 import {createJobResultTransfer} from './job-result-transfer.js';
@@ -228,6 +229,9 @@ window.inputApi=Object.freeze({
  }
 });
 materialFormUi.installFields();
+const printedMeasurementHost=document.createElement('div');printedMeasurementHost.id='printed-measurement-inspection';$('material-save').closest('details').after(printedMeasurementHost);
+const printedMeasurementUi=createPrintedMeasurementUi({host:printedMeasurementHost,language:()=>language});
+window.addEventListener('pagehide',event=>{if(event.persisted)printedMeasurementUi.invalidate();else printedMeasurementUi.destroy();});
 function renderMaterial(){fractureUi?.refreshMaterial();materialDirty=false;renderFatigueMaterial();materialFormUi.writeForm();updateDisciplineVisibility();}
 $('material').onchange=()=>{api.setMaterial($('material').value);renderMaterial();};
 $('material-save').onclick=()=>{try{const p=materialFormUi.readForm();if(!p.plasticity&&getProject().study.plasticLoadFractions){const study={...getProject().study};delete study.plasticLoadFractions;api.setStudy(study);}if(materialProperties.catalogSelection)p.catalogSelection=reconcileCatalogEdits(materialProperties.catalogSelection,p);api.setMaterialProperties(p);renderMaterial();status('材料物性を登録しました。');}catch(e){$('material-status').textContent=language==='en'?e.message:localizeStatus(e.message);}};renderMaterial();

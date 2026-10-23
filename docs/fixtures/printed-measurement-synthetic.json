@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "synthetic-example-only",
+  "revision": "1",
+  "provenance": "synthetic",
+  "units": {
+    "length": "mm",
+    "force": "N",
+    "time": "s",
+    "temperature": "degC",
+    "speed": "mm/s"
+  },
+  "instrument": {
+    "id": "synthetic-no-device",
+    "hardwareRevision": "synthetic-1",
+    "softwareRevision": "synthetic-1"
+  },
+  "calibration": {
+    "status": "unverified",
+    "forceEvidence": null,
+    "displacementEvidence": null,
+    "dimensionEvidence": null
+  },
+  "specimens": [
+    {
+      "id": "synthetic-Z",
+      "dimensions": [
+        1,
+        1,
+        10
+      ],
+      "gaugeLength": 10,
+      "buildDirection": [
+        0,
+        0,
+        1
+      ],
+      "batch": "synthetic-no-physical-batch",
+      "temperature": 20,
+      "speed": 0.1,
+      "displacementKind": "gauge",
+      "samples": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0.5,
+          0.05
+        ],
+        [
+          2,
+          1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "id": "synthetic-X",
+      "dimensions": [
+        1,
+        2,
+        10
+      ],
+      "gaugeLength": 10,
+      "buildDirection": [
+        1,
+        0,
+        0
+      ],
+      "batch": "synthetic-no-physical-batch",
+      "temperature": 20,
+      "speed": 0.1,
+      "displacementKind": "gauge",
+      "samples": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0.05
+        ],
+        [
+          2,
+          2,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

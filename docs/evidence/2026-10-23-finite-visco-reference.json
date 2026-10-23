@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "baseSha": "2a5fab3c54b49283dde44ada55ae4b9988eb4e06",
+  "branch": "codex/finitevisco-material-point-reference-20261023",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Pure material-point reference; synthetic/provisional/uncalibrated fixed; not a complete reproduction of any source theory.",
+  "parameters": {
+    "bulkModulusPa": 2000000,
+    "equilibriumShearModulusPa": 1000000,
+    "branchShearModulusPa": 500000,
+    "relaxationTimeSeconds": 2
+  },
+  "limits": {
+    "steps": 4096,
+    "bytes": 1048576,
+    "minStretch": 0.95,
+    "maxStretch": 1.05,
+    "minJ": 0.85,
+    "maxJ": 1.16,
+    "minTimeRatio": 0.000001,
+    "maxTimeRatio": 1000000,
+    "maxTimeSeconds": 1000000000
+  },
+  "initialTrial": {
+    "S12Pa": 14999.999999999869,
+    "expectedPa": 15000
+  },
+  "ramp": {
+    "measuredPa": 13934.693402873545,
+    "independentExpectedPa": 13934.693402873665
+  },
+  "hold": {
+    "measuredPa": 11447.492810230025,
+    "independentExpectedPa": 11447.49281023008
+  },
+  "rows": [
+    {
+      "timeSeconds": 1,
+      "E12": 0.005,
+      "S12Pa": 13934.693402873545,
+      "sigma12Pa": 13935.390189803144,
+      "Z12": 0.001065306597126325,
+      "energyDensityJPerM3": 65.48181217461641,
+      "dtSeconds": 1,
+      "path": "linear-Green-Lagrange",
+      "workDensity": 71.30613194252545,
+      "dissipationDensity": 5.824319767909034,
+      "energyBalanceErrorDensity": 1.1546319456101628e-14
+    },
+    {
+      "timeSeconds": 3,
+      "E12": 0.005,
+      "S12Pa": 11447.492810230025,
+      "sigma12Pa": 11448.065227802213,
+      "Z12": 0.003552507189769844,
+      "energyDensityJPerM3": 52.095235435667,
+      "dtSeconds": 2,
+      "path": "linear-Green-Lagrange",
+      "workDensity": 0,
+      "dissipationDensity": 13.386576738949412,
+      "energyBalanceErrorDensity": 1.7763568394002505e-15
+    },
+    {
+      "timeSeconds": 3.5,
+      "E12": 0,
+      "S12Pa": -3296.675804474424,
+      "sigma12Pa": -3296.675804474424,
+      "Z12": 0.003296675804474424,
+      "energyDensityJPerM3": 10.86807135980709,
+      "dtSeconds": 0.5,
+      "path": "linear-Green-Lagrange",
+      "workDensity": -39.76674458818242,
+      "dissipationDensity": 1.4604194876775014,
+      "energyBalanceErrorDensity": -1.021405182655144e-14
+    },
+    {
+      "timeSeconds": 4.5,
+      "E12": -0.003,
+      "S12Pa": -10360.350992270869,
+      "sigma12Pa": -10360.53748362401,
+      "Z12": 0.001360350992270739,
+      "energyDensityJPerM3": 37.012660775797315,
+      "dtSeconds": 1,
+      "path": "linear-Green-Lagrange",
+      "workDensity": 41.235897746445076,
+      "dissipationDensity": 15.09130833045485,
+      "energyBalanceErrorDensity": 0
+    },
+    {
+      "timeSeconds": 5.2,
+      "E12": 0.005,
+      "S12Pa": 13677.29910946864,
+      "sigma12Pa": 13677.98302571826,
+      "Z12": 0.0013227008905312295,
+      "energyDensityJPerM3": 63.52252874049863,
+      "dtSeconds": 0.7,
+      "path": "linear-Green-Lagrange",
+      "workDensity": 30.278852491906736,
+      "dissipationDensity": 3.7689845272054128,
+      "energyBalanceErrorDensity": 1.6431300764452317e-14
+    },
+    {
+      "timeSeconds": 7.2,
+      "E12": 0,
+      "S12Pa": -1807.800052731163,
+      "sigma12Pa": -1807.800052731163,
+      "Z12": 0.001807800052731163,
+      "energyDensityJPerM3": 3.268141030654796,
+      "dtSeconds": 2,
+      "path": "linear-Green-Lagrange",
+      "workDensity": -54.85099162199843,
+      "dissipationDensity": 5.4033960878454055,
+      "energyBalanceErrorDensity": -4.440892098500626e-15
+    }
+  ],
+  "maxAbsoluteEnergyBalanceErrorJPerM3": 1.6431300764452317e-14,
+  "sourceHashes": {
+    "src/finite-visco-reference.js": {
+      "bytes": 8124,
+      "sha256": "6cab756b18d789e76873d0336a6fa3e2d6482f783d4862a3696f866d445cda24"
+    },
+    "src/finite-visco-reference.d.ts": {
+      "bytes": 2696,
+      "sha256": "0926b3caf0c50ce7368150ea835b6e9e5eaa21b618822197138c9a10a464e1fe"
+    },
+    "tests/finite-visco-reference.test.mjs": {
+      "bytes": 13045,
+      "sha256": "4c65839a056ec91c6270855fa754d5dbbf147271905bdae30ad378db07ef9725"
+    },
+    "tests/fixtures/finite-visco-reference-types.ts": {
+      "bytes": 965,
+      "sha256": "61e486983b90c27249c361f855eabe0d9d964df9b8875ef382c89cbe07f3250e"
+    }
+  },
+  "tests": {
+    "command": "node --test tests/finite-visco-reference.test.mjs tests/docs.test.mjs",
+    "pass": 18,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 1360.669,
+    "contractDeclarations": 15,
+    "syntax": "passed",
+    "diffCheck": "passed",
+    "runtimeImportTypeFixture": "passed as normal test"
+  },
+  "independentOracles": [
+    "2000-panel Simpson integration of analytic memory and separate S:Edot power",
+    "exponential hold and large-x ramp primitive",
+    "nine-component Richardson derivative of fixed-memory energy versus P",
+    "time-dependent spatial rotations and full noncoaxial reference-basis covariance",
+    "exact same-path subdivision and smooth nonlinear-path refinement",
+    "stress-free reduced recovery limit"
+  ],
+  "designDifferences": [
+    "Issued frozen in-process states only; persistent JSON restore/replay is not implemented and clones are refused.",
+    "No full-history input/output API or retained ancestors; 1MiB applies per state, step count max4096.",
+    "dt/tau restricted to1e-6..1e6; outside refused."
+  ],
+  "integrationRequired": [
+    "root registers finite-visco-reference.js in src/module-layers.json domain.files; this owner did not edit the shared table"
+  ],
+  "unverified": [
+    "Permanent plasticity, finite plasticity, damage, necking or fracture",
+    "Physical calibration, printed material anisotropy or experimental accuracy",
+    "Global stability/ellipticity of StVK-like energy; envelope is numerical scope only",
+    "Element/mesh/structural/Newton integration, physical force/current area",
+    "Product solver/UI/API/MCP/project schema or publication",
+    "Serialized history restore/replay and whole-history byte budget"
+  ],
+  "parentComplete": false
+}
