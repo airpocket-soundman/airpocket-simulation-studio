@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "method": "Pillow RGB crop bytes, independent decoded images",
+  "panels": [
+    {
+      "panelIndex": 0,
+      "crop": [
+        100,
+        100,
+        540,
+        500
+      ],
+      "excludes": "headers,physical-time labels and color bars",
+      "pixelSha256": [
+        "cbac0a7b6f70f385616abfe445ba67f02014a8fe4f351d98c0acb5fa6a1cf98e",
+        "4a71e2c0636c41c2659cfbae11597aff72ffbcdb0f5d351b0943e9d64553a15e",
+        "9e327589961d0b76926dc684e56669032737c29ba0ecb26b45962f8055cad7b9"
+      ],
+      "differencesFromFirst": [
+        {
+          "comparedSelectedImage": 1,
+          "changedPixels": 2277,
+          "absoluteChannelDifference": 18483
+        },
+        {
+          "comparedSelectedImage": 2,
+          "changedPixels": 28756,
+          "absoluteChannelDifference": 1550344
+        }
+      ]
+    },
+    {
+      "panelIndex": 1,
+      "crop": [
+        740,
+        100,
+        1180,
+        500
+      ],
+      "excludes": "headers,physical-time labels and color bars",
+      "pixelSha256": [
+        "35dda8c3afb0259d0e93a2a3f9b5ac671356aa6128e5bd8c4dbcb151e6fb8942",
+        "340d8d98223a9010d635039cedc623e59af9ad4a75c2b664a14dd17ebdc4f4ca",
+        "18e9511d6f3eb020af30cc4601ffbc7b0e9d36217ad6d92d090021011a036cf6"
+      ],
+      "differencesFromFirst": [
+        {
+          "comparedSelectedImage": 1,
+          "changedPixels": 2221,
+          "absoluteChannelDifference": 17768
+        },
+        {
+          "comparedSelectedImage": 2,
+          "changedPixels": 28325,
+          "absoluteChannelDifference": 2427226
+        }
+      ]
+    }
+  ],
+  "limits": "Lossy VP9 pixel change is not exact physical pressure measurement; three selected frames only."
+}

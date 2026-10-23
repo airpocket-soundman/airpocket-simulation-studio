@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "base": "3aa69ad1eaf78a036237e20c29e830d4c20e69ac",
+  "branch": "codex/curved-pressure-persisted-operator",
+  "scope": {
+    "synthetic": true,
+    "solverConnected": false,
+    "solverRuns": 0,
+    "browserRuns": 0,
+    "sdkDownloads": 0,
+    "parentComplete": false,
+    "smoothSurfaceAccuracy": false
+  },
+  "sourceSha256": "907c496a85314bda8944089aa2909ae14471c6ce48dc8a06b0edbe88c0c5fce5",
+  "oracle": {
+    "provenance": "Independent analytic SI triangle oracle supplied by reviewer before reading implementation",
+    "geometry": {
+      "lengthUnit": "mm",
+      "surface": "open",
+      "nodes": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        3,
+        0
+      ],
+      "triangles": [
+        [
+          0,
+          1,
+          2
+        ]
+      ]
+    },
+    "pressure": {
+      "units": "Pa",
+      "values": [
+        {
+          "real": 2,
+          "imag": 3
+        }
+      ]
+    },
+    "displacement": {
+      "units": "m",
+      "real": [
+        0,
+        0,
+        0.001,
+        0,
+        0,
+        0.002,
+        0,
+        0,
+        0.004
+      ],
+      "imag": [
+        0,
+        0,
+        -0.001,
+        0,
+        0,
+        0.003,
+        0,
+        0,
+        0.002
+      ]
+    },
+    "expected": {
+      "eachNodalFzN": {
+        "real": -0.000002,
+        "imag": -0.000003
+      },
+      "resultantFzN": {
+        "real": -0.000006,
+        "imag": -0.000009
+      },
+      "momentRealNm": [
+        -6e-9,
+        4e-9,
+        0
+      ],
+      "momentImagNm": [
+        -9e-9,
+        6e-9,
+        0
+      ],
+      "volumeM3": {
+        "real": 7e-9,
+        "imag": 4e-9
+      },
+      "workJ": {
+        "real": -2.6e-8,
+        "imag": -1.3e-8
+      }
+    },
+    "actual": {
+      "force": {
+        "operatorRevision": "sha256:8ec323231a0dc47d1473962fcd000444312317c176a88de9db02bb4f6bfc7c19",
+        "geometryRevision": "sha256:2bc27a39afbe794f99e253e26d86e1cf59d33a31edc2ad70dac84d261a659b72",
+        "pressureRevision": "sha256:95999485280137527c13d141362012abe73c4bc2f0b439a819ce8de79f74c186",
+        "forceReal": [
+          0,
+          0,
+          -0.000002,
+          0,
+          0,
+          -0.000002,
+          0,
+          0,
+          -0.000002
+        ],
+        "forceImag": [
+          0,
+          0,
+          -0.000003,
+          0,
+          0,
+          -0.000003,
+          0,
+          0,
+          -0.000003
+        ],
+        "resultantReal": [
+          0,
+          0,
+          -0.000006
+        ],
+        "resultantImag": [
+          0,
+          0,
+          -0.000009
+        ],
+        "momentReal": [
+          -6e-9,
+          4e-9,
+          0
+        ],
+        "momentImag": [
+          -9.000000000000001e-9,
+          6e-9,
+          0
+        ],
+        "totalAreaMm2": 3,
+        "units": {
+          "force": "N",
+          "moment": "Nm"
+        }
+      },
+      "transpose": {
+        "operatorRevision": "sha256:8ec323231a0dc47d1473962fcd000444312317c176a88de9db02bb4f6bfc7c19",
+        "geometryRevision": "sha256:2bc27a39afbe794f99e253e26d86e1cf59d33a31edc2ad70dac84d261a659b72",
+        "displacementRevision": "sha256:63e8df2b79313cb0f54f621f08f1c3d6d6d658029f0c75f9702daf31ae3b7bd5",
+        "volumeReal": [
+          7.000000000000001e-9
+        ],
+        "volumeImag": [
+          3.9999999999999994e-9
+        ],
+        "totalVolumeReal": 7.000000000000001e-9,
+        "totalVolumeImag": 3.9999999999999994e-9,
+        "unit": "m3"
+      },
+      "work": {
+        "operatorRevision": "sha256:8ec323231a0dc47d1473962fcd000444312317c176a88de9db02bb4f6bfc7c19",
+        "geometryRevision": "sha256:2bc27a39afbe794f99e253e26d86e1cf59d33a31edc2ad70dac84d261a659b72",
+        "pressureRevision": "sha256:95999485280137527c13d141362012abe73c4bc2f0b439a819ce8de79f74c186",
+        "displacementRevision": "sha256:63e8df2b79313cb0f54f621f08f1c3d6d6d658029f0c75f9702daf31ae3b7bd5",
+        "nodalWork": {
+          "real": -2.6e-8,
+          "imag": -1.3e-8
+        },
+        "pressureWork": {
+          "real": -2.6e-8,
+          "imag": -1.3000000000000004e-8
+        },
+        "absoluteErrorJ": 3.308722450212111e-24,
+        "relativeErrorJ": 2.7572687085100918e-17,
+        "scaleJ": 1.2000000000000002e-7,
+        "unit": "J"
+      }
+    }
+  },
+  "persistence": {
+    "bytes": 703,
+    "rawIdentity": "sha256:5fc7f6d418fb7328681330da75074a622da5baa192a11b626b6bfece4c420082",
+    "meaning": "input-JSON-identity-not-authentication",
+    "operatorRevision": "sha256:8ec323231a0dc47d1473962fcd000444312317c176a88de9db02bb4f6bfc7c19",
+    "roundTripExact": true
+  },
+  "limits": {
+    "nodes": 4096,
+    "faces": 512,
+    "bytes": 1048576,
+    "coordinateMm": 1000000,
+    "values": 100000,
+    "depth": 12
+  },
+  "verification": {
+    "domainLegacyDocs": {
+      "command": "node --test tests/curved-pressure-operator.test.mjs tests/curved-pressure-transfer.test.mjs tests/docs.test.mjs",
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0
+    },
+    "contracts": {
+      "command": "npm run check:contracts",
+      "declarations": 20
+    },
+    "strictTypeFixture": "New domain test explicitly invokes strict tsc on tests/fixtures/curved-pressure-operator-types.ts",
+    "additionalOracles": [
+      "independent SI area-vector and centroid moment on skew closed tetrahedron",
+      "complex rigid translation/rotation work and shifted origin moment",
+      "old API equality including huge finite displacement and tiny normal underflow counterexample",
+      "closed uniform pressure cancellation while nodal loads remain",
+      "self-rehashed coefficient/normal/node-order/units/scope tampering rejection",
+      "all input snapshots before asynchronous hash awaits",
+      "4096 nodes and 512 faces combined; exact 1MiB accepted; plus-one and depth rejected"
+    ],
+    "reviewerDraft": {
+      "sourceHashMatched": true,
+      "mandatoryFindings": 0,
+      "formalCommitAudit": "pending commit identity confirmation"
+    }
+  },
+  "integration": {
+    "sharedMainProgressModuleLayersChanged": false,
+    "moduleLayerRegistration": "Root to register curved-pressure-operator.js alongside curved-pressure-transfer.js"
+  }
+}

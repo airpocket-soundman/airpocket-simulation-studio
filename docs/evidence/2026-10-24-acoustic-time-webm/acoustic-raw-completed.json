@@ -1,0 +1,369 @@
+{
+  "request": {
+    "requestId": "acoustic-webm191-acoustic-1792769284631",
+    "references": [
+      {
+        "caseId": "5c6df30a-8baa-4608-851d-8a4e6da7b072",
+        "expectedRevision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+      },
+      {
+        "caseId": "3f570dd3-1ea3-4ac0-93f0-a41f40895e4c",
+        "expectedRevision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+      }
+    ],
+    "field": "instantPressure",
+    "format": "webm",
+    "animation": "time",
+    "seconds": 2,
+    "startTimeSeconds": 0,
+    "endTimeSeconds": 0.0012,
+    "deformScale": 1,
+    "camera": {
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    }
+  },
+  "status": {
+    "schemaVersion": 1,
+    "jobId": "8e59246a-c28e-4352-915a-fbf3cb977b8b",
+    "requestId": "acoustic-webm191-acoustic-1792769284631",
+    "state": "completed",
+    "format": "webm",
+    "target": "comparison",
+    "comparison": {
+      "cases": [
+        {
+          "caseId": "5c6df30a-8baa-4608-851d-8a4e6da7b072",
+          "label": "Synthetic acoustic 1Pa",
+          "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+          "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+        },
+        {
+          "caseId": "3f570dd3-1ea3-4ac0-93f0-a41f40895e4c",
+          "label": "Synthetic acoustic 2Pa",
+          "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+          "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+        }
+      ],
+      "colorRange": {
+        "field": "instantPressure",
+        "maximum": 3.532363432716448,
+        "minimum": -3.4066020347578125
+      },
+      "field": "instantPressure",
+      "panels": [
+        {
+          "caseId": "5c6df30a-8baa-4608-851d-8a4e6da7b072",
+          "field": "instantPressure",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 0,
+          "minimum": 0,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "Pa"
+        },
+        {
+          "caseId": "3f570dd3-1ea3-4ac0-93f0-a41f40895e4c",
+          "field": "instantPressure",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 0,
+          "minimum": 0,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "Pa"
+        }
+      ],
+      "timeAnimation": {
+        "camera": "fixed",
+        "endTimeSeconds": 0.0012,
+        "field": "instantPressure",
+        "final": {
+          "panels": [
+            {
+              "frameIndex": 23,
+              "offsetSeconds": 0,
+              "timeSeconds": 0.0012
+            },
+            {
+              "frameIndex": 23,
+              "offsetSeconds": 0,
+              "timeSeconds": 0.0012
+            }
+          ],
+          "timeSeconds": 0.0012
+        },
+        "initial": {
+          "panels": [
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            },
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            }
+          ],
+          "timeSeconds": 0
+        },
+        "interpolated": false,
+        "kind": "acousticTransient",
+        "maxAbsOffsetSeconds": [
+          0.000027272727272727263,
+          0.000027272727272727263
+        ],
+        "rangeBasis": "all-selectable-stored-frames",
+        "selectedFrameCounts": [
+          24,
+          24
+        ],
+        "startTimeSeconds": 0,
+        "timeSelection": "nearest-stored-frames-only"
+      },
+      "unit": "Pa"
+    },
+    "view": {
+      "camera": {
+        "fov": 40,
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "deformScale": 1,
+      "layers": {
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true
+      },
+      "setup": {
+        "clipEnabled": false,
+        "axis": 2,
+        "position": 0,
+        "flip": false,
+        "opacity": 1,
+        "meshCount": 1,
+        "hiddenParts": []
+      },
+      "language": "en",
+      "resolution": {
+        "width": 1280,
+        "height": 640
+      }
+    },
+    "progress": {
+      "fraction": 1
+    },
+    "artifact": {
+      "mimeType": "video/webm;codecs=vp9",
+      "name": "comparison-8e59246a-c28e-4352-915a-fbf3cb977b8b.webm",
+      "totalBytes": 27172,
+      "sha256": "sha256:3c5e21448fac7ab9654564b7e1e40459f028ec6d347b9d01c2b8e2939f4b676c",
+      "maxChunkBytes": 65536,
+      "manifest": {
+        "schemaVersion": 1,
+        "target": "comparison",
+        "format": "webm",
+        "container": "webm",
+        "mimeType": "video/webm;codecs=vp9",
+        "codec": "vp9",
+        "sha256": "sha256:3c5e21448fac7ab9654564b7e1e40459f028ec6d347b9d01c2b8e2939f4b676c",
+        "totalBytes": 27172,
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        },
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "5c6df30a-8baa-4608-851d-8a4e6da7b072",
+              "label": "Synthetic acoustic 1Pa",
+              "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+              "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+            },
+            {
+              "caseId": "3f570dd3-1ea3-4ac0-93f0-a41f40895e4c",
+              "label": "Synthetic acoustic 2Pa",
+              "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+              "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+            }
+          ],
+          "colorRange": {
+            "field": "instantPressure",
+            "maximum": 3.532363432716448,
+            "minimum": -3.4066020347578125
+          },
+          "field": "instantPressure",
+          "panels": [
+            {
+              "caseId": "5c6df30a-8baa-4608-851d-8a4e6da7b072",
+              "field": "instantPressure",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 0,
+              "minimum": 0,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "Pa"
+            },
+            {
+              "caseId": "3f570dd3-1ea3-4ac0-93f0-a41f40895e4c",
+              "field": "instantPressure",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 0,
+              "minimum": 0,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "Pa"
+            }
+          ],
+          "timeAnimation": {
+            "camera": "fixed",
+            "endTimeSeconds": 0.0012,
+            "field": "instantPressure",
+            "final": {
+              "panels": [
+                {
+                  "frameIndex": 23,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0.0012
+                },
+                {
+                  "frameIndex": 23,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0.0012
+                }
+              ],
+              "timeSeconds": 0.0012
+            },
+            "initial": {
+              "panels": [
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                },
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                }
+              ],
+              "timeSeconds": 0
+            },
+            "interpolated": false,
+            "kind": "acousticTransient",
+            "maxAbsOffsetSeconds": [
+              0.000027272727272727263,
+              0.000027272727272727263
+            ],
+            "rangeBasis": "all-selectable-stored-frames",
+            "selectedFrameCounts": [
+              24,
+              24
+            ],
+            "startTimeSeconds": 0,
+            "timeSelection": "nearest-stored-frames-only"
+          },
+          "unit": "Pa"
+        },
+        "view": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              61,
+              41,
+              84
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "en",
+          "resolution": {
+            "width": 1280,
+            "height": 640
+          }
+        },
+        "time": {
+          "animation": "time",
+          "durationSeconds": 2,
+          "timeBasis": "display time",
+          "physicalTime": "Requested physical range maps to nearest stored frames per panel; actual times and signed offsets are shown in each rendered frame.",
+          "camera": "fixed",
+          "frameSelection": "nearest-stored-frames-only",
+          "requestedRangeSeconds": {
+            "start": 0,
+            "end": 0.0012
+          },
+          "fps": {
+            "target": 24,
+            "recording": "realtime",
+            "frameCountGuaranteed": false
+          }
+        }
+      }
+    }
+  },
+  "byteVerification": {
+    "bytes": 27172,
+    "sha256": "sha256:3c5e21448fac7ab9654564b7e1e40459f028ec6d347b9d01c2b8e2939f4b676c"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "decoder": "ffmpeg version 9.0.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers\r",
+  "probe": "ffprobe version 9.0.1-full_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg developers\r",
+  "bytes": 27172,
+  "sha256": "3c5e21448fac7ab9654564b7e1e40459f028ec6d347b9d01c2b8e2939f4b676c",
+  "codec": "vp9",
+  "width": 1280,
+  "height": 640,
+  "frameCount": 4,
+  "distinctFrameHashes": 4,
+  "presentationTimesSeconds": [
+    0,
+    0.385,
+    0.744,
+    1.112
+  ],
+  "formatDurationSeconds": null,
+  "selectedFrames": [
+    {
+      "decodedIndex": 0,
+      "ptsSeconds": 0,
+      "file": "decoded-0.png"
+    },
+    {
+      "decodedIndex": 1,
+      "ptsSeconds": 0.385,
+      "file": "decoded-1.png"
+    },
+    {
+      "decodedIndex": 3,
+      "ptsSeconds": 1.112,
+      "file": "decoded-2.png"
+    }
+  ],
+  "checksPassed": true,
+  "limitations": [
+    "Variable real-time recording; no fixed frame count or exact24fps claim.",
+    "Presentation PTS is not physical time; no per-encoded-frame physical ledger contract."
+  ]
+}
