@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "a4e1430",
+  "runtime": "c26010082fa5d23ab3b910116ac0e60227041748",
+  "rawFilesVerified": 32,
+  "physicalSnapshotsEqual": 5,
+  "runningFraction": 0.13772999999523164,
+  "markerAgeAtClickRequestMs": 615,
+  "clickOutcome": "focus-timeout; no confirmed pre-completion disconnect",
+  "acceptance": "partial",
+  "terminalState": "completed",
+  "executionSettled": true,
+  "artifactReadBytes": 1,
+  "artifactMetadataBytes": 354459,
+  "fullMediaHashVerified": false,
+  "cancellationProven": false,
+  "cleanupEvidenceVerified": true,
+  "additionalExports": 0,
+  "additionalCodecRuns": 0,
+  "solverRuns": 0,
+  "limitations": [
+    "194a and 194b remain partial; no cancellation acceptance closure",
+    "executionSettled describes Promise-chain completion and queue exclusion, not OS/codec resource release",
+    "Only foreground Japanese IAB condition; no English/hidden/other-engine matrix",
+    "Artifact metadata SHA is reported, not independently verified from full bytes"
+  ]
+}

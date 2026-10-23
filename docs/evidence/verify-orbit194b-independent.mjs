@@ -1,0 +1,26 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const root=path.resolve(process.argv[2]??'docs/evidence/2026-10-24-orbit-disconnect-synchronized-partial');
+const read=n=>JSON.parse(fs.readFileSync(path.join(root,n),'utf8'));
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const inventory=read('byte-inventory.json');
+for(const f of inventory.files){const b=fs.readFileSync(path.join(root,f.name));assert.equal(b.length,f.bytes);assert.equal(sha(b),f.sha256);}
+const primary=read('primary-result.json'),trace=read('gui-root-incomplete-trace.json'),states=read('before-after-state.json');
+assert.equal(primary.accepted,false);assert.equal(primary.state,'completed');assert.equal(primary.executionSettled,true);assert.equal(primary.refusalBasis,null);
+assert.equal(trace.marker.status.state,'running');assert.equal(trace.marker.status.executionSettled,false);assert.ok(trace.marker.status.progress.fraction>0);assert.equal(trace.dom.disconnectDisabled,false);assert.equal(trace.dom.modelDisabled,true);assert.equal(trace.dom.visibility,'visible');assert.ok(trace.marker.receivedAt<=trace.markerReadAt&&trace.markerReadAt<=trace.dom.at&&trace.dom.at<=trace.clickRequestedAt);assert.match(trace.error,/timed out/);
+for(const k of ['cases','compare','result','view'])assert.deepEqual(states.after[k],states.before[k]);
+const before=structuredClone(states.before.inspect),after=structuredClone(states.after.inspect);delete before.lifecycle;delete after.lifecycle;assert.deepEqual(after,before);
+assert.equal(states.before.inspect.lifecycle.pageInstanceId,states.after.inspect.lifecycle.pageInstanceId);assert.ok(states.after.inspect.lifecycle.connectionEpoch>states.before.inspect.lifecycle.connectionEpoch);
+for(const n of ['initial-session.json','fresh-session.json'])assert.deepEqual(read(n).scopes,['inspect','view']);
+assert.notEqual(read('initial-session.json').sessionId,read('fresh-session.json').sessionId);
+assert.match(read('old-session-call-rejection.json').message,/session unavailable/i);assert.deepEqual(read('after-first-disconnect-sessions.json').sessions,[]);
+const artifact=read('fresh-session-artifact-result.json').unexpected;assert.equal(artifact.nextOffset,1);assert.equal(Buffer.from(artifact.data,'base64').length,1);assert.equal(artifact.totalBytes,354459);
+assert.equal(read('after-release-job-status.json').rejected,true);assert.match(read('after-release-job-status.json').message,/Unknown visual export job/);
+assert.deepEqual(read('cleanup.json'),{sessions:[],ownedJobReleased:true,ownedTransfersReleased:true});assert.deepEqual(read('child-close.json'),{exited:true,terminated:false,escalated:false});assert.equal(read('process-cleanup.json').processExists,false);assert.equal(read('process-cleanup.json').privatePairExists,false);
+const dom=read('gui-final-dom.json');for(const k of ['codeEmpty','endpointEmpty','disconnectDisabled','stopDisabled'])assert.equal(dom[k],true);assert.equal(dom.modelDisabled,false);
+assert.equal('sha256:'+sha(fs.readFileSync(path.join(root,'driver.mjs'))),read('driver-source.json').driverSha256);
+const result={schemaVersion:1,sourceBase:'a4e1430',runtime:read('driver-source.json').runtimeSource,rawFilesVerified:inventory.files.length,physicalSnapshotsEqual:5,runningFraction:trace.marker.status.progress.fraction,markerAgeAtClickRequestMs:trace.clickRequestedAt-trace.marker.receivedAt,clickOutcome:'focus-timeout; no confirmed pre-completion disconnect',acceptance:'partial',terminalState:'completed',executionSettled:true,artifactReadBytes:1,artifactMetadataBytes:artifact.totalBytes,fullMediaHashVerified:false,cancellationProven:false,cleanupEvidenceVerified:true,additionalExports:0,additionalCodecRuns:0,solverRuns:0,limitations:['194a and 194b remain partial; no cancellation acceptance closure','executionSettled describes Promise-chain completion and queue exclusion, not OS/codec resource release','Only foreground Japanese IAB condition; no English/hidden/other-engine matrix','Artifact metadata SHA is reported, not independently verified from full bytes']};
+if(process.argv[3])fs.writeFileSync(process.argv[3],JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result,null,2));
