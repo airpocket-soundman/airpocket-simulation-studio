@@ -6,7 +6,9 @@ API/MCPの画像・動画出力ジョブは、開始・状態・取消の応答�
 
 [English](en/visual-export.md)
 
-時間比較GIFのmanifestには、各描画要求と各panelの実保存時刻/ずれ/case・結果識別を結ぶ `time.frameTimings` がある。[詳細・上限](view-compare-design.md)。GIFは24出力frameを記録する。WebMは既存の端点・方針概要を維持し、個別frame ledgerは提供しない。上限超過は失敗して部分成果物を返さない。
+時間比較GIFのmanifestには、各描画要求と各panelの実保存時刻/ずれ/case・結果識別を結ぶ `time.frameTimings` がある。[詳細・上限](view-compare-design.md)。GIFは24出力frameを記録する。[比較time WebMの固定フレーム経路](comparison-fixed-webm.md)は、全符号化・復号確認済みframeの物理時刻ledgerと再生時刻を記録する。回転・表示倍率の実時間WebMは従来の方針概要を維持し、同じ保証を持たない。上限超過は失敗して部分成果物を返さない。
+
+`executionSettled` は出力Promise鎖とキュー占有の終了を示す。出力成功やOS/codec内部の資源・メモリ解放を独立に証明する値ではない。
 
 結果表示の「画像・アニメーションを保存」から現在の表示をPNG、アニメーションをWebMで保存できます。モデルだけのPNGと回転にも対応します。画像にはモデル名、表示範囲・単位、断面情報を添えます。最大幅は1920ピクセルです。
 
