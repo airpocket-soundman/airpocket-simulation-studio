@@ -35,6 +35,9 @@ test('UTF8 limits and retained history remain bounded without truncating replies
 test('a provider change during a state notification cannot start the obsolete prompt',async()=>{
  let model,calls=0;model=createAgentChatState({onChange:state=>{if(state.phase==='prompting')model.setProvider(provider());}});model.setProvider(provider({prompt:async()=>{calls++;return reply('old');}}));assert.equal(await model.send('x'),false);assert.equal(calls,0);assert.equal(model.snapshot().messages.length,0);
 });
+test('retired provider A cannot be reused after A→B→A while its old cancellation is outstanding',async()=>{
+ const old=deferred(),cancelled=deferred();let calls=0;const a=provider({prompt:()=>{calls++;return old.promise;},cancel:()=>cancelled.promise}),model=createAgentChatState();model.setProvider(a);const pending=model.send('old');old.resolve(reply('old'));model.setProvider(provider());assert.throws(()=>model.setProvider(a),/CHAT_PROVIDER_RETIRED/);assert.equal(await model.send('new'),true);cancelled.resolve();assert.equal(await pending,false);assert.equal(calls,1);assert.equal(model.snapshot().messages.at(-1).text,'new');
+});
 test('real ACP cancellation waits for the pending turn and child shutdown',async()=>{
  const client=new AcpSessionClient({executable:process.execPath,argv:[fileURLToPath(new URL('./fixtures/acp-session-stub.mjs',import.meta.url)),'wait'],cwd:process.cwd(),installSignalHandlers:false});const model=createAgentChatState();
  try{await client.start();await client.newSession(process.cwd());model.setProvider(client);const sending=model.send('cancel me');assert.equal(await model.stop(),true);assert.equal(await sending,false);assert.equal(model.snapshot().phase,'closed');assert.equal(client.diagnostics().transport.activeChild,false);}finally{model.destroy();await client.close();}

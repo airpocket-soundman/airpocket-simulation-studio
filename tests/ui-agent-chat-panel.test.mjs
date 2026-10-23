@@ -19,3 +19,6 @@ test('invalid input focuses error control and late answer preserves a newer draf
 test('session changes and destruction do not render old answers or clear new drafts',async()=>{
  const {ui}=setup();let resolve;ui.setProvider(provider(()=>new Promise(r=>resolve=r)));ui.input.value='old';const pending=ui.send.onclick();ui.setProvider(provider(async()=>({text:'new',cancelled:false})));ui.input.value='new draft';resolve({text:'old secret',cancelled:false});await pending;assert.equal(ui.history.children.length,0);assert.equal(ui.input.value,'new draft');ui.destroy();
 });
+test('edited draft ABA survives completion and destroyed snapshot releases old history',async()=>{
+ const {ui}=setup();let resolve;ui.setProvider(provider(()=>new Promise(r=>resolve=r)));ui.input.value='first';const pending=ui.send.onclick();ui.input.value='changed';ui.input.oninput();ui.input.value='first';ui.input.oninput();resolve({text:'answer',cancelled:false});await pending;assert.equal(ui.input.value,'first');assert.equal(ui.snapshot().messages.length,2);ui.destroy();assert.equal(ui.snapshot().phase,'closed');assert.equal(ui.snapshot().canSend,false);assert.deepEqual(ui.snapshot().messages,[]);
+});
