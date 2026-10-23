@@ -1,0 +1,213 @@
+{
+  "workOrder": "65-CFDMESH1",
+  "baseSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "date": "2026-10-23",
+  "input": {
+    "plan": {
+      "units": "mm",
+      "output": "coordinate-placement-plan",
+      "gapMm": 10,
+      "firstHeightMm": 0.1,
+      "growthRatio": 2,
+      "layersPerWall": 3,
+      "maxLayers": 512,
+      "layerHeightsMm": [
+        0.1,
+        0.2,
+        0.4
+      ],
+      "oneSideThicknessMm": 0.7000000000000001,
+      "centreBandMm": {
+        "lowerMm": 0.7000000000000001,
+        "upperMm": 9.3,
+        "widthMm": 8.6
+      },
+      "coordinatesMm": [
+        0,
+        0.1,
+        0.30000000000000004,
+        0.7000000000000001,
+        9.3,
+        9.7,
+        9.9,
+        10
+      ],
+      "totalLayerCount": 6,
+      "walls": [
+        {
+          "wallId": 0,
+          "positionMm": 0,
+          "thicknessMm": 0.7000000000000001,
+          "heightsMm": [
+            0.1,
+            0.2,
+            0.4
+          ],
+          "coordinatesMm": [
+            0,
+            0.1,
+            0.30000000000000004,
+            0.7000000000000001
+          ]
+        },
+        {
+          "wallId": 1,
+          "positionMm": 10,
+          "thicknessMm": 0.7000000000000001,
+          "heightsMm": [
+            0.1,
+            0.2,
+            0.4
+          ],
+          "coordinatesMm": [
+            9.3,
+            9.7,
+            9.9,
+            10
+          ]
+        }
+      ],
+      "layers": [
+        {
+          "wallId": 0,
+          "index": 0,
+          "heightMm": 0.1,
+          "innerMm": 0,
+          "outerMm": 0.1,
+          "distanceFromLowerWallMm": 0,
+          "distanceFromUpperWallMm": 9.9
+        },
+        {
+          "wallId": 0,
+          "index": 1,
+          "heightMm": 0.2,
+          "innerMm": 0.1,
+          "outerMm": 0.30000000000000004,
+          "distanceFromLowerWallMm": 0.1,
+          "distanceFromUpperWallMm": 9.7
+        },
+        {
+          "wallId": 0,
+          "index": 2,
+          "heightMm": 0.4,
+          "innerMm": 0.30000000000000004,
+          "outerMm": 0.7000000000000001,
+          "distanceFromLowerWallMm": 0.30000000000000004,
+          "distanceFromUpperWallMm": 9.3
+        },
+        {
+          "wallId": 1,
+          "index": 0,
+          "heightMm": 0.1,
+          "innerMm": 9.9,
+          "outerMm": 10,
+          "distanceFromLowerWallMm": 9.9,
+          "distanceFromUpperWallMm": 0
+        },
+        {
+          "wallId": 1,
+          "index": 1,
+          "heightMm": 0.2,
+          "innerMm": 9.7,
+          "outerMm": 9.9,
+          "distanceFromLowerWallMm": 9.7,
+          "distanceFromUpperWallMm": 0.1
+        },
+        {
+          "wallId": 1,
+          "index": 2,
+          "heightMm": 0.4,
+          "innerMm": 9.3,
+          "outerMm": 9.7,
+          "distanceFromLowerWallMm": 9.3,
+          "distanceFromUpperWallMm": 0.30000000000000004
+        }
+      ],
+      "scope": {
+        "schemaVersion": 1,
+        "kind": "parallel-plate-wall-layer-placement",
+        "units": {
+          "length": "mm"
+        },
+        "output": "coordinate-placement-plan",
+        "meshProduced": false,
+        "unsupported": [
+          "gmsh-prism-elements",
+          "tetrahedral-mesh",
+          "flow-solve",
+          "y-plus",
+          "wall-shear-stress",
+          "general-3d-boundary-layer",
+          "moving-walls"
+        ]
+      }
+    },
+    "lengthMm": 2,
+    "widthMm": 1,
+    "maxAspectRatio": 20,
+    "minimumCellHeightMm": 0.1
+  },
+  "inputSha256": "e517ebc0dabe98b479e2ee2d59768cc826f5626bdaa19599c7e8cbfb2ff40e2f",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "commands": [
+    {
+      "command": "node --test tests/channel-layer-tet4.test.mjs tests/channel-layer-cell-quality.test.mjs tests/mesh-validity.test.mjs",
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 7
+    },
+    {
+      "command": "node --test tests/docs.test.mjs",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "measured": {
+    "nodeCount": 32,
+    "tetCount": 42,
+    "internalFaces": 54,
+    "externalFaces": 60,
+    "volumeMm3": 19.999999999999986,
+    "relativeVolumeError": 7.105427357601002e-16,
+    "areasMm2": {
+      "lowerWall": 2,
+      "upperWall": 2,
+      "xMin": 10.000000000000004,
+      "xMax": 10.000000000000004,
+      "zMin": 20.000000000000007,
+      "zMax": 20.000000000000007
+    }
+  },
+  "expected": {
+    "volumeMm3": 20,
+    "lowerWallMm2": 2,
+    "upperWallMm2": 2,
+    "maximumRelativeVolumeError": 1e-12
+  },
+  "unverified": [
+    "general Gmsh boundary layers",
+    "solver/UI integration",
+    "flow solve",
+    "solver wall-tag transfer",
+    "y-plus",
+    "browser/native/publication",
+    "full-suite CI"
+  ],
+  "integrationRequired": [
+    "Register channel-layer-tet4.js in src/module-layers.json domain.files (root owner)"
+  ]
+}
