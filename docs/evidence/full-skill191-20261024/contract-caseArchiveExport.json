@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "caseArchiveExport",
+      "scope": "inspect",
+      "description": "Freeze the current case archive JSON as a bounded byte export.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "sideEffects": [
+        "Allocates a retained temporary export buffer."
+      ],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Default registry holds at most 4 transfers and 100000000 retained bytes in total; these are not peak-heap guarantees.",
+        "Transfer IDs are temporary. Release retained buffers after use.",
+        "Canonical base64 pages contain at most 65536 decoded bytes; hashes cover complete source bytes."
+      ]
+    }
+  ]
+}

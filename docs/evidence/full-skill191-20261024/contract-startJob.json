@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "startJob",
+      "scope": "analyze",
+      "description": "Start a revision-frozen browser mesh or solve job; requestId permits retries while retained.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "inputRevision": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "operation": {
+            "enum": [
+              "solve",
+              "mesh"
+            ],
+            "default": "solve"
+          },
+          "includeFields": {
+            "type": "boolean",
+            "default": false
+          },
+          "origin": {
+            "enum": [
+              "api",
+              "gui"
+            ],
+            "default": "api"
+          },
+          "options": {
+            "type": "object",
+            "description": "Solver options validated by preflight and the selected solver; use preflight first. Mesh size is mm; method availability is target-specific."
+          }
+        },
+        "required": [
+          "inputRevision",
+          "requestId"
+        ]
+      },
+      "sideEffects": [
+        "Starts calculation and retains job/events and optional intermediate fields."
+      ],
+      "revisionFields": [
+        "inputRevision"
+      ],
+      "units": {
+        "options.size": "mm"
+      },
+      "limitations": [
+        "A conflicting requestId is rejected; inspect retained jobs before retrying a timed-out command.",
+        "An active input snapshot is never edited. Browser disconnect cancels connection-owned running jobs."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "showJob",
+      "scope": "analyze",
+      "description": "Publish a successful retained job as a displayed saved result only while its input matches the current input.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ]
+      },
+      "sideEffects": [
+        "Displays a saved result and adds its saved case through the configured result adapter."
+      ],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Rejects stale input, an active calculation, expiry or revoked connection. Does not restore mismatching input automatically."
+      ]
+    }
+  ]
+}

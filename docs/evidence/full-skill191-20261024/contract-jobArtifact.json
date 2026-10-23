@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "jobArtifact",
+      "scope": "inspect",
+      "description": "Read a hash-verified retained artifact summary, bounded node/value or element-connectivity page, or point interpolation.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "artifactId": {
+            "type": "string"
+          },
+          "pageKind": {
+            "enum": [
+              "nodes",
+              "elements"
+            ],
+            "default": "nodes"
+          },
+          "point": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "bodyIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "elementIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "default": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 200,
+            "default": 0
+          }
+        },
+        "required": [
+          "jobId",
+          "artifactId"
+        ],
+        "dependentRequired": {
+          "bodyIndex": [
+            "point"
+          ],
+          "elementIndex": [
+            "point"
+          ]
+        }
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {
+        "point": "mm",
+        "displacement": "mm",
+        "temperature": "degC",
+        "acousticPressure": "Pa"
+      },
+      "limitations": [
+        "pageKind defaults to nodes. elements uses element-count offsets, limit <= 200, and cannot include point, bodyIndex or elementIndex.",
+        "Retained mesh/scalar/nonlinear displacement fields only; ambiguous multi-body points require selectors.",
+        "All intermediate fields are provisional; not all solvers publish fields."
+      ]
+    }
+  ]
+}

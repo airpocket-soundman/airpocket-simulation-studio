@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "target": "comparison",
+  "format": "png",
+  "container": "png",
+  "mimeType": "image/png",
+  "sha256": "sha256:7474f611ccb68a13d96ad2f627f4d9d200ebf04da8c162c8d01b8a074a28ddfa",
+  "totalBytes": 95986,
+  "resolution": {
+    "width": 1280,
+    "height": 640
+  },
+  "comparison": {
+    "cases": [
+      {
+        "caseId": "0d20933d-f0f8-4c66-a720-8224c025b045",
+        "label": "Synthetic axial 100 N",
+        "resultRevision": "sha256:c4ba61707f5d92b1910937b9fa0c387ff45690c3e4ae1e1f4fe51bd8ab54dc5a",
+        "revision": "sha256:5ffe944ade23f47a7053cc6d0571d41ce0cbac12ad14e70333b99a123198a7a7"
+      },
+      {
+        "caseId": "79a238b3-b853-462e-873a-6225fd257280",
+        "label": "Synthetic axial 200 N",
+        "resultRevision": "sha256:b919739cca1e631fc69d51c941ce760212b7dbde7fdfd2ad471e0244ba0e9902",
+        "revision": "sha256:67775b793efae1b345c251ee8df86463eada1e9c78fba5334190368293e92faf"
+      }
+    ],
+    "colorRange": {
+      "field": "displacement",
+      "maximum": 0.08000000000008356,
+      "minimum": 0
+    },
+    "field": "displacement",
+    "panels": [
+      {
+        "caseId": "0d20933d-f0f8-4c66-a720-8224c025b045",
+        "field": "displacement",
+        "finalOnly": false,
+        "frameIndex": null,
+        "maximum": 0.04000000000004178,
+        "minimum": 0,
+        "offsetSeconds": null,
+        "timeApplies": false,
+        "timeSeconds": null,
+        "unit": "mm"
+      },
+      {
+        "caseId": "79a238b3-b853-462e-873a-6225fd257280",
+        "field": "displacement",
+        "finalOnly": false,
+        "frameIndex": null,
+        "maximum": 0.08000000000008356,
+        "minimum": 0,
+        "offsetSeconds": null,
+        "timeApplies": false,
+        "timeSeconds": null,
+        "unit": "mm"
+      }
+    ],
+    "unit": "mm"
+  },
+  "view": {
+    "camera": {
+      "position": [
+        61.00000000000001,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    },
+    "deformScale": 100,
+    "layers": {
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true
+    },
+    "setup": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    },
+    "language": "en"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "caseCompare",
+      "scope": "inspect",
+      "description": "Compare exact saved cases and optionally remeasure one global point without changing current input, display or measurement history.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "references": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "description": "Distinct caseId values are required at runtime. Each reference selects its own stored field and mesh-local selectors.",
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "caseId": {
+                  "type": "string",
+                  "description": "Opaque page-lifetime identity returned by the matching list/begin operation.",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "expectedRevision": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                },
+                "field": {
+                  "enum": [
+                    "displacement",
+                    "stress",
+                    "plasticStrain",
+                    "temperature",
+                    "heatFlux",
+                    "instantPressure",
+                    "pressure",
+                    "spl",
+                    "phase",
+                    "speed",
+                    "fluidPressure"
+                  ]
+                },
+                "modeIndex": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "frameIndex": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "bodyIndex": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "elementIndex": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "caseId",
+                "expectedRevision",
+                "field"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "point": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            },
+            "description": "Optional common global point in mm; no coordinate transform or extrapolation is inferred."
+          }
+        },
+        "required": [
+          "references"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffects": [],
+      "revisionFields": [
+        "references"
+      ],
+      "units": {
+        "point": "mm",
+        "displacementMm": "mm",
+        "magnitudeMm": "mm",
+        "vonMisesPa": "Pa",
+        "equivalentPlasticStrain": "1",
+        "temperature": "degC",
+        "flux": "W/m2",
+        "pressurePa": "Pa",
+        "pressureReal": "Pa",
+        "pressureImag": "Pa",
+        "peakPressurePa": "Pa peak",
+        "splDb": "dB RMS",
+        "phase": "rad",
+        "speedMs": "m/s",
+        "timeSeconds": "s",
+        "frequencyHz": "Hz"
+      },
+      "limitations": [
+        "At most 8 distinct exact case references and 65536 UTF-8 bytes in the JSON value; nested physical arrays are not returned.",
+        "Read-only and permitted while calculations run. A changed saved-case lease, invalid selector or revoked command is refused; current input/display need not match the saved input.",
+        "Raw stress is Pa and equivalent plastic strain is a dimensionless ratio; viewer MPa/% labels do not rescale these measurements.",
+        "Modal results require explicit modeIndex, represent normalized 1 mm shapes rather than dynamic responses, and never produce modal deltas. Transient acoustic results require explicit stored frameIndex; thermal frameIndex selects stored temperature only, omitting it preserves final temperature/heatFlux. Indexed thermal heatFlux is refused; no time interpolation.",
+        "bodyIndex and elementIndex require point and refer only to that saved mesh. Outside points or ambiguous bodies may be unavailable; corrupt data and invalid selectors are refused.",
+        "Different kinds, fields, units, harmonic frequencies or stored physical times are not silently compared. A compatible numeric difference does not establish equivalent physical assumptions or accuracy."
+      ]
+    }
+  ]
+}

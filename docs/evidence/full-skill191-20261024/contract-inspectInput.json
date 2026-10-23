@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "inspectInput",
+      "scope": "inspect",
+      "description": "Read a revisioned bounded input section, descriptor or explicitly requested JSON-pointer page without editing or solving.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "section": {
+            "enum": [
+              "project",
+              "study",
+              "material",
+              "conditions",
+              "provenance",
+              "selection",
+              "source",
+              "meshes",
+              "meshSettings",
+              "units",
+              "intent"
+            ],
+            "default": "project"
+          },
+          "pointer": {
+            "type": "string",
+            "maxLength": 2048,
+            "description": "Absolute escaped JSON Pointer within the selected section; empty pointer addresses project root only."
+          },
+          "expectedRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "description": "Exact SHA-256 revision returned by the relevant inspection; never infer a revision."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "default": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20,
+            "description": "Object pages additionally reject limit above 50; arrays and explicit string pages allow 200."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "sideEffects": [],
+      "revisionFields": [
+        "expectedRevision"
+      ],
+      "units": {},
+      "limitations": [
+        "Response is at most 65536 UTF-8 bytes. Nested arrays/objects and long strings are described with hashes and counts rather than recursively emitted.",
+        "Object entries are key-sorted. Explicit pointer requests may read bounded string pages, including source data; no root source payload is dumped.",
+        "Compare returned revision or provide expectedRevision across pages. SHA-256 authenticates bytes/JSON identity, not provenance correctness or physical accuracy."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "jobId": "fbc9e96f-b062-40bf-ae7d-ac445e3aa64a",
+  "inputRevision": "sha256:c31caa29d4f15c8f63a04b26e1311a466cff2711381a2d1d0a029cac5cdba104",
+  "state": "succeeded",
+  "executionSettled": true,
+  "resourceState": "settled",
+  "releaseAllowed": true,
+  "operation": "mesh",
+  "origin": "api",
+  "startedAt": 1792767493432,
+  "updatedAt": 1792767494750,
+  "lastSequence": 7,
+  "firstAvailableSequence": 1,
+  "eventRetention": {
+    "maxEvents": 256,
+    "maxEventBytes": 32768,
+    "maxRetainedBytes": 1048576,
+    "maxPageBytes": 65536,
+    "maxViewBytes": 24576,
+    "retainedEvents": 7,
+    "retainedBytes": 4618
+  },
+  "result": {
+    "mesh": {
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ]
+    },
+    "resultAvailable": true,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "intermediate": {
+      "retainedArtifacts": 0,
+      "retainedBytes": 0,
+      "storageLimited": false,
+      "sharedBytes": 0,
+      "maxBytes": 64000000,
+      "queue": {
+        "maxEvents": 8,
+        "maxBytes": 8000000,
+        "pendingEvents": 0,
+        "pendingBytes": 0,
+        "peakEvents": 0,
+        "peakBytes": 0,
+        "accepted": 0,
+        "dropped": 0,
+        "droppedMeshes": 0,
+        "droppedFields": 0,
+        "consumerErrors": 0,
+        "notificationErrors": 0,
+        "latestAcceptedSequence": null,
+        "latestCompletedSequence": null,
+        "latestPolicy": "last-accepted-snapshot",
+        "byteBasis": "conservative-structural-estimate",
+        "includesInFlight": true
+      }
+    }
+  }
+}

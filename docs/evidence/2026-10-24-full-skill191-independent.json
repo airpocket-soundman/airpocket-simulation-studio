@@ -1,0 +1,793 @@
+{
+  "schemaVersion": 1,
+  "dateJst": "2026-10-24",
+  "fixedSource": "1412075",
+  "observedStartUtc": "2026-10-23T14:56:13.091Z",
+  "productCompleteUtc": "2026-10-23T15:00:37.178Z",
+  "cleanupUtc": "2026-10-23T15:01:19.004Z",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "origin": "http://127.0.0.1:5188",
+    "browser": "Root paired actual IAB2 tab7, UA Chrome155 family reduced version; not independent branded-Chrome-extension execution",
+    "transport": "Registered browser_call absent; documented repository fallback using retained formal stdio createStdioClient",
+    "pairing": "Root GUI four explicit scopes inspect/edit/analyze/view; outside post-pair automation claim",
+    "secret": "Temporary pairing file written with mode0600 argument, never printed/copied; deleted at close. NTFS ACL not independently audited."
+  },
+  "recipe": {
+    "path": "skills/airpocket-studio/references/skill-loop.md",
+    "modified": false,
+    "priorQaOrFixtureRead": false,
+    "directWindowOrQaBridge": false,
+    "projectOperations": "formal stdio MCP only",
+    "studyKeys": 46,
+    "normalization": {
+      "applied": true,
+      "previousRevision": "sha256:900d0991ba51d3c0dee255c12f29f4a146b2167f1be219a30e254d8ab82f5407",
+      "changedPointers": {
+        "pointers": [],
+        "total": 0,
+        "truncated": false,
+        "maxPointers": 100
+      },
+      "requiresReview": false,
+      "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+      "revision": "sha256:900d0991ba51d3c0dee255c12f29f4a146b2167f1be219a30e254d8ab82f5407"
+    },
+    "installedSkillDifference": "Installed SKILL35/37 tool declaration differed from repo36/38; repo fixed-source Skill and refs used after explicit comparison, not silently treated as same version."
+  },
+  "result": {
+    "completed": true,
+    "recipeUnmodified": true,
+    "meshJobs": 2,
+    "solveJobs": 2,
+    "displacementsMm": [
+      0.04000000000002636,
+      0.08000000000005272
+    ],
+    "ratio": 2,
+    "intermediateArtifacts": [
+      "mesh",
+      "mesh"
+    ],
+    "intermediateFieldsAbsent": true,
+    "allFourBaselinesEqualAfterPngAndArchive": true,
+    "readyForGuiDisconnect": true
+  },
+  "meshA": {
+    "schemaVersion": 1,
+    "allowed": true,
+    "completePreflight": false,
+    "inputRevision": "sha256:c31caa29d4f15c8f63a04b26e1311a466cff2711381a2d1d0a029cac5cdba104",
+    "jobId": "fbc9e96f-b062-40bf-ae7d-ac445e3aa64a",
+    "meshQuality": {
+      "status": "checked",
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "negativeOrientationCount": 0,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ],
+      "qualityAvailable": true,
+      "diagnosticCount": 0,
+      "diagnosticsTruncated": false
+    },
+    "reports": [
+      {
+        "conditionIndex": 0,
+        "type": "fixed",
+        "originalAreaMm2": 100,
+        "mappedAreaMm2": 100,
+        "relativeAreaError": 0,
+        "maxProjectionDistanceMm": 0,
+        "approximation": "exact CAD planar rectangle"
+      },
+      {
+        "conditionIndex": 1,
+        "type": "force",
+        "originalAreaMm2": 100,
+        "mappedAreaMm2": 100,
+        "relativeAreaError": 0,
+        "maxProjectionDistanceMm": 0,
+        "approximation": "exact CAD planar rectangle"
+      }
+    ],
+    "diagnostics": [],
+    "rigidBody": {
+      "status": "checked",
+      "rigidBodyModesEliminated": true,
+      "freeRigidModeCount": 0,
+      "modes": [
+        {
+          "mode": "translation-x",
+          "kind": "translation",
+          "axis": "x",
+          "status": "eliminated",
+          "description": "translation along the x axis is constrained"
+        },
+        {
+          "mode": "translation-y",
+          "kind": "translation",
+          "axis": "y",
+          "status": "eliminated",
+          "description": "translation along the y axis is constrained"
+        },
+        {
+          "mode": "translation-z",
+          "kind": "translation",
+          "axis": "z",
+          "status": "eliminated",
+          "description": "translation along the z axis is constrained"
+        },
+        {
+          "mode": "rotation-x",
+          "kind": "rotation",
+          "axis": "x",
+          "status": "eliminated",
+          "description": "rotation about the x axis is constrained"
+        },
+        {
+          "mode": "rotation-y",
+          "kind": "rotation",
+          "axis": "y",
+          "status": "eliminated",
+          "description": "rotation about the y axis is constrained"
+        },
+        {
+          "mode": "rotation-z",
+          "kind": "rotation",
+          "axis": "z",
+          "status": "eliminated",
+          "description": "rotation about the z axis is constrained"
+        }
+      ],
+      "components": [
+        {
+          "index": 0,
+          "nodeCount": 94,
+          "constrainedNodeCount": 12,
+          "constraintRowCount": 36,
+          "rank": 6,
+          "freeRigidMotionCount": 0,
+          "freeModes": []
+        }
+      ],
+      "componentsTruncated": false,
+      "method": {
+        "rankTolerance": 0.000001,
+        "rankToleranceKind": "relative to the largest singular value of the centroid-centred, radius-normalised constraint matrix",
+        "freeModeParticipationThreshold": 1e-8,
+        "springSupports": "not modelled by boundary transfer; never counted as eliminating a mode"
+      }
+    },
+    "componentAnchoring": {
+      "status": "checked",
+      "kind": "structural",
+      "componentCount": 1,
+      "unanchoredComponentCount": 0,
+      "thermalContactPresent": false,
+      "components": [
+        {
+          "index": 0,
+          "nodeCount": 94,
+          "anchoredNodeCount": 12
+        }
+      ],
+      "componentsTruncated": false
+    },
+    "acousticResolution": {
+      "status": "not-applicable",
+      "reason": "Elements-per-wavelength applies to acoustic studies only"
+    },
+    "remainingChecks": [
+      "Solver convergence and physical accuracy have not been checked.",
+      "Rigid-body constraint rank covers nodal fixed/displacement supports only; spring or elastic supports are not modelled and are never counted as eliminating a mode."
+    ]
+  },
+  "meshB": {
+    "schemaVersion": 1,
+    "allowed": true,
+    "completePreflight": false,
+    "inputRevision": "sha256:7bd0cc0397f3cc04952fa44509e0b3ec2cbd68ca35048db0e533ea3a9487a48f",
+    "jobId": "83e7333c-7088-4c1b-9d5b-dc034404c709",
+    "meshQuality": {
+      "status": "checked",
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "negativeOrientationCount": 0,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ],
+      "qualityAvailable": true,
+      "diagnosticCount": 0,
+      "diagnosticsTruncated": false
+    },
+    "reports": [
+      {
+        "conditionIndex": 0,
+        "type": "fixed",
+        "originalAreaMm2": 100,
+        "mappedAreaMm2": 100,
+        "relativeAreaError": 0,
+        "maxProjectionDistanceMm": 0,
+        "approximation": "exact CAD planar rectangle"
+      },
+      {
+        "conditionIndex": 1,
+        "type": "force",
+        "originalAreaMm2": 100,
+        "mappedAreaMm2": 100,
+        "relativeAreaError": 0,
+        "maxProjectionDistanceMm": 0,
+        "approximation": "exact CAD planar rectangle"
+      }
+    ],
+    "diagnostics": [],
+    "rigidBody": {
+      "status": "checked",
+      "rigidBodyModesEliminated": true,
+      "freeRigidModeCount": 0,
+      "modes": [
+        {
+          "mode": "translation-x",
+          "kind": "translation",
+          "axis": "x",
+          "status": "eliminated",
+          "description": "translation along the x axis is constrained"
+        },
+        {
+          "mode": "translation-y",
+          "kind": "translation",
+          "axis": "y",
+          "status": "eliminated",
+          "description": "translation along the y axis is constrained"
+        },
+        {
+          "mode": "translation-z",
+          "kind": "translation",
+          "axis": "z",
+          "status": "eliminated",
+          "description": "translation along the z axis is constrained"
+        },
+        {
+          "mode": "rotation-x",
+          "kind": "rotation",
+          "axis": "x",
+          "status": "eliminated",
+          "description": "rotation about the x axis is constrained"
+        },
+        {
+          "mode": "rotation-y",
+          "kind": "rotation",
+          "axis": "y",
+          "status": "eliminated",
+          "description": "rotation about the y axis is constrained"
+        },
+        {
+          "mode": "rotation-z",
+          "kind": "rotation",
+          "axis": "z",
+          "status": "eliminated",
+          "description": "rotation about the z axis is constrained"
+        }
+      ],
+      "components": [
+        {
+          "index": 0,
+          "nodeCount": 94,
+          "constrainedNodeCount": 12,
+          "constraintRowCount": 36,
+          "rank": 6,
+          "freeRigidMotionCount": 0,
+          "freeModes": []
+        }
+      ],
+      "componentsTruncated": false,
+      "method": {
+        "rankTolerance": 0.000001,
+        "rankToleranceKind": "relative to the largest singular value of the centroid-centred, radius-normalised constraint matrix",
+        "freeModeParticipationThreshold": 1e-8,
+        "springSupports": "not modelled by boundary transfer; never counted as eliminating a mode"
+      }
+    },
+    "componentAnchoring": {
+      "status": "checked",
+      "kind": "structural",
+      "componentCount": 1,
+      "unanchoredComponentCount": 0,
+      "thermalContactPresent": false,
+      "components": [
+        {
+          "index": 0,
+          "nodeCount": 94,
+          "anchoredNodeCount": 12
+        }
+      ],
+      "componentsTruncated": false
+    },
+    "acousticResolution": {
+      "status": "not-applicable",
+      "reason": "Elements-per-wavelength applies to acoustic studies only"
+    },
+    "remainingChecks": [
+      "Solver convergence and physical accuracy have not been checked.",
+      "Rigid-body constraint rank covers nodal fixed/displacement supports only; spring or elastic supports are not modelled and are never counted as eliminating a mode."
+    ]
+  },
+  "png": {
+    "allFourBaselinesEqual": true,
+    "totalBytes": 95986,
+    "sha256": "sha256:7474f611ccb68a13d96ad2f627f4d9d200ebf04da8c162c8d01b8a074a28ddfa"
+  },
+  "archive": {
+    "allFourBaselinesEqual": true,
+    "totalBytes": 241285,
+    "sha256": "sha256:f0eecd328c864dc026f3afe39b8e2c1e810ac1e883abe7b7734b4f6296b787c0"
+  },
+  "refusals": {
+    "staleEdit": {
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Project revision conflict."
+    },
+    "outsideProbe": {
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Probe point is outside the analysis mesh"
+    },
+    "changedRetainedRequest": {
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "requestId conflicts with previous browser request"
+    }
+  },
+  "remainingPhysicalChecks": [
+    "Mesh quality and element validity after generation",
+    "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+    "Source applicability, convergence, mesh dependence and physical accuracy"
+  ],
+  "cleanup": {
+    "jobs": {
+      "jobs": [],
+      "total": 0,
+      "nextOffset": null
+    },
+    "sessions": {
+      "sessions": []
+    },
+    "driver": {
+      "closed": true,
+      "secretRemoved": true
+    },
+    "driverProcessExitCode": 0,
+    "childIndividualExitCode": "not exposed by existing createStdioClient; EOF/helper close completed",
+    "rootGui": "Disconnected and endpoint/code cleared; root owns subsequent tab/server cleanup"
+  },
+  "driverCorrection": {
+    "issue": "An extra driver assertion expected caseArchiveRead.encoding===base64; actual contract/recipe requires base64 data but does not declare that field.",
+    "resolution": "Removed only the unsupported assertion, retained already-delivered offset0 page and continued from returned nextOffset. No successful mutation or first page was replayed; recipe/product source unchanged.",
+    "claim": "Fresh independent recipe execution with an explicitly recorded driver correction; not an untouched fully automatic script success."
+  },
+  "limitations": [
+    "Synthetic exploratory/unconfirmed assumptions only; no material calibration or general geometry accuracy.",
+    "Only intermediate mesh artifacts retained; no intermediate field snapshot was claimed.",
+    "No public HTTPS, real AI authentication or full parent/Skill/P0–P6 completion.",
+    "Non-reproduction of runtime failure is not a root-cause fix."
+  ],
+  "sourceHashes": {
+    "skills/airpocket-studio/SKILL.md": {
+      "gitBlob": "59424297409857137764719aa7ea8cdbf9048b26",
+      "sha256": "23b70acb93d83629425b06c80d759e4977154daff1b4bb57534a4fd3c311e833"
+    },
+    "skills/airpocket-studio/references/skill-loop.md": {
+      "gitBlob": "b2a7e45a6845581e159a2806389a3a80af35ef91",
+      "sha256": "f21763a6b8f57f8a1b28e7e80e526eb51302120895f634008daab36c58eec452"
+    },
+    "skills/airpocket-studio/references/saved-inputs.md": {
+      "gitBlob": "081c4de42400ae3a10d9bd46d947ccb245e1f2b9",
+      "sha256": "fe5b7dc227780709a776516a0a295271a3ea43a6ca58804755ace1e3cf5708fd"
+    },
+    "skills/airpocket-studio/references/browser-session.md": {
+      "gitBlob": "fe027b7530ad6ed476ea5b1b93037c52ee784fa5",
+      "sha256": "4e48beabaf35a831f7382b2272de352545ad4c3de7854ce54971a1b8173f334a"
+    },
+    "skills/airpocket-studio/references/jobs-observations.md": {
+      "gitBlob": "ca4e6a82dcf238a8f21c797e0bfdbca60c96143b",
+      "sha256": "e6afd10da8ea4d4fda455d2e1f0181ba3dc78dcdfaab3531b7b6ddc8b4917450"
+    },
+    "skills/airpocket-studio/references/result-views.md": {
+      "gitBlob": "6575e8cc7a78eb3fb99d0efa4c3e7f10215dba47",
+      "sha256": "d123c7650eef39b5b13666f1ef6757a23e002cf1612cd9e4181e6b155ce027a5"
+    },
+    "skills/airpocket-studio/references/case-archives-measurements.md": {
+      "gitBlob": "a7345670ec0e47bbd0440dc0a82489be13607da4",
+      "sha256": "aaf521feba251cce9983aed3a8334f233702bb808248e42bc94e93d2faf9cfb7"
+    },
+    "scripts/perf-browser.mjs": {
+      "gitBlob": "7e27cfd761154709c5688f6cc3909f312b0602fa",
+      "sha256": "1e4f2624d0f069783103d5767888038b819302c1fb4fe82fdc7890990adedbb0"
+    },
+    "scripts/studio-mcp.mjs": {
+      "gitBlob": "50a436874232ec750e13f29b5c71bc1a4c035653",
+      "sha256": "929816a65e32f3a1a47301f2e0dac2dd0dc92212a7daf005592a46586286c2cf"
+    },
+    "skills/airpocket-studio/references/physics-provenance.md": {
+      "gitBlob": "72c0fef7b1453ee9973cf1a8b952d8e34af361cc",
+      "sha256": "1d77fcf56dd870f94d7c8a6e53cc729546ffffc40a15b9473a08d0d86bae97c9"
+    }
+  },
+  "files": {
+    "docs/evidence/full-skill191-20261024/A-artifacts.json": {
+      "bytes": 659,
+      "sha256": "ccb3e8f122e0bfe4b02b3618534236179a5cd961c652fe68ca47a45aa0fb4483"
+    },
+    "docs/evidence/full-skill191-20261024/A-cases.json": {
+      "bytes": 1331,
+      "sha256": "ed971f35140a75a916585d7476577506fe9e292ca3be75be6f3629aec15c0b96"
+    },
+    "docs/evidence/full-skill191-20261024/A-intermediate-node.json": {
+      "bytes": 952,
+      "sha256": "ce7409969de560adfa2862403cb7f98fa4178a96fd013e727e168f2faf0ddece"
+    },
+    "docs/evidence/full-skill191-20261024/A-mesh-events.json": {
+      "bytes": 6037,
+      "sha256": "069172116df09caae88527056c594065c639aa37c6328635c7db70959b424394"
+    },
+    "docs/evidence/full-skill191-20261024/A-mesh-preflight.json": {
+      "bytes": 3810,
+      "sha256": "251e84b4a644376afcc91086093d7093a3a554af19d73b54b3dc376fd35968e6"
+    },
+    "docs/evidence/full-skill191-20261024/A-mesh-status.json": {
+      "bytes": 2131,
+      "sha256": "e6af9c79a876f9404e06cfb02d0226cc87b4ba4f0e672cd5461f98ea7025b7f4"
+    },
+    "docs/evidence/full-skill191-20261024/A-missing-provenance.json": {
+      "bytes": 17184,
+      "sha256": "621bdf60109825453957d1b51a5434c0c2f4abdfe5acc8f6c1719c5a4c56ac20"
+    },
+    "docs/evidence/full-skill191-20261024/A-missing.json": {
+      "bytes": 17184,
+      "sha256": "621bdf60109825453957d1b51a5434c0c2f4abdfe5acc8f6c1719c5a4c56ac20"
+    },
+    "docs/evidence/full-skill191-20261024/A-preflight.json": {
+      "bytes": 11204,
+      "sha256": "510b39c6af389462c9f864fb8aa87a226979b1d837aed5535adfb660126891b0"
+    },
+    "docs/evidence/full-skill191-20261024/A-probe.json": {
+      "bytes": 973,
+      "sha256": "f453ed8c0f25123f3b9a0618914d30efcacc9cd5e668aada24fc3c93afa1a21a"
+    },
+    "docs/evidence/full-skill191-20261024/A-solve-events.json": {
+      "bytes": 2157,
+      "sha256": "c97e05f8dd1d7403ba2355aa7f4676819071a6fde41214077a2e2ecfd73f5d7f"
+    },
+    "docs/evidence/full-skill191-20261024/A-solve-status.json": {
+      "bytes": 2163,
+      "sha256": "6fc075d2baf46c9601469004a66c3d913435c83a8c872b24d3352c3c2596f193"
+    },
+    "docs/evidence/full-skill191-20261024/A-view.json": {
+      "bytes": 1285,
+      "sha256": "cda860df744e372a13aad5e1e5f91bd7bea95f4c261f9fd179af9ffe5aea5b83"
+    },
+    "docs/evidence/full-skill191-20261024/archive-preserved.json": {
+      "bytes": 147,
+      "sha256": "59a18c84d56b5be6701560c880e3cda27a0dfd3782bdec06a4c7a9851f32ddc6"
+    },
+    "docs/evidence/full-skill191-20261024/archive-transfer.json": {
+      "bytes": 317,
+      "sha256": "b6daaf534540a868c515e12d57da513b149f79c6333fddc1031d7305a041386d"
+    },
+    "docs/evidence/full-skill191-20261024/B-artifacts.json": {
+      "bytes": 659,
+      "sha256": "02aaa10dc0ff90689a8c8230fc1d3cf52b7a98b4d1f669970fcce71e21c421cf"
+    },
+    "docs/evidence/full-skill191-20261024/B-cases.json": {
+      "bytes": 2524,
+      "sha256": "ca706e7a175187109de6de6499c989c8f00b0743c4695d53f3058148c54793be"
+    },
+    "docs/evidence/full-skill191-20261024/B-intermediate-node.json": {
+      "bytes": 952,
+      "sha256": "d19323288b9e602a1ed675f12a10354cc24b7d86f86eb877aad70bbc4298bf96"
+    },
+    "docs/evidence/full-skill191-20261024/B-mesh-events.json": {
+      "bytes": 6033,
+      "sha256": "f29761ccfcfc1030744f74c61190371ba6b0d7ed748c77390efb1b4cb3318c74"
+    },
+    "docs/evidence/full-skill191-20261024/B-mesh-preflight.json": {
+      "bytes": 3810,
+      "sha256": "f4adfc7056fc4d3825407f3372970867669b2ba17dfcc3a9fea86bd94480b10f"
+    },
+    "docs/evidence/full-skill191-20261024/B-mesh-status.json": {
+      "bytes": 2131,
+      "sha256": "215cecb7fe8d0968e305f9c7e9c3e52f732afb874ca0c942e752f6293f30bad2"
+    },
+    "docs/evidence/full-skill191-20261024/B-missing.json": {
+      "bytes": 17184,
+      "sha256": "14221d8b466368b8a1f38d96d078a464285402f415dacf59a98cc34d070822b8"
+    },
+    "docs/evidence/full-skill191-20261024/B-preflight.json": {
+      "bytes": 11204,
+      "sha256": "510b39c6af389462c9f864fb8aa87a226979b1d837aed5535adfb660126891b0"
+    },
+    "docs/evidence/full-skill191-20261024/B-probe.json": {
+      "bytes": 973,
+      "sha256": "362eb2f8e5e4ba3832652db158b08c0e23ba8663897f0002cb95e630e8097f8c"
+    },
+    "docs/evidence/full-skill191-20261024/B-solve-events.json": {
+      "bytes": 2157,
+      "sha256": "8879686929177730a8ce7f23aa6dcc37cb3bea6a72fb1e59a3472ef9643eba25"
+    },
+    "docs/evidence/full-skill191-20261024/B-solve-status.json": {
+      "bytes": 2163,
+      "sha256": "63d7c2510f5bcf0520fe033ea2a1ff82cbe3ab5bc2da9c547a4f01aa0d420824"
+    },
+    "docs/evidence/full-skill191-20261024/B-view.json": {
+      "bytes": 1285,
+      "sha256": "22286feb84e08822cce491b95a5290fc2b37bdacb8a840c497f30a5bbcbefb98"
+    },
+    "docs/evidence/full-skill191-20261024/case-compare.json": {
+      "bytes": 5318,
+      "sha256": "e826631cc0abdd865f31b6cc106b57ce1e40bda99669ba7a9321caff984a8589"
+    },
+    "docs/evidence/full-skill191-20261024/case-refs.json": {
+      "bytes": 325,
+      "sha256": "32b31c0c69cb0a1a483d47242769b373e0801c366ffdf19b9bf26320136a5aef"
+    },
+    "docs/evidence/full-skill191-20261024/closed.json": {
+      "bytes": 36,
+      "sha256": "2dd8d8c8a9160bac30b4d3f8a95474a49af40ab1da8e197436f4da8cba8a6099"
+    },
+    "docs/evidence/full-skill191-20261024/comparison-manifest.json": {
+      "bytes": 2407,
+      "sha256": "278615c64c8762a1058b4414602465480d29566615068bf9ecce1e413f501459"
+    },
+    "docs/evidence/full-skill191-20261024/contract-caseArchiveExport.json": {
+      "bytes": 1278,
+      "sha256": "baa84c6be28523eb3b7bdd912c7e94faa37b680ae83d53508437fb4c62fce791"
+    },
+    "docs/evidence/full-skill191-20261024/contract-caseArchiveRead.json": {
+      "bytes": 1786,
+      "sha256": "62ab05f71da421159473bc9f8c1ef74217ddc07a8bb878b7050be80fce83c6f0"
+    },
+    "docs/evidence/full-skill191-20261024/contract-caseArchiveRelease.json": {
+      "bytes": 1241,
+      "sha256": "94016e0ee7b7641dfef05f72499f8696d82365a6a7f692941c3116976e1c26b4"
+    },
+    "docs/evidence/full-skill191-20261024/contract-caseCompare.json": {
+      "bytes": 5253,
+      "sha256": "15bb263c4736b53aa4d66a4af938e3ee85f320c3512c013f09c9b641e7c1caec"
+    },
+    "docs/evidence/full-skill191-20261024/contract-caseList.json": {
+      "bytes": 1000,
+      "sha256": "db4180c978203c15168dcbef2cea0059ad1c7a8dc745d728a9eaeda7553fd025"
+    },
+    "docs/evidence/full-skill191-20261024/contract-createBuiltinProject.json": {
+      "bytes": 7487,
+      "sha256": "c15066938866cc9ec196428e50a0ce96fdbb3d1650519aa501f4610b4b50e0fc"
+    },
+    "docs/evidence/full-skill191-20261024/contract-edit.json": {
+      "bytes": 23564,
+      "sha256": "606f6649508ae439494083d8ba4339ba5a9f4d8efe18c0cb4bbd1bc80d409605"
+    },
+    "docs/evidence/full-skill191-20261024/contract-exportArtifact.json": {
+      "bytes": 1485,
+      "sha256": "648fdc54d562581003f7e43d8d7f58be7e1102b79289623ecc7b9bc91adffb1c"
+    },
+    "docs/evidence/full-skill191-20261024/contract-exportCapabilities.json": {
+      "bytes": 1400,
+      "sha256": "cc4780612dbb264c51a2e6f88ec364c6737220757c11b8178759e5b39cc8fded"
+    },
+    "docs/evidence/full-skill191-20261024/contract-exportStatus.json": {
+      "bytes": 1050,
+      "sha256": "22dd70b6003833ee6fe4e8ab0f4c117c194df51efc4edaab950d314a85dc1484"
+    },
+    "docs/evidence/full-skill191-20261024/contract-getCompareView.json": {
+      "bytes": 1378,
+      "sha256": "177d9bfa4f5353a6f43468494b4fa28259e128b8404084e385e5ff1f50b08d6f"
+    },
+    "docs/evidence/full-skill191-20261024/contract-getResultView.json": {
+      "bytes": 1942,
+      "sha256": "f6baaf0571003f34cd900771db2be3d40fd6bb4359ad0db33f025b85d2349b21"
+    },
+    "docs/evidence/full-skill191-20261024/contract-inspect.json": {
+      "bytes": 2235,
+      "sha256": "94ff047f5eccd996eff3c95e6421439f8f1624134df8a1a921853dd745786567"
+    },
+    "docs/evidence/full-skill191-20261024/contract-inspectInput.json": {
+      "bytes": 2802,
+      "sha256": "0951a0005ff40ca60295084f301743b172494ec233fa8283f171762e685f25f2"
+    },
+    "docs/evidence/full-skill191-20261024/contract-jobArtifact.json": {
+      "bytes": 2685,
+      "sha256": "a9b9bfcf0be3bbe5bd773497124357254efa6dfd0db1f98afe73b3146bdcdbc4"
+    },
+    "docs/evidence/full-skill191-20261024/contract-jobArtifacts.json": {
+      "bytes": 1463,
+      "sha256": "624e7f17d21ccef253f16344583644e9d0cbbdfa2d0d065c3feffabd96d15e16"
+    },
+    "docs/evidence/full-skill191-20261024/contract-jobEvents.json": {
+      "bytes": 2956,
+      "sha256": "358e6147647d9acdeb7031dfbcfdba4b10cb058468c0133930cde219438fdcc8"
+    },
+    "docs/evidence/full-skill191-20261024/contract-jobStatus.json": {
+      "bytes": 1071,
+      "sha256": "04af104fa7a3cc0a987358543ac1e27b88513fff61f9fa21869f8b440a20fa6a"
+    },
+    "docs/evidence/full-skill191-20261024/contract-listJobs.json": {
+      "bytes": 1287,
+      "sha256": "c224a51378d27e22f6db7f88f074178256ea0725ca62122afa848e85bbb550f2"
+    },
+    "docs/evidence/full-skill191-20261024/contract-meshBoundaryPreflight.json": {
+      "bytes": 1888,
+      "sha256": "2f09db50be9caf0f2f1de65d3db518a612d14f9c124ef093a71de939d71bea2e"
+    },
+    "docs/evidence/full-skill191-20261024/contract-preflight.json": {
+      "bytes": 2269,
+      "sha256": "fd38b7fe6363e93346a2914c1da5cecd4915ff7e695ecc971f3033ac18269155"
+    },
+    "docs/evidence/full-skill191-20261024/contract-previewEdit.json": {
+      "bytes": 22782,
+      "sha256": "d484c3df77fd3f4784ba8e7ac21ef981893ec15d96bf5445f45d1152e6c1ea06"
+    },
+    "docs/evidence/full-skill191-20261024/contract-probe.json": {
+      "bytes": 1988,
+      "sha256": "c011a5bc45953879cc6112fac4f0e0ffeabf3e3479909081ae74b7e8a0b1a278"
+    },
+    "docs/evidence/full-skill191-20261024/contract-releaseExport.json": {
+      "bytes": 1133,
+      "sha256": "5cad9fee9a9eeeecf9533852684adc738e8fbc256c8de65855d00acd0917fef3"
+    },
+    "docs/evidence/full-skill191-20261024/contract-releaseJob.json": {
+      "bytes": 1178,
+      "sha256": "0f572581aa44cd0a4b6a982e81f14b6943fd5d4e06756c5145b86588378001e0"
+    },
+    "docs/evidence/full-skill191-20261024/contract-showJob.json": {
+      "bytes": 1340,
+      "sha256": "375e3969a3c190cede7460f50c09f9ee4f00f2b99cf396cdec54dfa258228064"
+    },
+    "docs/evidence/full-skill191-20261024/contract-startCompareExport.json": {
+      "bytes": 7010,
+      "sha256": "ca14e9a4bbbe043cde71c05a948774e85c1df92d392cceebd498fda7838549d3"
+    },
+    "docs/evidence/full-skill191-20261024/contract-startJob.json": {
+      "bytes": 2195,
+      "sha256": "caf71534b27512d7b5e0ead0e264bf1a668abcca75e832b7fa9516dfa6f94ec3"
+    },
+    "docs/evidence/full-skill191-20261024/disconnected-sessions.json": {
+      "bytes": 21,
+      "sha256": "655fa99a5156e03d194eedbb14b5beb839aaa9a95a9a4349a91bd384082aa37d"
+    },
+    "docs/evidence/full-skill191-20261024/export-status.json": {
+      "bytes": 5415,
+      "sha256": "179005531025df1f7af3856784fe4a72968fa8c1c5c4990bd6da938047e1afe6"
+    },
+    "docs/evidence/full-skill191-20261024/final-jobs.json": {
+      "bytes": 53,
+      "sha256": "61010d06bd12b6f36a32805382a98b2f6d18e4c0da5bcfe8edc9c8b7b23b2e20"
+    },
+    "docs/evidence/full-skill191-20261024/initial-inspect.json": {
+      "bytes": 4638,
+      "sha256": "e4e7002b09a2baa696b816e727ea0e218ee14a6a19d4ba99ea7db7cd6853cd53"
+    },
+    "docs/evidence/full-skill191-20261024/initial-preview.json": {
+      "bytes": 20544,
+      "sha256": "f416a4ce26eb7642a77ea2b9e41548a644b6917efd85b82ef7433bcc0108d7c0"
+    },
+    "docs/evidence/full-skill191-20261024/observed-study.json": {
+      "bytes": 1228,
+      "sha256": "1cc49af4d56bf5e674cb7f3c67f9a14320a001b8a9ee5e2ea188f8054182d46a"
+    },
+    "docs/evidence/full-skill191-20261024/output-baseline.json": {
+      "bytes": 9319,
+      "sha256": "b94f0600c55d0fefb38a3ed56026b7ea5eb82c7f3468f39a31509f41112bb956"
+    },
+    "docs/evidence/full-skill191-20261024/outside-probe-refusal.json": {
+      "bytes": 98,
+      "sha256": "847d1c97675ab1b3a51ec9014b0a2baf0295388a6046dace09488ef76d46bdd5"
+    },
+    "docs/evidence/full-skill191-20261024/png-preserved.json": {
+      "bytes": 146,
+      "sha256": "5c4f9dfb222b3b4b568c905ab214b11774a1bc7ea09bfa01d82d8451f39f9559"
+    },
+    "docs/evidence/full-skill191-20261024/product-complete.json": {
+      "bytes": 355,
+      "sha256": "b823377a9ab4168d3b3e1daead85e3740c9b1a216ec1d787eb9c929f9ae5210d"
+    },
+    "docs/evidence/full-skill191-20261024/ready.json": {
+      "bytes": 130,
+      "sha256": "c45b38c80164378f2f10750764ffba3f340c28c5533ed3f960746c8a59f08e44"
+    },
+    "docs/evidence/full-skill191-20261024/request-conflict-refusal.json": {
+      "bytes": 107,
+      "sha256": "b02fcfcca096595e766ce8764ca62d03c23f8b27d1d7b182186673e4ffecc6f2"
+    },
+    "docs/evidence/full-skill191-20261024/stale-edit-refusal.json": {
+      "bytes": 84,
+      "sha256": "d9f19e319e177eafc76cb5378cc588c114cd531db233406fdad5c985347ea4ae"
+    },
+    "docs/evidence/full-skill191-20261024/comparison.png": {
+      "bytes": 95986,
+      "sha256": "7474f611ccb68a13d96ad2f627f4d9d200ebf04da8c162c8d01b8a074a28ddfa"
+    },
+    "docs/evidence/full-skill191-20261024/cases.json": {
+      "bytes": 241285,
+      "sha256": "f0eecd328c864dc026f3afe39b8e2c1e810ac1e883abe7b7734b4f6296b787c0"
+    },
+    "docs/evidence/full-skill191-20261024/driver.mjs": {
+      "bytes": 1493,
+      "sha256": "6cd9dae3ae3620e60f8e2af843f803c58c03400285c93e47b32e4c7cd07d81e1"
+    },
+    "docs/evidence/full-skill191-20261024/call.mjs": {
+      "bytes": 874,
+      "sha256": "e8755c73b4529a8bacfafc7d62f56285b551b91b2c16be3240dfd997ed864ced"
+    },
+    "docs/evidence/full-skill191-20261024/live.mjs": {
+      "bytes": 534,
+      "sha256": "9abe4d03ccae822cd28419ae3ddd17813bbe4819b7d48c603ff42b62e6751e92"
+    },
+    "docs/evidence/full-skill191-20261024/run-common.mjs": {
+      "bytes": 2654,
+      "sha256": "80d7466bf9ea788e0f10be3cc0a9dd5aac3718188b9695870cb0e12b20807f02"
+    },
+    "docs/evidence/full-skill191-20261024/phase1.mjs": {
+      "bytes": 509,
+      "sha256": "77f738b341cda13727646d754c8429562aee00cd3466ab848343112575d1fa62"
+    },
+    "docs/evidence/full-skill191-20261024/phase2.mjs": {
+      "bytes": 2638,
+      "sha256": "e64448a93b41e67d602730569fa39775fb72fe43ee3ccc8f0bb68bf3112fdb1e"
+    },
+    "docs/evidence/full-skill191-20261024/phase3.mjs": {
+      "bytes": 488,
+      "sha256": "7fb1beee0e482e72a78ed0edf8c87bd797376dd480e1b565e44a33cbbb213f03"
+    },
+    "docs/evidence/full-skill191-20261024/phase4.mjs": {
+      "bytes": 637,
+      "sha256": "a4b65ca513e9373ac8436a2b611d7cdccdd8ae01546079292f3d46803c38e023"
+    },
+    "docs/evidence/full-skill191-20261024/phase5.mjs": {
+      "bytes": 2316,
+      "sha256": "1567ed19478c90f06641b1aacaf223829a785a2ba3705f437cc483ce95193bde"
+    },
+    "docs/evidence/full-skill191-20261024/phase6.mjs": {
+      "bytes": 1494,
+      "sha256": "bc7be66bc81bd95062b0788328ea4025abca88f900cfc9b5cc6dd9df06399e0f"
+    },
+    "docs/evidence/full-skill191-20261024/phase7.mjs": {
+      "bytes": 1553,
+      "sha256": "349230b09e81c7173ee3f6f0f2cb1934be9d5598c83b510e4486c7166452ef5e"
+    },
+    "docs/evidence/full-skill191-20261024/phase8.mjs": {
+      "bytes": 1389,
+      "sha256": "b1e49a610ec47ba34199aff70911e6711f344e9fdba07a819bac6fe3679d27ef"
+    },
+    "docs/evidence/full-skill191-20261024/phase9.mjs": {
+      "bytes": 2009,
+      "sha256": "26fab1db10012b20ef2f81eeac9353aaedafcbd459ae63f9e5c7790f4271c0a9"
+    },
+    "docs/evidence/full-skill191-20261024/phase10.mjs": {
+      "bytes": 771,
+      "sha256": "de1cd8fc707efa68d9d7ce210c51bf84f4db42193d268b90d60be1ef46a6e298"
+    },
+    "docs/evidence/full-skill191-20261024/fix-archive-driver.mjs": {
+      "bytes": 418,
+      "sha256": "7ca34167a0c4e09a6ccf8d1eb9e658a6c07b831794bbcbea44b24552f2227b6c"
+    }
+  },
+  "progressChanged": false,
+  "additionalReferenceReview": {
+    "path": "skills/airpocket-studio/references/physics-provenance.md",
+    "timing": "Read during evidence packaging; the recipe supplied explicit synthetic assumptions used during execution. No general physical acceptance inferred."
+  }
+}
