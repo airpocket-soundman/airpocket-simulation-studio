@@ -7,7 +7,8 @@ const record = (value, names) => {
 };
 const text = value => { if (typeof value !== 'string' || !value.trim() || value !== value.trim() || value.length > 200) fail('Invalid dataset identity or evidence'); };
 const number = (value, min, max) => { if (typeof value !== 'number' || !Number.isFinite(value) || value < min || value > max) fail('Nonfinite or out-of-range measurement'); };
-const unit = (value, choices) => { if (!Object.hasOwn(choices, value)) fail('Unsupported explicit measurement unit'); return choices[value]; };
+const unit = (value, choices) => { if (typeof value !== 'string' || !Object.hasOwn(choices, value)) fail('Unsupported explicit measurement unit'); return choices[value]; };
+const finiteOutput = value => { if (!Number.isFinite(value)) fail('Nonfinite normalized measurement'); return value; };
 
 /** Import exact UTF-8 JSON and retain its SHA-256 alongside normalized engineering curves. */
 export async function importPrintedMeasurementDataset(raw) {
@@ -37,8 +38,9 @@ export async function importPrintedMeasurementDataset(raw) {
   text(s.id); text(s.batch); if (ids.has(s.id)) fail('Duplicate specimen'); ids.add(s.id);
   if (!Array.isArray(s.dimensions) || s.dimensions.length !== 3) fail('Three specimen dimensions required');
   const dimensionsMm = s.dimensions.map(v => { number(v * length, 1e-6, 1e6); if (typeof v !== 'number') fail('Numeric dimensions required'); return v * length; });
-  number(s.gaugeLength, Number.MIN_VALUE, 1e6 / length);
-  const gaugeLengthMm = s.gaugeLength * length;
+  // Use the same normalized numerical protection range as specimen dimensions.
+  number(s.gaugeLength, 1e-6 / length, 1e6 / length);
+  const gaugeLengthMm = finiteOutput(s.gaugeLength * length);
   if (gaugeLengthMm > dimensionsMm[2]) fail('Gauge exceeds specimen length');
   if (!Array.isArray(s.buildDirection) || s.buildDirection.length !== 3 || s.buildDirection.some(v => typeof v !== 'number' || !Number.isFinite(v)) || Math.abs(Math.hypot(...s.buildDirection) - 1) > 1e-8) fail('Unit build direction required');
   number(s.temperature, -273.15, 2000); number(s.speed, Number.MIN_VALUE, 1e6 / speed);
@@ -49,10 +51,10 @@ export async function importPrintedMeasurementDataset(raw) {
    if (!Array.isArray(row) || row.length !== 3) fail('Expected time, force, displacement');
    number(row[0], 0, 1e9); number(row[1], -1e9 / force, 1e9 / force); number(row[2], -1e6 / length, 1e6 / length);
    if (row[0] <= last) fail('Sample times must strictly increase'); last = row[0];
-   const forceN = row[1] * force, displacementMm = row[2] * length;
-   return {timeS: row[0], forceN, displacementMm, engineeringStressPa: forceN / (dimensionsMm[0] * dimensionsMm[1]) * 1e6, engineeringStrain: displacementMm / gaugeLengthMm};
+   const forceN = finiteOutput(row[1] * force), displacementMm = finiteOutput(row[2] * length);
+   return {timeS: row[0], forceN, displacementMm, engineeringStressPa: finiteOutput(forceN / (dimensionsMm[0] * dimensionsMm[1]) * 1e6), engineeringStrain: finiteOutput(displacementMm / gaugeLengthMm)};
   });
-  return {id:s.id, dimensionsMm, gaugeLengthMm, buildDirection:[...s.buildDirection], batch:s.batch, temperatureC:s.temperature, speedMmPerSecond:s.speed * speed, samples};
+  return {id:s.id, dimensionsMm, gaugeLengthMm, buildDirection:[...s.buildDirection], batch:s.batch, temperatureC:s.temperature, speedMmPerSecond:finiteOutput(s.speed * speed), samples};
  });
  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
  const sourceSha256 = Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,'0')).join('');

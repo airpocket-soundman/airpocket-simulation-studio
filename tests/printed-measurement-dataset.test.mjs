@@ -24,6 +24,34 @@ test('measured calibration report requires all evidence without asserting verifi
  assert.equal((await load(JSON.stringify(d))).accuracyVerified,false);
  delete d.calibration.dimensionEvidence;await assert.rejects(load(JSON.stringify(d)));
 });
+
+test('all explicit units require strings rather than coercible arrays or objects',async()=>{
+ for(const key of Object.keys(fixture().units))for(const invalid of [[fixture().units[key]],{value:fixture().units[key]},null,1]){
+  const d=fixture();d.units[key]=invalid;
+  await assert.rejects(load(JSON.stringify(d)),{code:'PRINTED_DATASET_INVALID'});
+ }
+});
+
+test('normalized gauge protection rejects subnormal lengths and all normalized numbers remain finite',async()=>{
+ for(const lengthUnit of ['mm','m']){
+  const factor=lengthUnit==='m'?1000:1;
+  for(const gaugeLength of [Number.MIN_VALUE,1e-7/factor]){
+   const d=fixture();d.units.length=lengthUnit;d.specimens[0].gaugeLength=gaugeLength;
+   await assert.rejects(load(JSON.stringify(d)),{code:'PRINTED_DATASET_INVALID'});
+  }
+  const d=fixture();d.units.length=lengthUnit;d.units.force='kN';d.units.speed='m/s';
+  const s=d.specimens[0];s.dimensions=[1e-6/factor,1e-6/factor,1e6/factor];s.gaugeLength=1e-6/factor;s.speed=1000;s.samples=[[0,0,0],[1,1e6,1e6/factor]];
+  const r=await load(JSON.stringify(d)),normalized=r.specimens[0];
+  assert.equal(normalized.gaugeLengthMm,1e-6);
+  assert.equal(normalized.speedMmPerSecond,1e6);
+  assert.equal(normalized.samples[1].forceN,1e9);
+  assert.equal(normalized.samples[1].displacementMm,1e6);
+  assert.equal(normalized.samples[1].engineeringStressPa,1e27);
+  assert.equal(normalized.samples[1].engineeringStrain,1e12);
+  const visit=value=>{if(typeof value==='number')assert.ok(Number.isFinite(value));else if(value&&typeof value==='object')Object.values(value).forEach(visit);};visit(r);
+  assert.deepEqual(JSON.parse(JSON.stringify(r)),r);
+ }
+});
 test('existing equivalent links require exact IDs/revisions/specimens/batch and independent specimens',async()=>{
  const p=printedEquivalentFixture().materialProperties,b=p.printedEquivalent.basis;b.kind='identified';b.identification={id:'fit',revision:'1',specimenIds:['synthetic-specimen-1']};b.independentValidation={id:'check',revision:'1',specimenIds:['independent']};
  const fit=fixture(),check=fixture();check.id='check';check.specimens[0].id='independent';const raws=[JSON.stringify(fit),JSON.stringify(check)],before=structuredClone(p);
