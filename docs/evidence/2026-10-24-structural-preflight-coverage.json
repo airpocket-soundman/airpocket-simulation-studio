@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "base": "01f2e2e",
+  "scope": "Static isotropic linear structural coverage metadata and shared solve contract identity only",
+  "source": [
+    "src/analysis-preflight.js",
+    "src/preflight-physics-coverage.js"
+  ],
+  "regression": {
+    "command": "node --test tests/structural-coverage-metadata.test.mjs tests/analysis-preflight.test.mjs tests/advanced-structural-preflight.test.mjs tests/structural-model-preflight.test.mjs",
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "checks": [
+      "legacy/quantitative/exploratory identity and nonmutation",
+      "mesh-only null coverage retained",
+      "advanced/unsupported identities without borrowed structural coverage",
+      "existing support/provenance/stale-input rejection and severity",
+      "thermal component-anchor metadata retained",
+      "coverage arrays copied per response"
+    ]
+  },
+  "unchanged": [
+    "allowed decision logic",
+    "diagnostic severity",
+    "provisional flags",
+    "permissions",
+    "saved schema",
+    "solver behavior",
+    "mesh-only coverage identity"
+  ],
+  "remaining": [
+    "general mesh-quality thresholds",
+    "spring/elastic-support rank",
+    "advanced structural postmesh support",
+    "source applicability",
+    "convergence",
+    "mesh dependence",
+    "physical accuracy"
+  ],
+  "completePhysicalValidation": false,
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "ciDispatches": 0,
+  "publicationVerified": false,
+  "taskStatusChanged": false,
+  "docsCheck": {
+    "command": "node --test tests/docs.test.mjs",
+    "passed": 2,
+    "failed": 0,
+    "newDocumentReciprocalLinksVerified": true,
+    "unrelatedFileModified": false,
+    "baseline": {
+      "base": "01f2e2e",
+      "passed": 1,
+      "failed": 1,
+      "reason": "docs/orbit194b-independent-review-2026-10-24.md lacks en/orbit194b-independent-review-2026-10-24.md link on base01f2e2e"
+    },
+    "integratedFix": "9785c32"
+  }
+}
