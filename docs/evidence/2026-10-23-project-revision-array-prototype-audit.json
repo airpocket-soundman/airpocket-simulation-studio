@@ -1,0 +1,18 @@
+{
+  "base": "948bd91",
+  "before": {
+    "numericInheritedToJsonCanSpoofHash": true,
+    "nonnumericInheritedMapCanSpoofHash": true
+  },
+  "fix": "canonicalJson requires Array.prototype before invoking serialization or array methods.",
+  "after": "Both custom-prototype paths reject without inherited getter execution; Array subclasses reject; ordinary JSON canonical bytes and independent SHA-256 unchanged.",
+  "verification": {
+    "focusedTests": 19,
+    "pass": 19,
+    "fail": 0,
+    "contracts": 17,
+    "diffCheck": "pass"
+  },
+  "summaryJa": "配列の継承メソッドでrevisionを偽装する2経路を再現し、汎用JSON境界で厳密拒否した。",
+  "summaryEn": "Reproduced two inherited-array revision spoof paths and added strict rejection at the shared JSON boundary."
+}

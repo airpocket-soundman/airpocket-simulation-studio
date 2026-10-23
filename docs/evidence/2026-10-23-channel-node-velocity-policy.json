@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-23",
+  "base": "ed30a1173df947fda7f080f8e296153347d7969a",
+  "synthetic": true,
+  "sourceSha256": "de39de4c9286a2480904c4b634832e03461f73d03b3f590dde00c73359b5db3c",
+  "meshRevision": "sha256:e99e443f8cee93a413c95769d13acbd1b8f3dece618683ae032e3b35c173200a",
+  "transferRevision": "sha256:669a5f2b4d85eb341da28dca008cd166912e8018e533ba627e6ca3e0201512d6",
+  "policyRevision": "sha256:60a35d949ee4f005e883fb3551ab4f46cda436265f39536f01a794ea9d4a333f",
+  "scope": {
+    "geometry": "parallel-plate-axis-aligned-Tet4",
+    "symmetry": "z-component-only",
+    "pressure": "face-only-no-nodal-assignment",
+    "nullMeaning": "unconstrained-component",
+    "solverConnected": false,
+    "projectBoundaryApiConnected": false
+  },
+  "oracle": {
+    "tetrahedra": 42,
+    "boundaryNodes": 32,
+    "wallNodes": 8,
+    "overriddenInletNodeIds": [
+      0,
+      2,
+      28,
+      30
+    ],
+    "constrainedComponents": 72,
+    "unconstrainedComponents": 24,
+    "outletFaces": 14,
+    "pressurePa": 5,
+    "serializedBytes": 5227
+  },
+  "verification": {
+    "focusedPassed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "contractDeclarations": 18,
+    "maximumWallLayers": 512,
+    "maximumNodes": 2056,
+    "reloadAtMaximumCapacity": true,
+    "independentPrototypeForgeryRegression": "Rejected inherited array map after reviewer counterexample"
+  },
+  "unverified": [
+    "Real flow solver and project BC application",
+    "General normal symmetry and arbitrary geometry",
+    "Flow convergence and y-plus",
+    "Parent CFDMESH1 completion"
+  ],
+  "integration": {
+    "moduleLayerRegistration": "root to register channel-node-velocity-policy.js alongside channel-layer-boundary-transfer.js",
+    "sharedProgressChanged": false,
+    "upstreamBoundaryValidatorPrototypeFix": "Independent reviewer delivering separate fix-only commit"
+  }
+}
