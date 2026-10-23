@@ -238,6 +238,7 @@ function normalizeConfig(config) {
   if (typeof killProcess !== 'function') throw new Error('killProcess must be a function when provided');
   return Object.freeze({
     executable,
+    sessionMode: config.sessionMode === true,
     argv: [...argv],
     cwd,
     initializeTimeoutMs: positiveInteger('initializeTimeoutMs', ACP_PROBE_DEFAULTS.initializeTimeoutMs),
@@ -290,6 +291,7 @@ export class AcpClientProcess extends EventEmitter {
       activeChild: this.#child !== null,
       activeTimers: this.#timers.size,
       pendingRequests: this.#pending.size,
+      stdoutRetainedBytes: this.#stdout.length,
       stderrRetainedBytes: this.#stderr.length,
       stderrTruncated: this.#stderrTruncated,
       signalHandlersInstalled: this.#signalHandlers !== null
@@ -358,6 +360,21 @@ export class AcpClientProcess extends EventEmitter {
     return this.#stopPromise;
   }
 
+  // Restricted opt-in transport used by AcpSessionClient; the existing probe stays initialize-only.
+  async requestSession(method, params, timeoutMs) {
+    if (!this.#config.sessionMode || this.#state !== 'ready') throw new Error('ACP session transport is unavailable');
+    if (!['session/new', 'session/prompt'].includes(method) || this.#pending.size) throw new Error('ACP session transport refuses this request');
+    if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 120000) throw new Error('ACP session request timeout is invalid');
+    const message = {jsonrpc:'2.0',id:this.#nextId++,method,params};
+    if (Buffer.byteLength(JSON.stringify(message)) > 65536) throw new Error('ACP session request exceeds byte limit');
+    return (await this.#request(message, timeoutMs, method)).result;
+  }
+
+  cancelSession(sessionId) {
+    if (!this.#config.sessionMode || this.#state !== 'ready' || typeof sessionId !== 'string' || !sessionId.length || sessionId.length > 256) throw new Error('ACP session cancellation is unavailable');
+    this.#write({jsonrpc:'2.0',method:'session/cancel',params:{sessionId}});
+  }
+
   async #initialize() {
     const id = this.#nextId++;
     const response = await this.#request(buildInitializeRequest(id), this.#config.initializeTimeoutMs, 'initialize');
@@ -370,7 +387,7 @@ export class AcpClientProcess extends EventEmitter {
       const timer = setTimeout(() => {
         this.#timers.delete(timer);
         this.#pending.delete(id);
-        reject(new Error(`${label} timed out after ${timeoutMs}ms`));
+        reject(Object.assign(new Error(`${label} timed out after ${timeoutMs}ms`),{code:'ACP_REQUEST_TIMEOUT'}));
       }, timeoutMs);
       this.#timers.add(timer);
       this.#pending.set(id, { resolve, reject, timer });
@@ -390,12 +407,16 @@ export class AcpClientProcess extends EventEmitter {
     if (!child || !child.stdin || child.stdin.destroyed) {
       throw new Error('Cannot write to the ACP agent: stdio pipe is not open');
     }
-    child.stdin.write(Buffer.from(`${JSON.stringify(message)}\n`, 'utf8'));
+    if (!child.stdin.write(Buffer.from(`${JSON.stringify(message)}\n`, 'utf8'))) {
+      this.#violation('ACP stdin backpressure limit exceeded');
+      throw new Error('ACP stdin backpressure limit exceeded');
+    }
     // Only the method and id are emitted; request params are never republished.
     this.emit('outbound', { method: typeof message.method === 'string' ? message.method : null, id: message.id ?? null });
   }
 
   #consumeStdout(chunk) {
+    if (['failed','stopping','stopped'].includes(this.#state)) { this.#stdout=Buffer.alloc(0);return; }
     this.#stdout = Buffer.concat([this.#stdout, chunk]);
     for (;;) {
       const newline = this.#stdout.indexOf(0x0a);
@@ -408,7 +429,7 @@ export class AcpClientProcess extends EventEmitter {
         return;
       }
       this.#dispatchLine(line);
-      if (this.#state === 'failed') return;
+      if (this.#state === 'failed') { this.#stdout=Buffer.alloc(0);return; }
     }
     if (this.#stdout.length > this.#config.maxStdoutRecordBytes) {
       this.#violation(`ACP stdout record exceeded ${this.#config.maxStdoutRecordBytes} bytes without a terminating newline`);
@@ -468,6 +489,7 @@ export class AcpClientProcess extends EventEmitter {
         this.#rejectClientRequest(message);
         return;
       }
+      if (this.#config.sessionMode && message.method === 'session/update') this.emit('session-update', message.params);
       this.emit('notification', { method: message.method });
       return;
     }
@@ -485,7 +507,9 @@ export class AcpClientProcess extends EventEmitter {
   // No client-side ACP method is implemented in this probe, so every agent-to-client
   // request is unknown and rejected with JSON-RPC method-not-found (-32601).
   #rejectClientRequest(message) {
-    const response = { jsonrpc: '2.0', id: message.id, error: { code: -32601, message: 'Method not found' } };
+    const response = this.#config.sessionMode && message.method === 'session/request_permission'
+      ? {jsonrpc:'2.0',id:message.id,result:{outcome:{outcome:'cancelled'}}}
+      : { jsonrpc: '2.0', id: message.id, error: { code: -32601, message: 'Method not found' } };
     try {
       this.#write(response);
     } catch {
@@ -529,6 +553,7 @@ export class AcpClientProcess extends EventEmitter {
   }
 
   #fail(error) {
+    this.#stdout=Buffer.alloc(0);
     if (!this.#failure) this.#failure = error instanceof Error ? error : new Error(String(error));
     if (this.#state !== 'failed') this.#setState('failed');
     this.#rejectPending(this.#failure);
