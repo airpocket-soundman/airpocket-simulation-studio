@@ -19,3 +19,9 @@ Spherical exterior air domains also support [radiation acoustics](exterior-acous
 ## Revision-bound shared API/MCP
 
 Use shared window.fluidDomainApi.prepare/connected prepareFluidDomain, run startJob mesh, then after success plus executionSettled apply the surface through applyMesh/applyFluidDomainMesh. New inputs clear properties/conditions/selection/provenance/intent and retain fluidDomain study. Unlike existing all-in-one GUI examples, configure fluid/acoustic properties and conditions explicitly. See the [operation contract](automation.md).
+
+## Explicit opening-candidate confirmation (CFDPORT1)
+
+`confirmOpeningCandidate` in `src/opening-candidate-cap.js` is a pure adapter accepting the current indexed triangle mesh, integer `meshVersion`, a complete detected candidate and a confirmation carrying the same version. The caller must advance the version whenever the mesh changes. It requires `confirmed: true`, a cap ID, an explicitly supplied unit `outwardNormal`, an `interiorPointMm`, and an `enclosure` box in mm. Re-extracting and comparing every candidate field rejects stale versions, tampering, unhealthy components and unresolved seams. The normal must align with the candidate plane; the interior point must lie inside the enclosure and strictly on the retained side under the existing cap contract. Canonical candidate winding never determines physical outward direction.
+
+The returned `source.openingCaps` uses the existing half-space cap contract. Original `nodeIndices`, `toleranceMm` and `meshVersion` are retained, with no input mutation or array aliasing. Reversing the normal changes the retained side and requires a corresponding interior point. Confirmation does not establish a closed shell, create a local CAD lid or generate a fluid mesh. UI/API integration, arbitrary wires and multiple volumes are outside this adapter's scope.
