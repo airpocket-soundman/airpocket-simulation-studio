@@ -95,3 +95,15 @@ Thermal size3mm was interrupted by command timeout. Follow-up read-only inspect/
 Successful cold/warm/recovered runs retain nodeCount/elementCount from the formal MCP jobStatus.result.mesh with jobId/inputRevision in meshObservation. Missing/invalid counts remain null with a reason; requested size is never used to infer counts. Compact summaries expose no mesh-content hash, so meshRevision remains null and equal counts do not establish identical meshes. QA_PERF_CASES=structural-tiny,structural-medium selects two bounded sizes in the existing 48 replay helper. Added tests verify mocked contracts, not a new Chrome measurement.
 
 2026-10-22 addition: synchronous JS heap records every timer tick independently while slow UASM is pending. source=jsHeap and source=uasm use separate samples with null for the other series, preserving independent timestamps. Only UASM requests are serialized; pending UASM resolved after stop is discarded.
+
+## 2026-10-23: Separate idle windows and pinned input
+
+The runner records a default4-second idle window after cancellation attempts and after successful recovery (--idle-ms,3000..60000). Sampled maxima use activeWindows only; post-cancel/post-settle values must fit their own idle window. A UASM request/resolution interval must fit wholly within a phase. Historical reports without these fields retain legacy interpretation. completed-before-cancel is never a cancellation settlement. A failed case/recovery stops the remaining series.
+
+--input-snapshot accepts exportProject JSON within1MiB, matches its revision to formal inspect before/after each case, and records original byte length/SHA256. The API meshBudget checks actual successful-job counts before further runs; it does not bound allocation of the first mesh.
+
+[Evidence](../evidence/2026-10-23-perf-idle.json): IAB,60nodes/121Tet4; cold24344.473ms and warm2370.930ms (n1 each); one cancellation144.960ms, one completion before cancellation, successful recovery. Separate4-second idle windows retained. JS heap active sampled maximum32003185B, after-cancel30396838B, after-settle29645409B. UASM active sampled maximum136470490B; both idle values unavailable. Never sum the series or call them peak RAM. The raw report preserves a cancellation-timestamp error; the derived report explicitly documents its correction.
+
+Chrome became unavailable before pairing and timed out after180s without a solve. IAB also reports a Chrome155-family UA, so this is not independent-engine validation. Additional sizes, thermal, support limits and Chrome remeasurement remain unverified. Parallel host work and uncontrolled caches preclude a performance-improvement comparison. EOF after the successful report caused the GUI connection-failed message; the probe, owned tab and server were stopped.
+
+Post-run values require three uninterrupted seconds measured from the later of settlement and idle-window start. This also excludes a later completed-before-cancel attempt.

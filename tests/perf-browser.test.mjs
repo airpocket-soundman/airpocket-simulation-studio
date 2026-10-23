@@ -4,6 +4,8 @@ import {mkdtempSync, readFileSync, readdirSync, rmSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {runInNewContext} from 'node:vm';
+import {getProjectRevision} from '../src/project-revision.js';
+import {createHash} from 'node:crypto';
 import {CASES, MEMORY_SERIES, MEMORY_SETTLE_MS, PROBE_SNIPPET, PerfTimeoutError, REPORT_SCOPE, assertLocalOrigin, createStdioClient, mergeMemory, parseArgs, runBrowserPerf, waitForSession, writeReport} from '../scripts/perf-browser.mjs';
 
 const TOKEN = 'SECRET-PAIRING-TOKEN-0123456789';
@@ -127,6 +129,38 @@ test('fake run produces schema v1 with cold, warm, cancel and null memory with a
   assert.ok(starts.every(a => a.inputRevision === report.revision && typeof a.requestId === 'string' && [8, 3].includes(a.options.size)));
   assert.equal(new Set(starts.map(a => a.requestId)).size, starts.length);
   assert.equal(f.calls.filter(([, a]) => a.method === 'releaseJob').length, starts.length);
+});
+
+test('case and cancellation idle windows are isolated; normalized snapshot identity matches live input',async()=>{
+ const f=fake(),snapshot=JSON.stringify({version:1,name:'normalized synthetic snapshot'}),revision=await getProjectRevision(JSON.parse(snapshot)),original=f.client.call;
+ f.client.call=async(tool,args)=>{const v=await original(tool,args);if(args.method==='inspect')v.revision=revision;if(args.method==='jobStatus')v.inputRevision=revision;return v;};
+ const r=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny','structural-medium'],repeats:1,timeoutMs:5000,inputSnapshot:snapshot,...f.opts});assert.equal(r.inputSnapshot.sha256,createHash('sha256').update(snapshot).digest('hex'));assert.equal(r.inputSnapshot.bytes,Buffer.byteLength(snapshot));
+ for(const c of r.cases){assert.equal(c.status,'ok');assert.equal(c.inputSnapshot.revision,revision);assert.ok(c.cancelIdleWindow.endEpochMs-c.cancelIdleWindow.startEpochMs>=4000);assert.ok(c.recovered.startEpochMs>=c.cancelIdleWindow.endEpochMs);assert.ok(c.idleWindow.startEpochMs>=c.window.endEpochMs);assert.ok(c.idleWindow.endEpochMs-c.idleWindow.startEpochMs>=4000);}
+ assert.ok(r.cases[1].window.startEpochMs>=r.cases[0].idleWindow.endEpochMs);
+ const invalid=fake();await assert.rejects(runBrowserPerf({client:invalid.client,sessionId:'s',inputSnapshot:snapshot,...invalid.opts}),/snapshot revision mismatch/);assert.equal(invalid.calls.filter(([,a])=>a.method==='startJob').length,0);
+ for(const idleMs of [0,2999,60001,NaN])await assert.rejects(runBrowserPerf({client:invalid.client,idleMs}),/idleMs/);
+});
+
+test('idle samples never inflate active peaks and later case samples cannot fill idle recovery',()=>{
+ const c={status:'ok',window:{startEpochMs:100,endEpochMs:8500,cancelSettledEpochMs:1000},activeWindows:[{startEpochMs:100,endEpochMs:1000},{startEpochMs:5000,endEpochMs:8500}],cancelIdleWindow:{startEpochMs:1000,endEpochMs:5000},idleWindow:{startEpochMs:8500,endEpochMs:12500}};
+ const r={browser:{},cases:[c]},s=(t,end,n)=>({t,tRequested:t,tResolved:end,usedJSHeapSize:n,uasmBytes:n});
+ mergeMemory(r,{schemaVersion:2,intervalMs:1000,samples:[s(200,300,10),s(4200,4300,900),s(4900,5100,999),s(11500,11600,20),s(13000,13100,9999)]});
+ assert.equal(c.memory.series.uasm.peakBytesSampled,10);assert.equal(c.memory.series.jsHeap.peakBytesSampled,10);assert.equal(c.memory.series.uasm.afterCancelBytes,900);assert.equal(c.memory.series.uasm.afterSettleBytes,20);
+ mergeMemory(r,{schemaVersion:2,intervalMs:1000,samples:[s(200,300,10),s(13000,13100,9999)]});assert.equal(c.memory.series.uasm.afterCancelBytes,null);assert.equal(c.memory.series.uasm.afterSettleBytes,null);
+});
+
+test('failed execution stops the series before a later case can overlap an uncertain job',async()=>{
+ const f=fake({never:true});const r=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny','structural-medium'],repeats:1,timeoutMs:100,...f.opts});assert.equal(r.cases.length,1);assert.equal(r.cases[0].status,'failed');assert.equal(f.calls.filter(([,a])=>a.method==='startJob').length,1);
+});
+test('mesh budget stops before warm/cancel and malformed idle manifests cannot manufacture memory recovery',async()=>{
+ const f=fake();const r=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny','structural-medium'],repeats:1,meshBudget:{nodes:50,elements:100},...f.opts});assert.equal(r.cases.length,1);assert.match(r.cases[0].error,/declared budget/);assert.equal(f.calls.filter(([,a])=>a.method==='startJob').length,1);
+ const c={status:'ok',window:{startEpochMs:100,endEpochMs:8500,cancelSettledEpochMs:1000},activeWindows:[{startEpochMs:100,endEpochMs:1000},{startEpochMs:5000,endEpochMs:8500}],cancelIdleWindow:{startEpochMs:1000,endEpochMs:5000},idleWindow:{startEpochMs:8500,endEpochMs:12500}};
+ for(const mutate of [v=>v.idleWindow.startEpochMs=8400,v=>v.cancelIdleWindow.endEpochMs=5200,v=>v.activeWindows.push(v.activeWindows[0]),v=>v.activeWindows[0].endEpochMs=Infinity,v=>v.window.cancelSettledEpochMs=NaN]){const v=structuredClone(c);mutate(v);assert.throws(()=>mergeMemory({browser:{},cases:[v]},{samples:[]}),/performance.*(manifest|window)/);}
+ assert.equal(parseArgs(['--idle-ms','5000','--input-snapshot','snapshot.json']).idleMs,5000);assert.throws(()=>parseArgs(['--idle-ms','0']),/idle-ms/);
+});
+test('a completed-before-cancel attempt is never reported as a cancellation settlement',async()=>{
+ const f=fake(),original=f.client.call,fast=new Set();f.client.call=async(tool,args)=>{const v=await original(tool,args);if(args.method==='startJob'&&args.args.requestId.includes('half-warm-total'))fast.add(v.jobId);if(args.method==='jobStatus'&&fast.has(args.args.jobId))return {...v,state:'succeeded',executionSettled:true};return v;};
+ const r=await runBrowserPerf({client:f.client,sessionId:'s',cases:['structural-tiny'],repeats:1,...f.opts}),c=r.cases[0];assert.equal(c.cancel.runs[1].state,'completed-before-cancel');assert.equal(c.window.cancelSettledEpochMs,c.cancel.runs[0].endEpochMs);assert.equal(c.cancel.runs[1].requestedAfterMs,null);
 });
 
 test('memory probe merge fills the memory block and user agent', async () => {
@@ -357,4 +391,10 @@ test('missing or invalid final mesh counts remain unavailable and stale job inpu
   if(stale){assert.equal(r.cases[0].status,'failed');assert.match(r.cases[0].error,/input revision mismatch/);}
   else{const m=r.cases[0].cold.meshObservation;assert.equal(m.nodeCount,null);assert.equal(m.elementCount,null);assert.match(m.unavailableReason,/absent or invalid/);}
  }
+});
+
+test('post-cancel memory requires three uninterrupted idle seconds after a later completed attempt',()=>{
+ const c={status:'ok',window:{startEpochMs:100,endEpochMs:10000,cancelSettledEpochMs:1000},activeWindows:[{startEpochMs:100,endEpochMs:1000},{startEpochMs:1100,endEpochMs:4000},{startEpochMs:8000,endEpochMs:10000}],cancelIdleWindow:{startEpochMs:4000,endEpochMs:8000},idleWindow:{startEpochMs:10100,endEpochMs:14100}};
+ mergeMemory({browser:{},cases:[c]},{samples:[{t:500,usedJSHeapSize:10},{t:4500,usedJSHeapSize:99},{t:7100,usedJSHeapSize:20},{t:13050,usedJSHeapSize:88},{t:13200,usedJSHeapSize:30}]});
+ assert.equal(c.memory.series.jsHeap.afterCancelBytes,20);assert.equal(c.memory.series.jsHeap.afterSettleBytes,30);
 });

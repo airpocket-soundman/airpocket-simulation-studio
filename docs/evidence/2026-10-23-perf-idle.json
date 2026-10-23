@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-23",
+  "taskId": "PERF1",
+  "workOrders": [
+    "58-PERF1-SCALE",
+    "59-PERF1-BROWSER2"
+  ],
+  "status": "bounded-IAB-tiny-only; Chrome unpaired",
+  "sourceRevision": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+  "dirtyMeasurement": true,
+  "report": "perf-idle-20261023/report.merged.json",
+  "rawPreserved": true,
+  "metadataCorrections": [
+    {
+      "field": "cases[0].window.cancelSettledEpochMs",
+      "previous": 1792760342097,
+      "corrected": 1792760341042,
+      "reason": "actual cancelled run only; completed-before-cancel is not cancellation"
+    }
+  ],
+  "scope": "One IAB Chromium-family surface, n=1, localhost synthetic structural model; not another engine or support limit",
+  "input": {
+    "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+    "bytes": 1759,
+    "sha256": "621bde111750dfa4bedc22f4ea9f17da97c0e0951c1c8d1693bc307c947e874f",
+    "source": "caller-supplied exportProject JSON; revision matched to live inspect"
+  },
+  "measurement": {
+    "coldMs": 24344.473,
+    "warmMs": 2370.93,
+    "nodes": 60,
+    "tet4": 121,
+    "cancelled": 1,
+    "completedBeforeCancel": 1,
+    "recoverySucceeded": true,
+    "idleMs": 4000,
+    "series": {
+      "uasm": {
+        "name": "measureUserAgentSpecificMemory",
+        "source": "performance.measureUserAgentSpecificMemory().bytes (cross-origin isolated; semantic, whole-agent scope)",
+        "field": "uasmBytes",
+        "available": true,
+        "sampleCount": 2,
+        "intervalMs": 1000,
+        "timing": "request/resolution interval must fit wholly within the selected phase",
+        "baselineBytes": 47591012,
+        "peakBytesSampled": 136470490,
+        "afterCancelBytes": null,
+        "afterSettleBytes": null,
+        "unavailable": {
+          "afterCancelBytes": "no measureUserAgentSpecificMemory sample at or after cancelSettledEpochMs + 3000 ms",
+          "afterSettleBytes": "no measureUserAgentSpecificMemory sample at or after endEpochMs + 3000 ms"
+        }
+      },
+      "jsHeap": {
+        "name": "performance.memory.usedJSHeapSize",
+        "source": "performance.memory.usedJSHeapSize bytes (non-standard, coarse; JS heap scope)",
+        "field": "usedJSHeapSize",
+        "available": true,
+        "sampleCount": 30,
+        "intervalMs": 1000,
+        "timing": "synchronous JS heap at request time",
+        "baselineBytes": 31327698,
+        "peakBytesSampled": 32003185,
+        "afterCancelBytes": 30396838,
+        "afterSettleBytes": 29645409,
+        "unavailable": {}
+      }
+    }
+  },
+  "limitations": [
+    "Chrome3 unavailable before pairing; driver timed out after180s; no Chrome solve",
+    "Medium/fine/thermal not measured in this run",
+    "No controlled HTTP cache; cold means first case run in loaded page; other agents were testing on host",
+    "UASM post-cancel and post-settle unavailable because asynchronous intervals did not fit idle windows",
+    "Neither sampled series is true peak RAM/RSS/GPU; never sum series",
+    "Input setup used public GUI API in owned QA page; solve jobs used formal stdio MCP inspect/analyze",
+    "MCP EOF after successful report caused GUI connection-failed display; token cleared, probe stopped, owned IAB tab and Vite closed"
+  ],
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "chrome-input.snapshot.json": {
+      "bytes": 1759,
+      "sha256": "621bde111750dfa4bedc22f4ea9f17da97c0e0951c1c8d1693bc307c947e874f"
+    },
+    "input.after.json": {
+      "bytes": 1856,
+      "sha256": "028a2e521438f43a1c8d25a5222aa50bbc40a2a1957a7ad58e94b0a76f1f21bc"
+    },
+    "input.snapshot.json": {
+      "bytes": 1759,
+      "sha256": "621bde111750dfa4bedc22f4ea9f17da97c0e0951c1c8d1693bc307c947e874f"
+    },
+    "plan.json": {
+      "bytes": 390,
+      "sha256": "ac072df5399b7f4e6661f1acbc1a7882e0e8074b8be3915586229bb07459b7c1"
+    },
+    "probe.capture.json": {
+      "bytes": 15616,
+      "sha256": "d9a516f562ab5b1d6edd1ce184ba84b3ab68e673339f5fc80bebe0638fd17b6a"
+    },
+    "report.merged.json": {
+      "bytes": 12065,
+      "sha256": "291311596b8d57ffd265d9cfef73c21530178852b695f5a557bfb9ad2a773577"
+    },
+    "report.raw.json": {
+      "bytes": 8917,
+      "sha256": "09c4660afcf7ea219d8739f72d6c3670c6fb218e830558e0c7595da5ba0d8c2d"
+    },
+    "screen.jpg": {
+      "bytes": 114904,
+      "sha256": "e525c4b204516c668a3445e9f0ad385019478136558a3f014d7a7565f5ad146e"
+    },
+    "replay/driver.mjs": {
+      "bytes": 1711,
+      "sha256": "f2c40452bac379df7eef2a1ae43ab8e181c34115a39cdd6082bb6a6be1055e21"
+    },
+    "replay/input.json": {
+      "bytes": 791,
+      "sha256": "57faf0118c8cec7fc71740addab04e972dcd28ee54b730ce3be67667dc9fdee6"
+    },
+    "replay/perf.html": {
+      "bytes": 1385,
+      "sha256": "bd8d532a1899b0b96e0c36f2fabb21c62789d726f9093991c0e4462a620be8a4"
+    },
+    "replay/probe.js": {
+      "bytes": 1128,
+      "sha256": "eea795f7099900621e40952b41b90f4ce38471bb2fe8af93e005e57967582f53"
+    },
+    "replay/ui.mjs": {
+      "bytes": 1056,
+      "sha256": "266f6674582825accfad1557afc3a02282600198d8bd2c8a28e93864ff3a6da4"
+    }
+  },
+  "validation": {
+    "focusedTests": 23,
+    "pass": 23,
+    "fail": 0,
+    "skipped": 0,
+    "nodePerfTests": 4,
+    "note": "Node harness four tests passed before quiet-window refinement; browser focused suite rerun after refinement"
+  }
+}
