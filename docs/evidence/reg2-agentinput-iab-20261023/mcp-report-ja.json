@@ -1,0 +1,690 @@
+{
+  "languageLabel": "ja",
+  "localeControlledByRootGui": true,
+  "operation": "solve",
+  "readOnly": true,
+  "before": {
+    "schemaVersion": 1,
+    "revision": "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+    "project": {
+      "loaded": true,
+      "name": "Synthetic orthotropic QA valid-warning",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "browser": {
+      "name": "Chrome",
+      "reportedVersion": "155.0.0.0",
+      "precision": "reduced",
+      "fullVersionVerified": false,
+      "source": "navigator.userAgent"
+    },
+    "methods": {
+      "inspect": "inspect",
+      "inspectInput": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "checkGpuEnvironment": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "meshBoundaryPreflight": "inspect",
+      "previewEdit": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "jobResultExport": "inspect",
+      "jobResultRead": "inspect",
+      "jobResultRelease": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "getCompareView": "inspect",
+      "setCompareView": "view",
+      "caseList": "inspect",
+      "caseCompare": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "startCompareExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "lifecycle": {
+      "schemaVersion": 1,
+      "pageInstanceId": "c8bf3246-c4b8-412b-b8a0-0a5b4c5a1ef8",
+      "connectionEpoch": 1,
+      "eventSequence": 3,
+      "events": [
+        {
+          "sequence": 1,
+          "kind": "created",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 2,
+          "kind": "pageshow",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 3,
+          "kind": "connected",
+          "connectionEpoch": 1
+        }
+      ],
+      "relation": "unknown",
+      "automaticReplay": false,
+      "recoverySteps": [
+        "Reconnect with explicitly selected scopes.",
+        "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+        "Never automatically repeat a delivered or timed-out operation.",
+        "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+      ],
+      "cause": "unconfirmed",
+      "inputRevision": "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+      "ownedAnalysisJobs": 0,
+      "ownedExportJobs": 0
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "preflight": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "elastic-cpu",
+      "profile": {
+        "id": "elastic-cpu",
+        "models": [
+          "linear-elastic",
+          "orthotropic"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "observation-transport",
+            "when": "protocol-enabled worker observation delivery",
+            "optional": true,
+            "provisional": true,
+            "scope": "worker observation events only; enabled by browser and headless job clients, not legacy direct worker calls",
+            "requiredFields": [
+              "observationTransport.maxEvents",
+              "observationTransport.maxBytes",
+              "observationTransport.maxOutboxEvents",
+              "observationTransport.maxOutboxBytes",
+              "observationTransport.maxTotalEvents",
+              "observationTransport.maxTotalBytes",
+              "observationTransport.terminalControlMaxEvents",
+              "observationTransport.terminalControlMaxBytes",
+              "observationTransport.pendingEvents",
+              "observationTransport.pendingBytes",
+              "observationTransport.outboxEvents",
+              "observationTransport.outboxBytes",
+              "observationTransport.peakEvents",
+              "observationTransport.peakBytes",
+              "observationTransport.outboxPeakEvents",
+              "observationTransport.outboxPeakBytes",
+              "observationTransport.accepted",
+              "observationTransport.dropped",
+              "observationTransport.droppedMeshes",
+              "observationTransport.droppedFields",
+              "observationTransport.sourceSequence",
+              "observationTransport.policy",
+              "observationTransport.scope",
+              "observationTransport.terminal"
+            ],
+            "terminalRequiredFields": [
+              "observationTransport.droppedReasons"
+            ],
+            "dataEnvelopeSequenceField": "observationTransport.sequence",
+            "dataEnvelopeAckField": "observationAckId",
+            "cadence": "bounded FIFO outbox coalesces scalar iterations; one bounded control summary after drain immediately before normal result or reported-error terminal delivery",
+            "terminalSummaryOnHardTermination": false,
+            "terminalSummaryAvailableOn": "normal-result-or-reported-error",
+            "hardTerminationKinds": [
+              "cancellation",
+              "timeout",
+              "worker-abnormal-exit"
+            ],
+            "missingTerminalSummaryMeans": "final transport drop totals unknown; never infer zero from the last observation snapshot",
+            "metrics": [
+              {
+                "name": "observationTransport.pendingEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationTransport.pendingBytes",
+                "unit": "bytes"
+              },
+              {
+                "name": "observationTransport.outboxEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationTransport.outboxBytes",
+                "unit": "bytes"
+              },
+              {
+                "name": "observationTransport.dropped",
+                "unit": "count"
+              }
+            ],
+            "maxEvents": 8,
+            "maxBytes": 8000000,
+            "maxOutboxEvents": 8,
+            "maxOutboxBytes": 8000000,
+            "maxTotalEvents": 16,
+            "maxTotalBytes": 16000000,
+            "terminalControlMaxEvents": 1,
+            "terminalControlMaxBytes": 4096,
+            "byteBasis": "conservative-structural-envelope-estimate-including-transport-metadata",
+            "policy": "non-blocking-solver-callbacks; enqueue/coalesce within bounded outbox; ACK pumps FIFO; drain before normal terminal",
+            "workerTransportBounded": true,
+            "boundedOnlyWhenProtocolEnabled": true,
+            "hostQueueBudgetSeparate": true,
+            "progressBounded": false,
+            "finalResultBounded": false,
+            "totalJavaScriptHeapBounded": false
+          },
+          {
+            "stage": "observation-queue-limit",
+            "when": "pending-payload-limit",
+            "optional": true,
+            "provisional": true,
+            "pendingBasis": "in-flight-and-queued-full-payloads",
+            "byteBasis": "conservative-structural-estimate",
+            "storageBudgetSeparate": true,
+            "workerTransportBounded": false,
+            "requiredFields": [
+              "observationQueue.reason",
+              "observationQueue.observationSequence",
+              "observationQueue.maxEvents",
+              "observationQueue.maxBytes",
+              "observationQueue.pendingEvents",
+              "observationQueue.pendingBytes",
+              "observationQueue.dropped",
+              "observationQueue.latestPolicy"
+            ],
+            "cadence": "host notification when a full mesh or field payload is omitted by the bounded pending queue; scalar summaries continue with source observationSequence",
+            "metrics": [
+              {
+                "name": "observationQueue.dropped",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.droppedMeshes",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.droppedFields",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.pendingEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.pendingBytes",
+                "unit": "bytes"
+              }
+            ],
+            "latestPolicy": "last-accepted-snapshot",
+            "acceptedIsStored": false
+          },
+          {
+            "stage": "observation-event-gap",
+            "when": "job-event-payload-omission",
+            "optional": true,
+            "provisional": true,
+            "payloadOmitted": true,
+            "requiredFields": [
+              "gap.reason"
+            ],
+            "gapReasons": [
+              "bytes",
+              "structure-limit",
+              "non-finite",
+              "cycle",
+              "accessor",
+              "unsupported-type"
+            ],
+            "cadence": "replaces an unsafe or oversized observation at the same authoritative event sequence/type in the shared job registry; does not change calculation outcome",
+            "metrics": [],
+            "byteBasis": "serialized-UTF-8-JSON",
+            "workerTransportBounded": false,
+            "limitations": [
+              "Separate from pending field queue omissions and retained artifact limits.",
+              "A gap is missing telemetry, not evidence of convergence, failure or physical accuracy.",
+              "Event count and byte retention may evict older gaps; use the returned cursor and truncation metadata."
+            ]
+          },
+          {
+            "stage": "diagnostic",
+            "when": "execution-failure",
+            "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+            "metrics": [],
+            "failureSchemaVersion": 1
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+            "metrics": [
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "tolerance",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": false,
+        "available": false,
+        "scalarFieldsSupported": false,
+        "vectorFieldsSupported": false,
+        "meshSupported": true,
+        "meshAvailable": false,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "legacy",
+    "allowed": true,
+    "provisional": false,
+    "completePreflight": false,
+    "requiredInputContract": "unsupported",
+    "requiredPointers": [],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1"
+    },
+    "diagnostics": [
+      {
+        "code": "PREFLIGHT_CONTRACT_LIMITED",
+        "severity": "warning",
+        "target": "/study",
+        "message": "Required-input provenance contract is not implemented for this study/material combination",
+        "evidence": {
+          "kind": "structural"
+        },
+        "suggestions": [
+          "Use the documented study-specific validation; extend the provenance contract before a quantitative or exploratory run"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/0",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 1000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/1",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 2000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      },
+      {
+        "code": "UNIT_MAGNITUDE_SUSPECT",
+        "severity": "warning",
+        "target": "/materialProperties/orthotropic/youngModuliPa/2",
+        "message": "Value magnitude is unusual for the fixed input unit; no conversion was applied",
+        "evidence": {
+          "value": 3000,
+          "unit": "Pa",
+          "plausibleRange": [
+            100000,
+            10000000000000
+          ],
+          "hint": "Values near 1e2 look like GPa and near 1e5 like MPa; convert to Pa"
+        },
+        "suggestions": [
+          "Confirm the value is expressed in Pa; convert and record the conversion if it is not"
+        ],
+        "requiresUserIntent": false
+      }
+    ],
+    "physicsCoverage": {
+      "contract": null,
+      "implemented": [],
+      "remaining": [
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ],
+      "completePreflight": false
+    },
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "after": {
+    "schemaVersion": 1,
+    "revision": "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+    "project": {
+      "loaded": true,
+      "name": "Synthetic orthotropic QA valid-warning",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 2,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "browser": {
+      "name": "Chrome",
+      "reportedVersion": "155.0.0.0",
+      "precision": "reduced",
+      "fullVersionVerified": false,
+      "source": "navigator.userAgent"
+    },
+    "methods": {
+      "inspect": "inspect",
+      "inspectInput": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "checkGpuEnvironment": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "meshBoundaryPreflight": "inspect",
+      "previewEdit": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "jobResultExport": "inspect",
+      "jobResultRead": "inspect",
+      "jobResultRelease": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "getCompareView": "inspect",
+      "setCompareView": "view",
+      "caseList": "inspect",
+      "caseCompare": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "startCompareExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "lifecycle": {
+      "schemaVersion": 1,
+      "pageInstanceId": "c8bf3246-c4b8-412b-b8a0-0a5b4c5a1ef8",
+      "connectionEpoch": 1,
+      "eventSequence": 3,
+      "events": [
+        {
+          "sequence": 1,
+          "kind": "created",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 2,
+          "kind": "pageshow",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 3,
+          "kind": "connected",
+          "connectionEpoch": 1
+        }
+      ],
+      "relation": "unknown",
+      "automaticReplay": false,
+      "recoverySteps": [
+        "Reconnect with explicitly selected scopes.",
+        "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+        "Never automatically repeat a delivered or timed-out operation.",
+        "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+      ],
+      "cause": "unconfirmed",
+      "inputRevision": "sha256:3879741459419d04e78ac5ee4e323604572f68174812e0ba5838ca1d343ab62d",
+      "ownedAnalysisJobs": 0,
+      "ownedExportJobs": 0
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "inspectEqual": true
+}
