@@ -1,0 +1,268 @@
+{
+  "date": "2026-10-23",
+  "baseSha": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+  "scope": "CFDMESH1 next limited downstream boundary contract",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "syntheticInput": {
+    "source": {
+      "plan": {
+        "units": "mm",
+        "output": "coordinate-placement-plan",
+        "gapMm": 10,
+        "firstHeightMm": 0.1,
+        "growthRatio": 2,
+        "layersPerWall": 3,
+        "maxLayers": 512,
+        "layerHeightsMm": [
+          0.1,
+          0.2,
+          0.4
+        ],
+        "oneSideThicknessMm": 0.7000000000000001,
+        "centreBandMm": {
+          "lowerMm": 0.7000000000000001,
+          "upperMm": 9.3,
+          "widthMm": 8.6
+        },
+        "coordinatesMm": [
+          0,
+          0.1,
+          0.30000000000000004,
+          0.7000000000000001,
+          9.3,
+          9.7,
+          9.9,
+          10
+        ],
+        "totalLayerCount": 6,
+        "walls": [
+          {
+            "wallId": 0,
+            "positionMm": 0,
+            "thicknessMm": 0.7000000000000001,
+            "heightsMm": [
+              0.1,
+              0.2,
+              0.4
+            ],
+            "coordinatesMm": [
+              0,
+              0.1,
+              0.30000000000000004,
+              0.7000000000000001
+            ]
+          },
+          {
+            "wallId": 1,
+            "positionMm": 10,
+            "thicknessMm": 0.7000000000000001,
+            "heightsMm": [
+              0.1,
+              0.2,
+              0.4
+            ],
+            "coordinatesMm": [
+              9.3,
+              9.7,
+              9.9,
+              10
+            ]
+          }
+        ],
+        "layers": [
+          {
+            "wallId": 0,
+            "index": 0,
+            "heightMm": 0.1,
+            "innerMm": 0,
+            "outerMm": 0.1,
+            "distanceFromLowerWallMm": 0,
+            "distanceFromUpperWallMm": 9.9
+          },
+          {
+            "wallId": 0,
+            "index": 1,
+            "heightMm": 0.2,
+            "innerMm": 0.1,
+            "outerMm": 0.30000000000000004,
+            "distanceFromLowerWallMm": 0.1,
+            "distanceFromUpperWallMm": 9.7
+          },
+          {
+            "wallId": 0,
+            "index": 2,
+            "heightMm": 0.4,
+            "innerMm": 0.30000000000000004,
+            "outerMm": 0.7000000000000001,
+            "distanceFromLowerWallMm": 0.30000000000000004,
+            "distanceFromUpperWallMm": 9.3
+          },
+          {
+            "wallId": 1,
+            "index": 0,
+            "heightMm": 0.1,
+            "innerMm": 9.9,
+            "outerMm": 10,
+            "distanceFromLowerWallMm": 9.9,
+            "distanceFromUpperWallMm": 0
+          },
+          {
+            "wallId": 1,
+            "index": 1,
+            "heightMm": 0.2,
+            "innerMm": 9.7,
+            "outerMm": 9.9,
+            "distanceFromLowerWallMm": 9.7,
+            "distanceFromUpperWallMm": 0.1
+          },
+          {
+            "wallId": 1,
+            "index": 2,
+            "heightMm": 0.4,
+            "innerMm": 9.3,
+            "outerMm": 9.7,
+            "distanceFromLowerWallMm": 9.3,
+            "distanceFromUpperWallMm": 0.30000000000000004
+          }
+        ],
+        "scope": {
+          "schemaVersion": 1,
+          "kind": "parallel-plate-wall-layer-placement",
+          "units": {
+            "length": "mm"
+          },
+          "output": "coordinate-placement-plan",
+          "meshProduced": false,
+          "unsupported": [
+            "gmsh-prism-elements",
+            "tetrahedral-mesh",
+            "flow-solve",
+            "y-plus",
+            "wall-shear-stress",
+            "general-3d-boundary-layer",
+            "moving-walls"
+          ]
+        }
+      },
+      "lengthMm": 2,
+      "widthMm": 1,
+      "maxAspectRatio": 20,
+      "minimumCellHeightMm": 0.1
+    },
+    "conditions": {
+      "lowerWall": {
+        "type": "no-slip-wall"
+      },
+      "upperWall": {
+        "type": "no-slip-wall"
+      },
+      "xMin": {
+        "type": "velocity-inlet",
+        "velocityMps": [
+          1,
+          0,
+          0
+        ]
+      },
+      "xMax": {
+        "type": "pressure-outlet",
+        "pressurePa": 0
+      },
+      "zMin": {
+        "type": "symmetry"
+      },
+      "zMax": {
+        "type": "symmetry"
+      }
+    },
+    "qualityLimits": {
+      "maxTetEdgeAspectRatio": 30,
+      "minimumTetVolumeMm3": 0.000001
+    }
+  },
+  "inputSha256": "7fadb609aba154896498144bd377009ef31894cda047b5ae22fc58bc79c55bd7",
+  "meshRevision": "sha256:e99e443f8cee93a413c95769d13acbd1b8f3dece618683ae032e3b35c173200a",
+  "transferRevision": "sha256:f9c3b412280393e05a2356f3e6d9b9f876d1b641f40099e58d35e648d425f053",
+  "measured": {
+    "tetCount": 42,
+    "boundaryFaces": 60,
+    "boundaryAreasMm2": {
+      "lower-wall": 2,
+      "upper-wall": 2,
+      "inlet": 10.000000000000004,
+      "outlet": 10.000000000000004,
+      "side-z-min": 20.000000000000007,
+      "side-z-max": 20.000000000000007
+    },
+    "minimumTetCentroidPlateDistanceMm": 0.025,
+    "maximumTetEdgeAspectRatio": 22.38302928559947,
+    "minimumTetVolumeMm3": 0.033333333333333215,
+    "totalVolumeMm3": 19.999999999999986
+  },
+  "expected": {
+    "tetCount": 42,
+    "boundaryFaces": 60,
+    "boundaryAreasMm2": {
+      "lower-wall": 2,
+      "upper-wall": 2,
+      "inlet": 10,
+      "outlet": 10,
+      "side-z-min": 20,
+      "side-z-max": 20
+    },
+    "minimumTetCentroidPlateDistanceMm": 0.025,
+    "totalVolumeMm3": 20
+  },
+  "validation": {
+    "downstreamFullReconstruction": true,
+    "independentChecks": [
+      "planar shoelace triangle area",
+      "owner centroid to face outward dot product",
+      "analytic box Tet diagonal edge ratio",
+      "analytic y-plane node and Tet centroid distances"
+    ],
+    "refusals": [
+      "stale mesh",
+      "input changed during hashing",
+      "missing/extra/unsupported BC",
+      "reverse/oblique inlet",
+      "nonfinite outlet",
+      "quality limits",
+      "altered face normal/owner/area/conditions/revision",
+      "duplicate face and overlong manifest string"
+    ]
+  },
+  "tests": [
+    {
+      "command": "node --test tests/channel-layer-boundary-transfer.test.mjs tests/channel-layer-tet4.test.mjs tests/channel-layer-cell-quality.test.mjs tests/docs.test.mjs",
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 14
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "integrationRequired": [
+    "Add channel-layer-boundary-transfer.js to src/module-layers.json domain.files (root owner)"
+  ],
+  "unverified": [
+    "solver or project/CAD boundary API connection",
+    "shared-edge nodal BC precedence",
+    "actual flow convergence or physical accuracy",
+    "general 3D boundary layers",
+    "general wall distance and y-plus",
+    "browser/native execution and publication"
+  ],
+  "parentAcceptanceComplete": false
+}
