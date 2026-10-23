@@ -1,6 +1,7 @@
 // Persistable affine heat-flux operator. No thermal/flow iteration or material inference.
 import {planarHeatTransfer} from './planar-heat-transfer.js';
 import {canonicalJson,getProjectRevision} from './project-revision.js';
+import {clipPolygon,cross2,sub2} from './triangle-overlap.js';
 export const PLANAR_HEAT_OPERATOR_LIMITS=Object.freeze({nodes:4096,facesPerSide:512,bytes:1048576,coordinateMm:1e6});
 const trusted=new WeakSet(),encoder=new TextEncoder();
 const fail=message=>{throw Object.assign(Error(message),{code:'PLANAR_HEAT_OPERATOR_INVALID'});};
@@ -8,6 +9,28 @@ const fields=(v,keys)=>{if(!v||typeof v!=='object'||Array.isArray(v)||Object.key
 const finite=v=>{if(typeof v!=='number'||!Number.isFinite(v))fail('Nonfinite planar heat operator value');return v;};
 const checkBytes=text=>{if(text.length>PLANAR_HEAT_OPERATOR_LIMITS.bytes||encoder.encode(text).length>PLANAR_HEAT_OPERATOR_LIMITS.bytes)fail('Planar heat operator byte capacity exceeded');return text;};
 const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
+
+/** Coverage sums alone can cancel a gap against overlapping faces. Require each
+ * side to be a non-overlapping triangulation first. At most 512*511/2 pairs per
+ * side are examined; no coordinate-dependent spatial grid is enumerated here. */
+function rejectSideOverlap(g,faces){
+ const point=id=>g.mesh.nodes.slice(3*id,3*id+3),first=faces[0].nodes.map(point),origin=first[0];
+ const edge=first[1].map((x,k)=>x-origin[k]),other=first[2].map((x,k)=>x-origin[k]);
+ const normal=[edge[1]*other[2]-edge[2]*other[1],edge[2]*other[0]-edge[0]*other[2],edge[0]*other[1]-edge[1]*other[0]],length=Math.hypot(...edge),normalLength=Math.hypot(...normal);
+ if(!(length>0)||!(normalLength>1e-12))fail('Degenerate planar heat operator face');
+ const u=edge.map(x=>x/length),n=normal.map(x=>x/normalLength),v=[n[1]*u[2]-n[2]*u[1],n[2]*u[0]-n[0]*u[2],n[0]*u[1]-n[1]*u[0]];
+ const projected=faces.map(face=>{
+  const xy=face.nodes.map(id=>{const d=point(id).map((x,k)=>x-origin[k]);return [u.reduce((s,x,k)=>s+x*d[k],0),v.reduce((s,x,k)=>s+x*d[k],0)];});
+  return {xy,area:Math.abs(cross2(sub2(xy[1],xy[0]),sub2(xy[2],xy[0])))/2};
+ });
+ for(let i=0;i<projected.length;i++)for(let j=i+1;j<projected.length;j++){
+  const a=projected[i],b=projected[j],polygon=clipPolygon(a.xy,b.xy,1e-10);let overlap=0;
+  for(let k=1;k+1<polygon.length;k++)overlap+=Math.abs(cross2(sub2(polygon[k],polygon[0]),sub2(polygon[k+1],polygon[0])))/2;
+  // Same numeric area floor as the existing overlap integrator, plus a relative
+  // roundoff allowance. This does not relax the existing 1e-6 coverage criterion.
+  if(!Number.isFinite(overlap)||overlap>1e-12+1e-12*Math.min(a.area,b.area))fail('Planar heat operator side contains overlapping faces');
+ }
+}
 
 function geometrySnapshot(g){
  fields(g,['units','mesh','sourceFaces','targetFaces']);fields(g.mesh,['nodes']);
@@ -34,6 +57,7 @@ const close=(a,b,scale=Math.max(Math.abs(a),Math.abs(b)))=>Math.abs(a-b)<=1e-18+
 /** Compile exact constant/global-affine flux moments using the existing overlap integrator. */
 export async function buildPlanarHeatTransferOperator(geometry){
  const g=geometrySnapshot(geometry); // snapshot before all hash awaits
+ rejectSideOverlap(g,g.sourceFaces);rejectSideOverlap(g,g.targetFaces);
  const basis=[1,{base:0,gradient:[1,0,0]},{base:0,gradient:[0,1,0]},{base:0,gradient:[0,0,1]}];
  const transfers=basis.map(flux=>planarHeatTransfer(g.mesh,g.sourceFaces,g.targetFaces,flux));
  const targetIds=[...transfers[0].nodeHeatW.keys()].sort((a,b)=>a-b);

@@ -46,6 +46,30 @@ test('equal-area extreme aspect mismatch is refused before unbounded overlap-gri
  const g=fixture();for(let i=0;i<g.mesh.nodes.length;i+=3){const source=i<12;g.mesh.nodes[i]*=source?1e6:1e-5;g.mesh.nodes[i+1]*=source?1e-16:1e-5;}
  const before=structuredClone(g);await assert.rejects(build(g),/coverage bounds/);assert.deepEqual(g,before);
 });
+
+test('same-side geometric overlaps cannot cancel uncovered regions in per-face coverage sums',async()=>{
+ // Both sides have identical bounding boxes and total area 1 mm2, but they
+ // occupy different half-squares twice. Each pair overlaps by 1/4 mm2, which
+ // previously made every face appear fully covered while hiding both gaps.
+ for(const separateIds of [false,true]){
+  const g={units:'mm',mesh:{nodes:[0,0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,1,0]},sourceFaces:[{nodes:[0,1,2]},{nodes:[0,1,2]}],targetFaces:[{nodes:[3,5,4]},{nodes:[3,5,4]}]};
+  if(separateIds){g.mesh.nodes.push(...g.mesh.nodes);g.sourceFaces[1]={nodes:[6,7,8]};g.targetFaces[1]={nodes:[9,11,10]};}
+  const before=structuredClone(g);await assert.rejects(build(g),/overlapping faces/);assert.deepEqual(g,before);
+ }
+});
+
+test('matching extreme-aspect interfaces and a valid 512-face triangulation remain accepted',async()=>{
+ const g=fixture();g.mesh.nodes=g.mesh.nodes.map((v,i)=>i%3===0?v*1e6:i%3===1?v*1e-10:v);
+ near((await apply(await build(g),g,1)).sourceW,1e-10);
+ const n=16,nodes=[];for(let side=0;side<2;side++)for(let y=0;y<=n;y++)for(let x=0;x<=n;x++)nodes.push(x/n,y/n,0);
+ const sourceFaces=[],targetFaces=[],offset=(n+1)**2;
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+  const a=y*(n+1)+x,b=a+1,c=a+n+2,d=a+n+1;
+  for(const ids of [[a,b,c],[a,c,d]]){sourceFaces.push({nodes:ids});targetFaces.push({nodes:ids.map(i=>i+offset).reverse()});}
+ }
+ const maximum={units:'mm',mesh:{nodes},sourceFaces,targetFaces},operator=await build(maximum);
+ assert.equal(sourceFaces.length,limits.facesPerSide);near((await apply(operator,maximum,1)).sourceW,1e-6);
+});
 test('geometry and flux are snapshotted before asynchronous hashing',async()=>{
  const g=fixture(),original=structuredClone(g),building=build(g);g.mesh.nodes[0]=999;const op=await building;
  const input=structuredClone(original),loading=load(save(op),input);input.mesh.nodes[0]=999;assert.deepEqual(await loading,op);
