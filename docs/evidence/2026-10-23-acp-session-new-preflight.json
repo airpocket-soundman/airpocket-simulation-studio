@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-23",
+  "base": "de3f985ff5b8328a4054f99c972b95a0c6bfb3ac",
+  "adapterVersion": "2.2.2",
+  "adapterBundleSha256": "6b1bb4e7e9caaf4aeca1042ae4aec2dc2433b0b0e4b1614b38a4d41699902aaa",
+  "sourceLocations": {
+    "defaultAgentMode": "dist/index.js:34265-34370",
+    "newSession": "dist/index.js:35330",
+    "createSessionConfig": "dist/index.js:35437",
+    "promptSandboxApplication": "dist/index.js:35596-35616",
+    "sessionStateInitialMode": "dist/index.js:42845",
+    "startupHooksOverrideSeparation": "dist/index.js:45591"
+  },
+  "observedFacts": {
+    "defaultMode": "agent",
+    "defaultSandbox": "workspaceWrite",
+    "defaultReviewer": "auto_review",
+    "initialModeEnvironmentAloneConstrainsThreadStart": false,
+    "sessionNewMarksCwdTrusted": true,
+    "emptyRequestedMcpListDisablesInheritedMcp": false,
+    "userConfigCountsOnly": {"mcpDefinitions": 2, "pluginDefinitions": 12, "inlineHooks": 0},
+    "identifiersUrlsOrValuesRetained": false
+  },
+  "formalOverrideDocumentationConfirmed": ["sandbox_mode=read-only", "features.hooks=false", "mcp_servers.<id>.enabled=false", "plugins.<plugin>.enabled=false"],
+  "documentation": "https://learn.chatgpt.com/docs/config-file/config-reference",
+  "unverified": ["Pre-creation effective configuration across all managed/user/project/plugin layers", "All inherited MCP and workspace-managed plugins disabled", "Real adapter session/new compatibility", "Model prompt, cancellation, production browser transport"],
+  "decision": "Do not execute session/new until effective read-only/hooks/MCP isolation is demonstrable",
+  "sessionNewExecuted": false,
+  "promptSent": false,
+  "authenticationChanged": false,
+  "globalConfigurationChanged": false,
+  "reproduction": {"driver": "acp-installed-initialize-driver.mjs", "scope": "Initialize only", "result": "2026-10-23-acp-installed-initialize-reproduced.json", "elapsedMs": 4510, "observedOwnedProcessesStillRunning": 0, "syntheticCwdRemainingEntries": 0}
+}
