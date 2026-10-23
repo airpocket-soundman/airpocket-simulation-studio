@@ -61,31 +61,66 @@ export class PerfTimeoutError extends Error {
 
 // --- stdio connector client -------------------------------------------------------------------------------
 // The pairing token lives only in this closure. It is handed to `announce` (terminal) and never stored elsewhere.
-export async function createStdioClient({origin, spawnImpl = spawn, announce = () => {}, startupTimeoutMs = 15000}) {
+export async function createStdioClient({origin, spawnImpl = spawn, announce = () => {}, startupTimeoutMs = 15000, rpcTimeoutMs = 30000, closeGraceMs = 3000, terminateGraceMs = 2000, killGraceMs = 2000}) {
   const safeOrigin = assertLocalOrigin(origin);
-  const child = spawnImpl(process.execPath, [path.join(REPO, 'scripts/studio-mcp.mjs'), '--browser-origin=' + safeOrigin], {cwd: REPO, stdio: ['pipe', 'pipe', 'pipe']});
+  for(const ms of [startupTimeoutMs,rpcTimeoutMs,closeGraceMs,terminateGraceMs,killGraceMs])if(!Number.isSafeInteger(ms)||ms<1||ms>120000)throw Error('Invalid stdio client time budget');
+  const child = spawnImpl(process.execPath, [path.join(REPO, 'scripts/studio-mcp.mjs'), '--browser-origin=' + safeOrigin], {cwd: REPO, stdio: ['pipe', 'pipe', 'pipe'],shell:false,windowsHide:true});
   const pending = new Map();
-  let id = 0, stderr = '', token = null, info = null;
+  let id = 0, stderr = '', token = null, info = null, closing=false,closePromise,exitConfirmed=child.exitCode!=null||child.signalCode!=null;
+  const exitWaiters=new Set();
+  const failure=code=>Object.assign(Error(code),{code});
+  const rejectPending=error=>{for(const p of pending.values()){clearTimeout(p.timer);p.reject(error);}pending.clear();};
+  const onExit=()=>{exitConfirmed=true;rejectPending(failure('STDIO_CHILD_EXITED'));for(const notify of [...exitWaiters])notify(true);};
+  const onError=()=>rejectPending(failure('STDIO_CHILD_ERROR'));
+  const onStdinError=()=>rejectPending(failure('STDIO_TRANSPORT_FAILED'));
+  child.on('exit',onExit);child.on('close',onExit);child.on('error',onError);for(const stream of [child.stdin,child.stdout,child.stderr])stream.on('error',onStdinError);
   const redact = text => token ? String(text).split(token).join('[redacted]') : String(text);
   const lines = createInterface({input: child.stdout});
-  lines.on('line', line => { try { const m = JSON.parse(line); pending.get(m.id)?.(m); } catch { /* ignore non JSON-RPC lines */ } });
+  lines.on('error',onStdinError);
+  const onLine=line=>{try{const m=JSON.parse(line),p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(redact(m.error.message))):p.resolve(m.result);}}catch{/* ignore non JSON-RPC lines */}};
+  lines.on('line',onLine);
   const rpc = (method, params) => new Promise((resolve, reject) => {
+    if(closing||exitConfirmed){reject(failure('STDIO_CLIENT_CLOSED'));return;}
     const key = ++id;
-    pending.set(key, m => { pending.delete(key); m.error ? reject(Error(redact(m.error.message))) : resolve(m.result); });
-    child.stdin.write(JSON.stringify({jsonrpc: '2.0', id: key, method, params}) + '\n');
+    const timer=setTimeout(()=>{pending.delete(key);reject(failure('STDIO_RPC_TIMEOUT'));},rpcTimeoutMs);
+    pending.set(key,{resolve,reject,timer});
+    try{child.stdin.write(JSON.stringify({jsonrpc: '2.0', id: key, method, params}) + '\n');}catch{pending.delete(key);clearTimeout(timer);reject(failure('STDIO_TRANSPORT_FAILED'));}
   });
-  await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(Error('studio-mcp did not print the Browser connector line in time')), startupTimeoutMs);
-    child.once('exit', code => { clearTimeout(timer); reject(Error('studio-mcp exited early (code ' + code + ')')); });
-    child.stderr.on('data', d => {
+  const waitForExit=ms=>exitConfirmed?Promise.resolve(true):new Promise(resolve=>{const notify=value=>{clearTimeout(timer);exitWaiters.delete(notify);resolve(value);},timer=setTimeout(()=>notify(false),ms);exitWaiters.add(notify);});
+  const close=()=>closePromise??=(async()=>{
+    closing=true;rejectPending(failure('STDIO_CLIENT_CLOSED'));let terminated=false,escalated=false;
+    try{
+      try{child.stdin.end();}catch{}
+      if(!await waitForExit(closeGraceMs)){terminated=true;try{child.kill('SIGTERM');}catch{}
+        if(!await waitForExit(terminateGraceMs)){escalated=true;try{child.kill('SIGKILL');}catch{}
+          if(!await waitForExit(killGraceMs))throw failure('STDIO_CHILD_EXIT_UNCONFIRMED');
+        }
+      }
+      return {exited:true,terminated,escalated};
+    }finally{
+      rejectPending(failure('STDIO_CLIENT_CLOSED'));lines.off('line',onLine);lines.close();
+      child.off('exit',onExit);child.off('close',onExit);
+      if(exitConfirmed)child.off('error',onError);else child.once('close',()=>child.off('error',onError));
+      // destroy() may report pipe errors asynchronously. Keep each guard until
+      // that stream actually closes, then remove it without leaving a timer.
+      for(const stream of [child.stdin,child.stdout,child.stderr]){if(stream.closed)stream.off('error',onStdinError);else stream.once('close',()=>stream.off('error',onStdinError));}
+      child.stdin.destroy();child.stdout.destroy();child.stderr.destroy();stderr='';token=null;
+    }
+  })();
+  try{
+   await new Promise((resolve, reject) => {
+    let finished=false;
+    const finish=error=>{if(finished)return;finished=true;clearTimeout(timer);child.off('exit',earlyExit);child.off('close',earlyExit);child.off('error',earlyError);child.stderr.off('data',onData);error?reject(error):resolve();};
+    const timer=setTimeout(()=>finish(failure('STDIO_STARTUP_TIMEOUT')),startupTimeoutMs),earlyExit=()=>finish(failure('STDIO_CHILD_EXITED')),earlyError=()=>finish(failure('STDIO_CHILD_ERROR'));
+    const onData=d=>{
       stderr += d;
+      if(stderr.length>65536){finish(failure('STDIO_ANNOUNCEMENT_LIMIT'));return;}
       const m = stderr.match(/Browser connector: (.+)\n/);
       if (m && !info) {
-        const parsed = JSON.parse(m[1]);
-        token = parsed.pairingToken; info = {endpoint: parsed.endpoint, origin: parsed.origin};
-        clearTimeout(timer); resolve();
+        try{const parsed=JSON.parse(m[1]);if(typeof parsed.pairingToken!=='string'||!parsed.pairingToken||typeof parsed.endpoint!=='string'||parsed.origin!==safeOrigin)throw Error();token=parsed.pairingToken;info={endpoint:parsed.endpoint,origin:parsed.origin};finish();}catch{finish(failure('STDIO_ANNOUNCEMENT_INVALID'));}
       }
-    });
+    };
+    child.on('exit',earlyExit);child.on('close',earlyExit);child.on('error',earlyError);child.stderr.on('data',onData);if(exitConfirmed)earlyExit();
   });
   await rpc('initialize', {protocolVersion: '2025-11-25', capabilities: {}, clientInfo: {name: 'perf-browser', version: '1'}});
   child.stdin.write(JSON.stringify({jsonrpc: '2.0', method: 'notifications/initialized'}) + '\n');
@@ -97,8 +132,9 @@ export async function createStdioClient({origin, spawnImpl = spawn, announce = (
       if (result.isError) throw Object.assign(Error(redact(result.content?.[0]?.text ?? 'connector error')), {code: result.structuredContent?.error?.code});
       return result.structuredContent?.value;
     },
-    async close() { try { child.stdin.end(); } catch { /* already closed */ } await new Promise(r => { const t = setTimeout(() => { child.kill(); r(); }, 3000); child.once('exit', () => { clearTimeout(t); r(); }); if (child.exitCode !== null) r(); }); lines.close(); }
+    close
   };
+  }catch(error){await close();throw error;}
 }
 
 export async function waitForSession(client, {sessionId = null, timeoutMs = 600000, pollMs = 1000, now = () => Date.now(), sleep = ms => new Promise(r => setTimeout(r, ms))} = {}) {

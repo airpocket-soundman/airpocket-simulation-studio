@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-24",
+  "base": "14120751d6f4ab2bba4b2632c83af8107e9f5576",
+  "node": "v24.11.1",
+  "platform": "win32",
+  "origin": "http://127.0.0.1:5188",
+  "guiPairing": false,
+  "solverRuns": 0,
+  "credentialsPrintedOrSaved": false,
+  "sessionsResponse": {
+    "sessions": []
+  },
+  "closeResult": {
+    "exited": true,
+    "terminated": false,
+    "escalated": false
+  },
+  "closeElapsedMs": 16,
+  "exitObserved": true,
+  "closeObserved": true,
+  "exitCode": 0,
+  "exitSignal": null,
+  "elapsedMs": 442,
+  "ownedActiveHandleCount": 0,
+  "remainingStdoutDataListeners": 0,
+  "ownedStreamsDestroyed": true,
+  "sourceSha256": "a11fb869228fe19b3c29d20aa0c7379a3e655e9e41e9bcefc8eef0429617128a",
+  "verification": {
+    "fakeLifecycleTests": 7,
+    "allPerfTests": 32,
+    "docsTests": 2,
+    "failed": 0,
+    "skipped": 0,
+    "contractDeclarations": 19,
+    "initialEnvironmentIssue": "Before npm ci the existing real-stdio startup test failed; all passed after dependencies were installed"
+  },
+  "fakeNoExit": {
+    "killReturnValue": true,
+    "signals": [
+      "SIGTERM",
+      "SIGKILL"
+    ],
+    "outcome": "STDIO_CHILD_EXIT_UNCONFIRMED; never close success"
+  }
+}

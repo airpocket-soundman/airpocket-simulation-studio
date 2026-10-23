@@ -1,0 +1,900 @@
+{
+  "request": {
+    "requestId": "gif-timing191-thermal-1792768133552",
+    "references": [
+      {
+        "caseId": "eb27c660-a63e-47de-9bc7-70bd80ccb289",
+        "expectedRevision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+      },
+      {
+        "caseId": "f1e2cd62-063e-4530-bb77-aa60db8857c2",
+        "expectedRevision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+      }
+    ],
+    "field": "temperature",
+    "format": "gif",
+    "animation": "time",
+    "seconds": 2,
+    "startTimeSeconds": 0,
+    "endTimeSeconds": 10,
+    "deformScale": 1,
+    "camera": {
+      "position": [
+        2.4,
+        1.8,
+        2.6
+      ],
+      "target": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    }
+  },
+  "status": {
+    "schemaVersion": 1,
+    "jobId": "3109843d-fdec-4c85-9b45-24b3b9327de4",
+    "requestId": "gif-timing191-thermal-1792768133552",
+    "state": "completed",
+    "format": "gif",
+    "target": "comparison",
+    "comparison": {
+      "cases": [
+        {
+          "caseId": "eb27c660-a63e-47de-9bc7-70bd80ccb289",
+          "label": "QA analytic T=20+1t degC (closed tetra)",
+          "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+          "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+        },
+        {
+          "caseId": "f1e2cd62-063e-4530-bb77-aa60db8857c2",
+          "label": "QA analytic T=20+2t degC (closed tetra)",
+          "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+          "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+        }
+      ],
+      "colorRange": {
+        "field": "temperature",
+        "maximum": 39.99999999999994,
+        "minimum": 20
+      },
+      "field": "temperature",
+      "gifAnimation": {
+        "colors": 256,
+        "frames": 24,
+        "height": 320,
+        "loop": 0,
+        "lossy": true,
+        "palette": "RGB332",
+        "phasePolicy": "i/23",
+        "width": 640
+      },
+      "panels": [
+        {
+          "caseId": "eb27c660-a63e-47de-9bc7-70bd80ccb289",
+          "field": "temperature",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 20,
+          "minimum": 20,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "degC"
+        },
+        {
+          "caseId": "f1e2cd62-063e-4530-bb77-aa60db8857c2",
+          "field": "temperature",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 20,
+          "minimum": 20,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "degC"
+        }
+      ],
+      "timeAnimation": {
+        "camera": "fixed",
+        "endTimeSeconds": 10,
+        "field": "temperature",
+        "final": {
+          "panels": [
+            {
+              "frameIndex": 10,
+              "offsetSeconds": 0,
+              "timeSeconds": 10
+            },
+            {
+              "frameIndex": 10,
+              "offsetSeconds": 0,
+              "timeSeconds": 10
+            }
+          ],
+          "timeSeconds": 10
+        },
+        "initial": {
+          "panels": [
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            },
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            }
+          ],
+          "timeSeconds": 0
+        },
+        "interpolated": false,
+        "kind": "thermal",
+        "maxAbsOffsetSeconds": [
+          0.5,
+          0.5
+        ],
+        "rangeBasis": "all-selectable-stored-frames",
+        "selectedFrameCounts": [
+          11,
+          11
+        ],
+        "startTimeSeconds": 0,
+        "timeSelection": "nearest-stored-frames-only"
+      },
+      "unit": "degC"
+    },
+    "view": {
+      "camera": {
+        "fov": 40,
+        "position": [
+          2.4,
+          1.8,
+          2.6
+        ],
+        "target": [
+          0.25,
+          0.25,
+          0.25
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "deformScale": 1,
+      "layers": {
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true
+      },
+      "setup": {
+        "clipEnabled": false,
+        "axis": 2,
+        "position": 0,
+        "flip": false,
+        "opacity": 1,
+        "meshCount": 1,
+        "hiddenParts": []
+      },
+      "language": "en",
+      "sourceResolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "resolution": {
+        "width": 640,
+        "height": 320
+      }
+    },
+    "progress": {
+      "fraction": 1
+    },
+    "artifact": {
+      "mimeType": "image/gif",
+      "name": "comparison-3109843d-fdec-4c85-9b45-24b3b9327de4.gif",
+      "totalBytes": 5574849,
+      "sha256": "sha256:67b9a3e6d51ded47b0882903e89607e1ae30a98acfd8968610284b9b2a082ce0",
+      "maxChunkBytes": 65536,
+      "manifest": {
+        "schemaVersion": 1,
+        "target": "comparison",
+        "format": "gif",
+        "container": "gif",
+        "mimeType": "image/gif",
+        "sha256": "sha256:67b9a3e6d51ded47b0882903e89607e1ae30a98acfd8968610284b9b2a082ce0",
+        "totalBytes": 5574849,
+        "resolution": {
+          "width": 640,
+          "height": 320
+        },
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "eb27c660-a63e-47de-9bc7-70bd80ccb289",
+              "label": "QA analytic T=20+1t degC (closed tetra)",
+              "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+              "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+            },
+            {
+              "caseId": "f1e2cd62-063e-4530-bb77-aa60db8857c2",
+              "label": "QA analytic T=20+2t degC (closed tetra)",
+              "resultRevision": "sha256:969d61ed8ca4f0c5200ac588db1fcede4754799c1e910b9d7025feade2ed1ee8",
+              "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+            }
+          ],
+          "colorRange": {
+            "field": "temperature",
+            "maximum": 39.99999999999994,
+            "minimum": 20
+          },
+          "field": "temperature",
+          "gifAnimation": {
+            "colors": 256,
+            "frames": 24,
+            "height": 320,
+            "loop": 0,
+            "lossy": true,
+            "palette": "RGB332",
+            "phasePolicy": "i/23",
+            "width": 640
+          },
+          "panels": [
+            {
+              "caseId": "eb27c660-a63e-47de-9bc7-70bd80ccb289",
+              "field": "temperature",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 20,
+              "minimum": 20,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "degC"
+            },
+            {
+              "caseId": "f1e2cd62-063e-4530-bb77-aa60db8857c2",
+              "field": "temperature",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 20,
+              "minimum": 20,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "degC"
+            }
+          ],
+          "timeAnimation": {
+            "camera": "fixed",
+            "endTimeSeconds": 10,
+            "field": "temperature",
+            "final": {
+              "panels": [
+                {
+                  "frameIndex": 10,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 10
+                },
+                {
+                  "frameIndex": 10,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 10
+                }
+              ],
+              "timeSeconds": 10
+            },
+            "initial": {
+              "panels": [
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                },
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                }
+              ],
+              "timeSeconds": 0
+            },
+            "interpolated": false,
+            "kind": "thermal",
+            "maxAbsOffsetSeconds": [
+              0.5,
+              0.5
+            ],
+            "rangeBasis": "all-selectable-stored-frames",
+            "selectedFrameCounts": [
+              11,
+              11
+            ],
+            "startTimeSeconds": 0,
+            "timeSelection": "nearest-stored-frames-only"
+          },
+          "unit": "degC"
+        },
+        "view": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              2.4,
+              1.8,
+              2.6
+            ],
+            "target": [
+              0.25,
+              0.25,
+              0.25
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "en",
+          "sourceResolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "resolution": {
+            "width": 640,
+            "height": 320
+          }
+        },
+        "time": {
+          "animation": "time",
+          "durationSeconds": 2,
+          "timeBasis": "display time",
+          "recording": "fixed-frame",
+          "realtime": false,
+          "frameCount": 24,
+          "frameCountGuaranteed": true,
+          "phasePolicy": "i/23",
+          "camera": "fixed",
+          "frameSelection": "nearest-stored-frames-only",
+          "requestedRangeSeconds": {
+            "start": 0,
+            "end": 10
+          },
+          "delayCentiseconds": [
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8
+          ],
+          "loop": "infinite",
+          "frameTimings": {
+            "schemaVersion": 1,
+            "timeSelection": "nearest-stored-frames-only",
+            "interpolated": false,
+            "identity": "Each panel caseIndex indexes comparison.cases (caseId, revision, resultRevision).",
+            "mapping": "One entry per encoded GIF frame, in output order.",
+            "limits": {
+              "frames": 2048,
+              "bytes": 61440
+            },
+            "entries": [
+              {
+                "renderIndex": 0,
+                "phase": 0,
+                "requestedTimeSeconds": 0,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": 0
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": 0
+                  }
+                ]
+              },
+              {
+                "renderIndex": 1,
+                "phase": 0.043478260869565216,
+                "requestedTimeSeconds": 0.43478260869565216,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": -0.43478260869565216
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": -0.43478260869565216
+                  }
+                ]
+              },
+              {
+                "renderIndex": 2,
+                "phase": 0.08695652173913043,
+                "requestedTimeSeconds": 0.8695652173913043,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 1,
+                    "timeSeconds": 1,
+                    "offsetSeconds": 0.13043478260869568
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 1,
+                    "timeSeconds": 1,
+                    "offsetSeconds": 0.13043478260869568
+                  }
+                ]
+              },
+              {
+                "renderIndex": 3,
+                "phase": 0.13043478260869565,
+                "requestedTimeSeconds": 1.3043478260869565,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 1,
+                    "timeSeconds": 1,
+                    "offsetSeconds": -0.30434782608695654
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 1,
+                    "timeSeconds": 1,
+                    "offsetSeconds": -0.30434782608695654
+                  }
+                ]
+              },
+              {
+                "renderIndex": 4,
+                "phase": 0.17391304347826086,
+                "requestedTimeSeconds": 1.7391304347826086,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 2,
+                    "timeSeconds": 2,
+                    "offsetSeconds": 0.26086956521739135
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 2,
+                    "timeSeconds": 2,
+                    "offsetSeconds": 0.26086956521739135
+                  }
+                ]
+              },
+              {
+                "renderIndex": 5,
+                "phase": 0.21739130434782608,
+                "requestedTimeSeconds": 2.1739130434782608,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 2,
+                    "timeSeconds": 2,
+                    "offsetSeconds": -0.17391304347826075
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 2,
+                    "timeSeconds": 2,
+                    "offsetSeconds": -0.17391304347826075
+                  }
+                ]
+              },
+              {
+                "renderIndex": 6,
+                "phase": 0.2608695652173913,
+                "requestedTimeSeconds": 2.608695652173913,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": 0.3913043478260869
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": 0.3913043478260869
+                  }
+                ]
+              },
+              {
+                "renderIndex": 7,
+                "phase": 0.30434782608695654,
+                "requestedTimeSeconds": 3.0434782608695654,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": -0.04347826086956541
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": -0.04347826086956541
+                  }
+                ]
+              },
+              {
+                "renderIndex": 8,
+                "phase": 0.34782608695652173,
+                "requestedTimeSeconds": 3.4782608695652173,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": -0.4782608695652173
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 3,
+                    "timeSeconds": 3,
+                    "offsetSeconds": -0.4782608695652173
+                  }
+                ]
+              },
+              {
+                "renderIndex": 9,
+                "phase": 0.391304347826087,
+                "requestedTimeSeconds": 3.9130434782608696,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 4,
+                    "timeSeconds": 4,
+                    "offsetSeconds": 0.08695652173913038
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 4,
+                    "timeSeconds": 4,
+                    "offsetSeconds": 0.08695652173913038
+                  }
+                ]
+              },
+              {
+                "renderIndex": 10,
+                "phase": 0.43478260869565216,
+                "requestedTimeSeconds": 4.3478260869565215,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 4,
+                    "timeSeconds": 4,
+                    "offsetSeconds": -0.3478260869565215
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 4,
+                    "timeSeconds": 4,
+                    "offsetSeconds": -0.3478260869565215
+                  }
+                ]
+              },
+              {
+                "renderIndex": 11,
+                "phase": 0.4782608695652174,
+                "requestedTimeSeconds": 4.782608695652174,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 5,
+                    "timeSeconds": 5,
+                    "offsetSeconds": 0.21739130434782616
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 5,
+                    "timeSeconds": 5,
+                    "offsetSeconds": 0.21739130434782616
+                  }
+                ]
+              },
+              {
+                "renderIndex": 12,
+                "phase": 0.5217391304347826,
+                "requestedTimeSeconds": 5.217391304347826,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 5,
+                    "timeSeconds": 5,
+                    "offsetSeconds": -0.21739130434782616
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 5,
+                    "timeSeconds": 5,
+                    "offsetSeconds": -0.21739130434782616
+                  }
+                ]
+              },
+              {
+                "renderIndex": 13,
+                "phase": 0.5652173913043478,
+                "requestedTimeSeconds": 5.652173913043478,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 6,
+                    "timeSeconds": 6,
+                    "offsetSeconds": 0.3478260869565224
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 6,
+                    "timeSeconds": 6,
+                    "offsetSeconds": 0.3478260869565224
+                  }
+                ]
+              },
+              {
+                "renderIndex": 14,
+                "phase": 0.6086956521739131,
+                "requestedTimeSeconds": 6.086956521739131,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 6,
+                    "timeSeconds": 6,
+                    "offsetSeconds": -0.08695652173913082
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 6,
+                    "timeSeconds": 6,
+                    "offsetSeconds": -0.08695652173913082
+                  }
+                ]
+              },
+              {
+                "renderIndex": 15,
+                "phase": 0.6521739130434783,
+                "requestedTimeSeconds": 6.521739130434783,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": 0.47826086956521685
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": 0.47826086956521685
+                  }
+                ]
+              },
+              {
+                "renderIndex": 16,
+                "phase": 0.6956521739130435,
+                "requestedTimeSeconds": 6.956521739130435,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": 0.04347826086956541
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": 0.04347826086956541
+                  }
+                ]
+              },
+              {
+                "renderIndex": 17,
+                "phase": 0.7391304347826086,
+                "requestedTimeSeconds": 7.391304347826086,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": -0.39130434782608603
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 7,
+                    "timeSeconds": 7,
+                    "offsetSeconds": -0.39130434782608603
+                  }
+                ]
+              },
+              {
+                "renderIndex": 18,
+                "phase": 0.782608695652174,
+                "requestedTimeSeconds": 7.826086956521739,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 8,
+                    "timeSeconds": 8,
+                    "offsetSeconds": 0.17391304347826075
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 8,
+                    "timeSeconds": 8,
+                    "offsetSeconds": 0.17391304347826075
+                  }
+                ]
+              },
+              {
+                "renderIndex": 19,
+                "phase": 0.8260869565217391,
+                "requestedTimeSeconds": 8.26086956521739,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 8,
+                    "timeSeconds": 8,
+                    "offsetSeconds": -0.2608695652173907
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 8,
+                    "timeSeconds": 8,
+                    "offsetSeconds": -0.2608695652173907
+                  }
+                ]
+              },
+              {
+                "renderIndex": 20,
+                "phase": 0.8695652173913043,
+                "requestedTimeSeconds": 8.695652173913043,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 9,
+                    "timeSeconds": 9,
+                    "offsetSeconds": 0.304347826086957
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 9,
+                    "timeSeconds": 9,
+                    "offsetSeconds": 0.304347826086957
+                  }
+                ]
+              },
+              {
+                "renderIndex": 21,
+                "phase": 0.9130434782608695,
+                "requestedTimeSeconds": 9.130434782608695,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 9,
+                    "timeSeconds": 9,
+                    "offsetSeconds": -0.13043478260869534
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 9,
+                    "timeSeconds": 9,
+                    "offsetSeconds": -0.13043478260869534
+                  }
+                ]
+              },
+              {
+                "renderIndex": 22,
+                "phase": 0.9565217391304348,
+                "requestedTimeSeconds": 9.565217391304348,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 10,
+                    "timeSeconds": 10,
+                    "offsetSeconds": 0.43478260869565233
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 10,
+                    "timeSeconds": 10,
+                    "offsetSeconds": 0.43478260869565233
+                  }
+                ]
+              },
+              {
+                "renderIndex": 23,
+                "phase": 1,
+                "requestedTimeSeconds": 10,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 10,
+                    "timeSeconds": 10,
+                    "offsetSeconds": 0
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 10,
+                    "timeSeconds": 10,
+                    "offsetSeconds": 0
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gif": {
+          "palette": "RGB332",
+          "colors": 256,
+          "lossy": true
+        },
+        "sourceResolution": {
+          "width": 1280,
+          "height": 640
+        }
+      }
+    }
+  },
+  "byteVerification": {
+    "bytes": 5574849,
+    "sha256": "sha256:67b9a3e6d51ded47b0882903e89607e1ae30a98acfd8968610284b9b2a082ce0"
+  }
+}

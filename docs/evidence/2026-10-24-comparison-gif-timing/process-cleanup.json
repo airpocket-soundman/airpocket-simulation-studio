@@ -1,0 +1,16 @@
+{
+  "ownedChild": {
+    "pid": 11032,
+    "parentPid": 40968,
+    "name": "node.exe",
+    "observedRunning": true,
+    "observedAbsentAfterClose": true
+  },
+  "driverExitCode": 0,
+  "privatePairFileExistsAfterClose": false,
+  "finalSessions": [],
+  "limitations": [
+    "The original createStdioClient close helper resolves immediately after its timeout kill request; this record adds an independent OS PID-absence check for this owned child only.",
+    "The first two failed drivers were closed after root GUI disconnect; they did not record a final sessions[] RPC."
+  ]
+}

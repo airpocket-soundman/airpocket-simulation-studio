@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "preflight",
+      "scope": "inspect",
+      "description": "Read physical-input/provenance/execution checks and selected observation declarations without solving.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "options": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Null uses default options. Analysis settings, e.g. method, size, adaptive and includeFields. Physical runtime keys are discipline-checked against saved study; not a complete options schema."
+          },
+          "context": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "target": {
+                "enum": [
+                  "browser",
+                  "node"
+                ]
+              },
+              "operation": {
+                "enum": [
+                  "solve",
+                  "mesh"
+                ]
+              },
+              "mode": {
+                "enum": [
+                  "legacy",
+                  "quantitative",
+                  "exploratory"
+                ]
+              }
+            },
+            "required": []
+          }
+        },
+        "required": []
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {
+        "options.size": "mm"
+      },
+      "limitations": [
+        "Context defaults to browser/solve and mode follows saved intent/provenance.",
+        "allowed true still requires mesh transfer, constraint rank, convergence and physical accuracy checks.",
+        "Nested settings are checked by the selected discipline and execution capability validators."
+      ]
+    }
+  ]
+}

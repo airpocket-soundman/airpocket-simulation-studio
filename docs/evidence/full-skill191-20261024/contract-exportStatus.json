@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "exportStatus",
+      "scope": "inspect",
+      "description": "Read retained visual-export job state.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ]
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "taskId": "VIEWCOMPARE",
+  "status": "bounded-existing-feature-verification-passed",
+  "parentTaskCompleted": false,
+  "runtimeSource": "14120751d6f4ab2bba4b2632c83af8107e9f5576",
+  "mainCandidate": "5e0bcb9da1039e82dc834c6376d4ecd12c457774",
+  "mainRuntimeDiffEmpty": true,
+  "origin": "http://127.0.0.1:5188",
+  "execution": "formal local stdio MCP createStdioClient; ordinary main browser UI",
+  "freshSkillReproduction": false,
+  "solverRuns": 0,
+  "gifExports": {
+    "total": 3,
+    "thermal": 2,
+    "acoustic": 1,
+    "failedDriverChecks": 2,
+    "retainedVerifiedArtifacts": 2
+  },
+  "limitsPerExport": {
+    "watchdogMs": 120000,
+    "artifactBytes": 33554432,
+    "artifactPages": 512,
+    "pageBytes": 65536
+  },
+  "exports": {
+    "thermal": {
+      "bytes": 5574849,
+      "sha256": "sha256:67b9a3e6d51ded47b0882903e89607e1ae30a98acfd8968610284b9b2a082ce0",
+      "frameCount": 24,
+      "panelRecords": 48,
+      "independentOracle": true,
+      "independentDecode": true,
+      "rawCompleted": "thermal-raw-completed.json",
+      "state": "thermal-state.json"
+    },
+    "acoustic": {
+      "bytes": 5574849,
+      "sha256": "sha256:ae2a6b202ca93188a5bcb20eb94f4514f36191c088c76ae32a8237116c4b7cac",
+      "frameCount": 24,
+      "panelRecords": 48,
+      "independentOracle": true,
+      "independentDecode": true,
+      "rawCompleted": "acoustic-raw-completed.json",
+      "state": "acoustic-state.json"
+    }
+  },
+  "cleanup": {
+    "sessions": [],
+    "allOwnedExportsReleased": true,
+    "allOwnedTransfersReleased": true
+  },
+  "ownedProcess": {
+    "ownedChild": {
+      "pid": 11032,
+      "parentPid": 40968,
+      "name": "node.exe",
+      "observedRunning": true,
+      "observedAbsentAfterClose": true
+    },
+    "driverExitCode": 0,
+    "privatePairFileExistsAfterClose": false,
+    "finalSessions": [],
+    "limitations": [
+      "The original createStdioClient close helper resolves immediately after its timeout kill request; this record adds an independent OS PID-absence check for this owned child only.",
+      "The first two failed drivers were closed after root GUI disconnect; they did not record a final sessions[] RPC."
+    ]
+  },
+  "limitations": [
+    "same stored time axes within each dataset; different per-panel actual browser times unverified",
+    "historical synthetic inputs; no new physical accuracy or general geometry claim",
+    "visual text checked only decoded frame0/12/23, all timestamps checked numerically",
+    "initial failed thermal bytes/metadata were not saved",
+    "old helper general termination guarantee not claimed",
+    "parent remains building; MP4/WebM per-frame/public HTTPS not closed"
+  ]
+}

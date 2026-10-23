@@ -5,6 +5,8 @@ description: Analyze saved airpocket Simulation Studio projects, inspect validat
 
 Specialize the user's own LLM as a CAE agent; this application does not supply a proprietary AI subscription. Work from the user's geometry, physical intent and material sources. The checkout normally lives at `D:/github/airpocket-soundman/airpocket-simulation-studio`; reuse its actual location if different.
 
+Evaluation-evidence links in the references are relative to the repository layout. When reading an installed copy, resolve their `docs/evidence/...` paths under the verified checkout, not under the installed skill directory. Missing historical evidence is not a successful validation.
+
 ## Discover the actual connection first
 
 Inspect the tools registered in this conversation before choosing a workflow. A connected older server may expose 18 tools including `studio_progress`, while the full repository entry declares 36 default/38 paired tools and the minimal browser entry exposes three browser tools. Repository declarations do not install or activate missing tools. Do not claim that a listed tool exists in the current session without checking.

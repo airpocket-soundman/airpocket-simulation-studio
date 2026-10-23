@@ -1,0 +1,320 @@
+{
+  "view": {
+    "schemaVersion": 1,
+    "resultRevision": "sha256:b919739cca1e631fc69d51c941ce760212b7dbde7fdfd2ad471e0244ba0e9902",
+    "physicalRevision": "sha256:1e39b8ae4d5efbd12c150ab1e4a77523509a3e0ae3821a2bab5cdc6f561b85be",
+    "kind": "elastic",
+    "fields": [
+      {
+        "id": "displacement",
+        "unit": "mm"
+      },
+      {
+        "id": "stress",
+        "unit": "MPa"
+      }
+    ],
+    "state": {
+      "field": "displacement",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      }
+    },
+    "modeCount": 0,
+    "frameCount": 0,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "frames": [],
+    "modes": []
+  },
+  "input": {
+    "schemaVersion": 1,
+    "revision": "sha256:7bd0cc0397f3cc04952fa44509e0b3ec2cbd68ca35048db0e533ea3a9487a48f",
+    "section": "project",
+    "pointer": "",
+    "exists": true,
+    "units": {},
+    "limitations": [
+      "Read-only saved-input inspection; values and source labels are not physical validation or source authentication.",
+      "Hashes cover canonical JSON values, not original source-file bytes.",
+      "Nested objects/arrays and large strings are omitted from descriptors; select their absolute JSON Pointer for a bounded page.",
+      "Object pages contain at most 50 members; array/string pages at most 200 entries/UTF-16 code units; total response at most 65536 UTF-8 bytes.",
+      "Only known application input units are stated; no missing values, unknown units or physical settings are inferred."
+    ],
+    "descriptor": {
+      "pointer": "",
+      "type": "object",
+      "keyCount": 13,
+      "omitted": true,
+      "sha256": "sha256:7bd0cc0397f3cc04952fa44509e0b3ec2cbd68ca35048db0e533ea3a9487a48f",
+      "hashBasis": "canonical-json"
+    },
+    "page": {
+      "offset": 0,
+      "limit": 50,
+      "total": 13,
+      "nextOffset": null,
+      "entries": [
+        {
+          "pointer": "/analysisIntent",
+          "type": "object",
+          "keyCount": 1,
+          "omitted": true,
+          "sha256": "sha256:b3df1e30854d2546d52728b52702915a1254b8c4f33c5732804646bfb28e9651",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/conditions",
+          "type": "array",
+          "length": 2,
+          "omitted": true,
+          "sha256": "sha256:8256771751419216de7ddeaa7a7d2aad036560891cdf2c93faf23729931faf35",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/inputProvenance",
+          "type": "object",
+          "keyCount": 2,
+          "omitted": true,
+          "sha256": "sha256:78245e2904b1315e4aa90d449b103f76f614c22e682317995db7a3f1dd35996a",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/material",
+          "type": "string",
+          "length": 2,
+          "value": "金属"
+        },
+        {
+          "pointer": "/materialProperties",
+          "type": "object",
+          "keyCount": 2,
+          "omitted": true,
+          "sha256": "sha256:e599005cb5580354599e701e049ce52a403b0a0d2ea026d97cd1aebabc7f81cd",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/meshSettings",
+          "type": "object",
+          "keyCount": 1,
+          "omitted": true,
+          "sha256": "sha256:96e36c9e896bae13ac73b00bcd6535ae3269771cf82815b325131c21cf5234d1",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/meshes",
+          "type": "array",
+          "length": 1,
+          "omitted": true,
+          "sha256": "sha256:185588d59c06408dbf11e842c4cffd096524862da47404c7653ac811d745f44e",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/name",
+          "type": "string",
+          "length": 30,
+          "value": "Skill loop synthetic axial bar"
+        },
+        {
+          "pointer": "/planarRegion",
+          "type": "object",
+          "keyCount": 5,
+          "omitted": true,
+          "sha256": "sha256:552ad80bba9dc5d3f3739914e2c51212e56bbb169762b0e4bd7e6f6943d4a76f",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/selection",
+          "type": "array",
+          "length": 1,
+          "omitted": true,
+          "sha256": "sha256:cf1cbb66a638b4860a516671fb74850e6ccf787fe6c4c8d29e9c04efe880bd05",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/sourceModel",
+          "type": "object",
+          "keyCount": 2,
+          "omitted": true,
+          "sha256": "sha256:812d9ce1a8a93cdb12501ffb1edb46eaf5eafd4abbace2aa20777918bcc4b1bb",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/study",
+          "type": "object",
+          "keyCount": 46,
+          "omitted": true,
+          "sha256": "sha256:76bb79b3ad6387dfd9524a3d92e6f02cae980494c8adec737b39e8690da2e503",
+          "hashBasis": "canonical-json"
+        },
+        {
+          "pointer": "/version",
+          "type": "number",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "cases": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:db965c15de45cadbd6110dd58d49ce79f70e211404bfb2012779666e1edea0df",
+    "cases": [
+      {
+        "caseId": "0d20933d-f0f8-4c66-a720-8224c025b045",
+        "revision": "sha256:5ffe944ade23f47a7053cc6d0571d41ce0cbac12ad14e70333b99a123198a7a7",
+        "name": "Synthetic axial 100 N",
+        "kind": "elastic",
+        "metrics": [
+          {
+            "key": "maxDisplacementMm",
+            "unit": "mm",
+            "value": 0.04000000000004178
+          },
+          {
+            "key": "maxVonMisesPa",
+            "unit": "Pa",
+            "value": 1000000.000019183
+          }
+        ],
+        "runtimeIdentity": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "isolation": "web-worker",
+          "build": {
+            "status": "unavailable"
+          },
+          "engine": {
+            "requestedMethod": "pcg-strict",
+            "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+          },
+          "assets": [
+            {
+              "role": "gmsh",
+              "bytes": 41430673,
+              "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+              "status": "observed"
+            }
+          ]
+        },
+        "analysisAssessment": {
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false
+        }
+      },
+      {
+        "caseId": "79a238b3-b853-462e-873a-6225fd257280",
+        "revision": "sha256:67775b793efae1b345c251ee8df86463eada1e9c78fba5334190368293e92faf",
+        "name": "Synthetic axial 200 N",
+        "kind": "elastic",
+        "metrics": [
+          {
+            "key": "maxDisplacementMm",
+            "unit": "mm",
+            "value": 0.08000000000008356
+          },
+          {
+            "key": "maxVonMisesPa",
+            "unit": "Pa",
+            "value": 2000000.000038366
+          }
+        ],
+        "runtimeIdentity": {
+          "schemaVersion": 1,
+          "target": "browser",
+          "isolation": "web-worker",
+          "build": {
+            "status": "unavailable"
+          },
+          "engine": {
+            "requestedMethod": "pcg-strict",
+            "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+          },
+          "assets": [
+            {
+              "role": "gmsh",
+              "bytes": 41430673,
+              "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+              "status": "observed"
+            }
+          ]
+        },
+        "analysisAssessment": {
+          "mode": "exploratory",
+          "provisional": true,
+          "completePreflight": false
+        }
+      }
+    ]
+  },
+  "panel": {
+    "schemaVersion": 1,
+    "revision": "sha256:f872953f2aa7a06e2b53f0feed95623917279f4be6df96ffe477def26ba86f35",
+    "archive": {
+      "kind": "comparison-view",
+      "settings": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "field": "displacement"
+      },
+      "sources": [
+        {
+          "revision": "sha256:5ffe944ade23f47a7053cc6d0571d41ce0cbac12ad14e70333b99a123198a7a7"
+        },
+        {
+          "revision": "sha256:67775b793efae1b345c251ee8df86463eada1e9c78fba5334190368293e92faf"
+        }
+      ],
+      "version": 1
+    }
+  }
+}

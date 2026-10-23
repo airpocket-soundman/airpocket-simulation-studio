@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "archiveRevision": "sha256:f29c9e6d43964c6b6b3b69d194b1e799087a4012adaf14ecca397a0217ea35ce",
+  "cases": [
+    {
+      "caseId": "54c740a8-0738-47e9-8aaf-dfdee5f01e3e",
+      "revision": "sha256:5ffe944ade23f47a7053cc6d0571d41ce0cbac12ad14e70333b99a123198a7a7",
+      "name": "Synthetic axial 100 N",
+      "kind": "elastic",
+      "metrics": [
+        {
+          "key": "maxDisplacementMm",
+          "unit": "mm",
+          "value": 0.04000000000004178
+        },
+        {
+          "key": "maxVonMisesPa",
+          "unit": "Pa",
+          "value": 1000000.000019183
+        }
+      ],
+      "runtimeIdentity": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "isolation": "web-worker",
+        "build": {
+          "status": "unavailable"
+        },
+        "engine": {
+          "requestedMethod": "pcg-strict",
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      },
+      "analysisAssessment": {
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false
+      }
+    }
+  ]
+}

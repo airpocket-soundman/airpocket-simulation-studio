@@ -1,0 +1,617 @@
+{
+  "schemaVersion": 1,
+  "previousRevision": "sha256:f8c84c087aa405026ebcfcf5755afef2917e982a372eca659535acad7da9130c",
+  "revision": "sha256:900d0991ba51d3c0dee255c12f29f4a146b2167f1be219a30e254d8ab82f5407",
+  "operationCount": 8,
+  "changedPointers": {
+    "pointers": [
+      "/analysisIntent",
+      "/conditions",
+      "/inputProvenance",
+      "/materialProperties/poissonRatio",
+      "/materialProperties/youngModulus",
+      "/planarRegion"
+    ],
+    "total": 6,
+    "truncated": false,
+    "maxPointers": 100
+  },
+  "summary": {
+    "loaded": true,
+    "name": "Skill loop synthetic axial bar",
+    "meshCount": 1,
+    "selectedTriangles": 0,
+    "selectedAreaMm2": 0,
+    "conditionCount": 2,
+    "material": "金属"
+  },
+  "preflight": {
+    "schemaVersion": 1,
+    "target": "browser",
+    "operation": "solve",
+    "selectedObservation": {
+      "schemaVersion": 1,
+      "target": "browser",
+      "operation": "solve",
+      "supported": true,
+      "profileId": "elastic-cpu",
+      "profile": {
+        "id": "elastic-cpu",
+        "models": [
+          "linear-elastic",
+          "orthotropic"
+        ],
+        "methods": [
+          "pcg",
+          "pcg-strict",
+          "wasm-pcg"
+        ],
+        "events": [
+          {
+            "stage": "preparation",
+            "cadence": "after module initialization",
+            "metrics": []
+          },
+          {
+            "stage": "mesh",
+            "cadence": "after each generated mesh",
+            "metrics": [
+              {
+                "name": "nodeCount",
+                "unit": "count"
+              },
+              {
+                "name": "elementCount",
+                "unit": "count"
+              },
+              {
+                "name": "volumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minVolumeMm3",
+                "unit": "mm^3"
+              },
+              {
+                "name": "minQuality",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "qualityHistogram",
+                "unit": "count"
+              }
+            ]
+          },
+          {
+            "stage": "progress",
+            "cadence": "worker text progress converted by the client",
+            "metrics": []
+          },
+          {
+            "stage": "observation-transport",
+            "when": "protocol-enabled worker observation delivery",
+            "optional": true,
+            "provisional": true,
+            "scope": "worker observation events only; enabled by browser and headless job clients, not legacy direct worker calls",
+            "requiredFields": [
+              "observationTransport.maxEvents",
+              "observationTransport.maxBytes",
+              "observationTransport.maxOutboxEvents",
+              "observationTransport.maxOutboxBytes",
+              "observationTransport.maxTotalEvents",
+              "observationTransport.maxTotalBytes",
+              "observationTransport.terminalControlMaxEvents",
+              "observationTransport.terminalControlMaxBytes",
+              "observationTransport.pendingEvents",
+              "observationTransport.pendingBytes",
+              "observationTransport.outboxEvents",
+              "observationTransport.outboxBytes",
+              "observationTransport.peakEvents",
+              "observationTransport.peakBytes",
+              "observationTransport.outboxPeakEvents",
+              "observationTransport.outboxPeakBytes",
+              "observationTransport.accepted",
+              "observationTransport.dropped",
+              "observationTransport.droppedMeshes",
+              "observationTransport.droppedFields",
+              "observationTransport.sourceSequence",
+              "observationTransport.policy",
+              "observationTransport.scope",
+              "observationTransport.terminal"
+            ],
+            "terminalRequiredFields": [
+              "observationTransport.droppedReasons"
+            ],
+            "dataEnvelopeSequenceField": "observationTransport.sequence",
+            "dataEnvelopeAckField": "observationAckId",
+            "cadence": "bounded FIFO outbox coalesces scalar iterations; one bounded control summary after drain immediately before normal result or reported-error terminal delivery",
+            "terminalSummaryOnHardTermination": false,
+            "terminalSummaryAvailableOn": "normal-result-or-reported-error",
+            "hardTerminationKinds": [
+              "cancellation",
+              "timeout",
+              "worker-abnormal-exit"
+            ],
+            "missingTerminalSummaryMeans": "final transport drop totals unknown; never infer zero from the last observation snapshot",
+            "metrics": [
+              {
+                "name": "observationTransport.pendingEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationTransport.pendingBytes",
+                "unit": "bytes"
+              },
+              {
+                "name": "observationTransport.outboxEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationTransport.outboxBytes",
+                "unit": "bytes"
+              },
+              {
+                "name": "observationTransport.dropped",
+                "unit": "count"
+              }
+            ],
+            "maxEvents": 8,
+            "maxBytes": 8000000,
+            "maxOutboxEvents": 8,
+            "maxOutboxBytes": 8000000,
+            "maxTotalEvents": 16,
+            "maxTotalBytes": 16000000,
+            "terminalControlMaxEvents": 1,
+            "terminalControlMaxBytes": 4096,
+            "byteBasis": "conservative-structural-envelope-estimate-including-transport-metadata",
+            "policy": "non-blocking-solver-callbacks; enqueue/coalesce within bounded outbox; ACK pumps FIFO; drain before normal terminal",
+            "workerTransportBounded": true,
+            "boundedOnlyWhenProtocolEnabled": true,
+            "hostQueueBudgetSeparate": true,
+            "progressBounded": false,
+            "finalResultBounded": false,
+            "totalJavaScriptHeapBounded": false
+          },
+          {
+            "stage": "observation-queue-limit",
+            "when": "pending-payload-limit",
+            "optional": true,
+            "provisional": true,
+            "pendingBasis": "in-flight-and-queued-full-payloads",
+            "byteBasis": "conservative-structural-estimate",
+            "storageBudgetSeparate": true,
+            "workerTransportBounded": false,
+            "requiredFields": [
+              "observationQueue.reason",
+              "observationQueue.observationSequence",
+              "observationQueue.maxEvents",
+              "observationQueue.maxBytes",
+              "observationQueue.pendingEvents",
+              "observationQueue.pendingBytes",
+              "observationQueue.dropped",
+              "observationQueue.latestPolicy"
+            ],
+            "cadence": "host notification when a full mesh or field payload is omitted by the bounded pending queue; scalar summaries continue with source observationSequence",
+            "metrics": [
+              {
+                "name": "observationQueue.dropped",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.droppedMeshes",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.droppedFields",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.pendingEvents",
+                "unit": "count"
+              },
+              {
+                "name": "observationQueue.pendingBytes",
+                "unit": "bytes"
+              }
+            ],
+            "latestPolicy": "last-accepted-snapshot",
+            "acceptedIsStored": false
+          },
+          {
+            "stage": "observation-event-gap",
+            "when": "job-event-payload-omission",
+            "optional": true,
+            "provisional": true,
+            "payloadOmitted": true,
+            "requiredFields": [
+              "gap.reason"
+            ],
+            "gapReasons": [
+              "bytes",
+              "structure-limit",
+              "non-finite",
+              "cycle",
+              "accessor",
+              "unsupported-type"
+            ],
+            "cadence": "replaces an unsafe or oversized observation at the same authoritative event sequence/type in the shared job registry; does not change calculation outcome",
+            "metrics": [],
+            "byteBasis": "serialized-UTF-8-JSON",
+            "workerTransportBounded": false,
+            "limitations": [
+              "Separate from pending field queue omissions and retained artifact limits.",
+              "A gap is missing telemetry, not evidence of convergence, failure or physical accuracy.",
+              "Event count and byte retention may evict older gaps; use the returned cursor and truncation metadata."
+            ]
+          },
+          {
+            "stage": "diagnostic",
+            "when": "execution-failure",
+            "cadence": "on caught Worker execution failure before its terminal error when observation is requested",
+            "metrics": [],
+            "failureSchemaVersion": 1
+          },
+          {
+            "stage": "iteration",
+            "solver": "pcg",
+            "cadence": "first iteration, every 25 iterations, and tolerance crossing; zero iterations emit none",
+            "metrics": [
+              {
+                "name": "residual",
+                "unit": "dimensionless"
+              },
+              {
+                "name": "tolerance",
+                "unit": "dimensionless"
+              }
+            ]
+          }
+        ],
+        "textProgress": true,
+        "fields": [],
+        "limitations": [
+          "Declaration of implemented observation paths only; not execution permission or physical validation",
+          "Events and retained artifacts are not guaranteed: failures, zero iterations, retention limits and cancellation may omit them"
+        ]
+      },
+      "reasons": [],
+      "adaptive": {
+        "enabled": false,
+        "structuredRoundEvents": false,
+        "meshPerRound": false,
+        "textProgressOnly": false
+      },
+      "fieldRetention": {
+        "requested": false,
+        "available": false,
+        "scalarFieldsSupported": false,
+        "vectorFieldsSupported": false,
+        "meshSupported": true,
+        "meshAvailable": false,
+        "maxBytes": 64000000,
+        "eventRetention": 256,
+        "availabilityIsGuarantee": false
+      },
+      "declarationOnly": true,
+      "physicalAccuracyVerified": false
+    },
+    "mode": "exploratory",
+    "allowed": false,
+    "provisional": false,
+    "completePreflight": false,
+    "requiredInputContract": "temperature-dependent-isotropic-structure",
+    "requiredPointers": [
+      "/study/kind",
+      "/study/gravityEnabled",
+      "/study/thermalStress",
+      "/materialProperties/youngModulus",
+      "/materialProperties/poissonRatio",
+      "/study/materialTemperature",
+      "/conditions/0/type",
+      "/conditions/0/value",
+      "/conditions/0/direction",
+      "/conditions/0/regions",
+      "/conditions/0/planarRegion",
+      "/conditions/1/type",
+      "/conditions/1/value",
+      "/conditions/1/direction",
+      "/conditions/1/regions",
+      "/conditions/1/planarRegion"
+    ],
+    "units": {
+      "geometry": "mm",
+      "youngModulus": "Pa",
+      "force": "N",
+      "temperature": "degC",
+      "velocity": "m/s",
+      "pressure": "Pa",
+      "displacement": "mm",
+      "density": "kg/m3",
+      "gravity": "m/s2",
+      "poissonRatio": "1",
+      "expansion": "1/K",
+      "referenceTemperature": "degC",
+      "materialTemperature": "degC",
+      "temperatureMin": "degC",
+      "temperatureMax": "degC"
+    },
+    "diagnostics": [
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/kind",
+        "evidence": {
+          "value": "structural"
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/gravityEnabled",
+        "evidence": {
+          "value": false
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/thermalStress",
+        "evidence": {
+          "value": false
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/materialProperties/youngModulus",
+        "evidence": {
+          "value": 1000000000
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/materialProperties/poissonRatio",
+        "evidence": {
+          "value": 0
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/study/materialTemperature",
+        "evidence": {
+          "value": 20
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/type",
+        "evidence": {
+          "value": "fixed"
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/value",
+        "evidence": {
+          "value": 0
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/direction",
+        "evidence": {
+          "value": {
+            "type": "array",
+            "length": 3,
+            "omitted": true
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/regions",
+        "evidence": {
+          "value": {
+            "type": "array",
+            "length": 1,
+            "omitted": true
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/0/planarRegion",
+        "evidence": {
+          "value": {
+            "axis": 2,
+            "max": {
+              "type": "array",
+              "length": 2,
+              "omitted": true
+            },
+            "mesh": 0,
+            "min": {
+              "type": "array",
+              "length": 2,
+              "omitted": true
+            },
+            "position": 0
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/1/type",
+        "evidence": {
+          "value": "force"
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/1/value",
+        "evidence": {
+          "value": 100
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/1/direction",
+        "evidence": {
+          "value": {
+            "type": "array",
+            "length": 3,
+            "omitted": true
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/1/regions",
+        "evidence": {
+          "value": {
+            "type": "array",
+            "length": 1,
+            "omitted": true
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      },
+      {
+        "code": "PROVENANCE_REQUIRED",
+        "severity": "error",
+        "target": "/conditions/1/planarRegion",
+        "evidence": {
+          "value": {
+            "axis": 2,
+            "max": {
+              "type": "array",
+              "length": 2,
+              "omitted": true
+            },
+            "mesh": 0,
+            "min": {
+              "type": "array",
+              "length": 2,
+              "omitted": true
+            },
+            "position": 40
+          }
+        },
+        "suggestions": [
+          "Record source, rationale, applicability and confirmation for this required input"
+        ],
+        "requiresUserIntent": true
+      }
+    ],
+    "physicsCoverage": {
+      "contract": "temperature-dependent-isotropic-structure",
+      "implemented": [],
+      "remaining": [
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ],
+      "completePreflight": false
+    },
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ],
+    "reportPage": {
+      "diagnosticsTotal": 16,
+      "diagnosticsTruncated": false,
+      "requiredPointersTotal": 16,
+      "requiredPointersTruncated": false
+    }
+  },
+  "limitations": [
+    "Read-only preview; no live input, file or solver state is changed.",
+    "Changed arrays are reported at their whole-array JSON pointer; at most 100 pointers are returned.",
+    "Preflight diagnostic evidence arrays, long strings and deep or wide objects are summarized; inspect original input separately when reviewing evidence.",
+    "Preflight diagnostics are limited to 50 and required pointers to 100; use the existing preflight API for the complete report.",
+    "An allowed preflight does not prove mesh validity, boundary transfer, constraint rank, convergence or physical accuracy."
+  ],
+  "normalization": {
+    "applied": true,
+    "previousRevision": "sha256:900d0991ba51d3c0dee255c12f29f4a146b2167f1be219a30e254d8ab82f5407",
+    "changedPointers": {
+      "pointers": [],
+      "total": 0,
+      "truncated": false,
+      "maxPointers": 100
+    },
+    "requiresReview": false,
+    "note": "Host serialization changes are included in the resulting revision; review them before applying.",
+    "revision": "sha256:900d0991ba51d3c0dee255c12f29f4a146b2167f1be219a30e254d8ab82f5407"
+  }
+}

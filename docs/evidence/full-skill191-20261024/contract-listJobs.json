@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "listJobs",
+      "scope": "inspect",
+      "description": "List retained browser jobs with bounded pagination.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "default": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        },
+        "additionalProperties": false
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Browser memory only; an empty page does not imply jobs completed."
+      ]
+    }
+  ]
+}

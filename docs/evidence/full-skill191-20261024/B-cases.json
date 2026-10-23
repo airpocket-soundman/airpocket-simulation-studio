@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "archiveRevision": "sha256:db965c15de45cadbd6110dd58d49ce79f70e211404bfb2012779666e1edea0df",
+  "cases": [
+    {
+      "caseId": "0d20933d-f0f8-4c66-a720-8224c025b045",
+      "revision": "sha256:5ffe944ade23f47a7053cc6d0571d41ce0cbac12ad14e70333b99a123198a7a7",
+      "name": "Synthetic axial 100 N",
+      "kind": "elastic",
+      "metrics": [
+        {
+          "key": "maxDisplacementMm",
+          "unit": "mm",
+          "value": 0.04000000000004178
+        },
+        {
+          "key": "maxVonMisesPa",
+          "unit": "Pa",
+          "value": 1000000.000019183
+        }
+      ],
+      "runtimeIdentity": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "isolation": "web-worker",
+        "build": {
+          "status": "unavailable"
+        },
+        "engine": {
+          "requestedMethod": "pcg-strict",
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      },
+      "analysisAssessment": {
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false
+      }
+    },
+    {
+      "caseId": "79a238b3-b853-462e-873a-6225fd257280",
+      "revision": "sha256:67775b793efae1b345c251ee8df86463eada1e9c78fba5334190368293e92faf",
+      "name": "Synthetic axial 200 N",
+      "kind": "elastic",
+      "metrics": [
+        {
+          "key": "maxDisplacementMm",
+          "unit": "mm",
+          "value": 0.08000000000008356
+        },
+        {
+          "key": "maxVonMisesPa",
+          "unit": "Pa",
+          "value": 2000000.000038366
+        }
+      ],
+      "runtimeIdentity": {
+        "schemaVersion": 1,
+        "target": "browser",
+        "isolation": "web-worker",
+        "build": {
+          "status": "unavailable"
+        },
+        "engine": {
+          "requestedMethod": "pcg-strict",
+          "actualEngine": "Airpocket Tet4 / JavaScript CPU"
+        },
+        "assets": [
+          {
+            "role": "gmsh",
+            "bytes": 41430673,
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ]
+      },
+      "analysisAssessment": {
+        "mode": "exploratory",
+        "provisional": true,
+        "completePreflight": false
+      }
+    }
+  ]
+}
