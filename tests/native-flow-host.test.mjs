@@ -11,6 +11,7 @@ test('native host authenticates exact origin and refuses changes to approved phy
   assert.equal((await fetch(host.endpoint+'/capabilities',{headers:{Origin:origin}})).status,401);
   assert.equal((await fetch(host.endpoint+'/capabilities',{headers:{Origin:'http://evil.invalid',Authorization:`Bearer ${host.token}`}})).status,403);
   const headers={Origin:origin,Authorization:`Bearer ${host.token}`,'Content-Type':'application/json'};const capability=await(await fetch(host.endpoint+'/capabilities',{headers})).json();assert.deepEqual(capability.input,input);
+  assert.equal(capability.discreteBoundaryMassFlux.supported,false);assert.equal(capability.discreteBoundaryMassFlux.code,'SU2_DISCRETE_BOUNDARY_FLUX_UNAVAILABLE');assert.equal(capability.discreteBoundaryMassFlux.nodalSurfaceMassflowIsDiscreteFlux,false);
   const response=await fetch(host.endpoint+'/jobs',{method:'POST',headers,body:JSON.stringify({requestId:'changed',input:{...input,velocityMps:[-50,0,0]}})});assert.equal(response.status,400);assert.equal(host.jobs.size,0);
  }finally{await host.close();await rm(root,{recursive:true,force:true});}
 });
