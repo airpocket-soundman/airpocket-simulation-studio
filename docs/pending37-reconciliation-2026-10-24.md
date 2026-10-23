@@ -60,7 +60,7 @@ SU2追加起動は2/2で残0（N128延長とN144）。追加格子/再反復/sol
 
 ## 次に実装できる小単位
 
-1. **全物理preflightの段階を明示する。** `analysis-preflight.js` と `preflight-physics-coverage.js` を起点に、入力検査・メッシュ後検査・収束/精度の必要事項を分け、定常熱の連結成分anchor（熱接触含む）、音響波長、構造剛体rankはメッシュ後に実装済み。まず静的等方線形のcoverage欠落を直す。requiredInputContractは同契約名を返すが、physicsCoverageへundefinedが渡る。既存/不足metadataを正確に列挙し、allowed・実行許可・剛体mode診断の現在の意味は変えず、`completePhysicalValidation:false`を維持する。桁警告や入力存在だけで物理妥当としない。
+1. **全物理preflightの段階を明示する。** `analysis-preflight.js` と `preflight-physics-coverage.js` を起点に、入力検査・メッシュ後検査・収束/精度の必要事項を分け、定常熱の連結成分anchor（熱接触含む）、音響波長、構造剛体rankはメッシュ後に実装済み。まず静的等方線形のcoverage欠落を直す。requiredInputContractは同契約名を返すが、physicsCoverageへundefinedが渡る。既存/不足metadataを正確に列挙し、allowed・実行許可・剛体mode診断の現在の意味は変えず、`completePreflight:false`を維持する。桁警告や入力存在だけで物理妥当としない。
 2. **single-view保存時刻の固定フレーム出力。** 既存比較codec/containerを再利用し、別capability・結果lease・全timestamp encode/decode証明・取消/hidden cleanupを持つ境界を実装する。旧single欠落は未再現なので不具合実測とは呼ばない。orbit/deformationを変えず、実出力は別の明示予算を要する。
 3. **FINITEVISCOの非接続referenceを進める。** 材料点の実験条件/観測比較をpure境界として整え、合成・暫定・未校正を維持する。指定F応答を応力自由試験片/反力/永久塑性へ読み替えない。構造単要素接続はtensor/energy/tangentの独立受入を先に設計し、実験校正とダンベルへ飛躍しない。
 4. **録画切断の実行面を修復する。** 新exportより先にCUA focus timeoutを切り分ける。要求timestampはクリック成功ではない。意味的cancelの別検証は可能だが、実GUI切断の成功と呼ばない。
