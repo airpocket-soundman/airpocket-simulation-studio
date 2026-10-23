@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "reviewedPr": 180,
+  "reviewedHead": "e170735e666155f4c13a90cb007c6f5b7a658d31",
+  "baseMain": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "scope": "Independent review of submitted work order 52; partial real-Chrome validation for 53; additional manufactured references for 67/68. Not acceptance of all 20 orders.",
+  "findings": [
+    {
+      "id": "bounds",
+      "severity": "P1",
+      "reproduction": {
+        "boundsMm": [
+          5,
+          7,
+          11,
+          15,
+          17,
+          51
+        ],
+        "expectedDimensionsMm": [
+          10,
+          10,
+          40
+        ],
+        "before": "Translated-box regression fails: Generated mesh does not expose both end faces along the declared axis"
+      },
+      "cause": "Generator validates min/max coordinates but passes them directly to Gmsh addBox, which expects origin plus extents.",
+      "fix": "Convert to origin/extents at both mesh creation and spec.input.sourceModel; verify actual mesh bounds, support/load faces and analytical extension on X/Y/Z."
+    },
+    {
+      "id": "bundle-budget",
+      "severity": "P2",
+      "reproduction": {
+        "loadsN": "128 copies of 100 N",
+        "beforeSolveCalls": 128,
+        "before": "Capacity refusal occurs only after every solve and full serialization."
+      },
+      "fix": "Run shared bounded snapshot validation after every appended step, stop before the next solve on overflow, and prepare only one force vector set at a time. No destination published on refusal.",
+      "regression": "Asserts rejection before 128 solve calls; mock caches a real result for this resource-control test only. The physical-reference tests still independently solve each real load."
+    },
+    {
+      "id": "residual",
+      "severity": "P2",
+      "fix": "Negative as well as non-finite or above-threshold solver residuals remain failed rows without output.",
+      "regression": "Injected residuals -1, Infinity and 1e-8 all produce failed rows."
+    },
+    {
+      "id": "test-cleanup",
+      "severity": "P2",
+      "before": "Default full run reported a bridge long-poll failure and never exited because this test had no unconditional server cleanup. Run was interrupted, not counted as a passing suite.",
+      "fix": "Register t.after bridge.close immediately after server creation. Timing assertions and refusal thresholds are unchanged."
+    },
+    {
+      "id": "status-report",
+      "severity": "P2",
+      "before": "Submitter evidence and progress proposal incorrectly say queued.",
+      "fix": "Correct both to building, which was already the actual fixed-main parent status. Do not downgrade or mark released."
+    }
+  ],
+  "tests": {
+    "beforeFix": {
+      "command": "node --test --test-name-pattern='translated bounds|oversized routes' tests/increment-curve-bundle.test.mjs",
+      "tests": 2,
+      "fail": 2
+    },
+    "focused": {
+      "tests": 56,
+      "pass": 56,
+      "fail": 0,
+      "skip": 0,
+      "logSha256": "0807476d624ec3058dfc6f11c3c0171ea0416d26ec888eafba0c6bf54f853e78"
+    },
+    "manufacturedReferences": {
+      "command": "node --test tests/unilateral-contact-reference.test.mjs tests/curved-pressure-transfer.test.mjs",
+      "tests": 26,
+      "pass": 26,
+      "fail": 0,
+      "skip": 0
+    },
+    "contracts": "6 declaration files passed",
+    "fullSuite": {
+      "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+      "exitCode": 1,
+      "tests": 1850,
+      "pass": 1842,
+      "fail": 1,
+      "skip": 7,
+      "durationMs": 320886.5657,
+      "failedFile": "tests/visual-export-fixed-frame.test.mjs",
+      "fatalSignature": "Check failed: jit_page_->allocations_.erase(addr) == 1.",
+      "stackSymbol": "v8::internal::ThreadIsolation::UnregisterWasmAllocation",
+      "logSha256": "22e299e48a8c7d4d5b23d7a4fa268813e1aeb43ff37136918506cd243b029460",
+      "interpretation": "Full suite failed; reduced concurrency and a later isolated pass are not a runtime fix. No runtime flag, skip or threshold was changed."
+    },
+    "isolatedRuntimeDiagnostic": {
+      "command": "node --test tests/visual-export-fixed-frame.test.mjs",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 2781.5031,
+      "logSha256": "562930fa4d0ad2f1f3a94ad4567009bdafe334a22f13579ee19433f8a4e10848",
+      "scope": "One isolated rerun, not a clean replacement for the failed full run."
+    }
+  },
+  "realChrome": {
+    "origin": "http://127.0.0.1:18463/",
+    "input": "Only repository synthetic single-Tet4 examples; no user models",
+    "single": "File chooser loaded sample; rendered 4 rows with 1 failed gap; CSV/JSON/SVG links visible. Replacing input with {} and keyboard Enter refused it, focused input, set aria-invalid=true and hid stale preview/downloads.",
+    "comparison": "Two-file chooser loaded A/B; keyboard Enter rendered 2 curves with 2 failed gaps. Image decoded: complete=true, naturalWidth=1000, naturalHeight=980.",
+    "locale": "Switched Japanese to English with comparison and 8534 input characters retained; translated status and image alt verified.",
+    "fullSizeLink": "Same href as validated SVG confirmed; click created an owned Blob tab. Direct content inspection was rejected by the browser URL policy, so full-size drawing is NOT marked verified.",
+    "downloads": "waitForEvent download timed out; downloadMedia explicitly reports Blob downloads unsupported by this browser. Browser-saved output bytes and download hashes NOT verified.",
+    "unverified": [
+      "390px viewport",
+      "Direct browser artifact-vs-MCP byte comparison",
+      "Measured project/case/result revision invariance",
+      "Delayed file-selection race in a real browser (covered by automated UI tests only)",
+      "Public HTTPS workflow"
+    ],
+    "cleanup": "Owned Vite server stopped. Explicit tab cleanup could not be confirmed after debugger detached; created tabs remain subject to automatic session cleanup.",
+    "screenshots": [
+      {
+        "path": "docs/evidence/2026-10-23-audit-comparison-en.png",
+        "sha256": "fb49c8dfa4e2bcdaf96b30ec8868795196ffdd3895b73f3d9597bc6235128207"
+      },
+      {
+        "path": "docs/evidence/2026-10-23-audit-comparison-ja.png",
+        "sha256": "1a29dc2e9102c1daeaf8b566aea972d92a6dba1f2b1735813706bd67b9db60d0"
+      },
+      {
+        "path": "docs/evidence/2026-10-23-audit-single-curve.png",
+        "sha256": "cfeb5ddae375c5feae1e4a0f794b7f27e236c4fff4f6aba834b575388f9e1ccf"
+      }
+    ]
+  },
+  "followups": {
+    "67": "Three stiffnesses 100/1000/10000 N/mm, load/unload/opening/onset/negative force, closed-form displacement/penetration/reaction and equilibrium. Synthetic static independent solves, no friction/history.",
+    "68": "Skew closed tetrahedral shell with complex nonuniform face pressure; independent area-vector/centroid integration, translation law of moments, conjugate complex translation+rotation work in J. Discrete facets only, not solver coupling."
+  },
+  "sourceSha256": {
+    "docs/en/increment-curve-export.md": "6d9c68e8a28380fb97bf2ff4e9a95be66593742a2f1526a96794600ca2af8189",
+    "docs/evidence/2026-10-23-opencode-52-resultcurve1.json": "f6ed639b4bb6d69751fe311f8d5559d1dd9bebfcf24272c9cb4281ea26878359",
+    "docs/increment-curve-export.md": "2f346048c23aae02d341c2895b73787217c41b4a6f0ea20d2d44c565d9672065",
+    "scripts/increment-curve-bundle-service.mjs": "3abc55796e316f0cb062a17a88d6c00fc422fb7969aaec18f1d2e1b2c7fa9225",
+    "tests/browser-bridge.test.mjs": "8acfdf9d266f70dfc8e01174bfc6cce759e613d8fdac8a3533e1ca8bb7058fb0",
+    "tests/curved-pressure-transfer.test.mjs": "5c6f085c266ac1d91a25b8295a1abc15a9c6e5f81f1e32f7e52ecbfb7018f798",
+    "tests/increment-curve-bundle.test.mjs": "bcbfb10f38698d96208f762deee2911ec9de519cdc5e5538642d3071cca1f8f7",
+    "tests/unilateral-contact-reference.test.mjs": "dca63cdf658bf3fe5f970834f66f90a333d0e703de3057bc761a317f3b663ff6"
+  },
+  "parentTaskStatus": "RESULTCURVE1 remains building; no parent/gate completion or publication claimed",
+  "otherOrders": "54-66 and 69-71 have no new submitted PR identified in the inspected GitHub list. This audit does not certify their implementation.",
+  "repairCommit": "fe2f6d9",
+  "ci": {
+    "pullRequest": 180,
+    "head": "fe2f6d9",
+    "status": "pending-at-evidence-write; check current GitHub status separately",
+    "publicDeployment": "not performed"
+  },
+  "followupSourceSha256": {
+    "tests/curved-pressure-transfer.test.mjs": "5c6f085c266ac1d91a25b8295a1abc15a9c6e5f81f1e32f7e52ecbfb7018f798",
+    "tests/unilateral-contact-reference.test.mjs": "dca63cdf658bf3fe5f970834f66f90a333d0e703de3057bc761a317f3b663ff6"
+  }
+}
