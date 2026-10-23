@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-23",
+  "base": "ed30a11",
+  "reviewedOriginal": "6fcac2f1659f18b4c470b40ed4a881eaea005e45",
+  "finding": {
+    "priority": 2,
+    "issue": "SharedArrayBuffer is accepted if its prototype is changed to ArrayBuffer.prototype.",
+    "before": {
+      "publicFixtureBytes": 778,
+      "completed": true
+    },
+    "fix": "Invoke captured ArrayBuffer.prototype.byteLength getter as an intrinsic brand check before source copy; convert rejection to FINITE_VISCO_HISTORY_INVALID_INPUT.",
+    "after": "Spoofed shared buffer refuses; caller bytes remain unchanged. Ordinary ArrayBuffer subview preserves byteOffset, exact source length/hash and caller bytes. Own byteLength accessors are not invoked."
+  },
+  "independentReview": {
+    "rawOwnership": "Intrinsic typed-array getters and set copy input before hash await; mutable caller bytes cannot split identity/replay.",
+    "parser": "Decoded duplicate keys, fatal UTF-8, nesting/value/step/byte bounds and exact schema inspected; no alternate state/output import.",
+    "failure": "Rejected constitutive step returns exact index/completedSteps with no finalState or summary; parameter refusal reports zero completed steps.",
+    "hashes": "Raw SHA hashes captured source bytes; canonical SHA hashes sorted semantic input, independently checked by existing public-fixture test."
+  },
+  "verification": {
+    "tests": 34,
+    "pass": 34,
+    "fail": 0,
+    "skip": 0,
+    "contractDeclarationFiles": 17,
+    "diffCheck": "pass",
+    "node": "v24.11.1",
+    "platform": "win32"
+  },
+  "limits": [
+    "No solver or physical calibration validation.",
+    "Concurrent shared-memory execution was not required to demonstrate the admission defect; intrinsic brand rejection prevents it before copy."
+  ],
+  "summaryJa": "共有バッファのprototype偽装による受理を再現し、実brand検査で拒否した。通常バッファと原文保持の回帰は成功。",
+  "summaryEn": "Reproduced shared-buffer admission through prototype spoofing and added intrinsic brand rejection. Ordinary buffers and source preservation regressions pass."
+}

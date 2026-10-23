@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "runUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39968250962",
+  "head": "f2db420e49af992f1bbaa87204082856aaf6643b",
+  "gitDirtyEntries": [],
+  "raw": {
+    "path": "docs/evidence/pr187-linux-focused-20261023/wasm-single.json",
+    "bytes": 41893,
+    "sha256": "babb7a0ea7b55ac53977128900dcd132e9b85f3dd2f0d1e496aefad85f411c47",
+    "copiedByteForByte": true,
+    "gitAttributes": "* -text"
+  },
+  "extractedTap": {
+    "path": "docs/evidence/pr187-linux-focused-20261023/wasm-single.tap",
+    "bytes": 903,
+    "sha256": "d3af4f13467ac4d8028d41d9ecc501fae04be11c4a32068a5b8a255b446b7e65",
+    "source": "results[0].stdout from the preserved JSON; not a new execution"
+  },
+  "runtime": {
+    "executable": "/opt/hostedtoolcache/node/24.21.0/x64/bin/node",
+    "node": "v24.21.0",
+    "v8": "13.6.233.17-node.53",
+    "platform": "linux",
+    "arch": "x64",
+    "release": "node"
+  },
+  "execution": {
+    "count": 1,
+    "mode": "default",
+    "childArgv": [
+      "--test",
+      "--test-reporter=tap",
+      "tests/advanced-structural-source-execution.test.mjs"
+    ],
+    "concurrency": null,
+    "nodeOptionsPresent": false,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 4782,
+    "tapDurationMs": 4736.71691,
+    "code": 0,
+    "signal": null,
+    "timedOut": false,
+    "outputLimited": false,
+    "stderrBytes": 0
+  },
+  "sourceIdentity": {
+    "target": "tests/advanced-structural-source-execution.test.mjs",
+    "linuxGitBlobSha256": "d44a59cce4d7c2369bb968bc9eb3c986526e896d39b873b715cf823fe59fc1e2",
+    "linuxRuntimeSha256": "d44a59cce4d7c2369bb968bc9eb3c986526e896d39b873b715cf823fe59fc1e2",
+    "historicalWindowsCRLFSha256": "2a19c5aabaca822171e1bbf29dde7e292f15f644d754a4c8142df51993a2830c",
+    "gitBlobWithCRLFConversionSha256": "2a19c5aabaca822171e1bbf29dde7e292f15f644d754a4c8142df51993a2830c",
+    "sameBlobAtHistoricalWindowsBase": true,
+    "meaning": "The differing SHA256 values are expected LF versus CRLF bytes of the same tracked source, not different test logic."
+  },
+  "cgroup": {
+    "scope": "diagnostic runner cgroup; shared counters are not child attribution",
+    "before": {
+      "scope": "diagnostic runner cgroup; shared counters are not child attribution",
+      "sampledAt": "2026-10-23T14:17:35.866Z",
+      "available": true,
+      "files": {
+        "memory.events": {
+          "available": true,
+          "counters": {
+            "low": "0",
+            "high": "0",
+            "max": "0",
+            "oom": "0",
+            "oom_kill": "0",
+            "oom_group_kill": "0"
+          }
+        },
+        "memory.current": {
+          "available": true,
+          "value": "2857308160",
+          "unit": "bytes"
+        },
+        "memory.peak": {
+          "available": true,
+          "value": "3146035200",
+          "unit": "bytes"
+        },
+        "memory.max": {
+          "available": true,
+          "value": "max",
+          "unit": "bytes"
+        }
+      }
+    },
+    "after": {
+      "scope": "diagnostic runner cgroup; shared counters are not child attribution",
+      "sampledAt": "2026-10-23T14:17:40.650Z",
+      "available": true,
+      "files": {
+        "memory.events": {
+          "available": true,
+          "counters": {
+            "low": "0",
+            "high": "0",
+            "max": "0",
+            "oom": "0",
+            "oom_kill": "0",
+            "oom_group_kill": "0"
+          }
+        },
+        "memory.current": {
+          "available": true,
+          "value": "2858680320",
+          "unit": "bytes"
+        },
+        "memory.peak": {
+          "available": true,
+          "value": "3357949952",
+          "unit": "bytes"
+        },
+        "memory.max": {
+          "available": true,
+          "value": "max",
+          "unit": "bytes"
+        }
+      }
+    },
+    "interpretation": "Runner shared cumulative/lifetime counters only. Zero OOM-event change does not explain the earlier failed full CI; memory.peak is not a child peak."
+  },
+  "audit": {
+    "commitReviewed": "e836b4ebf7ddde6ec63b4b10677c085432ea38a0",
+    "files": 7,
+    "relatedRegressionPass": 15,
+    "relatedRegressionFail": 0,
+    "relatedRegressionSkip": 0,
+    "sourceEdits": false,
+    "solverExecutionsDuringAudit": 0,
+    "conclusion": "No actionable new defect found in the diagnostic-only change. TAP, signal handling, missing cgroup values and single default-GC execution were checked."
+  },
+  "normalCi": {
+    "runId": 39968241372,
+    "status": "unconfirmed; reported in progress at handoff, not inspected or inferred by this evidence"
+  },
+  "limitations": [
+    "Isolated Linux and earlier isolated Windows success are non-reproductions, not root-cause resolution or proof of flakiness.",
+    "Original full-suite failure39966324760 remains unexplained.",
+    "No current child was OOM-killed; these cgroup samples cannot attribute the old failure or a child peak.",
+    "Default runtime flags only; no GC or solver migration.",
+    "No solver rerun or historical Windows evidence edits."
+  ]
+}
