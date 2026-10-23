@@ -77,7 +77,8 @@ export async function createIncrementCurveComparison(request){
   for(const {curve} of artifacts){if(ids.has(curve.curveId))throw Error('Comparison curveId must be unique');ids.add(curve.curveId);}
   const comparison=Object.freeze({schemaVersion:1,kind:'increment-curve-comparison',analysis:Object.freeze({kind:'independent-linear-solves',plasticHistory:false}),units:Object.freeze({extensionMm:'mm',forceN:'N',engineeringStrain:'dimensionless',engineeringStressPa:'Pa'}),curves:Object.freeze(artifacts.map(artifact=>artifact.curve))});
   const headerEnd=artifacts[0].csv.indexOf('\r\n')+2;
-  const csv=artifacts[0].csv.slice(0,headerEnd)+artifacts.map(artifact=>artifact.csv.slice(artifact.csv.indexOf('\r\n')+2)).join('');
+  const header=artifacts.some(artifact=>artifact.curve.steps.some(row=>row.controlledQuantity==='displacement'))?artifacts[0].csv.slice(0,headerEnd).replace('controlledValue[N]','controlledValue[controlledUnit]'):artifacts[0].csv.slice(0,headerEnd);
+  const csv=header+artifacts.map(artifact=>artifact.csv.slice(artifact.csv.indexOf('\r\n')+2)).join('');
   const json=JSON.stringify(comparison,null,2)+'\n',svg=makeComparisonSvg(comparison);
   for(const artifact of [csv,json,svg])if(bytes(artifact)>INCREMENT_CURVE_COMPARISON_LIMITS.artifactBytes)throw Error('Comparison artifact exceeds 2 MiB UTF-8 limit');
   return Object.freeze({comparison,csv,json,svg});

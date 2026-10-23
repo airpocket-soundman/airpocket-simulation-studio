@@ -1,4 +1,4 @@
-// RESULTCURVE1 bounded generator: explicit force sequence -> independent Gmsh/elastic solves -> {spec,steps}.
+// RESULTCURVE1 bounded generator: explicit force or prescribed-displacement sequence -> independent Gmsh/elastic solves -> {spec,steps}.
 // This never scales, copies or interpolates a solved displacement/reaction. A failed solve is retained as an
 // explicit failed row without an output, and a failed generation never publishes a destination file.
 import {lstat,open} from 'node:fs/promises';
@@ -7,7 +7,7 @@ import gmshInitialize from '@loumalouomega/gmsh-wasm';
 import {generateMesh} from '../src/mesh-core.js';
 import {solveElastic} from '../src/fem-core.js';
 import {loadedFaceTractionForces} from '../src/increment-curve-data.js';
-import {createIncrementCurveArtifacts,snapshotIncrementCurveBundle} from '../src/increment-curve-export.js';
+import {INCREMENT_CURVE_EXPORT_LIMITS,createIncrementCurveArtifacts,snapshotIncrementCurveBundle} from '../src/increment-curve-export.js';
 import {publishJson} from './json-artifacts.mjs';
 
 export const INCREMENT_CURVE_BUNDLE_LIMITS=Object.freeze({
@@ -67,7 +67,11 @@ function validateRequest(input){
  const request=snapshotRequest(input);
  if(!plain(request))fail('Increment curve request must be a plain object');
  const keys=Reflect.ownKeys(request);
- if(keys.length!==REQUEST_KEYS.length||REQUEST_KEYS.some(key=>!Object.hasOwn(request,key)))fail('Increment curve request must contain exactly the documented fields');
+ const controlledQuantity=Object.hasOwn(request,'controlledQuantity')?request.controlledQuantity:'force';
+ if(!['force','displacement'].includes(controlledQuantity))fail('controlledQuantity must be force or displacement');
+ const sequenceKey=controlledQuantity==='force'?'loadsN':'displacementsMm';
+ const expected=[...REQUEST_KEYS.filter(key=>key!=='loadsN'),sequenceKey,...(Object.hasOwn(request,'controlledQuantity')?['controlledQuantity']:[])];
+ if(keys.length!==expected.length||expected.some(key=>!Object.hasOwn(request,key)))fail('Increment curve request must contain exactly the documented fields for its control mode');
  if(request.synthetic!==true)fail('This bounded generator only accepts synthetic:true reference requests');
  if(typeof request.curveId!=='string'||!request.curveId.trim()||request.curveId.length>100)fail('curveId must be a non-empty string of at most 100 characters');
  if(!plain(request.caseIdentity)||!Object.keys(request.caseIdentity).length)fail('caseIdentity must be a non-empty object');
@@ -86,8 +90,8 @@ function validateRequest(input){
  if(!positive(request.initialGaugeLengthMm)||!near(request.initialGaugeLengthMm,extents[axisIndex]))fail('initialGaugeLengthMm must match the requested box span along the axis');
  const crossSection=extents.filter((_,index)=>index!==axisIndex).reduce((product,extent)=>product*extent,1);
  if(!positive(request.initialAreaMm2)||!near(request.initialAreaMm2,crossSection))fail('initialAreaMm2 must match the requested box cross-section');
- if(!Array.isArray(request.loadsN)||request.loadsN.length<1||request.loadsN.length>INCREMENT_CURVE_BUNDLE_LIMITS.loads||!request.loadsN.every(finite))fail('loadsN must contain 1..128 finite force values');
- return {request,axisIndex,extents};
+ if(!Array.isArray(request[sequenceKey])||request[sequenceKey].length<1||request[sequenceKey].length>INCREMENT_CURVE_BUNDLE_LIMITS.loads||!request[sequenceKey].every(finite))fail(sequenceKey+' must contain 1..128 finite values');
+ return {request,axisIndex,extents,controlledQuantity,sequence:request[sequenceKey]};
 }
 
 function equalWeights(nodes){return nodes.map(()=>1/nodes.length);}
@@ -126,9 +130,9 @@ function makeSpec(request,mesh,axisIndex){
  };
 }
 
-/** Generate a re-inputable {spec,steps} bundle from one explicit force route using independent real solves. */
+/** Generate a re-inputable {spec,steps} bundle from one explicit force or prescribed-displacement route using independent real solves. */
 export async function createIncrementCurveBundle(input,{initialize=gmshInitialize,solve=solveElastic}={}){
- const {request,axisIndex,extents}=validateRequest(input);
+ const {request,axisIndex,extents,controlledQuantity,sequence}=validateRequest(input);
  const mesh=await generateMesh(initialize,{kind:'box',bounds:[...request.boundsMm.slice(0,3),...extents]},{size:request.meshSizeMm,maxElements:INCREMENT_CURVE_BUNDLE_LIMITS.elements});
  const nodeCount=mesh.nodes.length/3;
  if(nodeCount>INCREMENT_CURVE_BUNDLE_LIMITS.nodes)fail('Generated mesh exceeds the 20,000-node curve limit');
@@ -138,22 +142,23 @@ export async function createIncrementCurveBundle(input,{initialize=gmshInitializ
  // Mesh and input repeat per successful row in JSON, so node/step caps alone do not
  // bound the eventual bundle size. This also checks non-finite vectors before JSON normalisation.
  const appendStep=step=>{steps.push(step);snapshotIncrementCurveBundle({spec,steps});};
- for(let index=0;index<request.loadsN.length;index++){
-  const force=request.loadsN[index],stepId=`step-${index}-${force}N`,rowIdentity={...spec.rowIdentity};
+ for(let index=0;index<sequence.length;index++){
+  const value=sequence[index],controlledUnit=controlledQuantity==='force'?'N':'mm',stepId=`step-${index}-${value}${controlledUnit}`,rowIdentity={...spec.rowIdentity};
   // Prepare only this row; boundary validation errors are fatal, not failed solves.
-  const forces=loadedFaceTractionForces(mesh,{spec,totalForceN:force});
+  const boundary=controlledQuantity==='force'?{fixed:spec.fixedNodes,forces:loadedFaceTractionForces(mesh,{spec,totalForceN:value})}:{fixed:spec.fixedNodes,forces:[],displacements:spec.loadedNodes.map(node=>({node,direction:spec.axis.slice(),valueMm:value}))};
+  const calculation={kind:'synthetic-independent-linear-elastic-solve',controlledQuantity,controlledValue:value,controlledUnit,plasticHistory:false,...(controlledQuantity==='displacement'?{boundary:structuredClone(boundary)}:{})};
   let solved;
   try{
-   solved=solve(mesh,{youngModulus:request.youngModulusPa,poissonRatio:request.poissonRatio},{fixed:spec.fixedNodes,forces});
+   solved=solve(mesh,{youngModulus:request.youngModulusPa,poissonRatio:request.poissonRatio},boundary);
   }catch(error){
-   failures.push({stepIndex:index,stepId,loadN:force,message:String(error?.message??error).slice(0,300)});
-   appendStep({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
+   failures.push({stepIndex:index,stepId,...(controlledQuantity==='force'?{loadN:value}:{displacementMm:value}),message:String(error?.message??error).slice(0,300)});
+   appendStep({stepId,controlledQuantity,controlledValue:value,converged:false,provisional:true,rowIdentity});
    continue;
   }
   if(!plain(solved)||solved.kind!=='elastic')fail('Solver returned an unsupported result for '+stepId);
   if(!finite(solved.residual)||solved.residual<0||solved.residual>=SOLVE_TOLERANCE){
-   failures.push({stepIndex:index,stepId,loadN:force,message:'Solver residual did not converge: '+String(solved.residual)});
-   appendStep({stepId,controlledQuantity:'force',controlledValue:force,converged:false,provisional:true,rowIdentity});
+   failures.push({stepIndex:index,stepId,...(controlledQuantity==='force'?{loadN:value}:{displacementMm:value}),message:'Solver residual did not converge: '+String(solved.residual)});
+   appendStep({stepId,controlledQuantity,controlledValue:value,converged:false,provisional:true,rowIdentity});
    continue;
   }
   // Exact solved vectors only. The saved subset omits tensor/visual/performance arrays, but each value here is
@@ -161,15 +166,15 @@ export async function createIncrementCurveBundle(input,{initialize=gmshInitializ
   const result={kind:solved.kind,displacement:Array.from(solved.displacement),constraintReactions:structuredClone(solved.constraintReactions),applied:Array.from(solved.applied),residual:solved.residual};
   appendStep({
    stepId,
-   controlledQuantity:'force',
-   controlledValue:force,
+   controlledQuantity,
+   controlledValue:value,
    converged:true,
    provisional:false,
    rowIdentity,
    output:{
     input:spec.input,
     mesh,
-    calculation:{kind:'synthetic-independent-linear-elastic-solve',controlledQuantity:'force',controlledValue:force,controlledUnit:'N',plasticHistory:false},
+    calculation,
     result
    }
   });
@@ -187,6 +192,7 @@ async function readBoundedJson(path){
   if(!info.isFile()||info.size>INCREMENT_CURVE_BUNDLE_LIMITS.requestBytes)fail('Increment curve request must be a regular file within 64 KiB');
   const buffer=Buffer.alloc(INCREMENT_CURVE_BUNDLE_LIMITS.requestBytes+1);let length=0;
   while(length<buffer.length){const read=await handle.read(buffer,length,buffer.length-length,length);if(!read.bytesRead)break;length+=read.bytesRead;}
+  if(length>INCREMENT_CURVE_BUNDLE_LIMITS.requestBytes)fail('Increment curve request exceeds 64 KiB');
   bytes=buffer.subarray(0,length);
  }finally{await handle.close();}
  try{return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));}
@@ -202,11 +208,13 @@ export async function writeIncrementCurveBundle(args={},{publish=publishJson,cre
  try{await lstat(outputPath);fail('Increment curve output already exists');}catch(error){if(error.code!=='ENOENT')throw error;}
  const request=await readBoundedJson(requestPath);
  const result=await create(request);
+ if(Buffer.byteLength(JSON.stringify(result.bundle)+'\n','utf8')>INCREMENT_CURVE_EXPORT_LIMITS.bundleBytes)fail('Generated increment bundle file exceeds 1 MiB limit including newline');
  const publication=await publish(outputPath,result.bundle,{includeIntegrity:true});
- const failedSteps=result.curve.steps.filter(row=>row.status==='failed').map(row=>({stepIndex:row.stepIndex,stepId:row.stepId,controlledValue:row.controlledValue}));
+ const failedSteps=result.curve.steps.filter(row=>row.status==='failed').map(row=>({stepIndex:row.stepIndex,stepId:row.stepId,controlledValue:row.controlledValue,...(row.controlledQuantity==='displacement'?{controlledQuantity:'displacement',controlledUnit:'mm'}:{})}));
  return {
   schemaVersion:1,
   kind:'increment-curve-reinput-bundle',
+  ...(result.curve.steps.some(row=>row.controlledQuantity==='displacement')?{controlledQuantity:'displacement',controlledUnit:'mm'}:{}),
   format:'{spec,steps}',
   outputPath,
   outputBytes:publication.outputBytes,
@@ -220,7 +228,7 @@ export async function writeIncrementCurveBundle(args={},{publish=publishJson,cre
   meshRevision:result.curve.meshRevision,
   analysis:result.curve.analysis,
   failures:result.failures,
-  limitations:['Synthetic independent force-controlled linear-elastic solves only; not a plastic load/unload history.','The bundle is not a normal Studio project or the verified curve table JSON; it is a dedicated {spec,steps} input.','No GUI state is read or changed.']
+  limitations:[result.curve.steps.some(row=>row.controlledQuantity==='displacement')?'Synthetic independent prescribed-displacement linear-elastic solves only; not a plastic load/unload history.':'Synthetic independent force-controlled linear-elastic solves only; not a plastic load/unload history.','The bundle is not a normal Studio project or the verified curve table JSON; it is a dedicated {spec,steps} input.','No GUI state is read or changed.']
  };
 }
 
