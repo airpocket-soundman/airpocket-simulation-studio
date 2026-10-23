@@ -62,3 +62,19 @@ test('downstream validation refuses altered normal, owner, area, condition and r
   const bad=structuredClone(transfer);change(bad);const before=structuredClone(bad);await assert.rejects(validateChannelLayerBoundaryTransfer(i,bad));assert.deepEqual(bad,before);
  }
 });
+
+test('custom array prototypes cannot hide corrupted transfer faces behind canonical map output',async()=>{
+ const i=await input(),valid=await createChannelLayerBoundaryTransfer(i),received=structuredClone(valid);
+ const {canonicalJson}=await import('../src/project-revision.js');const originalFaces=valid.faces.map(face=>canonicalJson(face)).join(',');let invoked=false;
+ received.faces[0].nodeIds[0]=999;Object.setPrototypeOf(received.faces,{__proto__:Array.prototype,map(){invoked=true;return {join(){return originalFaces;}};}});
+ await assert.rejects(validateChannelLayerBoundaryTransfer(i,received),e=>e.code==='CHANNEL_BOUNDARY_TRANSFER_INVALID');assert.equal(invoked,false);assert.equal(received.faces[0].nodeIds[0],999);
+ assert.deepEqual(await validateChannelLayerBoundaryTransfer(i,JSON.parse(JSON.stringify(valid))),valid);
+});
+
+test('input mesh and inlet arrays reject custom prototypes before inherited serialization or array methods',async()=>{
+ for(const target of ['nodes','tetrahedra','tetrahedron','inlet']){
+  const i=await input();const array=target==='inlet'?i.conditions.xMin.velocityMps:target==='tetrahedron'?i.mesh.tetrahedra[0]:i.mesh[target];let invoked=false;
+  Object.setPrototypeOf(array,{__proto__:Array.prototype,toJSON(){invoked=true;return [];},every(){invoked=true;return true;}});
+  await assert.rejects(createChannelLayerBoundaryTransfer(i),e=>e.code==='CHANNEL_BOUNDARY_TRANSFER_INVALID');assert.equal(invoked,false);
+ }
+});

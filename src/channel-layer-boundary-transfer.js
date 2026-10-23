@@ -12,7 +12,9 @@ const exact=(record,keys)=>{if(!record||typeof record!=='object'||Array.isArray(
 const key=face=>[...face].sort((a,b)=>a-b).join('-');
 const tetFaces=([a,b,c,d])=>[[b,c,d],[a,d,c],[a,b,d],[a,c,b]];
 const position=(mesh,id)=>mesh.nodes.slice(3*id,3*id+3);
+const ordinaryArray=value=>Array.isArray(value)&&Object.getPrototypeOf(value)===Array.prototype;
 function geometry(mesh){
+ if(!ordinaryArray(mesh?.nodes)||!ordinaryArray(mesh?.tetrahedra)||!mesh.tetrahedra.every(ordinaryArray))failure('Ordinary mesh arrays required');
  inspectChannelLayerTet4(mesh); // Capacity and finite geometry gates precede serialization.
  const {units,output,lengthMm,widthMm,gapMm,nodes,tetrahedra}=mesh;
  return {units,output,lengthMm,widthMm,gapMm,nodes,tetrahedra};
@@ -26,7 +28,7 @@ function boundaryConditions(conditions){
  for(const [tag,,,type] of specifications){
   const c=conditions[tag];exact(c,type==='velocity-inlet'?['type','velocityMps']:type==='pressure-outlet'?['type','pressurePa']:['type']);
   if(c.type!==type)failure('Unsupported condition on '+tag+': expected '+type);
-  if(type==='velocity-inlet'&&(!Array.isArray(c.velocityMps)||c.velocityMps.length!==3||!c.velocityMps.every(v=>typeof v==='number'&&Number.isFinite(v))||c.velocityMps[0]<=0||c.velocityMps[1]!==0||c.velocityMps[2]!==0))failure('Limited inlet requires explicit finite positive x velocity in m/s');
+  if(type==='velocity-inlet'&&(!ordinaryArray(c.velocityMps)||c.velocityMps.length!==3||!c.velocityMps.every(v=>typeof v==='number'&&Number.isFinite(v))||c.velocityMps[0]<=0||c.velocityMps[1]!==0||c.velocityMps[2]!==0))failure('Limited inlet requires explicit finite positive x velocity in m/s');
   if(type==='pressure-outlet'&&(typeof c.pressurePa!=='number'||!Number.isFinite(c.pressurePa)))failure('Outlet pressure must be finite Pa');
  }
 }
@@ -78,6 +80,7 @@ export async function validateChannelLayerBoundaryTransfer(input,transfer){
   if(++values>500000||depth>12)failure('Boundary manifest capacity exceeded');
   if(typeof value==='string'){if(value.length>200)failure('Boundary manifest string capacity exceeded');return;}
   if(!value||typeof value!=='object')return;
+  const prototype=Object.getPrototypeOf(value);if(Array.isArray(value)?prototype!==Array.prototype:prototype!==Object.prototype&&prototype!==null)failure('Ordinary JSON prototypes required');
   const keys=Reflect.ownKeys(value);if(keys.length>(Array.isArray(value)?maximumFaces+1:32))failure('Boundary manifest record capacity exceeded');
   for(const k of keys){const d=Object.getOwnPropertyDescriptor(value,k);if(!d||!('value' in d))failure('Boundary manifest accessors are unsupported');bounded(d.value,depth+1);}
  };
