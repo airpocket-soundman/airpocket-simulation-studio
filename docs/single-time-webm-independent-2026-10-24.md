@@ -1,5 +1,7 @@
 # 単画面音響時間WebMの独立監査
 
+[English](en/single-time-webm-independent-2026-10-24.md)
+
 owner `12ab81b842d5d91c39acf926d7d7d38bd8db4cc0` を固定して監査した。draftで、同schedule・寸法の別packet bytesへ元Blobの復号証明を流用できる反例を発見した。ownerは原Blobのintrinsic読取SHAをprivate proofへ結合し、manifest再計算SHAとjob SHAを照合、own arrayBuffer差替を拒否する修正を加えた。独立反例は `WEBM_ENDPOINT_UNVERIFIED` へ変化した。
 
 独立3回帰は、非ゼロ開始・不均一時刻軸の全15動画長についてBigInt表示時刻と直接距離探索、first/last/offset、異payload/clone/返却proof変更/iterator偽装拒否、codec probe待機中のabortと遅延完了を検証する。関連UI回帰と合わせ33成功・失敗/skip0。JA/ENの4K capture上限、補間表示状態の復元、取消/結果交代/GUI stop、preview互換も確認した。

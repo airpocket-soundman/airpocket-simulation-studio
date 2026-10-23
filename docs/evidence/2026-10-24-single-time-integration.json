@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-24",
+  "runtimeCandidate": "1aa0e9eeaedf05ff2ece202f717df00c571a4b66",
+  "focusedTests": {
+    "root": 117,
+    "independentAdditional": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "contracts": 22,
+  "build": "passed",
+  "localPublished": {
+    "entries": 28,
+    "allPassed": true,
+    "elapsedMs": 42195.5936
+  },
+  "actual": {
+    "exports": 1,
+    "solverRuns": 0,
+    "bytes": 923844,
+    "sha256": "1b9ace1750d168d63b2a86ef5d70ee66e6cec42a806a0be5531c849a60563649",
+    "externalDecodedFrames": 48,
+    "storedStates": 24,
+    "codec": "vp8",
+    "resolution": [
+      584,
+      640
+    ],
+    "seconds": 2,
+    "terminalPhysicalSeconds": 0.0012,
+    "terminalOffsetSeconds": 0,
+    "physicalStatesUnchanged": 5,
+    "cleanupComplete": true
+  },
+  "evidenceGitBlobHashesVerified": 92,
+  "runtimeJavaScriptIdenticalToActual": true,
+  "sourceChangesSinceActual": [
+    "src/progress.json"
+  ],
+  "progress": {
+    "total": 171,
+    "unfinished": 37,
+    "onlyDescriptionAndEvidenceChanged": true,
+    "statusPromoted": false
+  },
+  "installedSkill": {
+    "oneReferenceUpdated": true,
+    "otherFilesUnchanged": true,
+    "quickValidate": "passed"
+  },
+  "preparationFailuresPreserved": [
+    "Owner broad legacy test selection: missing WASM before any numerical solver execution",
+    "Root published check before build manifest existed; completed build then all28passed",
+    "Independent saved-page verifier corrected null EOF before decoding; no RPC/export retry",
+    "Independent review docs reciprocal links repaired before final docs2/2"
+  ],
+  "publication": false
+}
