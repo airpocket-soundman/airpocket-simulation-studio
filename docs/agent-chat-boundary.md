@@ -1,0 +1,13 @@
+# 会話パネルのsession境界
+
+[English](en/agent-chat-boundary.md)
+
+指示55の限定実装。`createAgentChatState` は明示した `describe/prompt/cancel` プロバイダーだけを消費し、`createAgentChatPanel` はその状態をDOMへ表示する。Nodeの既存 `AcpSessionClient` を同じinterfaceとして実子プロセス試験で接続した。本番ブラウザーtransport・実AI認証・モデル選択・MCP委任は未実装であり、mainの利用者画面へ使用不能な会話欄を追加していない。
+
+未接続、開始前、初期化、セッション未作成/作成中、送信可能、応答待ち、取消中、終了処理、終了、失敗、認証不足を区別する。プロバイダーが明示的にreadyの時だけ1prompt送信できる。停止はcancel要求だけで完了とせず、進行中promptが決着するまで取消中を保つ。ACPクライアントは取消後childを閉じるため、次会話には新しいclientを明示的に設定する。プロバイダーの起動/認証をUIが代行することはない。外部で変化した起動状態は呼出側がrefreshする。
+
+送信16KiB、応答64KiB、履歴全体128KiB/16messageをUTF-8で制限。空白だけの送信、添付、HTML挿入は使わない。超過応答を黙って切らず失敗とし、履歴は古いmessageから破棄する。rawエラーは表示せず固定失敗コードだけ保持する。本文は明示的な会話snapshotにのみ存在し、永続化・ネットワーク送信・自動再送しない。
+
+進行中のproviderを差し替えるか取消した後は、その同じobjectの再採用を拒否し、新providerを要求する。旧取消がA→B→Aの新turnへ作用するのを防ぐ。接続変更/取消/破棄で世代を無効化し、古い応答や取消失敗が新しいsessionへ混ざらない。入力中の新draftは以前の応答到着で消さない。プロバイダーは明示的に差し替え、UIは所有していないclientのcloseを実行しない。active turnのcancelだけを要求し、所有者が最終closeを確認する。任意の不適合providerが取消を無視する場合の終了保証はせず、既存ACPクライアントの有界処理を前提とする。
+
+日英のラベル/aria-liveとplain-text表示をDOM fixtureで検証。textarea/通常buttonはキーボード操作可能な標準要素、幅は100%/box-sizing、本文は折返し。実Chrome・390px・本番接続成功は未検証であり、fixture結果を実画面合格にはしない。親AGENTCHAT1/AGENTACP1は未完を維持する。

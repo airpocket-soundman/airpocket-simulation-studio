@@ -1,0 +1,11 @@
+{
+ "schemaVersion":1,
+ "baseSha":"3dd42813a4f09d0ee1d5834d375b31d4ff00bef4",
+ "scope":"Explicit session-provider chat controller and DOM component; not mounted in main",
+ "tests":{"relatedTotal":81,"passed":81,"failed":0,"skipped":0},
+ "limits":{"promptUtf8Bytes":16384,"responseUtf8Bytes":65536,"historyUtf8Bytes":131072,"messages":16},
+ "verified":["unavailable/initialize/authentication/terminal admission refusals","one active prompt","cancel waits for prompt settlement and actual synthetic ACP child exit","obsolete reply/rejection after replacement/cancel/disposal","obsolete cancellation error after new provider","observer reentry before prompt admission","new draft preservation","plain text only","Japanese/English labels and live status in DOM fixture","fixed error codes without raw provider error","UTF8 response refusal and bounded history","public runtime import type fixture"],
+ "execution":{"node":"v24.11.1","platform":"win32","provider":"existing AcpSessionClient with synthetic stdio child","productionTransport":false},
+ "unverified":["real AI agent/authentication","browser production transport","real Chrome keyboard/390px","model selection","MCP delegation"],
+ "independentReview":{"findings":3,"fixed":["draft edit ABA uses its own generation","destroyed UI snapshots release history","retired provider objects cannot be adopted again"]},"progressModified":false
+}

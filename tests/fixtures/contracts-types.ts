@@ -136,3 +136,4 @@ void curveResponseKind;
 
 // Exercise the Node-only ACP session API declaration through the normal contract gate.
 import './acp-session-types';
+import './agent-chat-types';

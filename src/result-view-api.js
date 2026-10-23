@@ -50,8 +50,8 @@ export function validateResultViewSettings(settings,result){
 // The result revision identifies archived calculation data, not a screen index.
 // Settings never modify physical arrays, normalized modes or saved time frames.
 export function createResultViewApi(adapter){
- async function current(){const output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),parsed=JSON.parse(serialized),revision=await getProjectRevision(parsed),physicalRevision=await getPhysicalRevision(parsed);if(adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision,physicalRevision};}
- const unchanged=({output,serialized})=>adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
+ async function current(){const selection=adapter.captureSelection?.()??(()=>true),output=adapter.getAnalysis();if(!output?.result||!resultFields(output.result).length)throw Error('No supported displayed result');const serialized=JSON.stringify(output),parsed=JSON.parse(serialized),revision=await getProjectRevision(parsed),physicalRevision=await getPhysicalRevision(parsed);if(!selection()||adapter.getAnalysis()!==output||JSON.stringify(output)!==serialized)throw Error('Displayed result changed during inspection');return {output,serialized,revision,physicalRevision,selection};}
+ const unchanged=({output,serialized,selection})=>selection()&&adapter.getAnalysis()===output&&JSON.stringify(output)===serialized;
  function read(output){const s=canonicalViewState(structuredClone(adapter.get()));return validateResultViewSettings({...s,modeIndex:output.result.kind==='modal'?s.modeIndex:null,frameIndex:output.result.kind==='acousticTransient'?s.frameIndex:null},output.result);}
  // Thermal state.frameIndex remains null for legacy named-view consumers; physical-time metadata describes the actual display.
  const frameDisplay=()=>adapter.frameDisplay?.()||{};
@@ -59,12 +59,12 @@ export function createResultViewApi(adapter){
  function summary(context,state){const r=context.output.result;return {schemaVersion:1,resultRevision:context.revision,physicalRevision:context.physicalRevision,kind:r.kind,fields:resultFields(r),state,modeCount:r.modes?.length||0,frameCount:r.snapshots?.length||0,...snapshotStorage(r),...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time,timeSelection:'stored-frames-only'}:{}),...thermalTime(context.output),...(r.analysisAssessment||context.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||context.output.analysisAssessment)}:{})};}
  return Object.freeze({
   async probe({expectedResultRevision,point,options={}}={}){
-   const c=await current();if(expectedResultRevision!==undefined&&expectedResultRevision!==c.revision)throw Error('Displayed result revision conflict');const state=read(c.output),r=c.output.result;
+   const c=await current();if(!c.selection())throw Error('Displayed result changed during inspection');if(expectedResultRevision!==undefined&&expectedResultRevision!==c.revision)throw Error('Displayed result revision conflict');const state=read(c.output),r=c.output.result;
    return {schemaVersion:1,resultRevision:c.revision,kind:r.kind,display:{field:state.field,modeIndex:state.modeIndex,frameIndex:state.frameIndex,...(r.kind==='acousticTransient'?{physicalTimeSeconds:r.snapshots[state.frameIndex].time}:{}),...thermalTime(c.output)},...sampleDisplayedResult(c.output.mesh,r,point,options,{modeIndex:state.modeIndex,frameIndex:state.frameIndex,...frameDisplay()}),...(r.kind==='modal'?{modeInterpretation:'normalized-shape-not-dynamic-response'}:{}),...(r.analysisAssessment||c.output.analysisAssessment?{analysisAssessment:structuredClone(r.analysisAssessment||c.output.analysisAssessment)}:{})};
   },
   async get({frameOffset=0,frameLimit=20,modeOffset=0,modeLimit=20}={}){
    for(const [offset,limit]of [[frameOffset,frameLimit],[modeOffset,modeLimit]])if(!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<0||limit>50)throw Error('Invalid result metadata page');
-   const c=await current(),r=c.output.result,state=read(c.output),out=summary(c,state);
+   const c=await current();if(!c.selection())throw Error('Displayed result changed during inspection');const r=c.output.result,state=read(c.output),out=summary(c,state);
    return {...out,frames:(r.snapshots||[]).slice(frameOffset,frameOffset+frameLimit).map((f,i)=>({index:frameOffset+i,timeSeconds:f.time})),modes:(r.modes||[]).slice(modeOffset,modeOffset+modeLimit).map((m,i)=>({index:modeOffset+i,frequencyHz:m.frequencyHz,residual:m.residual}))};
   },
   async set({expectedResultRevision,settings}={},{guard=()=>true}={}){
