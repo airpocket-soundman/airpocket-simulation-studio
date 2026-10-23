@@ -1,0 +1,85 @@
+{
+  "workOrder": "63 PRINT2",
+  "baseSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "branch": "codex/print-dataset63",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "input": {
+    "kind": "synthetic",
+    "fixture": "tests/printed-measurement-dataset.test.mjs",
+    "hashVerification": "SHA-256 of exact UTF-8 source compared against independent node:crypto createHash; whitespace change produces a distinct hash"
+  },
+  "commands": [
+    {
+      "command": "npm ci --ignore-scripts",
+      "result": "passed; 0 vulnerabilities"
+    },
+    {
+      "command": "node --test tests/printed-equivalent-material.test.mjs tests/printed-measurement-dataset.test.mjs",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "passed, 7 declaration files"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "node --test tests/docs.test.mjs",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --strict --noEmit --skipLibCheck false --target ES2022 --module ESNext --moduleResolution Bundler src/printed-measurement-dataset.d.ts",
+      "result": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "input": "synthetic 1 N / initial 1 mm²",
+      "expected": 1000000,
+      "actual": 1000000,
+      "unit": "Pa"
+    },
+    {
+      "input": "synthetic 0.1 mm / gauge 10 mm",
+      "expected": 0.01,
+      "actual": 0.01,
+      "unit": "1"
+    }
+  ],
+  "rejected": [
+    "missing and unknown fields",
+    "unsupported units",
+    "duplicate specimens",
+    "invalid direction",
+    "nonfinite/out-of-bounds samples",
+    "duplicate times",
+    "crosshead displacement",
+    "synthetic reported calibration",
+    "incomplete reported calibration evidence",
+    "oversize bytes and total samples",
+    "reference ID/revision/specimen/batch mismatch",
+    "overlapping identification and validation specimens"
+  ],
+  "initialSetupFailure": "First focused attempt preceded dependency installation and failed with missing three; rerun after npm ci passed.",
+  "notVerified": [
+    "physical measurements (none supplied)",
+    "instrument calibration and uncertainty",
+    "parameter identification",
+    "independent physical predictive accuracy",
+    "GUI/MCP integration",
+    "full CI and native builds",
+    "release"
+  ],
+  "sharedIntegrationNeeded": "Register printed-measurement-dataset.js beside printed-equivalent-material.js in src/module-layers.json; parent agent owns shared-file integration.",
+  "parentAcceptance": "PRINT2 remains building: real calibration, measurement, identification, independent validation and application integration remain."
+}

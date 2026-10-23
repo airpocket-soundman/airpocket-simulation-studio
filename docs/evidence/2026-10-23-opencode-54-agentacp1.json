@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "workOrder": "54-AGENTACP1",
+  "baseCommit": "8f9e6701853180e8338dd8069519328677117bf2",
+  "scope": "One explicitly configured synthetic real Node child; ACP v1 text session, one active prompt, cancellation and bounded shutdown. No actual AI login/agent integration.",
+  "protocol": {
+    "tag": "schema-v1.26.0",
+    "commit": "e2d83349bc9e28a4059ea3acefa1c91c966f74e2",
+    "schemaBytes": 255170,
+    "sha256": "4bcd1d2051ff7ed379bd9b234fb9b09c5ab9245478698e9fab805bd9b52a33a6",
+    "verifiedDownloadedBytes": true,
+    "references": [
+      "https://agentclientprotocol.com/protocol/v1/session-setup",
+      "https://agentclientprotocol.com/protocol/v1/prompt-turn",
+      "https://github.com/agentclientprotocol/agent-client-protocol/releases/download/schema-v1.26.0/schema.json"
+    ]
+  },
+  "limits": {
+    "ownedChildren": 1,
+    "sessions": 1,
+    "activePrompts": 1,
+    "promptUtf8Bytes": 16384,
+    "recordBytes": 65536,
+    "retainedTextBytes": 65536,
+    "notificationsPerTurn": 128,
+    "defaultRequestMs": 30000,
+    "defaultCancelMs": 2000
+  },
+  "tests": {
+    "acp": {
+      "tests": 52,
+      "pass": 52,
+      "fail": 0,
+      "skip": 0,
+      "execution": "Real synthetic subprocess fixtures; no actual agent/model."
+    },
+    "integratedFocused": {
+      "tests": 132,
+      "pass": 132,
+      "fail": 0,
+      "skip": 0,
+      "logSha256": "9a24eb6a36b10561f1f23637b510f25184b4346aa0b6b9816dd7f0968d2dd6c9"
+    },
+    "contracts": "10 declarations via normal contract gate, including strict ACP API usage fixture",
+    "fullSuite": "Linux CI will be required separately; prior Windows V8 issue remains unresolved."
+  },
+  "independentReview": {
+    "reviewer": "opening_cap64 (different implementation owner)",
+    "repaired": [
+      "close during initialize/new must not publish ready",
+      "explicit close settles pending prompt without false failure",
+      "stdin backpressure rejects an outgoing reply backlog",
+      "stdout received after failure is discarded during shutdown"
+    ],
+    "additionalRegression": "A session/new response plus immediate notification in the same stdout chunk is buffered until session identity is available.",
+    "protocolGate": "Pinned schema requires capabilities for notice/compaction; the text client does not advertise them and refuses them."
+  },
+  "securityBoundaries": [
+    "No auth execution, discovery, installation, PATH search, MCP delegation or browser wiring",
+    "Client permissions always cancelled; filesystem/terminal methods refused",
+    "Conversation text is returned only by explicit prompt result, never diagnostics/evidence; raw remote error text is not exposed",
+    "Cancellation closes the old session before reuse; descendants beyond owned child not proven terminated"
+  ],
+  "unverified": [
+    "Actual Codex ACP entry point/authentication/model",
+    "UI and browser session integration",
+    "General future ACP/v2 compatibility",
+    "Malicious normal-completion old notifications have no turn id in v1 and cannot be generally attributed to a later turn"
+  ],
+  "sourceSha256": {
+    "scripts/acp-session-client.mjs": "ecc7a0820766f18daa4e40018d10ac5e0a8ea967da84f32d0d7454487e21d58d",
+    "scripts/acp-client-process.mjs": "e02a60b4035da05fe01f718a4fef291d79f139a500643d012c7124d939f98d41",
+    "scripts/acp-session-client.d.mts": "cec0c586652d7ab07fa81f8f400a1544174c225ece3ae29c3f3b4840194b1522",
+    "src/contracts/acp-session.d.ts": "d570d3c4086773e8ae6af73adb7c414294c18e968b01fc3d85c3ae6a418a6404",
+    "tests/acp-session-client.test.mjs": "ae5ffc918f0350ade73d1d3d0767bf7bc08d27d4fbc6268123126654eaaed0dc",
+    "tests/fixtures/acp-session-stub.mjs": "73f7b156869e5d224cc4df25828b8129f41d5d3d2231b125527865ad0bfcda58",
+    "tests/fixtures/acp-session-types.ts": "30d867c85dc1bc249dc53785324d5d9128bfbf7797fa45c9d9a63e78c1e5e6dd",
+    "src/module-layers.json": "b0fa6ce09567bdcfdf6f209a71793b7291c96b7e59cf483ecf9c1a16a720f331"
+  }
+}
