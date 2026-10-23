@@ -137,3 +137,23 @@ void curveResponseKind;
 // Exercise the Node-only ACP session API declaration through the normal contract gate.
 import './acp-session-types';
 import './agent-chat-types';
+
+import type {FixedWebmContainer,FixedWebmVerification,ComparisonFixedWebmCapability} from '../../src/contracts/fixed-webm';
+const fixedWebmContainer:FixedWebmContainer={width:1280,height:640,seconds:2,packets:[{timestamp:0,duration:41667,type:'key',data:new Uint8Array(1)}]};
+const fixedWebmProof:FixedWebmVerification={schemaVersion:1,codec:'vp8',frameCount:48,encodedFrameCount:48,decodedFrameCount:48,terminalTimestamp:1958333,totalDurationMicroseconds:2000000,verification:'strict-webm-demux+video-decoder'};
+const fixedWebmCapability:ComparisonFixedWebmCapability={supported:true,recording:'fixed-frame',codec:'vp8',codecSupport:'checked-at-export',maxFrames:120,maxArtifactBytes:33554432};
+// @ts-expect-error Delta frames are outside the constrained all-keyframe profile.
+const invalidFixedPacket:FixedWebmContainer={width:16,height:16,seconds:1,packets:[{timestamp:0,duration:1,type:'delta',data:new Uint8Array(1)}]};
+// @ts-expect-error MediaRecorder realtime must not masquerade as fixed-frame verification.
+const invalidFixedProof:FixedWebmVerification={...fixedWebmProof,verification:'realtime'};
+void [fixedWebmContainer,fixedWebmProof,fixedWebmCapability,invalidFixedPacket,invalidFixedProof];
+// Resolve declarations from the public runtime .js import, not only the type directory.
+import {fixedWebmSchedule,muxFixedWebm,demuxFixedWebm,FIXED_WEBM_LIMITS,fixedWebmError} from '../../src/fixed-webm.js';
+const fixedRuntimeSchedule:number=fixedWebmSchedule(2)[0].timestamp;
+const fixedRuntimeBytes:Uint8Array=muxFixedWebm(fixedWebmContainer);
+const fixedRuntimeReload:FixedWebmContainer=demuxFixedWebm(fixedRuntimeBytes);
+const fixedRuntimeLimit:120=FIXED_WEBM_LIMITS.frames;
+const fixedRuntimeError:string=fixedWebmError('WEBM_FIXED_INVALID','invalid').code;
+// @ts-expect-error Runtime imports must reject a string presentation duration.
+fixedWebmSchedule('2');
+void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];

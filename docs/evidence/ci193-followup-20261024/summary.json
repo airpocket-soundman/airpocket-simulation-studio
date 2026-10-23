@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "scope": "Docs-only followup; no additional CI, native, codec or browser export execution",
+  "previousFailure": {
+    "run": 39984626501,
+    "head": "2041bea24fc256ffa1cee291b05baf911a48874d",
+    "status": "unexplained file-level process failure retained; cause unresolved",
+    "reference": "../2026-10-24-ci193-jobstore-diagnostic.json"
+  },
+  "normal": {
+    "run": 39986234059,
+    "job": 120526010304,
+    "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39986234059/job/120526010304",
+    "head": "41a16459e9b20f071cd9be5470d13de8bda1dc30",
+    "mergeCandidate": {
+      "message": "Merge 41a16459e9b20f071cd9be5470d13de8bda1dc30 into c6cbe51eddaf4e14f0be0ab0aedb38eca9c7a25d",
+      "parents": [
+        "c6cbe51eddaf4e14f0be0ab0aedb38eca9c7a25d",
+        "41a16459e9b20f071cd9be5470d13de8bda1dc30"
+      ],
+      "sha": "0ac732397bdc728f117d31b786e48dfb73e097df"
+    },
+    "conclusion": "success",
+    "counts": {
+      "total": 2123,
+      "passed": 2115,
+      "failed": 0,
+      "skipped": 8
+    },
+    "suiteDurationMs": 230892.22783,
+    "verifyElapsedSeconds": 323,
+    "buildStepSeconds": 6,
+    "viteBuildSeconds": 3.01,
+    "localPublished": {
+      "reportEntries": 28,
+      "passed": 28,
+      "loggedPassChecks": 27,
+      "additionalReportOnlyCheck": "deployed-asset-integrity",
+      "elapsedMs": 31561.000477999998,
+      "revision": "0ac732397bdc728f117d31b786e48dfb73e097df"
+    },
+    "deploy": "skipped",
+    "verifyPublished": "skipped",
+    "publicDeploymentProven": false
+  },
+  "isolated": {
+    "run": 39986224476,
+    "job": 120525982479,
+    "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39986224476/job/120525982479",
+    "head": "41a16459e9b20f071cd9be5470d13de8bda1dc30",
+    "target": "tests/analysis-job-store.test.mjs",
+    "targetName": "analysis-job-store",
+    "iterationsRequested": 1,
+    "actualIterations": 1,
+    "childArgv": [
+      "--test",
+      "--test-reporter=tap",
+      "tests/analysis-job-store.test.mjs"
+    ],
+    "flagScope": {
+      "mode": "default",
+      "nodeOptions": "removed from diagnostic children",
+      "testRunner": "explicit CLI flags",
+      "testWorkers": "Node test runner inherits supported execArgv",
+      "workerThreads": "inherit execArgv unless overridden",
+      "separateProcesses": "not guaranteed;spawned process must explicitly forward flags",
+      "rootFixProven": false
+    },
+    "concurrency": null,
+    "counts": {
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    "tapDurationMs": 2348.456897,
+    "childDurationMs": 2388,
+    "code": 0,
+    "signal": null,
+    "timedOut": false,
+    "outputLimited": false,
+    "stderrBytes": 0,
+    "wasmAllocationFatal": false,
+    "wasmJitPageFatal": false,
+    "cgroupBefore": {
+      "scope": "diagnostic runner cgroup; shared counters are not child attribution",
+      "sampledAt": "2026-10-23T16:23:23.613Z",
+      "available": true,
+      "files": {
+        "memory.events": {
+          "available": true,
+          "counters": {
+            "low": "0",
+            "high": "0",
+            "max": "0",
+            "oom": "0",
+            "oom_kill": "0",
+            "oom_group_kill": "0"
+          }
+        },
+        "memory.current": {
+          "available": true,
+          "value": "2883878912",
+          "unit": "bytes"
+        },
+        "memory.peak": {
+          "available": true,
+          "value": "3418005504",
+          "unit": "bytes"
+        },
+        "memory.max": {
+          "available": true,
+          "value": "max",
+          "unit": "bytes"
+        }
+      }
+    },
+    "cgroupAfter": {
+      "scope": "diagnostic runner cgroup; shared counters are not child attribution",
+      "sampledAt": "2026-10-23T16:23:26.004Z",
+      "available": true,
+      "files": {
+        "memory.events": {
+          "available": true,
+          "counters": {
+            "low": "0",
+            "high": "0",
+            "max": "0",
+            "oom": "0",
+            "oom_kill": "0",
+            "oom_group_kill": "0"
+          }
+        },
+        "memory.current": {
+          "available": true,
+          "value": "2885074944",
+          "unit": "bytes"
+        },
+        "memory.peak": {
+          "available": true,
+          "value": "3418005504",
+          "unit": "bytes"
+        },
+        "memory.max": {
+          "available": true,
+          "value": "max",
+          "unit": "bytes"
+        }
+      }
+    },
+    "classification": "one isolated nonreproduction, not a root-cause fix or general failure-rate proof"
+  },
+  "integrity": {
+    "rawJsonByteExact": true,
+    "tapUtf8EqualsEmbeddedStdout": true,
+    "tapOkRecords": 12,
+    "inventory": {
+      "wasm-single.raw.json": {
+        "bytes": 44364,
+        "sha256": "9f86b72bf92c41f06a9cee22603360c5535d9e3aaf0d7ce2e97ae8f1b943cdd4"
+      },
+      "wasm-single.stdout.tap": {
+        "bytes": 2880,
+        "sha256": "4569a90beb757ce3319cf62b2288406798d9bfef27d1b60748a4da097fb3ffce"
+      },
+      "wasm-single.stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "published-report.raw.json": {
+        "bytes": 4391,
+        "sha256": "a920f46f5874aae392e70cebc293da4693542af86e7ea95333e1e2fcaf0329ca"
+      }
+    }
+  },
+  "prSnapshot": {
+    "number": 193,
+    "state": "OPEN",
+    "head": "41a16459e9b20f071cd9be5470d13de8bda1dc30",
+    "base": "c6cbe51eddaf4e14f0be0ab0aedb38eca9c7a25d",
+    "mergeable": "MERGEABLE",
+    "mergeStateStatus": "CLEAN"
+  },
+  "limitations": [
+    "Earlier failure remains unexplained; no V8/OOM cause inferred.",
+    "Isolated success and full-suite success are separate observations.",
+    "No default Node/GC, solver, test body, skip or physical threshold change.",
+    "Public deployment/verification was skipped.",
+    "This followup does not include PR194 visual-export settlement implementation."
+  ]
+}

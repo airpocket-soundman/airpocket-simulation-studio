@@ -1,0 +1,16 @@
+// Independent audit harness from agent63, adapted to portable test imports.
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {encodeComparisonTimeWebm as run} from '../src/ui/comparison-fixed-webm.js';
+function fixture(mode){let enc,dec,closedFrames=0,checked=0,proof=0;const abort=new AbortController();const doc=new EventTarget();doc.hidden=false;const timers=new Map();let clock=0,id=0;class Frame {constructor(canvas,opts){Object.assign(this,opts);}close(){closedFrames++;}}class Chunk {constructor(p){Object.assign(this,p);}}class Encoder {static isConfigSupported(){return mode==='support-hang'?new Promise(()=>{}):Promise.resolve({supported:true});}constructor(cb){this.cb=cb;this.state='configured';this.encodeQueueSize=0;enc=this;}configure(){}encode(frame){this.last=frame;this.cb.output({timestamp:frame.timestamp,duration:frame.duration,type:'key',byteLength:1,copyTo:a=>a[0]=0});}flush(){if(mode==='flush-abort')abort.abort();if(mode==='flush-hidden'){doc.hidden=true;doc.dispatchEvent(new Event('visibilitychange'));}if(mode.startsWith('flush-'))return new Promise(()=>{});return Promise.resolve();}close(){this.state='closed';}}class Decoder {static isConfigSupported(){return Promise.resolve({supported:true});}constructor(cb){this.cb=cb;this.state='configured';this.decodeQueueSize=0;dec=this;}configure(){}decode(p){this.cb.output({timestamp:p.timestamp,codedWidth:4,codedHeight:4,close(){closedFrames++;}});}flush(){return Promise.resolve();}close(){this.state='closed';}}
+const env={VideoEncoder:Encoder,VideoDecoder:Decoder,VideoFrame:Frame,EncodedVideoChunk:Chunk,document:doc,now:()=>clock,setTimeout:(fn,ms)=>{const key=++id;timers.set(key,{fn,ms});return key;},clearTimeout:key=>timers.delete(key),yieldControl:()=>Promise.resolve()};
+const args={initialCanvas:{width:4,height:4},renderFrame:()=>({width:4,height:4}),camera:{},seconds:1,signal:abort.signal,assertCurrent(){checked++;},onVerified(){proof++;}};
+return {env,args,abort,timers,get stats(){return {enc:enc?.state,dec:dec?.state,closedFrames,checked,proof};},late(){enc.cb.output({timestamp:777,type:'key',byteLength:1,copyTo(){}});dec?.cb.output({timestamp:777,codedWidth:4,codedHeight:4,close(){closedFrames++;}});}};
+}
+test('pending codec probe/flush abort or hidden never publishes and clears all timers',async()=>{
+for(const [mode,code]of [['support-hang','WEBM_FIXED_CANCELLED'],['flush-abort','WEBM_FIXED_CANCELLED'],['flush-hidden','WEBM_BACKGROUND_INTERRUPTED']]){const f=fixture(mode),p=run(f.args,f.env);if(mode==='support-hang')f.abort.abort();await assert.rejects(p,e=>e.code===code);assert.equal(f.timers.size,0);if(f.stats.enc)assert.equal(f.stats.enc,'closed');assert.equal(f.stats.proof,0);}
+});
+test('closed codec late outputs do not reenter source/host guards and decoded frames are closed',async()=>{
+const f=fixture('success');const blob=await run(f.args,f.env);assert.ok(blob.size>0);assert.equal(f.stats.enc,'closed');assert.equal(f.stats.dec,'closed');assert.equal(f.stats.closedFrames,48);assert.equal(f.stats.proof,1);assert.equal(f.timers.size,0);const before=f.stats.checked;f.late();
+
+assert.equal(f.stats.checked,before);assert.equal(f.stats.closedFrames,49);});

@@ -10,7 +10,7 @@ const mime=value=>typeof value==='string'&&/^video\/webm(?:;codecs=[a-z0-9., -]+
 export function createComparisonVideoController({cases,exports,id=()=>crypto.randomUUID(),poll=100,delay=ms=>new Promise(resolve=>setTimeout(resolve,ms))}={}){
  if(typeof cases?.list!=='function'||!['startCompare','status','artifact','cancel','release','waitForSettled'].every(key=>typeof exports?.[key]==='function')||typeof id!=='function'||!Number.isInteger(poll)||poll<1||poll>1000||typeof delay!=='function')throw TypeError('Invalid comparison video controller adapters');
  let active=null;
- const capabilities=({format='webm'}={})=>{const c=exports.capabilities?.()?.[format==='gif'?'comparisonGifExport':'comparisonWebmExport'];return c&&typeof c.supported==='boolean'?structuredClone(c):{supported:false,reason:'Comparison WebM availability is unavailable'};};
+ const capabilities=({format='webm',animation='orbit'}={})=>{const c=exports.capabilities?.()?.[format==='gif'?'comparisonGifExport':animation==='time'?'comparisonTimeWebmExport':'comparisonWebmExport'];return c&&typeof c.supported==='boolean'?structuredClone(c):{supported:false,reason:'Comparison WebM availability is unavailable'};};
  const stop=work=>{work.cancelled=true;if(work.jobId&&!work.cancelRequest)work.cancelRequest=Promise.resolve().then(()=>exports.cancel({jobId:work.jobId}));return work.cancelRequest;};
  function start(raw,{seconds=2,format='webm',animation='orbit',startTimeSeconds,endTimeSeconds,onProgress=()=>{}}={}){
   if(active)return Promise.reject(Error('Comparison video is already active'));

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "run": 39984626501,
+  "job": 120520481503,
+  "head": "2041bea24fc256ffa1cee291b05baf911a48874d",
+  "base": "c6cbe51eddaf4e14f0be0ab0aedb38eca9c7a25d",
+  "environment": {
+    "runner": "ubuntu-24.04",
+    "node": "24.21.0"
+  },
+  "observed": {
+    "failedFile": "tests/analysis-job-store.test.mjs",
+    "fileDurationMs": 18859.179947,
+    "passedBeforeFileFailure": 6,
+    "lastSuccessfulSubtest": "record size and count caps stop persistence without affecting jobs",
+    "nextDeclaredSubtest": "without the option nothing is persisted and the service shape is unchanged",
+    "nextSubtestInvocationProven": false,
+    "fileLevelMessage": "test failed",
+    "total": 2116,
+    "passed": 2107,
+    "failed": 1,
+    "skipped": 8,
+    "assertionStackPresent": false,
+    "signalReported": false,
+    "fileExitCodeReported": false,
+    "v8FatalSignaturePresent": false,
+    "oomSignaturePresent": false
+  },
+  "blobs": {
+    "tests/analysis-job-store.test.mjs": {
+      "base": "44679fc25bf72d28cfbd52ada57606b922c6a671",
+      "head": "44679fc25bf72d28cfbd52ada57606b922c6a671"
+    },
+    "scripts/analysis-job-store.mjs": {
+      "base": "8df8246867ab47e268c4914a8bfbac7786f8e29f",
+      "head": "8df8246867ab47e268c4914a8bfbac7786f8e29f"
+    },
+    "scripts/analysis-job-service.mjs": {
+      "base": "3f3f816e1a1ceacc0f6298879ff0d2fd33688c27",
+      "head": "3f3f816e1a1ceacc0f6298879ff0d2fd33688c27"
+    },
+    "src/fem-core.js": {
+      "base": "04c0fc503875aeedbb1dfd1a7ab06cbaef3d47c2",
+      "head": "04c0fc503875aeedbb1dfd1a7ab06cbaef3d47c2"
+    },
+    "src/analysis.worker.js": {
+      "base": "856d7c99232ea6a670becf9fe6f81055a2c74c57",
+      "head": "856d7c99232ea6a670becf9fe6f81055a2c74c57"
+    },
+    "scripts/headless-worker.mjs": {
+      "base": "1096c353eae50853008531542bfd9cfbb8e645a2",
+      "head": "1096c353eae50853008531542bfd9cfbb8e645a2"
+    }
+  },
+  "classification": {
+    "directSourceRegressionEvidence": false,
+    "criticalNewExportFeatureBugFound": false,
+    "sameSymptomAsPriorUnexplainedFileProcessExit": true,
+    "rootCause": "unavailable from spec reporter logs; cannot distinguish native/V8 crash, signal, OOM, or another process-level cause"
+  },
+  "nextProposal": {
+    "executionOwner": "root",
+    "target": "analysis-job-store",
+    "mode": "single",
+    "iterations": 1,
+    "flags": "default",
+    "status": "not dispatched by this change author"
+  },
+  "sourceRunUrl": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39984626501/job/120520481503",
+  "artifact": {
+    "name": "verification-39984626501-1",
+    "id": 12514728856
+  },
+  "rawSummary": [
+    "✔ record round trip: atomic metadata-only record, restored as metadata after restart (1069.279172ms)",
+    "✔ a job running when the process died is reported interrupted and never resumed (5.614775ms)",
+    "✔ corrupt, oversized, mismatched and foreign files are ignored with diagnostics and never crash (67.530468ms)",
+    "✔ a symlinked record is not followed (1.837124ms)",
+    "✔ directory must be explicit and absolute without traversal; job IDs cannot escape it (533.440654ms)",
+    "✔ record size and count caps stop persistence without affecting jobs (199.023604ms)",
+    "✖ tests/analysis-job-store.test.mjs (18859.179947ms)",
+    "ℹ tests 2116",
+    "ℹ pass 2107",
+    "ℹ fail 1",
+    "ℹ skipped 8",
+    "test at tests/analysis-job-store.test.mjs:1:1",
+    "✖ tests/analysis-job-store.test.mjs (18859.179947ms)",
+    "  'test failed'"
+  ],
+  "diagnosticImprovement": {
+    "branch": "codex/ci193-jobstore-diagnostic",
+    "base": "2041bea24fc256ffa1cee291b05baf911a48874d",
+    "fixedTarget": "analysis-job-store",
+    "selectedFiles": [
+      "tests/analysis-job-store.test.mjs"
+    ],
+    "workflowModesUnchanged": [
+      "compare",
+      "single"
+    ],
+    "singleIterations": 1,
+    "nodeFlagsDefault": [],
+    "concurrencyDefault": null,
+    "reporter": "TAP (existing)",
+    "processAndCgroupMetrics": "existing unchanged",
+    "testBodyModified": false,
+    "nodeDefaultsModified": false,
+    "gcDefaultsModified": false,
+    "skipsAdded": 0,
+    "settlementFeatureIncluded": false,
+    "verification": {
+      "command": "node --test tests/reproduce-wasm-runtime.test.mjs tests/compare-wasm-runtime.test.mjs",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "docs": {
+        "command": "node --test tests/docs.test.mjs",
+        "passed": 2,
+        "failed": 0
+      }
+    },
+    "linuxDispatches": 0,
+    "realSolverRuns": 0,
+    "realCodecRuns": 0,
+    "browserExports": 0
+  },
+  "rawSourceProvenance": {
+    "note": "Full downloaded logs retained in author ignored .qa/ci193; durable digest and bounded relevant excerpts are included here.",
+    "jobLogSha256": "6a81564802a201192287bfd16f052c7bf423ca12619ea02fec7692ecaa712d34",
+    "artifactTestLogSha256": "675506890791fbc4a35142116ea5f2fffda0a7b613fbe2230fc33cd314f0140a"
+  },
+  "investigationActions": {
+    "outsideOwnQaChanges": 0,
+    "newSolverRuns": 0,
+    "newCodecRuns": 0,
+    "newExports": 0,
+    "ciDispatches": 0
+  }
+}

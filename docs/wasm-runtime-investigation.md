@@ -145,3 +145,15 @@ node scripts/repro-v8-wasm-terminate.mjs --matrix --cell-seconds=150 --output=<�
 ### 2026-10-16 クラッシュ切り分け（[docs/evidence/2026-10-16-v8-crash-isolation.json](evidence/2026-10-16-v8-crash-isolation.json)）
 
 上流 nodejs/node#66366 は未解決（open）で、修正のバックポートPR #66376 も v24.x-staging 向けに open のまま未マージ。v24.22.0（2026-10-14）の変更履歴に wrapper/is_dying 修正はなく、24.21.0/24.22.0 とも修正を含まない（取得日 2026-10-16）。コード側では、MCPサーバーの既定が worker_threads で、ジョブごとに Worker を生成し結果後に必ず `terminate()` する（`scripts/headless-analysis.mjs`）ため、1プロセス内で wasm を使う Worker の生成と terminate が繰り返される。上流のトリガーと形は一致するが、これはコード読解と上流報告に基づく仮説で、測定では確認していない。実測: Windows（他セッションと共有の高負荷環境）で、CIで落ちた5ファイルを3並列で各設定約330秒（Node 24.11.1 / 24.22.0 / 22.23.3 / 26.12.0 / 24.11.1+`--no-wasm-code-gc`）、計93回でV8 fatalは0件。発生率が1%未満では何も区別できず、設定間の優劣は言えない（ジョブ期限切れによる非V8の失敗は負荷の影響で比較不能）。推奨: 根本対応は#66376を含む24.xリリースへの更新。暫定策は別承認でのテスト実行時 `--no-wasm-code-gc`（上流報告で0件、メモリ増は未測定）。MCP/ジョブ試験を `--analysis-isolation=process` で動かす案は未測定。Linux CIでの再現と各案の比較は未実施。
+
+
+### 2026-10-24 PR193のjob-store単独診断入口
+
+[CI run39984626501](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39984626501/job/120520481503) のhead `2041bea` では、既存 `analysis-job-store.test.mjs` が先頭6試験成功後にファイル単位で終了しました（18,859.18 ms、全2116件中2107成功・1失敗・8skip）。保存されたspecログにはassertionのstack、子のexitCode/signal、V8 fatal/OOMの識別根拠がありません。次に宣言されている試験は保存なしの実解析ジョブ確認ですが、実際に呼び出された位置までは記録されていません。原因をV8/OOMや新機能の回帰と断定しません。当該試験・store/service・FEM・workerの6ファイルはPRのbaseとheadで同一blobです。
+
+既存診断runnerとworkflowに固定target `analysis-job-store` を追加しました。`mode:single` なら既存の `node scripts/reproduce-wasm-runtime.mjs 1 .qa/wasm-single.json --target=analysis-job-store` がこの1ファイルだけを1回実行します。default Node flags/concurrency、TAP、exit/signal/timeout、cgroup前後の記録は維持し、比較modeも従来どおりです。共有cgroupのOOMカウンタはその子への原因帰属ではありません。試験本体・物理閾値・通常CI・既定Node/GCを変更せず、skipもしません。今回実行したのは選択/parser/stub回帰のみで、Linux診断・実solverの再実行は親担当として未実施です。[調査摘要と6blob](evidence/2026-10-24-ci193-jobstore-diagnostic.json)。
+
+
+### PR193 診断後の追確認（2026-10-24）
+
+同じhead `41a1645` の[通常CI39986234059](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39986234059/job/120526010304) はmerge候補 `0ac732397bdc728f117d31b786e48dfb73e097df` で2123件中2115成功・0失敗・8skip（230.892秒）、build成功、local公開前チェックはログ27件とasset整合1件を合わせたreport28件すべて成功（31.561秒）。deploy/公開後確認はskipのため未公開です。別の[単独診断39986224476](https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39986224476/job/120525982479) はhead直接・default flags・1回だけで12/12成功（child2388 ms、exit0・signalなし・timeoutなし）。これは単独1回の非再現で、元CIの原因解明/修正や一般の安定性を証明しません。元失敗は保持します。[raw JSON/TAPのbyte数・SHAと両結果](evidence/ci193-followup-20261024/summary.json)。

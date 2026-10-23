@@ -112,8 +112,8 @@ test('video cancellation discards late successful promises and stale links; subs
 
 test('unsupported capability, invalid duration and missing transient time refuse without invoking video start',async()=>{
  const unsupported=setup({videoApi:{capabilities:()=>({supported:false,reason:'No WebM codec'}),start:()=>assert.fail('Unsupported start')}});
- assert.equal(find(unsupported.ui.host,'compare-video-start').disabled,true);assert.equal(find(unsupported.ui.host,'compare-video-status').textContent,'このブラウザでは比較動画を作成できません。');
- const english=setup({language:()=> 'en',videoApi:{capabilities:()=>({supported:false,reason:'Canvas captureStream is unavailable'})}});assert.equal(find(english.ui.host,'compare-video-status').textContent,'This browser cannot create comparison videos.');
+ assert.equal(find(unsupported.ui.host,'compare-video-start').disabled,true);assert.equal(find(unsupported.ui.host,'compare-video-status').textContent,'No WebM codec');
+ const english=setup({language:()=> 'en',videoApi:{capabilities:()=>({supported:false,reason:'Canvas captureStream is unavailable'})}});assert.equal(find(english.ui.host,'compare-video-status').textContent,'Canvas captureStream is unavailable');
  let calls=0;const videoApi={capabilities:()=>({supported:true}),start(){calls++;return Promise.resolve({blob:videoBlob()});},cancel(){}};
  const f=setup({videoApi});for(const value of ['0','16','1.5','']){find(f.ui.host,'compare-video-seconds').value=value;await find(f.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(f.ui.host,'compare-video-status').textContent,/1〜15/);}
  const timed=setup({videoApi,transient:true});await find(timed.ui.host,'compare-video-start').onclick();assert.equal(calls,0);assert.match(find(timed.ui.host,'compare-video-status').textContent,/物理時刻/);

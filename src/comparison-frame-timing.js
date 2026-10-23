@@ -14,6 +14,6 @@ export function createComparisonFrameTiming(plan,{format}={}){
    if(bytes+next>COMPARISON_TIMING_LIMITS.bytes-1024)throw Error('Comparison frame timing exceeds its byte bound');
    bytes+=next;entries.push(entry);
   },
-  snapshot(){return structuredClone({schemaVersion:1,timeSelection:'nearest-stored-frames-only',interpolated:false,identity:'Each panel caseIndex indexes comparison.cases (caseId, revision, resultRevision).',mapping:format==='gif'?'One entry per encoded GIF frame, in output order.':'Initial capture canvas, then each render callback; encoded WebM frames may be duplicated or dropped and are not mapped one-to-one.',limits:COMPARISON_TIMING_LIMITS,entries});}
+  snapshot(){return structuredClone({schemaVersion:1,timeSelection:'nearest-stored-frames-only',interpolated:false,identity:'Each panel caseIndex indexes comparison.cases (caseId, revision, resultRevision).',mapping:format==='fixed-webm'?'One entry per verified encoded and decoded fixed WebM frame, in presentation order. Physical phase and presentation timestamp are distinct.':format==='gif'?'One entry per encoded GIF frame, in output order.':'Initial capture canvas, then each render callback; encoded WebM frames may be duplicated or dropped and are not mapped one-to-one.',limits:COMPARISON_TIMING_LIMITS,entries});}
  };
 }
