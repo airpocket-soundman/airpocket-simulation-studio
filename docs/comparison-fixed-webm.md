@@ -19,3 +19,5 @@ pure readerのkeyframeフラグ/寸法宣言の検査はbitstreamの真正性を
 Nodeのcodec fakeとpure否定試験、非等間隔2caseの実adapter/queue ledgerを検証。fake codecは実VP8画質の証明ではなく、独立FFmpeg fixture監査・実ブラウザ新経路出力は別証拠として追加する。[旧比較MediaRecorderの終端欠落実測](evidence/2026-10-24-acoustic-time-webm/README.md)は保持する。single-view timeには類似captureStream/150ms処理が残るが、今回の欠落実測はcomparisonのみで、single-view欠落は未再現・未検証。回転・表示倍率も実時間録画のままで新しい固定終端保証はない。一般形状の物理精度・公開HTTPS・MP4・他engineは未完。
 
 一次資料: [WebCodecs Working Draft](https://www.w3.org/TR/webcodecs/)、[WebM Container Guidelines](https://www.webmproject.org/docs/container/)、[RFC9559](https://www.rfc-editor.org/rfc/rfc9559.html)。[canvas capture draft](https://w3c.github.io/mediacapture-fromelement/)のrequestFrameはpaint時capture要求でencoder到達証明ではない。この限定設計は一般Matroska/全codecの実装を主張しない。
+
+追補: 固定source8208329の通常main/IAB・正式stdioによる[実音響比較1回の証拠](evidence/2026-10-24-fixed-comparison-webm/README.md)で、48枚/2秒・最終物理1.2ms/ずれ0を外部復号し、全96panel記録と元5状態の保持を独立再計算した。solver0。これは同軸の合成2ケースに限定し、独立branded Chrome・熱の固定WebM・異軸の実画面・GUI保存完了・一般物理精度は未確認。
