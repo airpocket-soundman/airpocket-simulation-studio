@@ -64,3 +64,14 @@ test('saved public input bytes replay with independently sorted canonical SHA an
  const {readFile}=await import('node:fs/promises'),raw=await readFile(new URL('../public/examples/finite-visco-input-history.json',import.meta.url)),source=new Uint8Array(raw),before=source.slice(),h=JSON.parse(raw),sort=value=>Array.isArray(value)?value.map(sort):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,sort(value[key])])):value;
  const r=await replay(source);assert.equal(r.completed,true);assert.equal(r.rawIdentity,sha(raw));assert.equal(r.canonicalIdentity,sha(JSON.stringify(sort(h))));assert.deepEqual(source,before);let expected=init({synthetic:true,provisional:true,calibrated:false,parameters:h.parameters});for(const entry of h.steps)expected=step({state:expected,...entry}).state;assert.deepEqual(r.finalState,expected);
 });
+
+test('shared buffer brand cannot impersonate ArrayBuffer through its prototype or own properties',async()=>{
+ const raw=JSON.stringify(history()),source=new TextEncoder().encode(raw),shared=new SharedArrayBuffer(source.length),view=new Uint8Array(shared);view.set(source);
+ Object.setPrototypeOf(shared,ArrayBuffer.prototype);
+ Object.defineProperty(shared,'byteLength',{get(){throw Error('must not invoke caller byteLength');}});
+ const before=new Uint8Array(source);await rejects(view);assert.deepEqual(new Uint8Array(shared),before);
+ // A regular buffer subview must retain its offset/length and remain unchanged.
+ const backing=new ArrayBuffer(source.length+8),all=new Uint8Array(backing);all.fill(33);const regular=new Uint8Array(backing,4,source.length);regular.set(source);const original=all.slice();
+ Object.defineProperty(backing,'byteLength',{get(){throw Error('must use intrinsic buffer brand');}});
+ const result=await replay(regular);assert.equal(result.completed,true);assert.equal(result.sourceBytes,source.length);assert.equal(result.rawIdentity,sha(source));assert.deepEqual(all,original);
+});

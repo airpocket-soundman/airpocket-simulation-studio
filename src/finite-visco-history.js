@@ -34,10 +34,11 @@ function parse(text){let at=0,count=0;const ws=()=>{while(/[\x20\t\r\n]/.test(te
  const match=/^(?:true|false|null|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)/.exec(text.slice(at));if(!match)invalid();at+=match[0].length;const out=JSON.parse(match[0]);if(typeof out==='number'&&(!Number.isFinite(out)||Math.abs(out)>Number.MAX_SAFE_INTEGER))invalid();return out;}
  const result=value(0);ws();if(at!==text.length)invalid();return validate(result);
 }
+const arrayBufferByteLengthGetter=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLength').get;
 const typedPrototype=Object.getPrototypeOf(Uint8Array.prototype),byteLengthGetter=Object.getOwnPropertyDescriptor(typedPrototype,'byteLength').get,bufferGetter=Object.getOwnPropertyDescriptor(typedPrototype,'buffer').get;
 function rawSnapshot(raw){let bytes;
  if(typeof raw==='string'){if(raw.length>1048576)fail('FINITE_VISCO_HISTORY_BYTE_LIMIT');bytes=new TextEncoder().encode(raw);if(new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes)!==raw)invalid();}
- else{if(!raw||Object.getPrototypeOf(raw)!==Uint8Array.prototype||!ArrayBuffer.isView(raw))invalid();const n=byteLengthGetter.call(raw);if(n>1048576)fail('FINITE_VISCO_HISTORY_BYTE_LIMIT');const buffer=bufferGetter.call(raw);if(Object.getPrototypeOf(buffer)!==ArrayBuffer.prototype)invalid();bytes=new Uint8Array(n);Uint8Array.prototype.set.call(bytes,raw);}
+ else{if(!raw||Object.getPrototypeOf(raw)!==Uint8Array.prototype||!ArrayBuffer.isView(raw))invalid();const n=byteLengthGetter.call(raw);if(n>1048576)fail('FINITE_VISCO_HISTORY_BYTE_LIMIT');const buffer=bufferGetter.call(raw);try{arrayBufferByteLengthGetter.call(buffer);}catch{invalid();}if(Object.getPrototypeOf(buffer)!==ArrayBuffer.prototype)invalid();bytes=new Uint8Array(n);Uint8Array.prototype.set.call(bytes,raw);}
  if(bytes.length>1048576)fail('FINITE_VISCO_HISTORY_BYTE_LIMIT');return bytes;
 }
 async function hash(bytes){const digest=await globalThis.crypto.subtle.digest('SHA-256',bytes);return 'sha256:'+Array.from(new Uint8Array(digest),x=>x.toString(16).padStart(2,'0')).join('');}
