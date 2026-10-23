@@ -1,0 +1,30 @@
+{
+  "reviewed": true,
+  "images": [
+    {
+      "decodedIndex": 0,
+      "requestPhysicalSeconds": 0,
+      "bothStoredPhysicalSeconds": 0,
+      "bothOffsetSeconds": 0
+    },
+    {
+      "decodedIndex": 23,
+      "displayedRequest": "587.23 us",
+      "bothDisplayedStored": "574.03 us",
+      "bothDisplayedOffset": "-13.208 us"
+    },
+    {
+      "decodedIndex": 47,
+      "displayedRequest": "1.2 ms",
+      "bothDisplayedStored": "1.2 ms",
+      "bothDisplayedOffset": "0 s"
+    }
+  ],
+  "checks": [
+    "Synthetic acoustic1Pa and2Pa labels",
+    "shared Pa color range approximately-3.4066..3.5324",
+    "fixed camera and distinct amplitude color distributions",
+    "decoded final image retains requested physical endpoint"
+  ],
+  "limits": "Only three selected image labels visually reviewed; all48x2 numerical frame selections verified separately."
+}

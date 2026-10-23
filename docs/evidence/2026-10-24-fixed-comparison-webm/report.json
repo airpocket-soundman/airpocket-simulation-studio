@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "taskId": "VIEWCOMPARE",
+  "status": "bounded-fixed-comparison-time-webm-passed",
+  "parentTaskCompleted": false,
+  "runtimeSource": "8208329fef3a6c02c4043bd0ff9cbbac85dfce3b",
+  "driverSource": {
+    "runtimeSource": "8208329fef3a6c02c4043bd0ff9cbbac85dfce3b",
+    "driverHead": "0a3730fb2954131c7da2a408463ddb85d2985830",
+    "driverSha256": "sha256:791f37a02215bd404c0a7576d2af346343eee0050364cb1a9c3915bf48fc1334"
+  },
+  "browser": {
+    "name": "Chrome",
+    "reportedVersion": "155.0.0.0",
+    "precision": "reduced",
+    "fullVersionVerified": false,
+    "source": "navigator.userAgent"
+  },
+  "surface": "ordinary main IAB2 tab10, origin http://127.0.0.1:5188",
+  "transport": "formal local stdio MCP createStdioClient",
+  "freshSkillReproduction": false,
+  "scopes": [
+    "inspect",
+    "edit",
+    "view"
+  ],
+  "analyzePermission": false,
+  "newBudget": {
+    "actualBrowserExports": 1,
+    "kind": "fixed comparison-time WebM only",
+    "seconds": 2,
+    "frames": 48,
+    "gifExports": 0,
+    "solverRuns": 0,
+    "watchdogMs": 120000,
+    "artifactBytes": 33554432,
+    "pages": 512,
+    "pageBytes": 65536
+  },
+  "artifact": {
+    "bytes": 1540510,
+    "sha256": "sha256:20fc86d0b17d1fa32f26f46575693b1a49a03ac350697f703a5fb0dea646d077"
+  },
+  "decoded": {
+    "codec": "vp8",
+    "width": 1280,
+    "height": 640,
+    "frames": 48,
+    "distinctFrameHashes": 48,
+    "allKeyFrames": true,
+    "formatDurationSeconds": "2.000000",
+    "allPtsMatchManifest": true,
+    "lastPtsSeconds": 1.958333,
+    "lastIntervalEndMicroseconds": 2000000
+  },
+  "physicalSelection": {
+    "requestedRangeSeconds": [
+      0,
+      0.0012
+    ],
+    "framesChecked": 48,
+    "panelRecordsChecked": 96,
+    "interpolated": false,
+    "selection": "nearest-stored-frames-only",
+    "allRequestedActualSignedOffsetsMatch": true,
+    "terminalDecodedImageIndex": 47,
+    "terminalBothStoredSeconds": 0.0012,
+    "terminalBothOffsetSeconds": 0,
+    "sameAxesWithinDataset": true
+  },
+  "state": {
+    "fivePhysicalSnapshotsUnchanged": true,
+    "inspectOwnershipDuringArtifact": {
+      "before": 0,
+      "after": 1
+    },
+    "afterRelease": {
+      "ownedExportJobs": 0,
+      "ownedAnalysisJobs": 0
+    }
+  },
+  "foreground": {
+    "operator": "root",
+    "beforeAfter": "read-only document.hidden=false and visibilityState=visible",
+    "during": "Root kept same tab, no other browser operations or source commits during export.",
+    "visibilitySpoofing": false,
+    "domInjection": false
+  },
+  "gui": {
+    "mainScreenshot": "main.jpg",
+    "rootActionsAfterBaseline": [
+      "Show comparison",
+      "select stored-frame time history",
+      "read new English fixed-endpoint explanation in accessibility output"
+    ],
+    "extraGuiExports": 0,
+    "limit": "Screenshot is after baseline and does not itself show the exported clip playback; decoded PNGs prove selected clip images."
+  },
+  "cleanup": {
+    "formalSessions": [],
+    "helperClose": {
+      "exited": true,
+      "terminated": false,
+      "escalated": false,
+      "observedAfterClose": 1792771386416
+    },
+    "ownedChildPid": 39696,
+    "osPidAbsentAfterClose": true,
+    "privatePairFileAbsentAfterClose": true,
+    "driverExitCode": 0,
+    "allTransfersAndJobReleased": true
+  },
+  "historicalEvidence": {
+    "mediaRecorderPartialCommit": "851d2c5517adac98d65dc3eeb18a71eaa49abbf9",
+    "preserved": true,
+    "meaning": "A new fixed-frame path verifies its terminal; it does not retroactively change the older partial recording."
+  },
+  "limitations": [
+    "Only this synthetic saved two-case acoustic dataset and this IAB surface; no general physical accuracy claim.",
+    "Both panel time axes are the same; distinct per-panel actual browser selections remain separate automated coverage.",
+    "Only decoded indices0/23/47 text visually reviewed; all48x2 numerical selections checked.",
+    "2seconds48frames in this request does not imply constant24fps for the general120frame-cap path.",
+    "Single-view time remains realtime; its endpoint loss was not reproduced here.",
+    "Orbit/deformation remain realtime without new fixed-terminal guarantee.",
+    "No public HTTPS/other engine/MP4/full VIEWCOMPARE completion claim."
+  ]
+}
