@@ -108,7 +108,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
  const jobs=new Map(),requests=new Map();let retainedBytes=0,renderActive=false,epoch=0;
  const find=({jobId}={})=>{const job=jobs.get(jobId);if(!job)throw Error('Unknown visual export job');return job;};
- const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.errorCode?{errorCode:job.errorCode}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
+ const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,executionSettled:job.executionSettled===true,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.errorCode?{errorCode:job.errorCode}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
  function stop(job){if(job.state==='running'){job.state='cancelled';job.controller.abort();}}
  function finish(job,blob){
   return (async()=>{
@@ -150,13 +150,13 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     if(!snapshot.view||typeof snapshot.view!=='object'||Array.isArray(snapshot.view))throw Error('Visual export requires frozen view settings');
     const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate visual export job ID');
     const physicalRevision=typeof snapshot.physicalRevision==='string'&&/^sha256:[0-9a-f]{64}$/.test(snapshot.physicalRevision)?snapshot.physicalRevision:undefined;
-    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(['gif','webm'].includes(normalized.format)&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames,...(normalized.format==='webm'?{getFixedVerification:snapshot.context.getFixedVerification}:{})}:{} )}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
+    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(['gif','webm'].includes(normalized.format)&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames,...(normalized.format==='webm'?{getFixedVerification:snapshot.context.getFixedVerification}:{})}:{} )}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',executionSettled:false,progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
     if(!sourceGuard())throw Error('Visual export request expired');
     accepted=true;jobs.set(jobId,job);entry.jobId=jobId;
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
     renderActive=true;let output;try{output=(compare?renderCompare:render)({...copy(normalized),...(compare?{comparison:copy(job.comparison),context:snapshot.context}:{}),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
-    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);if(WEBM_FAILURE_CODES.has(error?.code))job.errorCode=error.code;}}).finally(()=>{renderActive=false;});
+    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);if(WEBM_FAILURE_CODES.has(error?.code))job.errorCode=error.code;}}).finally(()=>{renderActive=false;job.executionSettled=true;});
     resolve();return summary(job);
    }catch(error){requests.delete(normalized.requestId);reject(error);throw error;}
   }

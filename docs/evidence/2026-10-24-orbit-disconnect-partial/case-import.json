@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "archiveRevision": "sha256:fbeada2e331ef168fe31fbb57f0f919357f65a0889e6f3cd7220750e9e9689f3",
+  "cases": [
+    {
+      "caseId": "a67efd4e-c0d5-4788-8861-9c4176a6d53b",
+      "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0",
+      "name": "Synthetic acoustic 1Pa",
+      "kind": "acousticTransient",
+      "metrics": [
+        {
+          "key": "receiverPeakPa",
+          "unit": "Pa peak",
+          "value": 0.9505644525907234
+        },
+        {
+          "key": "receiverRmsPa",
+          "unit": "Pa record RMS",
+          "value": 0.43079121890366395
+        }
+      ],
+      "runtimeIdentity": {
+        "assets": [
+          {
+            "bytes": 41430673,
+            "role": "gmsh",
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ],
+        "build": {
+          "dirty": true,
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+          "status": "available",
+          "version": "0.44.0"
+        },
+        "engine": {
+          "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+          "requestedMethod": "pcg"
+        },
+        "isolation": "process",
+        "schemaVersion": 1,
+        "target": "node"
+      },
+      "analysisAssessment": {
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false
+      }
+    },
+    {
+      "caseId": "e17f08ed-f076-437b-8615-0845e8fddfef",
+      "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55",
+      "name": "Synthetic acoustic 2Pa",
+      "kind": "acousticTransient",
+      "metrics": [
+        {
+          "key": "receiverPeakPa",
+          "unit": "Pa peak",
+          "value": 1.9011289051814468
+        },
+        {
+          "key": "receiverRmsPa",
+          "unit": "Pa record RMS",
+          "value": 0.8615824378073279
+        }
+      ],
+      "runtimeIdentity": {
+        "assets": [
+          {
+            "bytes": 41430673,
+            "role": "gmsh",
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ],
+        "build": {
+          "dirty": true,
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "sourceFingerprint": "sha256:49f9af22149d32d3de7c7f4542035d942e9bf9ca5f29c3bbb4f1db35dc58aef0",
+          "status": "available",
+          "version": "0.44.0"
+        },
+        "engine": {
+          "actualEngine": "Airpocket Wave Tet4 / JavaScript CPU",
+          "requestedMethod": "pcg"
+        },
+        "isolation": "process",
+        "schemaVersion": 1,
+        "target": "node"
+      },
+      "analysisAssessment": {
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false
+      }
+    }
+  ],
+  "imported": true
+}
