@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: record round trip: atomic metadata-only record, restored as metadata after restart
+ok 1 - record round trip: atomic metadata-only record, restored as metadata after restart
+  ---
+  duration_ms: 781.722316
+  type: 'test'
+  ...
+# Subtest: a job running when the process died is reported interrupted and never resumed
+ok 2 - a job running when the process died is reported interrupted and never resumed
+  ---
+  duration_ms: 5.296793
+  type: 'test'
+  ...
+# Subtest: corrupt, oversized, mismatched and foreign files are ignored with diagnostics and never crash
+ok 3 - corrupt, oversized, mismatched and foreign files are ignored with diagnostics and never crash
+  ---
+  duration_ms: 84.537921
+  type: 'test'
+  ...
+# Subtest: a symlinked record is not followed
+ok 4 - a symlinked record is not followed
+  ---
+  duration_ms: 3.121042
+  type: 'test'
+  ...
+# Subtest: directory must be explicit and absolute without traversal; job IDs cannot escape it
+ok 5 - directory must be explicit and absolute without traversal; job IDs cannot escape it
+  ---
+  duration_ms: 402.943167
+  type: 'test'
+  ...
+# Subtest: record size and count caps stop persistence without affecting jobs
+ok 6 - record size and count caps stop persistence without affecting jobs
+  ---
+  duration_ms: 123.576477
+  type: 'test'
+  ...
+# Subtest: without the option nothing is persisted and the service shape is unchanged
+ok 7 - without the option nothing is persisted and the service shape is unchanged
+  ---
+  duration_ms: 760.232546
+  type: 'test'
+  ...
+# Subtest: every restored state declares metadata availability and explicit recovery without persisting paths
+ok 8 - every restored state declares metadata availability and explicit recovery without persisting paths
+  ---
+  duration_ms: 0.444848
+  type: 'test'
+  ...
+# Subtest: restored discovery is sorted, bounded, metadata only and reflects explicit release
+ok 9 - restored discovery is sorted, bounded, metadata only and reflects explicit release
+  ---
+  duration_ms: 3.16857
+  type: 'test'
+  ...
+# Subtest: maximum restored page omits long diagnostics and stays below 64 KiB in the MCP envelope
+ok 10 - maximum restored page omits long diagnostics and stays below 64 KiB in the MCP envelope
+  ---
+  duration_ms: 8.840973
+  type: 'test'
+  ...
+# Subtest: escape-heavy restored metadata uses byte-bounded pages with a progressing cursor
+ok 11 - escape-heavy restored metadata uses byte-bounded pages with a progressing cursor
+  ---
+  duration_ms: 8.583414
+  type: 'test'
+  ...
+# Subtest: startup digest is order-independent, additive and validated while legacy records still load
+ok 12 - startup digest is order-independent, additive and validated while legacy records still load
+  ---
+  duration_ms: 4.283417
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2348.456897
