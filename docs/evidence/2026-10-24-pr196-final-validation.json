@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "pr": 196,
+  "head": "3d3c450aab2d5fe9f1ff143e4b50ff1aa37fe15b",
+  "run": 39991917717,
+  "job": 120545534522,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39991917717",
+  "conclusion": "success",
+  "mergeCandidate": {
+    "message": "Merge 3d3c450aab2d5fe9f1ff143e4b50ff1aa37fe15b into eda94d0ede209a862fa374639bc06862c93828d3",
+    "parents": [
+      "eda94d0ede209a862fa374639bc06862c93828d3",
+      "3d3c450aab2d5fe9f1ff143e4b50ff1aa37fe15b"
+    ],
+    "sha": "ec58004c657d1caa237ab29bea3f1a938cc89795"
+  },
+  "tests": {
+    "total": 2156,
+    "passed": 2148,
+    "failed": 0,
+    "skipped": 8,
+    "durationMs": 288589.14393
+  },
+  "build": {
+    "conclusion": "success",
+    "stepSeconds": 7
+  },
+  "localPublished": {
+    "reportChecks": 28,
+    "passed": 28,
+    "loggedPassChecks": 27,
+    "extraReportCheck": "deployed-asset-integrity",
+    "elapsedMs": 38828.373396,
+    "revision": "ec58004c657d1caa237ab29bea3f1a938cc89795",
+    "local": true
+  },
+  "artifact": {
+    "id": 12517997952,
+    "name": "verification-39991917717-1",
+    "digest": "sha256:107d18dd0dbb3cf3d4d773dd7289993f82643956a0ffd0e43b682286566ea5fc",
+    "downloadCount": 1
+  },
+  "deployment": "skipped",
+  "verifyPublished": "skipped",
+  "publicDeploymentProven": false,
+  "newRunsDispatched": 0,
+  "retries": 0,
+  "localSolverRuns": 0,
+  "taskStatusChanged": false,
+  "rawFiles": [
+    {
+      "file": "artifacts.json",
+      "bytes": 820,
+      "sha256": "bf9e4d716f6277b76af220e97ab33f8a495edbb2468048e21f74536ca91daaf3"
+    },
+    {
+      "file": "ci-build.log",
+      "bytes": 3693,
+      "sha256": "aa9999089ec1b8d0d751926f5e396ae57ee6cdc607b2a066e4f37e346eaca3bd"
+    },
+    {
+      "file": "ci-install.log",
+      "bytes": 440,
+      "sha256": "69fea6a92eeea1af4ff3b4c0c17785ab142d047a4ae702e0335d1e1facbd04a9"
+    },
+    {
+      "file": "ci-local-published.log",
+      "bytes": 1572,
+      "sha256": "371e78299c8742de38a8e9665ec69316b065b047958b6d30330949cd2bee9c73"
+    },
+    {
+      "file": "ci-tests.log",
+      "bytes": 233214,
+      "sha256": "b043c3b8971b45c300355624f5be5bb8ce9fb208360991d41213c4881c7f2194"
+    },
+    {
+      "file": "merge.json",
+      "bytes": 255,
+      "sha256": "389cbf3b1859db5ffae36b5e1cd5605be307a85bf235d385bd5da839aabe4868"
+    },
+    {
+      "file": "published-checkpoints-1792775354428-12419.jsonl",
+      "bytes": 86537,
+      "sha256": "69ff342b2285cfbe5b6bf6dc92ed0e1f92de2e8973ccb004a400f04343e39bdf"
+    },
+    {
+      "file": "published-report.json",
+      "bytes": 4386,
+      "sha256": "dac4e2adfde3b333c11dd666525cc4b9604a723e8ab27a5c6abb6767a5592e8b"
+    },
+    {
+      "file": "run.json",
+      "bytes": 3625,
+      "sha256": "a13569bf708e24b8e2c3f05cc0096fdff79e946376e12cc6b2463c11235cb4e6"
+    }
+  ]
+}
