@@ -15,7 +15,12 @@
   },
   "contracts": 26,
   "independentNumericalMandatoryFixes": 0,
-  "secondGeometryAudit": "pending separate evidence",
+  "secondGeometryAudit": {
+    "mandatoryFixes": 0,
+    "additionalRootTests": 4,
+    "failed": 0,
+    "evidence": "2026-10-27-grouped-temperature-boundary-audit.json"
+  },
   "legacyModulesUnchanged": [
     "src/planar-temperature-operator.js",
     "src/planar-p1-heat-operator.js",
