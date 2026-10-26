@@ -53,3 +53,5 @@ geometry/source fieldはhashの最初のawait前にprivate snapshotを取る。g
 旧geometry validatorのcoverage許容1e-6は維持するが、P1はさらに行/列momentを1e-18+1e-12×scaleで照合する。そのため旧coverage検査に通る微小不足でもP1係数の追加受入で拒否され得る。欠損熱量を発明して保存させない。
 
 独立監査で、未使用節点の座標をnull/真偽値/文字列に置き換えるとapplyだけが受理する不整合を再現し、全座標の明示number/finite検査へ修正した。使用節点だけの幾何identityを確認する前にも、未使用節点を含む全入力の型・単位・容量検査を行う。交差分割の転送を逆向きに構築した全16係数が元行列の転置と一致すること、flux配列順に依存しない版と荷重も独立確認した。[監査証拠](evidence/2026-10-23-planar-p1-independent-audit.json)。
+
+[温度のconsistent L2投影](planar-temperature-operator.md)は別APIで、熱流束APIを変更しない。

@@ -159,3 +159,4 @@ const fixedRuntimeError:string=fixedWebmError('WEBM_FIXED_INVALID','invalid').co
 // @ts-expect-error Runtime imports must reject a string presentation duration.
 fixedWebmSchedule('2');
 void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];
+export {temperatureFixture} from './planar-temperature-operator-types';

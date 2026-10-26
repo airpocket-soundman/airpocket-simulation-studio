@@ -25,3 +25,5 @@ This is bounded synthetic planar-reference acceptance, not material identificati
 The inherited geometry validator retains its1e-6 coverage tolerance, but P1 additionally requires row/column moment balance at1e-18+1e-12·scale. A geometry passing the looser coverage test can still be refused by the stricter P1 coefficient acceptance; no gap heat is invented.
 
 Independent review reproduced apply accepting null,boolean or string coordinates on unused nodes while build refused them. The fix requires every coordinate to be explicitly numeric and finite before identity checks, including unused nodes. An independently constructed reverse transfer matches all16 coefficients of the transpose crossing matrix; flux entry order preserves revision and nodal loads. [Audit evidence](../evidence/2026-10-23-planar-p1-independent-audit.json).
+
+[Consistent temperature L2 projection](planar-temperature-operator.md) is a separate API; the flux API is unchanged.

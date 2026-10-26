@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "scope": "full-coverage planar scalar temperature consistent L2 projection only",
+  "base": "e630920dcf482c521f128c19654ed0756a51eaa3",
+  "sourceSha256": "e684b97d09c1af929b7e4ee7313ea7c64f382a5dad59bbd6c5f1f870e0c77044",
+  "operatorRevision": "sha256:3d69d9416e134ca57a46b4a39f4938cb4088d38ba64193637d41b644e89280d4",
+  "method": "M_B theta_B = T theta_A; triangle consistent mass A/12; mm2 to m2 1e-6; area-normalized Cholesky",
+  "limits": {
+    "activeNodesPerSide": 128,
+    "conditionInfinity": 10000000000,
+    "bytes": 1048576,
+    "temperatureMagnitude": "Number.MAX_VALUE/(128*1e10)"
+  },
+  "independentOracles": {
+    "crossingCornerHat": {
+      "expected": [
+        0,
+        0.25,
+        1,
+        0.25
+      ],
+      "actual": [
+        7.211110073938365e-17,
+        0.24999999999999997,
+        1,
+        0.24999999999999992
+      ],
+      "sourceIntegral": 3.333333333333333e-7,
+      "targetIntegral": 3.333333333333333e-7,
+      "residual": 1.3877787807814457e-17
+    },
+    "globalAffine": {
+      "expected": [
+        20,
+        30,
+        60,
+        50
+      ],
+      "actual": [
+        20.000000000000004,
+        30,
+        60,
+        50
+      ],
+      "expectedIntegral": 0.00004,
+      "actualIntegral": 0.000039999999999999996,
+      "residual": 1.7763568394002505e-15
+    },
+    "fanCenterHat": {
+      "source": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "expected": [
+        0.5,
+        0,
+        0.5,
+        0
+      ],
+      "distinguishesLumped": [
+        0.375,
+        0.25,
+        0.375,
+        0.25
+      ],
+      "distinguishesPointSampling": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "validation": {
+    "command": "node --test tests/planar-temperature-operator.test.mjs tests/planar-p1-heat-operator.test.mjs tests/planar-p1-independent-audit.test.mjs tests/docs.test.mjs tests/contracts-types.test.mjs tests/module-boundaries.test.mjs",
+    "total": 46,
+    "pass": 46,
+    "fail": 0,
+    "skip": 0,
+    "typeDeclarations": 24,
+    "newTests": 10,
+    "boundaries": [
+      "source/target active128 accepted;129 rejected",
+      "exact 1MiB JSON accepted;+1 rejected",
+      "condition approx4e8 accepted;above1e10 rejected",
+      "self-rehashed coefficient forgery refused",
+      "preawait snapshots/accessor0/prototype spoof refusal",
+      "degC/K offsets and nonfinite/overflow refusals"
+    ]
+  },
+  "history": [
+    "initial overflow fixture exposed need for explicit numeric magnitude budget; added and verified",
+    "first exact128 fixture omitted square corners and correctly failed unchanged full-coverage gate; corrected fixture geometry, no gate relaxation"
+  ],
+  "notClaims": [
+    "energy conservation",
+    "source min/max or positivity preservation",
+    "coupled solver",
+    "COUPLE3 parent completion",
+    "experimental calibration",
+    "general curved or partial coverage"
+  ],
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newCodecRuns": 0
+}
