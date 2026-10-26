@@ -13,3 +13,5 @@
 取消・結果交代・途中の表示量変更はartifactを出さず、カメラ・操作lock・保存前の補間表示時刻をfinallyで復元する。fake codec/UI回帰は日英のSave実配線、first/last、field拒否、proof隔離・改ざん、復元・取消・既存音響互換を検証する。実ブラウザ・実codecの熱動画は未実行であり、既存音響動画の証拠を熱へ転用しない。solver/GUI/realcodec追加0。
 
 最終job境界でも、prepared field=`temperature`は熱proof、`instantPressure`は音響proofを要求し、それ以外は拒否する。Blob proofだけからmanifest種別を選ばない。同revisionでも両方向のproof取り違えを拒否するfake integration回帰を追加した。最終関連113件成功・失敗/skip0。
+
+公開encode APIは両方asyncを維持し、不正入力・null・undefinedも同期throwではなくPromise拒否を返す。valid入力のawait前snapshotは維持する。互換回帰追加後の最終関連114件成功。

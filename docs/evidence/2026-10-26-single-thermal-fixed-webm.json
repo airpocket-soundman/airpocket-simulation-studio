@@ -4,8 +4,8 @@
   "source": [
     {
       "path": "src/single-view-time-webm.js",
-      "workingSha256": "4aa7f0c1a6f8c434479f1dddb43dfac3ad346fe55d5dea36413e2893b9759e7d",
-      "lfSha256": "32d001e1009925fe92aed25ea50793531057eef01f558872b5332f0e7a288e46"
+      "workingSha256": "70083c5d50c7600fee4ae1361cc5c7ca9570a293f665ce2f8158104e7b46782d",
+      "lfSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4"
     },
     {
       "path": "src/visual-export.js",
@@ -55,10 +55,10 @@
     "firstLastNearestLedger": true
   },
   "tests": {
-    "newThermalPure": 6,
+    "newThermalPure": 7,
     "newThermalUI": 4,
-    "focusedTotal": 113,
-    "pass": 113,
+    "focusedTotal": 114,
+    "pass": 114,
     "fail": 0,
     "skip": 0,
     "contractsDeclarations": 25,
@@ -85,5 +85,6 @@
     "original": "Draft selected manifest by issued Blob proof alone; acoustic proof could be returned for a temperature job with the same declared revision.",
     "fixed": "Prepared field temperature selects thermal manifest; instantPressure selects acoustic manifest; every other field refuses. Private proof-kind checks reject both crossed combinations.",
     "regression": "Fake integration checks both crossed kinds plus pressure/heatFlux refusals; valid acoustic/thermal paths remain covered."
-  }
+  },
+  "asyncCompatibilityFix": "Both public encode wrappers remain async: invalid/null/undefined inputs reject a Promise rather than throwing synchronously; valid snapshot timing is unchanged."
 }

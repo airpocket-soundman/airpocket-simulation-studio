@@ -22,3 +22,10 @@ test('prepared field selects the expected proof kind in both directions and refu
   const api=createVisualExportJobs({render:()=>kind==='thermal'?encode(input,h.env):encodeSingleViewAcousticTimeWebm(input,h.env)}),j=await api.start({requestId:kind+field,expectedResultRevision:revision,format:'webm',animation:'time',seconds:2,view:{result:{field}}});await api.waitForSettled(j);assert.equal(api.status(j).state,'failed');assert.equal(api.status(j).errorCode,'WEBM_ENDPOINT_UNVERIFIED');assert.throws(()=>api.artifact(j),/unavailable/);
  }
 });
+
+
+test('public acoustic and thermal encoders preserve Promise rejection for invalid inputs',async()=>{
+ for(const encoder of [encode,encodeSingleViewAcousticTimeWebm])for(const input of [null,undefined,{}, {output:{result:{kind:'elastic'}},seconds:1}]){
+  let pending;assert.doesNotThrow(()=>{pending=encoder(input,fixedCodecEnv().env);});assert.ok(pending instanceof Promise);await assert.rejects(pending);
+ }
+});

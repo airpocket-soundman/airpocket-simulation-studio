@@ -32,8 +32,8 @@ export function createSingleViewThermalTimePlan(output,seconds,field){
  for(const snapshot of snapshots){const values=snapshot?.temperature;if(!Array.isArray(values)||values.length!==n)throw fixedWebmError('WEBM_FIXED_INVALID','Invalid stored thermal temperatures');for(let i=0;i<n;i++)if(!Number.isFinite(values[i]))throw fixedWebmError('WEBM_FIXED_INVALID','Invalid stored thermal temperatures');}
  return createSingleViewAcousticTimePlan({result:{kind:'acousticTransient',snapshots:snapshots.map(snapshot=>({time:snapshot.time}))}},seconds);
 }
-export function encodeSingleViewThermalTimeWebm(input,env={}){const plan=createSingleViewThermalTimePlan(input.output,input.seconds,input.field);return encodeTimeWebm(input,env,plan,'thermal');}
-export function encodeSingleViewAcousticTimeWebm(input,env={}){const plan=createSingleViewAcousticTimePlan(input.output,input.seconds);return encodeTimeWebm(input,env,plan,'acousticTransient');}
+export async function encodeSingleViewThermalTimeWebm(input,env={}){const plan=createSingleViewThermalTimePlan(input.output,input.seconds,input.field);return encodeTimeWebm(input,env,plan,'thermal');}
+export async function encodeSingleViewAcousticTimeWebm(input,env={}){const plan=createSingleViewAcousticTimePlan(input.output,input.seconds);return encodeTimeWebm(input,env,plan,'acousticTransient');}
 /** Only this encoder can issue the private Blob proof; arbitrary renderer Blobs cannot claim fixed-frame endpoints. */
 async function encodeTimeWebm({seconds,resultRevision,initialCanvas,renderFrame,signal,onProgress=()=>{},assertCurrent=()=>{}},env,plan,resultKind){
  if(!singleViewTimeWebmCapabilities(env).supported)throw fixedWebmError('WEBM_FIXED_UNSUPPORTED','保存時刻のWebMには動画の符号化・復号の対応が必要です。PNG連番を使用してください。');
