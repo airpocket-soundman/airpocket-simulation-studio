@@ -1,5 +1,5 @@
 import {fixedCodecEnv} from './helpers/single-view-fixed-codec.mjs';
-import {getSingleViewAcousticTimeVerification} from '../src/single-view-time-webm.js';
+import {getSingleViewAcousticTimeVerification,getSingleViewThermalTimeVerification} from '../src/single-view-time-webm.js';
 import {webmTestEnv} from './helpers/webm-test-env.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -14,11 +14,11 @@ class Vector {
  applyAxisAngle(){this.x+=10;return this;}
 }
 const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
-function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
+function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,thermal=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
  const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
- for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect'])element(id);
+ for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','result-field'])element(id);
  Object.assign(element('cancel-run'),{disabled:true});element('animation-kind').value='orbit';element('animation-seconds').value='1';element('clip-axis').value='0';element('deform-scale').value='2';element('clip-position').value='4';element('result-legend').textContent='20 → 100 °C';
  const draws=[],canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(...args){draws.push(args);},fillText(){}}),toBlob(cb,type){cb(new Blob(['png'],{type}));},captureStream(){return {getTracks:()=>tracks};}};
  globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('agent-disconnect')]};
@@ -32,9 +32,10 @@ function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv
  }
  globalThis.MediaRecorder=Recorder;
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
- const output={mesh:{nodes:[0,0,0,1,1,1]},result:acoustic?{kind:'acousticTransient',snapshots:[0,.2,.9,1.2].map(time=>({time,pressure:[time,2*time]}))}:{kind:'elastic'}};
- let current=output;const physical={timeSeconds:.35,frameIndex:1};const selected=[];if(acoustic){element('acoustic-time-frame').value='1';element('acoustic-time-frame').dispatchEvent=()=>{selected.push(Number(element('acoustic-time-frame').value));physical.frameIndex=Number(element('acoustic-time-frame').value);physical.timeSeconds=output.result.snapshots[physical.frameIndex].time;};}
- const api=installVisualExport({renderer:{domElement:{width:sourceWidth,height:sourceHeight},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic?{getTimeView:()=>structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,value);element('acoustic-time-frame').value=String(value.frameIndex);}}:{})});
+ element('result-field').value=thermal?'temperature':'instantPressure';
+ const output={mesh:{nodes:[0,0,0,1,1,1]},result:thermal?{kind:'thermal',transient:true,snapshots:[0,.2,.9,1.2].map(time=>({time,temperature:[20+time,30+time]}))}:acoustic?{kind:'acousticTransient',snapshots:[0,.2,.9,1.2].map(time=>({time,pressure:[time,2*time]}))}:{kind:'elastic'}};
+ let current=output;const physical={timeSeconds:.35,frameIndex:1};const selected=[];if(acoustic||thermal){element('acoustic-time-frame').value='1';element('acoustic-time-frame').dispatchEvent=()=>{selected.push(Number(element('acoustic-time-frame').value));physical.frameIndex=Number(element('acoustic-time-frame').value);physical.timeSeconds=output.result.snapshots[physical.frameIndex].time;};}
+ const api=installVisualExport({renderer:{domElement:{width:sourceWidth,height:sourceHeight},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic||thermal?{getTimeView:()=>structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,value);element('acoustic-time-frame').value=String(value.frameIndex);}}:{})});
  return {order,api,canvas,controls,camera,tracks,elements,frames,draws,output,physical,selected,replaceOutput:value=>{current=value;},get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
@@ -113,3 +114,14 @@ test('single fixed capability rejects before viewer changes and preview still us
  f.elements.get('animation-kind').value='time';f.elements.get('animation-seconds').value='1';const preview=f.elements.get('animation-preview').onclick();assert.equal(f.api.isActive(),true);assert.equal(f.frames.length,1);f.frames.shift()(performance.now()+2000);await preview;assert.equal(f.selected.at(-1),3);assert.deepEqual(f.physical,saved);assert.equal(f.recorder,undefined);
  }finally{f.restore();}
 });
+
+for(const locale of ['ja','en'])test('thermal Save uses fixed codec, restores interpolated state and refuses final-only flux ('+locale+')',async()=>{
+ const codec=fixedCodecEnv(),f=fixture({thermal:true,locale,recordingEnv:codec.env,sourceWidth:3840,sourceHeight:2160});try{const saved=structuredClone(f.physical);f.elements.get('animation-kind').value='time';f.elements.get('animation-seconds').value='1';await f.elements.get('animation-save').onclick();assert.equal(f.clicks,1);assert.equal(f.selected[0],0);assert.equal(f.selected.at(-1),3);assert.equal(f.selected.length,24);assert.deepEqual(f.physical,saved);assert.equal(f.controls.enabled,true);assert.equal(f.api.isActive(),false);assert.equal(f.recorder,undefined);assert.equal(f.api.capabilities().singleTimeWebmExport.field,'instantPressure');assert.equal(f.api.capabilities().singleThermalTimeWebmExport.field,'temperature');f.elements.get('result-field').value='heatFlux';await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/temperature/);assert.equal(f.api.isActive(),false);assert.deepEqual(f.physical,saved);assert.equal(f.clicks,1);
+ }finally{f.restore();}
+});
+
+test('thermal abort or mid-export field change restores UI and never downloads; preview remains refused',async()=>{
+ for(const mode of ['abort','field']){const codec=fixedCodecEnv(),f=fixture({thermal:true,recordingEnv:codec.env}),controller=new AbortController(),saved=structuredClone(f.physical);try{codec.stats.onEncode=()=>{if(mode==='abort')controller.abort();else f.elements.get('result-field').value='heatFlux';};await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1,signal:controller.signal}),/cancelled|changed/);assert.deepEqual(f.physical,saved);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(f.clicks,0);f.elements.get('animation-kind').value='time';await f.elements.get('animation-preview').onclick();assert.equal(f.api.isActive(),false);assert.equal(f.frames.length,0);}finally{f.restore();}}
+});
+
+test('thermal codec absence refuses before changing the viewer or publishing a download',async()=>{const f=fixture({thermal:true});try{const saved=structuredClone(f.physical);assert.equal(f.api.capabilities().singleThermalTimeWebmExport.supported,false);await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),{code:'WEBM_FIXED_UNSUPPORTED'});assert.deepEqual(f.physical,saved);assert.equal(f.clicks,0);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);}finally{f.restore();}});

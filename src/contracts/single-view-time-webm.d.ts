@@ -11,3 +11,13 @@ export declare function encodeSingleViewAcousticTimeWebm(input:SingleViewTimeEnc
 /** Detached diagnostics; this object is never accepted as an issued Blob proof. */
 export declare function getSingleViewAcousticTimeVerification(blob:Blob):SingleViewTimeVerification|null;
 export declare function singleViewAcousticTimeManifest(blob:Blob,bytes:Uint8Array,options:{seconds:number;resultRevision:string}):Promise<{time:{animation:'time';durationSeconds:number;timeBasis:'display time';physicalTime:string;recording:'fixed-frame';realtime:false;frameCount:number;frameCountGuaranteed:true;camera:'fixed';phasePolicy:'i/(N-1)';frameSelection:'nearest-stored-frames-only';requestedRangeSeconds:{start:number;end:number};storedFrameCount:number;frameTimings:Array<Omit<AcousticTimeFrame,'timestamp'|'duration'>&{timestampMicroseconds:number;durationMicroseconds:number}>;verification:FixedWebmVerification};resolution:{width:number;height:number};sha256:string;totalBytes:number}>;
+
+export interface ThermalTimeOutput {mesh:{nodes:ReadonlyArray<number>};result:{kind:'thermal';transient:true;snapshots:ReadonlyArray<{time:number;temperature:ReadonlyArray<number>}>}}
+export interface SingleThermalTimeWebmCapability extends Omit<SingleViewTimeWebmCapability,'resultKinds'|'field'> {resultKinds:ReadonlyArray<'thermal'>;field:'temperature';unit:'degC';maxScalarBytes:number}
+export interface ThermalTimeVerification extends SingleViewTimeVerification {resultKind:'thermal';field:'temperature';unit:'degC'}
+export interface ThermalTimeEncodeInput extends Omit<SingleViewTimeEncodeInput,'output'> {output:ThermalTimeOutput;field:'temperature'}
+export declare function singleThermalTimeWebmCapabilities(env?:Record<string,unknown>):SingleThermalTimeWebmCapability;
+export declare function createSingleViewThermalTimePlan(output:ThermalTimeOutput,seconds:number,field:'temperature'):AcousticTimePlan;
+export declare function encodeSingleViewThermalTimeWebm(input:ThermalTimeEncodeInput,env?:Record<string,unknown>):Promise<Blob>;
+export declare function getSingleViewThermalTimeVerification(blob:Blob):ThermalTimeVerification|null;
+export declare function singleViewThermalTimeManifest(blob:Blob,bytes:Uint8Array,options:{seconds:number;resultRevision:string}):Promise<Awaited<ReturnType<typeof singleViewAcousticTimeManifest>>&{time:{resultKind:'thermal';field:'temperature';unit:'degC'}}>;
