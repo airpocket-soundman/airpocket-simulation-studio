@@ -18,7 +18,7 @@ API/MCPの画像・動画出力ジョブは、開始・状態・取消の応答�
 
 4種類のアニメーション: モデルの一周、構造／固有振動の変形往復、保存した過渡音響フレーム、断面の移動。長さは1～15秒。再生だけとWebM保存を選べます。回転・変形・断面の録画はMediaRecorder対応ブラウザが必要で、利用可能なVP9／VP8方式を選びます。保存時刻のWebMはVideoEncoder/VideoDecoderのVP8対応が必要です。終了・停止時は元のカメラ、変形倍率、断面、時刻へ戻します。
 
-変形往復は計算済み変位の表示倍率を変えるだけで、荷重履歴や非線形過程を再計算しません。固有振動は最大1 mmへ正規化された形状で、実応答振幅ではありません。過渡音響は保存した離散時刻を再生し、動画内に物理時刻を記載します。動画時間は指定秒数へ伸縮した表示用の時間です。フレーム数は描画性能に依存します。単一ビューの[回転GIF保存](single-orbit-gif.md)に対応します。単一ビューの[保存時刻GIF](single-stored-time-gif.md)は温度・瞬時音圧に別capabilityで対応します。変形/断面GIF、MP4、流線・粒子アニメーションは未対応です。2ケース比較GIFは別経路で回転/時間/表示倍率に対応します。
+変形往復は計算済み変位の表示倍率を変えるだけで、荷重履歴や非線形過程を再計算しません。固有振動は最大1 mmへ正規化された形状で、実応答振幅ではありません。過渡音響は保存した離散時刻を再生し、動画内に物理時刻を記載します。動画時間は指定秒数へ伸縮した表示用の時間です。フレーム数は描画性能に依存します。単一ビューの[回転GIF保存](single-orbit-gif.md)に対応します。単一ビューの[保存時刻GIF](single-stored-time-gif.md)は温度・瞬時音圧に別capabilityで対応します。単一ビューの[変位表示用GIF](single-deformation-gif.md)も別capabilityで対応します。断面GIF、MP4、流線・粒子アニメーションは未対応です。2ケース比較GIFは別経路で回転/時間/表示倍率に対応します。
 
 固定フレームPNG連番（`png-sequence`）のZIPは、同じ入力を再計算しても同一のバイト列になります。`resultRevision`は壁時計時間`result.performance.solveMs`を含むため、再計算のたびに変わります（保存済みのケース・測定・名前付きビューが使う値で、変更しません）。そこで`getResultView`は物理内容だけのハッシュ`physicalRevision`（`result.performance`を除いた同じ出力のSHA-256）を追加で返し、ZIP内`manifest.json`（`schemaVersion` 2）は`resultRevision`の代わりにフレームごとにも`physicalRevision`を記録します。成果物メタデータの`manifest`は従来どおり`resultRevision`を持ち、`physicalRevision`も併記します。`schemaVersion` 1のZIP（`resultRevision`記録）も読み取り互換です。
 
@@ -33,3 +33,5 @@ API/MCPの画像・動画出力ジョブは、開始・状態・取消の応答�
 保存温度WebMの範囲と制約は[熱時間WebM](single-view-thermal-fixed-webm.md)を参照してください。
 
 2026-10-27: 単一ビューの保存時刻GIFは、通常main/IAB・正式stdio・英語前景の合成94節点熱ケース1回で限定実証しました。24枚・640×320・2秒・全bytes/hash・86ページ、0/5/10秒の最寄り選択6/12/6・終端10秒ずれ0、独立全24RGB一致と青/緑/赤のモデル可視性、5状態と補間2秒の復元・cleanupを確認しました。実音響・実取消・GUI download・一般物理精度は別です。[詳細と制限](single-stored-time-gif.md)。
+
+2026-10-27: 表示用変形GIFは既存の完全な171節点/428Tet静的WASM保存ケース1回で限定実証しました。2秒・24枚・倍率100・mode null、全5574849bytes/SHA/86ページ、独立全24RGB一致、13姿勢と棒の伸び戻りの可視性、5状態/GUI倍率100の復元・cleanupを確認しました。新solveはなく、実modal・実取消・GUI download・物理振幅の校正は未証明です。[詳細](single-deformation-gif.md)。

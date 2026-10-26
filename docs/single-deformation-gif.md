@@ -16,6 +16,16 @@ modalは保存1〜6モードから1つを選びます。選択モードの最大
 
 取消・拒否・完了のfinallyでcamera/up/fov、倍率、mode選択とonchange閉包、controls・入力・timeViewを復元します。結果が交代した場合は旧結果を新結果へ書き戻しません。120秒watchdogは取消を要求するだけです。所有yield/Blob/SHAが未完了ならlease/画面lockとexecutionSettled falseを保ち、実際のsettlement後に後始末します。従来の回転・保存時刻GIF、WebM経路は別のままです。
 
-[検証記録](evidence/2026-10-27-single-deformation-gif.json)。独立GIF/LZW decoderで24画像・delay・peakを検査し、real Threeの有限座標・倍率式、mode/倍率/bytes改竄、65536/+1、closure復元、所有待機中取消をfake canvasで検査します。この版の実GUI/GIF出力・実solverは未実行です。
+[検証記録](evidence/2026-10-27-single-deformation-gif.json)。独立GIF/LZW decoderで24画像・delay・peakを検査し、real Threeの有限座標・倍率式、mode/倍率/bytes改竄、65536/+1、closure復元、所有待機中取消をfake canvasで検査します。初期実装記録では実GUI/GIF出力を未実行としていました。現在の限定実証は以下の2026-10-27追記を参照してください。新solverは実行していません。
 
 静的結果に定義済みmodesがある場合は、保存ケースparserが追加fieldを許しても拒否します。従来viewerがmodes[modalIndex].displacementを優先するため、検査した静的vectorと描画vectorを一致させる局所制約です。modes getterも実行せず拒否します。従来renderer自体は変更しません。
+
+## 2026-10-27の限定実ブラウザ検証
+
+固定runtimef40ae9cの通常main/IAB・英語・前景で、既存の完全保存bundleから正式に取り込んだ171節点/428Tetの静的線形弾性WASMケースを使い、2秒の変形GIFを1回だけ出力しました。[実証記録](evidence/2026-10-27-single-deformation-gif-main/README.md)。元bundleは208374bytes/SHA `991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9`。既存bundle.caseArchiveだけを公式caseStoreでimport/exportし、input/mesh/resultは深く同一です。新solveや不足値・project envelopeの捏造はありません。
+
+出力5574849bytes/SHA `093d760aa5fd4e0ec38a23043000f2b873a1a8657f91465b7b387468d72387d1`、86ページ、24枚・640×320・RGB332・総delay200cs・loop0、mode null・最大表示倍率100、i/24 cosine台帳を確認しました。元の最大変位約0.04mmを表示上約4mmへ拡大し、物理振幅や載荷履歴とは区別しています。
+
+独立generic LZW/FFmpegの全24RGBが一致し、全モデル領域の非背景3537〜3973pixelsと13種類の姿勢を検出しました。先頭・最大倍率・最後の画像で棒全体、伸び戻り、表示用captionを目視確認しました。5状態不変、GUI倍率100の復元、settled解放とsession/所有child/token cleanupを確認しました。
+
+保存modal探索で利用可能な入力を得られなかった履歴と、不完全なpublic step3が公式case importで準備拒否された履歴は保持します。step3の境界導出でpure表示準備が進んでも、input不足を勝手に埋めず、完全な既存archiveへ切り替えました。この限定成功は実modal出力、GUI download、実取消matrix、一般形状・公開環境・物理校正を証明しません。[統合検証範囲](evidence/2026-10-27-single-deformation-gif-integration.json)。

@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+  "runtimeSource": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+  "evidenceBundleCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+  "actualEvidence": "docs/evidence/2026-10-27-single-deformation-gif-main/README.md",
+  "scope": "One bounded static deformation GIF; no status promotion",
+  "sourceValidation": {
+    "rootFocused": {
+      "head": "996f153b05ce535399cdbd717eec3cf5481b5f41",
+      "passed": 153,
+      "elapsedMs": 24706.2622,
+      "includesIndependentTests": 3
+    },
+    "typeDeclarations": 31,
+    "build": {
+      "passed": true,
+      "elapsedSeconds": 3.9
+    },
+    "localPublished": {
+      "passed": 28,
+      "elapsedMs": 38927.237799999995
+    }
+  },
+  "actual": {
+    "language": "en",
+    "foreground": true,
+    "normalMain": true,
+    "formalStdio": true,
+    "exports": 1,
+    "retries": 0,
+    "newSolverJobs": 0,
+    "source": {
+      "path": "docs/evidence/2026-10-14-case-view-bundle.json",
+      "bytes": 208374,
+      "sha256": "991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+      "gitBlobSha1": "eb7c2ae5b2634463427c430765411123eb41d43f",
+      "normalizedBytes": 207702,
+      "normalizedSha256": "0370dc4911f02fab9e9606d09ce70a356d08ff4502b4f9fb75a69539f6150377",
+      "nodes": 171,
+      "tetrahedra": 428,
+      "kind": "elastic",
+      "method": "WASM",
+      "originalInputMeshResultDeepEqual": true,
+      "procedure": "Only bundle.caseArchive through official caseStore import/export; no invented values or project envelope"
+    },
+    "driverSha256": "6414bd84b38e91ea9fca34676f98bb1bde6abf155bd438a2564126de2dbb1f5e",
+    "artifact": {
+      "bytes": 5574849,
+      "sha256": "093d760aa5fd4e0ec38a23043000f2b873a1a8657f91465b7b387468d72387d1",
+      "pages": 86,
+      "frames": 24,
+      "width": 640,
+      "height": 320,
+      "palette": "RGB332",
+      "colors": 256,
+      "totalDelayCentiseconds": 200,
+      "loop": 0
+    },
+    "selection": {
+      "field": "displacement",
+      "modeIndex": null,
+      "peakScale": 100,
+      "phase": "i/24",
+      "scalePolicy": "100*(1-cos(2*pi*i/24))/2",
+      "camera": "fixed",
+      "meaning": "Visual exaggeration only, no load/time history or dynamic amplitude"
+    },
+    "independent": {
+      "genericLzwFfmpegAll24RgbEqual": true,
+      "sceneRoi": [
+        0,
+        0,
+        640,
+        204
+      ],
+      "nonBackgroundPixels": {
+        "minimum": 3537,
+        "maximum": 3973
+      },
+      "distinctPoses": 13,
+      "manualFirstPeakLast": "Complete bar, visible elongation/return, readable visualization-only captions"
+    },
+    "restoration": {
+      "fiveStatesEqual": true,
+      "guiScale": 100,
+      "settledBeforeRelease": true,
+      "ownedChildSessionTokenCleanup": true
+    }
+  },
+  "preservedHistory": [
+    "Missing saved-modal search",
+    "Incomplete public increment-step3 lacked complete input: derived boundary permitted pure display but official import refused; not used",
+    "Complete existing archive replaced it without invented values/envelope",
+    "Initial camera-plane fixture and static modal alias correction records remain unchanged"
+  ],
+  "preservedImplementationRaw": [
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/initial-normalized-camera-fixture-failure.log",
+      "bytes": 6827,
+      "sha256": "f715382c5f73b6eee165587060f930dca31b002509180fc75dc634bb8b020ebe",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/locale-final.log",
+      "bytes": 5271,
+      "sha256": "4bb98eebc40aa3511f0c3848e6e2aefed1529748bf5f39645f675626e5c5f2e3",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/related-final.log",
+      "bytes": 16577,
+      "sha256": "49da7873823b739138728746f2f77bfa97a6825a379d1ea1861d7101121616cd",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/static-alias-fix.log",
+      "bytes": 5529,
+      "sha256": "8aea8f3d229d45863bb74772d3ab954b870e93e0fdd5087ab45b4599dd0f4b4a",
+      "unchangedFromBase": true
+    }
+  ],
+  "notClaimed": [
+    "actual modal GIF",
+    "actual cancellation matrix",
+    "GUI download completion",
+    "general geometry",
+    "public deployment",
+    "physical response amplitude/period",
+    "calibration",
+    "parent completion"
+  ],
+  "protectedProgress": {
+    "tasks": 171,
+    "allStatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "changedOnly": [
+      {
+        "id": "P4",
+        "field": "lastUpdate"
+      },
+      {
+        "id": "P4",
+        "field": "lastUpdateEn"
+      },
+      {
+        "id": "P4",
+        "field": "evidence"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "evidence"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "lastUpdate"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "lastUpdateEn"
+      }
+    ],
+    "allOtherFieldsDeepEqual": true
+  },
+  "installedSkillChanged": false,
+  "preservedActualPreparation": [
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/complete-normalized-archive.json",
+      "bytes": 207702,
+      "sha256": "0370dc4911f02fab9e9606d09ce70a356d08ff4502b4f9fb75a69539f6150377",
+      "gitBlobSha1": "6984433dd88e3265f79ba6fa550b970ebc34b75a",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/complete-preparation.json",
+      "bytes": 5444,
+      "sha256": "5a7c76bd2e8ef4692de3c121ab47125567dd6753b1934e63497acf9274762b22",
+      "gitBlobSha1": "c33b7a467b3707509a9a845b6147de5719d67564",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/complete-source-bundle.json",
+      "bytes": 208374,
+      "sha256": "991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+      "gitBlobSha1": "eb7c2ae5b2634463427c430765411123eb41d43f",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/prepare-complete.mjs",
+      "bytes": 3229,
+      "sha256": "8f539b78f101d39b2bf05d0f38ffcd8992ca364c5a9c98ef5b565199fcd8e33c",
+      "gitBlobSha1": "786ce053054f7cd23fb06a4894f53f456d32e772",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/prepare-static.mjs",
+      "bytes": 4272,
+      "sha256": "00cfffc43169bf528564cc545409b3cdc4920436fa1adc4b40c5f8100f5095bc",
+      "gitBlobSha1": "1fa5369372f33d7831cc8edfacbde4402a2d4ea0",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/prepare.mjs",
+      "bytes": 1677,
+      "sha256": "8d9907a04ec3b53c3fbf9cd7ab63cee41eeb01b4d8c8adfccb1f95971dc9d84f",
+      "gitBlobSha1": "dd9d1a691197bf9a0b67c61ca805612cc9265b40",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/raw-preparation.json",
+      "bytes": 386,
+      "sha256": "e05870ba321c53137d729ed2ddbdaab7eeb136a5510db50ab0bdc463bb8423ab",
+      "gitBlobSha1": "c427a84e6659625bd4418542d92b743a6ce9af63",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/source.json",
+      "bytes": 11461,
+      "sha256": "e193c57594fa53f4f97eb36176fb6988bfbe0616a424696b5ce81eead74dc50f",
+      "gitBlobSha1": "9bee1ac7087de08f228d643e83559dcab70fdb75",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/static-archive.json",
+      "bytes": 1176,
+      "sha256": "01ed4db510238e280445d3f937774a057ff2d21d8ecdf1efbe8303c6b8c07bbe",
+      "gitBlobSha1": "bf1d7cd8d4842ac980eac14e7d89b13a8299d7bc",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif-main/preparation/static-preparation.json",
+      "bytes": 6047,
+      "sha256": "b76133a594f21401fc81d0e8cd5d1c0bce5367b8185b48a50c86ffb0391b8593",
+      "gitBlobSha1": "60dfae48f54b370d59a75a247c3e728723b15f8d",
+      "sourceCommit": "af5edcfc78e448b9ca6db59a60d342080dbd1e58",
+      "modifiedByThisChange": false
+    }
+  ],
+  "integrationValidation": {
+    "docsProgress": {
+      "total": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    "skill": {
+      "valid": true,
+      "command": "python -X utf8 skill-creator/scripts/quick_validate.py skills/airpocket-studio"
+    },
+    "runtimeChanges": 0,
+    "installedSkillChanges": 0
+  }
+}
