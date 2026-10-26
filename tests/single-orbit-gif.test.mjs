@@ -42,3 +42,23 @@ test('modal proof mode0 cannot be borrowed by mode1 or absent-mode jobs; null an
  const api=createVisualExportJobs({render:()=>blob}),j=await api.start({requestId:'cross-mode',expectedResultRevision:revision,format:'gif',seconds:1,view:{result:{field:'displacement',modeIndex:1}}});await api.waitForSettled(j);assert.equal(api.status(j).state,'failed');assert.throws(()=>api.artifact(j),/unavailable/);
  const plain=await encode({...args(),viewTimeSeconds:undefined,viewerFrameIndex:undefined,interpolated:false,timeApplies:false},h.env),b=new Uint8Array(await plain.arrayBuffer());for(const modeIndex of [null,undefined]){const m=await manifest(plain,b,{resultRevision:revision,field:'temperature',seconds:2,modeIndex});assert.equal(m.time.selectedModeIndex,undefined);assert.equal(m.time.selectedPhysicalTimeSeconds,undefined);assert.equal(m.time.selectedStoredFrameIndex,undefined);assert.equal(m.time.timeSelectionBasis,'selected-field-has-no-time-history');}
 });
+import {PerspectiveCamera} from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {canonicalViewState} from '../src/result-view-api.js';
+
+test('real OrbitControls ULP drift uses the public canonical camera for plan, proof and prepared job identity',async()=>{
+ const c=new PerspectiveCamera(40,1,.1,1000);c.position.set(61,41,84);
+ const root={addEventListener(){},removeEventListener(){}},element={style:{},ownerDocument:root,getRootNode:()=>root,addEventListener(){},removeEventListener(){}};
+ const controls=new OrbitControls(c,element);controls.target.set(5,5,20);controls.update();
+ const raw={position:c.position.toArray(),target:controls.target.toArray(),up:c.up.toArray(),fov:c.fov};controls.dispose();
+ assert.notDeepEqual(raw.position,[61,41,84]);const prepared=canonicalViewState({camera:structuredClone(raw)}).camera;assert.deepEqual(prepared.position,[61,41,84]);
+ const h=orbitGifEnv(),rendered=[],blob=await encode({...args(),camera:raw,renderFrame:next=>{rendered.push(next);return {width:640,height:320};}},h.env);
+ assert.deepEqual(proof(blob).camera,prepared);assert.deepEqual(rendered[0],prepared);
+ const bytes=new Uint8Array(await blob.arrayBuffer()),options={resultRevision:revision,field:'temperature',seconds:2,timeSeconds:2,frameIndex:null,modeIndex:null,camera:prepared};
+ assert.equal((await manifest(blob,bytes,options)).time.selectedPhysicalTimeSeconds,2);
+ const api=createVisualExportJobs({render:()=>blob}),job=await api.start({requestId:'canonical-main-shape',expectedResultRevision:revision,format:'gif',animation:'orbit',seconds:2,view:{result:{field:'temperature',timeSeconds:2,frameIndex:null,modeIndex:null,camera:prepared}}});
+ await api.waitForSettled(job);assert.equal(api.status(job).state,'completed',JSON.stringify(api.status(job).error));
+ await assert.rejects(manifest(blob,bytes,{...options,camera:{...prepared,position:[62,41,84]}}),/prepared camera differs/);
+ const bad=await api.start({requestId:'different-camera',expectedResultRevision:revision,format:'gif',animation:'orbit',seconds:2,view:{result:{field:'temperature',timeSeconds:2,camera:{...prepared,position:[62,41,84]}}}});await api.waitForSettled(bad);assert.equal(api.status(bad).state,'failed');assert.throws(()=>api.artifact(bad),/unavailable/);
+ await assert.rejects(encode({...args(),camera:{...camera,fov:179.99999999999}},h.env),/canonical orbit GIF camera/);
+});

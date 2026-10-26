@@ -1,6 +1,7 @@
 import {COMPARISON_GIF,createGifEncoder,gifFrameDelays} from '../gif-encoder.js';
 import {orbitCameraPosition,sha256Hex} from '../visual-export-fixed-frame.js';
 import {canonicalJson} from '../project-revision.js';
+import {canonicalViewState} from '../result-view-api.js';
 export const SINGLE_ORBIT_GIF_LIMITS=Object.freeze({...COMPARISON_GIF,manifestBytes:16384,maxSourceWidth:640,maxSourceHeight:320});
 const issued=new WeakMap(),readBlob=Blob.prototype.arrayBuffer;
 const typed=Object.getPrototypeOf(Uint8Array.prototype),typedLength=Object.getOwnPropertyDescriptor(typed,'byteLength').get,typedBuffer=Object.getOwnPropertyDescriptor(typed,'buffer').get,abLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLength').get;
@@ -13,7 +14,9 @@ const cancelled=()=>Object.assign(Error('Single-view orbit GIF cancelled'),{code
 const freeze=v=>{if(v&&typeof v==='object'){for(const x of Object.values(v))freeze(x);Object.freeze(v);}return v;};
 function cameraSnapshot(input){
  if(!input||![Object.prototype,null].includes(Object.getPrototypeOf(input))||Reflect.ownKeys(input).length!==4)fail('Plain bounded orbit camera required');
- const c={};for(const key of ['position','target','up','fov']){const d=Object.getOwnPropertyDescriptor(input,key);if(!d||!d.enumerable||!Object.hasOwn(d,'value'))fail('Orbit camera data properties required');const v=d.value;if(key==='fov'){if(!Number.isFinite(v)||v<=0||v>=180)fail('Invalid orbit GIF camera');c[key]=v;}else{if(!Array.isArray(v)||Object.getPrototypeOf(v)!==Array.prototype||v.length!==3||Reflect.ownKeys(v).length!==4)fail('Three finite orbit camera coordinates required');c[key]=[];for(let i=0;i<3;i++){const d=Object.getOwnPropertyDescriptor(v,String(i));if(!d?.enumerable||!Object.hasOwn(d,'value')||!Number.isFinite(d.value)||Math.abs(d.value)>1e9)fail('Invalid orbit GIF coordinate');c[key].push(d.value);}}}return c;
+ const c={};for(const key of ['position','target','up','fov']){const d=Object.getOwnPropertyDescriptor(input,key);if(!d||!d.enumerable||!Object.hasOwn(d,'value'))fail('Orbit camera data properties required');const v=d.value;if(key==='fov'){if(!Number.isFinite(v)||v<=0||v>=180)fail('Invalid orbit GIF camera');c[key]=v;}else{if(!Array.isArray(v)||Object.getPrototypeOf(v)!==Array.prototype||v.length!==3||Reflect.ownKeys(v).length!==4)fail('Three finite orbit camera coordinates required');c[key]=[];for(let i=0;i<3;i++){const d=Object.getOwnPropertyDescriptor(v,String(i));if(!d?.enumerable||!Object.hasOwn(d,'value')||!Number.isFinite(d.value)||Math.abs(d.value)>1e9)fail('Invalid orbit GIF coordinate');c[key].push(d.value);}}}
+ // Match the public result-view identity before deriving either the orbit or its proof.
+ const normalized=canonicalViewState({camera:c}).camera;if(normalized.fov<=0||normalized.fov>=180)fail('Invalid canonical orbit GIF camera');return normalized;
 }
 export function singleOrbitGifCapabilities(env={}){let canvas,supported=false;try{canvas=(env.createCanvas??(()=>globalThis.document?.createElement('canvas')))();const ctx=canvas?.getContext?.('2d');supported=!!ctx&&typeof ctx.getImageData==='function'&&typeof ctx.drawImage==='function'&&typeof globalThis.crypto?.subtle?.digest==='function';}catch{}finally{if(canvas){canvas.width=0;canvas.height=0;}}return {supported,animations:['orbit'],mimeType:'image/gif',frames:24,width:640,height:320,maxArtifactBytes:COMPARISON_GIF.maxBytes,palette:'RGB332',colors:256,lossy:true,recording:'fixed-frame',...(!supported?{reason:'Orbit GIF needs a readable 2D canvas and SHA-256',alternatives:['webm','png']}:{})};}
 export async function encodeSingleOrbitGif({camera,field,resultRevision,viewTimeSeconds,viewerFrameIndex,interpolated=false,timeApplies=false,modeIndex,animation='orbit',seconds,renderFrame,signal,onProgress=()=>{},assertCurrent=()=>{}},env={}){
@@ -36,7 +39,14 @@ export async function encodeSingleOrbitGif({camera,field,resultRevision,viewTime
 }
 export function getSingleOrbitGifVerification(blob){const proof=issued.get(blob);return proof?structuredClone(proof):null;}
 export async function singleOrbitGifManifest(blob,bytes,{resultRevision,field,seconds,camera,timeSeconds,frameIndex,modeIndex}={}){
- const proof=issued.get(blob);if(!proof||proof.sourceResultRevision!==resultRevision||proof.field!==field||proof.seconds!==seconds||(modeIndex??null)!==(proof.selectedModeIndex??null)||timeSeconds!==undefined&&timeSeconds!==proof.viewTimeSeconds||frameIndex!==undefined&&frameIndex!==null&&frameIndex!==proof.viewerFrameIndex||camera!==undefined&&canonicalJson(cameraSnapshot(camera))!==canonicalJson(proof.camera))fail('Orbit GIF proof is missing, stale or does not match the prepared view');
+ const proof=issued.get(blob);if(!proof)fail('Orbit GIF proof is missing');
+ if(proof.sourceResultRevision!==resultRevision)fail('Orbit GIF prepared result revision differs');
+ if(proof.field!==field)fail('Orbit GIF prepared field differs');
+ if(proof.seconds!==seconds)fail('Orbit GIF prepared duration differs');
+ if((modeIndex??null)!==(proof.selectedModeIndex??null))fail('Orbit GIF prepared mode differs');
+ if(timeSeconds!==undefined&&timeSeconds!==proof.viewTimeSeconds)fail('Orbit GIF prepared viewer time differs');
+ if(frameIndex!==undefined&&frameIndex!==null&&frameIndex!==proof.viewerFrameIndex)fail('Orbit GIF prepared viewer frame differs');
+ if(camera!==undefined&&canonicalJson(cameraSnapshot(camera))!==canonicalJson(proof.camera))fail('Orbit GIF prepared camera differs');
  const owned=byteSnapshot(bytes,proof.totalBytes),sha256='sha256:'+await sha256Hex(owned);if(sha256!==proof.sha256||owned.length!==proof.totalBytes)fail('Orbit GIF bytes differ from the issued complete animation');
  return {sha256,totalBytes:owned.length,resolution:{width:640,height:320},time:{animation:'orbit',durationSeconds:seconds,timeBasis:'display time',physicalTime:'Selected result field and viewer time remain fixed; only the camera moves',...(proof.selectedModeIndex===undefined?{}:{selectedModeIndex:proof.selectedModeIndex}),...(proof.viewTimeSeconds===undefined?{}:{viewerTimeSeconds:proof.viewTimeSeconds}),interpolated:proof.interpolated,timeSelectionBasis:proof.timeApplies?(proof.interpolated?'viewer-interpolated':'stored-frame'):'selected-field-has-no-time-history',...(proof.timeApplies&&proof.viewTimeSeconds!==undefined?{selectedPhysicalTimeSeconds:proof.viewTimeSeconds}:{}),...(!proof.interpolated&&proof.timeApplies&&proof.viewerFrameIndex!==undefined?{selectedStoredFrameIndex:proof.viewerFrameIndex}:{}),recording:'fixed-frame',realtime:false,frameCount:24,frameCountGuaranteed:true,phasePolicy:'i/24',camera:'orbit',loop:'infinite',delayCentiseconds:proof.frames.map(f=>f.delayCentiseconds),frames:structuredClone(proof.frames)},gif:{palette:'RGB332',colors:256,lossy:true,letterbox:true}};
 }

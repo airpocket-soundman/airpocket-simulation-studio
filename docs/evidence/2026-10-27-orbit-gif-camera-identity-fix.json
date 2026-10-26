@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "failedActualPin": "35922baf5a8737429bc544cbc44842bb1d33cf05",
+  "actualArtifactAvailable": false,
+  "actualRawProofCameraCaptured": false,
+  "causeClaim": "Reproduced API canonical/raw camera identity inconsistency; sole actual failure cause not established",
+  "canonicalization": "Existing canonicalViewState, 12 significant digits; applied before orbit plan, render and private proof",
+  "sourceHashes": {
+    "workingBytes": {
+      "src/ui/single-orbit-gif.js": "5078ae1388e399e09b020a08665aae400fc2c015a687cda97e7d7e293b146cd1",
+      "src/visual-export.js": "8d323acabfb9269b84d3c45265d031e782aaec0a8d879cd44960ea286083f2e5"
+    },
+    "meaning": "SHA-256 of working file bytes, not normalized Git blob bytes"
+  },
+  "tests": {
+    "relevant": {
+      "total": 126,
+      "pass": 126,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 8356.6959
+    },
+    "docs": {
+      "total": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    "independentDraft": {
+      "owner": "print_dataset63",
+      "groups": 3,
+      "pass": 3,
+      "elapsedMilliseconds": 2024
+    }
+  },
+  "additionalActual": {
+    "gui": 0,
+    "externalCodec": 0,
+    "solver": 0,
+    "productExport": 0
+  },
+  "remaining": "Actual artifact success not yet verified"
+}
