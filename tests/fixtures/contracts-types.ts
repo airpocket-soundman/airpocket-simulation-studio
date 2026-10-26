@@ -168,3 +168,9 @@ import {inspectFiniteHistory as replay203} from '../../src/finite-visco-inspecto
 const ui203=inspector203({host:document.createElement('div')});const done203:Promise<boolean>=ui203.inspect();const cap203:4096=limits203.steps;
 replay203('{}').then(report=>{if(report.completed){const stress203:number=report.summary.finalObservation.S[0][0];void stress203;/* @ts-expect-error issued state never crosses worker report */
 report.finalState;} });void done203;void cap203;
+
+import {syntheticFiniteObservationPair as pair204} from '../../src/ui/finite-history-inspector.js';
+import {compareFiniteHistoryObservation as compare204} from '../../src/finite-visco-inspector.worker.js';
+const p204=pair204();const uiCompare204:Promise<boolean>=ui203.compareObservation();const input204:HTMLTextAreaElement=ui203.observation;
+compare204(p204.historyRaw,p204.observationRaw).then(r=>{if(r.completed){const s204:number=r.stress.signedDifference[0][0];void s204;/* @ts-expect-error comparisons never issue state */
+r.finalState;}});void uiCompare204;void input204;

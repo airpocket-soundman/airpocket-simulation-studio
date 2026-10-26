@@ -29,3 +29,6 @@ Sはsecond Piolaの全9成分、engineering shearやCauchy stressではない。
 構造的に不正なrawは安定code付き例外。履歴constitutive失敗は `completed:false/status:history-rejected` と元failureのcode/stepIndex/completedStepsだけを保持し、比較結果を返さない。成功履歴のidentity/parameters/time不一致は `FINITE_VISCO_COMPARISON_HISTORY_MISMATCH` / `PARAMETERS_MISMATCH` / `TIME_MISMATCH` で拒否する。時刻許容を設けず、失敗段階を補間しない。
 
 独立shear E-linear rampの指数解析式でS12・energy・累積Dを照合し、既知の±応力/energy差、raw/canonical/parameter/time不一致、byte境界・late mutation・getter非実行・shared偽装・strict JSON・途中失敗を回帰する。[証拠](evidence/2026-10-24-finite-visco-observation-comparison.json)。これは合成材料点の数値比較であり、実材料/応力自由試験片/反力/永久塑性/損傷/くびれの検証ではない。solver/UI/MCP/project保存へ接続せず、FINITEVISCO1の完了を意味しない。
+
+
+2026-10-27追補: 初版の製品非接続は当時の境界の記録。pure API/構成則/入力契約は変更せず、[最終合成観測比較UI](finite-observation-inspector.md)から所有Workerでこの関数を呼ぶ入口を追加した。構造solver、MCP、project保存、実測校正へは接続しない。

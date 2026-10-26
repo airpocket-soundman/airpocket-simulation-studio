@@ -25,3 +25,8 @@ Numerical/behavior verification used e972ce8. Subsequent4c02210 changes only tab
 ## Narrow-sidebar follow-up (2026-10-27, 7d1e657)
 
 The subsequent style-only7d1e657 changes paragraph/hash overflow wrapping and result max-width/horizontal overflow only. See [responsive evidence](../evidence/2026-10-27-finite-history-inspector-responsive/README.md). On the actual1280×900 desktop, the269px aside scroll width decreased495→269px; the233px result region decreased477→233px. All45cells remain identical and16related tests passed (1438.3942ms). Earlier e972ce8 and4c02210 evidence remains preserved. This verifies that desktop layout, not every viewport size or additional physics.
+
+
+## Optional final synthetic-observation comparison (2026-10-27 follow-up)
+
+The same panel now has a collapsed [single final synthetic-observation comparison](finite-observation-inspector.md). Replay-only inspection remains independent; a separate explicit button runs comparison. Mismatched identities/time/units/provenance refuse; stress/energy/dissipation differences are not pass or calibration decisions. Actual verification of this new comparison UI is pending and is separate from the203 replay-only GUI evidence above.
