@@ -2,6 +2,8 @@
 
 [日本語](../finite-visco-input-history.md) / [Underlying reference](finite-visco-reference.md)
 
+2026-10-27 follow-up: product-disconnected describes the initial implementation boundary. The new [saved-history inspector](finite-history-inspector.md) uses the unchanged pure API/input contract in an owned worker to display only final observations. It adds no structural-solver, project/case or MCP integration and no calibration guarantee.
+
 `src/finite-visco-history.js` is a pure, product-disconnected input boundary. It stores explicit F/dt steps, **not internal state**, and replays every step from the existing reference's I/Z0. It does not restore JSON state or resume from a saved last state. The reference API is unchanged. Synthetic/provisional/uncalibrated flags are mandatory; this does not complete FINITEVISCO1, calibration, plasticity or structural analysis.
 
 `encodeFiniteViscoInputHistory(history)` snapshots an exact data schema and returns canonical JSON with a trailing newline. It always reports `constitutiveVerified:false`: serialization checks structure, not constitutive admission. `replayFiniteViscoInputHistory(raw)` accepts a primitive string or ordinary Uint8Array. Convert a Node Buffer with `new Uint8Array(buffer)`. Array/Uint8Array subclasses, shared buffers, proxy views and malformed UTF8 are refused. Bytes are copied using intrinsic access before the first hash await, so later caller mutation cannot split identity from the evaluated input.

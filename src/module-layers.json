@@ -311,7 +311,8 @@
     "ui/analysis-preflight-ui.js",
     "ui/spherical-region-ui.js",
     "ui/agent-connection-status-ui.js",
-    "ui/printed-measurement-ui.js"
+    "ui/printed-measurement-ui.js",
+    "ui/finite-history-inspector.js"
    ]
   },
   "dashboard": {
@@ -348,7 +349,8 @@
    "dom": false,
    "files": [
     "analysis.worker.js",
-    "cad.worker.js"
+    "cad.worker.js",
+    "finite-visco-inspector.worker.js"
    ]
   }
  },
@@ -394,6 +396,12 @@
    "from": "analysis.worker.js",
    "to": "fetch()",
    "reason": "Intentional: the analysis worker fetches its WASM binaries (data.base + path) itself; fetch is available in worker scope and is not DOM access."
+  },
+  {
+   "kind": "edge",
+   "from": "ui/finite-history-inspector.js",
+   "to": "finite-visco-inspector.worker.js",
+   "reason": "The UI owns one module worker per material-point replay; messages only, never a runtime code import."
   }
  ]
 }

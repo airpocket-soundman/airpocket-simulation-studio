@@ -2,6 +2,8 @@
 
 [English](en/finite-visco-input-history.md) / [元の材料点境界](finite-visco-reference.md)
 
+2026-10-27追補: 初版の「製品非接続」は当時の実装境界の記録。既存pure API/入力契約を変えず、[保存入力履歴の検査画面](finite-history-inspector.md)が専用Workerで再計算した最終観測のみを表示する。構造solver・project/case・MCPへの接続や校正保証は追加しない。
+
 `src/finite-visco-history.js` は製品非接続のpure境界。保存対象は**明示F/dtの入力列のみ**で、JSON状態のrestoreや最後の状態からresumeする機能ではない。ロード時は必ず既存referenceのI/Z0から全件再計算する。元reference APIは変更していない。合成/暫定/未校正を固定し、塑性・校正・構造反力やFINITEVISCO1全体の完了を意味しない。
 
 `encodeFiniteViscoInputHistory(history)` はexact schemaをsnapshotしてcanonical JSON（末尾newline付き）へ変換する。`constitutiveVerified:false`であり、保存可能な構造と構成則の受入を区別する。`replayFiniteViscoInputHistory(raw)` はprimitive stringまたは通常のUint8Arrayを受ける。Node Bufferは`new Uint8Array(buffer)`で所有copyへ変換する。Array/Uint8Array subclass、SharedArrayBuffer、Proxyや不正UTF8は受理しない。元bytesはhashの最初のawait前にintrinsic copyし、呼出後のtypedarray変更を結果の入力同一性へ混ぜない。
