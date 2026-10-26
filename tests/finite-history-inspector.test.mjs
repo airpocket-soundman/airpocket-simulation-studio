@@ -32,3 +32,6 @@ test('malformed worker summaries refuse before success resolution and keep bound
 
 
 test('exact one MiB ASCII input is accepted without normalizing its raw hash',async()=>{const h=setup(),raw=syntheticFiniteHistoryJson().padEnd(1048576,' ');h.ui.input.value=raw;const p=h.ui.inspect();assert.equal(h.workers[0].sent.raw,raw);const r=await h.deliver();assert.equal(await p,true);assert.equal(r.sourceBytes,1048576);assert.equal(h.ui.snapshot().rawIdentity,hash(raw));h.ui.clear.onclick();assert.equal(h.ui.snapshot().rawIdentity,null);});
+
+
+test('primitive and array worker replies refuse immediately, settle false and terminate owned worker',async()=>{for(const value of [1,'x',true,null,undefined,[],['completed']]){const h=setup();h.ui.input.value=syntheticFiniteHistoryJson();const p=h.ui.inspect();assert.doesNotThrow(()=>h.workers[0].callback({data:value}));assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');assert.equal(h.ui.snapshot().workerActive,false);assert.equal(h.workers[0].terminated,1);assert.equal(h.timers.size,0);}});

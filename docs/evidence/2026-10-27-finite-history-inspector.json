@@ -83,5 +83,24 @@
     "Actual main/IAB UI verification not yet performed",
     "No calibration, measured-data fit, structural reaction, full trajectory curve, state resume or FINITEVISCO1 completion"
   ],
-  "progressChanged": false
+  "progressChanged": false,
+  "postReviewProtocolFix": {
+    "finding": "Root independently reproduced truthy primitive reply TypeError before typeof-object guard",
+    "correction": "Reject null, primitives and arrays before in operator or record access",
+    "newRegression": "Primitive/array replies terminate owned worker, clear watchdog, settle inspect false and render no result",
+    "validation": {
+      "total": 70,
+      "pass": 70,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 1628.9644
+    },
+    "sourceWorkingByteSHA256": "2c817e7a5d84fafffd882d1373789a5b42ab914a0acc7b172f133fff6074dd16",
+    "additionalActual": {
+      "gui": 0,
+      "structuralSolver": 0,
+      "codec": 0,
+      "export": 0
+    }
+  }
 }
