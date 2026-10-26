@@ -1,0 +1,289 @@
+{
+  "sourcePin": "996f153b05ce535399cdbd717eec3cf5481b5f41",
+  "sourcePath": "public/examples/increment-curve-reference.json",
+  "sourceBytes": 11461,
+  "sourceSha256": "e193c57594fa53f4f97eb36176fb6988bfbe0616a424696b5ce81eead74dc50f",
+  "stepIndex": 3,
+  "controlledQuantity": "force",
+  "controlledValue": 20,
+  "resultKind": "elastic",
+  "maxDisplacementMm": 0.011999999999999999,
+  "peakVisualizationScale": 100,
+  "maximumVisualDisplacementMm": 1.2,
+  "conversion": "No tetra tuple conversion required; source lacks surface. Derive4outward boundary triangles deterministically from existing tet indices only.",
+  "originalNodes": [
+    0,
+    0,
+    0,
+    10,
+    0,
+    0,
+    0,
+    10,
+    0,
+    0,
+    0,
+    10
+  ],
+  "originalTetrahedra": [
+    [
+      0,
+      1,
+      2,
+      3
+    ]
+  ],
+  "derivedSurface": [
+    {
+      "nodes": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "nodes": [
+        0,
+        3,
+        2
+      ]
+    },
+    {
+      "nodes": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "nodes": [
+        0,
+        2,
+        1
+      ]
+    }
+  ],
+  "originalDisplacement": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.011999999999999999
+  ],
+  "originalMagnitudes": [
+    0,
+    0,
+    0,
+    0.011999999999999999
+  ],
+  "sourceSolutionUnchanged": true,
+  "officialCaseStoreAddPassed": false,
+  "caseStoreFailure": "対応するプロジェクトではありません。",
+  "officialPrepareCaseViewPassed": true,
+  "pureGifPlanPassed": true,
+  "plan": {
+    "resultKind": "elastic",
+    "field": "displacement",
+    "unit": "mm",
+    "selectedModeIndex": null,
+    "peakScale": 100,
+    "nodeCount": 4,
+    "vectorBytes": 96,
+    "scalePolicy": "cosine-visualization-cycle",
+    "visualizationOnly": true,
+    "loadHistory": false,
+    "dynamicResponse": false,
+    "modeMeaning": "fixed-static-displacement",
+    "frames": [
+      {
+        "index": 0,
+        "phase": 0,
+        "deformScale": 0,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 1,
+        "phase": 0.041666666666666664,
+        "deformScale": 1.7037086855465844,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 2,
+        "phase": 0.08333333333333333,
+        "deformScale": 6.698729810778064,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 3,
+        "phase": 0.125,
+        "deformScale": 14.64466094067262,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 4,
+        "phase": 0.16666666666666666,
+        "deformScale": 24.999999999999993,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 5,
+        "phase": 0.20833333333333334,
+        "deformScale": 37.059047744873965,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 6,
+        "phase": 0.25,
+        "deformScale": 49.99999999999999,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 7,
+        "phase": 0.2916666666666667,
+        "deformScale": 62.940952255126035,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 8,
+        "phase": 0.3333333333333333,
+        "deformScale": 74.99999999999999,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 9,
+        "phase": 0.375,
+        "deformScale": 85.35533905932738,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 10,
+        "phase": 0.4166666666666667,
+        "deformScale": 93.30127018922194,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 11,
+        "phase": 0.4583333333333333,
+        "deformScale": 98.29629131445341,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 12,
+        "phase": 0.5,
+        "deformScale": 100,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 13,
+        "phase": 0.5416666666666666,
+        "deformScale": 98.29629131445343,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 14,
+        "phase": 0.5833333333333334,
+        "deformScale": 93.30127018922192,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 15,
+        "phase": 0.625,
+        "deformScale": 85.35533905932738,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 16,
+        "phase": 0.6666666666666666,
+        "deformScale": 75.00000000000003,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 17,
+        "phase": 0.7083333333333334,
+        "deformScale": 62.940952255126035,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 18,
+        "phase": 0.75,
+        "deformScale": 50.000000000000014,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 19,
+        "phase": 0.7916666666666666,
+        "deformScale": 37.059047744873986,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 20,
+        "phase": 0.8333333333333334,
+        "deformScale": 24.999999999999993,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 21,
+        "phase": 0.875,
+        "deformScale": 14.644660940672633,
+        "delayCentiseconds": 8
+      },
+      {
+        "index": 22,
+        "phase": 0.9166666666666666,
+        "deformScale": 6.698729810778081,
+        "delayCentiseconds": 9
+      },
+      {
+        "index": 23,
+        "phase": 0.9583333333333334,
+        "deformScale": 1.7037086855465844,
+        "delayCentiseconds": 8
+      }
+    ]
+  },
+  "cameraFit": {
+    "undeformedPlusPeakBounds": {
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        10,
+        10,
+        11.2
+      ]
+    },
+    "boundingSphereRadiusMm": 9.019977827023745,
+    "camera": {
+      "position": [
+        29.362011317247593,
+        29.362011317247593,
+        29.962011317247594
+      ],
+      "target": [
+        5,
+        5,
+        5.6
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    },
+    "formula": "center of union AABB; view along normalized[1,1,1]; distance1.6*radius/sin(verticalFov/2)"
+  },
+  "actualModalUnverified": true,
+  "newSolve": 0,
+  "newEncode": 0,
+  "newExport": 0
+}

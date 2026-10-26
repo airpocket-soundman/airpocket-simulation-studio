@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-27",
+  "runtimeSource": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+  "driverSha256": "6414bd84b38e91ea9fca34676f98bb1bde6abf155bd438a2564126de2dbb1f5e",
+  "overallAcceptance": "passed-bounded-static-deformation-gif-visible-bar",
+  "budget": {
+    "exports": 1,
+    "limit": 1,
+    "seconds": 2,
+    "watchdogMs": 120000,
+    "maxBytes": 33554432,
+    "retries": 0,
+    "solverRuns": 0
+  },
+  "sourceArchive": {
+    "path": "docs/evidence/2026-10-14-case-view-bundle.json",
+    "bytes": 208374,
+    "sha256": "991b3352d60fb7294f4cdec931483447b75567e60a8a970c04460db5a23d57c9",
+    "gitBlob": "eb7c2ae5b2634463427c430765411123eb41d43f",
+    "case": "Bundle real WASM reference",
+    "nodes": 171,
+    "resultKind": "elastic",
+    "maxDisplacementMm": 0.040000000011082545,
+    "extraction": "bundle.caseArchive via official caseStore import/export; original input/mesh/result deeply unchanged",
+    "normalizedArchiveBytes": 207702,
+    "normalizedArchiveSha256": "0370dc4911f02fab9e9606d09ce70a356d08ff4502b4f9fb75a69539f6150377"
+  },
+  "artifact": {
+    "file": "raw/deformation.gif",
+    "bytes": 5574849,
+    "sha256": "093d760aa5fd4e0ec38a23043000f2b873a1a8657f91465b7b387468d72387d1",
+    "pages": 86,
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "palette": "RGB332",
+    "colors": 256,
+    "loop": "infinite",
+    "delayCentisecondsTotal": 200
+  },
+  "visualization": {
+    "field": "displacement",
+    "unit": "mm",
+    "selectedModeIndex": null,
+    "peakScale": 100,
+    "phasePolicy": "i/24",
+    "scalePolicy": "100*(1-cos(2*pi*i/24))/2",
+    "maximumDisplayedDisplacementMm": 4.000000001108255,
+    "camera": "fixed, fitted to union of original and peak geometry",
+    "visualizationOnly": true,
+    "loadHistory": false,
+    "dynamicResponse": false,
+    "actualModalExportVerified": false
+  },
+  "technicalVerification": {
+    "allPageShaAndByteEquality": true,
+    "all24ExactCosineRecords": true,
+    "fiveStatesEqual": true,
+    "rootGuiControlsAndResultTextRestored": true,
+    "restoredScale": 100,
+    "ownedJobsAfterRelease": 0,
+    "sessionsEmpty": true,
+    "childExitAndClose": {
+      "code": 0,
+      "signal": null
+    },
+    "ownedPid": 39880,
+    "ownedPidAbsent": true,
+    "tokenRemoved": true
+  },
+  "sourceValidation": {
+    "focused": {
+      "source": "996f153b05ce535399cdbd717eec3cf5481b5f41",
+      "passed": 153,
+      "elapsedMs": 24706.2622
+    },
+    "typeDeclarations": 31,
+    "build": {
+      "source": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+      "seconds": 3.9,
+      "passed": true
+    },
+    "localPublished": {
+      "source": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+      "passed": 28,
+      "elapsedMs": 38927.237799999995
+    }
+  },
+  "preparationHistory": {
+    "initialIncrementStep3": "Existing20N step3 raw output lacked renderer surface, and officialcase import lacked project version/meshes/conditions. Pure boundary derivation plan passed but archive import failed. No invented envelope or BC used.",
+    "replacement": "Complete existing171node saved case imported without geometry/input/result conversion",
+    "files": "preparation/"
+  },
+  "limits": [
+    "Static-elastic actual only; modal automated coverage is separate",
+    "No physical modal amplitude/period/time/load response or calibrated accuracy",
+    "No GUI-button download proof",
+    "No language/hidden/cancellation/otherengine matrix or publication proof"
+  ],
+  "packagingNewRuns": {
+    "product": 0,
+    "codec": 0,
+    "solver": 0,
+    "gui": 0
+  },
+  "independent": {
+    "genericGifLzwRuns": 1,
+    "ffprobeRuns": 1,
+    "ffmpegDecodeRuns": 1,
+    "allNativeCommandsExit0": true,
+    "all24RgbPixelsEqual": true,
+    "all24SceneNonBackground": true,
+    "sceneRoiNonBackgroundMinimum": 3537,
+    "sceneRoiNonBackgroundMaximum": 3973,
+    "distinctSceneHashes": 13,
+    "manualFirstPeakLast": true,
+    "finalReview": "independent/visual-review.json",
+    "historicalMachinePending": "independent/result.json retained unchanged",
+    "omitted": [
+      {
+        "file": "ffmpeg.rgb",
+        "bytes": 14745600,
+        "sha256": "1157bb3b6cbda32f2cbc68a612bc0f0da40353bb1125fe8dcb2ef30d3124e141",
+        "reason": "Identical24-frame decodedRGB buffers retained in auditorQA; hashes/PNG/commands/logs copied"
+      },
+      {
+        "file": "independent.rgb",
+        "bytes": 14745600,
+        "sha256": "1157bb3b6cbda32f2cbc68a612bc0f0da40353bb1125fe8dcb2ef30d3124e141",
+        "reason": "Identical24-frame decodedRGB buffers retained in auditorQA; hashes/PNG/commands/logs copied"
+      }
+    ]
+  }
+}

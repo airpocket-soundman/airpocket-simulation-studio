@@ -1,0 +1,23 @@
+{
+  "executable": "C:\\Users\\yamashita_y00031\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin\\ffprobe.exe",
+  "args": [
+    "-v",
+    "error",
+    "-ignore_loop",
+    "1",
+    "-select_streams",
+    "v:0",
+    "-count_frames",
+    "-show_streams",
+    "-show_frames",
+    "-of",
+    "json",
+    "-i",
+    "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\audit-180-20261023\\airpocket-simulation-studio\\.qa\\single-deformation-gif208\\out\\deformation.gif"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "windowsHide": true,
+  "timeoutMs": 30000
+}
