@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "ba1844027c06e59f3d27294d4516a7c0ea4eb35c",
+  "scope": "Second independent source/rejection-boundary audit; distinct from numerical matrix/integration audit",
+  "source": {
+    "path": "src/grouped-temperature-operator.js",
+    "gitBlobSha1": "99b52ed244d72255e6153026fa857fab0b65b541",
+    "gitBlobSha256": "d3573fbe07013733105c6f8f5b8c70f502e7f47056f1e1c70d37aa2075ded3c1",
+    "worktreeCrLfSha256": "69671a3a04f8af869aaa2231198d870cadc52f7c4f075d8973421d112d138d98"
+  },
+  "mandatoryFindings": [],
+  "sourceModified": false,
+  "tests": {
+    "command": "node --test tests/grouped-temperature-boundary-audit.test.mjs",
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "checks": [
+      "Coplanar point/edge contacts with distinct IDs refuse",
+      "Noncoplanar vertex-on-face and subedge contact refuse",
+      "Shared node/edge-only contact succeeds without production helper use",
+      "Common vertex does not authorize an interior intersection extending away from it",
+      "Face assignment duplicate/missing/out-of-range/unknown fields refuse",
+      "Unrelated node changes remain bound to complete geometry identity",
+      "Nested accessor nonexecution and load snapshots before awaits",
+      "Self-rehashed geometry/local operator/group/M/R/source-ID changes refuse",
+      "Raw byte/depth overflow refuses",
+      "Node/face/group counts, sparse arrays, inherited records, nonfinite and nonnumber unused coordinates refuse"
+    ]
+  },
+  "limitsOfAudit": [
+    "Bounded explicit triangle groups and documented contact/area tolerances only",
+    "Not a proof of general CAD intersection classification or smooth-surface accuracy",
+    "No solver-connected temperature/coupling or material calibration validation"
+  ],
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "ciDispatches": 0,
+  "publicationVerified": false,
+  "taskStatusChanged": false
+}
