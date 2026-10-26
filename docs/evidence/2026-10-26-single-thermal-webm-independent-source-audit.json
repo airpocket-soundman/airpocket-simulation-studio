@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "scopeJa": "熱固定時刻WebM最終source独立監査とfake codec試験。実codec/GUI/solver成功の代用ではない。",
+  "scopeEn": "Independent final-source review and fake-codec tests only; no actual codec, GUI or solver acceptance.",
+  "reviewedCommit": "1ea22976e93d4837cfe8557f060f1f384fa378a5",
+  "rootEquivalent": "636a2421621f896b63473d91d604c5a02d06249e",
+  "sourceInventory": [
+    {
+      "path": "src/single-view-time-webm.js",
+      "gitBlobSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "gitBlobSha256": "1e62c286617144d89e145ee26a8307e06b6a9cae4b83b4479007e45bbcd8e9a5"
+    },
+    {
+      "path": "src/visual-export.js",
+      "gitBlobSha256": "437969d1a068f4a3265b10008192ec3798e1f390d1a7c0f28b9f36e67a4dfd05"
+    },
+    {
+      "path": "tests/single-thermal-time-webm.test.mjs",
+      "gitBlobSha256": "28dd810325057bc6eea21cb9c3345e8b192410ca268e74a16234973b400edc86"
+    }
+  ],
+  "findings": [],
+  "verifiedBoundaries": [
+    "prepared field selects thermal/acoustic private proof verification, never the returned Blob kind",
+    "both directions of cross-purpose proof mismatch refuse with WEBM_ENDPOINT_UNVERIFIED and no readable artifact",
+    "unsupported heatFlux/pressure fields refuse fixed-time job completion",
+    "public thermal/acoustic encoders retain async Promise rejection for null/undefined/invalid input",
+    "thermal history length <=61, total scalar size <=64MiB; exact nodal count and every finite value checked before codec work",
+    "stored-time axis is snapshotted, exact first/last planned; byte SHA/result revision remain bound to private issued proof",
+    "thermal Save and final-only heatFlux refusal, JA/EN, restore interpolated time, abort and mid-export field changes",
+    "existing acoustic endpoint, payload-substitution, probe/flush abort and UI regressions remain passing"
+  ],
+  "executed": {
+    "cwd": "thermal-time-webm200/airpocket-simulation-studio",
+    "command": "node --test tests/single-thermal-time-webm.test.mjs tests/single-view-time-webm.test.mjs tests/single-view-time-webm-independent.test.mjs tests/visual-export-adapter.test.mjs",
+    "total": 44,
+    "pass": 44,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 835.6116
+  },
+  "sourceEdits": 0,
+  "newActualCodecRuns": 0,
+  "newGuiExports": 0,
+  "newSolverRuns": 0,
+  "limits": [
+    "No real browser encoder/decoder claim",
+    "No source-scalar copying added; prepared output ownership and revision guards remain the source stability boundary",
+    "Thermal preview intentionally remains unavailable; Save fixed-time temperature only",
+    "No energy-conservation, calibration or parent-task completion claim"
+  ]
+}
