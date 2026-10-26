@@ -161,3 +161,4 @@ fixedWebmSchedule('2');
 void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];
 export {temperatureFixture} from './planar-temperature-operator-types';
 export {groupedTemperatureFixture} from './grouped-temperature-operator-types';
+import './single-orbit-gif-types';

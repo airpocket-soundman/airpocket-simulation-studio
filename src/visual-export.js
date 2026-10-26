@@ -1,3 +1,5 @@
+import {singleOrbitGifCapabilities,encodeSingleOrbitGif} from './ui/single-orbit-gif.js';
+import {canonicalJson} from './project-revision.js';
 import {singleViewTimeWebmCapabilities,singleThermalTimeWebmCapabilities,createSingleViewThermalTimePlan,encodeSingleViewThermalTimeWebm,createSingleViewAcousticTimePlan,encodeSingleViewAcousticTimeWebm} from './single-view-time-webm.js';
 import {createWebmRecordingLifecycle,waitForWebmStop} from './ui/webm-recording-lifecycle.js';
 import {framesOf} from './result-frames.js';
@@ -19,32 +21,33 @@ export async function hasVideoFrames(blob){
 const WEBM_TYPES=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
 const MP4_TYPES=['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=avc1','video/mp4'];
 function safeSupported(recorder,type){try{return typeof recorder?.isTypeSupported==='function'&&recorder.isTypeSupported(type)===true;}catch{return false;}}
-// MP4 and GIF are never exported by this application. The MediaRecorder probe only explains why MP4 is refused;
+// MP4 is not exported by this application; orbit GIF uses the separate bounded canvas encoder. The MediaRecorder probe only explains why MP4 is refused;
 // it can never make `supported` true because no MP4 encoder or muxer path exists here.
-export function exportFormatCapabilities({mediaRecorder}={}){
+export function exportFormatCapabilities({mediaRecorder,...gifEnv}={}){
  const mp4Type=MP4_TYPES.find(type=>safeSupported(mediaRecorder,type)),alternatives=['webm','png'];
  return {
   mp4:{supported:false,browserRecorderSupport:!!mp4Type,...(mp4Type?{probedMimeType:mp4Type}:{}),reason:mp4Type?'MediaRecorder reports MP4 recording in this browser, but MP4 export is not implemented in this application':'MediaRecorder does not support the MP4 container in this browser',alternatives:[...alternatives]},
-  gif:{supported:false,reason:'GIF encoding is not implemented',alternatives:[...alternatives]}
+  gif:singleOrbitGifCapabilities(gifEnv)
  };
 }
 
 export function installVisualExport({renderer,scene,camera,controls,getAnalysis,redraw,language,translate,getTimeView,restoreTimeView,recordingEnv={}}){
  const $=id=>document.getElementById(id),host=document.createElement('details');
- host.innerHTML=`<summary>画像・アニメーションを保存</summary><label><input id="result-surface" type="checkbox" checked> 結果の表面を表示</label><label><input id="result-surface-wire" type="checkbox"> 結果の表面メッシュを表示</label><button id="view-png">表示中の画像をPNGで保存</button><label>アニメーションの種類<select id="animation-kind"><option value="orbit">モデルを一周</option><option value="deformation">変形を往復（表示用）</option><option value="time">保存時刻（音響・温度）</option><option value="slice">断面を移動</option></select></label><label>動画の長さ（秒）<input id="animation-seconds" type="number" value="4" min="1" max="15" step="1"></label><div class="row"><button id="animation-preview">再生</button><button id="animation-save">WebM動画で保存</button><button id="animation-stop" disabled>再生を止める</button></div><p>画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化のWebMは保存した音響・温度フレームを使い、動画時間は表示用に伸縮します。温度はWebM保存のみ対応し、再生ボタンは未対応です。熱流束の時間変化は出力できません。</p><p id="visual-export-status" role="status"></p><a id="visual-export-download" hidden></a>`;
+ host.innerHTML=`<summary>画像・アニメーションを保存</summary><label><input id="result-surface" type="checkbox" checked> 結果の表面を表示</label><label><input id="result-surface-wire" type="checkbox"> 結果の表面メッシュを表示</label><button id="view-png">表示中の画像をPNGで保存</button><label>アニメーションの種類<select id="animation-kind"><option value="orbit">モデルを一周</option><option value="deformation">変形を往復（表示用）</option><option value="time">保存時刻（音響・温度）</option><option value="slice">断面を移動</option></select></label><label>動画の長さ（秒）<input id="animation-seconds" type="number" value="4" min="1" max="15" step="1"></label><div class="row"><button id="animation-preview">再生</button><button id="animation-save">WebM動画で保存</button><button id="animation-gif-save">回転GIFで保存</button><button id="animation-stop" disabled>再生を止める</button></div><p>画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化のWebMは保存した音響・温度フレームを使い、動画時間は表示用に伸縮します。温度はWebM保存のみ対応し、再生ボタンは未対応です。熱流束の時間変化は出力できません。GIFは回転のみ、24枚・640×320・256色の短いプレビューです。</p><p id="visual-export-status" role="status"></p><a id="visual-export-download" hidden></a>`;
  $('result-legend').after(host);
- translate({'画像・アニメーションを保存':'Save images and animations','結果の表面を表示':'Show result surface','結果の表面メッシュを表示':'Show result surface mesh','表示中の画像をPNGで保存':'Save current view as PNG','アニメーションの種類':'Animation type','モデルを一周':'Orbit the model','変形を往復（表示用）':'Deformation cycle (visualization)','保存時刻（音響・温度）':'Stored time (acoustic / temperature)','断面を移動':'Move section plane','動画の長さ（秒）':'Video duration (seconds)','再生':'Play','WebM動画で保存':'Save WebM video','再生を止める':'Stop playback','画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化のWebMは保存した音響・温度フレームを使い、動画時間は表示用に伸縮します。温度はWebM保存のみ対応し、再生ボタンは未対応です。熱流束の時間変化は出力できません。':'Images and videos include current colors, units, mesh and sections. Deformation cycles are visualizations, not recalculated load histories. Time WebM uses stored acoustic or temperature frames with a visualization time scale. Temperature supports Save WebM only, not the Play button. Heat-flux time export is unavailable.'});
+ translate({'画像・アニメーションを保存':'Save images and animations','結果の表面を表示':'Show result surface','結果の表面メッシュを表示':'Show result surface mesh','表示中の画像をPNGで保存':'Save current view as PNG','アニメーションの種類':'Animation type','モデルを一周':'Orbit the model','変形を往復（表示用）':'Deformation cycle (visualization)','保存時刻（音響・温度）':'Stored time (acoustic / temperature)','断面を移動':'Move section plane','動画の長さ（秒）':'Video duration (seconds)','再生':'Play','WebM動画で保存':'Save WebM video','回転GIFで保存':'Save orbit GIF','再生を止める':'Stop playback','画像・動画には現在の色、単位、メッシュ、断面を含めます。変形の往復は表示用で、載荷履歴の再計算ではありません。時間変化のWebMは保存した音響・温度フレームを使い、動画時間は表示用に伸縮します。温度はWebM保存のみ対応し、再生ボタンは未対応です。熱流束の時間変化は出力できません。GIFは回転のみ、24枚・640×320・256色の短いプレビューです。':'Images and videos include current colors, units, mesh and sections. Deformation cycles are visualizations, not recalculated load histories. Time WebM uses stored acoustic or temperature frames with a visualization time scale. Temperature supports Save WebM only, not the Play button. Heat-flux time export is unavailable. GIF is an orbit-only short preview: 24 frames, 640 by 320, 256 colors.'});
  $('result-surface').onchange=redraw;$('result-surface-wire').onchange=redraw;
  let active=null,downloadUrl;
  const message=(ja,en)=>$('visual-export-status').textContent=language()==='en'?en:ja;
  const canvas=document.createElement('canvas'),context=canvas.getContext('2d');
- function capture({maxWidth=1920,maxHeight=Infinity}={}){
+ function capture({maxWidth=1920,maxHeight=Infinity,gifLayout=false}={}){
   renderer.render(scene,camera);const source=renderer.domElement,w=Math.max(1,Math.floor(Math.min(maxWidth,source.width,(maxHeight-116)*source.width/source.height))),h=Math.max(1,Math.round(source.height*w/source.width));
-  if(canvas.width!==w||canvas.height!==h+116){canvas.width=w;canvas.height=h+116;}
-  context.fillStyle='#102331';context.fillRect(0,0,w,h+116);context.drawImage(source,0,0,w,h);
+  const outputWidth=gifLayout?640:w,outputHeight=gifLayout?320:h+116,captionY=gifLayout?204:h;
+  if(canvas.width!==outputWidth||canvas.height!==outputHeight){canvas.width=outputWidth;canvas.height=outputHeight;}
+  context.fillStyle='#102331';context.fillRect(0,0,outputWidth,outputHeight);context.drawImage(source,gifLayout?Math.floor((640-w)/2):0,gifLayout?Math.floor((204-h)/2):0,w,h);
   context.fillStyle='#edf6f8';context.font='15px sans-serif';
   const lines=['airpocket Simulation Studio · '+$('name').textContent,(getAnalysis()?.result?.analysisAssessment?.provisional?(language()==='en'?'PROVISIONAL · ':'暫定解析 · '):'')+$('result-legend').textContent,$('section-summary').textContent,$('visual-export-status').textContent];
-  lines.forEach((text,i)=>context.fillText(text,16,h+23+23*i,w-32));return canvas;
+  lines.forEach((text,i)=>context.fillText(text,16,captionY+23+23*i,outputWidth-32));return canvas;
  }
  function download(blob,name){if(downloadUrl)URL.revokeObjectURL(downloadUrl);downloadUrl=URL.createObjectURL(blob);const link=$('visual-export-download');link.href=downloadUrl;link.download=name;link.textContent=language()==='en'?'Download again':'もう一度ダウンロード';link.hidden=false;link.click();}
  const stop=()=>{if(active){active.stop=true;active.interrupt?.();}};$('animation-stop').onclick=stop;
@@ -117,8 +120,31 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
   if(save)download(blob,'simulation-time.webm');message('動画の全フレームと終端を確認しました。','All video frames and the endpoint were verified.');return blob;
  }
 
+ async function renderOrbitGif({animation='orbit',seconds,signal,onProgress=()=>{},save=false,expectedResultRevision}={}){
+  if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
+  if(animation!=='orbit')throw Error('Single-view GIF supports orbit only');
+  const output=getAnalysis(),field=$('result-field')?.value;
+  if(!output?.result||!field)throw Error('Display a result field before saving an orbit GIF');
+  if(!singleOrbitGifCapabilities(recordingEnv).supported)throw Error(language()==='en'?'Orbit GIF needs a readable canvas and SHA-256.':'回転GIFには読み取り可能なcanvasとSHA-256が必要です。');
+  const saved={position:camera.position.clone(),target:controls.target.clone(),up:camera.up?.clone?.(),fov:camera.fov,damping:controls.enableDamping,enabled:controls.enabled,timeView:getTimeView?.()},timeKey=saved.timeView===undefined?undefined:canonicalJson(saved.timeView),controller=new AbortController(),state={stop:false,interrupt:()=>controller.abort()};
+  const abort=()=>{state.stop=true;controller.abort();};signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+  const locked=[...document.querySelectorAll('#app button,#app input,#app select,aside summary')].filter(el=>el.id!=='animation-stop'&&el.id!=='agent-disconnect'&&!el.closest?.('#agent-connection')),disabled=locked.map(el=>el.disabled);
+  active=state;controls.enabled=false;controls.enableDamping=false;locked.forEach(el=>el.disabled=true);$('animation-stop').disabled=false;
+  const viewKeys=[['result-field','value'],['result-mode','value'],['deform-scale','value'],['clip-enabled','checked'],['clip-axis','value'],['clip-position','value'],['clip-flip','checked'],['model-opacity','value'],['result-surface','checked'],['result-surface-wire','checked'],['volume-wire','checked'],['result-section','checked'],['color-fixed','checked'],['color-min','value'],['color-max','value']],viewSnapshot=()=>canonicalJson(viewKeys.flatMap(([id,key])=>$(id)?[[id,key,$(id)[key]??null]]:[])),savedView=viewKeys.flatMap(([id,key])=>$(id)?[[id,key,$(id)[key]??null]]:[]),viewKey=canonicalJson(savedView),sourceResolution={width:renderer.domElement.width,height:renderer.domElement.height};
+  const timeState=saved.timeView?.state??saved.timeView,viewerFrameIndex=Number.isSafeInteger(timeState?.frameIndex)?timeState.frameIndex:undefined,viewTimeSeconds=Number.isFinite(timeState?.timeSeconds)?timeState.timeSeconds:output.result.snapshots?.[viewerFrameIndex]?.time,stored=framesOf(output.result),timeApplies=stored?.fieldId===field,modeIndex=output.result.kind==='modal'?Number($('result-mode')?.value):undefined,interpolated=Number.isFinite(timeState?.timeSeconds)&&!!stored&&!stored.times.includes(timeState.timeSeconds);
+  const check=()=>{if(state.stop||controller.signal.aborted)throw Object.assign(Error('Orbit GIF cancelled'),{code:'GIF_ORBIT_CANCELLED'});if(getAnalysis()!==output||$('result-field')?.value!==field||active!==state||viewSnapshot()!==viewKey||camera.fov!==saved.fov||saved.up&&(!camera.up||camera.up.x!==saved.up.x||camera.up.y!==saved.up.y||camera.up.z!==saved.up.z)||renderer.domElement.width!==sourceResolution.width||renderer.domElement.height!==sourceResolution.height||timeKey!==undefined&&canonicalJson(getTimeView?.())!==timeKey)throw Object.assign(Error('Displayed result, field or time changed during GIF export'),{code:'GIF_ORBIT_INVALID'});};let blob;
+  try{check();const start={position:[saved.position.x,saved.position.y,saved.position.z],target:[saved.target.x,saved.target.y,saved.target.z],up:camera.up?.toArray?.()??[0,1,0],fov:camera.fov??40};
+   blob=await encodeSingleOrbitGif({camera:start,field,resultRevision:expectedResultRevision,viewTimeSeconds,viewerFrameIndex,interpolated,timeApplies,modeIndex,animation,seconds,signal:controller.signal,onProgress,assertCurrent:check,renderFrame:(next,step)=>{
+    check();camera.position.copy({x:next.position[0],y:next.position[1],z:next.position[2]});camera.lookAt(saved.target);message('回転GIF '+(step.index+1)+'/24'+(!timeApplies||viewTimeSeconds===undefined?' · 表示結果は固定':' · '+(interpolated?'補間表示 ':'表示時刻 ')+viewTimeSeconds.toPrecision(5)+' s（固定）'),'Orbit GIF '+(step.index+1)+'/24'+(!timeApplies||viewTimeSeconds===undefined?' · displayed result is fixed':' · '+(interpolated?'interpolated view ':'view time ')+viewTimeSeconds.toPrecision(5)+' s (fixed)'));return capture({maxWidth:640,maxHeight:320,gifLayout:true});
+   }},recordingEnv);check();
+  }finally{try{camera.position.copy(saved.position);controls.target.copy(saved.target);if(saved.up)camera.up.copy(saved.up);camera.fov=saved.fov;camera.lookAt(saved.target);camera.updateProjectionMatrix?.();controls.enabled=saved.enabled;controls.enableDamping=saved.damping;if(getAnalysis()===output){const mode=$('result-mode'),modeChanged=mode&&savedView.some(([id,key,value])=>id==='result-mode'&&key==='value'&&mode.value!==value);for(const [id,key,value]of savedView)if($(id))$(id)[key]=value;if(modeChanged)mode.dispatchEvent(new Event('change'));if(saved.timeView!==undefined)restoreTimeView?.(saved.timeView);redraw();}}finally{locked.forEach((el,i)=>el.disabled=disabled[i]);$('animation-stop').disabled=true;active=null;signal?.removeEventListener('abort',abort);}}
+  if(save)download(blob,'simulation-orbit.gif');message('回転GIFを作成しました。','Orbit GIF completed.');return blob;
+ }
+ $('animation-gif-save').onclick=()=>renderOrbitGif({animation:$('animation-kind').value,seconds:Number($('animation-seconds').value),save:true}).catch(error=>message(error.message,error.message));
+
   // Same checks renderSequence runs, exposed so the job layer can refuse at start instead of failing after the job began.
  function preflight({animation='orbit',view,format,seconds=5}={}){
+  if(format==='gif'){if(animation!=='orbit')throw Error('Single-view GIF supports orbit only');if(!getAnalysis()?.result)throw Error('Display a result before exporting GIF');if(!singleOrbitGifCapabilities(recordingEnv).supported)throw Error('Orbit GIF canvas support is unavailable');return;}
   if(format==='webm'&&animation==='time'){const output=getAnalysis(),thermal=output?.result?.kind==='thermal';if(thermal)createSingleViewThermalTimePlan(output,seconds,view?.result?.field??$('result-field')?.value);else createSingleViewAcousticTimePlan(output,seconds);const cap=(thermal?singleThermalTimeWebmCapabilities:singleViewTimeWebmCapabilities)(recordingEnv);if(!cap.supported)throw Object.assign(Error(cap.reason),{code:'WEBM_FIXED_UNSUPPORTED'});return;}
   const output=getAnalysis(),result=output?.result;
   if(!FIXED_FRAME_ANIMATIONS.includes(animation))throw Error('Invalid animation type');
@@ -185,6 +211,7 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  async function render({format,animation,seconds,frames,view,expectedResultRevision,physicalRevision,signal,onProgress=()=>{}}){
   if(active||!$('cancel-run').disabled)throw Error('Viewer is busy');
   if(signal?.aborted)throw Error('Export cancelled');
+  if(format==='gif')return renderOrbitGif({animation,seconds,signal,onProgress,expectedResultRevision});
   if(format==='png-sequence')return renderSequence({animation,frames,view,expectedResultRevision,physicalRevision,signal,onProgress});
   if(format==='webm')return animate(true,{animation,seconds,signal,onProgress,save:false,expectedResultRevision});
   if(format!=='png')throw Error('Unsupported export format');
@@ -193,6 +220,6 @@ export function installVisualExport({renderer,scene,camera,controls,getAnalysis,
  }
  const pngSequenceSupported=()=>typeof crypto!=='undefined'&&!!crypto.subtle?.digest;
  const pngSequenceCapability=()=>pngSequenceSupported()?{supported:true,container:'zip',compression:'store',...FIXED_FRAME_LIMITS,animations:[...FIXED_FRAME_ANIMATIONS],timeSelection:'stored-frames-only',timeAnimationResultKinds:['acousticTransient','thermal'],thermalTimeField:'temperature',recording:'fixed-frame',realtime:false,wallClockIndependent:true,frameCountGuaranteed:true,manifest:'manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)'}:{supported:false,reason:'SHA-256 (crypto.subtle) is unavailable',alternatives:['png']};
- const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,singleTimeWebmExport:singleViewTimeWebmCapabilities(recordingEnv),singleThermalTimeWebmExport:singleThermalTimeWebmCapabilities(recordingEnv),png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
+ const capabilities=({mediaRecorder=typeof MediaRecorder==='undefined'?undefined:MediaRecorder}={})=>{const formats=exportFormatCapabilities({mediaRecorder,...recordingEnv});formats['png-sequence']=pngSequenceCapability();return {schemaVersion:1,singleOrbitGifExport:singleOrbitGifCapabilities(recordingEnv),singleTimeWebmExport:singleViewTimeWebmCapabilities(recordingEnv),singleThermalTimeWebmExport:singleThermalTimeWebmCapabilities(recordingEnv),png:true,'png-sequence':pngSequenceSupported(),webm:!!mediaRecorder&&!!canvas.captureStream&&WEBM_TYPES.some(type=>safeSupported(mediaRecorder,type)),mp4:formats.mp4.supported,gif:formats.gif.supported,formats,animations:['orbit','deformation','time','slice'],timeSelection:'stored-acoustic-frames-only',timeAnimationResultKinds:['acousticTransient'],stillTime:'displayed-time-recorded-for-thermal',recording:'realtime',targetFrameRate:24,frameCountGuaranteed:false,maxSeconds:15};};
  return {stop,capture,render,preflight,capabilities,isActive:()=>active!==null};
 }

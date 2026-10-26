@@ -1,3 +1,6 @@
+import {getSingleOrbitGifVerification} from '../src/ui/single-orbit-gif.js';
+import {orbitGifEnv} from './helpers/orbit-gif-env.mjs';
+import {decodeGif} from './helpers/gif-decode.mjs';
 import {fixedCodecEnv} from './helpers/single-view-fixed-codec.mjs';
 import {getSingleViewAcousticTimeVerification,getSingleViewThermalTimeVerification} from '../src/single-view-time-webm.js';
 import {webmTestEnv} from './helpers/webm-test-env.mjs';
@@ -8,20 +11,21 @@ import {installVisualExport,hasVideoFrames} from '../src/visual-export.js';
 class Vector {
  constructor(x=1,y=2,z=3){Object.assign(this,{x,y,z});}
  clone(){return new Vector(this.x,this.y,this.z);}
+ toArray(){return [this.x,this.y,this.z];}
  copy(v){Object.assign(this,{x:v.x,y:v.y,z:v.z});return this;}
  sub(v){this.x-=v.x;this.y-=v.y;this.z-=v.z;return this;}
  add(v){this.x+=v.x;this.y+=v.y;this.z+=v.z;return this;}
  applyAxisAngle(){this.x+=10;return this;}
 }
 const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
-function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,thermal=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
+function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,thermal=false,realTimeView=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
  const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
- for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','result-field'])element(id);
+ for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-gif-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','result-field','color-fixed','color-min','color-max','result-mode'])element(id);
  Object.assign(element('cancel-run'),{disabled:true});element('animation-kind').value='orbit';element('animation-seconds').value='1';element('clip-axis').value='0';element('deform-scale').value='2';element('clip-position').value='4';element('result-legend').textContent='20 → 100 °C';
- const draws=[],canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(...args){draws.push(args);},fillText(){}}),toBlob(cb,type){cb(new Blob(['png'],{type}));},captureStream(){return {getTracks:()=>tracks};}};
- globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('agent-disconnect')]};
+ const draws=[],texts=[],canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(...args){draws.push(args);},fillText(...args){texts.push(args);}}),toBlob(cb,type){cb(new Blob(['png'],{type}));},captureStream(){return {getTracks:()=>tracks};}};
+ globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('animation-gif-save'),element('agent-disconnect')]};
  globalThis.requestAnimationFrame=callback=>frames.push(callback);
  class Recorder {
  static isTypeSupported(type){return type==='video/webm';}
@@ -31,12 +35,13 @@ function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv
  stop(){order.push('stop');this.state='inactive';if(!noChunks)this.ondataavailable?.({data:new Blob([emptyRecording?Uint8Array.of(0x1a,0x45,0xdf,0xa3):CLUSTER],{type:'video/webm'})});this.onstop?.();}
  }
  globalThis.MediaRecorder=Recorder;
- const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
+ const camera={position:new Vector(),up:new Vector(0,1,0),fov:40,orientationUp:[0,1,0],updateProjectionMatrix(){},lookAt(){this.orientationUp=this.up.toArray();}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
  element('result-field').value=thermal?'temperature':'instantPressure';
  const output={mesh:{nodes:[0,0,0,1,1,1]},result:thermal?{kind:'thermal',transient:true,snapshots:[0,.2,.9,1.2].map(time=>({time,temperature:[20+time,30+time]}))}:acoustic?{kind:'acousticTransient',snapshots:[0,.2,.9,1.2].map(time=>({time,pressure:[time,2*time]}))}:{kind:'elastic'}};
  let current=output;const physical={timeSeconds:.35,frameIndex:1};const selected=[];if(acoustic||thermal){element('acoustic-time-frame').value='1';element('acoustic-time-frame').dispatchEvent=()=>{selected.push(Number(element('acoustic-time-frame').value));physical.frameIndex=Number(element('acoustic-time-frame').value);physical.timeSeconds=output.result.snapshots[physical.frameIndex].time;};}
- const api=installVisualExport({renderer:{domElement:{width:sourceWidth,height:sourceHeight},render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic||thermal?{getTimeView:()=>structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,value);element('acoustic-time-frame').value=String(value.frameIndex);}}:{})});
- return {order,api,canvas,controls,camera,tracks,elements,frames,draws,output,physical,selected,replaceOutput:value=>{current=value;},get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
+ const sourceElement={width:sourceWidth,height:sourceHeight};
+ const api=installVisualExport({renderer:{domElement:sourceElement,render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic||thermal?{getTimeView:()=>realTimeView?{state:structuredClone(physical),controls:[{id:'acoustic-time-frame',key:'value',value:element('acoustic-time-frame').value}]}:structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,realTimeView?value.state:value);element('acoustic-time-frame').value=realTimeView?value.controls[0].value:String(value.frameIndex);}}:{})});
+ return {order,api,canvas,controls,camera,tracks,elements,frames,draws,texts,resizeSource(){sourceElement.width++;},output,physical,selected,replaceOutput:value=>{current=value;},get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
 test('PNG export returns a PNG Blob with caption space and never initiates a download',async()=>{
@@ -125,3 +130,26 @@ test('thermal abort or mid-export field change restores UI and never downloads; 
 });
 
 test('thermal codec absence refuses before changing the viewer or publishing a download',async()=>{const f=fixture({thermal:true});try{const saved=structuredClone(f.physical);assert.equal(f.api.capabilities().singleThermalTimeWebmExport.supported,false);await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),{code:'WEBM_FIXED_UNSUPPORTED'});assert.deepEqual(f.physical,saved);assert.equal(f.clicks,0);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);}finally{f.restore();}});
+
+for(const locale of ['ja','en'])test('orbit GIF GUI Save uses caption-wide640 layout, freezes thermal2s and matches API bytes ('+locale+')',async()=>{
+ const gif=orbitGifEnv(),f=fixture({thermal:true,realTimeView:true,locale,recordingEnv:gif.env,sourceWidth:440,sourceHeight:521});try{f.output.result.snapshots=[0,5,10].map(time=>({time,temperature:[20+time,20+time]}));f.physical.timeSeconds=2;f.physical.frameIndex=0;f.elements.get('acoustic-time-frame').value='0';const saved={camera:f.camera.position.clone(),physical:structuredClone(f.physical)};f.elements.get('animation-kind').value='orbit';f.elements.get('animation-seconds').value='2';const blob=await f.api.render({format:'gif',animation:'orbit',seconds:2}),bytes=new Uint8Array(await blob.arrayBuffer()),decoded=decodeGif(bytes),verification=getSingleOrbitGifVerification(blob);assert.equal(verification.interpolated,true);assert.equal(verification.viewerFrameIndex,0);assert.equal(verification.viewTimeSeconds,2);assert.equal(decoded.frames.length,24);assert.equal(decoded.frames.reduce((n,f)=>n+f.delay,0),200);assert.equal(f.canvas.width,640);assert.equal(f.canvas.height,320);assert.ok(f.draws.every(d=>d[3]/d[4]>0.84&&d[3]/d[4]<0.85));assert.ok(f.texts.some(t=>String(t[0]).includes('°C')&&t[3]===608));assert.ok(f.texts.some(t=>String(t[0]).includes('2.0000')&&t[3]===608));assert.deepEqual(f.camera.position,saved.camera);assert.deepEqual(f.physical,saved.physical);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(f.elements.get('animation-gif-save').disabled,false);assert.equal(f.elements.get('agent-disconnect').disabled,false);
+ let download;const create=URL.createObjectURL;URL.createObjectURL=value=>{download=value;return 'blob:test-gif';};try{await f.elements.get('animation-gif-save').onclick();}finally{URL.createObjectURL=create;}assert.equal(f.clicks,1);assert.equal(f.elements.get('visual-export-download').download,'simulation-orbit.gif');assert.deepEqual(new Uint8Array(await download.arrayBuffer()),bytes);assert.deepEqual(f.physical,saved.physical);assert.equal(f.api.capabilities().singleOrbitGifExport.supported,true);assert.equal(f.api.capabilities().gif,true);
+ }finally{f.restore();}
+});
+
+test('same-revision GIF field/time/range/viewport changes, result replacement and abort refuse output and restore host ownership',async()=>{
+ for(const mode of ['field','time','range','resize','replace','abort']){const gif=orbitGifEnv(),f=fixture({thermal:true,recordingEnv:gif.env}),controller=new AbortController(),saved={camera:f.camera.position.clone(),physical:structuredClone(f.physical),field:f.elements.get('result-field').value,color:f.elements.get('color-max').value};let turns=0;
+  gif.env.yieldControl=async()=>{if(++turns!==2)return;if(mode==='field')f.elements.get('result-field').value='heatFlux';if(mode==='time')f.physical.timeSeconds=.7;if(mode==='range')f.elements.get('color-max').value='999';if(mode==='resize')f.resizeSource();if(mode==='replace')f.replaceOutput({result:{kind:'elastic'}});if(mode==='abort')controller.abort();};
+  try{await assert.rejects(f.api.render({format:'gif',animation:'orbit',seconds:1,signal:controller.signal}),/changed|cancelled/);assert.equal(f.clicks,0);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(f.controls.enableDamping,true);assert.deepEqual(f.camera.position,saved.camera);assert.equal(f.elements.get('animation-gif-save').disabled,false);if(mode!=='replace'){assert.deepEqual(f.physical,saved.physical);assert.equal(f.elements.get('result-field').value,saved.field);assert.equal(f.elements.get('color-max').value,saved.color);}}finally{f.restore();}
+ }
+});
+
+test('orbit-only GIF action refuses other panel animation kinds without modifying viewer',async()=>{const gif=orbitGifEnv(),f=fixture({thermal:true,recordingEnv:gif.env});try{const saved=structuredClone(f.physical);for(const kind of ['time','deformation','slice']){f.elements.get('animation-kind').value=kind;await f.elements.get('animation-gif-save').onclick();assert.equal(f.clicks,0);assert.equal(f.api.isActive(),false);assert.deepEqual(f.physical,saved);assert.match(f.elements.get('visual-export-status').textContent,/orbit only/);}}finally{f.restore();}});
+
+
+test('modal onchange closure and camera up/fov changes are refused and restored with the same result revision',async()=>{
+ for(const kind of ['mode','up','fov']){const gif=orbitGifEnv(),f=fixture({recordingEnv:gif.env});f.output.result={kind:'modal',modes:[{},{}]};f.elements.get('result-field').value='displacement';const select=f.elements.get('result-mode');select.value='0';let modeIndex=0;select.onchange=()=>modeIndex=Number(select.value);select.dispatchEvent=e=>{if(e.type==='change')select.onchange();};let turns=0;
+  gif.env.yieldControl=async()=>{if(++turns!==2)return;if(kind==='mode'){select.value='1';select.dispatchEvent(new Event('change'));}if(kind==='up')f.camera.up.x=.5;if(kind==='fov')f.camera.fov=50;};
+  try{await assert.rejects(f.api.render({format:'gif',animation:'orbit',seconds:1}),/changed/);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(select.value,'0');assert.equal(modeIndex,0);assert.deepEqual(f.camera.up.toArray(),[0,1,0]);assert.equal(f.camera.fov,40);assert.deepEqual(f.camera.orientationUp,[0,1,0]);assert.equal(f.clicks,0);}finally{f.restore();}
+ }
+});

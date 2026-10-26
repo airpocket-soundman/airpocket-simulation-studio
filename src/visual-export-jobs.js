@@ -1,3 +1,4 @@
+import {singleOrbitGifManifest,SINGLE_ORBIT_GIF_LIMITS} from './ui/single-orbit-gif.js';
 import {singleViewThermalTimeManifest,singleViewAcousticTimeManifest} from './single-view-time-webm.js';
 import {canonicalJson} from './project-revision.js';
 import {FIXED_FRAME_LIMITS,readStoreZip,sha256Hex} from './visual-export-fixed-frame.js';
@@ -9,9 +10,10 @@ function freeze(value){if(value&&typeof value==='object'){for(const child of Obj
 function request(value){
  if(!value||typeof value.requestId!=='string'||!value.requestId.trim()||value.requestId.length>128)throw Error('Invalid visual export requestId');
  if(typeof value.expectedResultRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(value.expectedResultRevision))throw Error('Invalid expectedResultRevision');
- if(!['png','webm','png-sequence'].includes(value.format))throw Error('Visual export format must be png, webm or png-sequence');
+ if(!['png','webm','png-sequence','gif'].includes(value.format))throw Error('Visual export format must be png, webm, gif or png-sequence');
  const animation=value.animation??'orbit';
  if(!['orbit','deformation','time','slice'].includes(animation))throw Error('Invalid visual export animation or seconds');
+ if(value.format==='gif'&&animation!=='orbit')throw Error('Single-view GIF supports orbit only');
  if(value.format==='png-sequence'){
   if(value.seconds!==undefined&&value.seconds!==null)throw Error('png-sequence is fixed-frame; seconds is not accepted, use frames');
   const frames=value.frames??FIXED_FRAME_LIMITS.defaultFrames;
@@ -94,18 +96,19 @@ async function buildManifest(job,mimeType,bytes,sha256,blob){
  const {format,animation,seconds,expectedResultRevision}=job.request,result=job.view?.result&&typeof job.view.result==='object'?job.view.result:{},picked={};
  for(const key of RESULT_SETTINGS)if(typeof result[key]==='string'&&result[key].length<=64||finite(result[key]))picked[key]=result[key];
  if(result.camera&&typeof result.camera==='object'){const camera={};for(const key of ['position','target','up'])if(vector(result.camera[key]))camera[key]=vector(result.camera[key]);if(finite(result.camera.fov))camera.fov=result.camera.fov;if(Object.keys(camera).length)picked.camera=camera;}
- const size=format==='png'?pngSize(bytes):undefined,container=format==='png'?'png':'webm',codec=(/codecs=([^;]+)/.exec(mimeType)||[])[1];
+ const size=format==='png'?pngSize(bytes):undefined,container=format==='png'?'png':format==='gif'?'gif':'webm',codec=(/codecs=([^;]+)/.exec(mimeType)||[])[1];
  const manifest={schemaVersion:1,resultRevision:expectedResultRevision,format,container,mimeType,...(codec?{codec}:{}),sha256,totalBytes:bytes.length,
   view:picked,...(size?{resolution:size}:{}),
   scale:{units:{time:'second'},...(finite(picked.deformScale)?{deformScale:picked.deformScale,deformScaleKind:'visualization multiplier'}:{})}};
  if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
  else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
  if(format==='webm'&&animation==='time'){if(!['temperature','instantPressure'].includes(picked.field))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Stored-time artifact requires temperature or instantaneous pressure');const fixed=await (picked.field==='temperature'?singleViewThermalTimeManifest:singleViewAcousticTimeManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
- if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
+ if(format==='gif'){const fixed=await singleOrbitGifManifest(blob,bytes,{seconds,resultRevision:expectedResultRevision,field:picked.field,camera:picked.camera,timeSeconds:picked.timeSeconds,frameIndex:picked.frameIndex,modeIndex:picked.modeIndex});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw Error('Orbit GIF identity changed');Object.assign(manifest,fixed);}
+ if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='gif'?SINGLE_ORBIT_GIF_LIMITS.manifestBytes:format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
-const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_FIXED_INVALID','WEBM_FIXED_UNSUPPORTED','WEBM_FIXED_CODEC_FAILURE','WEBM_FIXED_OUTPUT_MISMATCH','WEBM_FIXED_CANCELLED','WEBM_FIXED_TIMEOUT','WEBM_ENDPOINT_UNVERIFIED']);
+const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_FIXED_INVALID','WEBM_FIXED_UNSUPPORTED','WEBM_FIXED_CODEC_FAILURE','WEBM_FIXED_OUTPUT_MISMATCH','WEBM_FIXED_CANCELLED','WEBM_FIXED_TIMEOUT','WEBM_ENDPOINT_UNVERIFIED','GIF_ORBIT_INVALID','GIF_ORBIT_CANCELLED']);
 export function createVisualExportJobs({render,prepare,prepareCompare,renderCompare,maxBytes=32*1024*1024,maxJobs=4,id=()=>crypto.randomUUID()}={}){
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
  const jobs=new Map(),requests=new Map();let retainedBytes=0,renderActive=false,epoch=0;
@@ -120,8 +123,9 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
    if(!(blob instanceof Blob)||!blob.size||!(blob.type===mime||mime==='video/webm'&&blob.type.startsWith('video/webm;')))throw Error('Renderer returned an invalid visual artifact');
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
    const strictSingleTime=job.request.target!=='comparison'&&format==='webm'&&job.request.animation==='time';
-   if(strictSingleTime&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic Blob reader was replaced');
-   const bytes=new Uint8Array(await (strictSingleTime?readBlob.call(blob):blob.arrayBuffer()));
+   const strictIssued=strictSingleTime||job.request.target!=='comparison'&&format==='gif';
+   if(strictIssued&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError(format==='gif'?'GIF_ORBIT_INVALID':'WEBM_ENDPOINT_UNVERIFIED',format==='gif'?'Orbit GIF Blob reader was replaced':'Single-view acoustic Blob reader was replaced');
+   const bytes=new Uint8Array(await (strictIssued?readBlob.call(blob):blob.arrayBuffer()));
    if(job.state!=='running'||!jobs.has(job.jobId))return;
    job.assertLifetime?.();
    // Reserve before hashing so overlapping completions share one exact byte budget.

@@ -24,7 +24,7 @@ export function createResultExportPreparation({captureSelection,getAnalysis,isBu
    try{
     if(isBusy())throw Error('Viewer is busy');
     token.output=getAnalysis();token.selected=captureSelection();assertCurrent(token);
-    if(request?.format==='png-sequence'||request?.format==='webm'&&request?.animation==='time')preflight(request);
+    if(request?.format==='gif'||request?.format==='png-sequence'||request?.format==='webm'&&request?.animation==='time')preflight(request);
     if(disposed||token.cancelled)throw expired();
     const view=await getResultView();
     assertCurrent(token);
