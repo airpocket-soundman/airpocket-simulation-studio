@@ -1,0 +1,29 @@
+✔ every JP specification has an English counterpart and reciprocal link (45.749ms)
+✔ every task has English title and acceptance criteria (2.5748ms)
+✔ the real repository satisfies its module boundaries and the graph is what the table says it is (358.9252ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (256.7645ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (257.5153ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.4405ms)
+✔ import parser ignores strings that merely contain "from" (0.2258ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (0.1401ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.221ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.1406ms)
+✔ a real import inside a template substitution is still found (0.1342ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (15.1685ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (6.0477ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.3613ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (6.5085ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (14.7835ms)
+✔ a forbidden upward edge (domain -> ui) is reported (5.418ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (11.5453ms)
+✔ an unclassified new file fails, including files in subdirectories (13.1758ms)
+✔ allowlist entries must be used and justified (0.2368ms)
+✔ collectGraph resolves relative imports inside subdirectories (7.1632ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1120.045
