@@ -35,6 +35,21 @@ test('release deletes current issuance and dispose is terminal/idempotent, inclu
  const original=crypto.subtle.digest;let finish;crypto.subtle.digest=function(...args){return new Promise((resolve,reject)=>{finish=()=>original.apply(this,args).then(resolve,reject);});};
  try{const pending=p.replace(fixture());p.dispose();p.dispose();assert.equal(p.current(),null);await finish();await assert.rejects(pending,code('OPENING_SURFACE_REPLACED'));assert.throws(()=>p.clear(),code('OPENING_SURFACE_DISPOSED'));await assert.rejects(p.replace(fixture()),code('OPENING_SURFACE_DISPOSED'));assert.throws(()=>p.confirm(lease,request(lease)),code('OPENING_SURFACE_DISPOSED'));}finally{crypto.subtle.digest=original;}
 });
+test('two pending slots backpressure before snapshot without changing generation; all exit paths release slots',async()=>{
+ const p=create(),base=await p.replace(fixture()),original=crypto.subtle.digest,waits=[];
+ crypto.subtle.digest=function(...args){return new Promise((resolve,reject)=>waits.push({finish:()=>original.apply(this,args).then(resolve,reject),reject}));};
+ try{
+  const one=p.replace(fixture()),two=p.replace(fixture());let touched=0;const blocked={get mesh(){touched++;throw Error('must not snapshot');}};
+  await assert.rejects(p.replace(blocked),code('OPENING_SURFACE_PENDING_LIMIT'));assert.equal(touched,0);assert.equal(waits.length,2);assert.equal(p.current(),null);
+  await waits[1].finish();const winner=await two;assert.equal(winner.generation,base.generation+2);
+  const malformed=fixture();malformed.units='m';await assert.rejects(p.replace(malformed),code('OPENING_SURFACE_INVALID_INPUT'));assert.equal(p.current(),winner);
+  const third=p.replace(fixture());assert.equal(waits.length,3);await assert.rejects(p.replace(fixture()),code('OPENING_SURFACE_PENDING_LIMIT'));
+  p.clear();await assert.rejects(p.replace(fixture()),code('OPENING_SURFACE_PENDING_LIMIT'));
+  const rejected=assert.rejects(third,code('OPENING_SURFACE_HASH_FAILED'));waits[2].reject(Error('synthetic digest failure'));await rejected;
+  const fourth=p.replace(fixture());assert.equal(waits.length,4);await waits[0].finish();await assert.rejects(one,code('OPENING_SURFACE_REPLACED'));
+  await waits[3].finish();const last=await fourth;assert.equal(last.generation,winner.generation+3);assert.equal(p.current(),last);
+ }finally{crypto.subtle.digest=original;}
+});
 test('health reports keep seams, closed shells and defects honest; no inferred outward direction or welding',async()=>{
  const p=create(),closed=fixture();closed.mesh.triangles.push([4,5,6],[4,6,7]);let lease=await p.replace(closed);assert.equal(lease.analysis.closedShell,true);assert.deepEqual(lease.analysis.candidates,[]);
  const seam=fixture();seam.mesh={nodes:[0,0,0,1,0,0,1,1,0,0,1,0,1,0,0,2,0,0,2,1,0,1,1,0],triangles:[[0,1,2],[0,2,3],[4,5,6],[4,6,7]],toleranceMm:1e-6};lease=await p.replace(seam);assert.ok(lease.analysis.rejected.some(r=>/SEAM/.test(r.code)));assert.equal(lease.analysis.candidates.length,0);

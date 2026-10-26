@@ -1,6 +1,7 @@
-import {createRetainedOpeningSurfaceProvider,type RetainedOpeningSurfaceInput} from '../../src/retained-opening-surface.js';
+import {createRetainedOpeningSurfaceProvider,RETAINED_OPENING_SURFACE_LIMITS,type RetainedOpeningSurfaceInput} from '../../src/retained-opening-surface.js';
 import type {RetainedOpeningSurfaceLease} from '../../src/contracts/retained-opening-surface';
 const provider=createRetainedOpeningSurfaceProvider();
+const pendingLimit:2=RETAINED_OPENING_SURFACE_LIMITS.pending;void pendingLimit;
 const input:RetainedOpeningSurfaceInput={units:'mm',topologyIntent:'open-indexed-surface',sourceIdentity:'caller-reference',mesh:{nodes:[0,0,0,1,0,0,0,1,0],triangles:[[0,1,2]],toleranceMm:1e-6}};
 const lease:RetainedOpeningSurfaceLease=await provider.replace(input);
 const cap=provider.confirm(lease,{confirmed:true,capId:'opening',candidate:lease.analysis.candidates[0],outwardNormal:[0,0,1],interiorPointMm:[0,0,-1],enclosure:[-2,-2,-2,4,4,4]});
