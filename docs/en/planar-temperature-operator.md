@@ -17,3 +17,5 @@ Build, load and apply snapshot plain records/dense arrays before their first awa
 [Evidence](../evidence/2026-10-26-planar-temperature-operator.json) uses independent fixed oracles: crossing-diagonal corner hat→[0,.25,1,.25], and fan-center hat→[.5,0,.5,0]. The latter differs from all-zero point sampling and lumped [.375,.25,.375,.25]. No solver, GUI, codec or SDK is launched. This is limited synthetic verification, not completion of COUPLE3 or a product-accuracy claim.
 
 Exact-head PR199 CI passed 2180/2188 with 0 failures and 8 skips; all28 local checks passed. [CI evidence](../evidence/2026-10-26-pr199-ci/summary.json) does not prove public deployment or completion of COUPLE3.
+
+[Explicit multiple planar groups](grouped-temperature-operator.md) assemble global shared-node M/T through a separate API; this single-plane API is unchanged.

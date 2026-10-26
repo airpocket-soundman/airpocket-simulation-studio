@@ -160,3 +160,4 @@ const fixedRuntimeError:string=fixedWebmError('WEBM_FIXED_INVALID','invalid').co
 fixedWebmSchedule('2');
 void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];
 export {temperatureFixture} from './planar-temperature-operator-types';
+export {groupedTemperatureFixture} from './grouped-temperature-operator-types';
