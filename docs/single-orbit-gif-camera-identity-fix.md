@@ -18,3 +18,8 @@ GIFも既存canonicalViewStateを使用し、正規化済みカメラから計�
 正規化したtargetを描画へ渡す変更で、Three.jsが対応しないplain xyz objectをlookAtへ渡していました。これは本修正担当の誤りです。実PerspectiveCameraの数値試験でquaternionと行列のNaNを再現し、正式なlookAt(x,y,z)呼出へ修正しました。寛容だったfakeもvectorまたは数値3引数を要求します。
 
 実PerspectiveCameraをadapterへ注入した回帰は全24captureでquaternion・matrixWorld・projection・視線方向の有限性、targetへの向き、モデル境界8頂点の視錐台内投影、終了時の元カメラ復元を確認します。新しい実出力は行っていません。次の実画面での可視成功は未確認です。
+
+
+## 202cの限定可視成功（2026-10-27）
+
+後続の固定runtime `4e0f785de1971a2a40b89db6c04a8fe5035818de`で、別予算の202cを1回実行し、[独立可視確認](evidence/2026-10-27-single-orbit-gif-visible-main/README.md)まで成功した。24枚・640×320・200cs・loop0、補間表示2秒固定、全scene ROIの非背景2785〜5163 pixelsと24種類のhash、5状態復元と後始末を確認した。先頭/中央/最後で箱全体と向きの変化が見える。上記の未確認記述は各修正時点の履歴であり、202/202bの失敗記録は変更しない。成功範囲はsynthetic 94-node thermal box、通常main/IAB・英語・前景の当該例のみ。GUIボタンのdownload完了・一般形状/物理校正等は未証明。

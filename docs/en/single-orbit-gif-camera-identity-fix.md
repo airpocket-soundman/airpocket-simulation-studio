@@ -18,3 +18,8 @@ The subsequent 202b artifact passed technical checks, but independent image insp
 The change passing the canonical target to rendering used a plain xyz object with Three.js lookAt, which does not support that overload. This was an implementation error by the correction author. A real PerspectiveCamera numerical probe reproduced NaN quaternion and matrices. The GIF adapter now calls the supported lookAt(x,y,z) overload. Its previously permissive fake now requires a vector or three numeric arguments.
 
 A regression injects a real PerspectiveCamera into the adapter and checks every one of 24 captures: finite quaternion, matrixWorld, projection and world direction; alignment with the target; all eight model bounding corners projected inside the frustum; and restoration of the original camera. No additional actual export was run. Successful real visual acceptance remains unverified.
+
+
+## Bounded 202c visible success (2026-10-27)
+
+A separately budgeted single 202c attempt at frozen runtime `4e0f785de1971a2a40b89db6c04a8fe5035818de` subsequently passed [independent visible acceptance](../evidence/2026-10-27-single-orbit-gif-visible-main/README.md): 24 frames, 640×320, 200cs, loop0, fixed interpolated2s, 2785–5163 nonbackground pixels in every scene ROI, 24 distinct ROI hashes, five-state restoration and cleanup. First/middle/last images show the whole box and changing orientation. Pending statements above remain dated correction-stage history; 202/202b failures are unchanged. Success is limited to this synthetic94-node thermal box on the ordinary foreground English main/IAB. GUI-button download completion, general geometry and physical calibration remain unproven.
