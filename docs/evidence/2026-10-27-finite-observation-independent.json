@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "subjectCommit": "5906bd04ff223a694af77f43bea507a077634a6f",
+  "findings": [],
+  "scope": "Independent analytical and worker/UI boundary audit; no GUI/solver/export",
+  "checks": {
+    "independent": {
+      "total": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    "related": {
+      "total": 35, "pass": 35, "fail": 0, "durationMs": 1377.1492
+    }
+  },
+  "oracles": {
+    "strain": "Green strain diag(e,-e,0), e=.005; ramp tau2 then hold tau ln2",
+    "a": "1-exp(-1)",
+    "stress11": "2mu*e+m*e*a",
+    "energy": "mu*(2e²)+m*(2e²)*a²/4",
+    "dissipation": "2m*(2e²)*(1-2a+(1-exp(-2))/2)+m*(2e²)*a²*3/4",
+    "observedMinusReference": {
+      "stress": [
+        [
+          -7,
+          11,
+          -13
+        ],
+        [
+          17,
+          19,
+          -23
+        ],
+        [
+          29,
+          -31,
+          37
+        ]
+      ],
+      "energy": 2,
+      "dissipation": -1
+    },
+    "meaning": "Synthetic analytical reference and declared offsets; not measurement or calibration"
+  },
+  "lifecycle": [
+    "cross-action stale callbacks cannot publish or terminate newer owned worker",
+    "messageerror releases timer and ignores late success",
+    "Unicode origin clipped by codepoint and rendered as text",
+    "real module worker unknown action refusal then compare/replay; child terminated in finally"
+  ],
+  "protectedFiles": [
+    {
+      "path": "src/finite-visco-history.js",
+      "sha256": "b1cd4502b2a8390f117b0b59f864c9b0c1c01d4f68fc7699cbae52046f7ba651",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/finite-visco-reference.js",
+      "sha256": "98491164e057d2ec26a4b1dd9fc3946db174215c1c095f1abe7e3fe424748c99",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/finite-visco-observation-comparison.js",
+      "sha256": "1c2eeea92d362dc6dd094e386f2ddef1ecc3a5aaad6d57bb38b8b4afd6daf855",
+      "sameAsBase": true
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "c03a3af6b4c0e920225ae2d9ecf0e48ba2cfe4b66ed1b8e809820051406af303",
+      "sameAsBase": true
+    }
+  ],
+  "source": [
+    {
+      "path": "src/ui/finite-history-inspector.js",
+      "gitBytesSha256": "a25c5ff40270f878e0c2bfbad312c1e764eaf63bf3bc53333376d93db900516e"
+    },
+    {
+      "path": "src/finite-visco-inspector.worker.js",
+      "gitBytesSha256": "6d5d758356f82e2153abf3ebfae21b2f07b5941904eb023faa50420f230ddc01"
+    }
+  ],
+  "noSourceChanges": true,
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newExports": 0
+}
+
