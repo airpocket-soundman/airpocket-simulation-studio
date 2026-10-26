@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "ownerInitial": "1babe8022da5ef8fb4ac4ae57e6034b934847c4e",
+  "ownerFix": "167412d834aa1988bda2a4ead4c275ea67c9214e",
+  "productionSourceChangedByAuditor": false,
+  "counterexample": {
+    "legacySavedViewAccepted": true,
+    "resultKind": "elastic",
+    "staticVector": [
+      0,
+      0.1,
+      0
+    ],
+    "extraModeVector": [
+      0.2,
+      0,
+      0
+    ],
+    "initialPlanAccepted": true,
+    "initialMainRendererPrefersExtraMode": true,
+    "correction": "New static profile rejects defined modes; static adapter reads no modes; undefined allowed; no broad main change",
+    "postFixRefused": true,
+    "getterInvocations": 0
+  },
+  "independentMath": {
+    "formula": "sin²(pi*i/24) and exact radical fractions",
+    "productionAnimationStateUsedAsOracle": false,
+    "peakScale": 37,
+    "peakCoordinatesMm": [
+      10.37,
+      9.26,
+      41.48
+    ],
+    "frames": 24,
+    "float32FiniteAndRealThreeFrustumChecked": "this four-node synthetic fixture only",
+    "normalizedModeFrequenciesHz": [
+      1,
+      1000
+    ],
+    "displayDurationsSeconds": [
+      1,
+      15
+    ],
+    "multiplierSequenceIndependentOfFrequencyAndDuration": true,
+    "loadHistory": false,
+    "dynamicResponse": false
+  },
+  "ownership": {
+    "layers": [
+      "job",
+      "result-preparation handoff",
+      "viewer adapter"
+    ],
+    "pause": "quantization after7captures at half peak scale12.5",
+    "requests": [
+      "cancel",
+      "watchdog",
+      "mode closure change"
+    ],
+    "pending": "executionSettledfalse, locks/reservations retained; no early restore",
+    "afterOwnedSettlement": "original scale25/mode restored; onchange closure+redraw modeled; no artifact"
+  },
+  "validation": {
+    "newTests": 3,
+    "related": {
+      "total": 113,
+      "pass": 113,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 15910.1237,
+      "includesNew3": true
+    },
+    "typeDeclarations": 31,
+    "docsTests": 2,
+    "realSolveDependentFixedFrameFileRun": false,
+    "protectedOldFiveUnchanged": [
+      "src/ui/single-stored-time-gif.js",
+      "src/ui/single-orbit-gif.js",
+      "src/single-view-time-webm.js",
+      "src/ui/comparison-fixed-webm.js",
+      "src/gif-encoder.js"
+    ]
+  },
+  "sourceHashes": [
+    {
+      "path": "src/ui/single-deformation-gif.js",
+      "gitBlob": "8f8bb3b6b5bdc38d03f10788577a50b9fdbc1028",
+      "gitBlobSHA256": "6cc24a07eeb03601ee4563d3108e12dd386b8d3ec071aaa29e7e2b1dd480499b",
+      "workingSHA256": "3ddab7ed52f5ebdf6e700091c6e319ca6b619aa8ad4e8cd68895dcc224f82e41"
+    },
+    {
+      "path": "src/visual-export.js",
+      "gitBlob": "4cc36b567f6afea4cf7c8390f6c5fbf27da4cbc4",
+      "gitBlobSHA256": "7d5d3575c51ffd68ed17ed54589cdcebe09da20cfec8f5b66398f73d620f4596",
+      "workingSHA256": "5b58b157720ef8f9650e4f7163dacd15f2f0208ac3b28d711c497adb7e97fa81"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "gitBlob": "9f64b0454d583f0c36739a1660f0de5ba9c039d3",
+      "gitBlobSHA256": "418e9c70018165780642dd6753fdf2293f7381515eaf01b2e5e4458b2a9ad0bc",
+      "workingSHA256": "9cad34bf9603a56babe7d97566bb143f33d4acfd75adea945868f2026c47881b"
+    }
+  ],
+  "hashMeaning": "Git blob hashes use normalized repository bytes; working hashes can differ under CRLF",
+  "additionalActual": {
+    "gui": 0,
+    "gifDecode": 0,
+    "nativeCodec": 0,
+    "solver": 0,
+    "productExport": 0
+  },
+  "limitations": [
+    "No actual-model visible acceptance yet",
+    "No physical amplitude/dynamic response/calibration or parent completion",
+    "No OS/native resource release guarantee",
+    "General legacy renderer alias behavior is outside this narrow new-profile correction"
+  ]
+}
