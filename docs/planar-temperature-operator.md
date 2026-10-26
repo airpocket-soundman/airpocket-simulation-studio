@@ -15,3 +15,5 @@ fieldは `{units:'degC'|'K',values:[{nodeId,value}]}`。source active全節点�
 build/apply/loadは最初のawait前にplainrecord/dense arrayを複製し、accessorを実行しない。operatorはprivate WeakSet発行済みだけ適用/保存できる。loadはgeometryからT/M/Cholesky/R/版を全再導出し、受領record全体をcanonical比較する。係数を改変しhashを再計算しても拒否する。rawIdentityは入力JSON文字列UTF8のSHAで認証ではない。
 
 [証拠](evidence/2026-10-26-planar-temperature-operator.json)。独立固定式はcrossing-diagonal corner hat→[0,.25,1,.25]、center fan hat→[.5,0,.5,0]を使う。後者はpoint interpolationの全0やlumped [.375,.25,.375,.25]と異なる。solver、GUI、codec、SDKは起動していない。COUPLE3全体完了や製品精度の主張はしない。
+
+PR199の対象head5b2fd229のCIは2188件中2180成功/失敗0/skip8、local28項目成功。[対象CI証拠](evidence/2026-10-26-pr199-ci/summary.json)は公開配布やCOUPLE3全体完了を意味しない。
