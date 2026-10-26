@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-27",
+  "reviewedHead": "f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+  "pullRequest": 202,
+  "rootVisualReview": {
+    "images": ["2026-10-27-single-orbit-gif-visible-main/independent/first.png", "2026-10-27-single-orbit-gif-visible-main/independent/last.png"],
+    "completeModelVisible": true,
+    "changedOrientationVisible": true,
+    "fixedInterpolatedTwoSecondsReadable": true,
+    "scope": "The existing synthetic 94-node thermal box, not general geometry or physical calibration"
+  },
+  "independentGitByteInventoryRecheck": {
+    "reviewer": "print_dataset63",
+    "visible202c": {"files": 161, "bytes": 14493089, "allSha256AndGitBlobSha1Match": true},
+    "blank202b": {"files": 158, "bytes": 14487563, "allSha256AndGitBlobSha1Match": true},
+    "gitTreeMatchesInventoryExceptInventoryItself": true,
+    "newExportDecodeSolverRuns": 0
+  },
+  "rootProtectedProgressRecheck": {
+    "parent": "ae2f889",
+    "head": "f2fdaf4",
+    "tasks": 171,
+    "changedTaskIds": ["BROWSEREXPORT1", "P4"],
+    "allowedFields": ["lastUpdate", "lastUpdateEn", "evidence"],
+    "changedFields": 6,
+    "allOtherFieldsAndStatusesUnchanged": true,
+    "method": "Compare parsed parent/head Git blobs, restore only changed allowed fields, assert complete document equality. Initial checking script added absent undefined keys and failed; corrected property-preserving check passed without editing progress."
+  },
+  "rootDocumentationTests": {"passed": 2, "failed": 0},
+  "mainRechecked": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "mainMergedOrPublished": false,
+  "ci": "Exact-head final run recorded separately when terminal; this recheck does not claim CI completion."
+}
