@@ -20,3 +20,8 @@ Workerは内部のissued finalStateを送信せず、固定サイズの最終観
 [通常main/IABのGUI証拠](evidence/2026-10-27-finite-history-inspector-gui/README.md)で、既存public合成例のボタン入力・実Worker再計算・日英切替を確認した。4段階/最終4.7秒、仕事72.7319228・自由エネルギー39.9520031・散逸32.7799197 J/m³-reference、5行列45cellがdomain出力の9有効数字と一致した。raw SHAは `6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86`、canonical SHAは `8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71`。入力編集で旧結果が直ちに消え、`{` は実Workerで拒否され、クリア後は入力/結果空・idleへ戻った。
 
 数値・動作確認はe972ce8、後続4c02210は表幅/余白のみの修正であり、実GUIの全45cellは同一、captionは1行だった。e972ce8でfocused56・型28・build・local28（46816.716 ms）、4c02210で関連16（独立4を含む）成功。後者のsourceでfull build/localを再実行したとはしない。272個の保護対象DOM controls・条件表示・case数のEN baseline/final一致を確認したが、正式in-memory APIのproject/case/analysis同一性や実取消の受入は主張しない。上の未実施記述は実装時点の履歴である。一般物理・材料校正・構造解析・親タスク完了・公開成功は未証明。
+
+
+## 狭いサイド欄の表示追補（2026-10-27、7d1e657）
+
+後続のstyle-only修正7d1e657は、説明/hash行のoverflow-wrapと結果欄のmax-width・横スクロールだけを変更した。[表示幅の証拠](evidence/2026-10-27-finite-history-inspector-responsive/README.md)。実1280×900 desktopで幅269pxのasideのscroll幅は495→269px、幅233pxの結果欄は477→233pxとなった。全45cellは変更前と一致し、関連16試験が成功（1438.3942 ms）。e972ce8と4c02210の前段証拠は保持する。これは当該desktop配置の表示確認であり、一般的な全画面サイズや新たな物理検証を意味しない。
