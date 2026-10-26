@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "runtimeSource": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "driverSha256": "1077cd29a8d24e1067bae30726ee9f1ce70637774ff607400ba7e5857b647d55",
+  "overallAcceptance": "passed-bounded-stored-time-gif-visible-box",
+  "budget": {
+    "exports": 1,
+    "limit": 1,
+    "retries": 0,
+    "requestedSeconds": 2,
+    "watchdogMs": 120000,
+    "maxBytes": 33554432,
+    "solverRuns": 0
+  },
+  "artifact": {
+    "file": "raw/stored-time.gif",
+    "bytes": 5574849,
+    "sha256": "5f800ca2cd4ffb4ed78b2e98549b0e3255727481752e0e8d3645d0b8a0519687",
+    "pages": 86,
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "palette": "RGB332",
+    "colors": 256,
+    "loop": "infinite",
+    "delayCentisecondsTotal": 200
+  },
+  "physical": {
+    "kind": "thermal",
+    "field": "temperature",
+    "unit": "degC",
+    "storedTimesSeconds": [
+      0,
+      5,
+      10
+    ],
+    "nearestCounts": [
+      6,
+      12,
+      6
+    ],
+    "phasePolicy": "i/23",
+    "tiePolicy": "earlier; no exact midpoint tie in this fixture schedule",
+    "camera": "fixed",
+    "terminalActualTimeSeconds": 10,
+    "terminalOffsetSeconds": 0,
+    "noInterpolationInArtifact": true,
+    "baselineRestoredInterpolationSeconds": 2
+  },
+  "technicalVerification": {
+    "allPageShaAndByteEquality": true,
+    "all24ExactTimingRecords": true,
+    "fiveStatesEqual": true,
+    "rootGuiControlsAndTimeTextRestored": true,
+    "ownedJobsAfterRelease": 0,
+    "sessionsEmpty": true,
+    "childExitAndClose": {
+      "code": 0,
+      "signal": null
+    },
+    "ownedPid": 42712,
+    "ownedPidAbsent": true,
+    "tokenRemoved": true
+  },
+  "sourceValidation": {
+    "focused": {
+      "source": "7fcd9ee3312a66acb179b612394bbc5f9c175cda",
+      "passed": 132,
+      "elapsedMs": 14476.1375
+    },
+    "additionalUniqueIndependent": {
+      "source": "66ce457cc69b1034045c74967a84abe59b6afc21",
+      "passed": 4,
+      "elapsedMs": 5283.4426
+    },
+    "typeDeclarations": 30,
+    "build": {
+      "source": "66ce457cc69b1034045c74967a84abe59b6afc21",
+      "seconds": 3.54,
+      "passed": true
+    },
+    "localPublished": {
+      "source": "66ce457cc69b1034045c74967a84abe59b6afc21",
+      "passed": 28,
+      "elapsedMs": 61907.5862
+    }
+  },
+  "limitations": [
+    "No GUI-button download proof",
+    "Only existing94node synthetic thermal saved history",
+    "No new solved times/physical integration or calibrated accuracy",
+    "No hidden/other-language/engine/cancellation matrix",
+    "No exact midpoint tie in actual24schedule",
+    "Historical202/202b orbit failures and exhausted budgets are separate"
+  ],
+  "packagingNewRuns": {
+    "product": 0,
+    "codec": 0,
+    "solver": 0,
+    "gui": 0
+  },
+  "independent": {
+    "genericGifLzwRuns": 1,
+    "ffprobeRuns": 1,
+    "ffmpegDecodeRuns": 1,
+    "all24RgbPixelsEqual": true,
+    "all24SceneNonBackground": true,
+    "sceneRoiNonBackgroundMinimum": 4566,
+    "sceneRoiNonBackgroundMaximum": 4574,
+    "distinctSceneHashes": 3,
+    "sceneCounts": [
+      6,
+      12,
+      6
+    ],
+    "manualFirstMiddleLast": true,
+    "finalReview": "independent/visual-review.json",
+    "historicalMachinePending": "independent/result.json retained unchanged",
+    "wrapperExitNote": "independent/execution-wrapper-note.json: optional missingfailure.json inspection afterPASS, native commands0; no rerun",
+    "omitted": [
+      {
+        "file": "ffmpeg.rgb",
+        "bytes": 14745600,
+        "sha256": "d9b7ccf3eb959a574a35b2a81d043484b3816bf6a1ec8a63e31dd899c541b08b",
+        "reason": "Identical decoded24-frame RGB buffers retained in auditorQA; rawpixel comparison,PNG,hashes and logs copied"
+      },
+      {
+        "file": "independent.rgb",
+        "bytes": 14745600,
+        "sha256": "d9b7ccf3eb959a574a35b2a81d043484b3816bf6a1ec8a63e31dd899c541b08b",
+        "reason": "Identical decoded24-frame RGB buffers retained in auditorQA; rawpixel comparison,PNG,hashes and logs copied"
+      }
+    ]
+  }
+}
