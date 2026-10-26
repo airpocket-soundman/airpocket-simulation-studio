@@ -21,3 +21,5 @@
 APIの5状態は所有export数0→1だけを分けて一致し、GUI/APIとも出力前の補間2秒へ復元した。settled release・所有job0・sessions空・GUI資格情報欄clear・child exit/close・PID不存在・token削除を確認。[集約記録](evidence/2026-10-26-single-thermal-webm-main/report.json)には、同sourceの関連fake185成功（独立3件を含む）・型25宣言・full build・local配布物28/28成功41906.5168msも限定記録した。これらは当該sourceの記録で、公開成功ではない。
 
 [初回200の失敗](evidence/2026-10-26-thermal-time-webm-failed/README.md)と孤立native寸法診断、前段stale manifestによるlocal検査失敗は保持する。raw driver summaryの外部decode未実施という文はdecode前の歴史記録で、後取得した独立証拠と分ける。実証は英語foregroundの温度1case/2秒だけ。GUIのダウンロード完了、日英×hidden等の実取消行列、他engine、heatFlux時間動画、一般物理精度・校正、公開HTTPS、親タスク完了は未証明。
+
+PR200最終head4027bdcdのCIは2222件中2214成功/失敗0/skip8、local28項目全成功（37.796秒）。[最終CI証拠](evidence/2026-10-27-pr200-final-ci/summary.json)は旧aa06失敗と1ed取消も区別して保持する。公開配布の証明ではない。
