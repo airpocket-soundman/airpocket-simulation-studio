@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "owner": "8a515074780c55a29b31644090d2ed4bac05af79",
+  "fix": "9e81c33f43a0d177c7c8d3544c719c2ff2f1fc69",
+  "source": {
+    "path": "src/retained-opening-surface.js",
+    "workingCRLFSha256": "ece2a9696b5b855037167b9f535a7f87fa1d1f934efff9d9c7477f6556b51131",
+    "gitBlobSha256": "5a03e3a6cd6b4659488bd00d8b62fd06dde992cd9ff7749dcd94ae445db35b00"
+  },
+  "before": {
+    "reproduction": "Five replace calls admitted five unresolved fake SHA operations, retaining five snapshots despite a per-input byte cap."
+  },
+  "after": {
+    "maxPending": 2,
+    "overflowCode": "OPENING_SURFACE_PENDING_LIMIT",
+    "beforeInputInspection": true,
+    "finallyRelease": true,
+    "clearDisposeDoNotResetPending": true
+  },
+  "independentTests": 2,
+  "totalProviderTests": 10,
+  "pass": 10,
+  "fail": 0,
+  "skip": 0,
+  "checks": [
+    "Malformed replacement preserves pending valid generation",
+    "Overflow rejects before Proxy getPrototypeOf executes",
+    "Latest hash failure frees its slot without restoring old current",
+    "Later replacement wins even when an earlier hash completes last",
+    "Dispose prevents pending completion from issuing a lease"
+  ],
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "limitations": [
+    "Explicit caller-supplied indexed surface only",
+    "No CAD/display conversion, persistence, UI or solver integration",
+    "Snapshot count is bounded; hash operation completion is not forced or cancelled"
+  ]
+}
