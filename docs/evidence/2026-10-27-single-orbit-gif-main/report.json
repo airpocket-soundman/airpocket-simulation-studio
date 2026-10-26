@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "overallAcceptance": "partial-visible-model-missing",
+  "runtimeSource": "b1c550b1ee9b7bbcd27a2571ef54fb9b441a9054",
+  "driverSha256": "cec1b69e755b6911cb720da128e7a30cb98ddae858875c542c0b141515ab2da9",
+  "scope": "One foreground English normal-main orbit GIF artifact; technical pipeline passed but visible model failed acceptance",
+  "budget": {
+    "used": 1,
+    "limit": 1,
+    "remaining": 0,
+    "retries": 0,
+    "requestedSeconds": 2,
+    "watchdogMs": 120000,
+    "formalSolverJobs": 0
+  },
+  "archive": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "gitBlobSha1": "ccfcca833a094bb322afdb08777a02fcf2fa883c",
+    "rawBytes": 117499,
+    "rawSha256": "d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b",
+    "cases": 1,
+    "nodes": 94,
+    "sourceResultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65"
+  },
+  "artifact": {
+    "jobCompleted": true,
+    "bytes": 5574849,
+    "sha256": "ed9331e181fe6adc0951eed4e72c2f3e95435ac2cc084923d28d51162ff06ca7",
+    "pages": 86,
+    "format": "GIF89a",
+    "palette": "RGB332",
+    "colors": 256,
+    "width": 640,
+    "height": 320,
+    "frames": 24,
+    "loop": "infinite",
+    "delayTotalCentiseconds": 200,
+    "cameraLedgerVerified": 24,
+    "cameraPhasePolicy": "i/24",
+    "fixedField": "temperature",
+    "fixedViewerTimeSeconds": 2,
+    "interpolated": true,
+    "timeSelectionBasis": "viewer-interpolated",
+    "selectedStoredFrameIndexOmitted": true
+  },
+  "visualFailure": {
+    "visibleModelEvidencePass": false,
+    "all24SceneRegionsUniformBackground": true,
+    "sceneRoi": [
+      0,
+      0,
+      640,
+      204
+    ],
+    "pixelsPerScene": 130560,
+    "backgroundRgb": [
+      0,
+      36,
+      85
+    ],
+    "uniqueSceneRgbHashes": 1,
+    "captionReadable": true,
+    "captionCounters": [
+      1,
+      13,
+      24
+    ],
+    "rootCauseEstablishedByBundle": false,
+    "meaning": "Readable captions and varying frame hashes are insufficient to prove a visible rotating model."
+  },
+  "independent": {
+    "genericLzwDecode": true,
+    "ffprobeRuns": 1,
+    "ffmpegDecodeRuns": 1,
+    "allRgbBytesMatch": true,
+    "decodedBytesEach": 14745600,
+    "wholeRgbSha256": "sha256:180f40f6dbac8e8b4b78927457bc78566246ad0b1e486dd8044f179445b2c743",
+    "fullRawRgbRetainedOnlyInAuditorQa": true,
+    "frameHashesAndRoi": "independent/decoded-byte-crosscheck.json",
+    "resultTechnicalOnly": "independent/result.json",
+    "visual": "independent/visual-review.json",
+    "inputInventory": "independent/inventory.json",
+    "externalPowerShellInspectionFailureIsNotDecoderFailure": true
+  },
+  "restoration": {
+    "apiFiveStateSnapshotsEqual": 5,
+    "inspectOnlyOwnedExportCountChanges": [
+      0,
+      1
+    ],
+    "guiAndApiInterpolatedTimeSecondsRestored": 2
+  },
+  "cleanup": {
+    "jobReleased": true,
+    "ownedAnalysisJobs": 0,
+    "ownedExportJobs": 0,
+    "sessionsEmpty": true,
+    "guiEndpointAndTokenCleared": true,
+    "childExitAndCloseObserved": true,
+    "childExitCode": 0,
+    "childSignal": null,
+    "childPid": 39684,
+    "childPidAbsent": true,
+    "privatePairFileRemoved": true,
+    "rootObservedDriverExitCode": 0
+  },
+  "validationBeforeExecution": {
+    "focusedPassed": 107,
+    "independentPassed": 3,
+    "rootReportedTypeDeclarations": 27,
+    "build": "build202b.log",
+    "localReport": "published-report202b.json",
+    "localPassed": 28,
+    "localElapsedMs": 37857.93780000001
+  },
+  "historicalRecords": {
+    "failed202": "../2026-10-27-single-orbit-gif-failed/README.md",
+    "failedRuntime": "35922baf5a8737429bc544cbc44842bb1d33cf05",
+    "failedDriverSha256": "abb46b3e3a9cc5a4f613c08ce3411fd5041c23b3d21fed7906151d72c378b9c1",
+    "initialSourceFakeCounts": "188 relevant plus4 independent at earlier source, not current202b counts",
+    "rawDriverSummary": "external decode not yet run was saved before the independent check and is retained unmodified"
+  },
+  "unproven": [
+    "Visible rotating model",
+    "Actual GUI GIF-button download completion",
+    "Other language/background/browser matrix",
+    "General physical accuracy/calibration",
+    "Publication and parent-task completion"
+  ],
+  "packagingExecutions": {
+    "productExport": 0,
+    "codec": 0,
+    "solver": 0,
+    "gui": 0
+  }
+}
