@@ -181,13 +181,13 @@ test('thermal PNG sequence uses only stored temperatures, exact times, reproduci
  }finally{f.restore();}
 });
 
-test('thermal PNG sequence refuses flux, absent frames, invalid time/temperature and still refuses WebM',async()=>{
+test('thermal PNG sequence refuses flux, absent frames and invalid time/temperature; WebM requires selected temperature',async()=>{
  const f=fixture({kind:'thermal',snapshots:3});try{
   await assert.rejects(run(f,{animation:'time',frames:2,view:{result:{field:'heatFlux'}}}),/temperature/);assert.equal(f.renders,0);
   f.output.result.transient=false;await assert.rejects(run(f,{animation:'time',frames:2}),/stored/);f.output.result.transient=true;
   f.output.result.snapshots[1].time=0;await assert.rejects(run(f,{animation:'time',frames:2}),/increasing/);f.output.result.snapshots[1].time=.5;
   f.output.result.snapshots[1].temperature=[1];await assert.rejects(run(f,{animation:'time',frames:2}),/temperatures/);
-  await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/not supported for thermal/);assert.equal(f.renders,0);
+  await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/requires temperature/);assert.equal(f.renders,0);
  }finally{f.restore();}
 });
 

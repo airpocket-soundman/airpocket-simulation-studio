@@ -16,7 +16,7 @@ export function fixedCodecEnv(mode='success'){
   static async isConfigSupported(){return {supported:true};}
   constructor(callbacks){this.callbacks=callbacks;this.state='configured';this.decodeQueueSize=0;}
   configure(){}
-  decode(packet){if(mode==='decode-missing-last'&&packet.timestamp>950000)return;this.callbacks.output({timestamp:packet.timestamp,codedWidth:stats.width,codedHeight:stats.height,close(){stats.decodedClosed++;}});}
+  decode(packet){if(mode==='decode-missing-last'&&packet.timestamp>950000)return;const frame={timestamp:packet.timestamp,codedWidth:stats.width,codedHeight:stats.height,visibleRect:{x:0,y:0,width:stats.width,height:stats.height},displayWidth:stats.width,displayHeight:stats.height,rotation:0,flip:false,close(){stats.decodedClosed++;}};stats.mutateDecoded?.(frame);this.callbacks.output(frame);}
   flush(){return Promise.resolve();}
   close(){this.state='closed';stats.codecClosed++;}
  }

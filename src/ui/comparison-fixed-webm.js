@@ -1,6 +1,15 @@
 import {fixedWebmSchedule,muxFixedWebm,demuxFixedWebm,FIXED_WEBM_LIMITS,fixedWebmError} from '../fixed-webm.js';
 import {createWebmRecordingLifecycle} from './webm-recording-lifecycle.js';
 
+// WebCodecs coded dimensions may include non-visible padding (e.g. VP8
+// 440x637 -> coded 440x638). Verify the exact visible/display image, while
+// bounding decoder storage to a deliberately narrow +16 pixels on each axis.
+const MAX_DECODED_PADDING=16;
+function decodedViewportMatches(frame,width,height){
+ const r=frame.visibleRect;
+ return Number.isSafeInteger(frame.codedWidth)&&Number.isSafeInteger(frame.codedHeight)&&frame.codedWidth>=width&&frame.codedHeight>=height&&frame.codedWidth<=width+MAX_DECODED_PADDING&&frame.codedHeight<=height+MAX_DECODED_PADDING&&r!==null&&r!==undefined&&[r.x,r.y,r.width,r.height].every(Number.isSafeInteger)&&r.x===0&&r.y===0&&r.width===width&&r.height===height&&r.x+r.width<=frame.codedWidth&&r.y+r.height<=frame.codedHeight&&frame.displayWidth===width&&frame.displayHeight===height&&frame.rotation===0&&frame.flip===false;
+}
+
 export function comparisonFixedWebmCapabilities(env={}){
  const pick=k=>Object.hasOwn(env,k)?env[k]:globalThis[k];
  const available=['VideoEncoder','VideoDecoder','VideoFrame','EncodedVideoChunk'].every(k=>typeof pick(k)==='function')&&['VideoEncoder','VideoDecoder'].every(k=>typeof pick(k).isConfigSupported==='function');
@@ -51,7 +60,7 @@ export async function encodeComparisonTimeWebm({initialCanvas,renderFrame,camera
   const bytes=muxFixedWebm({width,height,seconds,packets:plan.map(p=>packets.get(p.timestamp))}),parsed=demuxFixedWebm(bytes);
   const decoded=new Set();
   decoder=new Decoder({error:e=>{if(!disposed)fail(e);},output:frame=>{try{if(disposed)return;
-   check();if(!expected.has(frame.timestamp)||!submittedDecodeTimestamps.has(frame.timestamp)||decoded.has(frame.timestamp)||frame.codedWidth!==width||frame.codedHeight!==height)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Fixed WebM decoded frame identity or dimensions differ');decoded.add(frame.timestamp);lifecycle.progress();
+   check();if(!expected.has(frame.timestamp)||!submittedDecodeTimestamps.has(frame.timestamp)||decoded.has(frame.timestamp)||!decodedViewportMatches(frame,width,height))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Fixed WebM decoded frame identity or dimensions differ');decoded.add(frame.timestamp);lifecycle.progress();
   }catch(e){fail(e);}finally{frame.close();}}});decoder.configure(decoderConfig);let submittedDecode=0;
   for(const packet of parsed.packets){check();while(decoder.decodeQueueSize>=FIXED_WEBM_LIMITS.queue||submittedDecode-decoded.size>=FIXED_WEBM_LIMITS.queue){await race(yieldControl());check();}submittedDecodeTimestamps.add(packet.timestamp);submittedDecode++;decoder.decode(new Chunk(packet));await race(yieldControl());}
   await race(decoder.flush());check();

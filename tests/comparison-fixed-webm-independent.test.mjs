@@ -21,13 +21,13 @@ function harness(mode='success'){
   static isConfigSupported(){return Promise.resolve({supported:true});}
   constructor(callbacks){this.callbacks=callbacks;this.state='configured';this.decodeQueueSize=0;decoder=this;}
   configure(){}
-  decode(packet){this.callbacks.output({timestamp:packet.timestamp,codedWidth:4,codedHeight:4,close(){stats.decodedClosed++;}});}
+  decode(packet){this.callbacks.output({timestamp:packet.timestamp,codedWidth:4,codedHeight:4,visibleRect:{x:0,y:0,width:4,height:4},displayWidth:4,displayHeight:4,rotation:0,flip:false,close(){stats.decodedClosed++;}});}
   flush(){return Promise.resolve();}
   close(){stats.beforeClose?.('decoder');stats.codecClose.push('decoder');this.state='closed';}
  }
  const env={VideoEncoder:Encoder,VideoDecoder:Decoder,VideoFrame:Frame,EncodedVideoChunk:Chunk,document:doc,now:()=>clock,setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms,due:clock+ms});return id;},clearTimeout:id=>timers.delete(id),yieldControl:()=>Promise.resolve()};
  const camera={position:[2,2,2],target:[0,0,0],up:[0,1,0],fov:40},request={initialCanvas:{width:4,height:4},renderFrame:()=>({width:4,height:4}),camera,seconds:1,signal:controller.signal,assertCurrent(){stats.checks++;},onVerified(){stats.proof++;}};
- return {env,request,stats,controller,timers,late(){encoder.callbacks.output({timestamp:777,type:'key',byteLength:1,copyTo(){throw Error('Late packet must not be copied');}});encoder.callbacks.error(Error('late'));decoder?.callbacks.output({timestamp:777,codedWidth:4,codedHeight:4,close(){stats.decodedClosed++;}});decoder?.callbacks.error(Error('late'));},advance(ms){clock+=ms;for(const {fn,due}of [...timers.values()])if(due<=clock)fn();}};
+ return {env,request,stats,controller,timers,late(){encoder.callbacks.output({timestamp:777,type:'key',byteLength:1,copyTo(){throw Error('Late packet must not be copied');}});encoder.callbacks.error(Error('late'));decoder?.callbacks.output({timestamp:777,codedWidth:4,codedHeight:4,visibleRect:{x:0,y:0,width:4,height:4},displayWidth:4,displayHeight:4,rotation:0,flip:false,close(){stats.decodedClosed++;}});decoder?.callbacks.error(Error('late'));},advance(ms){clock+=ms;for(const {fn,due}of [...timers.values()])if(due<=clock)fn();}};
 }
 for(const [mode,code]of [['support-hang','WEBM_FIXED_CANCELLED'],['flush-abort','WEBM_FIXED_CANCELLED'],['flush-hidden','WEBM_BACKGROUND_INTERRUPTED']])test('independent lifecycle '+mode+' refuses without proof and releases owned resources',async()=>{
  const h=harness(mode),pending=encode(h.request,h.env);if(mode==='support-hang')h.controller.abort();await assert.rejects(pending,{code});assert.equal(h.stats.proof,0);assert.equal(h.timers.size,0);assert.deepEqual(h.stats.codecClose,mode==='support-hang'?[]:['encoder']);assert.equal(h.stats.inputClosed,mode==='support-hang'?0:24);

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "diagnostic": "Root-owned isolated native VP8 diagnostic; requested440x637, decoded coded440x638, exact visible/display440x637, rotation0/flipfalse",
+  "diagnosticProductExports": 0,
+  "diagnosticEncodeCalls": 1,
+  "diagnosticDecodeCalls": 1,
+  "productAttempt200": "Failed WEBM_ENDPOINT_UNVERIFIED; no successful artifact; historical failure retained separately by root",
+  "fix": "Require exact integer visibleRect at origin0 and exact display size, no rotation/flip, coded containment with <=16 extra pixels per axis; timestamp membership/duplicates/endpoints unchanged",
+  "source": {
+    "path": "src/ui/comparison-fixed-webm.js",
+    "workingSha256": "dce3af2c24e7612d824b155815c91ebe40bc7f427b49ba427bd9056d7a59d64a",
+    "lfSha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3"
+  },
+  "newViewportTests": 20,
+  "initial": {
+    "total": 200,
+    "pass": 198,
+    "fail": 2,
+    "failures": [
+      "Real-solve fixed-frame test could not load absent public/fem-kernel.wasm in this fresh worktree; solve not reached",
+      "Obsolete thermal WebM blanket-unsupported assertion; updated to explicit temperature-field refusal"
+    ]
+  },
+  "finalFake": {
+    "total": 183,
+    "pass": 183,
+    "fail": 0,
+    "skip": 0
+  },
+  "typeDeclarations": 25,
+  "ownRealCodecRuns": 0,
+  "ownProductExports": 0,
+  "ownSolverRuns": 0,
+  "additionalWasmDownloaded": false,
+  "remaining": "Root will run the fixed-frame file in its existing built-WASM environment; no automatic product export retry",
+  "files": [
+    {
+      "name": "native.raw.json",
+      "bytes": 1351,
+      "sha256": "2a2a06aeeb765d97d289fe4feac1510aa8135ca20fa03fc07aa07fa05383e5b3"
+    },
+    {
+      "name": "initial-focused.raw.log",
+      "bytes": 23610,
+      "sha256": "bf59032287af69d17b1b91dfa5911ff3a8fc433344b4942395ab23462125594e"
+    },
+    {
+      "name": "final-fake-focused.raw.log",
+      "bytes": 18418,
+      "sha256": "f76344181d32966b8483ca62659649d5c9a87b8b46cde2fcdbb5d3baa0a5dc82"
+    }
+  ]
+}
