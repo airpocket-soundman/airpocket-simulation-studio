@@ -31,7 +31,7 @@ test('byte budget and cooperative cancellation refuse partial output; pending yi
 
 test('job metadata requires exact issued GIF, records fixed physical selection and rejects incompatible GIF requests',async()=>{
  const h=orbitGifEnv(),api=createVisualExportJobs({render:()=>encode(args(),h.env)}),request={requestId:'orbit',expectedResultRevision:revision,format:'gif',animation:'orbit',seconds:2,view:{result:{field:'temperature',timeSeconds:2,camera}}},j=await api.start(request);await api.waitForSettled(j);const s=api.status(j);assert.equal(s.state,'completed',s.error);assert.equal(s.artifact.manifest.container,'gif');assert.equal(s.artifact.manifest.time.frameCount,24);assert.equal(s.artifact.manifest.time.selectedPhysicalTimeSeconds,2);assert.deepEqual(s.artifact.manifest.resolution,{width:640,height:320});assert.equal((await api.start(request)).jobId,j.jobId);
- for(const animation of ['time','deformation','slice'])await assert.rejects(api.start({...request,requestId:animation,animation}),/orbit only/);await assert.rejects(api.start({...request,requestId:'frames',frames:24}),/frames is only/);
+ for(const animation of ['deformation','slice'])await assert.rejects(api.start({...request,requestId:animation,animation}),/orbit or stored time only/);await assert.rejects(api.start({...request,requestId:'frames',frames:24}),/frames is only/);
  const fake=createVisualExportJobs({render:()=>new Blob(['GIF89a'],{type:'image/gif'})}),bad=await fake.start({...request,requestId:'fake'});await fake.waitForSettled(bad);assert.equal(fake.status(bad).state,'failed');assert.throws(()=>fake.artifact(bad),/unavailable/);
 });
 
