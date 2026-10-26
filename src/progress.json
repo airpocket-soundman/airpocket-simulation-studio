@@ -985,9 +985,9 @@
       "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, published Worker remain incomplete.",
       "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
       "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
-      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。重複面・非凸開口を拒否。再レビューで発見した平行移動による誤縮退判定も統合側で修正。 親タスク全体の完了条件は未達。",
-      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Rejects duplicate faces and non-convex openings. Integration also repairs origin-dependent degeneracy found during re-review. Full parent acceptance remains incomplete.",
-      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "lastUpdate": "2026-10-26: 明示indexed surfaceの節点ID/順序/許容値を保持する非接続providerを追加。内容SHAと世代/私有leaseで置換・破棄・非同期後着・ABAを拒否。監査で未解決hashの保持数無制限を発見し、snapshot前max2制限と全終了経路の枠解放を追加。製品のindexed入力取得・保存・UI接続・任意wire/流体領域生成は未完。",
+      "lastUpdateEn": "2026-10-26: Added a disconnected provider retaining explicit indexed-surface node IDs/order/tolerance. Content SHA,generation and private leases reject replacement,disposal,late hashes and ABA. Audit found unlimited pending snapshots; admission now limits pending hashes to two before copying and releases slots on every settled path. Product indexed acquisition,persistence,UI,arbitrary wires and fluid-domain generation remain open.",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/retained-opening-surface.md; docs/opening-provider-independent-2026-10-26.md; docs/evidence/2026-10-26-opening-provider-integration.json",
       "review": {
         "status": "merged",
         "pr": 139,
