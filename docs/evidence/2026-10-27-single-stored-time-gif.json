@@ -3,14 +3,14 @@
   "base": "e7899787f382a452937cb4edfe60f49e43d26722",
   "scope": "Single stored thermal/acoustic time GIF, no actual browser export; native codec not required",
   "checks": {
-    "newPureTests": 9,
-    "newUiTests": 4,
+    "newPureTests": 10,
+    "newUiTests": 5,
     "finalRelated": {
-      "total": 118,
-      "pass": 118,
+      "total": 120,
+      "pass": 120,
       "fail": 0,
       "skip": 0,
-      "durationMs": 20998.5845
+      "durationMs": 12581.4373
     },
     "types": {
       "declarations": 29,
@@ -20,6 +20,13 @@
       "total": 21,
       "pass": 21,
       "fail": 0
+    },
+    "cooperativeBeforeSourceGate": {
+      "total": 118,
+      "pass": 118,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 20998.5845
     }
   },
   "history": [
@@ -47,6 +54,10 @@
     {
       "stage": "root draft audit",
       "reason": "Abort-racing wrapper would release ownership early. Replaced with cooperative await/checks; pending owned yield/Blob/SHA keeps renderer/job unsettled until real completion. New job/UI/SHA regressions pass."
+    },
+    {
+      "stage": "independent source-capacity audit",
+      "reason": "Own snapshots Symbol.iterator could yield62 frames despite indexed length2. Replaced iterator traversal with ordinary-array own indexed data descriptor reads for frames/scalars/time/mesh coordinates; rejects getters/symbol hooks without invocation. UI metadata capture also avoids caller map hook; added2 regressions."
     }
   ],
   "semantics": {
@@ -116,6 +127,11 @@
       "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-cooperative-suite.log",
       "bytes": 13091,
       "sha256": "3a952c60e14cbdd587ab3890e2bf0c2b2ef3940a4f7dc46a9689f18ae3b5476e"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-source-gate-suite.log",
+      "bytes": 13307,
+      "sha256": "b6eed077deaf54e2dade4829d8a51dcf624013541363b8771328d5f8f9ebe714"
     },
     {
       "path": "docs/evidence/2026-10-27-single-stored-time-gif/initial-broad-preparation-failure.log",

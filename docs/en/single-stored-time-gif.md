@@ -17,3 +17,5 @@ The scalar history is not cloned per frame. Only bounded time metadata is copied
 [Verification record](../evidence/2026-10-27-single-stored-time-gif.json). An independent GIF/LZW reader checks all24 images and delays; fake-canvas tests cover nonuniform times, ties, endpoints, units, purpose/byte tampering, cancellation, timeout and UI restoration. No real browser export is claimed here; that requires a separate acceptance run.
 
 The watchdog requests cancellation; it does not claim settlement of a still-pending owned yield, Blob read or digest. Cleanup and source/host unlock wait until that operation actually settles. An injected never-settling promise keeps executionSettled false; normal yields use finite timers.
+
+Source traversal reads indexed own data descriptors, not caller iterators or map hooks. Sparse values, custom array prototypes, symbol hooks and selected-data getters refuse without executing them.

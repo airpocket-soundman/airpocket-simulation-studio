@@ -17,3 +17,5 @@
 [検証記録](evidence/2026-10-27-single-stored-time-gif.json)。独立GIF/LZW readerで全24画像とdelayを検査し、非一様時刻・同距離選択・両端・単位・proof取り違え・bytes改竄・途中取消/timeout・UI復元をfake canvasで確認します。この版の実ブラウザ書出しは別の受入検証であり、ここでは実行していません。
 
 watchdogは取消要求であり、未完了の所有yield・Blob読取・digestを完了扱いにしません。その処理が実際にsettleするまでsource/host lockとexecutionSettled falseを保持します。注入したnever-settling promiseなら未完了のままです。通常yieldは有限timerです。
+
+sourceは呼出側iteratorやmap hookを実行せず、番号付きのown data descriptorだけを読みます。疎な値・独自配列prototype・symbol hook・対象値getterは実行せず拒否します。
