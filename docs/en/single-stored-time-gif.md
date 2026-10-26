@@ -14,8 +14,16 @@ A separate private issued-Blob proof binds field/kind/unit, source revision, fix
 
 The scalar history is not cloned per frame. Only bounded time metadata is copied under the existing result lease. Result/field/view/camera/history-reference/time/capture-size changes refuse. Cancel, timeout or error publishes no artifact. Finally restores the original timeView including interpolation, camera, controls and inputs. `executionSettled` reflects actual cleanup, not merely the immediate cancelled state.
 
-[Verification record](../evidence/2026-10-27-single-stored-time-gif.json). An independent GIF/LZW reader checks all24 images and delays; fake-canvas tests cover nonuniform times, ties, endpoints, units, purpose/byte tampering, cancellation, timeout and UI restoration. No real browser export is claimed here; that requires a separate acceptance run.
+[Verification record](../evidence/2026-10-27-single-stored-time-gif.json). An independent GIF/LZW reader checks all24 images and delays; fake-canvas tests cover nonuniform times, ties, endpoints, units, purpose/byte tampering, cancellation, timeout and UI restoration. The initial implementation record left real browser export pending. The dated2026-10-27 follow-up below records the current bounded acceptance.
 
 The watchdog requests cancellation; it does not claim settlement of a still-pending owned yield, Blob read or digest. Cleanup and source/host unlock wait until that operation actually settles. An injected never-settling promise keeps executionSettled false; normal yields use finite timers.
 
 Source traversal reads indexed own data descriptors, not caller iterators or map hooks. Sparse values, custom array prototypes, symbol hooks and selected-data getters refuse without executing them.
+
+## Bounded real-browser acceptance on2026-10-27
+
+At frozen runtime66ce457, ordinary foreground English main/IAB produced exactly one2s stored-time GIF through formal stdio from the existing synthetic94-node thermal case. [Actual evidence](../evidence/2026-10-27-single-stored-time-gif-main/README.md). Full5574849bytes/SHA-256 `5f800ca2cd4ffb4ed78b2e98549b0e3255727481752e0e8d3645d0b8a0519687`,86pages,24frames/640×320/RGB332/200cs/infinite loop0 passed. Stored0/5/10s selections occurred6/12/6 times; terminal10s has zero offset. Camera and all24 ledger entries matched. This example contained no nearest-time tie; the lower-index tie rule has automated coverage only.
+
+Independent generic GIF/LZW and FFmpeg decoded RGB matched for all24 frames. Every640×204 scene ROI had4566–4574 nonbackground pixels and exactly3 scene hashes corresponding to stored times. Manual first/middle/last review found a visible blue→green→red box, legend and readable time captions. Five-state equality, original GUI interpolated2s restoration, settled release and session/owned-child/token cleanup passed.
+
+Actual acoustic export, actual cancellation matrix, GUI-download completion, general geometry, publication and physics/calibration are not established. Initial pixel-expectation correction, two unchanged WASM preparation refusals before solver execution, and owned-await/source-hook fixes remain unchanged historical records. [Integration validation scope](../evidence/2026-10-27-single-stored-time-gif-integration.json).

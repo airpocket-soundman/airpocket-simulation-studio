@@ -14,8 +14,16 @@
 
 全scalar履歴の再copyは行わず、既存結果lease下で時刻metadataだけをsnapshotします。処理中の結果・field・view/camera・source履歴reference/time・capture寸法変更を拒否し、取消・timeout・エラーでartifactを公開しません。finallyで元のtimeView（補間表示を含む）、camera、controls、画面入力を復元します。`executionSettled`はこの後始末の完了を表し、cancel直後のstateだけでは完了扱いしません。
 
-[検証記録](evidence/2026-10-27-single-stored-time-gif.json)。独立GIF/LZW readerで全24画像とdelayを検査し、非一様時刻・同距離選択・両端・単位・proof取り違え・bytes改竄・途中取消/timeout・UI復元をfake canvasで確認します。この版の実ブラウザ書出しは別の受入検証であり、ここでは実行していません。
+[検証記録](evidence/2026-10-27-single-stored-time-gif.json)。独立GIF/LZW readerで全24画像とdelayを検査し、非一様時刻・同距離選択・両端・単位・proof取り違え・bytes改竄・途中取消/timeout・UI復元をfake canvasで確認します。初期実装時点では実ブラウザ書出しを未実行として記録しました。現在の限定実証は以下の2026-10-27追記を参照してください。
 
 watchdogは取消要求であり、未完了の所有yield・Blob読取・digestを完了扱いにしません。その処理が実際にsettleするまでsource/host lockとexecutionSettled falseを保持します。注入したnever-settling promiseなら未完了のままです。通常yieldは有限timerです。
 
 sourceは呼出側iteratorやmap hookを実行せず、番号付きのown data descriptorだけを読みます。疎な値・独自配列prototype・symbol hook・対象値getterは実行せず拒否します。
+
+## 2026-10-27の限定実ブラウザ検証
+
+固定runtime66ce457の通常main/IAB・英語・前景で、既存の合成94節点熱ケースから2秒の保存時刻GIFを正式stdioで1回だけ出力しました。[実証記録](evidence/2026-10-27-single-stored-time-gif-main/README.md)。5574849bytes/SHA-256 `5f800ca2cd4ffb4ed78b2e98549b0e3255727481752e0e8d3645d0b8a0519687`、86ページ、24枚・640×320・RGB332・総delay200cs・無限loop0を確認しました。保存時刻0/5/10秒の選択回数は6/12/6で、終端10秒のずれ0、固定camera、24件ledgerが一致しました。同距離選択はこの実例には発生せず、低indexのtie規則は自動検査だけの範囲です。
+
+独立generic GIF/LZWとFFmpegの全24枚RGBは一致し、全画像の640×204モデル領域に非背景4566〜4574pixels、scene hashは保存時刻に対応する3種類でした。先頭・中央・最後の画像で青→緑→赤の箱、凡例と時刻キャプションを目視確認しました。5状態不変、GUIの元の補間2秒への復元、settled後の解放とsession/所有child/tokenの後始末を確認しました。
+
+音響の実書出し、実取消matrix、GUIダウンロード完了、一般形状・公開環境・物理精度や校正は証明していません。初期のpixel期待値訂正、2回の既存WASM準備拒否（solver未到達）、所有await/配列hook修正の履歴は変更せず保持します。[統合検証の範囲](evidence/2026-10-27-single-stored-time-gif-integration.json)。

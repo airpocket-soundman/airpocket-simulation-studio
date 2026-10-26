@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "runtimeSource": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "actualEvidence": "docs/evidence/2026-10-27-single-stored-time-gif-main/README.md",
+  "scope": "One bounded thermal stored-time GIF acceptance; no status promotion",
+  "sourceValidation": {
+    "rootFocused": {
+      "head": "7fcd9ee3312a66acb179b612394bbc5f9c175cda",
+      "passed": 132,
+      "elapsedMs": 14476.1375
+    },
+    "uniqueIndependent": {
+      "head": "66ce457cc69b1034045c74967a84abe59b6afc21",
+      "passed": 4,
+      "elapsedMs": 5283.4426
+    },
+    "typeDeclarations": 30,
+    "build": {
+      "passed": true,
+      "elapsedSeconds": 3.54
+    },
+    "localPublished": {
+      "passed": 28,
+      "elapsedMs": 61907.5862
+    }
+  },
+  "actual": {
+    "fixture": "Existing synthetic94-node thermal case",
+    "language": "en",
+    "foreground": true,
+    "normalMain": true,
+    "formalStdio": true,
+    "exports": 1,
+    "solverJobs": 0,
+    "retries": 0,
+    "artifact": {
+      "bytes": 5574849,
+      "sha256": "5f800ca2cd4ffb4ed78b2e98549b0e3255727481752e0e8d3645d0b8a0519687",
+      "pages": 86,
+      "frames": 24,
+      "width": 640,
+      "height": 320,
+      "palette": "RGB332",
+      "totalDelayCentiseconds": 200,
+      "loop": 0
+    },
+    "physicalSelection": {
+      "phase": "i/23",
+      "nearest": true,
+      "storedTimesSeconds": [
+        0,
+        5,
+        10
+      ],
+      "selectionCounts": [
+        6,
+        12,
+        6
+      ],
+      "terminalSeconds": 10,
+      "terminalOffsetSeconds": 0,
+      "camera": "fixed",
+      "actualTieOccurred": false,
+      "tieLow": "automated coverage only"
+    },
+    "independent": {
+      "genericLzwFfmpegAll24RgbEqual": true,
+      "sceneRoi": [
+        0,
+        0,
+        640,
+        204
+      ],
+      "nonBackgroundPixels": {
+        "minimum": 4566,
+        "maximum": 4574
+      },
+      "distinctSceneHashes": 3,
+      "manualFirstMiddleLast": "Visible blue/green/red box and readable captions"
+    },
+    "restoration": {
+      "fiveStatesEqual": true,
+      "guiInterpolatedTimeSeconds": 2,
+      "settledBeforeRelease": true,
+      "ownedChildSessionTokenCleanup": true
+    }
+  },
+  "notClaimed": [
+    "actual acoustic GIF",
+    "actual cancellation matrix",
+    "GUI download completion",
+    "general geometry",
+    "public deployment",
+    "physical integration/interpolation accuracy",
+    "calibration",
+    "parent completion"
+  ],
+  "preservedHistory": [
+    "All initial pixel/preparation refusal logs remain unchanged",
+    "Two old WASM preparation failures reached no solver",
+    "Owned-await/source-hook refusal fixes remain historical"
+  ],
+  "protectedProgress": {
+    "tasks": 171,
+    "allStatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "changedOnly": [
+      {
+        "id": "P4",
+        "field": "lastUpdate"
+      },
+      {
+        "id": "P4",
+        "field": "lastUpdateEn"
+      },
+      {
+        "id": "P4",
+        "field": "evidence"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "evidence"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "lastUpdate"
+      },
+      {
+        "id": "BROWSEREXPORT1",
+        "field": "lastUpdateEn"
+      }
+    ],
+    "allOtherFieldsDeepEqual": true
+  },
+  "installedSkillChanged": false,
+  "preservedRaw": [
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/docs-layers.log",
+      "bytes": 2112,
+      "sha256": "4fead1534b32df802e4d98cd32437822a78f49cc766307481387867f8ab471f0",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/filter-attempt-preparation-failure.log",
+      "bytes": 15464,
+      "sha256": "0620997056a03b7e1a6442bfda3cafa1b322daca35447506419e2545702f74dd",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-cooperative-suite.log",
+      "bytes": 13091,
+      "sha256": "3a952c60e14cbdd587ab3890e2bf0c2b2ef3940a4f7dc46a9689f18ae3b5476e",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-source-gate-suite.log",
+      "bytes": 13307,
+      "sha256": "b6eed077deaf54e2dade4829d8a51dcf624013541363b8771328d5f8f9ebe714",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/initial-broad-preparation-failure.log",
+      "bytes": 15482,
+      "sha256": "1cdbda76c57371b160edb8002b8241a8b668b8c6a2b219bc6ef6d694de69cb29",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/initial-pixel-oracle.log",
+      "bytes": 1714,
+      "sha256": "07cb967a374341f7953397c5568234d617bfc87ae5a94591fb10c32bc18fb903",
+      "unchangedFromBase": true
+    }
+  ],
+  "integrationValidation": {
+    "docsProgressTests": {
+      "total": 7,
+      "pass": 7,
+      "fail": 0,
+      "elapsedMs": 178.6889
+    },
+    "skill": {
+      "valid": true,
+      "command": "python -X utf8 skill-creator/scripts/quick_validate.py skills/airpocket-studio",
+      "initialDefaultLocale": "Default Windows cp932 read failed on existing UTF-8 SKILL.md; UTF-8 interpreter mode passed without changing skill encoding"
+    },
+    "sourceChanges": "No runtime/contract changes; progress six authorized fields only",
+    "rawImplementationLogsUnchanged": 6
+  }
+}
