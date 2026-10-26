@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "scope": "Ordinary main/IAB GUI-only synthetic finite input-history inspector smoke",
+  "stageA": {
+    "source": "e972ce8b11fa8cf5b6696082b4e96d979081ae77",
+    "actualOwnedWorkerRuns": 2,
+    "success": 1,
+    "invalid": 1,
+    "publicExampleHashes": true,
+    "fiveTables45CellsAtNineSignificantDigits": true,
+    "jaEnInputAndCellsPreserved": true,
+    "editImmediatelyClearsOldResults": true,
+    "actualWorkerInvalidInputRefused": true,
+    "clearIdle": true,
+    "baselineFinalEnDomEquality": {
+      "controls": 272,
+      "conditions": true,
+      "caseCount": 0
+    },
+    "validation": {
+      "focusedPassed": 56,
+      "typeDeclarationsPassed": 28,
+      "buildPassed": true,
+      "buildSeconds": 3.61,
+      "localPassed": 28,
+      "localElapsedMs": 46816.716
+    }
+  },
+  "polish": {
+    "source": "4c0221081b0a5af9025cc237f24b9c1cc1dace0b",
+    "actualOwnedWorkerRuns": 1,
+    "success": 1,
+    "allRowsEqualStageA": true,
+    "protectedDomControlsEqual": true,
+    "controls": 272,
+    "tableWidths": [
+      {
+        "caption": "F (dimensionless)",
+        "captionHeight": 23,
+        "width": 633
+      },
+      {
+        "caption": "E (Green–Lagrange, dimensionless)",
+        "captionHeight": 23,
+        "width": 633
+      },
+      {
+        "caption": "S (second Piola–Kirchhoff, Pa)",
+        "captionHeight": 23,
+        "width": 633
+      },
+      {
+        "caption": "P (first Piola–Kirchhoff, Pa)",
+        "captionHeight": 23,
+        "width": 633
+      },
+      {
+        "caption": "sigma (Cauchy, Pa)",
+        "captionHeight": 23,
+        "width": 633
+      }
+    ],
+    "rootImageReviewPassed": true,
+    "focusedPassed": 16,
+    "focusedElapsedMs": 2016.7085,
+    "fullBuildAndLocalNotRerunForThisSource": true
+  },
+  "limitations": {
+    "formalInMemoryProjectCaseAnalysisEqualityProven": false,
+    "actualCancellationCaptured": false,
+    "physicalAcceptanceOrCalibration": false,
+    "finalCi": "planned, not observed in this bundle",
+    "publication": false,
+    "allLanguageOrHiddenMatrix": false
+  },
+  "newExecutionByPackager": {
+    "gui": 0,
+    "structuralSolver": 0,
+    "export": 0,
+    "codec": 0
+  },
+  "history": {
+    "stageAJaConditionsLocalized": true,
+    "finalEnComparisonUsed": true,
+    "stageAOriginalsUnmodified": true
+  }
+}
