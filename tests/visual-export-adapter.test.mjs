@@ -1,3 +1,4 @@
+import {PerspectiveCamera,Vector3} from 'three';
 import {getSingleOrbitGifVerification} from '../src/ui/single-orbit-gif.js';
 import {orbitGifEnv} from './helpers/orbit-gif-env.mjs';
 import {decodeGif} from './helpers/gif-decode.mjs';
@@ -18,7 +19,7 @@ class Vector {
  applyAxisAngle(){this.x+=10;return this;}
 }
 const CLUSTER=Uint8Array.of(0x1a,0x45,0xdf,0xa3,0x1f,0x43,0xb6,0x75,0x76,0x69,0x64,0x65,0x6f);
-function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,thermal=false,realTimeView=false,locale='en',sourceWidth=320,sourceHeight=200}={}){
+function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv={},acoustic=false,thermal=false,realTimeView=false,locale='en',sourceWidth=320,sourceHeight=200,cameraOverride,targetOverride,onRender=()=>{}}={}){
  const previous=Object.fromEntries(['document','requestAnimationFrame','MediaRecorder'].map(k=>[k,globalThis[k]]));
  const elements=new Map(),frames=[],tracks=[{stopped:false,stop(){this.stopped=true;}}];let clicks=0,renders=0,recorder;const order=[];
  function element(id){if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){clicks++;},dispatchEvent(){}});return elements.get(id);}
@@ -35,12 +36,12 @@ function fixture({failure=false,emptyRecording=false,noChunks=false,recordingEnv
  stop(){order.push('stop');this.state='inactive';if(!noChunks)this.ondataavailable?.({data:new Blob([emptyRecording?Uint8Array.of(0x1a,0x45,0xdf,0xa3):CLUSTER],{type:'video/webm'})});this.onstop?.();}
  }
  globalThis.MediaRecorder=Recorder;
- const camera={position:new Vector(),up:new Vector(0,1,0),fov:40,orientationUp:[0,1,0],updateProjectionMatrix(){},lookAt(){this.orientationUp=this.up.toArray();}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
+ const camera=cameraOverride??{position:new Vector(),up:new Vector(0,1,0),fov:40,orientationUp:[0,1,0],updateProjectionMatrix(){},lookAt(x,y,z){assert.ok(x instanceof Vector||Number.isFinite(x)&&Number.isFinite(y)&&Number.isFinite(z),'lookAt requires a vector or three numeric coordinates');this.orientationUp=this.up.toArray();}},controls={target:targetOverride??new Vector(0,0,0),enabled:true,enableDamping:true};
  element('result-field').value=thermal?'temperature':'instantPressure';
  const output={mesh:{nodes:[0,0,0,1,1,1]},result:thermal?{kind:'thermal',transient:true,snapshots:[0,.2,.9,1.2].map(time=>({time,temperature:[20+time,30+time]}))}:acoustic?{kind:'acousticTransient',snapshots:[0,.2,.9,1.2].map(time=>({time,pressure:[time,2*time]}))}:{kind:'elastic'}};
  let current=output;const physical={timeSeconds:.35,frameIndex:1};const selected=[];if(acoustic||thermal){element('acoustic-time-frame').value='1';element('acoustic-time-frame').dispatchEvent=()=>{selected.push(Number(element('acoustic-time-frame').value));physical.frameIndex=Number(element('acoustic-time-frame').value);physical.timeSeconds=output.result.snapshots[physical.frameIndex].time;};}
  const sourceElement={width:sourceWidth,height:sourceHeight};
- const api=installVisualExport({renderer:{domElement:sourceElement,render(){renders++;if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic||thermal?{getTimeView:()=>realTimeView?{state:structuredClone(physical),controls:[{id:'acoustic-time-frame',key:'value',value:element('acoustic-time-frame').value}]}:structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,realTimeView?value.state:value);element('acoustic-time-frame').value=realTimeView?value.controls[0].value:String(value.frameIndex);}}:{})});
+ const api=installVisualExport({renderer:{domElement:sourceElement,render(){renders++;onRender(camera);if(failure)throw Error('renderer failed');}},scene:{},camera,controls,getAnalysis:()=>current,redraw(){},language:()=>locale,translate(){},recordingEnv,...(acoustic||thermal?{getTimeView:()=>realTimeView?{state:structuredClone(physical),controls:[{id:'acoustic-time-frame',key:'value',value:element('acoustic-time-frame').value}]}:structuredClone(physical),restoreTimeView:value=>{Object.assign(physical,realTimeView?value.state:value);element('acoustic-time-frame').value=realTimeView?value.controls[0].value:String(value.frameIndex);}}:{})});
  return {order,api,canvas,controls,camera,tracks,elements,frames,draws,texts,resizeSource(){sourceElement.width++;},output,physical,selected,replaceOutput:value=>{current=value;},get recorder(){return recorder;},get clicks(){return clicks;},get renders(){return renders;},restore(){for(const [k,v]of Object.entries(previous)){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}};
 }
 
@@ -152,4 +153,18 @@ test('modal onchange closure and camera up/fov changes are refused and restored 
   gif.env.yieldControl=async()=>{if(++turns!==2)return;if(kind==='mode'){select.value='1';select.dispatchEvent(new Event('change'));}if(kind==='up')f.camera.up.x=.5;if(kind==='fov')f.camera.fov=50;};
   try{await assert.rejects(f.api.render({format:'gif',animation:'orbit',seconds:1}),/changed/);assert.equal(f.api.isActive(),false);assert.equal(f.controls.enabled,true);assert.equal(select.value,'0');assert.equal(modeIndex,0);assert.deepEqual(f.camera.up.toArray(),[0,1,0]);assert.equal(f.camera.fov,40);assert.deepEqual(f.camera.orientationUp,[0,1,0]);assert.equal(f.clicks,0);}finally{f.restore();}
  }
+});
+
+
+test('real Three camera keeps all 24 orbit captures finite, aimed at target and model bounds inside view',async()=>{
+ const invalid=new PerspectiveCamera(40,440/521,.1,1000);invalid.position.set(61,41,84);invalid.lookAt({x:5,y:5,z:20});assert.ok(invalid.quaternion.toArray().some(v=>!Number.isFinite(v)),'plain xyz object reproduces the unsupported Three lookAt overload');
+ const camera=new PerspectiveCamera(40,440/521,.1,1000),target=new Vector3(5,5,20);camera.position.set(61,41,84);camera.lookAt(target);camera.updateMatrixWorld(true);
+ const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),up:camera.up.clone(),fov:camera.fov},captures=[];
+ const gif=orbitGifEnv(),f=fixture({thermal:true,realTimeView:true,recordingEnv:gif.env,sourceWidth:440,sourceHeight:521,cameraOverride:camera,targetOverride:target,onRender:c=>{
+  c.updateMatrixWorld(true);assert.ok([...c.quaternion.toArray(),...c.matrixWorld.elements,...c.projectionMatrix.elements].every(Number.isFinite));
+  const direction=c.getWorldDirection(new Vector3()),expected=target.clone().sub(c.position).normalize();assert.ok(direction.distanceTo(expected)<1e-12);assert.ok(direction.toArray().every(Number.isFinite));
+  for(const x of [0,10])for(const y of [0,10])for(const z of [0,40]){const projected=new Vector3(x,y,z).project(c);assert.ok(projected.toArray().every(Number.isFinite));assert.ok(Math.abs(projected.x)<1&&Math.abs(projected.y)<1&&projected.z>-1&&projected.z<1,'model bounds remain inside the capture frustum');}
+  captures.push(c.position.toArray());
+ }});
+ try{f.output.result.snapshots=[0,5,10].map(time=>({time,temperature:[20+time,20+time]}));f.physical.timeSeconds=2;f.physical.frameIndex=0;await f.api.render({format:'gif',animation:'orbit',seconds:2});assert.equal(captures.length,24);assert.equal(new Set(captures.map(JSON.stringify)).size,24);assert.deepEqual(camera.position,saved.position);assert.ok(camera.quaternion.angleTo(saved.quaternion)<1e-7);assert.deepEqual(camera.up,saved.up);assert.equal(camera.fov,saved.fov);assert.equal(f.clicks,0);}finally{f.restore();}
 });

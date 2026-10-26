@@ -9,3 +9,12 @@
 GIFも既存canonicalViewStateを使用し、正規化済みカメラから計画・描画・証明を生成します。終了時は元の生カメラを復元します。異なるカメラは引き続き拒否し、正規化でfovが180となる入力も拒否します。最終照合のエラーは同じGIF_ORBIT_INVALIDのまま、値を含めず不一致項目を示します。API生成完了表示は「GIFのフレームを作成しました。」とし、公開artifact成功とは区別します。
 
 回帰は実OrbitControlsのULP差、公開APIと同じカメラ正規化、熱2秒補間・null frame/modeのjob境界、異なるカメラ拒否、計画初期座標、日英生成段階表示を確認します。関連126件成功・失敗0・skip0（8.3567秒）。型と層の試験を含みます。実GUI・外部codec・solver・追加exportは0です。実artifact成功の検証は未実施です。
+
+
+## 202bの可視受入失敗と向きの修正
+
+後続202bはartifactの技術検査を通過しましたが、独立画像監査でモデル領域が背景のみとなり、可視受入は失敗しました。前述のカメラ正規化は維持します。
+
+正規化したtargetを描画へ渡す変更で、Three.jsが対応しないplain xyz objectをlookAtへ渡していました。これは本修正担当の誤りです。実PerspectiveCameraの数値試験でquaternionと行列のNaNを再現し、正式なlookAt(x,y,z)呼出へ修正しました。寛容だったfakeもvectorまたは数値3引数を要求します。
+
+実PerspectiveCameraをadapterへ注入した回帰は全24captureでquaternion・matrixWorld・projection・視線方向の有限性、targetへの向き、モデル境界8頂点の視錐台内投影、終了時の元カメラ復元を確認します。新しい実出力は行っていません。次の実画面での可視成功は未確認です。

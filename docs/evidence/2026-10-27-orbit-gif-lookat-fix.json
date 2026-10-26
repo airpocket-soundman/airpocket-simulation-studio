@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "historical202b": {
+    "technicalChecks": "passed as reported by root",
+    "visualAcceptance": "failed: model region background only"
+  },
+  "defect": "GIF adapter passed plain xyz object to Three lookAt; real PerspectiveCamera reproduces nonfinite quaternion and matrices",
+  "correction": "Supported numeric lookAt(x,y,z) overload; canonical camera plan and proof retained",
+  "regression": {
+    "camera": "Real Three PerspectiveCamera injected into production adapter",
+    "captures": 24,
+    "checks": [
+      "finite quaternion",
+      "finite matrixWorld",
+      "finite projection",
+      "finite world direction",
+      "target alignment",
+      "all 8 model bounding corners inside frustum",
+      "original camera restoration"
+    ],
+    "fake": "lookAt requires vector or 3 finite numbers"
+  },
+  "validation": {
+    "relevant": {
+      "total": 127,
+      "pass": 127,
+      "fail": 0,
+      "skip": 0,
+      "durationMilliseconds": 9586.8891
+    },
+    "docs": {
+      "total": 2,
+      "pass": 2,
+      "fail": 0
+    }
+  },
+  "workingByteSHA256": {
+    "src/visual-export.js": "ad8d6d8db0f25fae06a9435af53910e71424c6e502939a20342371020d44811f",
+    "tests/visual-export-adapter.test.mjs": "26d23548b9144ab7da727ee7fa631d1ecbb58dd324b68effeac990d355525ef2"
+  },
+  "additionalActual": {
+    "gui": 0,
+    "codec": 0,
+    "productExport": 0,
+    "solver": 0
+  },
+  "remaining": "Real visible model acceptance not yet rerun"
+}
