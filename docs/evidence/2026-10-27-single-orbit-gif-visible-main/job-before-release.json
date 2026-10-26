@@ -1,0 +1,563 @@
+{
+  "schemaVersion": 1,
+  "jobId": "37b5706f-da09-45b0-8161-1472956ca036",
+  "requestId": "single-orbit-gif202c-1793041517434",
+  "state": "completed",
+  "executionSettled": true,
+  "format": "gif",
+  "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+  "view": {
+    "result": {
+      "field": "temperature",
+      "modeIndex": null,
+      "frameIndex": null,
+      "deformScale": 1,
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true,
+      "colorRange": null,
+      "camera": {
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ],
+        "fov": 40
+      },
+      "timeSeconds": 2
+    },
+    "setup": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    },
+    "language": "en"
+  },
+  "progress": {
+    "fraction": 1
+  },
+  "artifact": {
+    "mimeType": "image/gif",
+    "name": "result-37b5706f-da09-45b0-8161-1472956ca036.gif",
+    "totalBytes": 5574849,
+    "sha256": "sha256:56b231f00c29b5b37f39cd165035bef192b2ecb593266ca47e782f0700fe7fbc",
+    "maxChunkBytes": 65536,
+    "manifest": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+      "format": "gif",
+      "container": "gif",
+      "mimeType": "image/gif",
+      "sha256": "sha256:56b231f00c29b5b37f39cd165035bef192b2ecb593266ca47e782f0700fe7fbc",
+      "totalBytes": 5574849,
+      "view": {
+        "field": "temperature",
+        "timeSeconds": 2,
+        "deformScale": 1,
+        "camera": {
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "scale": {
+        "units": {
+          "time": "second"
+        },
+        "deformScale": 1,
+        "deformScaleKind": "visualization multiplier"
+      },
+      "time": {
+        "animation": "orbit",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "physicalTime": "Selected result field and viewer time remain fixed; only the camera moves",
+        "viewerTimeSeconds": 2,
+        "interpolated": true,
+        "timeSelectionBasis": "viewer-interpolated",
+        "selectedPhysicalTimeSeconds": 2,
+        "recording": "fixed-frame",
+        "realtime": false,
+        "frameCount": 24,
+        "frameCountGuaranteed": true,
+        "phasePolicy": "i/24",
+        "camera": "orbit",
+        "loop": "infinite",
+        "delayCentiseconds": [
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8,
+          8,
+          9,
+          8
+        ],
+        "frames": [
+          {
+            "index": 0,
+            "phase": 0,
+            "angleRadians": 0,
+            "cameraPositionMm": [
+              61,
+              41,
+              84
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 1,
+            "phase": 0.041666666666666664,
+            "angleRadians": 0.2617993877991494,
+            "cameraPositionMm": [
+              75.656265159,
+              41,
+              67.325386357
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 2,
+            "phase": 0.08333333333333333,
+            "angleRadians": 0.5235987755982988,
+            "cameraPositionMm": [
+              85.497422612,
+              41,
+              47.425625842
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 3,
+            "phase": 0.125,
+            "angleRadians": 0.7853981633974483,
+            "cameraPositionMm": [
+              89.852813742,
+              41,
+              25.656854249
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 4,
+            "phase": 0.16666666666666666,
+            "angleRadians": 1.0471975511965976,
+            "cameraPositionMm": [
+              88.425625842,
+              41,
+              3.502577388
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 5,
+            "phase": 0.20833333333333334,
+            "angleRadians": 1.3089969389957472,
+            "cameraPositionMm": [
+              81.313119408,
+              41,
+              -17.527427386
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 6,
+            "phase": 0.25,
+            "angleRadians": 1.5707963267948966,
+            "cameraPositionMm": [
+              69,
+              41,
+              -36
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 7,
+            "phase": 0.2916666666666667,
+            "angleRadians": 1.8325957145940461,
+            "cameraPositionMm": [
+              52.325386357,
+              41,
+              -50.656265159
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 8,
+            "phase": 0.3333333333333333,
+            "angleRadians": 2.0943951023931953,
+            "cameraPositionMm": [
+              32.425625842,
+              41,
+              -60.497422612
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 9,
+            "phase": 0.375,
+            "angleRadians": 2.356194490192345,
+            "cameraPositionMm": [
+              10.656854249,
+              41,
+              -64.852813742
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 10,
+            "phase": 0.4166666666666667,
+            "angleRadians": 2.6179938779914944,
+            "cameraPositionMm": [
+              -11.497422612,
+              41,
+              -63.425625842
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 11,
+            "phase": 0.4583333333333333,
+            "angleRadians": 2.8797932657906435,
+            "cameraPositionMm": [
+              -32.527427386,
+              41,
+              -56.313119408
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 12,
+            "phase": 0.5,
+            "angleRadians": 3.141592653589793,
+            "cameraPositionMm": [
+              -51,
+              41,
+              -44
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 13,
+            "phase": 0.5416666666666666,
+            "angleRadians": 3.4033920413889422,
+            "cameraPositionMm": [
+              -65.656265159,
+              41,
+              -27.325386357
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 14,
+            "phase": 0.5833333333333334,
+            "angleRadians": 3.6651914291880923,
+            "cameraPositionMm": [
+              -75.497422612,
+              41,
+              -7.425625842
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 15,
+            "phase": 0.625,
+            "angleRadians": 3.9269908169872414,
+            "cameraPositionMm": [
+              -79.852813742,
+              41,
+              14.343145751
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 16,
+            "phase": 0.6666666666666666,
+            "angleRadians": 4.1887902047863905,
+            "cameraPositionMm": [
+              -78.425625842,
+              41,
+              36.497422612
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 17,
+            "phase": 0.7083333333333334,
+            "angleRadians": 4.4505895925855405,
+            "cameraPositionMm": [
+              -71.313119408,
+              41,
+              57.527427386
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 18,
+            "phase": 0.75,
+            "angleRadians": 4.71238898038469,
+            "cameraPositionMm": [
+              -59,
+              41,
+              76
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 19,
+            "phase": 0.7916666666666666,
+            "angleRadians": 4.974188368183839,
+            "cameraPositionMm": [
+              -42.325386357,
+              41,
+              90.656265159
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 20,
+            "phase": 0.8333333333333334,
+            "angleRadians": 5.235987755982989,
+            "cameraPositionMm": [
+              -22.425625842,
+              41,
+              100.497422612
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 21,
+            "phase": 0.875,
+            "angleRadians": 5.497787143782138,
+            "cameraPositionMm": [
+              -0.656854249,
+              41,
+              104.852813742
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          },
+          {
+            "index": 22,
+            "phase": 0.9166666666666666,
+            "angleRadians": 5.759586531581287,
+            "cameraPositionMm": [
+              21.497422612,
+              41,
+              103.425625842
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 9
+          },
+          {
+            "index": 23,
+            "phase": 0.9583333333333334,
+            "angleRadians": 6.021385919380437,
+            "cameraPositionMm": [
+              42.527427386,
+              41,
+              96.313119408
+            ],
+            "letterbox": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 320
+            },
+            "delayCentiseconds": 8
+          }
+        ]
+      },
+      "resolution": {
+        "width": 640,
+        "height": 320
+      },
+      "gif": {
+        "palette": "RGB332",
+        "colors": 256,
+        "lossy": true,
+        "letterbox": true
+      }
+    }
+  }
+}

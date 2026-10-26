@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "exportArtifact",
+      "scope": "inspect",
+      "description": "Read a base64 page of a completed visual export.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65536,
+            "default": 65536
+          }
+        },
+        "required": [
+          "jobId"
+        ]
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {
+        "offset": "byte",
+        "length": "byte"
+      },
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "Offset cannot exceed artifact bytes; verify the full artifact SHA-256 after assembly."
+      ]
+    }
+  ]
+}

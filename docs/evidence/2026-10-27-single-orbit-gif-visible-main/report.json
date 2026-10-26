@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "overallAcceptance": "passed-bounded-visible-model-and-technical-checks",
+  "runtimeSource": "4e0f785de1971a2a40b89db6c04a8fe5035818de",
+  "driverSha256": "024a06aca50ab42cd0c903f6122c2f42cff53f07d4765f1fd0749e1611372c5c",
+  "scope": "One foreground English normal-main orbitGIF on existing94-node thermal box at fixed interpolated2s",
+  "budget": {
+    "used": 1,
+    "limit": 1,
+    "remaining": 0,
+    "retries": 0,
+    "requestedSeconds": 2,
+    "watchdogMs": 120000,
+    "formalSolverJobs": 0
+  },
+  "archive": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "gitBlobSha1": "ccfcca833a094bb322afdb08777a02fcf2fa883c",
+    "rawBytes": 117499,
+    "rawSha256": "d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b",
+    "cases": 1,
+    "nodes": 94,
+    "displayResultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65"
+  },
+  "artifact": {
+    "bytes": 5574849,
+    "sha256": "56b231f00c29b5b37f39cd165035bef192b2ecb593266ca47e782f0700fe7fbc",
+    "pages": 86,
+    "format": "GIF89a",
+    "palette": "RGB332",
+    "colors": 256,
+    "width": 640,
+    "height": 320,
+    "frames": 24,
+    "loop": "infinite",
+    "totalDelayCentiseconds": 200,
+    "cameraLedgerVerified": 24,
+    "cameraPhasePolicy": "i/24",
+    "fixedField": "temperature",
+    "viewerTimeSeconds": 2,
+    "selectedPhysicalTimeSeconds": 2,
+    "interpolated": true,
+    "timeSelectionBasis": "viewer-interpolated",
+    "selectedStoredFrameIndexOmitted": true
+  },
+  "visibleModel": {
+    "all24NonBackgroundSceneRoi": true,
+    "sceneRoi": [
+      0,
+      0,
+      640,
+      204
+    ],
+    "minimumNonBackgroundPixels": 2785,
+    "maximumNonBackgroundPixels": 5163,
+    "distinctSceneHashes": 24,
+    "manualThreeImagesPassed": true,
+    "manualReviewSource": "independent/visual-review.json",
+    "rootCauseHistory": "Separate source fix uses numeric camera.lookAt coordinates; historical202b blank output retained"
+  },
+  "independent": {
+    "genericLzwDecode": true,
+    "ffprobeRuns": 1,
+    "ffmpegDecodeRuns": 1,
+    "all24RgbPixelsMatch": true,
+    "decodedBytesEach": 14745600,
+    "wholeRgbSha256": "sha256:7f02ac6e05bfe3bf662b0bfbe81ed84a0abbe69cdf51c8f7a3730e30e7634640",
+    "fullRawRgbRetainedOnlyInAuditorQa": true,
+    "machineStageResultHistorical": "independent/result.json retains manual-pending/overall-false before visual review",
+    "finalManualAcceptance": "independent/visual-review.json",
+    "postprocessingNotes": "independent/postprocessing-notes.json; metadata naming corrected without rerun"
+  },
+  "restoration": {
+    "apiFiveStateSnapshotsEqual": 5,
+    "inspectOnlyOwnedExportCountChanges": [
+      0,
+      1
+    ],
+    "guiAndApiInterpolatedTimeSecondsRestored": 2
+  },
+  "cleanup": {
+    "jobReleased": true,
+    "ownedAnalysisJobs": 0,
+    "ownedExportJobs": 0,
+    "sessionsEmpty": true,
+    "guiEndpointAndTokenCleared": true,
+    "childExitAndCloseObserved": true,
+    "childExitCode": 0,
+    "childSignal": null,
+    "childPid": 34656,
+    "childPidAbsent": true,
+    "privateTokenRemoved": true,
+    "rootObservedDriverExitCode": 0
+  },
+  "validationBeforeExecution": {
+    "focusedPassed": 111,
+    "independentPassed": 1,
+    "rootReportedTypeDeclarations": 27,
+    "build": "build202c.log",
+    "localReport": "published-report202c.json",
+    "localPassed": 28,
+    "localElapsedMs": 38259.865900000004
+  },
+  "historicalRecords": {
+    "failed202": "../2026-10-27-single-orbit-gif-failed/README.md",
+    "blank202b": "../2026-10-27-single-orbit-gif-main/README.md",
+    "budgets": "202failed1/1,202bpartial1/1,202c1/1 are separate consumed budgets",
+    "rawDriverPendingText": "Pre-independent-check metadata remains unchanged; final acceptance comes from new visual review"
+  },
+  "unproven": [
+    "GUI GIF-save button download completion",
+    "Other browser/language/background/cancellation matrix",
+    "General shapes and physical accuracy/calibration",
+    "PublicHTTPS and parent-task completion"
+  ],
+  "packagingExecutions": {
+    "productExport": 0,
+    "codec": 0,
+    "solver": 0,
+    "gui": 0
+  }
+}

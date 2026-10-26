@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "startExport",
+      "scope": "view",
+      "description": "Start or retrieve an idempotent in-memory visual export.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "expectedResultRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "format": {
+            "enum": [
+              "png",
+              "webm",
+              "png-sequence",
+              "gif"
+            ]
+          },
+          "animation": {
+            "enum": [
+              "orbit",
+              "deformation",
+              "time",
+              "slice",
+              null
+            ],
+            "default": "orbit"
+          },
+          "seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 15
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": 5,
+            "description": "Display duration for webm/gif; png-sequence refuses a non-null value."
+          },
+          "frames": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": 24,
+            "description": "png-sequence only: frame count N; frame i is rendered from the stored view state for index i of N (orbit/deformation phase i/N, time/slice phase i/(N-1)); time requires N <= stored acoustic or thermal temperature snapshots; thermal needs the temperature field."
+          },
+          "view": {
+            "description": "Optional JSON request context retained for idempotency. The live renderer captures its current scene; this field does not apply a requested view. Use setResultView before exporting."
+          }
+        },
+        "required": [
+          "requestId",
+          "expectedResultRevision",
+          "format"
+        ]
+      },
+      "sideEffects": [
+        "Starts renderer work and retains an in-memory PNG/WebM/GIF/PNG-sequence (STORE ZIP with manifest.json) artifact; does not download or persist files."
+      ],
+      "revisionFields": [
+        "expectedResultRevision"
+      ],
+      "units": {
+        "seconds": "s"
+      },
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "Single-view GIF supports orbit only: 24 fixed phases i/24, 640x320 letterbox without aspect stretch, opaque RGB332 256 colors, 1–15 second integer centisecond delays summing to duration, 32MiB byte cap and private complete-animation proof bound to exact bytes, field, camera and result revision. It preserves selected physical time and restores viewer controls on completion/cancel; time/deformation/slice GIF are refused. No MediaRecorder or native codec is needed.",
+        "Single-view WebM animation time supports acousticTransient/instantPressure only through singleTimeWebmExport capability. It uses VP8 fixed N=min(seconds*24,120), a fixed camera, nearest stored physical frames from first through last with requested/actual/signed-offset ledger, and private encoder proof plus strict WebM/full decoding before publication. Capture fits 1280x640 and bytes stay <=32MiB. Unsupported codecs or incomplete endpoints refuse with no realtime fallback. Preview and other WebM animations retain existing realtime semantics; thermal stored-temperature time uses the separate singleThermalTimeWebmExport capability with the same fixed-frame endpoint checks.",
+        "Nonblank requestId; same request identity/content reuses a retained job.",
+        "Thermal time WebM requires transient stored temperature frames and the temperature field; heatFlux is final-step only and is refused. Thermal WebM does not interpolate or recalculate fields. Real-time preview remains acoustic-only. Default retention four jobs / 32 MiB; WebM depends on browser support; orbit/deformation/slice remain realtime. Fixed acoustic time frames are saved visualization states, not physical time integration. png-sequence is fixed-frame and wall-clock independent: frames 2-120, at most 4 MiB per frame and 24 MiB per archive (explicit refusals), manifest.json holds per-frame result revision, phase/angle/time/slice position, resolution and SHA-256; cancel discards the archive and restores controls."
+      ]
+    }
+  ]
+}
