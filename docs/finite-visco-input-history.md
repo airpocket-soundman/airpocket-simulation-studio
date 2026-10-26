@@ -36,3 +36,6 @@
 rawIdentityは保存元UTF8 bytes、canonicalIdentityはキー順を正規化したJSON（newlineなし）のSHA256。表現が異なる同じ入力はrawだけが異なり、F/dt/列順が変わればcanonicalも変わる。これらは**入力同一性のhashであり、署名・由来認証・校正・物理精度保証ではない**。この境界はファイル書込、製品solver/UI/MCP/progress、project schemaへ接続しない。
 
 [検証証拠](evidence/2026-10-23-finite-visco-input-history.json): 元APIの直接実行との全finalState一致、raw/canonical hash、非同期snapshot、失敗step、strict parse、容量/時間、型fixtureを検証。独立した元材料点Gauss/energy/rotation検証と合わせても、実験校正・serialized状態restore・構造解析・公開を証明しない。
+
+
+2026-10-27実画面追補: [限定GUI確認](evidence/2026-10-27-finite-history-inspector-gui/README.md)でpublic合成例の4段階/4.7秒、日英表示、全45cell、入力編集/不正JSON/クリアを確認。DOM保護272controlsの同一性であり、正式API全状態同一性・実取消・構造校正の証明ではない。

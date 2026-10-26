@@ -19,3 +19,6 @@ A parameter failure has `completed:false,status:"failed"`, code `FINITE_VISCO_HI
 rawIdentity hashes source UTF8 bytes; canonicalIdentity hashes sorted-key canonical JSON without its publication newline. Equivalent formatting/property order changes only raw identity; changed F/dt/step order changes semantic identity. **These are input identity hashes, not signatures, provenance authentication, calibration or accuracy guarantees.** No filesystem publication, product solver/UI/MCP/progress/project integration is added.
 
 [Evidence](../evidence/2026-10-23-finite-visco-input-history.json) covers exact final-state equality against direct reference calls, identities, mutation across awaits, failed-step reporting, strict parsing, capacities/time and runtime type fixtures. Underlying independent Gauss/energy/rotation tests remain distinct from experimental validation, serialized state restore, structural analysis and publication.
+
+
+2026-10-27 GUI follow-up: [bounded actual evidence](../evidence/2026-10-27-finite-history-inspector-gui/README.md) checks the public synthetic example at4steps/4.7s, Japanese/English, all45cells, edit/invalidJSON/Clear. Protected272-control DOM equality does not establish formal API state equality, actual cancellation or structural calibration.

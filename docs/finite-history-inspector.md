@@ -13,3 +13,10 @@ Workerは内部のissued finalStateを送信せず、固定サイズの最終観
 これは材料点の合成参照を調べる入口であり、実測・材料同定・構造解析・塑性・損傷・破断予測・材料校正・FINITEVISCO1の完了を意味しない。既存のsolverや表示倍率アニメーションとは別である。UIの実画面確認はこの実装時点では未実施。
 
 回帰は独立hydrostatic解析解、線形E ramp/holdのMaxwell応力・散逸解析解、厳密parser拒否、raw入力hash、最大4096段階、実moduleWorkerメッセージ、取消/入力ABA/直接入力変更/破棄/timeout/errorと不正応答を検証する。[証拠](evidence/2026-10-27-finite-history-inspector.json)。
+
+
+## 実画面確認（2026-10-27、限定例）
+
+[通常main/IABのGUI証拠](evidence/2026-10-27-finite-history-inspector-gui/README.md)で、既存public合成例のボタン入力・実Worker再計算・日英切替を確認した。4段階/最終4.7秒、仕事72.7319228・自由エネルギー39.9520031・散逸32.7799197 J/m³-reference、5行列45cellがdomain出力の9有効数字と一致した。raw SHAは `6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86`、canonical SHAは `8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71`。入力編集で旧結果が直ちに消え、`{` は実Workerで拒否され、クリア後は入力/結果空・idleへ戻った。
+
+数値・動作確認はe972ce8、後続4c02210は表幅/余白のみの修正であり、実GUIの全45cellは同一、captionは1行だった。e972ce8でfocused56・型28・build・local28（46816.716 ms）、4c02210で関連16（独立4を含む）成功。後者のsourceでfull build/localを再実行したとはしない。272個の保護対象DOM controls・条件表示・case数のEN baseline/final一致を確認したが、正式in-memory APIのproject/case/analysis同一性や実取消の受入は主張しない。上の未実施記述は実装時点の履歴である。一般物理・材料校正・構造解析・親タスク完了・公開成功は未証明。
