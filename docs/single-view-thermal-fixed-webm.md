@@ -11,3 +11,5 @@
 動画は1～15秒、N=min(seconds×24,120)、固定カメラ、phase=i/(N−1)。最初と最後を含む物理時刻に最寄りの保存frameを選び、requested/actual/signed offsetを記録する。VP8全keyframe、strict WebM検査と全timestampの復号確認、原Blob bytes SHA結合を保つ。captureは1280×640以下、動画32MiB以下。非対応codecや不完全な終端は拒否し、実時間録画へfallbackしない。
 
 取消・結果交代・途中の表示量変更はartifactを出さず、カメラ・操作lock・保存前の補間表示時刻をfinallyで復元する。fake codec/UI回帰は日英のSave実配線、first/last、field拒否、proof隔離・改ざん、復元・取消・既存音響互換を検証する。実ブラウザ・実codecの熱動画は未実行であり、既存音響動画の証拠を熱へ転用しない。solver/GUI/realcodec追加0。
+
+最終job境界でも、prepared field=`temperature`は熱proof、`instantPressure`は音響proofを要求し、それ以外は拒否する。Blob proofだけからmanifest種別を選ばない。同revisionでも両方向のproof取り違えを拒否するfake integration回帰を追加した。最終関連113件成功・失敗/skip0。

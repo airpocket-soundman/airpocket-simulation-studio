@@ -1,4 +1,4 @@
-import {getSingleViewThermalTimeVerification,singleViewThermalTimeManifest,singleViewAcousticTimeManifest} from './single-view-time-webm.js';
+import {singleViewThermalTimeManifest,singleViewAcousticTimeManifest} from './single-view-time-webm.js';
 import {canonicalJson} from './project-revision.js';
 import {FIXED_FRAME_LIMITS,readStoreZip,sha256Hex} from './visual-export-fixed-frame.js';
 import {COMPARISON_TIMING_LIMITS} from './comparison-frame-timing.js';
@@ -100,7 +100,7 @@ async function buildManifest(job,mimeType,bytes,sha256,blob){
   scale:{units:{time:'second'},...(finite(picked.deformScale)?{deformScale:picked.deformScale,deformScaleKind:'visualization multiplier'}:{})}};
  if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
  else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
- if(format==='webm'&&animation==='time'){if(getSingleViewThermalTimeVerification(blob)&&picked.field!=='temperature')throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Thermal time artifact requires the temperature field');const fixed=await (getSingleViewThermalTimeVerification(blob)?singleViewThermalTimeManifest:singleViewAcousticTimeManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
+ if(format==='webm'&&animation==='time'){if(!['temperature','instantPressure'].includes(picked.field))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Stored-time artifact requires temperature or instantaneous pressure');const fixed=await (picked.field==='temperature'?singleViewThermalTimeManifest:singleViewAcousticTimeManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
  if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }

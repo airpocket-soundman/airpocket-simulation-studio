@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {createSingleViewThermalTimePlan as plan,encodeSingleViewThermalTimeWebm as encode,getSingleViewThermalTimeVerification as proof,singleViewThermalTimeManifest as manifest,getSingleViewAcousticTimeVerification,singleViewAcousticTimeManifest,singleThermalTimeWebmCapabilities} from '../src/single-view-time-webm.js';
+import {createSingleViewThermalTimePlan as plan,encodeSingleViewThermalTimeWebm as encode,getSingleViewThermalTimeVerification as proof,singleViewThermalTimeManifest as manifest,getSingleViewAcousticTimeVerification,singleViewAcousticTimeManifest,encodeSingleViewAcousticTimeWebm,singleThermalTimeWebmCapabilities} from '../src/single-view-time-webm.js';
 import {HISTORY_MAX_BYTES} from '../src/time-history-plan.js';import {fixedCodecEnv} from './helpers/single-view-fixed-codec.mjs';import {createVisualExportJobs} from '../src/visual-export-jobs.js';import {demuxFixedWebm,muxFixedWebm} from '../src/fixed-webm.js';
 const revision='sha256:'+'a'.repeat(64),canvas={width:4,height:4};
 const output=()=>({mesh:{nodes:[0,0,0,1,0,0]},result:{kind:'thermal',transient:true,snapshots:[0,.2,.9,2].map(time=>({time,temperature:[20+time,40+time]}))}});
@@ -14,3 +14,11 @@ test('missing/static/invalid/oversized thermal history and heat flux refuse befo
 test('thermal cancelled flush never issues a verified artifact',async()=>{const h=fixedCodecEnv('flush-hang'),controller=new AbortController(),pending=encode({...args(),signal:controller.signal},h.env);for(let i=0;i<400&&!h.stats.flushStarted;i++)await Promise.resolve();assert.equal(h.stats.flushStarted,true);controller.abort();await assert.rejects(pending,{code:'WEBM_FIXED_CANCELLED'});assert.equal(h.stats.codecClosed,1);});
 
 test('thermal job manifest admits temperature only and retains private decoded byte proof',async()=>{for(const field of ['temperature','heatFlux']){const h=fixedCodecEnv(),api=createVisualExportJobs({render:()=>encode(args(),h.env)}),j=await api.start({requestId:field,expectedResultRevision:revision,format:'webm',animation:'time',seconds:2,view:{result:{field}}});await api.waitForSettled(j);const status=api.status(j);assert.equal(status.state,field==='temperature'?'completed':'failed');if(field==='temperature'){assert.equal(status.artifact.manifest.time.field,'temperature');assert.equal(status.artifact.manifest.time.frameTimings.at(-1).actualTimeSeconds,2);}else assert.throws(()=>api.artifact(j),/unavailable/);}});
+
+
+test('prepared field selects the expected proof kind in both directions and refuses unsupported fields',async()=>{
+ for(const [kind,field] of [['thermal','instantPressure'],['acousticTransient','temperature'],['acousticTransient','pressure'],['thermal','heatFlux']]){
+  const h=fixedCodecEnv(),input=args();if(kind==='acousticTransient')input.output={result:{kind,snapshots:[{time:0},{time:2}]}};
+  const api=createVisualExportJobs({render:()=>kind==='thermal'?encode(input,h.env):encodeSingleViewAcousticTimeWebm(input,h.env)}),j=await api.start({requestId:kind+field,expectedResultRevision:revision,format:'webm',animation:'time',seconds:2,view:{result:{field}}});await api.waitForSettled(j);assert.equal(api.status(j).state,'failed');assert.equal(api.status(j).errorCode,'WEBM_ENDPOINT_UNVERIFIED');assert.throws(()=>api.artifact(j),/unavailable/);
+ }
+});

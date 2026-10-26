@@ -14,8 +14,8 @@
     },
     {
       "path": "src/visual-export-jobs.js",
-      "workingSha256": "9e88fb61bde9daa759574ee90bb0891286b163c470d1e61ed26940cc31e50905",
-      "lfSha256": "497644f49f91c458ee1d350bb0f21dd507fe3d6eee0e317ddcae0fd65ac4ed16"
+      "workingSha256": "c5a332a78e30d97594843a1153c2ab896453a8985febca9393ab279f82f8554a",
+      "lfSha256": "1e62c286617144d89e145ee26a8307e06b6a9cae4b83b4479007e45bbcd8e9a5"
     },
     {
       "path": "src/main.js",
@@ -55,10 +55,10 @@
     "firstLastNearestLedger": true
   },
   "tests": {
-    "newThermalPure": 5,
+    "newThermalPure": 6,
     "newThermalUI": 4,
-    "focusedTotal": 112,
-    "pass": 112,
+    "focusedTotal": 113,
+    "pass": 113,
     "fail": 0,
     "skip": 0,
     "contractsDeclarations": 25,
@@ -80,5 +80,10 @@
     "Thermal Play preview remains unsupported; Save only",
     "No recalculation, interpolation, inferred heat flux or physical calibration",
     "Existing acoustic real export evidence remains separate"
-  ]
+  ],
+  "proofDispatchFix": {
+    "original": "Draft selected manifest by issued Blob proof alone; acoustic proof could be returned for a temperature job with the same declared revision.",
+    "fixed": "Prepared field temperature selects thermal manifest; instantPressure selects acoustic manifest; every other field refuses. Private proof-kind checks reject both crossed combinations.",
+    "regression": "Fake integration checks both crossed kinds plus pressure/heatFlux refusals; valid acoustic/thermal paths remain covered."
+  }
 }
