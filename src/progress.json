@@ -643,9 +643,9 @@
       "titleEn": "Couple solid/fluid heat transfer",
       "detailEn": "Transfer temperatures/heat flux and verify energy conservation.",
       "acceptanceEn": "Transfer temperatures/heat flux and verify energy conservation.",
-      "lastUpdate": "2026-10-23: 未統合・未公開候補。完全被覆の合成平面P1節点熱流を疎演算子へ保存し、全係数再導出・独立交差分割行列・正負ゼロ総量・容量・不正座標拒否を検証。旧affineの意味は維持。一般曲面・反復連成solver・親受入は未完。",
-      "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. Full-coverage synthetic planar P1 nodal heat flux uses a persisted sparse operator with coefficient rederivation, independent crossing-diagonal matrix, mixed-sign zero-total conservation, capacity and invalid-coordinate checks. Existing affine semantics remain unchanged. General curved interfaces, iterative coupled solving and parent acceptance remain incomplete.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-planar-p1-independent-audit.json",
+      "lastUpdate": "2026-10-26: 完全被覆・同一平面のP1温度L2投影を別pure APIに追加。consistent massと既存cross積分を使い、定数/affine・非affine fan製造解・C/K offset・面積×温度積分・残差・保存再導出を検証。各side128節点/conditioning予算を適用し、clampせず数値不成立を拒否。材料エネルギー保存、曲面、部分被覆、熱流体反復solver/UI接続は未完。",
+      "lastUpdateEn": "2026-10-26: Added a separate pure P1 temperature L2 projection for fully covered coplanar interfaces. Consistent mass and existing cross integration verified with constant/affine/nonaffine fan fields,C/K offsets,area-temperature integrals,residuals and full load-time rederivation. Each side has128active-node/conditioning budgets; invalid numerical outputs reject without clamping. Material-energy conservation,curved/partial interfaces and coupled-solver/UI integration remain open.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-planar-p1-independent-audit.json; docs/planar-temperature-operator.md; docs/temperature-l2-independent-2026-10-26.md; docs/evidence/2026-10-26-temperature-integration.json",
       "review": {
         "status": "merged",
         "pr": 140,

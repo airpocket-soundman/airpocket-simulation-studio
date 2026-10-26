@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-26",
+  "candidate": "c29a100d132d41b2eea5e316f643a3d98513baab",
+  "sourceGitBlobSha256": "dcc2d0383aaeeea6d6e563a30688e971ca43d781a8c8a8e3a0264ab6df8e90e4",
+  "rootFocused": {
+    "pass": 59,
+    "fail": 0,
+    "skip": 0
+  },
+  "independentAdditionalTests": 3,
+  "contracts": 25,
+  "independentSourceMandatoryFixes": 0,
+  "existingFluxModulesUnchanged": true,
+  "manufacturedNonAffineOracle": {
+    "source": "unit square center fan; center1,corners0",
+    "target": "diagonal two-triangle consistent projection",
+    "expected": [
+      0.5,
+      0,
+      0.5,
+      0
+    ],
+    "notLumped": [
+      0.375,
+      0.25,
+      0.375,
+      0.25
+    ],
+    "areaIntegralPerUnitArea": 0.3333333333333333,
+    "areaTemperatureIntegralDegCM2": 3.333333333333333e-7
+  },
+  "limits": {
+    "activeNodesPerSide": 128,
+    "conditionInfinity": 10000000000,
+    "bytes": 1048576
+  },
+  "solverConnected": false,
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newCodecRuns": 0,
+  "mainRechecked": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "progress": {
+    "changedIds": [
+      "COUPLE3"
+    ],
+    "changedFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsIdentical": true,
+    "total": 171,
+    "unfinished": 37,
+    "statusPromoted": false
+  },
+  "published": false
+}
