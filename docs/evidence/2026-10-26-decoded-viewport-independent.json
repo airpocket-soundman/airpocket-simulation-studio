@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "reviewedCommit": "3a14fb7a44ffa85f814afdf0094da7119052229c",
+  "sourceGitBlobSha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3",
+  "scopeJa": "既存失敗200の修正に対する独立fake回帰。実動画出力の再試行ではない。",
+  "scopeEn": "Independent fake regression for decoded viewport validation, not a retry of actual product export200.",
+  "nativeObservationReference": "2026-10-26-decoded-viewport/native.raw.json",
+  "observedNativeDimensions": {
+    "requested": [
+      440,
+      637
+    ],
+    "coded": [
+      440,
+      638
+    ],
+    "display": [
+      440,
+      637
+    ],
+    "visibleRect": [
+      0,
+      0,
+      440,
+      637
+    ]
+  },
+  "profile": "VP8 decoded storage padding <=16 pixels per axis; visible origin zero and visible/display requested dimensions exact; no rotation/flip",
+  "independentOracleCases": {
+    "positive": [
+      "native-observed odd-height layout, all48 PTS and frames closed",
+      "exact +16 coded width and height accepted"
+    ],
+    "negative": [
+      "+17 coded width/height",
+      "coded smaller than visible",
+      "fractional/infinite coded dimensions",
+      "missing visibleRect",
+      "nonzero/negative visible origin",
+      "short/fractional visible dimensions",
+      "display width/height mismatch",
+      "rotation90",
+      "fliptrue",
+      "future PTS before submission",
+      "duplicate PTS"
+    ]
+  },
+  "results": {
+    "newGroups": 3,
+    "combinedFakeTotal": 47,
+    "passed": 47,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 2257.4244,
+    "proofForEveryRefusedCase": 0,
+    "decodedFrameCloseForEveryRefusedCase": true
+  },
+  "command": "node --test tests/comparison-fixed-webm-padding-independent.test.mjs tests/single-thermal-time-webm.test.mjs tests/single-view-time-webm.test.mjs tests/single-view-time-webm-independent.test.mjs tests/visual-export-adapter.test.mjs",
+  "sourceEdits": 0,
+  "additionalActualCodecRuns": 0,
+  "additionalProductExports": 0,
+  "additionalSolverRuns": 0,
+  "findings": [],
+  "limits": [
+    "Fake packets do not establish genuine VP8 decoding or visible pixel content",
+    "16px is a deliberately narrow application resource profile, not a universal codec guarantee",
+    "Original failed product attempt remains failed with no artifact",
+    "Native single-frame diagnostic is separately scoped and is not product-export acceptance"
+  ],
+  "specification": "https://www.w3.org/TR/webcodecs/"
+}
