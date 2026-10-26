@@ -15,3 +15,12 @@
 応答はrequest種別ごとに検査し、別経路のsummary、primitive、疎/装飾行列、非有限値、異単位/校正flags、余分なpass/state、絶対差の不整合を拒否する。途中履歴拒否は失敗段階と完了段階数だけを表示し、比較数値を表示しない。全描画はtextContent。project/material/case、structural solver、保存schema、MCP method/scope、進捗状態を変更しない。
 
 [検証証拠](evidence/2026-10-27-finite-observation-inspector.json)。独立静水圧式、符号付き差、hash/時刻/単位/由来の拒否、両入力の取消・変更・古い応答、exact各1MiB、実moduleWorkerメッセージを確認する。実GUI確認はこの実装時点では未実施。実材料/構造反力/校正/塑性/損傷やFINITEVISCO1の完了は未証明。
+
+
+## 通常main/IABの実GUI確認（2026-10-27）
+
+固定source `f8b2a084f942f320a72c907926b9c2602863c122` の[実画面証拠](evidence/2026-10-27-finite-observation-inspector-gui/README.md)で、対の合成例のボタン入力・比較・日英切替を確認した。history477 bytesのraw SHAは `e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac`、観測1139 bytesのraw SHAは `b46e565ab6383a409e8bda546dfdd25731303455c8f933a7372e2677a43909a5`。応力差9cellと独立したエネルギー/散逸差がdomain出力と一致し、主要な合成差25 Pa/2/1 J/m³-reference、微小丸め差を含む表示と日英の入力・値保持を確認した。
+
+履歴へ空白を追加すると旧結果が即消え、再比較は実WorkerでHISTORY_MISMATCHを返して表を出さなかった。観測が編集後の履歴版と一致しないままでも旧「履歴を確認」は独立に動作した。クリアは両入力と結果を空・idleへ戻した。pure Worker呼出は比較成功/版不一致拒否/履歴のみ成功の3回で、このGUI操作の構造solver/出力exportは0。272個の保護DOM controls・条件表示・case数は同一だったが、正式なin-memory APIの全状態同一性や実取消の受入は証明していない。
+
+同sourceでroot focused66（4367.6697 ms）・型28・build9.17秒・local28（約61.34秒）が成功した。runtime-manifest生成前の早すぎたlocal確認はENOENTで失敗し、正しいbuild順の後に成功した履歴を保持する。実装時点の未確認記述は当時の記録である。合否threshold・fit・材料校正・構造連成・親タスク完了・公開成功は追加しない。

@@ -30,3 +30,6 @@ The subsequent style-only7d1e657 changes paragraph/hash overflow wrapping and re
 ## Optional final synthetic-observation comparison (2026-10-27 follow-up)
 
 The same panel now has a collapsed [single final synthetic-observation comparison](finite-observation-inspector.md). Replay-only inspection remains independent; a separate explicit button runs comparison. Mismatched identities/time/units/provenance refuse; stress/energy/dissipation differences are not pass or calibration decisions. Actual verification of this new comparison UI is pending and is separate from the203 replay-only GUI evidence above.
+
+
+2026-10-27 comparison-UI follow-up: [actual main/IAB checks](../evidence/2026-10-27-finite-observation-inspector-gui/README.md) cover paired synthetic inputs, JA/EN,9cells and separate energy/dissipation differences, whitespace identity refusal, independent replay-only inspection and Clear of both fields. Earlier pending comparison text is historical; actual cancellation, formal in-memory API state equality and physical calibration remain unproven.
