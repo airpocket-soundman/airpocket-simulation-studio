@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "singleTimeWebmExport": {
+    "supported": true,
+    "recording": "fixed-frame",
+    "codec": "vp8",
+    "codecSupport": "checked-at-export",
+    "maxFrames": 120,
+    "maxArtifactBytes": 33554432,
+    "resultKinds": [
+      "acousticTransient"
+    ],
+    "field": "instantPressure",
+    "timeSelection": "nearest-stored-frames-only",
+    "maxStoredFrames": 2048
+  },
+  "singleThermalTimeWebmExport": {
+    "supported": true,
+    "recording": "fixed-frame",
+    "codec": "vp8",
+    "codecSupport": "checked-at-export",
+    "maxFrames": 120,
+    "maxArtifactBytes": 33554432,
+    "resultKinds": [
+      "thermal"
+    ],
+    "field": "temperature",
+    "timeSelection": "nearest-stored-frames-only",
+    "maxStoredFrames": 61,
+    "unit": "degC",
+    "maxScalarBytes": 67108864
+  },
+  "png": true,
+  "png-sequence": true,
+  "webm": true,
+  "mp4": false,
+  "gif": false,
+  "formats": {
+    "mp4": {
+      "supported": false,
+      "browserRecorderSupport": true,
+      "probedMimeType": "video/mp4;codecs=avc1.42E01E",
+      "reason": "MediaRecorder reports MP4 recording in this browser, but MP4 export is not implemented in this application",
+      "alternatives": [
+        "webm",
+        "png"
+      ]
+    },
+    "gif": {
+      "supported": false,
+      "reason": "GIF encoding is not implemented",
+      "alternatives": [
+        "webm",
+        "png"
+      ]
+    },
+    "png-sequence": {
+      "supported": true,
+      "container": "zip",
+      "compression": "store",
+      "minFrames": 2,
+      "maxFrames": 120,
+      "defaultFrames": 24,
+      "maxFrameBytes": 4194304,
+      "maxTotalBytes": 25165824,
+      "animations": [
+        "orbit",
+        "deformation",
+        "time",
+        "slice"
+      ],
+      "timeSelection": "stored-frames-only",
+      "timeAnimationResultKinds": [
+        "acousticTransient",
+        "thermal"
+      ],
+      "thermalTimeField": "temperature",
+      "recording": "fixed-frame",
+      "realtime": false,
+      "wallClockIndependent": true,
+      "frameCountGuaranteed": true,
+      "manifest": "manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)"
+    }
+  },
+  "animations": [
+    "orbit",
+    "deformation",
+    "time",
+    "slice"
+  ],
+  "timeSelection": "stored-acoustic-frames-only",
+  "timeAnimationResultKinds": [
+    "acousticTransient"
+  ],
+  "stillTime": "displayed-time-recorded-for-thermal",
+  "recording": "realtime",
+  "targetFrameRate": 24,
+  "frameCountGuaranteed": false,
+  "maxSeconds": 15,
+  "comparisonPngExport": true,
+  "comparisonGifExport": {
+    "supported": true,
+    "animations": [
+      "orbit",
+      "time",
+      "deformation"
+    ],
+    "mimeType": "image/gif",
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "palette": "RGB332",
+    "colors": 256
+  },
+  "comparisonWebmExport": {
+    "supported": true,
+    "mimeType": "video/webm;codecs=vp9"
+  },
+  "comparisonTimeWebmExport": {
+    "supported": true,
+    "recording": "fixed-frame",
+    "codec": "vp8",
+    "codecSupport": "checked-at-export",
+    "maxFrames": 120,
+    "maxArtifactBytes": 33554432
+  },
+  "maxArtifactBytes": 33554432,
+  "maxArtifactChunkBytes": 65536
+}
