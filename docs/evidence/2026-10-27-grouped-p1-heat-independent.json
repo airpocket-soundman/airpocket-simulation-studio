@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "ownerCommit": "ec46a7b439367ec250ccf1f47959686d084570b0",
+  "scope": "Read-only source audit plus independent analytical, geometry, conservative-tamper and reload-ownership regressions",
+  "productionSourceChanged": false,
+  "oracle": {
+    "geometry": "Two unit squares XY/XZ share an edge; source four-triangle center fans, target two-triangle diagonals, distinct source/target IDs",
+    "flux": "XY 6*centerHat W/m2; XZ -2 W/m2 including group-local shared-node jump",
+    "squareHatTargetIntegrals": [
+      0.125,
+      0.041666666666666664,
+      0.125,
+      0.041666666666666664
+    ],
+    "otherFaceConstantWeights": [
+      0.3333333333333333,
+      0.16666666666666666,
+      0.3333333333333333,
+      0.16666666666666666
+    ],
+    "globalNodeHeatMicroW": [
+      0.08333333333333333,
+      -0.08333333333333333,
+      0.75,
+      0.25,
+      -0.6666666666666666,
+      -0.3333333333333333
+    ],
+    "totalHeatRateW": 0,
+    "testFunction": "theta=1+2x+3y+4z",
+    "weightedRate": {
+      "xyMicroWK": 7,
+      "xzMicroWK": -8,
+      "totalMicroWK": -1
+    },
+    "meaning": "Heat-flux weak-form weighted functional, not physical work in J or coupled-solver proof",
+    "areaFactorSquareMmToSquareM": 0.000001
+  },
+  "rejections": [
+    "duplicate-coordinate crease endpoints with different IDs on either side",
+    "nonconforming midpoint T-junction on either side",
+    "2x2 coefficient perturbation preserving both margins after local+global rehash"
+  ],
+  "ownership": [
+    "load geometry snapshotted before first await",
+    "caller mutation cannot change pending reload",
+    "retained local terms frozen",
+    "source raw JSON identity verified, not authentication"
+  ],
+  "validation": {
+    "independentTests": 4,
+    "related": {
+      "total": 75,
+      "pass": 75,
+      "fail": 0,
+      "skip": 0,
+      "durationMilliseconds": 3707.2093
+    },
+    "old201SerializedGoldens": true,
+    "typeDeclarations": 29,
+    "docsTests": 2,
+    "sourceProtectedDiffPassed": true
+  },
+  "hashes": [
+    {
+      "path": "src/grouped-p1-heat-operator.js",
+      "gitBlob": "61854632fbbf219935d0f081e7e17103194a856e",
+      "gitBlobSHA256": "0c08c92b91c929a869ea6323dea506ed5586a509f9383b0002ad189db8b6e0be",
+      "workingSHA256": "366a096eb95681b38d080a5e3a584de5add7152a072234d13af5bb49aeba6a81"
+    },
+    {
+      "path": "src/grouped-interface-geometry.js",
+      "gitBlob": "b09857a79a1c2b3c5ff451dd015aee8bb16f15fd",
+      "gitBlobSHA256": "54bb1edc1e7f7043bcee8e813f7e9ade32a684c5616d29e3399c24e627c26fe7",
+      "workingSHA256": "f44a9c68117f9b428ff09eec2ce6fda394770ea81039edf7d7dcda3bd28edd7c"
+    },
+    {
+      "path": "src/grouped-temperature-operator.js",
+      "gitBlob": "2b1c9bbba68c5bb99496f61e3fb6a9b8e25af5a6",
+      "gitBlobSHA256": "22afa70b14ef9c5f98635569de732ed0d6387b0c39bf3ed4c075a0d926630d0a",
+      "workingSHA256": "51058e9340a1b1a0579e1eb44b8c39cef91d5bdb649678fff1cb7bb38da3645c"
+    },
+    {
+      "path": "src/planar-p1-heat-operator.js",
+      "gitBlob": "6acd16e1556f56f875bffb7c4ceaa12d3dba8f92",
+      "gitBlobSHA256": "1a6cc36ac84595b8edb435cdaf8ad20171c106779d1cec94bcc5913c94d77e50",
+      "workingSHA256": "3f50144efd821673141139966befcec99801603a25a93093f25b5eb41153e793"
+    },
+    {
+      "path": "tests/fixtures/grouped-temperature-compatibility-golden.json",
+      "gitBlob": "8eff32eb0e1ecd7b1a9fc6a00bf383d3cc30ce14",
+      "gitBlobSHA256": "88e3ce863cdc2b3f5b92b2d62b688fe664f4062f67b689905eb52baf484d214b",
+      "workingSHA256": "00c573f258f2572bc9607a00ab7f62e76114fe0d624d1b44251d1cf5a817cd7c"
+    }
+  ],
+  "hashMeaning": "Git blob SHA256 describes normalized repository bytes; workingSHA256 can differ under Windows CRLF",
+  "additionalActual": {
+    "solver": 0,
+    "gui": 0,
+    "codec": 0,
+    "measurement": 0
+  },
+  "claims": {
+    "solverConnected": false,
+    "parentCompleted": false,
+    "physicalAccuracy": false,
+    "calibrated": false,
+    "published": false
+  }
+}
