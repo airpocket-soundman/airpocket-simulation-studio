@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-27",
+  "candidate": "70e9ae8e5a9f34ab8e5a3bffd7d11c5d16e24cf8",
+  "sourceGitBlobSha256": "d3573fbe07013733105c6f8f5b8c70f502e7f47056f1e1c70d37aa2075ded3c1",
+  "rootFocused": {
+    "passed": 59,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 8217.2894
+  },
+  "rootAdditionalIndependent": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0
+  },
+  "contracts": 26,
+  "independentNumericalMandatoryFixes": 0,
+  "secondGeometryAudit": "pending separate evidence",
+  "legacyModulesUnchanged": [
+    "src/planar-temperature-operator.js",
+    "src/planar-p1-heat-operator.js",
+    "src/planar-heat-operator.js",
+    "src/triangle-overlap.js"
+  ],
+  "oracle": {
+    "facetAreasMm2": [
+      0.5,
+      1
+    ],
+    "targetHatDifference": [
+      0.1111111111111111,
+      0.1111111111111111,
+      0.5555555555555556,
+      -0.1111111111111111
+    ],
+    "sourceHatIntegralM2": 1.6666666666666665e-7,
+    "integralMeaning": "area-temperature, not energy"
+  },
+  "limits": {
+    "groups": 8,
+    "activeNodesPerSide": 128,
+    "facesPerSide": 512,
+    "bytes": 1048576,
+    "conditionInfinity": 10000000000
+  },
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newCodecRuns": 0,
+  "solverConnected": false,
+  "progress": {
+    "changedIds": [
+      "COUPLE3"
+    ],
+    "changedFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsIdentical": true,
+    "total": 171,
+    "unfinished": 37,
+    "statusPromoted": false
+  },
+  "publicDeploymentProven": false
+}
