@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "reviewedCommit": "64a21d101321f04f0f9b7dba1ffb62554a8a9925",
+  "protectedBase": "ae2f889",
+  "protectedRuntime": [
+    {
+      "file": "src/finite-visco-history.js",
+      "gitBlob": "a1e1c95565c4312281b4bdd2f6fda65d35171bde",
+      "sha256": "b1cd4502b2a8390f117b0b59f864c9b0c1c01d4f68fc7699cbae52046f7ba651",
+      "unchangedFromBase": true
+    },
+    {
+      "file": "src/finite-visco-reference.js",
+      "gitBlob": "1bb73167b4512e2883976c1da4b607cfc547d06c",
+      "sha256": "98491164e057d2ec26a4b1dd9fc3946db174215c1c095f1abe7e3fe424748c99",
+      "unchangedFromBase": true
+    },
+    {
+      "file": "src/finite-visco-observation-comparison.js",
+      "gitBlob": "e90d2a5f8b0b7bd073bfbc8e2ba22d40847bf70b",
+      "sha256": "1c2eeea92d362dc6dd094e386f2ddef1ecc3a5aaad6d57bb38b8b4afd6daf855",
+      "unchangedFromBase": true
+    },
+    {
+      "file": "public/examples/finite-visco-input-history.json",
+      "gitBlob": "826b9737ca207545195a6db3a9d9f30bb07b1c8e",
+      "sha256": "6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+      "unchangedFromBase": true
+    },
+    {
+      "file": "package-lock.json",
+      "gitBlob": "5df7c480d203ba6ec0d8e4261fdde9ae512c3401",
+      "sha256": "c03a3af6b4c0e920225ae2d9ecf0e48ba2cfe4b66ed1b8e809820051406af303",
+      "unchangedFromBase": true
+    }
+  ],
+  "sourceEdits": 0,
+  "scopeJa": "有限Green/Maxwellの保存入力履歴を確認するUI/worker DTOの独立合成監査。構造solverや校正検証ではない。",
+  "scopeEn": "Independent synthetic material-point UI/worker report audit, not structural-solver or calibration acceptance.",
+  "independentOracles": {
+    "hydrostaticRampAndHold": {
+      "F": "1.01I",
+      "dtSeconds": [
+        1,
+        2
+      ],
+      "secondPiolaPa": 60300.00000000002,
+      "firstPiolaPa": 60903.00000000002,
+      "cauchyPa": 59702.97029702972,
+      "J": 1.0303010000000001,
+      "energyAndWorkJPerM3Reference": 909.0225000000006,
+      "dissipationJPerM3Reference": 0,
+      "finalTimeSeconds": 3,
+      "actual": {
+        "finalTimeSeconds": 3,
+        "cumulativeWorkDensity": 909.0225000000006,
+        "cumulativeDissipationDensity": 0,
+        "energyDensity": 909.0225000000006,
+        "finalObservation": {
+          "model": "synthetic-green-lagrange-maxwell-reference-v1",
+          "synthetic": true,
+          "provisional": true,
+          "calibrated": false,
+          "stressMeasure": {
+            "S": "second-Piola",
+            "P": "first-Piola",
+            "sigma": "Cauchy"
+          },
+          "units": {
+            "stress": "Pa",
+            "energyDensity": "J/m3-reference",
+            "dissipationRateDensity": "W/m3-reference"
+          },
+          "F": [
+            [
+              1.01,
+              0,
+              0
+            ],
+            [
+              0,
+              1.01,
+              0
+            ],
+            [
+              0,
+              0,
+              1.01
+            ]
+          ],
+          "E": [
+            [
+              0.010050000000000003,
+              0,
+              0
+            ],
+            [
+              0,
+              0.010050000000000003,
+              0
+            ],
+            [
+              0,
+              0,
+              0.010050000000000003
+            ]
+          ],
+          "J": 1.030301,
+          "principalStretches": [
+            1.01,
+            1.01,
+            1.01
+          ],
+          "S": [
+            [
+              60300.00000000002,
+              0,
+              0
+            ],
+            [
+              0,
+              60300.00000000002,
+              0
+            ],
+            [
+              0,
+              0,
+              60300.00000000002
+            ]
+          ],
+          "P": [
+            [
+              60903.00000000002,
+              0,
+              0
+            ],
+            [
+              0,
+              60903.00000000002,
+              0
+            ],
+            [
+              0,
+              0,
+              60903.00000000002
+            ]
+          ],
+          "sigma": [
+            [
+              59702.97029702973,
+              0,
+              0
+            ],
+            [
+              0,
+              59702.97029702973,
+              0
+            ],
+            [
+              0,
+              0,
+              59702.97029702973
+            ]
+          ],
+          "energyDensity": 909.0225000000006,
+          "dissipationRateDensity": 0
+        },
+        "units": {
+          "time": "s",
+          "stress": "Pa",
+          "energyDensity": "J/m3-reference"
+        }
+      }
+    },
+    "traceFreeGreenRampAndHold": {
+      "E": "diag(.005,-.005,0)",
+      "rampSeconds": 2,
+      "holdSeconds": 1.3862943611198906,
+      "stress11Pa": 11580.301397071395,
+      "finalEnergyJPerM3Reference": 52.4973525055858,
+      "cumulativeDissipationJPerM3Reference": 15.896619552986316,
+      "cumulativeWorkJPerM3Reference": 68.39397205857212,
+      "formula": "linear-E ramp residual H*(1-exp(-1)), hold residual halved; exact squared-exponential integrals",
+      "actual": {
+        "finalTimeSeconds": 3.386294361119891,
+        "cumulativeWorkDensity": 68.39397205857071,
+        "cumulativeDissipationDensity": 15.896619552985992,
+        "energyDensity": 52.49735250558473,
+        "finalObservation": {
+          "model": "synthetic-green-lagrange-maxwell-reference-v1",
+          "synthetic": true,
+          "provisional": true,
+          "calibrated": false,
+          "stressMeasure": {
+            "S": "second-Piola",
+            "P": "first-Piola",
+            "sigma": "Cauchy"
+          },
+          "units": {
+            "stress": "Pa",
+            "energyDensity": "J/m3-reference",
+            "dissipationRateDensity": "W/m3-reference"
+          },
+          "F": [
+            [
+              1.004987562112089,
+              0,
+              0
+            ],
+            [
+              0,
+              0.99498743710662,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ],
+          "E": [
+            [
+              0.004999999999999893,
+              0,
+              0
+            ],
+            [
+              0,
+              -0.0050000000000000044,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "J": 0.9999499987499374,
+          "principalStretches": [
+            0.99498743710662,
+            1,
+            1.004987562112089
+          ],
+          "S": [
+            [
+              11580.301397071013,
+              0,
+              0
+            ],
+            [
+              0,
+              -11580.30139707154,
+              0
+            ],
+            [
+              0,
+              0,
+              -1.3633315663751448e-10
+            ]
+          ],
+          "P": [
+            [
+              11638.058869565615,
+              0,
+              0
+            ],
+            [
+              0,
+              -11522.254407994422,
+              0
+            ],
+            [
+              0,
+              0,
+              -1.3633315663751448e-10
+            ]
+          ],
+          "sigma": [
+            [
+              11696.68926012632,
+              0,
+              0
+            ],
+            [
+              0,
+              -11465.071651015433,
+              0
+            ],
+            [
+              0,
+              0,
+              -1.363399738066383e-10
+            ]
+          ],
+          "energyDensity": 52.49735250558473,
+          "dissipationRateDensity": 2.497352505585749
+        },
+        "units": {
+          "time": "s",
+          "stress": "Pa",
+          "energyDensity": "J/m3-reference"
+        }
+      }
+    }
+  },
+  "validation": {
+    "command": "node --test tests/finite-history-inspector-independent.test.mjs",
+    "newTests": 4,
+    "pass": 4,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 161.2862,
+    "checks": [
+      "displayedS/P/Cauchy tensors and Pa/Jm3ref units independently differentiated",
+      "no issued finalState crosses worker summary boundary",
+      "primitive/incomplete/sparseE/P replies refuse before success and leave empty bounded results",
+      "A-B-A old worker replies cannot overwrite current generation",
+      "programmatic raw input edit before reply is refused",
+      "timeout terminates owned worker and late success is ignored",
+      "all timers and owned fake workers released"
+    ]
+  },
+  "closedFindings": [
+    {
+      "initial": "sparse matrix hole skipped by Array.every, then acceptedtrue/drawundefined.toPrecision error",
+      "final": "all outer/inner indices must exist; callbackErrornull/acceptedfalse/invalid/terminated1"
+    },
+    {
+      "initial": "truthy primitive in report gate could throw at in operator; root independently identified",
+      "final": "latest64a21d1 primitive/array guard; independent cases reject without callback exception"
+    }
+  ],
+  "findingsRemaining": [],
+  "ownActualWorkerThreads": 0,
+  "ownGuiRuns": 0,
+  "ownNativeSolverRuns": 0,
+  "ownExternalCodecRuns": 0,
+  "limits": [
+    "No whole-history trajectory fabricated; only final summary is displayed",
+    "Linear-Green-Lagrange interval semantics, not linear-F/free-stress specimen",
+    "Synthetic/provisional/uncalibrated; no material identification, permanent plasticity/fracture or parent-task completion"
+  ]
+}
