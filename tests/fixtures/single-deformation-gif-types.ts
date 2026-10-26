@@ -3,3 +3,5 @@ const output:DeformationGifOutput={mesh:{nodes:[0,0,0]},result:{kind:'elastic',d
 // @ts-expect-error Stress field is outside this displacement-only GIF.
 createSingleDeformationGifPlan(output,2,'stress',20);
 void p.then(async b=>{const m=await singleDeformationGifManifest(b,new Uint8Array(),{resultRevision:'sha256:'+'a'.repeat(64),field:'displacement',seconds:2,peakScale:20});const visualization:true=m.time.visualizationOnly;void visualization;});void cap;
+// @ts-expect-error Static output cannot carry a defined modal displacement alias.
+const staticAlias:DeformationGifOutput={mesh:{nodes:[0,0,0]},result:{kind:'elastic',displacement:[0,.1,0],magnitudes:[.1],modes:[]}};void staticAlias;

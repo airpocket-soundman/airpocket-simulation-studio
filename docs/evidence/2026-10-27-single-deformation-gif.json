@@ -21,6 +21,15 @@
     "publicTypes": {
       "declarations": 31,
       "pass": true
+    },
+    "staticAliasFix": {
+      "total": 47,
+      "pass": 47,
+      "fail": 0,
+      "durationMs": 15051.8099,
+      "newIndependentReproductionTests": 2,
+      "types": 31,
+      "docsAndLayersPassed": 21
     }
   },
   "history": [
@@ -30,6 +39,10 @@
       "pass": 42,
       "fail": 1,
       "reason": "After unit-normalized modal fixture update, artificial camera z10 lay exactly on a deformed vertex plane, so project() divided by zero. Test camera moved to z100. Product keeps fixed-camera semantics and explicitly does not promise frustum visibility or auto-fit. No product failure hidden or physical tolerance changed."
+    },
+    {
+      "stage": "independent static modes alias audit",
+      "reason": "A saved elastic result can contain additional modes; legacy main prefers modes[modalIndex].displacement. New static GIF profile now refuses defined modes and accessor modes without invoking it, and adapter only reads modes for modal kind. This binds validated/rendered vector without broad renderer changes."
     }
   ],
   "semantics": {
@@ -122,6 +135,11 @@
       "path": "docs/evidence/2026-10-27-single-deformation-gif/related-final.log",
       "bytes": 16577,
       "sha256": "49da7873823b739138728746f2f77bfa97a6825a379d1ea1861d7101121616cd"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/static-alias-fix.log",
+      "bytes": 5529,
+      "sha256": "8aea8f3d229d45863bb74772d3ab954b870e93e0fdd5087ab45b4599dd0f4b4a"
     }
   ]
 }

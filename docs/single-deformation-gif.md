@@ -17,3 +17,5 @@ modalは保存1〜6モードから1つを選びます。選択モードの最大
 取消・拒否・完了のfinallyでcamera/up/fov、倍率、mode選択とonchange閉包、controls・入力・timeViewを復元します。結果が交代した場合は旧結果を新結果へ書き戻しません。120秒watchdogは取消を要求するだけです。所有yield/Blob/SHAが未完了ならlease/画面lockとexecutionSettled falseを保ち、実際のsettlement後に後始末します。従来の回転・保存時刻GIF、WebM経路は別のままです。
 
 [検証記録](evidence/2026-10-27-single-deformation-gif.json)。独立GIF/LZW decoderで24画像・delay・peakを検査し、real Threeの有限座標・倍率式、mode/倍率/bytes改竄、65536/+1、closure復元、所有待機中取消をfake canvasで検査します。この版の実GUI/GIF出力・実solverは未実行です。
+
+静的結果に定義済みmodesがある場合は、保存ケースparserが追加fieldを許しても拒否します。従来viewerがmodes[modalIndex].displacementを優先するため、検査した静的vectorと描画vectorを一致させる局所制約です。modes getterも実行せず拒否します。従来renderer自体は変更しません。
