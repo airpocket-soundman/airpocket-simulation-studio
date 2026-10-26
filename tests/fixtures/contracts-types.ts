@@ -176,3 +176,4 @@ compare204(p204.historyRaw,p204.observationRaw).then(r=>{if(r.completed){const s
 r.finalState;}});void uiCompare204;void input204;
 export {groupedP1HeatFixture} from './grouped-p1-heat-operator-types';
 import './single-stored-time-gif-types';
+import './single-deformation-gif-types';

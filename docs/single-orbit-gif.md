@@ -2,7 +2,7 @@
 
 [English](en/single-orbit-gif.md) · [出力仕様](visual-export.md)
 
-計算結果または保存結果を表示し、表示量・時刻・モード・色範囲を選ぶ。「画像・アニメーションを保存」で種類を「モデルを一周」にして「GIFで保存」を押す。現在の結果を変えず、カメラだけを回す短いプレビューである。変形・断面GIFは拒否する。時間変化は別能力の[保存時刻GIF](single-stored-time-gif.md)を使う。既存のPNG/WebM、二ケース比較GIFは別経路のまま。
+計算結果または保存結果を表示し、表示量・時刻・モード・色範囲を選ぶ。「画像・アニメーションを保存」で種類を「モデルを一周」にして「GIFで保存」を押す。現在の結果を変えず、カメラだけを回す短いプレビューである。断面GIFは拒否する。変形は別能力の[表示用変形GIF](single-deformation-gif.md)を使う。時間変化は別能力の[保存時刻GIF](single-stored-time-gif.md)を使う。既存のPNG/WebM、二ケース比較GIFは別経路のまま。
 
 `singleOrbitGifExport`と`formats.gif`が対応を示す。読み取り可能な2D canvasとSHA-256が必要で、MediaRecorder/native codecは不要。既存の`startExport`へ`format:'gif',animation:'orbit',seconds:1..15`を追加し、method/scopeは増やさない。表示中の結果版を`getResultView`で取得する。既存のstatus/artifact分割取得/cancel/releaseを使う。
 

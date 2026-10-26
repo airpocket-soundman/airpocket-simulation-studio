@@ -1,0 +1,76 @@
+✔ 24 cosine cycle matches existing animationState with zero start/exact peak/no repeated terminal and finite realThree geometry (3.9223ms)
+✔ static/modal complete GIFs decode24 with fixedcamera/cycle/normalized purpose and total200centiseconds (4354.9252ms)
+✔ profile admits65536nodes/scale10000 and rejects+1, field/nonlinear/zero/sparse/nonfinite/Float32overflow/mode bounds without hooks (116.0252ms)
+✔ private purpose binds mode/peakscale/camera/revision and exact bytes; orbit/time cannot accept deformation proof (4258.5903ms)
+✔ job binds prepared mode and scale and refuses source-purpose borrow without publishing artifact (4411.31ms)
+✔ owned pendingyield cancellation/watchdog keeps job unsettled until actual return and never publishes partial output (3.4626ms)
+✔ PNG export returns a PNG Blob with caption space and never initiates a download (5.2419ms)
+✔ WebM cancellation stops tracks, restores camera and controls, and produces no download (2.9434ms)
+✔ WebM capture errors restore every locked control and active flag (0.3616ms)
+✔ PNG cancellation during asynchronous encoding discards the artifact and releases active state (0.4159ms)
+✔ completed WebM returns encoded bytes, restores view, and never downloads (159.3464ms)
+✔ recorder failure during playback rejects without unhandled rejection and restores resources (2.4498ms)
+✔ MCP disconnect remains available during WebM playback and PNG encoding (0.6712ms)
+✔ short WebM requests data before stop and returns a clip containing a Cluster (152.9965ms)
+✔ WebM with header but zero Clusters fails explicitly instead of reporting an empty success (156.0977ms)
+✔ WebM recorder that emits no chunks fails explicitly (155.5231ms)
+✔ hasVideoFrames rejects empty and clusterless blobs (0.4134ms)
+✔ capabilities keep legacy flags and add structured mp4/gif entries for both injected probe outcomes (0.3835ms)
+✔ single-viewer WebM background/stall rejects without a new frame and restores locks, view and controls (1.0494ms)
+✔ single-viewer WebM missing stop event is bounded; hidden page still allows fixed PNG (0.5736ms)
+✔ single acoustic fixed-time export selects physical endpoints and restores interpolated time and UI (ja) (8.4711ms)
+✔ single acoustic fixed-time export selects physical endpoints and restores interpolated time and UI (en) (2.452ms)
+✔ single acoustic fixed export abort/result replacement/stop refuses and restores host controls without downloads (2.5076ms)
+✔ single fixed capability rejects before viewer changes and preview still uses the old rAF semantics (0.5696ms)
+✔ thermal Save uses fixed codec, restores interpolated state and refuses final-only flux (ja) (4.9278ms)
+✔ thermal Save uses fixed codec, restores interpolated state and refuses final-only flux (en) (1.9006ms)
+✔ thermal abort or mid-export field change restores UI and never downloads; preview remains refused (1.0753ms)
+✔ thermal codec absence refuses before changing the viewer or publishing a download (0.2713ms)
+✔ orbit GIF GUI Save uses caption-wide640 layout, freezes thermal2s and matches API bytes (ja) (3338.0778ms)
+✔ orbit GIF GUI Save uses caption-wide640 layout, freezes thermal2s and matches API bytes (en) (3113.1304ms)
+✔ same-revision GIF field/time/range/viewport changes, result replacement and abort refuse output and restore host ownership (180.5673ms)
+✔ orbit-only GIF action refuses other panel animation kinds without modifying viewer (0.5468ms)
+✔ modal onchange closure and camera up/fov changes are refused and restored with the same result revision (84.5775ms)
+✔ real Three camera keeps all 24 orbit captures finite, aimed at target and model bounds inside view (1001.9106ms)
+✔ stored-time GIF adapter uses both endpoints with requested/actual captions and exact interpolated viewer restore thermal (1019.3018ms)
+✔ stored-time GIF adapter uses both endpoints with requested/actual captions and exact interpolated viewer restore acoustic (998.4217ms)
+✔ stored-time GIF field/camera/history replacement/result change and pending cancellation reject with exact restore (3.965ms)
+✔ stored-time GIF pending-yield cancellation keeps renderer and controls locked until cooperative yield finishes (2.1958ms)
+✔ stored-time GIF metadata capture ignores user-supplied map hook and cancellation still restores (0.8762ms)
+✔ deformation GIF UI uses fixed realThree camera/all24finite geometry and restores saved peak/mode static (1020.2147ms)
+✖ deformation GIF UI uses fixed realThree camera/all24finite geometry and restores saved peak/mode modal (459.7401ms)
+✔ deformation GIF mode closure and scale guards restore exact selection after same-revision edits (4.0614ms)
+✔ deformation GIF pending owned yield keeps UI locked after cancel until real settlement and restores source scale (3.2791ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 42
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13412.7197
+
+✖ failing tests:
+
+test at tests\visual-export-adapter.test.mjs:183:33
+✖ deformation GIF UI uses fixed realThree camera/all24finite geometry and restores saved peak/mode modal (459.7401ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(p.clone().project(c).toArray().every(Number.isFinite))
+  
+      at onRender (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/tests/visual-export-adapter.test.mjs:183:847)
+      at Object.render (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/tests/visual-export-adapter.test.mjs:46:87)
+      at capture (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/src/visual-export.js:46:12)
+      at renderFrame (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/src/visual-export.js:175:648)
+      at encodeSingleDeformationGif (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/src/ui/single-deformation-gif.js:40:76)
+      at async renderDeformationGif (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/src/visual-export.js:175:20)
+      at async TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-deform-gif208/airpocket-simulation-studio/tests/visual-export-adapter.test.mjs:183:1054)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

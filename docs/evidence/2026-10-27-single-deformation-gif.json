@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "base": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "scope": "Single-view displacement-only static/modal visualization GIF; no actual GUI/export/solver",
+  "checks": {
+    "newPureTests": 6,
+    "newUiTests": 6,
+    "related": {
+      "total": 151,
+      "pass": 151,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 16991.3805,
+      "note": "Includes19layers+2docs; subsequent JA/EN extension tested separately without source changes"
+    },
+    "localeDirect": {
+      "total": 45,
+      "pass": 45,
+      "fail": 0
+    },
+    "publicTypes": {
+      "declarations": 31,
+      "pass": true
+    }
+  },
+  "history": [
+    {
+      "stage": "normalized modal fixture",
+      "total": 43,
+      "pass": 42,
+      "fail": 1,
+      "reason": "After unit-normalized modal fixture update, artificial camera z10 lay exactly on a deformed vertex plane, so project() divided by zero. Test camera moved to z100. Product keeps fixed-camera semantics and explicitly does not promise frustum visibility or auto-fit. No product failure hidden or physical tolerance changed."
+    }
+  ],
+  "semantics": {
+    "resultKinds": [
+      "elastic-linear-static",
+      "selected-normalized-modal"
+    ],
+    "field": "displacement",
+    "frames": 24,
+    "phase": "i/24",
+    "scale": "S*(1-cos(2*pi*i/24))/2",
+    "startScale": 0,
+    "peakIndex": 12,
+    "terminal": "index23 positive; next loop returns0 without duplicate endpoint",
+    "modal": "maximum nodal vector norm1 within1e-8; not dynamic response amplitude or period",
+    "magnitudes": "vector norm consistency1e-10 scaled",
+    "camera": "fixed",
+    "nativeCodecRequired": false,
+    "loadHistory": false,
+    "dynamicResponse": false,
+    "purpose": "private Blob binds selected mode, peakScale, full scale ledger, field, revision, canonical camera and exact bytes",
+    "watchdog": "120seconds cancellation request; owned pending await must actually settle before source/host release and executionSettled true"
+  },
+  "limits": {
+    "nodes": 65536,
+    "vectorBytes": 1572864,
+    "peakScale": 10000,
+    "modes": 6,
+    "width": 640,
+    "height": 320,
+    "outputBytes": 33554432,
+    "seconds": [
+      1,
+      15
+    ]
+  },
+  "notClaimed": [
+    "new solved states",
+    "load history",
+    "frequency-dependent motion",
+    "physical response amplitude",
+    "automatic camera fit",
+    "all deformed vertices visible",
+    "measurement",
+    "calibration",
+    "real GUI export"
+  ],
+  "newSolverRuns": 0,
+  "newRealExports": 0,
+  "newNativeCodecRuns": 0,
+  "protectedFiles": [
+    {
+      "path": "src/ui/single-stored-time-gif.js",
+      "gitBytesSha256": "e08bbfbfde6c06f5bd15c235bd92f25a7da6945f87e84c5e0090b524930180ed",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/single-orbit-gif.js",
+      "gitBytesSha256": "3325995fc03eece8959a7c332b9cd00ed4765577c6a50fb6ab22763981673a9e",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/single-view-time-webm.js",
+      "gitBytesSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/gif-encoder.js",
+      "gitBytesSha256": "15501180e083b0f590bd5cb06d12094d86c15ec702482bdf281bf6b4bbf786db",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/comparison-fixed-webm.js",
+      "gitBytesSha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3",
+      "sameAsBase": true
+    }
+  ],
+  "raw": [
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/initial-normalized-camera-fixture-failure.log",
+      "bytes": 6827,
+      "sha256": "f715382c5f73b6eee165587060f930dca31b002509180fc75dc634bb8b020ebe"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/locale-final.log",
+      "bytes": 5271,
+      "sha256": "4bb98eebc40aa3511f0c3848e6e2aefed1529748bf5f39645f675626e5c5f2e3"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-deformation-gif/related-final.log",
+      "bytes": 16577,
+      "sha256": "49da7873823b739138728746f2f77bfa97a6825a379d1ea1861d7101121616cd"
+    }
+  ]
+}

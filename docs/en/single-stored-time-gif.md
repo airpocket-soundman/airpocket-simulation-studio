@@ -4,7 +4,7 @@
 
 Display stored temperature or instantaneous acoustic pressure, choose Stored time under Save images and animations, then Save GIF. This is a24-frame640×320 RGB332/256-color preview with a fixed camera, legend and actual/requested/offset time caption. Colors are quantized; duration is display time. It does not establish physical integration, interpolation or measurement accuracy.
 
-Sources require2–61 frames and at most64MiB of nodal scalar values. Every frame must match the mesh node count with finite scalars; times are finite, nonnegative and strictly increasing. Supported purposes are transient thermal temperature/degC and acousticTransient instantPressure/Pa. Final-only heat flux, static temperature and deformation/slice GIF are refused. Orbit GIF and stored-time WebM retain their existing paths.
+Sources require2–61 frames and at most64MiB of nodal scalar values. Every frame must match the mesh node count with finite scalars; times are finite, nonnegative and strictly increasing. Supported purposes are transient thermal temperature/degC and acousticTransient instantPressure/Pa. Final-only heat flux, static temperature and slice GIF are refused. Displacement uses the separate [deformation GIF](single-deformation-gif.md). Orbit GIF and stored-time WebM retain their existing paths.
 
 Presentation phase is i/23. The first and last stored physical times are included exactly. Intermediate equally spaced physical requests choose the nearest stored frame; a tie chooses the lower index. Repeated selection is allowed, and not all61 stored frames are promised. No interpolation or new solved times are created. The24-entry manifest records requested/actual/signed actual-minus-requested offsets.
 
