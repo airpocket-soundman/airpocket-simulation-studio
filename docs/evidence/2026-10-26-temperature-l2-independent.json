@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "owner": "fe30a121716735bc1ca217b674aaf7cafa339205",
+  "source": {
+    "path": "src/planar-temperature-operator.js",
+    "workingCRLFSha256": "e684b97d09c1af929b7e4ee7313ea7c64f382a5dad59bbd6c5f1f870e0c77044",
+    "gitBlobSha256": "dcc2d0383aaeeea6d6e563a30688e971ca43d781a8c8a8e3a0264ab6df8e90e4"
+  },
+  "oracle": {
+    "geometry": "Unit square, source four-triangle center fan, target AC diagonal two triangles",
+    "sourceTemperature": "Center1/corners0",
+    "normalizedMassNumerator": [
+      [
+        4,
+        1,
+        2,
+        1
+      ],
+      [
+        1,
+        2,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        4,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        2
+      ]
+    ],
+    "normalizedMassDenominator": 24,
+    "crossLoad": [
+      0.125,
+      0.041666666666666664,
+      0.125,
+      0.041666666666666664
+    ],
+    "target": [
+      0.5,
+      0,
+      0.5,
+      0
+    ],
+    "integralUnitSquareM2": 3.333333333333333e-7,
+    "alternativesExcluded": {
+      "pointSampling": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "lumpedMass": [
+        0.375,
+        0.25,
+        0.375,
+        0.25
+      ]
+    }
+  },
+  "checks": [
+    "Exact mass and center cross-load, not only output values",
+    "Scale1/10 and translated oblique plane scale2",
+    "Non-affine degC/K constant offset273.15 and m2 integral scaling",
+    "Self-rehashed mass/cross/conditioning/source-target weight tampering rejected",
+    "Nonordinary array prototype refused"
+  ],
+  "independentTests": 3,
+  "relatedTotal": 13,
+  "pass": 13,
+  "fail": 0,
+  "skip": 0,
+  "sourceFixes": 0,
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "limitations": [
+    "Full-coverage planar continuous P1 scalar temperatures only",
+    "No coupled solve, physical calibration or positivity-preserving projection claim",
+    "Conditioning budget and existing geometric coverage restrictions remain unchanged"
+  ]
+}
