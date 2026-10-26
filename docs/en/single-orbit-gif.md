@@ -2,7 +2,7 @@
 
 [日本語](../single-orbit-gif.md) · [Export specification](visual-export.md)
 
-Display a computed or saved result and choose its field, time, mode and color range. Under Save images and animations, select Orbit the model and press Save GIF. Only the camera moves; the selected result stays fixed. Slice GIF is refused; deformation uses [visual displacement GIF](single-deformation-gif.md); stored-time GIF uses the separate [stored-time capability](single-stored-time-gif.md). Existing PNG/WebM and two-case comparison GIF remain separate.
+Display a computed or saved result and choose its field, time, mode and color range. Under Save images and animations, select Orbit the model and press Save GIF. Only the camera moves; the selected result stays fixed. Thermal sections use [slice GIF](single-slice-gif.md); deformation uses [visual displacement GIF](single-deformation-gif.md); stored-time GIF uses the separate [stored-time capability](single-stored-time-gif.md). Existing PNG/WebM and two-case comparison GIF remain separate.
 
 Discover support through singleOrbitGifExport or formats.gif. A readable 2D canvas and SHA-256 are required; MediaRecorder/native codecs are not. The existing startExport accepts format:'gif', animation:'orbit', seconds:1..15, with exact expectedResultRevision from getResultView. Methods/scopes are unchanged. Use existing status/artifact pages/cancel/release.
 

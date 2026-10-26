@@ -29,3 +29,5 @@ Artifact5574849bytes/SHA `093d760aa5fd4e0ec38a23043000f2b873a1a8657f91465b7b3874
 Independent generic LZW/FFmpeg RGB matched across all24frames. Every scene had3537–3973 nonbackground pixels and13 distinct poses. Manual first/peak/last review confirmed a complete bar, visible elongation/return and readable visualization-only captions. Five-state equality, GUI scale100 restoration, settled release and session/owned-child/token cleanup passed.
 
 Missing saved-modal input and incomplete public-step3 official-import preparation failures remain preserved. Deriving a boundary for pure display did not justify inventing absent project input; the complete existing archive replaced it. This does not verify actual modal export, GUI download, actual cancellation matrix, general geometry, publication or calibration. [Integration scope](../evidence/2026-10-27-single-deformation-gif-integration.json).
+
+Fixed-time thermal sections use the separate [slice GIF](single-slice-gif.md) capability; displacement is not admitted there.

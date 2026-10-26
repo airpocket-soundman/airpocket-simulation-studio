@@ -1,3 +1,4 @@
+import {singleSliceGifManifest,SINGLE_SLICE_GIF_LIMITS} from './ui/single-slice-gif.js';
 import {singleDeformationGifManifest,SINGLE_DEFORMATION_GIF_LIMITS} from './ui/single-deformation-gif.js';
 import {singleStoredTimeGifManifest,SINGLE_STORED_TIME_GIF_LIMITS} from './ui/single-stored-time-gif.js';
 import {singleOrbitGifManifest,SINGLE_ORBIT_GIF_LIMITS} from './ui/single-orbit-gif.js';
@@ -15,7 +16,7 @@ function request(value){
  if(!['png','webm','png-sequence','gif'].includes(value.format))throw Error('Visual export format must be png, webm, gif or png-sequence');
  const animation=value.animation??'orbit';
  if(!['orbit','deformation','time','slice'].includes(animation))throw Error('Invalid visual export animation or seconds');
- if(value.format==='gif'&&!['orbit','time','deformation'].includes(animation))throw Error('Single-view GIF supports orbit, stored time or visual deformation only');
+ if(value.format==='gif'&&!['orbit','time','deformation','slice'].includes(animation))throw Error('Single-view GIF supports orbit, stored time or visual deformation only');
  if(value.format==='png-sequence'){
   if(value.seconds!==undefined&&value.seconds!==null)throw Error('png-sequence is fixed-frame; seconds is not accepted, use frames');
   const frames=value.frames??FIXED_FRAME_LIMITS.defaultFrames;
@@ -105,12 +106,12 @@ async function buildManifest(job,mimeType,bytes,sha256,blob){
  if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
  else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
  if(format==='webm'&&animation==='time'){if(!['temperature','instantPressure'].includes(picked.field))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Stored-time artifact requires temperature or instantaneous pressure');const fixed=await (picked.field==='temperature'?singleViewThermalTimeManifest:singleViewAcousticTimeManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
- if(format==='gif'){const fixed=await (animation==='time'?singleStoredTimeGifManifest:animation==='deformation'?singleDeformationGifManifest:singleOrbitGifManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision,field:picked.field,camera:picked.camera,timeSeconds:picked.timeSeconds,frameIndex:picked.frameIndex,modeIndex:picked.modeIndex,peakScale:picked.deformScale});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw Error('Orbit GIF identity changed');Object.assign(manifest,fixed);}
- if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='gif'?Math.max(SINGLE_ORBIT_GIF_LIMITS.manifestBytes,SINGLE_STORED_TIME_GIF_LIMITS.manifestBytes,SINGLE_DEFORMATION_GIF_LIMITS.manifestBytes):format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
+ if(format==='gif'){const fixed=await (animation==='time'?singleStoredTimeGifManifest:animation==='deformation'?singleDeformationGifManifest:animation==='slice'?singleSliceGifManifest:singleOrbitGifManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision,field:picked.field,camera:picked.camera,timeSeconds:picked.timeSeconds,frameIndex:picked.frameIndex,modeIndex:picked.modeIndex,peakScale:picked.deformScale,setup:job.view?.setup,surface:result.surface,section:result.section});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw Error('Orbit GIF identity changed');Object.assign(manifest,fixed);}
+ if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='gif'?Math.max(SINGLE_ORBIT_GIF_LIMITS.manifestBytes,SINGLE_STORED_TIME_GIF_LIMITS.manifestBytes,SINGLE_DEFORMATION_GIF_LIMITS.manifestBytes,SINGLE_SLICE_GIF_LIMITS.manifestBytes):format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
-const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_FIXED_INVALID','WEBM_FIXED_UNSUPPORTED','WEBM_FIXED_CODEC_FAILURE','WEBM_FIXED_OUTPUT_MISMATCH','WEBM_FIXED_CANCELLED','WEBM_FIXED_TIMEOUT','WEBM_ENDPOINT_UNVERIFIED','GIF_ORBIT_INVALID','GIF_ORBIT_CANCELLED','GIF_TIME_INVALID','GIF_TIME_CANCELLED','GIF_TIME_TIMEOUT','GIF_DEFORMATION_INVALID','GIF_DEFORMATION_CANCELLED','GIF_DEFORMATION_TIMEOUT']);
+const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_FIXED_INVALID','WEBM_FIXED_UNSUPPORTED','WEBM_FIXED_CODEC_FAILURE','WEBM_FIXED_OUTPUT_MISMATCH','WEBM_FIXED_CANCELLED','WEBM_FIXED_TIMEOUT','WEBM_ENDPOINT_UNVERIFIED','GIF_ORBIT_INVALID','GIF_ORBIT_CANCELLED','GIF_TIME_INVALID','GIF_TIME_CANCELLED','GIF_TIME_TIMEOUT','GIF_DEFORMATION_INVALID','GIF_DEFORMATION_CANCELLED','GIF_DEFORMATION_TIMEOUT','GIF_SLICE_INVALID','GIF_SLICE_CANCELLED','GIF_SLICE_TIMEOUT']);
 export function createVisualExportJobs({render,prepare,prepareCompare,renderCompare,maxBytes=32*1024*1024,maxJobs=4,id=()=>crypto.randomUUID()}={}){
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
  const jobs=new Map(),requests=new Map();let retainedBytes=0,renderActive=false,epoch=0;
@@ -126,7 +127,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
    const strictSingleTime=job.request.target!=='comparison'&&format==='webm'&&job.request.animation==='time';
    const strictIssued=strictSingleTime||job.request.target!=='comparison'&&format==='gif';
-   if(strictIssued&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError(format==='gif'?(job.request.animation==='time'?'GIF_TIME_INVALID':job.request.animation==='deformation'?'GIF_DEFORMATION_INVALID':'GIF_ORBIT_INVALID'):'WEBM_ENDPOINT_UNVERIFIED',format==='gif'?'Single-view GIF Blob reader was replaced':'Single-view acoustic Blob reader was replaced');
+   if(strictIssued&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError(format==='gif'?(job.request.animation==='time'?'GIF_TIME_INVALID':job.request.animation==='deformation'?'GIF_DEFORMATION_INVALID':job.request.animation==='slice'?'GIF_SLICE_INVALID':'GIF_ORBIT_INVALID'):'WEBM_ENDPOINT_UNVERIFIED',format==='gif'?'Single-view GIF Blob reader was replaced':'Single-view acoustic Blob reader was replaced');
    const bytes=new Uint8Array(await (strictIssued?readBlob.call(blob):blob.arrayBuffer()));
    if(job.state!=='running'||!jobs.has(job.jobId))return;
    job.assertLifetime?.();

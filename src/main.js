@@ -510,7 +510,7 @@ async function stokesExample(){
 $('stokes-demo').onclick=()=>stokesExample().catch(error=>status(error.message));window.analysisApi.loadStokesExample=stokesExample;
 
 const timeViewState=createTimeViewState({$,getState:()=>({frameIndex:acousticFrame,timeSeconds:acousticDisplayTime}),setState:s=>{acousticFrame=s.frameIndex;acousticDisplayTime=s.timeSeconds;},stop:()=>acousticPlayStop?.()});
-const visualExport=installVisualExport({renderer,scene,camera,controls,getAnalysis:()=>lastAnalysis,redraw:showAnalysis,language:()=>language,translate:addTranslations,...timeViewState});
+const visualExport=installVisualExport({renderer,scene,camera,controls,getAnalysis:()=>lastAnalysis,getSetupView:getViewSettings,restoreSetupView:state=>window.viewApi.set(state),redraw:showAnalysis,language:()=>language,translate:addTranslations,...timeViewState});
 const colorControls=document.createElement('details');colorControls.innerHTML='<summary>結果の色範囲</summary><label><input id="color-fixed" type="checkbox">色の範囲を固定</label><label>色範囲の下限<input id="color-min" type="number" step="any" value="0"></label><label>色範囲の上限<input id="color-max" type="number" step="any" value="1"></label><p>選択した物理量の表示単位を使います。範囲外の値は端の色で表示します。</p>';$('result-field').after(colorControls);
 addTranslations({'固定範囲 · ':'Fixed range · ','結果の色範囲':'Result color range','色の範囲を固定':'Fix color range','色範囲の下限':'Color minimum','色範囲の上限':'Color maximum','選択した物理量の表示単位を使います。範囲外の値は端の色で表示します。':'Use the selected field display units. Values outside the range use the endpoint colors.'});
 function syncColorRangeControls(){if(!$('color-fixed'))return;$('color-fixed').checked=!!resultColorRange;if(resultColorRange){$('color-min').value=resultColorRange.minimum;$('color-max').value=resultColorRange.maximum;}}

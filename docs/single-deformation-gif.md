@@ -29,3 +29,5 @@ modalは保存1〜6モードから1つを選びます。選択モードの最大
 独立generic LZW/FFmpegの全24RGBが一致し、全モデル領域の非背景3537〜3973pixelsと13種類の姿勢を検出しました。先頭・最大倍率・最後の画像で棒全体、伸び戻り、表示用captionを目視確認しました。5状態不変、GUI倍率100の復元、settled解放とsession/所有child/token cleanupを確認しました。
 
 保存modal探索で利用可能な入力を得られなかった履歴と、不完全なpublic step3が公式case importで準備拒否された履歴は保持します。step3の境界導出でpure表示準備が進んでも、input不足を勝手に埋めず、完全な既存archiveへ切り替えました。この限定成功は実modal出力、GUI download、実取消matrix、一般形状・公開環境・物理校正を証明しません。[統合検証範囲](evidence/2026-10-27-single-deformation-gif-integration.json)。
+
+固定時刻の温度断面は別能力の[断面GIF](single-slice-gif.md)を使います。変位はそちらの対象外です。
