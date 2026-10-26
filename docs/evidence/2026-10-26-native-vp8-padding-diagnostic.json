@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "scope": "Isolated one-frame native VP8 dimension diagnostic, not an application export",
+  "historicalFailure": {
+    "commit": "9c43e44f0a99d35b999a92993af68240016d5973",
+    "report": "2026-10-26-thermal-time-webm-failed/report.json",
+    "errorCode": "WEBM_ENDPOINT_UNVERIFIED",
+    "originalDecodedExactPropertiesRecorded": false,
+    "originalCauseProven": false
+  },
+  "observed": {
+    "requested": {
+      "width": 440,
+      "height": 637
+    },
+    "input": {
+      "codedWidth": 440,
+      "codedHeight": 637,
+      "displayWidth": 440,
+      "displayHeight": 637,
+      "visibleRect": {
+        "x": 0,
+        "y": 0,
+        "width": 440,
+        "height": 637
+      },
+      "timestamp": 0,
+      "rotation": 0,
+      "flip": false
+    },
+    "decoded": {
+      "codedWidth": 440,
+      "codedHeight": 638,
+      "displayWidth": 440,
+      "displayHeight": 637,
+      "visibleRect": {
+        "x": 0,
+        "y": 0,
+        "width": 440,
+        "height": 637
+      },
+      "timestamp": 0,
+      "rotation": 0,
+      "flip": false
+    },
+    "encodeCalls": 1,
+    "decodeCalls": 1,
+    "productExports": 0,
+    "completed": true
+  },
+  "interpretation": "This isolated diagnostic observed coded-height padding with unchanged visible/display dimensions. It does not directly establish the exact properties of the original failed product frame.",
+  "thermalDriverUnchangedSha256": "1d458e83c8e11af96fc3ac52d69d6970f50168a330fdbcce273813fc64dc1e88",
+  "packagingExecutions": {
+    "productExports": 0,
+    "solver": 0,
+    "codec": 0,
+    "gui": 0
+  },
+  "newProductExportAuthorized": false,
+  "rawFiles": [
+    {
+      "file": "index.html",
+      "bytes": 2906,
+      "sha256": "e0a25922b760c2c71c82fd343d7a2bac15f836a94f05a3dcb13762b6d0838e12",
+      "gitBlobSha1": "3d1c8825bb39ea8da398230fe86a8568a371367c"
+    },
+    {
+      "file": "native.jpg",
+      "bytes": 54149,
+      "sha256": "a0fabaf2d37400aecc752c9556de1b373f68314b0af082f653f69e7995b69cd9",
+      "gitBlobSha1": "7bf184dc4d72e551598ed4ed886e6127366c93c1"
+    },
+    {
+      "file": "native.json",
+      "bytes": 1351,
+      "sha256": "2a2a06aeeb765d97d289fe4feac1510aa8135ca20fa03fc07aa07fa05383e5b3",
+      "gitBlobSha1": "aadf0445b5285407e33fb9de45672cd0599057d7"
+    }
+  ]
+}
