@@ -174,3 +174,4 @@ import {compareFiniteHistoryObservation as compare204} from '../../src/finite-vi
 const p204=pair204();const uiCompare204:Promise<boolean>=ui203.compareObservation();const input204:HTMLTextAreaElement=ui203.observation;
 compare204(p204.historyRaw,p204.observationRaw).then(r=>{if(r.completed){const s204:number=r.stress.signedDifference[0][0];void s204;/* @ts-expect-error comparisons never issue state */
 r.finalState;}});void uiCompare204;void input204;
+export {groupedP1HeatFixture} from './grouped-p1-heat-operator-types';

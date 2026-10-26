@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "base": "c2ae100c17535316b2cdab1387dc2aa8b17fb6e5",
+  "scope": "Explicit grouped planar P1 source-outward flux to global target nodal heat rates; no coupled solver",
+  "solverConnected": false,
+  "checks": {
+    "newTests": {
+      "total": 13,
+      "pass": 13,
+      "fail": 0
+    },
+    "relatedFirstRun": {
+      "total": 72,
+      "pass": 71,
+      "fail": 1,
+      "reason": "New docs initially used .ja.md rather than repository docs/en convention; corrected documentation only"
+    },
+    "docsAndLayersAfterCorrection": {
+      "total": 21,
+      "pass": 21,
+      "fail": 0
+    },
+    "publicTypes": {
+      "declarations": 29,
+      "pass": true
+    },
+    "finalRelated": {
+      "total": 72,
+      "pass": 72,
+      "fail": 0,
+      "durationMs": 6895.7518
+    }
+  },
+  "oracles": {
+    "foldedZeroTotal": {
+      "sourceHatW": 0.000001,
+      "secondFacetW": -0.000001,
+      "targetNodalW": [
+        0,
+        0,
+        3.333333333333333e-7,
+        -3.333333333333333e-7
+      ]
+    },
+    "affine3D": {
+      "sourceW": 0.0000015,
+      "targetNodalW": [
+        4.583333333333333e-7,
+        6.25e-7,
+        5e-7,
+        -8.333333333333334e-8
+      ]
+    },
+    "temperatureCompatibility": "Two pre-extraction exact serialized records and apply results; regression golden, not independent physics"
+  },
+  "limits": {
+    "groups": 8,
+    "activeNodesPerSide": 128,
+    "meshNodes": 4096,
+    "facesPerSide": 512,
+    "retainedTerms": 16384,
+    "sourceValues": 1024,
+    "jsonBytes": 1048576
+  },
+  "testedBoundaries": [
+    "groups8/+1",
+    "global source128/+1",
+    "global target128",
+    "faces513 refusal",
+    "JSON exact1MiB/+1",
+    "depth21 refusal",
+    "nonfinite/overflow",
+    "self-rehashed nested coefficient/group/area/weights tampering"
+  ],
+  "notClaimed": [
+    "global16384 term exact-boundary execution",
+    "measurement",
+    "calibration",
+    "energy conservation",
+    "coupled solver",
+    "UI",
+    "real solver",
+    "codec"
+  ],
+  "protectedFiles": [
+    {
+      "path": "src/planar-p1-heat-operator.js",
+      "sha256": "1a6cc36ac84595b8edb435cdaf8ad20171c106779d1cec94bcc5913c94d77e50",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/planar-heat-operator.js",
+      "sha256": "4f9c41d1600e0cbe3b091b7342bd3cc39f2b1c6244cc9bc64d2677304a8d1f1f",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/planar-temperature-operator.js",
+      "sha256": "dcc2d0383aaeeea6d6e563a30688e971ca43d781a8c8a8e3a0264ab6df8e90e4",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/triangle-overlap.js",
+      "sha256": "0d8d5fa0a845f5caba1b03d90b25f22172894c1770a9e3b152832f7094bb96d9",
+      "sameAsBase": true
+    }
+  ],
+  "files": [
+    {
+      "path": "src/grouped-p1-heat-operator.js",
+      "sha256": "54442657a4b5b48ac8e3e406baa8b306b3625148a897dfd87cd1ecac2962457a"
+    },
+    {
+      "path": "src/grouped-interface-geometry.js",
+      "sha256": "f44a9c68117f9b428ff09eec2ce6fda394770ea81039edf7d7dcda3bd28edd7c"
+    },
+    {
+      "path": "src/grouped-temperature-operator.js",
+      "sha256": "51058e9340a1b1a0579e1eb44b8c39cef91d5bdb649678fff1cb7bb38da3645c"
+    },
+    {
+      "path": "tests/grouped-p1-heat-operator.test.mjs",
+      "sha256": "6086d75e14cf77095a8f905eba704e29d2df1a2393ea6d9e5aaa8654c96a5a0f"
+    },
+    {
+      "path": "tests/fixtures/grouped-temperature-compatibility-golden.json",
+      "sha256": "00c573f258f2572bc9607a00ab7f62e76114fe0d624d1b44251d1cf5a817cd7c"
+    }
+  ]
+}

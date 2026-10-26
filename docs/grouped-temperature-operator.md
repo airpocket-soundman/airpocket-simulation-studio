@@ -17,3 +17,5 @@ fieldはglobal source active各節点へ一つずつの `{units:'degC'|'K',value
 build/apply/loadは最初のawait前にplain record/dense配列をsnapshotしaccessorを実行しない。private発行済みoperatorだけapply/serializeできる。loadはgroup所属、local T/M/area、global行列/Cholesky/R/weights/conditioning/identityを全再導出してrecord全体をcanonical比較する。self-rehash改ざんでも拒否する。geometryRevisionは未使用節点も含む全manifestのidentity。rawIdentityは入力JSON原文UTF8のSHAで認証ではない。既存単一平面/fluxモジュールの挙動を変更しない。
 
 [合成証拠](evidence/2026-10-26-grouped-temperature-operator.json)の折面2三角形は面積各.5mm²、edgeAB共有。片側center fan hat1/境界0、他側0の場合、global `M=(1e-6/24)[[4,2,1,1],[2,4,1,1],[1,1,2,0],[1,1,0,2]]`、`b=1e-6*[1/18,1/18,1/18,0]` から温度差 `[1/6,1/6,1/2,-1/6]` となる。局所投影後の平均はC=1/3,D=0となり一致しない。3D affine20+10x+30y+40zはtarget[20,30,50,60]、積分35e-6degC*m2。scale10/剛体変換では温度不変、積分100倍。これらは独立固定式、実solver/GUI/codec起動なし。COUPLE3親全体の完了とはしない。
+
+関連: [グループ別P1熱流転送](grouped-p1-heat-operator.md)。温度解法を使わずglobal節点熱流量を加算します。
