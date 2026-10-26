@@ -1,0 +1,80 @@
+{
+  "source": "f8b2a084f942f320a72c907926b9c2602863c122",
+  "scope": "Public synthetic pair expected oracle; Node domain comparison only, no GUI/solver",
+  "history": {
+    "bytes": 477,
+    "rawIdentity": "sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac"
+  },
+  "observation": {
+    "bytes": 1139,
+    "rawIdentity": "sha256:b46e565ab6383a409e8bda546dfdd25731303455c8f933a7372e2677a43909a5"
+  },
+  "result": {
+    "kind": "finite-visco-final-synthetic-comparison",
+    "schemaVersion": 1,
+    "model": "synthetic-green-lagrange-maxwell-reference-v1",
+    "synthetic": true,
+    "provisional": true,
+    "calibrated": false,
+    "observationRawIdentity": "sha256:b46e565ab6383a409e8bda546dfdd25731303455c8f933a7372e2677a43909a5",
+    "historyIdentity": {
+      "rawIdentity": "sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac",
+      "canonicalIdentity": "sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395"
+    },
+    "completed": true,
+    "status": "compared",
+    "parameterRevision": "sha256:48340232adc9b553cb055a6bd5022c8fc44f6307894d46552a264b94c96bcd3b",
+    "timeSeconds": 3,
+    "origin": {
+      "kind": "synthetic-reference",
+      "description": "Analytical hydrostatic F=1.01 I with declared synthetic offsets: S11 +25 Pa, energy +2 J/m3-reference, dissipation +1 J/m3-reference. Not measured or calibrated."
+    },
+    "stress": {
+      "measure": "second-Piola",
+      "unit": "Pa",
+      "signedDifference": [
+        [
+          24.999999999978172,
+          0,
+          0
+        ],
+        [
+          0,
+          -2.1827872842550278e-11,
+          0
+        ],
+        [
+          0,
+          0,
+          -2.1827872842550278e-11
+        ]
+      ],
+      "maxAbsoluteDifference": 24.999999999978172
+    },
+    "energy": {
+      "unit": "J/m3-reference",
+      "energyDensity": {
+        "signedDifference": 1.9999999999994316,
+        "absoluteDifference": 1.9999999999994316
+      },
+      "cumulativeDissipationDensity": {
+        "signedDifference": 1,
+        "absoluteDifference": 1
+      }
+    },
+    "meaning": "Observed minus replayed final synthetic values; no tolerance, fit, calibration or physical-accuracy acceptance"
+  },
+  "independentAnalyticExpected": {
+    "hydrostaticF": 1.01,
+    "greenE": 0.010050000000000003,
+    "secondPiolaDiagonalPa": 60300,
+    "energyDensity": 909.0225,
+    "cumulativeDissipationDensity": 0,
+    "declaredObservationOffsets": {
+      "S11Pa": 25,
+      "energyDensityJm3": 2,
+      "dissipationDensityJm3": 1
+    },
+    "comparisonSign": "observed minus replayed"
+  }
+}

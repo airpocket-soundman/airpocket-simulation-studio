@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-27",
+  "source": "f8b2a084f942f320a72c907926b9c2602863c122",
+  "scope": "Ordinary main/IAB GUI synthetic final-observation comparison; no physical acceptance",
+  "actualOwnedWorkerRuns": 3,
+  "workflow": [
+    "Public pair Compare in Japanese",
+    "Switch English preserving both raw inputs and9cells",
+    "Append whitespace to history: immediate result clear; Compare refuses HISTORY_MISMATCH",
+    "Existing Inspect replays whitespace history independent of observation",
+    "Clear both inputs/results; restore Japanese"
+  ],
+  "crosscheck": {
+    "publicRawAndCanonicalHashes": true,
+    "comparisonSignedStress9CellsAtNineSignificantDigits": true,
+    "maxStressDifferencePa": 25,
+    "energySignedAndAbsoluteDifferenceJm3": 2,
+    "dissipationSignedAndAbsoluteDifferenceJm3": 1,
+    "timeSeconds": 3,
+    "independentReplayFiveTables45Cells": true,
+    "jaEnInputsAndCellsPreserved": true,
+    "baselineFinalJaAll272DomControlsConditionsCasesEqual": true,
+    "rootScreenshotReviewed": true
+  },
+  "validation": {
+    "focusedPassed": 66,
+    "focusedElapsedMs": 4367.6697,
+    "typeDeclarationsPassed": 28,
+    "buildPassed": true,
+    "buildSeconds": 9.17,
+    "localChecks": 28,
+    "localElapsedMs": 61335.5468,
+    "source": "f8b2a084f942f320a72c907926b9c2602863c122",
+    "earlierPrematureLocalFailure": "ENOENT dist/runtime-manifest.json before build; pre-physics; retained raw then correct-order success"
+  },
+  "limitations": [
+    "Synthetic/provisional/calibrated:false; no measurements/calibration/fit/tolerance acceptance",
+    "DOM equality is not formal in-memory project/case/analysis-input equality API evidence",
+    "Actual cancellation not captured",
+    "Publication and full language/hidden matrix unproven"
+  ],
+  "newStructuralSolverRuns": 0,
+  "newExports": 0,
+  "newCodecRuns": 0,
+  "packagerGuiRuns": 0
+}

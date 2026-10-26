@@ -1,0 +1,80 @@
+{
+  "cancelDisabled": true,
+  "compareDisabled": false,
+  "history": "{\"calibrated\":false,\"kind\":\"finite-visco-input-history\",\"model\":\"synthetic-green-lagrange-maxwell-reference-v1\",\"parameters\":{\"branchShearModulusPa\":500000,\"bulkModulusPa\":2000000,\"equilibriumShearModulusPa\":1000000,\"relaxationTimeSeconds\":2},\"provisional\":true,\"schemaVersion\":1,\"steps\":[{\"F\":[[1.01,0,0],[0,1.01,0],[0,0,1.01]],\"dtSeconds\":1},{\"F\":[[1.01,0,0],[0,1.01,0],[0,0,1.01]],\"dtSeconds\":2}],\"synthetic\":true,\"units\":{\"deformationGradient\":\"dimensionless\",\"time\":\"s\"}}\n",
+  "observation": "{\n  \"schemaVersion\": 1,\n  \"kind\": \"finite-visco-final-synthetic-observation\",\n  \"model\": \"synthetic-green-lagrange-maxwell-reference-v1\",\n  \"synthetic\": true,\n  \"provisional\": true,\n  \"calibrated\": false,\n  \"units\": {\n    \"time\": \"s\",\n    \"stress\": \"Pa\",\n    \"energyDensity\": \"J/m3-reference\"\n  },\n  \"historyIdentity\": {\n    \"rawIdentity\": \"sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac\",\n    \"canonicalIdentity\": \"sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395\"\n  },\n  \"parameterRevision\": \"sha256:48340232adc9b553cb055a6bd5022c8fc44f6307894d46552a264b94c96bcd3b\",\n  \"timeSeconds\": 3,\n  \"origin\": {\n    \"kind\": \"synthetic-reference\",\n    \"description\": \"Analytical hydrostatic F=1.01 I with declared synthetic offsets: S11 +25 Pa, energy +2 J/m3-reference, dissipation +1 J/m3-reference. Not measured or calibrated.\"\n  },\n  \"values\": {\n    \"S\": [\n      [\n        60325,\n        0,\n        0\n      ],\n      [\n        0,\n        60300,\n        0\n      ],\n      [\n        0,\n        0,\n        60300\n      ]\n    ],\n    \"energyDensity\": 911.0225,\n    \"cumulativeDissipationDensity\": 1\n  }\n}\n",
+  "rows": [
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "history rawIdentity: sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "history canonicalIdentity: sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "observationRawIdentity: sha256:b46e565ab6383a409e8bda546dfdd25731303455c8f933a7372e2677a43909a5"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "parameterRevision: sha256:48340232adc9b553cb055a6bd5022c8fc44f6307894d46552a264b94c96bcd3b"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "最終時刻 (s): 3"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "合成観測の説明（最大240文字表示）: Analytical hydrostatic F=1.01 I with declared synthetic offsets: S11 +25 Pa, energy +2 J/m3-reference, dissipation +1 J/m3-reference. Not measured or calibrated."
+    },
+    {
+      "cells": [
+        "25",
+        "0",
+        "0",
+        "0",
+        "-2.18278728e-11",
+        "0",
+        "0",
+        "0",
+        "-2.18278728e-11"
+      ],
+      "tag": "TABLE",
+      "text": "観測−再計算 S (second Piola–Kirchhoff, Pa)25000-2.18278728e-11000-2.18278728e-11"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "最大絶対応力成分差 (Pa): 25"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "自由エネルギー密度の差 (J/m³-reference) (符号付き): 2"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "自由エネルギー密度の差 (J/m³-reference) (絶対値): 2"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "累積散逸密度の差 (J/m³-reference) (符号付き): 1"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "累積散逸密度の差 (J/m³-reference) (絶対値): 1"
+    }
+  ],
+  "runDisabled": false,
+  "status": "合成観測との差を計算しました。合否・物理受入・校正の判定はありません。"
+}

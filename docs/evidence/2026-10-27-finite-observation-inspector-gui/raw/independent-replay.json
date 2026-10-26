@@ -1,0 +1,127 @@
+{
+  "history": "{\"calibrated\":false,\"kind\":\"finite-visco-input-history\",\"model\":\"synthetic-green-lagrange-maxwell-reference-v1\",\"parameters\":{\"branchShearModulusPa\":500000,\"bulkModulusPa\":2000000,\"equilibriumShearModulusPa\":1000000,\"relaxationTimeSeconds\":2},\"provisional\":true,\"schemaVersion\":1,\"steps\":[{\"F\":[[1.01,0,0],[0,1.01,0],[0,0,1.01]],\"dtSeconds\":1},{\"F\":[[1.01,0,0],[0,1.01,0],[0,0,1.01]],\"dtSeconds\":2}],\"synthetic\":true,\"units\":{\"deformationGradient\":\"dimensionless\",\"time\":\"s\"}}\n ",
+  "observation": "{\n  \"schemaVersion\": 1,\n  \"kind\": \"finite-visco-final-synthetic-observation\",\n  \"model\": \"synthetic-green-lagrange-maxwell-reference-v1\",\n  \"synthetic\": true,\n  \"provisional\": true,\n  \"calibrated\": false,\n  \"units\": {\n    \"time\": \"s\",\n    \"stress\": \"Pa\",\n    \"energyDensity\": \"J/m3-reference\"\n  },\n  \"historyIdentity\": {\n    \"rawIdentity\": \"sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac\",\n    \"canonicalIdentity\": \"sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395\"\n  },\n  \"parameterRevision\": \"sha256:48340232adc9b553cb055a6bd5022c8fc44f6307894d46552a264b94c96bcd3b\",\n  \"timeSeconds\": 3,\n  \"origin\": {\n    \"kind\": \"synthetic-reference\",\n    \"description\": \"Analytical hydrostatic F=1.01 I with declared synthetic offsets: S11 +25 Pa, energy +2 J/m3-reference, dissipation +1 J/m3-reference. Not measured or calibrated.\"\n  },\n  \"values\": {\n    \"S\": [\n      [\n        60325,\n        0,\n        0\n      ],\n      [\n        0,\n        60300,\n        0\n      ],\n      [\n        0,\n        0,\n        60300\n      ]\n    ],\n    \"energyDensity\": 911.0225,\n    \"cumulativeDissipationDensity\": 1\n  }\n}\n",
+  "rows": [
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "rawIdentity: sha256:72d385b704d88875f77dfa6d66dc848c2a4c923627e5346f0283b6471a4b5400"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "canonicalIdentity: sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Input steps: 2"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Final time (s): 3"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "J: 1.030301"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Cumulative work density (J/m³-reference): 909.0225"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Free-energy density (J/m³-reference): 909.0225"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Cumulative dissipation density (J/m³-reference): 0"
+    },
+    {
+      "cells": [],
+      "tag": "P",
+      "text": "Dissipation-rate density (W/m³-reference): 0"
+    },
+    {
+      "cells": [
+        "1.01",
+        "0",
+        "0",
+        "0",
+        "1.01",
+        "0",
+        "0",
+        "0",
+        "1.01"
+      ],
+      "tag": "TABLE",
+      "text": "F (dimensionless)1.010001.010001.01"
+    },
+    {
+      "cells": [
+        "0.01005",
+        "0",
+        "0",
+        "0",
+        "0.01005",
+        "0",
+        "0",
+        "0",
+        "0.01005"
+      ],
+      "tag": "TABLE",
+      "text": "E (Green–Lagrange, dimensionless)0.010050000.010050000.01005"
+    },
+    {
+      "cells": [
+        "60300",
+        "0",
+        "0",
+        "0",
+        "60300",
+        "0",
+        "0",
+        "0",
+        "60300"
+      ],
+      "tag": "TABLE",
+      "text": "S (second Piola–Kirchhoff, Pa)603000006030000060300"
+    },
+    {
+      "cells": [
+        "60903",
+        "0",
+        "0",
+        "0",
+        "60903",
+        "0",
+        "0",
+        "0",
+        "60903"
+      ],
+      "tag": "TABLE",
+      "text": "P (first Piola–Kirchhoff, Pa)609030006090300060903"
+    },
+    {
+      "cells": [
+        "59702.9703",
+        "0",
+        "0",
+        "0",
+        "59702.9703",
+        "0",
+        "0",
+        "0",
+        "59702.9703"
+      ],
+      "tag": "TABLE",
+      "text": "sigma (Cauchy, Pa)59702.970300059702.970300059702.9703"
+    }
+  ],
+  "status": "Synthetic reference replay finished; this is not physical acceptance or calibration."
+}
