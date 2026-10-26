@@ -1,0 +1,430 @@
+{
+  "request": {
+    "requestId": "formal-cancel203b-1793048846816",
+    "references": [
+      {
+        "caseId": "4d3b2c7b-be71-4ceb-92b6-9417614394ab",
+        "expectedRevision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+      },
+      {
+        "caseId": "d34bd1cf-7d97-4455-9dc3-793c670fb16d",
+        "expectedRevision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+      }
+    ],
+    "format": "webm",
+    "animation": "orbit",
+    "seconds": 15,
+    "field": "temperature",
+    "timeSeconds": 0,
+    "camera": {
+      "position": [
+        3,
+        3,
+        3
+      ],
+      "target": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    },
+    "deformScale": 1
+  },
+  "before": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+      "project": {
+        "loaded": true,
+        "name": "QA analytic T=20+1t",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "156.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "684bd397-6aa2-42c0-929d-6d05a571715c",
+        "connectionEpoch": 1,
+        "eventSequence": 9,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "hidden",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 4,
+            "kind": "visible",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 5,
+            "kind": "hidden",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 6,
+            "kind": "visible",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 7,
+            "kind": "hidden",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 8,
+            "kind": "visible",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 9,
+            "kind": "connected",
+            "connectionEpoch": 1
+          }
+        ],
+        "relation": "unknown",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:21f686aa60a388269ecae35063262ebd1dc10aa3ca440f734c21064e14863b6e",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 0
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "cases": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:3ddee4a1c783024030de995c7d15c58bb502353b602047c20b8c9fb0180b5a67",
+      "cases": [
+        {
+          "caseId": "4d3b2c7b-be71-4ceb-92b6-9417614394ab",
+          "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1",
+          "name": "QA analytic T=20+1t degC (closed tetra)",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 29.999999999999943
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 29.999999999999943
+            }
+          ]
+        },
+        {
+          "caseId": "d34bd1cf-7d97-4455-9dc3-793c670fb16d",
+          "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e",
+          "name": "QA analytic T=20+2t degC (closed tetra)",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 39.99999999999994
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 39.99999999999994
+            }
+          ]
+        }
+      ]
+    },
+    "compare": {
+      "schemaVersion": 1,
+      "revision": "sha256:5cb30006c4754fea699e4cdccd94ee9e0d7cca0eed007e3b72f6aeb29974476c",
+      "archive": {
+        "kind": "comparison-view",
+        "settings": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              3,
+              3,
+              3
+            ],
+            "target": [
+              0.25,
+              0.25,
+              0.25
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "field": "temperature",
+          "timeSeconds": 0
+        },
+        "sources": [
+          {
+            "revision": "sha256:65ad5df087a771260f0ef8d2d56451a6f54ae65f1e44acedf22cc0fbf3cce8d1"
+          },
+          {
+            "revision": "sha256:fbe45be211d42ed8cff7db7e846a7210c89c1849c1347246f9b1d0954f17085e"
+          }
+        ],
+        "version": 1
+      }
+    },
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+      "physicalRevision": "sha256:b7c4ee3d42200432b4d66771d6b912273c116d45b1ef1460059cd605ac5cfa56",
+      "kind": "thermal",
+      "fields": [
+        {
+          "id": "temperature",
+          "unit": "degC"
+        },
+        {
+          "id": "heatFlux",
+          "unit": "W/m2"
+        }
+      ],
+      "state": {
+        "field": "temperature",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            1.9,
+            1.4,
+            2.1
+          ],
+          "target": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 11,
+      "snapshotStorage": {
+        "requested": 11,
+        "count": 11,
+        "bytes": 352,
+        "budgetBytes": 67108864,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 0
+      },
+      "physicalTimeSeconds": 10,
+      "interpolated": false,
+      "timeSelection": "stored-frames-only",
+      "storedFrameIndex": 10,
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 1
+        },
+        {
+          "index": 2,
+          "timeSeconds": 2
+        },
+        {
+          "index": 3,
+          "timeSeconds": 3
+        },
+        {
+          "index": 4,
+          "timeSeconds": 4
+        },
+        {
+          "index": 5,
+          "timeSeconds": 5
+        },
+        {
+          "index": 6,
+          "timeSeconds": 6
+        },
+        {
+          "index": 7,
+          "timeSeconds": 7
+        },
+        {
+          "index": 8,
+          "timeSeconds": 8
+        },
+        {
+          "index": 9,
+          "timeSeconds": 9
+        },
+        {
+          "index": 10,
+          "timeSeconds": 10
+        }
+      ],
+      "modes": []
+    },
+    "view": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  }
+}

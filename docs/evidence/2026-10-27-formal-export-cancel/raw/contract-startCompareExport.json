@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "startCompareExport",
+      "scope": "view",
+      "description": "Start or retrieve an idempotent two-saved-case comparison PNG or orbit/time/deformation WebM/GIF export.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "format": {
+            "enum": [
+              "png",
+              "webm",
+              "gif"
+            ],
+            "default": "png"
+          },
+          "animation": {
+            "enum": [
+              "orbit",
+              "time",
+              "deformation"
+            ],
+            "default": "orbit",
+            "description": "WebM/GIF; orbit moves the shared camera at fixed panel times; time fixes the camera and traverses an explicit physical range."
+          },
+          "seconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 15,
+            "default": 5,
+            "description": "WebM/GIF only; PNG refuses seconds."
+          },
+          "references": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "caseId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "expectedRevision": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "caseId",
+                "expectedRevision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "field": {
+            "enum": [
+              "displacement",
+              "stress",
+              "plasticStrain",
+              "temperature",
+              "heatFlux",
+              "instantPressure",
+              "pressure",
+              "spl",
+              "phase",
+              "speed",
+              "fluidPressure"
+            ]
+          },
+          "startTimeSeconds": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Required for time WebM/GIF only; physical range start, less than endTimeSeconds."
+          },
+          "endTimeSeconds": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Required for time WebM/GIF only; physical range end."
+          },
+          "timeSeconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "toleranceSeconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "deformScale": {
+            "type": "number",
+            "minimum": 0
+          },
+          "camera": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "target": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "up": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "fov": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 180
+              }
+            },
+            "required": [
+              "position",
+              "target",
+              "up",
+              "fov"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "requestId",
+          "references",
+          "field"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffects": [
+        "Renders two saved cases to a retained PNG or orbit/time/deformation WebM/GIF and restores the original viewer; does not restore saved project inputs or download files."
+      ],
+      "revisionFields": [],
+      "units": {
+        "seconds": "s",
+        "startTimeSeconds": "s",
+        "endTimeSeconds": "s",
+        "timeSeconds": "s",
+        "toleranceSeconds": "s",
+        "deformScale": "1",
+        "camera.position": "mm",
+        "camera.target": "mm",
+        "camera.fov": "deg"
+      },
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "Format defaults to PNG with existing request identity; comparison-only GIF supports orbit/time/deformation,24 fixed frames (orbit phase i/24; time/deformation i/23 include both endpoints),640x320,RGB332 256 colors and seconds1-15 integer delays totaling seconds*100 centiseconds; no MediaRecorder is required. Single-view orbit GIF uses the separate singleOrbitGifExport capability; single-view time/deformation GIF remain unsupported. Comparison time WebM uses a separate comparisonTimeWebmExport capability: VP8 fixed frames N=min(seconds*24,120), physical phase i/(N-1), integer-microsecond presentation intervals total seconds, all encoded timestamps and strict-demux decoded timestamps verified including the endpoint. Missing APIs/codec or verification failure refuses the artifact; no realtime fallback. Orbit/default and deformation WebM retain realtime target24fps without guaranteed frame count. Selected physical times remain fixed throughout the orbit; browser recording support is observed through exportCapabilities. Time mode requires startTimeSeconds < endTimeSeconds within both stored histories, rejects timeSeconds/static/final-only fields, and uses nearest stored frames with actual times/offsets and no interpolation. Its camera and all-period common color range stay fixed. Deformation mode requires two linear-elastic cases, displacement/stress and positive explicit deformScale without any time arguments; fixed camera/result/color range, linear visualization multiplier 0 to deformScale, never a physical load history.",
+        "Exactly two distinct stable caseId/expectedRevision pairs from caseList; stale references and invalid settings are refused.",
+        "PNG/orbit with stored thermal temperature/acoustic time axes require timeSeconds; time WebM/GIF uses explicit physical start/end instead. Nearest stored frames are used with actual times and signed offsets, without interpolation. Thermal heat flux is final-only.",
+        "Uses the shared visual-export queue and existing exportStatus/exportArtifact/cancelExport/releaseExport transport and limits. Camera and deformation scale default to the captured current viewer when omitted."
+      ]
+    }
+  ]
+}
