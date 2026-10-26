@@ -4,7 +4,7 @@ import {canonicalJson} from './project-revision.js';
 
 // The detector itself has no capacity gate. This provider adds a deliberately
 // small envelope before invoking its component/loop and quadratic cycle work.
-export const RETAINED_OPENING_SURFACE_LIMITS=Object.freeze({nodes:512,triangles:1024,bytes:1048576,values:20000,depth:8,stringLength:256});
+export const RETAINED_OPENING_SURFACE_LIMITS=Object.freeze({nodes:512,triangles:1024,bytes:1048576,values:20000,depth:8,stringLength:256,pending:2});
 function fail(code){throw Object.assign(Error(code),{code});}
 const invalid=()=>fail('OPENING_SURFACE_INVALID_INPUT');
 const plain=x=>x!==null&&typeof x==='object'&&[Object.prototype,null].includes(Object.getPrototypeOf(x));
@@ -39,7 +39,7 @@ async function sha(bytes){const digest=await globalThis.crypto.subtle.digest('SH
 /** Caller-supplied indexed surfaces only. No display conversion, CAD inference,
  * persistence, solver or UI connection. Leases are instance-local capabilities. */
 export function createRetainedOpeningSurfaceProvider(){
- let generation=0,current=null,disposed=false;const issued=new WeakMap();
+ let generation=0,current=null,disposed=false,pending=0;const issued=new WeakMap();
  function open(){if(disposed)fail('OPENING_SURFACE_DISPOSED');}
  function advance(){if(generation===Number.MAX_SAFE_INTEGER)fail('OPENING_SURFACE_GENERATION_LIMIT');return ++generation;}
  function revoke(){const next=advance();if(current)issued.delete(current);current=null;return next;}
@@ -47,6 +47,11 @@ export function createRetainedOpeningSurfaceProvider(){
  return Object.freeze({
   async replace(input){
    open();
+   // Reserve before even inspecting caller data. Revoked requests still own
+   // their slot until hashing really settles; clear/dispose cannot hide it.
+   if(pending>=2)fail('OPENING_SURFACE_PENDING_LIMIT');
+   pending++;
+   try{
    // Malformed input cannot invalidate an existing valid lease. Once validated,
    // a replacement immediately revokes it, including while hashing is pending.
    const data=retained(input),ticket=revoke();let contentRevision;
@@ -54,6 +59,7 @@ export function createRetainedOpeningSurfaceProvider(){
    if(ticket!==generation)fail('OPENING_SURFACE_REPLACED');
    const lease=freeze({kind:'retained-opening-surface',generation:ticket,contentRevision,sourceIdentity:data.value.sourceIdentity,units:'mm',topologyIntent:'open-indexed-surface',analysis:data.analysis});
    issued.set(lease,{value:data.value,analysis:data.analysis});current=lease;return lease;
+   }finally{pending--;}
   },
   clear(){open();revoke();},
   release(lease){active(lease);revoke();},

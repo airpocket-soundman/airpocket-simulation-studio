@@ -24,6 +24,6 @@ export interface RetainedOpeningSurfaceProvider {
  dispose():void;
  confirm(lease:RetainedOpeningSurfaceLease,input:RetainedOpeningConfirmation):DeepReadonly<ConfirmedOpeningCap & {generation:number;contentRevision:string;sourceIdentity:string}>;
 }
-export declare const RETAINED_OPENING_SURFACE_LIMITS:Readonly<{nodes:512;triangles:1024;bytes:1048576;values:20000;depth:8;stringLength:256}>;
+export declare const RETAINED_OPENING_SURFACE_LIMITS:Readonly<{nodes:512;triangles:1024;bytes:1048576;values:20000;depth:8;stringLength:256;pending:2}>;
 /** Explicit caller surface only; leases are in-process/provider-specific and not serializable restore tokens. */
 export declare function createRetainedOpeningSurfaceProvider():RetainedOpeningSurfaceProvider;
