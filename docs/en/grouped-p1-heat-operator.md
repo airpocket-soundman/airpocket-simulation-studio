@@ -14,3 +14,15 @@ Serialize only issued operators. Reload rebuilds every planar coefficient, assig
 
 Independent tests use a folded unit pair: a6W/m² interior hat contributes1microW, a -2W/m² second facet contributes -1microW, leaving nonzero signed global nodal loads despite zero total. Unequal areas, closed-form affine3D loads, sign/scale/rotation, load tampering and exact capacity boundaries are covered. No real solver, measurement, calibration, UI or codec run is claimed. Evidence: [verification](../evidence/2026-10-27-grouped-p1-flux.json).
 
+
+
+## Integration-candidate verification (2026-10-27)
+
+Frozen root source `1b19f750640dca66644c43a78f869ff399fc83f9` integrates owner ec46a7b and the [four independent regressions](grouped-p1-heat-independent-audit.md). Root94focused tests already include those4; they are not added again. The29public declarations passed. The [integration record](../evidence/2026-10-27-grouped-p1-heat-integration.json) pins the source and build/local stages. The owner's initial documentation-location failure remains preserved rather than overwritten.
+
+This feature integrates **group-local source-outward P1 flux** and scattersW to shared global target nodes. Old201 temperature L2 instead assembles global consistent mass/cross matrices and solves temperatures once. Averaging group flux or applying a temperature inverse is not equivalent. Checks retain old201 serialized-byte/result goldens and existing planar-path compatibility.
+
+The independent two-unit-square fixture retains[1/12,-1/12,3/4,1/4,-2/3,-1/3]microW at six shared/global target nodes despite zero total. Positive source-outward rate means positive target applied load and negative target-outward rate. Conservation here concerns heat rateW, not material energyJ, temperature-dependent properties, a conjugate solver, general smooth/partial interfaces, GUI, measured calibration, COUPLE3 completion or publication. solverConnected:false remains explicit.
+
+
+The pinned source built in3.89s and passed28local published-equivalent checks in69010.4474ms. Original focused/build/local logs and local-report bytes were preserved with copyFile and compared against staged Git bytes/SHA under scoped -text attributes. Recording adds zero solver/GUI/codec/export runs.

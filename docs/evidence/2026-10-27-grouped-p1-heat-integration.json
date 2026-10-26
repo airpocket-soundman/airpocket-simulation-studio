@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "1b19f750640dca66644c43a78f869ff399fc83f9",
+  "owner": "ec46a7b439367ec250ccf1f47959686d084570b0",
+  "independentAudit": "1c25024d1316bf399ae4beaf66f30962db620277",
+  "sourceValidation": {
+    "focused": {
+      "total": 94,
+      "pass": 94,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 4241.4925,
+      "independentTestsIncluded": 4,
+      "independentAddedAgain": false
+    },
+    "typeDeclarations": 29,
+    "build": {
+      "passed": true,
+      "seconds": 3.89
+    },
+    "local": {
+      "passed": 28,
+      "failed": 0,
+      "elapsedMilliseconds": 69010.4474,
+      "revision": "1b19f750640dca66644c43a78f869ff399fc83f9",
+      "reportSHA256": "67a35fd99295981a3aa9826c10ff92a9fa2fe48ec4c9a7a3dd0d120c6629f20a"
+    }
+  },
+  "distinction": {
+    "flux": "group-local outward P1 W/m2, integrated then scattered to shared global target nodal W",
+    "temperature201": "global consistent mass/cross L2 temperature solve; no change",
+    "solverConnected": false,
+    "conservation": "heat rate W, not material energy J"
+  },
+  "compatibility": {
+    "old201SerializedGoldenBytesAndResults": true,
+    "oldPlanarFourUnchanged": [
+      "src/planar-heat-operator.js",
+      "src/planar-p1-heat-operator.js",
+      "src/planar-temperature-operator.js",
+      "src/triangle-overlap.js"
+    ],
+    "sourceVsBaseUnchanged": true
+  },
+  "rawEvidence": {
+    "folder": "docs/evidence/2026-10-27-grouped-p1-heat-integration/",
+    "files": [
+      {
+        "path": "docs/evidence/2026-10-27-grouped-p1-heat-integration/focused.log",
+        "source": ".qa/flux206-focused.log",
+        "bytes": 10078,
+        "sha256": "75960420c90fc68cf9bc293187c30dcf88e127769b85f952f38510ca7672cc14",
+        "gitBlob": "9248e64d0d33c7f2d438493d4992369d728a7287",
+        "stagedBytesExact": true
+      },
+      {
+        "path": "docs/evidence/2026-10-27-grouped-p1-heat-integration/build.log",
+        "source": ".qa/flux206-build.log",
+        "bytes": 3435,
+        "sha256": "37ba74b170c706919d7f3bdee1a7bed279eb9c49c5c0d87446f1892e991b89a8",
+        "gitBlob": "eab788aa30daa6d77c6432963997b4a85eabe3eb",
+        "stagedBytesExact": true
+      },
+      {
+        "path": "docs/evidence/2026-10-27-grouped-p1-heat-integration/local.log",
+        "source": ".qa/flux206-published.log",
+        "bytes": 1614,
+        "sha256": "bc7c5e8a4ef481b7a11fa57960dd802977858005b6bb865081a25158df3eb598",
+        "gitBlob": "3b1b9bd06d84ce3ce0aaab6481534663acc705c5",
+        "stagedBytesExact": true
+      },
+      {
+        "path": "docs/evidence/2026-10-27-grouped-p1-heat-integration/local-report.json",
+        "source": ".qa/published-report.json",
+        "bytes": 4394,
+        "sha256": "67a35fd99295981a3aa9826c10ff92a9fa2fe48ec4c9a7a3dd0d120c6629f20a",
+        "gitBlob": "153727ab2376b930ffa12603fea0f22146af38a1",
+        "stagedBytesExact": true
+      }
+    ],
+    "packagingNote": "Initial staging omitted globally ignored .log files; explicit scoped force-add fixed packaging before byte assertions. No validation was rerun."
+  },
+  "protectedProgress": {
+    "id": "COUPLE3",
+    "onlyFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsDeepEqual": true,
+    "all171StatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "statusPromoted": false
+  },
+  "limitations": [
+    "No coupled solver or material energy acceptance",
+    "No general curved/partial interface, GUI, measurement or calibration proof",
+    "No parent completion or publication"
+  ],
+  "newExecutionByRecorder": {
+    "gui": 0,
+    "solver": 0,
+    "codec": 0,
+    "export": 0
+  },
+  "progressWorkingByteSHA256": "87814ba68ab79b17b02a5f1e02cd7fc7f31d415f71b93eb85558a953b4056b3b"
+}
