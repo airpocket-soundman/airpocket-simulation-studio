@@ -25,4 +25,3 @@ for f in faces.values():
  if dot<0:bad.append({'center':center,'surface':f['surface'],'normalOffset':float(dot)})
 r={'checkedWallAdjacentCells':len(values),'wallFaceCount':len(faces),'nonUniqueAdjacencies':sum(f['matches']!=1 for f in faces.values()),'outward':sum(v>0 for v in values),'inward':sum(v<0 for v in values),'minimumNormalOffsetMetres':min(values),'maximumNormalOffsetMetres':max(values),'bad':bad,'method':'Adjacent-cell displacement dotted with discrete wall-plane normal oriented using signed OCC outward normal; all wall-face direction/adjacency check, not full volume-intersection certification'};print(json.dumps(r));(root/'normal-check.json').write_text(json.dumps(r,indent=2));gmsh.finalize()
 if r['inward'] or r['nonUniqueAdjacencies'] or len(values)!=len(faces):raise RuntimeError('Sampled wall direction or adjacency check failed')
-
