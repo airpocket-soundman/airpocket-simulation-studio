@@ -1,0 +1,22 @@
+{
+ "workOrder": "docs/opencode-work-orders-2026-10-28/74-PRINTMEASURE2.md",
+ "task": "PRINTMEASURE2",
+ "scope": "first bounded step: user-dimensioned dumbbell specimen, planned-condition core 3MF export, round-trip re-read",
+ "baseSha": "e776ff1dc7f0cf13dfa049dc4d255734f7c55b08",
+ "environment": {"node": "v24.11.1", "platform": "win32"},
+ "inputs": "synthetic dimensions only (100/20/10/40/5/4 mm); not taken from any test standard",
+ "commands": [
+  {"cmd": "node --test tests/printed-measurement-specimen.test.mjs tests/print-import.test.mjs tests/module-boundaries.test.mjs", "result": "pass", "tests": 33, "failed": 0},
+  {"cmd": "node --test tests/docs.test.mjs", "result": "pass"},
+  {"cmd": "npm run check:contracts", "result": "pass"},
+  {"cmd": "git diff --check", "result": "pass"}
+ ],
+ "measured": {
+  "volumeCheck": "analytic dumbbell volume vs mesh volume within relative 2e-4 at 256 arc segments, all three orientations",
+  "boundsMm": {"flat": [-50,-10,0,50,10,4], "on-edge": [-50,-2,0,50,2,20], "upright": [-10,-2,0,10,2,100]},
+  "reproducibleBytes": true,
+  "tamperRejected": ["plan hash", "geometry hash", "missing plan part"]
+ },
+ "notVerified": ["Bambu Studio loading or slicing of the package", "Bambu project_settings.config generation", "physical printing", "reconciliation of user-chosen temperatures and actual sliced settings", "UI/MCP integration", "standard specimen dimension tables"],
+ "progressProposal": "PRINTMEASURE2 stays queued/in progress; parent acceptance needs real slicing and printing."
+}

@@ -1,0 +1,19 @@
+{
+  "workOrder": "73-PRINTMEASURE1",
+  "date": "2026-10-28",
+  "baseSha": "e776ff1dc7f0cf13dfa049dc4d255734f7c55b08",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": "All inputs synthetic (tests/printed-test-machine-profile.test.mjs); no real machine, calibration or measured log exists.",
+  "commands": [
+    {"cmd": "node --test tests/printed-test-machine-profile.test.mjs tests/printed-measurement-dataset.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs", "tests": 31, "pass": 31, "fail": 0, "skipped": 0},
+    {"cmd": "npm run check:contracts", "result": "pass (33 declaration files)"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "observed": {
+    "syntheticProfileNormalized": {"ratedCapacityN": 10, "limits": {"forceN": 5, "strokeMm": 20, "speedMmPerSecond": 2}, "sameUnderKnMeterUnits": true},
+    "matchingDatasetFindings": 0,
+    "mismatchedProfileFindingCodes": ["dataset-calibration-without-profile-calibration", "force-above-device-stop", "hardware-revision-mismatch", "no-gauge-displacement-source", "speed-above-device-limit", "tension-not-offered"]
+  },
+  "notVerified": ["real machine design/build", "real calibration and compliance measurement", "device-side stop actually firing", "measured logs", "GUI/MCP wiring", "sales model and price", "force sign convention in dataset contract"],
+  "progressJsonEdited": false
+}
