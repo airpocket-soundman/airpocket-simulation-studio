@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "taskId": "CFD1",
+  "workOrder": "60-CFD1",
+  "date": "2026-10-28",
+  "status": "cause-identified-not-fixed",
+  "question": "Why does the Re40 cylinder Cd differ by 4.1226447% between N64 and N128 (QA tolerance 3%)?",
+  "newSolverRuns": 0,
+  "newSolverRunsReason": "Work order 60 caps additional runs at 2; both were already used (iteration audit 2026-10-23, grid N144 2026-10-23). This record reanalyses saved data only.",
+  "inputs": {
+    "reference": {"source": "Economon AIAA-2018-3111 IV.G (SU2 numerical result, not experiment)", "dragCoefficient": 1.507},
+    "cd": {
+      "N64_R50.5": {"value": 1.58644061, "source": "docs/evidence/2026-10-22-cfd-reference-run.json (baseline, pressure -10 reached)"},
+      "N128_R50.5": {"value": 1.5210373, "source": "docs/evidence/cfd-iteration-audit-20261023 (ITER 2400, pressure -10 reached)"},
+      "N144_R50.5": {"value": 1.516579997, "source": "docs/evidence/cfd-grid144-20261023/evaluation.json"},
+      "N64_R100.5": {"value": 1.580804881, "source": "docs/evidence/2026-10-22-cfd-reference-run.json (domain)"},
+      "N64_R50.5_ITER2400": {"value": 1.58644061, "source": "docs/evidence/2026-10-22-cfd-reference-run.json (iterations)"}
+    },
+    "meshGenerator": "scripts/qa-cfd-reference.py mesh_bytes(angular, outer): first radial step pi/N, fixed growth 1.1, last layer clipped at outer radius"
+  },
+  "isolation": [
+    {"factor": "iteration / solver convergence", "evidence": "N64 ITER1200 vs ITER2400 identical (0%); N128 ITER1200 vs ITER2400 differ 0.0000534%; last-100 Cd range < 0.0004%", "contributionToGapPercent": "<0.001", "verdict": "excluded"},
+    {"factor": "far-field domain size / boundary condition", "evidence": "N64 outer radius 50.5 -> 100.5 m changes Cd by 0.3552%", "contributionToGapPercent": "~0.36 (same order at N128 assumed, not measured)", "verdict": "minor, cannot explain 4.12%"},
+    {"factor": "drag integration on polygonal wall", "evidence": "inscribed N-gon perimeter deficit 1-sin(pi/N)/(pi/N): N64 0.0402%, N128 0.0100%", "contributionToGapPercent": "~0.03", "verdict": "excluded"},
+    {"factor": "spatial discretization of the N64 grid", "evidence": "N64 error vs reference 5.27%, N128 0.93%, N144 0.64%; nearly all change occurs between N64 and N128", "contributionToGapPercent": "~4", "verdict": "dominant cause"}
+  ],
+  "richardson": {
+    "threeGridFit": {
+      "grids": [64, 128, 144],
+      "ratio": "(f64-f128)/(f128-f144) = 14.673",
+      "observedOrder": ">=6 (bisection hit the 6.0 upper bound)",
+      "interpretation": "Unphysical order for a 2nd-order MUSCL/FDS scheme: the series is not in the asymptotic range, and grid ratio 128/144 = 1.125 is too small. No valid extrapolated Cd or GCI is claimed."
+    },
+    "assumedOrderTwoGrid": [
+      {"p": 1, "cdExtrapolated": 1.45563399, "N64ErrorPercent": 8.986, "N128ErrorPercent": 4.493},
+      {"p": 2, "cdExtrapolated": 1.49923620, "N64ErrorPercent": 5.817, "N128ErrorPercent": 1.454}
+    ],
+    "assumedOrderNote": "Illustrative only; not reference values. For a formal 2nd-order scheme the N64->N128 difference cannot be below 3% unless the N64 error is below ~4%, while N64 already deviates 5.27% from the published value."
+  },
+  "gridFamilyDefect": {
+    "finding": "The generator does not produce a geometrically similar refinement family. Only the circumferential count and first wall spacing scale with N; growth 1.1 is fixed, so radial spacing away from the wall barely changes and the clipped last layer varies erratically.",
+    "radialLayers": {"N64": 49, "N128": 56, "N144": 58, "N256": 64},
+    "radialSpacingFirstLayerBeyondR1m": {"N64": 0.10522, "N128": 0.07703, "N144": 0.07532, "N256": 0.06823},
+    "clippedOuterLayerThicknessM": {"N64": 2.868, "N128": 3.843, "N144": 0.310, "N256": 0.389},
+    "effectiveRefinementRatio": "2.0 circumferential, ~1.37 radial in the near wake (r~1 m); not a uniform h-refinement, so the N64/N128 pair does not satisfy Richardson assumptions"
+  },
+  "conclusion": "The 4.12% gap is spatial discretization error of the coarse N64 grid (outside the asymptotic range), not iteration error, far-field size, boundary condition or drag integration. The N64 grid already fails the 5% reference check on its own. No code defect justifies changing the solver or the evaluator; the tolerance was not relaxed and no run was skipped.",
+  "fixApplied": false,
+  "fixReason": "A legitimate fix needs new solver runs on a similar grid family, which exceeds the work-order 60 budget.",
+  "proposedNextPlan": {
+    "grid": "Scale growth as 1.1^(64/N) (or fixed layer count proportional to N) so all spacings halve together; outer radius fixed 50.5 m without irregular clipping",
+    "series": "N128, N256 (and N512 if budget) with ratio 2 for a 3-grid Richardson/GCI",
+    "budget": "New pre-registered plan required; estimated N256 ~4x N128 cells, ~8-10 min single thread, RSS < 200 MB (estimate, not measured)",
+    "acceptance": "Unchanged: Cd ref 5%, mesh difference 3%, residuals <= -6 all columns, last-100 range 0.5%"
+  },
+  "parentReleased": false
+}

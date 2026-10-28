@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "task": "P2",
+  "step": "runtime-asset-plan",
+  "date": "2026-10-28",
+  "baseSha": "036c2e7078a6eccfefdd3dae372b0eade7bda5ff",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "assetRoot": "public (npm ci + build-kernel + copy-cad; native MFEM not built)"
+  },
+  "commands": [
+    "node scripts/measure-runtime-assets.mjs --root public",
+    "node --test tests/runtime-asset-plan.test.mjs",
+    "node scripts/check-module-boundaries.mjs",
+    "npm run check:contracts"
+  ],
+  "results": {
+    "focusedTests": {
+      "pass": 3,
+      "fail": 0
+    },
+    "moduleBoundaries": "passed",
+    "contracts": "passed"
+  },
+  "units": {
+    "bytes": "byte",
+    "readMs": "millisecond, local disk read, single run"
+  },
+  "measurement": {
+    "files": [
+      {
+        "path": "gmsh/gmsh.mjs",
+        "status": "present",
+        "bytes": 514,
+        "sha256": "sha256:5b23a7f238b091ce328d2adbbf862f728fbb54d06cc0b9b5929c7b3eb8e60099",
+        "readMs": 3.112
+      },
+      {
+        "path": "gmsh/gmsh-core.wasm",
+        "status": "present",
+        "bytes": 41430673,
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "readMs": 946.218
+      },
+      {
+        "path": "fem-kernel.wasm",
+        "status": "present",
+        "bytes": 229,
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "readMs": 0.55
+      },
+      {
+        "path": "mfem/mfem.mjs",
+        "status": "missing"
+      },
+      {
+        "path": "mfem/mfem.wasm",
+        "status": "missing"
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "mesh-only",
+        "operation": "mesh",
+        "roles": [
+          "gmsh"
+        ],
+        "paths": [
+          "gmsh/gmsh.mjs",
+          "gmsh/gmsh-core.wasm"
+        ],
+        "missing": [],
+        "totalBytes": 41431187
+      },
+      {
+        "id": "solve-js-pcg",
+        "operation": "solve",
+        "method": "js-pcg",
+        "roles": [
+          "gmsh"
+        ],
+        "paths": [
+          "gmsh/gmsh.mjs",
+          "gmsh/gmsh-core.wasm"
+        ],
+        "missing": [],
+        "totalBytes": 41431187
+      },
+      {
+        "id": "solve-wasm-pcg",
+        "operation": "solve",
+        "method": "wasm-pcg",
+        "roles": [
+          "gmsh",
+          "kernel"
+        ],
+        "paths": [
+          "gmsh/gmsh.mjs",
+          "gmsh/gmsh-core.wasm",
+          "fem-kernel.wasm"
+        ],
+        "missing": [],
+        "totalBytes": 41431416
+      },
+      {
+        "id": "solve-mfem-wasm",
+        "operation": "solve",
+        "method": "mfem-wasm",
+        "roles": [
+          "gmsh",
+          "mfem",
+          "kernel"
+        ],
+        "paths": [
+          "gmsh/gmsh.mjs",
+          "gmsh/gmsh-core.wasm",
+          "mfem/mfem.mjs",
+          "mfem/mfem.wasm",
+          "fem-kernel.wasm"
+        ],
+        "missing": [
+          "mfem/mfem.mjs",
+          "mfem/mfem.wasm"
+        ],
+        "totalBytes": null
+      }
+    ]
+  },
+  "observations": [
+    "gmsh (gmsh.mjs + gmsh-core.wasm) is loaded for every request and dominates transfer (~41.4 MB); kernel adds 229 B.",
+    "MFEM assets were absent (native build not run); mfem-wasm totals are unmeasured."
+  ],
+  "notMeasured": [
+    "network transfer/compression",
+    "WASM compile/instantiate time",
+    "cold/warm browser cache",
+    "peak memory",
+    "fetch failure, quota, cancel, release behaviour",
+    "real Chrome runs (PERF1 owns browser measurement)"
+  ]
+}
