@@ -22,3 +22,8 @@ test('session changes and destruction do not render old answers or clear new dra
 test('edited draft ABA survives completion and destroyed snapshot releases old history',async()=>{
  const {ui}=setup();let resolve;ui.setProvider(provider(()=>new Promise(r=>resolve=r)));ui.input.value='first';const pending=ui.send.onclick();ui.input.value='changed';ui.input.oninput();ui.input.value='first';ui.input.oninput();resolve({text:'answer',cancelled:false});await pending;assert.equal(ui.input.value,'first');assert.equal(ui.snapshot().messages.length,2);ui.destroy();assert.equal(ui.snapshot().phase,'closed');assert.equal(ui.snapshot().canSend,false);assert.deepEqual(ui.snapshot().messages,[]);
 });
+test('without a provider the panel is disabled and states a bilingual refusal reason',()=>{
+ const h=setup(),ui=h.ui;assert.equal(ui.send.disabled,true);assert.equal(ui.stop.disabled,true);assert.equal(ui.input.disabled,true);assert.equal(ui.reason.hidden,false);assert.match(ui.reason.textContent,/送信できません/);
+ h.english();assert.match(ui.reason.textContent,/Sending refused: no conversation session provider/);assert.match(ui.status.textContent,/Unavailable/);
+ ui.setProvider(provider(async()=>({text:'',cancelled:false})));assert.equal(ui.input.disabled,false);assert.equal(ui.reason.hidden,true);assert.equal(ui.snapshot().productionTransport,false);ui.destroy();
+});
