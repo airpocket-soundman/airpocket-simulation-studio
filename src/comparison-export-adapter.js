@@ -1,6 +1,7 @@
 import {getProjectRevision} from './project-revision.js';
 import {createComparisonTimePlan} from './comparison-time-plan.js';
 import {createComparisonDeformationPlan} from './comparison-deformation-plan.js';
+import {createComparisonDeformationFrames} from './comparison-deformation-plan.js';
 import {createComparisonFrameTiming} from './comparison-frame-timing.js';
 import {fixedWebmError} from './fixed-webm.js';
 
@@ -32,6 +33,7 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
    const deformationMode=['webm','gif'].includes(request.format)&&request.animation==='deformation';
    if(deformationMode&&!Object.hasOwn(request,'deformScale'))throw Error('Deformation comparison requires an explicit positive deformScale');
    const deformationPlan=deformationMode?createComparisonDeformationPlan(sources.map(s=>s.output),request):null;
+   const deformationFrames=deformationPlan&&request.format==='gif'?createComparisonDeformationFrames(deformationPlan):null;
    if(request.field==='heatFlux'&&request.timeSeconds!==undefined&&sources.some(source=>source.output.result.kind==='thermal'))throw Error('Thermal heat flux comparison is final-step only; omit timeSeconds');
    const revisions=[];for(const source of sources)revisions.push(await getProjectRevision(source.output));
    const assertSources=()=>{if(!guard())throw Error('Comparison export expired');for(const source of sources)source.assertCurrent();};
@@ -43,8 +45,8 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
    if(request.format==='webm')view.resolution={width:rendered.canvas.width,height:rendered.canvas.height};
    assertCurrent();
    const comparison={cases:sources.map((source,i)=>({caseId:source.caseId,revision:source.revision,resultRevision:revisions[i],label:source.name})),field:request.field,...(request.timeSeconds===undefined?{}:{requestedTimeSeconds:request.timeSeconds}),panels:rendered.panels,colorRange:rendered.colorRange,unit:rendered.unit,...(timePlan?{timeAnimation:timePlan.summary}:{}),...(deformationPlan?{deformationAnimation:deformationPlan.summary}:{}),...(request.format==='gif'?{gifAnimation:{frames:24,width:640,height:320,palette:'RGB332',colors:256,phasePolicy:request.animation==='orbit'?'i/24':'i/23',lossy:true,loop:0}}:{})};
-   const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode||deformationMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange,deformationPlan?deformationPlan.atPhase(phase).deformScale:view.deformScale);assertSources();timeFrames?.record(phase);return frame.canvas;};
-   return {view,comparison,context:{canvas:rendered.canvas,assertCurrent,assertSources,renderFrame,...(timeFrames?{beginTimeFrames(){timeFrames.reset();},getTimeFrames:()=>timeFrames.snapshot(),...(fixedTime?{getFixedVerification:()=>fixedVerification,onVerified:value=>{fixedVerification=structuredClone(value);}}:{})}:{} )}};
+   const renderFrame=(nextCamera,{phase=0}={})=>{assertSources();const frame=renderAt(timeMode||deformationMode?view.camera:nextCamera,timePlan?timePlan.atPhase(phase).timeSeconds:request.timeSeconds,rendered.colorRange,deformationPlan?deformationPlan.atPhase(phase).deformScale:view.deformScale);assertSources();timeFrames?.record(phase);deformationFrames?.record(phase);return frame.canvas;};
+   return {view,comparison,context:{canvas:rendered.canvas,assertCurrent,assertSources,renderFrame,...(deformationFrames?{beginDeformationFrames(){deformationFrames.reset();},getDeformationFrames:()=>deformationFrames.snapshot()}:{}),...(timeFrames?{beginTimeFrames(){timeFrames.reset();},getTimeFrames:()=>timeFrames.snapshot(),...(fixedTime?{getFixedVerification:()=>fixedVerification,onVerified:value=>{fixedVerification=structuredClone(value);}}:{})}:{} )}};
   },
   async render({context,format='png',animation='orbit',view,seconds,signal,onProgress=()=>{}}){
    const check=()=>{if(signal?.aborted)throw Error('Comparison export cancelled');context.assertCurrent();};check();onProgress({fraction:0});
@@ -52,7 +54,7 @@ export function createComparisonExportAdapter({cases,getDefaults,isBusy=()=>fals
     const encode=format==='gif'?encodeGif:animation==='time'?encodeFixedVideo:recordVideo;
     if(typeof encode!=='function'||typeof acquireHostLock!=='function')throw Error('Comparison animation export is unavailable');
     const lock=acquireHostLock(),active=()=>{if(signal?.aborted)throw Error('Comparison export cancelled');lock.assertOwned();context.assertSources();};
-    try{active();context.beginTimeFrames?.();const blob=await encode({initialCanvas:context.canvas,renderFrame:(next,frame)=>{active();const canvas=context.renderFrame(next,frame);active();return canvas;},camera:view.camera,animation,seconds,signal,onProgress,onVerified:context.onVerified,assertCurrent:active});active();return blob;}finally{lock.release();}
+    try{active();context.beginTimeFrames?.();context.beginDeformationFrames?.();const blob=await encode({initialCanvas:context.canvas,renderFrame:(next,frame)=>{active();const canvas=context.renderFrame(next,frame);active();return canvas;},camera:view.camera,animation,seconds,signal,onProgress,onVerified:context.onVerified,assertCurrent:active});active();return blob;}finally{lock.release();}
    }
    const blob=await encodePng(context.canvas);check();onProgress({fraction:1});return blob;
   }
