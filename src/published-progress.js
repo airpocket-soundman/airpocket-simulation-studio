@@ -27,7 +27,7 @@ function manifestIdentity(value){
 async function hex(bytes,subtle){return Array.from(new Uint8Array(await subtle.digest('SHA-256',bytes)),value=>value.toString(16).padStart(2,'0')).join('');}
 function progressForBoard(value){
  const p=validateProgress(value);
- if(!['version','date','description'].every(key=>typeof p.release[key]==='string')||!p.solvers.every(row=>Array.isArray(row)&&row.every(cell=>typeof cell==='string'))||p.tasks.some(task=>['acceptance','evidence','titleEn','detailEn','acceptanceEn','lastUpdate','lastUpdateEn'].some(key=>task[key]!==undefined&&typeof task[key]!=='string')||task.depends!==undefined&&!Array.isArray(task.depends)))throw error('PUBLISHED_PROGRESS_INVALID','Published progress presentation metadata is invalid');
+ if(!['version','date','description'].every(key=>typeof p.release[key]==='string')||!p.solvers.every(row=>Array.isArray(row)&&row.every(cell=>typeof cell==='string'))||p.tasks.some(task=>['acceptance','evidence','titleEn','detailEn','acceptanceEn','lastUpdate','lastUpdateEn'].some(key=>task[key]!==undefined&&typeof task[key]!=='string')||['depends','parents','related'].some(key=>task[key]!==undefined&&!Array.isArray(task[key]))))throw error('PUBLISHED_PROGRESS_INVALID','Published progress presentation metadata is invalid');
  return p;
 }
 /** Verify only the progress asset's relationship to a stable clean publication

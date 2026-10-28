@@ -1,0 +1,298 @@
+{
+  "baseSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "items": [
+    {
+      "number": 52,
+      "id": "RESULTCURVE1",
+      "title": "実解析から再入力可能な段階bundleを生成する",
+      "file": "52-RESULTCURVE1.md",
+      "dependency": "なし。PR178/179の静止グラフ・比較UIは既存機能として利用する。",
+      "sourcePaths": [
+        "src/increment-curve-data.js",
+        "src/increment-curve-export.js",
+        "scripts/create-increment-curve-export-reference.mjs",
+        "tests/increment-curve-data.test.mjs",
+        "docs/increment-curve-export.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 53,
+      "id": "RESULTCURVE1",
+      "title": "単一・比較グラフの実Chrome操作と保存を検証する",
+      "file": "53-RESULTCURVE1.md",
+      "dependency": "52を待たず同梱参照で開始できる。52の成果を採用する追加確認は52統合後。",
+      "sourcePaths": [
+        "docs/increment-curve-ui.md",
+        "docs/increment-comparison-ui.md",
+        "src/ui/increment-curve.js",
+        "src/ui/increment-curve-comparison.js",
+        "tests/ui-increment-curve-comparison.test.mjs"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 54,
+      "id": "AGENTACP1",
+      "title": "ACPの有界session状態機械を合成childで実装する",
+      "file": "54-AGENTACP1.md",
+      "dependency": "なし。固定v1仕様で必要なmethodを確認できなければ、確認できた契約と不足点までを納品し未実装を明記する。",
+      "sourcePaths": [
+        "scripts/acp-client-process.mjs",
+        "tests/acp-client-process.test.mjs",
+        "tests/fixtures/acp-agent-stub.mjs",
+        "docs/agent-acp-probe.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 55,
+      "id": "AGENTCHAT1",
+      "title": "会話パネルをsession状態と拒否条件へ接続する",
+      "file": "55-AGENTCHAT1.md",
+      "dependency": "54の契約が統合済みになるまで本番接続を実装しない。先行する場合はUI契約案と合成試験に限定する。",
+      "sourcePaths": [
+        "src/ui/agent-connection-status-ui.js",
+        "tests/ui-agent-connection-status.test.mjs",
+        "tests/ui-agent-connection-status-scanner.test.mjs",
+        "docs/agent-operation.md",
+        "docs/agent-acp-probe.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 56,
+      "id": "P3",
+      "title": "再起動後の保持結果と取得不能理由を正式MCPで照合する",
+      "file": "56-P3.md",
+      "dependency": "なし。保存済み結果の完全復元をこの単位で新設しない。",
+      "sourcePaths": [
+        "scripts/analysis-job-service.mjs",
+        "tests/analysis-job-service.test.mjs",
+        "tests/mcp-restored-request-id.test.mjs",
+        "tests/mcp-job-settlement.test.mjs",
+        "docs/automation.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 57,
+      "id": "EXPORTBACKGROUND1",
+      "title": "録画中のセッション失効と日英実機条件を検証する",
+      "file": "57-EXPORTBACKGROUND1.md",
+      "dependency": "なし。Chrome操作環境を先に確認し、利用不可なら自動試験と未確認マトリクスまでを納品。",
+      "sourcePaths": [
+        "src/ui/webm-recording-lifecycle.js",
+        "tests/webm-recording-lifecycle.test.mjs",
+        "tests/browser-export-session.test.mjs",
+        "docs/pr-review-2026-10-22.md",
+        "docs/visual-export.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 58,
+      "id": "PERF1",
+      "title": "case間のidleと正規化入力を固定して性能を測る",
+      "file": "58-PERF1.md",
+      "dependency": "なし。重い測定は57/59/60/62と直列実行。",
+      "sourcePaths": [
+        "scripts/perf-browser.mjs",
+        "tests/perf-browser.test.mjs",
+        "docs/perf-scale-2026-10-22.md",
+        "docs/evidence/2026-10-22-perf-scale.json"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 59,
+      "id": "PERF1",
+      "title": "第2ブラウザで同一入力の計測可能性を確認する",
+      "file": "59-PERF1.md",
+      "dependency": "58のsnapshotと区間分離方式が統合済みであること。",
+      "sourcePaths": [
+        "docs/perf-scale-2026-10-22.md",
+        "scripts/perf-browser.mjs",
+        "tests/perf-browser.test.mjs",
+        "docs/perf-browser-plan.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 60,
+      "id": "CFD1",
+      "title": "円柱参照のメッシュ依存性を固定条件で調べる",
+      "file": "60-CFD1.md",
+      "dependency": "なし。10月22日02指示の未達条件を継承する。以前の実行成果を上書きしない。",
+      "sourcePaths": [
+        "docs/cfd-finemesh-followup-2026-10-22.md",
+        "scripts/qa-cfd-finemesh.py",
+        "scripts/replay-cfd-finemesh.py",
+        "tests/replay-cfd-finemesh.test.py",
+        "tests/qa-cfd-reference.test.py"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 61,
+      "id": "CFD1",
+      "title": "離散境界質量流束の取得経路と収支を検証する",
+      "file": "61-CFD1.md",
+      "dependency": "60とは別worktreeで可能だがsolver実行は直列。一次資料を確認せず出力列を推測しない。",
+      "sourcePaths": [
+        "scripts/su2-native.mjs",
+        "scripts/qa-cfd-reference-mass.mjs",
+        "scripts/native-flow-host.mjs",
+        "tests/su2-native.test.mjs",
+        "docs/cfd-finemesh-followup-2026-10-22.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 62,
+      "id": "P6",
+      "title": "明示した境界選択から準備済みTet4 recordを作る",
+      "file": "62-P6.md",
+      "dependency": "10月22日01のモーメント検査はmainに実装済み。再実装せず再利用する。",
+      "sourcePaths": [
+        "scripts/native-tet4-contract.mjs",
+        "tests/native-tet4-contract.test.mjs",
+        "tests/fixtures/native-tet4-record.mjs",
+        "docs/native-tet4-proof.md",
+        "src/constraints.js"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 63,
+      "id": "PRINT2",
+      "title": "材料同定データの入力検査と分離を整備する",
+      "file": "63-PRINT2.md",
+      "dependency": "実測なしでも取込契約まで進める。PRINTMEASURE/FINITEVISCOの実験を代替しない。",
+      "sourcePaths": [
+        "src/printed-equivalent-material.js",
+        "tests/printed-equivalent-material.test.mjs",
+        "tests/fixtures/printed-equivalent-material.mjs",
+        "docs/printed-equivalent-material.md",
+        "docs/printed-material-measurement.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 64,
+      "id": "CFDPORT1",
+      "title": "開口候補から明示確認済みcapへの変換境界を作る",
+      "file": "64-CFDPORT1.md",
+      "dependency": "なし。GUI/API接続を広げず変換契約とテストに限定する。",
+      "sourcePaths": [
+        "src/opening-loop-candidates.js",
+        "src/fluid-opening-caps.js",
+        "tests/opening-loop-candidates.test.mjs",
+        "tests/fluid-opening-caps.test.mjs",
+        "docs/fluid-domains.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 65,
+      "id": "CFDMESH1",
+      "title": "限定直交セルをTet4化して向き・壁tagを検査する",
+      "file": "65-CFDMESH1.md",
+      "dependency": "なし。既存cell-qualityの閾値を緩和せず利用する。",
+      "sourcePaths": [
+        "src/channel-layer-plan.js",
+        "src/channel-layer-cell-quality.js",
+        "src/tetra-geometry.js",
+        "tests/channel-layer-cell-quality.test.mjs",
+        "tests/mesh-validity.test.mjs"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 66,
+      "id": "COUPLE3",
+      "title": "非一様熱流転送を独立積分で検証する",
+      "file": "66-COUPLE3.md",
+      "dependency": "なし。既存テストに同等の非一様場がある場合は不足する独立参照のみ追加する。",
+      "sourcePaths": [
+        "src/planar-heat-transfer.js",
+        "src/triangle-overlap.js",
+        "tests/planar-heat-transfer.test.mjs",
+        "src/thermal-contact.js"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 67,
+      "id": "CONTACT1",
+      "title": "penalty感度と解析解を参照モデルで照合する",
+      "file": "67-CONTACT1.md",
+      "dependency": "なし。既存結果と符号が違う場合は符号契約を先に照合し、期待値を都合よく変えない。",
+      "sourcePaths": [
+        "src/unilateral-contact-reference.js",
+        "tests/unilateral-contact-reference.test.mjs",
+        "docs/roadmap.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 68,
+      "id": "COUPLE4B",
+      "title": "曲面転送の剛体モードと虚仕事を独立照合する",
+      "file": "68-COUPLE4B.md",
+      "dependency": "なし。既存の39修正・overflow対策を再実装しない。",
+      "sourcePaths": [
+        "src/curved-pressure-transfer.js",
+        "tests/curved-pressure-transfer.test.mjs",
+        "docs/vibration-acoustics.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 69,
+      "id": "MOD1",
+      "title": "結果選択の世代と非同期取消を画面から分離する",
+      "file": "69-MOD1.md",
+      "dependency": "53/55/57などのmain/UI編集と直列。対象経路が既に分離済みなら差分不要として現行証拠を納品。",
+      "sourcePaths": [
+        "src/main.js",
+        "src/ui/time-view-state.js",
+        "src/ui/view-compare-ui.js",
+        "src/module-layers.json",
+        "docs/module-boundaries.md"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 70,
+      "id": "P4",
+      "title": "曲線出力を専門Skillの独立一巡へ組み込む",
+      "file": "70-P4.md",
+      "dependency": "52/53の採用部分が統合済みであること。指示を受けた実施者がSkillを読むことは必要だが、他chatへの送信や新agent起動は別途明示指示がある場合だけ。",
+      "sourcePaths": [
+        "skills/airpocket-studio/SKILL.md",
+        "skills/airpocket-studio/references/skill-loop.md",
+        "docs/increment-curve-export.md",
+        "docs/increment-comparison-ui.md",
+        "tests/increment-curve-comparison-mcp.test.mjs"
+      ],
+      "status": "not-started"
+    },
+    {
+      "number": 71,
+      "id": "P0",
+      "title": "統合候補の受入と公開ゲートを固定版で再監査する",
+      "file": "71-P0.md",
+      "dependency": "52〜70の実施/未実施一覧が揃ってから最終監査。既存171件などの数は実行時に再計算する。",
+      "sourcePaths": [
+        "docs/task-critical-path.md",
+        "docs/roadmap.md",
+        "src/progress.json",
+        "src/publication-milestone.js",
+        "tests/publication-milestone.test.mjs",
+        "docs/progress-dashboard.md"
+      ],
+      "status": "not-started"
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "createdAt": "2026-10-23",
+  "repository": "airpocket-soundman/airpocket-simulation-studio",
+  "baseSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "purpose": "Planning only; no implementation or acceptance testing performed",
+  "previousInstructions": [
+    "docs/next-work-orders-2026-10-22/01-P6-MOMENT.md",
+    "docs/next-work-orders-2026-10-22/02-CFD1-REFERENCE.md",
+    "docs/next-work-orders-2026-10-22/03-PERF1-SCALE.md",
+    "docs/next-work-orders-2026-10-22/README.md",
+    "docs/opencode-release-work-orders-2026-10-21/00-COMMON.md",
+    "docs/opencode-release-work-orders-2026-10-21/41-CFD1.md",
+    "docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md",
+    "docs/opencode-release-work-orders-2026-10-21/43-P6.md",
+    "docs/opencode-release-work-orders-2026-10-21/44-RUNTIMEWASM1.md",
+    "docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md",
+    "docs/opencode-release-work-orders-2026-10-21/README.md",
+    "docs/opencode-review-followups-2026-10-21/00-COMMON.md",
+    "docs/opencode-review-followups-2026-10-21/46-AGENTINPUT1.md",
+    "docs/opencode-review-followups-2026-10-21/47-P0.md",
+    "docs/opencode-review-followups-2026-10-21/48-PERF1.md",
+    "docs/opencode-review-followups-2026-10-21/49-VIEWTIME.md",
+    "docs/opencode-review-followups-2026-10-21/50-BROWSEREXPORT1.md",
+    "docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md",
+    "docs/opencode-review-followups-2026-10-21/README.md",
+    "docs/opencode-work-orders-2026-10-21/00-COMMON.md",
+    "docs/opencode-work-orders-2026-10-21/21-UIIMPROVE1.md",
+    "docs/opencode-work-orders-2026-10-21/22-AGENTINPUT1.md",
+    "docs/opencode-work-orders-2026-10-21/23-PERF1.md",
+    "docs/opencode-work-orders-2026-10-21/24-P1.md",
+    "docs/opencode-work-orders-2026-10-21/25-MOD1.md",
+    "docs/opencode-work-orders-2026-10-21/26-P0.md",
+    "docs/opencode-work-orders-2026-10-21/27-AGENTACP1.md",
+    "docs/opencode-work-orders-2026-10-21/28-RESULTCURVE1.md",
+    "docs/opencode-work-orders-2026-10-21/29-CFDPORT1.md",
+    "docs/opencode-work-orders-2026-10-21/30-COUPLE3.md",
+    "docs/opencode-work-orders-2026-10-21/31-CFDMESH1.md",
+    "docs/opencode-work-orders-2026-10-21/32-BROWSEREXPORT1.md",
+    "docs/opencode-work-orders-2026-10-21/33-P4.md",
+    "docs/opencode-work-orders-2026-10-21/34-P3.md",
+    "docs/opencode-work-orders-2026-10-21/35-VIEWTIME.md",
+    "docs/opencode-work-orders-2026-10-21/36-VIEWCOMPARE.md",
+    "docs/opencode-work-orders-2026-10-21/37-REG2.md",
+    "docs/opencode-work-orders-2026-10-21/38-CONTACT1.md",
+    "docs/opencode-work-orders-2026-10-21/39-COUPLE4B.md",
+    "docs/opencode-work-orders-2026-10-21/40-AGENTCHAT1.md",
+    "docs/opencode-work-orders-2026-10-21/README.md"
+  ],
+  "referenceHashes": {
+    "docs/task-critical-path.md": "29f9bdd51701fc1adc85090e290c2857334a22a3db48e4512eca30583f541804",
+    "docs/rate-limit-takeover-2026-10-21.md": "5d300e74045c8d7f3fef0e2dec5a26c76faa0ddd369f2c39afa457ef8bb92506",
+    "docs/pr-review-2026-10-22.md": "194f78cfc101fb4d5c525f786b28fe341dd70c0705effd114bb1f462c1dcd7fe",
+    "docs/perf-scale-2026-10-22.md": "78edc188fd8a13dd83237be8797aa39100dc196d3e1ca5ba354dcb9e8c3366ab",
+    "docs/native-tet4-proof.md": "08716b0843f2491ea88378349048dd8af56fef6048079e81d5d77277869be2b5",
+    "docs/cfd-finemesh-followup-2026-10-22.md": "3ac4443ff358dcecb8008689fffb893a1db2117634bd77bce65ee55cadfadb2b",
+    "docs/increment-curve-ui.md": "4517c1e336ee09080764ad57fe65614e3287153f26f3244f91cae405f5e54c6f",
+    "docs/increment-comparison-ui.md": "444f1b60259849b9d989063278c9e2929e4ce686f8c3507c5b8323d46dda42a5",
+    "docs/agent-acp-probe.md": "a201b020c5d7bd04703ec3bc7a2c9925e70826dd01cde48328fa97f5549adc2a",
+    "docs/printed-equivalent-material.md": "b0ce28a79637a6b2f0720526ac2121a9d699b86724baa3ecf0f338bc8199ffe5",
+    "docs/next-work-orders-2026-10-22/README.md": "e0f55487f55ba276ec93909d86e69f41698b823ae06077eeeca8fc16db7ee499",
+    "src/progress.json": "dda14c3c5123ebc92dbe12ba911e68fff8d7e34d0a69efe906aa674b7104b48b"
+  },
+  "parentTasks": [
+    {
+      "id": "CFD1",
+      "title": "流体領域を作り、流れを解析",
+      "status": "building",
+      "category": "流体",
+      "detail": "通常風速の外部流れに着手。SU2 8.5.0・牛の3D定常SA RANSを直接実行し、実StudioブラウザAPIから別プロセスで再実行。全節点圧力・速度と出力SHAが一致。固定ケース用の試験用接続/表示であり、壁面116点の未収束、速度/乱流残差未達、境界層/精度検証と共通ジョブ・MCP統合は未完了。 計算/取得系7ツールを専用MCPと既存MCPの任意設定へ追加。実MCPで牛の再計算とページ取得が直接実行に一致し、警告/取消/解放を確認。表示MCPは後続。",
+      "acceptance": "単純参照形状から粗い牛型へ進み、版・配布条件・壁/遠方境界・メッシュ・停止・入出力契約を固定。速度・圧力・抗力・質量収支と領域/メッシュ/時間依存性を検証する。Stokes設定変更や未検証の層流仮定で代替せず、公開経路を待たせない。 2026-10-16: SU2 任意経路(取得は明示実行・固定SHA-256、同梱しない、LGPL-2.1表示)をmainへ反映(PR7)。実験的で上記の未達は変わらない。",
+      "titleEn": "Create fluid regions and simulate flow",
+      "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
+      "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work. 2026-10-16: The opt-in SU2 path (explicit download with a pinned SHA-256, not bundled, LGPL-2.1 notice) is merged (PR 7). Experimental; the open items above are unchanged.",
+      "lastUpdate": "2026-10-22: 必須の速度/乱流残差列が欠ける履歴を収束判定から拒否。細meshを旧条件・240秒予算で1回実行し89.078秒で完走。単独QA達成、メッシュ依存4.1227%は許容3%外で全体未完。離散流束・牛・host/MCP統合は残る。",
+      "lastUpdateEn": "2026-10-22: Reject missing required velocity/turbulence residual columns. Fine mesh completed once in89.078s under a240s budget with previous config. Individual QA passed; mesh dependence4.1227% exceeds3%, so full validation remains incomplete. Discrete flux/cow/host-MCP integration remain.",
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md; docs/cfd-reference-2026-10-22.md; docs/evidence/2026-10-22-cfd-reference-run.json; docs/cfd-finemesh-followup-2026-10-22.md; docs/evidence/cfd-finemesh-followup-20261022/run.json"
+    },
+    {
+      "id": "CFDMESH1",
+      "title": "流体境界層メッシュ",
+      "category": "流体",
+      "status": "building",
+      "detail": "壁面解像度と品質、境界条件の対応を検証。",
+      "acceptance": "壁面解像度と品質、境界条件の対応を検証。",
+      "titleEn": "Generate fluid boundary-layer meshes",
+      "detailEn": "Validate wall resolution, quality and boundary-condition mapping.",
+      "acceptanceEn": "Validate wall resolution, quality and boundary-condition mapping.",
+      "lastUpdate": "2026-10-21: 追加PR #154 を限定成果として取り込み対象。限定直交壁層セル品質を検査。再レビューで見つけたInfinity比較の抜けを統合側で修正し238反例を検証。 親タスク全体は未完。",
+      "lastUpdateEn": "2026-10-21: Additional PR #154 accepted for bounded integration. Checks limited orthogonal wall-layer cells; integration repairs the Infinity comparison bypass and verifies238 invalid metadata cases. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 154,
+        "head": "ee98287e58980a091541b437e42974f9fa7fec55",
+        "summary": "追加PRの限定成果をレビュー承認。限定直交壁層セル品質を検査。再レビューで見つけたInfinity比較の抜けを統合側で修正し238反例を検証。",
+        "summaryEn": "Additional PR accepted as a bounded increment. Checks limited orthogonal wall-layer cells; integration repairs the Infinity comparison bypass and verifies238 invalid metadata cases."
+      }
+    },
+    {
+      "id": "COUPLE3",
+      "title": "固体と流体の共役熱伝達",
+      "category": "連成",
+      "status": "building",
+      "detail": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "titleEn": "Couple solid/fluid heat transfer",
+      "detailEn": "Transfer temperatures/heat flux and verify energy conservation.",
+      "acceptanceEn": "Transfer temperatures/heat flux and verify energy conservation.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。熱流転送の中間・最終非有限値を明示拒否。正常な保存則の試験を維持。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Explicitly rejects non-finite intermediate and final heat-transfer values while retaining conservation tests. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 140,
+        "head": "e486fa38969e6d11d3e3f8d5078e1537d7aa9ae0",
+        "summary": "再レビュー合格。熱流転送の中間・最終非有限値を明示拒否。正常な保存則の試験を維持。",
+        "summaryEn": "Re-review approved. Explicitly rejects non-finite intermediate and final heat-transfer values while retaining conservation tests.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/30-COUPLE3.md"
+      }
+    },
+    {
+      "id": "CONTACT1",
+      "title": "接触・摩擦・ボルトを扱う",
+      "category": "構造",
+      "status": "building",
+      "detail": "接触収束と反力・摩擦条件を検証。",
+      "acceptance": "接触収束と反力・摩擦条件を検証。",
+      "titleEn": "Support contact, friction and bolts",
+      "detailEn": "Validate contact convergence, reactions and friction conditions.",
+      "acceptanceEn": "Validate contact convergence, reactions and friction conditions.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。安全な反復上限と停滞停止を追加。巨大上限を即時拒否し極小許容値でも有限回で停止。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Adds a safe iteration cap and stagnation termination; rejects huge budgets and stops tightly tolerated stalled solves. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 143,
+        "head": "86a396fc4bbfeecf9fea70a89f126fe7084e3771",
+        "summary": "再レビュー合格。安全な反復上限と停滞停止を追加。巨大上限を即時拒否し極小許容値でも有限回で停止。",
+        "summaryEn": "Re-review approved. Adds a safe iteration cap and stagnation termination; rejects huge budgets and stops tightly tolerated stalled solves.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/38-CONTACT1.md"
+      }
+    },
+    {
+      "id": "PERF1",
+      "title": "対応するモデル規模を測定",
+      "category": "検証",
+      "status": "building",
+      "detail": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "titleEn": "Measure supported model sizes",
+      "detailEn": "Measure browser memory, runtime and cancellation latency; display limits.",
+      "acceptanceEn": "Measure browser memory, runtime and cancellation latency; display limits.",
+      "lastUpdate": "2026-10-22: 遅いUASM中にheap tickが消える問題を実Chromeで再現し、独立計測へ修正。60/121と335/1006の2規模で計算・取消・復旧と57sampleを実測。schema2不正時刻を拒否し実mesh数を記録。最大対応規模・他ブラウザは未確認。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/48-PERF1.md; docs/evidence/2026-10-22-review48-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review48-real-chrome.json; docs/pr-review-2026-10-22.md; docs/next-work-orders-2026-10-22/03-PERF1-SCALE.md; docs/perf-scale-2026-10-22.md; docs/evidence/2026-10-22-perf-scale.json",
+      "lastUpdateEn": "2026-10-22: Reproduced heap tick starvation during slow UASM in actual Chrome and fixed independent sampling. Two sizes (60/121 and335/1006 nodes/elements) completed solves/cancel/recovery with57 samples. Reject invalid schema2 timing and retain actual mesh counts. Support limits and other browsers remain.",
+      "review": {
+        "status": "merged",
+        "pr": 174,
+        "head": "fa2f03373428bddbebf693f125abc37b54e0444b",
+        "summary": "実Chrome小構造1例でUASM/JS heapを別系列として記録し取消復旧を確認。rawコピーを含む再実行手順を修正。周期sample最大であり真のpeakではない。複数規模・他ブラウザの上限は未確認。",
+        "summaryEn": "One real Chrome small structural case records separate UASM/JS heap series and cancellation recovery. Replay instructions corrected to copy raw report. Sampled maxima are not true peaks; multiple model sizes and other browsers remain."
+      }
+    },
+    {
+      "id": "PRINT2",
+      "title": "積層とインフィルを反映して解析",
+      "category": "3Dプリント",
+      "detail": "最終段階の任意機能。異方性の等価モデルから開始し、壁・層・インフィルの詳細化と試験データによる検証。",
+      "acceptance": "最終段階の任意機能。異方性の等価モデルから開始し、壁・層・インフィルの詳細化と試験データによる検証。",
+      "depends": [
+        "PRINT1",
+        "MAT3"
+      ],
+      "optional": true,
+      "status": "building",
+      "titleEn": "Simulate layers and infill",
+      "detailEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
+      "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
+      "lastUpdate": "2026-10-21: PR #169: 造形条件・定数/軸・根拠・適用範囲を結ぶ等価材料recordを実装。正規保存復元、範囲外拒否、明示壁/infillとの排他、実Worker再計算の変位一致を確認。実測校正・独立実測は未提供、親は未完。",
+      "lastUpdateEn": "2026-10-21: PR #169 implements print-conditioned equivalent-material records binding constants, axes, basis and validity. Saved reload, out-of-range refusal, exclusion of explicit wall/infill models and actual Worker displacement equality verified. Physical calibration and independent measurement remain unavailable.",
+      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs; docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md; docs/evidence/2026-10-21-printed-equivalent-material.json",
+      "review": {
+        "status": "merged",
+        "pr": 169,
+        "head": "f39cbddfbac3471707456c605c823cc433c39c9f",
+        "summary": "限定的な造形条件付き等価材料recordをレビュー承認。保存復元と実Worker再計算を確認。実測校正・独立実測は未提供。",
+        "summaryEn": "Bounded print-conditioned equivalent record reviewed; saved reload and actual Worker reanalysis verified. Physical calibration and independent measurement remain unavailable."
+      }
+    },
+    {
+      "id": "COUPLE4B",
+      "title": "曲面・強制振動・双方向の音響連成",
+      "titleEn": "Curved interfaces, forced vibration and two-way acoustics",
+      "status": "building",
+      "category": "連成",
+      "depends": [
+        "COUPLE4"
+      ],
+      "detail": "曲面間の保守的な場の転送、荷重に対する周波数応答・減衰、音圧を構造へ戻す作用を実装し、連成参照解で検証。",
+      "detailEn": "Implement conservative curved-interface transfer, forced frequency response/damping and acoustic pressure feedback, and verify coupled references.",
+      "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
+      "acceptanceEn": "Verify curved/complex response and fluid added effects against references and energy balance.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。表現不能な圧力転送結果を拒否。有限な巨大変位の体積積分を維持。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Rejects unrepresentable pressure-transfer results and preserves finite volume integrals for extreme displacements. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 144,
+        "head": "366c95557e8cf77ab896c87dd4d9a03faf712df3",
+        "summary": "再レビュー合格。表現不能な圧力転送結果を拒否。有限な巨大変位の体積積分を維持。",
+        "summaryEn": "Re-review approved. Rejects unrepresentable pressure-transfer results and preserves finite volume integrals for extreme displacements.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/39-COUPLE4B.md"
+      }
+    },
+    {
+      "id": "CFDPORT1",
+      "title": "任意方向の開口閉鎖・流体体積の結合",
+      "titleEn": "Arbitrary opening caps and fluid-volume joining",
+      "status": "building",
+      "category": "流体",
+      "depends": [
+        "CFDDOM1"
+      ],
+      "detail": "明示point/単位outward normalの半空間capで有界箱を切りseed連結の一体積を抽出。API/型/保存検査と斜め管CAD参照を実装。任意開口wire認識/局所蓋・一般複数体積結合・公開Workerは未完。",
+      "detailEn": "Implemented explicit point/unit-outward-normal half-space caps, seed-connected extraction, API/types/persistence checks and an oblique-tube CAD reference. Opening-wire recognition/local lids, general volume joining, published Worker remain incomplete.",
+      "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
+      "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。重複面・非凸開口を拒否。再レビューで発見した平行移動による誤縮退判定も統合側で修正。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Rejects duplicate faces and non-convex openings. Integration also repairs origin-dependent degeneracy found during re-review. Full parent acceptance remains incomplete.",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 139,
+        "head": "43ec37f432f301e9a089b93de570a1e27adcb271",
+        "summary": "再レビュー合格。重複面・非凸開口を拒否。再レビューで発見した平行移動による誤縮退判定も統合側で修正。",
+        "summaryEn": "Re-review approved. Rejects duplicate faces and non-convex openings. Integration also repairs origin-dependent degeneracy found during re-review.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/29-CFDPORT1.md"
+      }
+    },
+    {
+      "id": "MOD1",
+      "title": "上位優先: モジュール境界と並列開発基盤",
+      "titleEn": "Upper priority: module boundaries and parallel development",
+      "category": "開発基盤",
+      "status": "building",
+      "detail": "TypeScriptの共通契約、画面と状態の分離、分野別実行アダプター、依存規則と独立テストを整備。公開障害修正を先行し、既存API/MCP整備と合わせて追加物理モデルより優先。全面React/WASM移行は公開前提にしない。",
+      "detailEn": "Establish TypeScript contracts, separate UI/state and discipline execution adapters, dependency rules and independent tests. After incident recovery, prioritize alongside existing API/MCP work over additional physics. Full React/WASM migration is not a publication prerequisite.",
+      "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
+      "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
+      "depends": [],
+      "lastUpdate": "2026-10-21: 追加PR #150 を限定成果として取り込み対象。時刻履歴のcount/budget変換をpure helper化。旧変換とマスク動作を保持。 親タスク全体は未完。",
+      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
+      "lastUpdateEn": "2026-10-21: Additional PR #150 accepted for bounded integration. Extracts time-history count/budget conversion into a pure helper while preserving conversion and masking. Full parent acceptance remains incomplete.",
+      "review": {
+        "status": "merged",
+        "pr": 150,
+        "head": "54e73b1df1e6caa4c0bc227604ff7930b8a82cc0",
+        "summary": "追加PRの限定成果をレビュー承認。時刻履歴のcount/budget変換をpure helper化。旧変換とマスク動作を保持。",
+        "summaryEn": "Additional PR accepted as a bounded increment. Extracts time-history count/budget conversion into a pure helper while preserving conversion and masking."
+      }
+    },
+    {
+      "id": "P0",
+      "title": "対応能力・操作対応表・構造化診断",
+      "titleEn": "Capabilities, operation matrix and structured diagnostics",
+      "status": "building",
+      "category": "共通",
+      "depends": [],
+      "detail": "docs/roadmap.mdの同名計画を参照。P0は能力取得と実行組合せ診断を実装中。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P0 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/47-P0.md; docs/evidence/2026-10-21-review47-chrome.json",
+      "lastUpdate": "2026-10-21: 追加PR #164で非対応adaptiveの公式API診断と、実Chromeでの熱解析disabled/uncheckedを別々に確認。対応構造解析ではSpace変更・Tab移動・stale破棄を確認。非対応欄を強制有効化せず、親全体は未完。",
+      "lastUpdateEn": "2026-10-21: PR #164 separately verifies the official unsupported-adaptive diagnostic and actual Chrome thermal disabled/unchecked controls. Supported structure passed Space, Tab and stale checks. Unsupported controls were not force-enabled; the parent remains open.",
+      "review": {
+        "status": "merged",
+        "pr": 164,
+        "head": "f2eb3beb3f47c929086ca3318312d46083e20ec8",
+        "summary": "非対応adaptiveの公式API診断と実GUIの安全な無効化を分離確認。対応欄のキー操作・staleを確認。",
+        "summaryEn": "Official unsupported-adaptive diagnostics and safe actual GUI disabling verified separately. Supported key operations and stale handling verified."
+      }
+    },
+    {
+      "id": "P3",
+      "title": "共通ジョブとブラウザセッション接続",
+      "titleEn": "Shared jobs and live browser sessions",
+      "status": "building",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P3 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。同一requestIdの起動予約をawait前に確保し、所有する起動条件だけを永続化。競合・失敗・再起動の回帰確認。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Startup reservations precede awaits; only the owner persists its startup digest. Concurrent, failed and restored requests verified. Full parent acceptance remains incomplete.",
+      "evidence": "docs/task-critical-path.md; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 131,
+        "head": "04e939ca6ae192ba2052862d5e9895c41287a14e",
+        "summary": "再レビュー合格。同一requestIdの起動予約をawait前に確保し、所有する起動条件だけを永続化。競合・失敗・再起動の回帰確認。",
+        "summaryEn": "Re-review approved. Startup reservations precede awaits; only the owner persists its startup digest. Concurrent, failed and restored requests verified.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/34-P3.md"
+      }
+    },
+    {
+      "id": "P4",
+      "title": "ビューア操作・再現可能な出力API",
+      "titleEn": "Viewer operations and reproducible export APIs",
+      "status": "building",
+      "category": "共通",
+      "depends": [
+        "P0"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "2026-10-21: 追加PR #155 を限定成果として取り込み対象。PNG chunk/CRCとGIF block構造を有界検証。完全decodeや物理精度の証明ではない。 親タスク全体は未完。",
+      "lastUpdateEn": "2026-10-21: Additional PR #155 accepted for bounded integration. Adds bounded PNG chunk/CRC and GIF block verification; this does not establish full decoding or physical accuracy. Full parent acceptance remains incomplete.",
+      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 155,
+        "head": "4c4fc45cd71cabe97cb008c806014e3a4a723692",
+        "summary": "追加PRの限定成果をレビュー承認。PNG chunk/CRCとGIF block構造を有界検証。完全decodeや物理精度の証明ではない。",
+        "summaryEn": "Additional PR accepted as a bounded increment. Adds bounded PNG chunk/CRC and GIF block verification; this does not establish full decoding or physical accuracy."
+      }
+    },
+    {
+      "id": "P6",
+      "title": "WASM・ネイティブ共通コア実証",
+      "titleEn": "Shared WASM/native core proof",
+      "status": "building",
+      "category": "共通",
+      "depends": [
+        "P0",
+        "P1"
+      ],
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
+      "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "2026-10-22: 準備済みTet4出力へ反力モーメントの釣合い検査を追加。合力を保つ3軸偶力の反例を拒否し、平行移動の正例を受理。実host/WASMは今回候補CIで別確認。CAD条件転送・製品backend・一般物理は残る。",
+      "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md; docs/evidence/2026-10-21-native-tet4-prepared-record.json; docs/next-work-orders-2026-10-22/01-P6-MOMENT.md",
+      "lastUpdateEn": "2026-10-22: Prepared Tet4 output validates reaction-moment equilibrium, rejecting three-axis spurious couples while accepting translated references. Actual host/WASM runs are checked in candidate CI separately. CAD transfer, product backend and general physics remain.",
+      "review": {
+        "status": "merged",
+        "pr": 165,
+        "head": "0146657aabc03311724d1ee536a76b749102ef41",
+        "summary": "準備済みTet4の限定共通契約をレビュー承認。非対応材料拒否と入力snapshotを修正。本番native統合とCAD条件転送は未完。",
+        "summaryEn": "Bounded prepared Tet4 contract reviewed; unsupported material refusal and input snapshots repaired. Production native integration and CAD condition transfer remain open."
+      }
+    },
+    {
+      "id": "EXPORTBACKGROUND1",
+      "title": "背景タブでの動画停滞を診断し安全に終了する",
+      "titleEn": "Diagnose stalled background-tab video and terminate safely",
+      "detail": "実時間WebMの背景タブ停滞を再現し、固定フレーム出力と区別して原因と利用者への復旧判断を記録する。 関連親はVIEWCOMPARE/BROWSEREXPORT1/P3で、親の完了は着手条件ではない。",
+      "detailEn": "Reproduce background-tab stalls in real-time WebM, distinguish fixed-frame output and record diagnosis/recovery guidance. Related parents are VIEWCOMPARE/BROWSEREXPORT1/P3; completing them is not a start prerequisite.",
+      "status": "checking",
+      "category": "結果表示",
+      "acceptance": "通常/背景/非選択タブで開始・中止・期限/失効を確認し、有限時間でのlock解放・部分成果物拒否・元表示復元と理由表示を証拠化する。再現しない場合も環境と観測限界を残し、滑らかな再生を保証しない。 この残作業の完了だけで関連親や公開ゲートの完了を宣言しない。",
+      "acceptanceEn": "Verify start/cancel/expiry in foreground/background/unselected tabs, bounded lock release, partial-artifact refusal, original-view restoration and visible reasons. Record environment/limits if unreproduced; do not guarantee smooth playback. Completing this work alone does not complete related parents or publication gates.",
+      "lastUpdate": "2026-10-22: PR #175。実Chromeのvisible→hiddenとhidden開始拒否、通常取消、foreground成果物を確認。停止期限はfault injection。セッション失効と日英実機マトリクスは残る。",
+      "lastUpdateEn": "2026-10-22: PR #175. Real Chrome visible-to-hidden interruption, hidden-start refusal, ordinary cancellation and foreground artifact observed. Stop timeout uses fault injection. Session expiry and bilingual real-browser matrix remain.",
+      "evidence": "docs/automation.md; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/task-critical-path.md; docs/evidence/2026-10-18-webm-lifecycle-real-chrome.json; docs/opencode-release-work-orders-2026-10-21/45-EXPORTBACKGROUND1.md; docs/evidence/2026-10-21-background-tab-visibility-feasibility.json; docs/evidence/2026-10-22-review45-real-chrome.json; docs/pr-review-2026-10-22.md; docs/evidence/2026-10-22-review45-real-chrome.json; docs/pr-review-2026-10-22.md",
+      "review": {
+        "status": "merged",
+        "pr": 175,
+        "head": "94b63f63ac7b8b1f2e2f7df0aca54e3c7ae79ed8",
+        "summary": "実Chromeのvisible→hiddenとhidden開始拒否、通常取消、foreground成果物を確認。停止期限はfault injection。セッション失効と日英実機マトリクスは残る。",
+        "summaryEn": "Real Chrome visible-to-hidden interruption, hidden-start refusal, ordinary cancellation and foreground artifact observed. Stop timeout uses fault injection. Session expiry and bilingual real-browser matrix remain."
+      }
+    },
+    {
+      "id": "AGENTACP1",
+      "title": "自分のCodexをACPで接続するローカル基盤",
+      "titleEn": "Local ACP connection to the user's Codex",
+      "category": "共通",
+      "status": "building",
+      "depends": [
+        "P0",
+        "P3",
+        "BROWSERCONNECTOR1"
+      ],
+      "detail": "既存ブラウザ接続にACPエージェントの検出・起動・停止とChatGPTログイン案内を追加する計画。第一段階はCodex。会話はACP、操作は既存MCPを利用し、サブスクとAPI認証を区別する。未着手。",
+      "detailEn": "Plan ACP agent discovery, lifecycle and ChatGPT sign-in guidance in the existing browser connector, starting with Codex. ACP handles conversation; existing MCP handles operations. Distinguish plan and API authentication. Not started.",
+      "acceptance": "docs/roadmap.mdのAGENTACP1に従い、Windows標準ブラウザの公開HTTPS/ローカル実接続、認証・scope・失効・取消・再接続・重複実行防止を検証。専門SKILLへ導入/復旧手順を記録。",
+      "acceptanceEn": "Follow AGENTACP1 in docs/en/roadmap.md. Verify real public HTTPS/local Windows browser connections, authentication, scopes, expiry, cancellation, reconnect and duplicate prevention; document setup/recovery in the specialist skill.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。JSON-RPC envelopeと既知capability/auth型を検証。不正応答をreadyにしない。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Validates JSON-RPC envelopes and known capability/auth types; malformed responses never become ready. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 133,
+        "head": "982d856444cb781370c78326b6b46ec1b3adcaf2",
+        "summary": "再レビュー合格。JSON-RPC envelopeと既知capability/auth型を検証。不正応答をreadyにしない。",
+        "summaryEn": "Re-review approved. Validates JSON-RPC envelopes and known capability/auth types; malformed responses never become ready.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/27-AGENTACP1.md"
+      }
+    },
+    {
+      "id": "AGENTCHAT1",
+      "title": "AIの選択・接続設定とアプリ内チャット",
+      "titleEn": "Agent selection, connection settings and in-app chat",
+      "category": "共通",
+      "status": "building",
+      "depends": [
+        "AGENTACP1"
+      ],
+      "detail": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。",
+      "detailEn": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started.",
+      "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
+      "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md.",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。実翻訳scannerで接続statusとaria-labelの言語往復・再走査収束を確認。 親タスク全体の完了条件は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Verifies connection status and aria-label language round trips and scan convergence with the actual scanner. Full parent acceptance remains incomplete.",
+      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "review": {
+        "status": "merged",
+        "pr": 145,
+        "head": "ce5ec68a354198bc8414130770592c4340b0edb9",
+        "summary": "再レビュー合格。実翻訳scannerで接続statusとaria-labelの言語往復・再走査収束を確認。",
+        "summaryEn": "Re-review approved. Verifies connection status and aria-label language round trips and scan convergence with the actual scanner.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/40-AGENTCHAT1.md"
+      }
+    },
+    {
+      "id": "RESULTCURVE1",
+      "title": "段階載荷データと静止グラフを取得・比較",
+      "titleEn": "Retrieve and compare incremental loading data and static curves",
+      "status": "building",
+      "category": "結果",
+      "depends": [
+        "P3",
+        "P4",
+        "MOD1",
+        "RESULTCONTROL1"
+      ],
+      "detail": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。",
+      "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
+      "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
+      "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json",
+      "lastUpdate": "2026-10-22: 検証済み2〜4曲線を荷重–標点伸びと工学SSの2図で比較し、番号・色・線種付き凡例と失敗点の線分断を保持。GUIの複数JSON読込、CSV/JSON/SVG保存・拡大リンク、同じMCPの比較ページを追加。実画面で既存プロジェクトと実解析保存ケースの不変、3形式の内容一致を確認。解析からの自動段階取得・変位制御・状態履歴材料への接続は継続。",
+      "lastUpdateEn": "2026-10-22: Compare 2–4 validated curves in force/gauge-extension and engineering stress–strain panels with numbered/color/dash legends and failed-step gaps. Added multiple-file GUI import, CSV/JSON/SVG downloads, a full-size link and comparison pages in the existing MCP tool. Browser checks confirmed unchanged project/saved real-analysis case and matching artifact bytes. Automatic increment capture, displacement control and state-history materials remain.",
+      "review": {
+        "status": "merged",
+        "pr": 134,
+        "head": "36153ae1c32bbb90cb8f283a513f75430d2ef67b",
+        "summary": "再レビュー合格。実際の荷重・入力・メッシュ・計算・結果の識別を曲線行へ束縛。荷重不一致を拒否。",
+        "summaryEn": "Re-review approved. Binds curve rows to actual force, input, mesh, calculation and result identities; rejects mismatched control forces.",
+        "instruction": "docs/opencode-work-orders-2026-10-21/28-RESULTCURVE1.md"
+      }
+    }
+  ],
+  "knownCompletedSlices": [
+    "PR178: validated single curve UI/MCP",
+    "PR179: validated curve comparison UI/MCP",
+    "PR177: GIF frame timing, performance sampling and CFD residual validation",
+    "2026-10-22: native moment balance validator; do not repeat 01-P6-MOMENT"
+  ],
+  "remainingBoundaries": [
+    "Real ACP agent entry/authentication unverified",
+    "Actual printed-material measurements not provided",
+    "CFD mesh dependence 4.1226959% exceeds 3%",
+    "PERF per-case idle and normalized input snapshot absent in prior run",
+    "Background recording session expiry and locale matrix remain"
+  ],
+  "supersession": "52-71 inherit unresolved conditions only; completed older slices must not be reimplemented"
+}
