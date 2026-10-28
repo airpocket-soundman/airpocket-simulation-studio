@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "workOrder": "docs/opencode-work-orders-2026-10-28/88-FINITEVISCO1.md",
+  "taskId": "FINITEVISCO1",
+  "baseSha": "1ad0fced74a8b8077ea405d9fb4d21f71dc9eded",
+  "branch": "claude/finitevisco1-88",
+  "environment": {"node": "v24.11.1", "platform": "win32", "arch": "x64"},
+  "scope": "Synthetic finite-strain generalized-Maxwell (Prony, 1-8 branches) material point on the multiplicative split F=FeFv: quadratic Hencky energy, deviatoric-only viscous flow, exponential-map return in principal log space; general-F stepping API and a traction-free uniaxial driver. Not calibrated, not compared with experiments, no plasticity/damage/structural integration.",
+  "syntheticParameters": {
+    "note": "Same synthetic fixture as work order 72; not a measured material.",
+    "bulkModulusPa": 2000000,
+    "equilibriumShearModulusPa": 1000000,
+    "branches": [{"shearModulusPa": 300000, "relaxationTimeSeconds": 0.5}, {"shearModulusPa": 400000, "relaxationTimeSeconds": 5}]
+  },
+  "protocol": "E11 ramp 0->0.03 in 1 s, hold 2 s, unload to 0 in 1 s, hold 2 s, reload to 0.03 in 1 s; 20 steps per segment; lateral sigma22=sigma33=0 by safeguarded secant",
+  "segmentEnds": [
+    {"segment": "load", "timeSeconds": 1, "sigma11Pa": 102177.67746462794, "P11Pa": 100978.3402079689, "S11Pa": 98078.83424830229, "areaRatio": 0.9882622380306675},
+    {"segment": "hold", "timeSeconds": 3, "sigma11Pa": 88907.95076837177, "P11Pa": 87663.85729643395, "S11Pa": 85146.66523173102, "areaRatio": 0.9860069491964898},
+    {"segment": "unload", "timeSeconds": 4, "sigma11Pa": -16657.082574452124, "P11Pa": -16611.031131162774, "S11Pa": -16611.031131162774, "areaRatio": 0.9972353235878183},
+    {"segment": "recover", "timeSeconds": 6, "sigma11Pa": -6763.6248275709095, "P11Pa": -6756.013257197357, "S11Pa": -6756.013257197357, "areaRatio": 0.9988746314930826},
+    {"segment": "reload", "timeSeconds": 7, "sigma11Pa": 96868.39461054791, "P11Pa": 95643.78628847153, "S11Pa": 92897.45744431196, "areaRatio": 0.9873580198474453}
+  ],
+  "summary": {"algorithmicDissipationDensityJm3": 628.690231703069, "storedEnergyDensityJm3": 1299.154550199414, "permanentPlasticStrain": null},
+  "comparisonWith72": {
+    "smallStrainLimit": "E11 amplitude 1e-5, same loop: max |S11 difference| / peak = 4.47e-3 at 20 steps/segment, 4.79e-4 at 200 steps/segment (first-order convergence to the linear-E exact-interval driver)",
+    "finiteStrain": "E11 amplitude 0.03: S11 differs by ~8.5% of peak and dissipation 621 vs 656 J/m3 at 200 steps/segment; this is a genuine difference of strain measure (Hencky vs Green-Lagrange) and integrator, not an error estimate of either model"
+  },
+  "verification": [
+    "small-strain limit converges to the work-order-72 driver (S11 rel. error < 1e-3, dissipation < 3e-3) and the error falls with refinement",
+    "objectivity: 40 steps of a non-coaxial path with a time-varying superposed rotation Q(t): sigma(QF)=Q sigma(F) Q^T to 1e-5 Pa, identical dissipation and stored energy",
+    "pure rigid rotation from the virgin state gives zero stress and zero dissipation",
+    "uniaxial loop: sigma22~0 every step, dissipation nondecreasing, relaxation during hold, compressive viscous memory at E11=0 recovering toward zero, no plastic residual",
+    "glassy (dt/tau=5e-6) and fully relaxed limits match an independent closed-form Hencky uniaxial oracle",
+    "faster loading raises peak P11; time refinement 8/16/32 vs 512 converges",
+    "refusals: calibrated/synthetic flags, extra fields, 0 or 9 branches, sum mu_k > mu_inf, K/mu out of range, stretch > 1.05 (uniaxial and general F), >4096 steps, zero duration/dt, empty segments, foreign state; input unchanged; outputs frozen"
+  ],
+  "commands": [
+    {"command": "node --test tests/finite-visco-hencky-multiplicative.test.mjs tests/finite-visco-prony-uniaxial.test.mjs tests/finite-visco-reference.test.mjs tests/docs.test.mjs", "result": "pass (30 tests)"},
+    {"command": "npm run check:contracts", "result": "pass (33 declaration files)"},
+    {"command": "git diff --check", "result": "pass"}
+  ],
+  "unverified": [
+    "no experimental data: no calibration, no comparison with measured curves",
+    "stretch envelope stays 0.95-1.05; no strong-ellipticity or polyconvexity argument for wider range (quadratic Hencky is not polyconvex)",
+    "exponential return is exact only for a fixed trial; within-step path is first order; dissipation is algorithmic (midpoint), no exact energy-balance identity as in 72",
+    "full CI not run in this session"
+  ],
+  "remainingParentAcceptance": "Experimental calibration, finite plasticity/viscoplasticity, damage, element/Newton tangent and structural path (reactions, deformed area), dumbbell necking and mesh regularization, RESULTCURVE1 history integration."
+}
