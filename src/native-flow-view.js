@@ -29,8 +29,9 @@ export function createNativeFlowView(container,{width=1100,height=650}={}){
   const cow=new T.Mesh(geometry(points,pvalues,p=>field==='pressure'?pressureColor(p,min,max):new T.Color('#e4e0d6')),new T.MeshStandardMaterial({vertexColors:true,side:T.DoubleSide,roughness:.9,transparent:field==='speed',opacity:field==='speed'?.36:1,depthWrite:field!=='speed'}));group.add(cow);
   const values=field==='pressure'?slice.pressure:slice.pressure.map((_,i)=>Math.hypot(...slice.velocity.slice(i*3,i*3+3)));
   const mesh=new T.Mesh(geometry(slice.positions,values,v=>field==='pressure'?pressureColor(v,min,max):speedColor(v,7)),new T.MeshBasicMaterial({vertexColors:true,side:T.DoubleSide,transparent:true,opacity:.85,depthWrite:false}));group.add(mesh);
-  const used=new Set();for(let i=0;i<slice.positions.length;i+=9){const p=new T.Vector3(...slice.positions.slice(i,i+3)),key=`${Math.floor(p.x/.28)},${Math.floor(p.z/.25)}`;if(used.has(key))continue;used.add(key);const v=new T.Vector3(...slice.velocity.slice(i,i+3));v.y=0;const speed=v.length();if(speed<.1)continue;group.add(new T.ArrowHelper(v.normalize(),p.add(new T.Vector3(0,-.015,0)),.10+Math.min(speed/5,1)*.10,0x273843,.05,.025));}
-  caption.textContent=`SU2 8.5.0 | 空気 5 m/s → 顔から尾 | ${field==='pressure'?`ゲージ圧力 ${min}〜${max} Pa`:'流速 0〜7 m/s'} | 中央断面 y=0 | 暫定：粗いメッシュ・精度未検証`;
+  const used=new Set();if(field==='speed')for(let i=0;i<slice.positions.length;i+=9){const p=new T.Vector3(...slice.positions.slice(i,i+3)),key=`${Math.floor(p.x/.28)},${Math.floor(p.z/.25)}`;if(used.has(key))continue;used.add(key);const v=new T.Vector3(...slice.velocity.slice(i,i+3));v.y=0;const speed=v.length();if(speed<.1)continue;group.add(new T.ArrowHelper(v.normalize(),p.add(new T.Vector3(0,-.015,0)),.10+Math.min(speed/5,1)*.10,0x273843,.05,.025));}
+  const time=output.frames?.[output.displayedFrame]?.timeSeconds;
+  caption.textContent=`${time==null?'定常':`SU2時刻 ${time.toFixed(3)} s`} | SU2 8.5.0 | 空気 5 m/s → 顔から尾 | ${field==='pressure'?`ゲージ圧力 ${min}〜${max} Pa`:'流速 0〜7 m/s'} | 中央断面 y=0 | 暫定：粗いメッシュ・精度未検証`;
   renderer.render(scene,camera);
  }
  controls.addEventListener('change',()=>renderer.render(scene,camera));
