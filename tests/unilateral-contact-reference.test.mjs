@@ -244,3 +244,47 @@ test('manufactured load-unload routes match the piecewise solution at three pena
   }
  }
 });
+
+// Work order 67 (CONTACT1): penalty sensitivity against the independently derived piecewise
+// solution. Synthetic reference problem: k = 100 N/mm, gap = 1 mm, F = 150 N.
+// Contact branch (F > k*gap): u = (F + kp*g)/(k + kp), penetration = u - g,
+// reaction magnitude kp*(u - g); the existing sign contract stores it as negative (opposes +u).
+test('penalty sensitivity at F=150 N matches the exact contact branch for kp=100/1000/10000', () => {
+  const k = 100, g = 1, F = 150;
+  const rows = [100, 1000, 10000].map(kp => ({kp, result: solve({forceN: F, penaltyNPerMm: kp})}));
+  for (const {kp, result} of rows) {
+    const u = (F + kp * g) / (k + kp);
+    assert.equal(result.converged, true);
+    assert.ok(close(result.u, u), `kp=${kp} u=${result.u}`);
+    assert.ok(close(result.penetrationMm, (F - k * g) / (k + kp)), `kp=${kp} penetration=${result.penetrationMm}`);
+    assert.ok(close(result.contactReactionN, -kp * (F - k * g) / (k + kp)), `kp=${kp} reaction=${result.contactReactionN}`);
+    assert.ok(Math.abs(result.residualN) <= base.toleranceN, `kp=${kp} residual=${result.residualN}`);
+    // From u0 = 0 the active set changes once: open guess, contact guess, converged check.
+    assert.equal(result.iterations, 3, `kp=${kp} iterations=${result.iterations}`);
+  }
+  const kp1000 = rows[1].result;
+  assert.ok(close(kp1000.u, 1150 / 1100), `u=${kp1000.u}`);
+  assert.ok(close(kp1000.contactReactionN, -50000 / 1100), `reaction=${kp1000.contactReactionN}`);
+  // The penalty error versus the rigid stop (u=g, reaction -(F-k*g)) is (F-k*g)/(k+kp), a
+  // property of this model, not a general accuracy claim for larger kp.
+  for (let i = 1; i < rows.length; i++) assert.ok(rows[i].result.penetrationMm < rows[i - 1].result.penetrationMm);
+});
+
+test('reference table covers open, onset, in-contact and unloading states without history', () => {
+  const k = 100, g = 1, kp = 1000;
+  const route = [
+    {state: 'open', forceN: 50},
+    {state: 'onset', forceN: 100},
+    {state: 'contact', forceN: 150},
+    {state: 'unload-contact', forceN: 120},
+    {state: 'unload-open', forceN: 50}
+  ];
+  for (const {state, forceN} of route) {
+    const result = solve({forceN, penaltyNPerMm: kp});
+    const expectedU = forceN <= k * g ? forceN / k : (forceN + kp * g) / (k + kp);
+    assert.ok(close(result.u, expectedU), `${state} u=${result.u}`);
+    assert.equal(result.penetrationMm > 0, state === 'contact' || state === 'unload-contact', state);
+  }
+  // Path independence: the unloading state equals a fresh solve, because the model has no history.
+  assert.deepEqual(solve({forceN: 50, penaltyNPerMm: kp}), solve({forceN: 50, penaltyNPerMm: kp}));
+});
