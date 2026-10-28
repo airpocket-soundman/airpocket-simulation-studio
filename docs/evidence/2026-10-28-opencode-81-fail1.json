@@ -1,0 +1,26 @@
+{
+  "workOrder": "docs/opencode-work-orders-2026-10-28/81-FAIL1.md",
+  "task": "FAIL1",
+  "baseSha": "066de3e614a8a5628ca80c689bf4c0dd50aebd4c",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": "Synthetic analytical parameters only: m=10, sigma0=1e8 Pa, V0=1000 mm^3; no real material claimed",
+  "commands": [
+    {"cmd": "node --test tests/weibull-fracture.test.mjs", "result": "pass 5 / fail 0"},
+    {"cmd": "node --test tests/module-boundaries.test.mjs", "result": "pass 19 / fail 0"},
+    {"cmd": "npm run check:contracts", "result": "pass (32 declaration files)"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "measured": {
+    "uniformUniaxialRelativeError": "<1e-12 (Pf at sigma=sigma0, V=V0 equals 1-e^-1)",
+    "sizeEffectRelativeError": "<1e-12",
+    "linearGradientEffectiveVolume": {"expected": "V/(m+1) = 90.909 mm^3 (midpoint-corrected)", "relativeErrorN200": "<1e-3", "observedOrder": "2 +/- 0.05"},
+    "piaEquibiaxialRiskRatio": 2,
+    "repeatedRootPrincipalError": "0.574 Pa at 1e8 Pa scale (~6e-9 relative)"
+  },
+  "unverified": [
+    "tests/fracture.test.mjs real-WASM case not run locally: public/fem-kernel.wasm not built in this worktree (pre-existing, unrelated)",
+    "No integration with solver element volumes, archives, UI or MCP",
+    "No measured strength data comparison"
+  ],
+  "progressProposal": "FAIL1 lastUpdate: 2026-10-28 Weibull 2-parameter volume PIA failure probability pure function verified against closed-form uniaxial, size effect, linear-gradient effective volume (order 2) and PIA multiaxial references. Parent acceptance remains incomplete."
+}
