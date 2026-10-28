@@ -1,0 +1,27 @@
+{
+  "workOrder": "91-COUPLE1",
+  "task": "COUPLE1",
+  "baseSha": "01e179e",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": {"synthetic": false, "note": "Headless thermal and thermal-stress solves of the advanced-structural fixture (size 5); temperature source applied through createCaseSourceOperations; case revisions hashed as case-operations does ({name, output})"},
+  "commands": [
+    {"cmd": "node --test tests/coupling-chain-cases.test.mjs tests/coupling-chain.test.mjs", "result": "pass", "tests": 8},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "verified": [
+    "chain built from solved thermal and structural cases: stress sources = [{from: heat, kind: temperature, revision: saved heat revision}], valid, current, order heat->stress",
+    "re-solved thermal case with wall temperature 80->90 has a new revision; saved stress case reported source-revision-changed with recorded/current revisions",
+    "re-applying the new thermal case and re-solving the structure restores current",
+    "missing producer case -> COUPLING_SOURCE_UNKNOWN; unmapped result kind -> COUPLING_CASE_UNSUPPORTED; non-array -> invalid"
+  ],
+  "notClaimed": [
+    "case listing API, UI or MCP display of stale cases",
+    "real-solve structural->acoustic (modal vibration) chain",
+    "fluid pressure->structure saved-case references",
+    "general-geometry thermal stress, vibration radiation or conjugate heat transfer verification",
+    "conservative transfer on non-matching interfaces",
+    "two-way coupling (COUPLE5)"
+  ],
+  "progressProposal": "COUPLE1 stays queued; add evidence tests/coupling-chain-cases.test.mjs as a second bounded step."
+}
