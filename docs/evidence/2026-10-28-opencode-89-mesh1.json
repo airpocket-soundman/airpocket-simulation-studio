@@ -1,0 +1,374 @@
+{
+ "task": "MESH1",
+ "order": "89",
+ "kind": "first bounded step: CAD face assignment of generated boundary faces",
+ "baseSha": "1ad0fced74a8b8077ea405d9fb4d21f71dc9eded",
+ "moduleSha256": "d3be17a611c38ad11b4c2a916ea801fb60210057f88e5b19b1b80629c73e02da",
+ "scriptSha256": "87f5fd8d366a2830ffbde17d3d66fde2d3a7777454c632b52d544247115f3bdd",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "gmsh": "@loumalouomega/gmsh-wasm 0.3.0"
+ },
+ "command": "node scripts/experimental/verify-mesh-boundary-conformity.mjs",
+ "syntheticInputs": true,
+ "rows": [
+  {
+   "name": "box10",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     10,
+     10,
+     10
+    ]
+   },
+   "options": {
+    "size": 5
+   },
+   "elements": 100,
+   "volumeMm3": 1000,
+   "conforming": true,
+   "boundaryFaces": 84,
+   "surfaceTriangles": 84,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 14,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 2,
+     "triangles": 14,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 3,
+     "triangles": 14,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 4,
+     "triangles": 14,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 5,
+     "triangles": 14,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 6,
+     "triangles": 14,
+     "areaMm2": 100
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "box10-fine",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     10,
+     10,
+     10
+    ]
+   },
+   "options": {
+    "size": 2
+   },
+   "elements": 733,
+   "volumeMm3": 999.9999999999981,
+   "conforming": true,
+   "boundaryFaces": 396,
+   "surfaceTriangles": 396,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 66,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 2,
+     "triangles": 66,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 3,
+     "triangles": 66,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 4,
+     "triangles": 66,
+     "areaMm2": 100
+    },
+    {
+     "faceTag": 5,
+     "triangles": 66,
+     "areaMm2": 99.99999999999994
+    },
+    {
+     "faceTag": 6,
+     "triangles": 66,
+     "areaMm2": 99.99999999999994
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "cylinder",
+   "source": {
+    "kind": "cylinder"
+   },
+   "options": {
+    "size": 6
+   },
+   "elements": 779,
+   "volumeMm3": 26363.91623275388,
+   "conforming": true,
+   "boundaryFaces": 406,
+   "surfaceTriangles": 406,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 326,
+     "areaMm2": 4491.708778652682
+    },
+    {
+     "faceTag": 2,
+     "triangles": 39,
+     "areaMm2": 434.98088903296735
+    },
+    {
+     "faceTag": 3,
+     "triangles": 41,
+     "areaMm2": 434.9808890329675
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "sphere",
+   "source": {
+    "kind": "sphere",
+    "center": [
+     0,
+     0,
+     0
+    ],
+    "radius": 10
+   },
+   "options": {
+    "size": 4
+   },
+   "elements": 337,
+   "volumeMm3": 3943.247790971745,
+   "conforming": true,
+   "boundaryFaces": 198,
+   "surfaceTriangles": 198,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 198,
+     "areaMm2": 1217.3784270136262
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "boxes-independent",
+   "source": {
+    "kind": "boxes",
+    "boxes": [
+     [
+      0,
+      0,
+      0,
+      10,
+      10,
+      10
+     ],
+     [
+      20,
+      0,
+      0,
+      5,
+      5,
+      5
+     ]
+    ]
+   },
+   "options": {
+    "size": 5
+   },
+   "elements": 124,
+   "volumeMm3": 1124.9999999999986,
+   "conforming": true,
+   "boundaryFaces": 108,
+   "surfaceTriangles": 108,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 18,
+     "areaMm2": 125
+    },
+    {
+     "faceTag": 2,
+     "triangles": 18,
+     "areaMm2": 125
+    },
+    {
+     "faceTag": 3,
+     "triangles": 18,
+     "areaMm2": 125
+    },
+    {
+     "faceTag": 4,
+     "triangles": 18,
+     "areaMm2": 125
+    },
+    {
+     "faceTag": 5,
+     "triangles": 18,
+     "areaMm2": 125
+    },
+    {
+     "faceTag": 6,
+     "triangles": 18,
+     "areaMm2": 125
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "box-refined",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     20,
+     20,
+     20
+    ]
+   },
+   "options": {
+    "size": 5,
+    "refinements": [
+     {
+      "center": [
+       10,
+       10,
+       10
+      ],
+      "radius": 6,
+      "size": 1.5
+     }
+    ]
+   },
+   "elements": 1170,
+   "volumeMm3": 8000.000000000003,
+   "conforming": true,
+   "boundaryFaces": 542,
+   "surfaceTriangles": 542,
+   "counts": {
+    "missing": 0,
+    "duplicate": 0,
+    "interior": 0,
+    "unassigned": 0,
+    "invalid": 0,
+    "nonManifold": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "triangles": 90,
+     "areaMm2": 400
+    },
+    {
+     "faceTag": 2,
+     "triangles": 90,
+     "areaMm2": 399.99999999999983
+    },
+    {
+     "faceTag": 3,
+     "triangles": 90,
+     "areaMm2": 400
+    },
+    {
+     "faceTag": 4,
+     "triangles": 90,
+     "areaMm2": 400
+    },
+    {
+     "faceTag": 5,
+     "triangles": 92,
+     "areaMm2": 399.99999999999983
+    },
+    {
+     "faceTag": 6,
+     "triangles": 90,
+     "areaMm2": 399.99999999999983
+    }
+   ],
+   "diagnostics": []
+  }
+ ],
+ "allConforming": true,
+ "notChecked": [
+  "Node-to-CAD-surface distance",
+  "STEP imports and fluidDomain/internal fluid meshes",
+  "REG2 cylindrical/conical patch partitions (in PR #221 scope)",
+  "Browser/worker/UI integration",
+  "Element limit 30000 and numerics unchanged; no new scale claimed"
+ ]
+}
