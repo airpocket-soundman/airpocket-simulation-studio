@@ -6,6 +6,8 @@
 
 2026-10-22: [PR172〜175のレビュー](pr-review-2026-10-22.md)で、実ChromeのPNG ZIP/音響GIFの独立decode、1構造例のメモリ系列、実hidden録画を確認した。要素数・再実行手順・cleanup確認範囲を訂正。背景録画の実hidden操作環境待ちは解消したが、セッション失効と日英実機マトリクスは残る。次は [3件の実行指示](next-work-orders-2026-10-22/README.md)に従いP6契約と計測を進める。親171件の状態と公開134件は、この限定検証だけで変更しない。
 
+2026-10-28: `src/progress.json`の`depends`は「前提（先に公開されている必要がある作業）」だけを表す。親エピック（P0〜P6、MOD1）への所属は`parents`、着手条件ではない関係は`related`に記録する。公開済み作業の`depends`は全て公開済みでなければならず、`validateProgress`が検査する。この規則で、未完の親より先に公開された子63件の矛盾を`parents`/`related`へ分離した。状態は変更していない。
+
 | 分類 | 既存ID | 条件 |
 |---|---|---|
 | 自律実装・検証可能（15） | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | 物理分野の大規模実装も含むため、1回で完了できる意味ではない。実機測定条件が不足すれば未完を維持。 |

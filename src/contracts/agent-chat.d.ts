@@ -16,6 +16,6 @@ export declare const AGENT_CHAT_LIMITS:Readonly<{promptBytes:16384;responseBytes
 export declare function createAgentChatState(options?:{onChange?:(state:AgentChatSnapshot)=>void}):AgentChatState;
 export declare function createAgentChatPanel(options:{host:HTMLElement;document?:Document;language?:()=>string}):{
  model:AgentChatState;input:HTMLTextAreaElement;send:HTMLButtonElement;stop:HTMLButtonElement;
- status:HTMLParagraphElement;history:HTMLDivElement;refresh():void;
+ status:HTMLParagraphElement;reason:HTMLParagraphElement;history:HTMLDivElement;refresh():void;
  setProvider(provider:AgentChatProvider|null):AgentChatSnapshot;snapshot():AgentChatSnapshot;destroy():void;
 };

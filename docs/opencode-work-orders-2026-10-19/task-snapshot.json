@@ -1,0 +1,207 @@
+{
+  "recordedAt": "2026-10-19",
+  "referenceMain": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "warning": "Snapshot only. Read current origin/main before execution; these are 20 bounded work packages under existing unfinished tasks, not 20 promised parent closures.",
+  "tasks": [
+    {
+      "sequence": 1,
+      "id": "UIIMPROVE1",
+      "title": "CAEのUI研究に基づいて操作画面を改良",
+      "status": "building",
+      "detail": "調査で優先した改善を段階実装する。既存CAEの画面構成をそのまま増やすのではなく、本アプリの初心者とLLM協働の用途に適用する。",
+      "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
+      "lastUpdate": "2026-10-19: 共有preflightの解析/メッシュ検査パネルを追加。mode/allowed/provisional、診断code/pointer/提案/後続確認と既知入力へのfocusを表示。入力/options/言語変更・古い非同期報告を無効化し、未登録物性draftを区別。既存gate/物理基準は不変、completePreflight:false。localhost実Chromeのlegacy表示、無効size→focus→keyboard修正→stale解除→再check、材料欄展開、EN→JA→EN/390pxを確認。provisional:trueとAPI無変更一致はunit根拠のみ。一般6caseの操作数/誤設定復帰の比較と公開検証、全診断の翻訳は未完でbuilding維持。",
+      "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json"
+    },
+    {
+      "sequence": 2,
+      "id": "AGENTINPUT1",
+      "title": "LLMから入力作成・根拠検査・中間結果取得",
+      "status": "checking",
+      "detail": "MCP18ツール、原子的編集17操作。STEP/STL/組込み形状、面ID選択、根拠・仮定、限定線形静解析preflight、暫定ラベルの保存検証、中間成果物の要約・点値・ページ取得を実装。",
+      "acceptance": "現在の残条件: 全物理preflightの完全化、流体・直交異方性・非線形・モーダルの桁規則、一般メッシュ品質と収束/精度の後検証、Skillだけの一巡。入力/根拠/中間結果の既存受入条件は維持。過去の検証記録: 全体317成功・3スキップ、ローカル配布物26項目成功。ブラウザ入力・復元13項目と追加5項目で0.04mm/-100N・日英暫定ラベル・保存ケース表示を確認。全物理preflightとライブ接続は継続。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
+      "lastUpdate": "2026-10-18: 正式MCPで入力復元→2解析→新ケース集保存→別process再読/同一点比較を一巡。探索的根拠とruntimeを保持。全物理の桁規則/精度と全Skill gateは残るためchecking維持。 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。 2026-10-18: 調和音響の波数/k²が既存solverの数値範囲を超える入力をmesh前に拒否。sweepは実際に解く端点だけを確認。新物理閾値の導入や全物理精度の保証ではない。",
+      "evidence": "tests/mcp-input-workflow.test.mjs; tests/analysis-preflight.test.mjs; tests/project-import.test.mjs; tests/intermediate-results.test.mjs; tests/assessment-preflight.test.mjs; tests/mcp-assessment-preflight.test.mjs; docs/evidence/2026-10-18-skill-loop-independent-post-pair.json"
+    },
+    {
+      "sequence": 3,
+      "id": "REG2",
+      "title": "寸法領域をCAD境界へ厳密に反映",
+      "status": "building",
+      "detail": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。",
+      "acceptance": "表面上の領域を寸法で定義し、境界適合と面積誤差を検証。再メッシュ後も指定を維持。 2026-10-16 円錐領域: 既存の円筒領域指定に任意の終端半径を追加し、STEPの円錐で荷重保存・面積検証・保存/復元をテスト、実Chromeでも円錐STEPの受理と誤った終端半径の拒否(メッシュ時)を確認。球面帯sectorは2026-10-19追加（下記）。一般UV矩形は未実装。円錐STEPで終端半径を空欄にした場合の条件文の表示は要確認。",
+      "lastUpdate": "2026-10-19: 単一STEP/組込み球の緯度経度sectorを意味API/MCPへ追加。CAD解析面積、極cap/全球/任意軸、2サイズ再メッシュ、123N/37W保存、実STEP Worker反力、JSONケース復元と改変拒否を確認。新GUI selectorなし。一般UV/複数体積/STL/流体/球面接触熱抵抗、SolidCraft0.16連携と公開Workerは対象外/未実証でbuilding維持。 localhost正式MCP inspect/editで418表示三角形/123N条件と寸法を保持、GUI JSON text→保存ファイルMCP再読で入力版一致。browser mesh/solve、GUIファイル再取込は未確認。",
+      "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json"
+    },
+    {
+      "sequence": 4,
+      "id": "VIEWCOMPARE",
+      "title": "複数ケースを並べて同期表示と動画出力",
+      "status": "building",
+      "detail": "同じカメラ・色範囲・変形倍率・時間または載荷倍率で複数ケースを一画面に配置。各ケースの条件・単位を表示し、PNGと動画を書き出す。",
+      "acceptance": "共通カメラ/表示量/色範囲/倍率/保存時刻で2ケースを左右表示。API・GUIのPNG/回転WebM、SHA付き成果物取得/取消/解放、portable設定の手動JSON/CAS取込を実装。任意のブラウザ内自動保存（1件・128 KiB）と再読込後候補の明示復元を追加し、ケース本体・画像/動画・資格情報は保存しない。localhost実ChromeでPNG・ケース再取込後の設定再対応・不正拒否、API動画の4フレーム/画像3種、GUI動画作成/1280x640プレビュー/利用者再生（終了2.738秒）/中止/再作成を確認。GUI完了・中止・再作成後の元2.01秒補間表示/入力/ケース/比較設定は完全一致。GUI保存リンクはクリックしたが完了待機タイムアウトでダウンロード完了は未確認。localhost実Chromeで任意自動保存・実再読込後の候補保持・新IDケース再取込後の明示復元・無効化/削除と再読込後の候補非復活を確認し、メイン表示/入力/ケースは不変。保存先の強制障害は自動テストのみ。熱温度/過渡音響の保存時刻WebM（共通カメラ・全期間色範囲固定、近傍保存時刻とずれ表示、明示物理開始/終了）を追加。localhost実Chromeの熱時間動画はAPI VP9/1280x640/SHA照合・4フレーム/画像4種、GUI作成/再生/中止/再作成と元2.01秒補間表示を含む4状態の完全一致を確認。実機音響は未確認。線形弾性2ケースの変位/応力の表示倍率を0→指定値へ片道linearで動かす変形WebMを追加（固定カメラ/色/保存結果、物理載荷履歴ではない、前回部分検証を保持し今回のAPI証跡で補完）。比較orbit GIFを追加（固定24枚・640×320・RGB332256色、localhost実ChromeでAPI成果物SHA/外部decode24画像とGUI作成/中止/再作成・元4状態一致を確認）。時間/表示倍率GIFは2026-10-19追加（最新欄参照）。MP4は未実装、滑らかな24fps・公開HTTPS・一般形状・installed MCP実行は未確認。 追加localhost実Chromeの低負荷検証でAPI24,858bytes/SHA照合・VP9/1280x640・外部decode4frame/4画像、凡例を除く独立形状変化と元4状態一致、GUI再生終了2.125秒を確認。前回partialは履歴として保持。 受理済みジョブは元開始命令期限から分離。15秒要求が15,725msで成功し92,321bytes/SHA/17frame17画像/形状変化/元4状態一致を実Chromeで確認。録画中実機切断は未試験（自動テストのみ）。",
+      "lastUpdate": "2026-10-19: 比較GIFをorbit/time/deformationへ拡張。24枚/640×320/RGB332、time/倍率は両端、整数delay合計を保持。正式MCP＋localhost実Chromeの小規模熱/弾性caseで外部24枚decode/2秒、GUI作成・取消・再作成、元4状態一致を確認。物理時刻は近傍保存のみ/全期間色固定、変形は表示倍率で載荷履歴ではない。MP4/公開HTTPS/一般形状/OS保存完了は未確認、building維持。",
+      "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json"
+    },
+    {
+      "sequence": 5,
+      "id": "VIEWTIME",
+      "title": "熱と音響の時間履歴を滑らかに表示",
+      "status": "building",
+      "detail": "熱の節点温度履歴と音響の保存フレーム密度を設定可能にし、固定色範囲と物理時刻で再生。計算刻み・保存刻み・表示補間を区別。",
+      "acceptance": "熱・音響の参照場で計算刻み・保存密度・表示補間を区別し、固定色範囲、保存復元、メモリ上限、API時間操作、固定フレーム出力を検証する。現在: 上限付きopt-in熱節点履歴、熱/音響スライダーと補間再生、表示時刻のプローブ・静止画、保存フレームのAPI選択、熱PNG連番を実装。2026-10-17実Chromeで解析式20+t/20+2tの保存時刻の温度、0/5/10秒PNG連番とハッシュ、出力後2秒復元、名前付きビュー/測定履歴の5秒保存復元・再検証・改ざん拒否を確認。旧v1互換を維持し任意補間時刻のAPI選択/保存は拒否。一般形状の伝播精度、公開HTTPS、一般形状の精度と全体peak RAMの確認は残る。保存密度/scalar予算APIと日本語UIは2026-10-18の限定実Chrome証拠を追加。",
+      "lastUpdate": "2026-10-18: 保存密度/予算3keysとscalar保存量metadataをGUI/API/preflight/保存復元に接続。実Chromeで熱API11要求/2400byte→94nodes/3frames/2256bytesと5s25℃、熱GUI5frames、音響GUI7/65536→741nodes/7frames/41496bytesを確認。336349byte archiveのhash/全bytes再読込と入力count7/budget65536復元、不正入力原子拒否を確認。metadataのstep/time/有限場/最終場改ざん拒否はunit確認。公開HTTPS/一般精度/peakRAM保証は未完、building維持。",
+      "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json"
+    },
+    {
+      "sequence": 6,
+      "id": "BROWSEREXPORT1",
+      "title": "LLM向け画像・動画出力ジョブ",
+      "status": "checking",
+      "detail": "結果版・ビューを固定してPNG/WebMの開始・進捗・中止・解放・SHA-256付きbase64分割取得を提供。任意接続28操作。32 MiB/4ジョブ/64 KiBページ上限。",
+      "acceptance": "現在の確認範囲: 2026-10-17: 実Chromeで熱の0/5/10秒3枚PNG連番、画像差・ZIP/画像ハッシュ・物理時刻・出力後2秒復元を確認。小規模ローカル試験のみ。補間表示の復元は自動テストで確認。slice/容量上限/120枚/公開HTTPSは未確認。 過去の検証履歴（以下の状態・未解決記述は各記録時点のもの）: 全体373件中370成功・3スキップ。実MCP/ChromeでPNG77,944バイト2分割とWebM8,795バイトをハッシュ照合、中止後の表示復元・成果物拒否を確認。1秒動画は背景タブで2フレーム。固定フレーム・MP4/GIF・永続化は未完了。公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。 2026-10-16: 固定フレームPNG連番(ZIP、2〜120枚、軌道/変形/時間)をmainへ反映(PR63)。実Chromeで構造・過渡音響のZIP解析、CRC、フレームSHA、中止後の表示復元、拒否、非選択タブでの完走を確認。軌道のmanifestが初回のみ最終桁で異なる不具合を見つけコードで修正済み(単体テストのみ、実Chrome再確認は未実施)。slice、容量上限境界、120枚成功、MP4/GIFは未検証。 2026-10-16 追記: 実Chromeで再確認。軌道書き出しは同一結果内でZIP完全一致(修正済み)、構造結果へのtime指定は開始時に拒否。ただし同じデモを解き直すとresultRevisionが変わりZIPも変わる(保存済み結果ごとの決定性のみ。原因未調査)。重い環境では8枚の書き出しに20〜180秒、開始が15秒の接続上限でタイムアウトし、ジョブが残って上限到達する場面があった。checking維持。 2026-10-16 実Chromeで再確認: 解き直しても軌道書出しのZIPが一致(physicalRevision、manifest v2)。ただしページ言語状態の変化でキャプション文字が変わると1枚目が変わる。slice、容量上限境界、120枚成功、MP4/GIFは未検証。checking維持。",
+      "lastUpdate": "2026-10-17: 実Chromeで熱の0/5/10秒3枚PNG連番、画像差・ZIP/画像ハッシュ・物理時刻・出力後2秒復元を確認。小規模ローカル試験のみ。補間表示の復元は自動テストで確認。slice/容量上限/120枚/公開HTTPSは未確認。",
+      "evidence": "src/visual-export-jobs.js; tests/visual-export-jobs.test.mjs; tests/visual-export-adapter.test.mjs; tests/browser-export-session.test.mjs; docs/testing.md; docs/evidence/2026-10-15-browserexport-real-chrome-2.json; docs/evidence/2026-10-15-browserexport-real-chrome-3.json; docs/evidence/2026-10-17-thermal-time-api-real-chrome.json"
+    },
+    {
+      "sequence": 7,
+      "id": "PERF1",
+      "title": "対応するモデル規模を測定",
+      "status": "building",
+      "detail": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "acceptance": "ブラウザごとのメモリ・時間・中止応答を測り、上限を表示。",
+      "lastUpdate": "2026-10-18: 実Chromeで構造3段階の時間・取消応答と取消後の再実行を測定しました。熱は接続timeoutとページresetで中断し、原因は未確定です。メモリ・対応上限・他ブラウザは未測定のため実装中を維持します。",
+      "evidence": "scripts/perf-measure.mjs; tests/perf-measure.test.mjs; docs/performance-measurement.md; docs/evidence/2026-10-18-browser-performance-real-chrome.json; docs/task-critical-path.md"
+    },
+    {
+      "sequence": 8,
+      "id": "CFDPORT1",
+      "title": "任意方向の開口閉鎖・流体体積の結合",
+      "status": "building",
+      "detail": "明示point/単位outward normalの半空間capで有界箱を切りseed連結の一体積を抽出。API/型/保存検査と斜め管CAD参照を実装。任意開口wire認識/局所蓋・一般複数体積結合・公開Workerは未完。",
+      "acceptance": "任意方向の複数開口・接続体積を参照形状で確認する。",
+      "lastUpdate": "2026-10-18: 限定半空間capをGUI/意味的API/MCPで一巡。実Chromeは明示2cap→実Worker4021.239mm3/2ports→JSON保存/再読の厳密一致、日英390px/keyboard/無効入力focus/失敗draft保持を確認。正式MCPはNodehosted実CPUWorkerで137721byte成果物SHA/7拒否/revision再構築保存検査を確認。ホストを分離、任意wire/局所蓋/一般join/公開Worker/物理精度は未完でbuilding。",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json"
+    },
+    {
+      "sequence": 9,
+      "id": "CFDMESH1",
+      "title": "流体境界層メッシュ",
+      "status": "queued",
+      "detail": "壁面解像度と品質、境界条件の対応を検証。",
+      "acceptance": "壁面解像度と品質、境界条件の対応を検証。",
+      "lastUpdate": null,
+      "evidence": null
+    },
+    {
+      "sequence": 10,
+      "id": "COUPLE3",
+      "title": "固体と流体の共役熱伝達",
+      "status": "queued",
+      "detail": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "acceptance": "境界の熱流・温度を転送し、エネルギー保存を検証。",
+      "lastUpdate": null,
+      "evidence": null
+    },
+    {
+      "sequence": 11,
+      "id": "CONTACT1",
+      "title": "接触・摩擦・ボルトを扱う",
+      "status": "queued",
+      "detail": "接触収束と反力・摩擦条件を検証。",
+      "acceptance": "接触収束と反力・摩擦条件を検証。",
+      "lastUpdate": null,
+      "evidence": null
+    },
+    {
+      "sequence": 12,
+      "id": "COUPLE4B",
+      "title": "曲面・強制振動・双方向の音響連成",
+      "status": "queued",
+      "detail": "曲面間の保守的な場の転送、荷重に対する周波数応答・減衰、音圧を構造へ戻す作用を実装し、連成参照解で検証。",
+      "acceptance": "曲面・複素応答・流体付加作用の参照解とエネルギー収支で検証。",
+      "lastUpdate": null,
+      "evidence": null
+    },
+    {
+      "sequence": 13,
+      "id": "RESULTCURVE1",
+      "title": "段階載荷データと静止グラフを取得・比較",
+      "status": "queued",
+      "detail": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。",
+      "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
+      "lastUpdate": null,
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js"
+    },
+    {
+      "sequence": 14,
+      "id": "MOD1",
+      "title": "上位優先: モジュール境界と並列開発基盤",
+      "status": "building",
+      "detail": "TypeScriptの共通契約、画面と状態の分離、分野別実行アダプター、依存規則と独立テストを整備。公開障害修正を先行し、既存API/MCP整備と合わせて追加物理モデルより優先。全面React/WASM移行は公開前提にしない。",
+      "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
+      "lastUpdate": "2026-10-18: MCPの公開tool名期待を1つの明示契約fixtureへ集約し、複数protocol試験で件数だけでなく全名称/重複/欠落を比較。新tool追加時に多数の固定件数を直す負担を低減。Node保存復元adapterはscriptsへ置き依存境界を維持。親全体は未完。",
+      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json"
+    },
+    {
+      "sequence": 15,
+      "id": "P0",
+      "title": "対応能力・操作対応表・構造化診断",
+      "status": "building",
+      "detail": "docs/roadmap.mdの同名計画を参照。P0は能力取得と実行組合せ診断を実装中。",
+      "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "lastUpdate": "2026-10-18: studio_archive_resultsを追加し既定35/接続37、live91操作は不変。tool名共通契約で新正式write操作の発見・重複/欠落とannotationを検証。親全体は未完。",
+      "evidence": "src/capabilities.js; tests/capabilities.test.mjs; docs/api-coverage.md; docs/task-critical-path.md"
+    },
+    {
+      "sequence": 16,
+      "id": "P1",
+      "title": "解析入力の共通操作と根拠・事前検査",
+      "status": "building",
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "acceptance": "docs/roadmap.mdのP1の完了条件と全段階の完了判定を満たし、検証証跡を保存する。 今回の診断変更は自動テスト/独立ソルバー参照で検証し、live GUI確認は未実施。",
+      "lastUpdate": "2026-10-18: 過渡音響の明示正timeStepだけで60000step超が確定する入力をsolver既存式で事前拒否。overflow evidenceをJSONで保持。自動刻み/mesh依存予算/全物理精度は未完。",
+      "evidence": "src/acoustic-resolution-contract.js; src/mesh-boundary-preflight.js; src/mesh-resolution-preflight.js; docs/automation.md; skills/airpocket-studio/references/jobs-observations.md; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
+    },
+    {
+      "sequence": 17,
+      "id": "P3",
+      "title": "共通ジョブとブラウザセッション接続",
+      "status": "building",
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "acceptance": "docs/roadmap.mdのP3の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "lastUpdate": "2026-10-18: 復元jobIdを失ってもstudio_restored_jobsで有界再発見（最大20件/JSON30000bytes）、取得可能性と明示nextStepsを追加。実MCP再起動→再発見→status→明示解放を確認。結果/場復元・完全冪等性・公開mutation・背景手動確認は未完。",
+      "evidence": "docs/task-critical-path.md"
+    },
+    {
+      "sequence": 18,
+      "id": "P4",
+      "title": "ビューア操作・再現可能な出力API",
+      "status": "building",
+      "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
+      "acceptance": "docs/roadmap.mdのP4の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
+      "lastUpdate": "2026-10-18: studio_archive_resultsでSHA固定した1〜8解析結果を新v1casearchiveへ原子的/上書き禁止で保存。正式MCP2caseと別process再読で一覧/測定完全一致、元SHA不変、上書き/旧SHA拒否を確認。一般精度/ブラウザ復元/公開gateは未完。 2026-10-18: 独立したfresh Chrome評価で、GUI接続準備後にSkillと公開MCP契約だけから合成軸棒の入力・根拠修復・2解析・比較・PNG/archiveのSHA検証を一巡。0.04/0.08mm・比2、両出力後の入力/結果/ケース/比較設定不変と3拒否を確認。GUI pairing前提、公開HTTPS・全Skill gate・一般精度は未完。",
+      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json"
+    },
+    {
+      "sequence": 19,
+      "id": "AGENTACP1",
+      "title": "自分のCodexをACPで接続するローカル基盤",
+      "status": "queued",
+      "detail": "既存ブラウザ接続にACPエージェントの検出・起動・停止とChatGPTログイン案内を追加する計画。第一段階はCodex。会話はACP、操作は既存MCPを利用し、サブスクとAPI認証を区別する。未着手。",
+      "acceptance": "docs/roadmap.mdのAGENTACP1に従い、Windows標準ブラウザの公開HTTPS/ローカル実接続、認証・scope・失効・取消・再接続・重複実行防止を検証。専門SKILLへ導入/復旧手順を記録。",
+      "lastUpdate": null,
+      "evidence": null
+    },
+    {
+      "sequence": 20,
+      "id": "AGENTCHAT1",
+      "title": "AIの選択・接続設定とアプリ内チャット",
+      "status": "queued",
+      "detail": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。",
+      "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
+      "lastUpdate": null,
+      "evidence": null
+    }
+  ]
+}

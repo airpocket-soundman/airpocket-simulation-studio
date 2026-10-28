@@ -2,7 +2,7 @@
 
 [English](en/agent-chat-boundary.md)
 
-指示55の限定実装。`createAgentChatState` は明示した `describe/prompt/cancel` プロバイダーだけを消費し、`createAgentChatPanel` はその状態をDOMへ表示する。Nodeの既存 `AcpSessionClient` を同じinterfaceとして実子プロセス試験で接続した。本番ブラウザーtransport・実AI認証・モデル選択・MCP委任は未実装であり、mainの利用者画面へ使用不能な会話欄を追加していない。
+指示55の限定実装。`createAgentChatState` は明示した `describe/prompt/cancel` プロバイダーだけを消費し、`createAgentChatPanel` はその状態をDOMへ表示する。Nodeの既存 `AcpSessionClient` を同じinterfaceとして実子プロセス試験で接続した。本番ブラウザーtransport・実AI認証・モデル選択・MCP委任は未実装であり、2026-10-28から会話欄は「自分のLLMに接続する」内に組み込まれるが、ブラウザーにはproviderを設定しないため常に未接続で、入力欄・送信・停止を無効にし「送信できません: 会話sessionの接続経路が設定されていません」と拒否理由を日英で表示する。[証拠](evidence/2026-10-28-chat-main-unavailable.json)。
 
 未接続、開始前、初期化、セッション未作成/作成中、送信可能、応答待ち、取消中、終了処理、終了、失敗、認証不足を区別する。プロバイダーが明示的にreadyの時だけ1prompt送信できる。停止はcancel要求だけで完了とせず、進行中promptが決着するまで取消中を保つ。ACPクライアントは取消後childを閉じるため、次会話には新しいclientを明示的に設定する。プロバイダーの起動/認証をUIが代行することはない。外部で変化した起動状態は呼出側がrefreshする。
 
