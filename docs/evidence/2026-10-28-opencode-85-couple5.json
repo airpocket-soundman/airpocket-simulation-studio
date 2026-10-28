@@ -1,0 +1,29 @@
+{
+  "workOrder": "85-COUPLE5",
+  "task": "COUPLE5",
+  "baseSha": "9445c0a",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": {"synthetic": true, "note": "Synthetic 2-DOF interface operators, not material data", "mass_kg": [0.1, 0.1], "stiffness_N_per_m": [4e3, 4e3], "addedMass_kg": "s*[[0.2,0.1],[0.1,0.2]], s in {0.5,1,2}", "addedStiffness_N_per_m": [[2e3, -5e2], [-5e2, 2e3]], "ambientForce_N": [10, 10], "dt_s": 1e-4},
+  "commands": [
+    {"cmd": "node --test tests/fsi-interface-vector.test.mjs tests/fsi-partitioned.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs", "result": "pass", "tests": 29},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "measured": {
+    "partitionedVsMonolithic_relativeMaxDiff_300steps": 7.304340206037171e-16,
+    "interfaceForceSum_N": 0,
+    "spectralRadius_s1_analytic": 2.999737526247375,
+    "residualRatio_unrelaxed_s1_measured": 2.999737526247376,
+    "divergenceDetected_window4_iterations": 5,
+    "iterationsFirstStep": [
+      {"s": 0.5, "eigenvalues": [-0.50001, -1.49989], "none": "diverging@5", "optimalConstant": 22, "aitken": 3},
+      {"s": 1, "eigenvalues": [-0.99996, -2.99974], "none": "diverging@5", "optimalConstant": 28, "aitken": 3},
+      {"s": 2, "eigenvalues": [-1.99986, -5.99944], "none": "diverging@5", "optimalConstant": 34, "aitken": 3}
+    ]
+  },
+  "notes": [
+    "Constant omega=0.5 at s=1 sits at spectral radius ~1 and stalls to max-iterations (500); at s=2 it is rejected as diverging after 5 iterations.",
+    "Reference is the monolithic solve of the same linear model, not an external dataset."
+  ],
+  "unverified": ["CFD solver coupling", "curved-transfer transpose as interface map", "quasi-Newton (IQN-ILS)", "ALE mesh motion", "nonlinear structure", "browser/worker path"]
+}
