@@ -15,3 +15,5 @@ UTF-8 JSON1MiB、128step、20,000節点、深さ32、graph要素500,000、単一
 [実solver由来のbundle](evidence/2026-10-22-resultcurve-export-bundle.json)と[小さい参照proof](evidence/2026-10-22-resultcurve-export-proof.json)を同梱。10×10×40mm、E=1e9Pa、ν=0、0/25/50/100/50/0Nを実Gmsh/弾性solverで計算した。100Nで伸び0.04mm、engineering stress1MPa、strain0.001と一致する。実測試験片ではない。保存resultは実際の全節点変位・支持反力・適用荷重・残差・kindの正確なsubsetで、未使用tensor/描画/performance配列を省いている。revisionは保存subsetを読み直して計算する。
 
 再生成は `node scripts/create-increment-curve-export-reference.mjs`。試験は参照meshを独立に再計算し、CSV/JSON/SVGの数値・revision一致、失敗点分断、入力不変、改ざん拒否、式注入、XML escape、数値極限、サイズ制限を確認する。今回の機能はRESULTCURVE1の限定単位であり、塑性材料同定や任意結果の正確性を保証しない。
+
+荷重列からの再入力bundle生成: `node scripts/create-increment-curve-bundle.mjs --forces 0,25,50,100,50,0 --out <絶対パス> [--size 4]`。合成の直方体棒について各段階を独立に線形解析し、`{spec,steps}`を新規ファイルへ書く（既存出力は拒否、書込完了後にだけ最終名が現れる）。解が得られない段階は`converged:false`で数値を持たず、他段階から補間しない。合成・線形・独立解のみで、塑性履歴や実測の根拠ではない。
