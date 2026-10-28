@@ -56,7 +56,7 @@ export function createIncrementCurveUi({anchor,document=globalThis.document,lang
    preview.src=links.svg.href;preview.hidden=false;counts={total:artifacts.curve.steps.length,failed:artifacts.curve.steps.filter(step=>step.status==='failed').length};message='検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。';refresh();return artifacts.curve;
   }catch(error){if(current===epoch){clear();fail(error,input);}return null;}finally{if(current===epoch)run.disabled=false;}
  }
- run.onclick=()=>validate();input.oninput=invalidate;
+ run.onclick=()=>validate();input.oninput=()=>{file.value='';invalidate();};
  file.onchange=async()=>{clear();input.value='';const current=epoch;run.disabled=true;message='入力が変更されました。再検証してください。';refresh();try{const selected=file.files?.[0];if(!selected)return;if(!Number.isSafeInteger(selected.size)||selected.size<0||selected.size>INCREMENT_CURVE_UI_MAX_BYTES)throw Error(tr('JSONは最大1MiBです。'));const text=bounded(await selected.text());if(current!==epoch)return;input.value=text;}catch(error){if(current===epoch)fail(error,file);}finally{if(current===epoch)run.disabled=false;}};
  document.addEventListener?.('studio-language',refresh);refresh();
  return {host,validate,clear:invalidate,destroy(){clear();document.removeEventListener?.('studio-language',refresh);host.remove?.();}};
