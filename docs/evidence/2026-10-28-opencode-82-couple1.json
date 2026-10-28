@@ -1,0 +1,27 @@
+{
+  "workOrder": "82-COUPLE1",
+  "task": "COUPLE1",
+  "baseSha": "6566774",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": {"synthetic": true, "note": "Synthetic chain descriptors with placeholder sha256 revisions; no solver runs or physical data"},
+  "commands": [
+    {"cmd": "node --test tests/coupling-chain.test.mjs", "result": "pass", "tests": 5},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "verified": [
+    "current thermal->structural and structural->acoustic chain: valid, current, producers ordered before consumers",
+    "changed thermal revision: stress stage source-revision-changed, downstream acoustic stage upstream-stale, unrelated modal->sound branch unaffected",
+    "transfer kind/physics mismatch and prototype keys rejected (COUPLING_TRANSFER_UNSUPPORTED)",
+    "two-way and self-referencing chains rejected (COUPLING_CYCLE), not iterated",
+    "empty, duplicate, unknown source, invalid revision and unsupported physics rejected with diagnostics"
+  ],
+  "notClaimed": [
+    "automatic chain construction from saved projects or case sets",
+    "UI/MCP display of stale stages",
+    "general thermal stress, vibration radiation or conjugate heat transfer verification",
+    "conservative transfer between non-planar or non-matching meshes",
+    "two-way coupling (COUPLE5)"
+  ],
+  "progressProposal": "COUPLE1 stays queued; add evidence src/coupling-chain.js, tests/coupling-chain.test.mjs as a first bounded step only."
+}
