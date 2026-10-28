@@ -1,0 +1,111 @@
+{
+  "verifiedAt": "2026-10-19T05:00:31.126Z",
+  "pr": 125,
+  "prHead": "f84f55e78b4d19351ef9a151b282dbd4ae3bac0f",
+  "mainHead": "d2d20c09b3dbbf568c596a503276c187267fc490",
+  "prRun": 39201115401,
+  "mainRun": 39201657893,
+  "tests": {
+    "pr": {
+      "total": 1594,
+      "pass": 1591,
+      "skip": 3,
+      "fail": 0
+    },
+    "main": {
+      "total": 1594,
+      "pass": 1591,
+      "skip": 3,
+      "fail": 0
+    },
+    "integrationTargeted": {
+      "total": 50,
+      "pass": 50,
+      "fail": 0
+    },
+    "contractDeclarations": 5
+  },
+  "local": {
+    "cleanBuild": "success",
+    "published": "success",
+    "publishedSeconds": 43.12,
+    "fullLocal": "Not repeated;required CI supplies final suite"
+  },
+  "jobs": {
+    "verify": "success",
+    "deploy": "success",
+    "verify-published": "success"
+  },
+  "manifest": {
+    "revision": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "dirty": false
+  },
+  "releaseTag": {
+    "name": "release-d2d20c09b3dbbf568c596a503276c187267fc490",
+    "type": "tag",
+    "peeled": "d2d20c09b3dbbf568c596a503276c187267fc490"
+  },
+  "publishedProgress": {
+    "verified": true,
+    "revision": "d2d20c09b3dbbf568c596a503276c187267fc490",
+    "sha256": "bccf3375141069940b2ef5ded70bca2f466db7be38ad56faab660d79650b6707",
+    "total": 171,
+    "counts": {
+      "ready": 0,
+      "released": 133,
+      "queued": 19,
+      "building": 14,
+      "checking": 5
+    },
+    "historyStatus": "verified",
+    "historyHead": {
+      "revision": "d2d20c09b3dbbf568c596a503276c187267fc490",
+      "progressSha256": "bccf3375141069940b2ef5ded70bca2f466db7be38ad56faab660d79650b6707",
+      "progressBytes": 361168
+    }
+  },
+  "planningReconciliation": {
+    "addedQueued": [
+      {
+        "id": "AGENTACP1",
+        "status": "queued"
+      },
+      {
+        "id": "AGENTCHAT1",
+        "status": "queued"
+      },
+      {
+        "id": "RESULTCURVE1",
+        "status": "queued"
+      },
+      {
+        "id": "FINITEVISCO1",
+        "status": "queued"
+      }
+    ],
+    "primaryDirtyFiles": "Root verified original five dirty file hashes preserved"
+  },
+  "rootIabEvidence": {
+    "board": ".qa/public-board-d2d20c09.png",
+    "app": ".qa/public-app-d2d20c09.png",
+    "verified": "Board candidate/progress SHA/bytes and latest UIIMPROVE1 record;public app check panel/operation choices/button present;read-only;owned app tab closed"
+  },
+  "featureEvidence": [
+    "docs/evidence/2026-10-19-preflight-gui-spherical-browser.json",
+    "docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json",
+    "docs/evidence/2026-10-19-spherical-cad-region.json",
+    "docs/evidence/2026-10-19-skill-sync.json"
+  ],
+  "limitations": [
+    "Preflight remains incomplete;no physical-validity approval.",
+    "Real browser sphere input/condition and saved-file-MCP revisions match;browser file import/download completion unverified.",
+    "REG2/UIIMPROVE1/VIEWCOMPARE and parent tasks not promoted to full completion."
+  ],
+  "handoff": {
+    "date": "2026-10-19",
+    "planningSnapshotBranch": "codex/planning-snapshot-2026-10-19",
+    "planningSnapshotCommit": "887d72ae18eb47d2c4ec14fd3ac26c64209b7a23",
+    "snapshotBase": "3fc7c97",
+    "warning": "Archival original planning only. Do not merge this old-base branch into current implementation. Planning intent was reconciled in PR125."
+  }
+}

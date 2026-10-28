@@ -15,3 +15,7 @@ test('VTU refuses truncated, compressed, oversized and inconsistent fields',()=>
  const bytes=fixture();assert.throws(()=>parseSu2Vtu(bytes.subarray(0,bytes.length-80)));assert.throws(()=>parseSu2Vtu(bytes,{maxPoints:3}),/limit/);assert.throws(()=>parseSu2Vtu(fixture({badIndex:true})),/connectivity/);assert.throws(()=>parseSu2Vtu(fixture({missingVelocity:true})),/velocity/);
  const compressed=Buffer.from(bytes.toString('latin1').replace('header_type="UInt64"','header_type="UInt64" compressor="vtkZLibDataCompressor"'),'latin1');assert.throws(()=>parseSu2Vtu(compressed),/encoding/);
 });
+
+test('wall y+ summary is dimensionless and never claims physical validation',()=>{
+ const v=parseSu2Vtu(fixture()),s={...v,fields:{...v.fields,Y_Plus:{components:1,values:[.1,.4,.8,1.2]}}},r=summarizeSu2Result(v,s);assert.equal(r.wallYPlus.maximum,1.2);assert.equal(r.wallYPlus.aboveOne,1);assert.equal(r.wallYPlus.units,'dimensionless');assert.equal(r.physicalAccuracyVerified,false);
+});

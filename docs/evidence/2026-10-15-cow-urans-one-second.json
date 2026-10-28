@@ -1,0 +1,1109 @@
+{
+  "date": "2026-10-15",
+  "purpose": "Longer physical-time experiment with unchanged dt and inner iteration budget",
+  "input": {
+    "schemaVersion": 1,
+    "kind": "unsteady-incompressible-rans-sa",
+    "meshUnits": "m",
+    "densityKgM3": 1.204,
+    "dynamicViscosityPaS": 0.0000181,
+    "velocityMps": [
+      -5,
+      0,
+      0
+    ],
+    "wallMarker": "cow",
+    "farfieldMarker": "farfield",
+    "turbulenceModel": "SA",
+    "wallTreatment": "standard-wall-function",
+    "turbulentViscosityRatio": 10,
+    "cflNumber": 5,
+    "multigridLevels": 0,
+    "maxIterations": 12,
+    "residualLog10Target": -5,
+    "provenance": {
+      "mode": "exploratory",
+      "authorization": "User confirmed 20 C air, 5 m/s head-to-tail, no ground",
+      "airProperties": "Assumed representative constant properties at 20 C",
+      "turbulence": "SA eddy-viscosity model, freestream nu factor 10 is an explicit exploratory assumption",
+      "mesh": "Coarse tetrahedral mesh, no prism layers or mesh convergence verification",
+      "extension": "User requested longer physical-time experiment; same dt and inner budget for comparison, not convergence validation"
+    },
+    "timeStepSeconds": 0.02,
+    "timeSteps": 51,
+    "outputEvery": 2
+  },
+  "metadata": {
+    "schemaVersion": 1,
+    "solver": "SU2",
+    "expectedVersion": "8.5.0",
+    "inputRevision": "sha256:66f0068dd1a4c2861011197993d20c7644ca3a6ef823da9d5b37d6bd3fac39e7",
+    "executionSettled": true,
+    "pressureCriterionMet": true,
+    "allReportedResidualsMet": false,
+    "numericallyConverged": false,
+    "residualChecks": [
+      {
+        "name": "rms[P]",
+        "value": -5.141359648,
+        "target": -5,
+        "met": true
+      },
+      {
+        "name": "rms[U]",
+        "value": -4.110002249,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[V]",
+        "value": -4.161349476,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[W]",
+        "value": -4.468838449,
+        "target": -5,
+        "met": false
+      },
+      {
+        "name": "rms[nu]",
+        "value": -4.903747595,
+        "target": -5,
+        "met": false
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "SU2_WALL_MODEL_NOT_CONVERGED",
+        "severity": "warning",
+        "occurrences": 623,
+        "lastAffectedPoints": 115,
+        "maximumAffectedPoints": 482,
+        "message": "Wall-function y+ computation did not converge at some points.",
+        "suggestions": [
+          "Inspect the wall y+ distribution and near-wall mesh.",
+          "Refine or replace the near-wall mesh and verify a supported wall treatment.",
+          "Do not use this result as a validated drag or pressure prediction."
+        ]
+      },
+      {
+        "code": "SU2_TIME_CONVERGENCE_UNVERIFIED",
+        "severity": "warning",
+        "message": "Inner convergence across all physical steps has not been certified; this series is provisional.",
+        "suggestions": [
+          "Inspect residuals at every physical time step.",
+          "Refine wall treatment and test smaller time steps before interpreting wake dynamics."
+        ]
+      }
+    ],
+    "physicalValidationComplete": false,
+    "convergenceCriterion": "All five residual fields are stopping criteria within each physical time step; final assessment alone does not certify earlier steps.",
+    "provisional": true,
+    "temporal": {
+      "timeStepSeconds": 0.02,
+      "requestedSteps": 51,
+      "outputEvery": 2,
+      "startup": "uniform-initial-flow",
+      "lastTimeIndex": 50,
+      "allTimeStepsConverged": false,
+      "warning": "Final residual checks do not certify convergence of every physical time step."
+    },
+    "history": {
+      "Time_Iter": 50,
+      "Outer_Iter": 0,
+      "Inner_Iter": 11,
+      "Cur_Time": 1,
+      "rms[P]": -5.141359648,
+      "rms[U]": -4.110002249,
+      "rms[V]": -4.161349476,
+      "rms[W]": -4.468838449,
+      "rms[nu]": -4.903747595
+    },
+    "artifacts": [
+      {
+        "name": "flow_00000.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:6e4b481fe8b5ea0cc4b10275e489326dffb3fd78092f766219c9c6684528c5f8"
+      },
+      {
+        "name": "flow_00002.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:8220cc6cdc6f5f259e8f3f58467aca905bd12dbd6474ba4c05e92baadff45b6e"
+      },
+      {
+        "name": "flow_00004.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:9702a1aed053d4220831e85b5afec15312ffb94d9876f8a189325244e42c29b5"
+      },
+      {
+        "name": "flow_00006.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:7de57d552ab1627e8dd8c75090b56a218404d51c01c52ccfc8bba0f9655edc86"
+      },
+      {
+        "name": "flow_00008.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:248587b23db60df555d3d6760af13bed3a9bb7c231729c28a0ef238d681edab1"
+      },
+      {
+        "name": "flow_00010.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:52227ab6992143880944e28280be3aab3cb69051b129bab042cfac59530720f7"
+      },
+      {
+        "name": "flow_00012.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:baebb7b7abd24bc0647ae8b8c52c4c4bfcd27e2e24db06ad471ba1772b4dc1a8"
+      },
+      {
+        "name": "flow_00014.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:d0994fcf137216f2222edaf12c475c7845f1ba15ccf9284a3a115271d44371a8"
+      },
+      {
+        "name": "flow_00016.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:ae4e273a322ff436785308e72f689b24ac3f73952a4c23b10060c0bb4d080a01"
+      },
+      {
+        "name": "flow_00018.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:29e2d5f34ccfbaa294a616b69f5ddb99ab9f9e012e4e6eff40862dafe25e1e3c"
+      },
+      {
+        "name": "flow_00020.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:8a375bf4fa9ce0fc37e23798aa8ec9fb7b84d2594ab2415ae70598bbd6bfbaa4"
+      },
+      {
+        "name": "flow_00022.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:566dcbf583cb6c1c40282c12087f7c37d37d4a45eec842f900b65c644d417392"
+      },
+      {
+        "name": "flow_00024.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:a66518c9a920985d99183b4c7241e477014e211d8cbfdf98f48dd68ff30713cf"
+      },
+      {
+        "name": "flow_00026.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:6816a079d6cfcbc0f6422166576d467d8af2707f69c7ff66cd56b2db9e04d8eb"
+      },
+      {
+        "name": "flow_00028.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:01d91de20bfc01f4c5dfcfdf949f1b0e3d207c9f1272cbd145c195da2fc502d8"
+      },
+      {
+        "name": "flow_00030.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:15e8b7c0811ec08adcafa3b6d3ed1fd31f68e60f58ef72bf038f1f6f51b2baa6"
+      },
+      {
+        "name": "flow_00032.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:2d1670822f581df2bcbadd2d6ba40520eff84f3b0ba342d4e79461edc5965131"
+      },
+      {
+        "name": "flow_00034.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:f7417a47ffe91dae87e36d7b885fc4214efd8b8b328c7c412b76fd01cffa77b0"
+      },
+      {
+        "name": "flow_00036.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:da501811bae37be3f271952ca0498719b4e9fbdb2f1416079060d8ebdecaaac2"
+      },
+      {
+        "name": "flow_00038.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:58c41badc9657898e3d494aa26929319cfb0a2c832442a4a56c3353d71732897"
+      },
+      {
+        "name": "flow_00040.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:1949cf4eb9d4e174ff4c53d98671aedbaae6868adc3bf03f4ee69d33e8744896"
+      },
+      {
+        "name": "flow_00042.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:dcbdce1718dbb0c7ad160e48b0179e72fe75fee253ccb6bd1a0f33453f89df10"
+      },
+      {
+        "name": "flow_00044.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:178db33f63cd9ddb6917ccf3c1c3fdb9e35d3bf93e12da77335cf58a6e0da399"
+      },
+      {
+        "name": "flow_00046.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:5c3f3f2cc085c6724ad61816ca964426f1b7d8898ac0025446767c45aa529d13"
+      },
+      {
+        "name": "flow_00048.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:8407c961780e8288c29a99b57d324d1b342d90172dbeeb43faad628f91c1312a"
+      },
+      {
+        "name": "flow_00050.vtu",
+        "bytes": 1406072,
+        "sha256": "sha256:3af087464f32375bd4256286544de1d608d7b1396d3bf7a4206572ecbd309b5e"
+      },
+      {
+        "name": "surface_flow_00000.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:f1df0b3d81fea9ccb462f08cdba89ed1c537b6e3758ba198f5ac7b400a0b6a65"
+      },
+      {
+        "name": "surface_flow_00002.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:3c4fde7ddc3e79702e868b80144eb3796f346bb5b57c90aac0d3268295b5e6f2"
+      },
+      {
+        "name": "surface_flow_00004.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:cac2f995fd91e07306fce23417f08bfa10ba87bf741293c5c5a12a5734d4254e"
+      },
+      {
+        "name": "surface_flow_00006.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:3e5d144362628714e506fe798c365c0be3fb3de57a1e5cad0c87c8f849a23b9c"
+      },
+      {
+        "name": "surface_flow_00008.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:f4c3c5ac2e50fc43c27b537695c20b2c4ac376dec48388cd00241733ff432b69"
+      },
+      {
+        "name": "surface_flow_00010.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:e71ee3e5726b661efc31acdc3572bd0d843c9184730155d937363d9bb9aadfe9"
+      },
+      {
+        "name": "surface_flow_00012.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:94f545dda3ef55d6ee04fd05b757e099b4ffbc75c38bfce6ce87a3b3966672e0"
+      },
+      {
+        "name": "surface_flow_00014.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:592c099601f711dc6075bed1c67183384510067a94313968291b1e002fe72fab"
+      },
+      {
+        "name": "surface_flow_00016.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:a553f933c728133ca3d3ef8e762c46f442d080425468e2025ad929ec52901349"
+      },
+      {
+        "name": "surface_flow_00018.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:8fe5c344292eae65f83f797a0093753206afb005c0a3d38f49a1e4320138e0fc"
+      },
+      {
+        "name": "surface_flow_00020.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:0346b2bd5aaeaf30a43d2393dd0e2e3a77117ae495aab3f2726619a3b8548af3"
+      },
+      {
+        "name": "surface_flow_00022.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:e9ad83055b69ec83f1dfae668fae83748d8c90da7b2aa177fef64a1e4c97991f"
+      },
+      {
+        "name": "surface_flow_00024.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:53c26d7744b3d47e0ee9ea6645dd1daecc8981e9d996ddb8aee47fb8583418cf"
+      },
+      {
+        "name": "surface_flow_00026.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:95af9635040f6186c273c235bb038c93dfd0377ff0aa4a10dc0d7c2bdfaaa058"
+      },
+      {
+        "name": "surface_flow_00028.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:62f3302e9196bba491fa3adadb07cad151ecc85d5197e299bf23366308c5eb21"
+      },
+      {
+        "name": "surface_flow_00030.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:3ced0695bdd235aed55fd350abbeb3527efdc3e24ebe0d944e7e2191f214c713"
+      },
+      {
+        "name": "surface_flow_00032.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:90008287b249c340a622623391efbb103d6ee6157a43413f5a2509b96eaf6409"
+      },
+      {
+        "name": "surface_flow_00034.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:083d9cde5e212825dad651490e963fee1b4baefbdc609f0c410bdfa79af94f74"
+      },
+      {
+        "name": "surface_flow_00036.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:94e41e1a5224c4916a7d32d3e1d9322e5aff46ba5f9fc2c9a6c9574a40133811"
+      },
+      {
+        "name": "surface_flow_00038.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:8c2c826b1b81a780e70cd78597b202290bf24c3e1aa602e8a40da555c7e8dc1a"
+      },
+      {
+        "name": "surface_flow_00040.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:65d8ac241ab2d3c9ada734b8808302dbc361831db73c74ff0a88a63f8300899a"
+      },
+      {
+        "name": "surface_flow_00042.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:36ed9eea42cd813bde9d9a75477b04761f1bc9d575bf777ff9832877370132b8"
+      },
+      {
+        "name": "surface_flow_00044.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:f87012320e83ab5993a78aeff665601fdce5a19c605c76072b27da94ae758780"
+      },
+      {
+        "name": "surface_flow_00046.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:0ba20a4928dfd76cf15b38b15b90311c8d6ee5352d53e4ba6dc9dcb28af296dc"
+      },
+      {
+        "name": "surface_flow_00048.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:a012e756f2b02389434ac5e59d7fc73373c9c7cb0d5cbf2bd2e106ebfc8a3915"
+      },
+      {
+        "name": "surface_flow_00050.vtu",
+        "bytes": 245316,
+        "sha256": "sha256:0c440db001165dc3c0b483852fe5d6c3029347aff9091c983631b886f248ad2f"
+      },
+      {
+        "name": "history.csv",
+        "bytes": 7956,
+        "sha256": "sha256:fe32e11dbb3007f0b30079374eb50921b54f2062c9cb69680ed8d89e1ec6f75f"
+      }
+    ]
+  },
+  "ranges": [
+    {
+      "index": 0,
+      "timeIndex": 0,
+      "timeSeconds": 0,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -135.07632446289062,
+        "maximum": 128.5970001220703
+      },
+      "surfacePressureRange": {
+        "minimum": -135.07632446289062,
+        "maximum": 128.5970001220703
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 7.437991348506095
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 1,
+      "timeIndex": 2,
+      "timeSeconds": 0.04,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -48.63164138793945,
+        "maximum": 60.43879318237305
+      },
+      "surfacePressureRange": {
+        "minimum": -48.63164138793945,
+        "maximum": 60.43879318237305
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 7.813510737207464
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 2,
+      "timeIndex": 4,
+      "timeSeconds": 0.08,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -157.79908752441406,
+        "maximum": 68.04505920410156
+      },
+      "surfacePressureRange": {
+        "minimum": -157.79908752441406,
+        "maximum": 68.04505920410156
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 15.055512190734198
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 3,
+      "timeIndex": 6,
+      "timeSeconds": 0.12,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -28.916610717773438,
+        "maximum": 35.37770080566406
+      },
+      "surfacePressureRange": {
+        "minimum": -28.916610717773438,
+        "maximum": 35.37770080566406
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 6.359840890643334
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 4,
+      "timeIndex": 8,
+      "timeSeconds": 0.16,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -28.50869369506836,
+        "maximum": 36.006534576416016
+      },
+      "surfacePressureRange": {
+        "minimum": -28.50869369506836,
+        "maximum": 36.006534576416016
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.983480847366584
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 5,
+      "timeIndex": 10,
+      "timeSeconds": 0.2,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -28.007305145263672,
+        "maximum": 35.32220458984375
+      },
+      "surfacePressureRange": {
+        "minimum": -28.007305145263672,
+        "maximum": 35.32220458984375
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.985979322040306
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 6,
+      "timeIndex": 12,
+      "timeSeconds": 0.24,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -27.354257583618164,
+        "maximum": 34.549556732177734
+      },
+      "surfacePressureRange": {
+        "minimum": -27.354257583618164,
+        "maximum": 34.549556732177734
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.968378066624136
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 7,
+      "timeIndex": 14,
+      "timeSeconds": 0.28,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -27.037179946899414,
+        "maximum": 34.4815673828125
+      },
+      "surfacePressureRange": {
+        "minimum": -27.037179946899414,
+        "maximum": 34.4815673828125
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.975609662305599
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 8,
+      "timeIndex": 16,
+      "timeSeconds": 0.32,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -24.683996200561523,
+        "maximum": 31.281953811645508
+      },
+      "surfacePressureRange": {
+        "minimum": -24.683996200561523,
+        "maximum": 31.281953811645508
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.923900059824828
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 9,
+      "timeIndex": 18,
+      "timeSeconds": 0.36,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -26.469135284423828,
+        "maximum": 34.03114318847656
+      },
+      "surfacePressureRange": {
+        "minimum": -26.469135284423828,
+        "maximum": 34.03114318847656
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.910793748545343
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 10,
+      "timeIndex": 20,
+      "timeSeconds": 0.4,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.980899810791016,
+        "maximum": 34.261722564697266
+      },
+      "surfacePressureRange": {
+        "minimum": -25.980899810791016,
+        "maximum": 34.261722564697266
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.899793379898334
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 11,
+      "timeIndex": 22,
+      "timeSeconds": 0.44,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.92717170715332,
+        "maximum": 34.197174072265625
+      },
+      "surfacePressureRange": {
+        "minimum": -25.92717170715332,
+        "maximum": 34.197174072265625
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.900987119085751
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 12,
+      "timeIndex": 24,
+      "timeSeconds": 0.48,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -26.012540817260742,
+        "maximum": 34.002201080322266
+      },
+      "surfacePressureRange": {
+        "minimum": -26.012540817260742,
+        "maximum": 34.002201080322266
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.898038831315131
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 13,
+      "timeIndex": 26,
+      "timeSeconds": 0.52,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.969404220581055,
+        "maximum": 33.87472915649414
+      },
+      "surfacePressureRange": {
+        "minimum": -25.969404220581055,
+        "maximum": 33.87472915649414
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.88837471978327
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 14,
+      "timeIndex": 28,
+      "timeSeconds": 0.56,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.807661056518555,
+        "maximum": 33.89289474487305
+      },
+      "surfacePressureRange": {
+        "minimum": -25.807661056518555,
+        "maximum": 33.89289474487305
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.8778562071578735
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 15,
+      "timeIndex": 30,
+      "timeSeconds": 0.6,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.694459915161133,
+        "maximum": 33.909889221191406
+      },
+      "surfacePressureRange": {
+        "minimum": -25.694459915161133,
+        "maximum": 33.909889221191406
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.869155505787031
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 16,
+      "timeIndex": 32,
+      "timeSeconds": 0.64,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -89.50640106201172,
+        "maximum": 43.48316955566406
+      },
+      "surfacePressureRange": {
+        "minimum": -89.50640106201172,
+        "maximum": 43.48316955566406
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.911131840021539
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 17,
+      "timeIndex": 34,
+      "timeSeconds": 0.68,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.602691650390625,
+        "maximum": 34.12095260620117
+      },
+      "surfacePressureRange": {
+        "minimum": -25.602691650390625,
+        "maximum": 34.12095260620117
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.870805242132076
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 18,
+      "timeIndex": 36,
+      "timeSeconds": 0.72,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.65264129638672,
+        "maximum": 33.507232666015625
+      },
+      "surfacePressureRange": {
+        "minimum": -25.65264129638672,
+        "maximum": 33.507232666015625
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.867198840822058
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 19,
+      "timeIndex": 38,
+      "timeSeconds": 0.76,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.580947875976562,
+        "maximum": 33.7567138671875
+      },
+      "surfacePressureRange": {
+        "minimum": -25.580947875976562,
+        "maximum": 33.7567138671875
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.869223838441586
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 20,
+      "timeIndex": 40,
+      "timeSeconds": 0.8,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.495088577270508,
+        "maximum": 33.73073196411133
+      },
+      "surfacePressureRange": {
+        "minimum": -25.495088577270508,
+        "maximum": 33.73073196411133
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.865418601305883
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 21,
+      "timeIndex": 42,
+      "timeSeconds": 0.84,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.491350173950195,
+        "maximum": 33.69025802612305
+      },
+      "surfacePressureRange": {
+        "minimum": -25.491350173950195,
+        "maximum": 33.69025802612305
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.8548988313815595
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 22,
+      "timeIndex": 44,
+      "timeSeconds": 0.88,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.46759796142578,
+        "maximum": 33.6272087097168
+      },
+      "surfacePressureRange": {
+        "minimum": -25.46759796142578,
+        "maximum": 33.6272087097168
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.843321219313525
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 23,
+      "timeIndex": 46,
+      "timeSeconds": 0.92,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.60268211364746,
+        "maximum": 34.29713821411133
+      },
+      "surfacePressureRange": {
+        "minimum": -25.60268211364746,
+        "maximum": 34.29713821411133
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.858186664623268
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 24,
+      "timeIndex": 48,
+      "timeSeconds": 0.96,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.384658813476562,
+        "maximum": 33.58888244628906
+      },
+      "surfacePressureRange": {
+        "minimum": -25.384658813476562,
+        "maximum": 33.58888244628906
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.828203283909288
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    },
+    {
+      "index": 25,
+      "timeIndex": 50,
+      "timeSeconds": 1,
+      "schemaVersion": 1,
+      "coordinates": "m",
+      "pressure": "Pa (incompressible gauge)",
+      "velocity": "m/s",
+      "volumePoints": 7716,
+      "volumeCells": 37455,
+      "surfacePoints": 2133,
+      "surfaceCellCount": 4262,
+      "pressureRange": {
+        "minimum": -25.37360191345215,
+        "maximum": 33.54871368408203
+      },
+      "surfacePressureRange": {
+        "minimum": -25.37360191345215,
+        "maximum": 33.54871368408203
+      },
+      "speedRange": {
+        "minimum": 0,
+        "maximum": 5.822997981479548
+      },
+      "provisional": true,
+      "physicalAccuracyVerified": false
+    }
+  ],
+  "presentation": {
+    "savedFrames": 26,
+    "intervalSeconds": 0.04,
+    "gifFramesPerSecond": 5,
+    "slowdown": 5
+  },
+  "physicalValidationComplete": false,
+  "limitations": [
+    "Unconverged inner residuals and wall warnings remain",
+    "One-second experiment does not validate developed turbulent wake",
+    "No geometry, mesh, time-step or inner-budget refinement in this extension",
+    "Direct native execution only for this longer run; prior six-frame case established host equivalence"
+  ]
+}
