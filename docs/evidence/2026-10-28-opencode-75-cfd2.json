@@ -1,0 +1,294 @@
+{
+ "workOrder": "75-CFD2",
+ "task": "CFD2",
+ "date": "2026-10-28",
+ "baseSha": "e776ff1dc7f0cf13dfa049dc4d255734f7c55b08",
+ "inputs": {
+  "solver": {
+   "path": "src/unsteady-ns-periodic.js",
+   "sha256": "b55a9800972bc29251ee2738765f74fe20d7649dbac48f7833328fbc8ab87adf"
+  },
+  "script": {
+   "path": "scripts/experimental/verify-unsteady-ns-periodic.mjs",
+   "sha256": "cb8497fe08e483ff945fcf4243555552695bc9ac27891343dc9390142e4d7b2d"
+  },
+  "synthetic": true,
+  "domain": "[0,2pi)^2 doubly periodic, nondimensional"
+ },
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz"
+ },
+ "command": "node scripts/experimental/verify-unsteady-ns-periodic.mjs",
+ "spatial": [
+  {
+   "case": "taylor-green-2d nu=0.01",
+   "kinematicViscosity": 0.01,
+   "endTime": 1,
+   "rows": [
+    {
+     "cells": 16,
+     "steps": 7,
+     "timeStep": {
+      "min": 0.03138437289101548,
+      "max": 0.16272576188626386
+     },
+     "relativeL2VelocityError": 0.0002557360536751532,
+     "maxAbsDivergenceAllSteps": 5.654319433712919e-16,
+     "finalMeanVelocity": [
+      4.553649124439119e-18,
+      -7.589415207398531e-18
+     ],
+     "finalKineticEnergy": 9.48746238872727,
+     "exactKineticEnergy": 9.482611677177944,
+     "kineticEnergyRelativeError": 0.0005115375082793694,
+     "wallMilliseconds": 4.3
+    },
+    {
+     "cells": 32,
+     "steps": 13,
+     "timeStep": {
+      "min": 0.044673355010946936,
+      "max": 0.08030860880717904
+     },
+     "relativeL2VelocityError": 0.00006417477500957769,
+     "maxAbsDivergenceAllSteps": 1.1308638867425838e-15,
+     "finalMeanVelocity": [
+      9.486769009248164e-19,
+      -2.8189256484623115e-18
+     ],
+     "finalKineticEnergy": 9.483828805172937,
+     "exactKineticEnergy": 9.482611677177944,
+     "kineticEnergyRelativeError": 0.00012835366842267604,
+     "wallMilliseconds": 12.6,
+     "observedOrderVsPrevious": 1.9945773281245094
+    },
+    {
+     "cells": 64,
+     "steps": 26,
+     "timeStep": {
+      "min": 0.007683753854451303,
+      "max": 0.04007262291053403
+     },
+     "relativeL2VelocityError": 0.000016058777741933682,
+     "maxAbsDivergenceAllSteps": 3.392591660227751e-15,
+     "finalMeanVelocity": [
+      -7.623296525288703e-19,
+      6.5221536938581126e-18
+     ],
+     "finalKineticEnergy": 9.482916237930043,
+     "exactKineticEnergy": 9.482611677177944,
+     "kineticEnergyRelativeError": 0.000032117813369092474,
+     "wallMilliseconds": 56.8,
+     "observedOrderVsPrevious": 1.9986442415494114
+    },
+    {
+     "cells": 128,
+     "steps": 51,
+     "timeStep": {
+      "min": 0.008384844527287494,
+      "max": 0.020026180734129987
+     },
+     "relativeL2VelocityError": 0.0000040156377762181135,
+     "maxAbsDivergenceAllSteps": 6.785183320455502e-15,
+     "finalMeanVelocity": [
+      -1.6390087529370712e-19,
+      3.4457300294304938e-18
+     ],
+     "finalKineticEnergy": 9.4826878347983,
+     "exactKineticEnergy": 9.482611677177944,
+     "kineticEnergyRelativeError": 0.000008031291689247766,
+     "wallMilliseconds": 411.3,
+     "observedOrderVsPrevious": 1.9996610468981377
+    }
+   ]
+  },
+  {
+   "case": "taylor-green-2d nu=0.001",
+   "kinematicViscosity": 0.001,
+   "endTime": 1,
+   "rows": [
+    {
+     "cells": 16,
+     "steps": 7,
+     "timeStep": {
+      "min": 0.0382975410920795,
+      "max": 0.16041058866459365
+     },
+     "relativeL2VelocityError": 0.000025570665387629358,
+     "maxAbsDivergenceAllSteps": 5.654319433712919e-16,
+     "finalMeanVelocity": [
+      2.168404344971009e-19,
+      -1.4094628242311558e-17
+     ],
+     "finalKineticEnergy": 9.830707571334246,
+     "exactKineticEnergy": 9.83020483514962,
+     "kineticEnergyRelativeError": 0.00005114198463362918,
+     "wallMilliseconds": 1.6
+    },
+    {
+     "cells": 32,
+     "steps": 13,
+     "timeStep": {
+      "min": 0.05214152868861799,
+      "max": 0.07905664676247905
+     },
+     "relativeL2VelocityError": 0.000006417292499689122,
+     "maxAbsDivergenceAllSteps": 1.1308638867425838e-15,
+     "finalMeanVelocity": [
+      6.776263578034403e-19,
+      -2.9544509200229996e-18
+     ],
+     "finalKineticEnergy": 9.830331002153967,
+     "exactKineticEnergy": 9.83020483514962,
+     "kineticEnergyRelativeError": 0.000012834626181401632,
+     "wallMilliseconds": 7.9,
+     "observedOrderVsPrevious": 1.9944530544263126
+    },
+    {
+     "cells": 64,
+     "steps": 26,
+     "timeStep": {
+      "min": 0.016140393155473887,
+      "max": 0.03939154579042066
+     },
+     "relativeL2VelocityError": 0.000001605866209358487,
+     "maxAbsDivergenceAllSteps": 2.8271597168564595e-15,
+     "finalMeanVelocity": [
+      -1.0730213375817477e-17,
+      2.761327408049019e-18
+     ],
+     "finalKineticEnergy": 9.830236407162511,
+     "exactKineticEnergy": 9.83020483514962,
+     "kineticEnergyRelativeError": 0.0000032117349964000397,
+     "wallMilliseconds": 51.8,
+     "observedOrderVsPrevious": 1.9986130410368794
+    },
+    {
+     "cells": 128,
+     "steps": 51,
+     "timeStep": {
+      "min": 0.01701038333826843,
+      "max": 0.019678738937484955
+     },
+     "relativeL2VelocityError": 4.0156305446400763e-7,
+     "maxAbsDivergenceAllSteps": 6.785183320455502e-15,
+     "finalMeanVelocity": [
+      7.572474548453445e-18,
+      -1.926576438529906e-18
+     ],
+     "finalKineticEnergy": 9.830212730045334,
+     "exactKineticEnergy": 9.83020483514962,
+     "kineticEnergyRelativeError": 8.031262670460393e-7,
+     "wallMilliseconds": 428.6,
+     "observedOrderVsPrevious": 1.9996532552828006
+    }
+   ]
+  },
+  {
+   "case": "viscous-shear-wave k=2",
+   "kinematicViscosity": 0.1,
+   "endTime": 1,
+   "rows": [
+    {
+     "cells": 16,
+     "steps": 6,
+     "timeStep": {
+      "min": 0.018645571496218816,
+      "max": 0.2264838838355961
+     },
+     "relativeL2VelocityError": 0.02034033758413776,
+     "maxAbsDivergenceAllSteps": 0,
+     "finalMeanVelocity": [
+      -5.0306980803327406e-17,
+      0
+     ],
+     "finalKineticEnergy": 4.616940441340626,
+     "wallMilliseconds": 2
+    },
+    {
+     "cells": 32,
+     "steps": 13,
+     "timeStep": {
+      "min": 0.07472458739787247,
+      "max": 0.07710628438351061
+     },
+     "relativeL2VelocityError": 0.005126691739130681,
+     "maxAbsDivergenceAllSteps": 0,
+     "finalMeanVelocity": [
+      -2.6942423986264785e-17,
+      0
+     ],
+     "finalKineticEnergy": 4.480286349550622,
+     "wallMilliseconds": 6.7,
+     "observedOrderVsPrevious": 1.9882435652860992
+    },
+    {
+     "cells": 64,
+     "steps": 52,
+     "timeStep": {
+      "min": 0.01689487411023949,
+      "max": 0.019276571095877652
+     },
+     "relativeL2VelocityError": 0.0012842708049610047,
+     "maxAbsDivergenceAllSteps": 0,
+     "finalMeanVelocity": [
+      -1.4457835970094202e-16,
+      0
+     ],
+     "finalKineticEnergy": 4.446097145387799,
+     "wallMilliseconds": 97.2,
+     "observedOrderVsPrevious": 1.9970787078097627
+    },
+    {
+     "cells": 128,
+     "steps": 208,
+     "timeStep": {
+      "min": 0.0024374457883297174,
+      "max": 0.004819142773969413
+     },
+     "relativeL2VelocityError": 0.00032122444689360567,
+     "maxAbsDivergenceAllSteps": 0,
+     "finalMeanVelocity": [
+      -9.088663524038643e-19,
+      0
+     ],
+     "finalKineticEnergy": 4.437548646928463,
+     "wallMilliseconds": 1616.9,
+     "observedOrderVsPrevious": 1.9992958463468011
+    }
+   ]
+  }
+ ],
+ "temporal": {
+  "case": "taylor-green-2d nu=0.01 cells=32 fixed dt self-convergence",
+  "rows": [
+   {
+    "fixedTimeStep": 0.1,
+    "maxAbsUDifferenceVsDt0125": 6.4146465916792295e-12
+   },
+   {
+    "fixedTimeStep": 0.05,
+    "maxAbsUDifferenceVsDt0125": 7.877032359715486e-13,
+    "observedOrderVsPrevious": 3.025645676116725
+   },
+   {
+    "fixedTimeStep": 0.025,
+    "maxAbsUDifferenceVsDt0125": 8.58202398035246e-14,
+    "observedOrderVsPrevious": 3.1982623650230666
+   }
+  ]
+ },
+ "notVerified": [
+  "walls / no-slip boundaries and inflow-outflow",
+  "3D",
+  "unstructured or curved meshes",
+  "turbulence models (none implemented)",
+  "vortex shedding / Strouhal against reference",
+  "GUI, API, MCP, worker integration",
+  "browser runtime measurement"
+ ],
+ "claims": "Laminar periodic transient NS kernel verified against exact solutions only; does not complete CFD2."
+}

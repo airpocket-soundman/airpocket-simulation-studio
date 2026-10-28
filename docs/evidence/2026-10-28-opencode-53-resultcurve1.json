@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "workOrder": "53-RESULTCURVE1",
+  "parentTaskId": "RESULTCURVE1",
+  "parentTaskStatusAfterWork": "building",
+  "scope": "Real-browser operation of the single and comparison increment-curve UIs with the bundled synthetic Tet4 references, artifact capture, and independent comparison with the formal MCP curve service. One input-reselection defect fixed. Not parent RESULTCURVE1 acceptance, not native/published verification, not general physical accuracy.",
+  "baseCommit": "e776ff1",
+  "workOrderBaseCommit": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "baseNote": "Run against origin/main e776ff1 (later than the work-order base); the work order file exists only in the primary checkout's untracked docs/opencode-work-orders-2026-10-23.",
+  "branch": "claude/resultcurve1-browser-53",
+  "environment": {
+    "browser": "Claude desktop built-in browser pane (Chromium), Vite dev server on 127.0.0.1:5353",
+    "node": "v24.11.1",
+    "os": "Windows 11 Pro"
+  },
+  "inputs": {
+    "synthetic": true,
+    "single": {"file": "public/examples/increment-curve-reference.json", "sha256": "cf063c1b25346ee852cd56de63c880fb6e9b8aa8cfac486bc89d48adf820d565"},
+    "comparison": {"files": ["public/examples/increment-comparison-a.json", "public/examples/increment-comparison-b.json"], "requestSha256": "41d03d0b1f722700959b44cb50f02ce424bc50b2aff20d3f0eda8a878b2b3495", "requestMeaning": "JSON.stringify({bundles:[A,B]}), identical to the text the UI places in its textarea after file selection"}
+  },
+  "operationMethod": {
+    "realInBrowser": ["page load and panel rendering", "Validate button real mouse click (single)", "Enter key on focused compare button (comparison)", "JP/EN toggle real mouse click", "Tab key focus movement run -> instructions -> CSV", "390x844 viewport emulation layout measurement", "artifact capture by fetching the page's own blob: URLs", "SHA-256 via crypto.subtle in page"],
+    "scriptedInBrowser": ["file input populated via DataTransfer + change event (OS file dialog cannot be driven)", "textarea value set + input event for invalid-bundle cases", "reselect-during-validation race"],
+    "notReal": "No OS file picker, no OS download dialog; downloads were verified as blob href + download attribute, not as files saved to disk."
+  },
+  "results": {
+    "single": {
+      "status": "pass",
+      "statusText": "検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。 段階: 4、失敗による空白: 1。",
+      "artifacts": {
+        "csv": {"utf8Bytes": 1926, "sha256": "cf24061806378e037edd01522081e6573e95367f0aa40abf4b12e76756737f62", "download": "increment-curve.csv"},
+        "json": {"utf8Bytes": 4686, "sha256": "bcfd7ed14e50b2a7ee0a3a09d9a338b0b90ee74d6e20f7cd336e3d1e21189ec4", "download": "increment-curve.json"},
+        "svg": {"utf8Bytes": 3233, "sha256": "3681d6716b39456e5ad60c3303b29fb3c858c305f4d208f820f5483f03a39678", "download": "increment-curve.svg", "externalReferences": false}
+      },
+      "csvDataRows": 4,
+      "csvValues": [
+        {"step": 1, "extensionMm": 0.006, "tensileForceN": 10, "engineeringStressPa": 200000, "engineeringStrain": 0.0006},
+        {"step": 2, "status": "failed", "numericCellsEmpty": true},
+        {"step": 3, "extensionMm": 0.012, "tensileForceN": 20, "engineeringStressPa": 400000, "engineeringStrain": 0.0012}
+      ],
+      "svgLabels": ["Gauge extension [mm]", "Tensile force [N]", "3 converged / 1 failed; lines do not cross failed steps"],
+      "fullSizeLink": "not present in single UI (exists only in comparison UI); not added, outside the order's minimal-fix scope"
+    },
+    "comparison": {
+      "status": "pass",
+      "statusText": "検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。 曲線: 2、失敗による空白: 2。",
+      "artifacts": {
+        "csv": {"utf8Bytes": 3352, "sha256": "1e80b53b060be26efbf063f76395a4d8347f0ef6b937f3420829ef438536d066"},
+        "json": {"utf8Bytes": 10915, "sha256": "fc1a9385138c6a4b8d3f0d58f499ac0b26c33521f0c90515244be32055c11396"},
+        "svg": {"utf8Bytes": 9951, "sha256": "2f8e1598158d2d787a8336eaa3ef9411c8ea7f48e476aa7bce64206b1735e0af", "externalReferences": false, "lineElements": 8}
+      },
+      "csvDataRows": 8,
+      "referenceA": {"curveId": "synthetic-tet-a", "converged": [0, 1, 3], "failed": [2], "step3": {"extensionMm": 0.012, "tensileForceN": 20, "engineeringStressPa": 400000}},
+      "referenceB": {"curveId": "synthetic-tet-b", "converged": [0, 1, 3], "failed": [2], "step3": {"extensionMm": 0.012, "tensileForceN": 40, "engineeringStressPa": 800000}},
+      "units": ["N", "mm", "Pa", "dimensionless", "mm^2"],
+      "legend": ["#1 synthetic-tet-a", "#2 synthetic-tet-b", "Engineering strain [dimensionless]", "Engineering stress [Pa]"],
+      "fullSizeLink": {"hidden": false, "hrefEqualsSvgBlob": true, "target": "_blank", "rel": "noopener", "textEn": "Open full-size graph"},
+      "previewSrcEqualsSvgBlob": true
+    },
+    "mcpIndependentComparison": {
+      "status": "pass",
+      "method": "scripts/increment-curve-service.mjs readIncrementCurve on the same inputs in Node, no publication",
+      "allSixSha256Match": true,
+      "note": "Browser-side byte counts for SVG were UTF-16 lengths (3230 / 9945); UTF-8 lengths and hashes are identical to the MCP response."
+    },
+    "language": {"status": "pass", "enStatusSingle": "Validated. ... Steps: 4; failed gaps: 1.", "enStatusComparison": "Validated. ... Curves: 2; failed gaps: 2.", "instructionLinksEn": ["docs/en/increment-curve-ui.md", "docs/en/increment-comparison-ui.md"]},
+    "narrow390": {"status": "pass", "documentScrollWidth": 390, "overflowingElements": 0, "previewWidthPx": 353},
+    "keyboard": {"status": "pass", "enterOnRunValidates": true, "tabOrder": ["SUMMARY", "sample A", "sample B", "textarea", "file", "run", "instructions", "csv", "json", "svg", "open"], "positiveTabindex": 0},
+    "invalidInputs": {
+      "status": "pass",
+      "oneFileSelected": "Select 2–4 bundle JSON files together. (aria-invalid=true, 0 links, preview hidden)",
+      "truncatedJson": "Unexpected end of JSON input (0 links)",
+      "emptyStepsBundle": "Curve export requires 1..128 steps (0 links)",
+      "singleSelfReportedSvg": "Curve export bundle must contain only spec and steps (0 links, preview hidden)"
+    },
+    "reselectDuringValidation": {"status": "pass", "observed": "Validation of A+B started, then a single file reselected before completion; after 4 s the stale result never appeared (0 links, preview hidden, run enabled)", "automatedCoverage": "existing epoch tests in tests/ui-increment-curve*.test.mjs"},
+    "projectUnchanged": {"status": "pass", "method": "localStorage key/length snapshot and #case-list text before vs after all invalid/reselect operations", "equal": true, "limitation": "no direct input/mesh/calculation/result revision accessor was read; this is an indirect check"}
+  },
+  "defectFixed": {
+    "id": "stale-file-selection-after-text-edit",
+    "symptom": "After loading a file and then editing the JSON textarea, the file input kept its selection; re-picking the same file in Chrome fires no change event, so the edited text silently stayed in place.",
+    "fix": "Text input now clears file.value before invalidating, in both src/ui/increment-curve.js and src/ui/increment-curve-comparison.js.",
+    "browserRecheck": "after reload: files.length 2 -> 0 and value '' after a textarea edit",
+    "regressionTests": ["tests/ui-increment-curve.test.mjs", "tests/ui-increment-curve-comparison.test.mjs"]
+  },
+  "commands": [
+    {"command": "node --test tests/ui-increment-curve.test.mjs tests/ui-increment-curve-comparison.test.mjs tests/increment-curve-mcp.test.mjs tests/increment-curve-comparison-mcp.test.mjs", "result": "pass", "tests": 25, "failed": 0},
+    {"command": "git diff --check", "result": "pass"},
+    {"command": "npm run check:contracts", "result": "not-run", "reason": "typescript is not installed in this worktree or the primary checkout's node_modules"}
+  ],
+  "unverified": [
+    "OS file picker and OS download/save dialogs",
+    "npm run check:contracts (missing typescript)",
+    "full CI, published site, native build",
+    "direct project revision identifiers before/after (indirect localStorage/case-list check only)",
+    "single UI has no full-size link; whether one is required is left to the parent"
+  ],
+  "remainingParentAcceptance": "RESULTCURVE1 stays building; progress update is for work order 71, src/progress.json not edited."
+}
