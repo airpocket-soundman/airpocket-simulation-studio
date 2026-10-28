@@ -4,6 +4,8 @@
 
 As of 2026-10-21, there are171 tasks,134 released and37 unfinished. Classification prioritizes work; it does not advance status without implementation and evidence.
 
+2026-10-28: In `src/progress.json`, `depends` means prerequisites only (work that must be released first). Membership in an umbrella epic (P0–P6, MOD1) is recorded in `parents`, and non-blocking links in `related`. Every `depends` entry of a released task must itself be released; `validateProgress` enforces this. The 63 released children that preceded unfinished parents were split into `parents`/`related`; no status changed.
+
 | Classification | Existing IDs | Conditions |
 |---|---|---|
 | Autonomous implementation/verification(15) | REG2, CFDMESH1, COUPLE3, CONTACT1, COUPLE4B, CFDPORT1, PERF1, UIIMPROVE1, AGENTINPUT1, VIEWCOMPARE, VIEWTIME, BROWSEREXPORT1, AGENTACP1, AGENTCHAT1, RESULTCURVE1 | Includes substantial physics work; autonomous does not mean finishable in one batch. Missing measurement conditions keep work open. |
