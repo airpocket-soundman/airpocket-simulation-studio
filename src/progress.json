@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-28T13:26:03.202Z",
+  "updatedAt": "2026-10-28T13:49:48.636Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -108,8 +108,8 @@
       "titleEn": "Apply dimensional regions exactly to CAD boundaries",
       "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
       "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing. 2026-10-16 Cones: an optional end radius on the existing cylindrical region, tested on a STEP cone (force conservation, area verification, save/restore) and in real Chrome (cone STEP accepted, wrong end radius refused at mesh time). Spherical sectors added2026-10-19 (below); general UV rectangles remain unimplemented. The condition text for a blank end radius on a cone needs a check.",
-      "lastUpdate": "2026-10-23: 未統合・未公開候補。実IABの合成円錐STEP表示で終端半径空欄と明示8の条件文・再適用・日英を確認。空欄は円筒指定であり円錐を推定しない。解析・一般UV矩形・親受入の完了ではない。",
-      "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. Actual IAB checks synthetic cone STEP display with blank versus explicit end radius 8, condition text, reapplication and JA/EN. Blank means cylinder intent, not inferred cone geometry. No solve, general UV rectangles or parent completion is claimed.",
+      "lastUpdate": "2026-10-23: 未統合・未公開候補。実IABの合成円錐STEP表示で終端半径空欄と明示8の条件文・再適用・日英を確認。空欄は円筒指定であり円錐を推定しない。解析・一般UV矩形・親受入の完了ではない。 2026-10-28: 未merge PR #221で保存済み円筒/円錐patchの逆宣言検査を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. Actual IAB checks synthetic cone STEP display with blank versus explicit end radius 8, condition text, reapplication and JA/EN. Blank means cylinder intent, not inferred cone geometry. No solve, general UV rectangles or parent completion is claimed. 2026-10-28: Unmerged PR #221 in progress: reverse declaration check for saved cylindrical/conical patches. Status not promoted.",
       "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-reg2-agentinput-main-iab.json",
       "review": {
         "status": "merged",
@@ -226,8 +226,8 @@
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work. 2026-10-16: The opt-in SU2 path (explicit download with a pinned SHA-256, not bundled, LGPL-2.1 notice) is merged (PR 7). Experimental; the open items above are unchanged.",
-      "lastUpdate": "2026-10-22: 必須の速度/乱流残差列が欠ける履歴を収束判定から拒否。細meshを旧条件・240秒予算で1回実行し89.078秒で完走。単独QA達成、メッシュ依存4.1227%は許容3%外で全体未完。離散流束・牛・host/MCP統合は残る。 2026-10-28: PR #211でSU2 URANS試作（牛型1秒・感度・壁解像度記録）を質量流束ガードと残差検査を維持して統合。試作記録であり精度保証ではない。",
-      "lastUpdateEn": "2026-10-22: Reject missing required velocity/turbulence residual columns. Fine mesh completed once in89.078s under a240s budget with previous config. Individual QA passed; mesh dependence4.1227% exceeds3%, so full validation remains incomplete. Discrete flux/cow/host-MCP integration remain. 2026-10-28: PR #211 merged the SU2 URANS prototype (cow 1 s, sensitivity, wall resolution records) keeping mass-flux guards and residual checks. Prototype records, not an accuracy guarantee.",
+      "lastUpdate": "2026-10-22: 必須の速度/乱流残差列が欠ける履歴を収束判定から拒否。細meshを旧条件・240秒予算で1回実行し89.078秒で完走。単独QA達成、メッシュ依存4.1227%は許容3%外で全体未完。離散流束・牛・host/MCP統合は残る。 2026-10-28: PR #211でSU2 URANS試作（牛型1秒・感度・壁解像度記録）を質量流束ガードと残差検査を維持して統合。試作記録であり精度保証ではない。 2026-10-28: 未merge PR #219で円柱N64→N128のCd差の原因分析を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-22: Reject missing required velocity/turbulence residual columns. Fine mesh completed once in89.078s under a240s budget with previous config. Individual QA passed; mesh dependence4.1227% exceeds3%, so full validation remains incomplete. Discrete flux/cow/host-MCP integration remain. 2026-10-28: PR #211 merged the SU2 URANS prototype (cow 1 s, sensitivity, wall resolution records) keeping mass-flux guards and residual checks. Prototype records, not an accuracy guarantee. 2026-10-28: Unmerged PR #219 in progress: cylinder N64->N128 Cd gap analysis. Status not promoted.",
       "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md; docs/cfd-reference-2026-10-22.md; docs/evidence/2026-10-22-cfd-reference-run.json; docs/cfd-finemesh-followup-2026-10-22.md; docs/evidence/cfd-finemesh-followup-20261022/run.json; docs/evidence/2026-10-15-cow-urans-smoke.json; docs/evidence/2026-10-15-cow-urans-one-second.json; docs/evidence/2026-10-15-cow-urans-sensitivity.json; docs/evidence/2026-10-15-cow-wall-resolution.json; docs/su2-urans.md; docs/evidence/2026-10-23-opencode-61-cfd1.json"
     },
     {
@@ -256,7 +256,9 @@
       "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
       "titleEn": "Couple thermal, structural, fluid and acoustic models",
       "detailEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers.",
-      "acceptanceEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers."
+      "acceptanceEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers.",
+      "lastUpdate": "2026-10-28: 未merge PR #224(指示82)で連成チェーン記述子と版伝播を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #224 (order 82) in progress: coupling chain descriptor and revision propagation. Status not promoted."
     },
     {
       "id": "FAIL1",
@@ -267,7 +269,9 @@
       "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
       "titleEn": "Support failure, fatigue, contact and nonlinear behavior",
       "detailEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions.",
-      "acceptanceEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions."
+      "acceptanceEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions.",
+      "lastUpdate": "2026-10-28: 未merge PR #225(指示81)でWeibull最弱リンク破壊確率と解析解参照を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #225 (order 81) in progress: Weibull weakest-link failure probability with analytic references. Status not promoted."
     },
     {
       "id": "BOARD1",
@@ -563,8 +567,9 @@
       "titleEn": "Support turbulence and unsteady flow",
       "detailEn": "Specify model assumptions and validate convergence and mass balance.",
       "acceptanceEn": "Specify model assumptions and validate convergence and mass balance.",
-      "lastUpdate": "2026-10-18: CFDRESEARCH2/3の調査票と段階計画は完了。候補構成/全依存SHA固定、Linux CPUビルド、B1/B2事前許容誤差と資源予算、基準問題の実行、実装/観測/停止再開/収支検証は残作業。研究完了はCFD2実装完了ではない。",
-      "lastUpdateEn": "2026-10-18: CFDRESEARCH2/3 research sheets/staged plan complete. Remaining:pin candidate configuration/all dependencies,Linux CPU build,pre-agreed B1/B2 tolerances/resource budgets,benchmark execution,implementation/observation/cancellation/restart and conservation validation. Research completion does not implement CFD2."
+      "lastUpdate": "2026-10-18: CFDRESEARCH2/3の調査票と段階計画は完了。候補構成/全依存SHA固定、Linux CPUビルド、B1/B2事前許容誤差と資源予算、基準問題の実行、実装/観測/停止再開/収支検証は残作業。研究完了はCFD2実装完了ではない。 2026-10-28: PR #215(指示75)で周期過渡NSをTaylor-Green/せん断波で検証し統合。圧縮性CFD本体は未着手で状態は据え置き。",
+      "lastUpdateEn": "2026-10-18: CFDRESEARCH2/3 research sheets/staged plan complete. Remaining:pin candidate configuration/all dependencies,Linux CPU build,pre-agreed B1/B2 tolerances/resource budgets,benchmark execution,implementation/observation/cancellation/restart and conservation validation. Research completion does not implement CFD2. 2026-10-28: PR #215 (order 75) merged periodic transient NS verification on Taylor-Green/shear wave. Status unchanged.",
+      "evidence": "docs/evidence/2026-10-28-opencode-75-cfd2.json"
     },
     {
       "id": "CFD3",
@@ -680,7 +685,10 @@
       "acceptance": "時間同期・力の保存・安定性を検証。",
       "titleEn": "Add two-way fluid/structure coupling",
       "detailEn": "Verify time synchronization, force conservation and stability.",
-      "acceptanceEn": "Verify time synchronization, force conservation and stability."
+      "acceptanceEn": "Verify time synchronization, force conservation and stability.",
+      "evidence": "docs/evidence/2026-10-28-opencode-76-couple5.json",
+      "lastUpdate": "2026-10-28: PR #214(指示76)で分離型FSI連成契約とピストン解析解照合を統合。限定契約で状態は据え置き。",
+      "lastUpdateEn": "2026-10-28: PR #214 (order 76) merged a partitioned FSI coupling contract with a piston analytic check. Limited contract; status unchanged."
     },
     {
       "id": "FAIL2",
@@ -1273,7 +1281,9 @@
       "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP2の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
-      "acceptanceEn": "Meet P2 and common completion gates in docs/en/roadmap.md; retain evidence."
+      "acceptanceEn": "Meet P2 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "2026-10-28: 未merge PR #220で要求別WASM資産計画とサイズ測定を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #220 in progress: per-request WASM asset plan and size measurement. Status not promoted."
     },
     {
       "id": "P3",
@@ -1400,8 +1410,8 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
-      "lastUpdate": "2026-10-21: 追加PR #156 を限定成果として取り込み対象。実Chrome390pxでrequiredPointersからTab/Enter移動、入力不変、stale破棄・日英再チェックを追加確認。 親タスク全体は未完。",
-      "lastUpdateEn": "2026-10-21: Additional PR #156 accepted for bounded integration. Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks. Full parent acceptance remains incomplete.",
+      "lastUpdate": "2026-10-21: 追加PR #156 を限定成果として取り込み対象。実Chrome390pxでrequiredPointersからTab/Enter移動、入力不変、stale破棄・日英再チェックを追加確認。 親タスク全体は未完。 2026-10-28: 指示83に着手（PR未作成）。状態は据え置き。",
+      "lastUpdateEn": "2026-10-21: Additional PR #156 accepted for bounded integration. Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks. Full parent acceptance remains incomplete. 2026-10-28: Order 83 started (no PR yet). Status unchanged.",
       "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
       "review": {
         "status": "merged",
@@ -1510,8 +1520,8 @@
       "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF added2026-10-19 (latest update); MP4 is not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-24: 未統合・未公開候補。比較time WebMを固定フレーム化し符号化/復号/全時刻ledgerを検査。通常main IAB・正式MCPの音響1回で48枚/2秒・全96panel選択・最終物理1.2ms/ずれ0と元5状態保持を独立確認。旧MediaRecorder終端欠落を保存。熱/異軸の固定WebM実画面、single-view終端、実download・録画中切断・MP4・公開は残る。",
-      "lastUpdateEn": "2026-10-24: Unmerged/unpublished candidate. Fixed-frame comparison-time WebM verifies encoding, decoding and the complete timing ledger. One ordinary-main IAB/formal-MCP acoustic export independently verifies48frames/2s,96panel selections, terminal physical1.2ms/zero offset and five unchanged physical states. Historical MediaRecorder endpoint loss is retained. Actual thermal/unequal-axis fixed WebM, single-view endpoints, completed download, recording disconnect, MP4 and publication remain open.",
+      "lastUpdate": "2026-10-24: 未統合・未公開候補。比較time WebMを固定フレーム化し符号化/復号/全時刻ledgerを検査。通常main IAB・正式MCPの音響1回で48枚/2秒・全96panel選択・最終物理1.2ms/ずれ0と元5状態保持を独立確認。旧MediaRecorder終端欠落を保存。熱/異軸の固定WebM実画面、single-view終端、実download・録画中切断・MP4・公開は残る。 2026-10-28: 未merge PR #223(指示77)で比較GIFのフレーム別変形倍率台帳を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-24: Unmerged/unpublished candidate. Fixed-frame comparison-time WebM verifies encoding, decoding and the complete timing ledger. One ordinary-main IAB/formal-MCP acoustic export independently verifies48frames/2s,96panel selections, terminal physical1.2ms/zero offset and five unchanged physical states. Historical MediaRecorder endpoint loss is retained. Actual thermal/unequal-axis fixed WebM, single-view endpoints, completed download, recording disconnect, MP4 and publication remain open. 2026-10-28: Unmerged PR #223 (order 77) in progress: per-frame deformation multiplier ledger for comparison GIF. Status not promoted.",
       "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md; docs/evidence/2026-10-22-review51-real-chrome.json; docs/pr-review-2026-10-22.md; docs/view-compare-design.md; tests/comparison-frame-timing.test.mjs; docs/evidence/2026-10-24-comparison-gif-timing/README.md; docs/evidence/2026-10-24-acoustic-time-webm/README.md; docs/comparison-fixed-webm.md; docs/evidence/2026-10-24-comparison-fixed-webm-source.json; docs/evidence/2026-10-24-fixed-comparison-webm/README.md; docs/fixed-webm-main-independent-2026-10-24.md",
       "review": {
         "status": "merged",
@@ -1574,7 +1584,9 @@
       "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models.",
       "depends": [
         "MAT3"
-      ]
+      ],
+      "lastUpdate": "2026-10-28: 未merge PR #216(指示73)で試験機要求仕様と機器プロファイルvalidatorを進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #216 (order 73) in progress: test-machine requirements and device-profile validator. Status not promoted."
     },
     {
       "id": "PRINTMEASURE2",
@@ -1590,7 +1602,9 @@
       "depends": [
         "PRINTMEASURE1",
         "PRINT1"
-      ]
+      ],
+      "lastUpdate": "2026-10-28: 未merge PR #217(指示74)でダンベル試験片3MF書出しを進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #217 (order 74) in progress: dumbbell specimen 3MF export. Status not promoted."
     },
     {
       "id": "PRINTMEASURE3",
@@ -2906,8 +2920,8 @@
       "detailEn": "Plan bilingual agent selection, installation/authentication, model selection and in-app conversation. Candidates PR184/185 implement an explicit-session-provider chat boundary; production transport and main integration remain.",
       "acceptance": "導入→ChatGPTログイン→接続→入力確認→変更案検査/承認→解析/中間確認→結果取得/保存出力を実接続で確認。権限拒否・利用上限・切断/停止/再接続を扱い、根拠と入力版を保持する。詳細はdocs/roadmap.md。",
       "acceptanceEn": "Verify installation through ChatGPT sign-in, connection, inspection, edit preview/approval, solve/observations and results/save/export over a real connection. Handle permission refusal, usage limits, disconnect/stop/reconnect and preserve provenance/revisions. See docs/en/roadmap.md.",
-      "lastUpdate": "2026-10-23: 未merge候補PR184/185で送信/取消/旧応答破棄・本文容量・draft/provider ABAを検証。実IABの合成接続で390px・日英・キーボード送信/停止・再接続・新draft保持を確認。本番AI認証・モデル選択・MCP委任は未実装/未確認。未公開、親受入未達。",
-      "lastUpdateEn": "2026-10-23: Unmerged candidates PR184/185 verify send/cancel, stale-response refusal, bounded text and draft/provider ABA. Actual IAB synthetic-provider checks cover390px, bilingual labels, keyboard send/stop, replacement and draft preservation. Real AI authentication, model selection and MCP delegation remain unimplemented/unverified. Unpublished; parent acceptance incomplete.",
+      "lastUpdate": "2026-10-23: 未merge候補PR184/185で送信/取消/旧応答破棄・本文容量・draft/provider ABAを検証。実IABの合成接続で390px・日英・キーボード送信/停止・再接続・新draft保持を確認。本番AI認証・モデル選択・MCP委任は未実装/未確認。未公開、親受入未達。 2026-10-28: 未merge PR #222で会話パネルのmount（provider不在時は利用不可）を進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-23: Unmerged candidates PR184/185 verify send/cancel, stale-response refusal, bounded text and draft/provider ABA. Actual IAB synthetic-provider checks cover390px, bilingual labels, keyboard send/stop, replacement and draft preservation. Real AI authentication, model selection and MCP delegation remain unimplemented/unverified. Unpublished; parent acceptance incomplete. 2026-10-28: Unmerged PR #222 in progress: mount conversation panel (unavailable without provider). Status not promoted.",
       "evidence": "docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-agent-chat-boundary.json; docs/evidence/2026-10-23-chat-browser.json",
       "review": {
         "status": "merged",
@@ -2931,9 +2945,9 @@
       "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
       "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
       "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
-      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json; docs/evidence/2026-10-23-resultcurve-displacement-control.json; docs/evidence/displacement-stdio-20261023/summary.json; docs/evidence/2026-10-23-opencode-52-resultcurve1.json; docs/evidence/2026-10-23-curve-layout-browser.json",
-      "lastUpdate": "2026-10-23: 未merge候補PR180〜185で明示力/変位の独立線形solveから段階bundleを生成。変位0/.01/.04/.02/0/−.02mmの反力0/25/100/50/0/−50Nを独立再計算し、実CLI→正式stdio MCPのCSV/JSON/SVG全bytes/hash一致と入力不変を確認。既存forceの全9成果物は旧実装とbyte一致を独立監査。非線形履歴・実物校正・実Chrome変位出力・公開HTTPSは未達。",
-      "lastUpdateEn": "2026-10-23: Unmerged candidates PR180–185 generate explicit force/displacement bundles from independent linear solves. Displacements0/.01/.04/.02/0/−.02mm yield0/25/100/50/0/−50N, checked by independent replay; actual CLI to formal stdio MCP matches all CSV/JSON/SVG bytes/hashes and preserves input. Independent review confirms byte identity for all nine existing force artifacts against the previous implementation. Nonlinear history, physical calibration, Chrome displacement export and public HTTPS remain.",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json; docs/evidence/2026-10-23-resultcurve-displacement-control.json; docs/evidence/displacement-stdio-20261023/summary.json; docs/evidence/2026-10-23-opencode-52-resultcurve1.json; docs/evidence/2026-10-23-curve-layout-browser.json; docs/evidence/2026-10-28-opencode-53-resultcurve1.json",
+      "lastUpdate": "2026-10-23: 未merge候補PR180〜185で明示力/変位の独立線形solveから段階bundleを生成。変位0/.01/.04/.02/0/−.02mmの反力0/25/100/50/0/−50Nを独立再計算し、実CLI→正式stdio MCPのCSV/JSON/SVG全bytes/hash一致と入力不変を確認。既存forceの全9成果物は旧実装とbyte一致を独立監査。非線形履歴・実物校正・実Chrome変位出力・公開HTTPSは未達。 2026-10-28: PR #213(指示53)で単一・比較グラフUIを実ブラウザで確認し統合。親受入は未達。",
+      "lastUpdateEn": "2026-10-23: Unmerged candidates PR180–185 generate explicit force/displacement bundles from independent linear solves. Displacements0/.01/.04/.02/0/−.02mm yield0/25/100/50/0/−50N, checked by independent replay; actual CLI to formal stdio MCP matches all CSV/JSON/SVG bytes/hashes and preserves input. Independent review confirms byte identity for all nine existing force artifacts against the previous implementation. Nonlinear history, physical calibration, Chrome displacement export and public HTTPS remain. 2026-10-28: PR #213 (order 53) merged a real-browser check of single/comparison curve UIs. Parent acceptance not met.",
       "review": {
         "status": "merged",
         "pr": 134,
@@ -2962,8 +2976,8 @@
       "acceptance": "保存した試験条件/根拠から材料パラメータを校正し、単要素の載荷速度・保持・除荷・再載荷応力、残留ひずみ、散逸を同条件実験と照合。対応する構造経路で段階ごとの反力/変位・Cauchy応力・変形後断面・入力版を保持し、メッシュ/時間刻み感度、要素反転、損傷正則化を検証。未校正材料・未対応組合せ・限界超過は拒否または暫定表示。ダンベルのくびれ/荷重低下は実験比較と収束根拠が揃う場合のみ受け入れる。",
       "acceptanceEn": "Calibrate from saved test conditions/evidence and compare single-element loading-rate, hold, unload/reload stress, residual strain and dissipation against experiments at matching conditions. In the structural path retain stepwise reactions/displacements, Cauchy stress, deformed area and input revision; assess mesh/time-step sensitivity, element inversion and damage regularization. Reject or mark provisional uncalibrated materials, unsupported combinations and exceeded limits. Accept dumbbell necking/post-peak force only with experimental comparison and convergence evidence.",
       "evidence": "docs/roadmap.md; docs/en/roadmap.md; docs/hyperelasticity.md; src/plasticity-core.js; docs/finite-visco-reference.md; docs/evidence/2026-10-23-finite-visco-reference.json; docs/evidence/2026-10-23-finite-visco-independent-audit.json; docs/finite-visco-observation-comparison.md; docs/finite-observation-independent-2026-10-24.md; docs/evidence/2026-10-24-finite-observation-integration.json; docs/finite-history-inspector.md; docs/en/finite-history-inspector.md; docs/evidence/2026-10-27-finite-history-inspector.json; docs/evidence/2026-10-27-finite-history-inspector-independent.json; docs/evidence/2026-10-27-finite-history-inspector-gui/README.md; docs/evidence/2026-10-27-finite-history-inspector-integration.json; docs/finite-observation-inspector.md; docs/en/finite-observation-inspector.md; docs/evidence/2026-10-27-finite-observation-inspector.json; docs/evidence/2026-10-27-finite-observation-inspector-gui/README.md; docs/evidence/2026-10-27-finite-observation-inspector-integration.json; docs/evidence/2026-10-23-finite-visco-input-history.json; docs/evidence/2026-10-23-finite-visco-history-independent-audit.json; docs/evidence/2026-10-24-finite-visco-observation-comparison.json; docs/evidence/2026-10-24-finite-observation-independent.json; docs/evidence/2026-10-27-finite-observation-independent.json",
-      "lastUpdate": "2026-10-27: 合成・暫定・未校正の履歴確認GUIへ最終合成観測1点の比較を追加。通常main/IABで対の例のJA/EN・9応力差cell（主要差25Pa）・独立したエネルギー差2/散逸差1 J/m³-reference、空白変更時の旧表示消去と版不一致拒否、履歴確認の独立性・両欄クリアを確認。DOM272controls等を保持。実取消受入・正式API全状態同一性・構造solver/実測校正は未証明、親は未完。",
-      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open.",
+      "lastUpdate": "2026-10-27: 合成・暫定・未校正の履歴確認GUIへ最終合成観測1点の比較を追加。通常main/IABで対の例のJA/EN・9応力差cell（主要差25Pa）・独立したエネルギー差2/散逸差1 J/m³-reference、空白変更時の旧表示消去と版不一致拒否、履歴確認の独立性・両欄クリアを確認。DOM272controls等を保持。実取消受入・正式API全状態同一性・構造solver/実測校正は未証明、親は未完。 2026-10-28: 未merge PR #218(指示72)で合成Prony一軸材料点driverを進行中。状態は昇格しない。",
+      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open. 2026-10-28: Unmerged PR #218 (order 72) in progress: synthetic Prony uniaxial material-point driver. Status not promoted.",
       "parents": [
         "P1",
         "P3",
