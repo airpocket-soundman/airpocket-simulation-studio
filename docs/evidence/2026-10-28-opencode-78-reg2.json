@@ -1,0 +1,21 @@
+{
+  "id": "REG2",
+  "workOrder": "docs/opencode-work-orders-2026-10-28/78-REG2.md",
+  "base": "036c2e7",
+  "branch": "claude/reg2-cad-step",
+  "environment": "Node.js on Windows 11, gmsh-wasm (npm ci); synthetic cylinder source and synthetic cone STEP fixtures",
+  "change": "validateCylindricalMesh now checks reverse declarations: a surface triangle whose vertices and surface-projected centroid lie in the cylindrical/conical dimensions and whose normal is within 45 degrees of the lateral surface normal must carry the patch label, and no other triangle may.",
+  "counterexample": {
+    "description": "Unlabel the smallest in-dimension patch triangle and subtract its area from meshAreaMm2",
+    "beforeFix": "accepted (assert.throws failed: 'Missing expected exception' in cylindrical-cad and conical-wiring tests)",
+    "afterFix": "rejected with 'Saved cylindrical patch triangle declaration mismatch'"
+  },
+  "commands": [
+    {"cmd": "node --test tests/cylindrical-cad.test.mjs tests/conical-cad.test.mjs tests/conical-wiring.test.mjs tests/spherical-cad.test.mjs tests/spherical-wiring.test.mjs", "result": "pass", "tests": 16, "fail": 0},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "unchangedTolerances": {"cadAreaRelative": 1e-7, "facetedAreaRelative": 0.03},
+  "notVerified": ["real browser / IAB", "public HTTPS build", "full npm test"],
+  "remainingParent": ["general UV rectangles on arbitrary CAD faces", "reverse declaration check for planar patches", "case-view.js does not call validateSphericalMesh (cases.js does)"]
+}
