@@ -1,0 +1,22 @@
+{
+  "task": "AGENTCHAT1",
+  "date": "2026-10-28",
+  "scope": "Conversation panel mounted inside #agent-connection (browser-session-ui.js) with no session provider; main.js unchanged",
+  "productionTransport": false,
+  "focusedTests": {
+    "command": "node --test tests/ui-agent-chat-panel.test.mjs tests/agent-chat-state.test.mjs tests/ui-agent-connection-status.test.mjs tests/ui-agent-connection-status-scanner.test.mjs tests/browser-gpu-inspection.test.mjs",
+    "pass": 34, "fail": 0,
+    "contractTypes": "npm run check:contracts passed (32 declaration files)"
+  },
+  "builtInBrowser": {
+    "server": "vite dev, http://localhost:5194",
+    "en": {"url": "?lang=en", "lang": "en", "heading": "Conversation (session provider required)", "send": "Send", "status": "Unavailable", "reason": "Sending refused: no conversation session provider is configured in this browser.", "sendDisabled": true, "stopDisabled": true, "inputDisabled": true, "insideAgentConnection": true},
+    "ja": {"url": "?lang=ja", "lang": "ja", "heading": "会話（接続プロバイダーが必要）", "send": "送信", "status": "未接続", "ariaLive": "polite", "reason": "送信できません: このブラウザーには会話sessionの接続経路が設定されていません。", "sendDisabled": true, "stopDisabled": true, "inputDisabled": true}
+  },
+  "notVerified": [
+    "In-page JP/EN link toggle in the built-in browser: the hidden pane's tab stalled after the click, so the live toggle is covered only by the DOM-fixture test (studio-language event)",
+    "390px layout and keyboard operation in the mounted position (pane was hidden; widths not measurable)",
+    "Real Codex/ACP launch, authentication and production browser transport (not implemented; not guessed)"
+  ],
+  "parentStatus": "AGENTCHAT1/AGENTACP1 remain unfinished"
+}
