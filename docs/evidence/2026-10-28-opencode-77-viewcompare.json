@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-28",
+  "order": "docs/opencode-work-orders-2026-10-28/77-VIEWCOMPARE.md",
+  "task": "VIEWCOMPARE",
+  "baseSha": "036c2e7078a6eccfefdd3dae372b0eade7bda5ff",
+  "scope": "Comparison deformation GIF per-encoded-frame display multiplier ledger (manifest.time.deformationFrames). Synthetic inputs only.",
+  "tests": {
+    "focused": {
+      "command": "node --test tests/comparison-deformation-frames.test.mjs tests/comparison-frame-timing.test.mjs tests/comparison-deformation-plan.test.mjs tests/comparison-gif.test.mjs tests/comparison-export-adapter.test.mjs tests/comparison-video.test.mjs",
+      "passed": 46,
+      "failed": 0
+    },
+    "contracts": {"command": "npm run check:contracts", "result": "32 declaration files type-check"},
+    "diffCheck": "git diff --check clean",
+    "fullSuiteRunByThisAgent": false,
+    "fullSuiteNote": "Started locally but the native mfem rebuild was still running at commit time; CI verify is the authoritative full run."
+  },
+  "browser": {
+    "environment": "Claude desktop built-in browser (Chrome 152), Vite dev server http://localhost:5193",
+    "path": "Real createComparisonExportAdapter + createVisualExportJobs + renderComparisonGif in page with a real 1280x640 2D canvas; synthetic two-case elastic outputs (1x/2x displacement) and a synthetic canvas renderer stub.",
+    "request": {"format": "gif", "animation": "deformation", "field": "displacement", "seconds": 2, "deformScale": 20},
+    "result": {
+      "state": "completed",
+      "totalBytes": 5574849,
+      "sha256": "sha256:a5913279fcb34f447d8465b5e25abf2a593a5da531f58ead8f2b5ff834b913a2",
+      "resolution": {"width": 640, "height": 320},
+      "deformationFrames": {"entries": 24, "endScale": 20, "first": {"renderIndex": 0, "phase": 0, "deformScale": 0}, "last": {"renderIndex": 23, "phase": 1, "deformScale": 20}, "everyEntryMatchesDrawnScaleAndPhaseI23": true}
+    },
+    "notVerified": [
+      "Real solver-produced elastic cases through window.comparisonVideoApi/GUI: the in-page elastic solve did not finish while the native build occupied the machine.",
+      "Formal MCP path, completed download, independent GIF decode of this artifact."
+    ]
+  },
+  "unchanged": ["src/progress.json", "roadmap", "src/main.js", "VIEWTIME files", "existing time frameTimings contract", "deformation WebM (no ledger; real-time mapping is not one-to-one)"],
+  "remainingParentAcceptance": ["thermal/unequal-axis fixed WebM on real screen", "single-view endpoints", "completed download", "recording disconnect", "MP4", "publication"]
+}

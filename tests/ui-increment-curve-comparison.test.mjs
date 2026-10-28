@@ -86,3 +86,9 @@ test('UI Blob artifact bytes match the formal stdio MCP output for the same publ
   for(const format of ['csv','json','svg']){const actual=Buffer.from(await h.blobs.get(h.get(format).href).arrayBuffer());assert.equal(actual.toString('utf8'),saved[format]);assert.equal(hash(actual),reply.result.structuredContent.value.artifacts[format].sha256);}
  }finally{h.ui.destroy();await rm(dir,{recursive:true,force:true});}
 });
+
+test('editing the JSON text clears the stale file selection so the same files can be reselected',async()=>{
+ const h=setup(),texts=pair().bundles.map(b=>JSON.stringify(b));h.get('file').files=texts.map(text=>file(text));h.get('file').value='C:\fakepath\a.json';await h.get('file').onchange();
+ assert.ok(await h.ui.validate());h.get('input').value+=' ';h.get('input').oninput();
+ assert.equal(h.get('file').value,'');assert.equal(h.get('open').hidden,true);assert.equal(h.get('preview').hidden,true);
+});

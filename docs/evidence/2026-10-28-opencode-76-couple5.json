@@ -1,0 +1,31 @@
+{
+  "workOrder": "76-COUPLE5",
+  "task": "COUPLE5",
+  "baseSha": "e776ff1",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": {"synthetic": true, "note": "Synthetic piston inputs, not material data", "area_m2": 1e-3, "length_m": 0.2, "kappa_Pa_per_m": 2e6, "p0_Pa": 1e4, "mass_kg": 0.1, "stiffness_N_per_m": 4e3, "density_kg_m3": {"stableCase": 100, "addedMassCase": 1000}},
+  "commands": [
+    {"cmd": "node --test tests/fsi-partitioned.test.mjs", "result": "pass", "tests": 4},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"},
+    {"cmd": "node --test tests/module-boundaries.test.mjs tests/docs.test.mjs", "result": "pass"}
+  ],
+  "measured": {
+    "omega_rad_s": 223.60679774997897,
+    "equilibrium_m": 0.0016666666666666668,
+    "relativeMaxError_64stepsPerPeriod": 0.0038628160193831473,
+    "relativeMaxError_128stepsPerPeriod": 0.0009664690377423571,
+    "observedTimeOrder": 1.9988575461934845,
+    "maxCouplingIterations_stable": 3,
+    "relativeEnergyDrift_2000steps_dt1e-4s": 8.730516309896073e-13,
+    "interfaceWorkImbalance_J": 0,
+    "dirichletNeumannFactor_analytic": -1.9998500149985001,
+    "residualRatio_unrelaxed_measured": 1.9998500149985001,
+    "aitkenIterations_addedMassRatio2": 3
+  },
+  "notes": [
+    "interfaceWorkImbalance is zero by construction (same force/displacement pair used for both fields); the non-trivial conservation check is the coupled energy drift.",
+    "Analytic reference is derived from the stated linear model, not an external dataset."
+  ],
+  "unverified": ["CFD solver coupling", "multi-DOF/curved interfaces", "ALE mesh motion", "nonlinear structure", "browser/worker path"]
+}
