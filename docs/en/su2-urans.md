@@ -1,5 +1,7 @@
 # Experimental native URANS connection
 
+[日本語](../su2-urans.md)
+
 Stacked on the unmerged native SU2 PR #7. This is native CPU execution, not browser WASM/WebGPU CFD.
 
 Use startup-approved `kind: unsteady-incompressible-rans-sa`, explicit `timeStepSeconds`, `timeSteps`, `outputEvery`; `maxIterations` is the inner iteration limit per physical step. Uniform initial flow, second-order dual time stepping, SA standard wall function and dimensional SI fields. No restart from a steady solution.
