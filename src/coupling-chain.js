@@ -61,3 +61,30 @@ export function inspectCouplingChain(chain){
  }
  return {valid:true,current:!stale.length,order,stale,diagnostics};
 }
+
+// Saved-case adapter (COUPLE1 second step). Builds the chain description from saved
+// case rows {caseId, revision, output} as returned by the case archive: the stage
+// revision is the saved case revision, and each source is the caseReference that
+// buildTemperatureCaseSource / buildVibrationCaseSource recorded in the consumer's
+// solved input. Cases without a mapped result kind are reported, not guessed.
+const RESULT_PHYSICS=Object.freeze({thermal:'thermal',elastic:'structural',modal:'structural',acoustic:'acoustic',acousticTransient:'acoustic'});
+const CASE_SOURCES=Object.freeze([['temperatureSource','temperature'],['vibrationSource','vibration']]);
+export function couplingChainFromCases(cases){
+ if(!Array.isArray(cases))return {chain:[],diagnostics:[{code:'COUPLING_CHAIN_INVALID',severity:'error',stage:null,message:'Saved cases must be an array',evidence:{}}]};
+ const chain=[],diagnostics=[];
+ for(const entry of cases){
+  const kind=entry?.output?.result?.kind,physics=Object.hasOwn(RESULT_PHYSICS,kind??'')?RESULT_PHYSICS[kind]:null;
+  if(!physics){diagnostics.push({code:'COUPLING_CASE_UNSUPPORTED',severity:'error',stage:entry?.caseId??null,message:'Saved case result kind has no coupling physics',evidence:{kind}});continue;}
+  const study=entry.output.input?.study,sources=[];
+  for(const [key,transfer] of CASE_SOURCES){const reference=study?.[key]?.caseReference;if(reference!==undefined)sources.push({from:reference?.caseId,kind:transfer,revision:reference?.revision});}
+  chain.push({id:entry.caseId,physics,revision:entry.revision,sources});
+ }
+ return {chain,diagnostics};
+}
+
+/** Inspect saved cases directly; adapter diagnostics make the result invalid. */
+export function inspectSavedCaseChain(cases){
+ const {chain,diagnostics}=couplingChainFromCases(cases);
+ if(diagnostics.length)return {valid:false,order:[],stale:[],diagnostics};
+ return inspectCouplingChain(chain);
+}
