@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-22T12:10:46.771Z",
+  "updatedAt": "2026-10-28T13:26:03.202Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -226,9 +226,9 @@
       "titleEn": "Create fluid regions and simulate flow",
       "detailEn": "Started ordinary-speed external flow. Cow 3D steady SA RANS ran directly and in a separate process from the real Studio browser API; pressure/velocity arrays and output hashes match. Experimental fixed-case connection/view only: wall treatment fails at 116 points, velocity/turbulence targets are unmet, boundary-layer/accuracy and shared-job/MCP integration remain pending. Seven compute/data tools are available through native-only MCP or optional full-MCP startup. Real MCP cow rerun/pages match direct execution with warnings/cancellation/release verified; native view MCP remains pending.",
       "acceptanceEn": "Progress from simple references to rough cow geometry, fixing version/distribution, wall/far-field boundaries, mesh, cancellation and I/O contracts. Verify velocity, pressure, drag, mass balance and domain/mesh/time dependence. Do not substitute Stokes settings or unverified laminar assumptions; do not delay publication work. 2026-10-16: The opt-in SU2 path (explicit download with a pinned SHA-256, not bundled, LGPL-2.1 notice) is merged (PR 7). Experimental; the open items above are unchanged.",
-      "lastUpdate": "2026-10-22: 必須の速度/乱流残差列が欠ける履歴を収束判定から拒否。細meshを旧条件・240秒予算で1回実行し89.078秒で完走。単独QA達成、メッシュ依存4.1227%は許容3%外で全体未完。離散流束・牛・host/MCP統合は残る。",
-      "lastUpdateEn": "2026-10-22: Reject missing required velocity/turbulence residual columns. Fine mesh completed once in89.078s under a240s budget with previous config. Individual QA passed; mesh dependence4.1227% exceeds3%, so full validation remains incomplete. Discrete flux/cow/host-MCP integration remain.",
-      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md; docs/cfd-reference-2026-10-22.md; docs/evidence/2026-10-22-cfd-reference-run.json; docs/cfd-finemesh-followup-2026-10-22.md; docs/evidence/cfd-finemesh-followup-20261022/run.json"
+      "lastUpdate": "2026-10-22: 必須の速度/乱流残差列が欠ける履歴を収束判定から拒否。細meshを旧条件・240秒予算で1回実行し89.078秒で完走。単独QA達成、メッシュ依存4.1227%は許容3%外で全体未完。離散流束・牛・host/MCP統合は残る。 2026-10-28: PR #211でSU2 URANS試作（牛型1秒・感度・壁解像度記録）を質量流束ガードと残差検査を維持して統合。試作記録であり精度保証ではない。",
+      "lastUpdateEn": "2026-10-22: Reject missing required velocity/turbulence residual columns. Fine mesh completed once in89.078s under a240s budget with previous config. Individual QA passed; mesh dependence4.1227% exceeds3%, so full validation remains incomplete. Discrete flux/cow/host-MCP integration remain. 2026-10-28: PR #211 merged the SU2 URANS prototype (cow 1 s, sensitivity, wall resolution records) keeping mass-flux guards and residual checks. Prototype records, not an accuracy guarantee.",
+      "evidence": "docs/evidence/2026-10-15-cow-flow-equivalence.json; docs/opencode-release-work-orders-2026-10-21/41-CFD1.md; docs/cfd-reference-2026-10-22.md; docs/evidence/2026-10-22-cfd-reference-run.json; docs/cfd-finemesh-followup-2026-10-22.md; docs/evidence/cfd-finemesh-followup-20261022/run.json; docs/evidence/2026-10-15-cow-urans-smoke.json; docs/evidence/2026-10-15-cow-urans-one-second.json; docs/evidence/2026-10-15-cow-urans-sensitivity.json; docs/evidence/2026-10-15-cow-wall-resolution.json; docs/su2-urans.md; docs/evidence/2026-10-23-opencode-61-cfd1.json"
     },
     {
       "id": "GPU1",
@@ -544,7 +544,7 @@
       "acceptanceEn": "Validate wall resolution, quality and boundary-condition mapping.",
       "lastUpdate": "2026-10-23: 未統合・未公開候補。限定Tet4の壁・入口共有節点を明示方針で解決し、未拘束nullと出口面圧力を分離。最大2056節点・保存再読込・改ざん拒否を独立監査。流体solver・project境界API・一般境界層・y+は未接続。",
       "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. An explicit limited Tet4 shared-node policy distinguishes unconstrained null components and face-based outlet pressure. Independent audit covers 2056 nodes, JSON reload and tamper rejection. Flow solver, project boundary API, general boundary layers and y-plus remain disconnected.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/evidence/2026-10-23-channel-policy-integration.json",
+      "evidence": "docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/evidence/2026-10-23-channel-policy-integration.json; docs/evidence/2026-10-23-opencode-65-cfdmesh1.json; docs/evidence/2026-10-23-opencode-65-independent-review-fix.json",
       "review": {
         "status": "merged",
         "pr": 154,
@@ -645,7 +645,7 @@
       "acceptanceEn": "Transfer temperatures/heat flux and verify energy conservation.",
       "lastUpdate": "2026-10-27: 折面group-local P1外向き熱流をglobal target節点の印加熱流量Wへ積分・加算するpure APIを追加。共有source節点でもgroup別値を平均せず、総量0で非ゼロ節点荷重を保持。独立square-fan弱形式・共有辺/T-junction・保存量を保つ係数改竄の再hash拒否を検証。旧201温度L2goldenと既存平面経路を維持。統合94件（独立4を含む）/型29/build/local28成功。熱流量保存であり材料energy/連成solver/UI/一般曲面/実測校正は未完、solverConnected:false。",
       "lastUpdateEn": "2026-10-27: Added pure grouped P1 source-outward heat-flux integration into global target nodal loadsW. Group-local shared-source values are not averaged; zero total retains nonzero nodal loads. Independent square-fan weak-form,shared-edge/T-junction and conservative rehashed-tamper refusal verified. Old201temperatureL2 goldens and existing planar paths retained. Integrated94tests including4independent/type29/build/local28 passed. Heat-rate conservation is not material-energy/coupled-solver/UI/general-surface/calibration acceptance; solverConnected:false.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-planar-p1-independent-audit.json; docs/planar-temperature-operator.md; docs/temperature-l2-independent-2026-10-26.md; docs/evidence/2026-10-26-temperature-integration.json; docs/grouped-temperature-operator.md; docs/grouped-temperature-independent-2026-10-27.md; docs/evidence/2026-10-27-grouped-temperature-integration.json; docs/grouped-p1-heat-operator.md; docs/en/grouped-p1-heat-operator.md; docs/grouped-p1-heat-independent-audit.md; docs/evidence/2026-10-27-grouped-p1-flux.json; docs/evidence/2026-10-27-grouped-p1-heat-independent.json; docs/evidence/2026-10-27-grouped-p1-heat-integration.json",
+      "evidence": "docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-planar-p1-independent-audit.json; docs/planar-temperature-operator.md; docs/temperature-l2-independent-2026-10-26.md; docs/evidence/2026-10-26-temperature-integration.json; docs/grouped-temperature-operator.md; docs/grouped-temperature-independent-2026-10-27.md; docs/evidence/2026-10-27-grouped-temperature-integration.json; docs/grouped-p1-heat-operator.md; docs/en/grouped-p1-heat-operator.md; docs/grouped-p1-heat-independent-audit.md; docs/evidence/2026-10-27-grouped-p1-flux.json; docs/evidence/2026-10-27-grouped-p1-heat-independent.json; docs/evidence/2026-10-27-grouped-p1-heat-integration.json; docs/evidence/2026-10-23-couple3-persisted-operator.json; docs/evidence/2026-10-23-couple3-operator-review-fix.json; docs/evidence/2026-10-26-grouped-temperature-operator.json; docs/evidence/2026-10-27-grouped-temperature-independent.json",
       "review": {
         "status": "merged",
         "pr": 140,
@@ -720,9 +720,9 @@
       "titleEn": "Support contact, friction and bolts",
       "detailEn": "Validate contact convergence, reactions and friction conditions.",
       "acceptanceEn": "Validate contact convergence, reactions and friction conditions.",
-      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。安全な反復上限と停滞停止を追加。巨大上限を即時拒否し極小許容値でも有限回で停止。 親タスク全体の完了条件は未達。",
-      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Adds a safe iteration cap and stagnation termination; rejects huge budgets and stops tightly tolerated stalled solves. Full parent acceptance remains incomplete.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。安全な反復上限と停滞停止を追加。巨大上限を即時拒否し極小許容値でも有限回で停止。 親タスク全体の完了条件は未達。 2026-10-28: PR #212で1自由度ばね+剛体ストッパーのpenalty感度を解析解と比較する試験を追加。3D接触・摩擦・ボルトは未対応で親受入は未達。",
+      "lastUpdateEn": "2026-10-21: Re-review approved for integration. Adds a safe iteration cap and stagnation termination; rejects huge budgets and stops tightly tolerated stalled solves. Full parent acceptance remains incomplete. 2026-10-28: PR #212 added a 1-DOF spring/rigid-stop penalty sensitivity test against the analytic solution. 3D contact, friction and bolts remain unsupported; parent acceptance not met.",
+      "evidence": "docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-28-opencode-67-contact1.json; tests/unilateral-contact-reference.test.mjs",
       "review": {
         "status": "merged",
         "pr": 143,
@@ -811,7 +811,6 @@
       "category": "共通",
       "detail": "アプリ・管理ボードの静的表示と動的メッセージを両言語化。言語を保存する。",
       "acceptance": "アプリ・管理ボードの静的表示と動的メッセージを両言語化。言語を保存する。",
-      "depends": [],
       "optional": false,
       "status": "released",
       "titleEn": "Offer English and Japanese web interfaces",
@@ -827,7 +826,6 @@
       "category": "共通",
       "detail": "README、機能、材料、構成、ソルバー、ロードマップ、検証、メッシュ、印刷部品を両言語で対応させる。",
       "acceptance": "README、機能、材料、構成、ソルバー、ロードマップ、検証、メッシュ、印刷部品を両言語で対応させる。",
-      "depends": [],
       "optional": false,
       "status": "released",
       "titleEn": "Provide English and Japanese repository documentation",
@@ -842,7 +840,6 @@
       "category": "共通",
       "detail": "dev-portalに解析アプリと開発管理へのリンクを公開して確認。",
       "acceptance": "dev-portalに解析アプリと開発管理へのリンクを公開して確認。",
-      "depends": [],
       "optional": false,
       "status": "released",
       "evidence": "docs/testing.md",
@@ -887,7 +884,7 @@
       "acceptanceEn": "Final optional phase. Start with equivalent orthotropic materials; add walls/layers/infill detail and validate against printed specimens.",
       "lastUpdate": "2026-10-23: 未merge・未公開候補で既存測定JSON parserを材料設定の読取検査へ接続。合成例の方向/条件/応力–ひずみ/表と校正報告を日英表示し、2MB/100片/10000点、世代/URL破棄、実main IAB390px・不正入力・project全内容/版不変・Back再読込後の再検査を確認。実測校正、材料同定と独立検証、解析への適用、物理精度は未達。",
       "lastUpdateEn": "2026-10-23: An unmerged, unpublished candidate mounts the existing measurement JSON parser as a read-only material inspector. Bilingual synthetic direction/conditions/stress-strain/table and calibration reports are checked with2MB/100specimen/10000sample limits, generation/URL cleanup, actual main IAB390px, invalid input, exact project/revision preservation and Back/reload reinspection. Real calibration, fitting with independent validation, analysis application and physical accuracy remain incomplete.",
-      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs; docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md; docs/evidence/2026-10-21-printed-equivalent-material.json; docs/evidence/2026-10-23-printed-measurement-ui.json; docs/evidence/2026-10-23-print2-ui-independent-audit.json; docs/evidence/2026-10-23-print2-main-browser.json",
+      "evidence": "src/orthotropic-material.js; src/orthotropic-result.js; tests/orthotropic.test.mjs; tests/orthotropic-integration.test.mjs; docs/opencode-release-work-orders-2026-10-21/42-PRINT2.md; docs/evidence/2026-10-21-printed-equivalent-material.json; docs/evidence/2026-10-23-printed-measurement-ui.json; docs/evidence/2026-10-23-print2-ui-independent-audit.json; docs/evidence/2026-10-23-print2-main-browser.json; docs/evidence/2026-10-23-opencode-63-print2.json; docs/evidence/2026-10-23-print2-audit-fixes.json",
       "review": {
         "status": "merged",
         "pr": 169,
@@ -987,7 +984,7 @@
       "acceptanceEn": "Verify arbitrarily oriented multi-port and connected-volume references.",
       "lastUpdate": "2026-10-26: 明示indexed surfaceの節点ID/順序/許容値を保持する非接続providerを追加。内容SHAと世代/私有leaseで置換・破棄・非同期後着・ABAを拒否。監査で未解決hashの保持数無制限を発見し、snapshot前max2制限と全終了経路の枠解放を追加。製品のindexed入力取得・保存・UI接続・任意wire/流体領域生成は未完。",
       "lastUpdateEn": "2026-10-26: Added a disconnected provider retaining explicit indexed-surface node IDs/order/tolerance. Content SHA,generation and private leases reject replacement,disposal,late hashes and ABA. Audit found unlimited pending snapshots; admission now limits pending hashes to two before copying and releases slots on every settled path. Product indexed acquisition,persistence,UI,arbitrary wires and fluid-domain generation remain open.",
-      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/retained-opening-surface.md; docs/opening-provider-independent-2026-10-26.md; docs/evidence/2026-10-26-opening-provider-integration.json",
+      "evidence": "src/fluid-opening-caps.js; tests/fluid-opening-caps-cad.test.mjs; docs/internal-fluid.md; docs/evidence/2026-10-18-fluid-opening-caps.json; docs/evidence/2026-10-18-fluid-opening-caps-gui.json; docs/evidence/2026-10-18-fluid-opening-caps-mcp.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/retained-opening-surface.md; docs/opening-provider-independent-2026-10-26.md; docs/evidence/2026-10-26-opening-provider-integration.json; docs/evidence/2026-10-23-opencode-64-cfdport1.json",
       "review": {
         "status": "merged",
         "pr": 139,
@@ -1208,9 +1205,8 @@
       "detailEn": "Establish TypeScript contracts, separate UI/state and discipline execution adapters, dependency rules and independent tests. After incident recovery, prioritize alongside existing API/MCP work over additional physics. Full React/WASM migration is not a publication prerequisite.",
       "acceptance": "モジュール間の型・公開API・依存規則を検査。代表画面とソルバーを別ファイル群・テストで独立改修し、GUI/API/MCP同等動作、保存互換性、数値参照、取消・復元を確認。フォルダ移動だけで完了にしない。",
       "acceptanceEn": "Check types, public interfaces and dependency rules. Demonstrate independent representative UI/solver changes and verify GUI/API/MCP parity, archive compatibility, numerical references, cancellation and restoration. File moves alone are insufficient.",
-      "depends": [],
       "lastUpdate": "2026-10-21: 追加PR #150 を限定成果として取り込み対象。時刻履歴のcount/budget変換をpure helper化。旧変換とマスク動作を保持。 親タスク全体は未完。",
-      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
+      "evidence": "src/ui/study-form-ui.js; tests/ui-study-form.test.mjs; tests/solver-adapter-post.test.mjs; docs/solver-adapters.md; docs/ui-state-separation.md; src/ui/discipline-controls-ui.js; tests/discipline-controls-ui.test.mjs; scripts/check-contract-types.mjs; tests/contracts-types.test.mjs; tests/solver-structural-postprocess.test.mjs; docs/evidence/2026-10-15-v044-publication.json; docs/evidence/2026-10-15-mod1-discipline-ui-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/evidence/2026-10-23-opencode-69-mod1.json; docs/evidence/2026-10-23-mod1-result-export-preparation.json",
       "lastUpdateEn": "2026-10-21: Additional PR #150 accepted for bounded integration. Extracts time-history count/budget conversion into a pure helper while preserving conversion and masking. Full parent acceptance remains incomplete.",
       "review": {
         "status": "merged",
@@ -1226,7 +1222,6 @@
       "titleEn": "Capabilities, operation matrix and structured diagnostics",
       "status": "building",
       "category": "共通",
-      "depends": [],
       "detail": "docs/roadmap.mdの同名計画を参照。P0は能力取得と実行組合せ診断を実装中。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP0の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
@@ -1321,7 +1316,7 @@
       "acceptanceEn": "Meet P4 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "lastUpdate": "2026-10-21: 追加PR #155 を限定成果として取り込み対象。PNG chunk/CRCとGIF block構造を有界検証。完全decodeや物理精度の証明ではない。 親タスク全体は未完。 2026-10-27: 単一ビューorbit GIFを通常main/IAB・正式stdioで限定実証。既存94節点熱ケースの温度・補間2秒を固定し、24フレーム/640×320/2秒/86ページ・全bytes/hash、独立復号pixel一致、全24モデル領域の非背景/回転と3画像目視を確認。5状態不変・補間2秒復元・cleanup成立。初回proof拒否と202b背景のみの履歴は保持。親受入全体、実取消matrix、GUI download、公開/他engine/一般物理精度は未証明。 2026-10-27: 単一ビュー保存時刻GIFを通常main/IAB・英語前景・正式stdioで限定実証。既存合成94節点熱ケース1回、24枚/640×320/2秒/5574849bytes/86ページ、0/5/10秒最寄り選択6/12/6・終端10秒ずれ0、独立全24RGB一致と3色のモデル可視性を確認。5状態不変・元の補間2秒復元・settled解放/所有child/session/token cleanup成立。実音響・実取消・GUI download・一般物理精度/校正と親完了は未証明。初期失敗/準備拒否の履歴を保持。 2026-10-27: 単一ビュー表示用変形GIFを通常main/IAB・英語前景・正式stdioで限定実証。既存完全archiveの171節点/428Tet静的WASMケース1回、倍率100・mode null・24i24cosine/640×320/2秒/5574849bytes/86ページ、独立全24RGB一致・13姿勢と棒の伸び戻りを目視確認。5状態/GUI倍率100復元・settled解放/全cleanup成立。新solveなし。保存modal探索・不完全public step3の準備拒否は保持し、完全入力へ公式切替、値/envelope捏造なし。実modal・実取消matrix・GUI download・一般物理/校正・親完了は未証明。",
       "lastUpdateEn": "2026-10-21: Additional PR #155 accepted for bounded integration. Adds bounded PNG chunk/CRC and GIF block verification; this does not establish full decoding or physical accuracy. Full parent acceptance remains incomplete. 2026-10-27: Bounded single-view orbit GIF verified through ordinary main/IAB and formal stdio using the existing94-node thermal case at fixed temperature/interpolated2s:24frames/640x320/2s/86pages, full bytes/hash, independent decoded-pixel equality, non-background model regions across24frames and three-image rotation review. Five-state equality, interpolated2s restoration and cleanup passed. Initial proof refusal and202b blank-model history retained. Full parent acceptance, actual cancellation matrix, GUI download, publication, other engines and general physical accuracy remain unproven. 2026-10-27: Bounded single-view stored-time GIF acceptance in foreground English ordinary-main/IAB/formal stdio: one existing synthetic94-node thermal case,24frames/640x320/2s/5574849bytes/86pages, nearest0/5/10s selections6/12/6 with terminal10s zero offset, independent all24 RGB equality and visible three-color model. Five-state equality, original interpolated2s restoration and settled release/owned-child/session/token cleanup passed. Actual acoustic/cancellation/GUI download, general physics/calibration and parent completion remain unproven; initial failure/preparation records retained. 2026-10-27: Bounded single-view visual-deformation GIF in foreground English ordinary-main/IAB/formal stdio: one complete existing171-node/428-Tet static WASM case, scale100/mode null/24i24cosine/640x320/2s/5574849bytes/86pages, all24 independent RGB equality/13poses and visible full-bar elongation/return. Five-state/GUI scale100 restoration and settled release/full cleanup passed. No new solve. Missing modal search/incomplete public-step3 preparation refusals retained; official complete-archive import replaced them without invented values/envelope. Actual modal/cancellation matrix/GUI download, general physics/calibration and parent completion remain unproven.",
-      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/evidence/2026-10-27-single-orbit-gif-visible-main/README.md; docs/evidence/2026-10-27-single-orbit-gif-integration.json; docs/single-stored-time-gif.md; docs/evidence/2026-10-27-single-stored-time-gif-main/README.md; docs/evidence/2026-10-27-single-stored-time-gif-integration.json; docs/single-deformation-gif.md; docs/evidence/2026-10-27-single-deformation-gif-main/README.md; docs/evidence/2026-10-27-single-deformation-gif-integration.json",
+      "evidence": "docs/evidence/2026-10-18-skill-loop-independent-post-pair.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/evidence/2026-10-27-single-orbit-gif-visible-main/README.md; docs/evidence/2026-10-27-single-orbit-gif-integration.json; docs/single-stored-time-gif.md; docs/evidence/2026-10-27-single-stored-time-gif-main/README.md; docs/evidence/2026-10-27-single-stored-time-gif-integration.json; docs/single-deformation-gif.md; docs/evidence/2026-10-27-single-deformation-gif-main/README.md; docs/evidence/2026-10-27-single-deformation-gif-integration.json; docs/evidence/2026-10-27-single-orbit-gif.json; docs/evidence/2026-10-27-single-deformation-gif.json; docs/evidence/2026-10-27-single-slice-gif.json; docs/evidence/2026-10-27-single-stored-time-gif.json; docs/evidence/2026-10-24-fixed-webm-integration.json",
       "review": {
         "status": "merged",
         "pr": 155,
@@ -1362,7 +1357,7 @@
       "acceptance": "docs/roadmap.mdのP6の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P6 and common completion gates in docs/en/roadmap.md; retain evidence.",
       "lastUpdate": "2026-10-22: 準備済みTet4出力へ反力モーメントの釣合い検査を追加。合力を保つ3軸偶力の反例を拒否し、平行移動の正例を受理。実host/WASMは今回候補CIで別確認。CAD条件転送・製品backend・一般物理は残る。",
-      "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md; docs/evidence/2026-10-21-native-tet4-prepared-record.json; docs/next-work-orders-2026-10-22/01-P6-MOMENT.md",
+      "evidence": "docs/opencode-release-work-orders-2026-10-21/43-P6.md; docs/evidence/2026-10-21-native-tet4-prepared-record.json; docs/next-work-orders-2026-10-22/01-P6-MOMENT.md; docs/evidence/2026-10-23-opencode-62-p6-boundary-selection.json",
       "lastUpdateEn": "2026-10-22: Prepared Tet4 output validates reaction-moment equilibrium, rejecting three-axis spurious couples while accepting translated references. Actual host/WASM runs are checked in candidate CI separately. CAD transfer, product backend and general physics remain.",
       "review": {
         "status": "merged",
@@ -1378,19 +1373,19 @@
       "titleEn": "Study existing CAE interfaces and propose improvements",
       "status": "released",
       "category": "UI",
-      "depends": [
-        "P0",
-        "P1",
-        "P3",
-        "P4"
-      ],
       "detail": "LLM向けAPI・MCP・専門SKILL・中間結果パイプラインを優先し、その後に既存CAEの代表的な操作フローを調査。対象候補はFreeCAD FEM、PrePoMax、SALOME/ParaView、商用CAEの公開資料。対象と版は調査時に確定する。",
       "detailEn": "After prioritized LLM functionality, study representative CAE workflows using public documentation or accessible applications; record selected products and versions at research time.",
       "acceptance": "形状取込、モデル/解析ツリー、領域選択、材料/条件、ジョブ監視、診断、結果/比較/出力を共通例題で比較。資料URL・版・確認日・観察と推測を記録。初心者の操作負担とエージェントとの協働を評価し、優先順位付き改善案と画面案を残す。",
       "acceptanceEn": "Compare import, model/study trees, selection, materials/conditions, job monitoring, diagnostics and results/comparison/export with a common scenario. Record source URLs, versions, dates and observed versus inferred findings. Deliver ranked improvements and screen proposals for beginners and agent collaboration.",
       "lastUpdate": "2026-10-18: COMSOL6.3/Mechanical2025R2の一次資料で共通ブラケット3案×静構造/独立定常熱6caseの資料ベース比較を追加。7操作段階、版URL日付、資料記述/適用推論/未確認、初心者負担とagent協働、9改善案/画面案を整備。独立reviewでAnsys本文2件再照合。資料研究のみ完了、実機6case/定量負担/復旧/keyboardはUIIMPROVE1へ残す。",
       "evidence": "docs/ui-research.md; docs/en/ui-research.md",
-      "lastUpdateEn": "2026-10-18: Added COMSOL6.3/Mechanical2025R2 primary-document comparison for three bracket variants,static structure and independent steady heat:six planned cases. Covers seven stages,versioned URLs/dates,documentation/mapping/gaps,beginner burden/agent collaboration and nine ranked proposals/screen sketch. Independent review rechecked two Ansys bodies. Literature research only complete;hands-on six cases,measured burden,recovery and keyboard remain UIIMPROVE1 work."
+      "lastUpdateEn": "2026-10-18: Added COMSOL6.3/Mechanical2025R2 primary-document comparison for three bracket variants,static structure and independent steady heat:six planned cases. Covers seven stages,versioned URLs/dates,documentation/mapping/gaps,beginner burden/agent collaboration and nine ranked proposals/screen sketch. Independent review rechecked two Ansys bodies. Literature research only complete;hands-on six cases,measured burden,recovery and keyboard remain UIIMPROVE1 work.",
+      "parents": [
+        "P0",
+        "P1",
+        "P3",
+        "P4"
+      ]
     },
     {
       "id": "UIIMPROVE1",
@@ -1458,7 +1453,6 @@
       "titleEn": "Verify an internal Stokes boundary adapter",
       "status": "released",
       "category": "流体",
-      "depends": [],
       "detail": "明示ポート速度・壁no-slip・流量収支・Re<=0.1を検査。独立モジュール段階でUI/Worker/保存studyへ未接続。",
       "detailEn": "Validate explicit port velocities, no-slip walls, flux balance and Re<=0.1; independent module, not yet integrated into UI/Worker/saved study.",
       "acceptance": "実円管P1/P2のPoiseuille圧損、細分化傾向、流束/発散収支と不正・未対応条件の拒否。",
@@ -1473,12 +1467,11 @@
       "titleEn": "Prove the MFEM host execution contract on a small reference",
       "status": "released",
       "category": "基盤",
-      "depends": [],
-      "detail": "Linux CIで実ホストMFEMとWASMを5条件で比較。棒の変位・反力・残差と不正入力8件を確認。任意保存入力や製品ネイティブバックエンドは未対応。",
-      "detailEn": "Linux CI verified real host MFEM against WASM for five bar fixtures and eight invalid inputs; arbitrary saved projects and production native backend remain unsupported.",
+      "detail": "Linux CIで実ホストMFEMとWASMを5条件で比較。棒の変位・反力・残差と不正入力8件を確認。任意保存入力や製品ネイティブバックエンドは未対応。 CI実行記録: GitHub Actions run 38540608025（リポジトリ外の参照）。",
+      "detailEn": "Linux CI verified real host MFEM against WASM for five bar fixtures and eight invalid inputs; arbitrary saved projects and production native backend remain unsupported. CI run record: GitHub Actions run 38540608025 (external reference).",
       "acceptance": "実ホスト機械語で棒の変位・反力・残差・不正入力を検証しWASM結果と比較。専用狭範囲CLIは全プロジェクトAPI対応と区別。",
       "acceptanceEn": "Run real host machine code, verify bar displacement/reaction/residual/invalid input and compare with WASM; distinguish the narrow fixture CLI from a full project API.",
-      "evidence": "native/native-proof/README.md; scripts/check-native-proof.mjs; https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/38540608025; docs/evidence/2026-10-15-release-status-audit-c.json",
+      "evidence": "native/native-proof/README.md; native/native-proof/main.cpp; .github/workflows/native-proof.yml; scripts/check-native-proof.mjs; tests/native-proof-contract.test.mjs; docs/evidence/2026-10-15-release-status-audit-c.json",
       "lastUpdate": "2026-10-15 追加公開監査: 記載済みの受け入れ条件と証跡、公開453cff45およびworkflow38700153486成功を照合して公開済みへ反映。実ブラウザの未測定容量・ヒープ等の開示済み制約やP0〜P6全体の未完了条件は維持。個別判断は監査証跡を参照。",
       "lastUpdateEn": "2026-10-15 additional publication audit: acceptance and evidence match published 453cff45 and successful workflow 38700153486. Reconciled to released; disclosed browser capacity/heap limits and broader P0–P6 requirements remain unchanged. No acceptance proof remains. Arbitrary saved-project support and a product native backend are explicitly distinguished from this narrow proof and are not claimed."
     },
@@ -1578,7 +1571,10 @@
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
-      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models.",
+      "depends": [
+        "MAT3"
+      ]
     },
     {
       "id": "PRINTMEASURE2",
@@ -1590,7 +1586,11 @@
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
-      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models.",
+      "depends": [
+        "PRINTMEASURE1",
+        "PRINT1"
+      ]
     },
     {
       "id": "PRINTMEASURE3",
@@ -1602,7 +1602,12 @@
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
-      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models."
+      "acceptanceEn": "Validate the corresponding proposal stage with actual equipment/slicing/logs and trace conditions, calibration and models.",
+      "depends": [
+        "PRINTMEASURE1",
+        "PRINTMEASURE2",
+        "PRINT2"
+      ]
     },
     {
       "id": "BROWSERFIELDS1",
@@ -1628,7 +1633,6 @@
       "titleEn": "Capture and reproduce intermittent nonlinear reference failure",
       "status": "released",
       "category": "基盤",
-      "depends": [],
       "detail": "力制御Neo-Hookean棒で一度Newton line search失敗。追加200回と計測付き並列全体検証では再現せず。ソルバー・許容差は未変更。失敗入力と反復状態の捕捉を継続。",
       "detailEn": "One force-controlled Neo-Hookean bar line-search failure remains unreproduced after 200 generated references and an instrumented parallel full run. Solver/tolerances unchanged; failed-input and iteration capture remain open.",
       "acceptance": "失敗入力を固定して再現し、変位・反力・独立伸長解・残差と不正入力拒否を維持して修正を検証。",
@@ -1755,12 +1759,11 @@
       "titleEn": "Capture intermittent WASM runtime termination during distribution checks",
       "status": "checking",
       "category": "基盤",
-      "depends": [],
       "detail": "Node v24.11.1で配信物検証と全体テストを並行した初回にV8 jit_page_->allocations_.erase(addr) == 1で停止。単独再実行26項目は成功。原因未特定。 印刷API追加時の全体テスト単独実行（並列数4）でもanalysis-job-service.test.mjsで同じV8停止が再発。対象ファイル単独3件は成功。 新規子プロセス12反復・36試験で非再現。上流Node issue66366/V8修正9b8ca54d5aは同じCHECKの原因候補だが本件との同一性未確定。再現記録スクリプトを追加。 ケース/ビュー/測定v2の全体試験でもmaterial-catalog.test.mjsで同CHECKが再発（518中514成功・1失敗・3スキップ）。該当単独7件は成功したが未解決。環境・ネイティブtrace・sourceSHAを保存。 終了待機をHEADLESSLIFECYCLE1で修正。公式ハッシュ照合したportable Node26.10.0と24.11.1を同ソース全体試験で各2回実行し、毎回538成功・3スキップ、fatalは非再現。v24.19.0は当該V8修正を含む対照でない。原因解決やNode26への既定移行は断定しない。 観測profile追加の全体試験でも所有権/settlement修正後に同fatalが再発（584中580成功・1失敗・3スキップ）。単独7実jobと同ソース再試験581成功・3スキップは通ったが、修正根治の証拠ではない。 観測照合追加後も既存analysis-job-serviceで2回目fatal（583報告中579成功・1失敗・3skip）。最終同ソースNode26比較は584中581成功・3skip、175.04秒で非再現。既定Nodeを変更せず未解決。 80操作契約追加の既定Node 24全体でもstokes-observation-pipelineで同V8fatal再発（839報告/835成功/1失敗/3skip）。該当単独3件は成功。Node26比較は根治や既定移行の証明ではない。 公開進捗追加の既定Node 24全体でもanalysis-job-serviceで同fatal再発（883報告/879成功/1失敗/3skip）。該当単独3件成功、同ソースNode26比較884中881成功・3skip。既定変更/根治の証明ではない。",
       "detailEn": "Concurrent distribution/full-suite execution stopped once in Node v24.11.1/V8 jit_page_->allocations_.erase(addr) ==1. Isolated26-check rerun passed; cause unresolved. Recurred in analysis-job-service.test.mjs during a standalone full-suite run at concurrency four after print API changes. Its isolated three tests passed. No reproduction in12 fresh processes/36 tests. Node issue66366/V8 fix9b8ca54d5a is a candidate for the same CHECK, not a confirmed match. Added a diagnostic report script. Recurred in material-catalog.test.mjs during the v2 case/view/measurement full suite (514passed,one failed,three skipped of518). Its isolated seven tests passed; unresolved. Saved environment, native trace and source SHAs. HEADLESSLIFECYCLE1 now awaits Worker termination. Frozen-source full suites on official-checksum-verified portableNode26.10.0 andNode 24.11.1 each ran twice,538passed/three skipped every run; no fatal reproduced. v24.19.0 is not a fix-containing control. No root-resolution or default-runtime migration claim. The observation-profile full suite reproduced the same fatal after ownership/settlement changes (580passed,one failed,three skipped of584). Isolated seven real jobs and unchanged-source retry581passed/three skipped succeeded; this does not establish a root fix. A second fatal occurred in existing analysis-job-service after observation assertions (579passed/one failure/3skip of583 reported). Final unchanged-source Node26 comparison passed581/skipped3 of584 in175.04s without recurrence. Default Node stays unchanged; unresolved. The80-operation-contract full run again hit the same V8 fatal in stokes-observation-pipeline on defaultNode 24 (839reported/835passed/onefailed/3skipped);the affected file alone passed3tests. Node26 comparison is not proof of resolution or default migration. The publication-progress defaultNode 24 full run reproduced the same fatal in analysis-job-service (883reported/879passed/onefailure/3skipped). Affected file alone3passed;same-sourceNode26 comparison881passed/3skipped of884. No default migration or root-fix proof.",
       "acceptance": "失敗時の実行条件・Worker/WASM終了状態を捕捉し、固定条件で再現と原因を検証する。再試行成功だけで解決扱いしない。 2026-10-16 追跡: 上流nodejs/node#66366はV8の競合(WasmImportWrapperCacheのMaybeGetがis_dying確認前にrefを取る)が原因とされ、修正はV8 68210d500a/9b8ca54d5aだが、24.xへのバックポート(PR66376)は未マージで、24.21.0・24.22.0とも修正を含まない(CHANGELOG確認)。当方のWindows実測(Node 24.11.1/24.22.0/22.23.3/26.12.0と--no-wasm-code-gc、CIで落ちた5ファイルを93回)ではV8致命エラー0回で、当方のどの操作が引き金かは未特定(worker.terminate()後のWASM保持という仮説のみ)。推奨: 24.xの修正入りリリースへのCIピン移行を待つ。暫定策として--no-wasm-code-gc(上流報告では0/20)はCI変更の承認が必要。checking維持。",
       "acceptanceEn": "Capture environment and Worker/WASM teardown state, reproduce with frozen conditions and verify root cause. Successful retry alone is not resolution. 2026-10-16 Tracking: upstream nodejs/node#66366 attributes the crash to a V8 race (WasmImportWrapperCache MaybeGet takes a ref before checking is_dying); V8 fixes 68210d500a/9b8ca54d5a, but the 24.x backport (PR 66376) is unmerged and neither 24.21.0 nor 24.22.0 contains it (CHANGELOG checked). Our Windows runs (Node 24.11.1, 24.22.0, 22.23.3, 26.12.0 and --no-wasm-code-gc; the five files that died in CI; 93 runs) produced 0 V8 fatals, so which operation of ours triggers it is not identified (hypothesis only: wasm kept alive across worker.terminate()). Recommendation: move the CI pin to the first 24.x release with the fix. Interim --no-wasm-code-gc (0/20 in the upstream report) needs an approved CI change. Stays checking.",
-      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json; docs/opencode-release-work-orders-2026-10-21/44-RUNTIMEWASM1.md; docs/evidence/2026-10-21-runtime-linux-comparison.json",
+      "evidence": "scripts/reproduce-wasm-runtime.mjs; docs/wasm-runtime-investigation.md; docs/en/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-wasm-material-catalog-failure.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-14-observation-profiles-v8-failure.json; docs/evidence/2026-10-14-observation-profiles-node26-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-17-comparison-video-local-validation.json; docs/evidence/2026-10-18-runtime-jit-failure.json; docs/evidence/2026-10-18-runtime-comparison-smoke.json; docs/opencode-release-work-orders-2026-10-21/44-RUNTIMEWASM1.md; docs/evidence/2026-10-21-runtime-linux-comparison.json; docs/evidence/2026-10-23-windows-v8-validation.json",
       "lastUpdate": "2026-10-21: 固定56576af6で実Linux比較を各1回実行。analysis-jobsは両設定8件、material-catalogは両設定7件が成功。致命署名・timeoutなし。元障害の再現や軽減効果・根治は未証明のためchecking維持。",
       "lastUpdateEn": "2026-10-21: Real Linux comparisons at frozen56576af6 passed once per target:8 analysis-jobs tests and7 material-catalog tests in each mode. No fatal signature or timeout. Root failure reproduction, mitigation effectiveness and resolution remain unproven.",
       "review": {
@@ -1851,16 +1854,16 @@
       "titleEn": "Observe GUI-started analysis through the user LLM",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P3"
-      ],
       "detail": "画面4経路を共通ジョブへ接続。入力SHA・CAS、中間場、履歴8件とGUI分のみの解放、最大100件のlistJobsを実装。49ライブ操作。直接analyze/generateMesh APIの互換経路は維持。",
       "detailEn": "Connect four GUI paths to common jobs with input SHA/CAS, retained intermediate fields, eight GUI history entries, GUI-only pruning and listJobs pages up to100.49 live methods; preserve legacy direct analyze/generateMesh APIs.",
       "evidence": "src/gui-analysis-jobs.js; tests/gui-analysis-jobs.test.mjs; tests/mcp-gui-jobs.test.mjs; docs/testing.md; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/evidence/2026-10-15-guijobs-real-chrome-2.json; docs/evidence/2026-10-15-release-status-audit-a.json",
       "acceptance": "共通API・実MCP/HTTPの模擬Worker試験に加え、実ローカルアプリ内ブラウザ/Worker/WASM/MCPで構造変位0.04mm・171節点/428要素と、熱10/20/30秒の暫定場・点測定を確認。切断継続・完了時入力照合・保持/解放の回帰も検証。実Chrome(localhost)で構造・熱・音響・流路・内部流体・外部流体の全GUI経路を確認(2026-10-15)。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "In addition to shared API/real MCP/HTTP tests with simulated Workers, actual local in-app browser/Worker/WASM/MCP verified structural0.04mm/171nodes/428elements and provisional thermal fields/probes at10/20/30s. Regression covers disconnect continuity, completion input checks and retention/release. All GUI routes (structural, thermal, acoustic, channel flow, internal and exterior fluid domain) were exercised in real Chrome on localhost on 2026-10-15. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The recorded real-local-browser route evidence and the job/MCP tests cover the stated scope; the deployed build and published verification passed. Disconnect continuity and intermediate field retention are covered by tests, not claimed as re-exercised in the browser run. HTTPS pairing is tracked separately."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The recorded real-local-browser route evidence and the job/MCP tests cover the stated scope; the deployed build and published verification passed. Disconnect continuity and intermediate field retention are covered by tests, not claimed as re-exercised in the browser run. HTTPS pairing is tracked separately.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "CATALOGAPPLY1",
@@ -1868,17 +1871,17 @@
       "titleEn": "Apply catalog materials with explicit assumptions and applicability",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P1"
-      ],
       "detail": "applyCatalogMaterialをGUI・共通API・保存MCP/ライブ編集の18番目の操作へ統合。カタログ版・Poisson仮定・等方近似・適用条件・実験配合選択を検証し、出典/測定条件/欠測を保存。数値一致でも旧材料根拠を未確認へ戻す。",
       "detailEn": "Integrate applyCatalogMaterial into GUI/shared API and saved/live edit as the18th semantic operation. Validate catalog revision, explicit Poisson/isotropic assumptions, applicability and experimental opt-in; retain sources/test conditions/missing data. Invalidate old material confirmations even when values match.",
       "evidence": "src/studio-api.js; src/material-catalog-ui.js; tests/material-catalog-operations.test.mjs; tests/mcp-catalog-apply.test.mjs; docs/evidence/2026-10-14-gui-jobs-catalog.json; docs/testing.md; docs/evidence/2026-10-14-catalog-apply.jpg; tests/material-catalog.test.mjs; docs/evidence/2026-10-15-release-status-audit-a.json",
       "acceptance": "実MCPで保存・版競合・原子的失敗・材料根拠失効と非材料根拠保持を検証。実ローカル画面で必須範囲入力、日英表示、保存JSONと共通物性の一致を確認。公開画面の新操作は未確認。 最終対象29成功・全体459中456成功/3スキップ、ビルド成功。 最終配信物26項目成功（28.31秒）。",
       "acceptanceEn": "Real MCP verifies publication, revision/atomicity failures and invalidation of material confirmations while retaining other provenance. Actual local UI verifies required scope, JP/EN and exported/shared material equality. New public UI remains unverified. Final29 related tests passed; full suite456 passed/three skipped of459; build passed. Final26 distribution checks passed in28.31seconds.",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The acceptance's real MCP and local GUI requirements have dedicated evidence and tests; the code is in the successfully published build. There is no separate live interaction with the public URL for this specific GUI action, but public-HTTPS pairing is not an outstanding requirement for this item."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The acceptance's real MCP and local GUI requirements have dedicated evidence and tests; the code is in the successfully published build. There is no separate live interaction with the public URL for this specific GUI action, but public-HTTPS pairing is not an outstanding requirement for this item.",
+      "parents": [
+        "P0",
+        "P1"
+      ]
     },
     {
       "id": "PRINTTRANSFER1",
@@ -1975,16 +1978,16 @@
       "titleEn": "Wait for Worker termination before settling headless analysis",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "RUNTIMEWASM1"
-      ],
       "detail": "headless解析の成功・失敗・取消・時間切れでterminate完了後だけPromiseを確定。終了処理失敗と元エラーを保持し、遅延応答と二重確定を防止。診断CLIに対象・並列数・別Node・親子環境・ソース指紋・途中記録を追加。共有ジョブの取消terminal先行は別の制約として残す。",
       "detailEn": "Headless success/failure/cancel/timeout promises settle only after termination. Preserve cleanup and original errors; prevent late replies and duplicate settlements. Diagnostic CLI gains targets/concurrency/runtime identity/source fingerprints/checkpoints. Shared-job cancellation may still become terminal before cleanup ends.",
       "acceptance": "新18試験（終了所有権12・診断6）と実解析10件成功。修正前後のFakeWorkerで旧応答は終了前確定・新応答は終了後確定を実証。同じソース/128ファイル/並列4でNode 24.11.1と26.10.0を各2回、毎回541中538成功・3スキップ。V8fatalは今回非再現だが根治未証明。共有ジョブの取消と終了追跡はJOBSETTLEMENT1で追加。ビルド・配信物26項目・SKILL成功。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。 既定Node 24の全体ゲートは、利用者決定(2026-10-15・方針B)により「必須CI verifyのNode 24成功」で判定し、手元Windows Node 24.11.1の断続的V8 fatal(nodejs/node#66366)は既知問題として記録する。V8根治の証明ではない(RUNTIMEWASM1)。",
       "acceptanceEn": "18new checks (12ownership/six diagnostic) and ten real-analysis checks pass. Deterministic before/after Worker adapter proves prior early settlement and corrected exit-bound settlement. Frozen sources/128files/concurrency4 on Node 24.11.1 and26.10.0, two runs each:538passed/three skipped of541 each. No V8fatal reproduced; root fix unproven. JOBSETTLEMENT1 adds shared-job cancellation and settlement tracking. Build,26distribution checks andSKILL passed. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
       "evidence": "scripts/headless-analysis.mjs; scripts/reproduce-wasm-runtime.mjs; tests/headless-worker-lifecycle.test.mjs; tests/reproduce-wasm-runtime.test.mjs; docs/wasm-runtime-investigation.md; docs/testing.md; docs/evidence/2026-10-14-headless-worker-ownership.json; docs/evidence/2026-10-14-runtime-comparison.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-8ea074a.json",
       "lastUpdate": "2026-10-15 公開候補8ea074a(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。方針Bに基づくゲート判定。公開済みへ。V8根治は未証明で別項目。",
-      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately."
+      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately.",
+      "related": [
+        "RUNTIMEWASM1"
+      ]
     },
     {
       "id": "JOBSETTLEMENT1",
@@ -2046,7 +2049,6 @@
       "category": "共通",
       "depends": [
         "BROWSERBRIDGE1",
-        "AGENTINPUT1",
         "AGENTEDIT1"
       ],
       "detail": "共通builtinProjectApi.createと編集権限のcreateBuiltinProjectを追加。既存factoryのbox/boxes/cylinder/sphere/tubeをmmで作成し、条件・物性・旧モデル状態を継承しない。現在入力版・busy・期限・失効・最終CASを確認し、ブラウザ保存形式と返却版をcommit前に正規化する。",
@@ -2055,7 +2057,10 @@
       "acceptanceEn": "573 passed and three skipped of576 including ten new tests (69.71s). Five shapes, revision/CAS, grants/busy/revocation/invalid inputs and normalization failures without commit verified. Real stdio/HTTP and actual browser create a10x10x40mm bar, configure/solve and measure0.04000000000143204mm at its tip. Returned revision matches subsequent inspect; stale revisions/invalid dimensions refused. Build,26distribution checks27.94s andSKILL pass. Live STEP import and general CAD creation remain separate.",
       "evidence": "src/builtin-project-operations.js; src/browser-builtin-project.js; src/browser-session.js; src/browser-session-ui.js; src/main.js; tests/builtin-project-operations.test.mjs; tests/browser-builtin-project.test.mjs; tests/mcp-browser-builtin.test.mjs; docs/evidence/2026-10-14-browser-builtin-proof.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "related": [
+        "AGENTINPUT1"
+      ]
     },
     {
       "id": "OBSERVATIONPROFILES1",
@@ -2064,7 +2069,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
         "AGENTJOBS1"
       ],
       "detail": "実solver配線から13観測profile（Node12）を宣言し、capabilitiesと診断/preflightのselectedObservationで選択する。stage/数値metrics/単位/時刻場/間引きと未対応経路を区別。scalarとmeshの保持要求・対応・取得保証なしを分離し、既存実行診断・物理assessment形式を維持する。",
@@ -2073,7 +2077,10 @@
       "acceptanceEn": "Implemented13profiles (12onNode) and selection diagnostics. Eight new tests, seven real MCP analyses,22existing Worker tests with observation assertions and actual browser three-time thermal fields verified. Node 24 full suites reproduced V8fatal twice; isolated tests pass and an intervening unchanged-source retry passed581/skipped3. Final-source Node26 full suite:581passed/3skipped of584 (175.04s). Build,26distribution checks27.53s andSKILL pass. No Node 24 root fix, real-GPU or physical-accuracy claim.",
       "evidence": "src/observation-profiles.js; src/capabilities.js; src/analysis-preflight.js; scripts/studio-mcp.mjs; tests/observation-profiles.test.mjs; tests/preflight-observation-profiles.test.mjs; tests/mcp-observation-profiles.test.mjs; docs/evidence/2026-10-14-observation-profiles-browser.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P0"
+      ]
     },
     {
       "id": "NODERUNTIMEINFO1",
@@ -2081,17 +2088,19 @@
       "titleEn": "Report actual Node identity and matching known runtime failures to LLM clients",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "RUNTIMEWASM1"
-      ],
       "detail": "能力取得・実行診断・事前検査のMCPにNode/V8/platform/archだけのruntime報告を追加。記録済み完全一致環境の未解決warningと他環境の未評価を区別し、物理診断・allowed・保存assessment・実行制御・既定環境を変更しない。",
       "detailEn": "Add allowlisted Node/V8/platform/arch runtime reports to capability,diagnostic and preflight MCP reads. Distinguish exact recorded unresolved-risk identities from unassessed runtimes without changing physical diagnostics,allowed,saved assessments,execution controls or defaults.",
       "acceptance": "新4件を含む関連25試験をNode 24.11.1と26.10.0で各25成功（2.27秒/11.41秒）。両環境の実stdio3読取で環境一致・入力不変・allowed維持と未評価/警告を確認。ビルド・配信物26項目（27.75秒）・SKILL成功。全体数値試験の再実行ではなく、既知V8停止の根治や未知環境の安全を証明しない。",
       "acceptanceEn": "All25targeted tests including four new tests pass on Node 24.11.1 and26.10.0 (2.27s/11.41s). Real stdio three-tool reports on both runtimes verify identities,unchanged inputs/allowed and risk-versus-unassessed status. Build,26distribution checks27.75s andSKILL pass. Not a rerun of the full numerical suite or proof of V8 resolution/unknown-runtime safety.",
       "evidence": "scripts/node-runtime-info.mjs; scripts/studio-mcp.mjs; tests/node-runtime-info.test.mjs; tests/mcp-runtime-info.test.mjs; tests/capabilities.test.mjs; docs/evidence/2026-10-14-runtime-info-node24.json; docs/evidence/2026-10-14-runtime-info-node26.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P0"
+      ],
+      "related": [
+        "RUNTIMEWASM1"
+      ]
     },
     {
       "id": "BROWSERINPUTIMPORT1",
@@ -2101,7 +2110,6 @@
       "category": "共通",
       "depends": [
         "BROWSERBUILTIN1",
-        "AGENTINPUT1",
         "BROWSERBRIDGE1"
       ],
       "detail": "共有取込APIと編集権限の4操作で元バイト・SHA256・入力版を照合。STEPのmm正規化、STLの明示単位、候補事前検証とCAS、接続所有転送、取消時のCAD Worker終了処理を実装。",
@@ -2110,7 +2118,10 @@
       "acceptanceEn": "Full suite:607passed/3skipped of610 including22new tests on Node 24.11.1 (84.61s). Real MCP covers multi-chunk STEP/OCCT and 25.4-scaled STL; actual browser verifies10x10x40mm STEP, revision agreement and repeated commit. Build,26distribution checks29.40s andSKILL pass. Staging limits are not peak-heap or15-second completion guarantees. Known Node 24 V8 fatal remains unresolved.",
       "evidence": "src/input-import-operations.js; src/input-import-transfer.js; src/cad-import-client.js; src/browser-session.js; tests/input-import-operations.test.mjs; tests/input-import-transfer.test.mjs; tests/cad-import-client.test.mjs; tests/browser-input-import-session.test.mjs; tests/mcp-input-import.test.mjs; docs/evidence/2026-10-15-browser-input-import.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "related": [
+        "AGENTINPUT1"
+      ]
     },
     {
       "id": "FLUIDDOMAINAPI1",
@@ -2157,7 +2168,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
         "BROWSERBRIDGE1"
       ],
       "detail": "GUIと同じ表面検査を保存/ライブMCPへ公開し、全問題三角形の総数と最大200件のページ、入力版を返す。入力不変、自己交差/CAD精度未検査と自動修復なしを明記し、合算体積の非有限値を拒否する。",
@@ -2166,7 +2176,10 @@
       "acceptanceEn": "Real MCP retrieves240problems in200+40pages without changing source JSON bytes. Actual browser verifies a1000mm3closed cube, seven defect triangles matching GUI diagnostics, two-item pages/selection and stale-revision refusal. Final full suite:634passed/3skipped of637 including six new tests onNode 24.11.1 (74.77s),including aggregate-volume overflow refusal. Build,26distribution checks27.94s andSKILL pass. Self-intersections,exact CAD and maximum scale remain unverified; known Node 24V8 failure remains unresolved.",
       "evidence": "src/surface-inspection.js; src/project-surface-inspection.js; src/studio-api.js; scripts/studio-mcp.mjs; tests/project-surface-inspection.test.mjs; tests/mcp-surface-inspection.test.mjs; docs/evidence/2026-10-15-browser-surface-inspection.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P0"
+      ]
     },
     {
       "id": "NONLINEARFIELDS1",
@@ -2194,8 +2207,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P1",
-        "AGENTINPUT1",
         "CASESOURCEAPI1"
       ],
       "detail": "定常/過渡熱伝導の必須物性・時間・発熱・熱境界の根拠をquantitative/exploratoryへ拡張。同値runtime設定のみ許可し、legacyとschema1保存assessment互換を維持。温度/振動sourceAssessmentの暫定性を有効連成の派生結果へOR伝播する。",
@@ -2204,7 +2215,13 @@
       "acceptanceEn": "Full Node 24.11.1 suite:671passed/3skipped of674 including19new tests (83.53s). Seven real MCP jobs and one actual IAB thermal job verify evidence/assumptions, runtime override refusal, three fields/final28.298613153037422degC and provisional labeling/unchanged input revision. Coupling source-assessment provisional OR, old-source compatibility and invalid metadata refusal are covered. Build2.67s/SKILL pass; all26distribution checks28.39s pass. Physical accuracy/known Node 24V8 resolution are not guaranteed.",
       "evidence": "src/analysis-preflight.js; src/source-assessment.js; src/case-source-operations.js; src/capabilities.js; tests/thermal-preflight.test.mjs; tests/source-assessment.test.mjs; tests/mcp-thermal-provenance.test.mjs; docs/evidence/2026-10-15-browser-thermal-provenance.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P1"
+      ],
+      "related": [
+        "AGENTINPUT1"
+      ]
     },
     {
       "id": "WAVEFLUIDPROVENANCE1",
@@ -2213,8 +2230,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P1",
-        "AGENTINPUT1",
         "THERMALPROVENANCE1"
       ],
       "detail": "acoustic-wave、fully-developed-channel-flow、external-creeping-stokes-flowのnonlegacy物理値・境界・元形状の根拠を要求。異なるruntime物理指定・無視される音響source指定を拒否し、legacy互換と保存assessmentを維持。",
@@ -2223,7 +2238,13 @@
       "acceptanceEn": "Full Node 24.11.1 suite:694passed/3skipped of697 including23new tests (85.71s). Ten real jobs(two browser/four MCP/four branch headless) verify evidence/assumptions/runtime refusal/saved provisional status and additional routes. Transient final point-1.0557616546423643Pa and channel speed0.00005579846498232953m/s/pressure0.0005Pa checked. Old metadata compatibility/tampered assessment refusal pass. Build4.49s/all26distribution27.79s/SKILL pass. Physical accuracy/known V8 resolution are not guaranteed.",
       "evidence": "src/acoustic-input-contract.js; src/fluid-input-contract.js; src/analysis-preflight.js; scripts/studio-mcp.mjs; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P1"
+      ],
+      "related": [
+        "AGENTINPUT1"
+      ]
     },
     {
       "id": "STOKESOBS1",
@@ -2232,7 +2253,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
         "OBSERVATIONPROFILES1"
       ],
       "detail": "P1/P2のrestart前処理実測・Arnoldi推定・final元方程式数値検査をphase/residualKindで区別し、既存ジョブイベントに接続。途中場や物理精度保証は追加しない。",
@@ -2241,7 +2261,10 @@
       "acceptanceEn": "Eight new tests/seven real jobs and IAB P1/P2 residuals/probes/provisional labels/unchanged input/zero artifacts with includeFieldsfalse checked. Node 24.11.1 full705:702passed/3skipped(85.56s);build2.65s passed;two QA recapture jobs matched with overall views;all26distribution27.79s/SKILL pass. Postsettlement polling does not guarantee preterminal timing,physical accuracy or known V8 resolution.",
       "evidence": "src/stokes-core.js; src/stokes-p2-core.js; src/observation-profiles.js; docs/evidence/2026-10-15-browser-stokes-observation.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "WAVECHANNELOBS1",
@@ -2250,7 +2273,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
         "OBSERVATIONPROFILES1"
       ],
       "detail": "BiCGStabとchannel PCGの再帰相対残差、音響掃引の開始/完了を構造化し既存jobEventsへ接続。phase/solvePhase/周波数とresidualKindを宣言し独立true残差や途中場と区別する。",
@@ -2259,7 +2281,10 @@
       "acceptanceEn": "New14 targets/eight real target jobs and existing seven-job MCP profile regression passed. DefaultNode 24.11.1 full FAILED:714passed/onefilefailure/3skipped of718(87.59s),known V8 fatal gate unresolved. Three isolated tests passed. PortableNode26.10.0 same-source full719:716passed/3skipped(219.48s,no drift) does not replace default failure. Build2.72s passed;26 distribution checks passed in28.04s. No physical accuracy/preterminal timing/V8 root-fix guarantees. The default Node 24 gate is judged, by the owner decision (option B), as the required CI verify passing on Node 24 (docs/evidence/2026-10-15-node24-gate-policy.json); not proof of a V8 root fix.",
       "evidence": "src/bicgstab.js; src/acoustic-core.js; src/acoustic-sweep.js; src/channel-flow.js; src/analysis.worker.js; src/observation-profiles.js; tests/mcp-acoustic-channel-observation.test.mjs; docs/testing.md; docs/evidence/2026-10-15-wave-channel-node24-v8-failure.json; docs/evidence/2026-10-15-wave-channel-node26-comparison.json; docs/evidence/2026-10-15-wave-channel-node24-isolated-jobs.json; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-fe733ec.json",
       "lastUpdate": "2026-10-15 公開候補fe733ec(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。実装は公開候補に含まれる。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
-      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status."
+      "lastUpdateEn": "2026-10-15 candidate fe733ec (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). The implementation is part of the published candidate. Moved to released. The publication-milestone gate is not closed by task status.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "PROCESSISOLATION1",
@@ -2267,16 +2292,16 @@
       "titleEn": "Optional Node analysis process isolation and dependency provenance",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P3"
-      ],
       "detail": "同じNode実行ファイルの1ジョブ1子を起動時に選び、中間結果/MCPを維持。close前公開を防ぎ異常終了を有界イベントで返す。V8根治とは区別する。",
       "detailEn": "Select one same-executable child per job at host startup while preserving intermediate APIs/MCP;block publication before close and expose bounded failure events,separately from V8 resolution.",
       "acceptance": "全体741件中738成功・3skip、新22件。実MCP controlled exit86後もping/別熱解析成功、cancel/timeoutのclose待機、result後異常終了/signalの公開拒否を確認。依存物/実行ファイルSHAと生ログ保存。V8根治未証明。",
       "acceptanceEn": "Full741:738passed/3skipped,22new. Real MCP survives controlled exit86 and runs a distinct thermal job;cancel/timeout await close;post-result abnormal exit/signals block publication. Dependency/executable hashes and raw logs retained;V8 resolution unproven.",
       "evidence": "scripts/analysis-process-worker.mjs; scripts/wasm-runtime-provenance.mjs; docs/evidence/2026-10-15-process-isolation.json; docs/evidence/2026-10-15-process-isolation-full.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "STRUCTURALPROVENANCE1",
@@ -2284,16 +2309,16 @@
       "titleEn": "Explicit input and provenance for isotropic modes and static orthotropic structure",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P1"
-      ],
       "detail": "物性・材料軸・境界・適用条件をrequiredPointersへ結び、modal温度表とorthotropic重力も既存CPU範囲で検証。数値設定と物理根拠を区別する。",
       "detailEn": "Bind material,axes,boundary and applicability evidence to requiredPointers,including modal temperature tables and orthotropic gravity within existing CPU scope;distinguish numerical settings from physical evidence.",
       "acceptance": "新27件、対象37件成功。全体768件中765成功・3skip。実MCP4 strict+legacy2、Worker温度表/重力のstrict/legacy4、最終実ブラウザ3ジョブを確認。古い根拠・runtime矛盾・改変拒否、保存復元・点測定・暫定性・入力版不変を維持。メッシュ後検査/物理精度/V8根治は未保証。",
       "acceptanceEn": "27new/37target tests pass;full768:765passed/3skipped. Real MCP4strict+2legacy,Worker table/gravity4strict/legacy and three final browser jobs checked. Stale evidence/runtime conflicts/tampering rejected;saved cases,probes,provisional state and input identity retained. Post-mesh checks,physical accuracy and V8 resolution remain unproven.",
       "evidence": "src/modal-input-contract.js; src/orthotropic-input-contract.js; tests/mcp-structural-model-provenance.test.mjs; docs/evidence/2026-10-15-browser-structural-contract.json; docs/evidence/2026-10-15-structural-model-full.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P1"
+      ]
     },
     {
       "id": "ADVANCEDSTRUCTURALPROVENANCE1",
@@ -2302,7 +2327,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P1",
         "STRUCTURALPROVENANCE1"
       ],
       "detail": "温度/熱膨張/温度場payload・塑性負荷履歴・非線形材料を実CPU等の対応範囲で明示根拠へ結び、上流暫定性を保持する。数値設定と物理履歴を区別する。",
@@ -2311,7 +2335,10 @@
       "acceptanceEn": "33new/43target tests pass;full801:798passed/3skipped. Real MCP8strict/4legacy,thermal-source coupling3,J2 unloading2strict/legacy and four real browser jobs checked. Saved cases/probes/intermediate displacement/provisional status/input identity retained;payload staleness/runtime conflicts refused. No source-authenticity,physical-accuracy or V8-resolution guarantees.",
       "evidence": "src/thermal-stress-input-contract.js; src/nonlinear-input-contract.js; tests/mcp-advanced-structural-provenance.test.mjs; tests/advanced-structural-source-execution.test.mjs; docs/evidence/2026-10-15-browser-advanced-structural-contract.json; docs/evidence/2026-10-15-advanced-structural-full.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P1"
+      ]
     },
     {
       "id": "EXECUTIONDIAGNOSTICS1",
@@ -2320,8 +2347,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
-        "P1",
         "OBSERVATIONPROFILES1"
       ],
       "detail": "拘束・境界の既存検査とWorker失敗段階を有界schema1でAPI・ジョブ・GUI・MCPへ伝え、専門SKILLから確認できるようにする。",
@@ -2330,7 +2355,11 @@
       "acceptanceEn": "22new,33target and one observation integration test pass;full823:820passed/3skipped. Real MCP six failures/direct response,GUI rank3/6 and separately declared100N comparison success checked. Legacy messages,cancel/timeout,cleanup and input identity retained. Complete physical validation,inferred repair and V8 resolution remain unproven.",
       "evidence": "src/analysis-failure.js; tests/mcp-execution-failure.test.mjs; tests/analysis-host-failure.test.mjs; docs/evidence/2026-10-15-execution-failure-full.json; docs/evidence/2026-10-15-execution-failure-first-full.json; docs/evidence/2026-10-15-browser-execution-failure.json; docs/testing.md",
       "lastUpdate": "※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P0",
+        "P1"
+      ]
     },
     {
       "id": "BROWSERCONTRACTS1",
@@ -2339,8 +2368,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
-        "P3",
         "EXECUTIONDIAGNOSTICS1"
       ],
       "detail": "全80ライブ操作の入力schema・scope・版照合・単位・副作用・制限を共有APIと接続不要MCPから最大10件/64KiBで取得。直接例外のfailureをHTTP越しに保持。",
@@ -2349,7 +2376,11 @@
       "acceptanceEn": "17new/28target pass;Node26 comparison full840:837passed/3skipped. DefaultNode 24:839reported/835passed/oneV8fatal/3skipped;affected file alone3passed. Default-runtime gate remains open. Actual browser80-contract discovery,creation,bad-frame rejection with unchanged revision,and explicit corrected edit verified. Declarations do not grant access,prove optional adapter availability,complete nested physical validation or completion of P0. The default Node 24 full-suite gate is judged, by the owner decision of 2026-10-15 (option B), as the required CI verify job passing on Node 24; the intermittent local Windows Node 24.11.1 V8 fatal (nodejs/node#66366) is recorded as a known issue. This is not proof of a V8 root fix (RUNTIMEWASM1).",
       "evidence": "src/browser-operation-contracts.js; src/browser-operation-names.js; tests/mcp-browser-contracts.test.mjs; tests/browser-failure-transport.test.mjs; docs/evidence/2026-10-15-browser-operation-contracts.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-15-operation-contracts-node24-failed.json; docs/testing.md; tests/browser-operation-contracts.test.mjs; tests/browser-operation-input-contracts.test.mjs; tests/browser-operation-view-contracts.test.mjs; tests/browser-operation-archive-contracts.test.mjs; docs/evidence/2026-10-15-node24-gate-policy.json; docs/evidence/2026-10-15-publication-8ea074a.json",
       "lastUpdate": "2026-10-15 公開候補8ea074a(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。方針Bに基づくゲート判定。公開済みへ。V8根治は未証明で別項目。",
-      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately."
+      "lastUpdateEn": "2026-10-15 candidate 8ea074a (v0.44.0) passed verify, deploy and verify-published (27 PASS, published manifest revision match, annotated tag). Gate judged under option B. Moved to released. V8 root fix remains unproven and tracked separately.",
+      "parents": [
+        "P0",
+        "P3"
+      ]
     },
     {
       "id": "EDITPREVIEW1",
@@ -2358,9 +2389,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
-        "P1",
-        "P3",
         "BROWSERCONTRACTS1"
       ],
       "detail": "変更案の非破壊適用・有界preflight・変更Pointer・候補版をAPI/MCPへ返す。GUIと共有する正規化後の版を確定前に照合し、単位変換を二重適用しない。",
@@ -2369,7 +2397,12 @@
       "acceptanceEn": "30new/59target pass;full872:869passed/3skipped. Actual browser100N job stayed running before/after150N preview,input unchanged;reviewed edit applied only after settlement and next solve succeeded. Midpoint.02/.03mm,max.04/.06mm. Legacy/no-complete-preflight labels retained. No general physical-accuracy,full P1-P3 or V8-resolution claim.",
       "evidence": "src/project-edit-preview.js; src/project-operations.js; src/browser-study-state.js; tests/browser-edit-preview.test.mjs; tests/mcp-edit-preview.test.mjs; docs/evidence/2026-10-15-browser-edit-preview.json; docs/evidence/2026-10-15-edit-preview-full.json; docs/testing.md; docs/evidence/2026-10-15-release-status-audit-a.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Actual local browser evidence meets the running-preview and post-settlement apply criteria, while dedicated tests cover exact revision binding and refusal. The later published CI passed on the final committed source. General physical accuracy, full P1-P3 and V8 root-cause resolution remain explicitly out of scope."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Actual local browser evidence meets the running-preview and post-settlement apply criteria, while dedicated tests cover exact revision binding and refusal. The later published CI passed on the final committed source. General physical accuracy, full P1-P3 and V8 root-cause resolution remain explicitly out of scope.",
+      "parents": [
+        "P0",
+        "P1",
+        "P3"
+      ]
     },
     {
       "id": "MESHARRAYLIMIT1",
@@ -2377,17 +2410,19 @@
       "titleEn": "Avoid mesh array argument overflow and report existing element limits",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "MESH1"
-      ],
       "detail": "要素タグ・assembly配列の一括引数展開と品質最小spreadをループへ置換し、配列追加前に既存要素上限を確認する。",
       "detailEn": "Replace bulk argument spread for element tags,assembly arrays and quality minima with loops,and check existing element limits before appending.",
       "acceptance": "専用4件成功。150000要素fakeGmshの拒否/finalizeと許容設定でのタグ順・接続・品質、assembly累計上限を検証。実GUI同size0.6はstack overflowから既存上限拒否へ変化。上限30000・数値式・対応規模は拡張しない。初回job完全archive未取得を明示。",
       "acceptanceEn": "Four dedicated tests verify150000-element fakeGmsh refusal/finalize,ordering/connectivity/quality under permitted settings,and assembly limits. Same real-browser size0.6 now returns the existing element-limit rejection. Default30000,numerics and supported scale are unchanged. Complete first failed job archive was not captured.",
       "evidence": "src/mesh-core.js; tests/mesh-array-limits.test.mjs; docs/evidence/2026-10-15-browser-edit-preview-first-attempt.json; docs/evidence/2026-10-15-browser-edit-preview.json; docs/testing.md; docs/evidence/2026-10-15-release-status-audit-a.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The four targeted tests and real GUI failure-mode comparison establish the narrow accepted behavior, and final main CI/build/deploy passed. The missing first-attempt full job archive, unchanged 30,000 default and unexpanded supported scale are documented limitations, not unmet acceptance criteria."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The four targeted tests and real GUI failure-mode comparison establish the narrow accepted behavior, and final main CI/build/deploy passed. The missing first-attempt full job archive, unchanged 30,000 default and unexpanded supported scale are documented limitations, not unmet acceptance criteria.",
+      "parents": [
+        "P0"
+      ],
+      "related": [
+        "MESH1"
+      ]
     },
     {
       "id": "PUBLISHEDPROGRESS1",
@@ -2395,16 +2430,16 @@
       "titleEn": "Display only progress verified against the publication manifest",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0"
-      ],
       "detail": "配信manifestと進捗の版・バイト数・SHA-256を取得前後で照合。raw main混在を廃止し、公開履歴と配信候補を区別、不一致時は前回表示を保持する。",
       "detailEn": "Verify stable manifest revision,bytes and SHA-256 before adopting progress. Remove raw-main mixing,separate history from published candidate,and retain the previous display on failure.",
       "acceptance": "専用7件成功。公開a446dc5でmanifestの版・bytes・SHA256一致を実ブラウザ日英表示で確認。dirtyローカルでは未照合のまま初期記録を保持。公開26項目・tag成功。任意の将来配信を保証しない。",
       "acceptanceEn": "Seven dedicated checks pass. Actual published a446dc5 board adopts matching manifest revision,bytes and SHA256 in JP/EN;dirty local build retains unverified initial data. Public26checks/tag pass. No guarantee for arbitrary future deployments.",
       "evidence": "src/published-progress.js; src/board.js; tests/published-progress.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md; docs/evidence/2026-10-15-publication-a446dc5.json; docs/evidence/2026-10-15-published-progress-browser.json",
       "lastUpdate": "a446dc5の公開CI・26配信物・注釈付きtagと実公開ボードの日英版照合成功を確認。Windows既知V8問題は別タスクで未解決。",
-      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved."
+      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved.",
+      "parents": [
+        "P0"
+      ]
     },
     {
       "id": "PUBLICATIONGATES1",
@@ -2412,16 +2447,16 @@
       "titleEn": "Validate publication gate references and completion evidence",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0"
-      ],
       "detail": "旧進捗互換を保ち、公開対象/将来/支援範囲、順序、参照、上限と候補版・manifest版・検証記録の整合を検査する。外部CI成功の真正性は宣言検査と区別する。",
       "detailEn": "Keep legacy progress compatibility while validating scope,order,references,bounds and matching candidate/manifest/evidence declarations. Declaration consistency is not independent remote-CI authentication.",
       "acceptance": "専用7件とprogress/docsを含む12件成功。参照先taskのreleasedだけではgateを閉じず、欠落/矛盾した完了証跡を拒否。公開gateはpendingを維持。既定runtimeのV8問題と公開後照合を残す。",
       "acceptanceEn": "Seven dedicated and twelve combined progress/docs checks pass. Released task flags cannot close gates;missing or conflicting completed evidence is rejected. Publication gates stay pending;default-runtime V8 issue and deployed verification remain open.",
       "evidence": "src/publication-milestone.js; src/progress.js; tests/publication-milestone.test.mjs; docs/evidence/2026-10-15-publication-progress-full.json; docs/testing.md; docs/evidence/2026-10-15-publication-a446dc5.json; docs/evidence/2026-10-15-published-progress-browser.json",
       "lastUpdate": "a446dc5の公開CI・26配信物・注釈付きtagと実公開ボードの日英版照合成功を確認。Windows既知V8問題は別タスクで未解決。 ※本文中のテスト件数・全体件数は各作業の記録時点の値で、現在の要件ではない(2026-10-15時点の全体は約1100件、リビジョンb69ab11)。",
-      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11)."
+      "lastUpdateEn": "Verified a446dc5 publication CI,26runtime checks,annotated tag and actual published board JP/EN revision adoption. Known Windows V8 issue remains separate and unresolved. Note: test counts quoted in this task are values as of when it was recorded, not current requirements (the full suite is about 1100 tests as of 2026-10-15, revision b69ab11).",
+      "parents": [
+        "P0"
+      ]
     },
     {
       "id": "INPUTINSPECTION1",
@@ -2429,18 +2464,18 @@
       "titleEn": "Read existing input through revisioned bounded pages",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P1",
-        "P3"
-      ],
       "detail": "材料・条件・解析設定・根拠・選択・ソースをJSON Pointerで読取。大配列/文字列の長さとcanonical hashを返し、明示ページだけを取得する。",
       "detailEn": "Inspect material,conditions,study,provenance,selection and sources through JSON Pointers;describe large data with canonical hashes and retrieve explicit bounded pages.",
       "acceptance": "新13件、全体897中894成功・3skip。共有read→preview/edit→再読、実stdio/HTTP、busy時read・失効/stale/権限/64KiB・source保持を検証。新ライブ操作の実GUI/公開HTTPS一巡とP1全体は未検証。",
       "acceptanceEn": "13new checks;full897:894passed/3skipped. Shared read→preview/edit→reread,real stdio/HTTP,busy reads,expiry/stale/scopes/64KiB and source identity verified. New live GUI/public-HTTPS end-to-end and full P1 remain unverified.",
       "evidence": "src/project-input-inspection.js; tests/project-input-inspection.test.mjs; tests/mcp-input-inspection.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-release-status-audit-c.json; docs/evidence/2026-10-15-browser-input-view-proof.json; docs/evidence/2026-10-15-browser-proof-publication.json",
       "lastUpdate": "2026-10-15 実Chrome/MCPで解析中のread、idleとの厳密一致、入力版不変、stale拒否、ページ境界拒否、2ページ往復を確認。inspectのみの再接続でread成功・edit/startJob/setView権限拒否も確認。接続解除・QA停止済み。公開HTTPSの独立検証はPUBLICHTTPS1で追跡する。 公開版9f57d0fの配信・実行検証とprogress完全性を確認。",
-      "lastUpdateEn": "2026-10-15 real Chrome/MCP verified reads bracketed by a running solve, exact idle equality, unchanged input revision, stale/page-bound refusal and two-page traversal. An inspect-only reconnection allowed reads and refused edit/startJob/setView. QA disconnected and stopped. Independent public HTTPS verification remains under PUBLICHTTPS1. Published revision 9f57d0f passed deployment/runtime verification and progress integrity checks."
+      "lastUpdateEn": "2026-10-15 real Chrome/MCP verified reads bracketed by a running solve, exact idle equality, unchanged input revision, stale/page-bound refusal and two-page traversal. An inspect-only reconnection allowed reads and refused edit/startJob/setView. QA disconnected and stopped. Independent public HTTPS verification remains under PUBLICHTTPS1. Published revision 9f57d0f passed deployment/runtime verification and progress integrity checks.",
+      "parents": [
+        "P0",
+        "P1",
+        "P3"
+      ]
     },
     {
       "id": "SKILLROUTING1",
@@ -2448,17 +2483,17 @@
       "titleEn": "Route specialist Skill details progressively and synchronize distribution",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P1"
-      ],
       "detail": "長い入口を用途別8参照へ移し、入力だけの作業で全ロードマップ/全catalogを取得しない。登録toolの実在とSDK経路を区別する。",
       "detailEn": "Split the long entry into eight workflow references;avoid full roadmap/catalog retrieval for input-only work and distinguish registered tools from explicit SDK fallback.",
       "acceptance": "repo/installed11files bytes/SHA一致、両validator成功。UI設定/登録不変。synthetic150N previewで100N根拠との矛盾を検出しsource保持・未適用/未解析。source factoryを使ったためSkill単独や全一巡の証明ではない。",
       "acceptanceEn": "All 11 repository/installed files match by bytes/SHA and both validators pass. UI metadata/server registration unchanged. Synthetic 150 N preview detects stale 100 N evidence, preserves source, and is not applied/analyzed. Source factories were used, so this is not proof of Skill-only or complete end-to-end behavior.",
       "evidence": "skills/airpocket-studio/SKILL.md; docs/evidence/2026-10-15-skill-synchronization-b.json; docs/evidence/2026-10-15-skill-forward-input-preview-b.json; docs/evidence/2026-10-15-release-status-audit-c.json",
       "lastUpdate": "2026-10-15 追加公開監査: 記載済みの受け入れ条件と証跡、公開453cff45およびworkflow38700153486成功を照合して公開済みへ反映。実ブラウザの未測定容量・ヒープ等の開示済み制約やP0〜P6全体の未完了条件は維持。個別判断は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 additional publication audit: acceptance and evidence match published 453cff45 and successful workflow 38700153486. Reconciled to released; disclosed browser capacity/heap limits and broader P0–P6 requirements remain unchanged. No remaining check for this task's stated synchronization and synthetic preview acceptance. The record explicitly does not claim Skill-only execution or a full workflow; broader end-to-end routing is tracked separately."
+      "lastUpdateEn": "2026-10-15 additional publication audit: acceptance and evidence match published 453cff45 and successful workflow 38700153486. Reconciled to released; disclosed browser capacity/heap limits and broader P0–P6 requirements remain unchanged. No remaining check for this task's stated synchronization and synthetic preview acceptance. The record explicitly does not claim Skill-only execution or a full workflow; broader end-to-end routing is tracked separately.",
+      "parents": [
+        "P0",
+        "P1"
+      ]
     },
     {
       "id": "MCPARGUMENTTYPES1",
@@ -2466,16 +2501,16 @@
       "titleEn": "Declare semantic MCP positional argument JSON types",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0"
-      ],
       "detail": "保存/ライブのedit・previewで数値・record・配列を共有schemaに明示。実行時の意味・拒否条件は維持する。",
       "detailEn": "Share explicit number,record and nested-array schemas across saved/live edit and preview while preserving runtime semantics and refusals.",
       "acceptance": "位置引数JSON型を保存/ライブedit・previewに宣言。現在登録済みSDKの型投影と実MCPの150 N preview/確定、不正位置型の拒否、入力不変、実live adapterの同一領域commitを検証。公開HTTPS接続と新規method全体の登録鮮度は別判定。",
       "acceptanceEn": "Declare positional JSON types for saved/live edit and preview. Verify the current registered SDK projection, actual MCP150 N preview/exact commit, invalid positional types, unchanged input and actual live-adapter same-region commit. Published HTTPS and whole-catalog method freshness are separate.",
       "evidence": "src/semantic-operation-schema.js; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-15-input-inspection-full.json; docs/evidence/2026-10-15-operation-contracts-full.json; docs/evidence/2026-10-21-registered-sdk-argument-types.json",
       "lastUpdate": "2026-10-21: 最終確認完了。現在の登録済みSDKで位置引数のJSON型を確認し、実MCPの150 Nプレビュー/同一版確定、不正型3件の拒否、元ファイル不変を検証。実live adapterの同一領域commit試験も成功。新規method全体の再登録や物理精度は別判定。",
-      "lastUpdateEn": "2026-10-21: Final verification passed: actual registered SDK positional JSON types, real MCP150 N preview/exact commit, three invalid-type refusals and unchanged input bytes. Actual live-adapter same-region commit test passed. Whole-catalog freshness and physical accuracy remain separate."
+      "lastUpdateEn": "2026-10-21: Final verification passed: actual registered SDK positional JSON types, real MCP150 N preview/exact commit, three invalid-type refusals and unchanged input bytes. Actual live-adapter same-region commit test passed. Whole-catalog freshness and physical accuracy remain separate.",
+      "parents": [
+        "P0"
+      ]
     },
     {
       "id": "BROWSERCONNECTOR1",
@@ -2484,8 +2519,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P0",
-        "P3",
         "BROWSERBRIDGE1"
       ],
       "detail": "既存Node 24で動く3ツールの一時ローカル接続。配信manifestに版・サイズ・SHA256と必要runtimeを結び付ける。",
@@ -2494,7 +2527,11 @@
       "acceptanceEn": "Verify isolated single-file startup,contracts,authentication,scopes,expiry,disconnect and EOF cleanup; distinguish runtime bundling and restart recovery. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "scripts/studio-browser-mcp.mjs; scripts/build-browser-connector.mjs; tests/browser-only-mcp.test.mjs; tests/browser-connector-bundle.test.mjs; docs/evidence/2026-10-15-browser-connector.json; docs/evidence/2026-10-15-public-browser-connector.json; docs/evidence/2026-10-15-public-https-inspect-failure.json; docs/evidence/2026-10-15-release-status-audit-a.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The defined single-file local connector and lifecycle acceptance is covered by dedicated tests and a prior actual public artifact download; current code is in the successfully republished source. Public HTTPS pairing remains a separate PUBLICHTTPS1 gate and is not used to hold this local connector scope."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The defined single-file local connector and lifecycle acceptance is covered by dedicated tests and a prior actual public artifact download; current code is in the successfully republished source. Public HTTPS pairing remains a separate PUBLICHTTPS1 gate and is not used to hold this local connector scope.",
+      "parents": [
+        "P0",
+        "P3"
+      ]
     },
     {
       "id": "P3OBSERVATIONLIFECYCLE1",
@@ -2503,7 +2540,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
         "BROWSERFIELDS1",
         "BROWSERCONTRACTS1"
       ],
@@ -2513,7 +2549,10 @@
       "acceptanceEn": "Reconstruct the same intermediate mesh from node/element pages with identity and measurement checks; verify asynchronous termination,late replies,cancellation/drain and unchanged final results in real Workers. Restart recovery and full P3 remain open. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/intermediate-results.js; src/analysis-client.js; src/analysis.worker.js; docs/evidence/2026-10-15-intermediate-lifecycle.json; tests/intermediate-results.test.mjs; tests/analysis-client.test.mjs; tests/browser-job-settlement.test.mjs; tests/browser-intermediate-store.test.mjs; tests/worker-pipeline.test.mjs; tests/headless-worker-lifecycle.test.mjs; docs/evidence/2026-10-15-release-status-audit-a.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. This narrow lifecycle slice meets its written acceptance and is included in the successful published build. Restart recovery and the broader P3 milestone remain unfinished and must stay separate; they do not negate this bounded slice."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. This narrow lifecycle slice meets its written acceptance and is included in the successful published build. Restart recovery and the broader P3 milestone remain unfinished and must stay separate; they do not negate this bounded slice.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "JOBRESULTEXPORT1",
@@ -2522,8 +2561,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
-        "P4",
         "BROWSERBRIDGE1"
       ],
       "detail": "確認権限でjobResultExport/Read/Release。元入力版を照合し、完全保持出力のbyte数・SHA256・base64分割取得とセッション所有を管理。",
@@ -2532,7 +2569,11 @@
       "acceptanceEn": "Reconstruct/verify jobA while UI inputB remains unchanged; verify refusals,expiry,disconnect/release and actual Worker-output JSON normalization. Complete saved comparisons and engine build identity remain separate requirements. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/job-result-transfer.js; tests/job-result-transfer.test.mjs; tests/browser-job-result-transfer.test.mjs; docs/evidence/2026-10-15-job-result-export.json; docs/evidence/2026-10-15-release-status-audit-a.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The browser session test keeps input B unchanged while round-tripping immutable job A; the transfer and lifecycle tests cover limits and refusals, and Worker output is exercised through analysis-client in Node. The final clean main CI passed after the locally failed runs. No dedicated actual-browser transfer run is recorded, but it is not an acceptance requirement. Saved-case comparison and engine identity remain separate."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The browser session test keeps input B unchanged while round-tripping immutable job A; the transfer and lifecycle tests cover limits and refusals, and Worker output is exercised through analysis-client in Node. The final clean main CI passed after the locally failed runs. No dedicated actual-browser transfer run is recorded, but it is not an acceptance requirement. Saved-case comparison and engine identity remain separate.",
+      "parents": [
+        "P3",
+        "P4"
+      ]
     },
     {
       "id": "RUNTIMEIDENTITY1",
@@ -2540,18 +2581,18 @@
       "titleEn": "Freeze executing build and WASM identity in results",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P3",
-        "P4"
-      ],
       "detail": "Worker初期化時のbuild/source fingerprint、browser/nodeとthread/process、要求method/実engine、実初期化WASM bytesのhashをcalculationへ保存。旧保存へ現行版を補わない。",
       "detailEn": "Record initialization-time build/source fingerprint,target/isolation,requested/actual engine and hashes of actual WASM initialization bytes in calculation;never backfill old outputs with the current build.",
       "acceptance": "旧形式互換・不正identity拒否・ケース保存/復元/一覧での保持、実Node thread/processとbrowser worker経路、kernel/Gmsh/MFEM hash、GPU fallback、別版で旧結果を開いても不変を検証。署名/環境認証/物理精度の証明とは区別。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "Verify legacy compatibility,invalid identity refusal,preservation/discovery across case save/restore,Node thread/process and browser Worker paths,kernel/Gmsh/MFEM hashes,GPU fallback and no restamping on later restoration. Distinguish from signatures,environment attestation or physical accuracy. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
       "evidence": "src/runtime-identity.js; scripts/source-build-identity.mjs; tests/browser-runtime-identity.test.mjs; tests/headless-runtime-identity.test.mjs; docs/evidence/2026-10-15-runtime-identity.json; tests/runtime-identity.test.mjs; tests/cases.test.mjs; tests/case-operations.test.mjs; tests/case-view.test.mjs; docs/evidence/2026-10-15-runtime-identity-browser.json; docs/evidence/2026-10-15-runtime-identity-browser-case.json; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task's listed compatibility, refusal, archive, runtime-path and asset-hash conditions are evidenced. Public HTTPS pairing is separately tracked and is not an acceptance condition here."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task's listed compatibility, refusal, archive, runtime-path and asset-hash conditions are evidenced. Public HTTPS pairing is separately tracked and is not an acceptance condition here.",
+      "parents": [
+        "P0",
+        "P3",
+        "P4"
+      ]
     },
     {
       "id": "CONNECTIONDIAGNOSTICS1",
@@ -2559,17 +2600,17 @@
       "titleEn": "Diagnose connector reachability separately from authentication",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P3"
-      ],
       "detail": "認証コードなしの有界health診断、権限状態照会、秘密を保持しないMCPカウンタ、loopback address-space指定を追加。旧公開画面の再試験は受信0で失敗。",
       "detailEn": "Add bounded credential-free health probe, advisory permission query, redacted MCP counters and loopback address-space hint. The older public UI retry failed with zero received requests.",
       "acceptance": "Origin/Host・認証・scope維持、応答/時間上限・古い診断排除・日英UI・実stdio互換を検証。原因を推測で断定しない。 公開HTTPS接続の検証はPUBLICHTTPS1で追跡する。",
       "acceptanceEn": "Verify Origin/Host/auth/scope isolation, response/deadline bounds, stale response exclusion, bilingual UI and real stdio compatibility; do not infer a cause. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/browser-connection-diagnostics.js; tests/browser-connection-diagnostics.test.mjs; docs/evidence/2026-10-15-browser-diagnostics.json; tests/browser-connection-errors.test.mjs; tests/browser-bridge-diagnostics.test.mjs; docs/evidence/2026-10-15-connection-diagnostics-local.jpg; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task-specific local diagnostic and protocol acceptance is evidenced. The unresolved public pairing belongs to the independent PUBLICHTTPS1 task and must not block this status."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task-specific local diagnostic and protocol acceptance is evidenced. The unresolved public pairing belongs to the independent PUBLICHTTPS1 task and must not block this status.",
+      "parents": [
+        "P0",
+        "P3"
+      ]
     },
     {
       "id": "PROVENANCECONTRACT1",
@@ -2577,17 +2618,17 @@
       "titleEn": "Discover provenance edit argument schemas",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P0",
-        "P1"
-      ],
       "detail": "edit/previewEditからsetInputProvenance/setAnalysisIntentの具体的な位置引数を発見し、既存物理入力・利用者確認の意味を保持する。",
       "detailEn": "Expose concrete positional argument schemas for provenance and analysis intent without inventing physical inputs or user confirmation.",
       "acceptance": "契約から有効編集を構築して診断を修復し、不正根拠・拒否時の入力版不変、ページ上限と実stdio互換を検証。",
       "acceptanceEn": "Build a valid edit from discovered contracts, verify diagnosis repair and invalid provenance refusal without mutation, page budgets and real stdio compatibility.",
       "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json; tests/mcp-evidence-operation-schema.test.mjs; tests/evidence-operation-schema.test.mjs; tests/mcp-typed-operation-schema.test.mjs; tests/mcp-input-workflow.test.mjs; tests/project-edit-preview.test.mjs; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Task acceptance is directly covered and the exact deployed source revision passes CI; no full-suite clause exists in this task's acceptance."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Task acceptance is directly covered and the exact deployed source revision passes CI; no full-suite clause exists in this task's acceptance.",
+      "parents": [
+        "P0",
+        "P1"
+      ]
     },
     {
       "id": "CASEARCHIVEVALIDATION1",
@@ -2595,17 +2636,17 @@
       "titleEn": "Validate saved MCP archives through restoration checks",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P3",
-        "P4"
-      ],
       "detail": "studio_validate_casesが全ケースの場・メッシュ・実行識別を復元と同じ経路で検査する。",
       "detailEn": "Validate every saved case field, mesh and runtime identity through the restoration path.",
       "acceptance": "短い場/不正接続/不正identityを実stdioで拒否し、有効旧保存/識別付き保存の互換と元ファイル不変を検証。",
       "acceptanceEn": "Reject malformed fields/connectivity/identity through real stdio; preserve legacy and identified valid outputs and source files.",
       "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json; tests/mcp-saved-case-validation.test.mjs; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Each stated archive compatibility, refusal and source-preservation clause has direct MCP test coverage included in the public revision."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. Each stated archive compatibility, refusal and source-preservation clause has direct MCP test coverage included in the public revision.",
+      "parents": [
+        "P3",
+        "P4"
+      ]
     },
     {
       "id": "OBSERVATIONQUEUE1",
@@ -2613,16 +2654,16 @@
       "titleEn": "Bound pending asynchronous observation payloads",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P3"
-      ],
       "detail": "保持ストアとは別に保存待機中のイベント数と推定bytesを制限し、超過時は場を間引いて要約を継続する。",
       "detailEn": "Bound pending payload count and estimated bytes independently of retained stores; continue summaries when fields are dropped.",
       "acceptance": "遅いconsumer・単一超過・cancel/drain/closeと最終結果不変を検証し、間引き数と制限を取得可能にする。Worker送信キュー全体のメモリ保証とは区別。 公開HTTPS接続の検証はPUBLICHTTPS1で別途追跡する。",
       "acceptanceEn": "Verify slow consumers, oversized items, cancellation/drain/close and unchanged final outputs; expose loss and limits. Do not claim bounds for the entire Worker transport queue. Published-HTTPS connection verification is tracked separately in PUBLICHTTPS1.",
       "evidence": "tests/job-observation-queue.test.mjs; src/analysis-client.js; src/observation-profiles.js; docs/evidence/2026-10-15-agent-contract-validation.json; docs/evidence/2026-10-15-job-event-bounds.json; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task explicitly excludes whole Worker transport/heap guarantees; its host-side queue contract and tests are satisfied."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The task explicitly excludes whole Worker transport/heap guarantees; its host-side queue contract and tests are satisfied.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "PLANARROTATION1",
@@ -2630,16 +2671,16 @@
       "titleEn": "Reject silently ignored planar rotation controls",
       "status": "released",
       "category": "共通",
-      "depends": [
-        "P1"
-      ],
       "detail": "rotationDegreesとframeの不足/矛盾を拒否し、GUI生成の整合した回転平面を保持する。",
       "detailEn": "Reject missing or inconsistent frames for explicit rotation controls; preserve coherent GUI planar descriptors.",
       "acceptance": "実API/MCPでframe無し回転拒否・元入力不変・GUI生成回転の保存保持、従来回転無し軸領域を検証。",
       "acceptanceEn": "Verify actual API/MCP rejection without mutation, saved GUI rotation preservation and legacy unrotated axial regions.",
       "evidence": "docs/evidence/2026-10-15-agent-contract-validation.json; tests/planar-rotation-contract.test.mjs; tests/oblique-planar.test.mjs; tests/planar-region.test.mjs; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The saved GUI descriptor path is represented by the same production helper used by the GUI, while the API/MCP and legacy-region clauses have direct tests."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The saved GUI descriptor path is represented by the same production helper used by the GUI, while the API/MCP and legacy-region clauses have direct tests.",
+      "parents": [
+        "P1"
+      ]
     },
     {
       "id": "JOBEVENTBYTES1",
@@ -2648,7 +2689,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
         "OBSERVATIONQUEUE1"
       ],
       "detail": "イベント件数上限に加えてpayload・保持合計・ページのUTF8容量を制限し、不正/過大な観測は同じsequenceの明示欠落通知へ置き換える。",
@@ -2657,7 +2697,10 @@
       "acceptanceEn": "Preserve valid structured failures and ordinary metrics; verify no getter execution, oversized/unsafe data, byte eviction, cursor continuation, unchanged lifecycle and real API/MCP JSON-value bounds. Distinguish RPC wrappers and Worker transport.",
       "evidence": "docs/evidence/2026-10-15-job-event-bounds.json; tests/analysis-jobs-event-bytes.test.mjs; tests/job-event-payload.test.mjs; tests/mcp-job-event-bytes.test.mjs; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. All specified event payload, retention, cursor, lifecycle and API/MCP value-size conditions are evidenced; excluded wrapper and Worker limits remain explicitly excluded."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. All specified event payload, retention, cursor, lifecycle and API/MCP value-size conditions are evidenced; excluded wrapper and Worker limits remain explicitly excluded.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "PUBLICATIONISOLATION1",
@@ -2694,7 +2737,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P4",
         "CASEARCHIVE1",
         "RUNTIMEIDENTITY1",
         "BROWSERBRIDGE1"
@@ -2705,7 +2747,10 @@
       "acceptanceEn": "Verify 1–8 cases at one global point with raw values/units and explicit mode/frame, incompatibility reasons, whole-request rejection of unknown/corrupt/stale inputs, lease freshness rechecks and the 64 KiB bound. Full suite passes in CI verify; real-Chrome localhost verified. No claim of physical accuracy, equal inputs or cross-mesh correspondence. Published-HTTPS verification is tracked in PUBLICHTTPS1.",
       "evidence": "src/case-comparison.js; tests/case-comparison.test.mjs; tests/browser-case-comparison.test.mjs; tests/mcp-case-comparison.test.mjs; docs/evidence/2026-10-15-case-comparison-local-runtime.json; docs/evidence/2026-10-15-case-comparison-browser-qa.json; docs/evidence/2026-10-15-release-status-audit-b.json",
       "lastUpdate": "2026-10-15 公開状態監査: 個別の受け入れ条件・証跡と公開リビジョンcf1e165への実装の包含を照合し、verify/deploy/verify-published成功(run 38699217923)を確認して公開済みへ反映。PUBLICHTTPS1とP0〜P6全体の未完了条件は維持。詳細と範囲の制限は監査証跡を参照。",
-      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The exact task acceptance and public runtime gate are evidenced. Published HTTPS pairing is a separate task; the actual comparison runtime check passed."
+      "lastUpdateEn": "2026-10-15 publication-state audit: acceptance and evidence matched against deployed cf1e165; verify/deploy/verify-published passed in run 38699217923. Reconciled to released; PUBLICHTTPS1 and broader P0–P6 requirements remain open. The exact task acceptance and public runtime gate are evidenced. Published HTTPS pairing is a separate task; the actual comparison runtime check passed.",
+      "parents": [
+        "P4"
+      ]
     },
     {
       "id": "WORKERTRANSPORT1",
@@ -2714,7 +2759,6 @@
       "status": "released",
       "category": "共通",
       "depends": [
-        "P3",
         "OBSERVATIONQUEUE1"
       ],
       "detail": "Worker送信中と送信待ちoutboxの観測数・推定bytesを別々に制限する。同期ソルバーは待たせず、通常終端前に配送を待つ。間引き・scalar iteration集約を保存待機・保存容量とは別の統計としてMCPの観測能力に公開する。",
@@ -2723,7 +2767,10 @@
       "acceptanceEn": "Verify sender windows, envelope bytes, duplicate/unknown ACKs, field rejection after mesh loss, normal terminal statistics, cancellation/stale replies and second-solve refusal across browser and Node thread/process hosts. Declare the separate fixed terminal control budget, unknown totals after hard termination and excluded progress/final-result paths; keep storage-queue limits distinct. Real Chrome on localhost (2026-10-16) confirmed the Worker path for Stokes P2 (12 sent, 10 coalesced, 0 pending, terminal statistics) and an acoustic sweep (17 accepted, 100 dropped), refusal of a late response after cancel (JOB_EXECUTION_REJECTED_AFTER_TERMINAL) and refusal of a second solve while running (8/8). Duplicate/unknown ACKs, field rejection after mesh loss and the Node hosts cannot be exercised from the connector and rest on unit tests; totals after forced termination are unknown as declared.",
       "evidence": "src/worker-observation-transport.js; tests/worker-observation-transport.test.mjs; tests/stokes-observation-pipeline.test.mjs; tests/wave-channel-observation-pipeline.test.mjs; docs/evidence/2026-10-15-worker-transport-initial-regression.json; docs/evidence/2026-10-15-worker-transport-full-regression.json; docs/evidence/2026-10-16-worker-transport-real-chrome-6.json; docs/evidence/2026-10-16-publication-d268661.json",
       "lastUpdate": "2026-10-16 実Chromeで8/8確認。必須CIは成功済み(PR 35)。公開済みの候補に含まれる。検証済みへ。公開HTTPSはPUBLICHTTPS1。 2026-10-16 公開候補d268661(v0.44.0)でverify・deploy・verify-published成功(27 PASS、公開manifestのリビジョン一致、注釈付きタグ)。公開済みへ。公開マイルストーンのゲートは項目の状態では閉じない。",
-      "lastUpdateEn": "2026-10-16 Confirmed 8/8 in real Chrome; required CI passed earlier (PR 35); part of published candidates. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1. 2026-10-16 Candidate d268661 (v0.44.0): verify, deploy and verify-published succeeded (27 PASS, published manifest revision matches, annotated tag). Released. The publication-milestone gate is not closed by task status."
+      "lastUpdateEn": "2026-10-16 Confirmed 8/8 in real Chrome; required CI passed earlier (PR 35); part of published candidates. Moved to ready. Published HTTPS is covered by PUBLICHTTPS1. 2026-10-16 Candidate d268661 (v0.44.0): verify, deploy and verify-published succeeded (27 PASS, published manifest revision matches, annotated tag). Released. The publication-milestone gate is not closed by task status.",
+      "parents": [
+        "P3"
+      ]
     },
     {
       "id": "PUBLICHTTPS1",
@@ -2754,12 +2801,12 @@
       "evidence": "src/mesh-boundary-preflight.js; tests/mesh-boundary-preflight.test.mjs; skills/airpocket-studio/references/jobs-observations.md; docs/evidence/2026-10-15-input-operations-real-chrome.json; docs/evidence/2026-10-16-publication-6429eeb.json",
       "status": "released",
       "category": "共通",
-      "depends": [
+      "lastUpdate": "2026-10-16 PR 40でmain、公開候補6429eebで27 PASS。実Chromeで確認し不具合1件を修正済み。拘束rank・剛体モードは別途追加中で本項目の範囲外。公開済みへ。 2026-10-16追記: 拘束rank・剛体モードの検査(src/constraint-rank.js、rigidBodyフィールド、ANALYSIS_RIGID_BODY_MODE_FREE)を追加(ab39d18で公開)。節点の固定・変位拘束のみ対象、許容1e-6は保守的で未較正。",
+      "lastUpdateEn": "2026-10-16 merged in PR 40; published candidate 6429eeb passed 27 checks; confirmed in real Chrome with one defect found and fixed. Constraint rank and rigid-body modes are a separate addition outside this task. Moved to released. Added 2026-10-16: constraint-rank / rigid-body check (src/constraint-rank.js, rigidBody field, ANALYSIS_RIGID_BODY_MODE_FREE), published in ab39d18; covers nodal fixed/displacement supports only; the 1e-6 tolerance is conservative and uncalibrated.",
+      "parents": [
         "P1",
         "MOD1"
-      ],
-      "lastUpdate": "2026-10-16 PR 40でmain、公開候補6429eebで27 PASS。実Chromeで確認し不具合1件を修正済み。拘束rank・剛体モードは別途追加中で本項目の範囲外。公開済みへ。 2026-10-16追記: 拘束rank・剛体モードの検査(src/constraint-rank.js、rigidBodyフィールド、ANALYSIS_RIGID_BODY_MODE_FREE)を追加(ab39d18で公開)。節点の固定・変位拘束のみ対象、許容1e-6は保守的で未較正。",
-      "lastUpdateEn": "2026-10-16 merged in PR 40; published candidate 6429eeb passed 27 checks; confirmed in real Chrome with one defect found and fixed. Constraint rank and rigid-body modes are a separate addition outside this task. Moved to released. Added 2026-10-16: constraint-rank / rigid-body check (src/constraint-rank.js, rigidBody field, ANALYSIS_RIGID_BODY_MODE_FREE), published in ab39d18; covers nodal fixed/displacement supports only; the 1e-6 tolerance is conservative and uncalibrated."
+      ]
     },
     {
       "id": "SELECTEDREFINEMENT1",
@@ -2772,12 +2819,12 @@
       "evidence": "src/studio-api.js; src/local-mesh.js; tests/selected-mesh-refinement.test.mjs; tests/mcp-selected-mesh-refinement.test.mjs; docs/evidence/2026-10-15-input-operations-real-chrome.json; docs/evidence/2026-10-16-publication-6429eeb.json",
       "status": "released",
       "category": "共通",
-      "depends": [
+      "lastUpdate": "2026-10-16 PR 40(必須verify成功)でmain、公開候補6429eebで27 PASS。実ChromeでGUI/接続経由を確認。公開済みへ。",
+      "lastUpdateEn": "2026-10-16 merged in PR 40 (required verify passed); published candidate 6429eeb passed 27 checks; GUI and connector paths confirmed in real Chrome. Moved to released.",
+      "parents": [
         "P1",
         "MOD1"
-      ],
-      "lastUpdate": "2026-10-16 PR 40(必須verify成功)でmain、公開候補6429eebで27 PASS。実ChromeでGUI/接続経由を確認。公開済みへ。",
-      "lastUpdateEn": "2026-10-16 merged in PR 40 (required verify passed); published candidate 6429eeb passed 27 checks; GUI and connector paths confirmed in real Chrome. Moved to released."
+      ]
     },
     {
       "id": "EXPORTBACKGROUND1",
@@ -2824,8 +2871,6 @@
       "category": "共通",
       "status": "building",
       "depends": [
-        "P0",
-        "P3",
         "BROWSERCONNECTOR1"
       ],
       "detail": "既存ブラウザ接続にACPエージェントの検出・起動・停止とChatGPTログイン案内を追加する計画。第一段階はCodex。会話はACP、操作は既存MCPを利用し、サブスクとAPI認証を区別する。未着手。",
@@ -2834,7 +2879,7 @@
       "acceptanceEn": "Follow AGENTACP1 in docs/en/roadmap.md. Verify real public HTTPS/local Windows browser connections, authentication, scopes, expiry, cancellation, reconnect and duplicate prevention; document setup/recovery in the specialist skill.",
       "lastUpdate": "2026-10-21: 再レビュー合格・統合対象。JSON-RPC envelopeと既知capability/auth型を検証。不正応答をreadyにしない。 親タスク全体の完了条件は未達。",
       "lastUpdateEn": "2026-10-21: Re-review approved for integration. Validates JSON-RPC envelopes and known capability/auth types; malformed responses never become ready. Full parent acceptance remains incomplete.",
-      "evidence": "; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json",
+      "evidence": "docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-opencode-54-agentacp1.json; docs/evidence/2026-10-23-acp-installed-initialize.json; docs/evidence/2026-10-23-acp-session-new-preflight.json",
       "review": {
         "status": "merged",
         "pr": 133,
@@ -2842,7 +2887,11 @@
         "summary": "再レビュー合格。JSON-RPC envelopeと既知capability/auth型を検証。不正応答をreadyにしない。",
         "summaryEn": "Re-review approved. Validates JSON-RPC envelopes and known capability/auth types; malformed responses never become ready.",
         "instruction": "docs/opencode-work-orders-2026-10-21/27-AGENTACP1.md"
-      }
+      },
+      "parents": [
+        "P0",
+        "P3"
+      ]
     },
     {
       "id": "AGENTCHAT1",
@@ -2876,16 +2925,13 @@
       "status": "building",
       "category": "結果",
       "depends": [
-        "P3",
-        "P4",
-        "MOD1",
         "RESULTCONTROL1"
       ],
       "detail": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。",
       "detailEn": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
       "acceptance": "一様棒の解析解・反力釣合い・除荷参照を確認。GUI/API/MCP、保存/復元、LLM向け段階データ、静止グラフ/出力値が一致し、未収束段階を補間せず表示する。非線形ヒステリシスは状態履歴を持つ対応材料・ソルバーの結果だけを用いる。",
       "acceptanceEn": "Verify uniform-bar analytical response, reaction balance and an unloading reference. Match GUI/API/MCP, saved/restored output, LLM-facing increments and static plots; never interpolate failed increments. Nonlinear hysteresis plots require a supported history-dependent material and solver.",
-      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json; docs/evidence/2026-10-23-resultcurve-displacement-control.json; docs/evidence/displacement-stdio-20261023/summary.json",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; src/result-view-api.js; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; src/increment-curve-export.js; src/ui/increment-curve.js; scripts/increment-curve-service.mjs; docs/increment-curve-ui.md; docs/increment-curve-export.md; docs/evidence/2026-10-22-resultcurve-export-proof.json; docs/evidence/2026-10-22-resultcurve-ui-check.json; src/increment-curve-comparison.js; src/ui/increment-curve-comparison.js; docs/increment-curve-comparison.md; docs/increment-comparison-ui.md; docs/evidence/2026-10-22-resultcurve-comparison-check.json; docs/evidence/2026-10-23-resultcurve-displacement-control.json; docs/evidence/displacement-stdio-20261023/summary.json; docs/evidence/2026-10-23-opencode-52-resultcurve1.json; docs/evidence/2026-10-23-curve-layout-browser.json",
       "lastUpdate": "2026-10-23: 未merge候補PR180〜185で明示力/変位の独立線形solveから段階bundleを生成。変位0/.01/.04/.02/0/−.02mmの反力0/25/100/50/0/−50Nを独立再計算し、実CLI→正式stdio MCPのCSV/JSON/SVG全bytes/hash一致と入力不変を確認。既存forceの全9成果物は旧実装とbyte一致を独立監査。非線形履歴・実物校正・実Chrome変位出力・公開HTTPSは未達。",
       "lastUpdateEn": "2026-10-23: Unmerged candidates PR180–185 generate explicit force/displacement bundles from independent linear solves. Displacements0/.01/.04/.02/0/−.02mm yield0/25/100/50/0/−50N, checked by independent replay; actual CLI to formal stdio MCP matches all CSV/JSON/SVG bytes/hashes and preserves input. Independent review confirms byte identity for all nine existing force artifacts against the previous implementation. Nonlinear history, physical calibration, Chrome displacement export and public HTTPS remain.",
       "review": {
@@ -2895,7 +2941,12 @@
         "summary": "再レビュー合格。実際の荷重・入力・メッシュ・計算・結果の識別を曲線行へ束縛。荷重不一致を拒否。",
         "summaryEn": "Re-review approved. Binds curve rows to actual force, input, mesh, calculation and result identities; rejects mismatched control forces.",
         "instruction": "docs/opencode-work-orders-2026-10-21/28-RESULTCURVE1.md"
-      }
+      },
+      "parents": [
+        "P3",
+        "P4",
+        "MOD1"
+      ]
     },
     {
       "id": "FINITEVISCO1",
@@ -2904,18 +2955,20 @@
       "status": "queued",
       "category": "構造",
       "depends": [
-        "P1",
-        "P3",
-        "MOD1",
         "RESULTCURVE1"
       ],
       "detail": "docs/roadmap.mdのFINITEVISCO1を参照。実験校正を前提に、有限ひずみ粘弾性（一般化Maxwell/PronyまたはPRF相当）、有限変形塑性/粘塑性、損傷を段階分け。まず材料点/単要素の載荷・保持・除荷・再載荷ループと散逸/残留を検証後、変形後断面・くびれ・メッシュ正則化を含むダンベルへ進む。既存Neo-Hookeanゴム機能や微小ひずみJ2を対応済みとみなさない。Abaqus PRFは参考モデル、外部CAEは導入依存にしない。",
       "detailEn": "See FINITEVISCO1 in docs/en/roadmap.md. With experimental calibration, stage finite-strain viscoelasticity (generalized Maxwell/Prony or PRF-like), finite-deformation plasticity/viscoplasticity and damage separately. First validate material-point/single-element load, hold, unload and reload loops, dissipation and residual strain; only then advance to dumbbell analysis with deformed area, necking and mesh regularization. Existing rubber Neo-Hookean and small-strain J2 are not completion evidence. Abaqus PRF is a reference model, not a required external dependency.",
       "acceptance": "保存した試験条件/根拠から材料パラメータを校正し、単要素の載荷速度・保持・除荷・再載荷応力、残留ひずみ、散逸を同条件実験と照合。対応する構造経路で段階ごとの反力/変位・Cauchy応力・変形後断面・入力版を保持し、メッシュ/時間刻み感度、要素反転、損傷正則化を検証。未校正材料・未対応組合せ・限界超過は拒否または暫定表示。ダンベルのくびれ/荷重低下は実験比較と収束根拠が揃う場合のみ受け入れる。",
       "acceptanceEn": "Calibrate from saved test conditions/evidence and compare single-element loading-rate, hold, unload/reload stress, residual strain and dissipation against experiments at matching conditions. In the structural path retain stepwise reactions/displacements, Cauchy stress, deformed area and input revision; assess mesh/time-step sensitivity, element inversion and damage regularization. Reject or mark provisional uncalibrated materials, unsupported combinations and exceeded limits. Accept dumbbell necking/post-peak force only with experimental comparison and convergence evidence.",
-      "evidence": "docs/roadmap.md; docs/en/roadmap.md; docs/hyperelasticity.md; src/plasticity-core.js; docs/finite-visco-reference.md; docs/evidence/2026-10-23-finite-visco-reference.json; docs/evidence/2026-10-23-finite-visco-independent-audit.json; docs/finite-visco-observation-comparison.md; docs/finite-observation-independent-2026-10-24.md; docs/evidence/2026-10-24-finite-observation-integration.json; docs/finite-history-inspector.md; docs/en/finite-history-inspector.md; docs/evidence/2026-10-27-finite-history-inspector.json; docs/evidence/2026-10-27-finite-history-inspector-independent.json; docs/evidence/2026-10-27-finite-history-inspector-gui/README.md; docs/evidence/2026-10-27-finite-history-inspector-integration.json; docs/finite-observation-inspector.md; docs/en/finite-observation-inspector.md; docs/evidence/2026-10-27-finite-observation-inspector.json; docs/evidence/2026-10-27-finite-observation-inspector-gui/README.md; docs/evidence/2026-10-27-finite-observation-inspector-integration.json",
+      "evidence": "docs/roadmap.md; docs/en/roadmap.md; docs/hyperelasticity.md; src/plasticity-core.js; docs/finite-visco-reference.md; docs/evidence/2026-10-23-finite-visco-reference.json; docs/evidence/2026-10-23-finite-visco-independent-audit.json; docs/finite-visco-observation-comparison.md; docs/finite-observation-independent-2026-10-24.md; docs/evidence/2026-10-24-finite-observation-integration.json; docs/finite-history-inspector.md; docs/en/finite-history-inspector.md; docs/evidence/2026-10-27-finite-history-inspector.json; docs/evidence/2026-10-27-finite-history-inspector-independent.json; docs/evidence/2026-10-27-finite-history-inspector-gui/README.md; docs/evidence/2026-10-27-finite-history-inspector-integration.json; docs/finite-observation-inspector.md; docs/en/finite-observation-inspector.md; docs/evidence/2026-10-27-finite-observation-inspector.json; docs/evidence/2026-10-27-finite-observation-inspector-gui/README.md; docs/evidence/2026-10-27-finite-observation-inspector-integration.json; docs/evidence/2026-10-23-finite-visco-input-history.json; docs/evidence/2026-10-23-finite-visco-history-independent-audit.json; docs/evidence/2026-10-24-finite-visco-observation-comparison.json; docs/evidence/2026-10-24-finite-observation-independent.json; docs/evidence/2026-10-27-finite-observation-independent.json",
       "lastUpdate": "2026-10-27: 合成・暫定・未校正の履歴確認GUIへ最終合成観測1点の比較を追加。通常main/IABで対の例のJA/EN・9応力差cell（主要差25Pa）・独立したエネルギー差2/散逸差1 J/m³-reference、空白変更時の旧表示消去と版不一致拒否、履歴確認の独立性・両欄クリアを確認。DOM272controls等を保持。実取消受入・正式API全状態同一性・構造solver/実測校正は未証明、親は未完。",
-      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open."
+      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open.",
+      "parents": [
+        "P1",
+        "P3",
+        "MOD1"
+      ]
     }
   ],
   "solvers": [
