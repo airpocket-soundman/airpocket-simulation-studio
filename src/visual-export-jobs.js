@@ -71,7 +71,13 @@ function comparisonManifest(job,mimeType,bytes,sha256){
   if(format==='gif'&&timing.entries.length!==24)throw Error('Comparison GIF frame timing is incomplete');
   manifest.time.frameTimings=copy(timing);
  }
- if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(timing?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');return manifest;
+ let scales;try{scales=job.getDeformationFrames?.();}finally{delete job.getDeformationFrames;}
+ if(scales){
+  const end=job.comparison.deformationAnimation?.endScale;
+  if(!Array.isArray(scales.entries)||scales.entries.length!==24||scales.endScale!==end||scales.entries.some((e,i)=>e.renderIndex!==i||e.phase!==i/23||e.deformScale!==(i===23?end:end*(i/23))))throw Error('Comparison GIF deformation frames are incomplete or differ from the linear plan');
+  manifest.time.deformationFrames=copy(scales);
+ }
+ if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(timing||scales?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');return manifest;
 }
 function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical(value[k])).join(',')+'}';return JSON.stringify(value);}
 function base64(bytes){let text='';for(let i=0;i<bytes.length;i++)text+=String.fromCharCode(bytes[i]);return btoa(text);}
@@ -161,7 +167,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     if(!snapshot.view||typeof snapshot.view!=='object'||Array.isArray(snapshot.view))throw Error('Visual export requires frozen view settings');
     const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate visual export job ID');
     const physicalRevision=typeof snapshot.physicalRevision==='string'&&/^sha256:[0-9a-f]{64}$/.test(snapshot.physicalRevision)?snapshot.physicalRevision:undefined;
-    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(['gif','webm'].includes(normalized.format)&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames,...(normalized.format==='webm'?{getFixedVerification:snapshot.context.getFixedVerification}:{})}:{} )}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',executionSettled:false,progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
+    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(['gif','webm'].includes(normalized.format)&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames,...(normalized.format==='webm'?{getFixedVerification:snapshot.context.getFixedVerification}:{})}:{} ),...(normalized.format==='gif'&&normalized.animation==='deformation'&&typeof snapshot.context?.getDeformationFrames==='function'?{getDeformationFrames:snapshot.context.getDeformationFrames}:{})}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',executionSettled:false,progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
     if(!sourceGuard())throw Error('Visual export request expired');
     accepted=true;jobs.set(jobId,job);entry.jobId=jobId;
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
