@@ -2,7 +2,7 @@
 
 [日本語](../single-view-thermal-fixed-webm.md)
 
-Export stored transient-thermal temperature frames through Results → Save images and animations → Stored time (acoustic / temperature) → Save WebM video. Select Temperature first. Heat flux is refused without automatically changing the field. Thermal Play preview remains unsupported. Orbit, deformation and section recording are unchanged.
+Export stored transient-thermal temperature frames through Results → Save images and animations → Stored time (acoustic / temperature) → Save WebM video. Select Temperature first. Heat flux is refused without automatically changing the field. Thermal Play preview steps the viewer slider through stored temperature frames (temperature only, no interpolation, displayed time restored after completion or stop; 79-VIEWTIME). Orbit, deformation and section recording are unchanged.
 
 The separate `singleThermalTimeWebmExport` capability advertises support. Existing `singleTimeWebmExport` and Acoustic-named APIs remain acoustic-only. The existing startExport time/WebM route also works; no method or scope is added. A private thermal proof binds kind=`thermal`, field=`temperature`, unit=`degC`, result revision and video-byte SHA. Acoustic getters/manifests cannot borrow it.
 
