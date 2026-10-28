@@ -1,0 +1,26 @@
+{
+  "workOrder": "docs/opencode-work-orders-2026-10-28/83-UIIMPROVE1.md",
+  "task": "UIIMPROVE1",
+  "step": "ui-research improvement 3, first bounded step: recent-message history next to #status",
+  "baseSha": "81b7de4",
+  "branch": "claude/uiimprove1-83",
+  "environment": {"os": "Windows 11", "browser": "Claude desktop built-in browser (Chromium)", "server": "vite dev 127.0.0.1:5283"},
+  "commands": [
+    {"cmd": "node --test tests/ui-status.test.mjs tests/ui-agent-connection-status.test.mjs tests/ui-agent-connection-status-scanner.test.mjs", "result": "pass 21 / fail 0"},
+    {"cmd": "node --test tests/i18n.test.mjs", "result": "pass 3 / fail 0"},
+    {"cmd": "npm run check:contracts", "result": "pass (32 declaration files)"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "browser": {
+    "ja": {"url": "/?lang=ja", "viewport": "375x812", "summary": "直近の表示 (2)", "items": ["材料物性を登録しました。", "曲面の一部分をブラシで選べます。"], "statusLineUnchanged": true, "pointerEvents": "auto", "noHorizontalScroll": true},
+    "en": {"url": "/?lang=en", "viewport": "375x812", "summary": "Recent messages (2)", "items": ["Material properties registered.", "Use the brush to select part of the curved surface."], "warningPrefixTranslation": "Check: Constraint directions are nearly parallel. Review overlapping directions.", "noHorizontalScroll": true},
+    "keyboard": "summary focused; real Enter key opened the details element (focus ring visible)"
+  },
+  "notVerified": [
+    "warning entry produced by an actual solver failure in the browser (verified by unit test and translate() only)",
+    "screen-reader announcement (#status role=status unchanged; history list is not live to avoid double announcement)",
+    "save/restore and published-site regression (history is display-only, not persisted)",
+    "before/after task-count comparison on a common scenario (parent acceptance)"
+  ],
+  "progressUpdateProposal": "UIIMPROVE1 stays building: improvement 3 first step (#diagnostics history, ja/en, 375px, keyboard) delivered; remaining: target region link and jobStatus code in history, improvements 1 and 4-9, before/after comparison."
+}
