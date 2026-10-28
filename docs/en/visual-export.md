@@ -30,7 +30,7 @@ For transient heat, API/MCP export jobs support a ZIP of stored temperature fram
 
 See the [comparison specification](view-compare-design.md) for GIF24-frame/endpoints/delays, physical time, visualization scale and evidence. Unsupported single-view thermal realtime WebM is distinct from supported comparison thermal time GIF/WebM.
 
-Stored thermal temperature frames now support the separate `singleThermalTimeWebmExport` capability and the GUI Stored time → Save WebM action. Heat-flux time export and thermal Play preview remain unsupported. See [thermal time WebM](single-view-thermal-fixed-webm.md) for current bounds; earlier thermal PNG-sequence evidence does not establish real thermal WebM execution.
+Stored thermal temperature frames now support the separate `singleThermalTimeWebmExport` capability and the GUI Stored time → Save WebM action. Heat-flux time export remains unsupported; thermal Play preview replays stored temperature frames only. See [thermal time WebM](single-view-thermal-fixed-webm.md) for current bounds; earlier thermal PNG-sequence evidence does not establish real thermal WebM execution.
 
 2026-10-27: Single-view stored-time GIF has bounded acceptance from one synthetic94-node thermal case through ordinary foreground English main/IAB and formal stdio.24frames/640×320/2s/full bytes/hash/86pages, nearest0/5/10s selections6/12/6 and terminal10s zero offset, independent all24 RGB equality and visible blue/green/red model, five-state/interpolated2s restoration and cleanup passed. Actual acoustic/cancellation/GUI download and general physical accuracy remain separate. [Details and limits](single-stored-time-gif.md).
 

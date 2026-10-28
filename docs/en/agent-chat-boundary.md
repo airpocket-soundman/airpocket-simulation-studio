@@ -2,7 +2,7 @@
 
 [日本語](../agent-chat-boundary.md)
 
-This bounded instruction55 implementation separates a DOM-free `createAgentChatState` from `createAgentChatPanel`. Only an explicitly supplied describe/prompt/cancel provider can enable sending. The existing Node `AcpSessionClient` works through this interface in real synthetic subprocess tests. Browser transport, real AI authentication, model selection and MCP delegation are not implemented. An unusable chat panel is not mounted in main.
+This bounded instruction55 implementation separates a DOM-free `createAgentChatState` from `createAgentChatPanel`. Only an explicitly supplied describe/prompt/cancel provider can enable sending. The existing Node `AcpSessionClient` works through this interface in real synthetic subprocess tests. Browser transport, real AI authentication, model selection and MCP delegation are not implemented. Since 2026-10-28 the panel is mounted inside "Connect your own LLM", but the browser sets no provider: it stays Unavailable with textarea/send/stop disabled and a bilingual refusal reason (no conversation session provider configured). [Evidence](../evidence/2026-10-28-chat-main-unavailable.json).
 
 States distinguish unavailable, idle, initialization, session creation, ready, prompting, cancellation, closing, closed, failure and authentication required. One prompt is admitted only in ready. Stop waits for the pending prompt to settle after cancellation. ACP cancellation closes its child; a new conversation requires a new explicit client. The caller starts/authenticates its provider and calls refresh after external state changes.
 

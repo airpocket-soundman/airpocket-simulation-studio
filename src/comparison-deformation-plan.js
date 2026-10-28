@@ -14,3 +14,13 @@ export function createComparisonDeformationPlan(outputs,options={}){
  }
  return {atPhase(phase){if(!Number.isFinite(phase)||phase<0||phase>1)throw Error('Invalid comparison deformation phase');return {deformScale:phase===1?deformScale:deformScale*phase};},summary:{kind:'elastic',field,scalePolicy:'linear',startScale:0,endScale:deformScale,visualizationOnly:true,camera:'fixed',resultValues:'fixed-saved-result',loadHistory:false}};
 }
+
+/** One entry per encoded comparison GIF frame: the display multiplier actually drawn in both panels. */
+export function createComparisonDeformationFrames(plan){
+ const entries=[];
+ return {
+  reset(){entries.length=0;},
+  record(phase){if(entries.length>=24)throw Error('Comparison deformation frames exceed the GIF frame count');entries.push({renderIndex:entries.length,phase,deformScale:plan.atPhase(phase).deformScale});},
+  snapshot(){return structuredClone({schemaVersion:1,mapping:'One entry per encoded GIF frame, in output order. Both panels use the same display multiplier; saved displacement and scalar values are unchanged.',scalePolicy:plan.summary.scalePolicy,endScale:plan.summary.endScale,entries});}
+ };
+}
