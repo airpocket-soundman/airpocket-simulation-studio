@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "workOrder": "docs/opencode-work-orders-2026-10-23/67-CONTACT1.md (untracked in primary checkout; not on main)",
+  "baseCommit": "e776ff1dc7f0cf13dfa049dc4d255734f7c55b08",
+  "workOrderBaseCommit": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "branch": "claude/contact1-penalty-67-cf06af",
+  "environment": {"node": "v24.11.1", "os": "Windows 11 Pro 10.0.26200"},
+  "scope": "1-DOF spring + rigid stop penalty reference only. Not 3D contact, not friction, not bolt; no state history.",
+  "inputs": {"synthetic": true, "springNPerMm": 100, "gapMm": 1, "forceN": 150, "toleranceN": 1e-9, "maxIterations": 50},
+  "signContract": "+u toward stop; penetration = max(0,u-g); contactReactionN = -kp*penetration (work-order magnitude kp*(u-g) matched with the existing negative sign; expectation not altered)",
+  "analytic": {"contact": "u=(F+kp*g)/(k+kp)", "penetration": "(F-k*g)/(k+kp)", "reactionMagnitude": "kp*(F-k*g)/(k+kp)"},
+  "penaltySensitivity": [
+    {"kp": 100, "uMm": 1.25, "penetrationMm": 0.25, "contactReactionN": -25, "residualN": 0, "iterations": 3},
+    {"kp": 1000, "uMm": 1.0454545454545454, "uExpected": "1150/1100", "penetrationMm": 0.045454545454545414, "contactReactionN": -45.45454545454541, "reactionExpected": "-50000/1100", "residualN": -5.684341886080802e-14, "iterations": 3},
+    {"kp": 10000, "uMm": 1.004950495049505, "penetrationMm": 0.004950495049504955, "contactReactionN": -49.50495049504955, "residualN": 5.684341886080802e-14, "iterations": 3}
+  ],
+  "numericalNote": "Penetration error vs rigid stop is (F-k*g)/(k+kp) for this model only; residual floor ~1e-13 N from float rounding. Larger kp is not claimed to be generally more accurate (overflow cases are refused as CONTACT_NON_FINITE).",
+  "referenceTable": "open F=50, onset F=100, contact F=150, unload-contact F=120, unload-open F=50 at kp=1000; path-independent (no history)",
+  "preservedGuards": ["maxIterations budget 10000", "stagnation refusal (tol 1e-30)", "non-finite refusal", "iteration-limit refusal"],
+  "codeChanges": "none to solver; tests only",
+  "changedFiles": ["tests/unilateral-contact-reference.test.mjs", "docs/evidence/2026-10-28-opencode-67-contact1.json"],
+  "sourceFilesSha256": {
+    "src/unilateral-contact-reference.js": "b4c355fff4efe081211af6ef10824bacf4fd5fff4bdb2332bd682a3d2b648579",
+    "tests/unilateral-contact-reference.test.mjs": "64fcf5cff365ddd4d4f0c53cbaea25446367efc2833f71e4bc39e7cba11d09ca"
+  },
+  "commands": [
+    {"command": "node --test tests/unilateral-contact-reference.test.mjs", "result": "pass: 16 tests, 0 fail, 0 skipped"},
+    {"command": "npm run check:contracts", "result": "pass (32 declaration files)"},
+    {"command": "git diff --check", "result": "pass"}
+  ],
+  "unverified": ["browser/native/public runtime", "3D contact, friction, bolt", "src/progress.json update (proposal for owner 71 only)"],
+  "parentAcceptanceRemaining": "CONTACT1 parent remains queued: production 3D contact, friction history, bolt pretension not addressed."
+}
