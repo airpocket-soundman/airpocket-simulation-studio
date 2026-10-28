@@ -1,0 +1,20 @@
+{
+  "workOrder": "docs/opencode-work-orders-2026-10-28/90-FAIL1.md",
+  "task": "FAIL1",
+  "baseSha": "01e179e",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": "Synthetic analytical parameters only: m=10, sigma0=1e8 Pa, V0=1000 mm^3, E=1e11 Pa, nu=0, bar 10x10x40 mm; no real material claimed",
+  "commands": [{"cmd":"node --test tests/weibull-fem-coupling.test.mjs","result":"pass 4 / fail 0"},{"cmd":"node --test tests/weibull-fracture.test.mjs","result":"pass 5 / fail 0"},{"cmd":"node --test tests/module-boundaries.test.mjs","result":"pass 19 / fail 0"},{"cmd":"npm run check:contracts","result":"pass (34 declaration files)"},{"cmd":"git diff --check","result":"pass"}],
+  "measured": {
+    "uniformTensionFemPf": "relative error <1e-8 vs 1-exp(-V/V0 (sigma/sigma0)^m), sigma=9e7 Pa, mesh 3x3x6 hex -> 324 Tet4, real solveElastic",
+    "volumeSum": "relative error <1e-12",
+    "pureBendingCentroidIntegration": {"expected": "V/(2(m+1)) = 181.82 mm^3 effective volume", "relativeErrors_nx16_32_64": [0.03494, 0.008897, 0.002235], "observedOrder": 1.993},
+    "pureBendingFemSolveDiagnostic": {"mesh": "nx=8/16/32, ny=2, nz=4", "riskRelativeError": [12.53, 10.83, 10.39], "cause": "Tet4 bending locking (spurious shear) at coarse nz; excluded from acceptance"}
+  },
+  "unverified": [
+    "Element-convergence of FE-solved bending failure probability (needs quadratic elements or stress recovery)",
+    "No headless/worker, archive, UI or MCP integration",
+    "No measured strength data comparison"
+  ],
+  "progressProposal": "FAIL1 lastUpdate: 2026-10-29 Weibull PIA failure probability coupled to solved Tet4 mesh element volumes; real-solver uniform tension matches closed form and pure-bending volume integration converges to V/(2(m+1)) with order 2. Tet4 bending locking noted. Parent acceptance remains incomplete."
+}

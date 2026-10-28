@@ -1,6 +1,7 @@
 // Two-parameter Weibull weakest-link volume failure probability using the
 // principle of independent action (PIA) over tensile principal stresses.
 // Parameters must come from registered strength tests; no defaults exist.
+import {tetraVolume} from './tetra-geometry.js';
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
 const record=(v,keys)=>object(v)&&Object.keys(v).length===keys.length&&Object.keys(v).every(k=>keys.includes(k));
 const text=v=>typeof v==='string'&&!!v.trim()&&v.length<=10000;
@@ -35,4 +36,15 @@ export function evaluateWeibullFailure(r,elementVolumesMm3,data){
  const risk=elementRisk.reduce((a,b)=>a+b,0);if(!Number.isFinite(risk))throw Error('Weibull assessment exceeded the numerical range');
  const peak=Math.max(...maxPrincipalPa),effectiveVolumeMm3=peak>0?risk*v0*(s0/peak)**m:0;
  return {kind:'weibull-failure',model:data.model,weibullData:structuredClone(data),elementRisk,maxPrincipalPa,riskOfRupture:risk,failureProbability:-Math.expm1(-risk),peakPrincipalPa:peak,effectiveVolumeMm3};
+}
+// Couples a solved Tet4 mesh (nodes in mm) to the weakest-link sum: each element's
+// constant stress acts over its own volume, so the sum is the exact volume integral of the FE stress field.
+export function tetraVolumesMm3(mesh){
+ if(!Array.isArray(mesh?.nodes)&&!ArrayBuffer.isView(mesh?.nodes)||mesh.nodes.length%3||!Array.isArray(mesh.tetrahedra)||!mesh.tetrahedra.length)throw Error('Weibull mesh coupling requires Tet4 nodes and tetrahedra');
+ const count=mesh.nodes.length/3;
+ return mesh.tetrahedra.map(t=>{if(!Array.isArray(t)||t.length!==4||!t.every(i=>Number.isInteger(i)&&i>=0&&i<count))throw Error('Weibull mesh coupling requires four valid node indices per tetrahedron');const v=Math.abs(tetraVolume(mesh.nodes,t));if(!positive(v))throw Error('Weibull mesh coupling requires non-degenerate tetrahedra');return v;});
+}
+export function evaluateWeibullFailureOnMesh(mesh,r,data){
+ const volumes=tetraVolumesMm3(mesh);if(r?.stresses?.length!==volumes.length)throw Error('Weibull mesh coupling requires one stress per tetrahedron of the solved mesh');
+ return {...evaluateWeibullFailure(r,volumes,data),totalVolumeMm3:volumes.reduce((a,b)=>a+b,0)};
 }
