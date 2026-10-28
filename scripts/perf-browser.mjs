@@ -7,11 +7,13 @@
 // It measures job wall time and cancel response as observed through the connector. It does NOT measure GPU, network,
 // other browsers or memory limits. Memory is measured only if the operator installs window.__perfProbe (see --print-probe).
 import {execFileSync, spawn} from 'node:child_process';
-import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {mkdirSync, readFileSync, writeFileSync,statSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {createInterface} from 'node:readline';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {createHash} from 'node:crypto';
+import {getProjectRevision} from '../src/project-revision.js';
 
 export const REPORT_SCHEMA_VERSION = 1;
 export const REPORT_SCOPE = 'browser via connector; localhost; real browser';
@@ -59,31 +61,66 @@ export class PerfTimeoutError extends Error {
 
 // --- stdio connector client -------------------------------------------------------------------------------
 // The pairing token lives only in this closure. It is handed to `announce` (terminal) and never stored elsewhere.
-export async function createStdioClient({origin, spawnImpl = spawn, announce = () => {}, startupTimeoutMs = 15000}) {
+export async function createStdioClient({origin, spawnImpl = spawn, announce = () => {}, startupTimeoutMs = 15000, rpcTimeoutMs = 30000, closeGraceMs = 3000, terminateGraceMs = 2000, killGraceMs = 2000}) {
   const safeOrigin = assertLocalOrigin(origin);
-  const child = spawnImpl(process.execPath, [path.join(REPO, 'scripts/studio-mcp.mjs'), '--browser-origin=' + safeOrigin], {cwd: REPO, stdio: ['pipe', 'pipe', 'pipe']});
+  for(const ms of [startupTimeoutMs,rpcTimeoutMs,closeGraceMs,terminateGraceMs,killGraceMs])if(!Number.isSafeInteger(ms)||ms<1||ms>120000)throw Error('Invalid stdio client time budget');
+  const child = spawnImpl(process.execPath, [path.join(REPO, 'scripts/studio-mcp.mjs'), '--browser-origin=' + safeOrigin], {cwd: REPO, stdio: ['pipe', 'pipe', 'pipe'],shell:false,windowsHide:true});
   const pending = new Map();
-  let id = 0, stderr = '', token = null, info = null;
+  let id = 0, stderr = '', token = null, info = null, closing=false,closePromise,exitConfirmed=child.exitCode!=null||child.signalCode!=null;
+  const exitWaiters=new Set();
+  const failure=code=>Object.assign(Error(code),{code});
+  const rejectPending=error=>{for(const p of pending.values()){clearTimeout(p.timer);p.reject(error);}pending.clear();};
+  const onExit=()=>{exitConfirmed=true;rejectPending(failure('STDIO_CHILD_EXITED'));for(const notify of [...exitWaiters])notify(true);};
+  const onError=()=>rejectPending(failure('STDIO_CHILD_ERROR'));
+  const onStdinError=()=>rejectPending(failure('STDIO_TRANSPORT_FAILED'));
+  child.on('exit',onExit);child.on('close',onExit);child.on('error',onError);for(const stream of [child.stdin,child.stdout,child.stderr])stream.on('error',onStdinError);
   const redact = text => token ? String(text).split(token).join('[redacted]') : String(text);
   const lines = createInterface({input: child.stdout});
-  lines.on('line', line => { try { const m = JSON.parse(line); pending.get(m.id)?.(m); } catch { /* ignore non JSON-RPC lines */ } });
+  lines.on('error',onStdinError);
+  const onLine=line=>{try{const m=JSON.parse(line),p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(redact(m.error.message))):p.resolve(m.result);}}catch{/* ignore non JSON-RPC lines */}};
+  lines.on('line',onLine);
   const rpc = (method, params) => new Promise((resolve, reject) => {
+    if(closing||exitConfirmed){reject(failure('STDIO_CLIENT_CLOSED'));return;}
     const key = ++id;
-    pending.set(key, m => { pending.delete(key); m.error ? reject(Error(redact(m.error.message))) : resolve(m.result); });
-    child.stdin.write(JSON.stringify({jsonrpc: '2.0', id: key, method, params}) + '\n');
+    const timer=setTimeout(()=>{pending.delete(key);reject(failure('STDIO_RPC_TIMEOUT'));},rpcTimeoutMs);
+    pending.set(key,{resolve,reject,timer});
+    try{child.stdin.write(JSON.stringify({jsonrpc: '2.0', id: key, method, params}) + '\n');}catch{pending.delete(key);clearTimeout(timer);reject(failure('STDIO_TRANSPORT_FAILED'));}
   });
-  await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(Error('studio-mcp did not print the Browser connector line in time')), startupTimeoutMs);
-    child.once('exit', code => { clearTimeout(timer); reject(Error('studio-mcp exited early (code ' + code + ')')); });
-    child.stderr.on('data', d => {
+  const waitForExit=ms=>exitConfirmed?Promise.resolve(true):new Promise(resolve=>{const notify=value=>{clearTimeout(timer);exitWaiters.delete(notify);resolve(value);},timer=setTimeout(()=>notify(false),ms);exitWaiters.add(notify);});
+  const close=()=>closePromise??=(async()=>{
+    closing=true;rejectPending(failure('STDIO_CLIENT_CLOSED'));let terminated=false,escalated=false;
+    try{
+      try{child.stdin.end();}catch{}
+      if(!await waitForExit(closeGraceMs)){terminated=true;try{child.kill('SIGTERM');}catch{}
+        if(!await waitForExit(terminateGraceMs)){escalated=true;try{child.kill('SIGKILL');}catch{}
+          if(!await waitForExit(killGraceMs))throw failure('STDIO_CHILD_EXIT_UNCONFIRMED');
+        }
+      }
+      return {exited:true,terminated,escalated};
+    }finally{
+      rejectPending(failure('STDIO_CLIENT_CLOSED'));lines.off('line',onLine);lines.close();
+      child.off('exit',onExit);child.off('close',onExit);
+      if(exitConfirmed)child.off('error',onError);else child.once('close',()=>child.off('error',onError));
+      // destroy() may report pipe errors asynchronously. Keep each guard until
+      // that stream actually closes, then remove it without leaving a timer.
+      for(const stream of [child.stdin,child.stdout,child.stderr]){if(stream.closed)stream.off('error',onStdinError);else stream.once('close',()=>stream.off('error',onStdinError));}
+      child.stdin.destroy();child.stdout.destroy();child.stderr.destroy();stderr='';token=null;
+    }
+  })();
+  try{
+   await new Promise((resolve, reject) => {
+    let finished=false;
+    const finish=error=>{if(finished)return;finished=true;clearTimeout(timer);child.off('exit',earlyExit);child.off('close',earlyExit);child.off('error',earlyError);child.stderr.off('data',onData);error?reject(error):resolve();};
+    const timer=setTimeout(()=>finish(failure('STDIO_STARTUP_TIMEOUT')),startupTimeoutMs),earlyExit=()=>finish(failure('STDIO_CHILD_EXITED')),earlyError=()=>finish(failure('STDIO_CHILD_ERROR'));
+    const onData=d=>{
       stderr += d;
+      if(stderr.length>65536){finish(failure('STDIO_ANNOUNCEMENT_LIMIT'));return;}
       const m = stderr.match(/Browser connector: (.+)\n/);
       if (m && !info) {
-        const parsed = JSON.parse(m[1]);
-        token = parsed.pairingToken; info = {endpoint: parsed.endpoint, origin: parsed.origin};
-        clearTimeout(timer); resolve();
+        try{const parsed=JSON.parse(m[1]);if(typeof parsed.pairingToken!=='string'||!parsed.pairingToken||typeof parsed.endpoint!=='string'||parsed.origin!==safeOrigin)throw Error();token=parsed.pairingToken;info={endpoint:parsed.endpoint,origin:parsed.origin};finish();}catch{finish(failure('STDIO_ANNOUNCEMENT_INVALID'));}
       }
-    });
+    };
+    child.on('exit',earlyExit);child.on('close',earlyExit);child.on('error',earlyError);child.stderr.on('data',onData);if(exitConfirmed)earlyExit();
   });
   await rpc('initialize', {protocolVersion: '2025-11-25', capabilities: {}, clientInfo: {name: 'perf-browser', version: '1'}});
   child.stdin.write(JSON.stringify({jsonrpc: '2.0', method: 'notifications/initialized'}) + '\n');
@@ -95,8 +132,9 @@ export async function createStdioClient({origin, spawnImpl = spawn, announce = (
       if (result.isError) throw Object.assign(Error(redact(result.content?.[0]?.text ?? 'connector error')), {code: result.structuredContent?.error?.code});
       return result.structuredContent?.value;
     },
-    async close() { try { child.stdin.end(); } catch { /* already closed */ } await new Promise(r => { const t = setTimeout(() => { child.kill(); r(); }, 3000); child.once('exit', () => { clearTimeout(t); r(); }); if (child.exitCode !== null) r(); }); lines.close(); }
+    close
   };
+  }catch(error){await close();throw error;}
 }
 
 export async function waitForSession(client, {sessionId = null, timeoutMs = 600000, pollMs = 1000, now = () => Date.now(), sleep = ms => new Promise(r => setTimeout(r, ms))} = {}) {
@@ -118,11 +156,11 @@ export async function waitForSession(client, {sessionId = null, timeoutMs = 6000
 // --- measurement ------------------------------------------------------------------------------------------
 const field = (e, k) => e?.[k] ?? e?.event?.[k] ?? e?.data?.[k];
 
-export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 300000, now = () => performance.now(), epoch = () => Date.now(), sleep = ms => new Promise(r => setTimeout(r, ms))}) {
+export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 300000, now = () => performance.now(), epoch = () => Date.now(), sleep = ms => new Promise(r => setTimeout(r, ms)),meshBudget}) {
   const call = (method, args = {}) => client.call('studio_browser_call', {sessionId, method, args});
   let counter = 0;
 
-  async function pollUntil(job, {onTick, deadlineAt}) {
+  async function pollUntil(job, {onTick, deadlineAt, expectedInputRevision}) {
     // Returns the settled status. Events are pulled by cursor; each is stamped with the host receive time.
     let cursor = 0;
     const events = [];
@@ -131,6 +169,10 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
       for (const e of page.events ?? []) events.push({e, receivedAt: now()});
       cursor = page.nextSequence ?? cursor;
       const status = await call('jobStatus', {jobId: job.jobId});
+      if(expectedInputRevision!==undefined){
+        if(status.jobId!==job.jobId)throw Error('Performance job identity mismatch');
+        if(status.inputRevision!==expectedInputRevision)throw Error('Performance job input revision mismatch');
+      }
       if (TERMINAL.has(status.state) && status.executionSettled === true) {
         // Drain any events that arrived with the final transition.
         const last = await call('jobEvents', {jobId: job.jobId, afterSequence: cursor, limit: 100});
@@ -186,6 +228,7 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
       const meshObservation = {source: 'jobStatus.result.mesh', jobId: job.jobId, inputRevision: revision, requestedSizeMm: caseDef.size, nodeCount: count('nodeCount'), elementCount: count('elementCount'), meshRevision: null, identityLimitation: 'Retained job and input identity only; compact job summary does not expose a mesh-content hash.'};
       if (settled.status.inputRevision !== undefined && settled.status.inputRevision !== revision) throw Error('Performance job input revision mismatch');
       if (meshObservation.nodeCount === null || meshObservation.elementCount === null) meshObservation.unavailableReason = 'Compact final mesh counts are absent or invalid; do not infer counts from requested size.';
+      if(meshBudget&&(meshObservation.nodeCount===null||meshObservation.elementCount===null||meshObservation.nodeCount>meshBudget.nodes||meshObservation.elementCount>meshBudget.elements))throw Error('Performance mesh exceeds declared budget or counts are unavailable');
       return {meshObservation, state: settled.status.state, ok: settled.status.state === 'succeeded', ...ph, jobElapsedMs: jobElapsedMs || null, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch, ...(settled.status.state !== 'succeeded' ? {error: settled.status.error?.message ?? settled.status.state} : {})};
     } catch (err) { if (err instanceof PerfTimeoutError) await bestEffortCancel(job); throw err; }
     finally { await release(job).catch(() => {}); }
@@ -196,14 +239,14 @@ export function createMeasurer({client, sessionId, pollMs = 50, timeoutMs = 3000
     let cancelAt = null, requestedAfterMs = null;
     const fire = async () => { if (cancelAt === null) { cancelAt = now(); requestedAfterMs = cancelAt - t0; await call('cancelJob', {jobId: job.jobId}); } };
     try {
-      const settled = await pollUntil(job, {deadlineAt: t0 + timeoutMs, onTick: async (events) => {
+      const settled = await pollUntil(job, {deadlineAt: t0 + timeoutMs, expectedInputRevision:revision, onTick: async (events) => {
         if (trigger === 'first-event' && events.length > 0) await fire();
         else if (trigger === 'half-warm-total' && now() - t0 >= halfMs) await fire();
       }});
       const state = settled.status.state === 'cancelled' ? 'cancelled' : settled.status.state === 'succeeded' ? 'completed-before-cancel' : 'error';
-      return {trigger, state, requestedAfterMs, latencyMs: cancelAt === null ? null : settled.settledAt - cancelAt, totalMs: settled.settledAt - t0, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch,
-        ...(state === 'error' ? {error: settled.status.error?.message ?? settled.status.state} : {})};
-    } catch (err) { if (err instanceof PerfTimeoutError) await bestEffortCancel(job); throw err; }
+      if(state==='error')throw Error('Cancellation run ended '+settled.status.state+(settled.status.error?.message?': '+settled.status.error.message:''));
+      return {trigger, state, requestedAfterMs, latencyMs: cancelAt === null ? null : settled.settledAt - cancelAt, totalMs: settled.settledAt - t0, startEpochMs: startEpoch, endEpochMs: settled.settledEpoch};
+    } catch (err) { await bestEffortCancel(job); throw err; }
     finally { await release(job).catch(() => {}); }
   }
 
@@ -220,15 +263,28 @@ function summarizeCancel(runs, trigger) {
   return {n: rs.length, states, latencyMs: stats(rs.map(r => r.latencyMs)), requestedAfterMs: stats(rs.map(r => r.requestedAfterMs))};
 }
 
-export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, repeats = 3, pollMs = 50, timeoutMs = 300000, now, epoch, sleep, log = () => {}} = {}) {
-  const m = createMeasurer({client, sessionId, pollMs, timeoutMs, now, epoch, sleep});
+export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, repeats = 3, pollMs = 50, timeoutMs = 300000, now, epoch, sleep, idleMs=4000, inputSnapshot,meshBudget, log = () => {}} = {}) {
+  if(!Number.isSafeInteger(idleMs)||idleMs<3000||idleMs>60000)throw Error('Performance idleMs must be3000..60000');
+  if(!Array.isArray(cases)||!cases.length||cases.some(id=>!Object.hasOwn(CASES,id)))throw Error('Unknown performance case');
+  if(!Number.isInteger(repeats)||repeats<1||repeats>10)throw Error('Performance repeats must be1..10');
+  if(meshBudget&&(!Number.isSafeInteger(meshBudget.nodes)||meshBudget.nodes<4||!Number.isSafeInteger(meshBudget.elements)||meshBudget.elements<1))throw Error('Invalid performance mesh budget');
+  const m = createMeasurer({client, sessionId, pollMs, timeoutMs, now, epoch, sleep,meshBudget});
   const inspected = await m.inspect();
   const revision = inspected.revision;
+  const clock=epoch??(()=>Date.now()),pause=sleep??(ms=>new Promise(r=>setTimeout(r,ms)));
+  let snapshotIdentity=null;
+  if(inputSnapshot!==undefined){
+    if(typeof inputSnapshot!=='string'||Buffer.byteLength(inputSnapshot)>1024*1024)throw Error('Performance input snapshot must be JSON within1 MiB');
+    const snapshotRevision=await getProjectRevision(JSON.parse(inputSnapshot));if(snapshotRevision!==revision)throw Error('Performance input snapshot revision mismatch');
+    snapshotIdentity={revision:snapshotRevision,bytes:Buffer.byteLength(inputSnapshot),sha256:createHash('sha256').update(inputSnapshot).digest('hex'),source:'caller-supplied exportProject JSON; revision matched to live inspect'};
+  }
+  const idle=async()=>{const startEpochMs=clock();await pause(idleMs);const endEpochMs=clock();if(endEpochMs-startEpochMs<idleMs)throw Error('Performance idle clock did not reach required duration');return {startEpochMs,endEpochMs,requestedMs:idleMs};};
   const out = [];
   for (const id of cases) {
     const def = CASES[id];
-    const rec = {id, physics: def.physics, meshSize: def.size, status: 'ok', repeats, notes: ['loaded input physics is not verified by the script; the operator must load the matching study']};
+    const rec = {id, physics: def.physics, meshSize: def.size, status: 'ok', repeats,inputSnapshot:snapshotIdentity, notes: ['loaded input physics is not verified by the script; the operator must load the matching study']};
     try {
+      if((await m.inspect()).revision!==revision)throw Error('Performance input changed before case');
       const cold = await m.runSolve(revision, def, id + '-cold');
       if (!cold.ok) throw Error('cold run ended ' + cold.state + (cold.error ? ': ' + cold.error : ''));
       const warm = [];
@@ -237,7 +293,9 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
       const halfMs = (summary.totalMs?.median ?? 0) / 2;
       const cancelRuns = [];
       for (const trigger of CANCEL_POINTS) for (let i = 0; i < repeats; i++) cancelRuns.push(await m.runCancel(revision, def, trigger, halfMs));
+      rec.cancelIdleWindow=await idle();
       const recovered = await m.runSolve(revision, def, id + '-recover');
+      if(!recovered.ok)throw Error('Recovery run ended '+recovered.state);
       rec.recovered = round(recovered);
       rec.cold = round(cold); rec.warm = {runs: warm.map(round), summary};
       rec.cancel = {
@@ -246,7 +304,10 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
         points: {'first-event': summarizeCancel(cancelRuns, 'first-event'), 'half-warm-total': {...summarizeCancel(cancelRuns, 'half-warm-total'), note: 'cancel requested at 50% of the median warm total'}},
         runs: cancelRuns.map(round), recoveredAfterCancel: recovered.ok
       };
-      rec.window = {startEpochMs: cold.startEpochMs, endEpochMs: Math.max(recovered.endEpochMs, ...cancelRuns.map(r => r.endEpochMs)), cancelSettledEpochMs: cancelRuns.length ? cancelRuns.at(-1).endEpochMs : null};
+      rec.window = {startEpochMs: cold.startEpochMs, endEpochMs: Math.max(recovered.endEpochMs, ...cancelRuns.map(r => r.endEpochMs)), cancelSettledEpochMs: cancelRuns.filter(r=>r.state==='cancelled').at(-1)?.endEpochMs??null};
+      rec.activeWindows=[cold,...warm,...cancelRuns,recovered].map(r=>({startEpochMs:r.startEpochMs,endEpochMs:r.endEpochMs}));
+      rec.idleWindow=await idle();
+      if((await m.inspect()).revision!==revision)throw Error('Performance input changed after case');
       rec.memory = null;
       rec.memoryReason = 'probe-absent: install window.__perfProbe in the page (node scripts/perf-browser.mjs --print-probe) and merge with --merge-memory';
     } catch (err) {
@@ -255,6 +316,7 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
     }
     log(rec);
     out.push(rec);
+    if(rec.status==='failed')break; // uncertain/failed execution must not overlap a later case
   }
   return {
     schemaVersion: REPORT_SCHEMA_VERSION, scope: REPORT_SCOPE, generatedAt: new Date().toISOString(),
@@ -262,7 +324,7 @@ export async function runBrowserPerf({client, sessionId, cases = DEFAULT_CASES, 
     git: gitInfo(),
     browser: {userAgent: inspected.userAgent ?? null, userAgentNote: inspected.userAgent ? 'from inspect' : 'not exposed by inspect; filled by --merge-memory when a probe is supplied', crossOriginIsolated: null},
     hostEnvironment: {node: process.version, platform: process.platform, arch: process.arch, osRelease: os.release(), cpuModel: os.cpus()[0]?.model ?? null, cpuCount: os.cpus().length, totalMemMiB: Math.round(os.totalmem() / 1048576)},
-    repeats, pollIntervalMs: pollMs, timeoutMs, loadedInput: inspected.project ?? null,
+    repeats, pollIntervalMs: pollMs, timeoutMs,idleMs,inputSnapshot:snapshotIdentity,meshBudget:meshBudget??null, loadedInput: inspected.project ?? null,
     cases: out,
     notes: [
       'Measurements, not support limits or guarantees.',
@@ -291,7 +353,7 @@ export const MEMORY_SETTLE_MS = 3000;
 
 const byteValue = v => (typeof v === 'number' && Number.isFinite(v) && v >= 0) ? v : null;
 
-function mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion}) {
+function mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion,activeWindows,idleWindow,cancelIdleWindow}) {
   const valueOf = s => byteValue(s?.[def.field]);
   // UASM is asynchronous. An interval crossing a phase boundary cannot be
   // assigned to either side using only its request time. Legacy probes carry
@@ -302,14 +364,15 @@ function mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpo
     if(legacy&&probeSchemaVersion!==2)return [s.t,s.t];
     return Number.isFinite(s.tRequested)&&s.tRequested>=0&&Number.isFinite(s.tResolved)&&s.tResolved>=s.tRequested&&s.t===s.tRequested?[s.tRequested,s.tResolved]:[NaN,NaN];
   };
-  const inWindow = all.filter(s => {const [a,b]=bounds(s);return a>=startEpochMs&&b<=endEpochMs&&valueOf(s)!==null;});
+  const inWindow = all.filter(s => {const [a,b]=bounds(s);return a>=startEpochMs&&b<=endEpochMs&&(!activeWindows||activeWindows.some(w=>a>=w.startEpochMs&&b<=w.endEpochMs))&&valueOf(s)!==null;});
   const peak = inWindow.length ? Math.max(...inWindow.map(valueOf)) : null;
   const beforeWindow = all.filter(s => bounds(s)[1] < startEpochMs && valueOf(s) !== null);
   const baseline = beforeWindow.length ? valueOf(beforeWindow.at(-1)) : null;
-  const afterSettleMs = endEpochMs + settleMs;
-  const afterCancelMs = Number.isFinite(cancelSettledEpochMs) ? cancelSettledEpochMs + settleMs : null;
-  const afterSettle = all.filter(s => bounds(s)[0] >= afterSettleMs && valueOf(s) !== null)[0] ?? null;
-  const afterCancel = afterCancelMs === null ? null : (all.filter(s => bounds(s)[0] >= afterCancelMs && valueOf(s) !== null)[0] ?? null);
+  const afterSettleMs = Math.max(endEpochMs, idleWindow?.startEpochMs ?? endEpochMs) + settleMs;
+  const afterCancelMs = Number.isFinite(cancelSettledEpochMs) ? Math.max(cancelSettledEpochMs, cancelIdleWindow?.startEpochMs ?? cancelSettledEpochMs) + settleMs : null;
+  const insideIdle=(s,w)=>!w||(bounds(s)[0]>=w.startEpochMs&&bounds(s)[1]<=w.endEpochMs);
+  const afterSettle = all.filter(s => bounds(s)[0] >= afterSettleMs && insideIdle(s,idleWindow)&&valueOf(s) !== null)[0] ?? null;
+  const afterCancel = afterCancelMs === null ? null : (all.filter(s => bounds(s)[0] >= afterCancelMs && insideIdle(s,cancelIdleWindow)&&valueOf(s) !== null)[0] ?? null);
   const unavailable = {};
   if (peak === null) unavailable.peakBytesSampled = 'no ' + def.name + ' sample inside the case window';
   if (baseline === null) unavailable.baselineBytes = 'no ' + def.name + ' sample before the case window';
@@ -341,10 +404,16 @@ export function mergeMemory(report, probe, {settleMs = MEMORY_SETTLE_MS} = {}) {
   for (const c of report.cases) {
     if (c.status !== 'ok' || !c.window) continue;
     const {startEpochMs, endEpochMs, cancelSettledEpochMs} = c.window;
+    if(c.activeWindows!==undefined||c.idleWindow!==undefined||c.cancelIdleWindow!==undefined){
+      const valid=w=>w&&Number.isFinite(w.startEpochMs)&&w.startEpochMs>=0&&Number.isFinite(w.endEpochMs)&&w.endEpochMs>=w.startEpochMs;
+      if(!valid(c.window)||!valid(c.idleWindow)||!valid(c.cancelIdleWindow)||!(cancelSettledEpochMs===null||Number.isFinite(cancelSettledEpochMs))||!Array.isArray(c.activeWindows)||!c.activeWindows.length||c.activeWindows.length>32||c.activeWindows.some(w=>!valid(w)||w.startEpochMs<startEpochMs||w.endEpochMs>endEpochMs))throw Error('Invalid performance phase manifest');
+      const windows=[...c.activeWindows,c.cancelIdleWindow].sort((a,b)=>a.startEpochMs-b.startEpochMs);
+      if(c.idleWindow.startEpochMs<endEpochMs||c.idleWindow.endEpochMs-c.idleWindow.startEpochMs<settleMs||c.cancelIdleWindow.endEpochMs-c.cancelIdleWindow.startEpochMs<settleMs||cancelSettledEpochMs!==null&&c.cancelIdleWindow.startEpochMs<cancelSettledEpochMs||c.cancelIdleWindow.endEpochMs>endEpochMs||windows.some((w,i)=>i&&w.startEpochMs<windows[i-1].endEpochMs))throw Error('Overlapping or insufficient performance idle window');
+    }
     const inside = all.filter(s => s.t >= startEpochMs && s.t <= endEpochMs);
     if (!inside.length) { c.memory = null; c.memoryReason = 'no probe samples inside the case window (probe interval may exceed the case duration)'; continue; }
     const series = {};
-    for (const def of MEMORY_SERIES) series[def.key] = mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion});
+    for (const def of MEMORY_SERIES) series[def.key] = mergeMemorySeries(def, all, {startEpochMs, endEpochMs, cancelSettledEpochMs, settleMs, intervalMs, probeSchemaVersion,activeWindows:c.activeWindows,idleWindow:c.idleWindow,cancelIdleWindow:c.cancelIdleWindow});
     const measured = MEMORY_SERIES.filter(d => series[d.key].available);
     if (!measured.length) {
       c.memory = null;
@@ -384,7 +453,7 @@ function gitInfo() {
 }
 
 export function parseArgs(argv) {
-  const o = {origin: 'http://127.0.0.1:5174', out: '.qa/perf-browser-report.json', repeats: 3, cases: DEFAULT_CASES.join(','), timeoutMs: 300000, pairTimeoutMs: 600000, pollMs: 50, session: null, mergeMemory: null, printProbe: false, list: false};
+  const o = {origin: 'http://127.0.0.1:5174', out: '.qa/perf-browser-report.json', repeats: 3, cases: DEFAULT_CASES.join(','), timeoutMs: 300000, pairTimeoutMs: 600000, pollMs: 50,idleMs:4000,inputSnapshotPath:null,session: null, mergeMemory: null, printProbe: false, list: false};
   const val = (i, name) => { if (argv[i] === undefined) throw Error(name + ' requires a value'); return argv[i]; };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -395,6 +464,8 @@ export function parseArgs(argv) {
     else if (a === '--timeout-ms') o.timeoutMs = Number(val(++i, a));
     else if (a === '--pair-timeout-ms') o.pairTimeoutMs = Number(val(++i, a));
     else if (a === '--poll-ms') o.pollMs = Number(val(++i, a));
+    else if(a==='--idle-ms')o.idleMs=Number(val(++i,a));
+    else if(a==='--input-snapshot')o.inputSnapshotPath=val(++i,a);
     else if (a === '--session') o.session = val(++i, a);
     else if (a === '--merge-memory') o.mergeMemory = val(++i, a);
     else if (a === '--print-probe') o.printProbe = true;
@@ -402,6 +473,7 @@ export function parseArgs(argv) {
     else throw Error('Unknown argument: ' + a);
   }
   if (!Number.isInteger(o.repeats) || o.repeats < 1 || o.repeats > 10) throw Error('--repeats must be an integer from 1 to 10');
+  if(!Number.isSafeInteger(o.idleMs)||o.idleMs<3000||o.idleMs>60000)throw Error('--idle-ms must be3000..60000');
   for (const [k, n] of [['--timeout-ms', o.timeoutMs], ['--pair-timeout-ms', o.pairTimeoutMs], ['--poll-ms', o.pollMs]]) if (!Number.isFinite(n) || n < 10) throw Error(k + ' must be a number >= 10');
   assertLocalOrigin(o.origin);
   return o;
@@ -445,12 +517,14 @@ async function main() {
   }
   const ids = o.cases.split(',');
   for (const id of ids) if (!CASES[id]) throw Error('Unknown case: ' + id);
+  if(o.inputSnapshotPath&&(!statSync(o.inputSnapshotPath).isFile()||statSync(o.inputSnapshotPath).size>1024*1024))throw Error('Performance input snapshot must be a file within1 MiB');
+  const inputSnapshot=o.inputSnapshotPath?readFileSync(o.inputSnapshotPath,'utf8'):undefined;
   const client = await createStdioClient({origin: o.origin, announce: info => process.stdout.write(operatorInstructions(info, process.stdout.isTTY === true))});
   let code = 0;
   try {
     const session = await waitForSession(client, {sessionId: o.session, timeoutMs: o.pairTimeoutMs});
     console.log('paired session', session.sessionId, 'scopes', (session.scopes ?? []).join(','));
-    const report = await runBrowserPerf({client, sessionId: session.sessionId, cases: ids, repeats: o.repeats, pollMs: o.pollMs, timeoutMs: o.timeoutMs,
+    const report = await runBrowserPerf({client, sessionId: session.sessionId, cases: ids, repeats: o.repeats, pollMs: o.pollMs, timeoutMs: o.timeoutMs,idleMs:o.idleMs,inputSnapshot,
       log: c => console.log(c.id.padEnd(20), c.status === 'ok' ? `cold ${c.cold.totalMs} ms warm median ${c.warm.summary.totalMs?.median} ms cancel ${CANCEL_POINTS.map(p => p + ' ' + c.cancel.points[p].latencyMs?.median + ' ms').join('; ')} recovered=${c.cancel.recoveredAfterCancel}` : 'FAILED ' + c.error)});
     console.log('report:', writeReport(report, o.out));
     if (report.cases.some(c => c.status !== 'ok')) code = 1;

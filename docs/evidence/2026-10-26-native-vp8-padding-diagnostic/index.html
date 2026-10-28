@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>One-frame VP8 dimension diagnostic</title>
+<h1>One-frame VP8 dimension diagnostic</h1><pre id="report">Running one isolated frame. This is not an application export.</pre>
+<script type="module">
+const report=document.querySelector('#report'),width=440,height=637,canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;document.body.append(canvas);
+const ctx=canvas.getContext('2d');ctx.fillStyle='#164d75';ctx.fillRect(0,0,width,height);ctx.fillStyle='#ff0000';ctx.fillRect(0,height-1,width,1);
+const meta=f=>({codedWidth:f.codedWidth,codedHeight:f.codedHeight,displayWidth:f.displayWidth,displayHeight:f.displayHeight,visibleRect:f.visibleRect?{x:f.visibleRect.x,y:f.visibleRect.y,width:f.visibleRect.width,height:f.visibleRect.height}:null,timestamp:f.timestamp,rotation:f.rotation??null,flip:f.flip??null});
+const result={kind:'isolated-native-vp8-dimension-diagnostic',notMainApplicationExport:true,productExports:0,requested:{width,height},encodeCalls:0,decodeCalls:0,userAgent:navigator.userAgent};let encoder,decoder,frame,timer;
+try{
+ const config={codec:'vp8',width,height,bitrate:1000000,framerate:1,latencyMode:'realtime'},packets=[];let failure;
+ result.encoderSupport=await VideoEncoder.isConfigSupported(config);if(!result.encoderSupport.supported)throw Error('VP8 unsupported');
+ encoder=new VideoEncoder({error:e=>{failure=e;},output:chunk=>{const bytes=new Uint8Array(chunk.byteLength);chunk.copyTo(bytes);packets.push({type:chunk.type,timestamp:chunk.timestamp,duration:chunk.duration,data:bytes});}});encoder.configure(config);
+ frame=new VideoFrame(canvas,{timestamp:0,duration:1000000});result.input=meta(frame);result.encodeCalls++;encoder.encode(frame,{keyFrame:true});frame.close();frame=null;
+ await Promise.race([encoder.flush(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('15-second diagnostic deadline')),15000);})]);if(failure)throw failure;encoder.close();encoder=null;
+ if(packets.length!==1)throw Error('Expected exactly one packet');result.packet={type:packets[0].type,timestamp:packets[0].timestamp,duration:packets[0].duration,bytes:packets[0].data.length};
+ decoder=new VideoDecoder({error:e=>{failure=e;},output:f=>{try{if(result.decoded)throw Error('Duplicate decoded frame');result.decoded=meta(f);}catch(e){failure=e;}finally{f.close();}}});decoder.configure({codec:'vp8',codedWidth:width,codedHeight:height});result.decodeCalls++;decoder.decode(new EncodedVideoChunk(packets[0]));await decoder.flush();if(failure)throw failure;if(!result.decoded)throw Error('No decoded frame');result.completed=true;
+}catch(e){result.completed=false;result.error={name:e.name,message:e.message};}
+finally{clearTimeout(timer);frame?.close();for(const codec of [encoder,decoder])if(codec&&codec.state!=='closed')try{codec.close();}catch{}report.textContent=JSON.stringify(result,null,2);}
+</script>

@@ -1,6 +1,11 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
+import {spawnSync} from 'node:child_process';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
 import {createIncrementCurveComparisonUi,INCREMENT_CURVE_COMPARISON_UI_MAX_BYTES} from '../src/ui/increment-curve-comparison.js';
 import {syntheticIncrementUiBundle} from './fixtures/increment-ui-reference.mjs';
 
@@ -61,4 +66,23 @@ test('file count and aggregate size refuse before reading; stale multi-file and 
  let resolve;h.get('file').files=[{size:2,text:()=>new Promise(r=>resolve=r)},entry(2)];const pending=h.get('file').onchange();h.get('input').value='new';h.get('input').oninput();resolve('{}');await pending;assert.equal(h.get('input').value,'new');assert.equal(reads,0);
  h.get('input').value=JSON.stringify(pair());const validating=h.ui.validate();h.get('input').oninput();assert.equal(await validating,null);assert.equal(h.blobs.size,0);
  h.get('input').value=JSON.stringify(pair());await h.ui.validate();h.ui.destroy();assert.equal(h.revoked.length,3);assert.equal(h.ui.host.removed,true);
+});
+
+for(const rejectOld of [false,true])test('new multi-file selection survives old read '+(rejectOld?'rejection':'completion'),async()=>{
+ const h=setup();let resolve,reject;h.get('file').files=[{size:2,text:()=>new Promise((a,b)=>{resolve=a;reject=b;})},file('{}')];const old=h.get('file').onchange();
+ const fresh=pair();h.get('file').files=fresh.bundles.map(b=>file(JSON.stringify(b)));await h.get('file').onchange();await h.ui.validate();const text=h.get('input').value,href=h.get('open').href,status=h.get('status').textContent;
+ if(rejectOld)reject(Error('obsolete read failed'));else resolve('{}');await old;
+ assert.equal(h.get('input').value,text);assert.equal(h.get('open').href,href);assert.equal(h.get('status').textContent,status);assert.equal(h.get('file').attributes['aria-invalid'],undefined);assert.equal(h.get('run').disabled,false);
+});
+
+test('UI Blob artifact bytes match the formal stdio MCP output for the same public A/B inputs',async()=>{
+ const h=setup(),source={bundles:['a','b'].map(id=>JSON.parse(readFileSync(new URL('../public/examples/increment-comparison-'+id+'.json',import.meta.url),'utf8')))},dir=await mkdtemp(join(tmpdir(),'curve-ui-mcp-'));
+ try{
+  const path=join(dir,'input.json'),outputPath=join(dir,'output.json'),text=JSON.stringify(source);await writeFile(path,text);h.get('input').value=text;assert.ok(await h.ui.validate());
+  const messages=[{jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-11-25'}},{jsonrpc:'2.0',method:'notifications/initialized'},{jsonrpc:'2.0',id:2,method:'tools/call',params:{name:'studio_increment_curve',arguments:{path,outputPath}}}];
+  const child=spawnSync(process.execPath,['scripts/studio-mcp.mjs'],{cwd:new URL('../',import.meta.url),input:messages.map(m=>JSON.stringify(m)).join('\n')+'\n',encoding:'utf8',timeout:30000,maxBuffer:1024*1024});assert.ifError(child.error);assert.equal(child.status,0,child.stderr);
+  const reply=child.stdout.trim().split('\n').map(JSON.parse).find(m=>m.id===2);assert.notEqual(reply.result.isError,true,JSON.stringify(reply.result));const saved=JSON.parse(await readFile(outputPath,'utf8'));
+  const hash=b=>createHash('sha256').update(b).digest('hex');
+  for(const format of ['csv','json','svg']){const actual=Buffer.from(await h.blobs.get(h.get(format).href).arrayBuffer());assert.equal(actual.toString('utf8'),saved[format]);assert.equal(hash(actual),reply.result.structuredContent.value.artifacts[format].sha256);}
+ }finally{h.ui.destroy();await rm(dir,{recursive:true,force:true});}
 });

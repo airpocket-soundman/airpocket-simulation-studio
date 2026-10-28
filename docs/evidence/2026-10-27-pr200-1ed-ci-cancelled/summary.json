@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pullRequest": 200,
+  "head": "1edc6642d6e1882e3bcd74d89c23ce0cb7635571",
+  "run": 40375346866,
+  "job": 121756782923,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/40375346866/job/121756782923",
+  "conclusion": "cancelled",
+  "finalHeadAcceptance": false,
+  "supersededByHead": "4027bdcdabb55c6c05780af13e13861a3849fb2d",
+  "mergeCandidate": "21505ad2541d5be6135ed84fc33697146cf75b8e",
+  "mergeParents": [
+    "5b2fd2299610ca27319139a882e1f39676feee5b",
+    "1edc6642d6e1882e3bcd74d89c23ce0cb7635571"
+  ],
+  "counts": null,
+  "countsMeaning": "No final suite summary: run cancelled during prepared tests. Do not infer complete pass/fail totals.",
+  "partialFailedTests": [
+    "viewer wiring: per-kind accessor is used and unsupported thermal paths refuse (12.166118ms)"
+  ],
+  "partialFailureContext": "Matches the obsolete viewer source assertion already fully diagnosed at historical aa06; this run remains cancelled rather than a completed failure.",
+  "build": "skipped",
+  "localPublished": {
+    "status": "skipped",
+    "reportEntries": null,
+    "elapsedMs": null
+  },
+  "artifact": {
+    "name": "verification-40375346866-1",
+    "downloadCount": 1,
+    "rawFileCount": 4,
+    "inventory": [
+      {
+        "file": "artifacts.raw.json",
+        "bytes": 815,
+        "sha256": "cb0cf6905b064f1c77826228286430b0657a660d617e3d49c4f632a915816001"
+      },
+      {
+        "file": "ci-install.log",
+        "bytes": 440,
+        "sha256": "cbc670e8e75146a699c4a10b26888a54ac8ae2bd6908ab380c629cad1506122e"
+      },
+      {
+        "file": "ci-tests.log",
+        "bytes": 156004,
+        "sha256": "8d039cae7302c089720089711bdf816b263e65ddb2160b0f022b930ae0422118"
+      },
+      {
+        "file": "run.raw.json",
+        "bytes": 3793,
+        "sha256": "cb10f8d04ab4abe839de62bc5c7311f33aa9eca67a5eb9fe8359b172095c6210"
+      }
+    ]
+  },
+  "scope": "Historical cancelled run with partial test evidence; no dispatch/retry by collector."
+}

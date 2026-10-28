@@ -1,0 +1,89 @@
+{
+  "sourceHead": "c8280ca1fc403680c9a83b00c8daad758e85981e",
+  "dirtyMeasurementNote": "Only module-layer registration pending during measurement; source module/main hashes fixed below",
+  "scope": "Actual main-mounted measurement inspector, IAB localhost with owned public-API QA project snapshot controls",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "documentWidth": 375,
+    "inspectionWidth": 338,
+    "svgWidth": 338
+  },
+  "input": {
+    "dataset": "synthetic-example-only",
+    "revision": "1",
+    "specimens": 2,
+    "samples": 6,
+    "synthetic": true,
+    "physicalCalibrationVerified": false
+  },
+  "checks": [
+    "main material entry mounted and operable",
+    "Z and X specimen selection shows direction and dimensions",
+    "stress1MPa at engineering strain.01 verified in graph/table",
+    "JA to EN preserves selected X specimen and numerical data",
+    "input edit immediately removes SVG and both save links",
+    "CtrlEnter with invalid JSON reports failure without old results",
+    "valid synthetic example restores inspection",
+    "browser Back performs actual reload; entry reopens and reinspection succeeds"
+  ],
+  "project": {
+    "unchanged": true,
+    "revision": "sha256:db8c1d0a2fbf5f22812722187e639abcdd2ab180db2719139014fff439b28071",
+    "beforeSha256": "028a2e521438f43a1c8d25a5222aa50bbc40a2a1957a7ad58e94b0a76f1f21bc",
+    "afterSha256": "028a2e521438f43a1c8d25a5222aa50bbc40a2a1957a7ad58e94b0a76f1f21bc"
+  },
+  "navigation": {
+    "pageshowPersisted": false,
+    "note": "Actual Back/reload succeeded; bfcache persisted=true covered only in independent automated regression, not observed in this browser"
+  },
+  "limits": [
+    "No source/normalized Blob download performed",
+    "No material fitting/application or real measured/calibrated data",
+    "No case archive snapshot comparison; only project bytes/revision compared"
+  ],
+  "cleanup": {
+    "tabClosed": true,
+    "viewportReset": true,
+    "ownedServerStopped": true
+  },
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "after.json": {
+      "bytes": 1856,
+      "sha256": "028a2e521438f43a1c8d25a5222aa50bbc40a2a1957a7ad58e94b0a76f1f21bc"
+    },
+    "away.html": {
+      "bytes": 140,
+      "sha256": "82ef2fc11f28ca00409d06f395d07da8f4e911d12eda86bfc7c6bdcb18aa2e39"
+    },
+    "before.json": {
+      "bytes": 1856,
+      "sha256": "028a2e521438f43a1c8d25a5222aa50bbc40a2a1957a7ad58e94b0a76f1f21bc"
+    },
+    "curve-table-ja.jpg": {
+      "bytes": 35679,
+      "sha256": "fcd8c52ced5c2c9fbde57706448b7d0d8334b5e0cf5db317f4e7ec3608ded9f1"
+    },
+    "en.jpg": {
+      "bytes": 37847,
+      "sha256": "1958a8b35440a39806ee9c18aa4d752367d772336e35d2631e31ac122cfe5505"
+    },
+    "index.html": {
+      "bytes": 1741,
+      "sha256": "8fd9a928f008c92e0333756331dd7e58dce657c7f03ea97626543b44db960412"
+    },
+    "ja.jpg": {
+      "bytes": 41789,
+      "sha256": "61bb135244420c8abff30e7f21ff97fe1ecf705d99fe44d6a82233a720aeac42"
+    }
+  },
+  "sourceHashes": {
+    "src/main.js": "d52f02b5761d07f7d9fb30a0979bed14731f6d92878025f682f6a63d23526c10",
+    "src/ui/printed-measurement-ui.js": "d7c86503af4e82ad48db5276a3aa216770028e5b963eaae3c8f64dbd42105275",
+    "src/printed-measurement-dataset.js": "e3df94b0399b97446388bbf33993d9a4010691d81c036f7dfb93362ec3e9431e"
+  }
+}

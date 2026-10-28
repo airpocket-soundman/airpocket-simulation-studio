@@ -1,0 +1,900 @@
+{
+  "request": {
+    "requestId": "gif-timing191-acoustic-1792768298603",
+    "references": [
+      {
+        "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+        "expectedRevision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+      },
+      {
+        "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+        "expectedRevision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+      }
+    ],
+    "field": "instantPressure",
+    "format": "gif",
+    "animation": "time",
+    "seconds": 2,
+    "startTimeSeconds": 0,
+    "endTimeSeconds": 0.0012,
+    "deformScale": 1,
+    "camera": {
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    }
+  },
+  "status": {
+    "schemaVersion": 1,
+    "jobId": "fc47c63e-52db-43d0-a34c-e9fb59f6522e",
+    "requestId": "gif-timing191-acoustic-1792768298603",
+    "state": "completed",
+    "format": "gif",
+    "target": "comparison",
+    "comparison": {
+      "cases": [
+        {
+          "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+          "label": "Synthetic acoustic 1Pa",
+          "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+          "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+        },
+        {
+          "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+          "label": "Synthetic acoustic 2Pa",
+          "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+          "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+        }
+      ],
+      "colorRange": {
+        "field": "instantPressure",
+        "maximum": 3.532363432716448,
+        "minimum": -3.4066020347578125
+      },
+      "field": "instantPressure",
+      "gifAnimation": {
+        "colors": 256,
+        "frames": 24,
+        "height": 320,
+        "loop": 0,
+        "lossy": true,
+        "palette": "RGB332",
+        "phasePolicy": "i/23",
+        "width": 640
+      },
+      "panels": [
+        {
+          "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+          "field": "instantPressure",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 0,
+          "minimum": 0,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "Pa"
+        },
+        {
+          "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+          "field": "instantPressure",
+          "finalOnly": false,
+          "frameIndex": 0,
+          "maximum": 0,
+          "minimum": 0,
+          "offsetSeconds": 0,
+          "timeApplies": true,
+          "timeSeconds": 0,
+          "unit": "Pa"
+        }
+      ],
+      "timeAnimation": {
+        "camera": "fixed",
+        "endTimeSeconds": 0.0012,
+        "field": "instantPressure",
+        "final": {
+          "panels": [
+            {
+              "frameIndex": 23,
+              "offsetSeconds": 0,
+              "timeSeconds": 0.0012
+            },
+            {
+              "frameIndex": 23,
+              "offsetSeconds": 0,
+              "timeSeconds": 0.0012
+            }
+          ],
+          "timeSeconds": 0.0012
+        },
+        "initial": {
+          "panels": [
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            },
+            {
+              "frameIndex": 0,
+              "offsetSeconds": 0,
+              "timeSeconds": 0
+            }
+          ],
+          "timeSeconds": 0
+        },
+        "interpolated": false,
+        "kind": "acousticTransient",
+        "maxAbsOffsetSeconds": [
+          0.000027272727272727263,
+          0.000027272727272727263
+        ],
+        "rangeBasis": "all-selectable-stored-frames",
+        "selectedFrameCounts": [
+          24,
+          24
+        ],
+        "startTimeSeconds": 0,
+        "timeSelection": "nearest-stored-frames-only"
+      },
+      "unit": "Pa"
+    },
+    "view": {
+      "camera": {
+        "fov": 40,
+        "position": [
+          61,
+          41,
+          84
+        ],
+        "target": [
+          5,
+          5,
+          20
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "deformScale": 1,
+      "layers": {
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true
+      },
+      "setup": {
+        "clipEnabled": false,
+        "axis": 2,
+        "position": 0,
+        "flip": false,
+        "opacity": 1,
+        "meshCount": 1,
+        "hiddenParts": []
+      },
+      "language": "en",
+      "sourceResolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "resolution": {
+        "width": 640,
+        "height": 320
+      }
+    },
+    "progress": {
+      "fraction": 1
+    },
+    "artifact": {
+      "mimeType": "image/gif",
+      "name": "comparison-fc47c63e-52db-43d0-a34c-e9fb59f6522e.gif",
+      "totalBytes": 5574849,
+      "sha256": "sha256:ae2a6b202ca93188a5bcb20eb94f4514f36191c088c76ae32a8237116c4b7cac",
+      "maxChunkBytes": 65536,
+      "manifest": {
+        "schemaVersion": 1,
+        "target": "comparison",
+        "format": "gif",
+        "container": "gif",
+        "mimeType": "image/gif",
+        "sha256": "sha256:ae2a6b202ca93188a5bcb20eb94f4514f36191c088c76ae32a8237116c4b7cac",
+        "totalBytes": 5574849,
+        "resolution": {
+          "width": 640,
+          "height": 320
+        },
+        "comparison": {
+          "cases": [
+            {
+              "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+              "label": "Synthetic acoustic 1Pa",
+              "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+              "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+            },
+            {
+              "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+              "label": "Synthetic acoustic 2Pa",
+              "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+              "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+            }
+          ],
+          "colorRange": {
+            "field": "instantPressure",
+            "maximum": 3.532363432716448,
+            "minimum": -3.4066020347578125
+          },
+          "field": "instantPressure",
+          "gifAnimation": {
+            "colors": 256,
+            "frames": 24,
+            "height": 320,
+            "loop": 0,
+            "lossy": true,
+            "palette": "RGB332",
+            "phasePolicy": "i/23",
+            "width": 640
+          },
+          "panels": [
+            {
+              "caseId": "1f57e344-4eff-493e-9b75-3de570cc9665",
+              "field": "instantPressure",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 0,
+              "minimum": 0,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "Pa"
+            },
+            {
+              "caseId": "32406eca-588e-4c68-8c8f-6c9187b253b0",
+              "field": "instantPressure",
+              "finalOnly": false,
+              "frameIndex": 0,
+              "maximum": 0,
+              "minimum": 0,
+              "offsetSeconds": 0,
+              "timeApplies": true,
+              "timeSeconds": 0,
+              "unit": "Pa"
+            }
+          ],
+          "timeAnimation": {
+            "camera": "fixed",
+            "endTimeSeconds": 0.0012,
+            "field": "instantPressure",
+            "final": {
+              "panels": [
+                {
+                  "frameIndex": 23,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0.0012
+                },
+                {
+                  "frameIndex": 23,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0.0012
+                }
+              ],
+              "timeSeconds": 0.0012
+            },
+            "initial": {
+              "panels": [
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                },
+                {
+                  "frameIndex": 0,
+                  "offsetSeconds": 0,
+                  "timeSeconds": 0
+                }
+              ],
+              "timeSeconds": 0
+            },
+            "interpolated": false,
+            "kind": "acousticTransient",
+            "maxAbsOffsetSeconds": [
+              0.000027272727272727263,
+              0.000027272727272727263
+            ],
+            "rangeBasis": "all-selectable-stored-frames",
+            "selectedFrameCounts": [
+              24,
+              24
+            ],
+            "startTimeSeconds": 0,
+            "timeSelection": "nearest-stored-frames-only"
+          },
+          "unit": "Pa"
+        },
+        "view": {
+          "camera": {
+            "fov": 40,
+            "position": [
+              61,
+              41,
+              84
+            ],
+            "target": [
+              5,
+              5,
+              20
+            ],
+            "up": [
+              0,
+              1,
+              0
+            ]
+          },
+          "deformScale": 1,
+          "layers": {
+            "surface": true,
+            "surfaceWire": false,
+            "volumeWire": false,
+            "section": true
+          },
+          "setup": {
+            "clipEnabled": false,
+            "axis": 2,
+            "position": 0,
+            "flip": false,
+            "opacity": 1,
+            "meshCount": 1,
+            "hiddenParts": []
+          },
+          "language": "en",
+          "sourceResolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "resolution": {
+            "width": 640,
+            "height": 320
+          }
+        },
+        "time": {
+          "animation": "time",
+          "durationSeconds": 2,
+          "timeBasis": "display time",
+          "recording": "fixed-frame",
+          "realtime": false,
+          "frameCount": 24,
+          "frameCountGuaranteed": true,
+          "phasePolicy": "i/23",
+          "camera": "fixed",
+          "frameSelection": "nearest-stored-frames-only",
+          "requestedRangeSeconds": {
+            "start": 0,
+            "end": 0.0012
+          },
+          "delayCentiseconds": [
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8,
+            8,
+            9,
+            8
+          ],
+          "loop": "infinite",
+          "frameTimings": {
+            "schemaVersion": 1,
+            "timeSelection": "nearest-stored-frames-only",
+            "interpolated": false,
+            "identity": "Each panel caseIndex indexes comparison.cases (caseId, revision, resultRevision).",
+            "mapping": "One entry per encoded GIF frame, in output order.",
+            "limits": {
+              "frames": 2048,
+              "bytes": 61440
+            },
+            "entries": [
+              {
+                "renderIndex": 0,
+                "phase": 0,
+                "requestedTimeSeconds": 0,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": 0
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 0,
+                    "timeSeconds": 0,
+                    "offsetSeconds": 0
+                  }
+                ]
+              },
+              {
+                "renderIndex": 1,
+                "phase": 0.043478260869565216,
+                "requestedTimeSeconds": 0.000052173913043478256,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 1,
+                    "timeSeconds": 0.000051948051948051944,
+                    "offsetSeconds": -2.2586109542631236e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 1,
+                    "timeSeconds": 0.000051948051948051944,
+                    "offsetSeconds": -2.2586109542631236e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 2,
+                "phase": 0.08695652173913043,
+                "requestedTimeSeconds": 0.00010434782608695651,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 2,
+                    "timeSeconds": 0.00010389610389610389,
+                    "offsetSeconds": -4.517221908526247e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 2,
+                    "timeSeconds": 0.00010389610389610389,
+                    "offsetSeconds": -4.517221908526247e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 3,
+                "phase": 0.13043478260869565,
+                "requestedTimeSeconds": 0.00015652173913043477,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 3,
+                    "timeSeconds": 0.00015584415584415584,
+                    "offsetSeconds": -6.775832862789303e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 3,
+                    "timeSeconds": 0.00015584415584415584,
+                    "offsetSeconds": -6.775832862789303e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 4,
+                "phase": 0.17391304347826086,
+                "requestedTimeSeconds": 0.00020869565217391303,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 4,
+                    "timeSeconds": 0.00020779220779220778,
+                    "offsetSeconds": -9.034443817052494e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 4,
+                    "timeSeconds": 0.00020779220779220778,
+                    "offsetSeconds": -9.034443817052494e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 5,
+                "phase": 0.21739130434782608,
+                "requestedTimeSeconds": 0.0002608695652173913,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 5,
+                    "timeSeconds": 0.00025974025974025974,
+                    "offsetSeconds": -0.0000011293054771315415
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 5,
+                    "timeSeconds": 0.00025974025974025974,
+                    "offsetSeconds": -0.0000011293054771315415
+                  }
+                ]
+              },
+              {
+                "renderIndex": 6,
+                "phase": 0.2608695652173913,
+                "requestedTimeSeconds": 0.00031304347826086954,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 6,
+                    "timeSeconds": 0.00031428571428571427,
+                    "offsetSeconds": 0.0000012422360248447281
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 6,
+                    "timeSeconds": 0.00031428571428571427,
+                    "offsetSeconds": 0.0000012422360248447281
+                  }
+                ]
+              },
+              {
+                "renderIndex": 7,
+                "phase": 0.30434782608695654,
+                "requestedTimeSeconds": 0.0003652173913043478,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 7,
+                    "timeSeconds": 0.0003662337662337662,
+                    "offsetSeconds": 0.000001016374929418409
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 7,
+                    "timeSeconds": 0.0003662337662337662,
+                    "offsetSeconds": 0.000001016374929418409
+                  }
+                ]
+              },
+              {
+                "renderIndex": 8,
+                "phase": 0.34782608695652173,
+                "requestedTimeSeconds": 0.00041739130434782605,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 8,
+                    "timeSeconds": 0.00041818181818181814,
+                    "offsetSeconds": 7.905138339920899e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 8,
+                    "timeSeconds": 0.00041818181818181814,
+                    "offsetSeconds": 7.905138339920899e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 9,
+                "phase": 0.391304347826087,
+                "requestedTimeSeconds": 0.0004695652173913043,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 9,
+                    "timeSeconds": 0.0004701298701298701,
+                    "offsetSeconds": 5.646527385657707e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 9,
+                    "timeSeconds": 0.0004701298701298701,
+                    "offsetSeconds": 5.646527385657707e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 10,
+                "phase": 0.43478260869565216,
+                "requestedTimeSeconds": 0.0005217391304347826,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 10,
+                    "timeSeconds": 0.0005220779220779221,
+                    "offsetSeconds": 3.387916431395058e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 10,
+                    "timeSeconds": 0.0005220779220779221,
+                    "offsetSeconds": 3.387916431395058e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 11,
+                "phase": 0.4782608695652174,
+                "requestedTimeSeconds": 0.0005739130434782608,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 11,
+                    "timeSeconds": 0.000574025974025974,
+                    "offsetSeconds": 1.1293054771313246e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 11,
+                    "timeSeconds": 0.000574025974025974,
+                    "offsetSeconds": 1.1293054771313246e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 12,
+                "phase": 0.5217391304347826,
+                "requestedTimeSeconds": 0.0006260869565217391,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 12,
+                    "timeSeconds": 0.0006259740259740259,
+                    "offsetSeconds": -1.1293054771313246e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 12,
+                    "timeSeconds": 0.0006259740259740259,
+                    "offsetSeconds": -1.1293054771313246e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 13,
+                "phase": 0.5652173913043478,
+                "requestedTimeSeconds": 0.0006782608695652173,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 13,
+                    "timeSeconds": 0.0006779220779220778,
+                    "offsetSeconds": -3.387916431395058e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 13,
+                    "timeSeconds": 0.0006779220779220778,
+                    "offsetSeconds": -3.387916431395058e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 14,
+                "phase": 0.6086956521739131,
+                "requestedTimeSeconds": 0.0007304347826086956,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 14,
+                    "timeSeconds": 0.0007298701298701298,
+                    "offsetSeconds": -5.646527385657707e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 14,
+                    "timeSeconds": 0.0007298701298701298,
+                    "offsetSeconds": -5.646527385657707e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 15,
+                "phase": 0.6521739130434783,
+                "requestedTimeSeconds": 0.0007826086956521738,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 15,
+                    "timeSeconds": 0.0007818181818181818,
+                    "offsetSeconds": -7.905138339920357e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 15,
+                    "timeSeconds": 0.0007818181818181818,
+                    "offsetSeconds": -7.905138339920357e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 16,
+                "phase": 0.6956521739130435,
+                "requestedTimeSeconds": 0.0008347826086956521,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 16,
+                    "timeSeconds": 0.0008337662337662337,
+                    "offsetSeconds": -0.000001016374929418409
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 16,
+                    "timeSeconds": 0.0008337662337662337,
+                    "offsetSeconds": -0.000001016374929418409
+                  }
+                ]
+              },
+              {
+                "renderIndex": 17,
+                "phase": 0.7391304347826086,
+                "requestedTimeSeconds": 0.0008869565217391302,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 17,
+                    "timeSeconds": 0.0008857142857142857,
+                    "offsetSeconds": -0.0000012422360248445655
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 17,
+                    "timeSeconds": 0.0008857142857142857,
+                    "offsetSeconds": -0.0000012422360248445655
+                  }
+                ]
+              },
+              {
+                "renderIndex": 18,
+                "phase": 0.782608695652174,
+                "requestedTimeSeconds": 0.0009391304347826086,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 18,
+                    "timeSeconds": 0.0009402597402597402,
+                    "offsetSeconds": 0.0000011293054771315415
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 18,
+                    "timeSeconds": 0.0009402597402597402,
+                    "offsetSeconds": 0.0000011293054771315415
+                  }
+                ]
+              },
+              {
+                "renderIndex": 19,
+                "phase": 0.8260869565217391,
+                "requestedTimeSeconds": 0.0009913043478260869,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 19,
+                    "timeSeconds": 0.0009922077922077921,
+                    "offsetSeconds": 9.034443817052765e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 19,
+                    "timeSeconds": 0.0009922077922077921,
+                    "offsetSeconds": 9.034443817052765e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 20,
+                "phase": 0.8695652173913043,
+                "requestedTimeSeconds": 0.0010434782608695651,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 20,
+                    "timeSeconds": 0.0010441558441558441,
+                    "offsetSeconds": 6.775832862790116e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 20,
+                    "timeSeconds": 0.0010441558441558441,
+                    "offsetSeconds": 6.775832862790116e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 21,
+                "phase": 0.9130434782608695,
+                "requestedTimeSeconds": 0.0010956521739130434,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 21,
+                    "timeSeconds": 0.001096103896103896,
+                    "offsetSeconds": 4.5172219085252985e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 21,
+                    "timeSeconds": 0.001096103896103896,
+                    "offsetSeconds": 4.5172219085252985e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 22,
+                "phase": 0.9565217391304348,
+                "requestedTimeSeconds": 0.0011478260869565216,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 22,
+                    "timeSeconds": 0.001148051948051948,
+                    "offsetSeconds": 2.2586109542626492e-7
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 22,
+                    "timeSeconds": 0.001148051948051948,
+                    "offsetSeconds": 2.2586109542626492e-7
+                  }
+                ]
+              },
+              {
+                "renderIndex": 23,
+                "phase": 1,
+                "requestedTimeSeconds": 0.0012,
+                "panels": [
+                  {
+                    "caseIndex": 0,
+                    "frameIndex": 23,
+                    "timeSeconds": 0.0012,
+                    "offsetSeconds": 0
+                  },
+                  {
+                    "caseIndex": 1,
+                    "frameIndex": 23,
+                    "timeSeconds": 0.0012,
+                    "offsetSeconds": 0
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gif": {
+          "palette": "RGB332",
+          "colors": 256,
+          "lossy": true
+        },
+        "sourceResolution": {
+          "width": 1280,
+          "height": 640
+        }
+      }
+    }
+  },
+  "byteVerification": {
+    "bytes": 5574849,
+    "sha256": "sha256:ae2a6b202ca93188a5bcb20eb94f4514f36191c088c76ae32a8237116c4b7cac"
+  }
+}

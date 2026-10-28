@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "getResultView",
+      "scope": "inspect",
+      "description": "Read displayed result identity, settings and bounded frame/mode metadata. Results carrying validated saved time-history snapshotInfo also add a detached snapshotStorage summary {requested,count,bytes,budgetBytes,unit:\"byte\",bytesPerScalar:8,meaning:\"stored-scalar-values-only\",excludes:[objects,rendering,observations,receiver-traces,peak-memory],warningCount}; it is derived from validateHistoryMetadata, omits per-frame steps and warning texts, never contains physical arrays, and legacy results without snapshotInfo omit it.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "frameOffset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "frameLimit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50,
+            "default": 20
+          },
+          "modeOffset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "modeLimit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50,
+            "default": 20
+          }
+        },
+        "required": []
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative."
+      ]
+    }
+  ]
+}

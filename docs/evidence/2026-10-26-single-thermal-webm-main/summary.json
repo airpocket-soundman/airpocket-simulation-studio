@@ -1,0 +1,25 @@
+{
+  "runtimeSource": "7fee9593ba37c5a933489daadbc1fe628b1b6ea9",
+  "exportInvocations": 1,
+  "sourceArchive": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "sha256": "sha256:d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b"
+  },
+  "byteVerification": {
+    "bytes": 796383,
+    "sha256": "sha256:d61b3821761937abe63658f070ec57dd5da46a26ebe73d16ff2ca7de2e4b4591"
+  },
+  "fieldProof": {
+    "resultKind": "thermal",
+    "field": "temperature",
+    "unit": "degC",
+    "privateProofValidatedByProductionManifest": true
+  },
+  "baselineTimeSeconds": 2,
+  "baselineInterpolated": true,
+  "physicalLedgerVerified": true,
+  "sourceResultRevisionVerified": true,
+  "fiveStatesUnchanged": true,
+  "realSolverJobs": 0,
+  "externalDecode": "separate decode.mjs not yet run"
+}

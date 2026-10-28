@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pullRequest": 200,
+  "head": "aa06c9643e1bee0cf1394128f529172b43dd7f07",
+  "run": 40374493868,
+  "job": 121753722702,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/40374493868/job/121753722702",
+  "conclusion": "failure",
+  "finalHeadAcceptance": false,
+  "supersededByDocsHead": "1edc6642d6e1882e3bcd74d89c23ce0cb7635571",
+  "mergeCandidate": "21505ad2541d5be6135ed84fc33697146cf75b8e",
+  "mergeParents": [
+    "5b2fd2299610ca27319139a882e1f39676feee5b",
+    "aa06c9643e1bee0cf1394128f529172b43dd7f07"
+  ],
+  "counts": {
+    "total": 2222,
+    "passed": 2213,
+    "failed": 1,
+    "skipped": 8
+  },
+  "suiteDurationMs": 284651.788937,
+  "verifyElapsedSeconds": 338.0,
+  "failure": {
+    "file": "tests/browser-study-state.test.mjs",
+    "line": 55,
+    "test": "viewer wiring: per-kind accessor is used and unsupported thermal paths refuse",
+    "code": "ERR_ASSERTION",
+    "operator": "match",
+    "expectedRegex": "result\\?\\.kind!=='acousticTransient'",
+    "cause": "obsolete source-pattern assertion conflicts with newly supported thermal fixed-time export; old thermal-unsupported string assertion remains after the failing assertion",
+    "notV8OrUnexplainedFileTermination": true
+  },
+  "build": "skipped after prepared-test failure",
+  "localPublished": {
+    "status": "skipped",
+    "reportEntries": null,
+    "elapsedMs": null
+  },
+  "artifact": {
+    "name": "verification-40374493868-1",
+    "downloadCount": 1,
+    "rawFileCount": 3,
+    "inventory": [
+      {
+        "file": "ci-install.log",
+        "bytes": 440,
+        "sha256": "cbc670e8e75146a699c4a10b26888a54ac8ae2bd6908ab380c629cad1506122e"
+      },
+      {
+        "file": "ci-tests.log",
+        "bytes": 264651,
+        "sha256": "b923714d410bdc01d578925a0ae7a66f82e9eb84cc4bcf4d7f75d13386c11733"
+      },
+      {
+        "file": "run.raw.json",
+        "bytes": 3783,
+        "sha256": "5f85d3cee35299b042d428597df301d3d253d1a2055e2693442316312919b15a"
+      }
+    ]
+  },
+  "scope": "Historical failed exact head, retained without retry or result substitution. Collector started no solver/codec/GUI or CI run."
+}

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "base": "167412d834aa1988bda2a4ead4c275ea67c9214e",
+  "scope": "Single thermal-temperature fixed-display-time slice GIF; existing renderer only",
+  "checks": {
+    "newPureTests": 7,
+    "newUiTests": 4,
+    "initialPure": {
+      "total": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    "initialFocused": {
+      "total": 58,
+      "pass": 58,
+      "fail": 0
+    },
+    "finalRelated": {
+      "total": 166,
+      "pass": 166,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 24413.3861,
+      "includes": "19layer and2documentation tests"
+    },
+    "types": {
+      "declarations": 32,
+      "pass": true
+    }
+  },
+  "sourceGate": {
+    "kind": "transient thermal temperature",
+    "definedDisplacementModes": "rejected using descriptors without executing getter",
+    "mesh": "indexed own data snapshot of nodes/Tet4; existing analyzeMeshValidity exact contract; invalid elements reject whole output without dropping",
+    "negativeOrientation": "accepted by unchanged validity contract",
+    "surface": "bounded own indexed valid triangle indices",
+    "flux": "finite retained3component vectors per cell required by existing renderer; not animated",
+    "time": "2..61stored frames/64MiB; current fixed displayed time bracketed with existing locateFrame; interpolated time has no stored index"
+  },
+  "oracles": {
+    "simplex": "(0,0,0),(1,0,0),(0,1,0),(0,0,1)mm",
+    "plane": "z=.5 gives triangle with vertices(0,0,.5),(.5,0,.5),(0,.5,.5)",
+    "temperature": "T(x,y,z,t)=20+x+2y+3z+t; fixed display t2 from0/5 stored frames gives22+x+2y+3z at section barycentric samples",
+    "retainedSide": "flipfalse coordinate>=position; fliptrue<=position",
+    "boundary": "existing original-skin duplicate cap omitted; simplex z0/z1 both have zero section triangles; empty frame remains possible",
+    "acceptance": "No actual pixels claimed. A future convex-box live acceptance must examine22interior scene regions/variation and first-middle-last side/captions; intentional boundary emptiness differs from all-blank failure"
+  },
+  "semantics": {
+    "frames": 24,
+    "phase": "i/23",
+    "coordinateBasis": "mesh-mm",
+    "camera": "fixed",
+    "field": "temperature",
+    "modeIndex": null,
+    "sourceTime": "fixed selected viewer time, interpolation explicitly identified",
+    "purpose": "full prepared setup, source revision, field/unit/time, mode null, visible section/surface and exact issued bytes",
+    "ownership": "cooperative owned yield/Blob/SHA; cancellation request does not settle unresolved work; restore original setup/time/camera before executionSettled true",
+    "watchdog": "120s cancellation request, no hard cleanup claim"
+  },
+  "limits": {
+    "nodes": 65536,
+    "tetrahedra": 131072,
+    "surfaceFaces": 524288,
+    "storedFrames": 61,
+    "scalarBytes": 67108864,
+    "planBytes": 12288,
+    "proofBytes": 16384,
+    "outputBytes": 33554432,
+    "width": 640,
+    "height": 320,
+    "seconds": [
+      1,
+      15
+    ]
+  },
+  "notClaimed": [
+    "real browser export",
+    "general section numerical accuracy",
+    "closed surface topology",
+    "self intersections",
+    "all-shapes visibility",
+    "observed empty pixels",
+    "new solved times",
+    "physical calibration"
+  ],
+  "newSolverRuns": 0,
+  "newRealExports": 0,
+  "newNativeCodecRuns": 0,
+  "progressChanges": 0,
+  "protectedFiles": [
+    {
+      "path": "src/ui/single-stored-time-gif.js",
+      "gitBytesSha256": "e08bbfbfde6c06f5bd15c235bd92f25a7da6945f87e84c5e0090b524930180ed",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/single-deformation-gif.js",
+      "gitBytesSha256": "6cc24a07eeb03601ee4563d3108e12dd386b8d3ec071aaa29e7e2b1dd480499b",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/single-orbit-gif.js",
+      "gitBytesSha256": "3325995fc03eece8959a7c332b9cd00ed4765577c6a50fb6ab22763981673a9e",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/single-view-time-webm.js",
+      "gitBytesSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/gif-encoder.js",
+      "gitBytesSha256": "15501180e083b0f590bd5cb06d12094d86c15ec702482bdf281bf6b4bbf786db",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/comparison-fixed-webm.js",
+      "gitBytesSha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/result-slice.js",
+      "gitBytesSha256": "4f95b49b401c5cdc831c5430c430dac2684471499609f22affcb91df4dd5ad04",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/mesh-validity.js",
+      "gitBytesSha256": "9ce18e408a4bf82a80ae0c674bad674cb252bf55bcb8a9ceff18e129e7e414d1",
+      "sameAsBase": true
+    }
+  ],
+  "raw": [
+    {
+      "path": "docs/evidence/2026-10-27-single-slice-gif/final-related.log",
+      "bytes": 18425,
+      "sha256": "61524177db6de2cb60cad4051198bd7729bc25c5b5e5ad5a3cae36df09631d11"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-slice-gif/initial-focused.log",
+      "bytes": 6808,
+      "sha256": "3b1a9b77efd26e1b699222cbdfe8a9740fb788d0d22434fc7b445f7faf4a2b48"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-slice-gif/initial-pure.log",
+      "bytes": 971,
+      "sha256": "638ec8528cd55b6aefebdd4d2408855fbf5c6718b81a7745757714bf39369341"
+    }
+  ]
+}

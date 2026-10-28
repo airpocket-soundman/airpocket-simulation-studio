@@ -1,0 +1,35 @@
+
+> airpocket-simulation-studio@0.44.0 build
+> node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build && node scripts/build-browser-connector.mjs && node scripts/build-progress-history.mjs && node scripts/build-manifest.mjs
+
+vite v7.3.7 building client environment for production...
+<script src="./coi-serviceworker.js"> in "/index.html" can't be bundled without type="module" attribute
+transforming...
+✓ 227 modules transformed.
+rendering chunks...
+[plugin vite:reporter] 
+(!) C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/project-operations.js is dynamically imported by C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/studio-api.js, C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/studio-api.js but also statically imported by C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/browser-session.js, C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/project-edit-preview.js, C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/result-assessment-api.js, C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/result-view-api.js, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/project-edit-preview.js is dynamically imported by C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/studio-api.js but also statically imported by C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/src/browser-session.js, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/assets/cad.worker-BUE9IjLc.js               0.49 kB
+dist/development.html                            0.78 kB │ gzip:   0.45 kB
+dist/index.html                                  0.79 kB │ gzip:   0.43 kB
+dist/assets/analysis.worker-CKCxB9PX.js        248.30 kB
+dist/assets/app-Dr9ouQoQ.css                     3.57 kB │ gzip:   1.36 kB
+dist/assets/development-CYIlFFzS.css            11.10 kB │ gzip:   3.26 kB
+dist/assets/geometry-inspection-BnSW6p_8.js      4.07 kB │ gzip:   1.82 kB
+dist/assets/i18n-CDf60JeE.js                    77.19 kB │ gzip:  27.73 kB
+dist/assets/development-Bdvi-a_j.js            485.97 kB │ gzip: 154.72 kB
+dist/assets/app-DCISJKdH.js                  1,754.69 kB │ gzip: 491.93 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.49s
+Standalone browser connector: 98213 bytes / 530abfa8c9ffd1d457283268c3a9c1ece0363b6d1747023fd090d29d985c31da
+Progress history: 267 points, 0 skipped, 69220 bytes
+Runtime manifest: 0.44.0 / 7fee959

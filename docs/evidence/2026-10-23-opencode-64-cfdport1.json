@@ -1,0 +1,82 @@
+{
+  "workOrder": "64-CFDPORT1",
+  "date": "2026-10-23",
+  "baseSha": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "branch": "codex/opencode-64-cfdport1",
+  "environment": "Windows, Node.js pure tests; npm ci --ignore-scripts",
+  "syntheticInput": "Indexed 2 x 2 x 10 mm box without top face; meshVersion 7; tolerance 0.000001 mm; enclosure [-2,-2,-1,4,4,12] mm; explicit normal [0,0,1]; seed [0,0,5] mm",
+  "expectedAndObserved": {
+    "nodeIndices": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "capPointMm": [
+      0,
+      0,
+      10
+    ],
+    "outwardNormal": [
+      0,
+      0,
+      1
+    ],
+    "status": "confirmed",
+    "meshVersion": 7,
+    "toleranceMm": 0.000001
+  },
+  "verification": [
+    {
+      "command": "node --test tests/opening-candidate-cap.test.mjs tests/opening-loop-candidates.test.mjs tests/fluid-opening-caps.test.mjs",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --test tests/docs.test.mjs",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "passed, 7 declarations"
+    },
+    {
+      "command": "TypeScript strict standalone tests/fixtures/opening-candidate-cap-types.ts",
+      "result": "passed"
+    },
+    {
+      "command": "check(collectGraph(cwd), config with domain.files plus opening-candidate-cap.js)",
+      "result": "0 problems, 234 files, 576 edges, 7 existing allowlist entries"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "rejections": [
+    "unconfirmed",
+    "stale version",
+    "modified candidate geometry or triangle identity",
+    "changed mesh",
+    "reversed normal retaining wrong seed side",
+    "nonparallel or nonunit normal",
+    "seed on plane",
+    "duplicate face",
+    "unresolved seam"
+  ],
+  "integrationRequired": "Root integrator must add opening-candidate-cap.js to src/module-layers.json domain.files; shared file intentionally not edited.",
+  "unverified": [
+    "real browser",
+    "native CAD",
+    "general physical accuracy",
+    "local OCC cap generation",
+    "UI/API integration",
+    "publication"
+  ],
+  "parentAcceptance": "CFD parent remains in progress; candidate confirmation is not closure, volume generation or CFD validation.",
+  "inputFixtureSha256": "a78b92bf832c1be14ec05cb573f23c4cc90d1a7f40ed66e30a4b4111f97b7851",
+  "runtime": "v24.11.1"
+}

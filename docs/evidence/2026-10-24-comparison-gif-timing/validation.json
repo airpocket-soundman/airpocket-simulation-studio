@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "automatedRegression": {
+    "command": "node --test tests/comparison-frame-timing.test.mjs",
+    "tests": 4,
+    "pass": 4,
+    "fail": 0,
+    "solverRuns": 0
+  },
+  "offlineCommands": [
+    "python .qa/gif-timing191/decode.py thermal acoustic",
+    "node .qa/gif-timing191/verify.mjs thermal acoustic"
+  ],
+  "offlineAllPassed": true,
+  "stagedByteVerification": "Every byte-inventory entry was compared to git show :path and local raw bytes; exact SHA256/length equality required.",
+  "diffCheck": "git diff --cached --check passed; raw CRLF preserved by -text and whitespace=cr-at-eol."
+}

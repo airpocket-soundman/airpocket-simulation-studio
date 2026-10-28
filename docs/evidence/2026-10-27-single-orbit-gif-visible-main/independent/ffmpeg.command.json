@@ -1,0 +1,33 @@
+{
+  "executable": "C:\\Users\\yamashita_y00031\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin\\ffmpeg.exe",
+  "args": [
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-threads",
+    "1",
+    "-ignore_loop",
+    "1",
+    "-i",
+    "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\audit-180-20261023\\airpocket-simulation-studio\\.qa\\single-orbit-gif202c\\out\\orbit.gif",
+    "-map",
+    "0:v:0",
+    "-an",
+    "-fps_mode",
+    "passthrough",
+    "-pix_fmt",
+    "rgb24",
+    "-frames:v",
+    "24",
+    "-threads",
+    "1",
+    "-f",
+    "rawvideo",
+    "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\grouped-temperature201\\airpocket-simulation-studio\\.qa\\gif202c-independent\\out-202c-4e0f785-20261027\\ffmpeg.rgb"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "windowsHide": true,
+  "timeoutMs": 30000
+}

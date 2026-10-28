@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "createBuiltinProject",
+      "scope": "edit",
+      "description": "Replace input with an explicit built-in solid without inventing material or boundary conditions.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "description": "Exact SHA-256 revision returned by the relevant inspection; never infer a revision."
+          },
+          "source": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "box"
+                  },
+                  "bounds": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 6,
+                    "maxItems": 6,
+                    "description": "[minimumX,minimumY,minimumZ,sizeX,sizeY,sizeZ] in mm; sizes positive."
+                  }
+                },
+                "required": [
+                  "kind",
+                  "bounds"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "boxes"
+                  },
+                  "boxes": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 6,
+                      "maxItems": 6,
+                      "description": "[minimumX,minimumY,minimumZ,sizeX,sizeY,sizeZ] in mm; sizes positive."
+                    },
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "description": "Independent boxes must not overlap in positive volume."
+                  }
+                },
+                "required": [
+                  "kind",
+                  "boxes"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "cylinder"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "sphere"
+                  },
+                  "center": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "radius": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "required": [
+                  "kind",
+                  "center",
+                  "radius"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "tube"
+                  },
+                  "center": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "axis": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2
+                  },
+                  "outerRadius": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "innerRadius": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "length": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                },
+                "required": [
+                  "kind",
+                  "center",
+                  "axis",
+                  "outerRadius",
+                  "innerRadius",
+                  "length"
+                ]
+              }
+            ],
+            "description": "Built-in solid in mm. Cylinder is fixed radius 12, length 60, Y axis. Tube innerRadius must be less than outerRadius; coordinate overflow and volume overlap are runtime checks."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "required": [
+          "expectedRevision",
+          "source"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffects": [
+        "Replaces the live project input and invalidates its displayed analysis through the host."
+      ],
+      "revisionFields": [
+        "expectedRevision"
+      ],
+      "units": {
+        "source.bounds": "mm",
+        "source.boxes": "mm",
+        "source.center": "mm",
+        "source.radius": "mm",
+        "source.outerRadius": "mm",
+        "source.innerRadius": "mm",
+        "source.length": "mm"
+      },
+      "limitations": [
+        "This is project creation, not meshing or physical setup.",
+        "Geometry-specific overflow, overlap and validity checks are additional runtime constraints."
+      ]
+    }
+  ]
+}

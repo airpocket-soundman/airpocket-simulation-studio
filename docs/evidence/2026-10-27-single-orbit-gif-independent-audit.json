@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "reviewedCommit": "149bfda3f8db10d8629eebe979c2effa008be72a",
+  "sourceEdits": 0,
+  "sourceInventory": [
+    {
+      "file": "src/ui/single-orbit-gif.js",
+      "gitBlob": "b86d6f6c9c1678825411c87c86fc24e3ef380ff9",
+      "sha256": "c9685c3712ffbedbdcd1ac08bc5f6c13acc71dc9ed079b81b012906d52f24dd9"
+    },
+    {
+      "file": "src/visual-export.js",
+      "gitBlob": "421fac7686bc2369d20f028e95763e15e36baa89",
+      "sha256": "216d04add9b52bf0312c8e0cac3fa88d9c993891a74200f71c587863748c00af"
+    },
+    {
+      "file": "src/visual-export-jobs.js",
+      "gitBlob": "080bf1e744ecb1629a0de936c7fa2e6379dd8ce7",
+      "sha256": "7038aaefc64cac6560e35b6c4414a31a50e699e2bc680266b387a238277d6965"
+    },
+    {
+      "file": "src/result-export-preparation.js",
+      "gitBlob": "74a1530536c271b91e7630b0bd4ae7812732868c",
+      "sha256": "02fbf19cd31fb1db9fc1ed9b0e3f250ce82d528ba13f6c3d2b8912becb24b70e"
+    }
+  ],
+  "scopeJa": "単画面回転GIFのsource独立監査と合成canvas検証。実ブラウザ出力や外部decoder検証の代替ではない。",
+  "scopeEn": "Independent source audit and synthetic canvas regression, not browser-export or external-decoder acceptance.",
+  "independentNewTests": 4,
+  "combinedTests": {
+    "command": "node --test tests/single-orbit-gif-independent.test.mjs tests/single-orbit-gif.test.mjs tests/visual-export-adapter.test.mjs",
+    "total": 37,
+    "pass": 37,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 15364.4898
+  },
+  "oracles": [
+    "all24 camera positions use independent sin/cos formulas and last phase23/24 differs from first",
+    "fixed two-second delays [8,9,8] repeated eight times total200 centiseconds",
+    "decoded center palette index (i mod8)*32 for every synthetic frame;640x320 image",
+    "arraylike length getter remains uncalled; oversized typed length spoof refuses before SHA; valid own length/buffer/iterator shadowing cannot override intrinsic bytes",
+    "mode0 issued artifact accepted only for preparedmode0; mode1/null refuse artifact publication",
+    "pending issuance SHA cancellation retains executionSettledfalse and busy exclusion until actual promise settles; release makes job inaccessible"
+  ],
+  "closedFindings": [
+    {
+      "initial": "Manifest copied arbitrary arraylike before checking capacity/brand",
+      "safeReproduction": "length getter touched once and untyped sentinel thrown; zero giant allocations",
+      "final": "ordinary Uint8Array intrinsic byte count/buffer brand and exact issued size gate before copy/SHA"
+    },
+    {
+      "initial": "Same-output modal selector changed during capture and remained changed after successful24-frame output",
+      "safeReproduction": "result-mode0 to1 at second fake yield completed and modeAfter1",
+      "final": "mode selector guard plus onchange closure restore; private selectedModeIndex binding refuses cross-mode borrowed proof"
+    },
+    {
+      "initial": "up/fov were not included in view restoration boundary",
+      "final": "up/fov guard and restoration before lookAt; regression verifies restored orientation up"
+    }
+  ],
+  "ownerUiChecks": [
+    "JA/EN GIF action and fixed temperature interpolation2s",
+    "field/time/range/source viewport/replacement/abort refusal",
+    "camera/modal closure restore and no partial download",
+    "legacy acoustic/thermal fixed WebM compatibility"
+  ],
+  "harnessCorrections": [
+    "Initial audit harness assumed a nonexistent stats() API; replaced with public released-job status rejection",
+    "Initial SHA-wait harness spun microtasks and starved Blob.arrayBuffer task; replaced with bounded setImmediate turns. Neither was a product-source defect."
+  ],
+  "syntheticEncoding": "Production pure GIF encoder with fake 2D canvas; exact byte SHA is checked. Shared test-only GIF decoder is used, not independent external decoding.",
+  "additionalBrowserExports": 0,
+  "additionalNativeOrBrowserCodecRuns": 0,
+  "additionalSolverRuns": 0,
+  "findingsRemaining": [],
+  "limits": [
+    "No actual GUI render/pixel/caption readability acceptance",
+    "No external FFmpeg/browser GIF decoder execution",
+    "No claim of dynamic physical response: selected field/time/mode fixed, camera orbit only",
+    "No measurement/calibration or parent-task completion claim"
+  ]
+}

@@ -11,6 +11,7 @@ export function canonicalJson(value,seen=new Set(),memo) {
   seen.add(value);
   let result;
   if(Array.isArray(value)) {
+    if(Object.getPrototypeOf(value)!==Array.prototype)throw new TypeError('Only ordinary JSON arrays are supported.');
     if(Reflect.ownKeys(value).length!==value.length+1)throw new TypeError('Sparse, decorated or accessor arrays are not supported.');
     // One descriptor read per element; plain finite-number arrays (the bulk of saved results) serialise natively.
     let numbers=true;

@@ -1,0 +1,76 @@
+{
+  "head": "2a5fab3c54b49283dde44ada55ae4b9988eb4e06",
+  "scope": "Actual IAB390px isolated production single/comparison UI modules, synthetic saved bundles; no solve in browser",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "documentWidth": 375,
+    "scrollbarPresent": true
+  },
+  "single": {
+    "source": "displacement-stdio-20261023/bundle.json",
+    "inputSha256": "49ed911873fcb9571495a2a0a26f1afaab08bd3f907d41d602e70ec2ab3a2bc6",
+    "steps": 6,
+    "failedGaps": 0,
+    "previewComplete": true,
+    "svgIntrinsicWidth": 800,
+    "displayWidth": 351
+  },
+  "comparison": {
+    "source": [
+      "public/examples/increment-comparison-a.json",
+      "public/examples/increment-comparison-b.json"
+    ],
+    "curves": 2,
+    "failedGaps": 2,
+    "previewComplete": true,
+    "svgIntrinsicWidth": 1000,
+    "displayWidth": 351,
+    "threeSaveLinksAndFullSizeLinkVisible": true
+  },
+  "languages": [
+    "ja",
+    "en",
+    "ja"
+  ],
+  "limits": [
+    "No browser Blob download, full-size link navigation or file chooser exercised",
+    "No live main project/result/case revision comparison in this isolated UI page",
+    "Not a Chrome extension or HTTPS publication test",
+    "MCP artifact-byte parity is separately verified, not inferred from preview"
+  ],
+  "cleanup": {
+    "viewportReset": true,
+    "tabClosed": true,
+    "ownedServerStopped": true
+  },
+  "files": {
+    ".gitattributes": {
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    "comparison-en.jpg": {
+      "bytes": 211643,
+      "sha256": "652a72b40706940cb0a71bcdca8047f2670b6e2735208a9eb564f992f80356e6"
+    },
+    "comparison-ja.jpg": {
+      "bytes": 60968,
+      "sha256": "fac19cc4f7b20c10635d85db0303280bdb73f6f0ca76d46aa6881710ef519409"
+    },
+    "index.html": {
+      "bytes": 1089,
+      "sha256": "eb506f8dd1724eab927a1a53d3ae0ef20dd1b64baa5b81f8a5a7376183386da9"
+    },
+    "single-full.jpg": {
+      "bytes": 94313,
+      "sha256": "2375354169faabccda05630a7d05cc67498dee61723cf59f3d04221886340643"
+    }
+  },
+  "sourceHashes": {
+    "src/ui/increment-curve.js": "2a52d5b9d383e06089fd3eb92e6106fec0cb92d77f08e8d15787e822310d0c2b",
+    "src/ui/increment-curve-comparison.js": "467576f190a7b5e6caeec0d4542bdafccde2a0d996337e65c88f2194b657426c",
+    "src/increment-curve-data.js": "398b29b08aae66c3ba78c034991b24cd4462b4bcb38f253ec737dbfe09817eeb",
+    "src/increment-curve-export.js": "c7843ed49540a173b5e48d2ca31b0a42c4077727b308ab85d6903c2c394683fd",
+    "src/increment-curve-comparison.js": "c3a8cb67b8dc395a8f746e36963b223e505d91a53b525509c56b4d17721f4cbf"
+  }
+}

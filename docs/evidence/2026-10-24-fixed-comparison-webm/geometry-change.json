@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "method": "Pillow RGB bytes of FFmpeg decoded images0/23/47",
+  "panels": [
+    {
+      "caseIndex": 0,
+      "crop": [
+        100,
+        100,
+        540,
+        500
+      ],
+      "excludes": "headers/time labels/color bars",
+      "pixelSha256": [
+        "34674f5f9205a677432bbc864f634844fbda3994be272d46d231b56280c6c4bf",
+        "5d4fcb19e389a27426a721a932a8fd03553ed6cc672b143b67432a3ca02f8464",
+        "ed587aa4c48c6ab06eebf56dc2ac83c2a4aaee9a9f204601fa85575b6e58401b"
+      ],
+      "differencesFromFirst": [
+        {
+          "selectedImage": 1,
+          "changedPixels": 131241,
+          "absoluteChannelDifference": 1705816
+        },
+        {
+          "selectedImage": 2,
+          "changedPixels": 131451,
+          "absoluteChannelDifference": 2150341
+        }
+      ]
+    },
+    {
+      "caseIndex": 1,
+      "crop": [
+        740,
+        100,
+        1180,
+        500
+      ],
+      "excludes": "headers/time labels/color bars",
+      "pixelSha256": [
+        "1b8a4ba7f72426eb451289446169c0b18b9544579e60822195b393236e6fbca1",
+        "f5a953fd365c1468b0848846b9f383cb8f62a401c1832497b279e92bcb45a156",
+        "1e759f59bf7861372ee9ebd70d1060db5a8b68cee5c2be0594507ee83c83f8eb"
+      ],
+      "differencesFromFirst": [
+        {
+          "selectedImage": 1,
+          "changedPixels": 108596,
+          "absoluteChannelDifference": 2386738
+        },
+        {
+          "selectedImage": 2,
+          "changedPixels": 108571,
+          "absoluteChannelDifference": 3278840
+        }
+      ]
+    }
+  ],
+  "meaning": "Geometry/color image changes independent of text; not exact physical pressure measurement."
+}

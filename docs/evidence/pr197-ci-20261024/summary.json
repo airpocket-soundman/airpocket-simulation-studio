@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "pr": 197,
+  "head": "e630920dcf482c521f128c19654ed0756a51eaa3",
+  "base": "3d3c450aab2d5fe9f1ff143e4b50ff1aa37fe15b",
+  "mergeCandidate": "645d9e63452ab04ed382abcee6b44ddbd0cac221",
+  "runId": 39992234541,
+  "attempt": 1,
+  "conclusion": "success",
+  "verifySeconds": 272,
+  "runCreatedToUpdatedSeconds": 275,
+  "tests": {
+    "total": 2165,
+    "pass": 2157,
+    "fail": 0,
+    "skip": 8,
+    "durationMs": 192989.430126
+  },
+  "buildSeconds": 2.69,
+  "local": {
+    "checks": 28,
+    "pass": 28,
+    "elapsedMs": 26506.599779999997,
+    "reportSha256": "9b04a8563cffb0e71ecff04e64bc823e4e7a1374ad4181ea14c3f7e4f7305709",
+    "execution": {
+      "host": "node-child-process",
+      "sameExecutable": true,
+      "node": "v24.21.0",
+      "v8": "13.6.233.17-node.53",
+      "platform": "linux",
+      "arch": "x64",
+      "childCount": 44,
+      "requestCount": 44,
+      "automaticFallback": false,
+      "automaticRetry": false
+    }
+  },
+  "artifact": {
+    "id": 12517888289,
+    "name": "verification-39992234541-1",
+    "zipBytes": 89882,
+    "zipSha256": "adb3a30d676302b5d83fb78e47ed0e3722c4ee44d1e710ead2e583a660433760",
+    "downloadedZipDigestVerified": true
+  },
+  "additionalWorkflowRuns": 0,
+  "additionalTests": 0,
+  "published": false,
+  "limitations": [
+    "PR merge-candidate validation; deploy and verify-published skipped by workflow condition",
+    "Eight existing environment-gated skips remain; no skips altered",
+    "Historical initial focused docs-link failure remains in integration evidence; current exact-head full suite passes"
+  ],
+  "files": [
+    {
+      "name": ".gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "name": "artifact-metadata.raw.json",
+      "bytes": 818,
+      "sha256": "8aaeff868b79658cc71f24fb389371be7233cc8ce2584e13adfdcee55be61412"
+    },
+    {
+      "name": "ci-build.log",
+      "bytes": 3693,
+      "sha256": "0754fe71abf9eca3def64de272b88b8390e4112709a333df7b87e84bed612645"
+    },
+    {
+      "name": "ci-install.log",
+      "bytes": 440,
+      "sha256": "69fea6a92eeea1af4ff3b4c0c17785ab142d047a4ae702e0335d1e1facbd04a9"
+    },
+    {
+      "name": "ci-local-published.log",
+      "bytes": 1567,
+      "sha256": "a89999c43e77f522254fe7c6f9277ce3669419f6e75c06680f7130df6a22a96b"
+    },
+    {
+      "name": "ci-tests.log",
+      "bytes": 234023,
+      "sha256": "a759a448b0fc18d1a2ae91ca3129bb237d4f5ffdf2bbd680b4fceb4179d3e529"
+    },
+    {
+      "name": "published-checkpoints-1792775384104-12194.jsonl",
+      "bytes": 86537,
+      "sha256": "8fc6166458f47b891328eae67404c114d50e15dda69a781d619308354a3395a8"
+    },
+    {
+      "name": "published-report.json",
+      "bytes": 4385,
+      "sha256": "9b04a8563cffb0e71ecff04e64bc823e4e7a1374ad4181ea14c3f7e4f7305709"
+    },
+    {
+      "name": "run.raw.json",
+      "bytes": 3660,
+      "sha256": "7b7c0495229470d724714448b289a52ffa96eef16aeb94f1a0b4943a55800e9f"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pr": 201,
+  "head": "c786f2661832c105a3b9bccd4cf15aeea1adc99d",
+  "run": 40375784106,
+  "job": 121758344557,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/40375784106",
+  "conclusion": "success",
+  "mergeCandidate": {
+    "message": "Merge c786f2661832c105a3b9bccd4cf15aeea1adc99d into 4027bdcdabb55c6c05780af13e13861a3849fb2d",
+    "parents": [
+      "4027bdcdabb55c6c05780af13e13861a3849fb2d",
+      "c786f2661832c105a3b9bccd4cf15aeea1adc99d"
+    ],
+    "sha": "85ad434939893359ef90388c3959226a4d01c08c"
+  },
+  "tests": {
+    "total": 2246,
+    "passed": 2238,
+    "failed": 0,
+    "skipped": 8,
+    "durationMs": 292674.241218
+  },
+  "build": {
+    "conclusion": "success",
+    "stepSeconds": 7
+  },
+  "localPublished": {
+    "reportChecks": 28,
+    "passed": 28,
+    "loggedPassChecks": 27,
+    "extraReportCheck": "deployed-asset-integrity",
+    "elapsedMs": 38219.183745,
+    "revision": "85ad434939893359ef90388c3959226a4d01c08c",
+    "local": true
+  },
+  "artifact": {
+    "id": 12674444657,
+    "name": "verification-40375784106-1",
+    "digest": "sha256:61b1fe3ec3e10c212c1da0406cd766b3ca139ee1bdc70b960e76beaa15fe9c6a",
+    "downloadCount": 1
+  },
+  "deploy": "skipped",
+  "verifyPublished": "skipped",
+  "publicDeploymentProven": false,
+  "newRunsDispatched": 0,
+  "retries": 0,
+  "localSolverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "rawFiles": [
+    {
+      "file": "artifacts.json",
+      "bytes": 819,
+      "sha256": "6fc545ccaf32e6fb7df230922949273691b9c1e5ae259a8287d4e4f5bb65d927",
+      "gitBlobSha1": "1fe7f9d3834203da3de59728e5e1231f77307c53"
+    },
+    {
+      "file": "ci-build.log",
+      "bytes": 3693,
+      "sha256": "7025acf31b8b09ea224eff19d7c3c451b3495a13b07a0f5c8ca4679052e80630",
+      "gitBlobSha1": "d4c289b092b1570c39f99cbe67af312aa20e1c91"
+    },
+    {
+      "file": "ci-install.log",
+      "bytes": 440,
+      "sha256": "cbc670e8e75146a699c4a10b26888a54ac8ae2bd6908ab380c629cad1506122e",
+      "gitBlobSha1": "0b8017f3d39abc0625d0627ff369faefbeeefe98"
+    },
+    {
+      "file": "ci-local-published.log",
+      "bytes": 1572,
+      "sha256": "368d00f7993083a55299922cb7c544394b6dc7dec010ce903700d5d93b6902a8",
+      "gitBlobSha1": "a7341a334371b36094adb013e473bd277e4510ec"
+    },
+    {
+      "file": "ci-tests.log",
+      "bytes": 242610,
+      "sha256": "7fe4ac8ecfe8b48b90460a5d59e58bf41905c3084ad43259a1557261a05f5b71",
+      "gitBlobSha1": "629583d91d641087df25b771a923ed9865554a99"
+    },
+    {
+      "file": "merge.json",
+      "bytes": 255,
+      "sha256": "682d790341d9d89c6b660bc7ce6a3ff21da43938f60f8d2bf96cd458b74c3ac8",
+      "gitBlobSha1": "7b47dac72666c939365f91f803f098b90e23ac75"
+    },
+    {
+      "file": "published-checkpoints-1793038749589-12406.jsonl",
+      "bytes": 86519,
+      "sha256": "41ffe519ffd7f1b1c6c76c9650b98d369dc604ddaed22ad87032c1108584d649",
+      "gitBlobSha1": "9d8507e8f0cf16cb9693973bdfeb14142c9ba5dc"
+    },
+    {
+      "file": "published-report.json",
+      "bytes": 4386,
+      "sha256": "e5ede778753736d5805ad33116c9db659aa415b2c0162365422496699800dc4f",
+      "gitBlobSha1": "865a2b580ec6de8be576b33fad01162b7d942d5d"
+    },
+    {
+      "file": "run.json",
+      "bytes": 3625,
+      "sha256": "4e20dc386cdb031cc00c17dba719db3e4fae2e533847183c5d72ef754341522e",
+      "gitBlobSha1": "94d3ee3654a5c0ca052f9d1a2b2200a0120ad301"
+    }
+  ],
+  "taskStatusChanged": false
+}

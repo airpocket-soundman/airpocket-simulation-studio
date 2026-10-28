@@ -116,7 +116,9 @@ export function createChannelLayerCellQuality(input){
   const region=index<layersPerWall?'lower-wall':index===layersPerWall?'centre':'upper-wall';
   const wallId=region==='centre'?null:region==='lower-wall'?0:1;
   const layerIndex=region==='lower-wall'?index:region==='upper-wall'?coordinates.length-2-index:null;
-  if(minimumCellHeightMm-heightMm>RELATIVE_TOLERANCE*Math.max(1,minimumCellHeightMm))throw Error('Cell '+index+' height '+heightMm+' mm is below the minimum cell height '+minimumCellHeightMm+' mm');
+  // Relative to the actual requested length, never an absolute millimetre floor.
+  // This retains boundary roundoff tolerance without admitting arbitrarily thin cells.
+  if(minimumCellHeightMm-heightMm>RELATIVE_TOLERANCE*Math.max(heightMm,minimumCellHeightMm))throw Error('Cell '+index+' height '+heightMm+' mm is below the minimum cell height '+minimumCellHeightMm+' mm');
   if(aspectRatio-maxAspectRatio>RELATIVE_TOLERANCE*Math.max(1,aspectRatio,maxAspectRatio))throw Error('Cell '+index+' aspect ratio '+aspectRatio+' exceeds the maximum aspect ratio '+maxAspectRatio);
   totalVolume+=volumeMm3;
   minimumObservedHeight=Math.min(minimumObservedHeight,heightMm);

@@ -1,0 +1,290 @@
+{
+  "inspect": {
+    "schemaVersion": 1,
+    "revision": "sha256:c077b523fda4f4de3e79b8eb0ec1be8db6b16115ff46645f636cdff2a776912f",
+    "project": {
+      "loaded": true,
+      "name": "Curved sample · Ø24 × 60 mm",
+      "meshCount": 1,
+      "selectedTriangles": 0,
+      "selectedAreaMm2": 0,
+      "conditionCount": 0,
+      "material": "金属"
+    },
+    "liveBrowserMcp": true,
+    "browser": {
+      "name": "Chrome",
+      "reportedVersion": "156.0.0.0",
+      "precision": "reduced",
+      "fullVersionVerified": false,
+      "source": "navigator.userAgent"
+    },
+    "methods": {
+      "inspect": "inspect",
+      "inspectInput": "inspect",
+      "geometry": "inspect",
+      "inspectSurface": "inspect",
+      "checkGpuEnvironment": "inspect",
+      "createBuiltinProject": "edit",
+      "prepareFluidDomain": "edit",
+      "applyCaseSource": "edit",
+      "clearCaseSource": "edit",
+      "applyFluidDomainMesh": "edit",
+      "inputImportBegin": "edit",
+      "inputImportWrite": "edit",
+      "inputImportCommit": "edit",
+      "inputImportRelease": "edit",
+      "preflight": "inspect",
+      "meshBoundaryPreflight": "inspect",
+      "previewEdit": "inspect",
+      "listJobs": "inspect",
+      "jobStatus": "inspect",
+      "jobEvents": "inspect",
+      "jobArtifacts": "inspect",
+      "jobArtifact": "inspect",
+      "jobResultExport": "inspect",
+      "jobResultRead": "inspect",
+      "jobResultRelease": "inspect",
+      "probe": "inspect",
+      "edit": "edit",
+      "startJob": "analyze",
+      "cancelJob": "analyze",
+      "releaseJob": "analyze",
+      "showJob": "analyze",
+      "getView": "view",
+      "setView": "view",
+      "getResultView": "inspect",
+      "setResultView": "view",
+      "getCompareView": "inspect",
+      "setCompareView": "view",
+      "caseList": "inspect",
+      "caseCompare": "inspect",
+      "caseView": "edit",
+      "caseRestoreInput": "edit",
+      "caseRename": "edit",
+      "caseRemove": "edit",
+      "caseSave": "analyze",
+      "exportCapabilities": "inspect",
+      "startExport": "view",
+      "startCompareExport": "view",
+      "exportStatus": "inspect",
+      "exportArtifact": "inspect",
+      "cancelExport": "view",
+      "releaseExport": "view",
+      "namedViewList": "inspect",
+      "namedViewExport": "inspect",
+      "namedViewSave": "view",
+      "namedViewApply": "view",
+      "namedViewRemove": "view",
+      "namedViewImport": "view",
+      "caseArchiveExport": "inspect",
+      "caseArchiveRead": "inspect",
+      "caseArchiveImport": "edit",
+      "caseArchiveWrite": "edit",
+      "caseArchiveCommit": "edit",
+      "caseArchiveRelease": "inspect",
+      "getAssessment": "inspect",
+      "evaluateAssessment": "analyze",
+      "previewCadUpdate": "inspect",
+      "applyCadUpdate": "edit",
+      "printInspect": "inspect",
+      "importPrint": "edit",
+      "getPrintData": "inspect",
+      "setPrintView": "view",
+      "printTransferExport": "inspect",
+      "printTransferRead": "inspect",
+      "printTransferImport": "edit",
+      "printTransferWrite": "edit",
+      "printTransferCommit": "edit",
+      "printTransferRelease": "inspect",
+      "caseBundleList": "inspect",
+      "caseBundleExport": "inspect",
+      "caseBundleRead": "inspect",
+      "caseBundleImport": "edit",
+      "caseBundleWrite": "edit",
+      "caseBundleCommit": "edit",
+      "caseBundleRelease": "inspect",
+      "measurementList": "inspect",
+      "measurementGet": "inspect",
+      "measurementSave": "edit",
+      "measurementRemove": "edit",
+      "measurementExport": "inspect",
+      "measurementImport": "edit",
+      "measurementVerify": "inspect"
+    },
+    "lifecycle": {
+      "schemaVersion": 1,
+      "pageInstanceId": "64360b29-ffb9-4a73-a72c-2c2e5de1fd03",
+      "connectionEpoch": 1,
+      "eventSequence": 3,
+      "events": [
+        {
+          "sequence": 1,
+          "kind": "created",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 2,
+          "kind": "pageshow",
+          "connectionEpoch": 0
+        },
+        {
+          "sequence": 3,
+          "kind": "connected",
+          "connectionEpoch": 1
+        }
+      ],
+      "relation": "unknown",
+      "automaticReplay": false,
+      "recoverySteps": [
+        "Reconnect with explicitly selected scopes.",
+        "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+        "Never automatically repeat a delivered or timed-out operation.",
+        "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+      ],
+      "cause": "unconfirmed",
+      "inputRevision": "sha256:c077b523fda4f4de3e79b8eb0ec1be8db6b16115ff46645f636cdff2a776912f",
+      "ownedAnalysisJobs": 0,
+      "ownedExportJobs": 0
+    },
+    "operationContracts": {
+      "schemaVersion": 1,
+      "api": "getBrowserOperationContracts",
+      "mcp": "studio_browser_contracts"
+    }
+  },
+  "cases": {
+    "schemaVersion": 1,
+    "archiveRevision": "sha256:95f1436c6153161a4e9e4372169ffc50f4d4e4c096f0df9e1b6a433d8c507764",
+    "cases": []
+  },
+  "capabilities": {
+    "schemaVersion": 1,
+    "singleTimeWebmExport": {
+      "supported": true,
+      "recording": "fixed-frame",
+      "codec": "vp8",
+      "codecSupport": "checked-at-export",
+      "maxFrames": 120,
+      "maxArtifactBytes": 33554432,
+      "resultKinds": [
+        "acousticTransient"
+      ],
+      "field": "instantPressure",
+      "timeSelection": "nearest-stored-frames-only",
+      "maxStoredFrames": 2048
+    },
+    "singleThermalTimeWebmExport": {
+      "supported": true,
+      "recording": "fixed-frame",
+      "codec": "vp8",
+      "codecSupport": "checked-at-export",
+      "maxFrames": 120,
+      "maxArtifactBytes": 33554432,
+      "resultKinds": [
+        "thermal"
+      ],
+      "field": "temperature",
+      "timeSelection": "nearest-stored-frames-only",
+      "maxStoredFrames": 61,
+      "unit": "degC",
+      "maxScalarBytes": 67108864
+    },
+    "png": true,
+    "png-sequence": true,
+    "webm": true,
+    "mp4": false,
+    "gif": false,
+    "formats": {
+      "mp4": {
+        "supported": false,
+        "browserRecorderSupport": true,
+        "probedMimeType": "video/mp4;codecs=avc1.42E01E",
+        "reason": "MediaRecorder reports MP4 recording in this browser, but MP4 export is not implemented in this application",
+        "alternatives": [
+          "webm",
+          "png"
+        ]
+      },
+      "gif": {
+        "supported": false,
+        "reason": "GIF encoding is not implemented",
+        "alternatives": [
+          "webm",
+          "png"
+        ]
+      },
+      "png-sequence": {
+        "supported": true,
+        "container": "zip",
+        "compression": "store",
+        "minFrames": 2,
+        "maxFrames": 120,
+        "defaultFrames": 24,
+        "maxFrameBytes": 4194304,
+        "maxTotalBytes": 25165824,
+        "animations": [
+          "orbit",
+          "deformation",
+          "time",
+          "slice"
+        ],
+        "timeSelection": "stored-frames-only",
+        "timeAnimationResultKinds": [
+          "acousticTransient",
+          "thermal"
+        ],
+        "thermalTimeField": "temperature",
+        "recording": "fixed-frame",
+        "realtime": false,
+        "wallClockIndependent": true,
+        "frameCountGuaranteed": true,
+        "manifest": "manifest.json (physicalRevision, per-frame phase/angle/time, resolution, SHA-256)"
+      }
+    },
+    "animations": [
+      "orbit",
+      "deformation",
+      "time",
+      "slice"
+    ],
+    "timeSelection": "stored-acoustic-frames-only",
+    "timeAnimationResultKinds": [
+      "acousticTransient"
+    ],
+    "stillTime": "displayed-time-recorded-for-thermal",
+    "recording": "realtime",
+    "targetFrameRate": 24,
+    "frameCountGuaranteed": false,
+    "maxSeconds": 15,
+    "comparisonPngExport": true,
+    "comparisonGifExport": {
+      "supported": true,
+      "animations": [
+        "orbit",
+        "time",
+        "deformation"
+      ],
+      "mimeType": "image/gif",
+      "frames": 24,
+      "width": 640,
+      "height": 320,
+      "palette": "RGB332",
+      "colors": 256
+    },
+    "comparisonWebmExport": {
+      "supported": true,
+      "mimeType": "video/webm;codecs=vp9"
+    },
+    "comparisonTimeWebmExport": {
+      "supported": true,
+      "recording": "fixed-frame",
+      "codec": "vp8",
+      "codecSupport": "checked-at-export",
+      "maxFrames": 120,
+      "maxArtifactBytes": 33554432
+    },
+    "maxArtifactBytes": 33554432,
+    "maxArtifactChunkBytes": 65536
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "4c0221081b0a5af9025cc237f24b9c1cc1dace0b",
+  "guiBundle": "990a0c31ef5b87570e37ec1527ff1ead5a7cc0a7",
+  "stages": {
+    "functional": {
+      "source": "e972ce8b11fa8cf5b6696082b4e96d979081ae77",
+      "actualOwnedWorkerRuns": 2,
+      "success": 1,
+      "invalid": 1,
+      "publicExampleHashes": true,
+      "fiveTables45CellsAtNineSignificantDigits": true,
+      "jaEnInputAndCellsPreserved": true,
+      "editImmediatelyClearsOldResults": true,
+      "actualWorkerInvalidInputRefused": true,
+      "clearIdle": true,
+      "baselineFinalEnDomEquality": {
+        "controls": 272,
+        "conditions": true,
+        "caseCount": 0
+      },
+      "validation": {
+        "focusedPassed": 56,
+        "typeDeclarationsPassed": 28,
+        "buildPassed": true,
+        "buildSeconds": 3.61,
+        "localPassed": 28,
+        "localElapsedMs": 46816.716
+      }
+    },
+    "styleOnly": {
+      "source": "4c0221081b0a5af9025cc237f24b9c1cc1dace0b",
+      "actualOwnedWorkerRuns": 1,
+      "success": 1,
+      "allRowsEqualStageA": true,
+      "protectedDomControlsEqual": true,
+      "controls": 272,
+      "tableWidths": [
+        {
+          "caption": "F (dimensionless)",
+          "captionHeight": 23,
+          "width": 633
+        },
+        {
+          "caption": "E (Green–Lagrange, dimensionless)",
+          "captionHeight": 23,
+          "width": 633
+        },
+        {
+          "caption": "S (second Piola–Kirchhoff, Pa)",
+          "captionHeight": 23,
+          "width": 633
+        },
+        {
+          "caption": "P (first Piola–Kirchhoff, Pa)",
+          "captionHeight": 23,
+          "width": 633
+        },
+        {
+          "caption": "sigma (Cauchy, Pa)",
+          "captionHeight": 23,
+          "width": 633
+        }
+      ],
+      "rootImageReviewPassed": true,
+      "focusedPassed": 16,
+      "focusedElapsedMs": 2016.7085,
+      "fullBuildAndLocalNotRerunForThisSource": true
+    }
+  },
+  "actual": {
+    "example": "existing public synthetic finite-visco-input-history.json",
+    "steps": 4,
+    "finalTimeSeconds": 4.7,
+    "rawIdentity": "sha256:6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+    "canonicalIdentity": "sha256:8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71",
+    "displayedReferenceDensity": {
+      "unit": "J/m3-reference",
+      "work": 72.7319228,
+      "energy": 39.9520031,
+      "dissipation": 32.7799197
+    },
+    "all45CellsMatch": true,
+    "jaEn": true,
+    "malformedJsonActualWorkerRefused": true,
+    "editClears": true,
+    "clearIdle": true,
+    "protectedDomControls": 272
+  },
+  "protectedProgress": {
+    "target": "FINITEVISCO1",
+    "allowedFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsDeepEqual": true,
+    "all171StatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "statusPromoted": false
+  },
+  "limitations": {
+    "formalInMemoryProjectCaseAnalysisEqualityProven": false,
+    "actualCancellationCaptured": false,
+    "physicalAcceptanceOrCalibration": false,
+    "finalCi": "planned, not observed in this bundle",
+    "publication": false,
+    "allLanguageOrHiddenMatrix": false
+  },
+  "newExecution": {
+    "gui": 0,
+    "solver": 0,
+    "export": 0,
+    "codec": 0
+  },
+  "progressWorkingByteSHA256": "e99175df3960a7f7ebe6579ff1df5d85daddc7332bca6a002ca705e6cc1930c3"
+}

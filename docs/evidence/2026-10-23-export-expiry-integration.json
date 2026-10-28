@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "workOrder": "57 EXPORTBACKGROUND1",
+  "date": "2026-10-23",
+  "implementationBaseSha": "5647a6ff36e2ff5e5a886e770d9e2cb1829c5b72",
+  "auditPredecessorCommit": "789263a",
+  "kind": "synthetic transport and recorder integration regression",
+  "claimJa": "本番connectorの通常poll応答401から切断・所有録画取消・部分成果物拒否・新接続成功までを通す合成統合試験。実Chrome、実hiddenタブ、実認証失効の検証ではない。",
+  "claimEn": "Synthetic integration regression executes the production normal-poll HTTP 401 branch through disconnect, owned recording cancellation, partial-artifact refusal and successful recording on a fresh connection. This is not actual Chrome, a real hidden tab or real authentication expiry.",
+  "productionModules": [
+    "src/browser-session.js: connectBrowserSession and createBrowserSession",
+    "src/browser-page-lifecycle.js: lifecycle events and connection epoch",
+    "src/visual-export-jobs.js: admission, cancellation, settlement and artifact rejection",
+    "src/comparison-export-adapter.js: source guards and host lock lifetime",
+    "src/ui/comparison-video.js: recording lifecycle and recorder/track cleanup",
+    "src/ui/webm-recording-lifecycle.js: localized visibility interruption"
+  ],
+  "syntheticBoundaries": [
+    "HTTP fetcher returns actual Response objects; no direct exception injection",
+    "MediaRecorder and canvas capture stream",
+    "animation callbacks and deterministic recording clock",
+    "document visibility state and locale",
+    "source data and renderer/host lock callbacks"
+  ],
+  "matrix": [
+    {
+      "locale": "ja",
+      "visibility": "visible",
+      "transport": "HTTP 401 from outstanding normal poll",
+      "oldExportState": "cancelled",
+      "partialArtifact": "refused through new connector",
+      "reconnectExport": "completed"
+    },
+    {
+      "locale": "ja",
+      "visibility": "simulated-hidden",
+      "transport": "visibility interruption then normal-poll HTTP 401",
+      "oldExportState": "failed",
+      "failureCode": "WEBM_BACKGROUND_INTERRUPTED",
+      "messageLocale": "ja",
+      "partialArtifact": "refused through new connector",
+      "reconnectExport": "completed"
+    },
+    {
+      "locale": "en",
+      "visibility": "visible",
+      "transport": "HTTP 401 from outstanding normal poll",
+      "oldExportState": "cancelled",
+      "partialArtifact": "refused through new connector",
+      "reconnectExport": "completed"
+    },
+    {
+      "locale": "en",
+      "visibility": "simulated-hidden",
+      "transport": "visibility interruption then normal-poll HTTP 401",
+      "oldExportState": "failed",
+      "failureCode": "WEBM_BACKGROUND_INTERRUPTED",
+      "messageLocale": "en",
+      "partialArtifact": "refused through new connector",
+      "reconnectExport": "completed"
+    }
+  ],
+  "expectedAndObserved": {
+    "expiredPollsPerCase": 1,
+    "oldConnectionDisconnectRequests": 1,
+    "connectionEpochAfterReconnect": 2,
+    "hostLocksPerCase": 2,
+    "hostLockReleasesPerCase": 2,
+    "trackStopsPerCase": 2,
+    "pendingAnimationCallbacksAfterSettlement": 0,
+    "recordingWatchdogTimersAfterSettlement": 0,
+    "pendingOldPollsAndRepliesAfterDisconnect": 0,
+    "unownedCompletedArtifact": "retained with identical hash",
+    "defaultsAndSyntheticSourceData": "unchanged",
+    "recoveredArtifact": "9 synthetic bytes identical through production base64 paging and independent SHA-256",
+    "recordedVideoDecoded": false
+  },
+  "commands": [
+    {
+      "command": "node --test tests/browser-export-expiry-integration.test.mjs tests/browser-export-session.test.mjs tests/visual-export-jobs.test.mjs tests/comparison-export-adapter.test.mjs tests/comparison-video.test.mjs tests/webm-recording-lifecycle.test.mjs",
+      "passed": 69,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "notVerified": [
+    "actual Chrome/Japanese-English UI and 390px",
+    "actual hidden/non-selected tabs",
+    "real connection credential expiry or public HTTPS",
+    "actual MediaRecorder codec or video decode",
+    "real 3D scene restoration",
+    "final integrated CI and publication"
+  ],
+  "parentStatus": "EXPORTBACKGROUND1 remains checking; this closes a synthetic cross-module regression gap, not the actual-browser acceptance condition.",
+  "sharedInventoryModified": false,
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "fixtureSha256": "196dcd5cf3ca56fdef4df3b8278331da2a59bfcb9abddd273494259174cbf5da",
+  "recoveredSyntheticArtifactSha256": "dfd3bee6fcfb35cb8710e4db947f1535282068f05288002ddfdcf77d2feedae6"
+}

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "base": "8208329fef3a6c02c4043bd0ff9cbbac85dfce3b",
+  "branch": "codex/visual-export-execution-settled",
+  "scope": {
+    "visualExportOnly": true,
+    "analysisJobsChanged": false,
+    "newMethods": 0,
+    "newScopes": 0,
+    "realBrowserExports": 0,
+    "realCodecExecutions": 0,
+    "nativeSolverJobs": 0,
+    "installedSkillModified": false,
+    "rootWorktreeModified": false
+  },
+  "observedLifecycle": [
+    {
+      "state": "running",
+      "executionSettled": false
+    },
+    {
+      "state": "cancelled",
+      "executionSettled": false
+    },
+    {
+      "state": "cancelled",
+      "executionSettled": false
+    },
+    {
+      "state": "cancelled",
+      "executionSettled": true
+    }
+  ],
+  "semantics": {
+    "initial": false,
+    "cancelImmediate": false,
+    "rendererOrArtifactPending": false,
+    "settledPromiseFinally": true,
+    "rendererExclusionReleasedAtSameBoundary": true,
+    "releaseRuleUnchanged": "Released jobs remain unknown, including settlement lookup."
+  },
+  "verification": {
+    "focused": {
+      "command": "node --test tests/visual-export-execution-settled.test.mjs tests/visual-export-jobs.test.mjs tests/browser-export-session.test.mjs tests/browser-export-expiry-integration.test.mjs tests/browser-operation-contracts.test.mjs tests/docs.test.mjs",
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0
+    },
+    "afterDocumentEdit": {
+      "command": "node --test tests/docs.test.mjs",
+      "passed": 2
+    },
+    "publicContracts": {
+      "command": "npm run check:contracts",
+      "declarations": 21
+    },
+    "repoSkill": {
+      "command": "python -X utf8 C:/Users/yamashita_y00031/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/airpocket-studio",
+      "result": "Skill is valid!"
+    }
+  },
+  "regressions": [
+    "cancel while renderer finally waits retains false and shared renderer exclusion",
+    "success/failure and idempotent/detached summaries return strict booleans",
+    "cancelAll and release retain old unknown-job/exclusion rules",
+    "new createBrowserSession over shared queue sees disconnected owned export cancelled/false until deferred cleanup then true; this is a unit regression, not real transport evidence",
+    "browser discovery retains inspect scope and documents settlement",
+    "cancel while Blob.arrayBuffer waits retains false until actual promise settles"
+  ],
+  "hashes": {
+    "source": "fa350aecb926d935efae33d3b50d83804ac451006102dfa70f43cb39548e9350",
+    "contract": "9a699f28b4a4a88087231afb1e64182b12bf7cb0fbbc98a8ed3320324f12b254",
+    "test": "5e743fb3a42a9ca5c8144760203804c8be63183ef0473078f6fa1f26e1a9e3a0",
+    "repoSkillReference": "2b1fe8087eeac0e385fa7932b9ce0704268d9c6eded659d531dd85618e664f33",
+    "installedSkillReference": "4e48beabaf35a831f7382b2272de352545ad4c3de7854ce54971a1b8173f334a"
+  },
+  "limits": [
+    "No real recording/disconnect trial was run.",
+    "Cancelled state is not equivalent to execution settlement.",
+    "This boolean reports actual export promise completion, not independent OS/browser codec resource inspection.",
+    "Repository Skill reference is updated; installed distribution remains untouched for parent-controlled synchronization."
+  ]
+}

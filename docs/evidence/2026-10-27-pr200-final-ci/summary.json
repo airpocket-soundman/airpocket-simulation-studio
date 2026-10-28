@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pullRequest": 200,
+  "head": "4027bdcdabb55c6c05780af13e13861a3849fb2d",
+  "run": 40375732139,
+  "job": 121758936756,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/40375732139/job/121758936756",
+  "conclusion": "success",
+  "mergeCandidate": "1f8d42f7b7498756e387e58f272173f7a9e0e89a",
+  "mergeParents": [
+    "5b2fd2299610ca27319139a882e1f39676feee5b",
+    "4027bdcdabb55c6c05780af13e13861a3849fb2d"
+  ],
+  "counts": {
+    "total": 2222,
+    "passed": 2214,
+    "failed": 0,
+    "skipped": 8
+  },
+  "suiteDurationMs": 272930.974375,
+  "verifyElapsedSeconds": 369.0,
+  "build": {
+    "stepSeconds": 6.0,
+    "viteSeconds": 3.37,
+    "passed": true
+  },
+  "localPublished": {
+    "stepSeconds": 38.0,
+    "elapsedMs": 37796.446509999994,
+    "reportEntries": 28,
+    "passed": 28,
+    "loggedPassLines": 27,
+    "revision": "1f8d42f7b7498756e387e58f272173f7a9e0e89a",
+    "additionalReportOnlyCheck": "deployed-asset-integrity"
+  },
+  "deployment": {
+    "deploy": "skipped",
+    "verify-published": "skipped",
+    "publicDeploymentProven": false
+  },
+  "artifact": {
+    "name": "verification-40375732139-1",
+    "downloadCount": 1,
+    "rawFileCount": 7,
+    "inventory": [
+      {
+        "file": "ci-build.log",
+        "bytes": 3693,
+        "sha256": "b35685a06221effdb1ac2dd0b52385921157de841091c4fb4d5b60c7d08449da"
+      },
+      {
+        "file": "ci-install.log",
+        "bytes": 440,
+        "sha256": "69fea6a92eeea1af4ff3b4c0c17785ab142d047a4ae702e0335d1e1facbd04a9"
+      },
+      {
+        "file": "ci-local-published.log",
+        "bytes": 1572,
+        "sha256": "bf9a20465bb6f7f464d27cae1a7af2d3027285c5a449c6539a15c7a04af2c32b"
+      },
+      {
+        "file": "ci-tests.log",
+        "bytes": 239961,
+        "sha256": "a09e9f768768b29608988fe5c2552a016127e8faf2cd68be8ed335195da431a0"
+      },
+      {
+        "file": "published-checkpoints-1793038793141-12422.jsonl",
+        "bytes": 86545,
+        "sha256": "3473fd00190c47f8deda3289bf5580ccae2632fe0703c6152f89a04050816886"
+      },
+      {
+        "file": "published-report.json",
+        "bytes": 4405,
+        "sha256": "ca5498439dabbbcfa599a61d6d087fa37bcef4f55ab015020dbca67c49999c60"
+      },
+      {
+        "file": "run.raw.json",
+        "bytes": 3783,
+        "sha256": "48fcbeeb674d89fa85b98229587162bf89dfdc9c4e4ac7f194583a0d1dbef0c9"
+      }
+    ]
+  },
+  "scope": "exact observed head only; no CI dispatch/retry or new local solver/codec/GUI invoked by evidence collector",
+  "sourceBaseline": {
+    "head": "4027bdcdabb55c6c05780af13e13861a3849fb2d",
+    "sourceBaseline": "aa06c9643e1bee0cf1394128f529172b43dd7f07",
+    "files": [
+      {
+        "file": "src/single-view-time-webm.js",
+        "gitBlob": "61fd823d443c0adcdf47d8aae9c18b596dbf00f1",
+        "bytes": 9006,
+        "sha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4",
+        "unchangedFromAa06": true
+      },
+      {
+        "file": "src/ui/comparison-fixed-webm.js",
+        "gitBlob": "97a5e05117bdf624b9d6db2e433da5e7c63a07f0",
+        "bytes": 8943,
+        "sha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3",
+        "unchangedFromAa06": true
+      },
+      {
+        "file": "src/visual-export.js",
+        "gitBlob": "7e8976dd75c1759568410594144a78a98a6ada21",
+        "bytes": 30061,
+        "sha256": "437969d1a068f4a3265b10008192ec3798e1f390d1a7c0f28b9f36e67a4dfd05",
+        "unchangedFromAa06": true
+      },
+      {
+        "file": "src/visual-export-jobs.js",
+        "gitBlob": "254348ad7ea55d14c6c7e3b4a8191c1cb721717f",
+        "bytes": 26825,
+        "sha256": "1e62c286617144d89e145ee26a8307e06b6a9cae4b83b4479007e45bbcd8e9a5",
+        "unchangedFromAa06": true
+      }
+    ],
+    "allSrcChangesSinceBaseline": [],
+    "changedFilesSinceBaseline": [
+      "docs/en/single-view-thermal-fixed-webm.md",
+      "docs/single-view-thermal-fixed-webm.md",
+      "tests/browser-study-state.test.mjs"
+    ]
+  },
+  "historicalRuns": [
+    {
+      "head": "aa06c9643e1bee0cf1394128f529172b43dd7f07",
+      "run": 40374493868,
+      "conclusion": "failure",
+      "counts": {
+        "total": 2222,
+        "passed": 2213,
+        "failed": 1,
+        "skipped": 8
+      },
+      "evidenceCommit": "fb848a67d50eb8147780019de42bcd6f46a0b153"
+    },
+    {
+      "head": "1edc6642d6e1882e3bcd74d89c23ce0cb7635571",
+      "run": 40375346866,
+      "conclusion": "cancelled",
+      "counts": null,
+      "partialObsoleteAssertionFailure": true,
+      "evidence": "2026-10-27-pr200-1ed-ci-cancelled/summary.json"
+    }
+  ],
+  "finalObservedHeadAcceptance": true
+}

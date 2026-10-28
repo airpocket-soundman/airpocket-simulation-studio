@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "pullRequest": 199,
+  "head": "5b2fd2299610ca27319139a882e1f39676feee5b",
+  "run": 40281933312,
+  "job": 121436937425,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/40281933312/job/121436937425",
+  "conclusion": "success",
+  "mergeCandidate": "84e51fb74ee5d31ed6e82ff83c1ef8c92c30f3e5",
+  "mergeParents": [
+    "16613b8d407e798e86b21eae4398adab227f81d5",
+    "5b2fd2299610ca27319139a882e1f39676feee5b"
+  ],
+  "counts": {
+    "total": 2188,
+    "passed": 2180,
+    "failed": 0,
+    "skipped": 8
+  },
+  "suiteDurationMs": 293211.599623,
+  "verifyElapsedSeconds": 392.0,
+  "build": {
+    "stepSeconds": 7.0,
+    "viteSeconds": 3.54,
+    "passed": true
+  },
+  "localPublished": {
+    "stepSeconds": 40.0,
+    "elapsedMs": 39659.918136,
+    "reportEntries": 28,
+    "passed": 28,
+    "loggedPassLines": 27,
+    "additionalReportOnlyCheck": "deployed-asset-integrity",
+    "revision": "84e51fb74ee5d31ed6e82ff83c1ef8c92c30f3e5"
+  },
+  "deployment": {
+    "deploy": "skipped",
+    "verifyPublished": "skipped",
+    "publicDeploymentProven": false
+  },
+  "initialFailuresForThisExactHead": [],
+  "artifact": {
+    "name": "verification-40281933312-1",
+    "downloadCount": 1,
+    "rawFileCount": 7,
+    "inventory": [
+      {
+        "file": "ci-build.log",
+        "bytes": 3693,
+        "sha256": "b2069c718bee2e6717b25858067b5e4d5f7c74df45e5a074c29f87b044b50b97"
+      },
+      {
+        "file": "ci-install.log",
+        "bytes": 440,
+        "sha256": "69fea6a92eeea1af4ff3b4c0c17785ab142d047a4ae702e0335d1e1facbd04a9"
+      },
+      {
+        "file": "ci-local-published.log",
+        "bytes": 1573,
+        "sha256": "5188df53f847ad20468c65b155f23b7f7e0667311a52a802adecd8c56a4fe0ea"
+      },
+      {
+        "file": "ci-tests.log",
+        "bytes": 236714,
+        "sha256": "7c701816f01adc3a7cb12512460db0449d0520fb40fec9cb506f04f5668c72bc"
+      },
+      {
+        "file": "published-checkpoints-1792997630552-12372.jsonl",
+        "bytes": 86512,
+        "sha256": "31c8f0efacbb9b01a2b589712ac1561fae4346a5acdeb63b4e3b06d68af97de7"
+      },
+      {
+        "file": "published-report.json",
+        "bytes": 4378,
+        "sha256": "cf2d068884d6e98dc940eb85eee1f2c88176caad719c6f0dcc58bff274c76395"
+      },
+      {
+        "file": "run.raw.json",
+        "bytes": 3783,
+        "sha256": "a3452f116e260b41923a04ade1b613b53416571cd81d76b23182163380b3385f"
+      }
+    ]
+  },
+  "scope": "CI on the exact PR merge candidate, no new CI dispatch/retry, no new local solver/GUI/codec invocation; not COUPLE3 parent completion"
+}

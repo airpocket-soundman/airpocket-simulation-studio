@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "ownerCommit": "ba1844027c06e59f3d27294d4516a7c0ea4eb35c",
+  "source": {
+    "path": "src/grouped-temperature-operator.js",
+    "workingCRLFSha256": "69671a3a04f8af869aaa2231198d870cadc52f7c4f075d8973421d112d138d98",
+    "gitBlobSha256": "d3573fbe07013733105c6f8f5b8c70f502e7f47056f1e1c70d37aa2075ded3c1"
+  },
+  "oracle": {
+    "facetAreasMm2": [
+      0.5,
+      1
+    ],
+    "unnormalizedMassNumerator": [
+      [
+        6,
+        3,
+        1,
+        2
+      ],
+      [
+        3,
+        6,
+        1,
+        2
+      ],
+      [
+        1,
+        1,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        0,
+        4
+      ]
+    ],
+    "unnormalizedMassFactorM2": 4.166666666666666e-8,
+    "centerHatCrossLoadM2": [
+      5.5555555555555555e-8,
+      5.5555555555555555e-8,
+      5.5555555555555555e-8,
+      0
+    ],
+    "normalizedMassDenominator": 36,
+    "targetTemperatureDifference": [
+      0.1111111111111111,
+      0.1111111111111111,
+      0.5555555555555556,
+      -0.1111111111111111
+    ],
+    "sourceHatIntegral": 1.6666666666666665e-7,
+    "baselineDegC": 20,
+    "integralMeaning": "Area-temperature, not energy"
+  },
+  "checks": [
+    "Unequal area global assembly, fixed M and b independent of production numerical helpers",
+    "C/K offset and area-temperature integral",
+    "Explicit shared point identity accepted; duplicate-ID point contact rejected",
+    "Nonconforming partial-edge contact rejected",
+    "Unused coordinates bind geometry revision despite equal matrix rows",
+    "Field permutation yields same revision/result without caller mutation"
+  ],
+  "independentTests": 4,
+  "ownerTests": 16,
+  "pass": 20,
+  "fail": 0,
+  "skip": 0,
+  "initialFixtureCorrection": "Two initial contact fixtures reused node IDs across source and target and were correctly refused by the pre-existing planar gate; corrected to separate side IDs without changing expected contact assertions.",
+  "sourceFixes": 0,
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "limitations": [
+    "Explicit groups only, no automatic surface inference",
+    "Full planar coverage and opposing normals remain required locally",
+    "Global area-temperature conservation is not coupled thermal energy conservation",
+    "Conditioning/capacity and self-rehash refusal checked in owner regressions and source review"
+  ]
+}

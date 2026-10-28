@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "scope": "One successful foreground English normal-main single-view thermal stored-time WebM export, separate new200b budget after failed200",
+  "runtimeSource": "7fee9593ba37c5a933489daadbc1fe628b1b6ea9",
+  "driverSha256": "80b336e1bc31108f26214738be6f0b20b123b51f82df87da470a5552afa72cbd",
+  "budget": {
+    "used": 1,
+    "limit": 1,
+    "remaining": 0,
+    "retries": 0,
+    "requestedSeconds": 2,
+    "watchdogMs": 120000,
+    "maxArtifactBytes": 33554432,
+    "maxPages": 512,
+    "pageBytes": 65536,
+    "formalSolverJobs": 0
+  },
+  "archive": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "gitBlobSha1": "ccfcca833a094bb322afdb08777a02fcf2fa883c",
+    "rawBytes": 117499,
+    "rawSha256": "d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b",
+    "cases": 1,
+    "nodes": 94,
+    "storedTimesSeconds": [
+      0,
+      5,
+      10
+    ],
+    "sourceResultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+    "physicalCalibration": false
+  },
+  "artifact": {
+    "bytes": 796383,
+    "sha256": "sha256:d61b3821761937abe63658f070ec57dd5da46a26ebe73d16ff2ca7de2e4b4591",
+    "pages": 13,
+    "codec": "vp8",
+    "allKeyFrames": true,
+    "width": 440,
+    "height": 637,
+    "frames": 48,
+    "presentationDurationSeconds": 2,
+    "terminalPresentationTimestampMicroseconds": 1958333,
+    "terminalPresentationDurationMicroseconds": 41667,
+    "terminalPhysicalTimeSeconds": 10,
+    "terminalPhysicalOffsetSeconds": 0,
+    "field": "temperature",
+    "unit": "degC",
+    "frameLedgerVerified": 48
+  },
+  "restoration": {
+    "apiPhysicalStateSnapshotsEqual": 5,
+    "inspectOnlyOwnedExportCountChanges": [
+      0,
+      1
+    ],
+    "interpolatedTimeSecondsBeforeAndAfter": 2,
+    "interpolatedBeforeAndAfter": true,
+    "guiFineSliderAndTemperatureRestored": true
+  },
+  "cleanup": {
+    "jobReleased": true,
+    "ownedAnalysisJobs": 0,
+    "ownedExportJobs": 0,
+    "sessionsEmpty": true,
+    "guiEndpointAndTokenCleared": true,
+    "childExitAndCloseObserved": true,
+    "childPid": 25080,
+    "childPidAbsent": true,
+    "privatePairFileRemoved": true,
+    "rootObservedDriverExitCode": 0
+  },
+  "independent": {
+    "result": "independent/independent-result.json",
+    "additionalAssertions": "independent/additional-assertions.json",
+    "ffprobeRuns": 1,
+    "ffmpegDecodeRuns": 1,
+    "extraProductExports": 0,
+    "solverRuns": 0,
+    "firstAndLastPixelHashesDiffer": true,
+    "visualObservationByIndependentAuditor": "First blue/last red; fixed20–30degC legend; stored/requested0→10s; both endpoint offsets0"
+  },
+  "validationBeforeExecution": {
+    "rootReportedFocusedPassed": 185,
+    "rootReportedIncludedIndependentTests": 3,
+    "rootReportedContractDeclarations": 25,
+    "build": "build200b-final.log",
+    "localAssetReport": "published-report200b-final.json",
+    "localChecksPassed": 28,
+    "localElapsedMs": 41906.5168,
+    "staleManifestPreviousLocalFailure": "published200b.log",
+    "staleFailureMeaning": "Local check saw build revision a7a52b5 while expected source7fee959; fresh full build then passed. Separate from media export failures/budgets."
+  },
+  "historicalRecords": {
+    "failedProduct200": "../2026-10-26-thermal-time-webm-failed/README.md",
+    "nativeDiagnostic": "../../native-vp8-padding-diagnostic-2026-10-26.md",
+    "driverSummaryExternalDecodeText": "Raw summary was saved before the independent decode; its not-yet-run text is historical, not edited."
+  },
+  "limitations": [
+    "One English foreground IAB/Chromium-family condition, not a full browser matrix",
+    "Only temperature with stored nodal history; no heat-flux time export",
+    "Three stored physical frames mapped to48 presentation frames; no48-step solve or physical interpolation in the video",
+    "No publication, physical accuracy, calibration or parent-task completion claim",
+    "Past failed200 and native isolated diagnostic retained"
+  ],
+  "packagingNewExecutions": {
+    "productExport": 0,
+    "codec": 0,
+    "solver": 0,
+    "gui": 0
+  }
+}

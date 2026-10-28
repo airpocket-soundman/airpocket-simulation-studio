@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "runtimeSource": "636a2421621f896b63473d91d604c5a02d06249e",
+  "driverSha256": "1d458e83c8e11af96fc3ac52d69d6970f50168a330fdbcce273813fc64dc1e88",
+  "scope": "One failed normal-main foreground English thermal stored-time WebM attempt, separate from prior acoustic successes",
+  "budget": {
+    "exportsUsed": 1,
+    "exportsLimit": 1,
+    "remaining": 0,
+    "seconds": 2,
+    "watchdogMs": 120000,
+    "solverRuns": 0,
+    "retries": 0
+  },
+  "sourceArchive": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "gitBlobSha1": "ccfcca833a094bb322afdb08777a02fcf2fa883c",
+    "bytes": 117499,
+    "sha256": "d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b",
+    "cases": 1,
+    "nodes": 94,
+    "storedTimesSeconds": [
+      0,
+      5,
+      10
+    ],
+    "kind": "thermal",
+    "field": "temperature",
+    "unit": "degC"
+  },
+  "outcome": {
+    "state": "failed",
+    "errorCode": "WEBM_ENDPOINT_UNVERIFIED",
+    "error": "Fixed WebM decoded frame identity or dimensions differ",
+    "progress": {
+      "fraction": 1
+    },
+    "executionSettled": true,
+    "completedArtifact": false,
+    "artifactBytesAcquired": 0,
+    "ledgerVerified": false,
+    "externalDecodePerformed": false,
+    "dimensionRootCauseProvenByThisBundle": false
+  },
+  "restoration": {
+    "baselineTimeSeconds": 2,
+    "baselineInterpolated": true,
+    "guiPostFailureTimeSeconds": 2,
+    "guiPostFailureInterpolated": true,
+    "modelEnabled": true,
+    "stopDisabled": true,
+    "foregroundVisible": true,
+    "fullFiveStatePostExportComparisonReached": false
+  },
+  "cleanup": {
+    "jobReleased": true,
+    "ownedAnalysisJobs": 0,
+    "ownedExportJobs": 0,
+    "sessionsEmpty": true,
+    "guiEndpointAndCodeCleared": true,
+    "ownedChildExited": true,
+    "ownedChildClosed": true,
+    "ownedChildExitCode": 0,
+    "ownedChildSignal": null,
+    "ownedChildPid": 29680,
+    "ownedChildPidAbsent": true,
+    "privateTokenRemoved": true,
+    "driverExitCodeReportedByRoot": 1
+  },
+  "claims": {
+    "temperatureEndpointSuccess": false,
+    "publication": false,
+    "physicalAccuracy": false,
+    "parentTaskComplete": false
+  },
+  "newExecutionByPackaging": {
+    "productExport": 0,
+    "solver": 0,
+    "codec": 0,
+    "gui": 0
+  }
+}

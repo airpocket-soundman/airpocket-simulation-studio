@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "scope": "comparison stored-time fixed-frame WebM source; no new browser export yet",
+  "base": "0eb70e9",
+  "historicalEndpointGapCommit": "851d2c5517adac98d65dc3eeb18a71eaa49abbf9",
+  "runtimeModes": {
+    "comparisonTimeWebm": "new VP8 fixed-frame encode/strictmux/demux/decode path",
+    "orbitDeformationWebm": "unchanged realtime MediaRecorder",
+    "singleTimeWebm": "unchanged; similar flush risk inferred but endpoint loss not reproduced"
+  },
+  "newModules": {
+    "fixed-webm.js": "contract layer: bounds/schedule/constrained container",
+    "ui/comparison-fixed-webm.js": "ui layer: codec support, encode/decode validation and lifecycle"
+  },
+  "limits": {
+    "seconds": [
+      1,
+      15
+    ],
+    "frames": "min(seconds*24,120)",
+    "artifactBytes": 33554432,
+    "width": 1280,
+    "height": 640,
+    "nativeAndOutstandingQueueEach": 2,
+    "totalMs": 120000,
+    "progressStallMs": 5000
+  },
+  "verification": {
+    "focusedTests": 123,
+    "pass": 123,
+    "fail": 0,
+    "contractDeclarations": 20,
+    "moduleBoundary": {
+      "files": 249,
+      "localEdges": 603,
+      "existingAllowlistedViolations": 7
+    },
+    "diffCheck": true,
+    "actualNewBrowserExports": 0,
+    "newHeavySolverRuns": 0,
+    "notes": [
+      "Existing adapter regression includes small pre-existing elasticity reference calculations; no new product solver path or user simulation ran.",
+      "Fake codec tests are not real browser/codec pixel proof.",
+      "Independent fixture/codec audit commits are being delivered separately by agents65/63.",
+      "No SDK or dependency downloads, native build, package changes or progress promotion."
+    ]
+  },
+  "auditCorrections": [
+    "Intrinsic typed-array buffer/length and ArrayBuffer brand reject spoofed SAB without invoking getters.",
+    "Disposed callback gate prevents late source/lock reentry and closes late decoded frames.",
+    "Native queue and submitted-minus-output each bounded; abort/probe/flush/hidden cleanup covered.",
+    "Static codec support methods checked and numeric DOMException codes normalized to stable failure.",
+    "Missing/tampered proof and physical ledger refuse artifact publication."
+  ],
+  "unverified": [
+    "new fixed path actual browser recording/container playback",
+    "general physical accuracy/geometry/publicHTTPS/other engines",
+    "single-time endpoint retention",
+    "realtime orbit/deformation endpoint guarantees"
+  ]
+}

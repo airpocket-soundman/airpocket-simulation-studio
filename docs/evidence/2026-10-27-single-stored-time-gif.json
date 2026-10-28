@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "base": "e7899787f382a452937cb4edfe60f49e43d26722",
+  "scope": "Single stored thermal/acoustic time GIF, no actual browser export; native codec not required",
+  "checks": {
+    "newPureTests": 10,
+    "newUiTests": 5,
+    "finalRelated": {
+      "total": 120,
+      "pass": 120,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 12581.4373
+    },
+    "types": {
+      "declarations": 29,
+      "pass": true
+    },
+    "docsAndLayers": {
+      "total": 21,
+      "pass": 21,
+      "fail": 0
+    },
+    "cooperativeBeforeSourceGate": {
+      "total": 118,
+      "pass": 118,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 20998.5845
+    }
+  },
+  "history": [
+    {
+      "stage": "initial pure",
+      "total": 7,
+      "pass": 6,
+      "fail": 1,
+      "reason": "RGB332 hand expectation192 was incorrect for red200; independent quantization gives160. Test expectation corrected."
+    },
+    {
+      "stage": "first broad",
+      "total": 129,
+      "pass": 128,
+      "fail": 1,
+      "reason": "Unchanged two-real-solves test entered missing fem-kernel.wasm preparation. ANALYSIS_PREPARATION_FAILED; solver not reached."
+    },
+    {
+      "stage": "negative-name-pattern attempt",
+      "total": 129,
+      "pass": 128,
+      "fail": 1,
+      "reason": "Pattern did not exclude unchanged real-solve test in this invocation; same missing WASM preparation refusal. No solver reached. No retry of this file afterward."
+    },
+    {
+      "stage": "root draft audit",
+      "reason": "Abort-racing wrapper would release ownership early. Replaced with cooperative await/checks; pending owned yield/Blob/SHA keeps renderer/job unsettled until real completion. New job/UI/SHA regressions pass."
+    },
+    {
+      "stage": "independent source-capacity audit",
+      "reason": "Own snapshots Symbol.iterator could yield62 frames despite indexed length2. Replaced iterator traversal with ordinary-array own indexed data descriptor reads for frames/scalars/time/mesh coordinates; rejects getters/symbol hooks without invocation. UI metadata capture also avoids caller map hook; added2 regressions."
+    }
+  ],
+  "semantics": {
+    "frames": 24,
+    "phase": "i/23",
+    "nearestTie": "lower index",
+    "endpoints": "exact first and last stored time",
+    "time": "actual/requested/signed actual-minus-requested ledger; no interpolation or newly solved times",
+    "purpose": "private issued Blob bound to result/field/kind/unit/camera/seconds/ledger/exact bytes",
+    "watchdog": "120seconds requests cancellation; pending owned async work must settle before cleanup/unlock/executionSettled true",
+    "color": "RGB332 lossy256",
+    "width": 640,
+    "height": 320,
+    "outputBytes": 33554432,
+    "sourceFrames": [
+      2,
+      61
+    ],
+    "sourceScalarBytes": 67108864
+  },
+  "notClaimed": [
+    "real browser export",
+    "real codec use",
+    "physical time integration accuracy",
+    "all sourceframes included",
+    "new solved states",
+    "calibration",
+    "bounded settlement of never-resolving injected promises"
+  ],
+  "newSolverExecutions": 0,
+  "newRealExports": 0,
+  "newNativeCodecExecutions": 0,
+  "protectedFiles": [
+    {
+      "path": "src/ui/single-orbit-gif.js",
+      "gitBytesSha256": "3325995fc03eece8959a7c332b9cd00ed4765577c6a50fb6ab22763981673a9e",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/single-view-time-webm.js",
+      "gitBytesSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/gif-encoder.js",
+      "gitBytesSha256": "15501180e083b0f590bd5cb06d12094d86c15ec702482bdf281bf6b4bbf786db",
+      "sameAsBase": true
+    },
+    {
+      "path": "src/ui/comparison-fixed-webm.js",
+      "gitBytesSha256": "2cf025bcb25410949af83d561bb0ead8c72ae87c315668127d504be7bdc981b3",
+      "sameAsBase": true
+    }
+  ],
+  "raw": [
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/docs-layers.log",
+      "bytes": 2112,
+      "sha256": "4fead1534b32df802e4d98cd32437822a78f49cc766307481387867f8ab471f0"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/filter-attempt-preparation-failure.log",
+      "bytes": 15464,
+      "sha256": "0620997056a03b7e1a6442bfda3cafa1b322daca35447506419e2545702f74dd"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-cooperative-suite.log",
+      "bytes": 13091,
+      "sha256": "3a952c60e14cbdd587ab3890e2bf0c2b2ef3940a4f7dc46a9689f18ae3b5476e"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/final-source-gate-suite.log",
+      "bytes": 13307,
+      "sha256": "b6eed077deaf54e2dade4829d8a51dcf624013541363b8771328d5f8f9ebe714"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/initial-broad-preparation-failure.log",
+      "bytes": 15482,
+      "sha256": "1cdbda76c57371b160edb8002b8241a8b668b8c6a2b219bc6ef6d694de69cb29"
+    },
+    {
+      "path": "docs/evidence/2026-10-27-single-stored-time-gif/initial-pixel-oracle.log",
+      "bytes": 1714,
+      "sha256": "07cb967a374341f7953397c5568234d617bfc87ae5a94591fb10c32bc18fb903"
+    }
+  ]
+}

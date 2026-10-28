@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "reviewedCommit": "0b0cc68d06f0f4137b37e526d46883e2e94bb3a0",
+  "sourceEdits": 0,
+  "source": {
+    "file": "src/visual-export.js",
+    "gitBlob": "d29bce3861e0ef6094b6243fdcb8697cf193bfc3",
+    "sha256": "621959a534fb17d2927b4af0ef1534375cb93c5dbd1e14116e7e68a6178dbb22"
+  },
+  "scopeJa": "GIF202bのモデル領域blankと一致するThree.lookAt境界の独立数値監査。新たな実GIFの可視モデル成功を意味しない。",
+  "scopeEn": "Independent numerical audit of the Three.lookAt boundary consistent with the blank202b model ROI; not actual visible-model acceptance of a new GIF.",
+  "existingArtifact": {
+    "pin": "b1c550b1ee9b7bbcd27a2571ef54fb9b441a9054",
+    "sha256": "ed9331e181fe6adc0951eed4e72c2f3e95435ac2cc084923d28d51162ff06ca7",
+    "bytes": 5574849,
+    "pages": 86,
+    "genericAndExternalDecoderFrames": 24,
+    "allRgbPixelsMatch": true,
+    "rgbBytes": 14745600,
+    "rgbSha256": "180f40f6dbac8e8b4b78927457bc78566246ad0b1e486dd8044f179445b2c743",
+    "visualModelPass": false,
+    "sceneRegion": [
+      0,
+      0,
+      640,
+      204
+    ],
+    "scenePixelsPerFrame": 130560,
+    "all24ScenePixelsUniformRgb": [
+      0,
+      36,
+      85
+    ],
+    "distinctSceneHashes": 1,
+    "evidenceCommit": "32dcb50b6d0e53b1cf295b62b9ab4012e0686865"
+  },
+  "independentOracle": {
+    "library": "installed real Three PerspectiveCamera",
+    "poses": 24,
+    "phases": "i/24",
+    "originalPlainObjectTarget": "lookAt({x:5,y:5,z:20}) produces nonfinite quaternion/world/inverse matrices",
+    "supportedTargets": "lookAt(5,5,20) and lookAt(new Vector3(5,5,20)) produce identical finite unit quaternions at every phase; target projects to viewport center",
+    "sourceFix": "GIF-only lookAt uses numeric3 overload; preparation/proof/field/time/canonical identity unchanged"
+  },
+  "executed": [
+    {
+      "command": "node --test tests/gif-camera-lookat-independent.test.mjs",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 144.2355
+    },
+    {
+      "command": "node --test --test-name-pattern='real Three camera keeps all 24' tests/visual-export-adapter.test.mjs",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 1852.3593,
+      "meaning": "actual production adapter with real PerspectiveCamera, finite24captures, direction/frustum8corners and raw restoration"
+    }
+  ],
+  "findingsRemaining": [],
+  "additionalActualExports": 0,
+  "additionalDecodesAfter202bVerification": 0,
+  "additionalSolverRuns": 0,
+  "visibleModelActualAcceptanceStillPending": true,
+  "limits": [
+    "Offline camera mathematics and synthetic canvas only",
+    "202b container decoding remains successful but model visibility failed",
+    "No repeat of actual export or external decoder to validate this source fix",
+    "No parent-feature completion claim"
+  ]
+}

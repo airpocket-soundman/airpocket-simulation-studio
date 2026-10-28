@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "pullRequest": 195,
+  "head": "eda94d0ede209a862fa374639bc06862c93828d3",
+  "run": 39991802155,
+  "job": 120545136149,
+  "url": "https://github.com/airpocket-soundman/airpocket-simulation-studio/actions/runs/39991802155/job/120545136149",
+  "conclusion": "success",
+  "mergeCandidate": "5c5cbc4686eddfc7e85f57271a0e14d959419633",
+  "mergeParents": [
+    "9785c32f1d8f599730fae9900ced16929f692fd0",
+    "eda94d0ede209a862fa374639bc06862c93828d3"
+  ],
+  "counts": {
+    "total": 2150,
+    "passed": 2142,
+    "failed": 0,
+    "skipped": 8
+  },
+  "suiteDurationMs": 288012.487165,
+  "verifyElapsedSeconds": 387,
+  "build": {
+    "stepSeconds": 6,
+    "viteSeconds": 3.46,
+    "passed": true
+  },
+  "localPublished": {
+    "stepSeconds": 40,
+    "elapsedMs": 39045.16182,
+    "reportEntries": 28,
+    "passed": 28,
+    "loggedPassLines": 27,
+    "additionalReportOnlyCheck": "deployed-asset-integrity",
+    "revision": "5c5cbc4686eddfc7e85f57271a0e14d959419633"
+  },
+  "deployment": {
+    "deploy": "skipped",
+    "verifyPublished": "skipped",
+    "publicDeploymentProven": false
+  },
+  "initialFailuresForThisExactHead": [],
+  "previousUnrelatedFailures": "Earlier PR193/194 and local preparation failures remain in their original evidence; not relabelled as this head results.",
+  "artifact": {
+    "name": "verification-39991802155-1",
+    "downloadCount": 1,
+    "rawFileCount": 7,
+    "inventory": [
+      {
+        "file": "ci-build.log",
+        "bytes": 3693,
+        "sha256": "4302079902e53283543fd3d0acd568b474d1fe8e22fc2e0456e9b129de9e0907"
+      },
+      {
+        "file": "ci-install.log",
+        "bytes": 440,
+        "sha256": "cbc670e8e75146a699c4a10b26888a54ac8ae2bd6908ab380c629cad1506122e"
+      },
+      {
+        "file": "ci-local-published.log",
+        "bytes": 1573,
+        "sha256": "24b8af24a06f49db6d38eb86ea79b91d4f30833960bb7eb3c58a9b77a6d731e4"
+      },
+      {
+        "file": "ci-tests.log",
+        "bytes": 232520,
+        "sha256": "c29e5e1bd401c7e819bb9dc6ee7ef85d84153dacea347b47c66f5816fc845a7e"
+      },
+      {
+        "file": "published-checkpoints-1792775306113-12350.jsonl",
+        "bytes": 86530,
+        "sha256": "33d0da55b4c6ab8b00c3c534aef994b04e6e0e9566f8561b80b0b02945052810"
+      },
+      {
+        "file": "published-report.json",
+        "bytes": 4391,
+        "sha256": "be689e3f69b52f1c79ae212cdf74f64952e1b4afd78335d54b128dd1f54c723e"
+      },
+      {
+        "file": "run.raw.json",
+        "bytes": 3660,
+        "sha256": "986b228e1f8da6c82726d387423d367a0149a1ed9c6f5f3c42ff1b94fc69c03d"
+      }
+    ]
+  },
+  "actions": {
+    "ciDispatched": 0,
+    "retries": 0,
+    "newExports": 0,
+    "newNativeJobs": 0,
+    "rootFilesModified": false
+  },
+  "limitations": [
+    "Exact PR195 head and recorded merge candidate only.",
+    "Local prepublication validation is not public deployment.",
+    "Docs-only followup is based separately on e630920 and was not part of the recorded CI head."
+  ]
+}

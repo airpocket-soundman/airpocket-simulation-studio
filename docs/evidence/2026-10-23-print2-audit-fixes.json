@@ -1,0 +1,18 @@
+{
+ "date": "2026-10-23",
+ "reviewedCommit": "94ea02a30f7eaa4d71f3bd1ed53ebef985f7e8b7",
+ "scope": "PRINT2 importer audit fixes",
+ "syntheticCounterexamples": [
+  {"input": "gaugeLength=Number.MIN_VALUE, gauge displacement=0.1 mm", "before": "Accepted engineeringStrain=Infinity; JSON serialization changed it to null", "after": "Rejected with PRINTED_DATASET_INVALID"},
+  {"input": "units.length=['mm']", "before": "Accepted through implicit property-key conversion", "after": "Rejected with PRINTED_DATASET_INVALID"}
+ ],
+ "protection": {"minimumGaugeLengthMm": 0.000001, "maximumGaugeLengthMm": 1000000, "basis": "Same numerical protection range as existing specimen dimensions; no accuracy claim"},
+ "finiteOutputChecks": ["gaugeLengthMm", "forceN", "displacementMm", "speedMmPerSecond", "engineeringStressPa", "engineeringStrain"],
+ "commands": [
+  {"command": "node --test tests/printed-measurement-dataset.test.mjs tests/printed-equivalent-material.test.mjs", "passed": 11, "failed": 0, "skipped": 0},
+  {"command": "npm run check:contracts", "passed": true, "declarationFiles": 8},
+  {"command": "node --test tests/docs.test.mjs", "passed": 2, "failed": 0, "skipped": 0},
+  {"command": "git diff --check", "passed": true}
+ ],
+ "unverified": ["physical measurement", "calibration accuracy", "UI/MCP integration", "publication", "full-suite CI"]
+}

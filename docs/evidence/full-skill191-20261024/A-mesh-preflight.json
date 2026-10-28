@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "allowed": true,
+  "completePreflight": false,
+  "inputRevision": "sha256:c31caa29d4f15c8f63a04b26e1311a466cff2711381a2d1d0a029cac5cdba104",
+  "jobId": "fbc9e96f-b062-40bf-ae7d-ac445e3aa64a",
+  "meshQuality": {
+    "status": "checked",
+    "nodeCount": 94,
+    "elementCount": 218,
+    "volumeMm3": 3999.9999999999986,
+    "minVolumeMm3": 5.06098404245161,
+    "negativeOrientationCount": 0,
+    "minQuality": 0.3632115694761907,
+    "qualityHistogram": [
+      0,
+      2,
+      11,
+      82,
+      123
+    ],
+    "qualityAvailable": true,
+    "diagnosticCount": 0,
+    "diagnosticsTruncated": false
+  },
+  "reports": [
+    {
+      "conditionIndex": 0,
+      "type": "fixed",
+      "originalAreaMm2": 100,
+      "mappedAreaMm2": 100,
+      "relativeAreaError": 0,
+      "maxProjectionDistanceMm": 0,
+      "approximation": "exact CAD planar rectangle"
+    },
+    {
+      "conditionIndex": 1,
+      "type": "force",
+      "originalAreaMm2": 100,
+      "mappedAreaMm2": 100,
+      "relativeAreaError": 0,
+      "maxProjectionDistanceMm": 0,
+      "approximation": "exact CAD planar rectangle"
+    }
+  ],
+  "diagnostics": [],
+  "rigidBody": {
+    "status": "checked",
+    "rigidBodyModesEliminated": true,
+    "freeRigidModeCount": 0,
+    "modes": [
+      {
+        "mode": "translation-x",
+        "kind": "translation",
+        "axis": "x",
+        "status": "eliminated",
+        "description": "translation along the x axis is constrained"
+      },
+      {
+        "mode": "translation-y",
+        "kind": "translation",
+        "axis": "y",
+        "status": "eliminated",
+        "description": "translation along the y axis is constrained"
+      },
+      {
+        "mode": "translation-z",
+        "kind": "translation",
+        "axis": "z",
+        "status": "eliminated",
+        "description": "translation along the z axis is constrained"
+      },
+      {
+        "mode": "rotation-x",
+        "kind": "rotation",
+        "axis": "x",
+        "status": "eliminated",
+        "description": "rotation about the x axis is constrained"
+      },
+      {
+        "mode": "rotation-y",
+        "kind": "rotation",
+        "axis": "y",
+        "status": "eliminated",
+        "description": "rotation about the y axis is constrained"
+      },
+      {
+        "mode": "rotation-z",
+        "kind": "rotation",
+        "axis": "z",
+        "status": "eliminated",
+        "description": "rotation about the z axis is constrained"
+      }
+    ],
+    "components": [
+      {
+        "index": 0,
+        "nodeCount": 94,
+        "constrainedNodeCount": 12,
+        "constraintRowCount": 36,
+        "rank": 6,
+        "freeRigidMotionCount": 0,
+        "freeModes": []
+      }
+    ],
+    "componentsTruncated": false,
+    "method": {
+      "rankTolerance": 0.000001,
+      "rankToleranceKind": "relative to the largest singular value of the centroid-centred, radius-normalised constraint matrix",
+      "freeModeParticipationThreshold": 1e-8,
+      "springSupports": "not modelled by boundary transfer; never counted as eliminating a mode"
+    }
+  },
+  "componentAnchoring": {
+    "status": "checked",
+    "kind": "structural",
+    "componentCount": 1,
+    "unanchoredComponentCount": 0,
+    "thermalContactPresent": false,
+    "components": [
+      {
+        "index": 0,
+        "nodeCount": 94,
+        "anchoredNodeCount": 12
+      }
+    ],
+    "componentsTruncated": false
+  },
+  "acousticResolution": {
+    "status": "not-applicable",
+    "reason": "Elements-per-wavelength applies to acoustic studies only"
+  },
+  "remainingChecks": [
+    "Solver convergence and physical accuracy have not been checked.",
+    "Rigid-body constraint rank covers nodal fixed/displacement supports only; spring or elastic supports are not modelled and are never counted as eliminating a mode."
+  ]
+}

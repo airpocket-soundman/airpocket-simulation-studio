@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "baseSha": "6acd800e307f8b9f2c46eb121a41500518f23806",
+  "branch": "codex/finitevisco-input-history-20261023",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Pure explicit input-history serialization/replay; reinitializes I/Z0, never restores claimed JSON state.",
+  "source": {
+    "path": "public/examples/finite-visco-input-history.json",
+    "bytes": 777,
+    "rawIdentity": "sha256:6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+    "canonicalIdentity": "sha256:8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71"
+  },
+  "synthetic": true,
+  "provisional": true,
+  "calibrated": false,
+  "limits": {
+    "bytes": 1048576,
+    "steps": 4096,
+    "depth": 16,
+    "values": 100000,
+    "stringLength": 1024
+  },
+  "measured": {
+    "completed": true,
+    "steps": 4,
+    "finalTimeSeconds": 4.7,
+    "S12Pa": -10685.296481987363,
+    "energyDensityJPerM3": 39.95200312412287,
+    "cumulativeWorkDensityJPerM3": 72.73192280741294,
+    "cumulativeDissipationDensityJPerM3": 32.77991968329006,
+    "outputBytes": 2352,
+    "failureAtThirdStep": {
+      "completed": false,
+      "status": "failed",
+      "failure": {
+        "code": "FINITE_VISCO_HISTORY_STEP_REJECTED",
+        "stepIndex": 2,
+        "completedSteps": 2
+      },
+      "hasFinalState": false,
+      "hasSummary": false
+    }
+  },
+  "validation": {
+    "command": "node --test tests/finite-visco-history.test.mjs tests/finite-visco-reference.test.mjs tests/finite-visco-independent-audit.test.mjs tests/docs.test.mjs",
+    "passed": 33,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 1654.4182,
+    "contractDeclarations": 16,
+    "actualRuntimeImportTypeFixture": "passed",
+    "sourceReferenceUnchanged": true,
+    "cases": [
+      "Exact final state equals independently called original init/steps",
+      "Source SHA independently checked with node crypto; canonical SHA independently sorted",
+      "typedarray/object changes during hash await cannot alter snapshot",
+      "No final state/summary on rejected step; exact zero-based step and completed count",
+      "1MiB accepted/+1byte refused,4096 accepted/+1 refused",
+      "100000-value/depth/encoded-byte limits and cumulative time rejection at step500",
+      "Malformed UTF8/BOM/1e999/unsafe integer/duplicate decoded keys/trailing input refusal",
+      "Unknown fields/state/Z/stress/cumulative/versions/units/flags refused",
+      "Accessor/sparse/decorated/subclass input and ordinary byte ownership",
+      "Original material-point independent Gauss/energy/rotation suite passes"
+    ],
+    "syntax": "passed",
+    "diffCheck": "passed"
+  },
+  "sourceHashes": {
+    "src/finite-visco-history.js": {
+      "bytes": 7911,
+      "sha256": "820650e3b096f799814d70757d375434c4bf2aa2a43d7d64b294e9d0e9cc00f6"
+    },
+    "src/finite-visco-history.d.ts": {
+      "bytes": 2280,
+      "sha256": "73551de2cc8f2c24edd8fcc03e6b9f2be2ba62b0c8ee823816be79fe694977f6"
+    },
+    "tests/finite-visco-history.test.mjs": {
+      "bytes": 10682,
+      "sha256": "0baaf71c37ca3a7149ccc2902988f2b2d3ef154d3b909a8d45387e2d973a643e"
+    },
+    "tests/fixtures/finite-visco-history-types.ts": {
+      "bytes": 1171,
+      "sha256": "eec1b1758e9dde4eeaab5746949b74528d35a000a209eec31bf26f9506dba36b"
+    },
+    "public/examples/finite-visco-input-history.json": {
+      "bytes": 777,
+      "sha256": "6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86"
+    }
+  },
+  "integrationRequired": [
+    "Root registers finite-visco-history.js in domain.files; shared module-layers not edited by this owner."
+  ],
+  "limitations": [
+    "Hash identity is not a signature, authentication, calibration or physical accuracy guarantee.",
+    "No persistent state restore/resume or full observation history; successful replay creates a new in-process issued final state.",
+    "No filesystem publication/product solver/UI/MCP/project/progress connection.",
+    "Encoding validates input structure only, with constitutiveVerified:false; constitutive admission occurs in replay.",
+    "Original numerical scope and pure-viscoelastic/no-permanent-plasticity limitations remain."
+  ],
+  "parentComplete": false
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "meshBoundaryPreflight",
+      "scope": "inspect",
+      "description": "Inspect condition-to-mesh boundary transfer for a successful, settled mesh-only job tied to this exact live input revision. This never reruns the mesher or solver.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "inputRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "jobId",
+          "inputRevision"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffects": [],
+      "revisionFields": [
+        "inputRevision"
+      ],
+      "units": {
+        "geometry": "mm",
+        "area": "mm2"
+      },
+      "limitations": [
+        "Static linear structural inputs only. Requires a retained successful mesh-only job whose frozen and output input revisions both match.",
+        "Reports boundary transfer plus an additive rigidBody result (per-mode eliminated/free for the six rigid-body motions of nodal fixed/displacement supports; free modes add error ANALYSIS_RIGID_BODY_MODE_FREE without refusing the inspection; springs are not modelled). completePreflight is always false; convergence and physical accuracy remain unchecked."
+      ]
+    }
+  ]
+}

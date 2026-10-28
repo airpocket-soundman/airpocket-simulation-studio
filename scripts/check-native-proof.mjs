@@ -70,7 +70,7 @@ export async function checkNativeProof({build=false,hostBinary,wasmBinary,python
  const hostBytes=await readFile(host);verifyHostExecutable(hostBytes);
  // The pre-existing native test remains a mandatory, non-skipped host execution gate.
  const env={...process.env,AIRPOCKET_NATIVE_PROOF:host,AIRPOCKET_NATIVE_PROOF_WASM:wasm};
- execute(process.execPath,['--test','tests/native-proof.test.mjs','tests/native-proof-contract.test.mjs','tests/native-tet4-contract.test.mjs'],{env,stdio:'inherit'});
+ execute(process.execPath,['--test','tests/native-proof.test.mjs','tests/native-proof-contract.test.mjs','tests/native-tet4-contract.test.mjs','tests/native-tet4-boundary-selection.test.mjs'],{env,stdio:'inherit'});
  const results=[];
  for(const fixture of proofFixtures){const [young,load]=fixture,input=`airpocket-native-proof-v1 ${young} ${load}\n`,outputs=[];for(const [binary,isWasm,runtime] of [[host,false,'host-native'],[wasm,true,'wasm-development-check']]){const result=runProof(binary,input,{wasm:isWasm});assert.ifError(result.error);assert.equal(result.status,0,result.stderr);const output=JSON.parse(result.stdout);verifyProofOutput(output,{runtime,young,load});outputs.push(output);}verifyNativeWasmPair(...outputs,fixture);results.push({fixture,host:outputs[0],wasm:outputs[1]});}
  for(const binary of [host,wasm])for(const input of invalidProofInputs){const result=runProof(binary,input,{wasm:binary===wasm});assert.ifError(result.error);assert.notEqual(result.status,0);assert.equal(result.stdout,'');assert.match(result.stderr,/Expected airpocket-native-proof-v1/);}

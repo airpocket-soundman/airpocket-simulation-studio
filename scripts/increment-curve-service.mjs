@@ -55,7 +55,7 @@ export async function readIncrementCurve(args={}, {publish=publishJson}={}){
   const content=Buffer.from(artifacts[format],'utf8');if(content.length>limits.artifactBytes)fail('Increment curve artifact exceeds its byte bound');
   descriptors[format]={bytes:content.length,sha256:hash(content),encoding:'utf-8'};
  }
- const result={schemaVersion:1,...payload,source:{path:inputPath,bytes:bytes.length,sha256:hash(bytes),meaning:'raw-utf8-input-snapshot'},artifacts:descriptors,limits,limitations:['Independent force-controlled linear solves only; not a plastic load/unload history or physical validation.','No browser state is read or changed. Artifact strings are retained only in an explicitly requested output bundle.']};
+ const result={schemaVersion:1,...payload,source:{path:inputPath,bytes:bytes.length,sha256:hash(bytes),meaning:'raw-utf8-input-snapshot'},artifacts:descriptors,limits,limitations:[(comparisonMode?artifacts.comparison.curves.some(curve=>curve.steps.some(row=>row.controlledQuantity==='displacement')):artifacts.curve.steps.some(row=>row.controlledQuantity==='displacement'))?'Independent linear solves with explicit force or verified prescribed-displacement control only; not a plastic load/unload history or physical validation.':'Independent force-controlled linear solves only; not a plastic load/unload history or physical validation.','No browser state is read or changed. Artifact strings are retained only in an explicitly requested output bundle.']};
  if(outputPath)result.outputPath=outputPath;
  if(Buffer.byteLength(JSON.stringify(result),'utf8')>INCREMENT_CURVE_MCP_LIMITS.responseBytes-2048)fail('Increment curve response exceeds its serialized tool-data value byte bound; request fewer rows');
  if(outputPath){

@@ -1,0 +1,97 @@
+{
+  "schema": "airpocket.single-slice-gif-independent-audit.v1",
+  "observedAt": "2026-10-26T22:32:14.729Z",
+  "candidate": "ddf0922ec7b913446e06e68a700fec5d3ce808fc",
+  "sourceChanged": false,
+  "mandatoryFixes": [],
+  "sourceHashes": [
+    {
+      "path": "src/ui/single-slice-gif.js",
+      "workingBytes": 15051,
+      "workingSha256": "d5c19d04b07e64a97ef884a49bd30c5673dad8c3cfc9e279d2217fbc4662a320",
+      "gitBlobBytes": 14991,
+      "gitBlobSha256": "69740390962d4a29618e072c402c8bf3e97278fe25494e180a0565c5a7294970",
+      "normalizedLfSha256": "69740390962d4a29618e072c402c8bf3e97278fe25494e180a0565c5a7294970"
+    },
+    {
+      "path": "src/visual-export.js",
+      "workingBytes": 55795,
+      "workingSha256": "21a72496167851185fb84f33de324f6b2ce2927fe35fa9da18552a5879457285",
+      "gitBlobBytes": 55517,
+      "gitBlobSha256": "35dce08d90aa9d07cbfd36ffadfec9016abaf9b6bfe2dae8667fbe9a67bbc12a",
+      "normalizedLfSha256": "35dce08d90aa9d07cbfd36ffadfec9016abaf9b6bfe2dae8667fbe9a67bbc12a"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "workingBytes": 29005,
+      "workingSha256": "18f90d642a032557656cae44828d600cbaef4880c68482e068c1aa1d11066a06",
+      "gitBlobBytes": 28821,
+      "gitBlobSha256": "2961cdfef49d41cfe10cfdd9093646a1d30c9ee2161c6a6f9a4c97d405ebd750",
+      "normalizedLfSha256": "2961cdfef49d41cfe10cfdd9093646a1d30c9ee2161c6a6f9a4c97d405ebd750"
+    },
+    {
+      "path": "src/main.js",
+      "workingBytes": 182127,
+      "workingSha256": "239af3411f20c5214913f745a5136eefe262da01e3529fe308a3ed33f18c7da8",
+      "gitBlobBytes": 181537,
+      "gitBlobSha256": "c82c7376de3e8494e642990e055f16fa5bc5fd99dad0fc3941545c2e27429a9a",
+      "normalizedLfSha256": "c82c7376de3e8494e642990e055f16fa5bc5fd99dad0fc3941545c2e27429a9a"
+    },
+    {
+      "path": "src/result-export-preparation.js",
+      "workingBytes": 3702,
+      "workingSha256": "bec0f1260e9ccdb16b0dd16c69aeb3b2be1d27d2e6a1c7b04a61b9be873c22ef",
+      "gitBlobBytes": 3641,
+      "gitBlobSha256": "02fbf19cd31fb1db9fc1ed9b0e3f250ce82d528ba13f6c3d2b8912becb24b70e",
+      "normalizedLfSha256": "02fbf19cd31fb1db9fc1ed9b0e3f250ce82d528ba13f6c3d2b8912becb24b70e"
+    },
+    {
+      "path": "src/view-settings.js",
+      "workingBytes": 1286,
+      "workingSha256": "8f073c5fa509ab018ac122c1648113b074dc224b52c3003fff76d7b66f0db271",
+      "gitBlobBytes": 1282,
+      "gitBlobSha256": "0233587b7aff20d9779dbc4b62a58e80e640678120f80e085b670a29c0090e78",
+      "normalizedLfSha256": "0233587b7aff20d9779dbc4b62a58e80e640678120f80e085b670a29c0090e78"
+    }
+  ],
+  "hashMeaning": "Working bytes may use CRLF. Git blob SHA-256 and LF-normalized SHA-256 are separate identities; all source text matches the candidate after line-ending normalization.",
+  "independentTests": {
+    "file": "tests/single-slice-gif-independent.test.mjs",
+    "count": 3,
+    "pass": 3,
+    "initialFocusedElapsedMilliseconds": 2535.3967,
+    "oracles": [
+      "Translated anisotropic Tet4 X range -2..4 mm, X=1 mm section area4 mm2, affine temperature integral1334/3 degC mm2 at interpolated4 s",
+      "Real createViewApi setup substitutions and immutable issued proof, getter invocations0",
+      "Job/preparation/adapter seventh-capture pending work holds lease during cancel/watchdog/side edit, then restores full setup and interpolated4 s"
+    ]
+  },
+  "related": {
+    "command": "node --test tests/single-slice-gif-independent.test.mjs tests/single-slice-gif.test.mjs tests/visual-export-adapter.test.mjs tests/visual-export-jobs.test.mjs tests/result-export-preparation.test.mjs tests/module-boundaries.test.mjs tests/contracts-types.test.mjs tests/docs.test.mjs",
+    "tests": 117,
+    "pass": 117,
+    "fail": 0,
+    "skip": 0,
+    "elapsedMilliseconds": 26031.1071,
+    "includesIndependent3": true,
+    "includesRealTypeScriptCompiler": true,
+    "rawLogSha256": "876658fbc2c1c276bc95ffe02972b8843675dca82e654cb981880523838b0527"
+  },
+  "historicalPreparationFailure": {
+    "reason": "First test launch preceded npm ci completion; Three module resolution failed before any test ran.",
+    "productFailure": false,
+    "oldAssertionsChanged": false
+  },
+  "actual": {
+    "browser": 0,
+    "productExports": 0,
+    "externalDecodes": 0,
+    "solverRuns": 0
+  },
+  "limitations": [
+    "Fake canvas and controlled asynchronous scheduling; actual209 visual acceptance remains unverified",
+    "Boundary sections may be empty; no general geometric accuracy or new physics claim",
+    "Existing207/208 source and actual evidence remain immutable",
+    "No progress/status promotion"
+  ]
+}

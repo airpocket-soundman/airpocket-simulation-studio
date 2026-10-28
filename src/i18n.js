@@ -123,6 +123,7 @@ export const dictionary={
  '登録した材料の有効温度範囲外です。':'Temperature is outside the registered material validity range',
  '温度依存の弾性物性には一様温度が必要です。':'Temperature-dependent elasticity currently requires a uniform temperature',
  '速度依存の構造モデルは未対応です。':'Rate-dependent structural constitutive models are not supported',
+ '直交異方性を登録済み。静的・線形のCPU解析に対応。方向別の物性と材料軸を結果へ保存します。専用の成分編集欄は未実装です。APIまたは保存入力で各成分を確認してください。':'Orthotropic elasticity registered. Static linear CPU analysis only. Constants and material axes are retained in saved results. No dedicated per-component editor is implemented; confirm each component in the API or saved input.',
  '直交異方性の構造モデルは未対応です。':'Orthotropic structural constitutive models are not supported',
  '静解析のひずみ速度0が登録した試験範囲外です。':'Static structure has zero strain rate, outside the registered test envelope',
 
@@ -275,3 +276,4 @@ addTranslations({'任意平面（API）':'Custom plane (API)','矩形の座標�
 addTranslations({'範囲は残りの2軸をX/Y/Z順で指定します。単一のSTEP・直方体の外側平面に対応。矩形の境界をCAD分割してメッシュへ反映します。回転時の面位置は原点から回転後の軸に沿った距離、範囲は残りの回転後の2軸で指定します。曲面と接触面は未対応です。':'Use the other two axes in X/Y/Z order for the ranges. Supports external planar faces of single STEP or box solids. CAD fragmentation makes the mesh conform to rectangle edges. With rotation, face position is the distance along the rotated normal axis from the origin; ranges use the other two rotated axes. Curved and contact interfaces are not supported.'});
 
 addTranslations({'一般3D流体の計算・任意開口wireの認識・複数流体体積の結合は未対応です。':'General 3D flow, arbitrary opening-wire recognition and fluid-volume joining remain unsupported.','箱面または明示した平面capで開口を閉じ、流体内の指定点につながる単一CAD空間だけを残します。閉じた空洞は箱面ポートとcapを全て解除してください。':'Close openings with box faces or explicit planar caps and keep one seed-connected CAD volume. Disable every box port and cap for a sealed cavity.'});
+addTranslations({'囲いの箱から元の部品体積を差し引いてメッシュを作ります。閉じた内部空洞は外部領域から除外します。内部領域は指定点と箱の端面で取り出せます。一般3D流体の計算・任意開口wireの認識・複数流体体積の結合は未対応です。':'Subtract the original solid from an enclosure box and mesh the remainder. Exclude sealed cavities from the exterior domain. Internal domains use a seed and box-plane caps. General 3D flow, arbitrary opening-wire recognition and fluid-volume joining remain unsupported.'});

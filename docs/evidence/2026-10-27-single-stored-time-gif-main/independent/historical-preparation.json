@@ -1,0 +1,46 @@
+{
+  "preparedOnly": true,
+  "awaitingRootArtifactReady": true,
+  "pin": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "driverSha256": "1077cd29a8d24e1067bae30726ee9f1ce70637774ff607400ba7e5857b647d55",
+  "scriptSHA256": "8629d65251e7b6b17dabe6879047cb09b41b869bbde8aa312324319c83be9852",
+  "genericParserSHA256": "4892ca64651942e023303d22932c7379742f30b3645f47af261eba8b492ad25f",
+  "artifact": "stored-time.gif",
+  "expected": {
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "totalDelayCs": 200,
+    "loop": 0,
+    "field": "temperature",
+    "unit": "degC",
+    "storedTimes": [
+      0,
+      5,
+      10
+    ],
+    "phases": "i/23",
+    "nearestCounts": [
+      6,
+      12,
+      6
+    ],
+    "terminalTimeSeconds": 10,
+    "terminalOffset": 0,
+    "fixedCamera": true,
+    "distinctSceneHashes": 3
+  },
+  "budgets": {
+    "productExports": 0,
+    "animationEncodes": 0,
+    "nativeCodec": 0,
+    "solver": 0,
+    "decoderInvocationsBeforeReady": 0
+  },
+  "notes": [
+    "Only node --check ran on verifier; no artifact decoder executed",
+    "Generic reader is byte-identical to202c reader",
+    "Output is exclusive; FFprobe/FFmpeg each once after explicit root ready",
+    "Manual first/middle/last model,color,captions review required; machine result remains overallVisualAcceptancefalse untilreview andcleanup"
+  ]
+}

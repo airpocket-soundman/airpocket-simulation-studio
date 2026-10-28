@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "scope": "Proposal only; no shared progress mutation. Append bounded evidence to existing text fields and explicitly supersede historical missing-implementation wording.",
+  "baseCandidate": "9594884",
+  "sourceSha256": "dda14c3c5123ebc92dbe12ba911e68fff8d7e34d0a69efe906aa674b7104b48b",
+  "candidateFollowup": "47bfd039e01e1d0591b861894d5b6de51bd8e2d2",
+  "pr185": "Unmerged candidate per root report; final CI/publication not inspected by this audit.",
+  "preserve": [
+    "every task id/status/acceptance/acceptanceEn",
+    "all historical review records including merged status",
+    "release metadata/testCount/description",
+    "publicationMilestone and gate evidence",
+    "all other task fields"
+  ],
+  "updates": [
+    {
+      "taskId": "AGENTCHAT1",
+      "field": "detail",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "165d86722e8181506ea137df053914c9edb379c7bab6e216a150f1b01c1845aa",
+      "originalValue": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。",
+      "proposedValue": "SolidCraftを参考にAIボタン、エージェント選択、導入/認証案内、接続テスト、モデル選択、操作カードと解析進捗を日英で提供する計画。手動接続は詳細設定に残す。未着手。 2026-10-23 未merge候補PR184/185で、明示session providerを使う会話controllerと未mountのpanel境界を追加。合成ACP childによる送信/取消/旧応答破棄、本文容量、draft/provider ABA、日英DOM fixtureの限定検証済み。本番browser transport・main接続・実AI認証・モデル選択・MCP委任は未実装/未確認。公開済みではなく、親受入は未達。上記の「未着手」は当初計画時点の履歴であり、この限定境界の現状を示さない。"
+    },
+    {
+      "taskId": "AGENTCHAT1",
+      "field": "detailEn",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "83771bfb8cdc3238c0ef6065e4530b5187727da13595db83892f38b9725695a6",
+      "originalValue": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started.",
+      "proposedValue": "Plan bilingual AI toolbar/chat, agent selection, install/auth guidance, connection test, model selection, operation cards and analysis progress following SolidCraft's workflow. Retain manual advanced connection settings. Not started. 2026-10-23: Unmerged candidates PR184/185 add an explicit-session-provider chat controller and an unmounted panel boundary. Synthetic ACP-child send/cancel/obsolete-reply refusal, bounded text, draft/provider ABA and bilingual DOM fixtures are verified within that scope. Production browser transport, main integration, real AI authentication, model selection and MCP delegation remain unimplemented/unverified. This is not published and parent acceptance remains incomplete. The earlier Not started wording describes the original plan, not the current limited boundary."
+    },
+    {
+      "taskId": "AGENTCHAT1",
+      "field": "lastUpdate",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "54cb4e724f5ff7e292f6813a9302e07f67902f7a152b6afa3ece3e0af9071c8d",
+      "originalValue": "2026-10-21: 再レビュー合格・統合対象。実翻訳scannerで接続statusとaria-labelの言語往復・再走査収束を確認。 親タスク全体の完了条件は未達。",
+      "proposedValue": "2026-10-21: 再レビュー合格・統合対象。実翻訳scannerで接続statusとaria-labelの言語往復・再走査収束を確認。 親タスク全体の完了条件は未達。 2026-10-23 未merge候補PR184/185で、明示session providerを使う会話controllerと未mountのpanel境界を追加。合成ACP childによる送信/取消/旧応答破棄、本文容量、draft/provider ABA、日英DOM fixtureの限定検証済み。本番browser transport・main接続・実AI認証・モデル選択・MCP委任は未実装/未確認。公開済みではなく、親受入は未達。上記の「未着手」は当初計画時点の履歴であり、この限定境界の現状を示さない。"
+    },
+    {
+      "taskId": "AGENTCHAT1",
+      "field": "lastUpdateEn",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "bf8f11e77f10fdf8bc5b8b53051743de44f48bcf0c5e05cb667f68e110061b81",
+      "originalValue": "2026-10-21: Re-review approved for integration. Verifies connection status and aria-label language round trips and scan convergence with the actual scanner. Full parent acceptance remains incomplete.",
+      "proposedValue": "2026-10-21: Re-review approved for integration. Verifies connection status and aria-label language round trips and scan convergence with the actual scanner. Full parent acceptance remains incomplete. 2026-10-23: Unmerged candidates PR184/185 add an explicit-session-provider chat controller and an unmounted panel boundary. Synthetic ACP-child send/cancel/obsolete-reply refusal, bounded text, draft/provider ABA and bilingual DOM fixtures are verified within that scope. Production browser transport, main integration, real AI authentication, model selection and MCP delegation remain unimplemented/unverified. This is not published and parent acceptance remains incomplete. The earlier Not started wording describes the original plan, not the current limited boundary."
+    },
+    {
+      "taskId": "RESULTCURVE1",
+      "field": "detail",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "39b591ca9eda97251b0735990071e01bd7fb9e4960bf8d77118dbbe18611481d",
+      "originalValue": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。",
+      "proposedValue": "docs/roadmap.mdのRESULTCURVE1を参照。GUI/API/MCPで同じ版付き物理段階、反力、標点ひずみを取得し、荷重–変位/工学SSを静止描画・CSV/JSON/画像出力。最大von Mises/変位をSSと呼ばず、独立結果を塑性履歴へつながない。 2026-10-23 未merge候補PR180〜185で、明示荷重列からの再入力bundle生成、独立線形solveの明示変位制御、支持/actuator反力と標点曲線、各step独立再計算、CLI/正式stdio MCP/型/容量回帰を追加。0/25/100/50/0/-50 Nの合成棒参照と反力釣合いを確認。独立線形stepであり塑性載荷履歴ではない。実Chrome保存全bytes・390px・拡大・公開HTTPSと自動段階取得/状態履歴材料接続は継続。公開済みではなく、親受入は未達。以前の「変位制御は継続」は履歴であり、明示独立線形経路の追加後の現状と区別する。"
+    },
+    {
+      "taskId": "RESULTCURVE1",
+      "field": "detailEn",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "6b677b68944d2df2739aaa69ac34d73873e339dd9c66116d2e57a3eb87b2277c",
+      "originalValue": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history.",
+      "proposedValue": "See RESULTCURVE1 in docs/en/roadmap.md. Retrieve the same revisioned physical increments, reactions and gauge strain through GUI/API/MCP; plot static force-displacement/engineering stress-strain curves and export CSV/JSON/images. Do not call maximum von Mises/displacement a stress-strain curve or concatenate independent results into a plastic history. 2026-10-23: Unmerged candidates PR180–185 add re-input bundles from explicit loads, explicit displacement-controlled independent linear solves, support/actuator reaction and gauge curves, per-step independent replay, CLI/formal stdio MCP/type/capacity regressions. The synthetic bar verifies 0/25/100/50/0/-50 N and reaction balance. Independent linear steps are not a plastic load history. Actual Chrome complete download bytes,390px,expanded output,published HTTPS,automatic increment capture and state-history material integration remain. This is not published and parent acceptance remains incomplete. Earlier displacement-control-pending wording is historical and is superseded only for the explicit independent linear path."
+    },
+    {
+      "taskId": "RESULTCURVE1",
+      "field": "lastUpdate",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "5a4731bf14912f464197666aa7f9e71fb17e633a0b457e781aae987ccbfe19fa",
+      "originalValue": "2026-10-22: 検証済み2〜4曲線を荷重–標点伸びと工学SSの2図で比較し、番号・色・線種付き凡例と失敗点の線分断を保持。GUIの複数JSON読込、CSV/JSON/SVG保存・拡大リンク、同じMCPの比較ページを追加。実画面で既存プロジェクトと実解析保存ケースの不変、3形式の内容一致を確認。解析からの自動段階取得・変位制御・状態履歴材料への接続は継続。",
+      "proposedValue": "2026-10-22: 検証済み2〜4曲線を荷重–標点伸びと工学SSの2図で比較し、番号・色・線種付き凡例と失敗点の線分断を保持。GUIの複数JSON読込、CSV/JSON/SVG保存・拡大リンク、同じMCPの比較ページを追加。実画面で既存プロジェクトと実解析保存ケースの不変、3形式の内容一致を確認。解析からの自動段階取得・変位制御・状態履歴材料への接続は継続。 2026-10-23 未merge候補PR180〜185で、明示荷重列からの再入力bundle生成、独立線形solveの明示変位制御、支持/actuator反力と標点曲線、各step独立再計算、CLI/正式stdio MCP/型/容量回帰を追加。0/25/100/50/0/-50 Nの合成棒参照と反力釣合いを確認。独立線形stepであり塑性載荷履歴ではない。実Chrome保存全bytes・390px・拡大・公開HTTPSと自動段階取得/状態履歴材料接続は継続。公開済みではなく、親受入は未達。以前の「変位制御は継続」は履歴であり、明示独立線形経路の追加後の現状と区別する。"
+    },
+    {
+      "taskId": "RESULTCURVE1",
+      "field": "lastUpdateEn",
+      "operation": "append bounded evidence and clarify historical wording",
+      "expectedOriginalSha256": "6c360c6b4935e715ba434b9eca09e875f72d0788c0cbcfba476a5642deffc9dd",
+      "originalValue": "2026-10-22: Compare 2–4 validated curves in force/gauge-extension and engineering stress–strain panels with numbered/color/dash legends and failed-step gaps. Added multiple-file GUI import, CSV/JSON/SVG downloads, a full-size link and comparison pages in the existing MCP tool. Browser checks confirmed unchanged project/saved real-analysis case and matching artifact bytes. Automatic increment capture, displacement control and state-history materials remain.",
+      "proposedValue": "2026-10-22: Compare 2–4 validated curves in force/gauge-extension and engineering stress–strain panels with numbered/color/dash legends and failed-step gaps. Added multiple-file GUI import, CSV/JSON/SVG downloads, a full-size link and comparison pages in the existing MCP tool. Browser checks confirmed unchanged project/saved real-analysis case and matching artifact bytes. Automatic increment capture, displacement control and state-history materials remain. 2026-10-23: Unmerged candidates PR180–185 add re-input bundles from explicit loads, explicit displacement-controlled independent linear solves, support/actuator reaction and gauge curves, per-step independent replay, CLI/formal stdio MCP/type/capacity regressions. The synthetic bar verifies 0/25/100/50/0/-50 N and reaction balance. Independent linear steps are not a plastic load history. Actual Chrome complete download bytes,390px,expanded output,published HTTPS,automatic increment capture and state-history material integration remain. This is not published and parent acceptance remains incomplete. Earlier displacement-control-pending wording is historical and is superseded only for the explicit independent linear path."
+    }
+  ],
+  "evidence": [
+    "docs/evidence/2026-10-23-agent-chat-boundary.json",
+    "docs/evidence/2026-10-23-resultcurve-displacement-control.json",
+    "docs/evidence/2026-10-23-selection-browser.json",
+    "docs/evidence/2026-10-23-order71-candidate-9594884.json"
+  ],
+  "applyRule": "Shared owner must compare expected original field hashes against current progress, retain intervening legitimate edits, and apply only these bounded additions. Do not overwrite the whole file or imply merged/published status."
+}

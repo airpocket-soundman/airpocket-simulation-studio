@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "verification": "Independent Node script; no runtime/private/production helper imports and no browser/export/codec execution",
+  "artifact": {
+    "bytes": 1540510,
+    "sha256": "sha256:20fc86d0b17d1fa32f26f46575693b1a49a03ac350697f703a5fb0dea646d077",
+    "allPageBytesEqual": true
+  },
+  "archive": {
+    "bytes": 500449,
+    "sha256": "sha256:5c7ec975ac3ccec58de4f391c00b8522afc9a6598a2422322cef253593b8cf31",
+    "canonicalRevision": "sha256:fbeada2e331ef168fe31fbb57f0f919357f65a0889e6f3cd7220750e9e9689f3"
+  },
+  "identities": [
+    {
+      "caseId": "7ee8b5d6-4d9f-461b-a94d-56e6677a2d62",
+      "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0",
+      "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+      "sourceBasis": "independently hashed official normalized case archive"
+    },
+    {
+      "caseId": "790b3f76-d78d-43f4-9686-6df54c6db1d8",
+      "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55",
+      "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+      "sourceBasis": "independently hashed official normalized case archive"
+    }
+  ],
+  "presentationChecks": 48,
+  "panelChecks": 96,
+  "maxObservedAbsOffsetSeconds": 0.000025531914893617107,
+  "terminalPhysicalSeconds": 0.0012,
+  "terminalStoredFrameIndices": [
+    23,
+    23
+  ],
+  "terminalOffsets": [
+    0,
+    0
+  ],
+  "ffprobe": {
+    "all48PtsEqual": true,
+    "allKey": true,
+    "codec": "vp8",
+    "width": 1280,
+    "height": 640,
+    "durationSeconds": 2,
+    "terminalPtsMicroseconds": 1958333
+  },
+  "decodedHashLines": 48,
+  "distinctDecodedHashes": 48,
+  "physicalStateBaselines": 5,
+  "onlyStateDifference": "ownedExportJobs0to1 while retained",
+  "axesIdentical": true,
+  "limitations": [
+    "Same stored time axes in both panels; not heterogeneous-axis browser evidence.",
+    "48 distinct decoded image hashes do not imply48 independently solved/stored physical states; each source retains24 snapshots and captions may differ.",
+    "Identity rederived from official normalized archive, not original pre-import bytes or unspecified prepared snapshots.",
+    "Existing ffprobe/framehash raw read only; no additional codec run.",
+    "Cleanup beyond retained-job baseline is recorded separately."
+  ]
+}

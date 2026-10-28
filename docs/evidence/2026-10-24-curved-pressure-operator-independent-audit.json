@@ -1,0 +1,36 @@
+{
+  "reviewedCommit": "bc66399d377ed958d9d8d47f588fdbc320b96ce4",
+  "reviewedSourceSha256": "62bdb881190a534e64c430ee5b8f76f882807b58ed9f7c718a5c4e615446bd7b",
+  "draftRawSha256": "907c496a85314bda8944089aa2909ae14471c6ce48dc8a06b0edbe88c0c5fce5",
+  "finalSourceMatchesDraftAfterCrLfNormalization": true,
+  "numericalHelperReused": false,
+  "oracles": {
+    "singleTriangle": "(0,0,0),(2,0,0),(0,3,0)mm, area3mm2,n=+z,p=2+3iPa gives each Fz=-(2+3i)e-6N",
+    "conjugateWork": "u_z=(1,2,4)e-3+i(-1,3,2)e-3m, V=(7+4i)e-9m3, W=-(26+13i)e-9J",
+    "moment": "Mx=-(6+9i)e-9Nm, My=(4+6i)e-9Nm; translated geometry and90degree proper rotation independently verified",
+    "closedTet": "Uniform complex pressure has zero resultant/moment but nonzero nodal forces; dilation gives W=-40e-12+5e-12iJ"
+  },
+  "refusals": {
+    "selfRehashedTamperCases": 5,
+    "accessorCalls": 0,
+    "capacityPlusOne": true,
+    "customArrayPrototype": true,
+    "nonfiniteAndUnits": true,
+    "reversedGeometryIdentity": true,
+    "byteLimit": true,
+    "failedCallPreservesInput": true
+  },
+  "solverRuns": 0,
+  "sourceChanged": false,
+  "summaryJa": "最終sourceとdraft監査hash一致。独立数式と改ざん拒否oracleは成功、必須修正なし。",
+  "summaryEn": "Final source matches audited draft. Independent mathematical and tamper-refusal oracles pass; no mandatory fix found.",
+  "verification": {
+    "focusedTests": 15,
+    "pass": 15,
+    "fail": 0,
+    "skip": 0,
+    "contractDeclarations": 20,
+    "diffCheck": "pass",
+    "solverRuns": 0
+  }
+}

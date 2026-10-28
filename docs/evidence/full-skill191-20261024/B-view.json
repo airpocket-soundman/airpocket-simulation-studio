@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "resultRevision": "sha256:b919739cca1e631fc69d51c941ce760212b7dbde7fdfd2ad471e0244ba0e9902",
+  "physicalRevision": "sha256:1e39b8ae4d5efbd12c150ab1e4a77523509a3e0ae3821a2bab5cdc6f561b85be",
+  "kind": "elastic",
+  "fields": [
+    {
+      "id": "displacement",
+      "unit": "mm"
+    },
+    {
+      "id": "stress",
+      "unit": "MPa"
+    }
+  ],
+  "state": {
+    "field": "displacement",
+    "modeIndex": null,
+    "frameIndex": null,
+    "deformScale": 1,
+    "surface": true,
+    "surfaceWire": false,
+    "volumeWire": false,
+    "section": true,
+    "colorRange": null,
+    "camera": {
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "fov": 40
+    }
+  },
+  "modeCount": 0,
+  "frameCount": 0,
+  "analysisAssessment": {
+    "schemaVersion": 1,
+    "mode": "exploratory",
+    "provisional": true,
+    "completePreflight": false,
+    "remainingChecks": [
+      "Mesh quality and element validity after generation",
+      "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+      "Source applicability, convergence, mesh dependence and physical accuracy"
+    ]
+  },
+  "frames": [],
+  "modes": []
+}

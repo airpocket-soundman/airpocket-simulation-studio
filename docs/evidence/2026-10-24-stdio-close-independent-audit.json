@@ -1,0 +1,24 @@
+{
+  "reviewedCommit": "48584ba7179f9fc68a3816c1110515de21ac7f7f",
+  "finding": {
+    "priority": 2,
+    "before": "Owned Writable asynchronous _destroy callback(EPIPE) after EOF/exit made close return exited:true, then process crashed with unhandled error, exit1.",
+    "resolution": "Handle all owned stream/readline transport errors; retain stream error guards until actual close. For unconfirmed child exit, retain its error guard until later close."
+  },
+  "verification": {
+    "focusedTests": 35,
+    "pass": 35,
+    "fail": 0,
+    "skip": 0,
+    "isolatedSubprocesses": [
+      "stdin late destroy error",
+      "stdout late destroy error",
+      "stderr late destroy error",
+      "unconfirmed child late error"
+    ],
+    "realSolverRuns": 0
+  },
+  "compatibility": "Existing close result, stable failure, idempotence, RPC30s deadline and no-automatic-retry semantics unchanged. Confirmed closed streams remove guards; unconfirmed-child regression explicitly expects temporary guard instead of unsafe zero-listener cleanup.",
+  "summaryJa": "非同期pipe errorによる終了後crashを再現して修正。実exit未確認時の遅延child errorも保護し、成功判定は緩和しない。",
+  "summaryEn": "Reproduced and fixed late pipe-error crashes. Late child errors after unconfirmed exit are guarded without weakening success criteria."
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "archiveRevision": "sha256:f6e7f76cf9a63cc3e5ab895e718599ff692591099f99cab7ad4b58ef6880d05c",
+  "cases": [
+    {
+      "caseId": "0573361c-c567-4783-840c-8fa764aec47a",
+      "revision": "sha256:2867f4f17127d9f8bdd06883bebd95332723537f83e63e5f0b91a7a945565e19",
+      "name": "Synthetic thermal actual Worker solve",
+      "kind": "thermal",
+      "metrics": [
+        {
+          "key": "minTemperature",
+          "unit": "°C",
+          "value": 29.999999359447788
+        },
+        {
+          "key": "maxTemperature",
+          "unit": "°C",
+          "value": 30.00000100800228
+        }
+      ],
+      "runtimeIdentity": {
+        "assets": [
+          {
+            "bytes": 41430673,
+            "role": "gmsh",
+            "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+            "status": "observed"
+          }
+        ],
+        "build": {
+          "dirty": true,
+          "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+          "sourceFingerprint": "sha256:f3a65273a004bd12437f16d2ab7b0ead57d14874f8df73ff356e8adee22a3dad",
+          "status": "available",
+          "version": "0.44.0"
+        },
+        "engine": {
+          "actualEngine": "Airpocket Heat Tet4 / JavaScript CPU",
+          "requestedMethod": "pcg"
+        },
+        "isolation": "process",
+        "schemaVersion": 1,
+        "target": "node"
+      },
+      "analysisAssessment": {
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false
+      }
+    }
+  ],
+  "imported": true
+}

@@ -1,0 +1,532 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "previewEdit",
+      "scope": "inspect",
+      "description": "Inspect an atomic proposed input edit and compact preflight without changing input,including while a job runs.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "description": "Exact SHA-256 revision returned by the relevant inspection; never infer a revision."
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "enum": [
+                    "selectTriangles",
+                    "selectCadFace",
+                    "selectPlanarRegion",
+                    "selectCylindricalRegion",
+                    "selectSphericalRegion",
+                    "clearSelection",
+                    "addCondition",
+                    "removeCondition",
+                    "selectCondition",
+                    "replaceConditionRegion",
+                    "reapplyConditionRegion",
+                    "applyCatalogMaterial",
+                    "setMaterial",
+                    "setMaterialProperties",
+                    "setMaterialPreset",
+                    "setStudy",
+                    "setMeshSettings",
+                    "addSelectedMeshRefinements",
+                    "setInputProvenance",
+                    "setAnalysisIntent"
+                  ]
+                },
+                "args": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": true
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "null"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": true
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "description": "Any deeper finite JSON value; detailed nested validation is performed by the semantic method."
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "description": "Typed positional JSON arguments of the selected semantic method. Numbers, strings, booleans, null, records and nested arrays are represented explicitly; exact method arity and physical/nested data remain runtime-validated."
+                }
+              },
+              "required": [
+                "method",
+                "args"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "method": {
+                        "const": "setInputProvenance"
+                      }
+                    },
+                    "required": [
+                      "method"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "args": {
+                        "type": "array",
+                        "minItems": 1,
+                        "prefixItems": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "schemaVersion": {
+                                "const": 1
+                              },
+                              "entries": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "pointer": {
+                                      "type": "string",
+                                      "pattern": "^/(?:[^~]|~[01])*$",
+                                      "description": "Non-root JSON Pointer into the saved input, escaping ~ as ~0 and / as ~1. Duplicate pointers and missing/current-value mismatches are runtime checks."
+                                    },
+                                    "value": {
+                                      "description": "Exact JSON snapshot at pointer; do not supply confidence or a replacement physical input."
+                                    },
+                                    "source": {
+                                      "type": "object",
+                                      "properties": {
+                                        "kind": {
+                                          "enum": [
+                                            "user-input",
+                                            "measured-document",
+                                            "cad",
+                                            "agent-proposal"
+                                          ]
+                                        },
+                                        "reference": {
+                                          "description": "Source reference; nonblank string required for measured-document and cad."
+                                        },
+                                        "revision": {
+                                          "description": "Source document/CAD revision; nonblank string required for measured-document and cad."
+                                        }
+                                      },
+                                      "required": [
+                                        "kind"
+                                      ],
+                                      "allOf": [
+                                        {
+                                          "if": {
+                                            "properties": {
+                                              "kind": {
+                                                "enum": [
+                                                  "measured-document",
+                                                  "cad"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "kind"
+                                            ]
+                                          },
+                                          "then": {
+                                            "required": [
+                                              "reference",
+                                              "revision"
+                                            ],
+                                            "properties": {
+                                              "reference": {
+                                                "type": "string",
+                                                "pattern": "\\S"
+                                              },
+                                              "revision": {
+                                                "type": "string",
+                                                "pattern": "\\S"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "rationale": {
+                                      "type": "string",
+                                      "pattern": "\\S",
+                                      "description": "Why this declared value was selected."
+                                    },
+                                    "applicability": {
+                                      "type": "string",
+                                      "pattern": "\\S",
+                                      "description": "Conditions and limits under which the evidence applies."
+                                    },
+                                    "assumption": {
+                                      "anyOf": [
+                                        {
+                                          "type": "null"
+                                        },
+                                        {
+                                          "type": "string",
+                                          "pattern": "\\S"
+                                        }
+                                      ],
+                                      "description": "Null when no assumption is declared, otherwise a nonblank explicit assumption. Exploratory unconfirmed required inputs need an assumption."
+                                    },
+                                    "status": {
+                                      "enum": [
+                                        "confirmed",
+                                        "unconfirmed"
+                                      ]
+                                    },
+                                    "confirmation": {
+                                      "type": "object",
+                                      "properties": {
+                                        "by": {
+                                          "const": "user"
+                                        },
+                                        "note": {
+                                          "type": "string",
+                                          "pattern": "\\S"
+                                        }
+                                      },
+                                      "required": [
+                                        "by",
+                                        "note"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "pointer",
+                                    "value",
+                                    "source",
+                                    "rationale",
+                                    "applicability",
+                                    "assumption",
+                                    "status"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "schemaVersion",
+                              "entries"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "method": {
+                        "const": "setAnalysisIntent"
+                      }
+                    },
+                    "required": [
+                      "method"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "args": {
+                        "type": "array",
+                        "minItems": 1,
+                        "prefixItems": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "mode": {
+                                "enum": [
+                                  "quantitative",
+                                  "exploratory"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "mode"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "method": {
+                        "const": "addSelectedMeshRefinements"
+                      }
+                    },
+                    "required": [
+                      "method"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "args": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 1,
+                        "prefixItems": [
+                          {
+                            "description": "Append at most 80 selected-triangle centroid regions per call, retaining existing refinements and selection. Total stored refinements must not exceed 160. Empty selection is rejected. Same helper as GUI; no meshing or convergence proof.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "size",
+                              "radius",
+                              "baseSize"
+                            ],
+                            "properties": {
+                              "size": {
+                                "type": "number",
+                                "exclusiveMinimum": 0,
+                                "description": "Local target size in mm; 15–100% of baseSize (runtime cross-field check)."
+                              },
+                              "radius": {
+                                "type": "number",
+                                "exclusiveMinimum": 0,
+                                "description": "Influence radius in mm."
+                              },
+                              "baseSize": {
+                                "type": "number",
+                                "exclusiveMinimum": 0,
+                                "description": "Explicit global mesh target size in mm; does not change job options."
+                              }
+                            }
+                          }
+                        ],
+                        "items": false
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "method": {
+                        "const": "selectSphericalRegion"
+                      }
+                    },
+                    "required": [
+                      "method"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "args": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "prefixItems": [
+                          {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "exactCad",
+                              "center",
+                              "axis",
+                              "reference",
+                              "radius",
+                              "tolerance",
+                              "latitudeMin",
+                              "latitudeMax",
+                              "startDegrees",
+                              "sweepDegrees"
+                            ],
+                            "properties": {
+                              "exactCad": {
+                                "const": true
+                              },
+                              "center": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                },
+                                "minItems": 3,
+                                "maxItems": 3
+                              },
+                              "axis": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                },
+                                "minItems": 3,
+                                "maxItems": 3,
+                                "description": "Nonzero polar axis; normalized at runtime."
+                              },
+                              "reference": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                },
+                                "minItems": 3,
+                                "maxItems": 3,
+                                "description": "Zero-longitude direction; projected perpendicular to axis and normalized."
+                              },
+                              "radius": {
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                              },
+                              "tolerance": {
+                                "type": "number",
+                                "minimum": 0,
+                                "description": "Display vertex radius tolerance in mm; CAD patch validation remains exact."
+                              },
+                              "latitudeMin": {
+                                "type": "number",
+                                "minimum": -90,
+                                "maximum": 90
+                              },
+                              "latitudeMax": {
+                                "type": "number",
+                                "minimum": -90,
+                                "maximum": 90
+                              },
+                              "startDegrees": {
+                                "type": "number"
+                              },
+                              "sweepDegrees": {
+                                "type": "number",
+                                "exclusiveMinimum": 0,
+                                "maximum": 360
+                              }
+                            },
+                            "description": "Exact spherical latitude/longitude sector. latitudeMin < latitudeMax; STEP or built-in sphere, single solid, no thermal contact. Geometry in mm, angles in degrees. Finite frame, overflow and geometric applicability are runtime-validated."
+                          }
+                        ],
+                        "items": false
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "options": {
+            "type": "object",
+            "description": "Candidate preflight settings; this never starts a solver."
+          },
+          "operation": {
+            "enum": [
+              "solve",
+              "mesh"
+            ],
+            "default": "solve"
+          },
+          "mode": {
+            "enum": [
+              "legacy",
+              "quantitative",
+              "exploratory"
+            ]
+          }
+        },
+        "required": [
+          "expectedRevision",
+          "operations"
+        ]
+      },
+      "sideEffects": [],
+      "revisionFields": [
+        "expectedRevision"
+      ],
+      "units": {
+        "options.size": "mm"
+      },
+      "limitations": [
+        "Read-only and available during calculation; running snapshots are not changed.",
+        "Returns candidate revision,changed pointer summary and compact preflight,not full candidate arrays.",
+        "Use the candidate revision as edit.expectedResultingRevision with the same operations and original expectedRevision.",
+        "Browser serialization changes are listed under normalization; review requiresReview and use the normalized candidate revision. Saved Node edits have no GUI conversion.",
+        "Preflight approval is not convergence or physical accuracy."
+      ]
+    }
+  ]
+}

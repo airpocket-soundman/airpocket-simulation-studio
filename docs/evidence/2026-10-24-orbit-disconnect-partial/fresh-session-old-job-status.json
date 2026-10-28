@@ -1,0 +1,232 @@
+[
+  {
+    "receivedAt": 1792772391149,
+    "status": {
+      "schemaVersion": 1,
+      "jobId": "cf6d8e14-3e7d-4d5c-885a-52c8ad2e256b",
+      "requestId": "orbit-disconnect194-1792772224486",
+      "state": "completed",
+      "executionSettled": true,
+      "format": "webm",
+      "target": "comparison",
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "a67efd4e-c0d5-4788-8861-9c4176a6d53b",
+            "label": "Synthetic acoustic 1Pa",
+            "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+            "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+          },
+          {
+            "caseId": "e17f08ed-f076-437b-8615-0845e8fddfef",
+            "label": "Synthetic acoustic 2Pa",
+            "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+            "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+          }
+        ],
+        "colorRange": {
+          "field": "instantPressure",
+          "maximum": 1,
+          "minimum": -1
+        },
+        "field": "instantPressure",
+        "panels": [
+          {
+            "caseId": "a67efd4e-c0d5-4788-8861-9c4176a6d53b",
+            "field": "instantPressure",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 0,
+            "minimum": 0,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "Pa"
+          },
+          {
+            "caseId": "e17f08ed-f076-437b-8615-0845e8fddfef",
+            "field": "instantPressure",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 0,
+            "minimum": 0,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "Pa"
+          }
+        ],
+        "requestedTimeSeconds": 0,
+        "unit": "Pa"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "ja",
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        }
+      },
+      "progress": {
+        "fraction": 1
+      },
+      "artifact": {
+        "mimeType": "video/webm;codecs=vp9",
+        "name": "comparison-cf6d8e14-3e7d-4d5c-885a-52c8ad2e256b.webm",
+        "totalBytes": 358336,
+        "sha256": "sha256:b97c227fab169734654904cd2318f78f8f9965a0f0377b101514387ed447aa54",
+        "maxChunkBytes": 65536,
+        "manifest": {
+          "schemaVersion": 1,
+          "target": "comparison",
+          "format": "webm",
+          "container": "webm",
+          "mimeType": "video/webm;codecs=vp9",
+          "codec": "vp9",
+          "sha256": "sha256:b97c227fab169734654904cd2318f78f8f9965a0f0377b101514387ed447aa54",
+          "totalBytes": 358336,
+          "resolution": {
+            "width": 1280,
+            "height": 640
+          },
+          "comparison": {
+            "cases": [
+              {
+                "caseId": "a67efd4e-c0d5-4788-8861-9c4176a6d53b",
+                "label": "Synthetic acoustic 1Pa",
+                "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+                "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+              },
+              {
+                "caseId": "e17f08ed-f076-437b-8615-0845e8fddfef",
+                "label": "Synthetic acoustic 2Pa",
+                "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+                "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+              }
+            ],
+            "colorRange": {
+              "field": "instantPressure",
+              "maximum": 1,
+              "minimum": -1
+            },
+            "field": "instantPressure",
+            "panels": [
+              {
+                "caseId": "a67efd4e-c0d5-4788-8861-9c4176a6d53b",
+                "field": "instantPressure",
+                "finalOnly": false,
+                "frameIndex": 0,
+                "maximum": 0,
+                "minimum": 0,
+                "offsetSeconds": 0,
+                "timeApplies": true,
+                "timeSeconds": 0,
+                "unit": "Pa"
+              },
+              {
+                "caseId": "e17f08ed-f076-437b-8615-0845e8fddfef",
+                "field": "instantPressure",
+                "finalOnly": false,
+                "frameIndex": 0,
+                "maximum": 0,
+                "minimum": 0,
+                "offsetSeconds": 0,
+                "timeApplies": true,
+                "timeSeconds": 0,
+                "unit": "Pa"
+              }
+            ],
+            "requestedTimeSeconds": 0,
+            "unit": "Pa"
+          },
+          "view": {
+            "camera": {
+              "fov": 40,
+              "position": [
+                61,
+                41,
+                84
+              ],
+              "target": [
+                5,
+                5,
+                20
+              ],
+              "up": [
+                0,
+                1,
+                0
+              ]
+            },
+            "deformScale": 1,
+            "layers": {
+              "surface": true,
+              "surfaceWire": false,
+              "volumeWire": false,
+              "section": true
+            },
+            "setup": {
+              "clipEnabled": false,
+              "axis": 2,
+              "position": 0,
+              "flip": false,
+              "opacity": 1,
+              "meshCount": 1,
+              "hiddenParts": []
+            },
+            "language": "ja",
+            "resolution": {
+              "width": 1280,
+              "height": 640
+            }
+          },
+          "time": {
+            "animation": "orbit",
+            "durationSeconds": 15,
+            "timeBasis": "display time",
+            "physicalTime": "Each panel retains its selected saved result and physical time throughout the display orbit.",
+            "camera": "orbit",
+            "fps": {
+              "target": 24,
+              "recording": "realtime",
+              "frameCountGuaranteed": false
+            }
+          }
+        }
+      }
+    }
+  }
+]

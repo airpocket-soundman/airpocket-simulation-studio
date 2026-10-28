@@ -5,7 +5,10 @@ import {createHash} from 'node:crypto';
 
 const digest=b=>`sha256:${createHash('sha256').update(b).digest('hex')}`;
 const fail=(code,message)=>Object.assign(new Error(message),{code});
-export function su2Capabilities(){return {schemaVersion:1,solver:'SU2',version:'8.5.0',status:'experimental-native-adapter',browserWasm:false,studies:['steady-incompressible-laminar','steady-incompressible-rans-sa'],meshFormat:'SU2',meshUnits:'m',fieldUnits:{pressure:'Pa',velocity:'m/s'},intermediate:['residual-log10'],unsupported:['other-turbulence-models','transient','browser-wasm-execution','automatic-cow-meshing'],physicalValidationComplete:false};}
+/** MARKER_ANALYZE massflow is a nodal diagnostic, not the FDS numerical boundary flux. */
+export function su2DiscreteMassFluxCapability(){return {schemaVersion:1,supported:false,status:'unavailable',code:'SU2_DISCRETE_BOUNDARY_FLUX_UNAVAILABLE',quantity:'solver-numerical-boundary-mass-flux',solver:'SU2',version:'8.5.0',units:null,source:'numerical-boundary-residual-not-exported',nodalSurfaceMassflowIsDiscreteFlux:false,dimensionSpecificNormalizationVerified:false,physicalAcceptanceComplete:false};}
+export function requireSu2DiscreteMassFlux(){throw Object.assign(fail('SU2_DISCRETE_BOUNDARY_FLUX_UNAVAILABLE','SU2 numerical boundary mass flux is not exported; nodal SURFACE_MASSFLOW and VTU integration cannot establish discrete mass conservation'),{capability:su2DiscreteMassFluxCapability()});}
+export function su2Capabilities(){return {schemaVersion:1,solver:'SU2',version:'8.5.0',status:'experimental-native-adapter',browserWasm:false,studies:['steady-incompressible-laminar','steady-incompressible-rans-sa'],meshFormat:'SU2',meshUnits:'m',fieldUnits:{pressure:'Pa',velocity:'m/s'},intermediate:['residual-log10'],unsupported:['other-turbulence-models','transient','browser-wasm-execution','automatic-cow-meshing','solver-discrete-boundary-mass-flux'],discreteBoundaryMassFlux:su2DiscreteMassFluxCapability(),physicalValidationComplete:false};}
 export function buildSu2Config(input){
  if(input?.schemaVersion!==1||!['steady-incompressible-laminar','steady-incompressible-rans-sa'].includes(input.kind))throw fail('SU2_UNSUPPORTED_STUDY','Explicit steady incompressible laminar schemaVersion 1 input required');
  if(input.meshUnits!=='m')throw fail('SU2_MESH_UNITS','SU2 mesh coordinates must explicitly be metres');
@@ -66,6 +69,6 @@ export async function runSu2Native({executable,meshPath,outputDirectory,input,ti
  const dimension=Number(mesh.toString('utf8').match(/^\s*NDIME\s*=\s*([23])\s*$/m)?.[1]??0);
  const assessment=assessSu2Run(history,input.residualLog10Target,Buffer.concat(chunks).toString(),{dimension,kind:input.kind});
  const artifacts=[];for(const name of ['flow.vtu','surface_flow.vtu','history.csv']){const bytes=await readFile(resolve(outputDirectory,name));artifacts.push({name,bytes:bytes.length,sha256:digest(bytes)});}
- const result={schemaVersion:1,solver:'SU2',expectedVersion:'8.5.0',inputRevision,executionSettled:true,...assessment,convergenceCriterion:'SU2 stopping criterion: pressure residual only; adapter additionally checks all reported residuals and wall warnings',provisional:true,physicalValidationComplete:false,history,artifacts};
+ const result={schemaVersion:1,solver:'SU2',expectedVersion:'8.5.0',inputRevision,executionSettled:true,...assessment,convergenceCriterion:'SU2 stopping criterion: pressure residual only; adapter additionally checks all reported residuals and wall warnings',provisional:true,physicalValidationComplete:false,discreteBoundaryMassFlux:su2DiscreteMassFluxCapability(),history,artifacts};
  await writeFile(resolve(outputDirectory,'result.json'),JSON.stringify(result,null,2));return result;
 }

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "kind": "synthetic-independent-prescribed-displacement-verification",
+  "baseCommit": "8c902f3b769609ae2e8d3a09b600184585bd593f",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "source": {
+    "path": "public/examples/increment-displacement-request.json",
+    "bytes": 675,
+    "sha256": "da9d2164362e530eea33f12284475ae7269d25357f89958762e3d0797ff4498a"
+  },
+  "independentSolveCount": 6,
+  "independentReplayCount": 6,
+  "replay": "Deep equality of kind, all displacement components, all constraint reactions, applied forces and residual against a fresh solve of every recorded boundary.",
+  "nodeCount": 60,
+  "rows": [
+    {
+      "controlledValueMm": 0,
+      "extensionMm": 0,
+      "expectedForceN": 0,
+      "tensileForceN": 0,
+      "supportReactionAxisN": 0,
+      "actuatorReactionAxisN": 0,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": 0,
+      "engineeringStressPa": 0,
+      "engineeringStrain": 0,
+      "residual": 0
+    },
+    {
+      "controlledValueMm": 0.01,
+      "extensionMm": 0.01,
+      "expectedForceN": 25,
+      "tensileForceN": 25.000000012717585,
+      "supportReactionAxisN": -25.000000012717585,
+      "actuatorReactionAxisN": 25.000000002462826,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": -1.0254758819883136e-8,
+      "engineeringStressPa": 250000.00012717588,
+      "engineeringStrain": 0.00025,
+      "residual": 6.7397978265905525e-9
+    },
+    {
+      "controlledValueMm": 0.04,
+      "extensionMm": 0.04,
+      "expectedForceN": 100,
+      "tensileForceN": 100.00000005087034,
+      "supportReactionAxisN": -100.00000005087034,
+      "actuatorReactionAxisN": 100.0000000098513,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": -4.1019035279532545e-8,
+      "engineeringStressPa": 1000000.0005087035,
+      "engineeringStrain": 0.001,
+      "residual": 6.7397978265905525e-9
+    },
+    {
+      "controlledValueMm": 0.02,
+      "extensionMm": 0.02,
+      "expectedForceN": 50,
+      "tensileForceN": 50.00000002543517,
+      "supportReactionAxisN": -50.00000002543517,
+      "actuatorReactionAxisN": 50.00000000492565,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": -2.0509517639766273e-8,
+      "engineeringStressPa": 500000.00025435176,
+      "engineeringStrain": 0.0005,
+      "residual": 6.7397978265905525e-9
+    },
+    {
+      "controlledValueMm": 0,
+      "extensionMm": 0,
+      "expectedForceN": 0,
+      "tensileForceN": 0,
+      "supportReactionAxisN": 0,
+      "actuatorReactionAxisN": 0,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": 0,
+      "engineeringStressPa": 0,
+      "engineeringStrain": 0,
+      "residual": 0
+    },
+    {
+      "controlledValueMm": -0.02,
+      "extensionMm": -0.02,
+      "expectedForceN": -50,
+      "tensileForceN": -50.00000002543517,
+      "supportReactionAxisN": 50.00000002543517,
+      "actuatorReactionAxisN": -50.00000000492565,
+      "externalAppliedAxisN": 0,
+      "forceBalanceErrorNAxialN": 2.0509517639766273e-8,
+      "engineeringStressPa": -500000.00025435176,
+      "engineeringStrain": -0.0005,
+      "residual": 6.7397978265905525e-9
+    }
+  ],
+  "artifacts": {
+    "csv": {
+      "bytes": 3552,
+      "sha256": "f7aee5e7d309c50975b3808c8200ddcfa378615b82df66e21eaa8793cd09c521"
+    },
+    "json": {
+      "bytes": 8664,
+      "sha256": "e7a88f70b3e0af53d7edabafe1f82c9474573db08e9710b3b8db34823922ab78"
+    },
+    "svg": {
+      "bytes": 4035,
+      "sha256": "d94911bed23d6ed1b82a8992f7b2c7409c06515b25105fe0fa61f259611d455c"
+    }
+  },
+  "rawBundle": {
+    "bytes": 91519,
+    "sha256": "49ed911873fcb9571495a2a0a26f1afaab08bd3f907d41d602e70ec2ab3a2bc6"
+  },
+  "validation": {
+    "relatedSuite": {
+      "tests": 101,
+      "pass": 101,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 32598.1333
+    },
+    "contractDeclarations": 13,
+    "coverage": [
+      "Real independent solve and per-step replay",
+      "Translated X/Y/Z EA u/L oracle",
+      "Tension/compression and unload to zero",
+      "Invalid/mixed requests and forged saved evidence",
+      "Failed-step preservation without fabricated measurement",
+      "Real CLI and formal stdio MCP artifact hashes",
+      "Force-first mixed comparison and empty pages",
+      "128-step byte-budget early stop without publication",
+      "Strict TypeScript request and correlated row units",
+      "1 MiB publication newline boundary",
+      "Published JSON schema structure and complete example runtime acceptance"
+    ],
+    "command": "node --test --test-concurrency=4 tests/increment-displacement-control.test.mjs tests/increment-curve-bundle.test.mjs tests/increment-curve-data.test.mjs tests/increment-curve-export.test.mjs tests/increment-curve-comparison.test.mjs tests/increment-curve-mcp.test.mjs tests/increment-curve-comparison-mcp.test.mjs tests/ui-increment-curve.test.mjs tests/ui-increment-curve-comparison.test.mjs tests/contracts.test.mjs tests/contracts-types.test.mjs tests/docs.test.mjs tests/module-boundaries.test.mjs"
+  },
+  "limitations": [
+    "Synthetic small linear elastic bar only; no physical experiment validation.",
+    "Every step is independent; no plasticity, nonlinear material or path history.",
+    "No real Chrome or native SDK validation in this task.",
+    "RESULTCURVE1 remains building; this evidence completes only its explicit prescribed-displacement path.",
+    "No main, progress, shared module-layer table or root UI edits."
+  ]
+}

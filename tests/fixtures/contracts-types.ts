@@ -114,8 +114,8 @@ import type {IncrementCurveMcpRequest, IncrementCurveMcpRow} from '../../src/con
 const curveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', offset: 0, limit: 20};
 // @ts-expect-error pagination limit must be numeric
 const badCurveRequest: IncrementCurveMcpRequest = {path: '/absolute/bundle.json', limit: '50'};
-// @ts-expect-error the bounded curve tool does not expose displacement control
-const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'displacement';
+// @ts-expect-error the bounded curve tool does not expose temperature control
+const badCurveControl: IncrementCurveMcpRow['controlledQuantity'] = 'temperature';
 void [curveRequest, badCurveRequest, badCurveControl];
 
 import type {IncrementCurveMcpResult} from '../../src/contracts/increment-curve-mcp';
@@ -133,3 +133,48 @@ function curveResponseKind(value: IncrementCurveMcpResult) {
  return total;
 }
 void curveResponseKind;
+
+// Exercise the Node-only ACP session API declaration through the normal contract gate.
+import './acp-session-types';
+import './agent-chat-types';
+import './retained-opening-surface-types';
+import './finite-visco-observation-comparison-types';
+
+import type {FixedWebmContainer,FixedWebmVerification,ComparisonFixedWebmCapability} from '../../src/contracts/fixed-webm';
+const fixedWebmContainer:FixedWebmContainer={width:1280,height:640,seconds:2,packets:[{timestamp:0,duration:41667,type:'key',data:new Uint8Array(1)}]};
+const fixedWebmProof:FixedWebmVerification={schemaVersion:1,codec:'vp8',frameCount:48,encodedFrameCount:48,decodedFrameCount:48,terminalTimestamp:1958333,totalDurationMicroseconds:2000000,verification:'strict-webm-demux+video-decoder'};
+const fixedWebmCapability:ComparisonFixedWebmCapability={supported:true,recording:'fixed-frame',codec:'vp8',codecSupport:'checked-at-export',maxFrames:120,maxArtifactBytes:33554432};
+// @ts-expect-error Delta frames are outside the constrained all-keyframe profile.
+const invalidFixedPacket:FixedWebmContainer={width:16,height:16,seconds:1,packets:[{timestamp:0,duration:1,type:'delta',data:new Uint8Array(1)}]};
+// @ts-expect-error MediaRecorder realtime must not masquerade as fixed-frame verification.
+const invalidFixedProof:FixedWebmVerification={...fixedWebmProof,verification:'realtime'};
+void [fixedWebmContainer,fixedWebmProof,fixedWebmCapability,invalidFixedPacket,invalidFixedProof];
+// Resolve declarations from the public runtime .js import, not only the type directory.
+import {fixedWebmSchedule,muxFixedWebm,demuxFixedWebm,FIXED_WEBM_LIMITS,fixedWebmError} from '../../src/fixed-webm.js';
+const fixedRuntimeSchedule:number=fixedWebmSchedule(2)[0].timestamp;
+const fixedRuntimeBytes:Uint8Array=muxFixedWebm(fixedWebmContainer);
+const fixedRuntimeReload:FixedWebmContainer=demuxFixedWebm(fixedRuntimeBytes);
+const fixedRuntimeLimit:120=FIXED_WEBM_LIMITS.frames;
+const fixedRuntimeError:string=fixedWebmError('WEBM_FIXED_INVALID','invalid').code;
+// @ts-expect-error Runtime imports must reject a string presentation duration.
+fixedWebmSchedule('2');
+void [fixedRuntimeSchedule,fixedRuntimeReload,fixedRuntimeLimit,fixedRuntimeError];
+export {temperatureFixture} from './planar-temperature-operator-types';
+export {groupedTemperatureFixture} from './grouped-temperature-operator-types';
+import './single-orbit-gif-types';
+
+import {createFiniteHistoryInspector as inspector203,FINITE_HISTORY_INSPECTOR_LIMITS as limits203} from '../../src/ui/finite-history-inspector.js';
+import {inspectFiniteHistory as replay203} from '../../src/finite-visco-inspector.worker.js';
+const ui203=inspector203({host:document.createElement('div')});const done203:Promise<boolean>=ui203.inspect();const cap203:4096=limits203.steps;
+replay203('{}').then(report=>{if(report.completed){const stress203:number=report.summary.finalObservation.S[0][0];void stress203;/* @ts-expect-error issued state never crosses worker report */
+report.finalState;} });void done203;void cap203;
+
+import {syntheticFiniteObservationPair as pair204} from '../../src/ui/finite-history-inspector.js';
+import {compareFiniteHistoryObservation as compare204} from '../../src/finite-visco-inspector.worker.js';
+const p204=pair204();const uiCompare204:Promise<boolean>=ui203.compareObservation();const input204:HTMLTextAreaElement=ui203.observation;
+compare204(p204.historyRaw,p204.observationRaw).then(r=>{if(r.completed){const s204:number=r.stress.signedDifference[0][0];void s204;/* @ts-expect-error comparisons never issue state */
+r.finalState;}});void uiCompare204;void input204;
+export {groupedP1HeatFixture} from './grouped-p1-heat-operator-types';
+import './single-stored-time-gif-types';
+import './single-deformation-gif-types';
+import './single-slice-gif-types';

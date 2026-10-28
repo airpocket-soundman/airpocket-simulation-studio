@@ -1,0 +1,18 @@
+{
+  "base": "ca94bee",
+  "finding": "Transfer faces array with custom inherited map can hide nodeId=999 from canonical regeneration equality.",
+  "before": {
+    "accepted": true,
+    "returnedExpected": true
+  },
+  "fix": "Local ordinary array/object prototype gate before manifest canonicalization; ordinary input mesh node/tetrahedron and inlet arrays required before inherited methods or serialization.",
+  "verification": {
+    "focused": 15,
+    "pass": 15,
+    "fail": 0,
+    "contracts": 17,
+    "diffCheck": "pass"
+  },
+  "summaryJa": "転送面の改ざん受理を再現し、局所prototype検査と入力配列境界を厳密化した。",
+  "summaryEn": "Reproduced tampered face admission and tightened local prototype/input-array boundaries."
+}

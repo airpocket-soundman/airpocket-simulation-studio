@@ -1,0 +1,24 @@
+# Finite material-point input-history serialization and replay
+
+[日本語](../finite-visco-input-history.md) / [Underlying reference](finite-visco-reference.md)
+
+2026-10-27 follow-up: product-disconnected describes the initial implementation boundary. The new [saved-history inspector](finite-history-inspector.md) uses the unchanged pure API/input contract in an owned worker to display only final observations. It adds no structural-solver, project/case or MCP integration and no calibration guarantee.
+
+`src/finite-visco-history.js` is a pure, product-disconnected input boundary. It stores explicit F/dt steps, **not internal state**, and replays every step from the existing reference's I/Z0. It does not restore JSON state or resume from a saved last state. The reference API is unchanged. Synthetic/provisional/uncalibrated flags are mandatory; this does not complete FINITEVISCO1, calibration, plasticity or structural analysis.
+
+`encodeFiniteViscoInputHistory(history)` snapshots an exact data schema and returns canonical JSON with a trailing newline. It always reports `constitutiveVerified:false`: serialization checks structure, not constitutive admission. `replayFiniteViscoInputHistory(raw)` accepts a primitive string or ordinary Uint8Array. Convert a Node Buffer with `new Uint8Array(buffer)`. Array/Uint8Array subclasses, shared buffers, proxy views and malformed UTF8 are refused. Bytes are copied using intrinsic access before the first hash await, so later caller mutation cannot split identity from the evaluated input.
+
+The exact v1 object has schemaVersion1; model `synthetic-green-lagrange-maxwell-reference-v1`; kind `finite-visco-input-history`; synthetic/provisional true; calibrated false; units `{time:"s",deformationGradient:"dimensionless"}`; the reference's four named parameters; and steps `{F:<dense3×3>,dtSeconds:<number>}`. [A synthetic example](../../public/examples/finite-visco-input-history.json) is supplied. Time is derived from dt; external time/state/Z/stress/cumulative outputs are unknown fields and are never trusted.
+
+Unknown fields, wrong versions/models/units/flags,1e999, magnitudes beyond MAX_SAFE_INTEGER, duplicate decoded keys, BOM and trailing data are refused. No last-key-wins or JSON Infinity conversion is admitted. Limits:1MiB raw/canonical output,1–4096 steps,depth16,100000 values,1024 characters per string. Exactly1MiB whitespace-padded input succeeds and one additional byte fails. Encoding snapshots refuse accessors, sparse/decorated/subclass arrays, nonfinite data and cycles/depth limits. Schema errors throw stable coded errors; nonpositive dt or reference parameter/F/x/time admission failures return explicit failed replays.
+
+Success has `completed:true,status:"completed"`, step count, summary and finalState only. There is no retained full observation array or raw input. Summary carries final observation/time and cumulative work/dissipation densities with Pa/s/J/m³-reference units. The returned state is newly computed and issued in-process, not trusted serialized memory.
+
+A parameter failure has `completed:false,status:"failed"`, code `FINITE_VISCO_HISTORY_PARAMETERS_REJECTED`, stepIndex null and completedSteps0. A rejected step uses `FINITE_VISCO_HISTORY_STEP_REJECTED` with its zero-based index and preceding completed-step count. No finalState,summary or partial observation array is returned on failure; later steps are neither run nor interpolated. Caller data remains unchanged on both paths.
+
+rawIdentity hashes source UTF8 bytes; canonicalIdentity hashes sorted-key canonical JSON without its publication newline. Equivalent formatting/property order changes only raw identity; changed F/dt/step order changes semantic identity. **These are input identity hashes, not signatures, provenance authentication, calibration or accuracy guarantees.** No filesystem publication, product solver/UI/MCP/progress/project integration is added.
+
+[Evidence](../evidence/2026-10-23-finite-visco-input-history.json) covers exact final-state equality against direct reference calls, identities, mutation across awaits, failed-step reporting, strict parsing, capacities/time and runtime type fixtures. Underlying independent Gauss/energy/rotation tests remain distinct from experimental validation, serialized state restore, structural analysis and publication.
+
+
+2026-10-27 GUI follow-up: [bounded actual evidence](../evidence/2026-10-27-finite-history-inspector-gui/README.md) checks the public synthetic example at4steps/4.7s, Japanese/English, all45cells, edit/invalidJSON/Clear. Protected272-control DOM equality does not establish formal API state equality, actual cancellation or structural calibration.

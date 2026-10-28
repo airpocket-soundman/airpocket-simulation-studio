@@ -1,0 +1,10 @@
+import {EventEmitter} from 'node:events';
+import {PassThrough,Writable} from 'node:stream';
+import {createStdioClient} from '../../scripts/perf-browser.mjs';
+const origin='http://127.0.0.1:5174',target=process.argv[2];
+const lateDestroy=function(error,callback){setImmediate(()=>callback(Object.assign(Error('synthetic late pipe error'),{code:'EPIPE'})));};
+const child=Object.assign(new EventEmitter(),{exitCode:null,signalCode:null,stdout:new PassThrough(target==='stdout'?{destroy:lateDestroy}:{}),stderr:new PassThrough(target==='stderr'?{destroy:lateDestroy}:{})});
+child.stdin=new Writable({write(chunk,encoding,callback){const m=JSON.parse(String(chunk));if(m.method==='initialize')queueMicrotask(()=>child.stdout.write(JSON.stringify({id:m.id,result:{}})+'\n'));callback();},final(callback){callback();if(target!=='unconfirmed-child')queueMicrotask(()=>{child.exitCode=0;child.emit('exit',0,null);});},...(target==='stdin'?{destroy:lateDestroy}:{})});child.kill=()=>true;
+const client=await createStdioClient({origin,closeGraceMs:3,terminateGraceMs:3,killGraceMs:3,spawnImpl:()=>{queueMicrotask(()=>child.stderr.write('Browser connector: '+JSON.stringify({endpoint:origin,pairingToken:'synthetic-noncredential',origin})+'\n'));return child;}});
+if(target==='unconfirmed-child'){let refused=false;try{await client.close();}catch(error){refused=error.code==='STDIO_CHILD_EXIT_UNCONFIRMED';}if(!refused)throw Error('Expected unconfirmed close refusal');child.emit('error',Error('synthetic late child error'));child.emit('close',null,null);if(child.listenerCount('error')!==0)throw Error('child guard retained after close');console.log(JSON.stringify({unconfirmedCloseRefused:true}));}else console.log(JSON.stringify(await client.close()));await new Promise(r=>setImmediate(r));await new Promise(r=>setImmediate(r));
+for(const stream of [child.stdin,child.stdout,child.stderr])if(stream.listenerCount('error')!==0)throw Error('stream error guard retained after close');

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-24",
+  "runtimeCandidate": "c26010082fa5d23ab3b910116ac0e60227041748",
+  "integratedHead": "e376b6f4a2d1b0a9e9627e5e38d699670b0e5c07",
+  "rawEvidence": [
+    {
+      "folder": "docs/evidence/2026-10-24-orbit-disconnect-partial",
+      "gitBlobBytesAndSha256Verified": 34
+    },
+    {
+      "folder": "docs/evidence/2026-10-24-orbit-disconnect-synchronized-partial",
+      "gitBlobBytesAndSha256Verified": 32
+    }
+  ],
+  "focusedTests": {
+    "pass": 41,
+    "fail": 0,
+    "scope": "Root execution settlement, export jobs, expiry integration, documentation and contracts at c260100"
+  },
+  "independentTests": {
+    "pass": 40,
+    "fail": 0,
+    "record": "2026-10-24-export-settled-independent-review.json"
+  },
+  "contracts": 21,
+  "build": "passed at c260100",
+  "localPublished": {
+    "passed": true,
+    "reportEntries": 28,
+    "elapsedMs": 41228.0435,
+    "publicDeployment": false
+  },
+  "actualDisconnect": {
+    "attempts": 2,
+    "eachSeparateBudgetOne": true,
+    "successfulActiveCancellation": false,
+    "first": "Completed before GUI disconnect",
+    "second": "Fresh running marker and active visible JA DOM; click requested but CUA focus command timed out; completed before disconnect",
+    "cleanup": "Both jobs released, old IDs unknown, sessions empty, owned children exited and pairing files removed"
+  },
+  "progress": {
+    "byteIdenticalTo": "2041bea",
+    "total": 171,
+    "unfinished": 37,
+    "statusPromotion": false
+  },
+  "installedSkill": {
+    "reference": "references/browser-session.md",
+    "otherFilesUnchanged": true,
+    "quickValidate": "passed"
+  },
+  "limits": [
+    "Settlement describes the renderer/finish/catch Promise chain and queue exclusion, not OS/codec/GPU teardown.",
+    "No extra SU2, solver or video launches.",
+    "No merge to main or publication."
+  ]
+}

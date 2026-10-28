@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-27",
+  "pr": 205,
+  "head": "23bbb2800ce3be55248e779398a55b224d508a7a",
+  "run": 40403894730,
+  "job": 121856562973,
+  "conclusion": "success",
+  "mergeCandidate": {
+    "sha": "506891540cd108ac30f491acfc639b80092ecfc3",
+    "message": "Merge 23bbb2800ce3be55248e779398a55b224d508a7a into 2832faaaede7c2bc6e540d2e35564a27bc16fea7",
+    "parents": [
+      "2832faaaede7c2bc6e540d2e35564a27bc16fea7",
+      "23bbb2800ce3be55248e779398a55b224d508a7a"
+    ]
+  },
+  "tests": {
+    "total": 2297,
+    "passed": 2289,
+    "failed": 0,
+    "skipped": 8,
+    "durationMs": 229103.025316
+  },
+  "build": {
+    "conclusion": "success",
+    "stepSeconds": 6
+  },
+  "localPublished": {
+    "checks": 28,
+    "allPassed": true,
+    "elapsedMs": 30253.257289,
+    "revision": "506891540cd108ac30f491acfc639b80092ecfc3",
+    "local": true
+  },
+  "artifact": {
+    "id": 12690122036,
+    "name": "verification-40403894730-1",
+    "digest": "sha256:26a491dadee031819c1574940e8da3a509551ae12d1b861cb7f8ce3235f3c9c3",
+    "downloadCount": 1
+  },
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "verify-published",
+      "conclusion": "skipped"
+    }
+  ],
+  "publicDeploymentProven": false,
+  "newRuns": 0,
+  "retries": 0,
+  "localSolverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "rawFiles": [
+    {
+      "file": "artifacts.json",
+      "bytes": 819,
+      "sha256": "8da6da2cf9944f3f5718b7bcf2ec45f25f570792aa8f9813227291a82c5fd96a",
+      "gitBlobSha1": "6c803f9388c6b6bcc39b68004c9d5cfbdb223a01"
+    },
+    {
+      "file": "ci-build.log",
+      "bytes": 3910,
+      "sha256": "52d57e96a0d2fadcaabb20c5afdd6b37eeb8d08590cbae33a5fd9605e3aac22c",
+      "gitBlobSha1": "78e638397353fb782a83b62aa78031517f7b5a44"
+    },
+    {
+      "file": "ci-install.log",
+      "bytes": 440,
+      "sha256": "64276d73acbcd7a8bbad3d39df2d23d08bd7e7da2890b8ba695f1d7dd5cce681",
+      "gitBlobSha1": "bd9744edbce99e553e8512067b871f8711fdb540"
+    },
+    {
+      "file": "ci-local-published.log",
+      "bytes": 1569,
+      "sha256": "4e6750a40ab312ffd589907d575cabb012c27fd78e0dd8f7c7642a08a1f2b135",
+      "gitBlobSha1": "f4fda07a5727d06a049ee1e932db28c6b20f58a1"
+    },
+    {
+      "file": "ci-tests.log",
+      "bytes": 248712,
+      "sha256": "59db80393a5da9bd063dc4471acda9eb3b9a2e3f9829b1662b79ee2286f57e8b",
+      "gitBlobSha1": "debda320072a32d07dc0c9e3f85159348e2d08c6"
+    },
+    {
+      "file": "job.log",
+      "bytes": 470272,
+      "sha256": "f4791f39836120b621d4383c0e97dc80f05705fba3a77b554e0697eb2b9d8a36",
+      "gitBlobSha1": "1ffe88ec4d6ec1c8642e523b8dc90fd0fcc229fd"
+    },
+    {
+      "file": "merge.json",
+      "bytes": 280,
+      "sha256": "7d3a711dc0eaa47cd812171939832742afd2c6d63089da6143a308730dcf61db",
+      "gitBlobSha1": "f18872357daa1025bad651fd72dbc942030c9b42"
+    },
+    {
+      "file": "published-checkpoints-1793050078195-12673.jsonl",
+      "bytes": 86529,
+      "sha256": "83645311cfeb2dc2f9feb0a129662fb9f7b0734e0fd90eedf74e22fc0b85ae72",
+      "gitBlobSha1": "f047236695d3ecea6b40b40a57e9347c1ccbbef2"
+    },
+    {
+      "file": "published-report.json",
+      "bytes": 4384,
+      "sha256": "7588ccb16d9ac47f1cba5eaf2ea15ff44a50ad457e208eb7e3ecc6eab64567af",
+      "gitBlobSha1": "bebe5ec459774871d97abb911f59533faaa10508"
+    },
+    {
+      "file": "run.json",
+      "bytes": 3781,
+      "sha256": "d20f781bac523916776ada9ffa6c029e132ec700857ed6c06636042790c87af5",
+      "gitBlobSha1": "c14e5a42a1f5080ee5b5b22da15335aaf6850e76"
+    }
+  ]
+}

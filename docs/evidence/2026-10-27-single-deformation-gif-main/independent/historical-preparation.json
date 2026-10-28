@@ -1,0 +1,41 @@
+{
+  "preparedOnly": true,
+  "awaitingRootArtifactReady": true,
+  "pin": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+  "driverSHA256": "6414bd84b38e91ea9fca34676f98bb1bde6abf155bd438a2564126de2dbb1f5e",
+  "verifierSHA256": "66cb665ce02c24228e09585524f847dc470670b59cfa289ddcf0cce68bb8720d",
+  "genericReaderSHA256": "4892ca64651942e023303d22932c7379742f30b3645f47af261eba8b492ad25f",
+  "artifact": "deformation.gif",
+  "expected": {
+    "resultKind": "elastic",
+    "nodes": 171,
+    "field": "displacement",
+    "unit": "mm",
+    "frames": 24,
+    "width": 640,
+    "height": 320,
+    "totalDelayCs": 200,
+    "loop": 0,
+    "phase": "i/24",
+    "peakScale": 100,
+    "modeIndex": null,
+    "sourceMaxDisplacementMm": 0.040000000011082545,
+    "visualMaxDisplacementMm": 4.000000001108255,
+    "cameraFixed": true,
+    "sceneNonBackgroundEveryFrame": true,
+    "minDistinctPoseHashes": 2,
+    "symmetryDuplicatesAllowed": true
+  },
+  "sourceNormError": 0,
+  "actualModalExportVerified": false,
+  "decoderInvocationsBeforeReady": 0,
+  "productExports": 0,
+  "animationEncodes": 0,
+  "solverRuns": 0,
+  "notes": [
+    "Only syntax check performed on verifier; no208artifact decoded",
+    "207script,reader and results left immutable",
+    "Manual first/peak(index12)/last model/cycle/visualization-only caption review required",
+    "No physical amplitude/period/load-history or modal actual acceptance claim"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "f8b2a084f942f320a72c907926b9c2602863c122",
+  "guiBundle": "85715642d1948331b4438a64ddcf7384b736e83a",
+  "guiEvidence": "docs/evidence/2026-10-27-finite-observation-inspector-gui/README.md",
+  "actualGuiSmoke": {
+    "ownedPureWorkerRuns": 3,
+    "workflow": [
+      "Public pair Compare in Japanese",
+      "Switch English preserving both raw inputs and9cells",
+      "Append whitespace to history: immediate result clear; Compare refuses HISTORY_MISMATCH",
+      "Existing Inspect replays whitespace history independent of observation",
+      "Clear both inputs/results; restore Japanese"
+    ],
+    "crosscheck": {
+      "publicRawAndCanonicalHashes": true,
+      "comparisonSignedStress9CellsAtNineSignificantDigits": true,
+      "maxStressDifferencePa": 25,
+      "energySignedAndAbsoluteDifferenceJm3": 2,
+      "dissipationSignedAndAbsoluteDifferenceJm3": 1,
+      "timeSeconds": 3,
+      "independentReplayFiveTables45Cells": true,
+      "jaEnInputsAndCellsPreserved": true,
+      "baselineFinalJaAll272DomControlsConditionsCasesEqual": true,
+      "rootScreenshotReviewed": true
+    },
+    "structuralSolverRuns": 0,
+    "productExports": 0,
+    "nativeCodecRuns": 0
+  },
+  "sourceValidation": {
+    "focusedPassed": 66,
+    "focusedElapsedMs": 4367.6697,
+    "typeDeclarationsPassed": 28,
+    "buildPassed": true,
+    "buildSeconds": 9.17,
+    "localChecks": 28,
+    "localElapsedMs": 61335.5468,
+    "source": "f8b2a084f942f320a72c907926b9c2602863c122",
+    "earlierPrematureLocalFailure": "ENOENT dist/runtime-manifest.json before build; pre-physics; retained raw then correct-order success"
+  },
+  "identities": {
+    "history": {
+      "rawIdentity": "sha256:e32a3ee8648ca26f7ce119ce35194018d4e4abc533ab3fd5013cee7bf22c5dac",
+      "canonicalIdentity": "sha256:bfa59dfead612860c00a502e186a53f8d2c35a1c1e76e74ba593b8f2ecbfb395"
+    },
+    "parameterRevision": "sha256:48340232adc9b553cb055a6bd5022c8fc44f6307894d46552a264b94c96bcd3b",
+    "observationRawIdentity": "sha256:b46e565ab6383a409e8bda546dfdd25731303455c8f933a7372e2677a43909a5"
+  },
+  "independentAuditReported": {
+    "commit": "c2eaa945435029720539e03c2dd6eb53fa86aad3",
+    "sourceChanges": 0,
+    "newTests": 4,
+    "relatedPass": 35,
+    "docsPass": 2,
+    "provenance": "Independent63 report; no additional execution by this recorder"
+  },
+  "protectedProgress": {
+    "id": "FINITEVISCO1",
+    "onlyFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsDeepEqual": true,
+    "all171StatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "statusPromoted": false
+  },
+  "limitations": [
+    "Synthetic/provisional/calibrated:false; no measurements/calibration/fit/tolerance acceptance",
+    "DOM equality is not formal in-memory project/case/analysis-input equality API evidence",
+    "Actual cancellation not captured",
+    "Publication and full language/hidden matrix unproven"
+  ],
+  "newExecutionByRecorder": {
+    "gui": 0,
+    "solver": 0,
+    "export": 0,
+    "codec": 0
+  },
+  "progressWorkingByteSHA256": "755c5feec672bbd71223e7e006aacad024d86550d4d9ba783ac59469a007de19"
+}

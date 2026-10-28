@@ -1,0 +1,78 @@
+{
+  "reviewedAt": "2026-10-26T22:27:06.301Z",
+  "overallVisualAcceptance": true,
+  "originalMachineResultPreserved": true,
+  "technicalSuccess": true,
+  "all24RgbPixelsMatch": true,
+  "frames": 24,
+  "width": 640,
+  "height": 320,
+  "totalDelayCentiseconds": 200,
+  "loop": 0,
+  "sceneRoi": [
+    0,
+    0,
+    640,
+    204
+  ],
+  "sceneNonBackgroundPixelsMin": 3537,
+  "sceneNonBackgroundPixelsMax": 3973,
+  "distinctSceneHashes": 13,
+  "images": [
+    {
+      "file": "first.png",
+      "frameIndex": 0,
+      "sha256": "2449a8b79c7a16947ec39c6f9f00341c9ef90d318c1f8df4ffb44fd8e1c32035"
+    },
+    {
+      "file": "peak.png",
+      "frameIndex": 12,
+      "sha256": "d7654decc32fa119db21fee7c73ce3d8ae0a8e21a1644a1a1a07b51c4915af69"
+    },
+    {
+      "file": "last.png",
+      "frameIndex": 23,
+      "sha256": "7641b358a1983249affa29d8cb50b1c1b3847261d5590b5514e753051ba61fa0"
+    }
+  ],
+  "manualObservations": [
+    "Frame0 shows the complete colored reference bar at visual scale0, fixed saved displacement legend0..0.04000mm.",
+    "Frame12 shows the complete bar visibly elongated at visual scale100 with the same camera and displacement legend.",
+    "Frame23 shows the complete bar returning close to its initial shape at visual scale1.7037.",
+    "All three captions explicitly describe visual deformation, fixed saved displacement, and not a load/time history."
+  ],
+  "artifact": {
+    "file": "deformation.gif",
+    "bytes": 5574849,
+    "sha256": "sha256:093d760aa5fd4e0ec38a23043000f2b873a1a8657f91465b7b387468d72387d1",
+    "pageCount": 86
+  },
+  "pin": "f40ae9c68a1db2fd42c5ef8dcc67c2cc491c956c",
+  "driverSha256": "sha256:6414bd84b38e91ea9fca34676f98bb1bde6abf155bd438a2564126de2dbb1f5e",
+  "visualizationSelection": {
+    "field": "displacement",
+    "unit": "mm",
+    "resultKind": "elastic",
+    "selectedModeIndex": null,
+    "peakScale": 100,
+    "sourceMaxDisplacementMm": 0.040000000011082545,
+    "visualMaxDisplacementMm": 4.000000001108255,
+    "scalePolicy": "cosine-visualization-cycle",
+    "ledgerVerified": 24,
+    "loadHistory": false,
+    "dynamicResponse": false,
+    "actualModalExportVerified": false
+  },
+  "fiveStatesUnchanged": true,
+  "cleanupVerified": true,
+  "decoderInvocations": {
+    "genericGif": 1,
+    "ffprobe": 1,
+    "ffmpeg": 1,
+    "reruns": 0
+  },
+  "scope": "Existing171-node elastic reference bundle only; static displacement visualization. Actual modal export remains unverified.",
+  "limitations": [
+    "No new product export, animation encoding, solver run, physical loading history, dynamic response, calibration or GUI operating-system download verification."
+  ]
+}

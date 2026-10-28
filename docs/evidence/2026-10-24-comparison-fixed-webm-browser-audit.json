@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "ownerCommit": "56f7a25f6ff9b08e24fc6183552a4c5703717c2e",
+  "branch": "codex/comparison-fixed-webm-independent-audit",
+  "scope": {
+    "sourceModified": false,
+    "realBrowserExports": 0,
+    "realCodecExecutions": 0,
+    "nativeSolverJobs": 0,
+    "sdkDownloads": 0,
+    "method": "Independent synthetic owned codec doubles; Blob bytes are not real VP8 or browser export evidence."
+  },
+  "sourceSha256": {
+    "browserEncoder": "114e4cbddbc2d88528832d5b04e9c8704a1c6822d58069ea3817cb3a559b341c",
+    "adapter": "e18658b52ac414949ea7209f5ef44c5ecf2fd10914be81907ed3eb08f3511941",
+    "jobs": "a851d577abb75a818d343695ccafa2c199758ed764dcea769cfea6b749410221"
+  },
+  "testFile": "tests/comparison-fixed-webm-independent.test.mjs",
+  "testSha256": "51ecd62637cf1d6f5370d1264bbc962efcf63f11aa9741c428fbd56e8189e88e",
+  "verification": {
+    "command": "node --test tests/comparison-fixed-webm-independent.test.mjs tests/comparison-video.test.mjs tests/comparison-export-adapter.test.mjs tests/visual-export-jobs.test.mjs tests/webm-recording-lifecycle.test.mjs",
+    "passed": 66,
+    "failed": 0,
+    "skipped": 0,
+    "independentTests": 6,
+    "existingRegressionTests": 60,
+    "priorLegacyCount": 59,
+    "note": "Owner added one fixed WebM proof/physical-ledger refusal regression while updating three former realtime-time fixtures."
+  },
+  "observations": [
+    {
+      "case": "pending codec support probe then abort",
+      "result": "WEBM_FIXED_CANCELLED",
+      "proofCallbacks": 0,
+      "codecInstances": 0,
+      "remainingTimers": 0
+    },
+    {
+      "case": "encoder flush promise never resolves then abort",
+      "result": "WEBM_FIXED_CANCELLED",
+      "inputFramesClosed": 24,
+      "closedCodecs": [
+        "encoder"
+      ],
+      "proofCallbacks": 0,
+      "remainingTimers": 0
+    },
+    {
+      "case": "encoder flush promise never resolves then page becomes hidden",
+      "result": "WEBM_BACKGROUND_INTERRUPTED",
+      "inputFramesClosed": 24,
+      "closedCodecs": [
+        "encoder"
+      ],
+      "proofCallbacks": 0,
+      "remainingTimers": 0
+    },
+    {
+      "case": "complete synthetic frame set then terminal output/error callbacks",
+      "submittedFrames": 24,
+      "inputFramesClosed": 24,
+      "decodedFramesClosedBeforeLate": 24,
+      "decodedFramesClosedAfterLate": 25,
+      "proofCallbacks": 1,
+      "closedCodecs": [
+        "encoder",
+        "decoder"
+      ],
+      "hostLeaseChecksFromLateCallbacks": 0,
+      "remainingTimers": 0
+    },
+    {
+      "case": "native queue reports zero while encoder emits no output",
+      "maximumSubmittedBeforeWatchdog": 2,
+      "result": "WEBM_PROGRESS_STALLED",
+      "closedCodecs": [
+        "encoder"
+      ],
+      "proofCallbacks": 0,
+      "remainingTimers": 0
+    },
+    {
+      "case": "adapter pending flush abort",
+      "hostLeaseHeldDuringCodecClose": true,
+      "hostLeaseReleases": 1,
+      "inputFramesClosed": 24,
+      "closedCodecs": [
+        "encoder"
+      ],
+      "remainingTimers": 0
+    }
+  ],
+  "review": {
+    "mandatoryRealBrowserFindings": 0,
+    "verifiedContracts": [
+      "comparison time uses fixed encoder only; orbit/deformation retain realtime recorder",
+      "source/session lifetime and abort checked during codec stages and before delivery",
+      "job renderer exclusion stays active until asynchronous renderer settles",
+      "owned host lock is released in adapter finally after codec cleanup",
+      "late encoder callbacks cannot copy packets or reenter host assertions; late decoder frames are closed",
+      "independent total/stall watchdogs and byte/inflight bounds",
+      "unsupported support probe and stable failure code handling"
+    ],
+    "defensiveBoundaryFollowup": {
+      "topic": "Callbacks carrying a planned timestamp before its submission",
+      "ownerCommitStatus": "planned timestamp map checked; explicit submitted-timestamp membership not yet enforced at this audited commit",
+      "classification": "Defensive contract hardening discussed with owner; no claim that native WebCodecs normally emits such a callback.",
+      "sourceChangeOwner": "opening_cap64"
+    }
+  },
+  "limitations": [
+    "No claim of real codec/browser endpoint success from these synthetic tests.",
+    "Pure WebM container/schedule independent review is owned separately.",
+    "Single-view time WebM remains a separate limitation."
+  ]
+}

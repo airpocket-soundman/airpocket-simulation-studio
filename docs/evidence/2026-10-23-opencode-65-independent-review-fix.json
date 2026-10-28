@@ -1,0 +1,20 @@
+{
+ "baseImplementation": "9b31a170a9dcef6f4235933e7d6ddc83476bc480",
+ "kind": "independent review regressions and corrections",
+ "environment": "Windows x64, Node v24.11.1",
+ "before": {"regressionTestsPassed": 4, "regressionTestsFailed": 3},
+ "counterexamples": [
+  {"case": "mesh units m/null or unsupported output", "before": "inspection accepted", "after": "rejected before coordinate inspection"},
+  {"case": "height 1e-14 mm, requested minimum 5e-13 mm, gap 1e-9 mm", "before": "18 Tet accepted despite 50x height shortfall", "after": "rejected by relative height threshold; 1e-14 mm minimum remains accepted"},
+  {"case": "600 wall layers through maxLayers override", "before": "2408 nodes and 3606 Tet accepted", "after": "rejected before quality/maps/geometry allocation"}
+ ],
+ "limits": {"wallLayers":512, "nodes":2056, "tetrahedra":3078, "exactCapacityAccepted":true},
+ "finalResults": {"focusedAndDocsPassed":29, "failed":0, "skipped":0, "contractDeclarationFilesPassed":8, "diffCheck":"passed"},
+ "commands": [
+  "node --test tests/channel-layer-tet4.test.mjs tests/channel-layer-cell-quality.test.mjs tests/channel-layer-plan.test.mjs tests/mesh-validity.test.mjs",
+  "npm run check:contracts",
+  "node --test tests/docs.test.mjs",
+  "git diff --check"
+ ],
+ "notVerified": ["general boundary-layer meshing", "flow solver", "physical accuracy", "native build", "release"]
+}

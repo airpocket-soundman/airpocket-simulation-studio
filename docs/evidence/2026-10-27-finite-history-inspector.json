@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "ae2f889",
+  "feature": "GUI-only synthetic finite material-point saved-input history inspector",
+  "scope": {
+    "strictParser": "existing unchanged finite-visco-history",
+    "reference": "existing unchanged finite-visco-reference",
+    "inputBytes": 1048576,
+    "steps": 4096,
+    "workersPerInspector": 1,
+    "watchdogMilliseconds": 10000,
+    "watchdogLimit": "No hard wall-clock guarantee during JavaScript suspension",
+    "output": "fixed-size final summary or failure; issued finalState never crosses worker",
+    "claims": {
+      "synthetic": true,
+      "provisional": true,
+      "calibrated": false,
+      "structuralSolver": false,
+      "measured": false,
+      "newMcpTools": false
+    }
+  },
+  "validation": {
+    "newTests": 11,
+    "related": {
+      "total": 69,
+      "pass": 69,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 5135.181
+    },
+    "types": {
+      "declarations": 28,
+      "passed": true
+    },
+    "viteBuild": {
+      "passed": true,
+      "elapsedSeconds": 3.53,
+      "workerAsset": "finite-visco-inspector.worker-COfbpxlr.js",
+      "fullNativeBuild": false
+    },
+    "oracles": [
+      "Hydrostatic E=.01I: S60000Pa, sigma60000/sqrt1.02Pa, energy/work900Jm-3, dissipation0",
+      "Independent linear-E deviatoric ramp/hold Maxwell stress and integrated dissipation",
+      "Real Node module worker runs existing public example, no issued state in response"
+    ],
+    "ownership": [
+      "edit ABA",
+      "direct value change without event",
+      "cancel",
+      "clear",
+      "dispose",
+      "BFcache invalidate",
+      "late callback",
+      "worker error/messageerror",
+      "watchdog",
+      "malformed response including sparse matrices",
+      "1MiB exact accepted/+1 rejected",
+      "4096 steps fixed report size"
+    ]
+  },
+  "reviewCorrections": [
+    "Added full finite/units/provenance response gate before successful resolution",
+    "Independent63 reproduced sparse-array hole skipping; indexed own0..2 gates now refuse",
+    "Initial test harness assumed pretty example schema spacing and raw CRLF equivalence; corrected duplicate-key fixture and explicit LF example assertion"
+  ],
+  "workingByteSHA256": {
+    "src/ui/finite-history-inspector.js": "961b0b7097e95872381c27a43183382e39d8f1c08bb198766259b0e1b91f2cb1",
+    "src/finite-visco-inspector.worker.js": "77737acd6709b178e3524bcda9566a079d6bb2d09c4f62079bfccb47daed2f06",
+    "src/finite-visco-history.js": "6defb61899b1ac0cc7abcf5a46f5425a592be21f527af6e86527fe065646723c",
+    "src/finite-visco-reference.js": "26817d861fce0ef8fcf3fde214ffbab0b1dab212c56e9437ca288806514fdd74",
+    "public/examples/finite-visco-input-history.json": "edff265baaa831e75665178975654d5ce9b2a4243861b07fcfac2d5e5052eb41"
+  },
+  "hashMeaning": "SHA256 of working file bytes; Git-normalized LF blob may differ",
+  "actual": {
+    "gui": 0,
+    "structuralSolver": 0,
+    "nativeCodec": 0,
+    "productExport": 0
+  },
+  "remaining": [
+    "Actual main/IAB UI verification not yet performed",
+    "No calibration, measured-data fit, structural reaction, full trajectory curve, state resume or FINITEVISCO1 completion"
+  ],
+  "progressChanged": false,
+  "postReviewProtocolFix": {
+    "finding": "Root independently reproduced truthy primitive reply TypeError before typeof-object guard",
+    "correction": "Reject null, primitives and arrays before in operator or record access",
+    "newRegression": "Primitive/array replies terminate owned worker, clear watchdog, settle inspect false and render no result",
+    "validation": {
+      "total": 70,
+      "pass": 70,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 1628.9644
+    },
+    "sourceWorkingByteSHA256": "2c817e7a5d84fafffd882d1373789a5b42ab914a0acc7b172f133fff6074dd16",
+    "additionalActual": {
+      "gui": 0,
+      "structuralSolver": 0,
+      "codec": 0,
+      "export": 0
+    }
+  }
+}

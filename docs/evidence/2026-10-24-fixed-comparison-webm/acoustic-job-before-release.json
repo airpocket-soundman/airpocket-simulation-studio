@@ -1,0 +1,1501 @@
+{
+  "schemaVersion": 1,
+  "jobId": "0ee46c57-384f-4da3-9495-c5191a918ba2",
+  "requestId": "fixed-webm193-acoustic-1792771166792",
+  "state": "completed",
+  "format": "webm",
+  "target": "comparison",
+  "comparison": {
+    "cases": [
+      {
+        "caseId": "7ee8b5d6-4d9f-461b-a94d-56e6677a2d62",
+        "label": "Synthetic acoustic 1Pa",
+        "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+        "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+      },
+      {
+        "caseId": "790b3f76-d78d-43f4-9686-6df54c6db1d8",
+        "label": "Synthetic acoustic 2Pa",
+        "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+        "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+      }
+    ],
+    "colorRange": {
+      "field": "instantPressure",
+      "maximum": 3.532363432716448,
+      "minimum": -3.4066020347578125
+    },
+    "field": "instantPressure",
+    "panels": [
+      {
+        "caseId": "7ee8b5d6-4d9f-461b-a94d-56e6677a2d62",
+        "field": "instantPressure",
+        "finalOnly": false,
+        "frameIndex": 0,
+        "maximum": 0,
+        "minimum": 0,
+        "offsetSeconds": 0,
+        "timeApplies": true,
+        "timeSeconds": 0,
+        "unit": "Pa"
+      },
+      {
+        "caseId": "790b3f76-d78d-43f4-9686-6df54c6db1d8",
+        "field": "instantPressure",
+        "finalOnly": false,
+        "frameIndex": 0,
+        "maximum": 0,
+        "minimum": 0,
+        "offsetSeconds": 0,
+        "timeApplies": true,
+        "timeSeconds": 0,
+        "unit": "Pa"
+      }
+    ],
+    "timeAnimation": {
+      "camera": "fixed",
+      "endTimeSeconds": 0.0012,
+      "field": "instantPressure",
+      "final": {
+        "panels": [
+          {
+            "frameIndex": 23,
+            "offsetSeconds": 0,
+            "timeSeconds": 0.0012
+          },
+          {
+            "frameIndex": 23,
+            "offsetSeconds": 0,
+            "timeSeconds": 0.0012
+          }
+        ],
+        "timeSeconds": 0.0012
+      },
+      "initial": {
+        "panels": [
+          {
+            "frameIndex": 0,
+            "offsetSeconds": 0,
+            "timeSeconds": 0
+          },
+          {
+            "frameIndex": 0,
+            "offsetSeconds": 0,
+            "timeSeconds": 0
+          }
+        ],
+        "timeSeconds": 0
+      },
+      "interpolated": false,
+      "kind": "acousticTransient",
+      "maxAbsOffsetSeconds": [
+        0.000027272727272727263,
+        0.000027272727272727263
+      ],
+      "rangeBasis": "all-selectable-stored-frames",
+      "selectedFrameCounts": [
+        24,
+        24
+      ],
+      "startTimeSeconds": 0,
+      "timeSelection": "nearest-stored-frames-only"
+    },
+    "unit": "Pa"
+  },
+  "view": {
+    "camera": {
+      "fov": 40,
+      "position": [
+        61,
+        41,
+        84
+      ],
+      "target": [
+        5,
+        5,
+        20
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ]
+    },
+    "deformScale": 1,
+    "layers": {
+      "surface": true,
+      "surfaceWire": false,
+      "volumeWire": false,
+      "section": true
+    },
+    "setup": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    },
+    "language": "en",
+    "resolution": {
+      "width": 1280,
+      "height": 640
+    }
+  },
+  "progress": {
+    "fraction": 1
+  },
+  "artifact": {
+    "mimeType": "video/webm;codecs=vp8",
+    "name": "comparison-0ee46c57-384f-4da3-9495-c5191a918ba2.webm",
+    "totalBytes": 1540510,
+    "sha256": "sha256:20fc86d0b17d1fa32f26f46575693b1a49a03ac350697f703a5fb0dea646d077",
+    "maxChunkBytes": 65536,
+    "manifest": {
+      "schemaVersion": 1,
+      "target": "comparison",
+      "format": "webm",
+      "container": "webm",
+      "mimeType": "video/webm;codecs=vp8",
+      "codec": "vp8",
+      "sha256": "sha256:20fc86d0b17d1fa32f26f46575693b1a49a03ac350697f703a5fb0dea646d077",
+      "totalBytes": 1540510,
+      "resolution": {
+        "width": 1280,
+        "height": 640
+      },
+      "comparison": {
+        "cases": [
+          {
+            "caseId": "7ee8b5d6-4d9f-461b-a94d-56e6677a2d62",
+            "label": "Synthetic acoustic 1Pa",
+            "resultRevision": "sha256:920f5d73d9c5059c1a9f519a5e9d6161d76f8c3c92ad6ebf7113ecc5fd4f52f6",
+            "revision": "sha256:0254033ed95ae1611c3c5919b88ec35eb8bc95ef60d378735f682e6d30af62b0"
+          },
+          {
+            "caseId": "790b3f76-d78d-43f4-9686-6df54c6db1d8",
+            "label": "Synthetic acoustic 2Pa",
+            "resultRevision": "sha256:0025b9a9c359c4e727227351db60bd3b0e395157a26c69bd53d5b7573c43a047",
+            "revision": "sha256:58d8e3291131f2f7e916fba213137296806c694a7c18fbc4ac14fe0094687c55"
+          }
+        ],
+        "colorRange": {
+          "field": "instantPressure",
+          "maximum": 3.532363432716448,
+          "minimum": -3.4066020347578125
+        },
+        "field": "instantPressure",
+        "panels": [
+          {
+            "caseId": "7ee8b5d6-4d9f-461b-a94d-56e6677a2d62",
+            "field": "instantPressure",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 0,
+            "minimum": 0,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "Pa"
+          },
+          {
+            "caseId": "790b3f76-d78d-43f4-9686-6df54c6db1d8",
+            "field": "instantPressure",
+            "finalOnly": false,
+            "frameIndex": 0,
+            "maximum": 0,
+            "minimum": 0,
+            "offsetSeconds": 0,
+            "timeApplies": true,
+            "timeSeconds": 0,
+            "unit": "Pa"
+          }
+        ],
+        "timeAnimation": {
+          "camera": "fixed",
+          "endTimeSeconds": 0.0012,
+          "field": "instantPressure",
+          "final": {
+            "panels": [
+              {
+                "frameIndex": 23,
+                "offsetSeconds": 0,
+                "timeSeconds": 0.0012
+              },
+              {
+                "frameIndex": 23,
+                "offsetSeconds": 0,
+                "timeSeconds": 0.0012
+              }
+            ],
+            "timeSeconds": 0.0012
+          },
+          "initial": {
+            "panels": [
+              {
+                "frameIndex": 0,
+                "offsetSeconds": 0,
+                "timeSeconds": 0
+              },
+              {
+                "frameIndex": 0,
+                "offsetSeconds": 0,
+                "timeSeconds": 0
+              }
+            ],
+            "timeSeconds": 0
+          },
+          "interpolated": false,
+          "kind": "acousticTransient",
+          "maxAbsOffsetSeconds": [
+            0.000027272727272727263,
+            0.000027272727272727263
+          ],
+          "rangeBasis": "all-selectable-stored-frames",
+          "selectedFrameCounts": [
+            24,
+            24
+          ],
+          "startTimeSeconds": 0,
+          "timeSelection": "nearest-stored-frames-only"
+        },
+        "unit": "Pa"
+      },
+      "view": {
+        "camera": {
+          "fov": 40,
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ]
+        },
+        "deformScale": 1,
+        "layers": {
+          "surface": true,
+          "surfaceWire": false,
+          "volumeWire": false,
+          "section": true
+        },
+        "setup": {
+          "clipEnabled": false,
+          "axis": 2,
+          "position": 0,
+          "flip": false,
+          "opacity": 1,
+          "meshCount": 1,
+          "hiddenParts": []
+        },
+        "language": "en",
+        "resolution": {
+          "width": 1280,
+          "height": 640
+        }
+      },
+      "time": {
+        "animation": "time",
+        "durationSeconds": 2,
+        "timeBasis": "display time",
+        "recording": "fixed-frame",
+        "realtime": false,
+        "frameCount": 48,
+        "frameCountGuaranteed": true,
+        "phasePolicy": "i/(N-1)",
+        "camera": "fixed",
+        "frameSelection": "nearest-stored-frames-only",
+        "requestedRangeSeconds": {
+          "start": 0,
+          "end": 0.0012
+        },
+        "presentationSchedule": [
+          {
+            "index": 0,
+            "timestampMicroseconds": 0,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 1,
+            "timestampMicroseconds": 41667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 2,
+            "timestampMicroseconds": 83333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 3,
+            "timestampMicroseconds": 125000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 4,
+            "timestampMicroseconds": 166667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 5,
+            "timestampMicroseconds": 208333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 6,
+            "timestampMicroseconds": 250000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 7,
+            "timestampMicroseconds": 291667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 8,
+            "timestampMicroseconds": 333333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 9,
+            "timestampMicroseconds": 375000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 10,
+            "timestampMicroseconds": 416667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 11,
+            "timestampMicroseconds": 458333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 12,
+            "timestampMicroseconds": 500000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 13,
+            "timestampMicroseconds": 541667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 14,
+            "timestampMicroseconds": 583333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 15,
+            "timestampMicroseconds": 625000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 16,
+            "timestampMicroseconds": 666667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 17,
+            "timestampMicroseconds": 708333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 18,
+            "timestampMicroseconds": 750000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 19,
+            "timestampMicroseconds": 791667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 20,
+            "timestampMicroseconds": 833333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 21,
+            "timestampMicroseconds": 875000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 22,
+            "timestampMicroseconds": 916667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 23,
+            "timestampMicroseconds": 958333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 24,
+            "timestampMicroseconds": 1000000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 25,
+            "timestampMicroseconds": 1041667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 26,
+            "timestampMicroseconds": 1083333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 27,
+            "timestampMicroseconds": 1125000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 28,
+            "timestampMicroseconds": 1166667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 29,
+            "timestampMicroseconds": 1208333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 30,
+            "timestampMicroseconds": 1250000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 31,
+            "timestampMicroseconds": 1291667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 32,
+            "timestampMicroseconds": 1333333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 33,
+            "timestampMicroseconds": 1375000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 34,
+            "timestampMicroseconds": 1416667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 35,
+            "timestampMicroseconds": 1458333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 36,
+            "timestampMicroseconds": 1500000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 37,
+            "timestampMicroseconds": 1541667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 38,
+            "timestampMicroseconds": 1583333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 39,
+            "timestampMicroseconds": 1625000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 40,
+            "timestampMicroseconds": 1666667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 41,
+            "timestampMicroseconds": 1708333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 42,
+            "timestampMicroseconds": 1750000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 43,
+            "timestampMicroseconds": 1791667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 44,
+            "timestampMicroseconds": 1833333,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 45,
+            "timestampMicroseconds": 1875000,
+            "durationMicroseconds": 41667
+          },
+          {
+            "index": 46,
+            "timestampMicroseconds": 1916667,
+            "durationMicroseconds": 41666
+          },
+          {
+            "index": 47,
+            "timestampMicroseconds": 1958333,
+            "durationMicroseconds": 41667
+          }
+        ],
+        "verification": {
+          "schemaVersion": 1,
+          "codec": "vp8",
+          "frameCount": 48,
+          "encodedFrameCount": 48,
+          "decodedFrameCount": 48,
+          "terminalTimestamp": 1958333,
+          "totalDurationMicroseconds": 2000000,
+          "verification": "strict-webm-demux+video-decoder"
+        },
+        "frameTimings": {
+          "schemaVersion": 1,
+          "timeSelection": "nearest-stored-frames-only",
+          "interpolated": false,
+          "identity": "Each panel caseIndex indexes comparison.cases (caseId, revision, resultRevision).",
+          "mapping": "One entry per verified encoded and decoded fixed WebM frame, in presentation order. Physical phase and presentation timestamp are distinct.",
+          "limits": {
+            "frames": 2048,
+            "bytes": 61440
+          },
+          "entries": [
+            {
+              "renderIndex": 0,
+              "phase": 0,
+              "requestedTimeSeconds": 0,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 0,
+                  "timeSeconds": 0,
+                  "offsetSeconds": 0
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 0,
+                  "timeSeconds": 0,
+                  "offsetSeconds": 0
+                }
+              ]
+            },
+            {
+              "renderIndex": 1,
+              "phase": 0.02127659574468085,
+              "requestedTimeSeconds": 0.00002553191489361702,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 0,
+                  "timeSeconds": 0,
+                  "offsetSeconds": -0.00002553191489361702
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 0,
+                  "timeSeconds": 0,
+                  "offsetSeconds": -0.00002553191489361702
+                }
+              ]
+            },
+            {
+              "renderIndex": 2,
+              "phase": 0.0425531914893617,
+              "requestedTimeSeconds": 0.00005106382978723404,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 1,
+                  "timeSeconds": 0.000051948051948051944,
+                  "offsetSeconds": 8.842221608179067e-7
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 1,
+                  "timeSeconds": 0.000051948051948051944,
+                  "offsetSeconds": 8.842221608179067e-7
+                }
+              ]
+            },
+            {
+              "renderIndex": 3,
+              "phase": 0.06382978723404255,
+              "requestedTimeSeconds": 0.00007659574468085105,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 1,
+                  "timeSeconds": 0.000051948051948051944,
+                  "offsetSeconds": -0.000024647692732799105
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 1,
+                  "timeSeconds": 0.000051948051948051944,
+                  "offsetSeconds": -0.000024647692732799105
+                }
+              ]
+            },
+            {
+              "renderIndex": 4,
+              "phase": 0.0851063829787234,
+              "requestedTimeSeconds": 0.00010212765957446807,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 2,
+                  "timeSeconds": 0.00010389610389610389,
+                  "offsetSeconds": 0.0000017684443216358135
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 2,
+                  "timeSeconds": 0.00010389610389610389,
+                  "offsetSeconds": 0.0000017684443216358135
+                }
+              ]
+            },
+            {
+              "renderIndex": 5,
+              "phase": 0.10638297872340426,
+              "requestedTimeSeconds": 0.0001276595744680851,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 2,
+                  "timeSeconds": 0.00010389610389610389,
+                  "offsetSeconds": -0.000023763470571981212
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 2,
+                  "timeSeconds": 0.00010389610389610389,
+                  "offsetSeconds": -0.000023763470571981212
+                }
+              ]
+            },
+            {
+              "renderIndex": 6,
+              "phase": 0.1276595744680851,
+              "requestedTimeSeconds": 0.0001531914893617021,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 3,
+                  "timeSeconds": 0.00015584415584415584,
+                  "offsetSeconds": 0.0000026526664824537405
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 3,
+                  "timeSeconds": 0.00015584415584415584,
+                  "offsetSeconds": 0.0000026526664824537405
+                }
+              ]
+            },
+            {
+              "renderIndex": 7,
+              "phase": 0.14893617021276595,
+              "requestedTimeSeconds": 0.00017872340425531912,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 3,
+                  "timeSeconds": 0.00015584415584415584,
+                  "offsetSeconds": -0.000022879248411163285
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 3,
+                  "timeSeconds": 0.00015584415584415584,
+                  "offsetSeconds": -0.000022879248411163285
+                }
+              ]
+            },
+            {
+              "renderIndex": 8,
+              "phase": 0.1702127659574468,
+              "requestedTimeSeconds": 0.00020425531914893615,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 4,
+                  "timeSeconds": 0.00020779220779220778,
+                  "offsetSeconds": 0.000003536888643271627
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 4,
+                  "timeSeconds": 0.00020779220779220778,
+                  "offsetSeconds": 0.000003536888643271627
+                }
+              ]
+            },
+            {
+              "renderIndex": 9,
+              "phase": 0.19148936170212766,
+              "requestedTimeSeconds": 0.00022978723404255317,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 4,
+                  "timeSeconds": 0.00020779220779220778,
+                  "offsetSeconds": -0.0000219950262503454
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 4,
+                  "timeSeconds": 0.00020779220779220778,
+                  "offsetSeconds": -0.0000219950262503454
+                }
+              ]
+            },
+            {
+              "renderIndex": 10,
+              "phase": 0.2127659574468085,
+              "requestedTimeSeconds": 0.0002553191489361702,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 5,
+                  "timeSeconds": 0.00025974025974025974,
+                  "offsetSeconds": 0.00000442111080408954
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 5,
+                  "timeSeconds": 0.00025974025974025974,
+                  "offsetSeconds": 0.00000442111080408954
+                }
+              ]
+            },
+            {
+              "renderIndex": 11,
+              "phase": 0.23404255319148937,
+              "requestedTimeSeconds": 0.0002808510638297872,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 5,
+                  "timeSeconds": 0.00025974025974025974,
+                  "offsetSeconds": -0.000021110804089527458
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 5,
+                  "timeSeconds": 0.00025974025974025974,
+                  "offsetSeconds": -0.000021110804089527458
+                }
+              ]
+            },
+            {
+              "renderIndex": 12,
+              "phase": 0.2553191489361702,
+              "requestedTimeSeconds": 0.0003063829787234042,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 6,
+                  "timeSeconds": 0.00031428571428571427,
+                  "offsetSeconds": 0.00000790273556231007
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 6,
+                  "timeSeconds": 0.00031428571428571427,
+                  "offsetSeconds": 0.00000790273556231007
+                }
+              ]
+            },
+            {
+              "renderIndex": 13,
+              "phase": 0.2765957446808511,
+              "requestedTimeSeconds": 0.00033191489361702125,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 6,
+                  "timeSeconds": 0.00031428571428571427,
+                  "offsetSeconds": -0.000017629179331306983
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 6,
+                  "timeSeconds": 0.00031428571428571427,
+                  "offsetSeconds": -0.000017629179331306983
+                }
+              ]
+            },
+            {
+              "renderIndex": 14,
+              "phase": 0.2978723404255319,
+              "requestedTimeSeconds": 0.00035744680851063825,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 7,
+                  "timeSeconds": 0.0003662337662337662,
+                  "offsetSeconds": 0.000008786957723127956
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 7,
+                  "timeSeconds": 0.0003662337662337662,
+                  "offsetSeconds": 0.000008786957723127956
+                }
+              ]
+            },
+            {
+              "renderIndex": 15,
+              "phase": 0.3191489361702128,
+              "requestedTimeSeconds": 0.0003829787234042553,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 7,
+                  "timeSeconds": 0.0003662337662337662,
+                  "offsetSeconds": -0.000016744957170489096
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 7,
+                  "timeSeconds": 0.0003662337662337662,
+                  "offsetSeconds": -0.000016744957170489096
+                }
+              ]
+            },
+            {
+              "renderIndex": 16,
+              "phase": 0.3404255319148936,
+              "requestedTimeSeconds": 0.0004085106382978723,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 8,
+                  "timeSeconds": 0.00041818181818181814,
+                  "offsetSeconds": 0.000009671179883945843
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 8,
+                  "timeSeconds": 0.00041818181818181814,
+                  "offsetSeconds": 0.000009671179883945843
+                }
+              ]
+            },
+            {
+              "renderIndex": 17,
+              "phase": 0.3617021276595745,
+              "requestedTimeSeconds": 0.00043404255319148935,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 8,
+                  "timeSeconds": 0.00041818181818181814,
+                  "offsetSeconds": -0.00001586073500967121
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 8,
+                  "timeSeconds": 0.00041818181818181814,
+                  "offsetSeconds": -0.00001586073500967121
+                }
+              ]
+            },
+            {
+              "renderIndex": 18,
+              "phase": 0.3829787234042553,
+              "requestedTimeSeconds": 0.00045957446808510635,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 9,
+                  "timeSeconds": 0.0004701298701298701,
+                  "offsetSeconds": 0.000010555402044763729
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 9,
+                  "timeSeconds": 0.0004701298701298701,
+                  "offsetSeconds": 0.000010555402044763729
+                }
+              ]
+            },
+            {
+              "renderIndex": 19,
+              "phase": 0.40425531914893614,
+              "requestedTimeSeconds": 0.00048510638297872335,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 9,
+                  "timeSeconds": 0.0004701298701298701,
+                  "offsetSeconds": -0.00001497651284885327
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 9,
+                  "timeSeconds": 0.0004701298701298701,
+                  "offsetSeconds": -0.00001497651284885327
+                }
+              ]
+            },
+            {
+              "renderIndex": 20,
+              "phase": 0.425531914893617,
+              "requestedTimeSeconds": 0.0005106382978723404,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 10,
+                  "timeSeconds": 0.0005220779220779221,
+                  "offsetSeconds": 0.00001143962420558167
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 10,
+                  "timeSeconds": 0.0005220779220779221,
+                  "offsetSeconds": 0.00001143962420558167
+                }
+              ]
+            },
+            {
+              "renderIndex": 21,
+              "phase": 0.44680851063829785,
+              "requestedTimeSeconds": 0.0005361702127659574,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 10,
+                  "timeSeconds": 0.0005220779220779221,
+                  "offsetSeconds": -0.000014092290688035329
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 10,
+                  "timeSeconds": 0.0005220779220779221,
+                  "offsetSeconds": -0.000014092290688035329
+                }
+              ]
+            },
+            {
+              "renderIndex": 22,
+              "phase": 0.46808510638297873,
+              "requestedTimeSeconds": 0.0005617021276595744,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 11,
+                  "timeSeconds": 0.000574025974025974,
+                  "offsetSeconds": 0.000012323846366399556
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 11,
+                  "timeSeconds": 0.000574025974025974,
+                  "offsetSeconds": 0.000012323846366399556
+                }
+              ]
+            },
+            {
+              "renderIndex": 23,
+              "phase": 0.48936170212765956,
+              "requestedTimeSeconds": 0.0005872340425531914,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 11,
+                  "timeSeconds": 0.000574025974025974,
+                  "offsetSeconds": -0.000013208068527217442
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 11,
+                  "timeSeconds": 0.000574025974025974,
+                  "offsetSeconds": -0.000013208068527217442
+                }
+              ]
+            },
+            {
+              "renderIndex": 24,
+              "phase": 0.5106382978723404,
+              "requestedTimeSeconds": 0.0006127659574468084,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 12,
+                  "timeSeconds": 0.0006259740259740259,
+                  "offsetSeconds": 0.00001320806852721755
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 12,
+                  "timeSeconds": 0.0006259740259740259,
+                  "offsetSeconds": 0.00001320806852721755
+                }
+              ]
+            },
+            {
+              "renderIndex": 25,
+              "phase": 0.5319148936170213,
+              "requestedTimeSeconds": 0.0006382978723404255,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 12,
+                  "timeSeconds": 0.0006259740259740259,
+                  "offsetSeconds": -0.000012323846366399556
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 12,
+                  "timeSeconds": 0.0006259740259740259,
+                  "offsetSeconds": -0.000012323846366399556
+                }
+              ]
+            },
+            {
+              "renderIndex": 26,
+              "phase": 0.5531914893617021,
+              "requestedTimeSeconds": 0.0006638297872340425,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 13,
+                  "timeSeconds": 0.0006779220779220778,
+                  "offsetSeconds": 0.000014092290688035329
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 13,
+                  "timeSeconds": 0.0006779220779220778,
+                  "offsetSeconds": 0.000014092290688035329
+                }
+              ]
+            },
+            {
+              "renderIndex": 27,
+              "phase": 0.574468085106383,
+              "requestedTimeSeconds": 0.0006893617021276596,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 13,
+                  "timeSeconds": 0.0006779220779220778,
+                  "offsetSeconds": -0.000011439624205581778
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 13,
+                  "timeSeconds": 0.0006779220779220778,
+                  "offsetSeconds": -0.000011439624205581778
+                }
+              ]
+            },
+            {
+              "renderIndex": 28,
+              "phase": 0.5957446808510638,
+              "requestedTimeSeconds": 0.0007148936170212765,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 14,
+                  "timeSeconds": 0.0007298701298701298,
+                  "offsetSeconds": 0.000014976512848853324
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 14,
+                  "timeSeconds": 0.0007298701298701298,
+                  "offsetSeconds": 0.000014976512848853324
+                }
+              ]
+            },
+            {
+              "renderIndex": 29,
+              "phase": 0.6170212765957447,
+              "requestedTimeSeconds": 0.0007404255319148936,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 14,
+                  "timeSeconds": 0.0007298701298701298,
+                  "offsetSeconds": -0.000010555402044763783
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 14,
+                  "timeSeconds": 0.0007298701298701298,
+                  "offsetSeconds": -0.000010555402044763783
+                }
+              ]
+            },
+            {
+              "renderIndex": 30,
+              "phase": 0.6382978723404256,
+              "requestedTimeSeconds": 0.0007659574468085106,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 15,
+                  "timeSeconds": 0.0007818181818181818,
+                  "offsetSeconds": 0.00001586073500967121
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 15,
+                  "timeSeconds": 0.0007818181818181818,
+                  "offsetSeconds": 0.00001586073500967121
+                }
+              ]
+            },
+            {
+              "renderIndex": 31,
+              "phase": 0.6595744680851063,
+              "requestedTimeSeconds": 0.0007914893617021275,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 15,
+                  "timeSeconds": 0.0007818181818181818,
+                  "offsetSeconds": -0.00000967117988394568
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 15,
+                  "timeSeconds": 0.0007818181818181818,
+                  "offsetSeconds": -0.00000967117988394568
+                }
+              ]
+            },
+            {
+              "renderIndex": 32,
+              "phase": 0.6808510638297872,
+              "requestedTimeSeconds": 0.0008170212765957446,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 16,
+                  "timeSeconds": 0.0008337662337662337,
+                  "offsetSeconds": 0.000016744957170489096
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 16,
+                  "timeSeconds": 0.0008337662337662337,
+                  "offsetSeconds": 0.000016744957170489096
+                }
+              ]
+            },
+            {
+              "renderIndex": 33,
+              "phase": 0.7021276595744681,
+              "requestedTimeSeconds": 0.0008425531914893616,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 16,
+                  "timeSeconds": 0.0008337662337662337,
+                  "offsetSeconds": -0.000008786957723127902
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 16,
+                  "timeSeconds": 0.0008337662337662337,
+                  "offsetSeconds": -0.000008786957723127902
+                }
+              ]
+            },
+            {
+              "renderIndex": 34,
+              "phase": 0.723404255319149,
+              "requestedTimeSeconds": 0.0008680851063829787,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 17,
+                  "timeSeconds": 0.0008857142857142857,
+                  "offsetSeconds": 0.000017629179331306983
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 17,
+                  "timeSeconds": 0.0008857142857142857,
+                  "offsetSeconds": 0.000017629179331306983
+                }
+              ]
+            },
+            {
+              "renderIndex": 35,
+              "phase": 0.7446808510638298,
+              "requestedTimeSeconds": 0.0008936170212765956,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 17,
+                  "timeSeconds": 0.0008857142857142857,
+                  "offsetSeconds": -0.000007902735562309907
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 17,
+                  "timeSeconds": 0.0008857142857142857,
+                  "offsetSeconds": -0.000007902735562309907
+                }
+              ]
+            },
+            {
+              "renderIndex": 36,
+              "phase": 0.7659574468085106,
+              "requestedTimeSeconds": 0.0009191489361702127,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 18,
+                  "timeSeconds": 0.0009402597402597402,
+                  "offsetSeconds": 0.000021110804089527458
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 18,
+                  "timeSeconds": 0.0009402597402597402,
+                  "offsetSeconds": 0.000021110804089527458
+                }
+              ]
+            },
+            {
+              "renderIndex": 37,
+              "phase": 0.7872340425531915,
+              "requestedTimeSeconds": 0.0009446808510638297,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 18,
+                  "timeSeconds": 0.0009402597402597402,
+                  "offsetSeconds": -0.00000442111080408954
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 18,
+                  "timeSeconds": 0.0009402597402597402,
+                  "offsetSeconds": -0.00000442111080408954
+                }
+              ]
+            },
+            {
+              "renderIndex": 38,
+              "phase": 0.8085106382978723,
+              "requestedTimeSeconds": 0.0009702127659574467,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 19,
+                  "timeSeconds": 0.0009922077922077921,
+                  "offsetSeconds": 0.000021995026250345453
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 19,
+                  "timeSeconds": 0.0009922077922077921,
+                  "offsetSeconds": 0.000021995026250345453
+                }
+              ]
+            },
+            {
+              "renderIndex": 39,
+              "phase": 0.8297872340425532,
+              "requestedTimeSeconds": 0.0009957446808510637,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 19,
+                  "timeSeconds": 0.0009922077922077921,
+                  "offsetSeconds": -0.0000035368886432715456
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 19,
+                  "timeSeconds": 0.0009922077922077921,
+                  "offsetSeconds": -0.0000035368886432715456
+                }
+              ]
+            },
+            {
+              "renderIndex": 40,
+              "phase": 0.851063829787234,
+              "requestedTimeSeconds": 0.0010212765957446808,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 20,
+                  "timeSeconds": 0.0010441558441558441,
+                  "offsetSeconds": 0.00002287924841116334
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 20,
+                  "timeSeconds": 0.0010441558441558441,
+                  "offsetSeconds": 0.00002287924841116334
+                }
+              ]
+            },
+            {
+              "renderIndex": 41,
+              "phase": 0.8723404255319149,
+              "requestedTimeSeconds": 0.001046808510638298,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 20,
+                  "timeSeconds": 0.0010441558441558441,
+                  "offsetSeconds": -0.0000026526664824537676
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 20,
+                  "timeSeconds": 0.0010441558441558441,
+                  "offsetSeconds": -0.0000026526664824537676
+                }
+              ]
+            },
+            {
+              "renderIndex": 42,
+              "phase": 0.8936170212765957,
+              "requestedTimeSeconds": 0.0010723404255319148,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 21,
+                  "timeSeconds": 0.001096103896103896,
+                  "offsetSeconds": 0.000023763470571981117
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 21,
+                  "timeSeconds": 0.001096103896103896,
+                  "offsetSeconds": 0.000023763470571981117
+                }
+              ]
+            },
+            {
+              "renderIndex": 43,
+              "phase": 0.9148936170212766,
+              "requestedTimeSeconds": 0.001097872340425532,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 21,
+                  "timeSeconds": 0.001096103896103896,
+                  "offsetSeconds": -0.0000017684443216359896
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 21,
+                  "timeSeconds": 0.001096103896103896,
+                  "offsetSeconds": -0.0000017684443216359896
+                }
+              ]
+            },
+            {
+              "renderIndex": 44,
+              "phase": 0.9361702127659575,
+              "requestedTimeSeconds": 0.0011234042553191488,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 22,
+                  "timeSeconds": 0.001148051948051948,
+                  "offsetSeconds": 0.000024647692732799112
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 22,
+                  "timeSeconds": 0.001148051948051948,
+                  "offsetSeconds": 0.000024647692732799112
+                }
+              ]
+            },
+            {
+              "renderIndex": 45,
+              "phase": 0.9574468085106383,
+              "requestedTimeSeconds": 0.001148936170212766,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 22,
+                  "timeSeconds": 0.001148051948051948,
+                  "offsetSeconds": -8.842221608179948e-7
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 22,
+                  "timeSeconds": 0.001148051948051948,
+                  "offsetSeconds": -8.842221608179948e-7
+                }
+              ]
+            },
+            {
+              "renderIndex": 46,
+              "phase": 0.9787234042553191,
+              "requestedTimeSeconds": 0.0011744680851063828,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 23,
+                  "timeSeconds": 0.0012,
+                  "offsetSeconds": 0.000025531914893617107
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 23,
+                  "timeSeconds": 0.0012,
+                  "offsetSeconds": 0.000025531914893617107
+                }
+              ]
+            },
+            {
+              "renderIndex": 47,
+              "phase": 1,
+              "requestedTimeSeconds": 0.0012,
+              "panels": [
+                {
+                  "caseIndex": 0,
+                  "frameIndex": 23,
+                  "timeSeconds": 0.0012,
+                  "offsetSeconds": 0
+                },
+                {
+                  "caseIndex": 1,
+                  "frameIndex": 23,
+                  "timeSeconds": 0.0012,
+                  "offsetSeconds": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

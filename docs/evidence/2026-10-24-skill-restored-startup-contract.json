@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-24",
+  "base": "14120751d6f4ab2bba4b2632c83af8107e9f5576",
+  "scope": "Repository Skill reference only; installed distribution unchanged during independent evaluation",
+  "contract": {
+    "digest": "Canonical SHA-256 startup descriptor: normalized absolute input/output paths, operation,size,method,adaptive,includeFields; not file contents",
+    "beforeInputReads": true,
+    "noResume": true
+  },
+  "metadataOnlyRefusalFixture": {
+    "outcomes": [
+      {
+        "record": "digest",
+        "changedStartup": false,
+        "code": "ANALYSIS_JOB_REQUEST_RESTORED"
+      },
+      {
+        "record": "digest",
+        "changedStartup": true,
+        "code": "ANALYSIS_JOB_REQUEST_CONFLICT"
+      },
+      {
+        "record": "legacy",
+        "changedStartup": false,
+        "code": "ANALYSIS_JOB_REQUEST_RESTORED"
+      },
+      {
+        "record": "legacy",
+        "changedStartup": true,
+        "code": "ANALYSIS_JOB_REQUEST_RESTORED"
+      }
+    ],
+    "workerStarts": 0,
+    "inputFileExisted": false,
+    "cleanup": true
+  },
+  "verification": {
+    "existingMetadataTests": 3,
+    "docsTests": 2,
+    "failed": 0,
+    "skipped": 0,
+    "contractDeclarations": 19,
+    "skillQuickValidate": "Passed using python -X utf8; default cp932 invocation failed decoding existing UTF-8 SKILL.md, no source change required"
+  },
+  "syncProposal": {
+    "afterFreshEvaluationOnly": true,
+    "repoDeclaredToolCounts": {
+      "default": 36,
+      "paired": 38
+    },
+    "installedDeclaredToolCounts": {
+      "default": 35,
+      "paired": 37
+    },
+    "files": [
+      {
+        "relative": "SKILL.md",
+        "repoSha256": "87f9978bbcba39dd0f9ad2692d1e294f1adf8cc82d922b03e7e8f0ff5ff1f553",
+        "installedSha256": "0732ecf1e9704528099d20e6fdd2825cc225d64d7c3b1167733f7271817f2ca1",
+        "identical": false,
+        "repoNormalizedLfSha256": "23b70acb93d83629425b06c80d759e4977154daff1b4bb57534a4fd3c311e833",
+        "installedNormalizedLfSha256": "4d357d1f5e4e8946465a723c7501d8ac3b105db46f75572848cfff3bcd00f5d1",
+        "normalizedContentIdentical": false
+      },
+      {
+        "relative": "references/jobs-observations.md",
+        "repoSha256": "b00f264d30ab7f753f72bd3ea237043e6484bf1f8e5a85d40b1d5ea0ce5167d7",
+        "installedSha256": "a15b93af5aa302b3d24d756137b21d01ec896aad8d2e87442864c7b19b97cc8a",
+        "identical": false,
+        "repoNormalizedLfSha256": "12ed6252cec879256dc3e0b093c1bf81815cccec2c3b8f5a9ac9617e6fc9ad6f",
+        "installedNormalizedLfSha256": "e6afd10da8ea4d4fda455d2e1f0181ba3dc78dcdfaab3531b7b6ddc8b4917450",
+        "normalizedContentIdentical": false
+      },
+      {
+        "relative": "references/skill-loop.md",
+        "repoSha256": "3b7153c08103a9ad0e653c9d0da8caa3c1207c1b3ddadb6902ee60941445589c",
+        "installedSha256": "5b8530953bf41ac15a1148378b26966df5a0fcbcbd7031842dfeccd92e38a746",
+        "identical": false,
+        "repoNormalizedLfSha256": "f21763a6b8f57f8a1b28e7e80e526eb51302120895f634008daab36c58eec452",
+        "installedNormalizedLfSha256": "f21763a6b8f57f8a1b28e7e80e526eb51302120895f634008daab36c58eec452",
+        "normalizedContentIdentical": true
+      }
+    ],
+    "scope": "Copy only reviewed changed repository Skill files after root acceptance; rehash installed copies; leave tool availability discovery authoritative",
+    "externalEvidenceLinks": [
+      {
+        "reference": "references/skill-loop.md",
+        "target": "../../../docs/evidence/2026-10-18-skill-loop-real-mcp.json",
+        "repoExists": true,
+        "installedExists": false
+      },
+      {
+        "reference": "references/skill-loop.md",
+        "target": "../../../docs/evidence/2026-10-18-skill-loop-independent.json",
+        "repoExists": true,
+        "installedExists": false
+      },
+      {
+        "reference": "references/skill-loop.md",
+        "target": "../../../docs/evidence/2026-10-18-skill-loop-independent-post-pair.json",
+        "repoExists": true,
+        "installedExists": false
+      },
+      {
+        "reference": "references/skill-loop.md",
+        "target": "../../../docs/evidence/2026-10-18-skill-loop-independent-post-pair.png",
+        "repoExists": true,
+        "installedExists": false
+      }
+    ],
+    "linkAction": "Do not copy external evidence or mass-package. Repository references are the authoritative recipe/evidence location; if installed references are used standalone, resolve evidence against the actual checkout documented in SKILL.md, or replace only required broken evidence links with verified repository URLs in a later scoped change.",
+    "hashBasis": "repoSha256/installedSha256 are observed working-copy bytes; normalizedLfSha256 supports content comparison across Git checkout line endings. Recompute actual target byte hash after root synchronization.",
+    "reviewedContentSyncTargets": [
+      "SKILL.md",
+      "references/jobs-observations.md"
+    ],
+    "lineEndingOnly": [
+      "references/skill-loop.md"
+    ]
+  }
+}

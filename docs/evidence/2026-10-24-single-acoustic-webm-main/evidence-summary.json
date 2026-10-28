@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "runtimeSource": "1aa0e9eeaedf05ff2ece202f717df00c571a4b66",
+  "driverFrozenSha256": "sha256:dd6b40d6b43d22210914cfd91a168a320651f4cf3c2e59117aac66424ece45d6",
+  "scope": {
+    "appExports": 1,
+    "displaySeconds": 2,
+    "applicationSolverJobs": 0,
+    "extraExportRetries": 0,
+    "browser": "Codex IAB normal main, EN",
+    "origin": "http://127.0.0.1:5188",
+    "publicDeploymentProven": false
+  },
+  "artifact": {
+    "bytes": 923844,
+    "sha256": "1b9ace1750d168d63b2a86ef5d70ee66e6cec42a806a0be5531c849a60563649",
+    "frames": 48,
+    "codec": "vp8",
+    "width": 584,
+    "height": 640,
+    "durationSeconds": 2,
+    "terminalPhysicalTimeSeconds": 0.0012,
+    "terminalOffsetSeconds": 0
+  },
+  "archive": {
+    "originalRawSha256": "sha256:bd30abd84f1b8c7fce85018feb476d44d7d88cef934b8edb45867ec45362a0b7",
+    "formalNormalizedSha256": "sha256:5c7ec975ac3ccec58de4f391c00b8522afc9a6598a2422322cef253593b8cf31",
+    "note": "Raw source and formal normalized JSON identities are intentionally distinct; import/readback full contents match."
+  },
+  "independent": {
+    "result": "independent/independent-result.json",
+    "notes": "independent/audit-notes.json",
+    "allPresentationAndPhysicalLedgerEntries": 48,
+    "decodedFirstLastVisuallyReviewed": true,
+    "retainedInitialVerifierMistake": "Final-page nextOffset null was initially rejected by audit script; fixed and reread same saved bytes, no RPC/export repeat."
+  },
+  "preservedState": {
+    "unchanged": 5,
+    "keys": [
+      "inspect (except retained ownedExportJobs count)",
+      "cases",
+      "compare",
+      "result",
+      "view"
+    ],
+    "sourceResultRevisionVerified": true
+  },
+  "cleanup": {
+    "exportExecutionSettledBeforeRelease": true,
+    "ownedExportsAfterRelease": 0,
+    "ownedAnalysisJobs": 0,
+    "transfersReleased": true,
+    "guiDisconnectedAndFieldsBlank": true,
+    "sessionListEmpty": true,
+    "stdioChildExitCode": 0,
+    "stdioChildCloseCode": 0,
+    "terminationRequested": false,
+    "escalation": false,
+    "pidGone": true,
+    "tokenFileAbsent": true,
+    "rootReportedTabClosedAndViteStopped": true
+  },
+  "baseline": {
+    "ownerFocused": {
+      "passed": 99,
+      "failed": 0,
+      "source": "12ab81b owner synthetic/pure tests; earlier missing-WASM preparation failure retained in sibling source evidence"
+    },
+    "rootIntegratedFocused": {
+      "passed": 117,
+      "failed": 0,
+      "source": "root reported at frozen1aa; not re-executed while packaging"
+    },
+    "contracts": 22,
+    "build": "validation/build.log",
+    "localChecks": {
+      "reportEntries": 28,
+      "allPassed": true,
+      "elapsedMs": 42195.5936
+    },
+    "earlyPreparationFailure": {
+      "log": "validation/early-published.log",
+      "checkpoints": "validation/early-published.checkpoints.jsonl",
+      "reason": "dist/runtime-manifest.json absent before build",
+      "applicationSolverStarted": false,
+      "followup": "Build then separate normal local verification success; this is not a repeated browser export."
+    }
+  },
+  "limits": [
+    "One bounded localhost/IAB acoustic archive and source revision only.",
+    "No branded Chrome, hidden/stalled real-tab run, GUI download completion, other engines or general geometry/physics/calibration proof.",
+    "No thermal-time WebM capability claim.",
+    "executionSettled reports export-promise cleanup, not independent OS codec-resource enumeration.",
+    "Historical driver and independent scripts retain original source-relative/absolute QA paths; they are evidence, not in-place portable entrypoints.",
+    "Private pairing file is excluded; installed Skill distribution is untouched by this packaging commit."
+  ]
+}

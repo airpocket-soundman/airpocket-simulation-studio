@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "base": "5b2fd22",
+  "source": [
+    {
+      "path": "src/single-view-time-webm.js",
+      "workingSha256": "70083c5d50c7600fee4ae1361cc5c7ca9570a293f665ce2f8158104e7b46782d",
+      "lfSha256": "9834f187e9fe9e63ef74356acaa6df17d7b3e9e41d7646addd1e5ff5d76083a4"
+    },
+    {
+      "path": "src/visual-export.js",
+      "workingSha256": "ec02582fcc0d801aadda55486cb9b885c63f4ca3976c04679a5c08057b95e3d8",
+      "lfSha256": "437969d1a068f4a3265b10008192ec3798e1f390d1a7c0f28b9f36e67a4dfd05"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "workingSha256": "c5a332a78e30d97594843a1153c2ab896453a8985febca9393ab279f82f8554a",
+      "lfSha256": "1e62c286617144d89e145ee26a8307e06b6a9cae4b83b4479007e45bbcd8e9a5"
+    },
+    {
+      "path": "src/main.js",
+      "workingSha256": "9c2d8f0ea326176771d8972c2d2d7ecf519750dd6d8f4d7df2ff40e567395207",
+      "lfSha256": "eb62d7ef1e812fee5756d9fd4813a9b41a777565ab3c2fc8113961b09571277f"
+    },
+    {
+      "path": "src/browser-operation-view-contracts.js",
+      "workingSha256": "59e205095424d94a686cf952ad9e054f0de43d717df724da2ee479aaa3246552",
+      "lfSha256": "580f6d593d5bb5314d5e374d5d87d69d3136e4cf7eac67d673ab0485acc2afea"
+    }
+  ],
+  "feature": "single-view stored thermal temperature time WebM via existing GUI Save and startExport",
+  "capability": "singleThermalTimeWebmExport",
+  "legacyAcousticUnchanged": true,
+  "fields": {
+    "resultKind": "thermal",
+    "field": "temperature",
+    "unit": "degC",
+    "interpolation": false,
+    "heatFlux": false
+  },
+  "bounds": {
+    "maxStoredFrames": 61,
+    "maxScalarBytes": 67108864,
+    "copyTemperatureArrays": false,
+    "maxVideoBytes": 33554432,
+    "maxWidth": 1280,
+    "maxHeight": 640,
+    "maxVideoFrames": 120
+  },
+  "verification": {
+    "privateProofKindFieldUnitRevision": true,
+    "originalBlobSha256Bound": true,
+    "strictDemux": true,
+    "everyTimestampDecoded": true,
+    "firstLastNearestLedger": true
+  },
+  "tests": {
+    "newThermalPure": 7,
+    "newThermalUI": 4,
+    "focusedTotal": 114,
+    "pass": 114,
+    "fail": 0,
+    "skip": 0,
+    "contractsDeclarations": 25,
+    "moduleBoundaries": 19,
+    "docs": 2
+  },
+  "sharedChanges": {
+    "main": "One thermal explanation line",
+    "browserOperationContract": "Existing startExport limit descriptions only; no methods/scopes added",
+    "moduleLayers": false,
+    "progress": false,
+    "packageLock": false
+  },
+  "realCodecRuns": 0,
+  "guiRuns": 0,
+  "solverRuns": 0,
+  "limitations": [
+    "Fake codec tests are control-flow/contract evidence, not actual thermal VP8 pixels",
+    "Thermal Play preview remains unsupported; Save only",
+    "No recalculation, interpolation, inferred heat flux or physical calibration",
+    "Existing acoustic real export evidence remains separate"
+  ],
+  "proofDispatchFix": {
+    "original": "Draft selected manifest by issued Blob proof alone; acoustic proof could be returned for a temperature job with the same declared revision.",
+    "fixed": "Prepared field temperature selects thermal manifest; instantPressure selects acoustic manifest; every other field refuses. Private proof-kind checks reject both crossed combinations.",
+    "regression": "Fake integration checks both crossed kinds plus pressure/heatFlux refusals; valid acoustic/thermal paths remain covered."
+  },
+  "asyncCompatibilityFix": "Both public encode wrappers remain async: invalid/null/undefined inputs reject a Promise rather than throwing synchronously; valid snapshot timing is unchanged."
+}

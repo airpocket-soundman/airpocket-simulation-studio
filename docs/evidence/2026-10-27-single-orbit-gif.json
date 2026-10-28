@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "base": "1edc664",
+  "includedRootCompatibilityFix": "4027bdcdabb55c6c05780af13e13861a3849fb2d",
+  "sourceCommit": "149bfda",
+  "source": [
+    {
+      "path": "src/ui/single-orbit-gif.js",
+      "workingSha256": "aec40524c9e36da62cb22cfa65825abb8d764c3a3d9857b466610f5da22c3706",
+      "gitBlobSha256": "c9685c3712ffbedbdcd1ac08bc5f6c13acc71dc9ed079b81b012906d52f24dd9"
+    },
+    {
+      "path": "src/visual-export.js",
+      "workingSha256": "820609c4dda3b380bafbe7eb72701e578a9f42fa8d91904407ad8f59a011a8d7",
+      "gitBlobSha256": "216d04add9b52bf0312c8e0cac3fa88d9c993891a74200f71c587863748c00af"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "workingSha256": "84ed21bcf49e1e3a11d59bc5bf83dca0fad8daeaba566af2ada7435cd0f7cfe2",
+      "gitBlobSha256": "7038aaefc64cac6560e35b6c4414a31a50e699e2bc680266b387a238277d6965"
+    }
+  ],
+  "capability": "singleOrbitGifExport",
+  "method": "startExport",
+  "methodsAndScopesAdded": 0,
+  "profile": {
+    "animations": [
+      "orbit"
+    ],
+    "frames": 24,
+    "phase": "i/24",
+    "width": 640,
+    "height": 320,
+    "imageHeight": 204,
+    "captionHeight": 116,
+    "palette": "RGB332",
+    "colors": 256,
+    "maxArtifactBytes": 33554432,
+    "seconds": [
+      1,
+      15
+    ],
+    "delay": "Positive integer centiseconds summing to seconds*100"
+  },
+  "privateProof": {
+    "wholeBlobBytesSha": true,
+    "ordinaryUint8ArrayExactLengthBeforeCopy": true,
+    "nonSharedArrayBufferBrand": true,
+    "fieldCameraTimeModeRevisionBinding": true,
+    "selectedModeNullUndefinedNormalize": "no mode, distinct from mode0",
+    "cloneAndComparisonBlobRefusal": true
+  },
+  "selection": {
+    "thermalInterpolated2s": "selectedPhysicalTimeSeconds2, interpolatedtrue, timeSelectionBasis viewer-interpolated; no selectedStoredFrameIndex",
+    "staticModal": "No invented stored time; mode proof bound separately"
+  },
+  "tests": {
+    "newPure": 6,
+    "newUI": 5,
+    "independentDecode": "General GIF/LZW decoder extracted unchanged from existing encoder tests;24 decoded images, palette, delay totals and letterbox pixels verified",
+    "fakeFocused": {
+      "total": 125,
+      "pass": 125,
+      "fail": 0,
+      "skip": 0
+    },
+    "initialBroad": {
+      "total": 132,
+      "pass": 127,
+      "fail": 5,
+      "skip": 0,
+      "reason": "The slice-reference before hook could not load prebuilt public/fem-kernel.wasm in the fresh worktree; five dependent tests failed preparation and no solver ran. Root will verify in its built environment."
+    },
+    "contractDeclarations": 26,
+    "moduleTests": 19
+  },
+  "draftIssuesClosed": [
+    "Manifest size/brand gate before allocation",
+    "Modal onchange closure guard and restore; cross-mode proof refusal",
+    "Restore camera up before lookAt",
+    "Thermal interpolated time metadata is not a stored-frame index"
+  ],
+  "cancellation": "Cooperative checks; unresolved yield retains executionSettled=false and renderer exclusion until owned processing settles; no orphaning race",
+  "realBrowserRuns": 0,
+  "realCodecRuns": 0,
+  "productExports": 0,
+  "solverRuns": 0,
+  "downloadedSdkOrWasm": false,
+  "progressChanged": false,
+  "publication": false,
+  "limitations": [
+    "Canvas tests use pixels and independent GIF decode but not a real main browser",
+    "Real GUI/download/full artifact transport acceptance remains separate",
+    "Artifact byte cap is not peak-process memory proof",
+    "Lossy preview, no physical time integration or numerical calibration"
+  ],
+  "rawFiles": [
+    {
+      "name": "initial-broad.raw.log",
+      "bytes": 20166,
+      "sha256": "8817737c75ea3eef463489d83822fe9fe5c85d63851a2d4506760efa49622952"
+    },
+    {
+      "name": "final-fake.raw.log",
+      "bytes": 13161,
+      "sha256": "248ab9d84f085cded1b70b986674a397768f8db8078652c3f11ff3acafeb53a5"
+    }
+  ]
+}

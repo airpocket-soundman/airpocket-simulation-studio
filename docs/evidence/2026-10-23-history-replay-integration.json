@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "candidate": "40024a1",
+  "scope": "Unmerged and unpublished input-history replay and bounded ACP initialize evidence",
+  "focusedAfterIndependentFix": {"tests": 38, "passed": 38, "failed": 0, "skipped": 0},
+  "contractDeclarations": 17,
+  "progressAndPublicationDocumentation": {"tests": 14, "passed": 14, "failed": 0, "skipped": 0, "head": "bf8d764"},
+  "buildAndLocalAssets": {"head": "ed30a1173df947fda7f080f8e296153347d7969a", "buildExitCode": 0, "localChecks": 27, "failed": 0, "durationSeconds": 43.39, "limitation": "Precedes documentation-only Linux evidence and the independently tested history-buffer fix; final-head CI remains required."},
+  "independentFix": {"commit": "40024a1", "issue": "A SharedArrayBuffer with a forged ArrayBuffer prototype bypassed the prototype-only check", "resolution": "Captured intrinsic ArrayBuffer byteLength getter checks the actual brand; regressions cover spoof rejection, ordinary subview identity and unchanged inputs"},
+  "acp": {"initialize": "verified with the installed adapter", "sessionNew": "not executed: effective read-only/hooks/MCP isolation cannot yet be demonstrated", "prompt": "not executed"},
+  "taskStatusChanged": false,
+  "physicalCalibrationVerified": false,
+  "productionSolverConnected": false,
+  "parentCompletionClaimed": false
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "baseCommit": "fdfe355a317f06d9437b5b2030b8148b4567a422",
+  "branch": "codex/material-status-locale-fix-20261023",
+  "scope": "AGENTINPUT1 orthotropic material-status locale round trip",
+  "historicalBrowserReproduction": {
+    "owner": "root",
+    "path": ".qa/agentinput-main/proof/gui.json",
+    "sha256": "2e2ea87bf77e6a0b25404ffb201cbcb8291c0f0bf23bf34fced33063bc51b5b3",
+    "meaning": "Root observed three fallback guides translated to Japanese while their material-status focus destination retained English."
+  },
+  "cause": {
+    "ja": "英語で生成した動的文をスキャナーが翻訳元として記憶し、日本語への復帰時も英語を保持した。全文辞書も不足していた。",
+    "en": "An English-generated dynamic sentence became the scanner source, so returning to Japanese retained English. The full-sentence dictionary entry was also missing."
+  },
+  "fix": {
+    "ja": "直交異方性の説明を他の状態文と同じ日本語の翻訳元へ統一し、全文の英訳を辞書へ追加。言語変更時のフォーム再描画は追加しない。",
+    "en": "Emit the canonical Japanese source like the other status messages and register its complete English translation. No language-change form redraw is added."
+  },
+  "verification": {
+    "red": {
+      "command": "node --test tests/ui-material-form-scanner.test.mjs",
+      "tests": 3,
+      "pass": 0,
+      "fail": 3
+    },
+    "green": {
+      "command": "node --test tests/ui-material-form-scanner.test.mjs tests/ui-material-form.test.mjs tests/i18n.test.mjs tests/ui-agent-connection-status-scanner.test.mjs tests/ui-spherical-region-scanner.test.mjs tests/ui-analysis-preflight.test.mjs tests/docs.test.mjs",
+      "tests": 48,
+      "pass": 48,
+      "fail": 0
+    },
+    "contracts": {
+      "command": "npm run check:contracts",
+      "declarations": 19,
+      "passed": true
+    },
+    "coverage": [
+      "actual src/i18n.js scanner using mini DOM and mutation delivery",
+      "EN initial load -> JA -> EN",
+      "JA initial load -> EN and dynamic replacement while EN -> JA -> EN",
+      "draft notes/density/dependence, text selection and status focus preserved",
+      "all three real preflight fallback buttons focus translated status and preserve drafts",
+      "scanner settles without redraw loop"
+    ],
+    "limits": [
+      "This fix evidence uses a mini DOM, not a real browser. Root owns the subsequent real IAB confirmation.",
+      "No solver was started.",
+      "Language change retains existing preflight report invalidation; tests explicitly run preflight again for each locale."
+    ]
+  }
+}

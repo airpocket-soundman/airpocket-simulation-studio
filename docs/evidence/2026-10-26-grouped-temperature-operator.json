@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "scope": "explicit piecewise-planar scalar temperature consistent P1 L2 projection only",
+  "base": "7fee9593ba37c5a933489daadbc1fe628b1b6ea9",
+  "sourceSha256": "69671a3a04f8af869aaa2231198d870cadc52f7c4f075d8973421d112d138d98",
+  "geometry": {
+    "units": "mm",
+    "mesh": {
+      "nodes": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0.3333333333333333,
+        0.3333333333333333,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "sourceFaces": [
+      {
+        "nodes": [
+          0,
+          1,
+          4
+        ]
+      },
+      {
+        "nodes": [
+          1,
+          2,
+          4
+        ]
+      },
+      {
+        "nodes": [
+          2,
+          0,
+          4
+        ]
+      },
+      {
+        "nodes": [
+          1,
+          0,
+          3
+        ]
+      }
+    ],
+    "targetFaces": [
+      {
+        "nodes": [
+          5,
+          7,
+          6
+        ]
+      },
+      {
+        "nodes": [
+          6,
+          8,
+          5
+        ]
+      }
+    ],
+    "groups": [
+      {
+        "groupId": "xy",
+        "sourceFaceIds": [
+          0,
+          1,
+          2
+        ],
+        "targetFaceIds": [
+          0
+        ]
+      },
+      {
+        "groupId": "xz",
+        "sourceFaceIds": [
+          3
+        ],
+        "targetFaceIds": [
+          1
+        ]
+      }
+    ]
+  },
+  "operatorRevision": "sha256:c9af364a8e6c90547de6d264d1164d83338ce8b7cf7e90aa9fddbf3e0da580ef",
+  "geometryRevision": "sha256:e4150a40a24eabb0caff7cc757bb9a983d0eba7626da1d0b3f4246344e63f069",
+  "areaM2": 0.000001,
+  "conditionInfinity": 8.000000000000004,
+  "independentOracles": {
+    "foldedCenterHat": {
+      "source": [
+        20,
+        20,
+        20,
+        20,
+        21
+      ],
+      "expectedTarget": [
+        20.166666666666668,
+        20.166666666666668,
+        20.5,
+        19.833333333333332
+      ],
+      "actualTarget": [
+        {
+          "nodeId": 5,
+          "value": 20.166666666666668
+        },
+        {
+          "nodeId": 6,
+          "value": 20.16666666666666
+        },
+        {
+          "nodeId": 7,
+          "value": 20.500000000000007
+        },
+        {
+          "nodeId": 8,
+          "value": 19.833333333333336
+        }
+      ],
+      "consistentMassM2": [
+        [
+          1.6666666666666665e-7,
+          8.333333333333333e-8,
+          4.166666666666666e-8,
+          4.166666666666666e-8
+        ],
+        [
+          8.333333333333333e-8,
+          1.6666666666666665e-7,
+          4.166666666666666e-8,
+          4.166666666666666e-8
+        ],
+        [
+          4.166666666666666e-8,
+          4.166666666666666e-8,
+          8.333333333333333e-8,
+          0
+        ],
+        [
+          4.166666666666666e-8,
+          4.166666666666666e-8,
+          0,
+          8.333333333333333e-8
+        ]
+      ],
+      "incrementRhsM2": [
+        5.555555555555555e-8,
+        5.555555555555555e-8,
+        5.555555555555555e-8,
+        0
+      ],
+      "expectedIntegral": 0.000020166666666666668,
+      "actualIntegral": 0.000020166666666666668,
+      "residual": 8.881784197001252e-16,
+      "invalidLocalAveragingTarget": [
+        20.166666666666668,
+        20.166666666666668,
+        20.333333333333332,
+        20
+      ]
+    },
+    "affine3D": {
+      "formula": "20+10*x_mm+30*y_mm+40*z_mm",
+      "expected": [
+        20,
+        30,
+        50,
+        60
+      ],
+      "actual": [
+        {
+          "nodeId": 5,
+          "value": 20.000000000000007
+        },
+        {
+          "nodeId": 6,
+          "value": 29.999999999999986
+        },
+        {
+          "nodeId": 7,
+          "value": 50.000000000000014
+        },
+        {
+          "nodeId": 8,
+          "value": 60
+        }
+      ],
+      "expectedIntegral": 0.000035,
+      "actualIntegral": 0.000035,
+      "residual": 1.7763568394002505e-15
+    },
+    "scaleAndRigidTransform": {
+      "lengthScale": 10,
+      "areaIntegralScale": 100,
+      "temperatureValuesUnchanged": true
+    }
+  },
+  "validation": {
+    "command": "node --test tests/grouped-temperature-operator.test.mjs tests/planar-temperature-operator.test.mjs tests/planar-temperature-operator-independent.test.mjs tests/planar-p1-heat-operator.test.mjs tests/planar-p1-independent-audit.test.mjs tests/docs.test.mjs tests/contracts-types.test.mjs tests/module-boundaries.test.mjs",
+    "total": 65,
+    "pass": 65,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 3557.872,
+    "newRegressionGroups": 16,
+    "typeDeclarations": 26,
+    "checks": [
+      "group8 accepted/9 refused",
+      "global active128 accepted/129 refused on each side",
+      "1MiB raw accepted/+1 refused",
+      "local well-conditioned/global ill-conditioned area imbalance refused",
+      "shared-edge folded and coplanar/disjoint patches accepted",
+      "cross-group coplanar area overlap/noncoplanar interior crossing refused",
+      "coincident coordinates with different IDs never welded",
+      "group/face assignments exact once and bounded IDs",
+      "self-rehashed mass/cross/area/weights/conditioning/coefficients refused",
+      "input snapshots before await, accessor zero/prototype spoof refused",
+      "degC/K offset and below-absolute-zero projection refusal"
+    ]
+  },
+  "legacyUnchanged": [
+    {
+      "path": "src/planar-temperature-operator.js",
+      "gitBlobSha256": "dcc2d0383aaeeea6d6e563a30688e971ca43d781a8c8a8e3a0264ab6df8e90e4",
+      "unchanged": true
+    },
+    {
+      "path": "src/planar-p1-heat-operator.js",
+      "gitBlobSha256": "1a6cc36ac84595b8edb435cdaf8ad20171c106779d1cec94bcc5913c94d77e50",
+      "unchanged": true
+    },
+    {
+      "path": "src/planar-heat-operator.js",
+      "gitBlobSha256": "4f9c41d1600e0cbe3b091b7342bd3cc39f2b1c6244cc9bc64d2677304a8d1f1f",
+      "unchanged": true
+    },
+    {
+      "path": "src/triangle-overlap.js",
+      "gitBlobSha256": "0d8d5fa0a845f5caba1b03d90b25f22172894c1770a9e3b152832f7094bb96d9",
+      "unchanged": true
+    }
+  ],
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newCodecRuns": 0,
+  "newSdkDownloads": 0,
+  "notClaims": [
+    "energy conservation",
+    "source minmax or positivity preservation",
+    "smooth curved surface/general CAD repair",
+    "partial coverage",
+    "thermal contact/coupled solver",
+    "measurement/calibration",
+    "COUPLE3 parent completion"
+  ]
+}

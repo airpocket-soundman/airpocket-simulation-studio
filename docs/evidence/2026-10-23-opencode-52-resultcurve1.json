@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "workOrder": "52-RESULTCURVE1",
+  "parentTaskId": "RESULTCURVE1",
+  "parentTaskStatusAfterWork": "building",
+  "scope": "Bounded generator/CLI: an explicit synthetic force route is solved stage-by-stage with real Gmsh WASM meshing and independent solveElastic calls, producing a revisioned {spec,steps} re-input bundle. The existing common export service revalidates it before exclusive publication. This is not automatic project/analysis capture, a plastic history or parent RESULTCURVE1 acceptance.",
+  "baseCommit": "fe98ca3e60b4f5dfd65c02f00b33b0f76059e9cb",
+  "implementationCommit": "45296ddf761979d7f9eeb92b79077d1c5be7dda4",
+  "branch": "codex/opencode-52-resultcurve1",
+  "agentsFile": "none present in the dedicated worktree",
+  "changedFilesHashBasis": "sha256 of the pre-commit working-tree bytes for the listed sources, tests and docs; this evidence file is not self-hashed",
+  "environment": {
+    "platform": "win32",
+    "node": "v24.11.1",
+    "dependencyInstall": "npm ci in the dedicated worktree (22 packages)",
+    "gmshWasm": "@loumalouomega/gmsh-wasm 0.3.0",
+    "solver": "src/fem-core.js solveElastic, JavaScript CPU",
+    "browser": "not used for this work order",
+    "native": "not used for this work order"
+  },
+  "request": {
+    "synthetic": true,
+    "curveId": "synthetic-bar-independent-linear-solves",
+    "caseIdentity": {
+      "name": "Synthetic 10x10x40 mm bar",
+      "synthetic": true
+    },
+    "rowIdentity": {
+      "materialKey": "synthetic-E1e9-nu0",
+      "geometryKey": "box-10x10x40mm",
+      "gaugeKey": "weighted-end-faces"
+    },
+    "boundsMm": [0, 0, 0, 10, 10, 40],
+    "meshSizeMm": 4,
+    "youngModulusPa": 1000000000,
+    "poissonRatio": 0,
+    "axis": [0, 0, 1],
+    "initialGaugeLengthMm": 40,
+    "initialAreaMm2": 100,
+    "loadsN": [0, 25, 50, 100, 50, 0]
+  },
+  "input": {
+    "requestBytes": 432,
+    "requestSha256": "6839af571a4f3582ae0eef3db240d54c515091b97b95cd54d52479e1c69d3d33"
+  },
+  "cliRun": {
+    "command": "node scripts/create-increment-curve-bundle.mjs --request <absolute request.json> --output <absolute bundle.json>",
+    "exit": 0,
+    "stderr": "",
+    "summaryKind": "increment-curve-reinput-bundle",
+    "summaryFormat": "{spec,steps}",
+    "outputBytes": 274045,
+    "outputSha256": "bf64b5111817a89b42a094f58bff3de1c8482beffa99fe52d4e4bed7ee86979c",
+    "nodeCount": 171,
+    "steps": 6,
+    "convergedSteps": 6,
+    "failedSteps": [],
+    "inputRevision": "sha256:de2cce7b7d51ba7828486d7d7b9c0cf9601f7f7c7c73608ba10373f5f82cf688",
+    "meshRevision": "sha256:8c3e2ca3142f7b6124be4b5e4f4850e4993968c71dfc365f557c673e08acc5b6"
+  },
+  "expectedAt100N": {
+    "extensionMm": 0.04,
+    "engineeringStressPa": 1000000,
+    "engineeringStrain": 0.001,
+    "tensileForceN": 100,
+    "supportReactionN": -100
+  },
+  "measuredAt100N": {
+    "stepIndex": 3,
+    "stepId": "step-3-100N",
+    "controlledValue": 100,
+    "controlledUnit": "N",
+    "status": "converged",
+    "extensionMm": 0.04000000000017234,
+    "engineeringStressPa": 1000000.0000140885,
+    "engineeringStrain": 0.0010000000000043086,
+    "tensileForceN": 100.00000000140884,
+    "reactionAxisN": -100.00000000140884,
+    "appliedAxisN": 100,
+    "forceBalanceErrorNAxialN": -1.4088357147556962e-9,
+    "calculationRevision": "sha256:5815836dd6d330d095ebd90cbf21f6c487e6f65b814d1b1331440f84c886f631",
+    "resultRevision": "sha256:0dfc90ec77c029073669ca1b7bd779f86563285a92e23117f1544d0c003a5ba1",
+    "relativeErrors": {
+      "extension": 4.3085535139653075e-12,
+      "engineeringStress": 1.4088508137888311e-11,
+      "engineeringStrain": 4.3085535139653075e-12,
+      "tensileForce": 1.4088286093283386e-11
+    }
+  },
+  "otherRoutePoints": {
+    "rows": [
+      {"stepIndex": 0, "controlledValue": 0, "extensionMm": 0},
+      {"stepIndex": 1, "controlledValue": 25, "extensionMm": 0.010000000000043086},
+      {"stepIndex": 2, "controlledValue": 50, "extensionMm": 0.02000000000008617},
+      {"stepIndex": 3, "controlledValue": 100, "extensionMm": 0.04000000000017234},
+      {"stepIndex": 4, "controlledValue": 50, "extensionMm": 0.02000000000008617},
+      {"stepIndex": 5, "controlledValue": 0, "extensionMm": 0}
+    ],
+    "note": "Rows 2 and 4 are separate solves at 50 N on the same linear route; equal extension is deterministic linear response, not plastic hysteresis."
+  },
+  "artifactsFromCommonService": {
+    "csv": {"bytes": 3569, "sha256": "e89b1694de005d3bcec814eb18d085ac0e3bc2886b015e477b69b894eeb4e9d1"},
+    "json": {"bytes": 8338, "sha256": "0f83ed7384919fef2da81bf99494e0b96d447495268a5f40d32b412bbe90b2e5"},
+    "svg": {"bytes": 4101, "sha256": "778e46c67eef8708f97ac98122b6b3331fb8817b692292a9b25bbd7ab5a679e5"}
+  },
+  "acceptance": {
+    "realSolverRoute": "passed: actual Gmsh WASM mesh (171 nodes), six independent solveElastic calls in route order",
+    "analytical100N": "passed within 1e-6 relative: extension 0.04 mm, engineering stress 1 MPa, engineering strain 0.001",
+    "zeroAndUnloadOrder": "passed: route values [0,25,50,100,50,0] retained; zero rows have zero extension; separate 50 N solves equal",
+    "noVectorCopy": "passed: every saved kind/displacement/constraintReactions/applied/residual equals a fresh solve at the same load",
+    "revisions": "passed: input/mesh/calculation/result revisions are content-derived by the common service",
+    "bundleRevalidation": "passed: CLI output read back and passed to createIncrementCurveArtifacts; CSV/JSON values and revisions match",
+    "failedStep": "passed by injected real-solver failure at step 2: failed row has no output and null measurement/revision fields; later 100 N row still converged",
+    "publicationAtomicity": "passed: existing destination unchanged; invalid request, 64 KiB overflow, malformed JSON, relative path, same input/output and injected generation failure leave no destination",
+    "formatSeparation": "passed: output has exactly spec and steps; no curve/csv/svg fields. Normal project and verified table JSON are not produced by this CLI."
+  },
+  "tests": {
+    "focused": {
+      "command": "node --test tests/increment-curve-bundle.test.mjs tests/increment-curve-data.test.mjs tests/increment-curve-export.test.mjs",
+      "tests": 25,
+      "pass": 25,
+      "fail": 0,
+      "skip": 0
+    },
+    "existingMcpCurve": {
+      "command": "node --test tests/increment-curve-mcp.test.mjs",
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    },
+    "contracts": {
+      "command": "npm run check:contracts",
+      "result": "Contract declarations type-check (6 declaration files), exit 0"
+    },
+    "docs": {
+      "command": "node --test tests/docs.test.mjs",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "result": "clean"
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "tests": 1849,
+      "pass": 1841,
+      "fail": 1,
+      "skip": 7,
+      "durationMs": 419692.05,
+      "failure": "tests/progress-insights-mcp.test.mjs real stdio progress timed out after 123279 ms in the full run",
+      "rerun": "node --test tests/progress-insights-mcp.test.mjs standalone: 3 pass, 0 fail"
+    }
+  },
+  "referenceRegeneration": {
+    "command": "node scripts/create-increment-curve-export-reference.mjs",
+    "result": "bundleBytes 274044 (without trailing newline), nodeCount 171, steps 6, peak step-3-100N",
+    "note": "The existing reference generator now calls the same bounded service; committed reference evidence content remained unchanged."
+  },
+  "changedFiles": {
+    "scripts/increment-curve-bundle-service.mjs": {"status": "added", "sha256": "94c4e7ba1c1ce59ad5ff50b0151034a1392991c8f38aa09a484d3f18f7517a6d"},
+    "scripts/create-increment-curve-bundle.mjs": {"status": "added", "sha256": "023f03cdf04a9b3f648a8e8ae32533450db2c0b6087f83e670bdc4ed17095f6c"},
+    "scripts/create-increment-curve-export-reference.mjs": {"status": "modified", "sha256": "1eab4806d59c326a704739ec5d741f2ec061c3d33a9369c6c3737a6f254b4170"},
+    "tests/increment-curve-bundle.test.mjs": {"status": "added", "sha256": "05ed00e7bab9cc65a6c02ce1aff52020df585672a2174e44412927a5e9ad5899"},
+    "docs/increment-curve-export.md": {"status": "modified", "sha256": "a8b12efcebcf6b8f7a17516f5ec6bad6c6ce83697bb16a988b17f9f78675395f"},
+    "docs/en/increment-curve-export.md": {"status": "modified", "sha256": "66a36b396107c1f312927e8a1d94bf2488e1dade35079538081c58c093a611ed"},
+    "docs/increment-curve-ui.md": {"status": "modified", "sha256": "cfd7966fba05d443e150ff220a6c2f1ab18e9741ae721b54ebd81b177f072164"},
+    "docs/en/increment-curve-ui.md": {"status": "modified", "sha256": "5fcf27f4c2ba145864041d112b384ac092c992791cc0427ec0cccaaf5e8db4f9"}
+  },
+  "notVerified": [
+    "No real browser or GUI session for this CLI; Node-only execution is not presented as browser/GUI verification.",
+    "No new MCP tool/argument; the existing studio_increment_curve tests passed, but this CLI was not exercised through a registered MCP client.",
+    "No measured specimen, calibration, arbitrary geometry, displacement control, nonlinear/plastic history or general physical accuracy.",
+    "No Linux/native execution.",
+    "Parent RESULTCURVE1 acceptance (saved project/analysis capture, GUI/API/MCP state agreement, LLM reconstruction) remains incomplete.",
+    "The full npm test run had one unrelated progress-insights MCP timeout; the standalone rerun passed, but the full run is not recorded as clean."
+  ],
+  "progressProposal": {
+    "id": "RESULTCURVE1",
+    "status": "building",
+    "note": "Add a bounded explicit-force-route generator/CLI that creates a revalidated {spec,steps} bundle from real independent solves with exclusive publication and preserved failed rows. Parent remains building: automatic capture from a saved project/analysis, displacement control, nonlinear history and full GUI/API/MCP acceptance remain open."
+  },
+  "auditCorrection": {
+    "date": "2026-10-23",
+    "reviewedHead": "e170735e666155f4c13a90cb007c6f5b7a658d31",
+    "reason": "The fixed base main already marks RESULTCURVE1 building; queued was an incorrect report, not an actual progress.json transition. Historical test runs above remain the submitter runs, not the later audit runs."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "exportCapabilities",
+      "scope": "inspect",
+      "description": "Inspect actual renderer/export format support. comparisonTimeWebmExport reports fixed-frame VP8 encode/decode API support separately (codec configuration checked on export); comparisonWebmExport remains realtime orbit/deformation. Single-view mp4 remains unsupported; formats.gif and singleOrbitGifExport retain bounded orbit GIF canvas support; singleStoredTimeGifExport separately reports nearest-stored thermal/acoustic time GIF support; singleDeformationGifExport reports fixed-camera saved linear displacement/normalized-modal visualization cycles. Comparison-only comparisonGifExport reports orbit/time/deformation GIF support separately and a MediaRecorder MP4 probe only changes the reason. formats[\"png-sequence\"] reports the fixed-frame ZIP export {supported,container:\"zip\",compression:\"store\",minFrames,maxFrames,defaultFrames,maxFrameBytes,maxTotalBytes,animations}.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "sideEffects": [],
+      "revisionFields": [],
+      "units": {},
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative."
+      ]
+    }
+  ]
+}

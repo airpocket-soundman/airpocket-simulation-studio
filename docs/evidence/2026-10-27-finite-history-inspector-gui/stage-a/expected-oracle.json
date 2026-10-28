@@ -1,0 +1,183 @@
+{
+  "scope": "read-only preparation; no browser/server/structural solver",
+  "example": {
+    "bytes": 777,
+    "rawSha256": "6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+    "canonicalSha256": "8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71"
+  },
+  "expectedReport": {
+    "sourceBytes": 777,
+    "rawIdentity": "sha256:6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+    "canonicalIdentity": "sha256:8daace3d459a7e6d5288744c3fe6f3d2ff6a33c8136b0c3b21c791aa0adb5e71",
+    "model": "synthetic-green-lagrange-maxwell-reference-v1",
+    "synthetic": true,
+    "provisional": true,
+    "calibrated": false,
+    "meaning": "input-history-replay-from-I-Z0",
+    "stepCount": 4,
+    "completed": true,
+    "status": "completed",
+    "summary": {
+      "finalTimeSeconds": 4.7,
+      "cumulativeWorkDensity": 72.73192280741294,
+      "cumulativeDissipationDensity": 32.77991968329006,
+      "energyDensity": 39.95200312412287,
+      "finalObservation": {
+        "model": "synthetic-green-lagrange-maxwell-reference-v1",
+        "synthetic": true,
+        "provisional": true,
+        "calibrated": false,
+        "stressMeasure": {
+          "S": "second-Piola",
+          "P": "first-Piola",
+          "sigma": "Cauchy"
+        },
+        "units": {
+          "stress": "Pa",
+          "energyDensity": "J/m3-reference",
+          "dissipationRateDensity": "W/m3-reference"
+        },
+        "F": [
+          [
+            0.9999954999493741,
+            -0.0030000135002126727,
+            0
+          ],
+          [
+            -0.0030000135002126727,
+            0.9999954999493741,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "E": [
+          [
+            0,
+            -0.0030000000000000434,
+            0
+          ],
+          [
+            -0.0030000000000000434,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "J": 0.9999819998379972,
+        "principalStretches": [
+          0.9969954864491614,
+          1,
+          1.0029955134495867
+        ],
+        "S": [
+          [
+            0,
+            -10685.296481987363,
+            0
+          ],
+          [
+            -10685.296481987363,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "P": [
+          [
+            32.056033699737064,
+            -10685.248397612242,
+            0
+          ],
+          [
+            -10685.248397612242,
+            32.056033699737064,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "sigma": [
+          [
+            64.11293293510441,
+            -10685.488822517249,
+            0
+          ],
+          [
+            -10685.488822517249,
+            64.11293293510441,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "energyDensity": 39.95200312412287,
+        "dissipationRateDensity": 21.952003124122342
+      },
+      "units": {
+        "time": "s",
+        "stress": "Pa",
+        "energyDensity": "J/m3-reference"
+      }
+    }
+  },
+  "displayNumberPolicy": "Number(x.toPrecision(9)).toString()",
+  "malformedExpected": {
+    "status": "invalid",
+    "failure": {
+      "code": "FINITE_VISCO_HISTORY_INVALID_INPUT"
+    }
+  },
+  "protectedFileDigests": [
+    {
+      "path": "src/progress.json",
+      "sha256": "5a22a3a734c21558880cef0801bb7c592365187d2432ba1f22a5552517618736"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "41e5f626380b8c6ea4f66d9be91ca916779d1700097e536e38bef0683c8987bd"
+    },
+    {
+      "path": "src/finite-visco-history.js",
+      "sha256": "6defb61899b1ac0cc7abcf5a46f5425a592be21f527af6e86527fe065646723c"
+    },
+    {
+      "path": "src/finite-visco-reference.js",
+      "sha256": "26817d861fce0ef8fcf3fde214ffbab0b1dab212c56e9437ca288806514fdd74"
+    },
+    {
+      "path": "public/examples/finite-visco-input-history.json",
+      "sha256": "edff265baaa831e75665178975654d5ce9b2a4243861b07fcfac2d5e5052eb41"
+    },
+    {
+      "path": "src/ui/finite-history-inspector.js",
+      "sha256": "961b0b7097e95872381c27a43183382e39d8f1c08bb198766259b0e1b91f2cb1"
+    },
+    {
+      "path": "src/finite-visco-inspector.worker.js",
+      "sha256": "77737acd6709b178e3524bcda9566a079d6bb2d09c4f62079bfccb47daed2f06"
+    }
+  ],
+  "limitations": [
+    "File hashes establish source immutability, not in-memory project/case/analysis-input equality; GUI baseline observations are separately required",
+    "Synchronous GUI cancellation timing not promised by tiny4-step example; disabled idle cancel is not actual cancellation evidence",
+    "Model synthetic/provisional/uncalibrated; no physical calibration or full solver acceptance"
+  ]
+}

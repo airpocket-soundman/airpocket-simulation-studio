@@ -19,10 +19,10 @@ function parseZip(bytes){const v=new DataView(bytes.buffer,bytes.byteOffset,byte
 function fixture({kind='elastic',snapshots=0,pngBytes,getTimeView,restoreTimeView}={}){
  const previous=globalThis.document,elements=new Map();let renders=0;
  const element=id=>{if(!elements.has(id))elements.set(id,{id,disabled:false,value:'',checked:false,textContent:'',after(){},click(){},dispatchEvent(){}});return elements.get(id);};
- for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','acoustic-time-frame'])element(id);
+ for(const id of ['result-legend','name','section-summary','visual-export-status','visual-export-download','result-surface','result-surface-wire','view-png','animation-kind','animation-seconds','animation-preview','animation-save','animation-gif-save','animation-stop','cancel-run','clip-axis','deform-scale','clip-enabled','clip-position','agent-disconnect','acoustic-time-frame'])element(id);
  element('cancel-run').disabled=true;element('clip-axis').value='0';element('deform-scale').value='2';element('clip-position').value='4';element('acoustic-time-frame').value='0';
  let last='';const canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(){},fillText(){}}),toBlob(cb,type){cb(new Blob([pngBytes?pngBytes(last):'frame:'+last],{type}));}};
- globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('agent-disconnect')]};
+ globalThis.document={getElementById:id=>elements.get(id)??null,createElement:tag=>tag==='canvas'?canvas:{innerHTML:''},querySelectorAll:()=>[element('deform-scale'),element('clip-position'),element('animation-save'),element('animation-gif-save'),element('agent-disconnect')]};
  const camera={position:new Vector(),lookAt(){}},controls={target:new Vector(0,0,0),enabled:true,enableDamping:true};
  const output={mesh:{nodes:[0,0,0,1,1,1]},result:{kind,...(kind==='thermal'?{transient:true}:{}),snapshots:Array.from({length:snapshots},(_,i)=>({time:i*0.5,...(kind==='thermal'?{temperature:[20+i,30+i]}:{})}))}};
  const api=installVisualExport({renderer:{domElement:{width:320,height:200},render(){renders++;last=[camera.position.x,camera.position.z,element('deform-scale').value,element('acoustic-time-frame').value,element('clip-position').value].map(v=>Number(v).toFixed(6)).join(',');}},scene:{},camera,controls,getAnalysis:()=>output,redraw(){},language:()=> 'en',translate(){},getTimeView,restoreTimeView});
@@ -181,13 +181,13 @@ test('thermal PNG sequence uses only stored temperatures, exact times, reproduci
  }finally{f.restore();}
 });
 
-test('thermal PNG sequence refuses flux, absent frames, invalid time/temperature and still refuses WebM',async()=>{
+test('thermal PNG sequence refuses flux, absent frames and invalid time/temperature; WebM requires selected temperature',async()=>{
  const f=fixture({kind:'thermal',snapshots:3});try{
   await assert.rejects(run(f,{animation:'time',frames:2,view:{result:{field:'heatFlux'}}}),/temperature/);assert.equal(f.renders,0);
   f.output.result.transient=false;await assert.rejects(run(f,{animation:'time',frames:2}),/stored/);f.output.result.transient=true;
   f.output.result.snapshots[1].time=0;await assert.rejects(run(f,{animation:'time',frames:2}),/increasing/);f.output.result.snapshots[1].time=.5;
   f.output.result.snapshots[1].temperature=[1];await assert.rejects(run(f,{animation:'time',frames:2}),/temperatures/);
-  await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/not supported for thermal/);assert.equal(f.renders,0);
+  await assert.rejects(f.api.render({format:'webm',animation:'time',seconds:1}),/requires temperature/);assert.equal(f.renders,0);
  }finally{f.restore();}
 });
 

@@ -5,6 +5,8 @@ description: Analyze saved airpocket Simulation Studio projects, inspect validat
 
 Specialize the user's own LLM as a CAE agent; this application does not supply a proprietary AI subscription. Work from the user's geometry, physical intent and material sources. The checkout normally lives at `D:/github/airpocket-soundman/airpocket-simulation-studio`; reuse its actual location if different.
 
+Evaluation-evidence links in the references are relative to the repository layout. When reading an installed copy, resolve their `docs/evidence/...` paths under the verified checkout, not under the installed skill directory. Missing historical evidence is not a successful validation.
+
 ## Discover the actual connection first
 
 Inspect the tools registered in this conversation before choosing a workflow. A connected older server may expose 18 tools including `studio_progress`, while the full repository entry declares 36 default/38 paired tools and the minimal browser entry exposes three browser tools. Repository declarations do not install or activate missing tools. Do not claim that a listed tool exists in the current session without checking.
@@ -33,6 +35,8 @@ Do not invent missing material values, loads, supports or regions to make a mode
 Prefer available semantic APIs/MCP for supported operations. Before live mutation, respect the explicitly granted scope and revision guards. Never silently widen permissions or modify a running job's frozen snapshot. Observe terminal state and `executionSettled:true` before release; inspect state after an uncertain mutation timeout rather than blindly retrying. Save and verify requested artifacts, keeping units and physical time distinct from presentation animation.
 
 ## Saved independent increment curves
+
+For an independent saved-file acceptance run, follow [the curve loop](references/increment-curve-loop.md). This verifies formal stdio output and refusal/integrity boundaries; browser interaction remains separate.
 
 When `studio_increment_curve` is actually registered, pass an absolute path to a `{spec,steps}` bundle with explicit gauge/axis/area/support and per-step independent linear outputs. Read offset/limit pages (default 20, maximum 50), retain source SHA and curve revisions, and use an explicit new outputPath to obtain the same CSV/JSON/SVG strings in an artifact-bundle JSON. Existing files are never overwritten. Failed/provisional steps are not silently converted to measurements. This is force-controlled independent linear extraction, not plastic load/unload history or measured material validation. It grants no browser scope. If absent from the registered server, use the documented repository callStudioTool fallback deliberately; installing or reloading a server is a separate action.
 

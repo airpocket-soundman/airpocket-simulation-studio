@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "archiveRevision": "sha256:6e18ae7a1ff09a9af976ac4ef27ecd0a8972c3692f6cfdde85876e2147ac6f95",
+  "cases": [
+    {
+      "caseId": "6e696e39-9e56-4551-9831-c48b79759d10",
+      "revision": "sha256:16530e52172c3e00b9046c3bb45c52d8339c6fa3f4376707b180f3d6e06bb352",
+      "name": "Bundle real WASM reference",
+      "kind": "elastic",
+      "metrics": [
+        {
+          "key": "maxDisplacementMm",
+          "unit": "mm",
+          "value": 0.040000000011082545
+        },
+        {
+          "key": "maxVonMisesPa",
+          "unit": "Pa",
+          "value": 1000000.0019643522
+        }
+      ],
+      "analysisAssessment": {
+        "mode": "legacy",
+        "provisional": false,
+        "completePreflight": false
+      }
+    }
+  ],
+  "imported": true
+}

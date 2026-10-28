@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "reviewedCommit": "97322bc69a77d09d5d5d297a31d7161667e4b566",
+  "sourceEdits": 0,
+  "sourceInventory": [
+    {
+      "file": "src/ui/single-orbit-gif.js",
+      "gitBlob": "5dc9b13a9b6ebff2204f62d96ff43589d02f4c03",
+      "sha256": "3325995fc03eece8959a7c332b9cd00ed4765577c6a50fb6ab22763981673a9e"
+    },
+    {
+      "file": "src/visual-export.js",
+      "gitBlob": "651689a31c573dadc32113c295f06735b9debd4e",
+      "sha256": "003ca366fc4448696ed05400bc01c47d84b5d774f1fcf36cb925d16e742b4a48"
+    },
+    {
+      "file": "src/result-view-api.js",
+      "gitBlob": "2f31a4d4cef6ca14ddcc0cf5db33e9c7d791f259",
+      "sha256": "cb20e57b87da8de488eb1aeed8dfd69a554881c29f4d2e62491a86d6b0683086"
+    }
+  ],
+  "scopeJa": "GIFカメラidentity修正の独立合成回帰。実202失敗のrawcameraは未記録であり、この反例が実失敗の唯一原因だったとは断定しない。",
+  "scopeEn": "Independent synthetic regression of GIF camera identity fix. The failed actual202 record lacks raw proof camera; this matching counterexample is not asserted to be its uniquely proven cause.",
+  "originalCounterexample": {
+    "rawPosition": [
+      61.000000000000014,
+      41,
+      84
+    ],
+    "preparedPosition": [
+      61,
+      41,
+      84
+    ],
+    "otherBoundaryFieldsMatch": true,
+    "result": "GIF_ORBIT_INVALID common prepared-view mismatch",
+    "actualExport": false
+  },
+  "independentOracles": [
+    "one-ULP position/target/up/fov normalize to the exact existing public12-significant-digit camera identity",
+    "meaningful0.001 vector and0.01 FOV changes remain refused",
+    "large coordinate999999999.9999 normalizes to1000000000 in both plan initial camera and private proof, not only final comparison",
+    "FOV179.99999999999 rounds to180 and is refused before canvas allocation"
+  ],
+  "results": {
+    "newTests": 3,
+    "combinedTotal": 37,
+    "pass": 37,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 13604.6265,
+    "command": "node --test tests/single-orbit-gif-camera-independent.test.mjs tests/single-orbit-gif.test.mjs tests/visual-export-adapter.test.mjs"
+  },
+  "sourceReview": [
+    "existing canonicalViewState reused; no broad epsilon acceptance",
+    "plan/private proof and rendered target use canonical values",
+    "finally restores original raw viewer camera and physical display",
+    "mode/field/time/revision/purpose/byte gates remain unchanged",
+    "bounded component-specific mismatch reason added for later diagnosis"
+  ],
+  "remainingFindings": [],
+  "additionalActualExports": 0,
+  "additionalWebCodecsOrExternalDecoderRuns": 0,
+  "additionalSolverRuns": 0,
+  "externalDecodePreparedOnly": true,
+  "limits": [
+    "Synthetic canvas/production pure GIF encoder only",
+    "No successful real202 artifact yet; external GIF/FFmpeg decode not executed",
+    "No calibration or parent-task completion claim"
+  ]
+}

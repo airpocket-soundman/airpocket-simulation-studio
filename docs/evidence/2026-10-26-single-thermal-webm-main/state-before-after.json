@@ -1,0 +1,636 @@
+{
+  "before": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:3907f9cf012aeb40ad38b2e8c1f1e4cc3e49f4c06ebc1216caa8aacf0132e35e",
+      "project": {
+        "loaded": true,
+        "name": "Synthetic thermal history QA",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "156.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "64360b29-ffb9-4a73-a72c-2c2e5de1fd03",
+        "connectionEpoch": 1,
+        "eventSequence": 3,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "connected",
+            "connectionEpoch": 1
+          }
+        ],
+        "relation": "unknown",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:3907f9cf012aeb40ad38b2e8c1f1e4cc3e49f4c06ebc1216caa8aacf0132e35e",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 0
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "cases": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:f6e7f76cf9a63cc3e5ab895e718599ff692591099f99cab7ad4b58ef6880d05c",
+      "cases": [
+        {
+          "caseId": "789945f1-17f7-4317-a5e6-7118ec465170",
+          "revision": "sha256:2867f4f17127d9f8bdd06883bebd95332723537f83e63e5f0b91a7a945565e19",
+          "name": "Synthetic thermal actual Worker solve",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 29.999999359447788
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 30.00000100800228
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:f3a65273a004bd12437f16d2ab7b0ead57d14874f8df73ff356e8adee22a3dad",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Heat Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        }
+      ]
+    },
+    "compare": {
+      "schemaVersion": 1,
+      "revision": "sha256:573ea6609bb7e30f6ce144d9425e319f8b91d02aba4e7a1d27f6337e2f35e22d",
+      "archive": null,
+      "reason": "Invalid comparison case selection"
+    },
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+      "physicalRevision": "sha256:97dc9986eb45145a822128c331fda9a217c86228a92e9e5a8854f3e550a3efec",
+      "kind": "thermal",
+      "fields": [
+        {
+          "id": "temperature",
+          "unit": "degC"
+        },
+        {
+          "id": "heatFlux",
+          "unit": "W/m2"
+        }
+      ],
+      "state": {
+        "field": "temperature",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 3,
+      "snapshotStorage": {
+        "requested": 11,
+        "count": 3,
+        "bytes": 2256,
+        "budgetBytes": 2400,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 1
+      },
+      "physicalTimeSeconds": 2,
+      "interpolated": true,
+      "timeSelection": "viewer-slider-only",
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 5
+        },
+        {
+          "index": 2,
+          "timeSeconds": 10
+        }
+      ],
+      "modes": []
+    },
+    "view": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  },
+  "after": {
+    "inspect": {
+      "schemaVersion": 1,
+      "revision": "sha256:3907f9cf012aeb40ad38b2e8c1f1e4cc3e49f4c06ebc1216caa8aacf0132e35e",
+      "project": {
+        "loaded": true,
+        "name": "Synthetic thermal history QA",
+        "meshCount": 1,
+        "selectedTriangles": 0,
+        "selectedAreaMm2": 0,
+        "conditionCount": 0,
+        "material": "金属"
+      },
+      "liveBrowserMcp": true,
+      "browser": {
+        "name": "Chrome",
+        "reportedVersion": "156.0.0.0",
+        "precision": "reduced",
+        "fullVersionVerified": false,
+        "source": "navigator.userAgent"
+      },
+      "methods": {
+        "inspect": "inspect",
+        "inspectInput": "inspect",
+        "geometry": "inspect",
+        "inspectSurface": "inspect",
+        "checkGpuEnvironment": "inspect",
+        "createBuiltinProject": "edit",
+        "prepareFluidDomain": "edit",
+        "applyCaseSource": "edit",
+        "clearCaseSource": "edit",
+        "applyFluidDomainMesh": "edit",
+        "inputImportBegin": "edit",
+        "inputImportWrite": "edit",
+        "inputImportCommit": "edit",
+        "inputImportRelease": "edit",
+        "preflight": "inspect",
+        "meshBoundaryPreflight": "inspect",
+        "previewEdit": "inspect",
+        "listJobs": "inspect",
+        "jobStatus": "inspect",
+        "jobEvents": "inspect",
+        "jobArtifacts": "inspect",
+        "jobArtifact": "inspect",
+        "jobResultExport": "inspect",
+        "jobResultRead": "inspect",
+        "jobResultRelease": "inspect",
+        "probe": "inspect",
+        "edit": "edit",
+        "startJob": "analyze",
+        "cancelJob": "analyze",
+        "releaseJob": "analyze",
+        "showJob": "analyze",
+        "getView": "view",
+        "setView": "view",
+        "getResultView": "inspect",
+        "setResultView": "view",
+        "getCompareView": "inspect",
+        "setCompareView": "view",
+        "caseList": "inspect",
+        "caseCompare": "inspect",
+        "caseView": "edit",
+        "caseRestoreInput": "edit",
+        "caseRename": "edit",
+        "caseRemove": "edit",
+        "caseSave": "analyze",
+        "exportCapabilities": "inspect",
+        "startExport": "view",
+        "startCompareExport": "view",
+        "exportStatus": "inspect",
+        "exportArtifact": "inspect",
+        "cancelExport": "view",
+        "releaseExport": "view",
+        "namedViewList": "inspect",
+        "namedViewExport": "inspect",
+        "namedViewSave": "view",
+        "namedViewApply": "view",
+        "namedViewRemove": "view",
+        "namedViewImport": "view",
+        "caseArchiveExport": "inspect",
+        "caseArchiveRead": "inspect",
+        "caseArchiveImport": "edit",
+        "caseArchiveWrite": "edit",
+        "caseArchiveCommit": "edit",
+        "caseArchiveRelease": "inspect",
+        "getAssessment": "inspect",
+        "evaluateAssessment": "analyze",
+        "previewCadUpdate": "inspect",
+        "applyCadUpdate": "edit",
+        "printInspect": "inspect",
+        "importPrint": "edit",
+        "getPrintData": "inspect",
+        "setPrintView": "view",
+        "printTransferExport": "inspect",
+        "printTransferRead": "inspect",
+        "printTransferImport": "edit",
+        "printTransferWrite": "edit",
+        "printTransferCommit": "edit",
+        "printTransferRelease": "inspect",
+        "caseBundleList": "inspect",
+        "caseBundleExport": "inspect",
+        "caseBundleRead": "inspect",
+        "caseBundleImport": "edit",
+        "caseBundleWrite": "edit",
+        "caseBundleCommit": "edit",
+        "caseBundleRelease": "inspect",
+        "measurementList": "inspect",
+        "measurementGet": "inspect",
+        "measurementSave": "edit",
+        "measurementRemove": "edit",
+        "measurementExport": "inspect",
+        "measurementImport": "edit",
+        "measurementVerify": "inspect"
+      },
+      "lifecycle": {
+        "schemaVersion": 1,
+        "pageInstanceId": "64360b29-ffb9-4a73-a72c-2c2e5de1fd03",
+        "connectionEpoch": 1,
+        "eventSequence": 3,
+        "events": [
+          {
+            "sequence": 1,
+            "kind": "created",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 2,
+            "kind": "pageshow",
+            "connectionEpoch": 0
+          },
+          {
+            "sequence": 3,
+            "kind": "connected",
+            "connectionEpoch": 1
+          }
+        ],
+        "relation": "unknown",
+        "automaticReplay": false,
+        "recoverySteps": [
+          "Reconnect with explicitly selected scopes.",
+          "Inspect page identity and input revision; list analysis and export jobs before deciding whether anything remains.",
+          "Never automatically repeat a delivered or timed-out operation.",
+          "If the page changed, reload user-saved input/cases explicitly and start a new operation only after review."
+        ],
+        "cause": "unconfirmed",
+        "inputRevision": "sha256:3907f9cf012aeb40ad38b2e8c1f1e4cc3e49f4c06ebc1216caa8aacf0132e35e",
+        "ownedAnalysisJobs": 0,
+        "ownedExportJobs": 1
+      },
+      "operationContracts": {
+        "schemaVersion": 1,
+        "api": "getBrowserOperationContracts",
+        "mcp": "studio_browser_contracts"
+      }
+    },
+    "cases": {
+      "schemaVersion": 1,
+      "archiveRevision": "sha256:f6e7f76cf9a63cc3e5ab895e718599ff692591099f99cab7ad4b58ef6880d05c",
+      "cases": [
+        {
+          "caseId": "789945f1-17f7-4317-a5e6-7118ec465170",
+          "revision": "sha256:2867f4f17127d9f8bdd06883bebd95332723537f83e63e5f0b91a7a945565e19",
+          "name": "Synthetic thermal actual Worker solve",
+          "kind": "thermal",
+          "metrics": [
+            {
+              "key": "minTemperature",
+              "unit": "°C",
+              "value": 29.999999359447788
+            },
+            {
+              "key": "maxTemperature",
+              "unit": "°C",
+              "value": 30.00000100800228
+            }
+          ],
+          "runtimeIdentity": {
+            "assets": [
+              {
+                "bytes": 41430673,
+                "role": "gmsh",
+                "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+                "status": "observed"
+              }
+            ],
+            "build": {
+              "dirty": true,
+              "revision": "56576af6bd26d510c3166edf69c1cd73ffcb9703",
+              "sourceFingerprint": "sha256:f3a65273a004bd12437f16d2ab7b0ead57d14874f8df73ff356e8adee22a3dad",
+              "status": "available",
+              "version": "0.44.0"
+            },
+            "engine": {
+              "actualEngine": "Airpocket Heat Tet4 / JavaScript CPU",
+              "requestedMethod": "pcg"
+            },
+            "isolation": "process",
+            "schemaVersion": 1,
+            "target": "node"
+          },
+          "analysisAssessment": {
+            "mode": "legacy",
+            "provisional": false,
+            "completePreflight": false
+          }
+        }
+      ]
+    },
+    "compare": {
+      "schemaVersion": 1,
+      "revision": "sha256:573ea6609bb7e30f6ce144d9425e319f8b91d02aba4e7a1d27f6337e2f35e22d",
+      "archive": null,
+      "reason": "Invalid comparison case selection"
+    },
+    "result": {
+      "schemaVersion": 1,
+      "resultRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+      "physicalRevision": "sha256:97dc9986eb45145a822128c331fda9a217c86228a92e9e5a8854f3e550a3efec",
+      "kind": "thermal",
+      "fields": [
+        {
+          "id": "temperature",
+          "unit": "degC"
+        },
+        {
+          "id": "heatFlux",
+          "unit": "W/m2"
+        }
+      ],
+      "state": {
+        "field": "temperature",
+        "modeIndex": null,
+        "frameIndex": null,
+        "deformScale": 1,
+        "surface": true,
+        "surfaceWire": false,
+        "volumeWire": false,
+        "section": true,
+        "colorRange": null,
+        "camera": {
+          "position": [
+            61,
+            41,
+            84
+          ],
+          "target": [
+            5,
+            5,
+            20
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "fov": 40
+        }
+      },
+      "modeCount": 0,
+      "frameCount": 3,
+      "snapshotStorage": {
+        "requested": 11,
+        "count": 3,
+        "bytes": 2256,
+        "budgetBytes": 2400,
+        "unit": "byte",
+        "bytesPerScalar": 8,
+        "meaning": "stored-scalar-values-only",
+        "excludes": [
+          "objects",
+          "rendering",
+          "observations",
+          "receiver-traces",
+          "peak-memory"
+        ],
+        "warningCount": 1
+      },
+      "physicalTimeSeconds": 2,
+      "interpolated": true,
+      "timeSelection": "viewer-slider-only",
+      "analysisAssessment": {
+        "completePreflight": false,
+        "mode": "legacy",
+        "provisional": false,
+        "remainingChecks": [
+          "Mesh quality and element validity after generation",
+          "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+          "Source applicability, convergence, mesh dependence and physical accuracy"
+        ],
+        "schemaVersion": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "timeSeconds": 0
+        },
+        {
+          "index": 1,
+          "timeSeconds": 5
+        },
+        {
+          "index": 2,
+          "timeSeconds": 10
+        }
+      ],
+      "modes": []
+    },
+    "view": {
+      "clipEnabled": false,
+      "axis": 2,
+      "position": 0,
+      "flip": false,
+      "opacity": 1,
+      "meshCount": 1,
+      "hiddenParts": []
+    }
+  }
+}

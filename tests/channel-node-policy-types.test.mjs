@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+test('runtime node policy import has strict nullable components and no nodal pressure API',()=>{const r=spawnSync(process.execPath,['node_modules/typescript/bin/tsc','--strict','--noEmit','--skipLibCheck','false','--target','ES2022','--module','ESNext','--moduleResolution','Bundler','tests/fixtures/channel-node-policy-types.ts'],{encoding:'utf8'});assert.equal(r.status,0,r.stdout+r.stderr);});

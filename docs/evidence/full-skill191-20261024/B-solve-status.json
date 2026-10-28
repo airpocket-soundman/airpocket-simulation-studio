@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "jobId": "7d8f72ff-1c13-497d-9f2b-182785b8b01f",
+  "inputRevision": "sha256:7bd0cc0397f3cc04952fa44509e0b3ec2cbd68ca35048db0e533ea3a9487a48f",
+  "state": "succeeded",
+  "executionSettled": true,
+  "resourceState": "settled",
+  "releaseAllowed": true,
+  "operation": "elastic",
+  "origin": "api",
+  "startedAt": 1792767550588,
+  "updatedAt": 1792767551379,
+  "lastSequence": 15,
+  "firstAvailableSequence": 1,
+  "eventRetention": {
+    "maxEvents": 256,
+    "maxEventBytes": 32768,
+    "maxRetainedBytes": 1048576,
+    "maxPageBytes": 65536,
+    "maxViewBytes": 24576,
+    "retainedEvents": 15,
+    "retainedBytes": 12247
+  },
+  "result": {
+    "kind": "elastic",
+    "mesh": {
+      "nodeCount": 94,
+      "elementCount": 218,
+      "volumeMm3": 3999.9999999999986,
+      "minVolumeMm3": 5.06098404245161,
+      "minQuality": 0.3632115694761907,
+      "qualityHistogram": [
+        0,
+        2,
+        11,
+        82,
+        123
+      ]
+    },
+    "resultAvailable": true,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "intermediate": {
+      "retainedArtifacts": 1,
+      "retainedBytes": 5010,
+      "storageLimited": false,
+      "sharedBytes": 5010,
+      "maxBytes": 64000000,
+      "queue": {
+        "maxEvents": 8,
+        "maxBytes": 8000000,
+        "pendingEvents": 0,
+        "pendingBytes": 0,
+        "peakEvents": 1,
+        "peakBytes": 30444,
+        "accepted": 1,
+        "dropped": 0,
+        "droppedMeshes": 0,
+        "droppedFields": 0,
+        "consumerErrors": 0,
+        "notificationErrors": 0,
+        "latestAcceptedSequence": 3,
+        "latestCompletedSequence": 3,
+        "latestPolicy": "last-accepted-snapshot",
+        "byteBasis": "conservative-structural-estimate",
+        "includesInFlight": true
+      }
+    }
+  }
+}

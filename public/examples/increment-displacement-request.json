@@ -1,0 +1,40 @@
+{
+  "synthetic": true,
+  "curveId": "synthetic-displacement-reference",
+  "caseIdentity": {
+    "name": "Synthetic 10x10x40 mm displacement-controlled bar",
+    "synthetic": true
+  },
+  "rowIdentity": {
+    "materialKey": "synthetic-E1e9-nu0",
+    "geometryKey": "box-10x10x40mm",
+    "gaugeKey": "weighted-end-faces"
+  },
+  "boundsMm": [
+    0,
+    0,
+    0,
+    10,
+    10,
+    40
+  ],
+  "meshSizeMm": 8,
+  "youngModulusPa": 1000000000,
+  "poissonRatio": 0,
+  "axis": [
+    0,
+    0,
+    1
+  ],
+  "initialGaugeLengthMm": 40,
+  "initialAreaMm2": 100,
+  "controlledQuantity": "displacement",
+  "displacementsMm": [
+    0,
+    0.01,
+    0.04,
+    0.02,
+    0,
+    -0.02
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "probe",
+      "scope": "inspect",
+      "description": "Measure the displayed result at a point.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "point": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "expectedResultRevision": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "bodyIndex": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elementIndex": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "modeIndex": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "required": [
+          "point"
+        ]
+      },
+      "sideEffects": [],
+      "revisionFields": [
+        "expectedResultRevision"
+      ],
+      "units": {
+        "point": "mm"
+      },
+      "limitations": [
+        "Argument envelope only; runtime validation remains authoritative.",
+        "Displayed acoustic/thermal time selection is used, including viewer interpolation metadata; non-final thermal probes omit heat flux. Modal modeIndex may override selected mode. Outside/ambiguous body points are rejected."
+      ]
+    }
+  ]
+}

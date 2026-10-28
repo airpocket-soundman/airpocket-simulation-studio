@@ -1,3 +1,5 @@
+import {fixedWebmFixture} from './fixtures/fixed-webm.mjs';
+import {fixedWebmSchedule} from '../src/fixed-webm.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createComparisonExportAdapter} from '../src/comparison-export-adapter.js';
@@ -12,23 +14,23 @@ const axes=[[0,1,6,10],[0,3,4,10]],sha=i=>'sha256:'+String(i).repeat(64);
 function fixture(format,{overflow=false,cancel=false}={}){
  const outputs=axes.map(times=>({mesh:{nodes:[0,0,0]},result:{kind:'thermal',transient:true,snapshots:times.map((time,i)=>({time,temperature:[20+i]}))}}));
  const renders=[];let releases=0;
- const adapter=createComparisonExportAdapter({cases:{readSource:async ref=>({caseId:ref.caseId,revision:ref.expectedRevision,name:ref.caseId,output:outputs[Number(ref.caseId)],assertCurrent(){}})},getDefaults:()=>({camera,deformScale:1}),renderComparison:args=>{renders.push(args);return {canvas:{width:1280,height:640},panels:[],colorRange:args.colorRange,unit:'degC'};},acquireHostLock:()=>({assertOwned(){},release(){releases++;}}),encodeGif:args=>{
+ const adapter=createComparisonExportAdapter({cases:{readSource:async ref=>({caseId:ref.caseId,revision:ref.expectedRevision,name:ref.caseId,output:outputs[Number(ref.caseId)],assertCurrent(){}})},getDefaults:()=>({camera,deformScale:1}),renderComparison:args=>{renders.push(args);return {canvas:{width:1280,height:640},panels:[],colorRange:args.colorRange??{field:'temperature',minimum:20,maximum:23},unit:'degC'};},acquireHostLock:()=>({assertOwned(){},release(){releases++;}}),encodeGif:args=>{
   if(overflow){for(let i=0;i<=COMPARISON_TIMING_LIMITS.frames;i++)args.renderFrame(camera,{phase:0});}
   if(cancel)throw Error('Comparison GIF cancelled');
   return renderComparisonGif(args,createGifCanvasEnv());
- },recordVideo:async args=>{for(let i=0;i<3000;i++)args.renderFrame(camera,{phase:i/2999});return new Blob([Uint8Array.of(26,69,223,163)],{type:'video/webm'});}});
+ },encodeFixedVideo:async args=>{const f=fixedWebmFixture(args.seconds);for(const frame of fixedWebmSchedule(args.seconds))args.renderFrame(camera,{phase:frame.phase});args.onVerified(f.context.getFixedVerification());return f.blob;},recordVideo:async args=>{for(let i=0;i<3000;i++)args.renderFrame(camera,{phase:i/2999});return new Blob([Uint8Array.of(26,69,223,163)],{type:'video/webm'});}});
  const queue=createVisualExportJobs({render:()=>{},prepareCompare:(...args)=>adapter.prepare(...args),renderCompare:args=>adapter.render(args)});
  const request={requestId:'trace-'+format,references:outputs.map((_,i)=>({caseId:String(i),expectedRevision:sha(i+1)})),field:'temperature',format,animation:'time',seconds:2,startTimeSeconds:0,endTimeSeconds:10};
  return {outputs,renders,queue,request,get releases(){return releases;}};
 }
 async function complete(h){const job=await h.queue.startCompare(h.request);await h.queue.waitForSettled(job);return h.queue.status(job);}
 
-for(const format of ['gif'])test(format+' actual adapter/queue manifest binds each intermediate request to both nonuniform stored time axes',async()=>{
+for(const format of ['gif','webm'])test(format+' actual adapter/queue manifest binds each intermediate request to both nonuniform stored time axes',async()=>{
  const h=fixture(format),before=structuredClone(h.outputs),done=await complete(h);assert.equal(done.state,'completed',done.error);
  const manifest=done.artifact.manifest,trace=manifest.time.frameTimings;
  assert.equal(trace.interpolated,false);assert.equal(trace.timeSelection,'nearest-stored-frames-only');
- assert.equal(trace.entries.length,format==='gif'?24:5);assert.match(trace.mapping,format==='gif'?/per encoded GIF/:/not mapped one-to-one/);
- const requests=format==='gif'?h.renders.slice(1):h.renders;assert.equal(requests.length,trace.entries.length);
+ assert.equal(trace.entries.length,format==='gif'?24:48);assert.match(trace.mapping,format==='gif'?/per encoded GIF/:/verified encoded/);
+ const requests=h.renders.slice(1);assert.equal(requests.length,trace.entries.length);
  for(let i=0;i<trace.entries.length;i++){
   const entry=trace.entries[i];assert.equal(entry.renderIndex,i);assert.equal(entry.requestedTimeSeconds,requests[i].timeSeconds);
   assert.equal(entry.requestedTimeSeconds,entry.phase*10);
@@ -45,11 +47,10 @@ for(const format of ['gif'])test(format+' actual adapter/queue manifest binds ea
  assert.ok(new TextEncoder().encode(JSON.stringify(manifest)).length<=4096+COMPARISON_TIMING_LIMITS.bytes);
 });
 
-test('WebM with many render callbacks preserves existing success and policy summary without a per-render ledger',async()=>{
- const h=fixture('webm'),done=await complete(h);assert.equal(done.state,'completed',done.error);
+test('Orbit WebM with many render callbacks preserves existing success and policy summary without a per-render ledger',async()=>{
+ const h=fixture('webm');h.request.animation='orbit';delete h.request.startTimeSeconds;delete h.request.endTimeSeconds;h.request.timeSeconds=0;const done=await complete(h);assert.equal(done.state,'completed',done.error);
  assert.equal(h.renders.length,3001);assert.equal(done.artifact.manifest.time.frameTimings,undefined);
- assert.equal(done.artifact.manifest.comparison.timeAnimation.interpolated,false);
- assert.equal(done.artifact.manifest.comparison.timeAnimation.timeSelection,'nearest-stored-frames-only');
+ assert.equal(done.artifact.manifest.comparison.timeAnimation,undefined);
  assert.equal(done.artifact.manifest.time.fps.frameCountGuaranteed,false);assert.equal(h.releases,1);
  assert.ok(new TextEncoder().encode(JSON.stringify(done.artifact.manifest)).length<=4096);
 });

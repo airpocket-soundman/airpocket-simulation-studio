@@ -95,3 +95,15 @@ English: [en/perf-browser-plan.md](en/perf-browser-plan.md)
 成功solveのcold/warm/recoveredは正式MCP jobStatus.result.meshのnodeCount/elementCountとjobId/inputRevisionをmeshObservationへ保存する。未提供・無効な数はnullと理由を保存し、sizeから推測しない。compact summaryにはmesh内容hashがないためmeshRevision=nullを明記し、同じ節点数だけで同じmeshと判定しない。QA_PERF_CASES=structural-tiny,structural-mediumで既存48再実行helperを2規模に指定できる。追加試験はmock契約確認であり、新probe/2規模の実Chrome計測はこの変更では実施していない。
 
 2026-10-22追記: 遅いUASMを待つ間も同期JS heapは各tickで独立sampleを記録する。source=jsHeapとsource=uasmは別sampleで他系列の値をnullにし、時刻や値を混ぜない。排他するのはUASM要求だけで、停止後に完了したUASMは破棄する。
+
+## 2026-10-23: 独立した待機区間と入力の固定
+
+各ケースの中断試行後と復帰成功後に、既定4秒の待機区間を記録する（--idle-ms、3000〜60000）。activeWindows 内だけでサンプル最大値を求め、中断後・終了後の値は対応する待機区間内だけから採用する。非同期UASMは要求から完了まで全区間が位相に収まる必要がある。区間なしの履歴レポートには従来の解釈を残す。completed-before-cancel は中断成立時刻に使わない。復帰失敗・ケース失敗で以降のケースを止める。
+
+--input-snapshot で1MiB以内の exportProject JSONを渡すと、実行前後の正式inspect revisionと一致を確認し、元バイト数・SHA256を記録する。APIのmeshBudgetは成功ジョブの実測節点・要素数を確認し、超過時は以後の温間実行やケースを止める。初回メッシュ生成自体の資源上限ではない。
+
+[実測証拠](evidence/2026-10-23-perf-idle.json): アプリ内ブラウザーで60節点/121 Tet4、cold24344.473ms、warm2370.930ms（各n1）、中断成立1回144.960ms、成立前完了1回、復帰成功。4秒の独立待機を保存した。JS heapのactiveサンプル最大32003185B、中断後30396838B、終了後29645409B。UASMのactiveサンプル最大136470490Bで、待機区間の値は欠測。系列を合算しない。元レポートの中断時刻誤記を保存したまま、派生レポートに修正理由を明記した。
+
+Chromeは接続前に操作不能となり180秒で待機終了、解析を開始していない。アプリ内ブラウザーもChrome155系UAなので別エンジン検証ではない。追加規模・熱・上限・Chrome再測定は未完。ホスト並列作業とキャッシュを統制していないため性能改善比較には使わない。
+
+中断後・終了後の値は、成立時刻と待機開始時刻の遅い方から連続3秒経過後を採用する。後続の中断前完了試行も待機時間に算入しない。

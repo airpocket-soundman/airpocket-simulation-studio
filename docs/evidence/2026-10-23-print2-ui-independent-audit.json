@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-23",
+  "reviewedCommit": "c83cdd107217b13b37efccc7705edf93a823e2d2",
+  "scope": "Independent read-only PRINT2 measurement inspector audit",
+  "findings": [],
+  "checks": {
+    "domainParser": "UI directly imports importPrintedMeasurementDataset; no alternate normalization.",
+    "main": "Mounted after material details; no project/case/solver API imported by widget.",
+    "calibration": "synthetic and reported measured provenance are separate; calibration reports explicitly unverified; normalized accuracyVerified=false.",
+    "safeText": "Metadata uses textContent and fixed SVG attributes; no HTML insertion.",
+    "lifecycle": "Generation rejects ABA/replacement/pending disposal. Input invalidation clears output and revokes owned URLs; bfcache persisted invalidates without destroying entry.",
+    "capacity": "Combined exact 2000000 UTF-8 bytes, 100 specimens, 10000 aggregate samples accepted. 100 selector entries; 50 visible table rows; chart <=201 points; all samples/raw bytes/hash preserved.",
+    "downloadFailure": "Second URL failure revokes first owned URL and keeps validated inspection usable."
+  },
+  "independentTests": 4,
+  "verification": {
+    "focusedTests": {
+      "pass": 21,
+      "fail": 0,
+      "skip": 0
+    },
+    "contracts": "17 declaration files pass",
+    "diffCheck": "pass",
+    "node": "v24.11.1",
+    "platform": "win32",
+    "strictPublicTypeTest": "pass"
+  },
+  "performance": {
+    "fakeDomCombinedInspectMilliseconds": 50.6866,
+    "limitation": "Single Windows Node fake-DOM observation; not a browser rendering budget or real-device performance guarantee.",
+    "formalRelativeImportInspectMilliseconds": 39.9765
+  },
+  "limitations": [
+    "Real browser 390px and bfcache HTTP navigation validation are handled separately by root.",
+    "No measured material calibration, fitting, solver application or accuracy claim."
+  ],
+  "summaryJa": "測定読取UIを独立監査。容量・非同期破棄・一部URL生成失敗・復帰時の再検査を追加検証し、必須修正は見つからなかった。",
+  "summaryEn": "Independent measurement-inspector audit adds combined-capacity, asynchronous disposal, partial URL failure and restored-entry checks; no mandatory fix identified."
+}

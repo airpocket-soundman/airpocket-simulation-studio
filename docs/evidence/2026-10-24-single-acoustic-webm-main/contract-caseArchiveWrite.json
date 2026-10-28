@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": 1,
+  "target": "browser",
+  "declarationOnly": true,
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "inputSchemaCoverage": "Command envelopes and documented nested fields; adapter, revision, applicability and physical validation remain authoritative.",
+  "requiresBrowserGrant": true,
+  "maxPageBytes": 65536,
+  "total": 1,
+  "offset": 0,
+  "limit": 5,
+  "nextOffset": null,
+  "operations": [
+    {
+      "method": "caseArchiveWrite",
+      "scope": "edit",
+      "description": "Append the next canonical base64 chunk to a staged case archive import.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "transferId": {
+            "type": "string",
+            "description": "Opaque page-lifetime identity returned by the matching list/begin operation."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "data": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 87384,
+            "description": "Canonical nonempty base64 for at most 65536 decoded bytes."
+          }
+        },
+        "required": [
+          "transferId",
+          "offset",
+          "data"
+        ]
+      },
+      "sideEffects": [
+        "Writes the staging buffer."
+      ],
+      "revisionFields": [],
+      "units": {
+        "offset": "byte"
+      },
+      "limitations": [
+        "Default registry holds at most 4 transfers and 100000000 retained bytes in total; these are not peak-heap guarantees.",
+        "Transfer IDs are temporary. Release retained buffers after use.",
+        "Canonical base64 pages contain at most 65536 decoded bytes; hashes cover complete source bytes.",
+        "Only the immediately previous identical offset/data retry is idempotent; chunks must otherwise be consecutive."
+      ]
+    }
+  ]
+}

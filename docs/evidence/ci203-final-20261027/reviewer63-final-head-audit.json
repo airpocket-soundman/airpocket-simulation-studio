@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "reviewedCommit": "7f07bbf06710f882530577c42b58a44d05b8eea8",
+  "relativeTo": "f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+  "inventoryPacks": [
+    {
+      "folder": "2026-10-27-finite-history-inspector-gui",
+      "files": 25,
+      "bytes": 385986,
+      "sha256AndGitBlobSha1Match": true,
+      "treeCompleteExcludingInventory": true
+    },
+    {
+      "folder": "2026-10-27-finite-history-inspector-responsive",
+      "files": 7,
+      "bytes": 195797,
+      "sha256AndGitBlobSha1Match": true,
+      "treeCompleteExcludingInventory": true
+    }
+  ],
+  "inventoryTotalFiles": 32,
+  "progress": {
+    "tasks": 171,
+    "allStatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    },
+    "onlyFieldsChanged": [
+      {
+        "id": "FINITEVISCO1",
+        "field": "lastUpdate"
+      },
+      {
+        "id": "FINITEVISCO1",
+        "field": "lastUpdateEn"
+      },
+      {
+        "id": "FINITEVISCO1",
+        "field": "evidence"
+      }
+    ],
+    "allOtherJsonDeepEqual": true
+  },
+  "protectedFiles": [
+    {
+      "file": "src/finite-visco-history.js",
+      "sha256": "b1cd4502b2a8390f117b0b59f864c9b0c1c01d4f68fc7699cbae52046f7ba651",
+      "unchanged": true
+    },
+    {
+      "file": "src/finite-visco-reference.js",
+      "sha256": "98491164e057d2ec26a4b1dd9fc3946db174215c1c095f1abe7e3fe424748c99",
+      "unchanged": true
+    },
+    {
+      "file": "src/finite-visco-observation-comparison.js",
+      "sha256": "1c2eeea92d362dc6dd094e386f2ddef1ecc3a5aaad6d57bb38b8b4afd6daf855",
+      "unchanged": true
+    },
+    {
+      "file": "public/examples/finite-visco-input-history.json",
+      "sha256": "6366950b1f9b41a412fa8f22f28ed6eab12f2937411588ecebd6e85188fc0d86",
+      "unchanged": true
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "c03a3af6b4c0e920225ae2d9ecf0e48ba2cfe4b66ed1b8e809820051406af303",
+      "unchanged": true
+    }
+  ],
+  "sourceContractDocsReview": "No mandatory findings. Runtime delta is mounted read-only owned-worker final-summary inspector plus spacing/wrapping. Contract and JAEN docs retain synthetic/provisional/uncalibrated limits, exact stress units and no structural/calibration/state-resume claim. UI execution evidence is explicitly scoped and historical unperformed statement is dated.",
+  "newRuntimeTests": 0,
+  "sourceEdits": 0,
+  "newExports": 0,
+  "newSolvers": 0,
+  "newDecoders": 0
+}

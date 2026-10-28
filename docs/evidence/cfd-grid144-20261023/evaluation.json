@@ -1,0 +1,25 @@
+{
+  "rawResultSha256": "f7eb98770b8bc3077c03bb9e51ebbcdfcee93d5ca20f5069c7b0651fcf48771a",
+  "planSha256": "28fdf55760634f12ad7ba0f4ff09f7d95a6cbcca8c1bf8b78e400ca7d997a9f6",
+  "checks": {
+    "exitZero": true,
+    "withinLimits": true,
+    "allRequiredResidualsPresent": true,
+    "allReportedResidualsAtQaTarget": true,
+    "reference5Percent": true,
+    "last100VariationHalfPercent": true,
+    "successive128To144Difference3Percent": true,
+    "original64To128Difference3Percent": false,
+    "noWallWarning": true,
+    "nodalFarfieldMassRelativeMaximum": true
+  },
+  "singleGridAndSmallStepQaAccepted": true,
+  "originalBaselineCriterionStillFailed": true,
+  "pressureSolverTargetReached": true,
+  "allVelocitySolverTargetsReached": false,
+  "workOrderAdditionalLaunchBudgetConsumed": 2,
+  "additionalLaunchBudgetMaximum": 2,
+  "noFurtherRetryPerformed": true,
+  "interpretation": "N128-to144 ratio 1.125 gives only local sensitivity evidence. N64-to128 failure remains; no Richardson order, GCI, general grid convergence, discrete mass conservation, or experimental accuracy established.",
+  "parentReleased": false
+}

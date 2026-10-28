@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "source": "c2ae100c17535316b2cdab1387dc2aa8b17fb6e5",
+  "driverSha256": "043ee6cf4c18f443d71045ab41c98706b16a9d2a68c7cf31c8c6458d6804807d",
+  "accepted": true,
+  "scope": "One Japanese foreground normal-main/IAB formal-stdio comparison-orbit cancellation",
+  "budget": {
+    "exportsUsed": 1,
+    "exportsLimit": 1,
+    "seconds": 15,
+    "watchdogMs": 120000,
+    "maxArtifactBytes": 33554432,
+    "retries": 0,
+    "solverRuns": 0,
+    "externalDecodeRuns": 0
+  },
+  "actual": {
+    "positiveProgress": 0.023957333332300185,
+    "cancelCalls": 1,
+    "state": "cancelled",
+    "executionSettled": true,
+    "artifactRefusal": {
+      "rejected": true,
+      "code": "BROWSER_OPERATION_FAILED",
+      "message": "Visual export artifact is unavailable"
+    },
+    "artifactBytesRead": 0,
+    "fivePhysicalStatesEqual": true,
+    "ownershipAfterRelease": 0,
+    "guiBaselineAfterEqual": true,
+    "guiControlsEvidence": "Separate root DOM snapshots/images; original driver intentionally says GUI unverified",
+    "cleanup": {
+      "success": true,
+      "exportInvocations": 1,
+      "tokenFileRemoved": true,
+      "ownedChildPidAbsent": true,
+      "ownedChildExitObserved": true,
+      "ownedChildCloseObserved": true
+    },
+    "ownedChild": {
+      "pid": 44312,
+      "absent": true
+    },
+    "guiFinal": {
+      "connectDisabled": false,
+      "disconnectDisabled": true,
+      "endpointEmpty": true,
+      "passwordFieldsEmpty": true
+    }
+  },
+  "validation": {
+    "buildPassed": true,
+    "buildSeconds": 3.93,
+    "localChecks": 28,
+    "localElapsedMs": 39505.5137,
+    "source": "c2ae100c17535316b2cdab1387dc2aa8b17fb6e5"
+  },
+  "limits": [
+    "Formal cancelExport only; not GUI cancel button or GUI disconnect cancellation",
+    "No hidden/English/full language matrix",
+    "No public deployment or general geometry/physical accuracy",
+    "Prior194/194b completed-before-disconnect partials remain unchanged"
+  ],
+  "progress": {
+    "changedIds": [
+      "P3",
+      "BROWSEREXPORT1"
+    ],
+    "changedFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsDeepIdentical": true,
+    "all171StatusesUnchanged": true,
+    "statusCounts": {
+      "released": 134,
+      "queued": 12,
+      "building": 21,
+      "checking": 4
+    }
+  }
+}

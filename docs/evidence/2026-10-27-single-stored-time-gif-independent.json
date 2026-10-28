@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "ownerCommit": "1e365866f3ab3017b3b971d54da304644dbf801f",
+  "productionSourceChanged": false,
+  "originalCounterexample": {
+    "source": "324dd7e",
+    "indexedFrames": 2,
+    "customIteratorFrames": 62,
+    "acceptedStoredTimes": 62,
+    "terminalSnapshotIndex": 61,
+    "scalarBytes": 16,
+    "finalResult": "rejected without invoking iterator"
+  },
+  "ownership": {
+    "layers": [
+      "visual export job",
+      "result export preparation handoff",
+      "viewer adapter"
+    ],
+    "yieldPause": "after first capture changes interpolated2s to stored0s, inside pixel quantization",
+    "requests": [
+      "cancel",
+      "watchdog",
+      "cancel+jobtokenrelease",
+      "watchdog+jobtokenrelease"
+    ],
+    "pendingBehavior": [
+      "executionSettled false",
+      "renderer and handoff busy",
+      "controls locked",
+      "no restore before inner settlement",
+      "new jobs/preparation/artifacts refused"
+    ],
+    "afterSettlement": [
+      "restore interpolated2s exactly",
+      "controls/canvas released",
+      "no artifact"
+    ],
+    "shaPause": "after24captures and terminal10s, cancellation retains all reservations until actual digest settlement",
+    "meaning": "Promisechain and renderer reservation, not OS/native-codec resource shutdown"
+  },
+  "timeOracle": {
+    "physicalRangeSeconds": [
+      2,
+      48
+    ],
+    "storedTimes": [
+      2,
+      6,
+      48
+    ],
+    "nearestCounts": [
+      2,
+      11,
+      11
+    ],
+    "phases": "i/23",
+    "displayDurationsSeconds": [
+      1,
+      15
+    ],
+    "exactEndpoints": true,
+    "terminalOffset": 0
+  },
+  "validation": {
+    "newTests": 4,
+    "related": {
+      "total": 110,
+      "pass": 110,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 12098.9619,
+      "includesNew4": true
+    },
+    "typeDeclarations": 29,
+    "docsTests": 2,
+    "realSolveDependentFixedFrameFileRun": false
+  },
+  "harnessCorrections": [
+    "Initial Windows absolute ESM path changed to file URL before finite iterator probe ran",
+    "Initial integer interior-time assumption corrected for IEEE roundoff with16EPS scaled bound; endpoints remain strict, source unchanged"
+  ],
+  "sourceHashes": [
+    {
+      "path": "src/ui/single-stored-time-gif.js",
+      "gitBlob": "eb977d4379516dc9664a86e4d1fc109a4bfd02aa",
+      "gitBlobSHA256": "e08bbfbfde6c06f5bd15c235bd92f25a7da6945f87e84c5e0090b524930180ed",
+      "workingSHA256": "9531445e62cbd5a47cad5789490c531975c689aa271c4659649c8657eb53334b"
+    },
+    {
+      "path": "src/visual-export.js",
+      "gitBlob": "aa193ce526c1575ae0bfd1166d919b1e412b7996",
+      "gitBlobSHA256": "5d792a1bbf51380a26100278c3757696509220aa59d9ec1bebc3f4b5f4c737f9",
+      "workingSHA256": "9ce78655de3099024ce511592bc2efc07a2b98f889f5f17cd6e3245bf231ab82"
+    },
+    {
+      "path": "src/visual-export-jobs.js",
+      "gitBlob": "e457f779ad90a7f329af7d2e5cab8a84366b6c4a",
+      "gitBlobSHA256": "69ff822898eb65112dc0cefaad745c3dfac62f087e30400e7e9d42ff2394de7b",
+      "workingSHA256": "74238d8392d5f1c214ea542ea937784da47df1d03de74ce3e2fe0b110f83a0dd"
+    }
+  ],
+  "hashMeaning": "Git blob hashes use repository bytes; working hashes can differ under CRLF",
+  "additionalActual": {
+    "gui": 0,
+    "nativeCodec": 0,
+    "solver": 0,
+    "productExport": 0
+  },
+  "limitations": [
+    "Actual artifact pixels/visible-model acceptance pending",
+    "No hard suspended-JavaScript or OS resource release guarantee",
+    "No parent completion or publication"
+  ]
+}

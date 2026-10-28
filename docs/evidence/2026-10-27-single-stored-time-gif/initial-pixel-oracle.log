@@ -1,0 +1,34 @@
+✔ stored-time plan includes exact endpoints and nearest-low tie with immutable bounded metadata (1.7364ms)
+✖ all24 GIF images decode independently with exact delays, physical ledger and source-kind units (2325.8564ms)
+✔ new history gates bound2..61frames/fullscalarbytes/finiteness and refuse unsupported field without altering oldcap (2.4512ms)
+✔ private exactbytes/purpose gate rejects copiedblob, edited payload, wrongfield/camera/duration and orbit borrow (2143.1962ms)
+✔ byte preflight uses intrinsic brand before allocation/hash and never invokes spoof getters (1068.6625ms)
+✔ cancel/hungyield/watchdog refuses output, clearscanvas/timer and lateyield has no callbacks (41.8883ms)
+✔ job purpose selects time manifest, publishes only exact complete issued GIF and cancels without artifact (2239.0052ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8134.1926
+
+✖ failing tests:
+
+test at tests\single-stored-time-gif.test.mjs:9:1
+✖ all24 GIF images decode independently with exact delays, physical ledger and source-kind units (2325.8564ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  160 !== 192
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/single-time-gif207/airpocket-simulation-studio/tests/single-stored-time-gif.test.mjs:9:635)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 160,
+    expected: 192,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

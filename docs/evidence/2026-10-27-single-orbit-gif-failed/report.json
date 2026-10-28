@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "runtimeSource": "35922baf5a8737429bc544cbc44842bb1d33cf05",
+  "driverSha256": "abb46b3e3a9cc5a4f613c08ce3411fd5041c23b3d21fed7906151d72c378b9c1",
+  "scope": "One failed foreground English normal-main single-view orbit GIF attempt with fixed interpolated thermal2s baseline",
+  "budget": {
+    "exportsUsed": 1,
+    "exportsLimit": 1,
+    "remaining": 0,
+    "requestedSeconds": 2,
+    "plannedFrames": 24,
+    "watchdogMs": 120000,
+    "solverRuns": 0,
+    "retries": 0
+  },
+  "sourceArchive": {
+    "revision": "35922baf5a8737429bc544cbc44842bb1d33cf05",
+    "gitBlob": "ccfcca833a094bb322afdb08777a02fcf2fa883c",
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "bytes": 117499,
+    "sha256": "sha256:d194a1ab08d5ddec80ac9fffe5ae367e2d1a64e608f0b58c1552e2b0a435df0b"
+  },
+  "outcome": {
+    "state": "failed",
+    "executionSettled": true,
+    "errorCode": "GIF_ORBIT_INVALID",
+    "error": "Orbit GIF proof is missing, stale or does not match the prepared view",
+    "progress": {
+      "fraction": 1
+    },
+    "statusHasArtifactDescriptor": false,
+    "completedArtifact": false,
+    "artifactReadAttempted": false,
+    "artifactBytesAcquired": 0,
+    "gifStructureOrPixelsDecoded": false,
+    "orbitLedgerVerified": false,
+    "uiStatusText": "Orbit GIF completed.",
+    "uiCompletionIsJobArtifactSuccess": false,
+    "rootCauseEstablishedByThisBundle": false
+  },
+  "restoration": {
+    "baselineTimeSeconds": 2,
+    "baselineInterpolated": true,
+    "postGuiFine": "200",
+    "postGuiField": "temperature",
+    "postGuiInterpolationText": true,
+    "postGuiStopDisabled": true,
+    "fullFiveStatePostExportComparisonReached": false
+  },
+  "cleanup": {
+    "jobReleased": true,
+    "ownedAnalysisJobs": 0,
+    "ownedExportJobs": 0,
+    "sessionsEmpty": true,
+    "guiEndpointAndTokenCleared": true,
+    "ownedChildExited": true,
+    "ownedChildClosed": true,
+    "ownedChildExitCode": 0,
+    "ownedChildSignal": null,
+    "ownedChildPid": 31844,
+    "ownedChildPidAbsent": true,
+    "privateTokenRemoved": true,
+    "driverExitCodeReportedByRoot": 1
+  },
+  "claims": {
+    "gifArtifactSuccess": false,
+    "publication": false,
+    "parentTaskComplete": false,
+    "physicalAccuracy": false
+  },
+  "newExecutionByPackaging": {
+    "export": 0,
+    "solver": 0,
+    "codec": 0,
+    "gui": 0
+  }
+}

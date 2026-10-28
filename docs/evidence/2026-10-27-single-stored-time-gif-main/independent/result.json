@@ -1,0 +1,88 @@
+{
+  "technicalSuccess": true,
+  "sceneMachineGatePass": true,
+  "manualVisualReviewPending": true,
+  "overallVisualAcceptance": false,
+  "sceneRoi": [
+    0,
+    0,
+    640,
+    204
+  ],
+  "sceneNonBackgroundPixels": [
+    4566,
+    4566,
+    4566,
+    4566,
+    4566,
+    4566,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4569,
+    4574,
+    4574,
+    4574,
+    4574,
+    4574,
+    4574
+  ],
+  "distinctSceneHashes": 3,
+  "pin": "66ce457cc69b1034045c74967a84abe59b6afc21",
+  "driverSha256": "sha256:1077cd29a8d24e1067bae30726ee9f1ce70637774ff607400ba7e5857b647d55",
+  "artifact": {
+    "file": "stored-time.gif",
+    "bytes": 5574849,
+    "sha256": "sha256:5f800ca2cd4ffb4ed78b2e98549b0e3255727481752e0e8d3645d0b8a0519687",
+    "pageCount": 86
+  },
+  "genericDecoderFrames": 24,
+  "externalDecoderFrames": 24,
+  "allRgbPixelsMatch": true,
+  "rgbBytes": 14745600,
+  "rgbSha256": "sha256:d9b7ccf3eb959a574a35b2a81d043484b3816bf6a1ec8a63e31dd899c541b08b",
+  "totalDelayCentiseconds": 200,
+  "physicalSelection": {
+    "field": "temperature",
+    "unit": "degC",
+    "storedTimes": [
+      0,
+      5,
+      10
+    ],
+    "rangeSeconds": [
+      0,
+      10
+    ],
+    "selection": "nearest-stored-frames-only",
+    "counts": [
+      6,
+      12,
+      6
+    ],
+    "ledgerVerified": 24,
+    "terminalActualTimeSeconds": 10,
+    "terminalOffsetSeconds": 0
+  },
+  "fixedCameraMetadataAndViewVerified": true,
+  "fiveStatesUnchanged": true,
+  "caseCanonicalRevision": "sha256:2867f4f17127d9f8bdd06883bebd95332723537f83e63e5f0b91a7a945565e19",
+  "displayResultCanonicalRevision": "sha256:f318247cb3f34383eebaeab8dd407e7b82c318c286d616ab3e4e320988f9bc65",
+  "cleanupVerified": true,
+  "extraProductExports": 0,
+  "extraAnimationEncodes": 0,
+  "extraSolverRuns": 0,
+  "limits": [
+    "Independent generic LZW and FFmpeg decoding; imported mesh summary decoration uses pinned pure inspectMesh helper",
+    "Overall visual acceptance remains false until independent first/middle/last PNG model/color-progression/actual-requested-offset caption review and cleanup are appended; machine ROI gates alone are insufficient",
+    "No new product export, re-encoding of animation, or solver invocation"
+  ]
+}

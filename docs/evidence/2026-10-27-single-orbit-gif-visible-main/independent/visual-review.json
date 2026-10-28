@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pin": "4e0f785de1971a2a40b89db6c04a8fe5035818de",
+  "artifactSha256": "sha256:56b231f00c29b5b37f39cd165035bef192b2ecb593266ca47e782f0700fe7fbc",
+  "technicalDecodePass": true,
+  "sceneMachineGatePass": true,
+  "overallVisualAcceptance": true,
+  "scope": "single202c thermal94-nodebox fixture, orbit24/2s640x320/RGB332; selected temperature at interpolated2s fixed",
+  "manualReview": {
+    "reviewer": "independent print_dataset63 agent",
+    "images": [
+      "first.png",
+      "middle.png",
+      "last.png"
+    ],
+    "frameIndices": [
+      0,
+      12,
+      23
+    ],
+    "modelVisibleInAllThree": true,
+    "modelInsideSceneRegion": true,
+    "boxHasDifferentVisibleFacesOrOrientation": true,
+    "captionReadableAllThree": true,
+    "captions": [
+      "Synthetic thermal history QA",
+      "20.00 to30.00 degreeC",
+      "Orbit GIF1/24,13/24,24/24; interpolated view2.0000s (fixed)"
+    ],
+    "observation": "The complete colored rectangular box is visible in the top scene region in all three images. First and middle show differing face shading at opposite orbit viewpoints; the last has a different slanted orientation. Model is not clipped and captions remain readable. This closes the old202b blank-scene failure for this fixture."
+  },
+  "sceneRoi": [
+    0,
+    0,
+    640,
+    204
+  ],
+  "backgroundRgb": [
+    0,
+    36,
+    85
+  ],
+  "framesWithNonBackground": 24,
+  "minimumNonBackgroundPixels": 2785,
+  "maximumNonBackgroundPixels": 5163,
+  "distinctSceneHashes": 24,
+  "all24DecodedPixelsAgreeWithFfmpeg": true,
+  "rgbSha256": "sha256:7f02ac6e05bfe3bf662b0bfbe81ed84a0abbe69cdf51c8f7a3730e30e7634640",
+  "fiveStatesUnchanged": true,
+  "cleanupVerified": true,
+  "verificationInvocations": 1,
+  "extraProductExports": 0,
+  "extraAnimationEncodes": 0,
+  "extraSolverRuns": 0,
+  "historicalResultNote": "result.json preserves the script technical-only stage with manualVisualReviewPending=true/overallVisualAcceptance=false; this separately appended review is the final combined visual assessment. Old202b script/result/PNGs remain unchanged.",
+  "limits": [
+    "Limited synthetic stored thermal fixture and current browser/runtime only",
+    "No new physical analysis or calibration claim",
+    "Not deformation/timeGIF/general video/cross-browser acceptance"
+  ]
+}

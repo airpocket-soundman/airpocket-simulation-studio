@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-23",
+  "baseSha": "5647a6f",
+  "environment": {
+    "node": "v24.11.1",
+    "v8": "13.6.233.10-node.28",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpuLogicalCount": 6
+  },
+  "preparation": {
+    "dependencyInstall": "npm ci --ignore-scripts",
+    "nativeAssets": "Copied existing public/mfem and matching build-stamp; no SDK download",
+    "nativeBuildDigest": "283f7f2f1865d1759c2c4afd644996ba6050ecf0d050c0fcbbfcaa4ade86595a",
+    "commands": [
+      "node scripts/build-kernel.mjs",
+      "node scripts/copy-cad.mjs"
+    ]
+  },
+  "fullSuite": {
+    "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+    "exitCode": 0,
+    "file": ".qa-v8-full-concurrency4.log",
+    "bytes": 199851,
+    "sha256": "78cbadd24d4f694f70de23f3d49455156613583d02d6576bd6cb32c24a3ebda2",
+    "tests": 1896,
+    "passed": 1889,
+    "failed": 0,
+    "skipped": 7,
+    "durationMs": 421662.9828,
+    "fatalDetected": false
+  },
+  "focused": {
+    "command": "node --test tests/visual-export-fixed-frame.test.mjs",
+    "runs": [
+      {
+        "attempt": 1,
+        "exitCode": 0,
+        "file": ".qa-v8-fixed-frame-1.log",
+        "bytes": 1930,
+        "sha256": "06769254e08cf59ed1277f344f610f25aac7079e07a438528759bd2b3448d427",
+        "tests": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2878.616,
+        "fatalDetected": false
+      },
+      {
+        "attempt": 2,
+        "exitCode": 0,
+        "file": ".qa-v8-fixed-frame-2.log",
+        "bytes": 1929,
+        "sha256": "e0eb9eef224a786ad648a3efa3532a54d67bd4fe25ed0f46ee72046693c4950a",
+        "tests": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2894.14,
+        "fatalDetected": false
+      },
+      {
+        "attempt": 3,
+        "exitCode": 0,
+        "file": ".qa-v8-fixed-frame-3.log",
+        "bytes": 1931,
+        "sha256": "c25eb26def23f913213c87eb434c8aed01fa607fafab3a6915ab303a0ec6a92c",
+        "tests": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2934.8601,
+        "fatalDetected": false
+      },
+      {
+        "attempt": 4,
+        "exitCode": 0,
+        "file": ".qa-v8-fixed-frame-4.log",
+        "bytes": 1931,
+        "sha256": "3f0caaf91f825dbfad9350aee30ff7d4140f7685dcc88a761fe27a4b26065df0",
+        "tests": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2887.4314,
+        "fatalDetected": false
+      },
+      {
+        "attempt": 5,
+        "exitCode": 0,
+        "file": ".qa-v8-fixed-frame-5.log",
+        "bytes": 1930,
+        "sha256": "3d86d612d4943f7ff1ef955ad163bcfc9843a6212586ce242966c3b484417117",
+        "tests": 17,
+        "passed": 17,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 3238.0052,
+        "fatalDetected": false
+      }
+    ]
+  },
+  "existingSkips": [
+    "One symlink test: host symlink unavailable",
+    "Six host-native/prepared proof tests: external host executable/proof setup unavailable"
+  ],
+  "priorFailure": {
+    "sourceLog": ".qa-audit-full-concurrency4.log",
+    "assertion": "jit_page_->allocations_.erase(addr) == 1",
+    "stack": "v8::internal::ThreadIsolation::UnregisterWasmAllocation",
+    "file": "tests/visual-export-fixed-frame.test.mjs",
+    "priorFocusedRerun": {
+      "passed": 17,
+      "failed": 0
+    }
+  },
+  "conclusion": "Previous V8 fatal was not reproduced by this full suite or five focused repetitions. This is successful verification of the recorded base, not proof that the nondeterministic runtime failure is fixed.",
+  "changesToTestBehavior": false,
+  "unverified": [
+    "Root changes after base 5647a6f",
+    "Host-native proof tests and host symlink capability",
+    "Linux CI",
+    "Repeated full suites beyond this run",
+    "Root cause of prior V8 allocation assertion"
+  ]
+}

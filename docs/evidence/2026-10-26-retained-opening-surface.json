@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "base": "e630920",
+  "scope": "Pure caller-declared retained indexed opening surface provider; no product mesh acquisition or UI append",
+  "source": "src/retained-opening-surface.js",
+  "existingDetectorAndConfirmationModified": false,
+  "identity": {
+    "units": "mm",
+    "topologyIntent": "open-indexed-surface",
+    "contentRevision": "SHA-256 of canonical UTF8 JSON including original complete node/triangle order, unused nodes, tolerance and caller sourceIdentity",
+    "sourceIdentityAuthenticated": false,
+    "generation": "Instance-local strictly increasing safe integer; replacement, clear, release and dispose revoke old leases",
+    "leaseRestoreSupported": false
+  },
+  "providerLimits": {
+    "nodes": 512,
+    "triangles": 1024,
+    "bytes": 1048576,
+    "depth": 8,
+    "values": 20000,
+    "stringLength": 256,
+    "coordinateAbsMm": 1000000,
+    "minToleranceMm": 1e-9,
+    "maxToleranceMm": 1000,
+    "pending": 2
+  },
+  "limitMeaning": "Conservative new provider envelope before invoking the existing detector, which has no explicit count cap; all limits apply together",
+  "verification": {
+    "focusedCommand": "node --test tests/retained-opening-surface.test.mjs tests/opening-candidate-cap.test.mjs tests/opening-loop-candidates.test.mjs",
+    "passed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "newTests": 8,
+    "contractCommand": "node scripts/check-contract-types.mjs",
+    "contractDeclarations": 24,
+    "moduleBoundaryPassed": 19,
+    "docsPassed": 2,
+    "checks": [
+      "independent canonical SHA",
+      "explicit outward/seed/enclosure cap using original node IDs",
+      "immutable input and outputs",
+      "late caller mutation before hash completion",
+      "out-of-order replacements/clear/ABA",
+      "foreign/cloned/stale lease refusal",
+      "release and terminal idempotent dispose including pending work",
+      "closed zero-candidate and unresolved-seam/unhealthy reports without welding",
+      "invalid units/intent/fields/prototypes/accessors/typed arrays/numbers/counts",
+      "512-node/1024-triangle admitted envelope",
+      "source/unused-node/order/tolerance identity binding",
+      "runtime .js import positive/negative type fixtures",
+      "pre-snapshot two-request backpressure; snapshot/hash success/hash failure/replaced finally release; clear retains pending accounting"
+    ]
+  },
+  "solverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "su2Runs": 0,
+  "ciDispatches": 0,
+  "normalInference": false,
+  "displayReverseConversion": false,
+  "coordinateWelding": false,
+  "portFaceRemoval": false,
+  "cadLidConstruction": false,
+  "projectSchemaChanged": false,
+  "apiMcpUiConnected": false,
+  "taskStatusChanged": false,
+  "publicationVerified": false,
+  "remaining": [
+    "Product source for explicit indexed opening surfaces",
+    "Persistence and provenance contract for that source",
+    "User-confirmed atomic append into manual cap drafts",
+    "General OCC opening/lid construction",
+    "General CFDPORT1 parent acceptance"
+  ],
+  "auditFix": {
+    "initialOwner": "8a51507",
+    "finding": "Unbounded pending digest requests retained one snapshot each",
+    "fix": "Reserve at most2 slots before snapshot; stable pending-limit rejection does not change generation/current; finally releases on all admitted exit paths; clear/dispose retain unresolved accounting",
+    "independentReproduction": "5 unresolved hashes were admitted before the fix",
+    "wholeHeapByteGuarantee": false
+  }
+}

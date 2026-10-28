@@ -1,0 +1,25 @@
+# Stored temperature-frame WebM
+
+[日本語](../single-view-thermal-fixed-webm.md)
+
+Export stored transient-thermal temperature frames through Results → Save images and animations → Stored time (acoustic / temperature) → Save WebM video. Select Temperature first. Heat flux is refused without automatically changing the field. Thermal Play preview remains unsupported. Orbit, deformation and section recording are unchanged.
+
+The separate `singleThermalTimeWebmExport` capability advertises support. Existing `singleTimeWebmExport` and Acoustic-named APIs remain acoustic-only. The existing startExport time/WebM route also works; no method or scope is added. A private thermal proof binds kind=`thermal`, field=`temperature`, unit=`degC`, result revision and video-byte SHA. Acoustic getters/manifests cannot borrow it.
+
+Only the stored shape used by framesOf is supported: thermal kind, transient=true, and snapshots[{time,temperature}]. Every frame must contain finite temperatures matching mesh node count. Existing storage limits of 61 frames and 64MiB (nodes×frames×8bytes) are reused; temperature arrays are not copied again. No temperatures are recalculated, no heat flux is inferred and no interpolation is generated.
+
+Video duration is 1–15 seconds with N=min(seconds×24,120), fixed camera and phase=i/(N−1). Nearest stored frames cover both physical endpoints; requested/actual times and signed offsets are recorded. VP8 all-key frames, strict WebM validation, decoding of every timestamp and original Blob byte-SHA binding remain required. Capture fits 1280×640 and video bytes stay within 32MiB. Unsupported codecs or incomplete endpoints refuse without realtime fallback.
+
+Cancellation, result replacement or a field change during export publishes no artifact and restores camera, controls and the prior interpolated time view in finally. Fake codec/UI regressions cover actual JA/EN Save wiring, endpoints, field refusal, proof isolation/tampering, restoration/cancellation and acoustic compatibility. At the initial source/fake-validation stage, no real browser/codec thermal export had been run and additional solver/GUI/real-codec runs were zero. That historical scope is separate from the later validation below; acoustic-video evidence is not reused as thermal evidence.
+
+The final job boundary requires a thermal proof for prepared temperature and an acoustic proof for instantPressure; every other field is refused. It does not choose the manifest kind from the Blob proof alone. Fake integration regressions reject crossed proofs in both directions even with the same declared revision. At that initial source-validation stage,113 related tests passed with zero failures/skips.
+
+Both public encode APIs remain async: invalid, null and undefined inputs reject a Promise instead of throwing synchronously. Valid inputs retain the pre-await snapshot. At the subsequent compatibility-regression stage,114 related tests passed. These113/114 counts describe fake regressions at their respective source revisions, not current overall totals or successful real thermal exports.
+
+Later fixed source `7fee9593ba37c5a933489daadbc1fe628b1b6ea9` completed [200b on the normal main/IAB with formal stdio](../evidence/2026-10-26-single-thermal-webm-main/README.md), using a separately authorized one-export budget. This was English/foreground with one existing thermal case,94 nodes and stored times0/5/10s, with zero new solves. All796383bytes/SHA across13 pages,48 all-key VP8 frames,440×637 display dimensions,two-second duration and final physical10s/zero offset were checked. Independent ffprobe/ffmpeg each ran once and confirmed48 frames, every PTS, dimensions,duration and endpoint images.
+
+Five API snapshots matched with only the owned-export count0→1 separated, and GUI/API restored the prior interpolated2s display. Settled release, zero owned jobs, empty sessions, cleared GUI pairing fields, child exit/close, absent PID and removed token were confirmed. The [summary](../evidence/2026-10-26-single-thermal-webm-main/report.json) also records185 related fake tests (including three independent tests),25 contract declarations, full build and local asset28/28 success in41906.5168ms for that source. These are revision-scoped records, not publication evidence.
+
+The [initial200 failure](../evidence/2026-10-26-thermal-time-webm-failed/README.md), isolated native-dimension diagnostic and preceding stale-manifest local-check failure remain preserved. Raw driver text saying external decode had not yet run is pre-decode history, separate from later independent results. Actual coverage is one English foreground temperature case/two-second export. Completed GUI downloads, the full language/hidden real-cancellation matrix, other engines, heat-flux time video, general physical accuracy/calibration, public HTTPS and parent-task completion remain unproven.
+
+Exact final-head4027bdcd PR200 CI passed2214/2222 with0 failures and8 skips; all28 local checks passed in37.796s. [Final CI evidence](../evidence/2026-10-27-pr200-final-ci/summary.json) separately retains the earlier aa06 failure and1ed cancellation. Public deployment is not proven.

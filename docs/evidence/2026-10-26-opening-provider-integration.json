@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-26",
+  "candidate": "2b68d916a4c20c23bce2f77534c2cee85118ffd5",
+  "sourceGitBlobSha256": "5a03e3a6cd6b4659488bd00d8b62fd06dde992cd9ff7749dcd94ae445db35b00",
+  "rootFocused": {
+    "pass": 50,
+    "fail": 0,
+    "skip": 0
+  },
+  "independentAdditionalTests": 2,
+  "contracts": 24,
+  "independentSourceReviewers": 2,
+  "mandatoryFinding": "Pending snapshots were unbounded; fixed before publication with maxPending=2 before copying",
+  "pendingBudget": 2,
+  "existingDetectorAndConfirmationUnchanged": true,
+  "newSolverRuns": 0,
+  "newGuiRuns": 0,
+  "newCodecRuns": 0,
+  "newSu2Runs": 0,
+  "priorCiRawGitBlobsVerified": 25,
+  "progress": {
+    "changedIds": [
+      "CFDPORT1"
+    ],
+    "changedFields": [
+      "lastUpdate",
+      "lastUpdateEn",
+      "evidence"
+    ],
+    "allOtherFieldsIdentical": true,
+    "total": 171,
+    "unfinished": 37,
+    "statusPromoted": false
+  },
+  "published": false,
+  "limits": [
+    "Caller indexed surfaces only; no product acquisition or persistence",
+    "No welding,display reconstruction,normal inference or UI append",
+    "Hash and caller identity do not authenticate origin",
+    "Candidate detection is not closed-shell or fluid-domain success"
+  ]
+}

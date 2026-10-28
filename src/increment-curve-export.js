@@ -66,7 +66,8 @@ const columns=Object.freeze([
   ['inputRevision','inputRevision'],['meshRevision','meshRevision'],['calculationRevision','calculationRevision'],['resultRevision','resultRevision']
 ]);
 function makeCsv(curve){
-  const lines=[columns.map(([heading])=>csvCell(heading)).join(',')];
+  const displacement=curve.steps.some(row=>row.controlledQuantity==='displacement');
+  const lines=[columns.map(([heading])=>csvCell(displacement&&heading==='controlledValue[N]'?'controlledValue[controlledUnit]':heading)).join(',')];
   for(const row of curve.steps){
     const values={...row,curveId:curve.curveId,analysisKind:curve.analysis.kind,plasticHistory:false,initialGaugeLengthMm:curve.initialGaugeLengthMm,initialAreaMm2:curve.initialAreaMm2};
     lines.push(columns.map(([,key])=>csvCell(values[key])).join(','));

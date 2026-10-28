@@ -1,0 +1,69 @@
+{
+  "blankJa": "荷重 1 · 100 N方向 (0, -1, 0) · 全体座標CAD円筒領域: 半径 10 mm / 軸方向 -10 → 10 mm / 角度 315° + 90°領域を選択選択範囲で更新数値領域を再適用削除",
+  "bothJa": "荷重 1 · 100 N方向 (0, -1, 0) · 全体座標CAD円筒領域: 半径 10 mm / 軸方向 -10 → 10 mm / 角度 315° + 90°領域を選択選択範囲で更新数値領域を再適用削除荷重 2 · 100 N方向 (0, -1, 0) · 全体座標CAD円筒領域: 半径 10 → 8 mm / 軸方向 -10 → 10 mm / 角度 315° + 90°領域を選択選択範囲で更新数値領域を再適用削除",
+  "bothEn": "Force 1 · 100 NDirection (0, -1, 0) · Global coordinatesCAD cylindrical region: radius 10 mm / Axial range -10 → 10 mm / Angle 315° + 90°Select regionReplace with selected regionReapply dimensional regionRemoveForce 2 · 100 NDirection (0, -1, 0) · Global coordinatesCAD cylindrical region: radius 10 → 8 mm / Axial range -10 → 10 mm / Angle 315° + 90°Select regionReplace with selected regionReapply dimensional regionRemove",
+  "savedSummary": {
+    "characters": 593069,
+    "conditions": [
+      {
+        "cylindricalRegion": {
+          "axialMax": 10,
+          "axialMin": -10,
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "exactCad": true,
+          "mesh": 0,
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "radius": 10,
+          "reference": [
+            1,
+            0,
+            0
+          ],
+          "startDegrees": 315,
+          "sweepDegrees": 90,
+          "tolerance": 2
+        },
+        "type": "force"
+      },
+      {
+        "cylindricalRegion": {
+          "axialMax": 10,
+          "axialMin": -10,
+          "axis": [
+            0,
+            1,
+            0
+          ],
+          "exactCad": true,
+          "mesh": 0,
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "radius": 10,
+          "radiusAtMax": 8,
+          "reference": [
+            1,
+            0,
+            0
+          ],
+          "startDegrees": 315,
+          "sweepDegrees": 90,
+          "tolerance": 0.3
+        },
+        "type": "force"
+      }
+    ],
+    "sourceKind": "step"
+  },
+  "scope": "DOM summary parsed in the page; full project bytes were not captured"
+}

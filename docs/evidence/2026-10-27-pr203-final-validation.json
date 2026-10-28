@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "pr": 203,
+  "final": {
+    "head": "7f07bbf06710f882530577c42b58a44d05b8eea8",
+    "run": 40387957778,
+    "conclusion": "success",
+    "mergeCandidate": {
+      "sha": "45ff5940ffce9d8fa3410e52516c0dada5dafead",
+      "message": "Merge 7f07bbf06710f882530577c42b58a44d05b8eea8 into f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+      "parents": [
+        "f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+        "7f07bbf06710f882530577c42b58a44d05b8eea8"
+      ]
+    },
+    "tests": {
+      "total": 2284,
+      "passed": 2276,
+      "failed": 0,
+      "skipped": 8,
+      "durationMs": 229749.606142
+    },
+    "build": {
+      "conclusion": "success",
+      "stepSeconds": 6
+    },
+    "localPublished": {
+      "checks": 28,
+      "allPassed": true,
+      "elapsedMs": 30290.762222,
+      "revision": "45ff5940ffce9d8fa3410e52516c0dada5dafead",
+      "local": true
+    },
+    "artifact": {
+      "id": 12680319559,
+      "name": "verification-40387957778-1",
+      "digest": "sha256:438a82b55609f038d2bcca8acb9fb134c5289f952f1e7b8fd1ff18480332e76d",
+      "downloadCount": 1
+    },
+    "jobs": [
+      {
+        "name": "verify",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "verify-published",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "superseded": {
+    "head": "442d54d63038fd6be329b7fcb8271c480f0ce522",
+    "run": 40387349692,
+    "conclusion": "cancelled",
+    "mergeCandidate": {
+      "sha": "fd21753460a8ba850bf298fa5b4477a07bcd4ceb",
+      "message": "Merge 442d54d63038fd6be329b7fcb8271c480f0ce522 into f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+      "parents": [
+        "f2fdaf46b89eab6d5eaba74b89b5c719e87071ce",
+        "442d54d63038fd6be329b7fcb8271c480f0ce522"
+      ]
+    },
+    "tests": {
+      "total": 2284,
+      "passed": 2276,
+      "failed": 0,
+      "skipped": 8,
+      "durationMs": 200375.662326
+    },
+    "build": {
+      "conclusion": "success",
+      "stepSeconds": 6
+    },
+    "localPublished": {
+      "checks": 28,
+      "allPassed": true,
+      "elapsedMs": 25754.471245999997,
+      "revision": "fd21753460a8ba850bf298fa5b4477a07bcd4ceb",
+      "local": true
+    },
+    "artifact": {
+      "id": 12680868106,
+      "name": "verification-40387349692-1",
+      "digest": "sha256:6cb33be0f4767596a70535b38a6d9656058122832cf1cc55c6ec49382242a01b",
+      "downloadCount": 1
+    },
+    "jobs": [
+      {
+        "name": "verify",
+        "conclusion": "cancelled"
+      },
+      {
+        "name": "deploy",
+        "conclusion": "cancelled"
+      },
+      {
+        "name": "verify-published",
+        "conclusion": "cancelled"
+      }
+    ],
+    "meaning": "Cancelled workflow after recorded tests/local checks; not failure and not final-head acceptance"
+  },
+  "independentAudit": {
+    "reviewer": "print_dataset63",
+    "raw": "ci203-final-20261027/reviewer63-final-head-audit.json",
+    "messageAttestation": "32evidence files/581783B matched SHA256/Gitblob/tree;171statuses unchanged;onlyFINITEVISCO1 lastUpdate,lastUpdateEn,evidence changed from202;protected5sourcefiles unchanged; no required finding"
+  },
+  "publicDeploymentProven": false,
+  "newRunsDispatched": 0,
+  "retries": 0,
+  "localSolverRuns": 0,
+  "guiRuns": 0,
+  "codecRuns": 0,
+  "rawFinalFiles": [
+    {
+      "file": "artifacts.json",
+      "bytes": 822,
+      "sha256": "9b44dc7877020b21ebfe40b87b9d0d544819baeea979e13805c8a5888743e690",
+      "gitBlobSha1": "a9d6ac55cbf9dd16ecbe7a1f3f152d789dc5248d"
+    },
+    {
+      "file": "ci-build.log",
+      "bytes": 3910,
+      "sha256": "628739bb52c5b33f821cac1ab28cbc65bbbe51a72bb05e2bc8ce3a74607688cb",
+      "gitBlobSha1": "08e3f96730079bca99388ff0e35837952b031b8a"
+    },
+    {
+      "file": "ci-install.log",
+      "bytes": 440,
+      "sha256": "cac16cfa634b36c9124f560ff3db7f9368ad64dec4387993badc1d00bec2bf5d",
+      "gitBlobSha1": "b950c8a8a9b9491d8bcbb28fd72da54ed5e2b502"
+    },
+    {
+      "file": "ci-local-published.log",
+      "bytes": 1569,
+      "sha256": "57b4c597e711498f9b462788c89d1e23c6efe006964f7fccb1a900b03c53c239",
+      "gitBlobSha1": "c5083a48733413bf4c92ba25bcf63da5439ebf8f"
+    },
+    {
+      "file": "ci-tests.log",
+      "bytes": 247067,
+      "sha256": "caac0c1282af7174206ab7fa328342023bc5c245efd980046e58062efefb7a14",
+      "gitBlobSha1": "3d1913d67f3d15470a05f624c9355ac4ec2261df"
+    },
+    {
+      "file": "job.log",
+      "bytes": 467390,
+      "sha256": "4a84d982fd9f35188635530ca4c23210cc665c191b570c4f7c061725506e7951",
+      "gitBlobSha1": "c884ad49f9ebd65eb78c522b982459645a287a9a"
+    },
+    {
+      "file": "merge.json",
+      "bytes": 280,
+      "sha256": "375402fdbec7ee2bcb3a452ba15d17b9591ca12a5d209493e5e829d77a941184",
+      "gitBlobSha1": "ab4d9d7ac176755c0fb2d5b295d8e68d974eeff5"
+    },
+    {
+      "file": "published-checkpoints-1793043607475-12541.jsonl",
+      "bytes": 86530,
+      "sha256": "e49fefb94496158ee4dae7adc392465bfb61a886b57e3f3e4fcd5acc92b2d37d",
+      "gitBlobSha1": "ecc73b607d88f68892cd550286a0b6c2ae1c18e9"
+    },
+    {
+      "file": "published-report.json",
+      "bytes": 4396,
+      "sha256": "4de35a3cd3d3f14426350e22d800a148e19ff4ee3272ac20760c71b8152849c3",
+      "gitBlobSha1": "2ba39ff1bccb646739f27539e56f61f702a5258e"
+    },
+    {
+      "file": "reviewer63-final-head-audit.json",
+      "bytes": 2543,
+      "sha256": "ba1c4394e3e140628830b4e45cb81ecf5bf3f4f9804dfa5d38cdecce6f31f407",
+      "gitBlobSha1": "fdeb494ee73b4f834e1d5fe609549a79f9fd0d3a"
+    },
+    {
+      "file": "run.json",
+      "bytes": 3781,
+      "sha256": "79e844a74e6794933133aa86cee0da27e0963d7a563b67becf7f759d7514e333",
+      "gitBlobSha1": "9b1a4e763fb599b0842a990fcae02b5d97074c68"
+    }
+  ],
+  "rawSupersededFiles": [
+    {
+      "file": "artifacts.json",
+      "bytes": 822,
+      "sha256": "d38f730bea69b735408e9a498ab0dbef0c54e61b1f361818ed9b990955637921",
+      "gitBlobSha1": "d1a1a46d1694d2e771953e59ae762c9aabff8ee6"
+    },
+    {
+      "file": "ci-build.log",
+      "bytes": 3910,
+      "sha256": "06da71789dcb67873a59dfc0c23186e3c4837b205e3a540c187c590a5aed7da1",
+      "gitBlobSha1": "11ff5253c9baeaa72dc076ce55394c624074ed1e"
+    },
+    {
+      "file": "ci-install.log",
+      "bytes": 440,
+      "sha256": "69fea6a92eeea1af4ff3b4c0c17785ab142d047a4ae702e0335d1e1facbd04a9",
+      "gitBlobSha1": "5f3dfc93eacd60878e5e24759003a7c9134651eb"
+    },
+    {
+      "file": "ci-local-published.log",
+      "bytes": 1567,
+      "sha256": "81e1c12b1bdac4e2be47b9fb27eb6b05d9790a8adabc2b7ad962ddb417e6cc37",
+      "gitBlobSha1": "e66c9e10504711258bdc3dbe296288525f65956b"
+    },
+    {
+      "file": "ci-tests.log",
+      "bytes": 247030,
+      "sha256": "0a571bd04ad49ed0c1121931d1c4effab87a5d1a7435bb7dd6912a8d55b9f3ce",
+      "gitBlobSha1": "a08826bed152c80de11e3ec1b827020eb582b0da"
+    },
+    {
+      "file": "job.log",
+      "bytes": 467560,
+      "sha256": "409efe67a67bed53b8e47a5d878a73e49b0ab01899cc8ae813bcd7031a1be428",
+      "gitBlobSha1": "3110732d2f4633ccef3c639a4aee9d7cc85818c3"
+    },
+    {
+      "file": "merge.json",
+      "bytes": 280,
+      "sha256": "7daee994067956a3aef91ce1568e8698777f7b11c45f18ac0d435bc1c167c92a",
+      "gitBlobSha1": "3a9b43408940e78d17cad186c7b3d07de3179ee2"
+    },
+    {
+      "file": "published-checkpoints-1793043278212-12676.jsonl",
+      "bytes": 86544,
+      "sha256": "776d9043b827fbbb7dc2fa5cc04b838e1b06dd87932edab59d3049741b173f81",
+      "gitBlobSha1": "950dde1bdc139f465275ec248452addb3e36e979"
+    },
+    {
+      "file": "published-report.json",
+      "bytes": 4381,
+      "sha256": "8b13a37cae73ae28358c87913027e67dc6d31cd34e4f9ed7dc9baf2de37b2a9f",
+      "gitBlobSha1": "f142933b04f824e7ab6bfea434e6e865a80a7b0e"
+    },
+    {
+      "file": "run.json",
+      "bytes": 3789,
+      "sha256": "2b7497848dfefc17de3342230785d9fd2ab0dc2f0acdc1b1a466c06b8761ce71",
+      "gitBlobSha1": "6bee3286b2665e6f0c348b58b6389ee609e390f1"
+    }
+  ]
+}

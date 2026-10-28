@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-23",
+  "workOrder": "61-CFD1",
+  "baseSha": "3dd42813a4f09d0ee1d5834d375b31d4ff00bef4",
+  "sourceInvestigation": {
+    "tag": "v8.5.0",
+    "commit": "12eb826f049ef7f67df974dfcb44cf36ee07c0f8",
+    "sources": [
+      {
+        "file": "SU2_CFD/src/output/CFlowOutput.cpp",
+        "url": "https://github.com/su2code/SU2/blob/12eb826f049ef7f67df974dfcb44cf36ee07c0f8/SU2_CFD/src/output/CFlowOutput.cpp",
+        "bytes": 215992,
+        "sha256": "0cdf05a698729afc3fb55e7f400c743898709cdc225aba8c699eef8b7f971d88"
+      },
+      {
+        "file": "SU2_CFD/src/solvers/CIncEulerSolver.cpp",
+        "url": "https://github.com/su2code/SU2/blob/12eb826f049ef7f67df974dfcb44cf36ee07c0f8/SU2_CFD/src/solvers/CIncEulerSolver.cpp",
+        "bytes": 133646,
+        "sha256": "5c0906f2a4719eb9050410a91be63e992d8b6ba63d07983ad67aa10265db11db"
+      },
+      {
+        "file": "SU2_CFD/src/numerics/flow/convection/fds.cpp",
+        "url": "https://github.com/su2code/SU2/blob/12eb826f049ef7f67df974dfcb44cf36ee07c0f8/SU2_CFD/src/numerics/flow/convection/fds.cpp",
+        "bytes": 9795,
+        "sha256": "6cda74bdd245125d6fbff43dff54920274830aeb9d1e8e64fa9d53ccb39e414a"
+      },
+      {
+        "file": "config_template.cfg",
+        "url": "https://github.com/su2code/SU2/blob/12eb826f049ef7f67df974dfcb44cf36ee07c0f8/config_template.cfg",
+        "bytes": 104205,
+        "sha256": "3e04a99021cdae4286b54c4e009d2c072c433bead708c0041fad8116ebb62b7d"
+      }
+    ],
+    "findings": [
+      {
+        "file": "SU2_CFD/src/output/CFlowOutput.cpp",
+        "lines": "194-261,440-444",
+        "finding": "MARKER_ANALYZE/SURFACE_MASSFLOW uses density and velocity at boundary vertices and their geometric normals; not the numerical FDS residual"
+      },
+      {
+        "file": "SU2_CFD/src/solvers/CIncEulerSolver.cpp",
+        "lines": "2215-2303",
+        "finding": "BC_Far_Field excludes non-domain nodes, flips normal outward and assembles ComputeResidual into LinSysRes"
+      },
+      {
+        "file": "SU2_CFD/src/numerics/flow/convection/fds.cpp",
+        "lines": "165-171,219-228",
+        "finding": "Numerical flux combines two projected physical states and dissipation; unavailable from existing nodal diagnostics"
+      }
+    ]
+  },
+  "runtimeDiscovery": {
+    "mode": "field discovery only; no solution iterations",
+    "budget": {
+      "timeoutMs": 10000,
+      "outputCapBytes": 2097152,
+      "processesAtOnce": 1,
+      "finalThreads": 1,
+      "downloads": false
+    },
+    "dimensionStub": "NDIME= 2 only; not a computational mesh",
+    "attempts": [
+      {
+        "file": "run-no-mesh.json",
+        "expected": "Exit 1: missing dimension mesh file"
+      },
+      {
+        "file": "run-initial-success.json",
+        "expected": "Exit 0: discovery with dimension stub"
+      },
+      {
+        "file": "run.json",
+        "expected": "Exit 0: final explicit -t 1 discovery with dimension stub"
+      }
+    ],
+    "observedField": "SURFACE_MASSFLOW",
+    "verifiedNumericalBoundaryFluxExport": false
+  },
+  "existingHistory": {
+    "file": "docs/evidence/cfd-finemesh-followup-20261022/history.csv",
+    "sha256": "73aaedd70e783ea0971d9b3675fc2f6bb244f8135965151dfd97e678c8ef4b8c",
+    "columns": "\"Time_Iter\",\"Outer_Iter\",\"Inner_Iter\",     \"rms[P]\"     ,     \"rms[U]\"     ,     \"rms[V]\"     ,    \"RefForce\"    ,       \"CD\"       ,       \"CL\"       ,       \"CSF\"      ,       \"CMx\"      ,       \"CMy\"      ,       \"CMz\"      ,       \"CFx\"      ,       \"CFy\"      ,       \"CFz\"      ,      \"CEff\"      ",
+    "discreteFluxAvailable": false
+  },
+  "capability": {
+    "schemaVersion": 1,
+    "supported": false,
+    "status": "unavailable",
+    "code": "SU2_DISCRETE_BOUNDARY_FLUX_UNAVAILABLE",
+    "quantity": "solver-numerical-boundary-mass-flux",
+    "solver": "SU2",
+    "version": "8.5.0",
+    "units": null,
+    "source": "numerical-boundary-residual-not-exported",
+    "nodalSurfaceMassflowIsDiscreteFlux": false,
+    "dimensionSpecificNormalizationVerified": false,
+    "physicalAcceptanceComplete": false
+  },
+  "artifacts": {
+    "directory": "docs/evidence/2026-10-23-cfd1-flux-discovery",
+    "files": [
+      {
+        "file": ".gitattributes",
+        "bytes": 15,
+        "sha256": "50b8945a29c1090ea744b8f1b761eb4af6136f91203cf5850bc9a915270532eb"
+      },
+      {
+        "file": "discovery.cfg",
+        "bytes": 914,
+        "sha256": "0d9d83e8a1d74733b56e23d23bf8944478dcd533cc3a8f482844fe9b480b5cde"
+      },
+      {
+        "file": "mesh.su2",
+        "bytes": 10,
+        "sha256": "e132e29917c6d748433f60b7739f001a6f3aeec6d8db5caaa53155a00d823bca"
+      },
+      {
+        "file": "raw-discovery-initial-success.log",
+        "bytes": 25495,
+        "sha256": "60877aee0c0dd80c11af73ad664d2b379e37a18bb286432b35105926645715dd"
+      },
+      {
+        "file": "raw-discovery-no-mesh.log",
+        "bytes": 2365,
+        "sha256": "38d27e9b3506b754f3b8b4cc93b4b113c7da7ee3bfdc4c24cfd73c5c9177841f"
+      },
+      {
+        "file": "raw-discovery.log",
+        "bytes": 25495,
+        "sha256": "60877aee0c0dd80c11af73ad664d2b379e37a18bb286432b35105926645715dd"
+      },
+      {
+        "file": "run-initial-success.json",
+        "bytes": 282,
+        "sha256": "6a3c40fcf5d69dd323002b372bddbcb5acc4addc667238dea35765a131883f8a"
+      },
+      {
+        "file": "run-no-mesh.json",
+        "bytes": 281,
+        "sha256": "12dc23718a1acf8273db6c03c165df9d11eea3b595c0ae785357f7675a978521"
+      },
+      {
+        "file": "run.json",
+        "bytes": 301,
+        "sha256": "c4467ba520cbe47f99c3fe1cfb2c4502ff463f485ca789fcc2ef452c60aa65e2"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "command": "node --test tests/su2-native.test.mjs tests/su2-mass-flux-capability.test.mjs tests/native-flow-host.test.mjs tests/docs.test.mjs",
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run check:contracts",
+      "passed": true,
+      "declarationFiles": 11
+    },
+    {
+      "command": "git diff --check",
+      "passed": true
+    }
+  ],
+  "unimplemented": [
+    "Solver instrumentation and build",
+    "Proven residual-component to physical-mass unit conversion and 2D span handling",
+    "Real numerical-flux output format and bounded parser",
+    "Synthetic and real conservation acceptance",
+    "All-marker completeness, iteration/result identity and MPI/thread reduction proof",
+    "CFD1 mass-balance parent acceptance"
+  ],
+  "parentAcceptanceComplete": false
+}

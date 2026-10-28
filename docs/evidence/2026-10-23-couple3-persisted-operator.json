@@ -1,0 +1,238 @@
+{
+  "baseSha": "8c902f3",
+  "branch": "codex/heat-operator66",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32"
+  },
+  "inputKind": "synthetic manufactured global-affine flux",
+  "geometry": {
+    "units": "mm",
+    "mesh": {
+      "nodes": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0.5,
+        0.5,
+        0
+      ]
+    },
+    "sourceFaces": [
+      {
+        "nodes": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "nodes": [
+          0,
+          2,
+          3
+        ]
+      }
+    ],
+    "targetFaces": [
+      {
+        "nodes": [
+          4,
+          8,
+          5
+        ]
+      },
+      {
+        "nodes": [
+          5,
+          8,
+          6
+        ]
+      },
+      {
+        "nodes": [
+          6,
+          8,
+          7
+        ]
+      },
+      {
+        "nodes": [
+          7,
+          8,
+          4
+        ]
+      }
+    ]
+  },
+  "flux": {
+    "base": 1,
+    "gradient": [
+      2000,
+      0,
+      0
+    ]
+  },
+  "operator": {
+    "schemaVersion": 1,
+    "kind": "planar-affine-heat-transfer",
+    "units": {
+      "length": "mm",
+      "flux": "W/m2",
+      "gradient": "W/m3",
+      "load": "W"
+    },
+    "basis": [
+      "1",
+      "x_m",
+      "y_m",
+      "z_m"
+    ],
+    "toleranceMm": 0.000001,
+    "coverageTolerance": 0.000001,
+    "sourceGeometryRevision": "sha256:ac4083818358e8d783c3d5dc135919ad02b0e73e3e6b0bfc8ce5297f69d68ae6",
+    "targetGeometryRevision": "sha256:2b780b14b1b975866c083b2a597ad8591f72f9c800c9fa6015b076628a1a4c95",
+    "coveredAreaM2": 0.000001,
+    "sourceCoefficients": [
+      0.000001,
+      5e-10,
+      5e-10,
+      0
+    ],
+    "rows": [
+      {
+        "nodeId": 4,
+        "coefficients": [
+          1.6666666666666665e-7,
+          4.1666666666666665e-11,
+          4.1666666666666665e-11,
+          0
+        ]
+      },
+      {
+        "nodeId": 5,
+        "coefficients": [
+          1.6666666666666665e-7,
+          1.2499999999999998e-10,
+          4.1666666666666665e-11,
+          0
+        ]
+      },
+      {
+        "nodeId": 6,
+        "coefficients": [
+          1.6666666666666665e-7,
+          1.2499999999999998e-10,
+          1.2499999999999998e-10,
+          0
+        ]
+      },
+      {
+        "nodeId": 7,
+        "coefficients": [
+          1.6666666666666665e-7,
+          4.1666666666666665e-11,
+          1.2499999999999998e-10,
+          0
+        ]
+      },
+      {
+        "nodeId": 8,
+        "coefficients": [
+          3.333333333333333e-7,
+          1.6666666666666663e-10,
+          1.6666666666666663e-10,
+          0
+        ]
+      }
+    ],
+    "operatorRevision": "sha256:b76f7424b0cfb84d57e4eecb9f038f99138cb329b0893d1fb0fd49cd2cd2bb9d"
+  },
+  "serializedUtf8Bytes": 1077,
+  "roundTripIdentical": true,
+  "expected": {
+    "areaMm2": 1,
+    "meanFluxWPerM2": 2,
+    "totalW": 0.000002,
+    "nodeIntegral": "A*(2*qi+qj+qk)/12"
+  },
+  "actual": {
+    "operatorRevision": "sha256:b76f7424b0cfb84d57e4eecb9f038f99138cb329b0893d1fb0fd49cd2cd2bb9d",
+    "coveredAreaM2": 0.000001,
+    "sourceW": 0.0000020000000000000003,
+    "targetW": 0.0000019999999999999995,
+    "targetOutwardW": -0.0000019999999999999995,
+    "balanceErrorW": 8.470329472543003e-22,
+    "nodeHeatW": [
+      [
+        4,
+        2.5e-7
+      ],
+      [
+        5,
+        4.1666666666666667e-7
+      ],
+      [
+        6,
+        4.1666666666666667e-7
+      ],
+      [
+        7,
+        2.5e-7
+      ],
+      [
+        8,
+        6.666666666666665e-7
+      ]
+    ]
+  },
+  "verification": {
+    "focusedPassed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "contractDeclarationFiles": 14,
+    "actualModuleTypeFixture": "passed",
+    "docs": "passed",
+    "diffCheck": "passed",
+    "tamperedAndRehashedCoefficients": "rejected",
+    "geometryChange": "rejected",
+    "equalAreaExtremeAspectMismatch": "rejected before overlap enumeration"
+  },
+  "notVerified": [
+    "browser transport or UI",
+    "general coupled fluid/thermal solver",
+    "arbitrary source nodal field interpolation",
+    "partial coverage transfer",
+    "experimental accuracy"
+  ],
+  "parentReleased": false,
+  "commands": [
+    "npm ci --ignore-scripts",
+    "node --test tests/planar-heat-operator.test.mjs tests/planar-heat-transfer.test.mjs tests/planar-heat-independent-integral.test.mjs",
+    "npm run check:contracts",
+    "node node_modules/typescript/bin/tsc --strict --noEmit --skipLibCheck false --target ES2022 --module ESNext --moduleResolution Bundler tests/fixtures/planar-heat-operator-types.ts",
+    "node --test tests/docs.test.mjs",
+    "git diff --check"
+  ]
+}

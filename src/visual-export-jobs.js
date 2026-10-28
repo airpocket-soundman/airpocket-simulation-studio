@@ -1,15 +1,22 @@
+import {singleSliceGifManifest,SINGLE_SLICE_GIF_LIMITS} from './ui/single-slice-gif.js';
+import {singleDeformationGifManifest,SINGLE_DEFORMATION_GIF_LIMITS} from './ui/single-deformation-gif.js';
+import {singleStoredTimeGifManifest,SINGLE_STORED_TIME_GIF_LIMITS} from './ui/single-stored-time-gif.js';
+import {singleOrbitGifManifest,SINGLE_ORBIT_GIF_LIMITS} from './ui/single-orbit-gif.js';
+import {singleViewThermalTimeManifest,singleViewAcousticTimeManifest} from './single-view-time-webm.js';
 import {canonicalJson} from './project-revision.js';
 import {FIXED_FRAME_LIMITS,readStoreZip,sha256Hex} from './visual-export-fixed-frame.js';
 import {COMPARISON_TIMING_LIMITS} from './comparison-frame-timing.js';
-const CHUNK=65536;
+import {fixedWebmSchedule,demuxFixedWebm,fixedWebmError} from './fixed-webm.js';
+const CHUNK=65536,readBlob=Blob.prototype.arrayBuffer;
 const copy=value=>structuredClone(value);
 function freeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;}
 function request(value){
  if(!value||typeof value.requestId!=='string'||!value.requestId.trim()||value.requestId.length>128)throw Error('Invalid visual export requestId');
  if(typeof value.expectedResultRevision!=='string'||!/^sha256:[a-f0-9]{64}$/.test(value.expectedResultRevision))throw Error('Invalid expectedResultRevision');
- if(!['png','webm','png-sequence'].includes(value.format))throw Error('Visual export format must be png, webm or png-sequence');
+ if(!['png','webm','png-sequence','gif'].includes(value.format))throw Error('Visual export format must be png, webm, gif or png-sequence');
  const animation=value.animation??'orbit';
  if(!['orbit','deformation','time','slice'].includes(animation))throw Error('Invalid visual export animation or seconds');
+ if(value.format==='gif'&&!['orbit','time','deformation','slice'].includes(animation))throw Error('Single-view GIF supports orbit, stored time or visual deformation only');
  if(value.format==='png-sequence'){
   if(value.seconds!==undefined&&value.seconds!==null)throw Error('png-sequence is fixed-frame; seconds is not accepted, use frames');
   const frames=value.frames??FIXED_FRAME_LIMITS.defaultFrames;
@@ -46,11 +53,21 @@ function gifSize(bytes){if(bytes.length<14||new TextDecoder().decode(bytes.subar
 function comparisonManifest(job,mimeType,bytes,sha256){
  const {format,animation,seconds}=job.request,recorded=job.view?.resolution,size=format==='png'?pngSize(bytes):format==='gif'?gifSize(bytes):recorded;
  if(!size||!Number.isSafeInteger(size.width)||size.width<1||!Number.isSafeInteger(size.height)||size.height<1)throw Error(format==='png'?'Comparison renderer returned invalid PNG dimensions':'Comparison video requires recorded canvas resolution');
+ const fixedTime=format==='webm'&&animation==='time';
  const codec=format==='webm'?(/codecs=([^;]+)/.exec(mimeType)||[])[1]:undefined;
  const manifest={schemaVersion:1,target:'comparison',format,container:format,mimeType,...(codec?{codec}:{}),sha256,totalBytes:bytes.length,resolution:{width:size.width,height:size.height},comparison:copy(job.comparison),view:copy(job.view),...(format==='gif'?{time:{animation,durationSeconds:seconds,timeBasis:'display time',recording:'fixed-frame',realtime:false,frameCount:24,frameCountGuaranteed:true,phasePolicy:animation==='orbit'?'i/24':'i/23',camera:animation==='orbit'?'orbit':'fixed',...(animation==='time'?{frameSelection:'nearest-stored-frames-only',requestedRangeSeconds:{start:job.request.startTimeSeconds,end:job.request.endTimeSeconds}}:{}),...(animation==='deformation'?{physicalTime:'Fixed saved structural result; visualization multiplier only, not a physical load history.'}:{}),delayCentiseconds:Array.from({length:24},(_,i)=>Math.round((i+1)*seconds*100/24)-Math.round(i*seconds*100/24)),loop:'infinite'},gif:{palette:'RGB332',colors:256,lossy:true},sourceResolution:copy(job.view.sourceResolution)}:{}),...(format==='webm'?{time:{animation,durationSeconds:seconds,timeBasis:'display time',physicalTime:animation==='deformation'?'Fixed saved structural result; only the visualization multiplier changes linearly from zero to the requested scale, not a physical load history.':animation==='time'?'Requested physical range maps to nearest stored frames per panel; actual times and signed offsets are shown in each rendered frame.':'Each panel retains its selected saved result and physical time throughout the display orbit.',camera:animation==='orbit'?'orbit':'fixed',...(animation==='time'?{frameSelection:'nearest-stored-frames-only',requestedRangeSeconds:{start:job.request.startTimeSeconds,end:job.request.endTimeSeconds}}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}}}:{})};
+ if(fixedTime){
+  const schedule=fixedWebmSchedule(seconds),proof=job.getFixedVerification?.(),parsed=demuxFixedWebm(bytes);
+  if(!proof||proof.schemaVersion!==1||proof.codec!=='vp8'||proof.frameCount!==schedule.length||proof.encodedFrameCount!==schedule.length||proof.decodedFrameCount!==schedule.length||proof.terminalTimestamp!==schedule.at(-1).timestamp||proof.totalDurationMicroseconds!==seconds*1000000||proof.verification!=='strict-webm-demux+video-decoder'||parsed.width!==size.width||parsed.height!==size.height||parsed.seconds!==seconds)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Comparison WebM endpoint verification is missing or inconsistent');
+  manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',recording:'fixed-frame',realtime:false,frameCount:schedule.length,frameCountGuaranteed:true,phasePolicy:'i/(N-1)',camera:'fixed',frameSelection:'nearest-stored-frames-only',requestedRangeSeconds:{start:job.request.startTimeSeconds,end:job.request.endTimeSeconds},presentationSchedule:schedule.map(({index,timestamp,duration})=>({index,timestampMicroseconds:timestamp,durationMicroseconds:duration})),verification:copy(proof)};
+  delete job.getFixedVerification;
+ }
  let timing;try{timing=job.getTimeFrames?.();}finally{delete job.getTimeFrames;}
+ if(fixedTime&&!timing)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Comparison fixed WebM physical frame timing is missing');
  if(timing){
   if(!Array.isArray(timing.entries)||timing.entries.length>COMPARISON_TIMING_LIMITS.frames||new TextEncoder().encode(JSON.stringify(timing)).length>COMPARISON_TIMING_LIMITS.bytes)throw Error('Comparison frame timing exceeds its size bound');
+  if(fixedTime&&timing.entries.length!==fixedWebmSchedule(seconds).length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Comparison fixed WebM timing is incomplete');
+  if(fixedTime){for(const [i,entry] of timing.entries.entries()){const phase=i/(timing.entries.length-1),requested=i===timing.entries.length-1?job.request.endTimeSeconds:job.request.startTimeSeconds+(job.request.endTimeSeconds-job.request.startTimeSeconds)*phase;if(entry.renderIndex!==i||entry.phase!==phase||entry.requestedTimeSeconds!==requested||!Array.isArray(entry.panels)||entry.panels.length!==2||entry.panels.some((p,k)=>p.caseIndex!==k||!Number.isSafeInteger(p.frameIndex)||p.frameIndex<0||!Number.isFinite(p.timeSeconds)||!Number.isFinite(p.offsetSeconds)||p.offsetSeconds!==p.timeSeconds-requested))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Comparison fixed WebM physical frame timing differs from its presentation schedule');}}
   if(format==='gif'&&timing.entries.length!==24)throw Error('Comparison GIF frame timing is incomplete');
   manifest.time.frameTimings=copy(timing);
  }
@@ -78,26 +95,28 @@ async function sequenceManifest(job,mimeType,bytes,sha256){
  if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
-function buildManifest(job,mimeType,bytes,sha256){
+async function buildManifest(job,mimeType,bytes,sha256,blob){
  const {format,animation,seconds,expectedResultRevision}=job.request,result=job.view?.result&&typeof job.view.result==='object'?job.view.result:{},picked={};
  for(const key of RESULT_SETTINGS)if(typeof result[key]==='string'&&result[key].length<=64||finite(result[key]))picked[key]=result[key];
  if(result.camera&&typeof result.camera==='object'){const camera={};for(const key of ['position','target','up'])if(vector(result.camera[key]))camera[key]=vector(result.camera[key]);if(finite(result.camera.fov))camera.fov=result.camera.fov;if(Object.keys(camera).length)picked.camera=camera;}
- const size=format==='png'?pngSize(bytes):undefined,container=format==='png'?'png':'webm',codec=(/codecs=([^;]+)/.exec(mimeType)||[])[1];
+ const size=format==='png'?pngSize(bytes):undefined,container=format==='png'?'png':format==='gif'?'gif':'webm',codec=(/codecs=([^;]+)/.exec(mimeType)||[])[1];
  const manifest={schemaVersion:1,resultRevision:expectedResultRevision,format,container,mimeType,...(codec?{codec}:{}),sha256,totalBytes:bytes.length,
   view:picked,...(size?{resolution:size}:{}),
   scale:{units:{time:'second'},...(finite(picked.deformScale)?{deformScale:picked.deformScale,deformScaleKind:'visualization multiplier'}:{})}};
  if(format==='webm')manifest.time={animation,durationSeconds:seconds,timeBasis:'display time',...(animation==='time'?{physicalTime:'stored acoustic frames; physical time of each frame is shown in the overlay and is not scaled to the video duration',frameSelection:'stored-acoustic-frames-only'}:{}),fps:{target:TARGET_FPS,recording:'realtime',frameCountGuaranteed:false}};
  else manifest.time={animation:null,timeBasis:'single frame',...(finite(picked.timeSeconds)?{physicalTimeSeconds:picked.timeSeconds}:{})};
- if(JSON.stringify(manifest).length>MAX_MANIFEST_BYTES)throw Error('Visual export manifest exceeds its size bound');
+ if(format==='webm'&&animation==='time'){if(!['temperature','instantPressure'].includes(picked.field))throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Stored-time artifact requires temperature or instantaneous pressure');const fixed=await (picked.field==='temperature'?singleViewThermalTimeManifest:singleViewAcousticTimeManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw fixedWebmError('WEBM_ENDPOINT_UNVERIFIED','Single-view acoustic artifact identity changed');Object.assign(manifest,fixed);}
+ if(format==='gif'){const fixed=await (animation==='time'?singleStoredTimeGifManifest:animation==='deformation'?singleDeformationGifManifest:animation==='slice'?singleSliceGifManifest:singleOrbitGifManifest)(blob,bytes,{seconds,resultRevision:expectedResultRevision,field:picked.field,camera:picked.camera,timeSeconds:picked.timeSeconds,frameIndex:picked.frameIndex,modeIndex:picked.modeIndex,peakScale:picked.deformScale,setup:job.view?.setup,surface:result.surface,section:result.section});if(fixed.sha256!==sha256||fixed.totalBytes!==bytes.length)throw Error('Orbit GIF identity changed');Object.assign(manifest,fixed);}
+ if(new TextEncoder().encode(JSON.stringify(manifest)).length>MAX_MANIFEST_BYTES+(format==='gif'?Math.max(SINGLE_ORBIT_GIF_LIMITS.manifestBytes,SINGLE_STORED_TIME_GIF_LIMITS.manifestBytes,SINGLE_DEFORMATION_GIF_LIMITS.manifestBytes,SINGLE_SLICE_GIF_LIMITS.manifestBytes):format==='webm'&&animation==='time'?COMPARISON_TIMING_LIMITS.bytes:0))throw Error('Visual export manifest exceeds its size bound');
  return manifest;
 }
 /** In-memory jobs; rendering, result validation and scene restoration belong to the adapter. */
-const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT']);
+const WEBM_FAILURE_CODES=new Set(['WEBM_BACKGROUND_INTERRUPTED','WEBM_PROGRESS_STALLED','WEBM_STOP_TIMEOUT','WEBM_FIXED_INVALID','WEBM_FIXED_UNSUPPORTED','WEBM_FIXED_CODEC_FAILURE','WEBM_FIXED_OUTPUT_MISMATCH','WEBM_FIXED_CANCELLED','WEBM_FIXED_TIMEOUT','WEBM_ENDPOINT_UNVERIFIED','GIF_ORBIT_INVALID','GIF_ORBIT_CANCELLED','GIF_TIME_INVALID','GIF_TIME_CANCELLED','GIF_TIME_TIMEOUT','GIF_DEFORMATION_INVALID','GIF_DEFORMATION_CANCELLED','GIF_DEFORMATION_TIMEOUT','GIF_SLICE_INVALID','GIF_SLICE_CANCELLED','GIF_SLICE_TIMEOUT']);
 export function createVisualExportJobs({render,prepare,prepareCompare,renderCompare,maxBytes=32*1024*1024,maxJobs=4,id=()=>crypto.randomUUID()}={}){
  if(typeof render!=='function'||!Number.isSafeInteger(maxBytes)||maxBytes<1||!Number.isSafeInteger(maxJobs)||maxJobs<1)throw Error('Invalid visual export job configuration');
  const jobs=new Map(),requests=new Map();let retainedBytes=0,renderActive=false,epoch=0;
  const find=({jobId}={})=>{const job=jobs.get(jobId);if(!job)throw Error('Unknown visual export job');return job;};
- const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.errorCode?{errorCode:job.errorCode}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
+ const summary=job=>({schemaVersion:1,jobId:job.jobId,requestId:job.request.requestId,state:job.state,executionSettled:job.executionSettled===true,format:job.request.format,...(job.request.target==='comparison'?{target:'comparison',comparison:copy(job.comparison)}:{resultRevision:job.request.expectedResultRevision}),view:copy(job.view),progress:copy(job.progress),...(job.error?{error:job.error}:{}),...(job.errorCode?{errorCode:job.errorCode}:{}),...(job.metadata?{artifact:copy(job.metadata)}:{})});
  function stop(job){if(job.state==='running'){job.state='cancelled';job.controller.abort();}}
  function finish(job,blob){
   return (async()=>{
@@ -106,7 +125,10 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
    const format=job.request.format,mime=format==='png'?'image/png':format==='png-sequence'?'application/zip':format==='gif'?'image/gif':'video/webm';
    if(!(blob instanceof Blob)||!blob.size||!(blob.type===mime||mime==='video/webm'&&blob.type.startsWith('video/webm;')))throw Error('Renderer returned an invalid visual artifact');
    if(blob.size>maxBytes-retainedBytes)throw Error('Visual export retained byte budget exceeded');
-   const bytes=new Uint8Array(await blob.arrayBuffer());
+   const strictSingleTime=job.request.target!=='comparison'&&format==='webm'&&job.request.animation==='time';
+   const strictIssued=strictSingleTime||job.request.target!=='comparison'&&format==='gif';
+   if(strictIssued&&Object.hasOwn(blob,'arrayBuffer'))throw fixedWebmError(format==='gif'?(job.request.animation==='time'?'GIF_TIME_INVALID':job.request.animation==='deformation'?'GIF_DEFORMATION_INVALID':job.request.animation==='slice'?'GIF_SLICE_INVALID':'GIF_ORBIT_INVALID'):'WEBM_ENDPOINT_UNVERIFIED',format==='gif'?'Single-view GIF Blob reader was replaced':'Single-view acoustic Blob reader was replaced');
+   const bytes=new Uint8Array(await (strictIssued?readBlob.call(blob):blob.arrayBuffer()));
    if(job.state!=='running'||!jobs.has(job.jobId))return;
    job.assertLifetime?.();
    // Reserve before hashing so overlapping completions share one exact byte budget.
@@ -116,7 +138,7 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
     if(job.state!=='running'||!jobs.has(job.jobId))return;
     job.assertLifetime?.();
-    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=job.request.target==='comparison'?comparisonManifest(job,blob.type,bytes,sha256):format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):buildManifest(job,blob.type,bytes,sha256);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`${job.request.target==='comparison'?'comparison':'result'}-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
+    const sha256='sha256:'+Array.from(digest,v=>v.toString(16).padStart(2,'0')).join('');const manifest=job.request.target==='comparison'?comparisonManifest(job,blob.type,bytes,sha256):format==='png-sequence'?await sequenceManifest(job,blob.type,bytes,sha256):await buildManifest(job,blob.type,bytes,sha256,blob);if(job.state!=='running'||!jobs.has(job.jobId))return;job.metadata={mimeType:blob.type,name:`${job.request.target==='comparison'?'comparison':'result'}-${job.jobId}.${format==='png-sequence'?'zip':format}`,totalBytes:bytes.length,sha256,maxChunkBytes:CHUNK,manifest};job.progress={fraction:1};job.state='completed';
    }finally{if(job.state!=='completed'&&job.bytes){retainedBytes-=job.bytes.length;job.bytes=null;}}
   })();
  }
@@ -139,13 +161,13 @@ export function createVisualExportJobs({render,prepare,prepareCompare,renderComp
     if(!snapshot.view||typeof snapshot.view!=='object'||Array.isArray(snapshot.view))throw Error('Visual export requires frozen view settings');
     const jobId=id();if(typeof jobId!=='string'||!jobId||jobs.has(jobId))throw Error('Invalid or duplicate visual export job ID');
     const physicalRevision=typeof snapshot.physicalRevision==='string'&&/^sha256:[0-9a-f]{64}$/.test(snapshot.physicalRevision)?snapshot.physicalRevision:undefined;
-    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(normalized.format==='gif'&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames}:{} )}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
+    const job={jobId,physicalRevision,...(compare?{comparison:freeze(copy(comparison)),...(['gif','webm'].includes(normalized.format)&&normalized.animation==='time'&&typeof snapshot.context?.getTimeFrames==='function'?{getTimeFrames:snapshot.context.getTimeFrames,...(normalized.format==='webm'?{getFixedVerification:snapshot.context.getFixedVerification}:{})}:{} )}:{}),request:freeze(copy(normalized)),view:freeze(copy(snapshot.view)),state:'running',executionSettled:false,progress:{fraction:0},controller:new AbortController(),bytes:null,...(compare?{assertLifetime:()=>{if(!sourceGuard())throw Error('Comparison export expired');}}:{})};
     if(!sourceGuard())throw Error('Visual export request expired');
     accepted=true;jobs.set(jobId,job);entry.jobId=jobId;
     const onProgress=value=>{if(job.state!=='running')return;const fraction=typeof value==='number'?value:value?.fraction;if(Number.isFinite(fraction)&&fraction>=0&&fraction<=1)job.progress={fraction};};
     // Calling synchronously reserves the renderer before another start can run.
     renderActive=true;let output;try{output=(compare?renderCompare:render)({...copy(normalized),...(compare?{comparison:copy(job.comparison),context:snapshot.context}:{}),...(physicalRevision?{physicalRevision}:{}),view:copy(job.view),signal:job.controller.signal,onProgress});}catch(error){output=Promise.reject(error);}
-    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);if(WEBM_FAILURE_CODES.has(error?.code))job.errorCode=error.code;}}).finally(()=>{renderActive=false;});
+    job.settled=Promise.resolve(output).then(blob=>finish(job,blob)).catch(error=>{if(job.state==='running'&&jobs.has(jobId)){job.state='failed';job.error=String(error?.message||error).slice(0,1000);if(WEBM_FAILURE_CODES.has(error?.code))job.errorCode=error.code;}}).finally(()=>{renderActive=false;job.executionSettled=true;});
     resolve();return summary(job);
    }catch(error){requests.delete(normalized.requestId);reject(error);throw error;}
   }

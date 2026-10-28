@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "pullRequest": 187,
+  "head": "f2db420e49af992f1bbaa87204082856aaf6643b",
+  "normalCi": {"run": 39968241372, "job": 120463682473, "conclusion": "success", "mergeCandidate": "5f8abbe", "tests": 2025, "passed": 2017, "failed": 0, "skipped": 8, "skipScope": "existing native-gated tests", "build": "passed", "localAssetChecks": 27, "localAssetChecksDurationSeconds": 37.72},
+  "earlierFailure": {"run": 39966324760, "head": "bb6f24c1ad40ee88ff2297963e6149da17c186ed", "target": "tests/advanced-structural-source-execution.test.mjs", "cause": "unresolved; spec reporter omitted child termination details"},
+  "isolatedLinuxDiagnostic": {"run": 39968250962, "tests": 3, "passed": 3, "failed": 0, "skipped": 0, "durationMs": 4782, "rawEvidence": "pr187-linux-focused-20261023/wasm-single.json", "meaning": "non-reproduction only; shared cgroup OOM counters did not increase"},
+  "diagnosticOnlyChange": "Explicit TAP and process termination/cgroup evidence in the manual diagnostic; normal solver/test/Node/GC settings unchanged",
+  "rootCauseFixed": false,
+  "deployed": false,
+  "taskStatusChanged": false
+}

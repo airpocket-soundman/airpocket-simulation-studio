@@ -1,0 +1,35 @@
+
+> airpocket-simulation-studio@0.44.0 build
+> node scripts/ensure-native.mjs && node scripts/build-kernel.mjs && node scripts/copy-cad.mjs && vite build && node scripts/build-browser-connector.mjs && node scripts/build-progress-history.mjs && node scripts/build-manifest.mjs
+
+[36mvite v7.3.7 [32mbuilding client environment for production...[36m[39m
+<script src="./coi-serviceworker.js"> in "/index.html" can't be bundled without type="module" attribute
+transforming...
+[32m✓[39m 227 modules transformed.
+rendering chunks...
+[33m[plugin vite:reporter] 
+(!) /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/project-operations.js is dynamically imported by /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/studio-api.js, /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/studio-api.js but also statically imported by /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/browser-session.js, /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/project-edit-preview.js, /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/result-assessment-api.js, /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/result-view-api.js, dynamic import will not move module into another chunk.
+[39m
+[33m[plugin vite:reporter] 
+(!) /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/project-edit-preview.js is dynamically imported by /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/studio-api.js but also statically imported by /home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/src/browser-session.js, dynamic import will not move module into another chunk.
+[39m
+computing gzip size...
+[2mdist/[22m[2massets/[22m[32mcad.worker-BUE9IjLc.js           [39m[1m[2m    0.49 kB[22m[1m[22m
+[2mdist/[22m[32mdevelopment.html                        [39m[1m[2m    0.78 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[32mindex.html                              [39m[1m[2m    0.79 kB[22m[1m[22m[2m │ gzip:   0.42 kB[22m
+[2mdist/[22m[2massets/[22m[32manalysis.worker-SAfY7nvz.js      [39m[1m[2m  248.30 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[35mapp-Dr9ouQoQ.css                 [39m[1m[2m    3.57 kB[22m[1m[22m[2m │ gzip:   1.36 kB[22m
+[2mdist/[22m[2massets/[22m[35mdevelopment-CYIlFFzS.css         [39m[1m[2m   11.10 kB[22m[1m[22m[2m │ gzip:   3.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mgeometry-inspection-Dk3CEpoF.js  [39m[1m[2m    4.07 kB[22m[1m[22m[2m │ gzip:   1.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mi18n-CDf60JeE.js                 [39m[1m[2m   77.19 kB[22m[1m[22m[2m │ gzip:  27.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mdevelopment-ju1uURcF.js          [39m[1m[2m  485.98 kB[22m[1m[22m[2m │ gzip: 154.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mapp-CZoQEQpa.js                  [39m[1m[33m1,754.69 kB[39m[22m[2m │ gzip: 491.93 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 3.24s[39m
+Standalone browser connector: 98213 bytes / 530abfa8c9ffd1d457283268c3a9c1ece0363b6d1747023fd090d29d985c31da
+Progress history: 269 points, 0 skipped, 69724 bytes
+Runtime manifest: 0.44.0 / 85ad434

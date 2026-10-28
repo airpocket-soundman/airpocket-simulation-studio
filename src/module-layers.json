@@ -12,6 +12,7 @@
    "files": [
     "analysis-failure.js",
     "gif-encoder.js",
+    "fixed-webm.js",
     "browser-connection-diagnostics.js",
     "browser-page-lifecycle.js",
     "browser-connection-errors.js",
@@ -80,6 +81,7 @@
     "constraints.js",
     "conical-cad.js",
     "curved-pressure-transfer.js",
+    "curved-pressure-operator.js",
     "cylindrical-cad.js",
     "cylindrical-region.js",
     "fatigue-core.js",
@@ -153,7 +155,24 @@
     "fluid-opening-caps.js",
     "opening-loop-candidates.js",
     "spherical-region.js",
-    "spherical-cad.js"
+    "spherical-cad.js",
+    "opening-candidate-cap.js",
+    "channel-layer-tet4.js",
+    "printed-measurement-dataset.js",
+    "result-selection-state.js",
+    "agent-chat-state.js",
+    "planar-heat-operator.js",
+    "planar-p1-heat-operator.js",
+    "planar-temperature-operator.js",
+    "grouped-temperature-operator.js",
+    "grouped-interface-geometry.js",
+    "grouped-p1-heat-operator.js",
+    "channel-layer-boundary-transfer.js",
+    "channel-node-velocity-policy.js",
+    "finite-visco-reference.js",
+    "finite-visco-history.js",
+    "finite-visco-observation-comparison.js",
+    "retained-opening-surface.js"
    ]
   },
   "operations": {
@@ -233,7 +252,8 @@
     "browser-session.js",
     "browser-study-state.js",
     "cad-import-client.js",
-    "gui-analysis-jobs.js"
+    "gui-analysis-jobs.js",
+    "result-export-preparation.js"
    ]
   },
   "ui": {
@@ -265,6 +285,7 @@
     "native-flow-view.js",
     "print-ui.js",
     "ui/case-list-ui.js",
+    "ui/agent-chat-panel.js",
     "ui/increment-curve.js",
     "ui/increment-curve-comparison.js",
     "ui/discipline-controls-ui.js",
@@ -275,8 +296,13 @@
     "ui/status-ui.js",
     "ui/time-view-state.js",
     "ui/comparison-video.js",
+    "ui/comparison-fixed-webm.js",
     "ui/webm-recording-lifecycle.js",
     "ui/comparison-gif.js",
+    "ui/single-orbit-gif.js",
+    "ui/single-stored-time-gif.js",
+    "ui/single-deformation-gif.js",
+    "ui/single-slice-gif.js",
     "ui/comparison-settings-storage.js",
     "ui/comparison-settings-persistence-ui.js",
     "ui/view-compare-ui.js",
@@ -284,11 +310,14 @@
     "visual-export-fixed-frame.js",
     "visual-export-jobs.js",
     "visual-export.js",
+    "single-view-time-webm.js",
     "ui/internal-opening-caps-ui.js",
     "ui/analysis-options.js",
     "ui/analysis-preflight-ui.js",
     "ui/spherical-region-ui.js",
-    "ui/agent-connection-status-ui.js"
+    "ui/agent-connection-status-ui.js",
+    "ui/printed-measurement-ui.js",
+    "ui/finite-history-inspector.js"
    ]
   },
   "dashboard": {
@@ -325,7 +354,8 @@
    "dom": false,
    "files": [
     "analysis.worker.js",
-    "cad.worker.js"
+    "cad.worker.js",
+    "finite-visco-inspector.worker.js"
    ]
   }
  },
@@ -371,6 +401,12 @@
    "from": "analysis.worker.js",
    "to": "fetch()",
    "reason": "Intentional: the analysis worker fetches its WASM binaries (data.base + path) itself; fetch is available in worker scope and is not DOM access."
+  },
+  {
+   "kind": "edge",
+   "from": "ui/finite-history-inspector.js",
+   "to": "finite-visco-inspector.worker.js",
+   "reason": "The UI owns one module worker per material-point replay; messages only, never a runtime code import."
   }
  ]
 }
