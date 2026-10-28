@@ -57,3 +57,9 @@ for(const lateOutcome of ['resolve','reject','destroy'])test('late file '+lateOu
  if(lateOutcome==='reject')reject(Error('obsolete read failed'));else resolve('{}');await old;
  assert.equal(h.get('input').value,fresh);assert.equal(h.get('svg').href,href);assert.equal(h.get('status').textContent,status);assert.equal(h.get('file').attributes['aria-invalid'],undefined);assert.equal(h.get('run').disabled,false);
 });
+
+test('editing the JSON text clears the stale file selection so the same file can be reselected',async()=>{
+ const h=setup(),text=JSON.stringify(bundle());h.get('file').files=[{size:text.length,text:async()=>text}];h.get('file').value='C:\fakepath\ref.json';await h.get('file').onchange();
+ assert.equal(h.get('input').value,text);h.get('input').value=text+' ';h.get('input').oninput();
+ assert.equal(h.get('file').value,'');assert.equal(h.get('preview').hidden,true);
+});
