@@ -63,7 +63,7 @@ export function createIncrementCurveComparisonUi({anchor,document=globalThis.doc
    preview.src=links.svg.href;preview.hidden=false;fullSize.href=links.svg.href;fullSize.hidden=false;counts={total:artifacts.comparison.curves.length,failed:artifacts.comparison.curves.reduce((sum,curve)=>sum+curve.steps.filter(step=>step.status==='failed').length,0)};message='検証済み。力 N、標点伸び mm、工学応力 Pa、工学ひずみ 1。';refresh();return artifacts.comparison;
   }catch(error){if(current===epoch){clear();fail(error,input);}return null;}finally{if(current===epoch)run.disabled=false;}
  }
- run.onclick=()=>validate();input.oninput=invalidate;
+ run.onclick=()=>validate();input.oninput=()=>{file.value='';invalidate();};
  file.onchange=async()=>{
   clear();input.value='';const current=epoch;run.disabled=true;message='入力が変更されました。再検証してください。';refresh();
   try{
