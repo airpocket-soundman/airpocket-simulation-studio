@@ -6,6 +6,8 @@ Proposal date: 2026-10-14. Future project, not implemented equipment, specimen g
 
 2026-10-28, work order 74 PRINTMEASURE2 first step: `src/printed-measurement-specimen.js` writes a core 3MF of a user-dimensioned dumbbell specimen with its planned orientation, layer height, walls and infill, and round-trips it through the existing 3MF importer. No standard dimensions are built in; Bambu Studio loading/slicing, reconciliation of user-chosen temperatures and UI/MCP are not done.
 
+2026-10-28, work order 86: `src/printed-specimen-link.js` checks measured dataset specimens against specimen plans re-read from the 3MF through a separate link table (dataset ID → specimen ID/version/plan hash). It reports and can reject unlinked specimens, missing plans, plan hash mismatches, cross-section/parallel-length differences beyond a caller-given tolerance, a gauge longer than the parallel section and a build direction that disagrees with the planned orientation. Matching is against planned values; it does not verify the printed part.
+
 ## Purpose and deliverables
 
 Users print and measure specimens made with their own materials, printers and process settings to obtain corresponding CAE parameters. This project provides a reproducible measurement workflow rather than measuring and publishing universal material constants ourselves.
