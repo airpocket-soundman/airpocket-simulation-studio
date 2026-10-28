@@ -1,0 +1,21 @@
+{
+ "workOrder": "docs/opencode-work-orders-2026-10-28/86-PRINTMEASURE.md",
+ "task": "PRINTMEASURE1/PRINTMEASURE2",
+ "scope": "second bounded step: link measured dataset specimens to specimen plans re-read from 3MF, with findings and rejection",
+ "baseSha": "4e9cef7",
+ "environment": {"node": "v24.11.1", "platform": "win32"},
+ "inputs": "synthetic dumbbell plan (100/20/10/40/5/4 mm) and synthetic tolerance 0.05 mm; neither from a standard nor a measurement",
+ "commands": [
+  {"cmd": "node --test tests/printed-specimen-link.test.mjs tests/printed-measurement-specimen.test.mjs tests/printed-test-machine-profile.test.mjs tests/printed-measurement-dataset.test.mjs tests/module-boundaries.test.mjs", "result": "pass", "tests": 36, "failed": 0},
+  {"cmd": "node --test tests/docs.test.mjs", "result": "pass"},
+  {"cmd": "npm run check:contracts", "result": "pass", "declarations": 34},
+  {"cmd": "git diff --check", "result": "pass"}
+ ],
+ "measured": {
+  "matchingOrientations": ["flat", "on-edge", "upright"],
+  "findingCodes": ["link-without-dataset-specimen", "dataset-specimen-unlinked", "specimen-plan-missing", "plan-hash-mismatch", "cross-section-mismatch", "parallel-length-mismatch", "gauge-exceeds-parallel-section", "build-direction-mismatch"],
+  "rejectedInputs": ["missing/negative/NaN tolerance", "extra tolerance or link field", "duplicate record", "duplicate link", "unsupported record kind"]
+ },
+ "notVerified": ["real measured specimen dimensions and tolerance choice", "printed part geometry", "sliced settings reconciliation", "joining with machine logs", "UI/MCP integration", "build-direction frame is an assumption not stated in the dataset contract"],
+ "progressProposal": "PRINTMEASURE1/2 stay queued/in progress; parent acceptance needs real machines, prints and measurements."
+}

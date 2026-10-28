@@ -2,7 +2,7 @@
 
 [English](en/single-view-thermal-fixed-webm.md)
 
-非定常熱の保存温度フレームを、結果表示の「画像・アニメーションを保存」→「保存時刻（音響・温度）」→「WebM動画で保存」から出力する。先に表示量を温度にする。熱流束を選んだ場合は拒否し、温度へ自動変更しない。熱の「再生」プレビューは従来どおり未対応。回転・変形・断面の録画は変更しない。
+非定常熱の保存温度フレームを、結果表示の「画像・アニメーションを保存」→「保存時刻（音響・温度）」→「WebM動画で保存」から出力する。先に表示量を温度にする。熱流束を選んだ場合は拒否し、温度へ自動変更しない。熱の「再生」プレビューは保存温度フレームを表示時刻スライダーで順に表示する（温度のみ、補間なし、終了・停止後に表示時刻を復元。79-VIEWTIME）。回転・変形・断面の録画は変更しない。
 
 `singleThermalTimeWebmExport` が独立能力を示す。旧`singleTimeWebmExport`とAcoustic名APIは音響専用のまま。既存`startExport`のtime/WebM経路も利用し、method・scopeは増やさない。熱proofはkind=`thermal`、field=`temperature`、unit=`degC`、result revision、動画bytes SHAへprivateに結合し、音響getter/manifestへ流用できない。
 
