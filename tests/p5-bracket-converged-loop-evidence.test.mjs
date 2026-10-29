@@ -4,7 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 
 const evidence=JSON.parse(await readFile(new URL('../docs/evidence/2026-10-29-opencode-98-p5.json',import.meta.url),'utf8'));
-const hash=async path=>'sha256:'+createHash('sha256').update(await readFile(new URL('../'+path,import.meta.url))).digest('hex');
+// Hash repository (LF) bytes so a CRLF checkout on Windows gives the same value as CI.
+const hash=async path=>'sha256:'+createHash('sha256').update((await readFile(new URL('../'+path,import.meta.url),'utf8')).replace(/\r\n/g,'\n')).digest('hex');
 
 test('P5 evidence: every variant converges under Tet10 on the MCP meshes and the selection follows the recorded rule',async()=>{
  assert.equal(evidence.scriptHash,await hash('scripts/experimental/p5-bracket-converged-loop.mjs'));
