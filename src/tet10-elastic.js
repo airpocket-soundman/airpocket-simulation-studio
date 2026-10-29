@@ -21,17 +21,29 @@ function element(mesh,t,d){const geo=elementGeometry(mesh,t.slice(0,4));if(!(geo
  return {geo,points:TET10_GAUSS.map(L=>{const b=strainMatrix(gradients(geo.grad,L)),db=d.map(r=>b[0].map((_,j)=>r.reduce((s,v,c)=>s+v*b[c][j],0)));return {L,b,db,weight:geo.volume/4};})};}
 export function tet10ElementStiffness(mesh,t,{youngModulus:E,poissonRatio:nu}){const {points}=element(mesh,t,elasticity(E,nu)),k=new Float64Array(900);
  for(const {b,db,weight}of points)for(let i=0;i<30;i++)for(let j=0;j<30;j++){let s=0;for(let a=0;a<6;a++)s+=b[a][i]*db[a][j];k[i*30+j]+=weight*s;}return k;}
-// Displacement constraints along global axes only: {node, direction:[unit axis], valueMm}.
-export function solveTet10Elastic(mesh,properties,{displacements=[]},{tolerance=1e-10,maxIterations=20000}={}){
+// Displacement constraints along global axes only: {node, direction:[unit axis], valueMm}. Nodal forces: {node, vectorN:[x,y,z]}.
+export function solveTet10Elastic(mesh,properties,{displacements=[],forces=[]},{tolerance=1e-10,maxIterations=20000}={}){
  const {youngModulus:E,poissonRatio:nu}=properties;if(!(E>0)||!Number.isFinite(nu)||nu<=-1||nu>=.49)throw Error('Valid elastic constants required');
  if(!mesh.tetrahedra.every(t=>t.length===10))throw Error('Tet10 solve requires ten nodes per tetrahedron');
  const n=mesh.nodes.length,d=elasticity(E,nu),dirichlet=new Map();
  for(const {node,direction,valueMm}of displacements){const axis=direction.findIndex(v=>v!==0);if(axis<0||direction.some((v,k)=>k===axis?v!==1:v!==0)||!Number.isInteger(node)||node<0||node>=n/3)throw Error('Tet10 displacement constraints must use a valid node and a global unit axis');dirichlet.set(node*3+axis,valueMm*.001);}
+ const rhs=new Float64Array(n);for(const {node,vectorN}of forces){if(!Number.isInteger(node)||node<0||node>=n/3||vectorN?.length!==3||!vectorN.every(Number.isFinite))throw Error('Tet10 nodal forces must use a valid node and a finite vector in N');for(let k=0;k<3;k++)rhs[node*3+k]+=vectorN[k];}
  const elements=mesh.tetrahedra.map(t=>element(mesh,t,d)),entries=mesh.tetrahedra.map(t=>({ids:t.flatMap(i=>[i*3,i*3+1,i*3+2]),k:tet10ElementStiffness(mesh,t,properties)}));
- const r=pcg(n,entries,new Float64Array(n),dirichlet,{tolerance,maxIterations}),u=r.solution;
+ const r=pcg(n,entries,rhs,dirichlet,{tolerance,maxIterations}),u=r.solution;
  // Stress recovery at the Gauss points (stress is linear inside each affine Tet10).
  const gaussPoints=[];elements.forEach(({points},e)=>{const local=entries[e].ids.map(i=>u[i]);for(const {L,db,weight}of points){const t=mesh.tetrahedra[e];gaussPoints.push({element:e,volumeMm3:weight*1e9,xMm:[0,1,2].map(k=>t.slice(0,4).reduce((s,i,a)=>s+L[a]*mesh.nodes[3*i+k],0)),stress:db.map(row=>dot(row,local))});}});
  return {kind:'elastic',engine:'Airpocket Tet10 / JavaScript CPU',displacement:Array.from(u,v=>v*1000),gaussPoints,iterations:r.iterations,residual:r.residual};
+}
+// Consistent nodal forces for a uniform traction on the boundary faces whose three corners satisfy onFace(x,y,z) (mm).
+// On a straight 6-node triangle the corner weights integrate to zero and each mid-edge node carries a third of the face load.
+export function tet10UniformFaceForces(mesh,onFace,totalN){
+ const at=i=>mesh.nodes.slice(3*i,3*i+3),faces=new Map();
+ for(const t of mesh.tetrahedra)for(const face of [[0,1,2],[0,1,3],[1,2,3],[0,2,3]]){if(!face.every(a=>onFace(...at(t[a]))))continue;const key=face.map(a=>t[a]).sort((x,y)=>x-y).join();if(faces.has(key))continue;
+  const [p,q,r]=face.map(a=>at(t[a])),u=q.map((v,k)=>v-p[k]),w=r.map((v,k)=>v-p[k]),area=Math.hypot(u[1]*w[2]-u[2]*w[1],u[2]*w[0]-u[0]*w[2],u[0]*w[1]-u[1]*w[0])/2;
+  faces.set(key,{area,mids:EDGES.flatMap(([a,b],e)=>face.includes(a)&&face.includes(b)?[t[4+e]]:[])});}
+ const total=[...faces.values()].reduce((s,f)=>s+f.area,0);if(!(total>0))throw Error('No Tet10 boundary faces matched the load region');
+ const forces=new Map();for(const {area,mids}of faces.values())for(const node of mids){const f=forces.get(node)??[0,0,0];totalN.forEach((v,k)=>f[k]+=v*area/total/3);forces.set(node,f);}
+ return {areaMm2:total,faceCount:faces.size,forces:[...forces].map(([node,vectorN])=>({node,vectorN}))};
 }
 // Weakest-link sum over Gauss points: each point carries a quarter of its element volume.
 export function evaluateWeibullFailureTet10(result,data){

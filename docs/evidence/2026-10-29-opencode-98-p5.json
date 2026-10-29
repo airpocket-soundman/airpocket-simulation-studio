@@ -1,0 +1,422 @@
+{
+ "schemaVersion": 1,
+ "task": "98-P5",
+ "previous": "97-P5 (docs/evidence/2026-10-29-opencode-97-p5.json)",
+ "date": "2026-10-29",
+ "baseSha": "c3a73e6d2fae32766f97b814b0b1b0dc41d2d746",
+ "scriptHash": "sha256:6e90811ca97f1e75a07d59712a439dc804bee006cd1df5faff4ecba23fd337ca",
+ "tet10Hash": "sha256:7d0f22eaadbe9c8e0ca7195ab5f542b494edb2b0ab189aa3be42eb984bd3dde1",
+ "serverHash": "sha256:a828f2846464e0c6c0acb10e2af4984ee9e3c923cbb5b5e3625bb1b52032455d",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64"
+ },
+ "command": "node scripts/experimental/p5-bracket-converged-loop.mjs",
+ "transport": "real MCP stdio (scripts/studio-mcp.mjs) for project, preflight, meshing and Tet4; in-process Tet10 re-solve of the MCP-written meshes",
+ "diagnosis": {
+  "cause": "Tet4 bending locking (constant-strain tetrahedra, 1-4 elements through thickness)",
+  "ruledOut": [
+   "PCG non-convergence: fem-core pcg throws \"Solver did not converge\" unless residual < 1e-8, and every 97 job succeeded",
+   "Rigid-body modes: root face fully fixed; an unconstrained system throws in pcg",
+   "Further Tet4 refinement: h=1 already near the 30000-element limit"
+  ]
+ },
+ "synthetic": {
+  "geometry": "Built-in box 20x t x 60 mm plate (synthetic stand-in for a bracket; not STEP)",
+  "load": "10 N uniform traction on tip face z=60, -y (synthetic, unconfirmed)",
+  "support": "Fixed root face z=0",
+  "material": {
+   "catalogId": "rtp-105-cc",
+   "catalogVersion": "2026-10-14.2",
+   "poissonRatio": 0.35,
+   "poissonOrigin": "user-assumption"
+  },
+  "target": "Max displacement <= 1 mm (synthetic, unconfirmed)",
+  "meshSizesMm": [
+   2,
+   1.4,
+   1
+  ],
+  "convergenceThreshold": 0.05
+ },
+ "toolsUsed": [
+  "studio_material_catalog",
+  "studio_create_builtin_project",
+  "studio_edit_project",
+  "studio_preflight_project",
+  "studio_start_analysis",
+  "studio_job_status",
+  "studio_release_job"
+ ],
+ "table": [
+  {
+   "round": 1,
+   "thicknessMm": 2,
+   "inputRevision": "sha256:3cece8fb28258068b0c229e215adaded9a1bfcfaab6bcfa8a5788eb2db900369",
+   "youngModulusPa": 5999000000,
+   "preflight": {
+    "allowed": true,
+    "provisional": true
+   },
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "4f452f8c-1156-472c-9103-c2fc822629ae",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 2476,
+     "tet4": {
+      "maxDisplacementMm": 2.113844624960768
+     },
+     "tet10": {
+      "nodeCount": 5119,
+      "loadedAreaMm2": 40,
+      "loadedFaces": 40,
+      "fixedNodes": 103,
+      "pcgIterations": 3399,
+      "pcgResidual": 9.550264066526791e-11,
+      "seconds": 27.6,
+      "maxDisplacementMm": 8.636297423846454
+     }
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "3fb54ba3-c1c5-432b-b785-7874f1a9c29a",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 4867,
+     "tet4": {
+      "maxDisplacementMm": 2.727666557390403
+     },
+     "tet10": {
+      "nodeCount": 10069,
+      "loadedAreaMm2": 40.00000000000001,
+      "loadedFaces": 62,
+      "fixedNodes": 159,
+      "pcgIterations": 3900,
+      "pcgResidual": 9.498251088448034e-11,
+      "seconds": 61.8,
+      "maxDisplacementMm": 8.65498747319073
+     }
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "252e9290-6aa1-4a38-a549-37904e136350",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 13668,
+     "tet4": {
+      "maxDisplacementMm": 4.926742960310764
+     },
+     "tet10": {
+      "nodeCount": 24543,
+      "loadedAreaMm2": 39.99999999999998,
+      "loadedFaces": 86,
+      "fixedNodes": 217,
+      "pcgIterations": 5895,
+      "pcgResidual": 9.784806704636137e-11,
+      "seconds": 209.5,
+      "maxDisplacementMm": 8.661025294203732
+     }
+    }
+   ],
+   "convergence": {
+    "metric": "relative change of Tet10 max displacement between the two finest MCP meshes",
+    "change": 0.0006971254335261286,
+    "threshold": 0.05,
+    "converged": true,
+    "tet4ChangeSameMeshes": 0.4463550099195047
+   },
+   "finestMaxDisplacementMm": 8.661025294203732,
+   "eulerBernoulliTipMm": 9.001500250041673,
+   "timoshenkoTipMm": 9.009601600266711,
+   "volumeMm3": 2400,
+   "displacementRatioToTimoshenko": 0.9613105749256815
+  },
+  {
+   "round": 1,
+   "thicknessMm": 3,
+   "inputRevision": "sha256:b0ff281e758661967b8dea14266987bb66e1a3309421aaafa330cb48f908c74a",
+   "youngModulusPa": 5999000000,
+   "preflight": {
+    "allowed": true,
+    "provisional": true
+   },
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "fbf91b91-03f1-4e85-90c9-e064a4e0ed79",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 2425,
+     "tet4": {
+      "maxDisplacementMm": 0.7271032920023885
+     },
+     "tet10": {
+      "nodeCount": 5080,
+      "loadedAreaMm2": 60,
+      "loadedFaces": 42,
+      "fixedNodes": 109,
+      "pcgIterations": 2993,
+      "pcgResidual": 9.766997059273794e-11,
+      "seconds": 16.9,
+      "maxDisplacementMm": 2.5705598450488027
+     }
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "c9c05cbe-5821-444f-adbe-235f87169872",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 7650,
+     "tet4": {
+      "maxDisplacementMm": 1.5609210360483567
+     },
+     "tet10": {
+      "nodeCount": 14025,
+      "loadedAreaMm2": 59.99999999999998,
+      "loadedFaces": 98,
+      "fixedNodes": 237,
+      "pcgIterations": 3328,
+      "pcgResidual": 9.832360834430515e-11,
+      "seconds": 62.4,
+      "maxDisplacementMm": 2.5759655382031816
+     }
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "1b0f9431-1246-4b42-8aa5-83c2250cdf37",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 19794,
+     "tet4": {
+      "maxDisplacementMm": 1.8887220715337567
+     },
+     "tet10": {
+      "nodeCount": 33201,
+      "loadedAreaMm2": 60.00000000000001,
+      "loadedFaces": 162,
+      "fixedNodes": 371,
+      "pcgIterations": 4813,
+      "pcgResidual": 9.997660257520226e-11,
+      "seconds": 254.4,
+      "maxDisplacementMm": 2.5775947981375045
+     }
+    }
+   ],
+   "convergence": {
+    "metric": "relative change of Tet10 max displacement between the two finest MCP meshes",
+    "change": 0.0006320853593823558,
+    "threshold": 0.05,
+    "converged": true,
+    "tet4ChangeSameMeshes": 0.1735570523720336
+   },
+   "finestMaxDisplacementMm": 2.5775947981375045,
+   "eulerBernoulliTipMm": 2.6671111851975327,
+   "timoshenkoTipMm": 2.6725120853475577,
+   "volumeMm3": 3600,
+   "displacementRatioToTimoshenko": 0.9644838697903552
+  },
+  {
+   "round": 1,
+   "thicknessMm": 4,
+   "inputRevision": "sha256:f72136ece38b82b09dbf2736bfb2c71bda3d1022a667c6573bb40219917aaf78",
+   "youngModulusPa": 5999000000,
+   "preflight": {
+    "allowed": true,
+    "provisional": true
+   },
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "bb4d25ff-46c5-46c3-b0c5-d0b766fbf81f",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 3496,
+     "tet4": {
+      "maxDisplacementMm": 0.6298979434095513
+     },
+     "tet10": {
+      "nodeCount": 6515,
+      "loadedAreaMm2": 80.00000000000003,
+      "loadedFaces": 46,
+      "fixedNodes": 117,
+      "pcgIterations": 1916,
+      "pcgResidual": 9.940287772925016e-11,
+      "seconds": 17.7,
+      "maxDisplacementMm": 1.0894793747530211
+     }
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "2b3b36b9-9f92-45fa-95c1-8749c5052ebd",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 9575,
+     "tet4": {
+      "maxDisplacementMm": 0.7645287776945526
+     },
+     "tet10": {
+      "nodeCount": 16748,
+      "loadedAreaMm2": 80.00000000000001,
+      "loadedFaces": 122,
+      "fixedNodes": 281,
+      "pcgIterations": 2853,
+      "pcgResidual": 9.687514906125577e-11,
+      "seconds": 72.9,
+      "maxDisplacementMm": 1.0914642676437332
+     }
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "45b99aca-eb39-46c9-8dbe-fefcf3ea7729",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 23449,
+     "tet4": {
+      "maxDisplacementMm": 0.8886217048343446
+     },
+     "tet10": {
+      "nodeCount": 38468,
+      "loadedAreaMm2": 80.00000000000007,
+      "loadedFaces": 210,
+      "fixedNodes": 469,
+      "pcgIterations": 3820,
+      "pcgResidual": 9.860378760171573e-11,
+      "seconds": 247.2,
+      "maxDisplacementMm": 1.0922116045599788
+     }
+    }
+   ],
+   "convergence": {
+    "metric": "relative change of Tet10 max displacement between the two finest MCP meshes",
+    "change": 0.0006842418750409663,
+    "threshold": 0.05,
+    "converged": true,
+    "tet4ChangeSameMeshes": 0.13964651827058977
+   },
+   "finestMaxDisplacementMm": 1.0922116045599788,
+   "eulerBernoulliTipMm": 1.125187531255209,
+   "timoshenkoTipMm": 1.1292382063677278,
+   "volumeMm3": 4800,
+   "displacementRatioToTimoshenko": 0.9672109909149749
+  },
+  {
+   "round": 2,
+   "thicknessMm": 4.2,
+   "inputRevision": "sha256:d3d5aef9305b70fa1089fc5885df8973a0aa52640d6fe21b38654103facbc0f1",
+   "youngModulusPa": 5999000000,
+   "preflight": {
+    "allowed": true,
+    "provisional": true
+   },
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "b537f5fb-f4d3-4e2f-9d08-e4422b31c05d",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 3719,
+     "tet4": {
+      "maxDisplacementMm": 0.5684731524900913
+     },
+     "tet10": {
+      "nodeCount": 6994,
+      "loadedAreaMm2": 84.00000000000003,
+      "loadedFaces": 68,
+      "fixedNodes": 163,
+      "pcgIterations": 1957,
+      "pcgResidual": 9.811101332983987e-11,
+      "seconds": 17.2,
+      "maxDisplacementMm": 0.9426123372039608
+     }
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "51d56cc7-7995-420e-8cb8-4d8de38131cf",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 10412,
+     "tet4": {
+      "maxDisplacementMm": 0.688559920476964
+     },
+     "tet10": {
+      "nodeCount": 17823,
+      "loadedAreaMm2": 83.99999999999997,
+      "loadedFaces": 122,
+      "fixedNodes": 281,
+      "pcgIterations": 2840,
+      "pcgResidual": 9.978585027841922e-11,
+      "seconds": 68.8,
+      "maxDisplacementMm": 0.9437347323173004
+     }
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "df255652-abb7-4337-88a0-a99d52ec005d",
+     "state": "succeeded",
+     "provisional": true,
+     "elementCount": 24742,
+     "tet4": {
+      "maxDisplacementMm": 0.7834868693856084
+     },
+     "tet10": {
+      "nodeCount": 40217,
+      "loadedAreaMm2": 84.00000000000004,
+      "loadedFaces": 220,
+      "fixedNodes": 491,
+      "pcgIterations": 3712,
+      "pcgResidual": 9.815230496004186e-11,
+      "seconds": 222.1,
+      "maxDisplacementMm": 0.944332848780601
+     }
+    }
+   ],
+   "convergence": {
+    "metric": "relative change of Tet10 max displacement between the two finest MCP meshes",
+    "change": 0.0006333746242893942,
+    "threshold": 0.05,
+    "converged": true,
+    "tet4ChangeSameMeshes": 0.12115959133186728
+   },
+   "finestMaxDisplacementMm": 0.944332848780601,
+   "eulerBernoulliTipMm": 0.9719792948970598,
+   "timoshenkoTipMm": 0.9758370807185063,
+   "volumeMm3": 5040,
+   "displacementRatioToTimoshenko": 0.9677156847588648
+  }
+ ],
+ "decision": {
+  "rule": "fit d=a*t^b on converged Tet10 finest-mesh max displacement; choose thinnest t (0.1 mm step) with predicted d <= 1 mm",
+  "fit": {
+   "a": 68.67205856533064,
+   "b": -2.987404633638123
+  },
+  "exactThicknessMm": 4.119470587197509,
+  "nextThicknessMm": 4.2,
+  "round1MeetingTarget": [],
+  "unconvergedInputs": [],
+  "rationale": "Round 1 thinnest passing variant is none; the converged fit predicts 4.2 mm reaches the target.",
+  "outcome": {
+   "thicknessMm": 4.2,
+   "finestMaxDisplacementMm": 0.944332848780601,
+   "predictedMm": 0.9438049445933808,
+   "meetsTarget": true,
+   "converged": true,
+   "volumeSavingVsThinnestPassing": null
+  },
+  "selection": {
+   "thicknessMm": 4.2,
+   "status": "selected (synthetic target, unconfirmed inputs)"
+  }
+ },
+ "missingApi": [
+  "Tet10 (quadratic) structural solve selectable through studio_start_analysis; here it runs in-process on MCP-written meshes",
+  "Fused multi-box / subtractive built-in shapes for ribs, L-shapes and holes (from 97)"
+ ],
+ "unverified": [
+  "Real bracket geometry, STEP exchange and design IDs",
+  "User confirmation of material, Poisson ratio, load and deflection target"
+ ]
+}
