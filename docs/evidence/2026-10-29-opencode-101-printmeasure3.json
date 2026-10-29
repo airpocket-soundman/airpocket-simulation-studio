@@ -1,0 +1,151 @@
+{
+ "workOrder": "docs/opencode-work-orders-2026-10-28/101-PRINTMEASURE3.md",
+ "task": "PRINTMEASURE3",
+ "scope": "first bounded step: identify small-strain parameters from synthetic noisy curves via the dataset validator; verify recovery, uncertainty and refusal",
+ "baseSha": "c3a73e6",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32"
+ },
+ "inputs": {
+  "provenance": "synthetic (invented values, not material data, not a measurement)",
+  "truth": {
+   "youngsModulusPa": 2000000000,
+   "yieldStressPa": 40000000,
+   "tangentModulusPa": 100000000,
+   "equilibriumModulusPa": 1200000000,
+   "branchModulusPa": 800000000,
+   "relaxationTimeS": 5
+  },
+  "specimen": "dimensions 4x10x80 mm, gauge 50 mm",
+  "noise": "Gaussian stress noise 2e5 Pa (1e5 Pa for relaxation), seeded Mulberry32"
+ },
+ "commands": [
+  {
+   "cmd": "node --test tests/printed-parameter-identification.test.mjs",
+   "result": "pass",
+   "tests": 6,
+   "failed": 0
+  },
+  {
+   "cmd": "node --test tests/module-boundaries.test.mjs tests/docs.test.mjs tests/printed-measurement-dataset.test.mjs tests/printed-specimen-link.test.mjs",
+   "result": "pass"
+  },
+  {
+   "cmd": "npm run check:contracts",
+   "result": "pass",
+   "declarations": 35
+  },
+  {
+   "cmd": "git diff --check",
+   "result": "pass"
+  }
+ ],
+ "measured": {
+  "linearElastic": {
+   "fits": [
+    {
+     "specimen": "synthetic-1",
+     "parameters": {
+      "youngsModulusPa": {
+       "value": 2002056346.2582777,
+       "standardError": 11444627.1513754,
+       "relativeStandardError": 0.005716436089705825
+      }
+     }
+    },
+    {
+     "specimen": "synthetic-2",
+     "parameters": {
+      "youngsModulusPa": {
+       "value": 1978525012.540891,
+       "standardError": 8145431.570405297,
+       "relativeStandardError": 0.004116921200781106
+      }
+     }
+    },
+    {
+     "specimen": "synthetic-3",
+     "parameters": {
+      "youngsModulusPa": {
+       "value": 1986171143.2904198,
+       "standardError": 10454739.7657333,
+       "relativeStandardError": 0.005263765814467176
+      }
+     }
+    }
+   ],
+   "across": {
+    "youngsModulusPa": {
+     "mean": 1988917500.6965294,
+     "sampleStandardDeviation": 12003656.771222897,
+     "specimens": 3
+    }
+   },
+   "twoSigmaCoverageOver60Seeds": "55/60"
+  },
+  "bilinear": [
+   {
+    "specimen": "synthetic-1",
+    "parameters": {
+     "youngsModulusPa": {
+      "value": 1999185805.3361163,
+      "standardError": 1226826.7489383118,
+      "relativeStandardError": 0.0006136631951185996
+     },
+     "yieldStressPa": {
+      "value": 40012335.881513104,
+      "standardError": 58397.36683670015,
+      "relativeStandardError": 0.0014594840703534503
+     },
+     "tangentModulusPa": {
+      "value": 99615961.66333103,
+      "standardError": 1144318.2854238932,
+      "relativeStandardError": 0.011487298484266108
+     }
+    }
+   }
+  ],
+  "slsRelaxation": [
+   {
+    "specimen": "synthetic-1",
+    "parameters": {
+     "equilibriumModulusPa": {
+      "value": 1200050779.1454644,
+      "standardError": 2024559.3968245469,
+      "relativeStandardError": 0.0016870614410718528
+     },
+     "branchModulusPa": {
+      "value": 813874808.925817,
+      "standardError": 7890816.312192721,
+      "relativeStandardError": 0.009695368655785429
+     },
+     "relaxationTimeS": {
+      "value": 4.969550459182866,
+      "standardError": 0.08459770302558246,
+      "relativeStandardError": 0.017023210393056903
+     }
+    }
+   }
+  ],
+  "refusals": {
+   "purelyLinearCurveAsBilinear": "no-distinct-yield",
+   "yieldAtWindowEnd": "no-distinct-yield",
+   "noiseSwampedModulus": "nonpositive-modulus",
+   "tooFewPoints": "too-few-points",
+   "relaxationTimeFarAboveHold": "relaxation-time-outside-window",
+   "relaxationTimeBelowSampling": "relaxation-time-outside-window",
+   "invalidDataset": "PRINTED_DATASET_INVALID (crosshead displacement, parsed object instead of raw JSON, synthetic claiming reported calibration)",
+   "invalidOptions": "PRINTED_IDENTIFICATION_INVALID"
+  }
+ },
+ "notVerified": [
+  "any real measured curve",
+  "measurement accuracy or calibration",
+  "finite-strain or multi-branch Prony identification against finite-visco-* material points",
+  "bilinear fit under unloading/cyclic data (rejected as non-monotonic)",
+  "handover of identified values into printed-equivalent-material or UI/MCP",
+  "standard-error coverage beyond the linear model"
+ ],
+ "progressProposal": "PRINTMEASURE3 queued -> in progress (first step: synthetic identification pipeline). Parent acceptance requires real measurements."
+}
