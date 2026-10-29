@@ -86,3 +86,5 @@ export function riemannL1Error(result,left,right){const {cells:n,cellWidth:h,int
 
 export const SOD={left:{density:1,velocity:0,pressure:1},right:{density:.125,velocity:0,pressure:.1}};
 export const observedOrder=(coarse,fine)=>Math.log2(coarse/fine);
+// Shared with the second-order MUSCL kernel (work order 94) so both use identical interface fluxes.
+export const numericalFlux=name=>{const F=FLUXES[name];if(!F)throw new Error('flux must be hllc or hlle');return F;};
