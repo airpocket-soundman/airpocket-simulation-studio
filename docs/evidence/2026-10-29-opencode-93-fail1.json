@@ -1,0 +1,21 @@
+{
+  "workOrder": "docs/opencode-work-orders-2026-10-28/93-FAIL1.md",
+  "task": "FAIL1",
+  "baseSha": "f16853a",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": "Synthetic analytical parameters only: m=10, sigma0=1e8 Pa, V0=1000 mm^3, E=1e11 Pa, nu=0 (bending) / 0.3 (tension check), bar 10x10x40 mm, sigma_max=1.1e8 Pa; no real material claimed",
+  "commands": [{"cmd":"node --test tests/tet10-weibull-bending.test.mjs","result":"pass 5 / fail 0"},{"cmd":"node --test tests/weibull-fem-coupling.test.mjs","result":"pass 4 / fail 0"},{"cmd":"node --test tests/weibull-fracture.test.mjs","result":"pass 5 / fail 0"},{"cmd":"node --test tests/module-boundaries.test.mjs","result":"pass 19 / fail 0"},{"cmd":"npm run check:contracts","result":"pass (34 declaration files)"},{"cmd":"git diff --check","result":"pass"}],
+  "measured": {
+    "existingQuadraticStructuralElement": "none (only fluid Stokes P2); minimal Tet10 added in src/tet10-elastic.js",
+    "tet4LockingQuantification": {"meshes": ["8x2x4","16x2x8","32x2x16","64x2x32"], "elements": [384,1536,6144,24576], "riskRelativeError": [12.53,1.321,0.2600,0.06128], "peakPrincipalRelativeError": [0.3688,0.1748,0.1075,0.0702], "note": "64x2x32 run once (27 s), not in the test suite"},
+    "tet10PureBending": {"meshes": ["2x1x1","4x1x1","8x1x1","16x1x1"], "elements": [12,24,48,96], "maxGaussStressErrorOverSigmaMax": [8.3e-12,1.3e-11,1.0e-11,3.5e-11], "riskRelativeError": [0.3019,0.04611,0.003679,0.0002441], "observedOrder_8_16": 3.91},
+    "tet10VsTet4UniformTension": "Gauss-point stresses equal Tet4 element stresses within 1e-7*E*1e-3 (nu=0.3)",
+    "elementChecks": "stiffness symmetric (<1e-12), rigid motions in null space, Tet4 energy reproduced for linear field (<1e-12)"
+  },
+  "unverified": [
+    "Tet10 not integrated in solveElastic, WASM, worker, archive, UI or MCP",
+    "Only straight-edged Tet10, axis-aligned displacement constraints, no force/thermal/orthotropic loads",
+    "No measured strength data comparison"
+  ],
+  "progressProposal": "FAIL1 lastUpdate: 2026-10-29 Tet4 bending locking quantified (risk error 12.5 -> 0.061 over 384 -> 24576 elements); minimal Tet10 (stiffness, Gauss-point stress recovery, Tet4 consistency) reproduces pure-bending stress exactly and Weibull risk converges to V/(2(m+1)) (error 2.4e-4 at 96 elements, order 3.9). Parent acceptance remains incomplete."
+}

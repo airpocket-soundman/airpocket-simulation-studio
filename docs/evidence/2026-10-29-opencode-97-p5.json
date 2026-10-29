@@ -1,0 +1,886 @@
+{
+ "schemaVersion": 1,
+ "task": "97-P5",
+ "previous": "92-P5 (docs/evidence/2026-10-29-opencode-92-p5.json)",
+ "date": "2026-10-29",
+ "baseSha": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+ "scriptHash": "sha256:e87115f12de1bb3c1394801e22eaaa81e19da0eb5812608e6d1c034e34bc7779",
+ "serverHash": "sha256:a828f2846464e0c6c0acb10e2af4984ee9e3c923cbb5b5e3625bb1b52032455d",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64"
+ },
+ "command": "node scripts/experimental/p5-bracket-design-loop.mjs",
+ "transport": "real MCP stdio (scripts/studio-mcp.mjs)",
+ "synthetic": {
+  "geometry": "Built-in box 20x t x 60 mm plate (synthetic stand-in for a bracket; not STEP, not SolidCraft)",
+  "load": "10 N total force on tip face z=60, direction -y (synthetic, unconfirmed)",
+  "support": "Fixed root face z=0",
+  "material": {
+   "catalogId": "rtp-105-cc",
+   "catalogVersion": "2026-10-14.2",
+   "youngModulusPa": 5999000000,
+   "poissonRatio": 0.35,
+   "poissonOrigin": "user-assumption via applyCatalogMaterial (catalog has no Poisson ratio)"
+  },
+  "target": "Max displacement <= 1 mm (synthetic design target, unconfirmed)",
+  "meshSizesMm": [
+   2,
+   1.4,
+   1
+  ],
+  "intent": "exploratory; all provenance entries unconfirmed; results provisional"
+ },
+ "toolsUsed": [
+  "studio_material_catalog",
+  "studio_create_builtin_project",
+  "studio_edit_project",
+  "studio_preflight_project",
+  "studio_start_analysis",
+  "studio_job_status",
+  "studio_job_events",
+  "studio_release_job",
+  "studio_compare_cases"
+ ],
+ "table": [
+  {
+   "round": 1,
+   "thicknessMm": 2,
+   "inputRevision": "sha256:3cece8fb28258068b0c229e215adaded9a1bfcfaab6bcfa8a5788eb2db900369",
+   "preflight": {
+    "allowed": true,
+    "provisional": true,
+    "requiredPointers": [
+     "/study/kind",
+     "/study/gravityEnabled",
+     "/materialProperties/youngModulus",
+     "/materialProperties/poissonRatio",
+     "/conditions/0/type",
+     "/conditions/0/value",
+     "/conditions/0/direction",
+     "/conditions/0/regions",
+     "/conditions/0/planarRegion",
+     "/conditions/1/type",
+     "/conditions/1/value",
+     "/conditions/1/direction",
+     "/conditions/1/regions",
+     "/conditions/1/planarRegion"
+    ]
+   },
+   "convergence": {
+    "metric": "relative change of max displacement between the two finest sizes",
+    "change": 0.4463550099195047,
+    "threshold": 0.05,
+    "converged": false
+   },
+   "finestMaxDisplacementMm": 4.926742960310764,
+   "eulerBernoulliTipMm": 9.001500250041673,
+   "volumeMm3": 2400,
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "30d6a162-5ec5-421f-addf-53cd07105b68",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 882,
+     "elementCount": 2476,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 2.113844624960768,
+     "maxVonMisesPa": 28238152.60411089
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "b597642e-bf57-4fcc-91e3-91f427fd1642",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 1735,
+     "elementCount": 4867,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 2.727666557390403,
+     "maxVonMisesPa": 90872996.3216474
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "59df82b9-83f8-4cfe-972f-34b243239883",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 3878,
+     "elementCount": 13668,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 4.926742960310764,
+     "maxVonMisesPa": 33015673.169963088
+    }
+   ],
+   "displacementRatioToBeam": 0.5473246484982274
+  },
+  {
+   "round": 1,
+   "thicknessMm": 3,
+   "inputRevision": "sha256:b0ff281e758661967b8dea14266987bb66e1a3309421aaafa330cb48f908c74a",
+   "preflight": {
+    "allowed": true,
+    "provisional": true,
+    "requiredPointers": [
+     "/study/kind",
+     "/study/gravityEnabled",
+     "/materialProperties/youngModulus",
+     "/materialProperties/poissonRatio",
+     "/conditions/0/type",
+     "/conditions/0/value",
+     "/conditions/0/direction",
+     "/conditions/0/regions",
+     "/conditions/0/planarRegion",
+     "/conditions/1/type",
+     "/conditions/1/value",
+     "/conditions/1/direction",
+     "/conditions/1/regions",
+     "/conditions/1/planarRegion"
+    ]
+   },
+   "convergence": {
+    "metric": "relative change of max displacement between the two finest sizes",
+    "change": 0.1735570523720336,
+    "threshold": 0.05,
+    "converged": false
+   },
+   "finestMaxDisplacementMm": 1.8887220715337567,
+   "eulerBernoulliTipMm": 2.6671111851975327,
+   "volumeMm3": 3600,
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "88432776-d18a-43e4-ac60-9f13e426e83c",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 886,
+     "elementCount": 2425,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.7271032920023885,
+     "maxVonMisesPa": 26140711.903699502
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "9984954f-f9b9-4ae1-b0d5-53b72a2081e4",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 2259,
+     "elementCount": 7650,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 1.5609210360483567,
+     "maxVonMisesPa": 14526548.22143466
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "e36fad8b-56d5-46fa-bad0-e1309c8712bd",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 4988,
+     "elementCount": 19794,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 1.8887220715337567,
+     "maxVonMisesPa": 17064189.686525177
+    }
+   ],
+   "displacementRatioToBeam": 0.7081527316956879
+  },
+  {
+   "round": 1,
+   "thicknessMm": 4,
+   "inputRevision": "sha256:f72136ece38b82b09dbf2736bfb2c71bda3d1022a667c6573bb40219917aaf78",
+   "preflight": {
+    "allowed": true,
+    "provisional": true,
+    "requiredPointers": [
+     "/study/kind",
+     "/study/gravityEnabled",
+     "/materialProperties/youngModulus",
+     "/materialProperties/poissonRatio",
+     "/conditions/0/type",
+     "/conditions/0/value",
+     "/conditions/0/direction",
+     "/conditions/0/regions",
+     "/conditions/0/planarRegion",
+     "/conditions/1/type",
+     "/conditions/1/value",
+     "/conditions/1/direction",
+     "/conditions/1/regions",
+     "/conditions/1/planarRegion"
+    ]
+   },
+   "convergence": {
+    "metric": "relative change of max displacement between the two finest sizes",
+    "change": 0.13964651827058977,
+    "threshold": 0.05,
+    "converged": false
+   },
+   "finestMaxDisplacementMm": 0.8886217048343446,
+   "eulerBernoulliTipMm": 1.125187531255209,
+   "volumeMm3": 4800,
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "3453d246-e9db-4fd8-b5d9-78971dd1511b",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 1064,
+     "elementCount": 3496,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.6298979434095513,
+     "maxVonMisesPa": 7489568.435660538
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "61b37781-5bf7-4062-9e47-863bd847937a",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 2604,
+     "elementCount": 9575,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.7645287776945526,
+     "maxVonMisesPa": 9577124.638852686
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "4abe672f-7934-4ef2-a208-c69132d23b2c",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 5698,
+     "elementCount": 23449,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.8886217048343446,
+     "maxVonMisesPa": 10089683.16477262
+    }
+   ],
+   "displacementRatioToBeam": 0.7897543121927754
+  },
+  {
+   "round": 2,
+   "thicknessMm": 3.9,
+   "inputRevision": "sha256:71a5f07c3ef404a6658e08dc602140847c352a0631ebfe00da9de673994fd32e",
+   "preflight": {
+    "allowed": true,
+    "provisional": true,
+    "requiredPointers": [
+     "/study/kind",
+     "/study/gravityEnabled",
+     "/materialProperties/youngModulus",
+     "/materialProperties/poissonRatio",
+     "/conditions/0/type",
+     "/conditions/0/value",
+     "/conditions/0/direction",
+     "/conditions/0/regions",
+     "/conditions/0/planarRegion",
+     "/conditions/1/type",
+     "/conditions/1/value",
+     "/conditions/1/direction",
+     "/conditions/1/regions",
+     "/conditions/1/planarRegion"
+    ]
+   },
+   "convergence": {
+    "metric": "relative change of max displacement between the two finest sizes",
+    "change": 0.1757644294005655,
+    "threshold": 0.05,
+    "converged": false
+   },
+   "finestMaxDisplacementMm": 0.9530174993649936,
+   "eulerBernoulliTipMm": 1.2139786914872701,
+   "volumeMm3": 4680,
+   "solves": [
+    {
+     "meshSizeMm": 2,
+     "jobId": "844fe547-be85-45ad-9b5f-e3405ae7835c",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 1064,
+     "elementCount": 3460,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.6872024722736211,
+     "maxVonMisesPa": 8032238.960552392
+    },
+    {
+     "meshSizeMm": 1.4,
+     "jobId": "83412197-ad76-46fd-b200-ad94b9683357",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 2543,
+     "elementCount": 9165,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.7855109223803517,
+     "maxVonMisesPa": 9823900.676900508
+    },
+    {
+     "meshSizeMm": 1,
+     "jobId": "ad801af4-391b-40e4-a556-233813ea61ce",
+     "state": "succeeded",
+     "provisional": true,
+     "nodeCount": 5592,
+     "elementCount": 22781,
+     "eventStages": [
+      null,
+      "preparation",
+      "progress",
+      "mesh",
+      "iteration",
+      "observation-transport"
+     ],
+     "maxDisplacementMm": 0.9530174993649936,
+     "maxVonMisesPa": 10890583.2106846
+    }
+   ],
+   "displacementRatioToBeam": 0.7850364310739527
+  }
+ ],
+ "decision": {
+  "rule": "fit d=a*t^b on finest-mesh max displacement; choose thinnest t (0.1 mm step) with predicted d <= 1 mm",
+  "fit": {
+   "a": 27.5064215970969,
+   "b": -2.464012251111271
+  },
+  "exactThicknessMm": 3.838689729124532,
+  "nextThicknessMm": 3.9,
+  "round1MeetingTarget": [
+   4
+  ],
+  "unconvergedInputs": [
+   2,
+   3,
+   4
+  ],
+  "rationale": "Round 1 thinnest passing variant is 4 mm; the fit predicts 3.9 mm reaches the target.",
+  "outcome": {
+   "thicknessMm": 3.9,
+   "finestMaxDisplacementMm": 0.9530174993649936,
+   "predictedMm": 0.9617089601013861,
+   "meetsTarget": true,
+   "converged": false,
+   "volumeSavingVsThinnestPassing": 0.025000000000000022
+  }
+ },
+ "comparison": {
+  "listing": [
+   {
+    "name": "Synthetic plate bracket t=2 mm (h=1)",
+    "caseId": "saved-case:0"
+   },
+   {
+    "name": "Synthetic plate bracket t=3 mm (h=1)",
+    "caseId": "saved-case:1"
+   },
+   {
+    "name": "Synthetic plate bracket t=4 mm (h=1)",
+    "caseId": "saved-case:2"
+   },
+   {
+    "name": "Synthetic plate bracket t=3.9 mm (h=1)",
+    "caseId": "saved-case:3"
+   }
+  ],
+  "result": {
+   "schemaVersion": 1,
+   "point": [
+    10,
+    1,
+    59.5
+   ],
+   "references": [
+    {
+     "reference": {
+      "caseId": "saved-case:0",
+      "expectedRevision": "sha256:6a87c591a8586f92a02e311a3b1c19aea5be29a2c85d16ae562239fc6fd636c5"
+     },
+     "name": "Synthetic plate bracket t=2 mm (h=1)",
+     "inputRevision": "sha256:3cece8fb28258068b0c229e215adaded9a1bfcfaab6bcfa8a5788eb2db900369",
+     "resultRevision": "sha256:4e8b6c5c2f7b197b0ca664b6bfc1b5294683f440e9c74686f3dbc2fb50020b96",
+     "kind": "elastic",
+     "selection": {
+      "field": "displacement",
+      "displayUnit": "mm"
+     },
+     "calculation": {
+      "operation": "elastic",
+      "options": {
+       "method": "wasm-pcg",
+       "size": 1,
+       "adaptive": false,
+       "maxRounds": 3
+      },
+      "engine": "Airpocket Tet4 / WASM CPU"
+     },
+     "mesh": {
+      "nodeCount": 3878,
+      "elementCount": 13668,
+      "surfaceFaceCount": 6240
+     },
+     "runtimeIdentity": {
+      "assets": [
+       {
+        "bytes": 229,
+        "role": "kernel",
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+       },
+       {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+       }
+      ],
+      "build": {
+       "dirty": true,
+       "revision": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+       "sourceFingerprint": "sha256:9413f001d269d140dd5e410de25b67ba0baaf9a10608ca2c98004f297c6750c0",
+       "status": "available",
+       "version": "0.44.0"
+      },
+      "engine": {
+       "actualEngine": "Airpocket Tet4 / WASM CPU",
+       "requestedMethod": "wasm-pcg"
+      },
+      "isolation": "worker-thread",
+      "schemaVersion": 1,
+      "target": "node"
+     },
+     "analysisAssessment": {
+      "recorded": true,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "omittedFields": [
+       "remainingChecks",
+       "schemaVersion"
+      ],
+      "omittedFieldCount": 2,
+      "omissionReason": "assessment details omitted to keep the response bounded"
+     },
+     "measurement": {
+      "element": 13398,
+      "values": {
+       "displacementMm": [
+        0.000010430180436306857,
+        -4.863292678709334,
+        0.000003925833667396747
+       ],
+       "magnitudeMm": 4.863292678722103
+      },
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      }
+     }
+    },
+    {
+     "reference": {
+      "caseId": "saved-case:1",
+      "expectedRevision": "sha256:c714b61531a6f13d5848fab433cb0caa37c4e6cad66ae0734c69b27e24f6492c"
+     },
+     "name": "Synthetic plate bracket t=3 mm (h=1)",
+     "inputRevision": "sha256:b0ff281e758661967b8dea14266987bb66e1a3309421aaafa330cb48f908c74a",
+     "resultRevision": "sha256:6315412ef56450b5836df369760e65c76a48d09b061ec8bf4741fcbed76209bd",
+     "kind": "elastic",
+     "selection": {
+      "field": "displacement",
+      "displayUnit": "mm"
+     },
+     "calculation": {
+      "operation": "elastic",
+      "options": {
+       "method": "wasm-pcg",
+       "size": 1,
+       "adaptive": false,
+       "maxRounds": 3
+      },
+      "engine": "Airpocket Tet4 / WASM CPU"
+     },
+     "mesh": {
+      "nodeCount": 4988,
+      "elementCount": 19794,
+      "surfaceFaceCount": 6864
+     },
+     "runtimeIdentity": {
+      "assets": [
+       {
+        "bytes": 229,
+        "role": "kernel",
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+       },
+       {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+       }
+      ],
+      "build": {
+       "dirty": true,
+       "revision": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+       "sourceFingerprint": "sha256:9413f001d269d140dd5e410de25b67ba0baaf9a10608ca2c98004f297c6750c0",
+       "status": "available",
+       "version": "0.44.0"
+      },
+      "engine": {
+       "actualEngine": "Airpocket Tet4 / WASM CPU",
+       "requestedMethod": "wasm-pcg"
+      },
+      "isolation": "worker-thread",
+      "schemaVersion": 1,
+      "target": "node"
+     },
+     "analysisAssessment": {
+      "recorded": true,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "omittedFields": [
+       "remainingChecks",
+       "schemaVersion"
+      ],
+      "omittedFieldCount": 2,
+      "omissionReason": "assessment details omitted to keep the response bounded"
+     },
+     "measurement": {
+      "element": 12896,
+      "values": {
+       "displacementMm": [
+        0.00007964000419185383,
+        -1.86360239000836,
+        -0.02372356691129843
+       ],
+       "magnitudeMm": 1.8637533855138662
+      },
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      }
+     }
+    },
+    {
+     "reference": {
+      "caseId": "saved-case:2",
+      "expectedRevision": "sha256:872d78f48ba5f668524362a5cfa353def0bf2065604efe26ad5681d268e11ecf"
+     },
+     "name": "Synthetic plate bracket t=4 mm (h=1)",
+     "inputRevision": "sha256:f72136ece38b82b09dbf2736bfb2c71bda3d1022a667c6573bb40219917aaf78",
+     "resultRevision": "sha256:19722ddb815a2146d50a1bedc95e5f99986bb3892b5ea9327313e78e5ff536d1",
+     "kind": "elastic",
+     "selection": {
+      "field": "displacement",
+      "displayUnit": "mm"
+     },
+     "calculation": {
+      "operation": "elastic",
+      "options": {
+       "method": "wasm-pcg",
+       "size": 1,
+       "adaptive": false,
+       "maxRounds": 3
+      },
+      "engine": "Airpocket Tet4 / WASM CPU"
+     },
+     "mesh": {
+      "nodeCount": 5698,
+      "elementCount": 23449,
+      "surfaceFaceCount": 7248
+     },
+     "runtimeIdentity": {
+      "assets": [
+       {
+        "bytes": 229,
+        "role": "kernel",
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+       },
+       {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+       }
+      ],
+      "build": {
+       "dirty": true,
+       "revision": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+       "sourceFingerprint": "sha256:9413f001d269d140dd5e410de25b67ba0baaf9a10608ca2c98004f297c6750c0",
+       "status": "available",
+       "version": "0.44.0"
+      },
+      "engine": {
+       "actualEngine": "Airpocket Tet4 / WASM CPU",
+       "requestedMethod": "wasm-pcg"
+      },
+      "isolation": "worker-thread",
+      "schemaVersion": 1,
+      "target": "node"
+     },
+     "analysisAssessment": {
+      "recorded": true,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "omittedFields": [
+       "remainingChecks",
+       "schemaVersion"
+      ],
+      "omittedFieldCount": 2,
+      "omissionReason": "assessment details omitted to keep the response bounded"
+     },
+     "measurement": {
+      "element": 6645,
+      "values": {
+       "displacementMm": [
+        -0.000024678911906304798,
+        -0.8763250153086668,
+        -0.022277690026114256
+       ],
+       "magnitudeMm": 0.8766081385303717
+      },
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      }
+     }
+    },
+    {
+     "reference": {
+      "caseId": "saved-case:3",
+      "expectedRevision": "sha256:89baeb34d7161031bd5157e1445e30c2285496955ef57ed2b9a292f989b7cc41"
+     },
+     "name": "Synthetic plate bracket t=3.9 mm (h=1)",
+     "inputRevision": "sha256:71a5f07c3ef404a6658e08dc602140847c352a0631ebfe00da9de673994fd32e",
+     "resultRevision": "sha256:6a33ba52830ce5c5703e95fc36277ad738a0322876a35ee01670a5e7f1c59367",
+     "kind": "elastic",
+     "selection": {
+      "field": "displacement",
+      "displayUnit": "mm"
+     },
+     "calculation": {
+      "operation": "elastic",
+      "options": {
+       "method": "wasm-pcg",
+       "size": 1,
+       "adaptive": false,
+       "maxRounds": 3
+      },
+      "engine": "Airpocket Tet4 / WASM CPU"
+     },
+     "mesh": {
+      "nodeCount": 5592,
+      "elementCount": 22781,
+      "surfaceFaceCount": 7196
+     },
+     "runtimeIdentity": {
+      "assets": [
+       {
+        "bytes": 229,
+        "role": "kernel",
+        "sha256": "sha256:08a76ea27e16eff34abf8451fac46c4365ed2e018bc8a6f27f2affa1c3666af2",
+        "status": "observed"
+       },
+       {
+        "bytes": 41430673,
+        "role": "gmsh",
+        "sha256": "sha256:c005138661a9852a813d688a3ac50a65bc60c20abc56fc0dc8331d0f2af5af23",
+        "status": "observed"
+       }
+      ],
+      "build": {
+       "dirty": true,
+       "revision": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+       "sourceFingerprint": "sha256:9413f001d269d140dd5e410de25b67ba0baaf9a10608ca2c98004f297c6750c0",
+       "status": "available",
+       "version": "0.44.0"
+      },
+      "engine": {
+       "actualEngine": "Airpocket Tet4 / WASM CPU",
+       "requestedMethod": "wasm-pcg"
+      },
+      "isolation": "worker-thread",
+      "schemaVersion": 1,
+      "target": "node"
+     },
+     "analysisAssessment": {
+      "recorded": true,
+      "mode": "exploratory",
+      "provisional": true,
+      "completePreflight": false,
+      "omittedFields": [
+       "remainingChecks",
+       "schemaVersion"
+      ],
+      "omittedFieldCount": 2,
+      "omissionReason": "assessment details omitted to keep the response bounded"
+     },
+     "measurement": {
+      "element": 11525,
+      "values": {
+       "displacementMm": [
+        -2.9882426999938056e-7,
+        -0.9398838509910707,
+        -0.022713959405746283
+       ],
+       "magnitudeMm": 0.940158272476385
+      },
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      }
+     }
+    }
+   ],
+   "comparison": {
+    "comparable": true,
+    "baselineCaseId": "saved-case:0",
+    "basis": "raw stored-field difference (case minus baseline) at the same global point; no time or mode interpolation; equal inputs are not asserted",
+    "reasons": [],
+    "deltas": [
+     {
+      "caseId": "saved-case:1",
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      },
+      "values": {
+       "displacementMm": [
+        0.00006920982375554698,
+        2.9996902887009735,
+        -0.023727492744965828
+       ],
+       "magnitudeMm": -2.9995392932082368
+      }
+     },
+     {
+      "caseId": "saved-case:2",
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      },
+      "values": {
+       "displacementMm": [
+        -0.00003510909234261166,
+        3.9869676634006668,
+        -0.022281615859781653
+       ],
+       "magnitudeMm": -3.9866845401917312
+      }
+     },
+     {
+      "caseId": "saved-case:3",
+      "units": {
+       "displacementMm": "mm",
+       "magnitudeMm": "mm"
+      },
+      "values": {
+       "displacementMm": [
+        -0.000010729004706306237,
+        3.923408827718263,
+        -0.02271788523941368
+       ],
+       "magnitudeMm": -3.923134406245718
+      }
+     }
+    ]
+   },
+   "bounds": {
+    "maxReferences": 8,
+    "maxResponseBytes": 65536
+   },
+   "archiveRevision": "sha256:17f09f9931a6e060686618b8ce17219a676d6a5c0c7c61ffca78fabe4b771bbc",
+   "source": {
+    "kind": "saved-case-archive",
+    "sha256": "sha256:8aa9e1df3c4fc25c20a09c917e39a9f7364353529e2b3454111f81d3fdd70900",
+    "bytes": 35170155,
+    "identityScope": "snapshot-local deterministic IDs; valid only with matching case and archive revisions"
+   }
+  }
+ },
+ "missingApi": [
+  "Fused multi-box solid: boxes are independent unfused bodies, so ribs, gussets and L-shapes need contact; holes need a subtractive built-in or STEP edit",
+  "Design ID/version lineage operation (round linkage is recorded only in this evidence JSON)"
+ ],
+ "unverified": [
+  "Real bracket geometry, STEP exchange and SolidCraft design IDs/versions",
+  "Convergence beyond three Tet4 sizes (no Tet10 or Richardson extrapolation)",
+  "Common colour range and video output of the variants",
+  "User confirmation of material, Poisson ratio, load and deflection target"
+ ]
+}

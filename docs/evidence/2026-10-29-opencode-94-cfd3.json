@@ -1,0 +1,1609 @@
+{
+ "workOrder": "94-CFD3",
+ "task": "CFD3",
+ "date": "2026-10-29",
+ "baseSha": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+ "inputs": {
+  "solver": {
+   "path": "src/euler-1d-muscl.js",
+   "sha256": "7af98a8d9471c2870cabaa9f8eac97da38b8785bbf4ad8b8b92a6f633eb062e9"
+  },
+  "sharedFluxes": {
+   "path": "src/euler-1d-riemann.js",
+   "sha256": "843e5a812e2955d4af3b665af7ca936b7ae183a21048962380d34e37b7eb0a79"
+  },
+  "script": {
+   "path": "scripts/experimental/verify-euler-1d-muscl.mjs",
+   "sha256": "135a3f1d9772731ae1bee9cc79825aae43ce817504a58125c577dcd022b1add1"
+  },
+  "synthetic": true,
+  "domain": "[0,1], ideal gas gamma=1.4, nondimensional; density wave rho=1+0.2 sin(2 pi x), u=1, p=1 (exact cell averages)"
+ },
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz"
+ },
+ "command": "node scripts/experimental/verify-euler-1d-muscl.mjs",
+ "smoothConvergence": [
+  {
+   "case": "periodic density wave, one period t=1",
+   "order": 1,
+   "limiter": "none",
+   "flux": "hllc",
+   "boundary": "periodic",
+   "endTime": 1,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 32,
+     "steps": 163,
+     "l1DensityError": 0.04977498872991813,
+     "minDensity": 0.8012826297711586,
+     "minPressure": 0.9999999999999983,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       1,
+       3
+      ],
+      "final": [
+       1,
+       1,
+       3.0000000000000004
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       0,
+       0,
+       1.480297366166875e-16
+      ]
+     },
+     "wallMilliseconds": 11.5
+    },
+    {
+     "cells": 64,
+     "steps": 328,
+     "l1DensityError": 0.02798848787909183,
+     "minDensity": 0.8003211213928769,
+     "minPressure": 0.9999999999999978,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999998,
+       0.9999999999999998,
+       2.9999999999999996
+      ],
+      "final": [
+       0.9999999999999997,
+       0.9999999999999993,
+       3.0000000000000004
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -1.1102230246251568e-16,
+       -4.440892098500627e-16,
+       2.96059473233375e-16
+      ]
+     },
+     "wallMilliseconds": 17.4,
+     "observedL1DensityOrderVsPrevious": 0.8305874440820534
+    },
+    {
+     "cells": 128,
+     "steps": 658,
+     "l1DensityError": 0.014872474624744794,
+     "minDensity": 0.8000803093700648,
+     "minPressure": 0.9999999999999974,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999999,
+       0.9999999999999999,
+       3.0000000000000013
+      ],
+      "final": [
+       0.9999999999999994,
+       0.9999999999999998,
+       3.000000000000002
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -4.440892098500627e-16,
+       -1.1102230246251568e-16,
+       2.9605947323337486e-16
+      ]
+     },
+     "wallMilliseconds": 35.4,
+     "observedL1DensityOrderVsPrevious": 0.9121888284285564
+    },
+    {
+     "cells": 256,
+     "steps": 1319,
+     "l1DensityError": 0.007670999904272067,
+     "minDensity": 0.8000200791567723,
+     "minPressure": 0.9999999999999966,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999992,
+       0.9999999999999992,
+       2.9999999999999996
+      ],
+      "final": [
+       1.0000000000000002,
+       1.0000000000000004,
+       2.999999999999999
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       9.992007221626407e-16,
+       1.2212453270876716e-15,
+       -1.4802973661668756e-16
+      ]
+     },
+     "wallMilliseconds": 123.2,
+     "observedL1DensityOrderVsPrevious": 0.9551581683696782
+    },
+    {
+     "cells": 512,
+     "steps": 2641,
+     "l1DensityError": 0.0038959119408447356,
+     "minDensity": 0.8000050199025834,
+     "minPressure": 0.9999999999999951,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1.0000000000000004,
+       1.0000000000000004,
+       2.999999999999999
+      ],
+      "final": [
+       0.9999999999999998,
+       1.0000000000000002,
+       3.0000000000000018
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -6.661338147750936e-16,
+       -2.220446049250312e-16,
+       8.881784197001247e-16
+      ]
+     },
+     "wallMilliseconds": 362.1,
+     "observedL1DensityOrderVsPrevious": 0.9774535746915596
+    }
+   ]
+  },
+  {
+   "case": "periodic density wave, one period t=1",
+   "order": 2,
+   "limiter": "none",
+   "flux": "hllc",
+   "boundary": "periodic",
+   "endTime": 1,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 32,
+     "steps": 166,
+     "l1DensityError": 0.0027840826135979574,
+     "minDensity": 0.8002237488731747,
+     "minPressure": 0.9999999999999974,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       1,
+       3
+      ],
+      "final": [
+       0.9999999999999998,
+       1,
+       2.9999999999999996
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -2.220446049250313e-16,
+       0,
+       -1.4802973661668753e-16
+      ]
+     },
+     "wallMilliseconds": 9.2
+    },
+    {
+     "cells": 64,
+     "steps": 331,
+     "l1DensityError": 0.0006923935354945024,
+     "minDensity": 0.8000501908081703,
+     "minPressure": 0.9999999999999962,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999998,
+       0.9999999999999998,
+       2.9999999999999996
+      ],
+      "final": [
+       0.9999999999999998,
+       0.9999999999999998,
+       3.0000000000000004
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       0,
+       0,
+       2.96059473233375e-16
+      ]
+     },
+     "wallMilliseconds": 19.7,
+     "observedL1DensityOrderVsPrevious": 2.0075378614830512
+    },
+    {
+     "cells": 128,
+     "steps": 661,
+     "l1DensityError": 0.0001728029053426573,
+     "minDensity": 0.8000114834088506,
+     "minPressure": 0.9999999999999944,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999999,
+       0.9999999999999999,
+       3.0000000000000013
+      ],
+      "final": [
+       1.0000000000000002,
+       0.9999999999999996,
+       3.0000000000000018
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       3.330669073875469e-16,
+       -3.33066907387547e-16,
+       1.4802973661668746e-16
+      ]
+     },
+     "wallMilliseconds": 54.5,
+     "observedL1DensityOrderVsPrevious": 2.002464781302033
+    },
+    {
+     "cells": 256,
+     "steps": 1322,
+     "l1DensityError": 0.000043180471445359615,
+     "minDensity": 0.8000028001781908,
+     "minPressure": 0.9999999999999929,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999992,
+       0.9999999999999992,
+       2.9999999999999996
+      ],
+      "final": [
+       1.0000000000000002,
+       1,
+       2.9999999999999987
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       9.992007221626407e-16,
+       7.771561172376096e-16,
+       -2.960594732333751e-16
+      ]
+     },
+     "wallMilliseconds": 177.6,
+     "observedL1DensityOrderVsPrevious": 2.0006765738628904
+    },
+    {
+     "cells": 512,
+     "steps": 2643,
+     "l1DensityError": 0.000010793896294952797,
+     "minDensity": 0.8000006942511133,
+     "minPressure": 0.9999999999999906,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1.0000000000000004,
+       1.0000000000000004,
+       2.999999999999999
+      ],
+      "final": [
+       1,
+       0.9999999999999998,
+       2.999999999999999
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -4.440892098500624e-16,
+       -6.661338147750936e-16,
+       0
+      ]
+     },
+     "wallMilliseconds": 761,
+     "observedL1DensityOrderVsPrevious": 2.0001632633855273
+    }
+   ]
+  },
+  {
+   "case": "periodic density wave, one period t=1",
+   "order": 2,
+   "limiter": "minmod",
+   "flux": "hllc",
+   "boundary": "periodic",
+   "endTime": 1,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 32,
+     "steps": 165,
+     "l1DensityError": 0.011987745084063396,
+     "minDensity": 0.8012826297711586,
+     "minPressure": 0.9999999999999982,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       1,
+       3
+      ],
+      "final": [
+       1.0000000000000004,
+       1.0000000000000002,
+       3.000000000000001
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       4.440892098500624e-16,
+       2.2204460492503126e-16,
+       2.96059473233375e-16
+      ]
+     },
+     "wallMilliseconds": 8.4
+    },
+    {
+     "cells": 64,
+     "steps": 330,
+     "l1DensityError": 0.003964749842166765,
+     "minDensity": 0.8003211213928769,
+     "minPressure": 0.9999999999999971,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999998,
+       0.9999999999999998,
+       2.9999999999999996
+      ],
+      "final": [
+       1.0000000000000002,
+       1,
+       3.0000000000000018
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       4.440892098500625e-16,
+       2.220446049250313e-16,
+       7.401486830834372e-16
+      ]
+     },
+     "wallMilliseconds": 22.6,
+     "observedL1DensityOrderVsPrevious": 1.5962585644337326
+    },
+    {
+     "cells": 128,
+     "steps": 661,
+     "l1DensityError": 0.0011506016185171015,
+     "minDensity": 0.8000803093700648,
+     "minPressure": 0.999999999999996,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999999,
+       0.9999999999999999,
+       3.0000000000000013
+      ],
+      "final": [
+       1,
+       1,
+       3.000000000000002
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       1.1102230246251565e-16,
+       1.1102230246251565e-16,
+       2.9605947323337486e-16
+      ]
+     },
+     "wallMilliseconds": 84.5,
+     "observedL1DensityOrderVsPrevious": 1.7848414365181524
+    },
+    {
+     "cells": 256,
+     "steps": 1321,
+     "l1DensityError": 0.00031515669417805535,
+     "minDensity": 0.8000200791567723,
+     "minPressure": 0.9999999999999947,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999992,
+       0.9999999999999992,
+       2.9999999999999996
+      ],
+      "final": [
+       0.9999999999999997,
+       0.9999999999999996,
+       3
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       4.440892098500628e-16,
+       3.330669073875471e-16,
+       1.4802973661668753e-16
+      ]
+     },
+     "wallMilliseconds": 397.4,
+     "observedL1DensityOrderVsPrevious": 1.8682471925757411
+    },
+    {
+     "cells": 512,
+     "steps": 2643,
+     "l1DensityError": 0.00008488121464062925,
+     "minDensity": 0.8000050199025834,
+     "minPressure": 0.9999999999999927,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1.0000000000000004,
+       1.0000000000000004,
+       2.999999999999999
+      ],
+      "final": [
+       1.0000000000000004,
+       1.0000000000000002,
+       3.000000000000001
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       0,
+       -2.220446049250312e-16,
+       5.9211894646675e-16
+      ]
+     },
+     "wallMilliseconds": 1476.7,
+     "observedL1DensityOrderVsPrevious": 1.8925521007273676
+    }
+   ]
+  },
+  {
+   "case": "periodic density wave, one period t=1",
+   "order": 2,
+   "limiter": "vanleer",
+   "flux": "hllc",
+   "boundary": "periodic",
+   "endTime": 1,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 32,
+     "steps": 165,
+     "l1DensityError": 0.006546440658215958,
+     "minDensity": 0.8012826297711586,
+     "minPressure": 0.999999999999998,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       1,
+       3
+      ],
+      "final": [
+       0.9999999999999996,
+       0.9999999999999998,
+       3.0000000000000004
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -4.440892098500626e-16,
+       -2.220446049250313e-16,
+       1.480297366166875e-16
+      ]
+     },
+     "wallMilliseconds": 7.9
+    },
+    {
+     "cells": 64,
+     "steps": 330,
+     "l1DensityError": 0.0017998095417500297,
+     "minDensity": 0.8003211213928769,
+     "minPressure": 0.9999999999999977,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999998,
+       0.9999999999999998,
+       2.9999999999999996
+      ],
+      "final": [
+       1.0000000000000002,
+       0.9999999999999998,
+       3.000000000000002
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       4.440892098500625e-16,
+       0,
+       8.881784197001245e-16
+      ]
+     },
+     "wallMilliseconds": 20.4,
+     "observedL1DensityOrderVsPrevious": 1.8628664705502465
+    },
+    {
+     "cells": 128,
+     "steps": 661,
+     "l1DensityError": 0.0004583253959173838,
+     "minDensity": 0.8000803093700648,
+     "minPressure": 0.9999999999999959,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999999,
+       0.9999999999999999,
+       3.0000000000000013
+      ],
+      "final": [
+       0.9999999999999998,
+       1,
+       3.000000000000001
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -1.1102230246251568e-16,
+       1.1102230246251565e-16,
+       -1.4802973661668748e-16
+      ]
+     },
+     "wallMilliseconds": 74.3,
+     "observedL1DensityOrderVsPrevious": 1.973400113606365
+    },
+    {
+     "cells": 256,
+     "steps": 1322,
+     "l1DensityError": 0.00011229113744619336,
+     "minDensity": 0.8000200791567723,
+     "minPressure": 0.9999999999999948,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.9999999999999992,
+       0.9999999999999992,
+       2.9999999999999996
+      ],
+      "final": [
+       1.0000000000000002,
+       0.9999999999999998,
+       3.0000000000000004
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       9.992007221626407e-16,
+       5.551115123125784e-16,
+       2.96059473233375e-16
+      ]
+     },
+     "wallMilliseconds": 293.6,
+     "observedL1DensityOrderVsPrevious": 2.029128160160035
+    },
+    {
+     "cells": 512,
+     "steps": 2643,
+     "l1DensityError": 0.000027680611484959,
+     "minDensity": 0.8000050199025834,
+     "minPressure": 0.9999999999999925,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1.0000000000000004,
+       1.0000000000000004,
+       2.999999999999999
+      ],
+      "final": [
+       1,
+       1,
+       3.0000000000000036
+      ],
+      "boundaryInflow": [
+       0,
+       0,
+       0
+      ],
+      "relativeImbalance": [
+       -4.440892098500624e-16,
+       -4.440892098500624e-16,
+       1.4802973661668737e-15
+      ]
+     },
+     "wallMilliseconds": 1016.3,
+     "observedL1DensityOrderVsPrevious": 2.0202963492084276
+    }
+   ]
+  }
+ ],
+ "shockTubes": [
+  {
+   "case": "sod t=0.2",
+   "order": 1,
+   "limiter": "minmod",
+   "flux": "hllc",
+   "boundary": "transmissive",
+   "endTime": 0.2,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 100,
+     "steps": 94,
+     "l1DensityError": 0.017957903200154605,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000037165,
+       0.17999999999212246,
+       1.3750000000140952
+      ],
+      "boundaryInflow": [
+       3.7166469219351256e-12,
+       0.17999999999212235,
+       1.4094988582372628e-11
+      ],
+      "relativeImbalance": [
+       -3.117280042895522e-16,
+       6.167905692631914e-16,
+       -2.9927957447693836e-17
+      ]
+     },
+     "wallMilliseconds": 5.7
+    },
+    {
+     "cells": 200,
+     "steps": 192,
+     "l1DensityError": 0.01140940101749858,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000001,
+       0.17999999999999985,
+       1.3750000000000007
+      ],
+      "boundaryInflow": [
+       8.612405249636157e-20,
+       0.17999999999999985,
+       3.0143418373726546e-19
+      ],
+      "relativeImbalance": [
+       1.9721987272892315e-16,
+       0,
+       3.227547459391455e-16
+      ]
+     },
+     "wallMilliseconds": 13.9,
+     "observedL1DensityOrderVsPrevious": 0.6543958544999259
+    },
+    {
+     "cells": 400,
+     "steps": 387,
+     "l1DensityError": 0.00723480325085794,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999998,
+       0.18000000000000005,
+       1.3749999999999996
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999994,
+       0
+      ],
+      "relativeImbalance": [
+       -3.9474596431116675e-16,
+       6.16790569236198e-16,
+       -4.844609562000683e-16
+      ]
+     },
+     "wallMilliseconds": 40.1,
+     "observedL1DensityOrderVsPrevious": 0.6571973649453683
+    },
+    {
+     "cells": 800,
+     "steps": 776,
+     "l1DensityError": 0.004571203865133498,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999997,
+       0.17999999999999974,
+       1.375000000000002
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999977,
+       0
+      ],
+      "relativeImbalance": [
+       -5.921189464667501e-16,
+       -1.5419764230904974e-16,
+       1.2918958832001802e-15
+      ]
+     },
+     "wallMilliseconds": 158.4,
+     "observedL1DensityOrderVsPrevious": 0.6623796222214123
+    },
+    {
+     "cells": 1600,
+     "steps": 1556,
+     "l1DensityError": 0.00286889866949335,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000008,
+       0.18000000000000013,
+       1.3750000000000022
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999974,
+       0
+      ],
+      "relativeImbalance": [
+       1.3816108750890817e-15,
+       2.1587669923266915e-15,
+       1.4533828686002026e-15
+      ]
+     },
+     "wallMilliseconds": 611.7,
+     "observedL1DensityOrderVsPrevious": 0.6720771487312025
+    }
+   ]
+  },
+  {
+   "case": "sod t=0.2",
+   "order": 2,
+   "limiter": "minmod",
+   "flux": "hllc",
+   "boundary": "transmissive",
+   "endTime": 0.2,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 100,
+     "steps": 96,
+     "l1DensityError": 0.00773095934437245,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999996,
+       0.17999999999999886,
+       1.3750000000000007
+      ],
+      "boundaryInflow": [
+       -1.529836332102984e-16,
+       0.17999999999999877,
+       -8.69764998712564e-17
+      ],
+      "relativeImbalance": [
+       -5.175210251373586e-16,
+       4.625929269271515e-16,
+       3.8622960707005004e-16
+      ]
+     },
+     "wallMilliseconds": 13.9
+    },
+    {
+     "cells": 200,
+     "steps": 193,
+     "l1DensityError": 0.004220849717727403,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000001,
+       0.18,
+       1.3749999999999998
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999997,
+       0
+      ],
+      "relativeImbalance": [
+       1.9737298215558335e-16,
+       1.5419764230904951e-16,
+       -3.229739708000455e-16
+      ]
+     },
+     "wallMilliseconds": 29.1,
+     "observedL1DensityOrderVsPrevious": 0.8731139876602365
+    },
+    {
+     "cells": 400,
+     "steps": 388,
+     "l1DensityError": 0.002383219152867569,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000004,
+       0.17999999999999974,
+       1.3749999999999996
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999988,
+       0
+      ],
+      "relativeImbalance": [
+       7.894919286223329e-16,
+       -7.709882115452487e-16,
+       -4.844609562000683e-16
+      ]
+     },
+     "wallMilliseconds": 116,
+     "observedL1DensityOrderVsPrevious": 0.8246218403806402
+    },
+    {
+     "cells": 800,
+     "steps": 778,
+     "l1DensityError": 0.0013685604956351425,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000006,
+       0.1799999999999998,
+       1.3749999999999998
+      ],
+      "boundaryInflow": [
+       0,
+       0.1799999999999999,
+       0
+      ],
+      "relativeImbalance": [
+       9.86864910777916e-16,
+       -6.167905692361987e-16,
+       -3.229739708000455e-16
+      ]
+     },
+     "wallMilliseconds": 453.6,
+     "observedL1DensityOrderVsPrevious": 0.8002524142627019
+    },
+    {
+     "cells": 1600,
+     "steps": 1557,
+     "l1DensityError": 0.000764881941186608,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999993,
+       0.18000000000000005,
+       1.3750000000000027
+      ],
+      "boundaryInflow": [
+       0,
+       0.18,
+       0
+      ],
+      "relativeImbalance": [
+       -1.1842378929335002e-15,
+       3.08395284618099e-16,
+       1.7763568394002471e-15
+      ]
+     },
+     "wallMilliseconds": 1768.7,
+     "observedL1DensityOrderVsPrevious": 0.8393502173105774
+    }
+   ]
+  },
+  {
+   "case": "sod t=0.2",
+   "order": 2,
+   "limiter": "vanleer",
+   "flux": "hllc",
+   "boundary": "transmissive",
+   "endTime": 0.2,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 100,
+     "steps": 96,
+     "l1DensityError": 0.00548138735041898,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999999,
+       0.18,
+       1.3749999999999998
+      ],
+      "boundaryInflow": [
+       0,
+       0.18000000000000005,
+       0
+      ],
+      "relativeImbalance": [
+       -1.9737298215558337e-16,
+       -3.0839528461809903e-16,
+       -3.229739708000455e-16
+      ]
+     },
+     "wallMilliseconds": 7.2
+    },
+    {
+     "cells": 200,
+     "steps": 194,
+     "l1DensityError": 0.00291689530867501,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000003,
+       0.17999999999999985,
+       1.3749999999999996
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999994,
+       0
+      ],
+      "relativeImbalance": [
+       5.921189464667498e-16,
+       -4.625929269271489e-16,
+       -4.844609562000683e-16
+      ]
+     },
+     "wallMilliseconds": 26.6,
+     "observedL1DensityOrderVsPrevious": 0.9101074816020336
+    },
+    {
+     "cells": 400,
+     "steps": 390,
+     "l1DensityError": 0.0016213320608740335,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5625000000000001,
+       0.17999999999999983,
+       1.3750000000000007
+      ],
+      "boundaryInflow": [
+       0,
+       0.1799999999999999,
+       0
+      ],
+      "relativeImbalance": [
+       1.9737298215558335e-16,
+       -4.62592926927149e-16,
+       3.229739708000454e-16
+      ]
+     },
+     "wallMilliseconds": 117.5,
+     "observedL1DensityOrderVsPrevious": 0.8472540110854512
+    },
+    {
+     "cells": 800,
+     "steps": 780,
+     "l1DensityError": 0.0009212501427406986,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999996,
+       0.17999999999999985,
+       1.3750000000000009
+      ],
+      "boundaryInflow": [
+       0,
+       0.17999999999999988,
+       0
+      ],
+      "relativeImbalance": [
+       -7.894919286223335e-16,
+       -1.5419764230904964e-16,
+       4.84460956200068e-16
+      ]
+     },
+     "wallMilliseconds": 450.7,
+     "observedL1DensityOrderVsPrevious": 0.8155147529450162
+    },
+    {
+     "cells": 1600,
+     "steps": 1560,
+     "l1DensityError": 0.0004945243990432255,
+     "minDensity": 0.125,
+     "minPressure": 0.1,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       0.5625,
+       0,
+       1.3750000000000002
+      ],
+      "final": [
+       0.5624999999999992,
+       0.18000000000000008,
+       1.3749999999999982
+      ],
+      "boundaryInflow": [
+       0,
+       0.18000000000000052,
+       0
+      ],
+      "relativeImbalance": [
+       -1.3816108750890837e-15,
+       -2.4671622769447914e-15,
+       -1.4533828686002046e-15
+      ]
+     },
+     "wallMilliseconds": 1738.7,
+     "observedL1DensityOrderVsPrevious": 0.8975512347351358
+    }
+   ]
+  },
+  {
+   "case": "toro test 2 (123 rarefaction) t=0.15",
+   "order": 2,
+   "limiter": "minmod",
+   "flux": "hllc",
+   "boundary": "transmissive",
+   "endTime": 0.15,
+   "cfl": 0.45,
+   "rows": [
+    {
+     "cells": 100,
+     "steps": 92,
+     "l1DensityError": 0.013378766287584835,
+     "minDensity": 0.026567770028522935,
+     "minPressure": 0.006820985934435598,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       0,
+       3
+      ],
+      "final": [
+       0.4000167750126428,
+       -6.439293542825907e-17,
+       0.9600821234923723
+      ],
+      "boundaryInflow": [
+       -0.5999832249873571,
+       2.0592950646763776e-18,
+       -2.0399178765076265
+      ],
+      "relativeImbalance": [
+       0,
+       -9.789460761027728e-17,
+       -4.440892098500626e-16
+      ]
+     },
+     "wallMilliseconds": 11.6
+    },
+    {
+     "cells": 200,
+     "steps": 184,
+     "l1DensityError": 0.008134024116915427,
+     "minDensity": 0.02206584592284465,
+     "minPressure": 0.005259651050128585,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       0,
+       3
+      ],
+      "final": [
+       0.4000000923732514,
+       -5.773159728050814e-17,
+       0.9600004523196815
+      ],
+      "boundaryInflow": [
+       -0.5999999076267472,
+       -3.821504427669993e-17,
+       -2.0399995476803205
+      ],
+      "relativeImbalance": [
+       -1.4432899320127035e-15,
+       -2.8689283452610505e-17,
+       5.921189464667501e-16
+      ]
+     },
+     "wallMilliseconds": 22,
+     "observedL1DensityOrderVsPrevious": 0.7179039116968072
+    },
+    {
+     "cells": 400,
+     "steps": 367,
+     "l1DensityError": 0.004573761053966101,
+     "minDensity": 0.017916869639766315,
+     "minPressure": 0.003929293973135053,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       0,
+       3
+      ],
+      "final": [
+       0.400000000007475,
+       2.2037927038809358e-16,
+       0.9600000000365966
+      ],
+      "boundaryInflow": [
+       -0.5999999999925274,
+       1.9409816297678044e-17,
+       -2.0399999999634124
+      ],
+      "relativeImbalance": [
+       2.4424906541753444e-15,
+       2.951915874415918e-16,
+       2.960594732333751e-15
+      ]
+     },
+     "wallMilliseconds": 73.7,
+     "observedL1DensityOrderVsPrevious": 0.8305882710089019
+    },
+    {
+     "cells": 800,
+     "steps": 733,
+     "l1DensityError": 0.0025255262640948442,
+     "minDensity": 0.014624399590626629,
+     "minPressure": 0.00295703579764096,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       0,
+       3
+      ],
+      "final": [
+       0.40000000000000085,
+       2.7478019859472624e-17,
+       0.9600000000000047
+      ],
+      "boundaryInflow": [
+       -0.6,
+       -3.432782081385333e-19,
+       -2.0400000000000094
+      ],
+      "relativeImbalance": [
+       7.771561172376096e-16,
+       4.0859087998313213e-17,
+       4.736951571734001e-15
+      ]
+     },
+     "wallMilliseconds": 270.5,
+     "observedL1DensityOrderVsPrevious": 0.8567969522174098
+    },
+    {
+     "cells": 1600,
+     "steps": 1466,
+     "l1DensityError": 0.0015310152217965834,
+     "minDensity": 0.012418142910525162,
+     "minPressure": 0.0023519420280533948,
+     "conservation": {
+      "names": [
+       "mass",
+       "momentum",
+       "energy"
+      ],
+      "initial": [
+       1,
+       0,
+       3
+      ],
+      "final": [
+       0.40000000000000113,
+       -8.881784197001253e-18,
+       0.9600000000000048
+      ],
+      "boundaryInflow": [
+       -0.6,
+       0,
+       -2.04000000000001
+      ],
+      "relativeImbalance": [
+       1.1102230246251565e-15,
+       -1.3045275856265809e-17,
+       4.884981308350689e-15
+      ]
+     },
+     "wallMilliseconds": 1025.2,
+     "observedL1DensityOrderVsPrevious": 0.7220954184874244
+    }
+   ]
+  }
+ ],
+ "walls": {
+  "case": "sod reflective walls t=0.5 (after reflection; L1 vs unbounded exact not meaningful)",
+  "order": 2,
+  "limiter": "minmod",
+  "flux": "hllc",
+  "boundary": "reflective",
+  "endTime": 0.5,
+  "cfl": 0.45,
+  "rows": [
+   {
+    "cells": 200,
+    "steps": 474,
+    "l1DensityError": 0.059450559121959304,
+    "minDensity": 0.125,
+    "minPressure": 0.1,
+    "conservation": {
+     "names": [
+      "mass",
+      "momentum",
+      "energy"
+     ],
+     "initial": [
+      0.5625,
+      0,
+      1.3750000000000002
+     ],
+     "final": [
+      0.5625000000000003,
+      0.2864792292172655,
+      1.3750000000000009
+     ],
+     "boundaryInflow": [
+      0,
+      0.2864792292172654,
+      0
+     ],
+     "relativeImbalance": [
+      5.921189464667498e-16,
+      3.875404955739967e-16,
+      4.84460956200068e-16
+     ]
+    },
+    "wallMilliseconds": 78.7
+   }
+  ]
+ },
+ "notVerified": [
+  "multiphase / interface capturing (not implemented)",
+  "2D/3D compressible flow (incl. isentropic vortex, wedge shock angle)",
+  "characteristic-variable limiting, WENO, order >2",
+  "viscous terms, real-gas EOS",
+  "SU2 or other OSS comparison runs",
+  "GUI, API, MCP, worker integration",
+  "browser runtime measurement"
+ ],
+ "claims": "1D single-phase inviscid ideal-gas second-order (MUSCL + SSP-RK2) FV kernel; second order verified on a smooth exact solution only; does not complete CFD3."
+}

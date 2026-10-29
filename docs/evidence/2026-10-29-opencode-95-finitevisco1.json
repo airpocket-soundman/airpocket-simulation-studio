@@ -1,0 +1,170 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-10-29",
+ "workOrder": "docs/opencode-work-orders-2026-10-28/95-FINITEVISCO1.md",
+ "taskId": "FINITEVISCO1",
+ "baseSha": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+ "branch": "claude/finitevisco1-95",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64"
+ },
+ "scope": "Synthetic PRF-like finite-strain material point: the 88 Hencky Prony viscous network (F=FeFv) in parallel with an equilibrium network whose deviatoric part is J2 elastoplastic with linear isotropic hardening (F=FeFp, exponential-map radial return on Kirchhoff stress in principal log space). General-F stepping API and traction-free uniaxial driver. Not calibrated, not compared with measurements, not a PRF compatibility claim.",
+ "syntheticParameters": {
+  "note": "K, mu and branches are the same synthetic values as 72/88; yieldStressPa and hardeningModulusPa are synthetic test values, not material constants",
+  "bulkModulusPa": 2000000,
+  "equilibriumShearModulusPa": 1000000,
+  "branches": [
+   {
+    "shearModulusPa": 300000,
+    "relaxationTimeSeconds": 0.5
+   },
+   {
+    "shearModulusPa": 400000,
+    "relaxationTimeSeconds": 5
+   }
+  ],
+  "plasticity": {
+   "yieldStressPa": 30000,
+   "hardeningModulusPa": 100000
+  }
+ },
+ "protocol": [
+  {
+   "toAxialGreenStrain": 0.04,
+   "durationSeconds": 2,
+   "steps": 200
+  },
+  {
+   "toAxialGreenStrain": 0.04,
+   "durationSeconds": 10,
+   "steps": 100
+  },
+  {
+   "toAxialGreenStrain": 0.025,
+   "durationSeconds": 1,
+   "steps": 100
+  },
+  {
+   "toAxialGreenStrain": 0.025,
+   "durationSeconds": 20,
+   "steps": 100
+  },
+  {
+   "toAxialGreenStrain": 0.045,
+   "durationSeconds": 1,
+   "steps": 200
+  }
+ ],
+ "segmentEnds": [
+  {
+   "timeSeconds": 2,
+   "axialGreenStrain": 0.04,
+   "lateralStretch": 0.987028,
+   "sigma11Pa": 73291.2,
+   "plasticAxialLogStrain": 0.0235724,
+   "equivalentPlasticStrain": 0.0235724,
+   "storedEnergyDensity": 873.36,
+   "viscousDissipationDensity": 307.709,
+   "plasticDissipationDensity": 707.171
+  },
+  {
+   "timeSeconds": 12,
+   "axialGreenStrain": 0.04,
+   "lateralStretch": 0.984045,
+   "sigma11Pa": 37643.2,
+   "plasticAxialLogStrain": 0.0255251,
+   "equivalentPlasticStrain": 0.0255251,
+   "storedEnergyDensity": 260.773,
+   "viscousDissipationDensity": 862.46,
+   "plasticDissipationDensity": 765.754
+  },
+  {
+   "timeSeconds": 13,
+   "axialGreenStrain": 0.025,
+   "lateralStretch": 0.986774,
+   "sigma11Pa": -13436.5,
+   "plasticAxialLogStrain": 0.0255251,
+   "equivalentPlasticStrain": 0.0255251,
+   "storedEnergyDensity": 74.2768,
+   "viscousDissipationDensity": 886.79,
+   "plasticDissipationDensity": 765.754
+  },
+  {
+   "timeSeconds": 33,
+   "axialGreenStrain": 0.025,
+   "lateralStretch": 0.987624,
+   "sigma11Pa": -3066.04,
+   "plasticAxialLogStrain": 0.0255251,
+   "equivalentPlasticStrain": 0.0255251,
+   "storedEnergyDensity": 34.2335,
+   "viscousDissipationDensity": 927.01,
+   "plasticDissipationDensity": 765.754
+  },
+  {
+   "timeSeconds": 34,
+   "axialGreenStrain": 0.045,
+   "lateralStretch": 0.983239,
+   "sigma11Pa": 55184.4,
+   "plasticAxialLogStrain": 0.0290269,
+   "equivalentPlasticStrain": 0.0290269,
+   "storedEnergyDensity": 445.325,
+   "viscousDissipationDensity": 982.03,
+   "plasticDissipationDensity": 870.807
+  }
+ ],
+ "summary": {
+  "steps": 700,
+  "workDensityTrapezoid": 2293.78,
+  "storedPlusDissipated": 2298.16,
+  "relativeBalanceGap": 0.00190595,
+  "viscousDissipationDensity": 982.03,
+  "plasticDissipationDensity": 870.807,
+  "permanentPlasticAxialLogStrain": 0.0290269
+ },
+ "comparisonWithJ2Return": {
+  "note": "viscous branch tau=1e-6 s with dt=0.05 s (fully relaxed) so only the equilibrium network acts; reference is src/plasticity-core.js j2Return under uniaxial stress with E11 as small strain; loop +a, a/4, -a/2, +a",
+  "smallStrain": {
+   "amplitudeGreenStrain": 0.00001,
+   "yieldStressPa": 10,
+   "maxRelSigma11Error": 0.0000186074,
+   "relEquivalentPlasticStrainError": 0.0000120188
+  },
+  "finiteStrain3pct": {
+   "amplitudeGreenStrain": 0.03,
+   "yieldStressPa": 30000,
+   "maxRelSigma11Error": 0.0539744,
+   "relEquivalentPlasticStrainError": 0.0342334
+  }
+ },
+ "verification": [
+  "small-strain limit agrees with j2Return (sigma11 and equivalent plastic strain), 3% shows recorded finite-strain gap",
+  "objectivity under superposed time-varying rotation with plastic flow; pure rigid rotation stress- and flow-free",
+  "load-hold-unload(partial)-hold-reload: traction-free faces, monotone viscous/plastic dissipation, elastic unloading (no plastic increment), relaxation and recovery, reload flow only near the previous peak, work = stored + dissipated within 2%",
+  "residual: unloading to the plastic axial strain and holding long gives |sigma11| < 1e-3 of peak",
+  "rejection of calibrated claims, H<=0, extra fields, out-of-envelope strain, forged state; inputs unchanged"
+ ],
+ "commands": [
+  {
+   "command": "node --test tests/finite-visco-prf-j2.test.mjs tests/finite-visco-hencky-multiplicative.test.mjs tests/finite-visco-prony-uniaxial.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+   "result": "pass"
+  },
+  {
+   "command": "npm run check:contracts",
+   "result": "pass"
+  }
+ ],
+ "unverified": [
+  "the equilibrium network keeps flowing during strain-hold because lateral contraction changes while branches relax (physical within the model, not checked against data)",
+  "plastic dissipation reported as sy*dgamma (same convention as j2Return); the backward-Euler excess H*dgamma^2/2 is not separately booked",
+  "no consistent tangent, element, damage, softening, necking, kinematic hardening or rate-dependent plasticity",
+  "stretch envelope 0.95-1.05 inherited; no calibration or measured comparison"
+ ],
+ "remainingParentAcceptance": [
+  "experimental calibration",
+  "structural path / element integration",
+  "dumbbell tensile curve",
+  "damage"
+ ]
+}
