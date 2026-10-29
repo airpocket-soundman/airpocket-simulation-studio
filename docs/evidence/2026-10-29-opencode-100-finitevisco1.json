@@ -1,0 +1,139 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-10-29",
+ "workOrder": "docs/opencode-work-orders-2026-10-28/100-FINITEVISCO1.md",
+ "taskId": "FINITEVISCO1",
+ "baseSha": "c3a73e6d2fae32766f97b814b0b1b0dc41d2d746",
+ "branch": "claude/finitevisco1-100",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "arch": "x64"
+ },
+ "scope": "Synthetic isotropic scalar damage (strain equivalence, energy driver, exponential law) on the 95 Hencky Prony + J2 material point. Local material point only; not calibrated, not compared with measurements.",
+ "syntheticParameters": {
+  "note": "K, mu, branches, yieldStressPa, hardeningModulusPa are the same synthetic values as 72/88/95; thresholdEnergyDensity and softeningEnergyDensity are synthetic test values, not material constants",
+  "bulkModulusPa": 2000000,
+  "equilibriumShearModulusPa": 1000000,
+  "branches": [
+   {
+    "shearModulusPa": 300000,
+    "relaxationTimeSeconds": 0.5
+   },
+   {
+    "shearModulusPa": 400000,
+    "relaxationTimeSeconds": 5
+   }
+  ],
+  "plasticity": {
+   "yieldStressPa": 30000,
+   "hardeningModulusPa": 100000
+  },
+  "damage": {
+   "thresholdEnergyDensity": 100,
+   "softeningEnergyDensity": 300
+  }
+ },
+ "protocol": [
+  {
+   "toAxialGreenStrain": 0.045,
+   "durationSeconds": 2,
+   "steps": 300
+  }
+ ],
+ "monotonic": {
+  "peak": {
+   "P11Pa": 28782.67232337378,
+   "axialGreenStrain": 0.00915
+  },
+  "rows": [
+   {
+    "axialGreenStrain": 0.0045,
+    "P11Pa": 17211.77182986324,
+    "effectiveP11Pa": 17211.77182986324,
+    "damage": 0,
+    "damageDriverEnergyDensity": 37.75138261505699
+   },
+   {
+    "axialGreenStrain": 0.009,
+    "P11Pa": 28780.34894853025,
+    "effectiveP11Pa": 33326.445201987575,
+    "damage": 0.136411076126001,
+    "damageDriverEnergyDensity": 143.99752178552677
+   },
+   {
+    "axialGreenStrain": 0.0225,
+    "P11Pa": 17127.94888630688,
+    "effectiveP11Pa": 57485.60244220161,
+    "damage": 0.7020480231806212,
+    "damageDriverEnergyDensity": 463.24688712276156
+   },
+   {
+    "axialGreenStrain": 0.045,
+    "P11Pa": 3226.150181305478,
+    "effectiveP11Pa": 76450.98749726097,
+    "damage": 0.957801065925786,
+    "damageDriverEnergyDensity": 1049.6080951492188
+   }
+  ],
+  "finalToPeakRatio": 0.11208654099451328,
+  "finalDamage": 0.957801065925786
+ },
+ "energyBalance": {
+  "workDensity": 651.1501550741046,
+  "storedPlusDissipated": 650.3825914667441,
+  "relativeError": 0.0011801724360880363,
+  "stored": 44.29234281096327,
+  "viscous": 78.44779722846738,
+  "plastic": 184.5955269891685,
+  "damage": 343.04692443814497
+ },
+ "unloading": {
+  "protocol": [
+   {
+    "toAxialGreenStrain": 0.012,
+    "durationSeconds": 1,
+    "steps": 120
+   },
+   {
+    "toAxialGreenStrain": 0.006,
+    "durationSeconds": 1,
+    "steps": 60
+   },
+   {
+    "toAxialGreenStrain": 0.012,
+    "durationSeconds": 1,
+    "steps": 60
+   },
+   {
+    "toAxialGreenStrain": 0.02,
+    "durationSeconds": 1,
+    "steps": 80
+   }
+  ],
+  "branches": [
+   {
+    "shearModulusPa": 300000,
+    "relaxationTimeSeconds": 0.000001
+   }
+  ],
+  "damageAtUnload": 0.2217621610021666,
+  "unloadSlopeRatioToUndamaged": 0.7782378389978333,
+  "expected": 0.7782378389978334,
+  "finalDamage": 0.2516309847261613
+ },
+ "tests": {
+  "commands": [
+   "node --test tests/finite-visco-damage.test.mjs tests/finite-visco-prf-j2.test.mjs tests/finite-visco-hencky-multiplicative.test.mjs tests/finite-visco-prony-uniaxial.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+   "npm run check:contracts"
+  ],
+  "result": "pass 41 / fail 0; check:contracts passed"
+ },
+ "unverified": [
+  "mesh regularization (characteristic length / fracture energy / crack band) not implemented: softening in a structure would be mesh dependent",
+  "no tension-compression split: damage also grows under compression energy",
+  "no element tangent, Newton, structural integration, element deletion or rupture criterion",
+  "no calibration or measured data; damage onset and softening values are synthetic",
+  "rate-dependent damage and damage-plasticity coupling beyond strain equivalence not examined"
+ ]
+}
