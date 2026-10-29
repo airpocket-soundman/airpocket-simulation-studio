@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T00:57:16.349Z",
+  "updatedAt": "2026-10-29T07:52:45.151Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -114,6 +114,26 @@
       "evidence": "docs/evidence/2026-10-28-opencode-89-mesh1.json; src/mesh-boundary-conformity.js; tests/mesh-boundary-conformity.test.mjs; docs/opencode-work-orders-2026-10-28/89-MESH1.md",
       "lastUpdate": "2026-10-29: 指示89・PR #232（merge済み）を親MESH1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親MESH1全体の完了ではない。",
       "lastUpdateEn": "2026-10-29: Recorded order 89 / PR #232 (merged) as a child of MESH1. Acceptance of this step is met by evidence; released. Does not complete MESH1."
+    },
+    {
+      "id": "MESH1B",
+      "title": "生成メッシュ表面節点のCAD面への幾何適合検査（解析プリミティブ）",
+      "titleEn": "Geometric conformity check of generated-mesh surface nodes to CAD faces (analytic primitives)",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "MESH1"
+      ],
+      "depends": [
+        "MESH1A"
+      ],
+      "detail": "読み取り専用の src/mesh-cad-geometry-conformity.js を追加。組込みプリミティブの解析面（平面・円板・円筒側面・球面）と (bodyIndex, faceTag) 群を対応付け、最大節点距離と弦高（情報のみ）、DEVIATION/UNMATCHED/SHARED/UNCOVERED診断を返す。実Gmsh WASMの立方体・円筒・球・独立2箱・局所細分箱で適合（最大距離≤4e-15 mm）。STEP面は supported:false で判定しない。",
+      "detailEn": "Add read-only src/mesh-cad-geometry-conformity.js. Matches (bodyIndex, faceTag) groups to analytic faces of built-in primitives (plane, disc, cylinder side, sphere), returns max node distance, chord height (informational) and DEVIATION/UNMATCHED/SHARED/UNCOVERED diagnostics. Real Gmsh WASM cube, cylinder, sphere, two independent boxes and locally refined box conform (max distance <=4e-15 mm). STEP faces return supported:false.",
+      "acceptance": "実Gmsh 5形状で conforming:true・全CAD面対応・最大距離≤4e-15 mm、円筒弦高が細分で減少・平面<1e-9、合成破損4種を該当コードで検出し入力不変、不正入力は例外、証拠にhashと全行実測。",
+      "acceptanceEn": "Five real Gmsh shapes conforming:true with all CAD faces covered and max distance <=4e-15 mm; cylinder chord height decreases with refinement, plane <1e-9; four synthetic defects detected with the matching code and input unchanged; invalid input throws; evidence holds hashes and all rows.",
+      "evidence": "docs/evidence/2026-10-29-opencode-96-mesh1.json; src/mesh-cad-geometry-conformity.js; tests/mesh-cad-geometry-conformity.test.mjs; scripts/experimental/verify-mesh-cad-geometry-conformity.mjs; docs/opencode-work-orders-2026-10-28/96-MESH1.md",
+      "lastUpdate": "2026-10-29: 指示96・PR #238（merge済み）を親MESH1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親MESH1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 96 / PR #238 (merged) as a child of MESH1. Acceptance of this step is met by evidence; released. Does not complete MESH1."
     },
     {
       "id": "REG2",
@@ -380,6 +400,26 @@
       "evidence": "docs/evidence/2026-10-29-opencode-90-fail1.json; tests/weibull-fem-coupling.test.mjs; src/weibull-fracture.js; docs/opencode-work-orders-2026-10-28/90-FAIL1.md",
       "lastUpdate": "2026-10-29: 指示90・PR #237（merge済み）を親FAIL1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FAIL1全体の完了ではない。",
       "lastUpdateEn": "2026-10-29: Recorded order 90 / PR #237 (merged) as a child of FAIL1. Acceptance of this step is met by evidence; released. Does not complete FAIL1."
+    },
+    {
+      "id": "FAIL1C",
+      "title": "最小Tet10でTet4曲げロッキングを定量し純曲げWeibull破壊確率の要素収束を示す",
+      "titleEn": "Minimal Tet10: quantify Tet4 bending locking and show element convergence of pure-bending Weibull failure probability",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FAIL1"
+      ],
+      "depends": [
+        "FAIL1B"
+      ],
+      "detail": "domain層に純関数 src/tet10-elastic.js（直辺Tet10、4点Gauss剛性、Gauss点応力回復、Weibull評価の委譲）を追加。Tet4の純曲げリスク誤差（384→24576要素で12.5→0.061）を記録し、Tet10で応力が丸め誤差内で厳密、リスクが解析解 V/(2(m+1)) へ観測次数約3.9で収束することを合成値で検証。既存ソルバー・UI・MCPは不変。",
+      "detailEn": "Add pure domain module src/tet10-elastic.js (straight-edged Tet10, 4-point Gauss stiffness, Gauss-point stress recovery, delegating Weibull evaluation). Record Tet4 pure-bending risk error (12.5 to 0.061 over 384 to 24576 elements) and verify with synthetic values that Tet10 stresses are exact to round-off and the risk converges to the analytic V/(2(m+1)) at observed order ~3.9. Existing solver, UI and MCP unchanged.",
+      "acceptance": "要素剛性の対称・エネルギー誤差<1e-12、一様引張でTet4と応力一致、Tet4 384/1536要素でリスク相対誤差>10/>1、Tet10 Gauss点応力誤差<1e-9·σmax、nx=16でリスク相対誤差<5e-4・観測次数>3.5、不正入力拒否。",
+      "acceptanceEn": "Element stiffness symmetry/energy error <1e-12, uniform tension stresses match Tet4, Tet4 risk relative error >10/>1 at 384/1536 elements, Tet10 Gauss stress error <1e-9*sigma_max, risk relative error <5e-4 at nx=16 with observed order >3.5, invalid input rejected.",
+      "evidence": "docs/evidence/2026-10-29-opencode-93-fail1.json; src/tet10-elastic.js; tests/tet10-weibull-bending.test.mjs; docs/opencode-work-orders-2026-10-28/93-FAIL1.md",
+      "lastUpdate": "2026-10-29: 指示93・PR #240（merge済み）を親FAIL1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FAIL1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 93 / PR #240 (merged) as a child of FAIL1. Acceptance of this step is met by evidence; released. Does not complete FAIL1."
     },
     {
       "id": "BOARD1",
@@ -747,6 +787,26 @@
       "evidence": "docs/evidence/2026-10-28-opencode-87-cfd3.json; src/euler-1d-riemann.js; tests/euler-1d-riemann.test.mjs; docs/opencode-work-orders-2026-10-28/87-CFD3.md",
       "lastUpdate": "2026-10-29: 指示87・PR #233（merge済み）を親CFD3の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親CFD3全体の完了ではない。",
       "lastUpdateEn": "2026-10-29: Recorded order 87 / PR #233 (merged) as a child of CFD3. Acceptance of this step is met by evidence; released. Does not complete CFD3."
+    },
+    {
+      "id": "CFD3B",
+      "title": "1D圧縮性EulerのMUSCL＋SSP-RK2で2次精度を滑らかな厳密解で確認",
+      "titleEn": "1D compressible Euler MUSCL + SSP-RK2: second order verified on a smooth exact solution",
+      "status": "released",
+      "category": "流体",
+      "parents": [
+        "CFD3"
+      ],
+      "depends": [
+        "CFD3A"
+      ],
+      "detail": "src/euler-1d-muscl.js を追加（原始変数の区分線形再構成、none/minmod/van Leer、SSP-RK2、周期・透過・反射壁）。周期密度波で無制限MUSCLの観測次数2.00、Sodで一次の誤差の半分未満、保存量収支≤4.9e-15、Toro試験2で正値性を確認。単相・1D・無次元の合成入力であり、多相流・2D/3Dは未実装。",
+      "detailEn": "Add src/euler-1d-muscl.js (piecewise-linear primitive reconstruction, none/minmod/van Leer, SSP-RK2, periodic/transmissive/reflective walls). Periodic density wave gives observed order 2.00 for unlimited MUSCL, Sod error below half of first order, conservation balance <=4.9e-15, positivity on Toro test 2. Single-phase, 1D, dimensionless synthetic input; multiphase and 2D/3D not implemented.",
+      "acceptance": "滑らか解で無制限次数1.95〜2.1、minmod>1.8、van Leer>1.9、一次<1.05、Sod N=400で2次minmod誤差<一次の1/2、全境界で収支誤差<1e-13、123問題で正値、不正入力・上限超過は例外、証拠にhashと全行実測。",
+      "acceptanceEn": "Smooth solution: unlimited order 1.95-2.1, minmod >1.8, van Leer >1.9, first order <1.05; Sod N=400 second-order minmod error < half of first order; balance error <1e-13 for all boundaries; positive on the 123 problem; invalid input/limits throw; evidence holds hashes and all measured rows.",
+      "evidence": "docs/evidence/2026-10-29-opencode-94-cfd3.json; src/euler-1d-muscl.js; tests/euler-1d-muscl.test.mjs; scripts/experimental/verify-euler-1d-muscl.mjs; docs/opencode-work-orders-2026-10-28/94-CFD3.md",
+      "lastUpdate": "2026-10-29: 指示94・PR #239（merge済み）を親CFD3の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親CFD3全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 94 / PR #239 (merged) as a child of CFD3. Acceptance of this step is met by evidence; released. Does not complete CFD3."
     },
     {
       "id": "ACOU2",
@@ -1590,6 +1650,26 @@
       "evidence": "docs/evidence/2026-10-29-opencode-92-p5.json; scripts/experimental/p5-bracket-thickness-sweep.mjs; tests/p5-bracket-thickness-evidence.test.mjs; docs/opencode-work-orders-2026-10-28/92-P5.md",
       "lastUpdate": "2026-10-29: 指示92・PR #236（merge済み）を親P5の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親P5全体の完了ではない。",
       "lastUpdateEn": "2026-10-29: Recorded order 92 / PR #236 (merged) as a child of P5. Acceptance of this step is met by evidence; released. Does not complete P5."
+    },
+    {
+      "id": "P5B",
+      "title": "合成ブラケット設計反復ループを1周（各案メッシュ収束判定＋次案決定）",
+      "titleEn": "One synthetic bracket design-iteration loop (per-variant mesh convergence check + next-variant decision)",
+      "status": "building",
+      "category": "共通",
+      "parents": [
+        "P5"
+      ],
+      "depends": [
+        "P5A"
+      ],
+      "detail": "実MCP stdioだけで厚さ2/3/4 mmを各3メッシュ水準で解析し、d=a·t^b の当てはめで次案3.9 mmを決定・解析・比較した（予測0.962、実測0.953 mm）。ループの機構（反復・判断記録・比較）はMCPだけで回る。ただし全案がメッシュ未収束（最細2水準変化14〜45%）で、梁理論は3.9 mmで目標超過を示すため、この判断は過剛性Tet4に依存し設計判断に使えない。",
+      "detailEn": "Using real MCP stdio only, thicknesses 2/3/4 mm were each solved at three mesh sizes, a d=a*t^b fit chose 3.9 mm, which was solved and compared (predicted 0.962, measured 0.953 mm). The loop mechanism (iteration, decision record, comparison) runs over MCP alone. However no variant is mesh-converged (finest-pair change 14-45%) and beam theory puts 3.9 mm above the target, so the decision depends on over-stiff Tet4 and cannot be used for design.",
+      "acceptance": "4案×3水準の全ジョブsucceeded・provisional・事前検査allowed・入力版4つ相異、決定案が規則どおりで第1周と異なる、収束可否を案ごとに記録、比較comparable=true。加えて、設計判断に使うには各案の収束（Tet10または細分外挿）が必要。",
+      "acceptanceEn": "All 4 variants x 3 sizes succeeded/provisional/allowed with 4 distinct revisions, decision follows the rule and differs from round 1, convergence recorded per variant, comparison comparable=true. Additionally, a usable design decision requires per-variant convergence (Tet10 or refinement extrapolation).",
+      "evidence": "docs/evidence/2026-10-29-opencode-97-p5.json; scripts/experimental/p5-bracket-design-loop.mjs; tests/p5-bracket-design-loop-evidence.test.mjs; docs/opencode-work-orders-2026-10-28/97-P5.md",
+      "lastUpdate": "2026-10-29: 指示97・PR #241（merge済み）を親P5の子タスクとして記録。ループ機構の受け入れ条件は証拠で満たすが、全案がメッシュ未収束で設計判断に使えないためreleasedにしない（building）。残条件: Tet10または細分外挿で収束した判断によるループ再実行。親P5全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 97 / PR #241 (merged) as a child of P5. Loop-mechanism acceptance is met by evidence, but no variant is mesh-converged so the decision cannot be used for design; not released (building). Remaining: rerun the loop with a converged decision via Tet10 or refinement extrapolation. Does not complete P5."
     },
     {
       "id": "P6",
@@ -3364,6 +3444,26 @@
       "evidence": "docs/evidence/2026-10-28-opencode-88-finitevisco1.json; src/finite-visco-hencky-multiplicative.js; tests/finite-visco-hencky-multiplicative.test.mjs; docs/opencode-work-orders-2026-10-28/88-FINITEVISCO1.md",
       "lastUpdate": "2026-10-29: 指示88・PR #234（merge済み）を親FINITEVISCO1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FINITEVISCO1全体の完了ではない。",
       "lastUpdateEn": "2026-10-29: Recorded order 88 / PR #234 (merged) as a child of FINITEVISCO1. Acceptance of this step is met by evidence; released. Does not complete FINITEVISCO1."
+    },
+    {
+      "id": "FINITEVISCO1C",
+      "title": "有限ひずみ粘弾性網と平衡網J2弾塑性の並列材料点で残留ひずみと散逸を検証",
+      "titleEn": "Parallel finite-strain viscoelastic and J2 elastoplastic equilibrium network: residual strain and dissipation verified",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FINITEVISCO1"
+      ],
+      "depends": [
+        "FINITEVISCO1B"
+      ],
+      "detail": "src/finite-visco-prf-j2.js を追加。粘性網は指示88の材料点をそのまま使い、平衡網を乗法分解F=FeFpの主対数空間J2半径方向戻し（線形等方硬化）に置換。微小ひずみ極限で j2Return と一致、客観性、載荷・保持・除荷・再載荷での散逸単調と仕事収支（差0.19%）、塑性ひずみまで除荷した保持で応力消失を合成値で確認。校正なし、PRF互換は主張しない。",
+      "detailEn": "Add src/finite-visco-prf-j2.js. The viscous network reuses the order-88 material point; the equilibrium network is replaced by multiplicative F=FeFp J2 radial return in principal log space with linear isotropic hardening. With synthetic values: agreement with j2Return in the small-strain limit, objectivity, monotone dissipation and work balance (0.19% gap) over load/hold/unload/reload, stress vanishing when held at the plastic strain. Not calibrated; no PRF compatibility claimed.",
+      "acceptance": "焦点試験・契約検査・docs試験・module境界試験が通り、証拠に合成パラメータ、段端値、エネルギー収支（2%以内）、j2Returnとの比較（微小ひずみ極限と3%での実差）、未確認事項を記録。",
+      "acceptanceEn": "Focused, contract, docs and module-boundary tests pass; evidence records synthetic parameters, segment-end values, energy balance (within 2%), comparison with j2Return (small-strain limit and actual difference at 3%) and unverified items.",
+      "evidence": "docs/evidence/2026-10-29-opencode-95-finitevisco1.json; src/finite-visco-prf-j2.js; tests/finite-visco-prf-j2.test.mjs; docs/opencode-work-orders-2026-10-28/95-FINITEVISCO1.md",
+      "lastUpdate": "2026-10-29: 指示95・PR #242（merge済み）を親FINITEVISCO1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FINITEVISCO1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 95 / PR #242 (merged) as a child of FINITEVISCO1. Acceptance of this step is met by evidence; released. Does not complete FINITEVISCO1."
     }
   ],
   "solvers": [
