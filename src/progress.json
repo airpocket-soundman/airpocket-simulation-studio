@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-28T13:49:48.636Z",
+  "updatedAt": "2026-10-29T00:57:16.349Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -84,7 +84,7 @@
     {
       "id": "MESH1",
       "title": "CAD境界に適合するメッシュを仕上げる",
-      "status": "queued",
+      "status": "building",
       "category": "構造",
       "detail": "CADまたは閉じた表面から体積メッシュを生成。品質、局所細分化、部分領域への適合を検証。",
       "depends": [
@@ -94,9 +94,26 @@
       "titleEn": "Finish CAD boundary-conforming meshes",
       "detailEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
       "acceptanceEn": "Generate volume elements from CAD or closed surfaces; verify quality, local sizing and conformity to partial regions.",
-      "lastUpdate": "2026-10-17: メッシュを変更せず接続・縮退・有限性・品質配列を検査する事前診断を追加しました。負向きだけでは拒否しません。CAD境界への厳密適合や一般形状での品質保証は未完で、親タスクは未着手状態を維持します。",
-      "lastUpdateEn": "2026-10-17: Added read-only connectivity/degeneracy/finite-value/quality-array preflight; negative orientation alone is accepted. Exact CAD-boundary conformity and general-geometry quality guarantees remain incomplete; parent stays queued.",
+      "lastUpdate": "2026-10-17: メッシュを変更せず接続・縮退・有限性・品質配列を検査する事前診断を追加しました。負向きだけでは拒否しません。CAD境界への厳密適合や一般形状での品質保証は未完で、親タスクは未着手状態を維持します。 2026-10-29: 完了した一歩を子タスクMESH1Aとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-17: Added read-only connectivity/degeneracy/finite-value/quality-array preflight; negative orientation alone is accepted. Exact CAD-boundary conformity and general-geometry quality guarantees remain incomplete; parent stays queued. 2026-10-29: Split completed steps into child tasks MESH1A. Started, so queued→building. Parent acceptance remains; the parent is not released.",
       "evidence": "src/mesh-core.js; src/tetra-geometry.js; src/mesh-boundary-preflight.js; docs/automation.md"
+    },
+    {
+      "id": "MESH1A",
+      "title": "生成メッシュ境界面のCAD面割当て検査",
+      "titleEn": "Boundary-face to CAD-face assignment check for generated meshes",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "MESH1"
+      ],
+      "detail": "実Gmsh WASMで生成した体積メッシュの境界面が、CAD面へ漏れ・重複なく割り当てられているかを検査する読み取り専用の関数。",
+      "detailEn": "Read-only check that boundary faces of real Gmsh WASM volume meshes are assigned to CAD faces without leaks or duplicates.",
+      "acceptance": "立方体・円筒・球・独立2箱・局所細分でconforming、立方体各面100 mm²（1e-9）・円筒面積2%以内、合成破損4種を各1件の該当コードで検出し入力不変。",
+      "acceptanceEn": "Cube, cylinder, sphere, two boxes and local refinement conforming; cube faces 100 mm² (1e-9), cylinder area within 2%; four synthetic defects each detected once with input unchanged.",
+      "evidence": "docs/evidence/2026-10-28-opencode-89-mesh1.json; src/mesh-boundary-conformity.js; tests/mesh-boundary-conformity.test.mjs; docs/opencode-work-orders-2026-10-28/89-MESH1.md",
+      "lastUpdate": "2026-10-29: 指示89・PR #232（merge済み）を親MESH1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親MESH1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 89 / PR #232 (merged) as a child of MESH1. Acceptance of this step is met by evidence; released. Does not complete MESH1."
     },
     {
       "id": "REG2",
@@ -108,8 +125,8 @@
       "titleEn": "Apply dimensional regions exactly to CAD boundaries",
       "detailEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing.",
       "acceptanceEn": "Define dimensional surface regions and verify boundary/area errors and persistence after remeshing. 2026-10-16 Cones: an optional end radius on the existing cylindrical region, tested on a STEP cone (force conservation, area verification, save/restore) and in real Chrome (cone STEP accepted, wrong end radius refused at mesh time). Spherical sectors added2026-10-19 (below); general UV rectangles remain unimplemented. The condition text for a blank end radius on a cone needs a check.",
-      "lastUpdate": "2026-10-23: 未統合・未公開候補。実IABの合成円錐STEP表示で終端半径空欄と明示8の条件文・再適用・日英を確認。空欄は円筒指定であり円錐を推定しない。解析・一般UV矩形・親受入の完了ではない。 2026-10-28: 未merge PR #221で保存済み円筒/円錐patchの逆宣言検査を進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. Actual IAB checks synthetic cone STEP display with blank versus explicit end radius 8, condition text, reapplication and JA/EN. Blank means cylinder intent, not inferred cone geometry. No solve, general UV rectangles or parent completion is claimed. 2026-10-28: Unmerged PR #221 in progress: reverse declaration check for saved cylindrical/conical patches. Status not promoted.",
+      "lastUpdate": "2026-10-23: 未統合・未公開候補。実IABの合成円錐STEP表示で終端半径空欄と明示8の条件文・再適用・日英を確認。空欄は円筒指定であり円錐を推定しない。解析・一般UV矩形・親受入の完了ではない。 2026-10-28: 未merge PR #221で保存済み円筒/円錐patchの逆宣言検査を進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクREG2Aとして分離。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-23: Unmerged/unpublished candidate. Actual IAB checks synthetic cone STEP display with blank versus explicit end radius 8, condition text, reapplication and JA/EN. Blank means cylinder intent, not inferred cone geometry. No solve, general UV rectangles or parent completion is claimed. 2026-10-28: Unmerged PR #221 in progress: reverse declaration check for saved cylindrical/conical patches. Status not promoted. 2026-10-29: Split completed steps into child tasks REG2A. Parent acceptance remains; the parent is not released.",
       "evidence": "docs/evidence/2026-10-19-spherical-cad-region.json; tests/spherical-cad.test.mjs; tests/spherical-wiring.test.mjs; tests/mcp-typed-operation-schema.test.mjs; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-repaired-pr-review.json; docs/evidence/2026-10-23-reg2-agentinput-main-iab.json",
       "review": {
         "status": "merged",
@@ -119,6 +136,23 @@
         "summaryEn": "Re-review approved. Verified spherical GUI dynamic status through JP/EN round trips using the actual language scanner.",
         "instruction": "docs/opencode-work-orders-2026-10-21/37-REG2.md"
       }
+    },
+    {
+      "id": "REG2A",
+      "title": "保存済み円筒・円錐パッチの逆方向宣言照合",
+      "titleEn": "Reverse declaration check for saved cylinder/cone patches",
+      "status": "released",
+      "category": "3D",
+      "parents": [
+        "REG2"
+      ],
+      "detail": "保存済みの円筒・円錐パッチ宣言をCAD面から逆方向に照合し、宣言と面の不一致を反例で拒否。",
+      "detailEn": "Reverse-check saved cylindrical/conical patch declarations against CAD faces and reject mismatches with counterexamples.",
+      "acceptance": "反例で不一致を拒否し、既存の許容差は不変、焦点試験が通る。",
+      "acceptanceEn": "Counterexample mismatches are rejected, existing tolerances unchanged, focused tests pass.",
+      "evidence": "docs/evidence/2026-10-28-opencode-78-reg2.json; src/cylindrical-cad.js; tests/cylindrical-cad.test.mjs; tests/conical-wiring.test.mjs; docs/opencode-work-orders-2026-10-28/78-REG2.md",
+      "lastUpdate": "2026-10-29: 指示78・PR #221（merge済み）を親REG2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親REG2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 78 / PR #221 (merged) as a child of REG2. Acceptance of this step is met by evidence; released. Does not complete REG2."
     },
     {
       "id": "WASM1",
@@ -250,28 +284,102 @@
     {
       "id": "COUPLE1",
       "title": "熱・構造・音響・流体をつなぐ",
-      "status": "queued",
+      "status": "building",
       "category": "連成",
       "detail": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
       "acceptance": "熱応力、振動からの音の放射、共役熱伝達を段階的に追加。メッシュ間の転送・保存則も検証。",
       "titleEn": "Couple thermal, structural, fluid and acoustic models",
       "detailEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers.",
       "acceptanceEn": "Add thermal stress, vibration sound radiation and conjugate heat transfer with conservative mesh transfers.",
-      "lastUpdate": "2026-10-28: 未merge PR #224(指示82)で連成チェーン記述子と版伝播を進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-28: Unmerged PR #224 (order 82) in progress: coupling chain descriptor and revision propagation. Status not promoted."
+      "lastUpdate": "2026-10-28: 未merge PR #224(指示82)で連成チェーン記述子と版伝播を進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクCOUPLE1A・COUPLE1Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #224 (order 82) in progress: coupling chain descriptor and revision propagation. Status not promoted. 2026-10-29: Split completed steps into child tasks COUPLE1A, COUPLE1B. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "COUPLE1A",
+      "title": "一方向連成チェーンの共通記述と版の伝播検査",
+      "titleEn": "One-way coupling chain descriptor and revision propagation",
+      "status": "released",
+      "category": "連成",
+      "parents": [
+        "COUPLE1"
+      ],
+      "detail": "解析段の生成→消費を共通の連成チェーン記述子で表し、上流の版変更を下流へ伝播して失効を判定する。",
+      "detailEn": "Describe producer→consumer analysis stages with a shared coupling-chain descriptor and propagate upstream revisions to mark downstream stages stale.",
+      "acceptance": "正常チェーンで valid/current、生成段の版変更で直接・推移的下流のみ失効、不正記述・循環は診断コード付き valid:false。",
+      "acceptanceEn": "Valid chains are valid/current; a producer revision change stales only direct and transitive consumers; invalid descriptors and cycles return valid:false with diagnostic codes.",
+      "evidence": "docs/evidence/2026-10-28-opencode-82-couple1.json; src/coupling-chain.js; tests/coupling-chain.test.mjs; docs/opencode-work-orders-2026-10-28/82-COUPLE1.md",
+      "lastUpdate": "2026-10-29: 指示82・PR #224（merge済み）を親COUPLE1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親COUPLE1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 82 / PR #224 (merged) as a child of COUPLE1. Acceptance of this step is met by evidence; released. Does not complete COUPLE1."
+    },
+    {
+      "id": "COUPLE1B",
+      "title": "保存ケースからの連成チェーン生成と失効判定",
+      "titleEn": "Coupling chains from saved cases with staleness checks",
+      "status": "released",
+      "category": "連成",
+      "parents": [
+        "COUPLE1"
+      ],
+      "depends": [
+        "COUPLE1A"
+      ],
+      "detail": "実解析の熱→構造保存ケースから連成チェーンを自動生成し、上流入力変更での失効と再適用での回復を確認。",
+      "detailEn": "Generate coupling chains automatically from saved thermal→structural cases and verify staleness on upstream changes and recovery after reapplication.",
+      "acceptance": "生成→消費順でcurrent、上流変更で下流のみ失効し再適用で回復、生成段欠落・未対応種別・非配列は診断付き valid:false。",
+      "acceptanceEn": "Chain ordered producer→consumer and current; an upstream change stales only downstream and reapplication recovers; missing producer, unsupported kinds and non-arrays return valid:false.",
+      "evidence": "docs/evidence/2026-10-28-opencode-91-couple1.json; tests/coupling-chain-cases.test.mjs; src/coupling-chain.js; docs/opencode-work-orders-2026-10-28/91-COUPLE1.md",
+      "lastUpdate": "2026-10-29: 指示91・PR #235（merge済み）を親COUPLE1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親COUPLE1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 91 / PR #235 (merged) as a child of COUPLE1. Acceptance of this step is met by evidence; released. Does not complete COUPLE1."
     },
     {
       "id": "FAIL1",
       "title": "破壊・疲労・接触・非線形を扱う",
-      "status": "queued",
+      "status": "building",
       "category": "構造",
       "detail": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
       "acceptance": "材料モデルと試験データに基づき、個別に検証。材料名や最大応力だけから破断を保証しない。",
       "titleEn": "Support failure, fatigue, contact and nonlinear behavior",
       "detailEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions.",
       "acceptanceEn": "Validate each material model against test data. Material names or peak stress alone do not guarantee failure predictions.",
-      "lastUpdate": "2026-10-28: 未merge PR #225(指示81)でWeibull最弱リンク破壊確率と解析解参照を進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-28: Unmerged PR #225 (order 81) in progress: Weibull weakest-link failure probability with analytic references. Status not promoted."
+      "lastUpdate": "2026-10-28: 未merge PR #225(指示81)でWeibull最弱リンク破壊確率と解析解参照を進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクFAIL1A・FAIL1Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #225 (order 81) in progress: Weibull weakest-link failure probability with analytic references. Status not promoted. 2026-10-29: Split completed steps into child tasks FAIL1A, FAIL1B. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "FAIL1A",
+      "title": "Weibull最弱リンク破壊確率を解析解で検証",
+      "titleEn": "Weibull weakest-link failure probability verified analytically",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FAIL1"
+      ],
+      "detail": "2母数Weibull体積PIA破壊確率の純関数を一軸閉形式・寸法効果・線形勾配有効体積・多軸PIA参照で検証。材料定数は合成。",
+      "detailEn": "Verify a two-parameter Weibull volume PIA failure-probability function against uniaxial closed forms, size effect, linear-gradient effective volume and multiaxial PIA references. Synthetic constants.",
+      "acceptance": "一軸・寸法効果の相対誤差<1e-12、n=200で<1e-3かつ次数2±0.05、リスク相対差<1e-10、重根主応力誤差<1e-7、圧縮のみで P_f=0。",
+      "acceptanceEn": "Uniaxial/size-effect error <1e-12, n=200 error <1e-3 with order 2±0.05, risk difference <1e-10, repeated-root principal stress error <1e-7, P_f=0 under pure compression.",
+      "evidence": "docs/evidence/2026-10-28-opencode-81-fail1.json; src/weibull-fracture.js; tests/weibull-fracture.test.mjs; docs/opencode-work-orders-2026-10-28/81-FAIL1.md",
+      "lastUpdate": "2026-10-29: 指示81・PR #225（merge済み）を親FAIL1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FAIL1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 81 / PR #225 (merged) as a child of FAIL1. Acceptance of this step is met by evidence; released. Does not complete FAIL1."
+    },
+    {
+      "id": "FAIL1B",
+      "title": "Weibull破壊確率をFEM Tet4要素体積積分へ結合",
+      "titleEn": "Weibull failure probability coupled to FEM Tet4 volume integration",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FAIL1"
+      ],
+      "depends": [
+        "FAIL1A"
+      ],
+      "detail": "解いたTet4メッシュの要素体積と応力にWeibull PIAを結合し、一様引張と純曲げで解析解と照合。Tet4の曲げロッキングを記録。",
+      "detailEn": "Couple Weibull PIA to solved Tet4 element volumes and stresses; compare with closed forms for uniform tension and pure bending. Tet4 bending locking recorded.",
+      "acceptance": "一様引張で P_f 相対誤差<1e-8・有効体積=V、nx=64で誤差<5e-3かつ次数2±0.1、体積総和<1e-12、不正入力を拒否。",
+      "acceptanceEn": "Uniform tension P_f error <1e-8 with effective volume V, nx=64 error <5e-3 and order 2±0.1, volume sum <1e-12, invalid inputs rejected.",
+      "evidence": "docs/evidence/2026-10-29-opencode-90-fail1.json; tests/weibull-fem-coupling.test.mjs; src/weibull-fracture.js; docs/opencode-work-orders-2026-10-28/90-FAIL1.md",
+      "lastUpdate": "2026-10-29: 指示90・PR #237（merge済み）を親FAIL1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FAIL1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 90 / PR #237 (merged) as a child of FAIL1. Acceptance of this step is met by evidence; released. Does not complete FAIL1."
     },
     {
       "id": "BOARD1",
@@ -283,7 +391,9 @@
       "acceptance": "検索・カード詳細・ソルバー状態・開発メモを公開。",
       "titleEn": "Publish the development board",
       "detailEn": "Deploy search, task details, solver status and local notes on Pages.",
-      "acceptanceEn": "Deploy search, task details, solver status and local notes on Pages."
+      "acceptanceEn": "Deploy search, task details, solver status and local notes on Pages.",
+      "lastUpdate": "2026-10-29: PR #226で前提(depends)と所属(parents)・関連(related)を区別。指示72〜92（PR #214〜#218, #220, #221, #223〜#225, #227〜#237）を親の子タスク21件として記録し、着手済みの親11件をbuildingへ。",
+      "lastUpdateEn": "2026-10-29: PR #226 separated prerequisites (depends) from membership (parents) and related links. Orders 72–92 (PRs #214–#218, #220, #221, #223–#225, #227–#237) recorded as 21 child tasks; 11 started parents moved to building."
     },
     {
       "id": "LIVE1",
@@ -561,26 +671,82 @@
       "id": "CFD2",
       "title": "乱流・非定常の流れ",
       "category": "流体",
-      "status": "queued",
+      "status": "building",
       "detail": "モデルと適用範囲を指定し、収束・質量収支を検証。",
       "acceptance": "モデルと適用範囲を指定し、収束・質量収支を検証。",
       "titleEn": "Support turbulence and unsteady flow",
       "detailEn": "Specify model assumptions and validate convergence and mass balance.",
       "acceptanceEn": "Specify model assumptions and validate convergence and mass balance.",
-      "lastUpdate": "2026-10-18: CFDRESEARCH2/3の調査票と段階計画は完了。候補構成/全依存SHA固定、Linux CPUビルド、B1/B2事前許容誤差と資源予算、基準問題の実行、実装/観測/停止再開/収支検証は残作業。研究完了はCFD2実装完了ではない。 2026-10-28: PR #215(指示75)で周期過渡NSをTaylor-Green/せん断波で検証し統合。圧縮性CFD本体は未着手で状態は据え置き。",
-      "lastUpdateEn": "2026-10-18: CFDRESEARCH2/3 research sheets/staged plan complete. Remaining:pin candidate configuration/all dependencies,Linux CPU build,pre-agreed B1/B2 tolerances/resource budgets,benchmark execution,implementation/observation/cancellation/restart and conservation validation. Research completion does not implement CFD2. 2026-10-28: PR #215 (order 75) merged periodic transient NS verification on Taylor-Green/shear wave. Status unchanged.",
+      "lastUpdate": "2026-10-18: CFDRESEARCH2/3の調査票と段階計画は完了。候補構成/全依存SHA固定、Linux CPUビルド、B1/B2事前許容誤差と資源予算、基準問題の実行、実装/観測/停止再開/収支検証は残作業。研究完了はCFD2実装完了ではない。 2026-10-28: PR #215(指示75)で周期過渡NSをTaylor-Green/せん断波で検証し統合。圧縮性CFD本体は未着手で状態は据え置き。 2026-10-29: 完了した一歩を子タスクCFD2A・CFD2Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-18: CFDRESEARCH2/3 research sheets/staged plan complete. Remaining:pin candidate configuration/all dependencies,Linux CPU build,pre-agreed B1/B2 tolerances/resource budgets,benchmark execution,implementation/observation/cancellation/restart and conservation validation. Research completion does not implement CFD2. 2026-10-28: PR #215 (order 75) merged periodic transient NS verification on Taylor-Green/shear wave. Status unchanged. 2026-10-29: Split completed steps into child tasks CFD2A, CFD2B. Started, so queued→building. Parent acceptance remains; the parent is not released.",
       "evidence": "docs/evidence/2026-10-28-opencode-75-cfd2.json"
+    },
+    {
+      "id": "CFD2A",
+      "title": "周期領域の非定常非圧縮NSを解析解で検証",
+      "titleEn": "Periodic transient incompressible NS verified against exact solutions",
+      "status": "released",
+      "category": "流体",
+      "parents": [
+        "CFD2"
+      ],
+      "detail": "周期領域の層流非定常Navier–StokesをTaylor–Green渦・せん断波の厳密解で検証。乱流・CFD2本体ではない。",
+      "detailEn": "Verify a laminar periodic transient Navier–Stokes kernel against Taylor–Green and shear-wave exact solutions. Not turbulence or the full CFD2.",
+      "acceptance": "空間次数1.9〜2.1、RK3時間自己収束2.5以上、|div u|<1e-12、エネルギー相対差<1e-3、非solenoidal初期値の射影と不正入力の例外。",
+      "acceptanceEn": "Spatial order 1.9–2.1, RK3 temporal self-convergence ≥2.5, |div u|<1e-12, energy error <1e-3, projection of non-solenoidal initial data and exceptions on invalid input.",
+      "evidence": "docs/evidence/2026-10-28-opencode-75-cfd2.json; src/unsteady-ns-periodic.js; tests/unsteady-ns-periodic.test.mjs; docs/opencode-work-orders-2026-10-28/75-CFD2.md",
+      "lastUpdate": "2026-10-29: 指示75・PR #215（merge済み）を親CFD2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親CFD2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 75 / PR #215 (merged) as a child of CFD2. Acceptance of this step is met by evidence; released. Does not complete CFD2."
+    },
+    {
+      "id": "CFD2B",
+      "title": "壁付きチャネルの非定常NSを起動Couette/Poiseuilleで検証",
+      "titleEn": "Wall-bounded transient NS verified with startup Couette/Poiseuille",
+      "status": "released",
+      "category": "流体",
+      "parents": [
+        "CFD2"
+      ],
+      "depends": [
+        "CFD2A"
+      ],
+      "detail": "壁境界付き非定常Navier–Stokesを起動Couette/Poiseuilleの解析解で検証し、安定限界の鋭さも確認。層流のみ。",
+      "detailEn": "Verify wall-bounded transient Navier–Stokes against startup Couette/Poiseuille exact solutions and confirm a sharp stability limit. Laminar only.",
+      "acceptance": "Ny=16→64で次数1.9〜2.1かつNy=64で誤差<5e-4、時間次数2.5以上、|div u|と断面流量差<1e-12、安定限界0.98倍で有界・1.05倍で発散。",
+      "acceptanceEn": "Order 1.9–2.1 and error <5e-4 at Ny=64, temporal order ≥2.5, |div u| and section flow difference <1e-12, bounded at 0.98× and divergent at 1.05× the limit.",
+      "evidence": "docs/evidence/2026-10-28-opencode-84-cfd2.json; src/unsteady-ns-channel.js; tests/unsteady-ns-channel.test.mjs; docs/opencode-work-orders-2026-10-28/84-CFD2.md",
+      "lastUpdate": "2026-10-29: 指示84・PR #231（merge済み）を親CFD2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親CFD2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 84 / PR #231 (merged) as a child of CFD2. Acceptance of this step is met by evidence; released. Does not complete CFD2."
     },
     {
       "id": "CFD3",
       "title": "圧縮性・多相流",
       "category": "流体",
-      "status": "queued",
+      "status": "building",
       "detail": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。",
       "acceptance": "後段の機能。相と圧縮性のモデルごとに公開例題で検証。",
       "titleEn": "Support compressible/multiphase flow",
       "detailEn": "Later phase; verify each phase/compressibility model against published examples.",
-      "acceptanceEn": "Later phase; verify each phase/compressibility model against published examples."
+      "acceptanceEn": "Later phase; verify each phase/compressibility model against published examples.",
+      "lastUpdate": "2026-10-29: 完了した一歩を子タスクCFD3Aとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-29: Split completed steps into child tasks CFD3A. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "CFD3A",
+      "title": "1D圧縮性Euler有限体積法を厳密Riemann解で検証",
+      "titleEn": "1D compressible Euler FV verified against exact Riemann solutions",
+      "status": "released",
+      "category": "流体",
+      "parents": [
+        "CFD3"
+      ],
+      "detail": "単相・非粘性・理想気体の1D一次有限体積法（HLLC/HLLE）をSodとToro試験の厳密Riemann解で検証。多相・多次元は未着手。",
+      "detailEn": "Verify a 1D single-phase inviscid ideal-gas first-order FV kernel (HLLC/HLLE) against exact Riemann solutions for Sod and Toro tests. Multiphase/multi-D not started.",
+      "acceptance": "Sod星状態がToro表と1e-5以内、L1次数0.5〜1.05かつN=800でL1<5e-3、保存量収支<1e-13、123問題で正値性、不正入力の例外。",
+      "acceptanceEn": "Sod star state within 1e-5 of Toro, L1 order 0.5–1.05 and L1<5e-3 at N=800, conservation residual <1e-13, positivity on the 123 problem, exceptions on invalid input.",
+      "evidence": "docs/evidence/2026-10-28-opencode-87-cfd3.json; src/euler-1d-riemann.js; tests/euler-1d-riemann.test.mjs; docs/opencode-work-orders-2026-10-28/87-CFD3.md",
+      "lastUpdate": "2026-10-29: 指示87・PR #233（merge済み）を親CFD3の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親CFD3全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 87 / PR #233 (merged) as a child of CFD3. Acceptance of this step is met by evidence; released. Does not complete CFD3."
     },
     {
       "id": "ACOU2",
@@ -680,15 +846,52 @@
       "id": "COUPLE5",
       "title": "流体構造の双方向連成",
       "category": "連成",
-      "status": "queued",
+      "status": "building",
       "detail": "時間同期・力の保存・安定性を検証。",
       "acceptance": "時間同期・力の保存・安定性を検証。",
       "titleEn": "Add two-way fluid/structure coupling",
       "detailEn": "Verify time synchronization, force conservation and stability.",
       "acceptanceEn": "Verify time synchronization, force conservation and stability.",
       "evidence": "docs/evidence/2026-10-28-opencode-76-couple5.json",
-      "lastUpdate": "2026-10-28: PR #214(指示76)で分離型FSI連成契約とピストン解析解照合を統合。限定契約で状態は据え置き。",
-      "lastUpdateEn": "2026-10-28: PR #214 (order 76) merged a partitioned FSI coupling contract with a piston analytic check. Limited contract; status unchanged."
+      "lastUpdate": "2026-10-28: PR #214(指示76)で分離型FSI連成契約とピストン解析解照合を統合。限定契約で状態は据え置き。 2026-10-29: 完了した一歩を子タスクCOUPLE5A・COUPLE5Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: PR #214 (order 76) merged a partitioned FSI coupling contract with a piston analytic check. Limited contract; status unchanged. 2026-10-29: Split completed steps into child tasks COUPLE5A, COUPLE5B. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "COUPLE5A",
+      "title": "分離反復FSI連成契約を解析解ピストンで検証",
+      "titleEn": "Partitioned FSI coupling contract verified on an analytic piston",
+      "status": "released",
+      "category": "連成",
+      "parents": [
+        "COUPLE5"
+      ],
+      "detail": "分離型の流体構造連成反復（Aitken緩和）の契約を1自由度ピストンの解析解で検証。実CFD・実構造ソルバとの結合ではない。",
+      "detailEn": "Verify a partitioned FSI iteration contract (Aitken relaxation) on a one-DOF analytic piston. Not coupled to real CFD/structural solvers.",
+      "acceptance": "相対誤差<2e-3、観測次数2±0.05、エネルギードリフト<1e-9、界面力和0 N、発散率の解析値一致、Aitken≤5反復、非収束を成功扱いしない。",
+      "acceptanceEn": "Relative error <2e-3, order 2±0.05, energy drift <1e-9, zero net interface force, divergence rate matches analysis, Aitken ≤5 iterations, non-convergence not reported as success.",
+      "evidence": "docs/evidence/2026-10-28-opencode-76-couple5.json; src/fsi-partitioned.js; tests/fsi-partitioned.test.mjs; docs/opencode-work-orders-2026-10-28/76-COUPLE5.md",
+      "lastUpdate": "2026-10-29: 指示76・PR #214（merge済み）を親COUPLE5の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親COUPLE5全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 76 / PR #214 (merged) as a child of COUPLE5. Acceptance of this step is met by evidence; released. Does not complete COUPLE5."
+    },
+    {
+      "id": "COUPLE5B",
+      "title": "多自由度界面のベクトルAitkenと発散検出",
+      "titleEn": "Vector Aitken and divergence detection on multi-DOF interfaces",
+      "status": "released",
+      "category": "連成",
+      "parents": [
+        "COUPLE5"
+      ],
+      "depends": [
+        "COUPLE5A"
+      ],
+      "detail": "多自由度界面にベクトルAitken緩和と発散検出を追加し、モノリシック解と照合。",
+      "detailEn": "Add vector Aitken relaxation and divergence detection for multi-DOF interfaces and compare against monolithic solutions.",
+      "acceptance": "分離解とモノリシック解の相対差<1e-9、作用反作用和0 N、スペクトル半径の一致<1e-6と発散拒否、Aitken≤6反復かつ最適定数緩和より少ない、不正入力の例外。",
+      "acceptanceEn": "Partitioned vs monolithic <1e-9, exact action–reaction balance, spectral radius within 1e-6 and divergence rejection, Aitken ≤6 iterations and fewer than optimal constant relaxation, invalid inputs rejected.",
+      "evidence": "docs/evidence/2026-10-28-opencode-85-couple5.json; src/fsi-interface-vector.js; tests/fsi-interface-vector.test.mjs; docs/opencode-work-orders-2026-10-28/85-COUPLE5.md",
+      "lastUpdate": "2026-10-29: 指示85・PR #230（merge済み）を親COUPLE5の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親COUPLE5全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 85 / PR #230 (merged) as a child of COUPLE5. Acceptance of this step is met by evidence; released. Does not complete COUPLE5."
     },
     {
       "id": "FAIL2",
@@ -1273,7 +1476,7 @@
       "id": "P2",
       "title": "必要時取得・実行準備・性能計測",
       "titleEn": "On-demand preparation and performance measurements",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P0"
@@ -1282,8 +1485,25 @@
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP2の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
       "acceptanceEn": "Meet P2 and common completion gates in docs/en/roadmap.md; retain evidence.",
-      "lastUpdate": "2026-10-28: 未merge PR #220で要求別WASM資産計画とサイズ測定を進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-28: Unmerged PR #220 in progress: per-request WASM asset plan and size measurement. Status not promoted."
+      "lastUpdate": "2026-10-28: 未merge PR #220で要求別WASM資産計画とサイズ測定を進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクP2Aとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #220 in progress: per-request WASM asset plan and size measurement. Status not promoted. 2026-10-29: Split completed steps into child tasks P2A. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "P2A",
+      "title": "要求別WASM資産計画とサイズ測定",
+      "titleEn": "Per-request WASM asset plan and size measurement",
+      "status": "released",
+      "category": "共通",
+      "parents": [
+        "P2"
+      ],
+      "detail": "解析要求ごとに必要なWASM資産を計画し、ファイルのバイト数・SHA・読込時間をNodeで測定。ネットワーク転送・ブラウザでの計測は未実施。",
+      "detailEn": "Plan required WASM assets per analysis request and measure file bytes, SHA and read time in Node. Network transfer and browser measurements not done.",
+      "acceptance": "焦点試験3件・モジュール境界・契約検査が通り、証拠に全資産のbytes/SHA/読込時間と未測定項目を記録。",
+      "acceptanceEn": "Three focused tests, module boundaries and contracts pass; evidence records bytes/SHA/read time of all assets and unmeasured items.",
+      "evidence": "docs/evidence/2026-10-28-opencode-80-p2.json; src/runtime-asset-plan.js; tests/runtime-asset-plan.test.mjs; scripts/measure-runtime-assets.mjs; docs/opencode-work-orders-2026-10-28/80-P2.md",
+      "lastUpdate": "2026-10-29: 指示80・PR #220（merge済み）を親P2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親P2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 80 / PR #220 (merged) as a child of P2. Acceptance of this step is met by evidence; released. Does not complete P2."
     },
     {
       "id": "P3",
@@ -1339,7 +1559,7 @@
       "id": "P5",
       "title": "ブラケット3案のCAD設計反復",
       "titleEn": "Three-bracket CAD iteration",
-      "status": "queued",
+      "status": "building",
       "category": "共通",
       "depends": [
         "P1",
@@ -1350,7 +1570,26 @@
       "detail": "docs/roadmap.mdの依存関係・範囲・判断ゲートに従って実装する。",
       "detailEn": "Follow scope, decision gates and acceptance in docs/en/roadmap.md.",
       "acceptance": "docs/roadmap.mdのP5の完了条件と全段階の完了判定を満たし、検証証跡を保存する。",
-      "acceptanceEn": "Meet P5 and common completion gates in docs/en/roadmap.md; retain evidence."
+      "acceptanceEn": "Meet P5 and common completion gates in docs/en/roadmap.md; retain evidence.",
+      "lastUpdate": "2026-10-29: 完了した一歩を子タスクP5Aとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-29: Split completed steps into child tasks P5A. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "P5A",
+      "title": "合成ブラケット厚さ3案をMCPだけで解析・比較",
+      "titleEn": "Three synthetic bracket thicknesses analyzed and compared via MCP only",
+      "status": "released",
+      "category": "共通",
+      "parents": [
+        "P5"
+      ],
+      "detail": "合成板ブラケットの厚さ2/3/4 mmをMCPツールだけで設定・事前検査・解析・比較する。実CAD設計反復ではない。",
+      "detailEn": "Configure, preflight, solve and compare synthetic plate brackets with 2/3/4 mm thickness using MCP tools only. Not real CAD iteration.",
+      "acceptance": "3案とも事前検査allowed・succeeded・provisional、入力版が異なる、最大変位 t=2>3>4、比較が comparable=true、証拠とscript hashの整合を試験。",
+      "acceptanceEn": "All three allowed/succeeded/provisional with distinct revisions, max displacement t=2>3>4, comparison comparable=true, a test checks evidence/script hash consistency.",
+      "evidence": "docs/evidence/2026-10-29-opencode-92-p5.json; scripts/experimental/p5-bracket-thickness-sweep.mjs; tests/p5-bracket-thickness-evidence.test.mjs; docs/opencode-work-orders-2026-10-28/92-P5.md",
+      "lastUpdate": "2026-10-29: 指示92・PR #236（merge済み）を親P5の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親P5全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 92 / PR #236 (merged) as a child of P5. Acceptance of this step is met by evidence; released. Does not complete P5."
     },
     {
       "id": "P6",
@@ -1410,8 +1649,8 @@
       "detailEn": "Implement ranked findings incrementally for beginner workflows and collaboration with user-owned LLM agents.",
       "acceptance": "変更前後を同一例題で確認し、タスク完了・操作数・誤設定からの復帰を比較。既存API/MCPと状態を一致させ、新機能には意味的API・MCP・SKILL案内を同時整備。日英、狭い画面、キーボード操作、保存復元と公開画面の回帰を確認する。",
       "acceptanceEn": "Compare completion, interaction count and recovery using the same scenario before/after. Preserve API/MCP state consistency; include semantic API/MCP/SKILL support for new functions. Verify JP/EN, narrow screens, keyboard operation, persistence and published browser regressions.",
-      "lastUpdate": "2026-10-21: 追加PR #156 を限定成果として取り込み対象。実Chrome390pxでrequiredPointersからTab/Enter移動、入力不変、stale破棄・日英再チェックを追加確認。 親タスク全体は未完。 2026-10-28: 指示83に着手（PR未作成）。状態は据え置き。",
-      "lastUpdateEn": "2026-10-21: Additional PR #156 accepted for bounded integration. Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks. Full parent acceptance remains incomplete. 2026-10-28: Order 83 started (no PR yet). Status unchanged.",
+      "lastUpdate": "2026-10-21: 追加PR #156 を限定成果として取り込み対象。実Chrome390pxでrequiredPointersからTab/Enter移動、入力不変、stale破棄・日英再チェックを追加確認。 親タスク全体は未完。 2026-10-28: 指示83に着手（PR未作成）。状態は据え置き。 2026-10-29: 完了した一歩を子タスクUIIMPROVE1Aとして分離。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-21: Additional PR #156 accepted for bounded integration. Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks. Full parent acceptance remains incomplete. 2026-10-28: Order 83 started (no PR yet). Status unchanged. 2026-10-29: Split completed steps into child tasks UIIMPROVE1A. Parent acceptance remains; the parent is not released.",
       "evidence": "tests/ui-view-compare.test.mjs; docs/evidence/2026-10-18-comparison-input-recovery.json; tests/ui-analysis-preflight.test.mjs; docs/evidence/2026-10-19-preflight-gui-ja-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-en-narrow.jpg; docs/evidence/2026-10-19-preflight-gui-spherical-browser.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json",
       "review": {
         "status": "merged",
@@ -1420,6 +1659,23 @@
         "summary": "追加PRの限定成果をレビュー承認。実Chrome390pxでrequiredPointersからTab/Enter移動、入力不変、stale破棄・日英再チェックを追加確認。",
         "summaryEn": "Additional PR accepted as a bounded increment. Additional actual Chrome390px verification covers required-pointer Tab/Enter focus, unchanged input, stale disposal and JP/EN rechecks."
       }
+    },
+    {
+      "id": "UIIMPROVE1A",
+      "title": "直近の表示を保持する診断履歴",
+      "titleEn": "Recent diagnostics history panel",
+      "status": "released",
+      "category": "UI",
+      "parents": [
+        "UIIMPROVE1"
+      ],
+      "detail": "状態表示で上書きされた警告・案内を「直近の表示」履歴として残す（改善案3の第1段）。日英・狭い画面で確認。",
+      "detailEn": "Keep overwritten warnings/messages in a Recent messages history (first stage of improvement 3); checked in Japanese/English on narrow screens.",
+      "acceptance": "上書き警告が履歴に残り、上限・畳み込み・複製返却を試験、履歴要素が無くても #status は従来どおり、内蔵ブラウザで日英・375px表示と開閉を確認。",
+      "acceptanceEn": "Overwritten warnings remain in history; limits, folding and copy return tested; #status unchanged without the list; built-in browser confirmed ja/en at 375px with open/close.",
+      "evidence": "docs/evidence/2026-10-28-opencode-83-uiimprove1.json; src/ui/status-ui.js; tests/ui-status.test.mjs; docs/opencode-work-orders-2026-10-28/83-UIIMPROVE1.md",
+      "lastUpdate": "2026-10-29: 指示83・PR #228（merge済み）を親UIIMPROVE1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親UIIMPROVE1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 83 / PR #228 (merged) as a child of UIIMPROVE1. Acceptance of this step is met by evidence; released. Does not complete UIIMPROVE1."
     },
     {
       "id": "AGENTEDIT1",
@@ -1520,8 +1776,8 @@
       "acceptanceEn": "Compare two cases with shared camera/field/range/scale/stored time. Implemented API/GUI PNG/orbit-WebM, hashed artifact retrieval/cancel/release and portable manual JSON/CAS settings. Added opt-in browser-local saving of one preset (128 KiB) and explicit restoration of reload candidates; cases, media and credentials are not saved. Localhost real Chrome verified PNG, settings rebinding after case reimport, invalid refusals, API video 4 frames/3 distinct images and GUI creation/1280x640 native preview/user playback ending 2.738 s/cancel/restart. After GUI completion/cancel/restart, the original 2.01 s interpolated viewer, input, cases and panel were exactly unchanged. Download was clicked once but timed out awaiting completion, which is unverified. Localhost real Chrome verified opt-in saving, candidate retention after reload, explicit restoration after case reimport with new IDs, disable/delete and no candidate resurrection after another reload; main viewer/input/cases stayed unchanged. Forced storage failures have automated coverage only. Added stored-time thermal-temperature/transient-acoustic WebM with fixed camera/whole-period range, nearest stored times and offsets and explicit physical endpoints; localhost real-Chrome thermal time video passed API VP9/1280x640/SHA validation with four frames/four images, GUI creation/play/cancel/restart and exact restoration of all four states including the original 2.01 s interpolation; real-browser acoustic time video remains unverified. Added linear-elastic displacement/stress deformation WebM with one-way linear visualization multiplier 0 to requested scale, fixed camera/range/saved result, not a physical load history; earlier partial real-Chrome evidence is retained and supplemented by current API proof. Added comparison orbit GIF (24 fixed frames,640x320,RGB332256 colors; localhost Chrome verified API SHA/24 decoded images and GUI create/cancel/restart/four-state equality); time/deformation GIF added2026-10-19 (latest update); MP4 is not implemented; smooth 24 fps, public HTTPS, general geometry and installed-MCP execution remain unverified. Additional low-load localhost Chrome verified API24,858 bytes/SHA, VP9/1280x640, four decoded frames/four images, independent geometry-only change and four-state equality, plus separate GUI playback ending2.125s. Earlier partial evidence is retained. Accepted jobs detach original admission expiry; real Chrome15s request completed at15,725ms with92,321 bytes/SHA/17 frames17 images/geometry change/four-state equality. Disconnect during this recording has automated coverage only.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-24: 未統合・未公開候補。比較time WebMを固定フレーム化し符号化/復号/全時刻ledgerを検査。通常main IAB・正式MCPの音響1回で48枚/2秒・全96panel選択・最終物理1.2ms/ずれ0と元5状態保持を独立確認。旧MediaRecorder終端欠落を保存。熱/異軸の固定WebM実画面、single-view終端、実download・録画中切断・MP4・公開は残る。 2026-10-28: 未merge PR #223(指示77)で比較GIFのフレーム別変形倍率台帳を進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-24: Unmerged/unpublished candidate. Fixed-frame comparison-time WebM verifies encoding, decoding and the complete timing ledger. One ordinary-main IAB/formal-MCP acoustic export independently verifies48frames/2s,96panel selections, terminal physical1.2ms/zero offset and five unchanged physical states. Historical MediaRecorder endpoint loss is retained. Actual thermal/unequal-axis fixed WebM, single-view endpoints, completed download, recording disconnect, MP4 and publication remain open. 2026-10-28: Unmerged PR #223 (order 77) in progress: per-frame deformation multiplier ledger for comparison GIF. Status not promoted.",
+      "lastUpdate": "2026-10-24: 未統合・未公開候補。比較time WebMを固定フレーム化し符号化/復号/全時刻ledgerを検査。通常main IAB・正式MCPの音響1回で48枚/2秒・全96panel選択・最終物理1.2ms/ずれ0と元5状態保持を独立確認。旧MediaRecorder終端欠落を保存。熱/異軸の固定WebM実画面、single-view終端、実download・録画中切断・MP4・公開は残る。 2026-10-28: 未merge PR #223(指示77)で比較GIFのフレーム別変形倍率台帳を進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクVIEWCOMPAREAとして分離。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-24: Unmerged/unpublished candidate. Fixed-frame comparison-time WebM verifies encoding, decoding and the complete timing ledger. One ordinary-main IAB/formal-MCP acoustic export independently verifies48frames/2s,96panel selections, terminal physical1.2ms/zero offset and five unchanged physical states. Historical MediaRecorder endpoint loss is retained. Actual thermal/unequal-axis fixed WebM, single-view endpoints, completed download, recording disconnect, MP4 and publication remain open. 2026-10-28: Unmerged PR #223 (order 77) in progress: per-frame deformation multiplier ledger for comparison GIF. Status not promoted. 2026-10-29: Split completed steps into child tasks VIEWCOMPAREA. Parent acceptance remains; the parent is not released.",
       "evidence": "docs/evidence/2026-10-17-comparison-api-real-chrome.json; docs/evidence/2026-10-17-comparison-presets-real-chrome.json; docs/evidence/2026-10-17-comparison-video-real-chrome.json; docs/evidence/2026-10-17-comparison-video-gui-real-chrome.json; docs/evidence/2026-10-17-comparison-settings-persistence-real-chrome.json; docs/evidence/2026-10-17-comparison-time-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-artifact-real-chrome.json; docs/evidence/2026-10-17-comparison-deformation-video-15s-real-chrome.json; docs/evidence/2026-10-17-publication-5af30be.json; docs/evidence/2026-10-17-comparison-gif-real-chrome.json; docs/evidence/2026-10-19-comparison-time-deformation-gif-real-chrome.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/51-VIEWCOMPARE.md; docs/evidence/2026-10-22-review51-real-chrome.json; docs/pr-review-2026-10-22.md; docs/view-compare-design.md; tests/comparison-frame-timing.test.mjs; docs/evidence/2026-10-24-comparison-gif-timing/README.md; docs/evidence/2026-10-24-acoustic-time-webm/README.md; docs/comparison-fixed-webm.md; docs/evidence/2026-10-24-comparison-fixed-webm-source.json; docs/evidence/2026-10-24-fixed-comparison-webm/README.md; docs/fixed-webm-main-independent-2026-10-24.md",
       "review": {
         "status": "merged",
@@ -1530,6 +1786,23 @@
         "summary": "実Chromeの音響2ケース24枚GIFを独立decode。2000msの8/9cs配分、共通範囲、成功/取消/拒否後の状態保持を確認。中間panel時刻の個別manifest記録・一般形状・MP4は残る。",
         "summaryEn": "Real Chrome acoustic two-case 24-frame GIF independently decoded; 2000ms in 8/9cs delays, shared range and state retention checked. Per-panel intermediate timestamps, general geometry and MP4 remain."
       }
+    },
+    {
+      "id": "VIEWCOMPAREA",
+      "title": "比較変形GIFのframe別倍率ledger",
+      "titleEn": "Per-frame scale ledger for comparison deformation GIFs",
+      "status": "released",
+      "category": "UI",
+      "parents": [
+        "VIEWCOMPARE"
+      ],
+      "detail": "比較の変形GIFで各frameの変形倍率と載荷倍率をledgerとして記録し、内蔵ブラウザの実canvasで生成を確認。",
+      "detailEn": "Record per-frame deformation and load scale in a ledger for comparison deformation GIFs; generation confirmed on a real canvas in the built-in browser.",
+      "acceptance": "焦点試験が通り、内蔵ブラウザで1280x640のGIF生成が完了しSHAを記録、既存比較出力は不変。",
+      "acceptanceEn": "Focused tests pass; a 1280x640 GIF completed in the built-in browser with SHA recorded; existing comparison exports unchanged.",
+      "evidence": "docs/evidence/2026-10-28-opencode-77-viewcompare.json; src/comparison-deformation-plan.js; tests/comparison-deformation-frames.test.mjs; docs/opencode-work-orders-2026-10-28/77-VIEWCOMPARE.md",
+      "lastUpdate": "2026-10-29: 指示77・PR #223（merge済み）を親VIEWCOMPAREの子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親VIEWCOMPARE全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 77 / PR #223 (merged) as a child of VIEWCOMPARE. Acceptance of this step is met by evidence; released. Does not complete VIEWCOMPARE."
     },
     {
       "id": "VIEWTIME",
@@ -1541,8 +1814,8 @@
       "acceptanceEn": "Verify solve/storage/display-time distinctions against thermal/acoustic reference fields, fixed ranges, persistence, memory limits, API time control and fixed-frame export. Implemented: bounded opt-in thermal nodal history, thermal/acoustic sliders and interpolated playback, displayed-time probes/stills, stored-frame API selection and thermal PNG sequences. Real Chrome on 2026-10-17 checked stored-time temperatures against 20+t/20+2t, a 0/5/10 s sequence and hashes, restoration to 2 s, and 5 s named-view/measurement persistence, replay and tamper refusal. Legacy v1 remains compatible; arbitrary interpolated-time API selection/persistence is refused. General-geometry propagation accuracy,total peak RAM and public HTTPS remain open. Storage-density/scalar-budget APIs and Japanese UI have bounded real-Chrome evidence from2026-10-18.",
       "status": "building",
       "category": "結果表示",
-      "lastUpdate": "2026-10-27: 単一ビューの保存時刻・温度WebMを追加。熱temperature専用capability、全frame/終端/bytes証明と音響proof分離。実IABの合成保存履歴で48VP8/2秒/440×637・物理終端10秒/ずれ0を外部復号まで確認。5状態不変・補間2秒復元・cleanupを検証。初回失敗とcoded-padding診断を保持し、表示領域厳密・内部余白16px上限へ修正。一般形状/公開環境/GUI download/熱preview/取消matrixは未完。",
-      "lastUpdateEn": "2026-10-27: Added single-view stored-temperature WebM with separate capability and purpose-bound complete-frame/endpoint/byte proof. A saved synthetic history in ordinary IAB passed independent48-frame VP8/2s/440x637 decode, terminal physical10s/zero offset, five-state equality, interpolated2s restoration and cleanup. Initial failure and native coded-padding diagnostic retained; exact visible/display verification permits bounded16px internal padding. General geometry, public deployment, GUI download, thermal preview and cancellation matrix remain open.",
+      "lastUpdate": "2026-10-27: 単一ビューの保存時刻・温度WebMを追加。熱temperature専用capability、全frame/終端/bytes証明と音響proof分離。実IABの合成保存履歴で48VP8/2秒/440×637・物理終端10秒/ずれ0を外部復号まで確認。5状態不変・補間2秒復元・cleanupを検証。初回失敗とcoded-padding診断を保持し、表示領域厳密・内部余白16px上限へ修正。一般形状/公開環境/GUI download/熱preview/取消matrixは未完。 2026-10-29: 完了した一歩を子タスクVIEWTIMEAとして分離。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-27: Added single-view stored-temperature WebM with separate capability and purpose-bound complete-frame/endpoint/byte proof. A saved synthetic history in ordinary IAB passed independent48-frame VP8/2s/440x637 decode, terminal physical10s/zero offset, five-state equality, interpolated2s restoration and cleanup. Initial failure and native coded-padding diagnostic retained; exact visible/display verification permits bounded16px internal padding. General geometry, public deployment, GUI download, thermal preview and cancellation matrix remain open. 2026-10-29: Split completed steps into child tasks VIEWTIMEA. Parent acceptance remains; the parent is not released.",
       "evidence": "docs/evidence/2026-10-17-thermal-time-api-real-chrome.json; docs/evidence/2026-10-17-thermal-persistence-real-chrome.json; docs/evidence/2026-10-18-viewtime-storage.json; docs/evidence/2026-10-21-opencode-pr-review.json; docs/evidence/2026-10-21-board-review-followup.json; docs/evidence/2026-10-21-next-pr-review.json; docs/opencode-review-followups-2026-10-21/49-VIEWTIME.md; docs/evidence/2026-10-21-review49-chrome-mcp.json; docs/single-view-acoustic-fixed-webm.md; docs/evidence/2026-10-24-single-acoustic-webm-main/README.md; docs/single-view-thermal-fixed-webm.md; docs/fixed-webm-decoded-viewport.md; docs/evidence/2026-10-26-single-thermal-webm-main/README.md; docs/evidence/2026-10-27-thermal-webm-integration.json",
       "review": {
         "status": "merged",
@@ -1551,6 +1824,23 @@
         "summary": "実計算した保存熱/音響のNode・実Chrome・正式MCP要約を照合。reload後も結果版と要約が一致。",
         "summaryEn": "Real saved thermal/acoustic summaries matched across Node, actual Chrome and paired MCP. Result revisions and summaries matched after reload."
       }
+    },
+    {
+      "id": "VIEWTIMEA",
+      "title": "熱の再生プレビューを保存温度フレームへ接続",
+      "titleEn": "Thermal Play preview wired to saved temperature frames",
+      "status": "checking",
+      "category": "UI",
+      "parents": [
+        "VIEWTIME"
+      ],
+      "detail": "熱結果の再生プレビューを保存温度frameへ接続し、完了・停止で補間表示時刻を復元。fake DOM/clockで検証済み、実ブラウザ再生は未確認。",
+      "detailEn": "Wire thermal Play preview to saved temperature frames and restore the interpolated display time on completion/stop. Verified with fake DOM/clock; real-browser playback unverified.",
+      "acceptance": "fake DOM/clockで単調再生・完了/停止での時刻復元・不適合結果の拒否を自動確認し、内蔵ブラウザで再生完走を1回確認する（未達: 実ブラウザ確認）。",
+      "acceptanceEn": "Fake DOM/clock tests cover monotonic playback, time restore and rejection; one built-in browser Play run must complete (remaining: real-browser run).",
+      "evidence": "docs/evidence/2026-10-28-opencode-79-viewtime.json; tests/thermal-time-preview.test.mjs; src/visual-export.js; docs/opencode-work-orders-2026-10-28/79-VIEWTIME.md",
+      "lastUpdate": "2026-10-29: 指示79・PR #227（merge済み）を親VIEWTIMEの子タスクとして記録。受け入れ条件の一部（実ブラウザ確認）が未達のためchecking。親VIEWTIME全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 79 / PR #227 (merged) as a child of VIEWTIME. Part of the acceptance (real-browser check) remains; checking. Does not complete VIEWTIME."
     },
     {
       "id": "BROWSERBRIDGE1",
@@ -1577,7 +1867,7 @@
       "titleEn": "Design DIY-capable tensile/compression equipment and sales specification",
       "detail": "荷重・変位計測、治具、校正、装置剛性補正、装置側停止と共通ログ形式を設計する。販売方式は別途決定。",
       "detailEn": "Design force/displacement sensing, fixtures, calibration, compliance correction, device stopping and shared logs; decide sales separately.",
-      "status": "queued",
+      "status": "building",
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
@@ -1585,8 +1875,25 @@
       "depends": [
         "MAT3"
       ],
-      "lastUpdate": "2026-10-28: 未merge PR #216(指示73)で試験機要求仕様と機器プロファイルvalidatorを進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-28: Unmerged PR #216 (order 73) in progress: test-machine requirements and device-profile validator. Status not promoted."
+      "lastUpdate": "2026-10-28: 未merge PR #216(指示73)で試験機要求仕様と機器プロファイルvalidatorを進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクPRINTMEASURE1Aとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #216 (order 73) in progress: test-machine requirements and device-profile validator. Status not promoted. 2026-10-29: Split completed steps into child tasks PRINTMEASURE1A. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "PRINTMEASURE1A",
+      "title": "試験機の要求仕様と共通機器プロファイル形式",
+      "titleEn": "Test-machine requirements and shared instrument profile format",
+      "status": "released",
+      "category": "3Dプリント",
+      "parents": [
+        "PRINTMEASURE1"
+      ],
+      "detail": "自作機・販売機共通の要求（モード、荷重検出、変位源、装置側停止、剛性、校正、識別）と未決定事項を文書化し、機器プロファイルの検証器と測定datasetとの照合を追加。値はすべて合成。",
+      "detailEn": "Document shared DIY/commercial requirements (modes, force sensing, displacement source, device stop, stiffness, calibration, identity) and open decisions; add an instrument profile validator reconciled against measurement datasets. All values synthetic.",
+      "acceptance": "単位違いでも同じ正規化値、不正プロファイルを PRINTED_MACHINE_PROFILE_INVALID で拒否、一致プロファイルで所見0・不一致で6種の所見。",
+      "acceptanceEn": "Equivalent normalization across units; invalid profiles rejected with PRINTED_MACHINE_PROFILE_INVALID; a matching profile yields zero findings and a mismatched one six kinds.",
+      "evidence": "docs/evidence/2026-10-28-opencode-73-printmeasure1.json; docs/printed-test-machine.md; src/printed-test-machine-profile.js; tests/printed-test-machine-profile.test.mjs; docs/opencode-work-orders-2026-10-28/73-PRINTMEASURE1.md",
+      "lastUpdate": "2026-10-29: 指示73・PR #216（merge済み）を親PRINTMEASURE1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親PRINTMEASURE1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 73 / PR #216 (merged) as a child of PRINTMEASURE1. Acceptance of this step is met by evidence; released. Does not complete PRINTMEASURE1."
     },
     {
       "id": "PRINTMEASURE2",
@@ -1594,7 +1901,7 @@
       "titleEn": "Export measurement specimens and Bambu projects",
       "detail": "形状・方向・インフィル・壁・層高さを指定した版付きプロジェクトを提供。温度等は利用者が設定してBambuでスライスし、採用設定を照合する。",
       "detailEn": "Provide versioned geometry/orientation/infill/wall/layer projects; users choose temperatures and slice, then reconcile actual settings.",
-      "status": "queued",
+      "status": "building",
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
@@ -1603,8 +1910,45 @@
         "PRINTMEASURE1",
         "PRINT1"
       ],
-      "lastUpdate": "2026-10-28: 未merge PR #217(指示74)でダンベル試験片3MF書出しを進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-28: Unmerged PR #217 (order 74) in progress: dumbbell specimen 3MF export. Status not promoted."
+      "lastUpdate": "2026-10-28: 未merge PR #217(指示74)でダンベル試験片3MF書出しを進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクPRINTMEASURE2A・PRINTMEASURE2Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-28: Unmerged PR #217 (order 74) in progress: dumbbell specimen 3MF export. Status not promoted. 2026-10-29: Split completed steps into child tasks PRINTMEASURE2A, PRINTMEASURE2B. Started, so queued→building. Parent acceptance remains; the parent is not released."
+    },
+    {
+      "id": "PRINTMEASURE2A",
+      "title": "寸法指定ダンベル試験片と条件付き3MFの往復検証",
+      "titleEn": "Dimensioned dumbbell specimens and conditioned 3MF round trip",
+      "status": "released",
+      "category": "3Dプリント",
+      "parents": [
+        "PRINTMEASURE2"
+      ],
+      "detail": "合成寸法のダンベル試験片メッシュと条件付き3MFを生成し、読み戻しで計画と一致することを検証。実スライス・実印刷は未実施。",
+      "detailEn": "Generate synthetic-dimension dumbbell meshes and conditioned 3MF files and verify round-trip agreement with the plan. Real slicing/printing not performed.",
+      "acceptance": "フィレット解析体積とmesh体積が相対2e-4以内、閉じた外向きmesh、往復でbounds一致、同一計画で同一bytes、改竄を拒否。",
+      "acceptanceEn": "Analytic fillet volume vs mesh within 2e-4, closed outward meshes, round-trip bounds match, deterministic bytes, tampering rejected.",
+      "evidence": "docs/evidence/2026-10-28-opencode-74-printmeasure2.json; src/printed-measurement-specimen.js; tests/printed-measurement-specimen.test.mjs; docs/opencode-work-orders-2026-10-28/74-PRINTMEASURE2.md",
+      "lastUpdate": "2026-10-29: 指示74・PR #217（merge済み）を親PRINTMEASURE2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親PRINTMEASURE2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 74 / PR #217 (merged) as a child of PRINTMEASURE2. Acceptance of this step is met by evidence; released. Does not complete PRINTMEASURE2."
+    },
+    {
+      "id": "PRINTMEASURE2B",
+      "title": "試験片3MF計画と測定datasetの試験片参照を照合",
+      "titleEn": "Reconcile specimen 3MF plans with dataset specimen references",
+      "status": "released",
+      "category": "3Dプリント",
+      "parents": [
+        "PRINTMEASURE2"
+      ],
+      "depends": [
+        "PRINTMEASURE2A"
+      ],
+      "detail": "指示74の書出し→再読込を通した試験片計画と、既存取込器を通した測定datasetの試験片参照を許容差付きで照合する。",
+      "detailEn": "Reconcile specimen plans re-read from order-74 exports with specimen references in imported measurement datasets, with explicit tolerances.",
+      "acceptance": "合成計画3方向で所見0、不一致datasetで8種の所見と拒否、許容差の未指定・負・NaN・余分fieldを拒否。",
+      "acceptanceEn": "Three synthetic orientations yield zero findings; a mismatched dataset yields eight finding kinds and rejection; missing/negative/NaN tolerances and extra fields rejected.",
+      "evidence": "docs/evidence/2026-10-28-opencode-86-printmeasure.json; src/printed-specimen-link.js; tests/printed-specimen-link.test.mjs; docs/opencode-work-orders-2026-10-28/86-PRINTMEASURE.md",
+      "lastUpdate": "2026-10-29: 指示86・PR #229（merge済み）を親PRINTMEASURE2の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親PRINTMEASURE2全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 86 / PR #229 (merged) as a child of PRINTMEASURE2. Acceptance of this step is met by evidence; released. Does not complete PRINTMEASURE2."
     },
     {
       "id": "PRINTMEASURE3",
@@ -2966,7 +3310,7 @@
       "id": "FINITEVISCO1",
       "title": "有限変形の粘弾塑性・損傷と引張曲線を検証",
       "titleEn": "Validate finite-strain viscoelastic-plasticity, damage and tensile curves",
-      "status": "queued",
+      "status": "building",
       "category": "構造",
       "depends": [
         "RESULTCURVE1"
@@ -2976,13 +3320,50 @@
       "acceptance": "保存した試験条件/根拠から材料パラメータを校正し、単要素の載荷速度・保持・除荷・再載荷応力、残留ひずみ、散逸を同条件実験と照合。対応する構造経路で段階ごとの反力/変位・Cauchy応力・変形後断面・入力版を保持し、メッシュ/時間刻み感度、要素反転、損傷正則化を検証。未校正材料・未対応組合せ・限界超過は拒否または暫定表示。ダンベルのくびれ/荷重低下は実験比較と収束根拠が揃う場合のみ受け入れる。",
       "acceptanceEn": "Calibrate from saved test conditions/evidence and compare single-element loading-rate, hold, unload/reload stress, residual strain and dissipation against experiments at matching conditions. In the structural path retain stepwise reactions/displacements, Cauchy stress, deformed area and input revision; assess mesh/time-step sensitivity, element inversion and damage regularization. Reject or mark provisional uncalibrated materials, unsupported combinations and exceeded limits. Accept dumbbell necking/post-peak force only with experimental comparison and convergence evidence.",
       "evidence": "docs/roadmap.md; docs/en/roadmap.md; docs/hyperelasticity.md; src/plasticity-core.js; docs/finite-visco-reference.md; docs/evidence/2026-10-23-finite-visco-reference.json; docs/evidence/2026-10-23-finite-visco-independent-audit.json; docs/finite-visco-observation-comparison.md; docs/finite-observation-independent-2026-10-24.md; docs/evidence/2026-10-24-finite-observation-integration.json; docs/finite-history-inspector.md; docs/en/finite-history-inspector.md; docs/evidence/2026-10-27-finite-history-inspector.json; docs/evidence/2026-10-27-finite-history-inspector-independent.json; docs/evidence/2026-10-27-finite-history-inspector-gui/README.md; docs/evidence/2026-10-27-finite-history-inspector-integration.json; docs/finite-observation-inspector.md; docs/en/finite-observation-inspector.md; docs/evidence/2026-10-27-finite-observation-inspector.json; docs/evidence/2026-10-27-finite-observation-inspector-gui/README.md; docs/evidence/2026-10-27-finite-observation-inspector-integration.json; docs/evidence/2026-10-23-finite-visco-input-history.json; docs/evidence/2026-10-23-finite-visco-history-independent-audit.json; docs/evidence/2026-10-24-finite-visco-observation-comparison.json; docs/evidence/2026-10-24-finite-observation-independent.json; docs/evidence/2026-10-27-finite-observation-independent.json",
-      "lastUpdate": "2026-10-27: 合成・暫定・未校正の履歴確認GUIへ最終合成観測1点の比較を追加。通常main/IABで対の例のJA/EN・9応力差cell（主要差25Pa）・独立したエネルギー差2/散逸差1 J/m³-reference、空白変更時の旧表示消去と版不一致拒否、履歴確認の独立性・両欄クリアを確認。DOM272controls等を保持。実取消受入・正式API全状態同一性・構造solver/実測校正は未証明、親は未完。 2026-10-28: 未merge PR #218(指示72)で合成Prony一軸材料点driverを進行中。状態は昇格しない。",
-      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open. 2026-10-28: Unmerged PR #218 (order 72) in progress: synthetic Prony uniaxial material-point driver. Status not promoted.",
+      "lastUpdate": "2026-10-27: 合成・暫定・未校正の履歴確認GUIへ最終合成観測1点の比較を追加。通常main/IABで対の例のJA/EN・9応力差cell（主要差25Pa）・独立したエネルギー差2/散逸差1 J/m³-reference、空白変更時の旧表示消去と版不一致拒否、履歴確認の独立性・両欄クリアを確認。DOM272controls等を保持。実取消受入・正式API全状態同一性・構造solver/実測校正は未証明、親は未完。 2026-10-28: 未merge PR #218(指示72)で合成Prony一軸材料点driverを進行中。状態は昇格しない。 2026-10-29: 完了した一歩を子タスクFINITEVISCO1A・FINITEVISCO1Bとして分離。着手済みのためqueued→building。親の受け入れ条件は残るため親はreleasedにしない。",
+      "lastUpdateEn": "2026-10-27: Added optional final synthetic-observation comparison to the synthetic/provisional/uncalibrated history GUI. Ordinary main/IAB verified paired JA/EN inputs,9stress-difference cells and separate25Pa/2energy/1dissipation offsets, immediate clearing and identity refusal after whitespace edits, independent Inspect and Clear both fields.272DOM controls preserved. Actual cancellation, formal API state equality, structural solver and calibration remain unproven; parent remains open. 2026-10-28: Unmerged PR #218 (order 72) in progress: synthetic Prony uniaxial material-point driver. Status not promoted. 2026-10-29: Split completed steps into child tasks FINITEVISCO1A, FINITEVISCO1B. Started, so queued→building. Parent acceptance remains; the parent is not released.",
       "parents": [
         "P1",
         "P3",
         "MOD1"
       ]
+    },
+    {
+      "id": "FINITEVISCO1A",
+      "title": "Prony多分岐Maxwellの材料点一軸ループ",
+      "titleEn": "Multi-branch Prony Maxwell uniaxial material-point loop",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FINITEVISCO1"
+      ],
+      "detail": "既存1分岐参照を変えず、一般化Maxwell（Prony多分岐）の有限Green–Lagrange材料点で載荷・保持・除荷・再載荷の一軸応力ループを検証。合成パラメータで未校正。",
+      "detailEn": "Without changing the single-branch reference, verify loading/hold/unloading/reloading uniaxial loops of a finite Green–Lagrange generalized Maxwell (multi-branch Prony) material point. Synthetic, uncalibrated parameters.",
+      "acceptance": "焦点試験・契約検査・docs試験が通り、証拠に基準SHA・合成パラメータ・段端値・仕事/散逸/貯蔵エネルギー・未確認事項を記録。校正済み・予測済みと表示しない。",
+      "acceptanceEn": "Focused tests, contract check and docs tests pass; evidence records base SHA, synthetic parameters, segment ends, work/dissipation/stored energy and unverified items. Never labeled calibrated or predictive.",
+      "evidence": "docs/evidence/2026-10-28-opencode-72-finitevisco1.json; src/finite-visco-prony-uniaxial.js; tests/finite-visco-prony-uniaxial.test.mjs; docs/opencode-work-orders-2026-10-28/72-FINITEVISCO1.md",
+      "lastUpdate": "2026-10-29: 指示72・PR #218（merge済み）を親FINITEVISCO1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FINITEVISCO1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 72 / PR #218 (merged) as a child of FINITEVISCO1. Acceptance of this step is met by evidence; released. Does not complete FINITEVISCO1."
+    },
+    {
+      "id": "FINITEVISCO1B",
+      "title": "乗法分解Hencky Prony材料点の客観性と微小ひずみ極限",
+      "titleEn": "Multiplicative Hencky Prony material point: objectivity and small-strain limit",
+      "status": "released",
+      "category": "構造",
+      "parents": [
+        "FINITEVISCO1"
+      ],
+      "depends": [
+        "FINITEVISCO1A"
+      ],
+      "detail": "乗法分解上のHencky対数ひずみProny材料点を追加し、剛体回転に対する客観性、微小ひずみ極限での指示72との一致、3%での実差を同じ合成値で検証。",
+      "detailEn": "Add a multiplicative-split Hencky Prony material point; verify objectivity under rigid rotation, agreement with order 72 in the small-strain limit and the actual difference at 3% using the same synthetic values.",
+      "acceptance": "焦点試験・契約検査・docs試験が通り、証拠に72との比較（微小ひずみ極限の収束と3%での差）と未確認事項を記録。",
+      "acceptanceEn": "Focused tests, contracts and docs tests pass; evidence records comparison with 72 (small-strain convergence, difference at 3%) and unverified items.",
+      "evidence": "docs/evidence/2026-10-28-opencode-88-finitevisco1.json; src/finite-visco-hencky-multiplicative.js; tests/finite-visco-hencky-multiplicative.test.mjs; docs/opencode-work-orders-2026-10-28/88-FINITEVISCO1.md",
+      "lastUpdate": "2026-10-29: 指示88・PR #234（merge済み）を親FINITEVISCO1の子タスクとして記録。この一歩の受け入れ条件を証拠で確認しreleased。親FINITEVISCO1全体の完了ではない。",
+      "lastUpdateEn": "2026-10-29: Recorded order 88 / PR #234 (merged) as a child of FINITEVISCO1. Acceptance of this step is met by evidence; released. Does not complete FINITEVISCO1."
     }
   ],
   "solvers": [
