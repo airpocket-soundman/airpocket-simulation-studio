@@ -1,0 +1,986 @@
+{
+ "task": "MESH1",
+ "order": "96",
+ "kind": "second bounded step: surface node distance to analytic CAD faces",
+ "baseSha": "f16853a673bac6a56a6724256c9d92cbe8aa4f2a",
+ "moduleSha256": "403b6e7c1735df205a60b929a0aea23368b7ff06964bd1b8de19ee60a6a8349d",
+ "scriptSha256": "7f4b1292a407ca16d292b3d01ee4f67124fde20baf78ba34c5ae6ed080097169",
+ "environment": {
+  "node": "v24.11.1",
+  "platform": "win32",
+  "gmsh": "@loumalouomega/gmsh-wasm 0.3.0"
+ },
+ "command": "node scripts/experimental/verify-mesh-cad-geometry-conformity.mjs",
+ "syntheticInputs": true,
+ "rows": [
+  {
+   "name": "box10",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     10,
+     10,
+     10
+    ]
+   },
+   "options": {
+    "size": 5
+   },
+   "elements": 100,
+   "conforming": true,
+   "toleranceMm": 0.000009999999999999999,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "box0:xmin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": null,
+     "cadFace": "box0:xmax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": null,
+     "cadFace": "box0:ymin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 4,
+     "bodyIndex": null,
+     "cadFace": "box0:ymax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 5,
+     "bodyIndex": null,
+     "cadFace": "box0:zmin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 6,
+     "bodyIndex": null,
+     "cadFace": "box0:zmax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "box0:xmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:xmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 4,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 5,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 6,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "box10-fine",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     10,
+     10,
+     10
+    ]
+   },
+   "options": {
+    "size": 2
+   },
+   "elements": 733,
+   "conforming": true,
+   "toleranceMm": 0.000009999999999999999,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "box0:xmin",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": null,
+     "cadFace": "box0:xmax",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": null,
+     "cadFace": "box0:ymin",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 4,
+     "bodyIndex": null,
+     "cadFace": "box0:ymax",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 5,
+     "bodyIndex": null,
+     "cadFace": "box0:zmin",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 6,
+     "bodyIndex": null,
+     "cadFace": "box0:zmax",
+     "cadKind": "plane",
+     "nodes": 44,
+     "nodesOutsideTolerance": 0,
+     "triangles": 66,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "box0:xmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:xmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 4,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 5,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 6,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "cylinder",
+   "source": {
+    "kind": "cylinder"
+   },
+   "options": {
+    "size": 6
+   },
+   "elements": 779,
+   "conforming": true,
+   "toleranceMm": 0.000029999999999999997,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "cylinder:lateral",
+     "cadKind": "cylinder",
+     "nodes": 176,
+     "nodesOutsideTolerance": 0,
+     "triangles": 326,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0.31812923929837567
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": null,
+     "cadFace": "cylinder:ymax",
+     "cadKind": "plane",
+     "nodes": 27,
+     "nodesOutsideTolerance": 0,
+     "triangles": 39,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": null,
+     "cadFace": "cylinder:ymin",
+     "cadKind": "plane",
+     "nodes": 28,
+     "nodesOutsideTolerance": 0,
+     "triangles": 41,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "cylinder:lateral",
+     "kind": "cylinder",
+     "areaMm2": 4523.893421169302,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "cylinder:ymin",
+     "kind": "plane",
+     "areaMm2": 452.3893421169302,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "cylinder:ymax",
+     "kind": "plane",
+     "areaMm2": 452.3893421169302,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "cylinder-fine",
+   "source": {
+    "kind": "cylinder"
+   },
+   "options": {
+    "size": 3
+   },
+   "elements": 5211,
+   "conforming": true,
+   "toleranceMm": 0.000029999999999999997,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "cylinder:lateral",
+     "cadKind": "cylinder",
+     "nodes": 648,
+     "nodesOutsideTolerance": 0,
+     "triangles": 1244,
+     "maxNodeDistanceMm": 3.552713678800501e-15,
+     "maxCentroidSagMm": 0.10539624496064803
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": null,
+     "cadFace": "cylinder:ymax",
+     "cadKind": "plane",
+     "nodes": 86,
+     "nodesOutsideTolerance": 0,
+     "triangles": 144,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": null,
+     "cadFace": "cylinder:ymin",
+     "cadKind": "plane",
+     "nodes": 86,
+     "nodesOutsideTolerance": 0,
+     "triangles": 144,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "cylinder:lateral",
+     "kind": "cylinder",
+     "areaMm2": 4523.893421169302,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "cylinder:ymin",
+     "kind": "plane",
+     "areaMm2": 452.3893421169302,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "cylinder:ymax",
+     "kind": "plane",
+     "areaMm2": 452.3893421169302,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "sphere",
+   "source": {
+    "kind": "sphere",
+    "center": [
+     0,
+     0,
+     0
+    ],
+    "radius": 10
+   },
+   "options": {
+    "size": 4
+   },
+   "elements": 337,
+   "conforming": true,
+   "toleranceMm": 0.000009999999999999999,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "sphere",
+     "cadKind": "sphere",
+     "nodes": 101,
+     "nodesOutsideTolerance": 0,
+     "triangles": 198,
+     "maxNodeDistanceMm": 1.7763568394002505e-15,
+     "maxCentroidSagMm": 0.6406867084774088
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "sphere",
+     "kind": "sphere",
+     "areaMm2": 1256.6370614359173,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "boxes-independent",
+   "source": {
+    "kind": "boxes",
+    "boxes": [
+     [
+      0,
+      0,
+      0,
+      10,
+      10,
+      10
+     ],
+     [
+      20,
+      0,
+      0,
+      5,
+      5,
+      5
+     ]
+    ]
+   },
+   "options": {
+    "size": 5
+   },
+   "elements": 124,
+   "conforming": true,
+   "toleranceMm": 0.000024999999999999998,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": 0,
+     "cadFace": "box0:xmin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": 0,
+     "cadFace": "box0:xmax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": 0,
+     "cadFace": "box0:ymin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 4,
+     "bodyIndex": 0,
+     "cadFace": "box0:ymax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 5,
+     "bodyIndex": 0,
+     "cadFace": "box0:zmin",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 6,
+     "bodyIndex": 0,
+     "cadFace": "box0:zmax",
+     "cadKind": "plane",
+     "nodes": 12,
+     "nodesOutsideTolerance": 0,
+     "triangles": 14,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 1,
+     "bodyIndex": 1,
+     "cadFace": "box1:xmin",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": 1,
+     "cadFace": "box1:xmax",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": 1,
+     "cadFace": "box1:ymin",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 4,
+     "bodyIndex": 1,
+     "cadFace": "box1:ymax",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 5,
+     "bodyIndex": 1,
+     "cadFace": "box1:zmin",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 6,
+     "bodyIndex": 1,
+     "cadFace": "box1:zmax",
+     "cadKind": "plane",
+     "nodes": 5,
+     "nodesOutsideTolerance": 0,
+     "triangles": 4,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "box0:xmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box0:xmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box0:ymin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box0:ymax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 4,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box0:zmin",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 5,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box0:zmax",
+     "kind": "plane",
+     "areaMm2": 100,
+     "faceTag": {
+      "faceTag": 6,
+      "bodyIndex": 0
+     }
+    },
+    {
+     "id": "box1:xmin",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": 1
+     }
+    },
+    {
+     "id": "box1:xmax",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": 1
+     }
+    },
+    {
+     "id": "box1:ymin",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": 1
+     }
+    },
+    {
+     "id": "box1:ymax",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 4,
+      "bodyIndex": 1
+     }
+    },
+    {
+     "id": "box1:zmin",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 5,
+      "bodyIndex": 1
+     }
+    },
+    {
+     "id": "box1:zmax",
+     "kind": "plane",
+     "areaMm2": 25,
+     "faceTag": {
+      "faceTag": 6,
+      "bodyIndex": 1
+     }
+    }
+   ],
+   "diagnostics": []
+  },
+  {
+   "name": "box-refined",
+   "source": {
+    "kind": "box",
+    "bounds": [
+     0,
+     0,
+     0,
+     20,
+     20,
+     20
+    ]
+   },
+   "options": {
+    "size": 5,
+    "refinements": [
+     {
+      "center": [
+       10,
+       10,
+       10
+      ],
+      "radius": 6,
+      "size": 1.5
+     }
+    ]
+   },
+   "elements": 1170,
+   "conforming": true,
+   "toleranceMm": 0.000019999999999999998,
+   "counts": {
+    "deviation": 0,
+    "unmatched": 0,
+    "uncovered": 0,
+    "shared": 0
+   },
+   "faceTags": [
+    {
+     "faceTag": 1,
+     "bodyIndex": null,
+     "cadFace": "box0:xmin",
+     "cadKind": "plane",
+     "nodes": 58,
+     "nodesOutsideTolerance": 0,
+     "triangles": 90,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 2,
+     "bodyIndex": null,
+     "cadFace": "box0:xmax",
+     "cadKind": "plane",
+     "nodes": 58,
+     "nodesOutsideTolerance": 0,
+     "triangles": 90,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 3,
+     "bodyIndex": null,
+     "cadFace": "box0:ymin",
+     "cadKind": "plane",
+     "nodes": 58,
+     "nodesOutsideTolerance": 0,
+     "triangles": 90,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 4,
+     "bodyIndex": null,
+     "cadFace": "box0:ymax",
+     "cadKind": "plane",
+     "nodes": 58,
+     "nodesOutsideTolerance": 0,
+     "triangles": 90,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 5,
+     "bodyIndex": null,
+     "cadFace": "box0:zmin",
+     "cadKind": "plane",
+     "nodes": 59,
+     "nodesOutsideTolerance": 0,
+     "triangles": 92,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    },
+    {
+     "faceTag": 6,
+     "bodyIndex": null,
+     "cadFace": "box0:zmax",
+     "cadKind": "plane",
+     "nodes": 58,
+     "nodesOutsideTolerance": 0,
+     "triangles": 90,
+     "maxNodeDistanceMm": 0,
+     "maxCentroidSagMm": 0
+    }
+   ],
+   "cadFaces": [
+    {
+     "id": "box0:xmin",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 1,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:xmax",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 2,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymin",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 3,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:ymax",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 4,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmin",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 5,
+      "bodyIndex": null
+     }
+    },
+    {
+     "id": "box0:zmax",
+     "kind": "plane",
+     "areaMm2": 400,
+     "faceTag": {
+      "faceTag": 6,
+      "bodyIndex": null
+     }
+    }
+   ],
+   "diagnostics": []
+  }
+ ],
+ "allConforming": true,
+ "notChecked": [
+  "STEP imports (no analytic surface available; returns supported:false)",
+  "fluidDomain/internal fluid meshes",
+  "REG2 cylindrical/conical patch partitions",
+  "Preflight/API/MCP integration",
+  "Chordal sag is reported only; no sag tolerance is enforced",
+  "Element limit 30000 and numerics unchanged; no new scale claimed"
+ ]
+}
