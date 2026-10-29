@@ -1,0 +1,34 @@
+{
+  "workOrder": "102-COUPLE5",
+  "task": "COUPLE5",
+  "baseSha": "c3a73e6",
+  "environment": {"node": "v24.11.1", "platform": "win32"},
+  "inputs": {"synthetic": true, "note": "Synthetic water-like layer and plate, not material data", "cellsY": 16, "cellsX": 4, "height_m": 1e-3, "density_kg_per_m3": 1000, "kinematicViscosity_m2_per_s": 1e-6, "plateMass_kg_per_m2": 0.05, "plateStiffness_N_per_m3": 50, "initialDisplacement_m": 1e-3, "endTime_s": 0.4, "referenceRK4Step_s": 2e-6},
+  "fluidSolver": "src/unsteady-ns-channel.js solveChannelUnsteadyNS (unchanged, moving top wall)",
+  "commands": [
+    {"cmd": "node --test tests/fsi-channel-shear-plate.test.mjs tests/fsi-interface-vector.test.mjs tests/fsi-partitioned.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs", "result": "pass", "tests": 34},
+    {"cmd": "npm run check:contracts", "result": "pass"},
+    {"cmd": "git diff --check", "result": "pass"}
+  ],
+  "measured": {
+    "dtSweep": [
+      {"dt_s": 4e-3, "maxRelDispErrorVsMonolithic": 0.03510642945340629, "maxEnergyDefect": 0.07288635215015316, "finalMechEnergyRatio": 0.0277939355014621, "maxIterations": 3},
+      {"dt_s": 2e-3, "maxRelDispErrorVsMonolithic": 0.008456488049634833, "maxEnergyDefect": 0.03015674807719778, "finalMechEnergyRatio": 0.02281578570968799, "maxIterations": 3},
+      {"dt_s": 1e-3, "maxRelDispErrorVsMonolithic": 0.0007558513073261893, "maxEnergyDefect": 0.014643916230184906, "finalMechEnergyRatio": 0.021468015320209605, "maxIterations": 3}
+    ],
+    "interfaceForceSum_N_per_m2": 0,
+    "xUniformitySpread": 0,
+    "iterationsDt2e-3_20steps": [
+      {"mass": 0.05, "none": 29, "constant": 18, "aitken": 3},
+      {"mass": 0.01, "none": "diverging@5", "constant": 56, "aitken": 3},
+      {"mass": 0.002, "none": "diverging@5", "constant": "diverging@5", "aitken": 3},
+      {"mass": 0.0005, "none": "diverging@5", "constant": "diverging@5", "aitken": 3}
+    ]
+  },
+  "notes": [
+    "Displacement converges to the monolithic semi-discrete reference at order ~2.1 then ~3.5 (Newmark + constant-wall-velocity errors partly cancel at dt=1e-3).",
+    "Energy-budget defect is first order (~1.0-1.3): the plate sees the end-of-step shear at v^{n+1} while the fluid sees the step-constant wall velocity. Removing it needs the time-averaged shear, which the unchanged solver does not expose.",
+    "The fluid interface response is linear in d (Stokes layer, v=0), so 1-DOF Aitken is a secant that converges in 3 iterations."
+  ],
+  "unverified": ["normal-direction elastic wall (ALE)", "pressure-field coupling", "curved-transfer transpose as interface map", "IQN-ILS", "nonlinear structure", "browser/worker path"]
+}

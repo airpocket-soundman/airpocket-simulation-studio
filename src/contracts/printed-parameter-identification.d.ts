@@ -1,0 +1,6 @@
+/** Work order 101: small-strain parameter identification from validator-accepted dataset JSON. Never calibrated. */
+export type PrintedIdentificationModel = 'linear-elastic' | 'bilinear-elastic-plastic' | 'sls-relaxation';
+export interface PrintedIdentificationOptions { model: PrintedIdentificationModel; maxStrain: number; minPoints: number; maxRelativeStandardError: number; maxTangentRatio?: number; holdStrainTolerance?: number }
+export interface PrintedIdentifiedParameter { value: number; standardError: number; relativeStandardError: number }
+export type PrintedSpecimenIdentification = { specimen: string; identified: true; points: number; parameters: Record<string, PrintedIdentifiedParameter>; rSquared: number; residualRmsPa: number; [extra: string]: unknown } | { specimen: string; identified: false; reason: string; [extra: string]: unknown };
+export interface PrintedIdentificationResult { identificationVersion: 1; model: PrintedIdentificationModel; options: PrintedIdentificationOptions; dataset: { id: string; revision: string; provenance: 'synthetic' | 'measured'; sourceSha256: string }; calibrated: false; accuracyVerified: false; identified: boolean; specimens: PrintedSpecimenIdentification[]; across: Record<string, { mean: number; sampleStandardDeviation: number; specimens: number }> | null }
