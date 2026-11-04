@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-04",
+  "base": "d8214ad0b2497d10c5de6de4d9b593963a91442a",
+  "sourceHead": "2ff4211f789aa98d6d2658d04924df0b8706134f",
+  "scope": [
+    "CFD3 finite admission",
+    "FINITEVISCO1 local damage integrity and numerics",
+    "PRINTMEASURE3 identification validation/statistics",
+    "COUPLE5 shear-plate diagnostics and resource bounds",
+    "P5 source-hash portability",
+    "VIEWTIMEA actual GUI completion/cancellation/refusal"
+  ],
+  "parallelOwners": {
+    "damage": "680d11e4f0a5954d8db2a9319ae760fae6a4786b",
+    "identification": [
+      "8a6d457d2e4a9de2ef440284786f5a00a9c3c5b8",
+      "5a5ac15f0b6b260284ec8f85c79ae2b7f94e02e8",
+      "82f2df6d13a57372ec6ded2661a0846fd46f9f18"
+    ],
+    "shearPlate": [
+      "155a9d9d8f89155a1959283b9e1977158b5d7902",
+      "d1fd93e6cc7dc99dfb8056a893a99e9ec5882c27"
+    ]
+  },
+  "independentCrossReview": {
+    "euler": "four independent fixed-source admission/conservation tests passed; no mandatory finding",
+    "identification": "hidden own-data options and aggregate SD overflow found, fixed and independently reproduced finite/refused",
+    "fsi": "custom profile iterator capacity bypass found,fixed and six independent gate groups passed without a fluid solve"
+  },
+  "validation": {
+    "initialFull": {
+      "source": "d8a9f45179fc403d21eef7ecf794346c58ce739e",
+      "command": "npm test",
+      "tests": 2517,
+      "passed": 2507,
+      "failed": 1,
+      "skipped": 9,
+      "durationMs": 359214.9036,
+      "failure": "analysis-job-service restart startup-condition digest: Job did not finish at20-second wait",
+      "cause": "not established; no timeout threshold,test skip or production job service change"
+    },
+    "finalSourceRecheck": {
+      "command": "node --test tests/analysis-job-service.test.mjs tests/fsi-channel-shear-plate-audit.test.mjs",
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "durationMs": 5485.0366,
+      "restartTestMs": 1425.7422
+    },
+    "typeDeclarations": 36,
+    "build": {
+      "source": "2ff4211f789aa98d6d2658d04924df0b8706134f",
+      "passed": true,
+      "viteSeconds": 4.16
+    },
+    "finalFullAndCI": "pending at this record;see final PR checks and subsequent verification",
+    "gui": {
+      "rawFiles": 15,
+      "rawBytes": 621543,
+      "allCommittedSha256AndBlobHashesVerified": true,
+      "exactRestoredControls": 485,
+      "interpolatedPhysicalTimeSeconds": 2,
+      "noNewSolveOrEncoding": true
+    }
+  },
+  "taskData": {
+    "count": 197,
+    "baselineGitBlobUnchanged": true,
+    "noParentAcceptancePromotion": true
+  },
+  "limits": [
+    "all material/coupling reference inputs are synthetic and uncalibrated",
+    "no general multi-phase,regularized damage,general FSI,external measurement or public-browser physical acceptance",
+    "cooperative limits cannot preempt arbitrary synchronous callback code",
+    "no new SU2 execution"
+  ],
+  "rawFolder": "docs/evidence/2026-11-04-parallel-root-validation",
+  "rawFiles": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "gitBlobSha1": "fa1385d99a319b43c06f5309d1aae9fdd3adea46"
+    },
+    {
+      "file": "build.log",
+      "bytes": 3436,
+      "sha256": "eff01544883774021bda04d1b603f73d66cee032661ae6bdb64a116353284e5f",
+      "gitBlobSha1": "41cb794ca828902edb2190546721ce2e05839614"
+    },
+    {
+      "file": "core-related.log",
+      "bytes": 3289,
+      "sha256": "9b59696bc35061fb1809e334c6b0b510c52698a4e9bf0e69361b53b89da373d2",
+      "gitBlobSha1": "6f612f58bea13d4a610ca9408aee2e3a2046a5c5"
+    },
+    {
+      "file": "euler-related.log",
+      "bytes": 3054,
+      "sha256": "dc3562c60ca241967e6ce6d4041515b0407c3fb42aa2916d4f34545287b0fb6d",
+      "gitBlobSha1": "5c7c7752a04ee6ef2d2caa5287e5a28f57bfa686"
+    },
+    {
+      "file": "initial-full.log",
+      "bytes": 269187,
+      "sha256": "bc708f801c06216dab11e895c728e15a69dccfcd8751aba196791e8de4a0bcc7",
+      "gitBlobSha1": "d810da305dbc95fdaa100086a4c90528747ad04e"
+    },
+    {
+      "file": "job-and-fsi-recheck.log",
+      "bytes": 1845,
+      "sha256": "023d9088b738fbab4709ae8cedb6ef6f7c55af5e504f8c06e42d8498312d2303",
+      "gitBlobSha1": "60e8be9e83864e5d1c57720012c0474162b2f415"
+    },
+    {
+      "file": "p5-windows-after.log",
+      "bytes": 475,
+      "sha256": "fe4413c86b76e47cd943076bed0ca9a7e72af45a538568b8ade0de981c67931e",
+      "gitBlobSha1": "494bcd5fa8a0410a01cccf6a040d667bc723d729"
+    },
+    {
+      "file": "p5-windows-before.log",
+      "bytes": 2625,
+      "sha256": "03e1d34d3a25e50c8f235abe44ae7931d2c5184c61ccee0112c895bf8d8d48c8",
+      "gitBlobSha1": "0d4e6714e6a1cc5410febeff2fc9d493105a2add"
+    }
+  ]
+}
