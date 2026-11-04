@@ -19,3 +19,6 @@ Both parent dataset inspection and identification reserve their own single SHA-p
 
 
 The three explicitly labeled synthetic example buttons load invented curves and their visible toy conditions. They do not identify automatically. Loading replaces the JSON above, revokes its old validated downloads/results, and cancels old identification. Clear conditions leaves raw text untouched. These examples are not measured data or material recommendations; the legacy measurement example is unchanged. [Example formulas, truth and exact raw hashes](../evidence/2026-11-04-printed-identification-examples.json).
+
+
+[Condition-specific summaries](printed-identification-groups.md) now replace the mixed overall average in this UI. Single-specimen scatter is explicitly unknown.

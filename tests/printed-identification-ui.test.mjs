@@ -1,3 +1,4 @@
+import {identifyPrintedParametersByCondition} from '../src/printed-identification-groups.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
@@ -11,7 +12,7 @@ function setup(parent=false,{unsupported=false}={}){
  const createWorker=()=>{if(unsupported)throw Error('unsupported');const w={terminated:0,postMessage(data){this.sent=data;this.callback=this.onmessage;},terminate(){this.terminated++;}};workers.push(w);return w;},common={host,document,language:()=>language,setTimer:fn=>{timers.set(++clock,fn);return clock;},clearTimer:id=>timers.delete(id)};
  const measurement=parent?createPrintedMeasurementUi({...common,createIdentificationWorker:createWorker,url:{createObjectURL:()=> 'blob:fixture',revokeObjectURL(){}}}):null;
  const ui=measurement?.identification??createPrintedIdentificationUi({...common,getRaw:()=>raw,createWorker});if(measurement)measurement.input.value=raw;
- return {ui,measurement,workers,timers,listeners,setRaw(v){raw=v;if(measurement)measurement.input.value=v;},raw:()=>measurement?.input.value??raw,english(){language='en';(measurement??ui).refresh();},async ready(){for(let i=0;i<50&&!workers.at(-1)?.sent;i++)await new Promise(r=>setTimeout(r,1));assert.ok(workers.at(-1)?.sent);},async deliver(mutate=x=>x){const w=workers.at(-1);const result=await identifyPrintedParameters(w.sent.raw,w.sent.options);w.callback({data:mutate({requestId:w.sent.requestId,ok:true,result})});return result;}};
+ return {ui,measurement,workers,timers,listeners,setRaw(v){raw=v;if(measurement)measurement.input.value=v;},raw:()=>measurement?.input.value??raw,english(){language='en';(measurement??ui).refresh();},async ready(){for(let i=0;i<50&&!workers.at(-1)?.sent;i++)await new Promise(r=>setTimeout(r,1));assert.ok(workers.at(-1)?.sent);},async deliver(mutate=x=>x){const w=workers.at(-1);const {identification:result,grouping}=await identifyPrintedParametersByCondition(w.sent.raw,w.sent.options);w.callback({data:mutate({requestId:w.sent.requestId,ok:true,result,grouping})});return result;}};
 }
 function options(h,model='linear-elastic'){h.ui.model.value=model;for(const [k,v]of Object.entries({maxStrain:'.08',minPoints:'5',maxRelativeStandardError:'.05',maxTangentRatio:'.5',holdStrainTolerance:'.000001'}))h.ui.inputs[k].value=v;}
 
@@ -86,4 +87,13 @@ test('explicit example buttons replace only raw/conditions, revoke parent downlo
 });
 test('loading a synthetic example while digest is pending preserves the real preparation slot',async()=>{
  const h=setup(true);options(h);const original=globalThis.crypto.subtle.digest;let release;globalThis.crypto.subtle.digest=()=>new Promise(r=>{release=r;});try{const p=h.ui.identify();h.ui.exampleButtons[2].onclick();assert.equal(h.ui.model.value,'sls-relaxation');assert.equal(h.ui.snapshot().digestPending,true);assert.equal(await h.ui.identify(),false);assert.equal(h.workers.length,0);release(new ArrayBuffer(32));assert.equal(await p,false);assert.equal(h.ui.snapshot().sourceSha256,null);assert.equal(h.ui.run.disabled,false);}finally{globalThis.crypto.subtle.digest=original;}
+});
+
+
+test('condition UI hides mixed global averages and displays exact singleton unknowns and rejection reasons',async()=>{
+ const h=setup(),d=JSON.parse(syntheticDataset({curves:ramp(10,.005,linearStress(1e9)),noisePa:0,specimens:4}));d.specimens[1].samples=d.specimens[1].samples.map(([t,f,u])=>[t,3*f,u]);d.specimens[2].buildDirection=[1,0,0];d.specimens[2].samples=d.specimens[2].samples.map(([t,f,u])=>[t,9*f,u]);d.specimens[3].samples=d.specimens[3].samples.slice(0,2);h.setRaw(JSON.stringify(d));options(h);const p=h.ui.identify();await h.ready();await h.deliver();assert.equal(await p,true);assert.match(h.ui.results.textContent,/条件が異なるため全体平均は表示しません/);assert.match(h.ui.results.textContent,/不明（同定できた試験片が1片のみ）/);assert.match(h.ui.results.textContent,/条件内の点数が不足/);assert.match(h.ui.results.textContent,/2000000000/);assert.doesNotMatch(h.ui.results.textContent,/4333333333/);h.english();assert.match(h.ui.results.textContent,/Conditions differ/);assert.match(h.ui.results.textContent,/Unknown \(only one identified specimen\)/);h.ui.cancel.onclick();assert.equal(h.ui.results.textContent,'');
+});
+test('condition replies reject missing/duplicate members, altered statistics, source/options, sparse groups and false singleton SD',async()=>{
+ const mutations=[m=>{m.grouping.dataset.sourceSha256='0'.repeat(64);},m=>{m.grouping.options.minPoints++;},m=>{m.grouping.covarianceAccuracyVerified=true;},m=>{delete m.grouping.groups[0];},m=>{m.grouping.groups[0].members=[];},m=>{m.grouping.groups[0].members.push(m.grouping.groups[0].members[0]);},m=>{m.grouping.groups[0].statistics.youngsModulusPa.mean*=2;},m=>{m.grouping.groups[0].statistics.youngsModulusPa.sampleStandardDeviation=0;},m=>{m.grouping.groups[0].conditions.temperatureC=Infinity;},m=>{m.grouping.mixedConditions=true;}];
+ for(const mutate of mutations){const h=setup();options(h);const p=h.ui.identify();await h.ready();await h.deliver(m=>{mutate(m);return m;});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');}
 });

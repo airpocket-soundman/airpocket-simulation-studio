@@ -1,7 +1,8 @@
+import type {PrintedIdentificationGrouping} from './printed-identification-groups.js';
 import type {PrintedIdentificationOptions,PrintedIdentificationResult} from './printed-parameter-identification.js';
 /** Private worker protocol; it carries no project or material mutation method. */
 export interface PrintedIdentificationWorkerRequest {requestId:number;raw:string;options:PrintedIdentificationOptions}
-export type PrintedIdentificationWorkerResponse={requestId:number;ok:true;result:PrintedIdentificationResult}|{requestId:number;ok:false;code:'PRINTED_DATASET_INVALID'|'PRINTED_IDENTIFICATION_INVALID'};
+export type PrintedIdentificationWorkerResponse={requestId:number;ok:true;result:PrintedIdentificationResult;grouping:PrintedIdentificationGrouping}|{requestId:number;ok:false;code:'PRINTED_DATASET_INVALID'|'PRINTED_IDENTIFICATION_INVALID'};
 export interface PrintedIdentificationUi {
  exampleButtons:HTMLButtonElement[];panel:HTMLDetailsElement;model:HTMLSelectElement;inputs:Record<'maxStrain'|'minPoints'|'maxRelativeStandardError'|'maxTangentRatio'|'holdStrainTolerance',HTMLInputElement>;run:HTMLButtonElement;cancel:HTMLButtonElement;clear:HTMLButtonElement;status:HTMLParagraphElement;results:HTMLDivElement;
  identify():Promise<boolean>;invalidate():void;refresh():void;destroy():void;

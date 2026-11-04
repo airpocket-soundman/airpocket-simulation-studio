@@ -16,3 +16,6 @@ const request:PrintedIdentificationWorkerRequest={requestId:1,raw:'{}',options:{
 import {printedIdentificationExample} from '../../src/printed-identification-examples.js';
 const toy=printedIdentificationExample('sls-relaxation');const rawToy:string=toy.raw;void rawToy;
 ui.identification.exampleButtons[0].click();
+
+import {identifyPrintedParametersByCondition} from '../../src/printed-identification-groups.js';
+identifyPrintedParametersByCondition('{}',{model:'linear-elastic',maxStrain:.01,minPoints:3,maxRelativeStandardError:.1}).then(r=>{const unknownSd:number|null=r.grouping.groups[0].statistics!.youngsModulusPa.sampleStandardDeviation;void unknownSd;});
