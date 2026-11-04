@@ -1,0 +1,14 @@
+{
+  "meaning": "Existing GUI synthetic example only;not measured",
+  "sourceBytes": 1585,
+  "sourceSha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+  "independentDerivation": "specimenZ:0.5N/(1mm2)=500000Pa;0.05mm/10mm=.005;E=100000000Pa. specimenX doubles force and area, same E.",
+  "expectedYoungsModulusPa": 100000000,
+  "expectedSpecimens": 2,
+  "options": {
+    "model": "linear-elastic",
+    "maxStrain": 0.02,
+    "minPoints": 3,
+    "maxRelativeStandardError": 0.1
+  }
+}

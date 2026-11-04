@@ -1,0 +1,37 @@
+{
+  "options": [
+    {
+      "disabled": false,
+      "id": "printed-measurement-1-identification-model",
+      "value": "linear-elastic"
+    },
+    {
+      "disabled": false,
+      "id": "printed-measurement-1-identification-maxStrain",
+      "value": "0.02"
+    },
+    {
+      "disabled": false,
+      "id": "printed-measurement-1-identification-minPoints",
+      "value": "3"
+    },
+    {
+      "disabled": false,
+      "id": "printed-measurement-1-identification-maxRelativeStandardError",
+      "value": "0.1"
+    },
+    {
+      "disabled": true,
+      "id": "printed-measurement-1-identification-maxTangentRatio",
+      "value": ""
+    },
+    {
+      "disabled": true,
+      "id": "printed-measurement-1-identification-holdStrainTolerance",
+      "value": ""
+    }
+  ],
+  "raw": "{\n  \"schemaVersion\": 1,\n  \"id\": \"synthetic-example-only\",\n  \"revision\": \"1\",\n  \"provenance\": \"synthetic\",\n  \"units\": {\n    \"length\": \"mm\",\n    \"force\": \"N\",\n    \"time\": \"s\",\n    \"temperature\": \"degC\",\n    \"speed\": \"mm/s\"\n  },\n  \"instrument\": {\n    \"id\": \"synthetic-no-device\",\n    \"hardwareRevision\": \"synthetic-1\",\n    \"softwareRevision\": \"synthetic-1\"\n  },\n  \"calibration\": {\n    \"status\": \"unverified\",\n    \"forceEvidence\": null,\n    \"displacementEvidence\": null,\n    \"dimensionEvidence\": null\n  },\n  \"specimens\": [\n    {\n      \"id\": \"synthetic-Z\",\n      \"dimensions\": [\n        1,\n        1,\n        10\n      ],\n      \"gaugeLength\": 10,\n      \"buildDirection\": [\n        0,\n        0,\n        1\n      ],\n      \"batch\": \"synthetic-no-physical-batch\",\n      \"temperature\": 20,\n      \"speed\": 0.1,\n      \"displacementKind\": \"gauge\",\n      \"samples\": [\n        [\n          0,\n          0,\n          0\n        ],\n        [\n          1,\n          0.5,\n          0.05\n        ],\n        [\n          2,\n          1,\n          0.1\n        ]\n      ]\n    },\n    {\n      \"id\": \"synthetic-X\",\n      \"dimensions\": [\n        1,\n        2,\n        10\n      ],\n      \"gaugeLength\": 10,\n      \"buildDirection\": [\n        1,\n        0,\n        0\n      ],\n      \"batch\": \"synthetic-no-physical-batch\",\n      \"temperature\": 20,\n      \"speed\": 0.1,\n      \"displacementKind\": \"gauge\",\n      \"samples\": [\n        [\n          0,\n          0,\n          0\n        ],\n        [\n          1,\n          1,\n          0.05\n        ],\n        [\n          2,\n          2,\n          0.1\n        ]\n      ]\n    }\n  ]\n}",
+  "result": "Synthetic data; not a measurement: synthetic-example-only / 1SHA-256: 378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681synthetic-ZPoints: 3Young modulus (Pa): 100000000; Standard error 0; Relative standard error 0R² / RMS (Pa): 1 / 0synthetic-XPoints: 3Young modulus (Pa): 100000000; Standard error 0; Relative standard error 0R² / RMS (Pa): 1 / 0Across-specimen mean / sample standard deviationYoung modulus (Pa): 100000000 / 0",
+  "status": "Identification results (not applied to material)"
+}
