@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "baseline": "6718614bf731073ee345eb40cd1932792d0e43f9",
+  "ownerFix": "fe3274caacf5251bb49b6c1bd084f99b9cd40e72",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Closeout audit only: existing batch/group/holdout increments, no new feature",
+  "sourceChangesInAuditCommit": false,
+  "sources": [
+    {
+      "path": "scripts/printed-identification-batch-service.mjs",
+      "commit": "6718614bf731073ee345eb40cd1932792d0e43f9",
+      "gitBlobSha256": "b5e57e1f7e5c85fa8e4982a5e1ec63cf2c69dfbb4e5dca093aa17201fb4dda59"
+    },
+    {
+      "path": "scripts/printed-identification-file-io.mjs",
+      "commit": "6718614bf731073ee345eb40cd1932792d0e43f9",
+      "gitBlobSha256": "4ecb728a3d598909c54615a180a3f46b3c303f55bfbcaee280e32e9d175ea76f"
+    },
+    {
+      "path": "src/printed-identification-groups.js",
+      "commit": "6718614bf731073ee345eb40cd1932792d0e43f9",
+      "gitBlobSha256": "f484510b39e49a16919d0dd19162e4c7f1f2f89e90e726f7349ee39a6ec33660"
+    },
+    {
+      "path": "src/printed-parameter-holdout.js",
+      "commit": "6718614bf731073ee345eb40cd1932792d0e43f9",
+      "gitBlobSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9"
+    },
+    {
+      "path": "src/ui/printed-identification-ui.js",
+      "commit": "fe3274caacf5251bb49b6c1bd084f99b9cd40e72",
+      "gitBlobSha256": "76757a0069640061d71a5483d5a8b16804d75686b79d5851481d32b99b1581dd"
+    }
+  ],
+  "initial": {
+    "tests": 49,
+    "pass": 49,
+    "fail": 0,
+    "skip": 0,
+    "durationMilliseconds": 4657.4266,
+    "additionalIndependentProbe": {
+      "accepted": true,
+      "phase": "completed",
+      "sourceTemperatureC": 20,
+      "forgedGroupTemperatureC": 999,
+      "displayContains999": true
+    }
+  },
+  "fixed": {
+    "independentGroups": 2,
+    "independentPass": 2,
+    "independentDurationMilliseconds": 244.1317,
+    "covered": [
+      "Every condition field valid-range substitution",
+      "Group memberships plus correct internal statistics swapped"
+    ],
+    "temperatureProbe": {
+      "accepted": false,
+      "phase": "invalid",
+      "display": "empty",
+      "workerTerminated": true
+    },
+    "related": {
+      "command": "node --test tests/printed-identification-closeout-independent.test.mjs tests/printed-identification-batch-cli.test.mjs tests/printed-identification-groups.test.mjs tests/printed-parameter-holdout.test.mjs tests/printed-identification-file-independent.test.mjs tests/printed-identification-ui.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "tests": 69,
+      "pass": 69,
+      "fail": 0,
+      "skip": 0,
+      "durationMilliseconds": 5751.8023
+    },
+    "contracts": {
+      "pass": true,
+      "declarationFiles": 40
+    }
+  },
+  "logs": [
+    {
+      "path": "docs/evidence/printed-final-integration-audit-20261104/initial-related.log",
+      "bytes": 5684,
+      "sha256": "a8ad5fb2e08b63f8d2348724aa7d70426e5edfbff36717124bcc01a1023087f7"
+    },
+    {
+      "path": "docs/evidence/printed-final-integration-audit-20261104/final-related.log",
+      "bytes": 8057,
+      "sha256": "1531f9e849bbf0a15878e1e10b55fe3bdf2df01a0da4e0eefc6f9518004420ea"
+    },
+    {
+      "path": "docs/evidence/printed-final-integration-audit-20261104/contracts.log",
+      "bytes": 157,
+      "sha256": "d496178934c4afd3662a31854cf159fe7bd0cfdf75e7aef66ea13881479a3aca"
+    }
+  ],
+  "findings": [
+    {
+      "kind": "UI source-condition binding",
+      "before": "Valid but wrong condition labels passed strict reply validation",
+      "fixedBy": "fe3274caacf5251bb49b6c1bd084f99b9cd40e72",
+      "independentlyClosed": true
+    }
+  ],
+  "batchAdditionalMandatoryFindings": [],
+  "taskList": {
+    "owner": "root",
+    "relatedId": "PRINTMEASURE3",
+    "statusPromotion": false
+  },
+  "limitations": [
+    "Root full suite is a separate run",
+    "No new solver, measurement, actual GUI or publication run",
+    "Recorded conditions/IDs do not verify calibration or physical independence",
+    "No next task or new feature started"
+  ]
+}
