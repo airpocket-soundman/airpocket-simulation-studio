@@ -1,0 +1,38 @@
+✔ unlimited MUSCL + SSP-RK2 is second order on the smooth periodic density wave (384.2569ms)
+✔ limited schemes stay above first order and beat order 1 on the smooth wave (895.127ms)
+✔ second-order Sod is more accurate than first order, conservative and positive; Toro test 2 stays positive (341.8693ms)
+✔ invalid inputs and runaway runs throw instead of returning results (0.7916ms)
+✔ Euler admission rejects unbounded inputs before initial-data callbacks or grid allocation (3.1698ms)
+✔ Euler rejects nonfinite conserved overrides instead of allowing infinite output or stalled time (4.9485ms)
+✔ Euler initialization consumes the same cooperative time budget as integration (5.6808ms)
+✔ both Euler fluxes preserve an anisotropic uniform moving state and its four analytic totals (10.7553ms)
+✔ unsplit 2D MUSCL + SSP-RK2 is second order on the advected isentropic vortex (2467.1152ms)
+✔ 2D Riemann problem (Lax-Liu 3): conservative, positive, diagonal-symmetric; reflective box has zero mass/energy inflow (2691.2315ms)
+✔ invalid inputs and limits throw (1.7761ms)
+✔ the real repository satisfies its module boundaries and the graph is what the table says it is (480.0934ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (299.762ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (337.8421ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.5189ms)
+✔ import parser ignores strings that merely contain "from" (0.3771ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (0.2309ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.3223ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.19ms)
+✔ a real import inside a template substitution is still found (0.2046ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (23.8783ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (7.0623ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.8215ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (23.7794ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (33.9556ms)
+✔ a forbidden upward edge (domain -> ui) is reported (6.479ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (13.5149ms)
+✔ an unclassified new file fails, including files in subdirectories (11.3076ms)
+✔ allowlist entries must be used and justified (0.2483ms)
+✔ collectGraph resolves relative imports inside subdirectories (8.9282ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5337.613

@@ -1,0 +1,51 @@
+✔ P5 evidence: every variant converges under Tet10 on the MCP meshes and the selection follows the recorded rule (7.779ms)
+✖ P5 evidence: one synthetic design loop with per-variant mesh sweeps, a recorded decision and a round-2 result (8.3087ms)
+✖ P5 evidence: three synthetic thickness variants solved and compared only through MCP (10.3571ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 313.1706
+
+✖ failing tests:
+
+test at tests\p5-bracket-design-loop-evidence.test.mjs:8:1
+✖ P5 evidence: one synthetic design loop with per-variant mesh sweeps, a recorded decision and a round-2 result (8.3087ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'sha256:e87115f12de1bb3c1394801e22eaaa81e19da0eb5812608e6d1c034e34bc7779'
+  - 'sha256:30e9323295b1c6309e0abb5ff2c4b2d22525431bcd2ea1d0944c6a891164f56a'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/tests/p5-bracket-design-loop-evidence.test.mjs:10:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'sha256:e87115f12de1bb3c1394801e22eaaa81e19da0eb5812608e6d1c034e34bc7779',
+    expected: 'sha256:30e9323295b1c6309e0abb5ff2c4b2d22525431bcd2ea1d0944c6a891164f56a',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\p5-bracket-thickness-evidence.test.mjs:8:1
+✖ P5 evidence: three synthetic thickness variants solved and compared only through MCP (10.3571ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'sha256:e92fa3c4cf152ebf38e14d04b95f115f83b66cd3879a97384275873cc5d285fe'
+  - 'sha256:04afe416d1289c186f639a94c143b9ab7fa5aea3080aec339fb6e43139aee75b'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/audit-180-20261023/airpocket-simulation-studio/tests/p5-bracket-thickness-evidence.test.mjs:10:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'sha256:e92fa3c4cf152ebf38e14d04b95f115f83b66cd3879a97384275873cc5d285fe',
+    expected: 'sha256:04afe416d1289c186f639a94c143b9ab7fa5aea3080aec339fb6e43139aee75b',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
