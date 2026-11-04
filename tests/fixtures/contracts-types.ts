@@ -178,3 +178,4 @@ export {groupedP1HeatFixture} from './grouped-p1-heat-operator-types';
 import './single-stored-time-gif-types';
 import './single-deformation-gif-types';
 import './single-slice-gif-types';
+import './fsi-channel-shear-plate-types';
