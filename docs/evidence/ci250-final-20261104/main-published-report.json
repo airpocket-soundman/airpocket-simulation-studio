@@ -1,0 +1,169 @@
+{
+  "status": "passed",
+  "version": "0.44.0",
+  "revision": "74f3b8c216ed5ef5c131a6c5f97950b06ef4d956",
+  "local": false,
+  "checkedAt": "2026-11-04T06:17:25.326Z",
+  "elapsedMs": 47185.070958,
+  "checks": [
+    {
+      "name": "deployed-asset-integrity",
+      "passed": true,
+      "assets": 25,
+      "downloaded": 25
+    },
+    {
+      "name": "structural-airpocket-and-mfem",
+      "passed": true,
+      "ms": 1267.5766350000004
+    },
+    {
+      "name": "saved-case-comparison-and-point-remeasurement",
+      "passed": true,
+      "ms": 68.17884099999992
+    },
+    {
+      "name": "closed-convex-stl-volume-structure-and-archive",
+      "passed": true,
+      "ms": 721.798933
+    },
+    {
+      "name": "preinstalled-polymer-catalog-axial-reference-and-provenance",
+      "passed": true,
+      "ms": 705.3015300000006
+    },
+    {
+      "name": "engineering-polymer-five-family-axial-references",
+      "passed": true,
+      "ms": 3266.5128000000004
+    },
+    {
+      "name": "mode-i-brittle-fracture-bounds-real-worker-and-archive",
+      "passed": true,
+      "ms": 622.3050619999995
+    },
+    {
+      "name": "uniaxial-sn-fatigue-life-goodman-and-archive",
+      "passed": true,
+      "ms": 1982.9024449999997
+    },
+    {
+      "name": "thermal-radiation",
+      "passed": true,
+      "ms": 564.9334820000004
+    },
+    {
+      "name": "rubber-finite-strain",
+      "passed": true,
+      "ms": 840.0633200000011
+    },
+    {
+      "name": "laminar-channel-flow",
+      "passed": true,
+      "ms": 931.6106970000001
+    },
+    {
+      "name": "three-dimensional-creeping-stokes-flow-and-archive",
+      "passed": true,
+      "ms": 3585.489552000001
+    },
+    {
+      "name": "taylor-hood-p2-worker-physical-archive-and-midpoint-probe",
+      "passed": true,
+      "ms": 2870.690139999999
+    },
+    {
+      "name": "exterior-radiation-and-far-field",
+      "passed": true,
+      "ms": 1942.3914700000023
+    },
+    {
+      "name": "transient-acoustic-wave-and-archive",
+      "passed": true,
+      "ms": 961.1488979999995
+    },
+    {
+      "name": "modal-frequencies-and-archive",
+      "passed": true,
+      "ms": 1660.0962300000028
+    },
+    {
+      "name": "modal-to-exterior-acoustic-power",
+      "passed": true,
+      "ms": 2965.9284929999994
+    },
+    {
+      "name": "internal-cad-channel-and-port-archive",
+      "passed": true,
+      "ms": 3038.7441059999983
+    },
+    {
+      "name": "exact-planar-cad-patch-and-archive",
+      "passed": true,
+      "ms": 954.9646569999968
+    },
+    {
+      "name": "exact-cylindrical-cad-patch-and-reaction",
+      "passed": true,
+      "ms": 2241.017734000001
+    },
+    {
+      "name": "j2-plasticity-free-contraction-and-archive",
+      "passed": true,
+      "ms": 1186.5957359999957
+    },
+    {
+      "name": "j2-plasticity-elastic-unloading-and-archive",
+      "passed": true,
+      "ms": 1778.5556260000012
+    },
+    {
+      "name": "failure-and-restart",
+      "passed": true,
+      "ms": 1157.8730800000048
+    },
+    {
+      "name": "project-and-case-roundtrips",
+      "passed": true,
+      "ms": 17.652845000004163
+    },
+    {
+      "name": "published-cad-reader-and-step-mesher",
+      "passed": true,
+      "ms": 3115.5080899999957
+    },
+    {
+      "name": "cad-update-reconciliation-pending-repair-and-step-worker-reference",
+      "passed": true,
+      "ms": 2575.3465639999995
+    },
+    {
+      "name": "oblique-planar-cad-area-and-reaction",
+      "passed": true,
+      "ms": 1210.2861639999974
+    },
+    {
+      "name": "progress-history-candidate",
+      "passed": true,
+      "ms": 3.2922039999975823
+    }
+  ],
+  "execution": {
+    "host": "node-child-process",
+    "sameExecutable": true,
+    "node": "v24.22.1",
+    "v8": "13.6.233.17-node.58",
+    "platform": "linux",
+    "arch": "x64",
+    "childCount": 44,
+    "requestCount": 44,
+    "automaticFallback": false,
+    "automaticRetry": false
+  },
+  "checkpointPath": "/home/runner/work/airpocket-simulation-studio/airpocket-simulation-studio/.qa/published-checkpoints-1793772998126-2790.jsonl",
+  "limitations": [
+    "Same-Node child processes execute hash-verified deployed CAD/analysis WASM assets and fixed STEP generation tasks.",
+    "Process isolation is containment and does not establish a V8 root-cause fix or a non-WASM native solver.",
+    "Browser UI, isolation, camera/selection gestures and real WebGPU require separate browser checks."
+  ]
+}
