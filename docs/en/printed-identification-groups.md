@@ -13,3 +13,6 @@ Bounds are100 groups,100 specimens and three parameters per model, preserving2MB
 This adds no measurements, calibration or independent measured validation. It is a limited PRINTMEASURE3 increment for reading existing synthetic identification without mixing conditions, not completion of the parent task.
 
 [Evidence](../evidence/2026-11-04-printed-identification-groups.json)
+
+
+The UI now normalizes the original raw JSON with the existing importer inside its owned preparation slot, snapshots only condition metadata, and matches every reported member against that source. Plausible but substituted conditions (for example20°C→999°C), swapped memberships and substituted source labels refuse. The same pending SHA slot remains held until actual preparation settles; fitting stays in the worker.

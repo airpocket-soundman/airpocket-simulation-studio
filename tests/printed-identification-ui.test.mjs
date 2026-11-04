@@ -97,3 +97,14 @@ test('condition replies reject missing/duplicate members, altered statistics, so
  const mutations=[m=>{m.grouping.dataset.sourceSha256='0'.repeat(64);},m=>{m.grouping.options.minPoints++;},m=>{m.grouping.covarianceAccuracyVerified=true;},m=>{delete m.grouping.groups[0];},m=>{m.grouping.groups[0].members=[];},m=>{m.grouping.groups[0].members.push(m.grouping.groups[0].members[0]);},m=>{m.grouping.groups[0].statistics.youngsModulusPa.mean*=2;},m=>{m.grouping.groups[0].statistics.youngsModulusPa.sampleStandardDeviation=0;},m=>{m.grouping.groups[0].conditions.temperatureC=Infinity;},m=>{m.grouping.mixedConditions=true;}];
  for(const mutate of mutations){const h=setup();options(h);const p=h.ui.identify();await h.ready();await h.deliver(m=>{mutate(m);return m;});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');}
 });
+
+
+test('every grouped condition and member is bound to normalized source, not just a plausible same-SHA reply',async()=>{
+ const mutations=[c=>c.temperatureC=999,c=>c.speedMmPerSecond=.7,c=>c.batch='other-batch',c=>c.dimensionsMm=[2,1,10],c=>c.gaugeLengthMm=9,c=>c.buildDirection=[1,0,0]];
+ for(const mutate of mutations){const h=setup();options(h);const p=h.ui.identify();await h.ready();await h.deliver(m=>{mutate(m.grouping.groups[0].conditions);return m;});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');assert.equal(h.workers[0].terminated,1);}
+ // Mutating both identity copies cannot override the original source's metadata.
+ const h=setup();options(h);const p=h.ui.identify();await h.ready();await h.deliver(m=>{m.result.dataset.provenance=m.grouping.dataset.provenance='measured';return m;});assert.equal(await p,false);
+});
+test('member swaps between plausible groups refuse even when each statistic still matches its swapped member',async()=>{
+ const h=setup(),d=JSON.parse(syntheticDataset({curves:ramp(10,.005,linearStress()),noisePa:0,specimens:2}));d.specimens[1].temperature=999;h.setRaw(JSON.stringify(d));options(h);const p=h.ui.identify();await h.ready();await h.deliver(m=>{const [a,b]=m.grouping.groups;[a.members,b.members]=[b.members,a.members];[a.statistics,b.statistics]=[b.statistics,a.statistics];return m;});assert.equal(await p,false);assert.equal(h.ui.results.textContent,'');
+});

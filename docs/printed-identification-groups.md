@@ -13,3 +13,6 @@
 実測・校正・独立検証は追加していません。親PRINTMEASURE3全体の完了ではなく、既存の合成同定を条件混在なしで読むための限定増分です。
 
 [検証証拠](evidence/2026-11-04-printed-identification-groups.json)
+
+
+UIは占有中の準備枠で元JSONを既存importerにより正規化し、条件metadataだけをsnapshotして全memberを元条件と照合します。範囲内でも20°Cを999°Cへ差し替える返信、所属の入替え、出典表示の差替えは拒否します。準備の実完了まで同じSHA1枠を保持し、重い同定は引き続きworkerで処理します。
