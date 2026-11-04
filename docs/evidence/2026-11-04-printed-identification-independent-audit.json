@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "candidate": "99dcf950258f6fea1b43c068da323ff9c3ef0292",
+  "initialCandidate": "e8a2683e754f9e5d1cb43657975393fbcc5ab517",
+  "sourceChangesInAudit": false,
+  "sourceHashes": [
+    {
+      "path": "src/ui/printed-identification-ui.js",
+      "gitBlobSha256": "cf4225cc8152b4035209f8cf00b371e138bafab19de62b5d4b450c41d5e9fcf7"
+    },
+    {
+      "path": "src/ui/printed-measurement-ui.js",
+      "gitBlobSha256": "03e5cc9d6c94eaa18428360c841c5e0232e1c305b719a83a0f1ad9f08e497be0"
+    },
+    {
+      "path": "src/printed-identification.worker.js",
+      "gitBlobSha256": "8f9da29b5cfde959132baa1c92a1f99dd2b657dd24340cd9eb433b171b4265e2"
+    }
+  ],
+  "protectedPaths": [
+    "src/main.js",
+    "src/progress.json",
+    "src/printed-parameter-identification.js",
+    "src/printed-measurement-dataset.js"
+  ],
+  "independentTests": 6,
+  "independentElapsedMilliseconds": 245.3722,
+  "related": {
+    "command": "node --test tests/printed-identification-ui-independent.test.mjs tests/printed-identification-ui.test.mjs tests/ui-printed-measurement.test.mjs tests/printed-parameter-identification.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+    "tests": 58,
+    "pass": 58,
+    "fail": 0,
+    "skip": 0,
+    "durationMilliseconds": 3546.0104,
+    "includesIndependent6": true,
+    "logSha256": "46dcd212f226b2b20aa4a97e9f2360309d53da80cfcc514f624681969d574dfa"
+  },
+  "contracts": {
+    "pass": true,
+    "declarationFiles": 37,
+    "logSha256": "4a03200a4e60b1c942fad10b4e5a707a98fdeca2b7d16b1e0182200eb70c9337"
+  },
+  "oracle": {
+    "strain": [
+      0.001,
+      0.002,
+      0.003,
+      0.004,
+      0.005
+    ],
+    "noisePa": [
+      -200,
+      100,
+      0,
+      0,
+      0
+    ],
+    "youngModulusPa": 700000000,
+    "ssePaSquared": 50000,
+    "residualDegreesOfFreedom": 4,
+    "standardErrorPa": 15075.567228888181,
+    "relativeStandardError": 0.0000215365246126974,
+    "residualRmsPa": 100,
+    "realNodeModuleWorker": true,
+    "calibrated": false,
+    "accuracyVerified": false
+  },
+  "counterexamples": [
+    {
+      "before": "Et=2E/SE0/RSE0 accepted despite maxTangentRatio.5",
+      "fixedBy": "99dcf950258f6fea1b43c068da323ff9c3ef0292",
+      "independentlyClosed": true
+    },
+    {
+      "before": "Parent raw ABA starts two unresolved digest preparations",
+      "observedBeforeDigestCalls": 2,
+      "expectedAfterDigestCalls": 1,
+      "fixedBy": "99dcf950258f6fea1b43c068da323ff9c3ef0292",
+      "independentlyClosed": true
+    }
+  ],
+  "limits": [
+    "Controlled fake DOM and SHA scheduling plus one real Node module Worker; no actual browser GUI/Worker teardown claim",
+    "No file-CLI validation in this record",
+    "No solver, calibration, physical accuracy, material application or publication claim",
+    "Progress remains unchanged"
+  ]
+}

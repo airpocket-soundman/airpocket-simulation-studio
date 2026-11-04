@@ -1,0 +1,41 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {Worker} from 'node:worker_threads';
+import {identifyPrintedParameters} from '../src/printed-parameter-identification.js';
+import {independentPrintedHost as host,independentPrintedRaw as raw} from './helpers/printed-identification-independent-host.mjs';
+const near=(a,b,rel=1e-10)=>assert.ok(Math.abs(a-b)<=rel*Math.max(1,Math.abs(b)),`${a} != ${b}`);
+const tick=()=>new Promise(r=>setImmediate(r));
+async function realWorker(request){const script=`const{parentPort}=require('node:worker_threads');globalThis.self=globalThis;globalThis.postMessage=x=>parentPort.postMessage(x);import(${JSON.stringify(new URL('../src/printed-identification.worker.js',import.meta.url).href)}).then(()=>{parentPort.on('message',x=>self.onmessage({data:x}));parentPort.postMessage({ready:true});});`;const w=new Worker(script,{eval:true});try{return await new Promise((resolve,reject)=>{w.on('error',reject);w.on('message',m=>m.ready?w.postMessage(request):resolve(m));});}finally{await w.terminate();}}
+
+test('independent noisy through-origin oracle crosses actual worker and mounted UI with exact raw SHA and conditional standard error',async()=>{
+ const h=host(),source=h.parent.input.value;h.setOptions();try{assert.equal(await h.parent.inspect(),true);assert.equal(h.urls.size,2);const p=h.ui.identify();await h.ready();const worker=h.workers[0],reply=await realWorker(worker.request),parameter=reply.result.specimens[0].parameters.youngsModulusPa;
+ // x=.001*[1..5], noise=100*[-2,1,0,0,0]: x.noise=0, SSE=50000Pa², df4, sum(x²)=55e-6.
+ near(parameter.value,7e8);near(parameter.standardError,100/Math.sqrt(44e-6));near(parameter.relativeStandardError,100/Math.sqrt(44e-6)/7e8);near(reply.result.specimens[0].residualRmsPa,100);assert.equal(reply.result.dataset.sourceSha256,createHash('sha256').update(source).digest('hex'));assert.equal(reply.result.calibrated,false);assert.equal(reply.result.accuracyVerified,false);worker.saved({data:reply});assert.equal(await p,true);assert.equal(h.ui.snapshot().phase,'completed');assert.match(h.ui.results.textContent,/700000000/);assert.match(h.ui.panel.textContent,/Standard errors are conditional/);h.language('ja');assert.match(h.ui.panel.textContent,/測定精度ではありません/);assert.equal(h.parent.input.value,source);assert.equal(h.urls.size,2);assert.equal(worker.terminations,1);
+ }finally{h.close();assert.equal(h.urls.size,0);}
+});
+
+test('raw/options ABA while SHA is pending retains a single preparation slot and late digest cannot revive destroyed or edited UI',async()=>{
+ for(const action of ['raw-aba','options-aba','destroy']){const h=host();h.setOptions();const original=globalThis.crypto.subtle.digest;let release,digests=0;globalThis.crypto.subtle.digest=()=>{digests++;return new Promise(r=>release=r);};try{const p=h.ui.identify();assert.equal(h.ui.snapshot().digestPending,true);if(action==='raw-aba'){const old=h.parent.input.value;h.parent.input.value='{';h.parent.input.oninput();h.parent.input.value=old;h.parent.input.oninput();}else if(action==='options-aba'){h.ui.inputs.minPoints.value='6';h.ui.inputs.minPoints.oninput();h.ui.inputs.minPoints.value='5';h.ui.inputs.minPoints.oninput();}else h.parent.destroy();assert.equal(await h.ui.identify(),false);assert.equal(digests,1);assert.equal(h.workers.length,0);assert.equal(h.ui.snapshot().digestPending,true);release(new ArrayBuffer(32));assert.equal(await p,false);assert.equal(h.ui.snapshot().digestPending,false);assert.equal(h.workers.length,0);assert.equal(h.ui.results.textContent,'');}finally{globalThis.crypto.subtle.digest=original;h.close();}}
+});
+
+test('parent inspection retains its own pending SHA slot across raw ABA independently of the child worker slot',async()=>{
+ const h=host(),digest=globalThis.crypto.subtle.digest,releases=[];let calls=0,first,second;globalThis.crypto.subtle.digest=()=>{calls++;return new Promise(r=>releases.push(r));};try{first=h.parent.inspect();const before=h.parent.input.value;h.parent.input.value='{';h.parent.input.oninput();h.parent.input.value=before;h.parent.input.oninput();second=h.parent.inspect();assert.equal(calls,1,'editing the parent cannot open a second unresolved import/digest');assert.equal(h.parent.run.disabled,true);assert.equal(h.ui.snapshot().workerActive,false);releases[0](new ArrayBuffer(32));assert.equal(await first,false);assert.equal(await second,false);assert.equal(h.parent.snapshot().sourceSha256,null);assert.equal(h.urls.size,0);assert.equal(h.parent.run.disabled,false);}finally{for(const release of releases)release(new ArrayBuffer(32));await Promise.allSettled([first,second]);globalThis.crypto.subtle.digest=digest;h.close();}
+});
+
+test('stale worker callbacks cannot replace a newer result, and mounted raw edits revoke existing measurement URLs immediately',async()=>{
+ const h=host();h.setOptions();try{await h.parent.inspect();const oldRaw=h.parent.input.value,p=h.ui.identify();await h.ready();const first=h.workers[0],old=first.saved;h.parent.input.value=oldRaw+' ';h.parent.input.oninput();h.parent.input.value=oldRaw;h.parent.input.oninput();assert.equal(h.urls.size,0);assert.equal(await p,false);assert.equal(first.terminations,1);assert.equal(first.onmessage,null);assert.equal(first.onerror,null);assert.equal(first.onmessageerror,null);const newer=h.ui.identify();await h.ready(2);const current=h.workers[1],reply={requestId:current.request.requestId,ok:true,result:await identifyPrintedParameters(current.request.raw,current.request.options)};old({data:{...reply,requestId:first.request.requestId}});assert.equal(h.ui.snapshot().phase,'pending');assert.equal(h.ui.results.textContent,'');current.saved({data:reply});assert.equal(await newer,true);old({data:{}});assert.equal(h.ui.snapshot().phase,'completed');assert.equal(h.ui.snapshot().sourceSha256,reply.result.dataset.sourceSha256);assert.equal(current.terminations,1);assert.equal(h.timers.size,0);}finally{h.close();}
+});
+
+test('same-source responses refuse internally inconsistent conditional errors and recomputed across-specimen statistics',async()=>{
+ for(const mutation of ['rse','across']){const d=JSON.parse(raw());if(mutation==='across'){const second=structuredClone(d.specimens[0]);second.id='independent-2';second.samples=second.samples.map(([t,f,u])=>[t,2*f,u]);d.specimens.push(second);}const h=host(JSON.stringify(d));h.setOptions();try{const p=h.ui.identify();await h.ready();const w=h.workers[0],r=await identifyPrintedParameters(w.request.raw,w.request.options);if(mutation==='rse')r.specimens[0].parameters.youngsModulusPa.relativeStandardError=0;else r.across.youngsModulusPa.sampleStandardDeviation=0;w.saved({data:{requestId:w.request.requestId,ok:true,result:r}});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');assert.equal(w.terminations,1);}finally{h.close();}}
+});
+
+test('finite same-source replies still refuse contradictory yield, tangent, held-strain and goodness-of-fit semantics',async()=>{
+ for(const [model,mutations]of [
+  ['bilinear-elastic-plastic',[s=>{s.parameters.tangentModulusPa={value:2*s.parameters.youngsModulusPa.value,standardError:0,relativeStandardError:0};},s=>{s.yieldStrain=.09;},s=>{s.parameters.yieldStressPa={value:1,standardError:0,relativeStandardError:0};},s=>{s.rSquared=1.1;}]],
+  ['sls-relaxation',[s=>{s.heldStrain=-.005;},s=>{s.heldStrain=.09;}]]]){
+  const d=JSON.parse(raw());d.specimens[0].samples=Array.from({length:100},(_,i)=>{if(model==='sls-relaxation'){const time=40*i/99;return[time,.005*(1.2e9+.8e9*Math.exp(-time/5))/1e6,.05];}const e=(i+1)*.0006,stress=e<=.02?2e9*e:4e7+1e8*(e-.02);return[i+1,stress/1e6,e*10];});const source=JSON.stringify(d);
+  for(const mutate of mutations){const h=host(source);h.setOptions(model);try{const p=h.ui.identify();await h.ready();const w=h.workers[0],r=await identifyPrintedParameters(w.request.raw,w.request.options);assert.equal(r.identified,true);mutate(r.specimens[0]);w.saved({data:{requestId:w.request.requestId,ok:true,result:r}});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');assert.equal(w.terminations,1);}finally{h.close();}}
+ }
+});
