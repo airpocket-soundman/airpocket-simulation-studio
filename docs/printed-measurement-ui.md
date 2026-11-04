@@ -2,7 +2,7 @@
 
 [English](en/printed-measurement-ui.md)
 
-基点 `2a5fab3`。mainの材料物性入力detailsの直後へ「印刷材料の測定JSONを検査」という折畳み入口を実際にmountした。JSON入力、検査button、明示した合成例、試験片select、応力–ひずみグラフ、数値表、原文/正規化JSON保存を提供する。project/case/solverへの登録や材料自動同定・適用は行わない。
+初版（基点 `2a5fab3`）の記録。mainの材料物性入力detailsの直後へ「印刷材料の測定JSONを検査」という折畳み入口を実際にmountした。JSON入力、検査button、明示した合成例、試験片select、応力–ひずみグラフ、数値表、原文/正規化JSON保存を提供する。初版ではproject/case/solverへの登録や材料同定・適用は行わなかった。現在の任意同定は下記参照。
 
 `src/ui/printed-measurement-ui.js` は既存 `importPrintedMeasurementDataset` を直接使う。単位換算・原文SHA-256・合成/実測申告・機器版・校正報告・非有限/件数/2,000,000 UTF-8 byte検査を別実装しない。source/batch/方向/試験温度/速度/寸法/標点長と件数を表示し、原文hashや機器/校正の詳細は折り畳む。「入力検査済み」は物理精度や校正証明書の検証成功を意味しない。校正status/根拠はデータ内の報告値であり、装置も証明書も検証していない。measuredも実測と申告されたデータとして区別する。実測データは今回提供されていない。
 
@@ -14,6 +14,9 @@
 
 rootでの実IAB確認: dev serverのmainを390px幅で開く→「03 解析条件」→材料物性detailsの直後の検査入口を開く→「合成例を検査」→Z/Xを切替し1 MPa/0.01と方向を確認→JSONを`{`へ変更して旧曲線/保存リンクが即消えることを確認→ENへ切替。検査前後の正式exportProject/case状態が変わらないことも確認する。単独fixtureは `/docs/fixtures/printed-measurement-ui.html?lang=en`。本提出のDOM回帰は実IAB/390px観測を代替しない。
 
-保存リンクはJSONを作るだけで自動downloadしない。検査器の上限2 MB/100片/全10,000点を保持。対応していない単位、crosshead変位、不完全な校正根拠、不正試験片等は既存parserで拒否する。全連成、同定、実機校正、実測精度、製品物性の自動変更は未完。
+保存リンクはJSONを作るだけで自動downloadしない。検査器の上限2 MB/100片/全10,000点を保持。対応していない単位、crosshead変位、不完全な校正根拠、不正試験片等は既存parserで拒否する。初版では同定も未実装だったが、現在は下記の明示条件付き同定を追加。全連成、実機校正、実測精度、製品物性の自動変更は未確認・未対応。
 
 実main・IAB390pxで、日英と試験片切替、合成1MPa/.01、不正入力の旧表示破棄、CtrlEnter、検査前後のproject全内容/版一致、Back再読込後の再検査を確認した。[証拠](evidence/2026-10-23-print2-main-browser.json)。pageshow.persistedはfalseであり、実bfcache復帰とBlob保存の成功は主張しない。
+
+
+[任意の読取専用同定](printed-identification-ui.md)を追加しました。条件は明示入力し、専用workerで計算します。材料値へは適用しません。

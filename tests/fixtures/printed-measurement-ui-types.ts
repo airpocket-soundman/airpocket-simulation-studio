@@ -4,3 +4,11 @@ ui.inspect().then(valid=>{const result:boolean=valid;void result;});
 const phase:'idle'|'pending'|'valid'|'invalid'|'closed'=ui.snapshot().phase;void phase;
 // @ts-expect-error this inspector cannot apply material properties
 ui.applyMaterial();
+
+ui.identification.identify().then((identified:boolean)=>void identified);
+const digest:boolean=ui.identification.snapshot().digestPending;void digest;
+// @ts-expect-error no application API on identification results
+ui.identification.applyMaterial();
+
+import type {PrintedIdentificationWorkerRequest} from '../../src/ui/printed-identification-ui.js';
+const request:PrintedIdentificationWorkerRequest={requestId:1,raw:'{}',options:{model:'linear-elastic',maxStrain:.01,minPoints:3,maxRelativeStandardError:.1}};void request;
