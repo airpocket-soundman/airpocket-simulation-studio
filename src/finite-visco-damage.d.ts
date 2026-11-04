@@ -4,7 +4,10 @@ import type {FiniteViscoPrfJ2Parameters,FiniteViscoPrfJ2State} from './finite-vi
 export interface FiniteViscoDamageParameters extends FiniteViscoPrfJ2Parameters {
  readonly damage:{readonly thresholdEnergyDensity:number;readonly softeningEnergyDensity:number};
 }
+declare const damageStateBrand:unique symbol;
+/** In-process issued immutable state. JSON/structured clones and reconstructed records are not resumable. */
 export interface FiniteViscoDamageState extends FiniteViscoHenckyFlags {
+ readonly [damageStateBrand]:true;
  readonly model:'synthetic-hencky-prony-j2-scalar-damage-v1';readonly Y0:number;readonly Yf:number;readonly effective:FiniteViscoPrfJ2State;
  readonly r:number;readonly d:number;readonly Y:number;readonly damageDissipationDensity:number;readonly viscousDissipationDensity:number;readonly plasticDissipationDensity:number;
 }
