@@ -78,9 +78,9 @@
   "rawFiles": [
     {
       "file": ".gitattributes",
-      "bytes": 8,
-      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
-      "gitBlobSha1": "fa1385d99a319b43c06f5309d1aae9fdd3adea46"
+      "bytes": 98,
+      "sha256": "7d52457d7bb5fccad530c673f78081d88a2d65879e1f191dca0bb16550282b4f",
+      "gitBlobSha1": "4e97ed0e1020db2ee0a2c6e9b3781c1076ca9cf2"
     },
     {
       "file": "build.log",
@@ -124,5 +124,6 @@
       "sha256": "03e1d34d3a25e50c8f235abe44ae7931d2c5184c61ccee0112c895bf8d8d48c8",
       "gitBlobSha1": "0d4e6714e6a1cc5410febeff2fc9d493105a2add"
     }
-  ]
+  ],
+  "rawLogPolicy": "Raw terminal logs retain exact CRLF/spacing and are excluded from whitespace lint only in their dedicated evidence directory; code/tests remain checked"
 }
