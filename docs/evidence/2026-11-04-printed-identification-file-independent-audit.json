@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "cliSourceCommit": "449e3d2ec8a8dd3c72a5476284e83f52501fd3ad",
+  "coreRefusalFix": "6ba5983741b9b10c45d566a41f4188f9edd6741f",
+  "uiFix": "99dcf950258f6fea1b43c068da323ff9c3ef0292",
+  "sourceChangesInAudit": false,
+  "sourceHashes": [
+    {
+      "path": "scripts/identify-printed-parameters.mjs",
+      "commit": "449e3d2ec8a8dd3c72a5476284e83f52501fd3ad",
+      "gitBlobSha256": "ff75e33f3f6045ec1f668da72dfed772b7e1e268e69d681dd85c1e1afc8c1a1f"
+    },
+    {
+      "path": "scripts/printed-identification-file-service.mjs",
+      "commit": "449e3d2ec8a8dd3c72a5476284e83f52501fd3ad",
+      "gitBlobSha256": "ebf05a1462bdcbe9e4e26f94bfc574971dce55c7924e73e77db6bdeb52247406"
+    },
+    {
+      "path": "scripts/json-artifacts.mjs",
+      "commit": "449e3d2ec8a8dd3c72a5476284e83f52501fd3ad",
+      "gitBlobSha256": "067811addbc47f44f9826f787e5bbcbc42b0b0e6d6f5488c8105836e7dcb6e07"
+    },
+    {
+      "path": "src/printed-parameter-identification.js",
+      "commit": "6ba5983741b9b10c45d566a41f4188f9edd6741f",
+      "gitBlobSha256": "99c04ce0402316ab4b0d7b7a6d3ddad4839263d636eec2478a4528bfcc5438a5"
+    }
+  ],
+  "independentGroups": 4,
+  "tests": [
+    "m/kN noisy closed-form E/SE/RSE/RMS, exact UTF8 input and artifact bytes/hash",
+    "Mixed resolved/unresolved specimens preserve whole-fit refusal and individual result",
+    "Three concurrent refused publications have one exclusive owner; existing output and all inputs preserved/temp0",
+    "Extreme unresolved strain and subnormal SLS retain their original finite refusal through CLI"
+  ],
+  "oracle": {
+    "synthetic": true,
+    "measured": false,
+    "youngModulusPa": 700000000,
+    "standardErrorPa": 15075.567228888181,
+    "relativeStandardError": 0.0000215365246126974,
+    "residualRmsPa": 100
+  },
+  "verification": {
+    "related": {
+      "command": "node --test tests/printed-identification-file-independent.test.mjs tests/printed-identification-file-cli.test.mjs tests/printed-identification-refusal-numerics.test.mjs tests/printed-identification-ui-independent.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "pass": 44,
+      "fail": 0,
+      "skip": 0,
+      "durationMilliseconds": 55793.2452,
+      "includesIndependentCli4AndUi6": true,
+      "logSha256": "c65d15ba7b317c7966eabdc145bc7d5772afad64ed97c398cf26be6fe14e2b3d"
+    },
+    "contracts": {
+      "pass": true,
+      "declarationFiles": 37,
+      "logSha256": "4a03200a4e60b1c942fad10b4e5a707a98fdeca2b7d16b1e0182200eb70c9337"
+    }
+  },
+  "mandatoryCliFindings": [],
+  "scope": {
+    "browserRuns": 0,
+    "solverRuns": 0,
+    "newMeasurements": 0,
+    "calibrationClaims": 0,
+    "progressChanges": 0
+  },
+  "limitations": [
+    "Actual Windows process and file behavior on this host; not exhaustive OS scheduling/race proof",
+    "No actual browser/measurement/material application/MCP integration/publication claim",
+    "PRINTMEASURE3 parent remains incomplete"
+  ]
+}
