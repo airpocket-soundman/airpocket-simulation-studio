@@ -18,10 +18,26 @@ const reject=message=>{throw Error('Shear-plate FSI '+message);};
 const finite=(value,name)=>{if(!Number.isFinite(value))reject('requires finite '+name);return value;};
 function requireFluid(fluid){if(!configurations.has(fluid))reject('requires a fluid issued by channelShearFluid; reload its parameters, not serialized methods');return configurations.get(fluid);}
 function requirePlate(plate){if(!plate||!finitePositive(plate.mass)||!Number.isFinite(plate.stiffness)||plate.stiffness<0)reject('requires a positive plate mass and non-negative stiffness');}
+const typedPrototype=Object.getPrototypeOf(Float64Array.prototype),typedLength=Object.getOwnPropertyDescriptor(typedPrototype,'length').get,
+  typedBuffer=Object.getOwnPropertyDescriptor(typedPrototype,'buffer').get,arrayBufferLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLength').get;
 function profileSnapshot(input,n){
   if(input===undefined)return new Float64Array(n);
-  if(!(Array.isArray(input)||input instanceof Float64Array)||input.length!==n)reject('requires a finite initial profile of length cellsY');
-  const copy=Float64Array.from(input);if(!copy.every(Number.isFinite))reject('requires a finite initial profile of length cellsY');return copy;
+  const array=Array.isArray(input),prototype=Object.getPrototypeOf(input);
+  if(array){
+    if(prototype!==Array.prototype||Object.getOwnPropertyDescriptor(input,'length')?.value!==n)reject('requires an ordinary dense initial profile of length cellsY');
+  }else{
+    if(prototype!==Float64Array.prototype)reject('requires an ordinary Float64Array or dense Array profile');
+    // Intrinsic getters ignore own length/buffer accessors and reject fake/shared/detached storage.
+    let length;try{length=typedLength.call(input);arrayBufferLength.call(typedBuffer.call(input));}catch{reject('requires ordinary non-shared profile storage');}
+    if(length!==n)reject('requires a finite initial profile of length cellsY');
+  }
+  const copy=new Float64Array(n);
+  for(let i=0;i<n;i++){
+    const descriptor=Object.getOwnPropertyDescriptor(input,String(i));
+    if(!descriptor||!Object.hasOwn(descriptor,'value')||!Number.isFinite(descriptor.value))reject('requires finite own indexed profile data');
+    copy[i]=descriptor.value;
+  }
+  return copy;
 }
 const substepCount=(fluid,dt)=>{const n=Math.max(1,Math.ceil(dt/(.5*fluid.stableDt)));if(!Number.isSafeInteger(n)||n>SHEAR_PLATE_LIMITS.fluidSubsteps)reject('fluid substep capacity exceeded');return n;};
 

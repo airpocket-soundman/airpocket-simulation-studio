@@ -51,3 +51,23 @@ test('bad dimensions, nonfinite/range/work and reference stability requests refu
  for(const patch of [{h:0},{h:-1},{h:Infinity},{endTime:NaN},{endTime:-1},{h:1e-20},{h:1},{initialDisplacement:Infinity},{initialProfile:[0,0]},{state:{}}])assert.throws(()=>shearPlateMonolithicReference({fluid,plate,endTime:1,h:.001,...patch}));
  assert.throws(()=>fluid.advance([0,0],0,.01));assert.throws(()=>fluid.advance([0,0,0,0],NaN,.01));assert.throws(()=>fluid.advance([0,0,0,0],0,1e10));
 });
+
+test('profile snapshot reads bounded own data and never invokes custom iterators/getters',()=>{
+ let iterations=0,getters=0;
+ const a=[.1,.2,.1,0];a[Symbol.iterator]=function*(){iterations++;for(let i=0;i<100;i++)yield 99;};
+ const typed=new Float64Array([.1,.2,.1,0]);typed[Symbol.iterator]=()=>{iterations++;throw Error('must not iterate');};
+ Object.defineProperty(typed,'length',{get(){getters++;throw Error('must use intrinsic length');}});
+ Object.defineProperty(typed,'buffer',{get(){getters++;throw Error('must use intrinsic buffer');}});
+ const cfg={fluid,plate,initialDisplacement:.1,dt:.01,steps:2};
+ const ordinary=runShearPlateCoupled({...cfg,initialProfile:[.1,.2,.1,0]});
+ assert.deepEqual(runShearPlateCoupled({...cfg,initialProfile:a}),ordinary);
+ assert.deepEqual(runShearPlateCoupled({...cfg,initialProfile:typed}),ordinary);
+ assert.equal(shearPlateMonolithicReference({fluid,plate,initialProfile:a,endTime:.001,h:.001}).profile.length,4);
+ assert.equal(iterations,0);assert.equal(getters,0);
+ const accessor=[0,0,0,0];Object.defineProperty(accessor,'0',{get(){getters++;return 0;}});
+ for(const profile of [accessor,[0,,0,0],Object.create(Float64Array.prototype),new(class extends Array{})(0,0,0,0)])assert.throws(()=>runShearPlateCoupled({...cfg,initialProfile:profile}));
+ assert.equal(getters,0);
+ const storage=new SharedArrayBuffer(32),shared=new Float64Array(storage);Object.defineProperty(shared,'buffer',{value:new ArrayBuffer(32)});
+ Object.setPrototypeOf(storage,ArrayBuffer.prototype);assert.throws(()=>runShearPlateCoupled({...cfg,initialProfile:shared}),/non-shared/);
+ const long=new Float64Array(100);Object.defineProperty(long,'length',{value:4});assert.throws(()=>runShearPlateCoupled({...cfg,initialProfile:long}));
+});

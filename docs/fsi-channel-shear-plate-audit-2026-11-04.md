@@ -17,3 +17,5 @@ converged:trueは界面固定点の収束だけを表す。時間精度、メッ
 保存するのはfluid.parametersとplate/初期profile配列/dt/steps等の入力で、ロード後にchannelShearFluid(parameters)を呼び直す。factoryのsnapshotは凍結される。関数をJSON化したfluidや途中stateの復元は受け付けない。入力JSON再計算一致と失敗時の入力不変を回帰した。追加型は成功/失敗profileを区別する。
 
 関連40試験・型36declarations成功。法線壁/ALE・圧力連成・曲面仕事保存写像・IQN-ILS・非線形・実測校正・製品接続は未完。新SU2実行なし。
+
+独立監査追補: 初期profileのFloat64Array.fromはカスタム反復子で上限を越え得たため、Arrayはown dense dataをcellsY個だけ読み、Float64Arrayはintrinsic length/bufferのbrand検査後に固定個数copyする。反復子とown length/buffer getterは実行しない。sparse/accessor/subclass/fake/SharedArrayBuffer（prototype偽装含む）を拒否する。[追補証拠](evidence/2026-11-04-couple5-profile-snapshot-fix.json)。既存40件と旧102証拠は歴史として保持する。
