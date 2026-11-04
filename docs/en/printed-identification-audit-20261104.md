@@ -13,3 +13,5 @@ These changes audit work order 101 using synthetic curves only. They do not veri
 Standard errors remain conditional model approximations, not calibration accuracy or evidence that the model is correct. Bilinear coefficient covariance remains conditional on the fitted breakpoint; only yield uncertainty additionally uses breakpoint profile curvature. Finite strain, multiple branches, unloading/cyclic and perfectly plastic identification remain unsupported. Identification data are not independent validation: existing importPrintedEquivalentDatasets specimen separation is unchanged.
 
 Evidence: [audit result](../evidence/2026-11-04-printmeasure3-audit.json). No progress changes.
+
+Entry-point checks additionally reproduced unrepresentable modulus uncertainty at tiny finite strains and nonfinite optional SLS diagnostics at subnormal time spans. Refusal reasons remain while unrepresentable optional numeric fields are omitted. Infinity/NaN are not silently turned into JSON null; ordinary finite refusal diagnostics remain. [Additional verification](../evidence/2026-11-04-identification-refusal-finite.json).

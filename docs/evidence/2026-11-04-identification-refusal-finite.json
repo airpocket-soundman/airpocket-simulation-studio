@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-04",
+  "base": "74f3b8c216ed5ef5c131a6c5f97950b06ef4d956",
+  "scope": "finite JSON refusal diagnostics when exposing identification to UI and CLI",
+  "before": [
+    {
+      "case": "linear modulus,finite subnormal strains and noisy stresses",
+      "result": "identified:false with relativeStandardError Infinity; JSON encodes null"
+    },
+    {
+      "case": "SLS hold at subnormal positive sample times",
+      "result": "unresolved time window emits nonfinite optional relaxation time"
+    }
+  ],
+  "fix": "Keep refusal reason and omit only optional unrepresentable numeric diagnostics; do not fabricate a parameter or alter a successful fit",
+  "validation": {
+    "command": "node --test tests/printed-identification-refusal-numerics.test.mjs tests/printed-parameter-identification.test.mjs",
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "durationMs": 302.8334,
+    "independentChecks": [
+      "both refusals contain no parameter estimates",
+      "recursive finite numbers",
+      "exact JSON roundtrip",
+      "ordinary finite point count preserved"
+    ]
+  },
+  "files": [
+    {
+      "path": "src/printed-parameter-identification.js",
+      "canonicalLfSha256": "99c04ce0402316ab4b0d7b7a6d3ddad4839263d636eec2478a4528bfcc5438a5"
+    },
+    {
+      "path": "tests/printed-identification-refusal-numerics.test.mjs",
+      "canonicalLfSha256": "0902f73d8c223276fa6a67ef1e065d4e64d3a8a8dcf3be80126040f36a19b01b"
+    }
+  ],
+  "noSolverOrMeasurement": true,
+  "noTaskStatusChange": true
+}

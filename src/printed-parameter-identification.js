@@ -35,7 +35,9 @@ function invert(A) {
  return M.map(row => row.slice(m));
 }
 const r2 = (y, sse) => { const mean = sum(y) / y.length, sst = sum(y.map(v => (v - mean) ** 2)); return sst > 0 ? 1 - sse / sst : NaN; };
-const rejected = (reason, extra = {}) => ({identified: false, reason, ...extra});
+// Unresolvable diagnostics have no numeric value. Preserve the refusal reason instead of
+// publishing Infinity/NaN, which JSON would silently turn into a misleading null field.
+const rejected = (reason, extra = {}) => ({identified: false, reason, ...Object.fromEntries(Object.entries(extra).filter(([, value]) => typeof value !== 'number' || Number.isFinite(value)))});
 const parameter = (value, se) => ({value, standardError: se, relativeStandardError: Math.abs(se / value)});
 
 // σ = E ε through the origin on ε in [0, maxStrain].
