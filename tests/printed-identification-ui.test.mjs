@@ -55,3 +55,24 @@ test('UTF8 capacity and unavailable workers refuse; per-specimen 512-point budge
 test('100 specimens keep bounded model-specific coefficient rendering, and reported measurement labels remain unverified',async()=>{
  const h=setup(),d=JSON.parse(syntheticDataset({curves:ramp(10,.005,linearStress()),noisePa:0,specimens:100}));d.provenance='measured';d.id='<script>reported</script>';h.setRaw(JSON.stringify(d));options(h);const p=h.ui.identify();await h.ready();await h.deliver();assert.equal(await p,true);assert.match(h.ui.results.textContent,/実測と申告されたデータ・精度未検証/);assert.match(h.ui.results.textContent,/<script>reported<\/script>/);assert.equal(h.ui.results.children.filter(n=>n.tag==='strong').length,101);assert.equal(h.ui.results.children.some(n=>n.tag==='script'),false);assert.ok(h.ui.results.children.length<450);h.ui.clear.onclick();assert.equal(h.ui.results.textContent,'');assert.equal(h.raw(),JSON.stringify(d));
 });
+
+
+test('model meaning gates reject finite but inconsistent bilinear and held-strain replies',async()=>{
+ for(const [model,mutate]of [
+ ['bilinear-elastic-plastic',s=>{s.parameters.tangentModulusPa={value:2*s.parameters.youngsModulusPa.value,standardError:0,relativeStandardError:0};}],
+ ['bilinear-elastic-plastic',s=>{s.yieldStrain=0;}],
+ ['bilinear-elastic-plastic',s=>{s.yieldStrain=.09;}],
+ ['bilinear-elastic-plastic',s=>{s.parameters.yieldStressPa.value*=2;s.parameters.yieldStressPa.relativeStandardError=Math.abs(s.parameters.yieldStressPa.standardError/s.parameters.yieldStressPa.value);} ],
+ ['sls-relaxation',s=>{s.heldStrain=0;}],['sls-relaxation',s=>{s.heldStrain=.09;}],['linear-elastic',s=>{s.rSquared=1.01;}]
+ ]){const h=setup();options(h,model);h.setRaw(syntheticDataset({curves:model==='sls-relaxation'?relaxationCurve():ramp(100,.06,model==='bilinear-elastic-plastic'?bilinearStress():linearStress()),noisePa:0}));const p=h.ui.identify();await h.ready();await h.deliver(m=>{mutate(m.result.specimens[0]);return m;});assert.equal(await p,false);assert.equal(h.ui.snapshot().phase,'invalid');assert.equal(h.ui.results.textContent,'');}
+});
+test('parent inspection retains one preparation slot through raw/options edit, ABA, invalidation and destruction',async()=>{
+ const original=globalThis.crypto.subtle.digest;let release,calls=0;
+ globalThis.crypto.subtle.digest=()=>{calls++;return new Promise(r=>{release=r;});};
+ try{for(const action of ['edit','bfcache','destroy']){
+  const h=setup(true),raw=h.raw(),pending=h.measurement.inspect();assert.equal(h.measurement.snapshot().inspectionPending,true);const before=calls;
+  h.setRaw('{');h.measurement.input.oninput();h.setRaw(raw);h.measurement.input.oninput();if(action==='bfcache')h.measurement.invalidate();if(action==='destroy')h.measurement.destroy();
+  assert.equal(h.measurement.run.disabled,true);assert.equal(await h.measurement.inspect(),false);assert.equal(calls,before);assert.equal(h.measurement.results.textContent,'');assert.equal(h.measurement.downloads.children.length,0);
+  release(new ArrayBuffer(32));assert.equal(await pending,false);assert.equal(h.measurement.snapshot().inspectionPending,false);if(action!=='destroy')assert.equal(h.measurement.run.disabled,false);
+ }}finally{globalThis.crypto.subtle.digest=original;}
+});

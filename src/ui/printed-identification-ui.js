@@ -52,8 +52,11 @@ function validResult(r,options,hash){
   const extra=options.model==='bilinear-elastic-plastic'?['yieldStrain','residualSsReductionVsLinear']:options.model==='sls-relaxation'?['heldStrain']:[];
   if(!exact(s,['specimen','identified','points','parameters','rSquared','residualRmsPa',...extra])||extra.some(k=>!finite(s[k])))return false;
   count++;
-  if(!Number.isInteger(s.points)||s.points<options.minPoints||s.points>(options.model==='bilinear-elastic-plastic'?512:10000)||options.model==='sls-relaxation'&&s.points<4||!finite(s.rSquared)||!finite(s.residualRmsPa)||s.residualRmsPa<0||!exact(s.parameters,keys[options.model]))return false;
+  if(!Number.isInteger(s.points)||s.points<options.minPoints||s.points>(options.model==='bilinear-elastic-plastic'?512:10000)||options.model==='sls-relaxation'&&s.points<4||!finite(s.rSquared)||s.rSquared>1||!finite(s.residualRmsPa)||s.residualRmsPa<0||!exact(s.parameters,keys[options.model]))return false;
+  if(options.model==='bilinear-elastic-plastic'&&(s.points<2*options.minPoints||!(s.yieldStrain>0&&s.yieldStrain<=options.maxStrain)||s.residualSsReductionVsLinear>1))return false;
+  if(options.model==='sls-relaxation'&&!(s.heldStrain>0&&s.heldStrain<=options.maxStrain))return false;
   for(const p of Object.values(s.parameters))if(!exact(p,['value','standardError','relativeStandardError'])||!finite(p.value)||p.value<=0||!finite(p.standardError)||p.standardError<0||!finite(p.relativeStandardError)||p.relativeStandardError<0||p.relativeStandardError>options.maxRelativeStandardError||p.relativeStandardError!==Math.abs(p.standardError/p.value))return false;
+  if(options.model==='bilinear-elastic-plastic'&&(!(s.parameters.tangentModulusPa.value<s.parameters.youngsModulusPa.value*options.maxTangentRatio)||s.parameters.yieldStressPa.value!==s.parameters.youngsModulusPa.value*s.yieldStrain))return false;
  }
  if(r.identified!==(count===r.specimens.length))return false;
  if(count<2)return r.across===null;

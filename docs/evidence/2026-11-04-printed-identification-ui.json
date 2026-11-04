@@ -85,5 +85,30 @@
     "npm ci --ignore-scripts only; no native SDK.",
     "An initial test-generation Python warning about regex escape did not prevent tests; no failed runtime tests.",
     "Earlier commentary guessed declaration counts incorrectly; actual command stdout and base ancestry above are authoritative."
-  ]
+  ],
+  "independentFollowup": {
+    "findings": [
+      "Finite tangent modulus outside explicit ratio could pass response gate.",
+      "Existing parent dataset inspector allowed overlapping unresolved SHA preparations after edit/invalidate."
+    ],
+    "fixes": [
+      "Model inequalities and yield identity checked before display.",
+      "Parent inspectionPending slot held through actual await/finally; disabled run survives edits/BFcache/destroy until settlement."
+    ],
+    "newRegressions": 2,
+    "focusedUiAndTypes": {
+      "total": 23,
+      "pass": 23,
+      "fail": 0
+    },
+    "declarations": 37,
+    "initialRegressionFailure": "One existing overlap test expected a second concurrent inspection to succeed. Updated it to require rejection until prior digest settles, then fresh inspection succeeds. Initial result19pass/1fail, final related rerun passed.",
+    "finalRelated": {
+      "total": 57,
+      "pass": 57,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 1567.0808
+    }
+  }
 }
