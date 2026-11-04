@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T07:52:45.151Z",
+  "updatedAt": "2026-11-04T06:59:44.286Z",
   "release": {
     "version": "v0.44",
     "date": "2026-10-22",
@@ -1909,18 +1909,18 @@
       "id": "VIEWTIMEA",
       "title": "熱の再生プレビューを保存温度フレームへ接続",
       "titleEn": "Thermal Play preview wired to saved temperature frames",
-      "status": "checking",
+      "status": "released",
       "category": "UI",
       "parents": [
         "VIEWTIME"
       ],
-      "detail": "熱結果の再生プレビューを保存温度frameへ接続し、完了・停止で補間表示時刻を復元。fake DOM/clockで検証済み、実ブラウザ再生は未確認。",
-      "detailEn": "Wire thermal Play preview to saved temperature frames and restore the interpolated display time on completion/stop. Verified with fake DOM/clock; real-browser playback unverified.",
+      "detail": "保存温度フレームへの熱再生プレビューを接続。既存のfake DOM/clock検証に加え、実ブラウザの完走・停止・熱流束の拒否を確認し、補間表示時刻2秒と485個のDOMコントロールを復元。親VIEWTIME全体の完成ではない。",
+      "detailEn": "Thermal Play preview is wired to stored temperature frames. In addition to fake DOM/clock tests, actual-browser completion, stop and heat-flux refusal restored interpolated display time2 seconds and485 DOM controls. Does not complete parent VIEWTIME.",
       "acceptance": "fake DOM/clockで単調再生・完了/停止での時刻復元・不適合結果の拒否を自動確認し、内蔵ブラウザで再生完走を1回確認する（未達: 実ブラウザ確認）。",
       "acceptanceEn": "Fake DOM/clock tests cover monotonic playback, time restore and rejection; one built-in browser Play run must complete (remaining: real-browser run).",
-      "evidence": "docs/evidence/2026-10-28-opencode-79-viewtime.json; tests/thermal-time-preview.test.mjs; src/visual-export.js; docs/opencode-work-orders-2026-10-28/79-VIEWTIME.md",
-      "lastUpdate": "2026-10-29: 指示79・PR #227（merge済み）を親VIEWTIMEの子タスクとして記録。受け入れ条件の一部（実ブラウザ確認）が未達のためchecking。親VIEWTIME全体の完了ではない。",
-      "lastUpdateEn": "2026-10-29: Recorded order 79 / PR #227 (merged) as a child of VIEWTIME. Part of the acceptance (real-browser check) remains; checking. Does not complete VIEWTIME."
+      "evidence": "docs/evidence/2026-10-28-opencode-79-viewtime.json; tests/thermal-time-preview.test.mjs; src/visual-export.js; docs/opencode-work-orders-2026-10-28/79-VIEWTIME.md; docs/evidence/2026-11-04-thermal-preview-acceptance.json; docs/evidence/2026-11-04-thermal-preview-stop.json; docs/evidence/2026-11-04-thermal-preview-refusal.json; docs/evidence/2026-11-04-pr250-final-validation.json; https://github.com/airpocket-soundman/airpocket-simulation-studio/pull/250",
+      "lastUpdate": "2026-11-04: 実GUIの完走・停止・熱流束拒否の3証拠とPR #250（main74f3b8cへ統合、CI2518件fail0）で限定受入を閉鎖しreleased。acceptance内の「未達」は初版の履歴として保持。追加解析・新時刻・一般熱精度・hidden/session行列の受入は主張しない。",
+      "lastUpdateEn": "2026-11-04: Closed the bounded acceptance with three actual-GUI records (completion, stop, heat-flux refusal) and PR #250 merged as main74f3b8c (CI2518 tests,zero failures); released. The acceptance remaining-note is retained as initial history. No new solve/time, general thermal accuracy or hidden/session matrix acceptance is claimed."
     },
     {
       "id": "BROWSERBRIDGE1",
@@ -2036,7 +2036,7 @@
       "titleEn": "Identify and validate CAE parameters from measured curves",
       "detail": "校正付き引張・圧縮ログを取り込み、方向・造形条件別のパラメータと未同定値を記録。独立片で検証し利用者の材料へ登録。定数の公開は既定にしない。",
       "detailEn": "Import calibrated axial logs; retain direction/process parameters and unidentified values, validate independent specimens and register user materials without default publication.",
-      "status": "queued",
+      "status": "building",
       "category": "3Dプリント",
       "optional": true,
       "acceptance": "docs/printed-material-measurement.mdの該当段階を実機・実スライス・実測ログで検証し、条件と校正とモデルの追跡を確認する。",
@@ -2045,7 +2045,10 @@
         "PRINTMEASURE1",
         "PRINTMEASURE2",
         "PRINT2"
-      ]
+      ],
+      "lastUpdate": "2026-11-04: 合成曲線の3モデル同定を数値監査し、読取専用UI・明示合成例・原文固定CLI・有界batch CLI・測定条件完全一致の群別集計・学習側だけで同定する宣言holdout評価を実装。UI/CLI一致と日英・不正入力・490コントロール/プロジェクト不変の実機証拠あり（条件群UI実機確認は本証拠の範囲外）。実測・校正根拠・独立片の物理的独立性/実測検証・材料登録の親受入は未完でbuilding。実測や材料精度を捏造しない。",
+      "lastUpdateEn": "2026-11-04: Audited three-model synthetic identification and added read-only UI, explicit synthetic examples, raw-bound CLI, bounded batch CLI, exact-condition grouping and declared holdout predictions fitted on training only. Actual evidence covers UI/CLI agreement, JA/EN, invalid input and490 unchanged controls/project (actual grouped-UI acceptance is outside these records). Real measurements, calibration evidence, physical independence/measured validation and material registration remain open; building, not parent completion. No measured data or material accuracy is invented.",
+      "evidence": "docs/evidence/2026-11-04-printmeasure3-audit.json; docs/evidence/2026-11-04-printed-identification-ui.json; docs/evidence/2026-11-04-printed-identification-entrypoints-acceptance.json; docs/evidence/2026-11-04-printed-identification-file-cli.json; docs/evidence/2026-11-04-printed-identification-file-independent-audit.json; docs/evidence/2026-11-04-printed-identification-examples.json; docs/evidence/2026-11-04-printed-identification-groups.json; docs/evidence/2026-11-04-printed-identification-batch-cli.json; docs/evidence/2026-11-04-printed-parameter-holdout.json"
     },
     {
       "id": "BROWSERFIELDS1",

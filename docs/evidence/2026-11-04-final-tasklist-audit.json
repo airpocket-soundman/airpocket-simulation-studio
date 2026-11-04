@@ -1,0 +1,60 @@
+{
+  "baseSha": "74f3b8c216ed5ef5c131a6c5f97950b06ef4d956",
+  "updatedAt": "2026-11-04T06:59:44.286Z",
+  "tasks": 197,
+  "allTaskIdsAndOrderUnchanged": true,
+  "changedTasks": [
+    {
+      "id": "VIEWTIMEA",
+      "fields": [
+        "detail",
+        "detailEn",
+        "evidence",
+        "lastUpdate",
+        "lastUpdateEn",
+        "status"
+      ],
+      "before": "checking",
+      "after": "released"
+    },
+    {
+      "id": "PRINTMEASURE3",
+      "fields": [
+        "evidence",
+        "lastUpdate",
+        "lastUpdateEn",
+        "status"
+      ],
+      "before": "queued",
+      "after": "building"
+    }
+  ],
+  "other195TasksDeepEqual": true,
+  "all197AcceptanceFieldsUnchanged": true,
+  "releaseAndAllOtherTopLevelFieldsUnchanged": true,
+  "beforeCounts": {
+    "released": 158,
+    "building": 33,
+    "checking": 5,
+    "queued": 1
+  },
+  "afterCounts": {
+    "released": 159,
+    "building": 34,
+    "checking": 4,
+    "queued": 0
+  },
+  "notes": [
+    "User-requested final task-list update only; no runtime changes.",
+    "VIEWTIME parent remains unchanged; only VIEWTIMEA bounded acceptance released.",
+    "PRINTMEASURE3 remains building; real measurement/calibration/physical-independent validation/material-registration acceptance remains open.",
+    "Older release171-task/test1828 description is historical and unchanged."
+  ],
+  "verification": {
+    "command": "node --test tests/progress.test.mjs tests/docs.test.mjs",
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0
+  }
+}
