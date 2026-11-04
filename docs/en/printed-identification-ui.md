@@ -16,3 +16,6 @@ Ctrl/Command+Enter from a condition field runs identification. Language changes 
 
 
 Both parent dataset inspection and identification reserve their own single SHA-preparation slot until actual settlement. Finite worker replies additionally must satisfy the selected model: tangent ratio, positive in-window yield/hold strain, yield stress = elastic modulus × yield strain, and R-squared ≤1. These consistency checks do not establish measurement accuracy.
+
+
+The three explicitly labeled synthetic example buttons load invented curves and their visible toy conditions. They do not identify automatically. Loading replaces the JSON above, revokes its old validated downloads/results, and cancels old identification. Clear conditions leaves raw text untouched. These examples are not measured data or material recommendations; the legacy measurement example is unchanged. [Example formulas, truth and exact raw hashes](../evidence/2026-11-04-printed-identification-examples.json).

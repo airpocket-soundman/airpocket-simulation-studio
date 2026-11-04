@@ -12,3 +12,7 @@ ui.identification.applyMaterial();
 
 import type {PrintedIdentificationWorkerRequest} from '../../src/ui/printed-identification-ui.js';
 const request:PrintedIdentificationWorkerRequest={requestId:1,raw:'{}',options:{model:'linear-elastic',maxStrain:.01,minPoints:3,maxRelativeStandardError:.1}};void request;
+
+import {printedIdentificationExample} from '../../src/printed-identification-examples.js';
+const toy=printedIdentificationExample('sls-relaxation');const rawToy:string=toy.raw;void rawToy;
+ui.identification.exampleButtons[0].click();

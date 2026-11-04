@@ -76,3 +76,14 @@ test('parent inspection retains one preparation slot through raw/options edit, A
   release(new ArrayBuffer(32));assert.equal(await pending,false);assert.equal(h.measurement.snapshot().inspectionPending,false);if(action!=='destroy')assert.equal(h.measurement.run.disabled,false);
  }}finally{globalThis.crypto.subtle.digest=original;}
 });
+
+
+test('explicit example buttons replace only raw/conditions, revoke parent downloads and cancel old workers without auto-run',async()=>{
+ const h=setup(true);options(h);assert.equal(await h.measurement.inspect(),true);assert.equal(h.measurement.downloads.children.length,2);const pending=h.ui.identify();await h.ready();const old=h.workers[0].callback,previousRaw=h.raw();
+ assert.equal(h.ui.exampleButtons[1].onclick(),true);assert.notEqual(h.raw(),previousRaw);assert.equal(h.ui.model.value,'bilinear-elastic-plastic');assert.equal(h.ui.inputs.maxTangentRatio.value,'0.5');assert.equal(h.ui.inputs.holdStrainTolerance.value,'');assert.equal(await pending,false);assert.equal(h.workers[0].terminated,1);assert.equal(h.workers.length,1);assert.equal(h.measurement.downloads.children.length,0);assert.equal(h.measurement.results.textContent,'');old({data:{}});assert.equal(h.ui.results.textContent,'');
+ h.english();assert.match(h.ui.panel.textContent,/Invented algorithm example/);assert.match(h.ui.panel.textContent,/no automatic run/);const toy=h.raw();h.ui.cancel.onclick();assert.equal(h.raw(),toy);h.ui.clear.onclick();assert.equal(h.raw(),toy);assert.equal(h.ui.model.value,'');assert.ok(Object.values(h.ui.inputs).every(input=>input.value===''));
+ for(let i=0;i<3;i++){const before=h.workers.length;assert.equal(h.ui.exampleButtons[i].onclick(),true);assert.equal(h.workers.length,before);const p=h.ui.identify();for(let n=0;n<100&&h.workers.length===before;n++)await new Promise(r=>setTimeout(r,1));assert.equal(h.workers.length,before+1);await h.deliver();assert.equal(await p,true);}h.measurement.destroy();
+});
+test('loading a synthetic example while digest is pending preserves the real preparation slot',async()=>{
+ const h=setup(true);options(h);const original=globalThis.crypto.subtle.digest;let release;globalThis.crypto.subtle.digest=()=>new Promise(r=>{release=r;});try{const p=h.ui.identify();h.ui.exampleButtons[2].onclick();assert.equal(h.ui.model.value,'sls-relaxation');assert.equal(h.ui.snapshot().digestPending,true);assert.equal(await h.ui.identify(),false);assert.equal(h.workers.length,0);release(new ArrayBuffer(32));assert.equal(await p,false);assert.equal(h.ui.snapshot().sourceSha256,null);assert.equal(h.ui.run.disabled,false);}finally{globalThis.crypto.subtle.digest=original;}
+});
