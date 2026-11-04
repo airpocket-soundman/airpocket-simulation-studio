@@ -8,7 +8,7 @@ export const PRINTED_IDENTIFICATION_LIMITS = Object.freeze({bilinearPoints: 512}
 export const PRINTED_IDENTIFICATION_MODELS = Object.freeze(['linear-elastic', 'bilinear-elastic-plastic', 'sls-relaxation']);
 const fail = message => { throw Object.assign(new Error(message), {code: 'PRINTED_IDENTIFICATION_INVALID'}); };
 const exact = (value, names) => {
- if (!value || typeof value !== 'object' || Array.isArray(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value)) || Reflect.ownKeys(value).length !== names.length || names.some(key => !Object.hasOwn(value, key) || !Object.hasOwn(Object.getOwnPropertyDescriptor(value, key), 'value'))) fail('Missing or unknown identification fields');
+ if (!value || typeof value !== 'object' || Array.isArray(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value)) || Reflect.ownKeys(value).length !== names.length || names.some(key => !Object.hasOwn(value, key) || !Object.hasOwn(Object.getOwnPropertyDescriptor(value, key), 'value') || !Object.getOwnPropertyDescriptor(value, key).enumerable)) fail('Missing or unknown identification fields');
 };
 const positive = (value, label) => { if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) fail(label + ' must be a finite positive number'); return value; };
 const sum = xs => xs.reduce((s, x) => s + x, 0);

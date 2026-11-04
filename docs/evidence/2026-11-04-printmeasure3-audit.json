@@ -37,5 +37,15 @@
     "browser": 0
   },
   "progressChanged": false,
-  "documentationPreparationFailure": "Initial English .en.md placement failed repository docs convention; moved to docs/en with reciprocal links, docs 2/2 passed."
+  "documentationPreparationFailure": "Initial English .en.md placement failed repository docs convention; moved to docs/en with reciprocal links, docs 2/2 passed.",
+  "independentFollowup": {
+    "finding": "Nonenumerable own option fields passed exact validation but disappeared in spread snapshot, bypassing minPoints or losing model.",
+    "fix": "Require enumerable own data fields before copying options.",
+    "regression": "All 14 model-specific option fields hidden individually are rejected with PRINTED_IDENTIFICATION_INVALID; normal four-point linear data still rejected.",
+    "focused": {
+      "pass": 12,
+      "fail": 0
+    },
+    "declarations": 35
+  }
 }

@@ -105,3 +105,14 @@ test('audit: finite diagnostics and every parameter uncertainty are mandatory', 
  assert.equal((await identify(syntheticDataset({curves:flat,noisePa:0}),{...LIN,maxRelativeStandardError:10})).specimens[0].reason,'nonfinite-fit');
  await assert.rejects(identify(syntheticDataset({curves:flat}),{...LIN,model:'__proto__'}),{code:'PRINTED_IDENTIFICATION_INVALID'});
 });
+
+
+test('audit: every nonenumerable option is refused before validated snapshot loses it', async () => {
+ const raw=syntheticDataset({curves:ramp(4,.005,linearStress()),noisePa:0});
+ for (const options of [LIN,BIL,SLS]) for (const key of Object.keys(options)) {
+  const hidden={...options};Object.defineProperty(hidden,key,{value:options[key],enumerable:false});
+  await assert.rejects(identify(raw,hidden),{code:'PRINTED_IDENTIFICATION_INVALID'},`${options.model}.${key}`);
+ }
+ // The ordinary minimum-points condition still rejects this same four-point input.
+ assert.equal((await identify(raw,LIN)).specimens[0].reason,'too-few-points');
+});
