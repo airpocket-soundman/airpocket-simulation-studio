@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-04",
+  "task": "VIEWTIMEA",
+  "runtimeSource": "8e972b5",
+  "url": "http://127.0.0.1:5188/?lang=en",
+  "environment": "existing in-app browser, English, local Vite source",
+  "scope": "work order79 previously missing actual GUI preview completion",
+  "source": {
+    "path": "docs/evidence/review49-real-archives/thermal.json",
+    "sha256": "bd20f2bddebf2246e7610169f7f163ce4407c36892b4b77c3ea6ea24094be668",
+    "nodes": 94,
+    "tetrahedra": 218,
+    "storedTimesSeconds": [
+      0,
+      5,
+      10
+    ],
+    "synthetic": true
+  },
+  "actions": [
+    "Official case archive file-input label and file chooser import",
+    "View saved result in 3D",
+    "Save panel time animation,2 display seconds",
+    "Fine slider200 establishes interpolated physical2 seconds",
+    "GUI Play observed locked controls and physical0 start",
+    "Completion message observed,all DOM controls and physical2 second text exactly restored"
+  ],
+  "result": {
+    "completed": true,
+    "allControlsRestored": true,
+    "controls": 485,
+    "physicalTimeRestoredSeconds": 2,
+    "stopDisabledAfterCompletion": true,
+    "noNewSolve": true,
+    "noNewEncodingOrDownload": true
+  },
+  "preparationHistory": [
+    {
+      "action": "direct hidden file input click/file chooser",
+      "result": "10-second chooser timeout and tool session reset; no import or playback completed"
+    },
+    {
+      "action": "visible official Import case archive label",
+      "result": "successful chooser/import"
+    }
+  ],
+  "limitations": [
+    "One English foreground completion; actual stop,hidden,language matrix not claimed",
+    "DOM state equality does not prove all private API/project states identical",
+    "Saved source is synthetic;no measured calibration/general thermal accuracy",
+    "Parent VIEWTIME and all197 task statuses unchanged"
+  ],
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "gitBlobSha1": "fa1385d99a319b43c06f5309d1aae9fdd3adea46"
+    },
+    {
+      "file": "after.json",
+      "bytes": 78464,
+      "sha256": "87a982b40dd47f7fdaf82ada9ae7e3ea20eceb5e26e6a289f2ecd56de69ba69a",
+      "gitBlobSha1": "4e1e8601de7b06a64404fc995eb9da0daf7980e0"
+    },
+    {
+      "file": "after.txt",
+      "bytes": 6518,
+      "sha256": "87bac785da0263298344c462b80133809ce8e34c38e1392f3311729f3784b378",
+      "gitBlobSha1": "dd7ae8caa0c73375a19093311dbecb88dda335dd"
+    },
+    {
+      "file": "baseline.json",
+      "bytes": 76013,
+      "sha256": "bbcd02e03552b52a818ce8b33cfb2fdb5342d4dd1d9744c711c93f32e96f7431",
+      "gitBlobSha1": "f3a361c5aadccf08bbd81dcae2a1d5bfa0968fed"
+    },
+    {
+      "file": "completed.png",
+      "bytes": 45339,
+      "sha256": "fb89f4ff3e7d125cf47b20397ea191a8e4ae4c26dd226a4d0d33fb0a15f0415b",
+      "gitBlobSha1": "b985f06b52ab28931110dd98c0d44742e6cbf942"
+    },
+    {
+      "file": "running.txt",
+      "bytes": 7339,
+      "sha256": "5aabb2c4f4d65c6df75cb8a702b899a422fac1e57079288f34779b8e20a06c4a",
+      "gitBlobSha1": "23d14b87a4a1e516e528ceb7cea8a78c006e619a"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+Browser tab: 1, Title: "airpocket Simulation Studio", URL: "http://127.0.0.1:5188/?lang=en".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~			13 button Curved sample, ID: demo
+~			14 button Cylindrical CAD patch sample, ID: cylindrical-cad-demo
+~			15 button Analysis example, ID: analysis-demo
+~			16 button Pressure / gravity example, ID: pressure-demo
+~			17 button Displacement example, ID: displacement-demo
+~			18 button Natural vibration example, ID: modal-demo
+~			19 button Uniaxial fatigue reference example, ID: fatigue-demo
+~			20 button Plastic axial tension example, ID: plastic-demo
+~			21 button Plastic loading / unloading example, ID: plastic-unload-demo
+~			22 button Rubber finite-strain example, ID: rubber-demo
+~			23 button Thermal stress example, ID: thermal-stress-demo
+~			24 button Thermal example, ID: thermal-demo
+~			25 button Internal passage example, ID: internal-fluid-demo
+~			26 button Exterior fluid-domain example, ID: exterior-demo
+~			27 button Sphere exterior creeping-flow example, ID: stokes-demo
+~			28 button Laminar channel example, ID: flow-demo
+~			29 button Thermal contact example, ID: contact-demo
+~			30 button Thermal radiation example, ID: radiation-demo
+~			31 button Cooling example, ID: convection-demo
+~			32 button Spherical source / exterior radiation example, ID: radiation-acoustic-demo
+~			33 button Acoustic example, ID: acoustic-demo
+~			34 button Sound propagation example, ID: transient-acoustic-demo
+~			35 button Absorbing boundary example, ID: impedance-demo
+~			36 button Cavity example, ID: cavity-demo
+~			37 button Fit model, ID: fit
+~				40 pop up button (collapsed, settable) STL length unit, Value: mm, ID: unit, Secondary Actions: Expand
+~				53 stepper (settable, integer) Solid-to-enclosure padding (mm), Value: 10, ID: fluid-padding
+~			54 button Create surrounding fluid domain, ID: exterior-create
+~			55 button Create surrounding spherical acoustic domain, ID: exterior-acoustic-create
+~				62 button Orbit
+~				63 button Face
+~				64 button Brush
+~				65 button Erase
+~				66 button Probe
+~				71 slider (settable, integer) Brush radius 4 mm, Value: 4, ID: radius
+~			72 button Undo, ID: undo
+~			73 button Clear selection, ID: clear
+~			74 checkbox (settable, integer) Description: Show surface triangles, Value: 0, ID: wire
+~			86 button Interior face example, ID: interior-demo
+~			87 checkbox (settable, integer) Description: Section view, Value: 0, ID: clip-enabled
+~				90 pop up button (collapsed, settable) Section axis, Value: Z, ID: clip-axis, Secondary Actions: Expand
+~				97 stepper (settable, integer) Section position (mm), Value: 0, ID: clip-position
+~			98 checkbox (settable, integer) Description: Flip retained side, Value: 0, ID: clip-flip
+~				101 slider (settable, integer) Model opacity, Value: 1, ID: model-opacity
+~			366 checkbox (disabled, settable, integer) Description: Part 0 visible, Value: 1
+~			107 button Inspect surface, ID: geometry-inspect
+~			108 button Geometry defect example, ID: geometry-defect-demo
+~			112 button Export project, ID: save
+~				160 pop up button (collapsed, settable) Discipline, Value: Thermal, ID: physics, Secondary Actions: Expand
+~				170 pop up button (collapsed, settable) Material category, Value: Metal, ID: material, Secondary Actions: Expand
+~			214 button Check GPU availability, ID: gpu-check
+~			215 pop up button (collapsed, settable) Value: Airpocket Tet4 · JavaScript, ID: solver, Secondary Actions: Expand
+~				225 stepper (settable, integer) Target mesh size (mm), Value: 5, ID: mesh-size
+~				231 stepper (settable, integer) Maximum refinement rounds, Value: 3, ID: adaptive-rounds
+~				234 stepper (settable, integer) Adaptive element limit, Value: 10000, ID: adaptive-elements
+~				237 stepper (settable, integer) Adaptive time limit (seconds), Value: 60, ID: adaptive-seconds
+~				240 stepper (settable, integer) Displacement change tolerance (%), Value: 1, ID: adaptive-tolerance
+~				243 stepper (settable, integer) Stress change tolerance (%), Value: 5, ID: adaptive-stress-tolerance
+~				248 pop up button (collapsed, settable) Description: Check operation, Value: Solve, ID: preflight-operation, Secondary Actions: Expand
+~				252 button Check current inputs, ID: preflight-run
+~			253 button Generate volume mesh, ID: mesh-run
+~			254 button Run analysis, ID: solve-run
+~			258 pop up button (collapsed, settable) Value: Temperature (°C), ID: result-field, Secondary Actions: Expand
+~				275 stepper (settable, integer) Deformation scale, Value: 1, ID: deform-scale
+~			276 checkbox (settable, integer) Description: Show internal mesh, Value: 0, ID: volume-wire
+~			277 checkbox (settable, integer) Description: Show computed fields on the section, Value: 1, ID: result-section
+~			278 button Return to setup, ID: setup-view
+~			279 button Export results, ID: result-export
+~				337 checkbox (settable, integer) Description: Show result surface, Value: 1, ID: result-surface
+~				338 checkbox (settable, integer) Description: Show result surface mesh, Value: 0, ID: result-surface-wire
+~				339 button Save current view as PNG, ID: view-png
+~				341 pop up button (collapsed, settable) Animation type, Value: Stored time (acoustic / temperature), ID: animation-kind, Secondary Actions: Expand
+~				348 stepper (settable, integer) Video duration (seconds), Value: 2, ID: animation-seconds
+~				349 button Play, ID: animation-preview
+~				350 button Save WebM video, ID: animation-save
+~				351 button Save GIF, ID: animation-gif-save
+~				352 button (disabled) Stop playback, ID: animation-stop
+~				368 text Playback completed.
+~					357 slider (settable, integer) Description: Stored frame time, Value: 0, ID: acoustic-time-frame
+~				369 text 2.0000 s
+~					363 slider (settable, integer) Description: Fine time (linear interpolation between stored frames), Value: 200, ID: acoustic-time-fine
+~				364 button Play, ID: acoustic-time-play
++				370 text Interpolated: linear display blend between stored frames, not a solved time step.
+~				294 text field (settable) Case name, Value: Case 1, ID: case-name
+~			295 button Save current calculation, ID: case-add
+~			296 button Export case archive, ID: case-export
+~				315 button View saved result in 3D
+~				316 button Duplicate and restore input
+~				317 button Remove
+The focused UI element is 0 AXWebArea airpocket Simulation Studio, URL: 127.0.0.1:5188/?lang=en
