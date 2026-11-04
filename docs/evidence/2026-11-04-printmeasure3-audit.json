@@ -1,0 +1,41 @@
+{
+  "base": "d8214ad0b2497d10c5de6de4d9b593963a91442a",
+  "task": "PRINTMEASURE3",
+  "provenance": "synthetic analytical/test curves only; not measurements",
+  "fixes": [
+    "SLS maxStrain and residual degrees of freedom",
+    "full-history bilinear monotonicity",
+    "nonpositive tangent refusal",
+    "512-point exact-search budget, no decimation",
+    "all parameter uncertainty and finite successful diagnostics",
+    "descriptor-safe own options and model lookup"
+  ],
+  "verification": {
+    "focusedRelated": {
+      "tests": 41,
+      "pass": 41,
+      "fail": 0,
+      "skip": 0
+    },
+    "declarations": 35
+  },
+  "initialPreparationFailure": {
+    "relatedFileFailures": 2,
+    "cause": "missing node_modules (three, @xmldom/xmldom); type checker also absent",
+    "remedy": "npm ci --ignore-scripts; same related command then passed"
+  },
+  "notVerified": [
+    "real measurements or calibration",
+    "finite-strain/multi-branch/cyclic identification",
+    "independent measured validation",
+    "UI/material application",
+    "full-model uncertainty coverage outside existing linear synthetic experiment"
+  ],
+  "runtimeLaunches": {
+    "solver": 0,
+    "SU2": 0,
+    "browser": 0
+  },
+  "progressChanged": false,
+  "documentationPreparationFailure": "Initial English .en.md placement failed repository docs convention; moved to docs/en with reciprocal links, docs 2/2 passed."
+}
