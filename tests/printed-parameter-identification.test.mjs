@@ -116,3 +116,16 @@ test('audit: every nonenumerable option is refused before validated snapshot los
  // The ordinary minimum-points condition still rejects this same four-point input.
  assert.equal((await identify(raw,LIN)).specimens[0].reason,'too-few-points');
 });
+
+
+test('audit: finite extreme moduli retain finite analytical across-specimen scatter', async () => {
+ const d=JSON.parse(syntheticDataset({curves:ramp(10,.005,linearStress()),noisePa:0,specimens:2}));
+ d.specimens.forEach((s,k)=>{s.dimensions=[1,1,1];s.gaugeLength=1;s.samples=Array.from({length:10},(_,j)=>{const i=j+1;return [i,i*(k+1),i*2**-500];});});
+ const result=await identify(JSON.stringify(d),LIN);
+ assert.equal(result.identified,true);
+ const E=1e6*2**500, aggregate=result.across.youngsModulusPa;
+ assert.ok(Math.abs(aggregate.mean/(1.5*E)-1)<1e-14);
+ assert.ok(Math.abs(aggregate.sampleStandardDeviation/(E/Math.SQRT2)-1)<1e-14);
+ assert.ok(Number.isFinite(aggregate.sampleStandardDeviation));
+ assert.deepEqual(JSON.parse(JSON.stringify(result)).across,result.across);
+});

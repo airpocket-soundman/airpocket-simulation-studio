@@ -149,8 +149,10 @@ export async function identifyPrintedParameters(rawDatasetJson, identificationOp
  });
  const ok = specimens.filter(s => s.identified), across = {};
  if (ok.length >= 2) for (const key of Object.keys(ok[0].parameters)) {
-  const v = ok.map(s => s.parameters[key].value), mean = sum(v) / v.length;
-  across[key] = {mean, sampleStandardDeviation: Math.sqrt(sum(v.map(x => (x - mean) ** 2)) / (v.length - 1)), specimens: v.length};
+  const v = ok.map(s => s.parameters[key].value), mean = sum(v.map(x => x / v.length));
+  const sampleStandardDeviation = Math.hypot(...v.map(x => (x - mean) / Math.sqrt(v.length - 1)));
+  if (!Number.isFinite(mean) || !Number.isFinite(sampleStandardDeviation)) fail('Across-specimen statistics are not representable');
+  across[key] = {mean, sampleStandardDeviation, specimens: v.length};
  }
  return {identificationVersion: PRINTED_IDENTIFICATION_VERSION, model: opts.model, options: opts, dataset: {id: dataset.id, revision: dataset.revision, provenance: dataset.provenance, sourceSha256: dataset.sourceSha256},
   calibrated: false, accuracyVerified: false, identified: ok.length === specimens.length, specimens, across: ok.length >= 2 ? across : null};

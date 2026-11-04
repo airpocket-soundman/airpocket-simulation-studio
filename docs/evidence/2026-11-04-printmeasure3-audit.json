@@ -47,5 +47,12 @@
       "fail": 0
     },
     "declarations": 35
+  },
+  "aggregateFollowup": {
+    "finding": "Finite ~1e156 moduli produced Infinity sample SD through squared deviations.",
+    "fix": "Average divided contributions; hypot of deviations normalized by sqrt(n-1); typed PRINTED_IDENTIFICATION_INVALID if aggregate not representable.",
+    "oracle": "E=1e6*2**500 and 2E; mean=1.5E, sampleSD=E/sqrt(2), JSON roundtrip exact.",
+    "focusedPass": 13,
+    "declarations": 35
   }
 }
