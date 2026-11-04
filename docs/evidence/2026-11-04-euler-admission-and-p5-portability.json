@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-04",
+  "base": "d8214ad0b2497d10c5de6de4d9b593963a91442a",
+  "scope": [
+    "CFD3 finite bounded admission and independent uniform-state conservation",
+    "P5 source provenance portability"
+  ],
+  "changes": [
+    "262144 cells maximum before allocation/initial callback",
+    "finite integer maxSteps 1..1000000 and finite time budget (0,600000] ms",
+    "own limiter and explicit flux names",
+    "finite cell metrics, conservative states, wave rates, advancing time steps and integral/norm diagnostics",
+    "initial-data generation consumes cooperative time budget",
+    "P5 evidence checks normalize checkout CRLF to canonical repository LF without changing historical evidence or scripts"
+  ],
+  "validation": {
+    "eulerRelated": {
+      "tests": 30,
+      "passed": 30,
+      "failed": 0,
+      "durationMs": 5337.613,
+      "command": "node --test tests/euler-2d-admission-independent.test.mjs tests/euler-2d-muscl.test.mjs tests/euler-1d-muscl.test.mjs tests/module-boundaries.test.mjs"
+    },
+    "p5Evidence": {
+      "before": {
+        "tests": 3,
+        "passed": 1,
+        "failed": 2,
+        "cause": "raw CRLF checkout hash differs from recorded LF source"
+      },
+      "after": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "noAdditionalMeshOrStructuralSolve": true
+    }
+  },
+  "sourceHashes": [
+    {
+      "path": "src/euler-2d-muscl.js",
+      "canonicalLfSha256": "5ffe152977c83e6ead21a76d4b8f8672d6284e5556b303029a7af6835f1f4be8"
+    },
+    {
+      "path": "tests/euler-2d-admission-independent.test.mjs",
+      "canonicalLfSha256": "bddae241cf877393515ec731491394ec511ec0cbf440e343bca1991a15a784d6"
+    },
+    {
+      "path": "tests/p5-bracket-design-loop-evidence.test.mjs",
+      "canonicalLfSha256": "4c37f75ec1aea278f0e82886f4b15d3321e4dfed48e1b36b80ca239222b13187"
+    },
+    {
+      "path": "tests/p5-bracket-thickness-evidence.test.mjs",
+      "canonicalLfSha256": "49341aff8a5e4ac6d33070529dfd8cfe0109eb1095400e2adbe11333a5ba17a2"
+    }
+  ],
+  "limits": [
+    "cooperative synchronous budget cannot interrupt arbitrary user callback code",
+    "cell allocation limit is not measured whole-process peak RAM",
+    "no GUI/worker/MCP integration or general compressible/multiphase acceptance",
+    "no new SU2 run or external measurement/calibration",
+    "all current197 task statuses and evidence retained"
+  ]
+}

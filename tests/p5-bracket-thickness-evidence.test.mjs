@@ -7,7 +7,8 @@ const evidence=JSON.parse(await readFile(new URL('../docs/evidence/2026-10-29-op
 
 test('P5 evidence: three synthetic thickness variants solved and compared only through MCP',async()=>{
  assert.equal(evidence.transport,'real MCP stdio (scripts/studio-mcp.mjs)');assert.match(evidence.synthetic.geometry,/synthetic/);
- assert.equal(evidence.scriptHash,'sha256:'+createHash('sha256').update(await readFile(new URL('../scripts/experimental/p5-bracket-thickness-sweep.mjs',import.meta.url))).digest('hex'));
+ // Evidence pins repository LF source, independently of Windows checkout CRLF conversion.
+ assert.equal(evidence.scriptHash,'sha256:'+createHash('sha256').update((await readFile(new URL('../scripts/experimental/p5-bracket-thickness-sweep.mjs',import.meta.url),'utf8')).replace(/\r\n/g,'\n')).digest('hex'));
  for(const tool of ['studio_create_builtin_project','studio_edit_project','studio_preflight_project','studio_start_analysis','studio_compare_cases'])assert.ok(evidence.toolsUsed.includes(tool),tool);
  assert.deepEqual(evidence.table.map(r=>r.thicknessMm),[2,3,4]);
  assert.equal(new Set(evidence.table.map(r=>r.inputRevision)).size,3);
