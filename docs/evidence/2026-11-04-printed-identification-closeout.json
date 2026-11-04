@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-04",
+  "finalProductSource": "a7c93fd",
+  "taskCounts": {
+    "total": 197,
+    "released": 159,
+    "building": 34,
+    "checking": 4,
+    "queued": 0,
+    "remaining": 38
+  },
+  "initialFull": {
+    "status": "interrupted",
+    "source": "2815c3f",
+    "observedFailures": 6,
+    "finalCountsAvailable": false,
+    "causeEstablished": false
+  },
+  "serialFull": {
+    "command": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "startSource": "6718614",
+    "note": "Condition-binding UI fix and task-list updates landed during this execution; not an immutable final-source full run. Failure was obsolete synthetic reply fixture and was subsequently fixed without product-code changes.",
+    "total": 2588,
+    "pass": 2578,
+    "fail": 1,
+    "skip": 9,
+    "durationMs": 981931.9607
+  },
+  "afterFixtureFix": {
+    "source": "a7c93fd",
+    "relatedTests": 23,
+    "pass": 23,
+    "fail": 0,
+    "durationMs": 1639.8832
+  },
+  "contracts": 40,
+  "build": "passed",
+  "localPublished": {
+    "checks": 28,
+    "passed": 28,
+    "seconds": 80.45,
+    "revision": "a7c93fd"
+  },
+  "singleCli": {
+    "bytes": 1218,
+    "sha256": "b36a43019cc88ce204e5ad7819b872ef2333fe63dff37e19928c1c9c76612e69",
+    "exactGoldenCompatible": true
+  },
+  "finalCI": "See current PR251 checks for immutable final-head verification.",
+  "files": [
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/.gitattributes",
+      "bytes": 26,
+      "sha256": "155348a89d5e749f50d336f8f164a39bf8415179177b36e8b51766f3ab9a16d3"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/build.log",
+      "bytes": 3504,
+      "sha256": "568e0b6e5bbc80d64f516355274a8ecf38e0025c67b912c07419431333b623ed"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/contracts.log",
+      "bytes": 157,
+      "sha256": "d496178934c4afd3662a31854cf159fe7bd0cfdf75e7aef66ea13881479a3aca"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/fixed-focused.log",
+      "bytes": 4317,
+      "sha256": "c0806a68271d5f60588871b4159f52ae7bc775bdd11629898946ad096740d286"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/fixture-regression.log",
+      "bytes": 2910,
+      "sha256": "f38e36b09297184ba4dfa46f2db41822c7e5dac146db1f559c2c8b32451a38ef"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/independent.log",
+      "bytes": 394,
+      "sha256": "445fc1d996925ac6837ac8db505cf3f172084933edcc6e16ab0c16c0046c3224"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/initial-interrupted.log",
+      "bytes": 23632,
+      "sha256": "2b4cf6d39fa77f4e076558c11145c8c91f5242ea8a1b9358dbdd5a10261ae3de"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/progress-layers-docs.log",
+      "bytes": 763,
+      "sha256": "838a201f1d5ccfef0876c3f314a693353c2b5f9fd7f2b2a9a66dc7912aef5d89"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/published.log",
+      "bytes": 1513,
+      "sha256": "e97ce418b36aefbb324c9cfa0cca1c4d8e4b4a48409a1c4bd8c6cd47e52e163c"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/serial-full-before-fixture-fix.log",
+      "bytes": 276604,
+      "sha256": "25dd61f96388734d79a0d323a5ec60ae34a82f8c63920b05a17cd3c254ac6fa5"
+    },
+    {
+      "path": "docs/evidence/printed-identification-closeout-20261104/single-after-refactor.json",
+      "bytes": 1218,
+      "sha256": "b36a43019cc88ce204e5ad7819b872ef2333fe63dff37e19928c1c9c76612e69"
+    }
+  ]
+}
