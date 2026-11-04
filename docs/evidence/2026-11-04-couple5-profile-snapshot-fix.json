@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-04",
+  "task": "COUPLE5",
+  "base": "155a9d9d8f89155a1959283b9e1977158b5d7902",
+  "independentFinding": "A4elementArray with a custom100yield iterator passed the length check then Float64Array.from read100values; an infinite iterator bypassed the work cap.",
+  "fix": "Snapshot exactlycellsY own numeric data slots. OrdinaryFloat64Array uses intrinsic length/buffer brand and ArrayBuffer byteLength brand, rejecting fake/shared/detached storage. No caller iterator or own length/buffer getter executed.",
+  "regressions": [
+    "Array custom100yield iterator: executions0, same computed result as indexed input",
+    "Float64Array throwingiterator/own length+buffergetters: executions0, same result",
+    "Array sparse/accessor/subclass and fakeFloat64Array refuse",
+    "SharedArrayBuffer with ownbuffer/prototype spoof refuses via intrinsic brand",
+    "100elementFloat64Array with spoofed ownlength4 refuses beforecopy"
+  ],
+  "commands": [
+    {
+      "command": "node --test tests/fsi-channel-shear-plate-audit.test.mjs tests/fsi-channel-shear-plate.test.mjs tests/fsi-interface-vector.test.mjs tests/fsi-partitioned.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "tests": 41,
+      "pass": 41,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 2739.273
+    },
+    {
+      "command": "npm run check:contracts",
+      "declarations": 36,
+      "pass": true
+    }
+  ],
+  "sourceSha256Lf": "e40427046906bbaeca227b5595cf260c708ce04b6f014f61cb77d5536f477aa0",
+  "physicalSchemeUnchanged": true,
+  "progressUnchanged": true,
+  "newSU2": 0,
+  "unverified": [
+    "Arbitrary Proxy trap termination is not an untrusted-JavaScript sandbox guarantee",
+    "GeneralFSI/normalwalls/ALE/pressurecoupling/measurement/product integration remain outside scope"
+  ]
+}

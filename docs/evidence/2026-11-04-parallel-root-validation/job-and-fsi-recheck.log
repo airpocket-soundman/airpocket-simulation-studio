@@ -1,0 +1,23 @@
+✔ real CPU job exposes mesh and numerical events, freezes input and publishes only complete output (1293.1529ms)
+✔ real transient fields reference the correct mesh and agree with saved final temperature/history (1156.5253ms)
+✔ job cancellation, timeout, artifact limits and invalid options preserve input and existing files (1172.0669ms)
+✔ restart startup-condition digest separates identical from changed conditions before any input read or worker start (1425.7422ms)
+✔ concurrent starts never persist the competing startup digest for the accepted job (45.0885ms)
+✔ same-condition concurrent retries share one job while changed conditions are refused before any read (41.9003ms)
+✔ starts that fail before owning a job release their reservation; 32 failures do not block the same request ID (57.0203ms)
+✔ a legacy record without a startup digest stays restored-only and never starts a worker (9.0435ms)
+✔ each dissipation trapezoid uses its own held wall velocity on both sides of the step (8.8503ms)
+✔ independent cell-force momentum and energy balances use Pa, kg/m2 and J/m2 consistently (0.8293ms)
+✔ nonzero initial fluid replay agrees with an independent six-state exponential and reference step halving (60.332ms)
+✔ zero-energy equilibrium has finite zero absolute and relative diagnostics, including JSON output (1.218ms)
+✔ parameter JSON reload reconstructs the same issued fluid and nonzero initial case; no saved methods/state accepted (1.8325ms)
+✔ bad dimensions, nonfinite/range/work and reference stability requests refuse before producing completed states (0.866ms)
+✔ profile snapshot reads bounded own data and never invokes custom iterators/getters (3.3754ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5485.0366

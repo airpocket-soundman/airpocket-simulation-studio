@@ -1,0 +1,7766 @@
+{
+  "before": [
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "model",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-view",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "print-all-layers",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-layer",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "print-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "print-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylindrical-cad-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "analysis-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "displacement-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-unload-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "rubber-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-stress-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-fluid-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "transient-acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cavity-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fit",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "unit",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cad-update-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cad-update-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fluid-padding",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-acoustic-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-bounds",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "24"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "24"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-0",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "internal-port-1",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-2",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-3",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "internal-port-4",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-5",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-cap-add",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radius",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "undo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-mesh",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-radius-end",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.3"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-sweep",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "90"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "cylinder-exact",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-select",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-reapply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-mesh",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-latitude-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-latitude-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "315"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-sweep",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "90"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-select",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-rotate",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-position",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "40"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-min-u",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-min-v",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "6"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-max-u",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-max-v",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "14"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-select",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "interior-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-position",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-flip",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "model-opacity",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "1"
+    },
+    {
+      "checked": true,
+      "disabled": true,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "geometry-inspect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "geometry-defect-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "project-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "restore",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-endpoint",
+      "tag": "INPUT",
+      "type": "url",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-token",
+      "tag": "INPUT",
+      "type": "password",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-diagnose",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-connect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "agent-disconnect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "password",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "physics",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "thermal"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "金属"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-family",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-filler",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-content",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-search",
+      "tag": "INPUT",
+      "type": "search",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-experimental",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-grade",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "rtp-100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-poisson",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.35"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-isotropic",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-applicability",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-youngModulus",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-poissonRatio",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-strength",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-conductivity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-specificHeat",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-expansion",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-temperatureMin",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-temperatureMax",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-grade",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-notes",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-mu",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-bulk",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-yield",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "250"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-hardening",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-ultimate",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "400"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-yield",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "250"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-test-conditions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-k-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-k-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-temp-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-temp-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-conditions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-surface",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-register",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-remove",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-example",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-compare",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-paired-example",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "finite-history-cancel",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-clear",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "fixed",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "constraint-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "constraint-local",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "prescribed-mm",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "direction-fixed",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "displacement-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-count",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "nonlinear-steps",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "plastic-load-fractions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "nonlinear-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "force",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dx",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dy",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dz",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "load",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-input",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "normal-traction",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "normal-traction-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-9.80665"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-stress",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solid-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "80"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "reference-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "temperature-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-flux",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-flux-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-power",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-power-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-h",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-emissivity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.8"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-ambient",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-h",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "ambient-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "transient-heat",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "time-step",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "time-steps",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "initial-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "volumetric-source",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-snapshots",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "11"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-history-budget",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.002288818359375"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-pressure-drop",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-viscosity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.001"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-sound-speed",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1500"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.001"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-element",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "P1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-reference-length",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-pressure",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-pressure-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-r",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "411.6"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-radiation",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-points",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "36"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-distance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "transient-acoustic",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-duration",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pulse-width",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-step",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-damping",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-snapshots",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-history-budget",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-case",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-mode",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-amplitude",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-phase",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-frequency",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sound-speed",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "343"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "air-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1.2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-loss",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "reference-pressure",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.00002"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-sweep",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "500"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-end",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-count",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gpu-check",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solver",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "pcg"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mesh-size",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-size",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "adaptive-run",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-rounds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "3"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-elements",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-stress-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "preflight-operation",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "solve"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "preflight-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mesh-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solve-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cancel-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-field",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "heatFlux"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-fixed",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "deform-scale",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "volume-wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "result-section",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "setup-view",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "View 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "Probe 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "result-surface",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-surface-wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "view-png",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-kind",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "time"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-preview",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-gif-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "animation-stop",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-frame",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-fine",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "200"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-play",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-min-factor",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-max-factor",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-cycles",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-correction",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "none"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-evaluate",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-a-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-a-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-y-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-y-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-residual-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-residual-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-geometry-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-stress-assumption",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-evaluate",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "Case 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-curve-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-curve-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-comparison-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-comparison-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-left",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-right",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-time",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-png",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-import",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-reset",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-format",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "webm"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-kind",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "orbit"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-from",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-to",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-start",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-cancel",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-persistence-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-persistence-restore",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-persistence-remove",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-bundle-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-bundle-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    }
+  ],
+  "after": [
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "model",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-view",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "print-all-layers",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "print-layer",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "print-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "print-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylindrical-cad-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "analysis-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "displacement-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-unload-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "rubber-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-stress-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-fluid-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "transient-acoustic-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cavity-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fit",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "unit",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cad-update-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cad-update-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fluid-padding",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-acoustic-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-seed-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-bounds",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-min-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "24"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-width-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "24"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-0",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "internal-port-1",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-2",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-3",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "internal-port-4",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-port-5",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-cap-add",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "internal-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radius",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "undo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-mesh",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-radius-end",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.3"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-sweep",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "90"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "cylinder-exact",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-select",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "cylinder-reapply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-mesh",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-center-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-axis-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-reference-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-latitude-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-latitude-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "315"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-sweep",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "90"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "spherical-select",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-rotate",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-angle-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-position",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "40"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-min-u",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-min-v",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "6"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-max-u",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-max-v",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "14"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "planar-select",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "interior-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-position",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "clip-flip",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "model-opacity",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "1"
+    },
+    {
+      "checked": true,
+      "disabled": true,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "geometry-inspect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "geometry-defect-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "project-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "restore",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-endpoint",
+      "tag": "INPUT",
+      "type": "url",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-token",
+      "tag": "INPUT",
+      "type": "password",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-diagnose",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "agent-connect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "agent-disconnect",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "INPUT",
+      "type": "password",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "physics",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "thermal"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "金属"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-family",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-filler",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-content",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-search",
+      "tag": "INPUT",
+      "type": "search",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-experimental",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-grade",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "rtp-100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-poisson",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.35"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-isotropic",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-applicability",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "catalog-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-youngModulus",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-poissonRatio",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-strength",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-conductivity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-specificHeat",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-expansion",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-temperatureMin",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mat-temperatureMax",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-grade",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-notes",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-mu",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "hyperelastic-bulk",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-yield",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "250"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "plastic-hardening",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-ultimate",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "400"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-yield",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "250"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-test-conditions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-k-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-k-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-temp-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-temp-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-conditions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-surface",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-register",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-remove",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-example",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-compare",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-paired-example",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "finite-history-cancel",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "finite-history-clear",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "material-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "fixed",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "constraint-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "constraint-local",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "frame-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "prescribed-mm",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "direction-fixed",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "displacement-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-count",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "modal-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "nonlinear-steps",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "plastic-load-fractions",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "nonlinear-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "force",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dx",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dy",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "dz",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "load",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-input",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pressure-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "normal-traction",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "normal-traction-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-9.80665"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gravity-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-stress",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solid-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "80"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "reference-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case-apply",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-case-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "temperature-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-flux",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-flux-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-power",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "heat-power-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-h",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "contact-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-emissivity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.8"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-ambient",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "radiation-iterations",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "30"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-h",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "ambient-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "convection-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "transient-heat",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "time-step",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "time-steps",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "initial-temperature",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "volumetric-source",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-snapshots",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "11"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "thermal-history-budget",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.002288818359375"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-pressure-drop",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-viscosity",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.001"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "flow-sound-speed",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1500"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.001"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-velocity-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-element",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "P1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "stokes-reference-length",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-pressure",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-pressure-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-r",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "411.6"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "impedance-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "exterior-radiation",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-axis",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-points",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "36"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "directivity-distance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "transient-acoustic",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-duration",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "pulse-width",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-step",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-damping",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-snapshots",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-history-budget",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-case",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-mode",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-amplitude",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-phase",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-create",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "vibration-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-frequency",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sound-speed",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "343"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "air-density",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1.2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-loss",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.01"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "reference-pressure",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.00002"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-sweep",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-start",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "500"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-end",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "sweep-count",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "receiver-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "20"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "gpu-check",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solver",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "pcg"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mesh-size",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-size",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-radius",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "12"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "local-mesh-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "adaptive-run",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-rounds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "3"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-elements",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "10000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "60"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "adaptive-stress-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "5"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "preflight-operation",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "solve"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "preflight-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "mesh-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "solve-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "cancel-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-field",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "heatFlux"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-fixed",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "color-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "deform-scale",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "volume-wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "result-section",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "setup-view",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "View 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "named-view-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "Probe 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "measurement-history-clear",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": true,
+      "disabled": false,
+      "id": "result-surface",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "result-surface-wire",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "view-png",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-kind",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "time"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-preview",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "animation-gif-save",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "animation-stop",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-frame",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-fine",
+      "tag": "INPUT",
+      "type": "range",
+      "value": "200"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "acoustic-time-play",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-min-factor",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "-1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-max-factor",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-cycles",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "100000"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-correction",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "none"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fatigue-evaluate",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-a-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-a-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0.4"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-y-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-y-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-x",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-y",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-normal-z",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-residual-min",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-residual-max",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-geometry-source",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-stress-assumption",
+      "tag": "INPUT",
+      "type": "text",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-evaluate",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "fracture-demo",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-name",
+      "tag": "INPUT",
+      "type": "text",
+      "value": "Case 1"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-add",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-text-show",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-curve-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-curve-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-comparison-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "increment-comparison-run",
+      "tag": "BUTTON",
+      "type": "button",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-left",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-right",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-time",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-run",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-png",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-import",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-file",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-settings-reset",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-format",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "webm"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-kind",
+      "tag": "SELECT",
+      "type": "select-one",
+      "value": "orbit"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-from",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-to",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-tolerance",
+      "tag": "INPUT",
+      "type": "number",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-seconds",
+      "tag": "INPUT",
+      "type": "number",
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-video-start",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-video-cancel",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "compare-persistence-enabled",
+      "tag": "INPUT",
+      "type": "checkbox",
+      "value": "on"
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-persistence-restore",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": true,
+      "id": "compare-persistence-remove",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-bundle-export",
+      "tag": "BUTTON",
+      "type": "submit",
+      "value": ""
+    },
+    {
+      "checked": false,
+      "disabled": false,
+      "id": "case-bundle-import",
+      "tag": "INPUT",
+      "type": "file",
+      "value": ""
+    }
+  ]
+}

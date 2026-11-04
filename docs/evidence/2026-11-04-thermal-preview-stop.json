@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-04",
+  "relatedCompletion": "docs/evidence/2026-11-04-thermal-preview-acceptance.json",
+  "sourceUnchangedPreviewModuleFrom": "d8214ad",
+  "runtimeHeadAtStop": "5454464",
+  "scope": "English foreground GUI preview cancellation,not encoded export",
+  "durationSeconds": 15,
+  "observedRunning": true,
+  "action": "GUI Stop playback",
+  "observedStatus": "Export cancelled",
+  "controlsExactlyRestored": 485,
+  "physicalTimeRestoredSeconds": 2,
+  "notes": [
+    "Status uses the existing generic cancellation label",
+    "Screenshot captured after duration was manually reset from15 to2",
+    "No new solve or media encoding;no hidden/session/disconnect acceptance",
+    "Existing completion records remain unchanged"
+  ],
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "gitBlobSha1": "fa1385d99a319b43c06f5309d1aae9fdd3adea46"
+    },
+    {
+      "file": "stop-baseline.json",
+      "bytes": 75998,
+      "sha256": "07d603e1525bd95c9376065a020ebadabb96b75005dedb259fba1947a9c357d1",
+      "gitBlobSha1": "41d90666ad4fa8863182c4ba2ba131c689868daa"
+    },
+    {
+      "file": "stopped.json",
+      "bytes": 75998,
+      "sha256": "07d603e1525bd95c9376065a020ebadabb96b75005dedb259fba1947a9c357d1",
+      "gitBlobSha1": "41d90666ad4fa8863182c4ba2ba131c689868daa"
+    },
+    {
+      "file": "stopped.png",
+      "bytes": 48627,
+      "sha256": "06fbd59b51eabb8b5669cba237b2a89ab74a806c80a5449878e26b57b457cce4",
+      "gitBlobSha1": "2a14cc5b94d7258d537ef9bf9b5b12935b2af894"
+    },
+    {
+      "file": "stopped.txt",
+      "bytes": 6516,
+      "sha256": "f8c05c111df01b2c6f082ff0902b7d85a6eb9f359626f46d89a9a432cf8b39cd",
+      "gitBlobSha1": "59eef626060b9e3497d8b0ce2d527e9ce6c8a766"
+    }
+  ]
+}

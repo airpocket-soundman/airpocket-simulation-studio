@@ -1,0 +1,37 @@
+✔ Euler admission rejects unbounded inputs before initial-data callbacks or grid allocation (3.0255ms)
+✔ Euler rejects nonfinite conserved overrides instead of allowing infinite output or stalled time (3.3775ms)
+✔ Euler initialization consumes the same cooperative time budget as integration (5.6098ms)
+✔ both Euler fluxes preserve an anisotropic uniform moving state and its four analytic totals (9.1882ms)
+✔ independent hydrostatic Hencky oracle resolves tiny damage and attenuated stress near full damage without cancellation (12.3499ms)
+✔ hydrostatic unload/hold/reload uses maximum driver and exact trapezoidal damage bookkeeping, refusing rounded d=1 without modifying issued state (3.0504ms)
+✔ traction-free uniaxial path matches an independent relaxed elastic Hencky stress/energy oracle with damage (42.3094ms)
+✔ only in-process issued states resume: frozen clones, negative bookkeeping, altered flags/parameters and state accessors are refused without execution (1.66ms)
+✔ damage entry gates reject parameter/array/F hooks, sparse arrays and excess resource budgets before delegating (1.339ms)
+✔ monotonic tension: undamaged below threshold, load peak then drop, d monotone in [0,1), energy balance (2144.4313ms)
+✔ unloading stiffness drops by (1-d), damage frozen while unloading and on reload below the previous driver (1739.744ms)
+✔ general-F stepping: objective damage under superposed rotation; pure rotation leaves d = 0 (17.4592ms)
+✔ rejects unsupported combinations, calibrated claims, envelope violations, forged state; inputs unchanged (27.459ms)
+✔ linear elastic: recovers E within standard error, labels synthetic and uncalibrated, aggregates specimens (24.7061ms)
+✔ linear elastic: standard error matches seed-to-seed scatter and scales with noise (19.6339ms)
+✔ bilinear elastic-plastic: recovers E, yield stress and tangent modulus (24.363ms)
+✔ SLS relaxation: recovers equilibrium modulus, branch modulus and relaxation time (23.0096ms)
+✔ refuses unidentifiable parameters instead of returning a number (54.1707ms)
+✔ only validator-accepted datasets and exact options are accepted; inputs are not mutated (2.4354ms)
+✔ audit: analytical origin fit and a held strain outside the declared window (1.4034ms)
+✔ audit: softening and unload hidden beyond the fitting window are refused (12.9638ms)
+✔ audit: nonlinear search budget and minimum residual degrees of freedom (2.2257ms)
+✔ audit: options reject accessor and symbol hooks without executing them (0.6049ms)
+✔ audit: finite diagnostics and every parameter uncertainty are mandatory (1.4822ms)
+✔ audit: every nonenumerable option is refused before validated snapshot loses it (1.997ms)
+✔ audit: finite extreme moduli retain finite analytical across-specimen scatter (0.8943ms)
+✔ thermal Play preview steps stored temperature frames first to last and restores the interpolated view (58.3072ms)
+✔ thermal Play preview stop restores the displayed time and unlocks controls (12.0769ms)
+✔ thermal Play preview refuses heat flux, steady results and single-frame history before touching the slider (45.2836ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4108.3458

@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "recordedAt": "2026-11-04T05:42:25.549Z",
+  "taskId": "FINITEVISCO1",
+  "workOrder": "docs/opencode-work-orders-2026-10-28/100-FINITEVISCO1.md",
+  "baseSha": "d8214ad0b2497d10c5de6de4d9b593963a91442a",
+  "branch": "codex/finite-damage-audit-20261104",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Independent audit and corrections limited to the synthetic local damage material-point boundary; no new physics or structural integration.",
+  "counterexamplesBeforeFix": [
+    {
+      "kind": "frozen-state-forgery",
+      "input": "Object.freeze({...issued,damageDissipationDensity:-100,Yf:1e12}); F=1.01I;dt=1",
+      "observedDamageDissipationDensity": -99.99999964754073
+    },
+    {
+      "kind": "parameter-accessor",
+      "input": "parameters.damage own enumerable getter",
+      "getterExecutions": 1
+    },
+    {
+      "kind": "small-exponential-cancellation",
+      "stretch": 1.0000005,
+      "thresholdEnergyDensity": 0.000001,
+      "softeningEnergyDensity": 1000000000000,
+      "driverEnergyDensity": 0.0000022499988757295278,
+      "observedDamage": 0,
+      "expectedDamage": 1.2499988757295279e-18
+    },
+    {
+      "kind": "survival-factor-cancellation",
+      "exponent": 35,
+      "observedAttenuation": 6.661338147750936e-16,
+      "expectedAttenuation": 6.305116760146989e-16,
+      "relativeError": 0.05649719127416164
+    }
+  ],
+  "fixes": [
+    "WeakSet-issued immutable in-process states; frozen clones/reconstructed states refused; opaque declaration brand",
+    "Own enumerable data-property and dense ordinary-array snapshots before parameter spread/delegation, max8branches/64segments/4096steps/3x3F",
+    "Damage=-expm1(-x) and survival=exp(-x) computed independently; no saturation clamp",
+    "Nonnegative finite energy increments and finite cumulative damage bookkeeping checked"
+  ],
+  "syntheticParameters": {
+    "bulkModulusPa": 2000000,
+    "equilibriumShearModulusPa": 1000000,
+    "branches": [
+      {
+        "shearModulusPa": 300000,
+        "relaxationTimeSeconds": 1
+      }
+    ],
+    "plasticity": {
+      "yieldStressPa": 30000,
+      "hardeningModulusPa": 100000
+    },
+    "damageCases": [
+      {
+        "thresholdEnergyDensity": 100,
+        "softeningEnergyDensity": 300
+      },
+      {
+        "thresholdEnergyDensity": 0.000001,
+        "softeningEnergyDensity": 1000000000000
+      },
+      {
+        "thresholdEnergyDensity": 100,
+        "softeningEnergyDensity": "(9e6*log(1.01)^2-100)/35"
+      }
+    ],
+    "relaxedUniaxialOracle": {
+      "branchShearModulusPa": 1,
+      "relaxationTimeSeconds": 0.000001,
+      "yieldStressPa": 1000000000000,
+      "thresholdEnergyDensity": 100,
+      "softeningEnergyDensity": 30,
+      "poissonRatio": "2/7",
+      "youngModulusPa": "18e6/7"
+    },
+    "note": "All parameters are explicitly synthetic; no measured or calibrated material data."
+  },
+  "independentTests": {
+    "file": "tests/finite-visco-damage-independent.test.mjs",
+    "tests": 5,
+    "passed": 5,
+    "elapsedMilliseconds": 169.6579,
+    "oracle": "Hydrostatic Hencky Y=9e6(log a)^2,tau_eff=6e6 log a,J=a^3; max history and trapezoidal Ymid delta-d; relaxed uniaxial nu=2/7,E=18e6/7. No production constitutive output used as oracle."
+  },
+  "verification": {
+    "related": {
+      "command": "node --test tests/finite-visco-damage.test.mjs tests/finite-visco-damage-independent.test.mjs tests/finite-visco-prf-j2.test.mjs tests/finite-visco-hencky-multiplicative.test.mjs tests/finite-visco-prony-uniaxial.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "tests": 46,
+      "pass": 46,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 8606.8655,
+      "logSha256": "db8c49402d465d3babd313c265a039d3eb3ffb908e60b693e7c61e79da5f2793"
+    },
+    "contracts": {
+      "command": "npm run check:contracts",
+      "pass": true,
+      "declarationFiles": 35,
+      "logSha256": "ec09fe94c6023fd83de8c9140e20561d888f1cef4a056be16217d37fe2850564"
+    },
+    "postDocumentation": {
+      "command": "node --test tests/docs.test.mjs",
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMilliseconds": 163.5183
+    },
+    "diffCheckPassed": true
+  },
+  "sourceHashes": [
+    {
+      "path": "src/finite-visco-damage.js",
+      "workingByteSha256": "a1ea81721fe07de183abefa8572719f2dfd73eaed69185396e0e6cd1e424b609",
+      "normalizedLfSha256": "92089800487ee36ba9c05763c11ec2bd60f5eeaec4228ced277fa0302912d88b",
+      "baseGitBlobSha256": "3127cfb4ff6b01538cd17b68e07235b10e6c979e68609d570f665019d92c0fc7"
+    },
+    {
+      "path": "src/finite-visco-damage.d.ts",
+      "workingByteSha256": "8e32e3d3cb99807182554f85af5c648bfc48cc1ffea97f2e2fa30213edac773e",
+      "normalizedLfSha256": "44a4c803a6eb2c7911dd4daaccd4b0242126c8a7a11b12e1bba965e141b42327",
+      "baseGitBlobSha256": "1406d2de0402ef1cb3a416024a67549ab4f878145ab00ad77e25a8f3e3e894cd"
+    },
+    {
+      "path": "tests/finite-visco-damage-independent.test.mjs",
+      "workingByteSha256": "86cff43e97bb677ba8ce90110c01be05be0d16c5ace9177422e8b0b3e31acb54",
+      "normalizedLfSha256": "86cff43e97bb677ba8ce90110c01be05be0d16c5ace9177422e8b0b3e31acb54"
+    }
+  ],
+  "hashMeaning": "Working byte hash and LF-normalized hash are distinct; base identities use Git blob bytes.",
+  "protectedFiles": [
+    {
+      "path": "src/finite-visco-prf-j2.js",
+      "gitBlobSha256": "b83df011728d63f9008773a6c50dd703929c0ef4f0464fcd2d4579c2cd9a52d2",
+      "unchanged": true
+    },
+    {
+      "path": "src/finite-visco-prf-j2.d.ts",
+      "gitBlobSha256": "8c81796a2e40df6b00872053daa0955c96e3345510b7f4d1b9f4b27852674cdc",
+      "unchanged": true
+    },
+    {
+      "path": "src/finite-visco-hencky-multiplicative.js",
+      "gitBlobSha256": "d73fb6b498140a338d9b5959df5eaa158d9080777289e1ef225a7a0873dec8ad",
+      "unchanged": true
+    },
+    {
+      "path": "src/finite-visco-prony-uniaxial.js",
+      "gitBlobSha256": "0b781409fe9ee5857d7f5472afbca44e96c70889c8694eb8a105c01484da8e61",
+      "unchanged": true
+    },
+    {
+      "path": "src/progress.json",
+      "gitBlobSha256": "db41b20d04f4ce35146a060050226522c14ebcd0c4372ffc78af2353de35b231",
+      "unchanged": true
+    },
+    {
+      "path": "tests/finite-visco-damage.test.mjs",
+      "gitBlobSha256": "fc692865551a29de050a1e0ad5f8c0efcf148d1303dc81cb3bd44cbd5b11a4f5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/evidence/2026-10-29-opencode-100-finitevisco1.json",
+      "gitBlobSha256": "940fb9bc1d7045809084dd831c5166510c3576722e1165585bb5f2e86e8625c4",
+      "unchanged": true
+    }
+  ],
+  "unverified": [
+    "Local scalar damage remains mesh dependent; no characteristic length/fracture-energy regularization",
+    "No tension-compression split, element deletion, rupture criterion, structural tangent/Newton/solver integration or calibration",
+    "Damage dissipation is the specified discrete trapezoidal bookkeeping, not an exact arbitrary-step work integral",
+    "d rounding to1 is explicitly outside the representable d<1 envelope; no clamp or fabricated complete rupture",
+    "States cannot resume after JSON/structured cloning or another module instance/process",
+    "No full-suite, new solver, SU2, GUI, codec, measurement or publication run; parent task status unchanged"
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "date": "2026-11-04",
+  "task": "COUPLE5",
+  "workOrder": "102 follow-up independent audit",
+  "base": "d8214ad0b2497d10c5de6de4d9b593963a91442a",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "synthetic": true,
+  "provisional": true,
+  "calibrated": false,
+  "scope": "x-uniform laminar tangential shear plate; no mesh motion, pressure feedback, generalFSI or measured validation",
+  "sourceSha256Lf": "8fd189e7158ce42562fa1f7ad39ec6b5ca29c78c0111495b8d2f8baa99880928",
+  "fixes": [
+    "Current held wall velocity at both ends of each dissipation trapezoid",
+    "Finite zero-energy equilibrium and absoluteJ/m2 defect; positive-energy underflow refuses",
+    "Unknown options cannot override internal state/structure",
+    "Bounded issued fluid/parameters and finite/range/work preflight",
+    "Monolithic initialProfile matches coupled initial data; reference bound and finite outputs"
+  ],
+  "measured": {
+    "sweep": [
+      {
+        "dtSeconds": 0.004,
+        "maxRelativeDisplacementError": 0.03510642945340629,
+        "maxRelativeEnergyDefect": 0.02360750153928014,
+        "finalMechanicalEnergyRatio": 0.0277939355014621,
+        "maxIterations": 3,
+        "maxXSpread": 0,
+        "actionReactionSumMaximum": 0
+      },
+      {
+        "dtSeconds": 0.002,
+        "maxRelativeDisplacementError": 0.008456488049634833,
+        "maxRelativeEnergyDefect": 0.005605136368798631,
+        "finalMechanicalEnergyRatio": 0.02281578570968799,
+        "maxIterations": 3,
+        "maxXSpread": 0,
+        "actionReactionSumMaximum": 0
+      },
+      {
+        "dtSeconds": 0.001,
+        "maxRelativeDisplacementError": 0.0007558513073261893,
+        "maxRelativeEnergyDefect": 0.0007375500499745656,
+        "finalMechanicalEnergyRatio": 0.021468015320209605,
+        "maxIterations": 3,
+        "maxXSpread": 0,
+        "actionReactionSumMaximum": 0
+      }
+    ],
+    "reference": {
+      "requestedMaximumStepSeconds": 0.000002,
+      "actualStepSeconds": 0.00000199999000005,
+      "steps": 200001
+    },
+    "firstStepDissipatedJPerM2": 1.5268753996565874e-8,
+    "zeroEnergyDiagnostics": [
+      {
+        "relative": 0,
+        "absoluteJPerM2": 0
+      },
+      {
+        "relative": 0,
+        "absoluteJPerM2": 0
+      },
+      {
+        "relative": 0,
+        "absoluteJPerM2": 0
+      }
+    ]
+  },
+  "historical102": {
+    "path": "docs/evidence/2026-10-29-opencode-102-couple5.json",
+    "unaltered": true,
+    "oldMaxEnergyDefect": [
+      0.07288635215015316,
+      0.03015674807719778,
+      0.014643916230184906
+    ],
+    "correction": "Prior inevitable first-order interpretation included the wrong left-end wall velocity. This sweep is not an asymptotic/global FSI order certificate; displacement and interface paths are unchanged."
+  },
+  "independentOracles": [
+    "Explicit6x6 finite-volume fluid/plate linear system exponentiated by scaledTaylor, separate fromRK4",
+    "Face-force momentum and energy identities",
+    "Two-step exact heldV trapezoids and Newmark averageforce work",
+    "JSON parameter reload vs unchanged live case; no saved executable-state restore"
+  ],
+  "limits": {
+    "cellsX": 256,
+    "cellsY": 512,
+    "coupledSteps": 20000,
+    "iterations": 200,
+    "fluidSubsteps": 20000,
+    "fluidWork": 20000000,
+    "referenceSteps": 500000,
+    "referenceWork": 10000000
+  },
+  "referenceRatePrecondition": "actualDt*(4*nu/hy^2+4*mu/(plate.mass*hy)+sqrt(k/m))<=0.1; conservative local policy, not general stability proof",
+  "commands": [
+    {
+      "command": "node --test tests/fsi-channel-shear-plate-audit.test.mjs tests/fsi-channel-shear-plate.test.mjs tests/fsi-interface-vector.test.mjs tests/fsi-partitioned.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "tests": 40,
+      "pass": 40,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 1536.6976
+    },
+    {
+      "command": "npm run check:contracts",
+      "declarations": 36,
+      "pass": true
+    },
+    {
+      "command": "node --test tests/docs.test.mjs (after new JP/EN documents)",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 164.3744
+    },
+    {
+      "command": "git diff --check",
+      "pass": true
+    }
+  ],
+  "externalSource": {
+    "url": "https://mooseframework.inl.gov/source/timeintegrators/NewmarkBeta.html",
+    "accessed": "2026-11-04",
+    "use": "Names/parameters for structural Newmark beta1/4,gamma1/2 only; does not certify partitionedCFD coupling"
+  },
+  "unverified": [
+    "General pressure-driven/normal-wall FSI andALE",
+    "Curved-work-conserving interface transfer/IQN-ILS",
+    "Nonlinear/large-deformation and measured calibration",
+    "Worker/MCP/UI/product connection",
+    "Global energy-conservation/stability/accuracy outside this bounded synthetic test"
+  ],
+  "noNewSU2": true,
+  "protectedProgressUnchanged": true
+}

@@ -16,7 +16,7 @@ test('partitioned CFD2 channel + plate converges to the monolithic semi-discrete
   for(let i=1;i<errors.length;i++)assert.ok(Math.log2(errors[i-1]/errors[i])>1.8,`order ${Math.log2(errors[i-1]/errors[i])}`);
 });
 
-test('interface forces are action-reaction and the energy budget closes at first order in dt',()=>{
+test('interface forces are action-reaction and the energy defect decreases under dt refinement',()=>{
   const defects=[2e-3,1e-3].map(dt=>{const r=runShearPlateCoupled({fluid,plate,initialDisplacement:d0,dt,steps:Math.round(T/dt)});
     for(const h of r.history.slice(1))assert.equal(h.forceOnPlate+h.forceOnFluid,0);
     // Physical dissipation: plate + fluid mechanical energy decays by >95% within T.

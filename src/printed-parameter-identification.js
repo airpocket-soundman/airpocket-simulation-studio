@@ -4,10 +4,11 @@
 // Results are never calibrated; uncertainty is the least-squares standard error, not measurement accuracy.
 import {importPrintedMeasurementDataset} from './printed-measurement-dataset.js';
 export const PRINTED_IDENTIFICATION_VERSION = 1;
+export const PRINTED_IDENTIFICATION_LIMITS = Object.freeze({bilinearPoints: 512});
 export const PRINTED_IDENTIFICATION_MODELS = Object.freeze(['linear-elastic', 'bilinear-elastic-plastic', 'sls-relaxation']);
 const fail = message => { throw Object.assign(new Error(message), {code: 'PRINTED_IDENTIFICATION_INVALID'}); };
 const exact = (value, names) => {
- if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).length !== names.length || names.some(key => !Object.hasOwn(value, key))) fail('Missing or unknown identification fields');
+ if (!value || typeof value !== 'object' || Array.isArray(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value)) || Reflect.ownKeys(value).length !== names.length || names.some(key => !Object.hasOwn(value, key) || !Object.hasOwn(Object.getOwnPropertyDescriptor(value, key), 'value') || !Object.getOwnPropertyDescriptor(value, key).enumerable)) fail('Missing or unknown identification fields');
 };
 const positive = (value, label) => { if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) fail(label + ' must be a finite positive number'); return value; };
 const sum = xs => xs.reduce((s, x) => s + x, 0);
@@ -50,8 +51,10 @@ function linear(samples, opts) {
 
 // Continuous bilinear σ = E ε (ε≤εy), σy + Et(ε-εy); monotonic loading only. Breakpoint scanned over sample strains.
 function bilinear(samples, opts) {
+ for (let i = 1; i < samples.length; i++) if (samples[i].engineeringStrain < samples[i - 1].engineeringStrain) return rejected('non-monotonic-loading');
  const pts = samples.filter(s => s.engineeringStrain >= 0 && s.engineeringStrain <= opts.maxStrain);
  for (let i = 1; i < pts.length; i++) if (pts[i].engineeringStrain < pts[i - 1].engineeringStrain) return rejected('non-monotonic-loading');
+ if (pts.length > PRINTED_IDENTIFICATION_LIMITS.bilinearPoints) return rejected('bilinear-point-budget-exceeded', {points: pts.length});
  if (pts.length < 2 * opts.minPoints) return rejected('too-few-points', {points: pts.length});
  const y = pts.map(s => s.engineeringStressPa), x = pts.map(s => s.engineeringStrain);
  const design = ey => x.map(e => [Math.min(e, ey), Math.max(e - ey, 0)]);
@@ -69,6 +72,7 @@ function bilinear(samples, opts) {
  if (below < opts.minPoints || above < opts.minPoints) return rejected('yield-at-window-edge', {yieldStrain: ey});
  const [E, Et] = fit.b;
  if (!(E > 0)) return rejected('nonpositive-modulus');
+ if (!(Et > 0)) return rejected('nonpositive-tangent-modulus');
  if (!(Et < E * opts.maxTangentRatio)) return rejected('no-distinct-yield', {tangentToElasticRatio: Et / E});
  // Yield stress σy = E εy; standard error from b covariance at fixed εy plus the breakpoint profile curvature.
  const h = Math.max(1e-6 * ey, 1e-12), s2 = fit.sse / (x.length - 3), curvature = (f(ey + h) - 2 * fit.sse + f(ey - h)) / (h * h);
@@ -84,8 +88,9 @@ function relaxation(samples, opts) {
  let peak = 0; samples.forEach((s, i) => { if (s.engineeringStrain > samples[peak].engineeringStrain) peak = i; });
  const e0 = samples[peak].engineeringStrain;
  if (!(e0 > 0)) return rejected('no-held-strain');
+ if (e0 > opts.maxStrain) return rejected('held-strain-outside-window');
  const hold = samples.slice(peak).filter(s => Math.abs(s.engineeringStrain - e0) <= opts.holdStrainTolerance * e0);
- if (hold.length < opts.minPoints || hold.length !== samples.length - peak) return rejected('hold-not-constant', {points: hold.length});
+ if (hold.length < Math.max(4, opts.minPoints) || hold.length !== samples.length - peak) return rejected('hold-not-constant', {points: hold.length});
  const t0 = hold[0].timeS, t = hold.map(s => s.timeS - t0), y = hold.map(s => s.engineeringStressPa / s.engineeringStrain), span = t[t.length - 1];
  const dtMin = Math.min(...t.slice(1).map((v, i) => v - t[i]));
  const at = tau => lsq(t.map(v => [1, Math.exp(-v / tau)]), y);
@@ -112,7 +117,10 @@ function relaxation(samples, opts) {
 const DEFAULTS_REQUIRED = ['model', 'maxStrain', 'minPoints', 'maxRelativeStandardError'];
 function options(o) {
  if (!o || typeof o !== 'object') fail('Identification options required');
- const extra = {'linear-elastic': [], 'bilinear-elastic-plastic': ['maxTangentRatio'], 'sls-relaxation': ['holdStrainTolerance']}[o.model];
+ const modelDescriptor = Object.getOwnPropertyDescriptor(o, 'model');
+ if (!modelDescriptor || !Object.hasOwn(modelDescriptor, 'value') || typeof modelDescriptor.value !== 'string') fail('Own data model required');
+ const models = {'linear-elastic': [], 'bilinear-elastic-plastic': ['maxTangentRatio'], 'sls-relaxation': ['holdStrainTolerance']};
+ const extra = Object.hasOwn(models, modelDescriptor.value) ? models[modelDescriptor.value] : null;
  if (!extra) fail('Unsupported identification model');
  exact(o, [...DEFAULTS_REQUIRED, ...extra]);
  positive(o.maxStrain, 'maxStrain'); positive(o.maxRelativeStandardError, 'maxRelativeStandardError');
@@ -130,11 +138,21 @@ export async function identifyPrintedParameters(rawDatasetJson, identificationOp
  const opts = options(identificationOptions);
  const dataset = await importPrintedMeasurementDataset(rawDatasetJson);
  const fit = {'linear-elastic': linear, 'bilinear-elastic-plastic': bilinear, 'sls-relaxation': relaxation}[opts.model];
- const specimens = dataset.specimens.map(s => ({specimen: s.id, ...fit(s.samples, opts)}));
+ const specimens = dataset.specimens.map(s => {
+  const result = fit(s.samples, opts);
+  if (result.identified) {
+   const numeric = value => typeof value === 'number' ? Number.isFinite(value) : value && typeof value === 'object' ? Object.values(value).every(numeric) : true;
+   if (!numeric(result)) return {specimen: s.id, ...rejected('nonfinite-fit')};
+   if (Object.values(result.parameters).some(p => p.relativeStandardError > opts.maxRelativeStandardError)) return {specimen: s.id, ...rejected('parameters-not-resolved')};
+  }
+  return {specimen: s.id, ...result};
+ });
  const ok = specimens.filter(s => s.identified), across = {};
  if (ok.length >= 2) for (const key of Object.keys(ok[0].parameters)) {
-  const v = ok.map(s => s.parameters[key].value), mean = sum(v) / v.length;
-  across[key] = {mean, sampleStandardDeviation: Math.sqrt(sum(v.map(x => (x - mean) ** 2)) / (v.length - 1)), specimens: v.length};
+  const v = ok.map(s => s.parameters[key].value), mean = sum(v.map(x => x / v.length));
+  const sampleStandardDeviation = Math.hypot(...v.map(x => (x - mean) / Math.sqrt(v.length - 1)));
+  if (!Number.isFinite(mean) || !Number.isFinite(sampleStandardDeviation)) fail('Across-specimen statistics are not representable');
+  across[key] = {mean, sampleStandardDeviation, specimens: v.length};
  }
  return {identificationVersion: PRINTED_IDENTIFICATION_VERSION, model: opts.model, options: opts, dataset: {id: dataset.id, revision: dataset.revision, provenance: dataset.provenance, sourceSha256: dataset.sourceSha256},
   calibrated: false, accuracyVerified: false, identified: ok.length === specimens.length, specimens, across: ok.length >= 2 ? across : null};

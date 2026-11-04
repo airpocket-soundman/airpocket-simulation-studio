@@ -8,20 +8,32 @@ import {numericalFlux} from './euler-1d-riemann.js';
 const finitePositive=v=>Number.isFinite(v)&&v>0;
 const LIMITERS={none:(a,b)=>(a+b)/2,minmod:(a,b)=>a*b<=0?0:Math.abs(a)<Math.abs(b)?a:b,vanleer:(a,b)=>a*b<=0?0:2*a*b/(a+b)};
 const NAMES=['mass','xMomentum','yMomentum','energy'];
+// Allocation and execution admission bounds, checked before invoking the initial-data callback.
+export const EULER_2D_LIMITS=Object.freeze({cells:262144,maxSteps:1000000,timeBudgetMs:600000});
 
 export function solveEuler2DMuscl({nx,ny,lengthX=1,lengthY=1,initial,gamma=1.4,endTime,cfl=.45,flux='hllc',limiter='minmod',order=2,boundary='periodic',maxSteps=1e6,timeBudgetMs=6e4}){
  for(const [k,v] of [['nx',nx],['ny',ny]])if(!Number.isInteger(v)||v<4||v>4096)throw new Error(k+' must be an integer in [4, 4096]');
- if(!finitePositive(lengthX)||!finitePositive(lengthY)||!finitePositive(endTime)||!(gamma>1))throw new Error('lengths>0, endTime>0 and gamma>1 are required');
+ if(nx*ny>EULER_2D_LIMITS.cells)throw new Error('grid exceeds the 262144 cell allocation limit');
+ if(!finitePositive(lengthX)||!finitePositive(lengthY)||!finitePositive(endTime)||!Number.isFinite(gamma)||!(gamma>1))throw new Error('finite lengths>0, endTime>0 and gamma>1 are required');
+ if(!Number.isSafeInteger(maxSteps)||maxSteps<1||maxSteps>EULER_2D_LIMITS.maxSteps)throw new Error('maxSteps must be an integer in [1, 1000000]');
+ if(!finitePositive(timeBudgetMs)||timeBudgetMs>EULER_2D_LIMITS.timeBudgetMs)throw new Error('timeBudgetMs must be finite in (0, 600000]');
  if(order!==1&&order!==2)throw new Error('order must be 1 or 2');
  if(!(cfl>0&&cfl<=(order===2?.5:1)))throw new Error('cfl must be in (0, 0.5] for order 2 and (0, 1] for order 1');
- const F=numericalFlux(flux),lim=LIMITERS[limiter];if(!lim)throw new Error('limiter must be none, minmod or vanleer');
+ if(!['hllc','hlle'].includes(flux))throw new Error('flux must be hllc or hlle');
+ if(!Object.hasOwn(LIMITERS,limiter))throw new Error('limiter must be none, minmod or vanleer');
+ const F=numericalFlux(flux),lim=LIMITERS[limiter];
  if(!['periodic','transmissive','reflective'].includes(boundary))throw new Error('boundary must be periodic, transmissive or reflective');
  if(typeof initial!=='function')throw new Error('initial must be a function (i, j, hx, hy) -> cell state');
- const hx=lengthX/nx,hy=lengthY/ny,n=nx*ny,U=[0,1,2,3].map(()=>new Float64Array(n));
- for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const s=initial(i,j,hx,hy),c=i+nx*j;
+ const hx=lengthX/nx,hy=lengthY/ny,n=nx*ny;
+ if(!finitePositive(hx)||!finitePositive(hy)||!finitePositive(hx*hy))throw new Error('cell dimensions and area must be finite and positive');
+ const start=performance.now(),checkBudget=()=>{if(performance.now()-start>timeBudgetMs)throw new Error('time budget exceeded');};
+ const U=[0,1,2,3].map(()=>new Float64Array(n));
+ for(let j=0;j<ny;j++){checkBudget();for(let i=0;i<nx;i++){const s=initial(i,j,hx,hy),c=i+nx*j;
   if(!s||!finitePositive(s.density)||!Number.isFinite(s.velocityX)||!Number.isFinite(s.velocityY)||!finitePositive(s.pressure))throw new Error('initial state at cell '+i+','+j+' is non-physical');
   U[0][c]=s.mass??s.density;U[1][c]=s.xMomentum??s.density*s.velocityX;U[2][c]=s.yMomentum??s.density*s.velocityY;
-  U[3][c]=s.energy??s.pressure/(gamma-1)+s.density*(s.velocityX**2+s.velocityY**2)/2;}
+  U[3][c]=s.energy??s.pressure/(gamma-1)+s.density*(s.velocityX**2+s.velocityY**2)/2;
+  if(!U.every(a=>Number.isFinite(a[c]))||!(U[0][c]>0))throw new Error('initial conserved state must be finite with positive mass');}}
+ checkBudget();
  // Primitive (rho,u,v,p) with two ghost layers on every side; row stride mx.
  const mx=nx+4,my=ny+4,P=[0,1,2,3].map(()=>new Float64Array(mx*my)),id=(i,j)=>(i+2)+mx*(j+2);
  const GX=[0,1,2,3].map(()=>new Float64Array((nx+1)*ny)),GY=[0,1,2,3].map(()=>new Float64Array(nx*(ny+1)));
@@ -29,10 +41,10 @@ export function solveEuler2DMuscl({nx,ny,lengthX=1,lengthY=1,initial,gamma=1.4,e
  const ghost=(src,dst,normal)=>{for(let k=0;k<4;k++)P[k][dst]=boundary==='reflective'&&k===normal?-P[k][src]:P[k][src];};
  const primitives=(V,steps)=>{let sx=0,sy=0;
   for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const c=i+nx*j,r=V[0][c],u=V[1][c]/r,v=V[2][c]/r,p=(gamma-1)*(V[3][c]-r*(u*u+v*v)/2);
-   if(!(r>0&&p>0)||!Number.isFinite(u)||!Number.isFinite(v))throw new Error('non-physical or non-finite state at cell '+i+','+j+' step '+steps);
+   if(!finitePositive(r)||!finitePositive(p)||!Number.isFinite(u)||!Number.isFinite(v))throw new Error('non-physical or non-finite state at cell '+i+','+j+' step '+steps);
    const q=id(i,j),a=Math.sqrt(gamma*p/r);P[0][q]=r;P[1][q]=u;P[2][q]=v;P[3][q]=p;
    minDensity=Math.min(minDensity,r);minPressure=Math.min(minPressure,p);sx=Math.max(sx,Math.abs(u)+a);sy=Math.max(sy,Math.abs(v)+a);}
-  rate=sx/hx+sy/hy;
+  rate=sx/hx+sy/hy;if(!finitePositive(rate))throw new Error('non-finite or zero CFL wave rate');
   for(let g=0;g<2;g++){const per=boundary==='periodic';
    for(let j=0;j<ny;j++){ghost(per?id(nx-2+g,j):id(1-g,j),id(g-2,j),1);ghost(per?id(g,j):id(nx-1-g,j),id(nx+g,j),1);}
    for(let i=0;i<nx;i++){ghost(per?id(i,ny-2+g):id(i,1-g),id(i,g-2),2);ghost(per?id(i,g):id(i,ny-1-g),id(i,ny+g),2);}}};
@@ -52,11 +64,12 @@ export function solveEuler2DMuscl({nx,ny,lengthX=1,lengthY=1,initial,gamma=1.4,e
    for(let j=0;j<ny;j++)for(let i=0;i<nx;i++)r[i+nx*j]=-(gx[i+1+(nx+1)*j]-gx[i+(nx+1)*j])/hx-(gy[i+nx*(j+1)]-gy[i+nx*j])/hy;
    let b=0;for(let j=0;j<ny;j++)b+=(gx[(nx+1)*j]-gx[nx+(nx+1)*j])*hy;for(let i=0;i<nx;i++)b+=(gy[i]-gy[i+nx*ny])*hx;inflow[k]=b;}
   return inflow;};
- const totals=V=>V.map(a=>{let t=0;for(let c=0;c<n;c++)t+=a[c];return t*hx*hy;}),initialTotals=totals(U),boundaryInflow=[0,0,0,0];
+ const totals=V=>V.map(a=>{let t=0;for(let c=0;c<n;c++)t+=a[c];const integral=t*hx*hy;if(!Number.isFinite(integral))throw new Error('non-finite conserved integral');return integral;}),initialTotals=totals(U),boundaryInflow=[0,0,0,0];
  const Rs=[0,1,2,3].map(()=>new Float64Array(n)),U1=[0,1,2,3].map(()=>new Float64Array(n));
- let time=0,steps=0;const start=performance.now();
+ let time=0,steps=0;
  while(time<endTime*(1-1e-14)){if(steps>=maxSteps)throw new Error('step limit exceeded');if(performance.now()-start>timeBudgetMs)throw new Error('time budget exceeded');
   const b0=residual(U,steps,Rs),dt=Math.min(cfl/rate,endTime-time);
+  if(!finitePositive(dt)||time+dt===time)throw new Error('time step cannot advance finite physical time');
   if(order===1){for(let k=0;k<4;k++){boundaryInflow[k]+=dt*b0[k];for(let c=0;c<n;c++)U[k][c]+=dt*Rs[k][c];}}
   else{for(let k=0;k<4;k++)for(let c=0;c<n;c++)U1[k][c]=U[k][c]+dt*Rs[k][c];
    const b1=residual(U1,steps,Rs);// Shu-Osher SSP-RK2
@@ -64,7 +77,7 @@ export function solveEuler2DMuscl({nx,ny,lengthX=1,lengthY=1,initial,gamma=1.4,e
   time+=dt;steps++;}
  primitives(U,steps);const final=totals(U);
  const pick=k=>{const a=new Float64Array(n);for(let j=0;j<ny;j++)for(let i=0;i<nx;i++)a[i+nx*j]=P[k][id(i,j)];return a;};
- const scale=U.map((a,k)=>{let t=0;for(let c=0;c<n;c++)t+=Math.abs(a[c]);return Math.max(t*hx*hy,Math.abs(initialTotals[k]),1e-300);});
+ const scale=U.map((a,k)=>{let t=0;for(let c=0;c<n;c++)t+=Math.abs(a[c]);const norm=t*hx*hy;if(!Number.isFinite(norm))throw new Error('non-finite conserved norm');return Math.max(norm,Math.abs(initialTotals[k]),1e-300);});
  return {model:'euler-2d-ideal-gas-muscl-unsplit',phases:1,order,limiter,flux,boundary,gamma,nx,ny,cellWidthX:hx,cellWidthY:hy,lengthX,lengthY,time,steps,
   density:pick(0),velocityX:pick(1),velocityY:pick(2),pressure:pick(3),conserved:U,minDensity,minPressure,
   conservation:{names:NAMES,initial:initialTotals,final,boundaryInflow,relativeImbalance:final.map((v,k)=>(v-initialTotals[k]-boundaryInflow[k])/scale[k])}};}

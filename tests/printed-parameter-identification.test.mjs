@@ -68,3 +68,64 @@ test('only validator-accepted datasets and exact options are accepted; inputs ar
  }
  const opts = structuredClone(LIN); await identify(raw, opts); assert.deepEqual(opts, LIN);
 });
+
+// Independent exact curves; all values here are synthetic analytical inputs.
+test('audit: analytical origin fit and a held strain outside the declared window', async () => {
+ const curves = [1,2,3,4,5].map((i) => ({t:i,strain:i/1000,stressPa:7e8*i/1000}));
+ const fit = (await identify(syntheticDataset({curves,noisePa:0}),LIN)).specimens[0];
+ assert.equal(fit.identified,true);
+ assert.ok(Math.abs(fit.parameters.youngsModulusPa.value/7e8-1)<1e-14);
+ const result = await identify(syntheticDataset({curves:relaxationCurve(),noisePa:0}),{...SLS,maxStrain:.001});
+ assert.equal(result.specimens[0].reason,'held-strain-outside-window');
+});
+test('audit: softening and unload hidden beyond the fitting window are refused', async () => {
+ const curves = ramp(100,.06,e=>e<=.02?2e9*e:4e7-1e8*(e-.02));
+ assert.equal((await identify(syntheticDataset({curves,noisePa:0}),BIL)).specimens[0].reason,'nonpositive-tangent-modulus');
+ const loading = ramp(100,.06,bilinearStress());
+ loading.push({t:101,strain:.09,stressPa:47e6},{t:102,strain:.085,stressPa:46e6});
+ assert.equal((await identify(syntheticDataset({curves:loading,noisePa:0}),BIL)).specimens[0].reason,'non-monotonic-loading');
+});
+test('audit: nonlinear search budget and minimum residual degrees of freedom', async () => {
+ assert.equal((await identify(syntheticDataset({curves:ramp(513,.06,bilinearStress()),noisePa:0}),BIL)).specimens[0].reason,'bilinear-point-budget-exceeded');
+ const r = await identify(syntheticDataset({curves:relaxationCurve({n:3}),noisePa:0}),{...SLS,minPoints:3});
+ assert.equal(r.specimens[0].identified,false);
+ assert.equal(r.specimens[0].reason,'hold-not-constant');
+});
+test('audit: options reject accessor and symbol hooks without executing them', async () => {
+ const raw=syntheticDataset({curves:ramp(10,.005,linearStress())}); let calls=0;
+ const a={...LIN};Object.defineProperty(a,'model',{get(){calls++;return 'linear-elastic';},enumerable:true});
+ await assert.rejects(identify(raw,a),{code:'PRINTED_IDENTIFICATION_INVALID'});
+ const b={...LIN};Object.defineProperty(b,'maxStrain',{get(){calls++;return .01;},enumerable:true});
+ await assert.rejects(identify(raw,b),{code:'PRINTED_IDENTIFICATION_INVALID'});
+ await assert.rejects(identify(raw,{...LIN,[Symbol('extra')]:1}),{code:'PRINTED_IDENTIFICATION_INVALID'});
+ assert.equal(calls,0);
+});
+test('audit: finite diagnostics and every parameter uncertainty are mandatory', async () => {
+ const flat=ramp(20,.005,()=>1e6);
+ assert.equal((await identify(syntheticDataset({curves:flat,noisePa:0}),{...LIN,maxRelativeStandardError:10})).specimens[0].reason,'nonfinite-fit');
+ await assert.rejects(identify(syntheticDataset({curves:flat}),{...LIN,model:'__proto__'}),{code:'PRINTED_IDENTIFICATION_INVALID'});
+});
+
+
+test('audit: every nonenumerable option is refused before validated snapshot loses it', async () => {
+ const raw=syntheticDataset({curves:ramp(4,.005,linearStress()),noisePa:0});
+ for (const options of [LIN,BIL,SLS]) for (const key of Object.keys(options)) {
+  const hidden={...options};Object.defineProperty(hidden,key,{value:options[key],enumerable:false});
+  await assert.rejects(identify(raw,hidden),{code:'PRINTED_IDENTIFICATION_INVALID'},`${options.model}.${key}`);
+ }
+ // The ordinary minimum-points condition still rejects this same four-point input.
+ assert.equal((await identify(raw,LIN)).specimens[0].reason,'too-few-points');
+});
+
+
+test('audit: finite extreme moduli retain finite analytical across-specimen scatter', async () => {
+ const d=JSON.parse(syntheticDataset({curves:ramp(10,.005,linearStress()),noisePa:0,specimens:2}));
+ d.specimens.forEach((s,k)=>{s.dimensions=[1,1,1];s.gaugeLength=1;s.samples=Array.from({length:10},(_,j)=>{const i=j+1;return [i,i*(k+1),i*2**-500];});});
+ const result=await identify(JSON.stringify(d),LIN);
+ assert.equal(result.identified,true);
+ const E=1e6*2**500, aggregate=result.across.youngsModulusPa;
+ assert.ok(Math.abs(aggregate.mean/(1.5*E)-1)<1e-14);
+ assert.ok(Math.abs(aggregate.sampleStandardDeviation/(E/Math.SQRT2)-1)<1e-14);
+ assert.ok(Number.isFinite(aggregate.sampleStandardDeviation));
+ assert.deepEqual(JSON.parse(JSON.stringify(result)).across,result.across);
+});
