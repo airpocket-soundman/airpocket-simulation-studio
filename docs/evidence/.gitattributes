@@ -1,7 +1,8 @@
 # Preserve immutable captured bytes; these two files contain recorded CRLF.
 # Source files and all other evidence retain their existing whitespace checks.
-2026-11-07-printed-sls-prony-cli/README.txt -whitespace
-2026-11-07-printed-sls-prony-cli/capture.mjs -whitespace
+2026-11-07-printed-sls-prony-cli/README.txt whitespace=cr-at-eol
+2026-11-07-printed-sls-prony-cli/capture.mjs whitespace=cr-at-eol
 # These control-file bytes are also explicitly listed in their raw inventories.
 2026-11-07-printed-sls-prony-cli/.gitattributes -text
 printed-holdout-cli-20261107/.gitattributes -text
+2026-11-07-printed-sls-report-artifacts/.gitattributes -text

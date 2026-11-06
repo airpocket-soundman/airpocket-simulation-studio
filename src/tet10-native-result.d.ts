@@ -1,0 +1,7 @@
+declare const nativeTet10HandleBrand:unique symbol;
+export interface NativeTet10Handle {readonly [nativeTet10HandleBrand]:true;readonly kind:'validated-native-Tet10';readonly validationVersion:1;readonly nativeResultRevision:string;readonly nodeCount:number;readonly elementCount:number;readonly provisional:true}
+export interface NativeTet10Point {readonly queryVersion:1;readonly nativeResultRevision:string;readonly elementIndex:number;readonly boundaryPolicy:'lowest-containing-element-index';readonly pointMm:readonly number[];readonly barycentric:readonly number[];readonly displacementMm:readonly number[];/** [xx,yy,zz,gammaXY,gammaYZ,gammaZX], dimensionless */ readonly engineeringStrain:readonly number[];readonly stressPa:readonly number[];readonly vonMisesPa:number;readonly units:{readonly point:'mm';readonly displacement:'mm';readonly strain:'1';readonly stress:'Pa'};readonly provisional:true}
+export declare const TET10_NATIVE_QUERY_LIMITS:Readonly<{bytes:8388608;values:200000;depth:24;stringChars:65536;nodes:4096;elements:512;coordinateMm:1000000;displacementMm:1000000;condition:1000000}>;
+/** Bounded detached JSON snapshot. Content hash and numerical consistency, not authenticity/equilibrium. Handles are process-local; JSON clones are rejected. */
+export declare function prepareNativeTet10Result(saved:unknown):Promise<NativeTet10Handle>;
+export declare function sampleNativeTet10Result(handle:NativeTet10Handle,pointMm:readonly [number,number,number]):NativeTet10Point;

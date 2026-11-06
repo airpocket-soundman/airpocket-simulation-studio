@@ -1,0 +1,3 @@
+import {pathToFileURL} from 'node:url';
+import {parseFsiReverifyArgs,verifyFsiAverageArtifact,fsiReverifyError} from './fsi-average-reverify-service.mjs';
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const controller=new AbortController(),cancel=()=>controller.abort();process.once('SIGINT',cancel);process.once('SIGTERM',cancel);try{const report=await verifyFsiAverageArtifact(parseFsiReverifyArgs(process.argv.slice(2)),{signal:controller.signal});console.log(JSON.stringify(report));process.exitCode=report.status==='matched'?0:2;}catch(e){console.log(JSON.stringify(fsiReverifyError(e)));process.exitCode=1;}finally{process.removeListener('SIGINT',cancel);process.removeListener('SIGTERM',cancel);}}

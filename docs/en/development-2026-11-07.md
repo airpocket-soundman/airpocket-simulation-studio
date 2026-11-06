@@ -16,3 +16,7 @@ Saved execution retains source/configuration versions, units, method, limits and
 The197-item board remains released159/building34/checking4/queued0, with38 open items. Bounded increments do not complete their parent tasks. P5B still needs common native-result comparison and design-loop acceptance. PRINTMEASURE1/2/3, PRINT2 and FINITEVISCO1 retain their existing physical-machine/slicing/measurement/calibration requirements. Other parent tasks retain general-geometry, physics, performance or real-connection software and verification work; the38 open items are not all external-data blockers.
 
 Environment, failures, fixes and original logs are recorded separately under `docs/evidence/2026-11-07-*`. The corresponding PR's immutable-head CI determines final integrated verification and publication. Synthetic agreement never establishes physical accuracy or calibration.
+
+## Third-wave additions
+
+A separate PR adds dedicated saved Tet10 point queries, tolerance-based FSI replay comparison, and CSV/JSON/SVG pages of saved SLS/Prony reports. Independent reviews fixed sparse-array, length-snapshot and integer-count gaps and rechecked equations and file/publication boundaries. Actual browser rendering verifies a synthetic50/81-row page with31unshown rows. Standard Tet4 probe/case/view/compare, calibration and broader geometry/physics acceptance remain separate. Local `npm run check:mcp` now includes correspondence and GUI classifications.

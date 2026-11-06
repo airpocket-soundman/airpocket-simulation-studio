@@ -18,4 +18,7 @@ export declare const FSI_AVERAGE_FILE_LIMITS:Readonly<{requestBytes:65536;artifa
 export declare function parseFsiAverageArgs(args:readonly string[]):FsiAverageFilePaths;
 /** Timeout covers owned worker execution; cancellation is honored before publication starts. */
 export declare function writeFsiAverageFiles(request:FsiAverageFilePaths,options?:FsiAverageFileOptions):Promise<FsiAverageFileSummary>;
+/** Strict immutable configuration text, then owned worker execution/exit/result validation. */
+export declare function runFsiAverageConfiguration(rawConfiguration:string,options?:FsiAverageFileOptions):Promise<{result:FsiAverageJsonResult;worker:{executionSettled:true;exitCode:0}}>;
+export declare function fsiAbortRequested(signal?:AbortSignal):boolean;
 export declare function fsiAverageCliError(error:unknown):{schemaVersion:1;kind:'fsi-average-file-summary';status:'error';code:string;source?:FsiAverageSource};

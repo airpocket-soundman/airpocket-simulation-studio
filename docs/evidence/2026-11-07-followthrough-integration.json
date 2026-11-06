@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-07",
+  "base": "92c4d9bae64bca62a895b6d28e2d715f3bc68d33",
+  "preIntegrationHead": "0891f7e2d72bee35ff9cdc79f9f2319e50229e23",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Third wave: dedicated full-quadratic saved Tet10 queries, explicit-tolerance FSI replay, saved SLS report native pages, formal MCP and independent audits",
+  "verification": {
+    "related": {
+      "command": "node --test --test-concurrency=2 tests/followthrough-saved-mcp.test.mjs tests/tet10-native-result.test.mjs tests/tet10-native-file.test.mjs tests/tet10-native-query-types.test.mjs tests/tet10-native-query-independent.test.mjs tests/fsi-average-reverify.test.mjs tests/fsi-average-file-cli.test.mjs tests/fsi-channel-average-force.test.mjs tests/printed-sls-report-artifacts.test.mjs tests/printed-sls-report-artifacts-types.test.mjs tests/printed-sls-report-independent.test.mjs tests/operation-correspondence.test.mjs tests/operation-correspondence-gui.test.mjs tests/studio-mcp.test.mjs tests/browser-only-mcp.test.mjs tests/capabilities.test.mjs tests/module-boundaries.test.mjs tests/skill-package.test.mjs tests/docs.test.mjs",
+      "tests": 98,
+      "pass": 98,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 10415.0708
+    },
+    "declarations": 44,
+    "formalStdio": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "mcpCheck": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    },
+    "rawEvidenceBeforeIntegration": {
+      "files": 93,
+      "exactGitBlobBytes": true
+    },
+    "wholeCI": "Required on final immutable PR head; related results are not substituted"
+  },
+  "closedAuditFindings": [
+    "Sparse array slots disguised by non-index numeric properties now refuse",
+    "Array length copied once from own data descriptor; no repeated Proxy length reads",
+    "Statistical counts require exact safe integers; machine tolerance applies only to floating statistics"
+  ],
+  "nonFinding": "XML-invalid labels were already rejected by the raw parser; regression coverage was expanded without claiming a product fix.",
+  "priorPublication": {
+    "pr": 252,
+    "head": "ae46843974bd871a8ef2f538607458723da7d76a",
+    "merge": "92c4d9bae64bca62a895b6d28e2d715f3bc68d33",
+    "prCI": 42298391674,
+    "mainCI": 42299490042,
+    "tests": 2652,
+    "pass": 2644,
+    "fail": 0,
+    "skip": 8,
+    "publicChecks": 28,
+    "publicSeconds": 45.03,
+    "status": "verify/deploy/verify-published succeeded"
+  },
+  "visual": {
+    "kind": "Actual browser display of committed synthetic SVG artifact; not an application GUI workflow",
+    "svg": "docs/evidence/2026-11-07-printed-sls-report-artifacts/validation-page0.svg",
+    "svgSha256": "5fd7a8d7f0a5a76c01f093d4497b7e65a7bf4cce17d726f9dc683d095c9da025",
+    "heldRows": 50,
+    "totalRows": 81,
+    "unshown": 31,
+    "renderer": "existing IAB, dedicated read-only localhost5198 preview",
+    "temporaryServerStopped": true,
+    "userAppTabUnchanged": true,
+    "initialPreview": "Old localhost5188 was offline; fresh owned preview was used. No browser security settings changed."
+  },
+  "limits": {
+    "calibrated": false,
+    "physicalAccuracyVerified": false,
+    "producerAuthentication": false,
+    "standardTet4ViewsForNativeTet10": false
+  },
+  "taskCounts": {
+    "total": 197,
+    "released": 159,
+    "building": 34,
+    "checking": 4,
+    "remaining": 38
+  },
+  "statusesPromoted": false,
+  "files": [
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/.gitattributes",
+      "bytes": 26,
+      "sha256": "155348a89d5e749f50d336f8f164a39bf8415179177b36e8b51766f3ab9a16d3"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/contracts.log",
+      "bytes": 157,
+      "sha256": "002b25571dbb5f6a97787d40324cd280a2a2f779ca4c04a7b3174ee7352dda92"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/formal-stdio.log",
+      "bytes": 328,
+      "sha256": "78bda5e2ade08eb193c62b5d9f786c14a3835c807e651d2dd07f7707808698e3"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/main252-publication-cli-log.log",
+      "bytes": 599976,
+      "sha256": "a3b600847dd5e5c32220a3fd399a7bc836217e5d04f00821719d1fc7e603ac3b"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/mcp-check.log",
+      "bytes": 2062,
+      "sha256": "7b4063bf037e14846e15a19e05cf406a9bbf96cc71f53a4b2c1cca1adb63abf6"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/plot-preview.png",
+      "bytes": 57961,
+      "sha256": "94c9282cf4ae75b4cc0393652ed0671ef3d79a1772371bd4e50fc10c7454959b"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/pr252-final-cli-log.log",
+      "bytes": 546498,
+      "sha256": "f61ffc81723c4d3ecbaefe10043ad86055690788a21c9397c89c7df1fc8b2b18"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/prior-raw-blob-audit.json",
+      "bytes": 24418,
+      "sha256": "6896046255334aa5e2bb1e7ca9291460b5bc088403b4dd13214d8007ca59ae3e"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/related.log",
+      "bytes": 11075,
+      "sha256": "9a06f2898bedf86964869c3b7ecde4140e3067a044b38727300babcecdc7990b"
+    },
+    {
+      "path": "docs/evidence/followthrough-integration-20261107/tasklist.log",
+      "bytes": 763,
+      "sha256": "a7f8f417c061c9010e82ea20c5f083ff6ab3dec3205d86978784696a98b601ea"
+    }
+  ]
+}

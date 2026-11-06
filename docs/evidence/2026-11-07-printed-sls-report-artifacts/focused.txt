@@ -1,0 +1,57 @@
+✔ every JP specification has an English counterpart and reciprocal link (94.3966ms)
+✔ every task has English title and acceptance criteria (6.0077ms)
+✔ the real repository satisfies its module boundaries and the graph is what the table says it is (562.103ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (385.6329ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (379.3848ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.469ms)
+✔ import parser ignores strings that merely contain "from" (0.2412ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (0.1478ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.2353ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.1446ms)
+✔ a real import inside a template substitution is still found (0.1541ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (14.3461ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (6.1587ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.4411ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (7.6641ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (15.4778ms)
+✔ a forbidden upward edge (domain -> ui) is reported (5.7144ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (12.7455ms)
+✔ an unclassified new file fails, including files in subdirectories (9.5701ms)
+✔ allowlist entries must be used and justified (0.2947ms)
+✔ collectGraph resolves relative imports inside subdirectories (7.5541ms)
+✔ SLS file service types require pinned config and expose summary-only result (825.4419ms)
+✔ actual CLI publishes an exact-hash bounded report; independent held residual and no physical inputs modified (457.3509ms)
+✔ wrong config/data SHA and invalid UTF8 refuse before any worker without losing byte identities (293.5424ms)
+✔ aliases/hardlinks and existing outputs cannot overwrite any source or prior artifact (42.569ms)
+✔ two actual CLI writers produce exactly one complete atomic artifact and no temporary leftovers (298.5833ms)
+{"workerDeadlineEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","resultNull":true}}
+✔ worker deadline reports refusal only after confirmed exit, and pre-abort starts no worker (33.2236ms)
+✔ strict private config parser rejects duplicates, escaped aliases, depth, unknown fields and malformed arguments (8.5107ms)
+{"ownedAbortEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_ABORTED","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_ABORTED","resultNull":true}}
+✔ abort after a real owned worker request waits for exit and never publishes a completed curve (39.0566ms)
+✔ actual CLI invalid arguments emit one small error summary without stack or stderr (111.6218ms)
+{"isolatedWorkerOutput":{"channel":"stdout","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+{"isolatedWorkerOutput":{"channel":"stderr","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+✔ unexpected real worker stdout/stderr are isolated, discarded and refused after worker exit and stream close (348.7249ms)
+{"inlineHostEvidence":{"status":"completed","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":false,"cause":null,"stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"stdoutJSON":true}}
+✔ public service works from an inline ESM host without inheriting incompatible file-worker flags (204.3777ms)
+✔ paged report artifacts expose pinned read-only pure and file interfaces (730.3314ms)
+✔ deterministic native pages preserve three distinct stored series and exact native identities, never fit (208.0702ms)
+✔ self-rehashed schema/flags/source/version/nonfinite/rows/metrics/stress-measure mutations refuse (171.0101ms)
+✔ SVG XML text and CSV string formulas are escaped, large labels remain response bounded (30.394ms)
+✔ refused report returns only reason/empty curves and safe page offsets (10.1424ms)
+✔ raw/query snapshots reject getter hooks and late SHA edits cannot redirect a page (9.4125ms)
+✔ 4MiB exact reports are accepted; native output is exclusive, SHA-exact and source unchanged (330.8999ms)
+✔ unidentified pair inside a valid refused report never produces fitted curves (6.5089ms)
+✔ file SHA/UTF8/alias checks and simultaneous native publications never overwrite a source (100.2891ms)
+✔ XML-invalid decoded control/surrogate labels refuse while Japanese and real emoji pairs survive (80.7535ms)
+✔ metric counts are exact integers, never floating-tolerance quantities (61.2765ms)
+✔ internal native publisher refuses non-string/copy-excess input before invoking coercion or IO (0.4288ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2060.0501

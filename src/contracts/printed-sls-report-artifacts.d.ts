@@ -1,0 +1,6 @@
+export type PrintedSlsReportFormat='csv'|'json'|'svg';
+export interface PrintedSlsReportQuery {pairIndex:number;role:'training'|'validation';format:PrintedSlsReportFormat;offset:number;limit:number}
+export interface PrintedSlsReportArtifactResponse {schemaVersion:1;synthetic:true;calibrated:false;accuracyVerified:false;source:{bytes:number;sha256:string};status:'available'|'refused';reason:string|null;role:'training'|'validation';trainingSpecimenId:string|null;validationSpecimenId:string|null;engineeringHoldStrain:number|null;units:{time:'s';stress:'Pa';strain:'1'};series:['observed','idealStep','PronyNominal'];warning:string;page:{offset:number;requestedLimit:number;returnedRows:number;totalRows:number;unshownRows:number;nextOffset:number|null;responseLimited:boolean};artifact:{format:PrintedSlsReportFormat;mimeType:'text/csv'|'application/json'|'image/svg+xml';bytes:number;sha256:string;text:string}}
+export declare const PRINTED_SLS_REPORT_LIMITS:Readonly<{reportBytes:4194304;pageRows:50;responseBytes:65536;pageBudgetBytes:32768}>;
+/** Validates saved-report shape/internal algebra only, never original datasets or physical authenticity. */
+export declare function createPrintedSlsReportArtifact(request:{rawReport:string;expectedSHA256:string;query:PrintedSlsReportQuery}):Promise<PrintedSlsReportArtifactResponse>;

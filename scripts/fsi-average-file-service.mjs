@@ -7,6 +7,8 @@ export const FSI_AVERAGE_FILE_LIMITS=Object.freeze({requestBytes:65536,artifactB
 const prefix='FSI_AVERAGE_FILE_',failure=code=>Object.assign(Error(code),{code}),fail=code=>{throw failure(code);};
 const safeCode=e=>typeof e?.code==='string'&&/^(?:FSI_AVERAGE(?:_FILE)?|PRINTED_IDENTIFICATION)_[A-Z0-9_]+$/.test(e.code)?e.code:prefix+'IO';
 const hash=b=>createHash('sha256').update(b).digest('hex');
+const abortedGetter=Object.getOwnPropertyDescriptor(AbortSignal.prototype,'aborted').get;
+export function fsiAbortRequested(signal){if(signal===undefined)return false;try{return abortedGetter.call(signal);}catch{fail(prefix+'ARGUMENTS');}}
 function record(o,keys,required=keys){
  if(!o||![Object.prototype,null].includes(Object.getPrototypeOf(o)))fail(prefix+'ARGUMENTS');
  const own=Reflect.ownKeys(o);if(own.length>keys.length||own.some(k=>!keys.includes(k))||required.some(k=>!Object.hasOwn(o,k)))fail(prefix+'ARGUMENTS');
@@ -50,10 +52,10 @@ function validateResult(result,input){
 function runtimeOptions(value){
  const o=record(value,['signal','timeoutMs'],[]),timeoutMs=o.timeoutMs??FSI_AVERAGE_FILE_LIMITS.timeoutMs;
  if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>FSI_AVERAGE_FILE_LIMITS.timeoutMs)fail(prefix+'ARGUMENTS');
- if(o.signal!==undefined&&!(o.signal instanceof AbortSignal))fail(prefix+'ARGUMENTS');return {signal:o.signal,timeoutMs};
+ fsiAbortRequested(o.signal);return {signal:o.signal,timeoutMs};
 }
 async function execute(input,options,createWorker){
- const {signal,timeoutMs}=options;if(signal?.aborted)fail(prefix+'CANCELLED');
+ const {signal,timeoutMs}=options;if(fsiAbortRequested(signal))fail(prefix+'CANCELLED');
  let worker,exited=false,exitCode=null,message=null,hasMessage=false,settled=false,timer,resolveExit;const exit=new Promise(resolve=>resolveExit=resolve);
  let rejectOutcome;const abort=()=>rejectOutcome(failure(prefix+'CANCELLED'));
  try{
@@ -70,29 +72,34 @@ async function execute(input,options,createWorker){
    worker.on('message',value=>{if(settled)return;if(hasMessage){rejectOutcome(failure(prefix+'PROTOCOL'));return;}hasMessage=true;message=value;});
    worker.once('error',()=>rejectOutcome(failure(prefix+'WORKER')));
    worker.once('exit',code=>{exited=true;exitCode=code;resolveExit();finish();});
-   timer=setTimeout(()=>rejectOutcome(failure(prefix+'TIMEOUT')),timeoutMs);signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+   timer=setTimeout(()=>rejectOutcome(failure(prefix+'TIMEOUT')),timeoutMs);if(signal)EventTarget.prototype.addEventListener.call(signal,'abort',abort,{once:true});if(fsiAbortRequested(signal))abort();
   });
   const result=await outcome;return {result,worker:{executionSettled:true,exitCode}};
  }finally{
-  clearTimeout(timer);signal?.removeEventListener('abort',abort);
+  clearTimeout(timer);if(signal)EventTarget.prototype.removeEventListener.call(signal,'abort',abort);
   // A result message is not release: normal completion waits for exit; cancellation
   // and errors await owned termination AND the exit event before returning.
   if(worker&&!exited){await worker.terminate();await exit;}
  }
 }
+/** Shared immutable-text worker boundary. Third argument is a private host test seam. */
+export async function runFsiAverageConfiguration(rawConfiguration,options={},dependencies={}){
+ if(typeof rawConfiguration!=='string'||rawConfiguration.length>FSI_AVERAGE_FILE_LIMITS.requestBytes||Buffer.byteLength(rawConfiguration)>FSI_AVERAGE_FILE_LIMITS.requestBytes)fail(prefix+'JSON');
+ const runtime=runtimeOptions(options),input=parseRequest(rawConfiguration),completed=await execute(input,runtime,dependencies.createWorker??((url,opts)=>new Worker(url,opts)));
+ if(fsiAbortRequested(runtime.signal))fail(prefix+'CANCELLED');validateResult(completed.result,input);return completed;
+}
 /** Third-argument worker factory is a private host test seam, never a file/CLI option. */
 export async function writeFsiAverageFiles(request,options={},dependencies={}){
- const paths=pathsSnapshot(request),runtime=runtimeOptions(options);if(runtime.signal?.aborted)fail(prefix+'CANCELLED');
+ const paths=pathsSnapshot(request),runtime=runtimeOptions(options);if(fsiAbortRequested(runtime.signal))fail(prefix+'CANCELLED');
  const output=await preparePrintedOutputPath(paths.output),source=await preparePrintedInputPath(paths.request);
  if(printedPathKey(source.path)===printedPathKey(output))fail(prefix+'PATH_ALIAS');
  let identity;
  try{
-  const snapshot=await readPrintedInputSnapshot(source,FSI_AVERAGE_FILE_LIMITS.requestBytes);identity=snapshot.identity;const input=parseRequest(snapshot.text);
-  const completed=await execute(input,runtime,dependencies.createWorker??((url,opts)=>new Worker(url,opts)));
-  if(runtime.signal?.aborted)fail(prefix+'CANCELLED');const result=validateResult(completed.result,input);
+  const snapshot=await readPrintedInputSnapshot(source,FSI_AVERAGE_FILE_LIMITS.requestBytes);identity=snapshot.identity;
+  const completed=await runFsiAverageConfiguration(snapshot.text,runtime,dependencies),result=completed.result,input=result.input;
   const artifact={schemaVersion:1,kind:'fsi-average-force-file',methodVersion:1,synthetic:true,calibrated:false,source:identity,configurationSha256:hash(canonical(result.input)),profileRepresentation:'finite-number-array-m/s',worker:completed.worker,result};
   if(Buffer.byteLength(JSON.stringify(artifact))+1>FSI_AVERAGE_FILE_LIMITS.artifactBytes)fail(prefix+'ARTIFACT_LIMIT');
-  if(runtime.signal?.aborted)fail(prefix+'CANCELLED');let integrity;
+  if(fsiAbortRequested(runtime.signal))fail(prefix+'CANCELLED');let integrity;
   // Publication is the commit point. A later abort does not undo a complete artifact.
   try{const published=await publishJson(output,artifact,{includeIntegrity:true});integrity={outputBytes:published.outputBytes,outputSha256:published.outputSha256,...(published.cleanupWarning?{cleanupWarning:{code:'ARTIFACT_TEMP_CLEANUP_FAILED'}}:{})};}catch(e){if(e.code==='EEXIST')fail(prefix+'OUTPUT_EXISTS');throw e;}
   const last=result.history.at(-1);return {schemaVersion:1,kind:'fsi-average-file-summary',status:'completed',methodVersion:1,synthetic:true,calibrated:false,source:identity,configurationSha256:artifact.configurationSha256,output,...integrity,worker:completed.worker,steps:input.steps,final:{timeSeconds:last.t,displacementM:last.d,velocityMPerS:last.v,energyDefectJPerM2:last.energyDefectJPerM2,relativeEnergyDefect:last.energyDefect},work:result.work};

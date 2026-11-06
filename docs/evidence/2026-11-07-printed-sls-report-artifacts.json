@@ -1,0 +1,267 @@
+{
+  "task": "PRINTMEASURE3 saved SLS report page artifacts",
+  "baseSha": "a8eace7a71925eeee1bf8951d1583bac83d49bea",
+  "scope": "Read-only4MiB report import and deterministic native CSV/JSON/SVG for one pair/one role/page. No original datasets, refit, constitutive driver or UI call in the new artifact path.",
+  "query": {
+    "pairIndex": "0..7",
+    "role": [
+      "training",
+      "validation"
+    ],
+    "format": [
+      "csv",
+      "json",
+      "svg"
+    ],
+    "offset": "integer>=0",
+    "limit": "1..50"
+  },
+  "integrity": "Caller-pinned raw report SHA plus strict schema/internal-algebra validation; not authenticity, physical correctness or re-verification against original datasets.",
+  "bounds": {
+    "reportBytes": 4194304,
+    "pageRowsMax": 50,
+    "wholeResponseBytes": 65536,
+    "pageConstructionBudgetBytes": 32768,
+    "jsonDepth": 16,
+    "jsonValues": 400000,
+    "jsonArray": 4096,
+    "jsonString": 4096
+  },
+  "verification": {
+    "ownTestsIncludingTypes": 12,
+    "related": {
+      "tests": 44,
+      "pass": 44,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 2060.0501
+    },
+    "declarationStdout": "Contract declarations type-check (44 declaration files).",
+    "rawInventory": [
+      {
+        "file": ".gitattributes",
+        "bytes": 166,
+        "sha256": "cbca89035bc35aea48e81c934242a31cae99f91dca9bc8a228e7d47c792a5155",
+        "gitBlobSha1": "49d022edd290f13bfd622fb4505d2cd144788c34"
+      },
+      {
+        "file": "capture-summary.json",
+        "bytes": 3612,
+        "sha256": "f60e2fd009fb7d4075e0986660381713fc167834ff973daeed3294c83f942e44",
+        "gitBlobSha1": "ed71f7c13c5a26c68edabc33b1917515cf0ce8a8"
+      },
+      {
+        "file": "capture.mjs",
+        "bytes": 1814,
+        "sha256": "feeb74611f3de77581309765af700c7e9849317ef3c7d2ca2d1dc89cef89a9ae",
+        "gitBlobSha1": "132c60421e4b6c47627a2e29e38f03d51150e174"
+      },
+      {
+        "file": "focused.txt",
+        "bytes": 6024,
+        "sha256": "f92779698c19a4535eeb270123f3ba666dc6fe943145f7e6b7e37641a12f267d",
+        "gitBlobSha1": "aa2818eb61029a632d2f974bdb02c6ed11b3e3d5"
+      },
+      {
+        "file": "initial-capture-summary.json",
+        "bytes": 3594,
+        "sha256": "e02a80bb853b333dfa31293783d4ce7343f4db966c288ae2993f4c70984359db",
+        "gitBlobSha1": "88876a503fb7515f983144f5e137b9f8ec4c7160"
+      },
+      {
+        "file": "README.txt",
+        "bytes": 683,
+        "sha256": "4484b42d433a1bd65f4901443ff4fee3aafdfe04e66167fb885fc93a1b2695d6",
+        "gitBlobSha1": "b79e40882d8cc95853087925b835d5ba27eb7f55"
+      },
+      {
+        "file": "validation-page0.csv",
+        "bytes": 23509,
+        "sha256": "ca648a26ec4f0ea5dfd6b11675d3b3bdaf5f0f5b5d32597eb085499b51d52210",
+        "gitBlobSha1": "93f76c3eba1f189fe2ef862fe36fbb7cfdbc388a"
+      },
+      {
+        "file": "validation-page0.json",
+        "bytes": 16424,
+        "sha256": "bd04058ed93a232e3a5e2804859593fd80b92f87bfe28822b82c282f9abcf59d",
+        "gitBlobSha1": "0f71aff9e031b5a4831824599df2ed2697c14979"
+      },
+      {
+        "file": "validation-page0.svg",
+        "bytes": 4806,
+        "sha256": "5fd7a8d7f0a5a76c01f093d4497b7e65a7bf4cce17d726f9dc683d095c9da025",
+        "gitBlobSha1": "f7abc6977445d781c9a15ef76564987599138b29"
+      }
+    ],
+    "protected": [
+      {
+        "path": "src/main.js",
+        "baseGitSha256": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+        "unchanged": true
+      },
+      {
+        "path": "src/progress.json",
+        "baseGitSha256": "93ea60d7313352b02da817b11fea943e1c7fff14be409fcbb99d454f7227e966",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-sls-prony-roundtrip.js",
+        "baseGitSha256": "77c9b8e736b0402743264883df520a930cc554a23bb9490073419410a1d83c0b",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/printed-sls-prony-file-service.mjs",
+        "baseGitSha256": "e0a07efeadaebd82628106be50367dcebc9bcd022f6d4430e53f5634d9bee00c",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/printed-identification-file-io.mjs",
+        "baseGitSha256": "4ecb728a3d598909c54615a180a3f46b3c303f55bfbcaee280e32e9d175ea76f",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/json-artifacts.mjs",
+        "baseGitSha256": "067811addbc47f44f9826f787e5bbcbc42b0b0e6d6f5488c8105836e7dcb6e07",
+        "unchanged": true
+      }
+    ],
+    "capture": {
+      "sourcePath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\docs\\evidence\\2026-11-07-printed-sls-prony-cli\\report.json",
+      "sourceBytes": 140904,
+      "sourceSHA256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+      "summaries": [
+        {
+          "format": "csv",
+          "request": {
+            "reportPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\docs\\evidence\\2026-11-07-printed-sls-prony-cli\\report.json",
+            "expectedSHA256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+            "query": {
+              "pairIndex": 0,
+              "role": "validation",
+              "format": "csv",
+              "offset": 0,
+              "limit": 50
+            },
+            "outputPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-report-artifacts-nov07-final\\validation-page0.csv"
+          },
+          "page": {
+            "offset": 0,
+            "requestedLimit": 50,
+            "returnedRows": 50,
+            "totalRows": 81,
+            "unshownRows": 31,
+            "nextOffset": 50,
+            "responseLimited": false
+          },
+          "responseBytes": 26001,
+          "nativeBytes": 23509,
+          "nativeSHA256": "ca648a26ec4f0ea5dfd6b11675d3b3bdaf5f0f5b5d32597eb085499b51d52210"
+        },
+        {
+          "format": "json",
+          "request": {
+            "reportPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\docs\\evidence\\2026-11-07-printed-sls-prony-cli\\report.json",
+            "expectedSHA256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+            "query": {
+              "pairIndex": 0,
+              "role": "validation",
+              "format": "json",
+              "offset": 0,
+              "limit": 50
+            },
+            "outputPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-report-artifacts-nov07-final\\validation-page0.json"
+          },
+          "page": {
+            "offset": 0,
+            "requestedLimit": 50,
+            "returnedRows": 50,
+            "totalRows": 81,
+            "unshownRows": 31,
+            "nextOffset": 50,
+            "responseLimited": false
+          },
+          "responseBytes": 18661,
+          "nativeBytes": 16424,
+          "nativeSHA256": "bd04058ed93a232e3a5e2804859593fd80b92f87bfe28822b82c282f9abcf59d"
+        },
+        {
+          "format": "svg",
+          "request": {
+            "reportPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\docs\\evidence\\2026-11-07-printed-sls-prony-cli\\report.json",
+            "expectedSHA256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+            "query": {
+              "pairIndex": 0,
+              "role": "validation",
+              "format": "svg",
+              "offset": 0,
+              "limit": 50
+            },
+            "outputPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-report-artifacts-nov07-final\\validation-page0.svg"
+          },
+          "page": {
+            "offset": 0,
+            "requestedLimit": 50,
+            "returnedRows": 50,
+            "totalRows": 81,
+            "unshownRows": 31,
+            "nextOffset": 50,
+            "responseLimited": false
+          },
+          "responseBytes": 6138,
+          "nativeBytes": 4806,
+          "nativeSHA256": "5fd7a8d7f0a5a76c01f093d4497b7e65a7bf4cce17d726f9dc683d095c9da025"
+        }
+      ],
+      "newFitOrSolverRuns": 0
+    }
+  },
+  "auditFindings": [
+    {
+      "source": "root",
+      "issue": "Metric count accepted a noninteger within floating tolerance.",
+      "fix": "count safe-integer/exact rows.length;32EPS only for remaining four statistics.",
+      "regression": "Training/validation/holdout counts changed by±ULP and rehashed refuse."
+    },
+    {
+      "source": "root",
+      "issue": "XML C0/lone-surrogate concern.",
+      "classification": "Coverage gap, not a product defect: parser string gate already rejected these.",
+      "regression": "All formats refuse C0/FFFE/FFFF/lone surrogate; Japanese/valid emoji parse as actual XML."
+    },
+    {
+      "source": "agent65",
+      "issue": "Internal native publisher Buffer copy lacked an early string/byte gate.",
+      "classification": "Not a public-service bypass; low-level helper defense added.",
+      "regression": "arraylike getter/coercion0; UTF8-overbudget refuses before IO."
+    }
+  ],
+  "initialIterations": [
+    {
+      "result": "5pass1fail",
+      "reason": "Independent decimal4000100 exact expectation differed from saved double4000099.9999999995.",
+      "fix": "Compare stored value exactly and decimal truth within1e-8Pa; no product threshold change."
+    },
+    {
+      "result": "9pass1fail",
+      "reason": "Test used deprecated xmldom errorHandler object.",
+      "fix": "Installed version onError callback used; no product change."
+    }
+  ],
+  "behavior": [
+    "Observed, ideal step and Prony nominal are distinct series; s/Pa/engineering strain explicit.",
+    "Native source hash/page totals/unshown counts and hypothetical-ramp/calibrated:false warnings retained.",
+    "Refused sources/pairs have no curves; CSV refusal is metadata-only.",
+    "CSV formula prefix guard and XML escaping/control gates; no scripts/links injected.",
+    "Native optional file publication is exclusive/atomic, complete-byte visible; no fsync guarantee.",
+    "Dedicated4MiB FD reader copies common snapshot/noLinks semantics without raising shared2MB limits."
+  ],
+  "progressChanged": false,
+  "newFEMOrGuiOrSDKLaunches": 0,
+  "remaining": [
+    "Shared MCP entry and product acceptance are root-owned.",
+    "No report authenticity/real-measurement/calibration/material-application acceptance."
+  ],
+  "preparationNotes": [
+    "Initial staged diff check reported captured CRLF as trailing whitespace. Raw/native bytes were not changed; scoped cr-at-eol attributes now declare their intentional line endings."
+  ]
+}

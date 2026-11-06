@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:45:26.543Z",
+  "base": "857ac9ecdd5720ec70db1f541cd6b5509040ebcc",
+  "finding": "Holes compensated by non-index numeric own keys passed snapshot own-key count. Hash-excluded result.performance exposed acceptance; malformed point fell through to OUTSIDE.",
+  "fix": "Read exact own enumerable data descriptors at indices0..length-1. Existing key count then also excludes all extra properties.",
+  "tests": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0,
+    "elapsedMs": 599.3863,
+    "docs": 2
+  },
+  "cases": [
+    "performance=[1,,3] plus key4294967295 rejected INVALID",
+    "performance=[1,,3] plus huge numeric string rejected INVALID",
+    "point=[5,,5] plus huge numeric string rejected INVALID, not OUTSIDE",
+    "normal dense performance accepted"
+  ],
+  "femRuns": 0,
+  "sourceWorkingSha256": "5f90996234e07601af4aa60432e1231094a5b5e9df37a2e8340683bceb4b11ab",
+  "raw": {
+    "path": "dense-fix.log",
+    "bytes": 1612,
+    "sha256": "7ea057e26db6895f43455dbc9b0ff2b5a44cafac315c8849f32c217920cd8612"
+  }
+}

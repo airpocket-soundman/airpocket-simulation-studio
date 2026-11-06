@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:50:28.216Z",
+  "ownerCommit": "b42851836a68a0ad66ac849090b1c5d83d07f7f0",
+  "ownerLocalPick": "ebab266",
+  "rootIntegration": "21b0e44",
+  "productionChanges": false,
+  "mandatoryFindings": [],
+  "tests": {
+    "newIndependent": 4,
+    "related": {
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMs": 883.5112
+    },
+    "types": 44,
+    "docs": 2
+  },
+  "checks": [
+    "Independent CSV reader checks every stored row across all pages, quoted CRLF/formula prefix handling, all3 original Pa fields, source time and exact nextOffset progression.",
+    "XML parser validates safe Japanese/emoji/special-character metadata and all3series coordinates against independent raw-Pa axis equations.",
+    "Concurrent FD source append refuses before publication; existing output is preserved; no temporary files remain.",
+    "Low-level publisher refuses nonstring hooks, character and UTF8 byte overflows before copying or writing."
+  ],
+  "notes": [
+    "Low-level copy-before-cap was suggested during draft review and hardened by owner before fixed commit; public service already provided bounded text.",
+    "Count integer/exact-size gate was fixed by owner following root review before fixed commit.",
+    "XML control rejection existed in strict parser; not a new product defect."
+  ],
+  "workflowIncident": {
+    "action": "One command used owner worktree rather than own worktree and temporarily switched its checked-out branch to codex/nov07-report-artifact-independent at a8.",
+    "fileMove": "Failed because source path did not exist; no file write occurred.",
+    "sourceEdits": false,
+    "commitReferencesChanged": false,
+    "recovery": "Switched back to codex/nov07-printed-report-artifacts at b42851836a68a0ad66ac849090b1c5d83d07f7f0; git status clean; owner and root notified.",
+    "impact": "Fixed runtime source bytes match root integration21b0e44; independent tests run only in own worktree afterward.",
+    "preventiveCheck": "Every exec uses own explicit workdir; compare git show-toplevel/status before branch changes."
+  },
+  "limitations": [
+    "Saved-report schema/internal algebra only, not original datasets or physics/authenticity verification.",
+    "No actual GUI rendering/image, physical measurement, FEM or new solve.",
+    "No source/progress/status changes."
+  ],
+  "sources": [
+    {
+      "path": "src/printed-sls-report-artifacts.js",
+      "ownerGitLfSha256": "ad802e14ce4b9c149ffc53838be16a1d15341a5defacdc5a9ec6060c9609bf35",
+      "rootGitLfSha256": "ad802e14ce4b9c149ffc53838be16a1d15341a5defacdc5a9ec6060c9609bf35",
+      "same": true
+    },
+    {
+      "path": "src/printed-sls-report-json.js",
+      "ownerGitLfSha256": "cbe119e8a78246b18a7a4d35f4b9ced22c5d7617abfef6f5bc9f1aebcbb4eabe",
+      "rootGitLfSha256": "cbe119e8a78246b18a7a4d35f4b9ced22c5d7617abfef6f5bc9f1aebcbb4eabe",
+      "same": true
+    },
+    {
+      "path": "scripts/printed-sls-report-artifact-service.mjs",
+      "ownerGitLfSha256": "7650076600f7cba1d1b11e3a159239bb0e91a7f57e6ebcb78499048ad45909e2",
+      "rootGitLfSha256": "7650076600f7cba1d1b11e3a159239bb0e91a7f57e6ebcb78499048ad45909e2",
+      "same": true
+    },
+    {
+      "path": "scripts/printed-sls-report-file-io.mjs",
+      "ownerGitLfSha256": "2e8d601036d6bd6f4918a08e77ba4d305a510377eddfd3ee2b4b6340c26b1b98",
+      "rootGitLfSha256": "2e8d601036d6bd6f4918a08e77ba4d305a510377eddfd3ee2b4b6340c26b1b98",
+      "same": true
+    }
+  ],
+  "raw": [
+    {
+      "path": "focused.log",
+      "bytes": 1963,
+      "sha256": "50f90ae1eda7e6ef418792e592933a8bf24d47c77440a167484c84c6e404f443"
+    },
+    {
+      "path": "types.log",
+      "bytes": 157,
+      "sha256": "002b25571dbb5f6a97787d40324cd280a2a2f779ca4c04a7b3174ee7352dda92"
+    },
+    {
+      "path": "docs.log",
+      "bytes": 276,
+      "sha256": "be9625fe2aa057fa226cd04ea78d48978562872eb6352005fff33ba196031831"
+    }
+  ]
+}

@@ -24,3 +24,5 @@ export interface AverageForceResult {
 }
 export declare const AVERAGE_FORCE_LIMITS:Readonly<{steps:4096;microsteps:4096;cellSteps:2000000}>;
 export declare function runChannelAverageForce(input:AverageForceInput):AverageForceResult;
+/** Validates capacity and owns initial data; performs no fluid advance. */
+export declare function inspectChannelAverageForceInput(input:AverageForceInput):{input:Readonly<AverageForceInput>;work:{responseSolves:number;cellStepsUpperBound:number}};

@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:35:30.286Z",
+  "base": "a8eace7a71925eeee1bf8951d1583bac83d49bea",
+  "scope": "Dedicated full native Tet10 validation/point API plus pinned read-only Node file service; common Tet4 query/view/compare remain refused.",
+  "tests": {
+    "related": {
+      "pass": 41,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMs": 1418.5074
+    },
+    "newPure": 7,
+    "newFile": 4,
+    "newTypes": 1,
+    "contractDeclarations": 43,
+    "docs": 2
+  },
+  "realJob": {
+    "runs": 1,
+    "geometryMm": [
+      10,
+      10,
+      10
+    ],
+    "E_Pa": 1000000000,
+    "nu": 0,
+    "forceN": 100,
+    "nodes": 63,
+    "elements": 24,
+    "bytes": 39044,
+    "sha256": "d53dfafc2672d08a0728e3f0aee07fe1915d22e5166664aa14464868cb31fe99",
+    "nativeResultRevision": "sha256:aec2888d8c33cd7f66bdfe0f9888ad821c17df97996e04dd218f738ddf3d9733",
+    "runtimeBuild": {
+      "status": "available",
+      "version": "0.44.0",
+      "revision": "a8eace7a71925eeee1bf8951d1583bac83d49bea",
+      "dirty": true,
+      "sourceFingerprint": "sha256:6ed3eb8f2a3df3ed9c5e22381fea4a82f7c3d95b340e6335e92b8eb969a0d3b8"
+    },
+    "exact": "u_z=0.001*z(mm), strain_zz=.001, stress_zz=1e6Pa; later regressions reuse captured raw without solving."
+  },
+  "oracles": [
+    "Independent affine/quadratic polynomials including all engineering-shear components, nu=.25 volumetric/shear coupling; rigid translation and infinitesimal rotation.",
+    "Rehashed displacement/Gauss/coordinate/topology/unit/runtime/input-revision changes are refused unless fully consistent constructed polynomial records.",
+    "Shared boundaries choose minimum containing element index; outside, cloned handle, getter/hole/custom prototype/typed storage/budget overflow refused.",
+    "Concurrent file append rejected through bounded FD identity/size checks; point request and source input are detached before await."
+  ],
+  "limits": {
+    "rawBytes": 8388608,
+    "snapshotConservativeBytes": 8388608,
+    "values": 200000,
+    "depth": 24,
+    "stringChars": 65536,
+    "arrayElements": 16384,
+    "objectKeys": 128,
+    "elements": 512,
+    "nodes": 4096,
+    "coordinateDisplacementMm": 1000000,
+    "conditionIndicator": 1000000
+  },
+  "historicalCorrections": [
+    {
+      "stage": "Initial independent quadratic oracle",
+      "pass": 4,
+      "fail": 1,
+      "cause": "Test gammaXY was accidentally .006*z; independent differentiation gives .002*z+.001*z=.003*z. Only oracle corrected; source unchanged.",
+      "raw": "Initial tool output only; not repackaged as an invented raw log."
+    },
+    {
+      "stage": "Layer check",
+      "pass": 26,
+      "fail": 1,
+      "cause": "Saved assessment validation belongs to operations; new module registration moved from domain to operations without an exception.",
+      "raw": "initial-layer.log"
+    },
+    {
+      "stage": "Additional bound/edit harness",
+      "pass": 9,
+      "fail": 2,
+      "cause": "FD hook compared lexical Windows path rather than realpath, and wide-tree assertion expected value budget although conservative byte budget correctly fired first. Harness corrected only.",
+      "raw": "initial-extra-harness.log"
+    }
+  ],
+  "limitations": [
+    "Content hash/numerical consistency are not authentication, equilibrium, calibration or convergence certification.",
+    "Small-strain linear isotropic straight-affine box profile only; no finite-rotation objectivity claim.",
+    "Common sampleResult/case/view/compare still refuse native output; parent P5B/98 remains open.",
+    "No new FEM run after the one captured small job; no GUI/native-code backend/measurement claim."
+  ],
+  "tet10KernelUnchanged": true,
+  "sources": [
+    {
+      "path": "src/tet10-native-result.js",
+      "workingByteSha256": "02297e4bd24d25306e1f5084775d1c1ea04b3402cd3441f7dfa99f0274535558",
+      "gitNormalizedBlobId": "3e7062af298f81e9d2ad664849523c3605907825"
+    },
+    {
+      "path": "src/tet10-native-result.d.ts",
+      "workingByteSha256": "971f0ce5102c098f4476a845f8c271d0bc51eb5c0bab68d6fba12c3cdbb0df19",
+      "gitNormalizedBlobId": "b3554d77ffcd2b582a2c69ee87eb64511e8ce63f"
+    },
+    {
+      "path": "scripts/tet10-native-file.mjs",
+      "workingByteSha256": "df24d3515c39df22ab2b13c4f7417b590488a1b4a3dcd61958938b8f34dbde61",
+      "gitNormalizedBlobId": "43aa8591fb3e79f2e7ad71d13b89174a52ce26c4"
+    },
+    {
+      "path": "scripts/tet10-native-file.d.mts",
+      "workingByteSha256": "1a5d4770dcd75777aabcdcf4e28f07a088b6d6936367264e10367aa7c3e5908f",
+      "gitNormalizedBlobId": "64161168dc39f455f4da256b21524bfec0f44dea"
+    },
+    {
+      "path": "tests/tet10-native-result.test.mjs",
+      "workingByteSha256": "0cc447b0248414f2a23fd1e4f6f0e91582f9e473c633b6925080eff3a9821400",
+      "gitNormalizedBlobId": "be3af6f2e3fea744af767d2a9f4e67b42bd74e7c"
+    },
+    {
+      "path": "tests/tet10-native-file.test.mjs",
+      "workingByteSha256": "6168a7657a9e9954c4157f30422cad965d98d193919ebc6a35fd28a526516877",
+      "gitNormalizedBlobId": "d6156d54bb08ae9298297c724b992fe6efffeaa8"
+    }
+  ],
+  "raw": [
+    {
+      "path": "real-job.json",
+      "bytes": 39044,
+      "sha256": "d53dfafc2672d08a0728e3f0aee07fe1915d22e5166664aa14464868cb31fe99"
+    },
+    {
+      "path": "real-job-status.json",
+      "bytes": 3048,
+      "sha256": "977513dd2a90b9977021dd53e3468fd9d6a0eaba0363acd2c44d9110ba0daef1"
+    },
+    {
+      "path": "focused.log",
+      "bytes": 4265,
+      "sha256": "b1200d6a5e0a184f7859f47c0d4404606b247071fe5fa49c171ad5af2dfff1a5"
+    },
+    {
+      "path": "types.log",
+      "bytes": 157,
+      "sha256": "efe2124a43aa53098d9cd4bad21b4a2e3c6b5acbdd6715857ff603259052a780"
+    },
+    {
+      "path": "initial-layer.log",
+      "bytes": 4036,
+      "sha256": "08db179560120ea86eab6dc06f49b738aa4f6d47c64eab0dc82c1fc52a097fea"
+    },
+    {
+      "path": "initial-extra-harness.log",
+      "bytes": 4446,
+      "sha256": "45cb79ae5371995df407292860a4da76d6710f50a5e1926fb8a0b77d3a01e309"
+    }
+  ]
+}

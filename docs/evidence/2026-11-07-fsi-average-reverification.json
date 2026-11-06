@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "task": "COUPLE5/102",
+  "base": "a8eace7a71925eeee1bf8951d1583bac83d49bea",
+  "scope": "Explicit tolerance, raw-SHA-pinned saved synthetic FSI artifact recomputation in one owned worker",
+  "validation": {
+    "tests": 48,
+    "skip": 0,
+    "pass": 48,
+    "elapsedMs": 3331.2691,
+    "declarations": 43,
+    "typesSHA256": "efe2124a43aa53098d9cd4bad21b4a2e3c6b5acbdd6715857ff603259052a780",
+    "focusedSHA256": "d7c37d38397b58852e9a75a0b1ceeff33c642f110e7d161f0073a6a9e4db921e",
+    "command": "node --test tests/fsi-average-reverify.test.mjs tests/fsi-average-file-cli.test.mjs tests/fsi-channel-average-force.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+    "fail": 0
+  },
+  "proof": {
+    "requestSHA256": "174370a1071994c7835f854c36be2364927db2fb82679268ede8cd4feb2e8512",
+    "reportSHA256": "6d12657099e9f1c44ce9b493e5cfa11fb9ea0d3446c385112729a7de1bd51808",
+    "exactNumericMatch": true,
+    "status": "matched",
+    "artifactSHA256": "b2b0c0a68430665da53889fc02dacf01184956280ca521046cdda162c5641da7",
+    "note": "Historical request includes the executed machine-local absolute input path; hashes identify this execution, not portable output bytes",
+    "executionSettled": true,
+    "requestBytes": 446,
+    "cellSteps": 96,
+    "workerExitCode": 0,
+    "reportBytes": 3016
+  },
+  "limits": {
+    "artifactBytes": 4194304,
+    "replayCellSteps": 2000000,
+    "requestBytes": 65536,
+    "maximumRelativeTolerance": 1E-06,
+    "reportBytes": 65536,
+    "firstMismatchPointers": 8
+  },
+  "maximumHistoryTest": {
+    "reportBytes": 3059,
+    "replayCellSteps": 196608,
+    "artifactBytes": 3262524,
+    "rows": 4097
+  },
+  "checks": [
+    "Legacy saved CLI artifact remains byte-identical after worker-boundary extraction",
+    "Unit-specific absolute/relative comparisons and mismatch CLI exit2",
+    "Strict SHA/version/source/config/time/work failures admit no worker",
+    "Nonfinite subtraction/threshold refuses instead of serializing null",
+    "4MiB and64KiB exact boundaries/plus1/FD mutation",
+    "Actual worker cancellation waits for exit",
+    "Getter-resistant AbortSignal intrinsic brand and methods",
+    "Prospective full report/publication metadata bound before exclusive commit",
+    "Two real report CLI writers have one complete winner"
+  ],
+  "originalSourceRecomputed": false,
+  "originalRuntime": "not-recorded",
+  "calibrated": false,
+  "physicalAccuracyVerified": false,
+  "authenticationVerified": false,
+  "nonClaims": [
+    "No original raw request rederivation",
+    "No original runtime identity or cross-runtime guarantee",
+    "Within explicit tolerances is not calibration/authentication/physical accuracy/equilibrium",
+    "No GUI/MCP/main/progress changes",
+    "No new SU2/physical measurements/general nonlinear FSI"
+  ]
+}

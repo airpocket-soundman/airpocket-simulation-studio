@@ -1,0 +1,66 @@
+✔ pinned native file query returns a compact true quadratic point and never alters source (46.3978ms)
+✔ strict parser refuses decoded duplicates, depth, values, huge arrays and nonfinite numeric literals (9.7956ms)
+✔ file reader refuses malformed UTF8/BOM, raw cap and symlink without getters or publication (24.8234ms)
+✖ concurrent FD snapshot edits are refused before any native point can be returned (23.1376ms)
+✔ one captured real saved Tet10 job is sampled without rerunning any solver; boundaries are deterministic (35.6768ms)
+✔ independent affine, true quadratic and rigid rotation/translation fields recover exact u, engineering strain and stress (44.0065ms)
+✔ hash mismatch and rehashed numerical/topological tampering are refused (79.106ms)
+✔ own-data budgets reject getters, holes, custom arrays and large coordinates without invoking caller hooks (23.9038ms)
+✔ snapshot is detached before hash await and returned handles never expose mutable field storage (14.068ms)
+✔ rehashed duplicate cells, coverage gaps, oversized node counts and inherited typed storage are rejected (59.502ms)
+✖ snapshot value/depth budgets are enforced before canonical hashing large caller trees (107.2574ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 543.3293
+
+✖ failing tests:
+
+test at tests\tet10-native-file.test.mjs:8:1
+✖ concurrent FD snapshot edits are refused before any native point can be returned (23.1376ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/tet10-native-file.test.mjs:8:783)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { reason: 'input-changed' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests\tet10-native-result.test.mjs:25:1
+✖ snapshot value/depth budgets are enforced before canonical hashing large caller trees (107.2574ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    Comparison {
+  +   reason: 'byte-budget'
+  -   reason: 'value-depth-budget'
+    }
+  
+      at async TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/tet10-native-result.test.mjs:25:335)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Native Tet10: byte-budget
+        at fail (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:8:71)
+        at text (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:9:155)
+        at copy (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:9:1172)
+        at copy (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:9:1215)
+        at copy (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:9:1215)
+        at snapshot (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:9:1364)
+        at prepareNativeTet10Result (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/src/tet10-native-result.js:23:63)
+        at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/tet10-native-result.test.mjs:25:356)
+        at async Test.run (node:internal/test_runner/test:1113:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:788:7),
+    expected: { reason: 'value-depth-budget' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
