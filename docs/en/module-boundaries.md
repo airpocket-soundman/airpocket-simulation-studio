@@ -63,6 +63,8 @@ Discipline-specific control visibility belongs in `src/ui/discipline-controls-ui
 
 ## What this does NOT cover
 
+When changing MCP operations or capabilities, run `npm run check:mcp` to check real stdio, capability/browser-only boundaries and both operation correspondence tables together. Add actual tool names to the tables and relevant skill guidance; saved-file-only support is not GUI support. This check does not replace whole CI or numerical verification.
+
 - MOD1 is not complete. This slice is only the mechanical dependency-direction check and a limited type contract.
 - No React or WASM migration.
 - Moving folders alone does not count as a boundary; passing the classification table and direction check does.

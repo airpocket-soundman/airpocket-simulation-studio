@@ -55,6 +55,8 @@ node --test tests/module-boundaries.test.mjs tests/contracts.test.mjs tests/cont
 
 ## 独立した変更と統合
 
+MCPの操作や能力を変更したら `npm run check:mcp` で実stdio・能力・browser-only境界と日英の操作対応表を合わせて検査する。ツール名の追加は対応表と専門手順へ反映し、保存ファイル専用をGUI対応と記載しない。これは全体CIや該当数値検証の代わりではない。
+
 UIの制御表示は `src/ui/discipline-controls-ui.js` が担当し、`src/main.js` は状態をgetterで渡して呼び出す。UI変更はこのモジュールと `tests/discipline-controls-ui.test.mjs` を中心に行い、main側には状態の注入・イベント接続だけを足す。分野固有のソルバー処理は `src/solver-adapters/<discipline>-adapter.js` に置き、共通の実行フローは `src/analysis.worker.js` がアダプターを呼び出す。例として温度範囲の後処理は `src/solver-adapters/thermal-adapter.js` にある。変更後は分類表を更新し、境界検査と関係する機能テストを実行する。共有の実行制御やまだアダプターへ移していない処理はworker側の責務として扱う。
 
 ## 共有型契約 (`src/contracts/*.d.ts`)
