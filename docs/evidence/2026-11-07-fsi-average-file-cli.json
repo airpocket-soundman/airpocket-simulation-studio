@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "task": "COUPLE5/102",
+  "base": "4bc0a9f4256bd50dbc87176b1b5e71ce0bff6ddb",
+  "scope": "Explicit saved synthetic average-force configuration to isolated Node worker and exclusive JSON artifact",
+  "validation": {
+    "command": "node --test tests/fsi-average-file-cli.test.mjs tests/fsi-channel-average-force.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+    "focusedSHA256": "280274c8e32f4c861b1fc9827dbc6a9c7d6176c3788e9ae0454bfa0ebfe8a20e",
+    "tests": 39,
+    "skip": 0,
+    "elapsedMs": 2885.8051,
+    "declarations": 41,
+    "pass": 39,
+    "fail": 0,
+    "typesSHA256": "8cd7c3cfdf239f694bc506585fe009327919ae9172997f997e0f46a1bc29435f"
+  },
+  "proof": {
+    "artifactSHA256": "b2b0c0a68430665da53889fc02dacf01184956280ca521046cdda162c5641da7",
+    "artifactBytes": 2694,
+    "methodVersion": 1,
+    "requestBytes": 218,
+    "calibrated": false,
+    "requestSHA256": "6c3769c89d835d9238cafbfcdf611dd0abc32970eb1115e44c57eef94c4f5c2e",
+    "profile": "ordinary finite-number array m/s",
+    "workerExitCode": 0,
+    "executionSettled": true,
+    "synthetic": true
+  },
+  "limits": {
+    "artifactBytes": 4194304,
+    "cellSteps": 2000000,
+    "workerTimeoutMs": 120000,
+    "microsteps": 4096,
+    "macrosteps": 4096,
+    "requestBytes": 65536
+  },
+  "maximumHistoryTest": {
+    "rows": 4097,
+    "fits": true,
+    "cellSteps": 196608,
+    "artifactBytes": 3262524
+  },
+  "ownership": [
+    "Result cannot publish before worker exit0 and private stdout/stderr end",
+    "Timeout awaits terminate resolution and separately observed exit",
+    "Actual abort observes exited worker with threadId -1",
+    "Unexpected actual stdout/stderr drained privately and refused",
+    "Null/sparse/nonfinite/missing work or history and duplicate null messages refused",
+    "Two real publishers have one complete winner",
+    "Inline --input-type=module host compatible via fixed execArgv=[]"
+  ],
+  "failureSemantics": "No completed artifact on validation/timeout/cancel/worker failure; stable code and available snapshot SHA only",
+  "nonClaims": [
+    "No GUI/MCP/material application added",
+    "No general FSI/ALE/pressure/nonlinear accuracy or measured calibration",
+    "Worker timeout does not bound OS filesystem I/O",
+    "V8 heap limits are not process RSS limits",
+    "Publication start is commit point; later abort does not undo artifact"
+  ]
+}
