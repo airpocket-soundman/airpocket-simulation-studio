@@ -13,3 +13,7 @@
 Node `queryNativeTet10File({path, expectedRawSHA256, pointMm})` は8MiB上限のFD snapshotを読み、no-links/regular file/前後dev・ino・size・mtime・ctimeを確認します。raw SHA不一致、UTF8/BOM、decoded重複key、深さ/value過剰を拒否し、compactな1点だけ返します。書込・worker・solverは開始しません。既存job64MB・printed reader2MB上限は変更しません。raw8MiB以下でも構造/snapshot予算を超えれば拒否します。
 
 [証拠](evidence/2026-11-07-tet10-native-query/report.json) には1回だけ実行した10mm cubeの24Tet10/63節点・39,044B保存rawを保持し、以後の回帰はそれを純読取で使います。affine/真のquadratic/剛体並進と無限小回転の解析式、ν=0.25の体積/せん断規約、自己hash再計算後の改竄拒否、体外、入力所有、同時file編集を検査します。構成されたpolynomial記録は形状関数検証用で、実荷重解を装いません。有限回転の客観性、任意CAD、一般case/view/compare、親P5B/98の完了は主張しません。標準sampleResultのnative拒否は維持します。
+
+## 入力密度の追補（2026-11-07）
+
+独立監査で、hash対象外のperformance配列の欠番を非index数値キーで補うと、旧snapshotのownKey数検査を通過する漏れが見つかりました。数値解の誤答ではありませんが、dense own-data契約違反です。配列はlength固定で0..length−1のown enumerable data descriptorを直接読み、欠番を拒否するよう修正しました。同じ形のpointもOUTSIDEではなくINVALIDとなります。正常なdense performanceは維持し、追加FEMは行っていません。[修正証拠](evidence/2026-11-07-tet10-native-query/dense-fix.json)
