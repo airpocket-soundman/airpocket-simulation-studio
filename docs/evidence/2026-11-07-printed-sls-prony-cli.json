@@ -1,0 +1,203 @@
+{
+  "task": "PRINTMEASURE3 SLS/Prony read-only file entry",
+  "baseSha": "113d6237e4c7219b73276b62c77cfe14e4d04e84",
+  "scope": "Pinned raw config/datasets, one owned numerical worker, exclusive atomic report, small stdout/service summary. No MCP registration or material application.",
+  "config": "Strict dedicated JSON parser with decoded duplicate-key/depth/value/type and raw hash checks; explicit SLS conditions/K/ramp/worker budget.",
+  "actualCli": {
+    "argv": [
+      "scripts/roundtrip-printed-sls.mjs",
+      "--config",
+      "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-prony-cli-nov07-raw\\config.json",
+      "--config-sha256",
+      "f6b7cb7270a9f5c33e740cb3d2b60d6a497abfcbd2180c336e122eb3ba4206c1",
+      "--output",
+      "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-prony-cli-nov07-raw\\report.json"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "workerExitConfirmed": true,
+    "reportBytes": 140904,
+    "reportSha256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+    "independentIdealHoldoutBiasPa": -99.99999999998856,
+    "expectedBiasPa": -100,
+    "solverRuns": 0
+  },
+  "boundaries": [
+    {
+      "workerDeadlineEvidence": {
+        "status": "refused",
+        "execution": {
+          "workerStarted": true,
+          "exitConfirmed": true,
+          "exitCode": 0,
+          "terminationRequested": true,
+          "cause": "PRINTED_SLS_PRONY_WORKER_TIMEOUT"
+        },
+        "refusalCode": "PRINTED_SLS_PRONY_WORKER_TIMEOUT",
+        "resultNull": true
+      }
+    },
+    {
+      "ownedAbortEvidence": {
+        "status": "refused",
+        "execution": {
+          "workerStarted": true,
+          "exitConfirmed": true,
+          "exitCode": 0,
+          "terminationRequested": true,
+          "cause": "PRINTED_SLS_PRONY_ABORTED"
+        },
+        "refusalCode": "PRINTED_SLS_PRONY_ABORTED",
+        "resultNull": true
+      }
+    }
+  ],
+  "verification": {
+    "newFileTests": 9,
+    "focusedRelated": {
+      "total": 58,
+      "pass": 58,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 4110.2561
+    },
+    "declarationStdout": "Contract declarations type-check (41 declaration files).",
+    "rawInventory": [
+      {
+        "file": ".gitattributes",
+        "bytes": 37,
+        "sha256": "919f9b7ed1f1c6b33c103b943bb2135a7bd03a28302e1cf0b54a4486d4b348e3",
+        "gitBlobSha1": "99832a16fb23f4454690c6999ecf78966961ff60"
+      },
+      {
+        "file": "capture.mjs",
+        "bytes": 2946,
+        "sha256": "a6ee220d85ed390d67d45c6ef2a4f4002cde4fa43492ecc8f2cc5c622cd6815c",
+        "gitBlobSha1": "202a737117b17082d7da3dcc7509cc36ca9a24c5"
+      },
+      {
+        "file": "config.json",
+        "bytes": 977,
+        "sha256": "f6b7cb7270a9f5c33e740cb3d2b60d6a497abfcbd2180c336e122eb3ba4206c1",
+        "gitBlobSha1": "778686d33f136d550daf175bcadad670ded8bcb6"
+      },
+      {
+        "file": "focused.txt",
+        "bytes": 8816,
+        "sha256": "c1483fa14bb3cdd8a131f7cd20bb4325b71820fd0e67e81fc7ca56c99e8f8f1a",
+        "gitBlobSha1": "c8434f644a2d6b4483d0be5217cac48e7ee248bf"
+      },
+      {
+        "file": "README.txt",
+        "bytes": 569,
+        "sha256": "2b108d8c898adf4404fec8b8fec1ef7a01fcbad4e72183f1a1b1e022391de13c",
+        "gitBlobSha1": "5c2bdf8abd607161e49502c8d21e43f88a2180bc"
+      },
+      {
+        "file": "report.json",
+        "bytes": 140904,
+        "sha256": "b159b4c643535e4d940dfd768d09c09470ecba8b59a0e52e3a7d84adc97d6af0",
+        "gitBlobSha1": "de602e88ebaf0600fd5ac718cd75f68b3168af71"
+      },
+      {
+        "file": "stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "gitBlobSha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+      },
+      {
+        "file": "stdout.json",
+        "bytes": 666,
+        "sha256": "e6882aa8f16749bbcf48dc6a362c7f17175aae1447795dcc0688b1048985dc51",
+        "gitBlobSha1": "9ad27d7bcbd8ad686c1dd122c8f69884bbd6b423"
+      },
+      {
+        "file": "training.json",
+        "bytes": 2990,
+        "sha256": "a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48",
+        "gitBlobSha1": "feab03c9db7fa9d4910f4a11d9903fd4ceffbcf4"
+      },
+      {
+        "file": "validation.json",
+        "bytes": 3034,
+        "sha256": "47b16e08529b19bcb48d9fe7db1e08978eea24a2e1af527dd4ccf130229751f7",
+        "gitBlobSha1": "7b465dd93586907dd3dd2d5c5434a3cfc581f6f3"
+      },
+      {
+        "file": "verification.json",
+        "bytes": 804,
+        "sha256": "2732fb0d29f36ba8f42f7c526415cf9f6d5062e479195664258a62fa75b61512",
+        "gitBlobSha1": "a2c0dfed906b1fe477624c1b53e5226514875438"
+      }
+    ],
+    "protected": [
+      {
+        "path": "src/main.js",
+        "baseGitSha256": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+        "unchanged": true
+      },
+      {
+        "path": "src/progress.json",
+        "baseGitSha256": "884fd19fc900d1f959ba28c99566c91b75fc6e9d329d8e5616a5d76b69c8173c",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-sls-prony-roundtrip.js",
+        "baseGitSha256": "77c9b8e736b0402743264883df520a930cc554a23bb9490073419410a1d83c0b",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/printed-identification-file-io.mjs",
+        "baseGitSha256": "4ecb728a3d598909c54615a180a3f46b3c303f55bfbcaee280e32e9d175ea76f",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/json-artifacts.mjs",
+        "baseGitSha256": "067811addbc47f44f9826f787e5bbcbc42b0b0e6d6f5488c8105836e7dcb6e07",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/printed-identification-file-service.mjs",
+        "baseGitSha256": "a647f453be101cd4f66938a357ac0d000b85fb7d31b349282cc354005436a460",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/printed-identification-batch-service.mjs",
+        "baseGitSha256": "b5e57e1f7e5c85fa8e4982a5e1ec63cf2c69dfbb4e5dca093aa17201fb4dda59",
+        "unchanged": true
+      }
+    ]
+  },
+  "initialIteration": {
+    "result": "5pass1fail",
+    "cause": "New safe-code regex omitted digits and hid UTF8 error as generic IO.",
+    "fix": "New dedicated service/worker sanitizer accepts A-Z0-9_ code names; shared helpers/services unchanged.",
+    "final": "9 own tests and58 related tests pass."
+  },
+  "semantics": {
+    "completed": "All bounded pair computations finished, not an accuracy acceptance.",
+    "timeoutOrAbort": "Wait for real worker exit; discard result and publish refusal. No partial completed curve.",
+    "cleanupDeadline": "Termination wait can exceed workerMilliseconds; no global native-OS-task settlement guarantee.",
+    "ioDeadline": "Byte-bounded cooperative snapshots, not hard wall-clock IO cancellation.",
+    "publication": "Final abort check before irreversible publishJson call; later abort is reported, no deletion/rollback of committed result.",
+    "atomic": "Exclusive complete-byte visibility, not crash/fsync durability."
+  },
+  "limits": {
+    "configBytes": 65536,
+    "datasetBytesEach": 2000000,
+    "pairs": 8,
+    "driverSteps": 4096,
+    "workerMillisecondsMax": 30000,
+    "artifactBytes": 4194304
+  },
+  "notVerified": [
+    "Real measured curves/calibration",
+    "Unknown bulk/Poisson identification",
+    "Exact finite-strain reproduction or uncertainty propagation",
+    "GUI/MCP/public tool access",
+    "Adversarial filesystem race resistance beyond reused snapshot helpers"
+  ],
+  "progressChanged": false,
+  "newSolverOrNativeSdkOrGui": 0,
+  "nextCandidate": "Future common backend/MCP wrapper may reuse config/configSha256/output summary API after root review; not added here."
+}

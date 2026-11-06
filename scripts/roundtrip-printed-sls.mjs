@@ -1,0 +1,3 @@
+import {pathToFileURL} from 'node:url';
+import {parseSlsPronyFileArgs,writePrintedSlsPronyReport,slsPronyFileError} from './printed-sls-prony-file-service.mjs';
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const controller=new AbortController(),cancel=()=>controller.abort();process.once('SIGINT',cancel);process.once('SIGTERM',cancel);try{const summary=await writePrintedSlsPronyReport(parseSlsPronyFileArgs(process.argv.slice(2)),{signal:controller.signal});console.log(JSON.stringify(summary));process.exitCode=summary.status==='completed'?0:2;}catch(error){console.log(JSON.stringify(slsPronyFileError(error)));process.exitCode=1;}finally{process.removeListener('SIGINT',cancel);process.removeListener('SIGTERM',cancel);}}
