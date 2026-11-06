@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+test('SLS file service types require pinned config and expose summary-only result',()=>{const r=spawnSync(process.execPath,['node_modules/typescript/bin/tsc','--strict','--noEmit','--target','ES2022','--module','ESNext','--moduleResolution','Bundler','tests/fixtures/printed-sls-prony-file-types.ts'],{encoding:'utf8',windowsHide:true});assert.equal(r.status,0,r.stdout+r.stderr);});

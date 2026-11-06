@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "task": "COUPLE5/102",
+  "base": "72da16fe2231e25abc9903035c8da9d2b723b667",
+  "runtime": {
+    "arch": "x64",
+    "platform": "win32",
+    "node": "v24.11.1"
+  },
+  "focused": {
+    "elapsedMs": 2241.2623,
+    "skip": 0,
+    "fail": 0,
+    "command": "node --test tests/fsi-channel-average-force.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+    "pass": 28,
+    "sha256": "b3bb9f771341390f4cc81dca88a2e105f326f0934c46a08afaf7f4c8fe41d2d7",
+    "tests": 28
+  },
+  "types": {
+    "success": true,
+    "declarations": 41,
+    "command": "npm run check:contracts; explicit fsi-channel-average-force-types.ts strict tsc",
+    "sha256": "8cd7c3cfdf239f694bc506585fe009327919ae9172997f997e0f46a1bc29435f"
+  },
+  "unchanged": [
+    "src/fsi-channel-shear-plate.js",
+    "src/fsi-interface-vector.js",
+    "src/unsteady-ns-channel.js",
+    "src/main.js",
+    "src/progress.json",
+    "package.json",
+    "package-lock.json"
+  ],
+  "nonClaims": [
+    "No full-suite CI by owner",
+    "No new SU2/WASM/native/GUI/codec/measurement",
+    "No pressure/normal-wall/ALE/general nonlinear FSI",
+    "No exact SSP-RK3 stage-integrated work claim",
+    "Legacy102 raw evidence retained; new result does not rewrite old semantics"
+  ],
+  "remaining": [
+    "Coupled normal elasticity/ALE and pressure",
+    "Curved transfer transpose mapping",
+    "IQN-ILS and nonlinear/large displacement",
+    "Worker/browser integration",
+    "Independent review and root integration/full CI"
+  ]
+}

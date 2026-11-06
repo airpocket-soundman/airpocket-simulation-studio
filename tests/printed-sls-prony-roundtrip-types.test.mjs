@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+test('roundtrip public types require explicit bulk and SLS conditions',()=>{const r=spawnSync(process.execPath,['node_modules/typescript/bin/tsc','--strict','--noEmit','--target','ES2022','--module','ESNext','--moduleResolution','Bundler','tests/fixtures/printed-sls-prony-roundtrip-types.ts'],{encoding:'utf8',windowsHide:true});assert.equal(r.status,0,r.stdout+r.stderr);});

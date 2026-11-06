@@ -1,0 +1,15 @@
+# Time-averaged tangential channel-wall coupling
+
+`runChannelAverageForce` in `src/fsi-channel-average-force.js` adds a synthetic COUPLE5/102 verification method. Existing `runShearPlateCoupled`, channel solver and vector Aitken behavior stay unchanged. The scope is a periodic-x, x-uniform incompressible laminar channel and a tangentially sliding linear spring/mass plate. There is no measured calibration, normal-wall/pressure coupling, ALE, general FSI, UI/worker or MCP connection.
+
+Input requires `schemaVersion:1`, `method:'time-averaged-midpoint'`, existing fluid parameters, `plate:{mass,stiffness}`, `initialDisplacement`, `dt`, `steps`, `microsteps`, and optionally a dense Array `initialProfile`. Initial plate velocity is zero. SI units are m, s, kg/m³, kinematic viscosity m²/s, plate areal mass kg/m², stiffness N/m³, shear Pa and areal energy J/m². This JSON-input boundary refuses Float64Array, sparse profiles and indexed accessors; custom iterators are not invoked.
+
+Over each macrostep the wall velocity is held at `V=(v0+v1)/2=(d1-d0)/dt`. Bounded microsteps call the real `channelShearFluid.advance`; endpoint wall shears are trapezoidally integrated to approximate `I=∫Fdt`. The plate receives `I/dt` through `m(v1-v0)/dt+k(d0+d1)/2=I/dt`. Only the linear x-uniform response is supported: actual zero/probe-velocity solves identify an affine response, and another actual solve verifies the final force residual. This does not prove nonlinear FSI iteration convergence or general stability.
+
+Plate interface work `V I` and fluid work `-V I` use the same product. The midpoint plate energy identity has only rounding error. Fluid SSP-RK3 and trapezoidal shear/dissipation quadratures retain finite integration error, so exact total energy conservation is not claimed. Separate fluid/plate energy defects, total defect, and areal momentum defect including bottom-wall impulse are reported without clamping. Semi-discrete dissipation includes both half-cell wall gradients and every internal face difference.
+
+Limits are 4096 macrosteps, 4096 microsteps and 2000000 cell-steps including all three fluid responses. Microsteps are subdivided further under the existing viscous stability limit. Save the frozen initial `result.input`, reload JSON and recompute every step. Output profiles, histories and claimed energies cannot restore a state. `synthetic:true,calibrated:false` remain fixed. Zero-energy equilibrium reports relative defect zero; non-equilibrium underflow and nonfinite values are refused.
+
+Independent checks use a directly written monolithic semi-discrete RK4, a one-microstep diffusion-matrix SSP-RK3 polynomial, interface work/momentum/dissipation identities and macro/microstep refinement. Second-order displacement, dissipation and energy-defect convergence is demonstrated on a small synthetic grid. Historical first-order results for method102 remain unchanged; the new method is not a claim of accuracy for arbitrary configurations. See [dated numerical evidence](../evidence/2026-11-07-couple5-average-force.json).
+
+[日本語](../fsi-channel-average-force.md) / [Previous102 audit](fsi-channel-shear-plate-audit-2026-11-04.md)

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "training": {
+    "path": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-prony-cli-nov07-raw\\training.json",
+    "expectedSHA256": "a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48"
+  },
+  "validation": {
+    "path": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\printed-identification-ui-20261104\\airpocket-simulation-studio\\.qa\\printed-sls-prony-cli-nov07-raw\\validation.json",
+    "expectedSHA256": "47b16e08529b19bcb48d9fe7db1e08978eea24a2e1af527dd4ccf130229751f7"
+  },
+  "options": {
+    "model": "sls-relaxation",
+    "maxStrain": 0.01,
+    "minPoints": 5,
+    "maxRelativeStandardError": 0.05,
+    "holdStrainTolerance": 0.000001
+  },
+  "specimenPairs": [
+    {
+      "trainingSpecimenId": "T",
+      "validationSpecimenId": "V"
+    }
+  ],
+  "bulkModulusPa": 1000000000,
+  "rampDurationSeconds": 0.00002,
+  "workerMilliseconds": 5000
+}

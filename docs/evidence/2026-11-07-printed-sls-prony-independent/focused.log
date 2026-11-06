@@ -1,0 +1,38 @@
+✔ one-branch driver matches the independent one-branch reference step-by-step with traction-free lateral faces (15.1232ms)
+✔ two branches with equal relaxation time reproduce one branch of summed modulus; distinct times differ (3.2403ms)
+✔ load-hold-unload-recover-reload loop: energy balance, nondecreasing dissipation, relaxation and recovery without plastic residual (1.4455ms)
+✔ glassy and fully relaxed limits match independent closed-form uniaxial oracles (1.1755ms)
+✔ faster loading gives higher peak nominal stress and time refinement converges (11.1679ms)
+✔ refuses uncalibrated impersonation, envelope violations and oversized inputs without mutating input (1.1633ms)
+✔ linear training-only predictions retain slope and independent signed Pa errors even when validation has a different exact slope (14.597ms)
+✔ bilinear validation with too few points to refit still predicts the declared training kink without averaging or refitting (15.4754ms)
+✔ SLS prediction uses validation hold amplitude and elapsed time from its explicitly declared step, not validation fitting (17.3594ms)
+✔ dataset and specimen identity must be distinct with a complete one-to-one mapping, not inferred ordering (3.5042ms)
+✔ explicit reversed dataset ordering uses each mapped training specimen instead of positional pairing or across-specimen averaging (1.7643ms)
+✔ every recorded condition including batch is matched exactly after unit normalization; mismatches never produce error scores (5.7248ms)
+✔ loading paths outside the window, unloads, holds and strain extrapolation are refused without filtering points (3.6071ms)
+✔ SLS rejects inferred ramps, nonconstant holds and temporal/amplitude extrapolation before validation can be treated as a fit (7.2608ms)
+✔ unidentified training returns a per-pair reason without invented parameters, validation refit, scores or automatic material acceptance (1.8457ms)
+✔ own-data snapshots reject hooks and capacities before await, and later caller edits cannot redirect any dataset or mapping (9.5771ms)
+✔ exact combined sample and pair capacities remain usable and excess total samples refuse before fitting (70.7318ms)
+✔ independent lateral-traction scalar elimination matches every finite-ramp/hold stress measure and energy (30.6569ms)
+{"independentContinuousGridErrorsPa":[17.543615969858365,4.381263032351853,1.0950253536866512]}
+✔ independent continuous SLS finite-ramp oracle gives second-order hold-grid convergence without calling production model (31.9218ms)
+✔ validation stress changes affect only signed errors, never fitted Prony trajectory (16.5473ms)
+✔ abort during second hash stage cannot falsely settle owned pending preparation or publish a partial result (11.8797ms)
+{"roundtripGolden":{"sourceTraining":"a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48","sourceValidation":"03fd1879bbfc676de3814403955bed5a4c64de97d81f6589c11814ec54c84935","pronyParameters":{"bulkModulusPa":1000000000,"equilibriumShearModulusPa":461538461.53846157,"branches":[{"shearModulusPa":395604395.6043961,"relaxationTimeSeconds":1.7948717948717934}]},"trainingMetrics":{"pronyMinusObserved":{"count":81,"biasPa":30903.85082069901,"meanAbsoluteErrorPa":30903.85082069901,"rootMeanSquareErrorPa":31174.266695722174,"maximumAbsoluteErrorPa":48047.90392259229},"pronyMinusIdealStep":{"count":81,"biasPa":30903.85082069855,"meanAbsoluteErrorPa":30903.85082069855,"rootMeanSquareErrorPa":31174.266695721635,"maximumAbsoluteErrorPa":48047.903922588564},"idealStepMinusObserved":{"count":81,"biasPa":4.599123825261622e-10,"meanAbsoluteErrorPa":5.518948590313951e-10,"rootMeanSquareErrorPa":9.817001907056755e-10,"maximumAbsoluteErrorPa":3.725290298461914e-9}},"validationMetrics":{"pronyMinusObserved":{"count":81,"biasPa":7732.148122072166,"meanAbsoluteErrorPa":7732.148122072166,"rootMeanSquareErrorPa":7800.579469951414,"maximumAbsoluteErrorPa":11999.976009219885},"pronyMinusIdealStep":{"count":81,"biasPa":7732.148122071937,"meanAbsoluteErrorPa":7732.148122071937,"rootMeanSquareErrorPa":7800.579469951145,"maximumAbsoluteErrorPa":11999.976009218022},"idealStepMinusObserved":{"count":81,"biasPa":2.299561912630811e-10,"meanAbsoluteErrorPa":2.7594742951569753e-10,"rootMeanSquareErrorPa":4.908500953528377e-10,"maximumAbsoluteErrorPa":1.862645149230957e-9}}}}
+✔ independent rational-modulus/relaxation mapping goldens and Pa/nominal-vs-Piola distinctions (37.7525ms)
+{"convergence":{"normalizedAmplitudeErrors":[0.0014984970052950085,0.0007481235060403124,0.00037303050622553566],"shortRampMaxPa":0.0019518842887009669,"longRampMaxPa":0.3968749102377842,"gridMaximumErrorsPa":[0.004256307883281352,0.0009791346392660216,0.00036999880185817347]}}
+✔ small-amplitude and short-ramp independent convergence rather than false exact reproduction (232.6245ms)
+✔ holdout errors agree with training-only ideal prediction without refitting validation (19.9101ms)
+✔ strict synthetic/step/uniform/bulk/driver budgets reject unsupported physical assumptions (17.7784ms)
+✔ snapshots reject getters and preserve pending options/source; cooperative abort keeps native preparation real (2.2697ms)
+✔ non-aborted async source/options snapshots are bound and exact total step budget is admitted (191.2085ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 702.4694

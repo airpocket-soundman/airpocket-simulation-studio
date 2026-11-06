@@ -6,7 +6,7 @@ import {createAnalysisJobs} from '../src/analysis-jobs.js';
 import {createStudioApi} from '../src/studio-api.js';
 import {analyzeProject} from './headless-analysis.mjs';
 import {publishJson} from './json-artifacts.mjs';
-import {getProjectRevision,canonicalJson} from '../src/project-revision.js';
+import {getProjectRevision,getPhysicalRevision,canonicalJson} from '../src/project-revision.js';
 import {inspectIntermediate} from '../src/intermediate-results.js';
 import {createJobStore,restoredJobView} from './analysis-job-store.mjs';
 
@@ -14,13 +14,13 @@ import {createJobStore,restoredJobView} from './analysis-job-store.mjs';
 // "same startup conditions", NOT file contents: it never reads the input, is not a content hash,
 // holds no raw paths in the record, and does not prove that a same-path file was unchanged.
 // Paths are normalized to absolute form only; case is not folded (no basis to unify case).
-export function startupConditionDigest({path,outputPath,operation='solve',size=5,method='wasm-pcg',adaptive=false,includeFields=false}={}){
- const descriptor={descriptorVersion:1,inputPath:resolve(path),outputPath:resolve(outputPath),operation,size,method,adaptive,includeFields};
+export function startupConditionDigest({path,outputPath,operation='solve',size=5,method='wasm-pcg',adaptive=false,includeFields=false,elementOrder=1}={}){
+ const descriptor={descriptorVersion:1,inputPath:resolve(path),outputPath:resolve(outputPath),operation,size,method,adaptive,includeFields,...(elementOrder===2?{elementOrder:2}:{})};
  return createHash('sha256').update(canonicalJson(descriptor)).digest('hex');
 }
 
 export function summarizeAnalysis({mesh,result}){
- return {mesh:mesh.summary,kind:result?.kind,engine:result?.engine,residual:result?.residual,iterations:result?.iterations,maxDisplacementMm:result?.maxDisplacementMm,maxVonMisesPa:result?.maxVonMisesPa,minTemperature:result?.minTemperature,maxTemperature:result?.maxTemperature,maxSpeedMs:result?.maxSpeedMs,reactionDragN:result?.reactionDragN,stokes:result?.stokes,modeFrequenciesHz:result?.modes?.map(m=>m.frequencyHz),analysisAssessment:result?.analysisAssessment};
+ return {...(result?.kind==='elastic-tet10'?{elementOrder:2,representation:result.representation,viewSupported:false,pointSupported:false,compareSupported:false}:{}),mesh:mesh.summary,kind:result?.kind,engine:result?.engine,residual:result?.residual,iterations:result?.iterations,maxDisplacementMm:result?.maxDisplacementMm,maxVonMisesPa:result?.maxVonMisesPa,minTemperature:result?.minTemperature,maxTemperature:result?.maxTemperature,maxSpeedMs:result?.maxSpeedMs,reactionDragN:result?.reactionDragN,stokes:result?.stokes,modeFrequenciesHz:result?.modes?.map(m=>m.frequencyHz),analysisAssessment:result?.analysisAssessment};
 }
 export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=256,maxArtifactBytes=64_000_000,maxPendingObservationEvents=observationQueueDefaults.maxEvents,maxPendingObservationBytes=observationQueueDefaults.maxBytes,isolation='worker',createProcessWorker,jobStore}={}){
  validateObservationQueueLimits(maxPendingObservationEvents,maxPendingObservationBytes);
@@ -82,11 +82,12 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
    const observe=event=>{if(includeFields)queue.push(event);else{const {mesh,field,...summary}=event;onEvent(summary);}};
    try{
    const output=await analyzeProject(project,options,operation,{signal,observe:true,observeFields:includeFields,onEvent:observe,isolation,...(createProcessWorker?{createProcessWorker}:{})});
+   if(options.elementOrder===2)output.nativeResultRevision=await getPhysicalRevision(output);
    await queue.drain();if(writeError)throw writeError;if(signal.aborted)throw Error('Calculation cancelled');
    beginCommit();
-   const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.analysisAssessment.provisional};
+   const job={schemaVersion:1,jobId,inputRevision,final:true,provisional:output.result?.kind==='elastic-tet10'||output.analysisAssessment.provisional};
    const publication=await publishJson(outputPath,{...output,job},{includeIntegrity:true});
-   return {...summarizeAnalysis(output),intermediateQueue:queue.snapshot(),...publication,outputPath,...(artifactDirectory?{artifactDirectory,intermediateBytes:artifactBytes,intermediateStorageLimited:artifactLimitReported}:{}),job};
+   return {...summarizeAnalysis(output),...(output.nativeResultRevision?{nativeResultRevision:output.nativeResultRevision}:{}),intermediateQueue:queue.snapshot(),...publication,outputPath,...(artifactDirectory?{artifactDirectory,intermediateBytes:artifactBytes,intermediateStorageLimited:artifactLimitReported}:{}),job};
    }finally{queue.close();await queue.drain();signal.removeEventListener('abort',closeQueue);}
   }finally{destinations.delete(key);}
  }});
@@ -102,14 +103,14 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
   return {job,record,snapshot};
  }
  const service={
-  async start({path,outputPath,requestId,operation='solve',size=5,method='wasm-pcg',adaptive=false,includeFields=false}={}){
+  async start({path,outputPath,requestId,operation='solve',size=5,method='wasm-pcg',adaptive=false,includeFields=false,elementOrder=1}={}){
    const pathKey=value=>process.platform==='win32'?resolve(value).toLowerCase():resolve(value);
    if(typeof path!=='string'||!isAbsolute(path)||typeof outputPath!=='string'||!isAbsolute(outputPath)||pathKey(path)===pathKey(outputPath))throw Error('Use distinct absolute input and output paths');
-   if(typeof requestId!=='string'||!requestId||requestId.length>200||!['solve','mesh'].includes(operation)||!Number.isFinite(size)||size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(method)||typeof adaptive!=='boolean'||typeof includeFields!=='boolean')throw Error('Invalid analysis job arguments');
+   if(typeof requestId!=='string'||!requestId||requestId.length>200||!['solve','mesh'].includes(operation)||!Number.isFinite(size)||size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(method)||typeof adaptive!=='boolean'||typeof includeFields!=='boolean'||![1,2].includes(elementOrder))throw Error('Invalid analysis job arguments');
    // Validate first, then fingerprint the observed startup conditions before any input read.
    // Restored metadata cannot prove payload equivalence; its digest only distinguishes the
    // recorded startup conditions from this request. Never replay a retained request ID.
-   const startupDigest=store?startupConditionDigest({path,outputPath,operation,size,method,adaptive,includeFields}):undefined;
+   const startupDigest=store?startupConditionDigest({path,outputPath,operation,size,method,adaptive,includeFields,elementOrder}):undefined;
    const prior=[...restored.values()].find(record=>record.requestId===requestId);
    if(prior){
     // Same digest (or a legacy record that stored no digest): existing restore refusal.
@@ -128,7 +129,7 @@ export function createHeadlessJobService({timeoutMs=120000,maxJobs=32,maxEvents=
     // inside it, before the owning jobId is returned to this request.
     startingReservation=reservation;
     let job;
-    try{job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive},inputRevision,requestId,context:{outputPath:resolvedOutput,includeFields}});}
+    try{job=jobs.start({project,operation:operation==='mesh'?'mesh':'elastic',options:{size,method,adaptive,...(elementOrder===2?{elementOrder:2}:{})},inputRevision,requestId,context:{outputPath:resolvedOutput,includeFields}});}
     finally{startingReservation=undefined;}
     outputPaths.set(job.jobId,resolvedOutput);
     if(store){

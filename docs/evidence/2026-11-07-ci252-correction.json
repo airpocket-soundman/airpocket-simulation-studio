@@ -1,0 +1,29 @@
+{
+  "run": 42295528564,
+  "head": "a8eace7a71925eeee1bf8951d1583bac83d49bea",
+  "initial": {
+    "tests": 2652,
+    "pass": 2641,
+    "fail": 3,
+    "skip": 8,
+    "durationMs": 368893.709297
+  },
+  "failures": [
+    "JP operation correspondence omitted three new MCP tool rows",
+    "EN operation correspondence omitted three new MCP tool rows",
+    "A refusal-summary test incorrectly expected output path to be absent; Windows JSON escaping hid the mistake while Linux revealed it"
+  ],
+  "fix": "Added all three actual Node-only operation rows to both tables. Assert exact requested output identity, bounded summary and absence of raw result/input/stack instead of forbidding the documented output path. Product numerical code and thresholds unchanged.",
+  "finalFullVerification": "Rerun on updated immutable PR head, not inferred from focused success",
+  "secondAttempt": {
+    "run": 42296916464,
+    "head": "54e38e928addec5b8505cbdd6477794f6e899bdb",
+    "tests": 2652,
+    "pass": 2643,
+    "fail": 1,
+    "skip": 8,
+    "durationMs": 383324.999955,
+    "failure": "Operation-table GUI cells lacked the required connector-only classification prefix. Both languages corrected using the established wording; no numerical change."
+  },
+  "followup": "Run both operation correspondence suites, including GUI classification, together with real MCP/capability/CLI tests before rerunning whole CI."
+}

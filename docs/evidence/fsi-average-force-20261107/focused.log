@@ -1,0 +1,36 @@
+✔ every JP specification has an English counterpart and reciprocal link (507.3222ms)
+✔ every task has English title and acceptance criteria (3.574ms)
+✔ actual channel/midpoint displacements converge to independent monolithic RK4; dissipation and energy error are second order (54.6626ms)
+✔ same averaged impulse does opposite fluid/plate work; actual energy and momentum quadratures converge with microstep refinement (31.975ms)
+✔ one-microstep force/state agrees with independent diffusion polynomial and midpoint scalar equation (0.5707ms)
+✔ bounded synthetic fixture improves energy defect over unchanged legacy method without changing legacy semantics (14.4074ms)
+✔ saved input reload recomputes exactly, ignores no claimed result, owns snapshots and preserves callers (12.6718ms)
+✔ zero-energy equilibrium stays finite; capacities and hostile inputs refuse before stepping (9.2175ms)
+✔ free translated equilibrium, tiny resolved amplitudes and mixed initial fluid velocities retain finite diagnostics (2.8897ms)
+✔ the real repository satisfies its module boundaries and the graph is what the table says it is (904.8834ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (495.6397ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (422.0936ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.4931ms)
+✔ import parser ignores strings that merely contain "from" (0.3096ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (0.1659ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.2442ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.1607ms)
+✔ a real import inside a template substitution is still found (0.1491ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (53.5163ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (7.2098ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.3551ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (9.4459ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (29.7456ms)
+✔ a forbidden upward edge (domain -> ui) is reported (25.4038ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (29.3356ms)
+✔ an unclassified new file fails, including files in subdirectories (16.1177ms)
+✔ allowlist entries must be used and justified (0.2504ms)
+✔ collectGraph resolves relative imports inside subdirectories (18.0985ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2241.2623

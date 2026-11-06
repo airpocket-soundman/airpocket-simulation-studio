@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-07",
+  "base": "a0a8f87d4ee00f189910b17e1fb87772d3191a49",
+  "preCloseoutHead": "6740b48cf7ff6128bbadeb1ef117915c34be7cdd",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": "Two development waves: raw-bound holdout CLI/MCP; SLS/Prony mapping and owned file execution; average-force FSI and owned file execution; full Tet10 saved jobs; independent audits; formal MCP entry and skill guidance",
+  "verification": {
+    "related": {
+      "tests": 97,
+      "pass": 97,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 13338.3052
+    },
+    "contracts": 43,
+    "formalMcp": {
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0
+    },
+    "tasklist": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0
+    },
+    "docsSkillMcp": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "rawBlobFilesVerified": 49,
+    "diffCheck": "passed after preserving raw CRLF bytes under two exact evidence-only whitespace exceptions"
+  },
+  "taskCounts": {
+    "total": 197,
+    "released": 159,
+    "building": 34,
+    "checking": 4,
+    "queued": 0,
+    "remaining": 38
+  },
+  "parentStatusesPromoted": false,
+  "allAcceptanceCriteriaPreserved": true,
+  "initialLocalCorrections": [
+    "One-ULP exact arithmetic test expectation; reciprocal docs links; missing MCP initialized notification were corrected without numerical threshold changes.",
+    "A local generated MCP insertion had a string-replacement syntax error; own file was restored and a literal callback insertion applied, then actual MCP tests passed.",
+    "Two captured raw CRLF files failed whitespace checks; their bytes and manifest hashes remain unchanged under exact evidence-only attributes. Hashed package control bytes now retain their original LF."
+  ],
+  "physicalAccuracyVerified": false,
+  "measuredCalibration": false,
+  "finalWholeVerification": "Corresponding immutable-head PR CI; not inferred from related tests.",
+  "sourceFiles": [
+    {
+      "path": "scripts/studio-mcp.mjs",
+      "checkoutSha256": "c7af1faf93e0faec29455017b52b2f09c00a7a32ce0d5f24926b83559c1a82ef"
+    },
+    {
+      "path": "src/capabilities.js",
+      "checkoutSha256": "18a4d0c87d5fdf111e717100e93356b61f88791e857b8996494c56fcb1a2f89b"
+    },
+    {
+      "path": "scripts/printed-holdout-file-service.mjs",
+      "checkoutSha256": "d3b2351cf54cb942be68d287a92db967dae24e4b4fcfb99deb96257eb5771e13"
+    },
+    {
+      "path": "scripts/fsi-average-file-service.mjs",
+      "checkoutSha256": "40b62631236f0547f8ed0a2f45665011d967eae0a93eb5aa7bd07147ff131ec9"
+    },
+    {
+      "path": "scripts/printed-sls-prony-file-service.mjs",
+      "checkoutSha256": "cddd264eba1f1649b14e216f6f8b17d826eed150bd036f3748dc5323a63d9f0a"
+    },
+    {
+      "path": "src/solver-adapters/tet10-native-adapter.js",
+      "checkoutSha256": "1f88efbfbe25501e804457b1440e300085142ec1f420fe8a067ccf5115edc2bb"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/evidence/parallel-integration-20261107/.gitattributes",
+      "bytes": 26,
+      "sha256": "155348a89d5e749f50d336f8f164a39bf8415179177b36e8b51766f3ab9a16d3"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/contracts.log",
+      "bytes": 157,
+      "sha256": "efe2124a43aa53098d9cd4bad21b4a2e3c6b5acbdd6715857ff603259052a780"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/docs-skill-mcp.log",
+      "bytes": 401,
+      "sha256": "f60d69e297eb07891d051c6d6dc99cb53cb21f3a44697c3e533658b0eccc88cd"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/formal-mcp.log",
+      "bytes": 1303,
+      "sha256": "81bb138c39492e1291e782be61d19451e30be4c1cca8ae1b29c740c36cc6a397"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/raw-blob-audit.json",
+      "bytes": 12870,
+      "sha256": "2367359a75ffd16890f6f65cb6bc3be21d0e311c47be6358025f1af53ac54754"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/related.log",
+      "bytes": 14116,
+      "sha256": "6463bd11d77976003347c36f360388a7cf55faf6833bd5d7a5c6ace233791cc0"
+    },
+    {
+      "path": "docs/evidence/parallel-integration-20261107/tasklist.log",
+      "bytes": 764,
+      "sha256": "77d3d6603bfea6e600804e796b12bfc076fbb250481eca98c0070040ab3a9e68"
+    }
+  ]
+}

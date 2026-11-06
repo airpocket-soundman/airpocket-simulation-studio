@@ -1,0 +1,19 @@
+# Saved synthetic FSI average-force execution
+
+[日本語](../fsi-average-file-cli.md)
+
+`node scripts/run-fsi-average.mjs --request <absolute JSON path> --output <new absolute JSON path>` recomputes an explicit [time-averaged-force configuration](fsi-channel-average-force.md) in an independent Node worker and publishes a new JSON artifact. It adds no GUI, MCP, material application or measurement calibration. The input is the pure API configuration (`schemaVersion:1,method:'time-averaged-midpoint'`, fluid/plate/initial state/dt/steps/microsteps), not an output-state restore. Initial plate velocity remains zero; SI units and the linear x-uniform laminar tangential-wall scope remain unchanged.
+
+Requests are strict UTF-8 without BOM, at most65536 bytes, depth6,2048 values and512 array entries. Decoded duplicate keys, nonfinite numbers, unknown core fields and invalid versions are refused. The shared bounded FD reader requires regular files and link-free absolute paths, rejecting growth/replacement during reading. Inputs are never written. Artifacts identify the raw snapshot bytes/SHA, without locking subsequent external edits or proving authentication/calibration. This is not an OS sandbox against hostile parent-directory replacement.
+
+Kernel work remains capped at2000000 cell-steps and4096 macro/microsteps. Workers use Node V8 heap/stack limits of64MiB old/16MiB young/4MiB stack; these do not cap total process RSS. The default execution timeout is120000ms; host API `writeFsiAverageFiles(paths,{timeoutMs,signal})` accepts1..120000ms and AbortSignal. This timeout covers worker execution, not all OS filesystem I/O. CLI SIGINT/SIGTERM use the same cancellation path. Timeout/cancellation/errors await both owned termination and the exit event before returning, without publishing a completed artifact.
+
+Normal completion also waits for exit0 and both private stream endings, not merely a result message. stdout/stderr are privately drained with no retention or parent forwarding; any nonempty output refuses the operation and awaits owned termination. Before publication, checks enforce dense own array data, finite numeric profiles and required history fields, bounded safe-integer work and correspondence with the normalized initial input. Duplicate messages and null/sparse/nonfinite results are refused. Float64Array profiles are explicitly encoded as ordinary finite-number arrays in m/s. The artifact limit is4194304 bytes; a real4097-row bounded synthetic regression fits. This is not a fixed byte-size guarantee for every numerical configuration; excess output is refused before publication.
+
+Artifacts contain `methodVersion:1,synthetic:true,calibrated:false`, raw request identity, canonical normalized-configuration SHA, settled worker evidence and full results. The canonical hash identifies input content, not a signature or calibration. Compact stdout includes output bytes/SHA and finite final diagnostics. Exit0 means completed; failures exit1 with stable codes and available snapshot identities, without raw input bodies or stacks.
+
+Exclusive atomic publication never replaces an existing file, directory or link. Two concurrent CLI writers have one complete winner. Publication start is the commit point; later cancellation does not undo a complete artifact. Tests cover real CLI success/races, real-worker cancellation/exit, timeout ownership waits, an independent one-step diffusion oracle, maximum history, declarations and malformed protocol data. They establish no GUI, measurement or general FSI success.
+
+## Formal MCP
+
+`studio_run_fsi_average({request,output})` uses the same saved-file service. `studio_capabilities.fsiAverageSavedFiles` is available only for Node. Exclusive new-file publication is non-idempotent and does not change browser inputs. This synchronous stdio call uses the fixed120s worker deadline and advertises no separate cancellation notification; direct Node API/CLI cancellation remains distinct.

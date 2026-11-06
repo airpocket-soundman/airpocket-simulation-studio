@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-07",
+  "base": "a0a8f87",
+  "scope": "Read-only saved-file holdout prediction entry; raw hashes before training-only comparison; exclusive artifact publication",
+  "tests": {
+    "total": 18,
+    "pass": 18,
+    "fail": 0,
+    "skip": 0
+  },
+  "actualCli": {
+    "status": "compared",
+    "artifactBytes": 2312,
+    "sha256": "801159f3c837dd49d6c4c8dc10be0fe16c975faf41e7643247fd483d665a60d9",
+    "biasPa": -400000,
+    "rmsPa": 432049.37989385735
+  },
+  "initialFailures": [
+    "Independent exact-E assertion differed by one floating-point ULP; harness changed to two machine-epsilon relative bound. Production thresholds unchanged.",
+    "New docs lacked reciprocal language links; links added and docs test passed."
+  ],
+  "physicalIndependenceVerified": false,
+  "calibrated": false,
+  "accuracyVerified": false,
+  "remaining": [
+    "Real measurements/calibration",
+    "GUI/MCP entry for holdout",
+    "Automatic material application is not implemented"
+  ],
+  "files": [
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/.gitattributes",
+      "bytes": 26,
+      "sha256": "155348a89d5e749f50d336f8f164a39bf8415179177b36e8b51766f3ab9a16d3"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/artifact.json",
+      "bytes": 2312,
+      "sha256": "801159f3c837dd49d6c4c8dc10be0fe16c975faf41e7643247fd483d665a60d9"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/focused.log",
+      "bytes": 2360,
+      "sha256": "fd63daec622ce8b47655e2f65b49f000697f29d59bf34db380c3400f20b16416"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/request.json",
+      "bytes": 715,
+      "sha256": "72dcf134d7150e9de1480cbd751f155d6e3e4848b8c76422e257a804b4650cb6"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/summary.json",
+      "bytes": 405,
+      "sha256": "8fcd3e583874a5bf1ee4d95c0050336cd0f563b7cdc48dfac8d00cccfeaa8bc6"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/training.json",
+      "bytes": 2338,
+      "sha256": "16a0ab21f1b6939ea450b5cf3129e8215c75c9757ffa28d8bc00b6086fa7d0cc"
+    },
+    {
+      "path": "docs/evidence/printed-holdout-cli-20261107/validation.json",
+      "bytes": 697,
+      "sha256": "aca7176a5899754bdb0406887fafdb993fce81b2cb22ec4ae08ae389c2eebd1c"
+    }
+  ]
+}

@@ -147,3 +147,6 @@
 | `studio_validate_cases` | read-only | none | 同一経路: `#case-import` `#case-list` — 読込で同じstore.import、行ボタン「保存結果を3D表示」で同じprepareCaseViewによる検証 | `references/case-archives-measurements.md`, `references/saved-inputs.md` |
 | `studio_browser_sessions` | read-only | none | 関連（別処理）: `#agent-state` — GUIは自身の接続状態だけを示す。接続一覧ではない | `references/browser-session.md` |
 | `studio_browser_call` | live-write (scope per method) | none | 関連（別処理）: `#agent-connection` `#agent-endpoint` `#agent-token` `#agent-diagnose` `#agent-connect` `#agent-disconnect` `[data-agent-scope="inspect"]` `[data-agent-scope="edit"]` `[data-agent-scope="analyze"]` `[data-agent-scope="view"]` — GUIは接続と許可範囲を設定する側で、呼び出し自体はコネクタから届く | `references/browser-session.md`, `references/saved-inputs.md` |
+| `studio_run_fsi_average` | write/execute | none | connector only — no GUI control by design (新規ファイルへの平均力連成検証。Node保存実行のみ、GUIなし) | `references/experimental-saved-verification.md` |
+| `studio_roundtrip_printed_sls` | write/execute | none | connector only — no GUI control by design (SHA固定の合成SLS/Pronyレポート。Node保存実行のみ、材料適用なし) | `references/experimental-saved-verification.md` |
+| `studio_compare_printed_holdout` | write/execute | none | connector only — no GUI control by design (学習のみ同定の別片予測。Node保存ファイルのみ、GUIなし) | `references/experimental-saved-verification.md` |

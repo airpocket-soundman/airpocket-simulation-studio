@@ -1,0 +1,108 @@
+✖ real CPU job exposes mesh and numerical events, freezes input and publishes only complete output (746.1528ms)
+✖ real transient fields reference the correct mesh and agree with saved final temperature/history (816.8478ms)
+✖ job cancellation, timeout, artifact limits and invalid options preserve input and existing files (1028.3371ms)
+✖ restart startup-condition digest separates identical from changed conditions before any input read or worker start (842.5146ms)
+✔ concurrent starts never persist the competing startup digest for the accepted job (53.7279ms)
+✔ same-condition concurrent retries share one job while changed conditions are refused before any read (43.2436ms)
+✔ starts that fail before owning a job release their reservation; 32 failures do not block the same request ID (46.9414ms)
+✔ a legacy record without a startup digest stays restored-only and never starts a worker (9.8017ms)
+✔ runtime identity is preserved across case roundtrip without stamping legacy output or accepting contradictory metadata (8.8167ms)
+✔ case snapshots and exported copies remain independent; archives roundtrip atomically (0.9222ms)
+✔ comparison keeps physics units and bounds case collection (1.2577ms)
+✔ corrupt calculation operation, discipline and result ranges cannot replace saved cases (1.8915ms)
+✔ adaptive budgets roundtrip and invalid imported settings cannot replace cases (0.9046ms)
+✔ GPU verification and timing metadata are validated before archive replacement (1.049ms)
+✔ result probe interpolates fields and rejects points outside the solid (2.565ms)
+✔ transient/modal probes carry their physical units and explicit visible-element selection (0.4479ms)
+✔ native profile is explicit and legacy startup hashes remain unchanged (5.7462ms)
+✔ real worker Tet10 job preserves native representation and exact axial reference (1358.9517ms)
+✔ real process Tet10 job preserves native representation and exact axial reference (1850.2824ms)
+✔ native saved artifacts cannot enter Tet4 case/view/point/compare paths (1.1926ms)
+✔ whole-face and bounded static profile rejects partial/overlap and unsupported physics (1.1845ms)
+✔ formal stdio discovers element order, runs native job and refuses archived probe (1716.6573ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 18
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5259.3865
+
+✖ failing tests:
+
+test at tests\analysis-job-service.test.mjs:18:1
+✖ real CPU job exposes mesh and numerical events, freezes input and publishes only complete output (746.1528ms)
+  AssertionError [ERR_ASSERTION]: {"code":"JOB_FAILED","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","failure":{"schemaVersion":1,"code":"ANALYSIS_PREPARATION_FAILED","stage":"preparation","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","diagnostics":[{"code":"ANALYSIS_PREPARATION_FAILED","severity":"error","stage":"preparation","target":"/","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","evidence":{},"suggestions":[],"requiresUserIntent":true}]}}
+  + actual - expected
+  
+  + 'failed'
+  - 'succeeded'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/analysis-job-service.test.mjs:26:53)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'succeeded',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\analysis-job-service.test.mjs:34:1
+✖ real transient fields reference the correct mesh and agree with saved final temperature/history (816.8478ms)
+  AssertionError [ERR_ASSERTION]: {"code":"JOB_FAILED","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","failure":{"schemaVersion":1,"code":"ANALYSIS_PREPARATION_FAILED","stage":"preparation","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","diagnostics":[{"code":"ANALYSIS_PREPARATION_FAILED","severity":"error","stage":"preparation","target":"/","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","evidence":{},"suggestions":[],"requiresUserIntent":true}]}}
+  + actual - expected
+  
+  + 'failed'
+  - 'succeeded'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/analysis-job-service.test.mjs:38:142)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'succeeded',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\analysis-job-service.test.mjs:46:1
+✖ job cancellation, timeout, artifact limits and invalid options preserve input and existing files (1028.3371ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'failed'
+  - 'succeeded'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/analysis-job-service.test.mjs:52:176)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'succeeded',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\analysis-job-service.test.mjs:58:1
+✖ restart startup-condition digest separates identical from changed conditions before any input read or worker start (842.5146ms)
+  AssertionError [ERR_ASSERTION]: {"code":"JOB_FAILED","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","failure":{"schemaVersion":1,"code":"ANALYSIS_PREPARATION_FAILED","stage":"preparation","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","diagnostics":[{"code":"ANALYSIS_PREPARATION_FAILED","severity":"error","stage":"preparation","target":"/","message":"ENOENT: no such file or directory, open 'C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\public\\fem-kernel.wasm'","evidence":{},"suggestions":[],"requiresUserIntent":true}]}}
+  + actual - expected
+  
+  + 'failed'
+  - 'succeeded'
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/analysis-job-service.test.mjs:64:53)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'failed',
+    expected: 'succeeded',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

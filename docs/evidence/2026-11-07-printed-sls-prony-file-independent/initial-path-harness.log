@@ -1,0 +1,31 @@
+✔ worker stdout and stderr cannot contaminate summary and are refused only after actual exit (177.867ms)
+✖ abort after atomic link preserves completed artifact and truthfully marks late observation (102.2976ms)
+✔ semantic-equivalent whitespace still changes pinned config bytes and cannot start a worker (20.6178ms)
+✔ different pinned configs racing for one output bind the winner bytes to its own sources only (250.6091ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 662.428
+
+✖ failing tests:
+
+test at tests\printed-prony-file-independent.test.mjs:10:1
+✖ abort after atomic link preserves completed artifact and truthfully marks late observation (102.2976ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/printed-prony-file-independent.test.mjs:10:470)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,4 +1,5 @@
 import {invert} from './fem-core.js';
+import {rejectNativeTet10View} from './tet10-job-profile.js';
 import {stokesVelocityAt} from './stokes-interpolation.js';
 export function sampleDisplayedResult(mesh,result,point,options={},display={}){
  if(result.kind==='acousticTransient'){
@@ -13,6 +14,7 @@ export function sampleDisplayedResult(mesh,result,point,options={},display={}){
  return sampleResult(mesh,result,point,result.kind==='modal'?{...options,modeIndex:options.modeIndex??display.modeIndex??0}:options);
 }
 export function sampleResult(mesh,result,point,{bodyIndex,modeIndex=0,elementIndex}={}){
+ rejectNativeTet10View(mesh,result);
  if(mesh.nodeBodies&&(!Array.isArray(mesh.nodeBodies)||mesh.nodeBodies.length!==mesh.nodes.length/3||!mesh.nodeBodies.every(v=>Number.isInteger(v)&&v>=0)))throw Error('Invalid probe body identifiers');
  if(elementIndex!==undefined&&(!Number.isInteger(elementIndex)||elementIndex<0||elementIndex>=mesh.tetrahedra.length))throw Error('Invalid probe element');let first=null;
  if(bodyIndex!==undefined&&(!Number.isInteger(bodyIndex)||bodyIndex<0||!mesh.nodeBodies))throw Error('Invalid probe body');

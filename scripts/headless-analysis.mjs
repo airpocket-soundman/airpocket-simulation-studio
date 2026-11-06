@@ -4,12 +4,14 @@ import {Worker} from 'node:worker_threads';
 import {createStudioApi} from '../src/studio-api.js';
 import {requireAnalysisPreflight} from '../src/analysis-preflight.js';
 import {validateRuntimeIdentity} from '../src/runtime-identity.js';
+import {validateTet10JobProfile} from '../src/tet10-job-profile.js';
 export async function analyzeProject(project,options={},operation='elastic',runtime={}){
  const api=createStudioApi();api.loadProject(project);const input=api.exportProject();
  if(!input.sourceModel)throw Error('Project has no source model; import STEP/STL or use a built-in solid');
  if(!['mesh','elastic'].includes(operation))throw Error('Unknown analysis operation');
  const settings=structuredClone({size:5,method:'wasm-pcg',adaptive:false,maxRounds:3,...options});
  if(!Number.isFinite(settings.size)||settings.size<=0||!['wasm-pcg','pcg','pcg-strict','mfem-wasm'].includes(settings.method))throw Error('Invalid CPU analysis settings');
+ validateTet10JobProfile(input,settings,operation);
  const isolation=runtime.isolation??'worker';if(!['worker','process'].includes(isolation))throw Error('Invalid analysis isolation');
  if(runtime.createProcessWorker!==undefined&&typeof runtime.createProcessWorker!=='function')throw Error('Invalid process worker factory');
  if(runtime.signal?.aborted)throw Error('Calculation cancelled');
