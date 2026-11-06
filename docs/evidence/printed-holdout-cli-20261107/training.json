@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "id": "synthetic-identification-linear-elastic",
+  "revision": "1",
+  "provenance": "synthetic",
+  "units": {
+    "length": "mm",
+    "force": "N",
+    "time": "s",
+    "temperature": "degC",
+    "speed": "mm/s"
+  },
+  "instrument": {
+    "id": "invented-algorithm-example-no-device",
+    "hardwareRevision": "synthetic-1",
+    "softwareRevision": "synthetic-1"
+  },
+  "calibration": {
+    "status": "unverified",
+    "forceEvidence": null,
+    "displacementEvidence": null,
+    "dimensionEvidence": null
+  },
+  "specimens": [
+    {
+      "id": "synthetic-example",
+      "dimensions": [
+        1,
+        1,
+        10
+      ],
+      "gaugeLength": 10,
+      "buildDirection": [
+        0,
+        0,
+        1
+      ],
+      "batch": "invented-no-physical-batch",
+      "temperature": 20,
+      "speed": 0.1,
+      "displacementKind": "gauge",
+      "samples": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0.5,
+          0.005
+        ],
+        [
+          2,
+          1,
+          0.01
+        ],
+        [
+          3,
+          1.5,
+          0.015
+        ],
+        [
+          4,
+          2,
+          0.02
+        ],
+        [
+          5,
+          2.5,
+          0.025
+        ],
+        [
+          6,
+          3,
+          0.03
+        ],
+        [
+          7,
+          3.5,
+          0.035
+        ],
+        [
+          8,
+          4,
+          0.04
+        ],
+        [
+          9,
+          4.500000000000001,
+          0.045000000000000005
+        ],
+        [
+          10,
+          5,
+          0.05
+        ],
+        [
+          11,
+          5.5,
+          0.05499999999999999
+        ],
+        [
+          12,
+          6,
+          0.06
+        ],
+        [
+          13,
+          6.500000000000001,
+          0.065
+        ],
+        [
+          14,
+          7,
+          0.07
+        ],
+        [
+          15,
+          7.5,
+          0.075
+        ],
+        [
+          16,
+          8,
+          0.08
+        ],
+        [
+          17,
+          8.5,
+          0.085
+        ],
+        [
+          18,
+          9.000000000000002,
+          0.09000000000000001
+        ],
+        [
+          19,
+          9.5,
+          0.095
+        ],
+        [
+          20,
+          10,
+          0.1
+        ]
+      ]
+    }
+  ]
+}
