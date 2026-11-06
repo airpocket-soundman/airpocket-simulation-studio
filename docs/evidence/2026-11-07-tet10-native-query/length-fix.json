@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:47:43.398Z",
+  "base": "7985b0f18b28c9698dd80b2f72d6d5bb663802d8",
+  "finding": "Array Proxy get(length) could change the fourth read, enlarging the sequence after capacity/key-count checks.",
+  "fix": "Read the own data length descriptor once; safe-integer/cap check and use the same captured length in key count and indexed traversal.",
+  "tests": {
+    "pass": 14,
+    "fail": 0,
+    "skip": 0,
+    "elapsedMs": 716.0326,
+    "docs": 2
+  },
+  "probe": "length get would return16385 after prior3; fixed implementation invokes it0times for both saved performance and point. No huge allocation tested.",
+  "femRuns": 0,
+  "sourceWorkingSha256": "c8192a47e0bc648d2d0bd326bfa7b52278b83d89a9822ad71a4701a0e159f309",
+  "raw": {
+    "path": "length-fix.log",
+    "bytes": 1713,
+    "sha256": "d53f86724655099ecb0a37d7432d70fec88240e50ef78cecee4265dd2c4e3562"
+  }
+}

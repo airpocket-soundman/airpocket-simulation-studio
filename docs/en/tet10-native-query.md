@@ -17,3 +17,5 @@ Node `queryNativeTet10File({path, expectedRawSHA256, pointMm})` reads an8MiB cap
 ## Dense-input follow-up (2026-11-07)
 
 Independent audit found that a non-index numeric property could compensate a hole in the old snapshot own-key count, notably in hash-excluded performance arrays. This was a dense own-data contract defect, not a numerical solution error. Arrays now traverse fixed indices0..length−1 and require every own enumerable data descriptor. Equivalent malformed points now raise INVALID rather than OUTSIDE. Normal dense performance remains accepted; no additional FEM ran. [Fix evidence](../evidence/2026-11-07-tet10-native-query/dense-fix.json)
+
+A further resource-bound check snapshots array length once from its own data descriptor, using that same validated value for capacity, key count and traversal. An Array Proxy length get trap therefore cannot enlarge traversal after the capacity check. A bounded16385-value probe confirms zero length get calls; no huge allocation was attempted.
