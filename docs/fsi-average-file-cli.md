@@ -13,3 +13,7 @@
 成果物には `methodVersion:1,synthetic:true,calibrated:false`、raw要求identity、正規化初期設定のcanonical SHA、終了確認、全結果を含みます。canonical SHAも入力内容同一性であり、署名や実測校正ではありません。stdoutは出力bytes/SHAと有限の終端診断を含む小さいsummaryです。通常終了は0、失敗は1で安定codeだけを返します。raw入力本文・stackは返しません。利用可能な失敗snapshotのSHAは残します。
 
 出力はexclusive atomic publicationで既存ファイル・directory・linkを置き換えません。同時2実行は1件だけが完全な成果物を出版します。出版開始がcommit点で、それ以後の取消では完成ファイルを取り消しません。実CLI成功/競合、実worker取消終了、timeoutで終了待ちするhost境界、独立1step拡散oracle、最大history、型と不正protocolを回帰しました。GUI/実測/一般FSIの成功とは区別します。
+
+## 正式MCP
+
+`studio_run_fsi_average({request,output})` は同じ保存サービスを使います。`studio_capabilities.fsiAverageSavedFiles` はNode対象だけavailableです。新規ファイルを書き出す非冪等な操作で、browser入力を変更しません。この同期stdio呼出しは固定120秒worker期限を使い、別の取消通知を保証しません。Node API/CLIの取消とは区別してください。

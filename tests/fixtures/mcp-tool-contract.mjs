@@ -11,6 +11,8 @@ const savedTools=[
   "studio_capabilities",
   "studio_compare_cases",
   "studio_compare_printed_holdout",
+  "studio_run_fsi_average",
+  "studio_roundtrip_printed_sls",
   "studio_create_builtin_project",
   "studio_diagnose_execution",
   "studio_edit_project",

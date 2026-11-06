@@ -25,3 +25,7 @@ The final Abort check precedes the irreversible decision to call publishJson. La
 
 
 Worker stdout/stderr are isolated with dedicated readable streams. Any nonempty output causes typed WORKER_STDIO refusal, not a parent stdout/stderr write. Content is discarded; observed-byte metadata saturates at4097 with a truncation flag. Publication waits for both actual worker exit and stream end/close. The plain-JS worker uses execArgv:[] rather than inheriting incompatible inline-host flags; an actual --input-type=module -e host is covered. Original pre-isolation capture bytes remain historical and unchanged.
+
+## Formal MCP
+
+`studio_roundtrip_printed_sls({config,configSha256,output})` uses the same saved-file service. `studio_capabilities.printedSlsPronySavedFiles` is available only for Node. Exclusive new-file publication is non-idempotent and does not add calibration, material application or browser permissions. The config supplies an explicit worker deadline; this synchronous stdio call advertises no separate cancellation notification.

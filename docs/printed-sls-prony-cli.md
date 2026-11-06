@@ -25,3 +25,7 @@ service `writePrintedSlsPronyReport({config,configSha256,output},{signal})` はM
 
 
 Workerのstdout/stderrは専用streamへ隔離し、非空ならWORKER_STDIOで拒否します。内容を親stdout/stderrへ流さず破棄し、観測byte数だけ4097で飽和・超過flagを記録。実worker exitと両stream end/closeを待って公開します。純JS workerはexecArgv:[]としてinline hostの非互換flagを継承しません。実際の--input-type=module -e入口も回帰確認済みです。隔離追加前の実CLI原本bytesは履歴として変更しません。
+
+## 正式MCP
+
+`studio_roundtrip_printed_sls({config,configSha256,output})` は同じ保存サービスを使います。`studio_capabilities.printedSlsPronySavedFiles` はNode対象だけavailableです。新規ファイルを排他的に保存する非冪等な操作で、実測校正・材料適用やbrowser権限を追加しません。configの明示worker期限を使い、同期stdioの別取消通知は保証しません。

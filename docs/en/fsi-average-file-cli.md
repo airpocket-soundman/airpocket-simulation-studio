@@ -13,3 +13,7 @@ Normal completion also waits for exit0 and both private stream endings, not mere
 Artifacts contain `methodVersion:1,synthetic:true,calibrated:false`, raw request identity, canonical normalized-configuration SHA, settled worker evidence and full results. The canonical hash identifies input content, not a signature or calibration. Compact stdout includes output bytes/SHA and finite final diagnostics. Exit0 means completed; failures exit1 with stable codes and available snapshot identities, without raw input bodies or stacks.
 
 Exclusive atomic publication never replaces an existing file, directory or link. Two concurrent CLI writers have one complete winner. Publication start is the commit point; later cancellation does not undo a complete artifact. Tests cover real CLI success/races, real-worker cancellation/exit, timeout ownership waits, an independent one-step diffusion oracle, maximum history, declarations and malformed protocol data. They establish no GUI, measurement or general FSI success.
+
+## Formal MCP
+
+`studio_run_fsi_average({request,output})` uses the same saved-file service. `studio_capabilities.fsiAverageSavedFiles` is available only for Node. Exclusive new-file publication is non-idempotent and does not change browser inputs. This synchronous stdio call uses the fixed120s worker deadline and advertises no separate cancellation notification; direct Node API/CLI cancellation remains distinct.
