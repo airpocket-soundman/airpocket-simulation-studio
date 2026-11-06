@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "task": "COUPLE5/102",
+  "base": "72da16fe2231e25abc9903035c8da9d2b723b667",
+  "synthetic": true,
+  "calibrated": false,
+  "input": {
+    "schemaVersion": 1,
+    "method": "time-averaged-midpoint",
+    "fluid": {
+      "cellsX": 4,
+      "cellsY": 8,
+      "height": 1,
+      "length": 1,
+      "density": 1,
+      "kinematicViscosity": 0.1
+    },
+    "plate": {
+      "mass": 0.5,
+      "stiffness": 2
+    },
+    "initialDisplacement": 0.1,
+    "dt": 0.025,
+    "steps": 8,
+    "microsteps": 4
+  },
+  "reference": {
+    "method": "independent monolithic semi-discrete RK4",
+    "steps": 1000,
+    "displacementM": 0.09306841160575144,
+    "velocityMPerS": -0.06550365383275464,
+    "dissipatedJPerM2": 0.00017764511796966386
+  },
+  "macro": [
+    {
+      "dt": 0.025,
+      "displacementErrorM": 0.0000018300570586160525,
+      "dissipationErrorJPerM2": 1.2525083809350403e-7,
+      "maxRelativeEnergyDefect": 0.000006743643208087511,
+      "maxPlateEnergyDefectJPerM2": 1.9447876468958736e-18,
+      "maxRelativeForceResidual": 2.3291040148809826e-15,
+      "cellStepsUpperBound": 3072
+    },
+    {
+      "dt": 0.0125,
+      "displacementErrorM": 4.537793392572764e-7,
+      "dissipationErrorJPerM2": 2.9246838802079577e-8,
+      "maxRelativeEnergyDefect": 0.000001570194247887957,
+      "maxPlateEnergyDefectJPerM2": 3.0323779511703952e-18,
+      "maxRelativeForceResidual": 6.295213402675466e-15,
+      "cellStepsUpperBound": 6144
+    },
+    {
+      "dt": 0.00625,
+      "displacementErrorM": 1.1335650992871926e-7,
+      "dissipationErrorJPerM2": 7.159581304200377e-9,
+      "maxRelativeEnergyDefect": 3.811448804139083e-7,
+      "maxPlateEnergyDefectJPerM2": 2.944286524655948e-18,
+      "maxRelativeForceResidual": 1.078957662841732e-14,
+      "cellStepsUpperBound": 12288
+    }
+  ],
+  "macroOrders": {
+    "displacement": [
+      2.011825801247006,
+      2.001123678354096
+    ],
+    "dissipation": [
+      2.098467655077402,
+      2.0303335712368544
+    ],
+    "energyDefect": [
+      2.102585163166221,
+      2.0425316422932926
+    ]
+  },
+  "micro": [
+    {
+      "microsteps": 1,
+      "energyDefectJPerM2": 2.8953369836728915e-7,
+      "maxMomentumDefectKgPerMS": 8.134937268658416e-7,
+      "cellStepsUpperBound": 1536
+    },
+    {
+      "microsteps": 2,
+      "energyDefectJPerM2": 6.574492174282742e-8,
+      "maxMomentumDefectKgPerMS": 2.2409404183884165e-7,
+      "cellStepsUpperBound": 3072
+    },
+    {
+      "microsteps": 4,
+      "energyDefectJPerM2": 1.570194247887957e-8,
+      "maxMomentumDefectKgPerMS": 5.824875152799016e-8,
+      "cellStepsUpperBound": 6144
+    },
+    {
+      "microsteps": 8,
+      "energyDefectJPerM2": 3.839093308879993e-9,
+      "maxMomentumDefectKgPerMS": 1.4818793120660027e-8,
+      "cellStepsUpperBound": 12288
+    }
+  ],
+  "microOrders": {
+    "energyDefect": [
+      2.1387799035355193,
+      2.0659364171362613,
+      2.0321055148665104
+    ],
+    "momentumDefect": [
+      1.860026929503256,
+      1.943805258040946,
+      1.974799172400155
+    ]
+  },
+  "unchangedLegacySameFixture": {
+    "maxRelativeEnergyDefect": 0.00002895336990334229,
+    "comparisonScope": "this synthetic fixture only; historical102 results are not rewritten"
+  },
+  "limitations": [
+    "Time-averaged force is trapezoidal microstep quadrature, not exact RK-stage work",
+    "Constant wall velocity over macrostep; x-uniform linear laminar tangential model only",
+    "No ALE, pressure/normal wall, nonlinear FSI, UI, worker, MCP, measured calibration or general stability claim",
+    "Input JSON replay recomputes from initial state, not result/state restore"
+  ]
+}
