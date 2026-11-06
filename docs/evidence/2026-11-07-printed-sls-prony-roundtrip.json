@@ -1,0 +1,170 @@
+{
+  "task": "PRINTMEASURE3 bounded SLS/Prony roundtrip",
+  "baseSha": "72da16fe2231e25abc9903035c8da9d2b723b667",
+  "scope": "Synthetic training-only SLS fits transformed to a one-branch constant-bulk, traction-free Prony material point. Finite ramp/small-amplitude/time-refinement consistency, never exact finite-strain curve reproduction.",
+  "models": {
+    "identificationVersion": 1,
+    "mappingVersion": 1,
+    "normalizationVersion": 1,
+    "holdoutVersion": 1,
+    "prony": "synthetic-green-lagrange-prony-uniaxial-v1"
+  },
+  "physicalDecisions": {
+    "bulk": "Caller supplied; not identified from an axial relaxation curve.",
+    "mapping": "muInf=3K Einf/(9K-Einf), mu0=3K E0/(9K-E0), mu1=mu0-muInf, tauMu=tauE*(3K+muInf)/(3K+mu0)",
+    "poleDerivation": "Operational Young modulus9K*mu(s)/(3K+mu(s)); pole tauE=tauMu*(3K+mu0)/(3K+muInf).",
+    "strain": "Green E11=engineering strain+engineering strain^2/2",
+    "stress": "Compare nominal P11 with engineering force/initial-area; retain second-Piola and Cauchy separately.",
+    "ramp": "Explicit hypothetical duration ending at first held source sample; cannot precede zero anchor. Not a measured ramp.",
+    "uncertainty": "Original scalar conditional standard errors retained, no transformed uncertainty propagation."
+  },
+  "verification": {
+    "total": 58,
+    "pass": 58,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 1442.6426,
+    "declarationStdout": "Contract declarations type-check (41 declaration files).",
+    "ownTests": 7,
+    "protected": [
+      {
+        "path": "src/main.js",
+        "baseGitSha256": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+        "unchanged": true
+      },
+      {
+        "path": "src/progress.json",
+        "baseGitSha256": "884fd19fc900d1f959ba28c99566c91b75fc6e9d329d8e5616a5d76b69c8173c",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-parameter-identification.js",
+        "baseGitSha256": "99c04ce0402316ab4b0d7b7a6d3ddad4839263d636eec2478a4528bfcc5438a5",
+        "unchanged": true
+      },
+      {
+        "path": "src/finite-visco-prony-uniaxial.js",
+        "baseGitSha256": "0b781409fe9ee5857d7f5472afbca44e96c70889c8694eb8a105c01484da8e61",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-parameter-holdout.js",
+        "baseGitSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9",
+        "unchanged": true
+      }
+    ]
+  },
+  "observed": {
+    "roundtripGolden": {
+      "sourceTraining": "a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48",
+      "sourceValidation": "03fd1879bbfc676de3814403955bed5a4c64de97d81f6589c11814ec54c84935",
+      "pronyParameters": {
+        "bulkModulusPa": 1000000000,
+        "equilibriumShearModulusPa": 461538461.53846157,
+        "branches": [
+          {
+            "shearModulusPa": 395604395.6043961,
+            "relaxationTimeSeconds": 1.7948717948717934
+          }
+        ]
+      },
+      "trainingMetrics": {
+        "pronyMinusObserved": {
+          "count": 81,
+          "biasPa": 30903.85082069901,
+          "meanAbsoluteErrorPa": 30903.85082069901,
+          "rootMeanSquareErrorPa": 31174.266695722174,
+          "maximumAbsoluteErrorPa": 48047.90392259229
+        },
+        "pronyMinusIdealStep": {
+          "count": 81,
+          "biasPa": 30903.85082069855,
+          "meanAbsoluteErrorPa": 30903.85082069855,
+          "rootMeanSquareErrorPa": 31174.266695721635,
+          "maximumAbsoluteErrorPa": 48047.903922588564
+        },
+        "idealStepMinusObserved": {
+          "count": 81,
+          "biasPa": 4.599123825261622e-10,
+          "meanAbsoluteErrorPa": 5.518948590313951e-10,
+          "rootMeanSquareErrorPa": 9.817001907056755e-10,
+          "maximumAbsoluteErrorPa": 3.725290298461914e-09
+        }
+      },
+      "validationMetrics": {
+        "pronyMinusObserved": {
+          "count": 81,
+          "biasPa": 7732.148122072166,
+          "meanAbsoluteErrorPa": 7732.148122072166,
+          "rootMeanSquareErrorPa": 7800.579469951414,
+          "maximumAbsoluteErrorPa": 11999.976009219885
+        },
+        "pronyMinusIdealStep": {
+          "count": 81,
+          "biasPa": 7732.148122071937,
+          "meanAbsoluteErrorPa": 7732.148122071937,
+          "rootMeanSquareErrorPa": 7800.579469951145,
+          "maximumAbsoluteErrorPa": 11999.976009218022
+        },
+        "idealStepMinusObserved": {
+          "count": 81,
+          "biasPa": 2.299561912630811e-10,
+          "meanAbsoluteErrorPa": 2.7594742951569753e-10,
+          "rootMeanSquareErrorPa": 4.908500953528377e-10,
+          "maximumAbsoluteErrorPa": 1.862645149230957e-09
+        }
+      }
+    },
+    "convergence": {
+      "normalizedAmplitudeErrors": [
+        0.0014984970052950085,
+        0.0007481235060403124,
+        0.00037303050622553566
+      ],
+      "shortRampMaxPa": 0.0019518842887009669,
+      "longRampMaxPa": 0.3968749102377842,
+      "gridMaximumErrorsPa": [
+        0.004256307883281352,
+        0.0009791346392660216,
+        0.00036999880185817347
+      ]
+    }
+  },
+  "rawLog": {
+    "path": "docs/evidence/2026-11-07-printed-sls-prony-roundtrip/focused.txt",
+    "bytes": 8087,
+    "sha256": "bab4b87650b133e0ade2cb564b974f488c9bbc99a0d5fa3ee811bb1f5fc11a81",
+    "gitBlobSha1": "88e0cf602e2b49684aab310d0923a3adaa439180"
+  },
+  "initialIterations": [
+    {
+      "result": "4pass1fail",
+      "reason": "Initial short-ramp expectation ignored a fixed0.25s lateral time discretization floor."
+    },
+    {
+      "result": "focused convergence1fail",
+      "coarseFastMaxPa": 0.044580446526424566,
+      "coarseSlowMaxPa": 0.3968749102377842,
+      "correction": "Keep the ratio acceptance; use a declared finer synthetic source grid for short-ramp test and add separate temporal-refinement oracle. No driver thresholds or original observed times changed."
+    }
+  ],
+  "bounds": {
+    "datasetBytesEach": 2000000,
+    "pairs": 8,
+    "totalDriverSteps": 4096,
+    "resultBytes": 4000000
+  },
+  "cancellation": "Own-data snapshot before awaits; AbortSignal native brand check after awaited SHA/holdout and between bounded synchronous runs. No early-settlement/hard-deadline claim.",
+  "notVerified": [
+    "Real measurements or calibration",
+    "Physical independence of declared holdout specimens",
+    "Unknown bulk/Poisson identification",
+    "Uncertainty propagation through parameter mapping",
+    "Exact finite-strain reproduction",
+    "Structural solver/material application/GUI/MCP"
+  ],
+  "nextCandidate": "An explicitly read-only saved report/CLI entry for this already bounded API, after root review; no automatic material application.",
+  "parentRemaining": "PRINTMEASURE3 actual equipment/calibration/independent measured validation/material registration acceptance remains open; FINITEVISCO1 structural/damage calibration unchanged.",
+  "progressChanged": false,
+  "newHeavySolverOrGuiOrNativeLaunches": 0
+}
