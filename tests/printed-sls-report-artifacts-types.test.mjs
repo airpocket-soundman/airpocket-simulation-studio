@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+test('paged report artifacts expose pinned read-only pure and file interfaces',()=>{const r=spawnSync(process.execPath,['node_modules/typescript/bin/tsc','--strict','--noEmit','--target','ES2022','--module','ESNext','--moduleResolution','Bundler','tests/fixtures/printed-sls-report-artifacts-types.ts'],{encoding:'utf8',windowsHide:true});assert.equal(r.status,0,r.stdout+r.stderr);});
