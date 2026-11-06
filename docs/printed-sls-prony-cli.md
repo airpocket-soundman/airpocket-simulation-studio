@@ -22,3 +22,6 @@ config自身のSHAもCLI引数で固定し、3原文すべてのSHAが一致し�
 service `writePrintedSlsPronyReport({config,configSha256,output},{signal})` はMCP等が将来再利用できる小さい要約を返します。今回MCP登録や権限は追加していません。変換は明示K/有限仮想ランプ/微小振幅・時間刻み極限の整合確認だけで、Young/せん断τは同一ではありません。全結果は未校正・精度未検証・材料未適用です。
 
 [CLI証拠](evidence/2026-11-07-printed-sls-prony-cli.json) · [原本pack](evidence/2026-11-07-printed-sls-prony-cli/verification.json)
+
+
+Workerのstdout/stderrは専用streamへ隔離し、非空ならWORKER_STDIOで拒否します。内容を親stdout/stderrへ流さず破棄し、観測byte数だけ4097で飽和・超過flagを記録。実worker exitと両stream end/closeを待って公開します。純JS workerはexecArgv:[]としてinline hostの非互換flagを継承しません。実際の--input-type=module -e入口も回帰確認済みです。隔離追加前の実CLI原本bytesは履歴として変更しません。

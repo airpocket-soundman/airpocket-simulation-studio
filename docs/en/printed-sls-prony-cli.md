@@ -22,3 +22,6 @@ The final Abort check precedes the irreversible decision to call publishJson. La
 `writePrintedSlsPronyReport({config,configSha256,output},{signal})` returns the small summary for future backend reuse. No MCP registration or permission is added here. The transform still needs explicit K and a hypothetical finite ramp, with small-amplitude/time-refinement limits. Young/shear relaxation times differ. Results remain uncalibrated, accuracy-unverified and unapplied.
 
 [Evidence](../evidence/2026-11-07-printed-sls-prony-cli.json) · [Original pack](../evidence/2026-11-07-printed-sls-prony-cli/verification.json)
+
+
+Worker stdout/stderr are isolated with dedicated readable streams. Any nonempty output causes typed WORKER_STDIO refusal, not a parent stdout/stderr write. Content is discarded; observed-byte metadata saturates at4097 with a truncation flag. Publication waits for both actual worker exit and stream end/close. The plain-JS worker uses execArgv:[] rather than inheriting incompatible inline-host flags; an actual --input-type=module -e host is covered. Original pre-isolation capture bytes remain historical and unchanged.

@@ -1,0 +1,75 @@
+✔ every JP specification has an English counterpart and reciprocal link (82.3561ms)
+✔ every task has English title and acceptance criteria (3.4825ms)
+✔ the real repository satisfies its module boundaries and the graph is what the table says it is (534.9551ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (392.3885ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (446.0125ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.5312ms)
+✔ import parser ignores strings that merely contain "from" (0.249ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (4.2774ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.3405ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.226ms)
+✔ a real import inside a template substitution is still found (2.2024ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (23.7119ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (8.9431ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.364ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (9.2748ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (58.0691ms)
+✔ a forbidden upward edge (domain -> ui) is reported (20.8869ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (29.4534ms)
+✔ an unclassified new file fails, including files in subdirectories (16.7502ms)
+✔ allowlist entries must be used and justified (0.2563ms)
+✔ collectGraph resolves relative imports inside subdirectories (8.4971ms)
+✔ real CLI agrees with pure gate and independent exact tensile regression/aggregate, preserves input bytes (271.7393ms)
+✔ fit refusal is an exclusive artifact with original reasons and no invented parameter values (174.8417ms)
+✔ invalid JSON/options/UTF8 are bounded private refusals retaining exact available input SHA (1292.4516ms)
+✔ native absolute distinct paths and exact flags required; existing file/directory and hardlink aliases stay unchanged (998.625ms)
+✔ fixed file-byte bounds accept exact capacities and refuse oversized/sparse inputs without publishing partial fits (236.2465ms)
+✔ symlink/junction directory components refuse before read or publication (189.0368ms)
+✔ two real concurrent CLI writers publish exactly one complete artifact and clean owned temporary files (123.9911ms)
+✔ bilinear and SLS explicit model options reach the same pure results through real CLI files (295.3783ms)
+✔ saved-file service public declarations retain false calibration and explicit path contracts (412.6066ms)
+✔ declared measured provenance is retained without calibration or accuracy promotion (synthetic numeric fixture) (113.7766ms)
+✔ linear training-only predictions retain slope and independent signed Pa errors even when validation has a different exact slope (23.8526ms)
+✔ bilinear validation with too few points to refit still predicts the declared training kink without averaging or refitting (17.2566ms)
+✔ SLS prediction uses validation hold amplitude and elapsed time from its explicitly declared step, not validation fitting (26.3554ms)
+✔ dataset and specimen identity must be distinct with a complete one-to-one mapping, not inferred ordering (3.3591ms)
+✔ explicit reversed dataset ordering uses each mapped training specimen instead of positional pairing or across-specimen averaging (1.9796ms)
+✔ every recorded condition including batch is matched exactly after unit normalization; mismatches never produce error scores (8.9608ms)
+✔ loading paths outside the window, unloads, holds and strain extrapolation are refused without filtering points (6.3546ms)
+✔ SLS rejects inferred ramps, nonconstant holds and temporal/amplitude extrapolation before validation can be treated as a fit (5.9748ms)
+✔ unidentified training returns a per-pair reason without invented parameters, validation refit, scores or automatic material acceptance (1.1584ms)
+✔ own-data snapshots reject hooks and capacities before await, and later caller edits cannot redirect any dataset or mapping (12.7706ms)
+✔ exact combined sample and pair capacities remain usable and excess total samples refuse before fitting (116.6151ms)
+✔ SLS file service types require pinned config and expose summary-only result (853.2428ms)
+✔ actual CLI publishes an exact-hash bounded report; independent held residual and no physical inputs modified (385.4896ms)
+✔ wrong config/data SHA and invalid UTF8 refuse before any worker without losing byte identities (84.4447ms)
+✔ aliases/hardlinks and existing outputs cannot overwrite any source or prior artifact (27.2619ms)
+✔ two actual CLI writers produce exactly one complete atomic artifact and no temporary leftovers (454.0952ms)
+{"workerDeadlineEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","resultNull":true}}
+✔ worker deadline reports refusal only after confirmed exit, and pre-abort starts no worker (91.8058ms)
+✔ strict private config parser rejects duplicates, escaped aliases, depth, unknown fields and malformed arguments (24.8164ms)
+{"ownedAbortEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_ABORTED","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_ABORTED","resultNull":true}}
+✔ abort after a real owned worker request waits for exit and never publishes a completed curve (37.4392ms)
+✔ actual CLI invalid arguments emit one small error summary without stack or stderr (133.5038ms)
+{"isolatedWorkerOutput":{"channel":"stdout","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+{"isolatedWorkerOutput":{"channel":"stderr","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+✔ unexpected real worker stdout/stderr are isolated, discarded and refused after worker exit and stream close (396.1842ms)
+{"inlineHostEvidence":{"status":"completed","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":false,"cause":null,"stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"stdoutJSON":true}}
+✔ public service works from an inline ESM host without inheriting incompatible file-worker flags (212.2583ms)
+✔ roundtrip public types require explicit bulk and SLS conditions (783.3699ms)
+{"roundtripGolden":{"sourceTraining":"a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48","sourceValidation":"03fd1879bbfc676de3814403955bed5a4c64de97d81f6589c11814ec54c84935","pronyParameters":{"bulkModulusPa":1000000000,"equilibriumShearModulusPa":461538461.53846157,"branches":[{"shearModulusPa":395604395.6043961,"relaxationTimeSeconds":1.7948717948717934}]},"trainingMetrics":{"pronyMinusObserved":{"count":81,"biasPa":30903.85082069901,"meanAbsoluteErrorPa":30903.85082069901,"rootMeanSquareErrorPa":31174.266695722174,"maximumAbsoluteErrorPa":48047.90392259229},"pronyMinusIdealStep":{"count":81,"biasPa":30903.85082069855,"meanAbsoluteErrorPa":30903.85082069855,"rootMeanSquareErrorPa":31174.266695721635,"maximumAbsoluteErrorPa":48047.903922588564},"idealStepMinusObserved":{"count":81,"biasPa":4.599123825261622e-10,"meanAbsoluteErrorPa":5.518948590313951e-10,"rootMeanSquareErrorPa":9.817001907056755e-10,"maximumAbsoluteErrorPa":3.725290298461914e-9}},"validationMetrics":{"pronyMinusObserved":{"count":81,"biasPa":7732.148122072166,"meanAbsoluteErrorPa":7732.148122072166,"rootMeanSquareErrorPa":7800.579469951414,"maximumAbsoluteErrorPa":11999.976009219885},"pronyMinusIdealStep":{"count":81,"biasPa":7732.148122071937,"meanAbsoluteErrorPa":7732.148122071937,"rootMeanSquareErrorPa":7800.579469951145,"maximumAbsoluteErrorPa":11999.976009218022},"idealStepMinusObserved":{"count":81,"biasPa":2.299561912630811e-10,"meanAbsoluteErrorPa":2.7594742951569753e-10,"rootMeanSquareErrorPa":4.908500953528377e-10,"maximumAbsoluteErrorPa":1.862645149230957e-9}}}}
+✔ independent rational-modulus/relaxation mapping goldens and Pa/nominal-vs-Piola distinctions (50.1144ms)
+{"convergence":{"normalizedAmplitudeErrors":[0.0014984970052950085,0.0007481235060403124,0.00037303050622553566],"shortRampMaxPa":0.0019518842887009669,"longRampMaxPa":0.3968749102377842,"gridMaximumErrorsPa":[0.004256307883281352,0.0009791346392660216,0.00036999880185817347]}}
+✔ small-amplitude and short-ramp independent convergence rather than false exact reproduction (252.2265ms)
+✔ holdout errors agree with training-only ideal prediction without refitting validation (22.3967ms)
+✔ strict synthetic/step/uniform/bulk/driver budgets reject unsupported physical assumptions (36.1444ms)
+✔ snapshots reject getters and preserve pending options/source; cooperative abort keeps native preparation real (2.8626ms)
+✔ non-aborted async source/options snapshots are bound and exact total step budget is admitted (213.3745ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 60
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4290.0331

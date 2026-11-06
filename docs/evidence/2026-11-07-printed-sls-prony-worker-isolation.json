@@ -1,0 +1,90 @@
+{
+  "baseSha": "56a266e873d9d74374674316d88fdac571f62696",
+  "scope": "Audit followup only: isolate unexpected worker output and support inline ESM callers.",
+  "workerOptions": {
+    "stdout": true,
+    "stderr": true,
+    "execArgv": []
+  },
+  "ownership": "Always wait for actual Worker exit plus both readable streams end/close before report publication. Any nonempty output is refused; payload discarded, byte count capped at4097 and overflow recorded.",
+  "verification": {
+    "newRegressionCases": [
+      "Real worker stdout noise8192+bytes cannot corrupt parent stdout",
+      "Real worker stderr noise8192+bytes cannot corrupt parent stderr",
+      "Actual --input-type=module -e host succeeds with a file worker"
+    ],
+    "ownFileAndTypeTests": 11,
+    "related": {
+      "total": 60,
+      "pass": 60,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 4290.0331
+    },
+    "declarationStdout": "Contract declarations type-check (41 declaration files).",
+    "observed": [
+      {
+        "isolatedWorkerOutput": {
+          "channel": "stdout",
+          "status": "refused",
+          "execution": {
+            "workerStarted": true,
+            "exitConfirmed": true,
+            "exitCode": 1,
+            "terminationRequested": true,
+            "cause": "PRINTED_SLS_PRONY_WORKER_STDIO",
+            "stdioClosed": true,
+            "stdioBytesObserved": 4097,
+            "stdioTruncated": true
+          },
+          "refusalCode": "PRINTED_SLS_PRONY_WORKER_STDIO"
+        }
+      },
+      {
+        "isolatedWorkerOutput": {
+          "channel": "stderr",
+          "status": "refused",
+          "execution": {
+            "workerStarted": true,
+            "exitConfirmed": true,
+            "exitCode": 1,
+            "terminationRequested": true,
+            "cause": "PRINTED_SLS_PRONY_WORKER_STDIO",
+            "stdioClosed": true,
+            "stdioBytesObserved": 4097,
+            "stdioTruncated": true
+          },
+          "refusalCode": "PRINTED_SLS_PRONY_WORKER_STDIO"
+        }
+      },
+      {
+        "inlineHostEvidence": {
+          "status": "completed",
+          "execution": {
+            "workerStarted": true,
+            "exitConfirmed": true,
+            "exitCode": 0,
+            "terminationRequested": false,
+            "cause": null,
+            "stdioClosed": true,
+            "stdioBytesObserved": 0,
+            "stdioTruncated": false
+          },
+          "stdoutJSON": true
+        }
+      }
+    ],
+    "rawLog": {
+      "path": "docs/evidence/2026-11-07-printed-sls-prony-cli/stdio-inline-focused.txt",
+      "bytes": 10061,
+      "sha256": "a1db761df4faf672ce45c28e98af6f20dcb490226efb1e4396e4089f8912fe6c",
+      "gitBlobSha1": "79632abf56e40e6f93d85d24838e336e16a60cb0"
+    }
+  },
+  "originalActualCliPack": "Captured before this followup; all original raw bytes and report SHA retained as historical proof, not overwritten.",
+  "runtimeSourceChanges": [
+    "scripts/printed-sls-prony-file-service.mjs"
+  ],
+  "progressOrMainOrModelChanged": false,
+  "newHeavySolverGuiNativeSdk": 0
+}
