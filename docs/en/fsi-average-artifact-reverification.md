@@ -17,3 +17,7 @@ Execution shares the immutable-text/private strict configuration/owned worker bo
 Tests cover real legacy-artifact CLI replay, per-unit tolerance boundaries, pre-worker raw/hash/config/time/work refusals, nonfinite comparison rejection,4097-row histories,4MiB/64KiB boundaries, changed FDs, owned cancellation, concurrent publication and byte-identical existing saved-CLI golden artifacts. The original [synthetic linear laminar tangential-wall scope](fsi-channel-average-force.md) is unchanged.
 
 [Dated execution evidence](../evidence/2026-11-07-fsi-average-reverification.json)
+
+## Formal MCP
+
+`studio_reverify_fsi_average({request,output?})` uses the same saved recomputation service. Optional output is an exclusive new report, so the operation is non-idempotent. Matched means the explicitly configured numerical tolerance only. Browser inputs and permissions are unchanged.

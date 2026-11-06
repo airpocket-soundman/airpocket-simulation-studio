@@ -1,0 +1,27 @@
+
+> airpocket-simulation-studio@0.44.0 check:mcp
+> node --test tests/operation-correspondence.test.mjs tests/operation-correspondence-gui.test.mjs tests/studio-mcp.test.mjs tests/browser-only-mcp.test.mjs tests/capabilities.test.mjs
+
+✔ browser-only API declares exactly three tools, rejects unknown arguments and enforces bridge pairing/scopes/expiry (115.9089ms)
+✔ dependency-free browser entry uses shared stdio protocol, emits pairing only on stderr and closes bridge on EOF (204.4583ms)
+✔ browser entry requires one explicit exact origin and refuses extra CLI arguments (359.5025ms)
+✔ discovery separates host support, candidates and unavailable live MCP (13.6728ms)
+✔ diagnostics distinguish valid engine choice from unsupported study and material combinations without mutating input (5.7507ms)
+✔ known diagnostics add an escaped JSON pointer while unknown targets stay pointer-free without changing the legacy shape (5.2588ms)
+✔ every GUI element cited in the correspondence table exists in the source: docs/operation-correspondence.md (157.6461ms)
+✔ every GUI element cited in the correspondence table exists in the source: docs/en/operation-correspondence.md (107.9413ms)
+✔ GUI column uses one of the three classifications and never the old name-search wording (2.171ms)
+✔ connector-only rows cite no control id as their own GUI path (1.3925ms)
+✔ operation correspondence table lists every browser method and MCP tool exactly once: docs/operation-correspondence.md (4.8171ms)
+✔ operation correspondence table lists every browser method and MCP tool exactly once: docs/en/operation-correspondence.md (3.3043ms)
+✔ operation correspondence docs are linked from API coverage (1.6859ms)
+✔ MCP CPU analysis uses the real Worker and preserves physical output for validated probes (3828.3814ms)
+✔ MCP stdio negotiates initialization and lists tools without non-protocol stdout (300.5286ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4691.9491

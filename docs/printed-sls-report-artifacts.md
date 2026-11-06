@@ -15,3 +15,7 @@ queryはpairIndex（0〜7）、role（training/validation）、format（csv/json
 `readPrintedSlsReportArtifact({reportPath,expectedSHA256,query,outputPath?})` は共通path/noLinks/regular-file gateを再利用します。4MiB専用readerはFDの前後stat（dev/ino/size/mtime/ctime）とpath再stat、limit+1読取、fatal UTF-8/BOM検査を行います。元の2MB用shared helperは変更しません。optional outputPathは新しいnative CSV/JSON/SVGだけを同一directoryの一時ファイル→exclusive hardlinkで原子的公開し、既存ファイルを上書きしません。JSON wrapperへCSV/SVGをquoteして保存するものではありません。原子的完成bytes公開であってfsync/停電耐久保証ではありません。返却publication SHAはnativebytesと一致します。
 
 今回MCP/GUI/進捗/共有mainは変更していません。[証拠](evidence/2026-11-07-printed-sls-report-artifacts.json)
+
+## 正式MCP
+
+`studio_read_printed_sls_report({reportPath,expectedSHA256,query,outputPath?})` は同じページ出力を使います。queryのpairIndex/role/format/offset/limitは必須です。optional outputPathはCSV/JSON/SVGのnative bytesを新規保存し、artifactとpublicationのSHAを保持します。応答の64KiBはserialized tool data valueで、RPCの重複表現・envelopeは別です。

@@ -17,3 +17,7 @@
 回帰は実CLI旧artifact照合、単位別許容差内外、raw/hash/config/time/work改変の起動前拒否、非有限比較拒否、最大4097history、4MiB/64KiB境界、FD変更、worker取消、同時report出版、既存保存CLIのgolden bytes完全互換です。元の合成・接線・線形laminarという [物理限界](fsi-channel-average-force.md) は変わりません。
 
 [2026-11-07実行証拠](evidence/2026-11-07-fsi-average-reverification.json)
+
+## 正式MCP
+
+`studio_reverify_fsi_average({request,output?})` は同じ保存再計算サービスを呼びます。任意outputは新規reportへの排他的保存であり非冪等です。matchedは明示許容差内の数値一致だけです。既存browser入力・権限は変更しません。

@@ -19,3 +19,7 @@ Node `queryNativeTet10File({path, expectedRawSHA256, pointMm})` は8MiB上限の
 独立監査で、hash対象外のperformance配列の欠番を非index数値キーで補うと、旧snapshotのownKey数検査を通過する漏れが見つかりました。数値解の誤答ではありませんが、dense own-data契約違反です。配列はlength固定で0..length−1のown enumerable data descriptorを直接読み、欠番を拒否するよう修正しました。同じ形のpointもOUTSIDEではなくINVALIDとなります。正常なdense performanceは維持し、追加FEMは行っていません。[修正証拠](evidence/2026-11-07-tet10-native-query/dense-fix.json)
 
 さらにArray Proxyのlength get trapで容量検査後だけ長さを差替える余地を閉じました。length自身もown data descriptorから1回だけsnapshotし、その検証済み値で容量・key数・走査長を統一します。16385という小さな上限超え値を使った反例でlength get trap呼出0を確認し、巨大割当は試していません。
+
+## 正式MCP
+
+`studio_query_native_tet10({path,expectedRawSHA256,pointMm})` は同じ専用read-onlyサービスを使います。能力は `tet10NativePointQuery` に分離し、標準probe/case/view/compareの未対応は維持します。登録済みツールを発見し、存在しない入口を利用可能と見なさないでください。

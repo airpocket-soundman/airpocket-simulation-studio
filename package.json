@@ -13,7 +13,7 @@
     "native:build": "node scripts/ensure-native.mjs",
     "test:published": "node scripts/check-published.mjs",
     "mcp": "node scripts/studio-mcp.mjs",
-    "check:mcp": "node --test tests/operation-correspondence.test.mjs tests/studio-mcp.test.mjs tests/browser-only-mcp.test.mjs tests/capabilities.test.mjs"
+    "check:mcp": "node --test tests/operation-correspondence.test.mjs tests/operation-correspondence-gui.test.mjs tests/studio-mcp.test.mjs tests/browser-only-mcp.test.mjs tests/capabilities.test.mjs"
   },
   "dependencies": {
     "@loumalouomega/gmsh-wasm": "0.3.0",

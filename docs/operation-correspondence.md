@@ -150,3 +150,6 @@
 | `studio_run_fsi_average` | write/execute | none | connector only — no GUI control by design (新規ファイルへの平均力連成検証。Node保存実行のみ、GUIなし) | `references/experimental-saved-verification.md` |
 | `studio_roundtrip_printed_sls` | write/execute | none | connector only — no GUI control by design (SHA固定の合成SLS/Pronyレポート。Node保存実行のみ、材料適用なし) | `references/experimental-saved-verification.md` |
 | `studio_compare_printed_holdout` | write/execute | none | connector only — no GUI control by design (学習のみ同定の別片予測。Node保存ファイルのみ、GUIなし) | `references/experimental-saved-verification.md` |
+| `studio_query_native_tet10` | read-only | none | connector only — no GUI control by design (Node専用の全Tet10保存結果の点取得。標準probeとは別経路) | `references/experimental-saved-verification.md` |
+| `studio_reverify_fsi_average` | write/execute | none | connector only — no GUI control by design (明示した単位別許容差で保存FSI結果を再計算。任意の新規検証report保存) | `references/experimental-saved-verification.md` |
+| `studio_read_printed_sls_report` | write/execute | none | connector only — no GUI control by design (SHA固定の保存レポートのページ出力。再同定・解析なし) | `references/experimental-saved-verification.md` |

@@ -1,7 +1,8 @@
+import {ownedTemp} from './helpers/owned-temp.mjs';
 import test from 'node:test';import assert from'node:assert/strict';import{mkdtemp,readFile,writeFile,rm,realpath}from'node:fs/promises';import{tmpdir}from'node:os';import{join}from'node:path';import{spawnSync}from'node:child_process';import{createHash}from'node:crypto';import{assertMcpTools}from'./fixtures/mcp-tool-contract.mjs';import{getCapabilities}from'../src/capabilities.js';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 test('formal MCP executes pinned Prony and average-force files with bounded summaries and exclusive publication',async t=>{
- const dir=await mkdtemp(join(await realpath(tmpdir()),'scientific-mcp-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+ const dir=await ownedTemp(t,'scientific-mcp-');
  const request=join(dir,'fsi.json'),fsiOut=join(dir,'fsi-out.json');await writeFile(request,await readFile('docs/evidence/fsi-average-file-20261107/request.json'));
  const config=JSON.parse(await readFile('docs/evidence/2026-11-07-printed-sls-prony-cli/config.json'));
  for(const role of ['training','validation']){const b=await readFile('docs/evidence/2026-11-07-printed-sls-prony-cli/'+role+'.json');config[role]={path:join(dir,role+'.json'),expectedSHA256:sha(b)};await writeFile(config[role].path,b);}

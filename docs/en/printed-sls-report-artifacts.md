@@ -15,3 +15,7 @@ Entire responses are at most64KiB UTF-8. A32KiB page budget reserves wrapper/fil
 `readPrintedSlsReportArtifact({reportPath,expectedSHA256,query,outputPath?})` reuses common path/noLinks/regular-file gates. Its dedicated4MiB reader checks pre/post FD stat (dev/ino/size/mtime/ctime), path stat, limit+1 bytes and fatal UTF-8/BOM. The shared2MB helper is unchanged. Optional outputPath atomically publishes a new native CSV/JSON/SVG using a same-directory temporary file and exclusive hardlink, never overwriting an existing file. CSV/SVG are not quoted inside a JSON wrapper. This is atomic complete-byte visibility, not fsync/power-loss durability. Publication SHA matches native bytes.
 
 No MCP/GUI/progress/shared-main change. [Evidence](../evidence/2026-11-07-printed-sls-report-artifacts.json)
+
+## Formal MCP
+
+`studio_read_printed_sls_report({reportPath,expectedSHA256,query,outputPath?})` uses the same page exporter. All five query fields are explicit. Optional outputPath exclusively saves native CSV/JSON/SVG bytes with artifact/publication hashes. The64KiB bound is for the serialized tool data value, excluding duplicated RPC representations and envelope.
