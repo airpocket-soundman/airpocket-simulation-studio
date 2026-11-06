@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:03:04.841Z",
+  "base": "9569625",
+  "sourceOriginal": "113d",
+  "sourceIntegration": "b833bc6",
+  "productionChanges": false,
+  "solverGuiCodecRuns": 0,
+  "mandatoryFindings": [],
+  "tests": {
+    "newIndependent": 4,
+    "related": {
+      "pass": 27,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMs": 702.4694
+    },
+    "types": 43,
+    "docs": 2
+  },
+  "oracles": {
+    "mapping": "mu=3*K*E/(9*K-E); tauMu=tauE*(3K+muInf)/(3K+mu0)",
+    "discrete": "Lateral traction elimination q=A*E11+B*w; exact integral of linear q per interval with endpoint w eliminated.",
+    "stressMeasures": "S; P=lambda*S; sigma=P/(1+2*E22)",
+    "energy": "K*tr(E)^2/2 + 2*muInf*q^2/3 + 2*muBranch*(q-w)^2/3",
+    "continuous": "S=Green*(Einf+Ebranch*phi(ramp/tauE)*exp(-holdTime/tauE))",
+    "gridMaximumErrorsPa": [
+      17.543615969858365,
+      4.381263032351853,
+      1.0950253536866512
+    ],
+    "validationPerturbationPa": 123.5,
+    "expectedBiasShiftPa": -123.5
+  },
+  "ownership": "Abort during second digest stage retains owned preparation until actual settle; no completed result.",
+  "limitations": [
+    "Synthetic only; no calibration/physical-independence/accuracy claim.",
+    "Cooperative checkpoints do not interrupt synchronous driver loops.",
+    "Finite-strain Prony driver is not exact ideal-step Young relaxation reproduction."
+  ],
+  "sources": [
+    {
+      "path": "src/printed-sls-prony-roundtrip.js",
+      "gitLfSha256": "77c9b8e736b0402743264883df520a930cc554a23bb9490073419410a1d83c0b",
+      "workingByteSha256": "4b1d7fe4e2c2549a3d54f98e75bbafa3feb44c90aa8d502f3d8a9fcd19b13771"
+    },
+    {
+      "path": "src/finite-visco-prony-uniaxial.js",
+      "gitLfSha256": "0b781409fe9ee5857d7f5472afbca44e96c70889c8694eb8a105c01484da8e61",
+      "workingByteSha256": "6ad7b3b00d38db8c03ea0550a89e7cfc48893883ce315bae31c8eb4e94f0d861"
+    },
+    {
+      "path": "src/printed-parameter-holdout.js",
+      "gitLfSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9",
+      "workingByteSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9"
+    }
+  ],
+  "raw": [
+    {
+      "path": "focused.log",
+      "bytes": 5435,
+      "sha256": "89d8c19c6da3ba7a349edae9dc6054204ebd4cffbda6bcb34f0951b2a39a3204"
+    },
+    {
+      "path": "types.log",
+      "bytes": 157,
+      "sha256": "efe2124a43aa53098d9cd4bad21b4a2e3c6b5acbdd6715857ff603259052a780"
+    },
+    {
+      "path": "docs.log",
+      "bytes": 278,
+      "sha256": "17b1209d5597ea98eb6753ca2e4427a99b5ad96c93836d8d8b80e2af7bca4133"
+    }
+  ]
+}
