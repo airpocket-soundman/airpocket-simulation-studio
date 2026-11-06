@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "task": "P5B/98 native Tet10 dedicated point query",
+  "auditBase": "af24992830151167173fa611f92ec3e25bbd9a5c",
+  "queryOriginal": "857ac9e",
+  "ownerFixes": [
+    "7985b0f18b28c9698dd80b2f72d6d5bb663802d8",
+    "604d5ab66f339513e1c821238ae8b19c0a5fc78b"
+  ],
+  "productSourceChangesByIndependentReviewer": 0,
+  "auditedSourceGitBlob": "56ba5603246944ff9c8f8793329d38bc693654bd",
+  "auditedFileServiceGitBlob": "43aa8591fb3e79f2e7ad71d13b89174a52ce26c4",
+  "rawFixture": {
+    "GUI": 0,
+    "productWorkers": 0,
+    "path": "docs/evidence/2026-11-07-tet10-native-query/real-job.json",
+    "sha256": "d53dfafc2672d08a0728e3f0aee07fe1915d22e5166664aa14464868cb31fe99",
+    "bytes": 39044,
+    "newFEMSolves": 0
+  },
+  "findings": [
+    {
+      "independentFinal": "INVALID own-data-required",
+      "initial": "Performance sparse array plus non-index numeric-string key accepted by original snapshot",
+      "scope": "Shape-contract refusal gap, not a demonstrated wrong finite numerical point",
+      "raw": "Original acceptance/failing test existed in tool output only; no historical raw log fabricated",
+      "id": "dense-slot-compensation",
+      "reproduction": "result.performance=[1,,3]; result.performance[4294967295]=0 (or very long numeric-string key)",
+      "fixedBy": "7985b0f"
+    },
+    {
+      "independentFinal": "get length trap calls0 and normal numeric query succeeds",
+      "initial": "Repeated Proxy length reads could redirect Array.from allocation after capacity checks",
+      "scope": "Source resource/gate follow-up, fixed to one admitted descriptor length",
+      "id": "length-read-after-admission",
+      "reproduction": "Bounded fourth-read16385 length trap; no huge value allocated",
+      "fixedBy": "604d5ab"
+    }
+  ],
+  "validation": {
+    "skip": 0,
+    "independentTests": 3,
+    "command": "node --test tests/tet10-native-query-independent.test.mjs tests/tet10-native-result.test.mjs tests/tet10-native-file.test.mjs tests/tet10-native-query-types.test.mjs tests/docs.test.mjs",
+    "declarations": 43,
+    "focusedSHA256": "35e29407a26694f6801e988f75c61277acd89ed61105d4e489a35c2372d7818d",
+    "elapsedMs": 744.9767,
+    "typesSHA256": "efe2124a43aa53098d9cd4bad21b4a2e3c6b5acbdd6715857ff603259052a780",
+    "pass": 19,
+    "tests": 19,
+    "fail": 0
+  },
+  "independentOracle": {
+    "displacementToleranceMm": 2E-12,
+    "source": "Constructed polynomial record only; not claimed original/new load-equilibrium solve",
+    "E_Pa": 1000000000,
+    "engineeringStrain": "[0.0007*y,-0.0004*z,0.0011*x,0.0007*x,-0.0004*y,0.0011*z]",
+    "pointsLocalMm": [
+      [
+        1.125,
+        3.25,
+        7.5
+      ],
+      [
+        0,
+        2.5,
+        5
+      ],
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        5,
+        5,
+        5
+      ]
+    ],
+    "stressTolerancePa": 0.001,
+    "strainTolerance": 2E-12,
+    "nu": 0.31,
+    "translationMm": [
+      100000,
+      -200000,
+      300000
+    ],
+    "field": "u=[0.0007*x*y,-0.0004*y*z,0.0011*z*x] mm in local coordinates"
+  },
+  "fileIdentityProbe": "Same bytes and SHA in a replaced inode after FD read still returns input-changed",
+  "requiredFindingsRemaining": [],
+  "nonClaims": [
+    "No producer authentication, load equilibrium, calibration or convergence certificate",
+    "No full arbitrary CAD/native common point-view-compare support",
+    "No general P5B/98 completion",
+    "No new FEM solve or huge allocation"
+  ]
+}
