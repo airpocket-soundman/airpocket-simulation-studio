@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "base": "4bc0a9f4256bd50dbc87176b1b5e71ce0bff6ddb",
+  "task": "PRINTMEASURE3",
+  "scope": "Independent saved-file CLI and formal stdio MCP audit",
+  "productSourceChanges": 0,
+  "requiredFindings": [],
+  "validation": {
+    "pass": 12,
+    "elapsedMs": 1867.9407,
+    "typesSHA256": "8cd7c3cfdf239f694bc506585fe009327919ae9172997f997e0f46a1bc29435f",
+    "fail": 0,
+    "skip": 0,
+    "declarations": 41,
+    "focusedSHA256": "22cdcc60e2388ee27e93c9d9b3fb1908edfb3e217913a59887fa4250a1ca0000",
+    "command": "node --test tests/printed-holdout-entry-independent.test.mjs tests/printed-holdout-cli.test.mjs tests/docs.test.mjs",
+    "tests": 12
+  },
+  "independentOracle": {
+    "rmsFormula": "sqrt(102500/3)",
+    "validationChangesDoNotChangeFit": true,
+    "maximumAbsoluteErrorPa": 300,
+    "inputUnits": [
+      "mm/N",
+      "m/kN"
+    ],
+    "residualsPa": [
+      -300,
+      100,
+      -50
+    ],
+    "biasPa": -83.33333333333333,
+    "trainingModulusPa": 700000000,
+    "standardErrorFormula": "sqrt((50000/4)/(55e-6))",
+    "maePa": 150,
+    "residualConvention": "prediction minus observation"
+  },
+  "bounds": {
+    "datasetEachBytes": 2000000,
+    "plusOneRefused": true,
+    "exactBoundaryAccepted": true
+  },
+  "safety": [
+    "Raw UTF8 SHA and byte lengths preserved",
+    "Existing directory remains unchanged",
+    "Junction components refused",
+    "Node-only capability",
+    "MCP publisher readOnlyHint false and idempotentHint false",
+    "Unknown MCP arguments refused",
+    "SHA mismatch returns refusal artifact with result null"
+  ],
+  "falseFlags": [
+    "calibrated",
+    "accuracyVerified",
+    "physicalIndependenceVerified"
+  ],
+  "nonClaims": [
+    "No physical measurements or calibration",
+    "No GUI/browser/solver/codec",
+    "Not an adversarial OS filesystem sandbox"
+  ]
+}
