@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T21:10:04.357Z",
+  "ownerBase": "56a266e873d9d74374674316d88fdac571f62696",
+  "ownerFix": "11bba8cfdb6e7a68d610115a026c515e53c5e5c4",
+  "localFix": "0229a1d",
+  "productionChanged": false,
+  "mandatoryFindings": [],
+  "tests": {
+    "independentGroups": 4,
+    "related": {
+      "pass": 21,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMs": 1689.7075
+    },
+    "types": 41,
+    "docs": 2
+  },
+  "checks": [
+    "Actual stdout-only and stderr-only worker fixture noise produces no parent stdout/stderr contamination, typed refusal, exitConfirmed and stdioClosed, result null.",
+    "Abort after successful atomic link preserves completed artifact and returns abortObservedAfterPublication true.",
+    "Config trailing newline preserves semantics but fails pinned raw-byte SHA before worker start.",
+    "Two different actual CLI configs race for one output: one completed/one error; output bytes/SHA, config SHA and validation SHA belong to the winner only; no temp leftovers.",
+    "Completed summary maximum residual is finite; refused maximum is null."
+  ],
+  "harnessCorrection": {
+    "initialPass": 3,
+    "initialFail": 1,
+    "cause": "The first late-abort harness compared the lexical Windows output path with the physical normalized publication path, so its abort callback was not triggered.",
+    "correction": "Compare the destination with join(await realpath(fixtureDir), result.json); no production source or threshold changes."
+  },
+  "limitations": [
+    "Real Worker replacement is test-child-only; no product injection API introduced.",
+    "Synthetic provisional uncalibrated material-point consistency only; no structural solve, measured accuracy, physical independence or GUI claim.",
+    "No new feature/status promotion."
+  ],
+  "sources": [
+    {
+      "path": "scripts/printed-sls-prony-file-service.mjs",
+      "gitLfSha256": "e0a07efeadaebd82628106be50367dcebc9bcd022f6d4430e53f5634d9bee00c",
+      "workingByteSha256": "cddd264eba1f1649b14e216f6f8b17d826eed150bd036f3748dc5323a63d9f0a"
+    },
+    {
+      "path": "scripts/printed-sls-prony-config.mjs",
+      "gitLfSha256": "6aebf7e7009995b98c45c7cce9ca0d3bfdb483afcabeafaa766feeaf2b7bfb58",
+      "workingByteSha256": "a78b1524245d4aec897a37b3f92272a6b55c98a0bdbc208c4e64beb9159895be"
+    },
+    {
+      "path": "scripts/printed-sls-prony.worker.mjs",
+      "gitLfSha256": "644d65bf68f10044b93a38e46121dbb6c53b6f7fd91c3372bb76faa8f13dad19",
+      "workingByteSha256": "be1f974b3dc14a1ecc15da40f670a05767d84d4d03fddfbd13505defef63209b"
+    },
+    {
+      "path": "scripts/roundtrip-printed-sls.mjs",
+      "gitLfSha256": "8b468d051b4b0ac10b2eac55f5b6513cfaa06c94bba991d9fe42f3ed8b2f3ee5",
+      "workingByteSha256": "812c422033e169728fdf505075f6df3758314b2fc29e7b3c8503f2541ed40a9b"
+    },
+    {
+      "path": "scripts/printed-identification-file-io.mjs",
+      "gitLfSha256": "4ecb728a3d598909c54615a180a3f46b3c303f55bfbcaee280e32e9d175ea76f",
+      "workingByteSha256": "533ea0326d9aeb103446e5bbd2fd86f47c875963699cfaf4aa1fe9b03aa1b5ed"
+    }
+  ],
+  "raw": [
+    {
+      "path": "initial-path-harness.log",
+      "bytes": 1344,
+      "sha256": "fc0febf0d080ff9ced2d6b1867d70c769e75a0553ce634e35e079e284f27291b"
+    },
+    {
+      "path": "new.log",
+      "bytes": 557,
+      "sha256": "7462584b9d9b1453f8a17054d94fff6f3e39c315c65651f4f580c7fe4dfb0bd1"
+    },
+    {
+      "path": "focused.log",
+      "bytes": 5823,
+      "sha256": "a277a5411c311c9386a415e1d4b929ed4009495d215b3e00efb5b66d01693909"
+    },
+    {
+      "path": "types.log",
+      "bytes": 157,
+      "sha256": "8cd7c3cfdf239f694bc506585fe009327919ae9172997f997e0f46a1bc29435f"
+    },
+    {
+      "path": "docs.log",
+      "bytes": 277,
+      "sha256": "ac6afaf712d6f0c261b2d98dbab580fd0e75e52419a2d83baa26483c6b7bfce2"
+    }
+  ]
+}

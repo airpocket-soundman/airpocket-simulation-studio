@@ -1,0 +1,36 @@
+✔ worker stdout and stderr cannot contaminate summary and are refused only after actual exit (511.6028ms)
+✔ abort after atomic link preserves completed artifact and truthfully marks late observation (127.3232ms)
+✔ semantic-equivalent whitespace still changes pinned config bytes and cannot start a worker (51.0542ms)
+✔ different pinned configs racing for one output bind the winner bytes to its own sources only (294.461ms)
+✔ SLS file service types require pinned config and expose summary-only result (648.9548ms)
+✔ actual CLI publishes an exact-hash bounded report; independent held residual and no physical inputs modified (283.2732ms)
+✔ wrong config/data SHA and invalid UTF8 refuse before any worker without losing byte identities (69.1407ms)
+✔ aliases/hardlinks and existing outputs cannot overwrite any source or prior artifact (25.4573ms)
+✔ two actual CLI writers produce exactly one complete atomic artifact and no temporary leftovers (349.7638ms)
+{"workerDeadlineEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_WORKER_TIMEOUT","resultNull":true}}
+✔ worker deadline reports refusal only after confirmed exit, and pre-abort starts no worker (47.7346ms)
+✔ strict private config parser rejects duplicates, escaped aliases, depth, unknown fields and malformed arguments (7.0974ms)
+{"ownedAbortEvidence":{"status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_ABORTED","stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"refusalCode":"PRINTED_SLS_PRONY_ABORTED","resultNull":true}}
+✔ abort after a real owned worker request waits for exit and never publishes a completed curve (28.8683ms)
+✔ actual CLI invalid arguments emit one small error summary without stack or stderr (126.248ms)
+{"isolatedWorkerOutput":{"channel":"stdout","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+{"isolatedWorkerOutput":{"channel":"stderr","status":"refused","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":1,"terminationRequested":true,"cause":"PRINTED_SLS_PRONY_WORKER_STDIO","stdioClosed":true,"stdioBytesObserved":4097,"stdioTruncated":true},"refusalCode":"PRINTED_SLS_PRONY_WORKER_STDIO"}}
+✔ unexpected real worker stdout/stderr are isolated, discarded and refused after worker exit and stream close (345.4825ms)
+{"inlineHostEvidence":{"status":"completed","execution":{"workerStarted":true,"exitConfirmed":true,"exitCode":0,"terminationRequested":false,"cause":null,"stdioClosed":true,"stdioBytesObserved":0,"stdioTruncated":false},"stdoutJSON":true}}
+✔ public service works from an inline ESM host without inheriting incompatible file-worker flags (249.2514ms)
+{"roundtripGolden":{"sourceTraining":"a217f89b80bdee3254ce5b2ee6ba7d6499844da61794d61544b9cc249e736d48","sourceValidation":"03fd1879bbfc676de3814403955bed5a4c64de97d81f6589c11814ec54c84935","pronyParameters":{"bulkModulusPa":1000000000,"equilibriumShearModulusPa":461538461.53846157,"branches":[{"shearModulusPa":395604395.6043961,"relaxationTimeSeconds":1.7948717948717934}]},"trainingMetrics":{"pronyMinusObserved":{"count":81,"biasPa":30903.85082069901,"meanAbsoluteErrorPa":30903.85082069901,"rootMeanSquareErrorPa":31174.266695722174,"maximumAbsoluteErrorPa":48047.90392259229},"pronyMinusIdealStep":{"count":81,"biasPa":30903.85082069855,"meanAbsoluteErrorPa":30903.85082069855,"rootMeanSquareErrorPa":31174.266695721635,"maximumAbsoluteErrorPa":48047.903922588564},"idealStepMinusObserved":{"count":81,"biasPa":4.599123825261622e-10,"meanAbsoluteErrorPa":5.518948590313951e-10,"rootMeanSquareErrorPa":9.817001907056755e-10,"maximumAbsoluteErrorPa":3.725290298461914e-9}},"validationMetrics":{"pronyMinusObserved":{"count":81,"biasPa":7732.148122072166,"meanAbsoluteErrorPa":7732.148122072166,"rootMeanSquareErrorPa":7800.579469951414,"maximumAbsoluteErrorPa":11999.976009219885},"pronyMinusIdealStep":{"count":81,"biasPa":7732.148122071937,"meanAbsoluteErrorPa":7732.148122071937,"rootMeanSquareErrorPa":7800.579469951145,"maximumAbsoluteErrorPa":11999.976009218022},"idealStepMinusObserved":{"count":81,"biasPa":2.299561912630811e-10,"meanAbsoluteErrorPa":2.7594742951569753e-10,"rootMeanSquareErrorPa":4.908500953528377e-10,"maximumAbsoluteErrorPa":1.862645149230957e-9}}}}
+✔ independent rational-modulus/relaxation mapping goldens and Pa/nominal-vs-Piola distinctions (35.3623ms)
+{"convergence":{"normalizedAmplitudeErrors":[0.0014984970052950085,0.0007481235060403124,0.00037303050622553566],"shortRampMaxPa":0.0019518842887009669,"longRampMaxPa":0.3968749102377842,"gridMaximumErrorsPa":[0.004256307883281352,0.0009791346392660216,0.00036999880185817347]}}
+✔ small-amplitude and short-ramp independent convergence rather than false exact reproduction (235.9672ms)
+✔ holdout errors agree with training-only ideal prediction without refitting validation (22.0624ms)
+✔ strict synthetic/step/uniform/bulk/driver budgets reject unsupported physical assumptions (21.5305ms)
+✔ snapshots reject getters and preserve pending options/source; cooperative abort keeps native preparation real (3.5203ms)
+✔ non-aborted async source/options snapshots are bound and exact total step budget is admitted (248.6584ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1689.7075
