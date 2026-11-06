@@ -1,0 +1,60 @@
+✖ the real repository satisfies its module boundaries and the graph is what the table says it is (452.9887ms)
+✔ independent oracle: every relative .js string literal in src is a recognised module reference (285.9728ms)
+✔ mutating the real graph is detected, and every allowlist entry is load-bearing (322.6564ms)
+✔ every allowlisted violation in the real layer table carries a specific reason (0.5719ms)
+✔ import parser ignores strings that merely contain "from" (0.3552ms)
+✔ probe 1: static imports after block comments, statements and on one line are found (0.1764ms)
+✔ probe 2: dynamic import with template literal or options argument, and static import from a template (0.3316ms)
+✔ commented-out or quoted import text creates no edge; import.meta and member import are not imports (0.1797ms)
+✔ a real import inside a template substitution is still found (0.1921ms)
+✔ probe 3: Worker / URL loading creates edges, so worker and asset loading cannot escape layer checks (15.3273ms)
+✔ probe 4: window./location/fetch/Worker/history are detected; members, comments, strings and keys are not (7.2897ms)
+✔ a dom allowlist entry excuses exactly one named global with a reason and goes stale when fixed (0.4121ms)
+✔ CRLF, CR-only line ends and a UTF-8 BOM parse identically to LF (9.2335ms)
+✔ Windows-style paths: backslash specifiers and backslash entries in the layer table resolve like POSIX ones (17.1381ms)
+✔ a forbidden upward edge (domain -> ui) is reported (5.3687ms)
+✔ allowed downward edge passes; forbidden external and DOM use in a pure layer fail (11.6351ms)
+✔ an unclassified new file fails, including files in subdirectories (12.5406ms)
+✔ allowlist entries must be used and justified (0.3299ms)
+✔ collectGraph resolves relative imports inside subdirectories (6.8737ms)
+✔ pinned native file query returns a compact true quadratic point and never alters source (62.3565ms)
+✔ strict parser refuses decoded duplicates, depth, values, huge arrays and nonfinite numeric literals (9.1737ms)
+✔ file reader refuses malformed UTF8/BOM, raw cap and symlink without getters or publication (31.7693ms)
+✔ one captured real saved Tet10 job is sampled without rerunning any solver; boundaries are deterministic (38.1629ms)
+✔ independent affine, true quadratic and rigid rotation/translation fields recover exact u, engineering strain and stress (55.5266ms)
+✔ hash mismatch and rehashed numerical/topological tampering are refused (85.1477ms)
+✔ own-data budgets reject getters, holes, custom arrays and large coordinates without invoking caller hooks (26.9714ms)
+✔ snapshot is detached before hash await and returned handles never expose mutable field storage (17.2815ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 26
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1391.929
+
+✖ failing tests:
+
+test at tests\module-boundaries.test.mjs:37:1
+✖ the real repository satisfies its module boundaries and the graph is what the table says it is (452.9887ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'forbidden edge: tet10-native-result.js [domain] -> analysis-preflight.js [operations] (domain may import: domain, contract)'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///C:/Users/yamashita_y00031/.codex/worktrees/slice-gif-independent209/airpocket-simulation-studio/tests/module-boundaries.test.mjs:41:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'forbidden edge: tet10-native-result.js [domain] -> analysis-preflight.js [operations] (domain may import: domain, contract)' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

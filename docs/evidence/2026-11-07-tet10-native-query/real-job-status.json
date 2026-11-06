@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "jobId": "3eeedd81-e946-4208-a0d4-e5d57b7cfac6",
+  "inputRevision": "sha256:5f0408a67b720010ff3856d0aead2cb1a363723bbc2e5f233489342f68ceb560",
+  "state": "succeeded",
+  "executionSettled": true,
+  "resourceState": "settled",
+  "releaseAllowed": true,
+  "operation": "elastic",
+  "origin": "api",
+  "startedAt": 1794000455157,
+  "updatedAt": 1794000456588,
+  "lastSequence": 11,
+  "firstAvailableSequence": 1,
+  "eventRetention": {
+    "maxEvents": 256,
+    "maxEventBytes": 32768,
+    "maxRetainedBytes": 1048576,
+    "maxPageBytes": 65536,
+    "maxViewBytes": 24576,
+    "retainedEvents": 11,
+    "retainedBytes": 6661
+  },
+  "result": {
+    "elementOrder": 2,
+    "representation": "straight-affine-Tet10-native-v1",
+    "viewSupported": false,
+    "pointSupported": false,
+    "compareSupported": false,
+    "mesh": {
+      "nodeCount": 63,
+      "elementCount": 24,
+      "volumeMm3": 999.9999999999997,
+      "minVolumeMm3": 41.666666666666664,
+      "minQuality": 0.857142857142857,
+      "qualityHistogram": [
+        0,
+        0,
+        0,
+        0,
+        24
+      ],
+      "elementType": "Tet10",
+      "nodesPerElement": 10,
+      "cornerNodeCount": 14,
+      "qualityBasis": "parent-corner-Tet4"
+    },
+    "kind": "elastic-tet10",
+    "engine": "Airpocket Tet10 / JavaScript CPU",
+    "residual": 7.550547787573839e-11,
+    "iterations": 37,
+    "maxDisplacementMm": 0.010000000000128295,
+    "maxVonMisesPa": 1000000.0000543412,
+    "analysisAssessment": {
+      "schemaVersion": 1,
+      "mode": "legacy",
+      "provisional": false,
+      "completePreflight": false,
+      "remainingChecks": [
+        "Mesh quality and element validity after generation",
+        "Boundary-region transfer and constraint rank/rigid-body modes after meshing",
+        "Source applicability, convergence, mesh dependence and physical accuracy"
+      ]
+    },
+    "nativeResultRevision": "sha256:aec2888d8c33cd7f66bdfe0f9888ad821c17df97996e04dd218f738ddf3d9733",
+    "intermediateQueue": {
+      "maxEvents": 8,
+      "maxBytes": 8000000,
+      "pendingEvents": 0,
+      "pendingBytes": 0,
+      "peakEvents": 0,
+      "peakBytes": 0,
+      "accepted": 0,
+      "dropped": 0,
+      "droppedMeshes": 0,
+      "droppedFields": 0,
+      "consumerErrors": 0,
+      "notificationErrors": 0,
+      "latestAcceptedSequence": null,
+      "latestCompletedSequence": null,
+      "latestPolicy": "last-accepted-snapshot",
+      "byteBasis": "conservative-structural-estimate",
+      "includesInFlight": true
+    },
+    "outputBytes": 39044,
+    "outputSha256": "d53dfafc2672d08a0728e3f0aee07fe1915d22e5166664aa14464868cb31fe99",
+    "outputPath": "C:\\Users\\yamashita_y00031\\.codex\\worktrees\\slice-gif-independent209\\airpocket-simulation-studio\\.qa\\tet10-query\\real.json",
+    "job": {
+      "schemaVersion": 1,
+      "jobId": "3eeedd81-e946-4208-a0d4-e5d57b7cfac6",
+      "inputRevision": "sha256:5f0408a67b720010ff3856d0aead2cb1a363723bbc2e5f233489342f68ceb560",
+      "final": true,
+      "provisional": true
+    }
+  }
+}
