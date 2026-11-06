@@ -5,7 +5,7 @@ import {printedAbsolutePath,printedPathKey,preparePrintedInputPath,preparePrinte
 export const PRINTED_HOLDOUT_FILE_LIMITS=Object.freeze({requestBytes:65536,datasetBytes:2000000,artifactBytes:4194304});
 const prefix='PRINTED_HOLDOUT_FILE_',fail=code=>{throw Object.assign(Error(code),{code});};
 const exact=(o,keys)=>o&&[Object.prototype,null].includes(Object.getPrototypeOf(o))&&Reflect.ownKeys(o).length===keys.length&&keys.every(k=>{const d=Object.getOwnPropertyDescriptor(o,k);return d?.enumerable&&Object.hasOwn(d,'value');});
-const safeCode=e=>typeof e?.code==='string'&&/^PRINTED_(?:HOLDOUT(?:_FILE)?|IDENTIFICATION|DATASET)_[A-Z_]+$/.test(e.code)?e.code:prefix+'IO';
+const safeCode=e=>typeof e?.code==='string'&&/^PRINTED_(?:HOLDOUT(?:_FILE)?|IDENTIFICATION|DATASET)_[A-Z0-9_]+$/.test(e.code)?e.code:prefix+'IO';
 export function printedHoldoutCliError(error){return{schemaVersion:1,kind:'printed-holdout-cli-summary',status:'error',code:safeCode(error)};}
 function pathsSnapshot(value){
  if(!exact(value,['request','output']))fail(prefix+'ARGUMENTS');
