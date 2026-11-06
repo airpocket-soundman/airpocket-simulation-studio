@@ -11,8 +11,10 @@ import {validatePlanarMesh} from './planar-region.js';
 import {validateInternalMesh} from './internal-fluid.js';
 import {validateComputeMetadata,validateCalculationRuntimeIdentity} from './cases.js';
 import {inspectMesh} from './mesh-core.js';
+import {rejectNativeTet10View} from './tet10-job-profile.js';
 export function prepareCaseView(saved){
  const output=structuredClone(saved?.output),mesh=output?.mesh,r=output?.result;
+ rejectNativeTet10View(mesh,r);
  validateSavedAssessment(output);
  validateCalculationRuntimeIdentity(output);
  requireResolvedCadConditions(output?.input??{});

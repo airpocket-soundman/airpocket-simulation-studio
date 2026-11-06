@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "recordedAt": "2026-11-06T20:57:59.491Z",
+  "base": "72da16fe2231e25abc9903035c8da9d2b723b667",
+  "sharedSchemaOriginal": "1b912e5bb354ac37c6414f69789aaa1febfd8fa5",
+  "sharedSchemaLocal": "2e0dd04",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "scope": {
+    "elementOrder": 2,
+    "method": "pcg-strict",
+    "nativeMachineCode": false,
+    "representation": "straight-affine-Tet10-native-v1",
+    "resultKind": "elastic-tet10",
+    "isolations": [
+      "worker-thread",
+      "process"
+    ],
+    "caseViewPointCompare": false
+  },
+  "tests": {
+    "focused": {
+      "pass": 43,
+      "fail": 0,
+      "skip": 0,
+      "elapsedMs": 5884.8364
+    },
+    "types": {
+      "declarations": 41,
+      "passed": true
+    },
+    "initialMissingAsset": {
+      "pass": 18,
+      "fail": 4,
+      "cause": "Own public/fem-kernel.wasm absent in old Tet4 regression; copied existing root-generated asset and all related tests then passed. No SDK obtained."
+    }
+  },
+  "reference": {
+    "geometryMm": [
+      10,
+      10,
+      10
+    ],
+    "youngModulusPa": 1000000000,
+    "poissonRatio": 0,
+    "totalForceN": 100,
+    "exact": "u_x=u_y=0; u_z=0.001*z (mm); sigma_zz=1e6Pa",
+    "checked": "All native nodes and all Gauss sigma_zz, complete Tet10/t6 topology, force sum, unchanged input, reconstructed physical hash, real worker/process and formal stdio job, explicit archived probe refusal. All other stress components vanish; integrated Gauss volume equals1000mm3."
+  },
+  "compatibility": {
+    "legacyStartupDigestUnchanged": true,
+    "explicit1EqualsOmitted": true,
+    "order2Different": true,
+    "sameRequestChangedOrderRejected": true,
+    "tet10KernelUnmodified": true
+  },
+  "limitations": [
+    "Straight affine box only; complete face fixed+total-force conditions; no reactions.",
+    "Native result remains provisional; no GUI/view/point/compare/case import support.",
+    "Parent mesh observation is Tet4 geometry, not a Tet10 intermediate solution field.",
+    "No 12-design comparison rerun, browser pairing or parent P5B/98 completion claim."
+  ],
+  "sources": [
+    {
+      "path": "src/tet10-elastic.js",
+      "workingByteSha256": "7d0f22eaadbe9c8e0ca7195ab5f542b494edb2b0ab189aa3be42eb984bd3dde1",
+      "gitNormalizedBlobId": "bdb5ff8767d5597a788272c84c892352a3c44fa7"
+    },
+    {
+      "path": "src/tet10-job-profile.js",
+      "workingByteSha256": "a4a910d76f12ce523c08723238273c79d1fd1f758435ad25b2f322907a6354a9",
+      "gitNormalizedBlobId": "6a27621637b45936049ca9bb5cba2a4e798fb15c"
+    },
+    {
+      "path": "src/solver-adapters/tet10-native-adapter.js",
+      "workingByteSha256": "bcf70fddd70649b9303f623f86353b50d4da10294f32f3dde7fed355daa14052",
+      "gitNormalizedBlobId": "60a996b9df0a4f40becc7bac348595c1dec110ac"
+    },
+    {
+      "path": "scripts/headless-analysis.mjs",
+      "workingByteSha256": "f53e3479347e11b226828de1a767a9d09463cb5d18ccd819d8ffecab061c51ac",
+      "gitNormalizedBlobId": "2cf0f615dd62835dafceed2b947a6ddabe5e29f1"
+    },
+    {
+      "path": "scripts/analysis-job-service.mjs",
+      "workingByteSha256": "9368d4201ed526c52fe4a517656df01dffe36f21bc1491d099a6151424124a6c",
+      "gitNormalizedBlobId": "49165b7ac187cdbb8a79d086b875334dec4c65d0"
+    },
+    {
+      "path": "src/analysis.worker.js",
+      "workingByteSha256": "03d0b15bc24c788b38e634b086873c76110b6596a13de783d91b3a6c13c7d9c1",
+      "gitNormalizedBlobId": "e51927eaba8f55bd38c260e3a4238afb44508f9f"
+    },
+    {
+      "path": "tests/tet10-native-job.test.mjs",
+      "workingByteSha256": "170d372f36edfcd6080b44aa453b18e51e11290f53b15862e2db83b9ccacbc12",
+      "gitNormalizedBlobId": "72eaf4f4c4a34283b35f3330da23e7876ded9bee"
+    }
+  ],
+  "raw": [
+    {
+      "path": "initial-missing-asset.log",
+      "bytes": 7993,
+      "sha256": "cd72babccdb3c4a910e0ebd36577b1e21b026a551e24abda093ab42fd0e97f28"
+    },
+    {
+      "path": "focused.log",
+      "bytes": 4406,
+      "sha256": "2ccfb4e4ccc952ca1a79600a59e5092bf08cbe9c308b4abd20caf7334cc35124"
+    },
+    {
+      "path": "types.log",
+      "bytes": 157,
+      "sha256": "8cd7c3cfdf239f694bc506585fe009327919ae9172997f997e0f46a1bc29435f"
+    }
+  ]
+}

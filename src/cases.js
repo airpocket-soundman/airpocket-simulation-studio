@@ -14,6 +14,7 @@ import {validateInternalMesh} from './internal-fluid.js';
 import {validateProject} from './regions.js';
 import {requireResolvedCadConditions} from './cad-update-state.js';
 import {canonicalJson} from './project-revision.js';
+import {rejectNativeTet10View} from './tet10-job-profile.js';
 const metrics={stokes:[['maxSpeedMs','m/s'],['minPressurePa','Pa'],['maxPressurePa','Pa']],modal:[['lowestFrequencyHz','Hz'],['highestFrequencyHz','Hz']],acousticTransient:[['receiverPeakPa','Pa peak'],['receiverRmsPa','Pa record RMS']],channelFlow:[['maxSpeedMs','m/s'],['outletFlowM3s','m³/s']],elastic:[['maxDisplacementMm','mm'],['maxVonMisesPa','Pa']],thermal:[['minTemperature','°C'],['maxTemperature','°C']],acoustic:[['maxPressurePa','Pa peak'],['maxSplDb','dB RMS']]};
 export function validateCalculationRuntimeIdentity(output){
  const calculation=output?.calculation;
@@ -33,6 +34,7 @@ export function createCaseStore({maxRetainedBytes=CASE_STORE_MAX_RETAINED_BYTES}
  if(!Number.isSafeInteger(maxRetainedBytes)||maxRetainedBytes<1)throw TypeError('Invalid case memory budget');
  let cases=[];
  function validate(c,owned=false){
+  rejectNativeTet10View(c?.output?.mesh,c?.output?.result);
   if(!c||typeof c.name!=='string'||!c.name.trim()||c.name.length>100)throw Error('Invalid case name');
   validateProject(c.output?.input);
   validateSavedAssessment(c.output);
