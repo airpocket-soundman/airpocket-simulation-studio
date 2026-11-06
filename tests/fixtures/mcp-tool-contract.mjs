@@ -10,6 +10,7 @@ const savedTools=[
   "studio_cancel_job",
   "studio_capabilities",
   "studio_compare_cases",
+  "studio_compare_printed_holdout",
   "studio_create_builtin_project",
   "studio_diagnose_execution",
   "studio_edit_project",

@@ -13,3 +13,7 @@ Limits are64KiB per request,2,000,000bytes per dataset,100pairs and10,000combine
 Artifacts retain source byte hashes and sizes, the existing pure result, or a refusal without invented model numbers. Residuals in Pa are prediction minus observation. Publication is exclusive: existing outputs are preserved and concurrent processes have one complete-artifact winner. Exit codes are0 compared,2 refusal artifact,1 argument/path/IO error. Stdout is a compact JSON summary without curves or internal exception stacks.
 
 Measured calibration, verified physical independence, material accuracy guarantees, GUI/MCP entry points, and general cyclic histories remain outside this completed entry point.
+
+## MCP entry
+
+Local stdio `studio_compare_printed_holdout({request,output})` uses the same service and returns a compact artifact hash summary without source curves. Inspect Node `studio_capabilities.printedHoldout` for limits and availability. This exclusive new-file writer is neither read-only nor idempotent. Browser materials, inputs and connection permissions are unchanged. This is the repository stdio route, not automatic registration in installed clients.
