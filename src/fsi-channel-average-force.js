@@ -35,6 +35,11 @@ function snapshot(raw){
 const sum=profile=>{let value=0;for(let j=0;j<profile.length;j++)value+=profile[j];return finite(value);};
 const relative=(value,scale)=>scale===0?(value===0?0:fail('FSI_AVERAGE_ZERO_ENERGY')):finite(value/scale);
 
+/** Validate/snapshot a configuration and its work bound without advancing a solver. */
+export function inspectChannelAverageForceInput(raw){
+ const {input,fluid,h}=snapshot(raw);return {input,work:{responseSolves:3*input.steps*input.microsteps,cellStepsUpperBound:3*input.steps*input.microsteps*Math.max(1,Math.ceil(h/(.5*fluid.stableDt)))*fluid.parameters.cellsX*fluid.cellsY}};
+}
+
 /** Input-only JSON reload: always recomputes from the saved initial state. No result/state restore. */
 export function runChannelAverageForce(raw){
  const {input,fluid,h}=snapshot(raw),{dt,steps,microsteps,plate}=input;
