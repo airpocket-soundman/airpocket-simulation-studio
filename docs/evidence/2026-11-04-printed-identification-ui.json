@@ -1,0 +1,114 @@
+{
+  "task": "PRINTMEASURE3 read-only UI entry",
+  "baseSha": "74f3b8c216ed5ef5c131a6c5f97950b06ef4d956",
+  "mergeBaseWithRequestedBase": "74f3b8c216ed5ef5c131a6c5f97950b06ef4d956",
+  "scope": "Existing main-mounted printed-measurement inspector gains nested explicit-condition identification; no main/MCP/material/domain/progress changes.",
+  "implementation": {
+    "models": [
+      "linear-elastic",
+      "bilinear-elastic-plastic",
+      "sls-relaxation"
+    ],
+    "defaults": "All model/condition controls empty; no inferred material values.",
+    "worker": "One owned module worker/request; 10s worker watchdog, input/options/cancel/clear/BFcache/dispose terminate and cut callbacks.",
+    "preparationOwnership": "Native SHA is cooperative, not cancellable; single digest slot remains reserved until real settlement even after invalidation.",
+    "binding": [
+      "raw UTF8 SHA256 computed before worker",
+      "raw/options snapshot",
+      "generation/requestId",
+      "model-specific exact finite response",
+      "across values recomputed from accepted individual parameters"
+    ],
+    "bounds": {
+      "inputBytes": 2000000,
+      "specimens": 100,
+      "totalSamples": 10000,
+      "bilinearWindowPoints": 512,
+      "responseBytes": 262144,
+      "parametersPerSpecimen": 3
+    }
+  },
+  "verification": {
+    "focusedRelated": {
+      "total": 55,
+      "pass": 55,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 1587.0909
+    },
+    "newUiTests": 10,
+    "realNodeWorkers": "three synthetic model requests plus typed invalid JSON refusal; all child workers terminated in finally",
+    "declarations": 37,
+    "declarationStdout": "Contract declarations type-check (37 declaration files).",
+    "diffCheck": "pass",
+    "protected": [
+      {
+        "path": "src/main.js",
+        "baseGitBytesSha256": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+        "unchanged": true
+      },
+      {
+        "path": "src/progress.json",
+        "baseGitBytesSha256": "db41b20d04f4ce35146a060050226522c14ebcd0c4372ffc78af2353de35b231",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-parameter-identification.js",
+        "baseGitBytesSha256": "0b6e36517be9c947eee1ef343b88f5f57c074ebc10ffcb28ae25f5c4f418ba43",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-measurement-dataset.js",
+        "baseGitBytesSha256": "e3df94b0399b97446388bbf33993d9a4010691d81c036f7dfb93362ec3e9431e",
+        "unchanged": true
+      },
+      {
+        "path": "src/contracts/printed-parameter-identification.d.ts",
+        "baseGitBytesSha256": "631493a2f534b084181671be2c5b8913b28f805e26980cfdfbb852c92a1fa1e7",
+        "unchanged": true
+      }
+    ]
+  },
+  "notVerified": [
+    "Real browser/UI acceptance (root integration task)",
+    "real measurements or calibration accuracy",
+    "independent measured validation",
+    "automatic material application or solver handover"
+  ],
+  "launches": {
+    "GUI": 0,
+    "solver": 0,
+    "SU2": 0,
+    "nativeCodec": 0
+  },
+  "preparationNotes": [
+    "npm ci --ignore-scripts only; no native SDK.",
+    "An initial test-generation Python warning about regex escape did not prevent tests; no failed runtime tests.",
+    "Earlier commentary guessed declaration counts incorrectly; actual command stdout and base ancestry above are authoritative."
+  ],
+  "independentFollowup": {
+    "findings": [
+      "Finite tangent modulus outside explicit ratio could pass response gate.",
+      "Existing parent dataset inspector allowed overlapping unresolved SHA preparations after edit/invalidate."
+    ],
+    "fixes": [
+      "Model inequalities and yield identity checked before display.",
+      "Parent inspectionPending slot held through actual await/finally; disabled run survives edits/BFcache/destroy until settlement."
+    ],
+    "newRegressions": 2,
+    "focusedUiAndTypes": {
+      "total": 23,
+      "pass": 23,
+      "fail": 0
+    },
+    "declarations": 37,
+    "initialRegressionFailure": "One existing overlap test expected a second concurrent inspection to succeed. Updated it to require rejection until prior digest settles, then fresh inspection succeeds. Initial result19pass/1fail, final related rerun passed.",
+    "finalRelated": {
+      "total": 57,
+      "pass": 57,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 1567.0808
+    }
+  }
+}

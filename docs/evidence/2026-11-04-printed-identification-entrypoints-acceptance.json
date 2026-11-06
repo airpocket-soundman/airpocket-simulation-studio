@@ -1,0 +1,213 @@
+{
+  "date": "2026-11-04",
+  "scope": "First UI/CLI entry points before the separately developed condition-grouping addition",
+  "guiSource": "e8ce96f30a28eaeb022a0b6a0d42f24251a5c69e",
+  "cliSource": "96479501bcb5eb3ffc347b41c26d1f8b830d4571",
+  "environment": "ordinary existing in-app browser,English/Japanese,local Vite and real module workers;actual Node CLI",
+  "commonInputSha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+  "commonInputBytes": 1585,
+  "cliArtifactBytes": 1218,
+  "cliArtifactSha256": "b36a43019cc88ce204e5ad7819b872ef2333fe63dff37e19928c1c9c76612e69",
+  "commonYoungsModulusPa": 100000000,
+  "models": [
+    {
+      "model": "linear-elastic",
+      "rawSha256": "16a0ab21f1b6939ea450b5cf3129e8215c75c9757ffa28d8bc00b6086fa7d0cc",
+      "truth": {
+        "youngsModulusPa": 1000000000
+      },
+      "formula": "stress = 1e9 Pa × strain"
+    },
+    {
+      "model": "bilinear-elastic-plastic",
+      "rawSha256": "7be5811b9b6fdc3ebb0a28f5a7d9f86611b4b39ca4f3a05a27707c5cc92099f0",
+      "truth": {
+        "youngsModulusPa": 2000000000,
+        "yieldStressPa": 20000000,
+        "tangentModulusPa": 100000000
+      },
+      "formula": "stress = 2e9 Pa × min(strain,0.01) + 1e8 Pa × max(strain−0.01,0)"
+    },
+    {
+      "model": "sls-relaxation",
+      "rawSha256": "54e79428181cba54b6f66bbd8e4290e5520c16376b0426bba3d0dd5451d360af",
+      "truth": {
+        "equilibriumModulusPa": 1200000000,
+        "branchModulusPa": 800000000,
+        "relaxationTimeS": 2
+      },
+      "formula": "held strain = 0.004; stress = 0.004 × (1.2e9 + 0.8e9 exp(−(t−1)/2)) Pa"
+    }
+  ],
+  "checks": {
+    "exampleLoadsNeverAutoIdentify": true,
+    "oldDisplayAndDownloadLinksClearedOnLoad": true,
+    "jaEnRawAndOptionsPreserved": true,
+    "optionEditAndAbaImmediatelyClear": true,
+    "invalidJsonRefusedWithoutOldValues": true,
+    "clearRemovesOptionsAndResultsButRetainsRaw": true,
+    "wholeProjectJsonExactlyUnchanged": true,
+    "otherDomControlsExactlyUnchanged": 490,
+    "cliInputsAndExistingArtifactUnchanged": true
+  },
+  "limitations": [
+    "Synthetic algorithm inputs only;not measured/calibrated material data",
+    "No material application or solver",
+    "Actual cancellation/timeout not claimed;independent automated ownership tests cover these paths",
+    "No private browser API revision equality claim",
+    "Later condition-grouping UI requires a separate acceptance record"
+  ],
+  "rawFolder": "docs/evidence/2026-11-04-printed-identification-entrypoints-gui",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 26,
+      "sha256": "155348a89d5e749f50d336f8f164a39bf8415179177b36e8b51766f3ab9a16d3",
+      "gitBlobSha1": "dc7fa84bd005a6f7cc04cee810c7eb3d17cdb10e"
+    },
+    {
+      "file": "actual-cli-artifact.json",
+      "bytes": 1218,
+      "sha256": "b36a43019cc88ce204e5ad7819b872ef2333fe63dff37e19928c1c9c76612e69",
+      "gitBlobSha1": "e3ffb7dc9ba0057afc07ad330e13eff4ba903aad"
+    },
+    {
+      "file": "cli-acceptance.json",
+      "bytes": 1072,
+      "sha256": "a168241ef921e96e3c7e9957cd23be0dd4b07af440122ed9d4b2148735d2ed28",
+      "gitBlobSha1": "392990350ca44149e2583b8381e886cde8e4f2a8"
+    },
+    {
+      "file": "cli-existing-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "file": "cli-existing-stdout.json",
+      "bytes": 127,
+      "sha256": "8fb55d62debf87c2903ff13965ad815198deadb1a0878c1e12bc21229dc4effe",
+      "gitBlobSha1": "91c206b6c9e0455f4591257944076945b0ad8347"
+    },
+    {
+      "file": "cli-start.json",
+      "bytes": 761,
+      "sha256": "b7dd31816e70ef066979a75f5fb8c6e01daf9f82cc736c862c883bc7878e2e94",
+      "gitBlobSha1": "6ffb26d0a3db0fd259b6c45ea3d188c7b27e91ee"
+    },
+    {
+      "file": "cli-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "file": "cli-stdout.json",
+      "bytes": 432,
+      "sha256": "ff25094c2465c49e432fb0578adaf1edf532562e0c7c33488cb3e0112cfac978",
+      "gitBlobSha1": "b6d1660bababf93cdc573762182649093b7f4a50"
+    },
+    {
+      "file": "dataset.json",
+      "bytes": 1585,
+      "sha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+      "gitBlobSha1": "c67c0f24ed01992f7d01f40794ef874eb20b6121"
+    },
+    {
+      "file": "expected-identification.json",
+      "bytes": 1222,
+      "sha256": "c012efaa2b15d9abfcc007291b78a6ce98c83284844e3aa2500ea16cc0f27a7e",
+      "gitBlobSha1": "ead857e61c23029f1e29b143fd6436425d56d587"
+    },
+    {
+      "file": "gui-after.json",
+      "bytes": 80374,
+      "sha256": "b5c8e59c729d008ce9f9e7217b6c9ec462511ae67617d932b16204d851d2a276",
+      "gitBlobSha1": "c6ad47ab830480a291a97c1cbe07588bfb8dc490"
+    },
+    {
+      "file": "gui-before.json",
+      "bytes": 79791,
+      "sha256": "83cac3d1f5f00529c81e7f79a647c9c23e8e92b4fc1da22b485724750a1690aa",
+      "gitBlobSha1": "3b6e632b56610913be620b942449664583e90d8f"
+    },
+    {
+      "file": "gui-clear.json",
+      "bytes": 8756,
+      "sha256": "aaa7d556d80652f6f860cf689dfe83b1a7a12177b0dba77680633bcee7156ab3",
+      "gitBlobSha1": "5a81eb912f1fe008bcab73c398d30f0a90668fd5"
+    },
+    {
+      "file": "gui-cli-match.json",
+      "bytes": 3106,
+      "sha256": "812cd6216c2c0a1b9806df4fa85390bc00bbfac854509082be1a2e8c4037ca03",
+      "gitBlobSha1": "dfec866f44cf851fb3b77d5635df7954b21c5c23"
+    },
+    {
+      "file": "gui-cli-match.png",
+      "bytes": 35894,
+      "sha256": "567e0de089036535e58bfdfbdf60880c7366bfd2980de5579003a5a24a03c246",
+      "gitBlobSha1": "b4bebe991ac6853a524955cc21ea1ae6d6480043"
+    },
+    {
+      "file": "gui-example-bilinear-elastic-plastic.json",
+      "bytes": 20093,
+      "sha256": "a0cb3dfe94858c458c6f8463f169b7aa75cfbecf31d13b6855c9bd7e4699bc76",
+      "gitBlobSha1": "2fd52e659f9b80ca3fd17598bc5b45df8c30e417"
+    },
+    {
+      "file": "gui-example-linear-elastic.json",
+      "bytes": 6658,
+      "sha256": "481974f74269218b0b454be9d401dac524ff829654dcab4ea320412c12030638",
+      "gitBlobSha1": "f63a0680003efb383afedbd3abee3f2626e77cde"
+    },
+    {
+      "file": "gui-example-sls-relaxation.json",
+      "bytes": 17761,
+      "sha256": "98db0aba98c32afc8ceec8079f3f95dc5d64b91c1084423b21b4932d5e2a317f",
+      "gitBlobSha1": "8bb76e72839d4172a09d54a21044790c417f5290"
+    },
+    {
+      "file": "gui-final.png",
+      "bytes": 39350,
+      "sha256": "5d0f278101e6449e701338841e994aa5e3b4b542c191f771d507efdeabcc840e",
+      "gitBlobSha1": "37d197ee89e9e27e4f97f43e6a9d4999be3b0146"
+    },
+    {
+      "file": "gui-invalid-and-aba.json",
+      "bytes": 179,
+      "sha256": "9b67e863ecc592cbba88f8995adac6283cfdafec5c4ba570834f12c9efcf5f30",
+      "gitBlobSha1": "181b66d17f9fe6275528369df7387f46c33faba1"
+    },
+    {
+      "file": "gui-language-ja.json",
+      "bytes": 20338,
+      "sha256": "208eaf60dc292b19122cec6318d6c61bb53a6d046c365ba748b20cef8968faaa",
+      "gitBlobSha1": "251704cbcaa381d462d2e7ee0679a7d64787c559"
+    },
+    {
+      "file": "gui-sls-ja.png",
+      "bytes": 39791,
+      "sha256": "9079f7e741aa9c7d3663cfa4c09939bc8e0e901c988a7f5d6368ab8c5bacdf98",
+      "gitBlobSha1": "ec39dcf457f93927f76f616da7d1866cff18ac10"
+    },
+    {
+      "file": "options.json",
+      "bytes": 89,
+      "sha256": "0891b5b5ec826d65659c46fd82d16dc1c60afa9083de099bacef21249175aa39",
+      "gitBlobSha1": "25ce1f11f0049d199cdecfe8c21b3091a4ec9b4e"
+    },
+    {
+      "file": "oracle.json",
+      "bytes": 508,
+      "sha256": "e20afff44c739b3dd4e0b77874b4cc4e44e5d6058807e26057c7f3b2285ad445",
+      "gitBlobSha1": "48c4dddab66fec296a9797c6ba813c2a45f5591a"
+    },
+    {
+      "file": "project-before.json",
+      "bytes": 1650,
+      "sha256": "62e4bf5695512a8692c0fc07bba55c4e51ff0be68c84a4e60679927a18c12ec1",
+      "gitBlobSha1": "7b407ab0c7cce4d6707788ddd20f8a0b5e4c928a"
+    }
+  ]
+}

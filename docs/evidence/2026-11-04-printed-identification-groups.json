@@ -1,0 +1,118 @@
+{
+  "task": "PRINTMEASURE3",
+  "baseSha": "e8ce96f30a28eaeb022a0b6a0d42f24251a5c69e",
+  "limitedScopeCompleted": "Exact normalized measurement-condition grouping API and existing read-only worker/UI summaries. Existing identify/across and CLI remain unchanged.",
+  "conditionEquality": {
+    "fields": [
+      "buildDirection",
+      "temperatureC",
+      "speedMmPerSecond",
+      "batch",
+      "dimensionsMm",
+      "gaugeLengthMm"
+    ],
+    "numbers": "Object.is, no tolerance/rounding; signed zero distinct",
+    "normalization": "Existing dataset importer only"
+  },
+  "statistics": {
+    "contributors": "identified specimens in the same group only",
+    "mean": "sum(value/n)",
+    "sampleSD": "hypot((value-mean)/sqrt(n-1)); null with one contributor",
+    "noIdentified": "statistics null; refused members retain only identity/false/reason",
+    "flags": {
+      "calibrated": false,
+      "accuracyVerified": false,
+      "covarianceAccuracyVerified": false
+    }
+  },
+  "bounds": {
+    "groups": 100,
+    "specimens": 100,
+    "parameters": 3,
+    "inputBytes": 2000000,
+    "inputSamples": 10000,
+    "workerMilliseconds": 10000,
+    "replyBytes": 262144
+  },
+  "ui": "Mixed global averages hidden; exact conditions, member/refusal identities and per-group statistics shown in bounded details. Single-member scatter explicitly unknown. Raw/options/generation/cancel/download behavior retained.",
+  "verification": {
+    "focusedRelated": {
+      "total": 48,
+      "pass": 48,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 14147.9523
+    },
+    "newPureTests": 4,
+    "newUiTests": 2,
+    "declarationStdout": "Contract declarations type-check (39 declaration files).",
+    "protected": [
+      {
+        "path": "src/printed-parameter-identification.js",
+        "sha256GitBytes": "99c04ce0402316ab4b0d7b7a6d3ddad4839263d636eec2478a4528bfcc5438a5",
+        "unchanged": true
+      },
+      {
+        "path": "src/main.js",
+        "sha256GitBytes": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+        "unchanged": true
+      },
+      {
+        "path": "src/progress.json",
+        "sha256GitBytes": "db41b20d04f4ce35146a060050226522c14ebcd0c4372ffc78af2353de35b231",
+        "unchanged": true
+      },
+      {
+        "path": "src/printed-measurement-dataset.js",
+        "sha256GitBytes": "e3df94b0399b97446388bbf33993d9a4010691d81c036f7dfb93362ec3e9431e",
+        "unchanged": true
+      },
+      {
+        "path": "src/ui/printed-measurement-ui.js",
+        "sha256GitBytes": "616b10ee5a61afd6b881d48d771010449674b642fa6206eb6541f2644df98fba",
+        "unchanged": true
+      },
+      {
+        "path": "src/contracts/printed-parameter-identification.d.ts",
+        "sha256GitBytes": "395d9e5d373beed19b91618a92bccf62e45541c78cd159e89231a84d4db444f4",
+        "unchanged": true
+      }
+    ],
+    "mockProtocolUpdate": "Existing independent UI mock packets now include grouping from the new pure API; original numerical and lifecycle assertions retained.",
+    "existingUiExampleCoreDocs": {
+      "total": 27,
+      "pass": 27,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 4046.3256
+    }
+  },
+  "independentOracles": [
+    "E1e9 and3e9 same Z group => mean2e9/SDsqrt(2)*1e9; separate X9e9 singleton unknown",
+    "All six condition changes plus1ULP temperature separate",
+    "100groups capacity and all-rejected coefficients absent",
+    "Extreme finite modulus E/2E scatter remains E/sqrt(2); equivalent normalized unit records match"
+  ],
+  "notVerified": [
+    "Real browser acceptance of this grouped increment",
+    "Real measurements, calibration or measurement accuracy",
+    "Independent measured validation",
+    "Model covariance accuracy beyond existing approximation",
+    "Automatic application/solver handover"
+  ],
+  "progressProposal": {
+    "id": "PRINTMEASURE3",
+    "limitedCompleted": "条件別集計・読取UI（完全一致/単片SD不明/条件混在全体平均非表示）",
+    "parentRemaining": "実測・校正根拠・独立検証・材料適用受入は未完。親status完了へ昇格しない。",
+    "statusEdited": false
+  },
+  "newLaunches": {
+    "solver": 0,
+    "SU2": 0,
+    "GUI": 0,
+    "nativeCodec": 0
+  },
+  "preparationNotes": [
+    "Python test-writing escape-sequence warning only; test commands passed. No product or test failures in this increment."
+  ]
+}

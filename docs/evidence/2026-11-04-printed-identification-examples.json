@@ -1,0 +1,92 @@
+{
+  "task": "PRINTMEASURE3 explicit synthetic examples UI increment",
+  "baseSha": "99dcf950258f6fea1b43c068da323ff9c3ef0292",
+  "provenance": "Invented deterministic algorithm examples only; never measured, calibrated or recommended material data.",
+  "examples": [
+    {
+      "model": "linear-elastic",
+      "rawBytes": 2338,
+      "rawSha256": "16a0ab21f1b6939ea450b5cf3129e8215c75c9757ffa28d8bc00b6086fa7d0cc",
+      "options": {
+        "model": "linear-elastic",
+        "maxStrain": 0.01,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05
+      },
+      "analyticalTruth": {
+        "youngsModulusPa": 1000000000
+      },
+      "formula": "stress = 1e9 Pa × strain"
+    },
+    {
+      "model": "bilinear-elastic-plastic",
+      "rawBytes": 8540,
+      "rawSha256": "7be5811b9b6fdc3ebb0a28f5a7d9f86611b4b39ca4f3a05a27707c5cc92099f0",
+      "options": {
+        "model": "bilinear-elastic-plastic",
+        "maxStrain": 0.04,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05,
+        "maxTangentRatio": 0.5
+      },
+      "analyticalTruth": {
+        "youngsModulusPa": 2000000000,
+        "yieldStressPa": 20000000,
+        "tangentModulusPa": 100000000
+      },
+      "formula": "stress = 2e9 Pa × min(strain,0.01) + 1e8 Pa × max(strain−0.01,0)"
+    },
+    {
+      "model": "sls-relaxation",
+      "rawBytes": 7483,
+      "rawSha256": "54e79428181cba54b6f66bbd8e4290e5520c16376b0426bba3d0dd5451d360af",
+      "options": {
+        "model": "sls-relaxation",
+        "maxStrain": 0.01,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05,
+        "holdStrainTolerance": 0.000001
+      },
+      "analyticalTruth": {
+        "equilibriumModulusPa": 1200000000,
+        "branchModulusPa": 800000000,
+        "relaxationTimeS": 2
+      },
+      "formula": "held strain = 0.004; stress = 0.004 × (1.2e9 + 0.8e9 exp(−(t−1)/2)) Pa"
+    }
+  ],
+  "behavior": {
+    "load": "Explicit button only; replaces measurement raw text and all visible model conditions.",
+    "automaticIdentification": false,
+    "materialOrSolverWrites": false,
+    "lifecycle": "Parent raw callback invalidates old dataset/results/URLs and owned worker; pending native SHA keeps its real single slot; all inputs remain editable.",
+    "defaultConditions": "Empty until a user loads an example or types values."
+  },
+  "legacyExample": {
+    "bytes": 1585,
+    "sha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+    "unchanged": true
+  },
+  "verification": {
+    "focusedRelated": {
+      "total": 61,
+      "pass": 61,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 7971.7714
+    },
+    "declarationStdout": "Contract declarations type-check (38 declaration files).",
+    "newTests": 4,
+    "initialTestCorrection": "One new loop test mistakenly expected cumulative workers to remain 1 after explicit identifies; replaced with per-click before-count assertion. Initial15pass/1fail, final61pass."
+  },
+  "notVerified": [
+    "Real browser interaction (root integration responsibility)",
+    "real measurements/calibration/independent measured validation",
+    "physical material recommendations"
+  ],
+  "newLaunches": {
+    "solver": 0,
+    "GUI": 0,
+    "nativeCodec": 0
+  }
+}

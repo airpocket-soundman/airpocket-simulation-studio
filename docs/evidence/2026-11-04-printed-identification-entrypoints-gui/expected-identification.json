@@ -1,0 +1,56 @@
+{
+  "identificationVersion": 1,
+  "model": "linear-elastic",
+  "options": {
+    "model": "linear-elastic",
+    "maxStrain": 0.02,
+    "minPoints": 3,
+    "maxRelativeStandardError": 0.1
+  },
+  "dataset": {
+    "id": "synthetic-example-only",
+    "revision": "1",
+    "provenance": "synthetic",
+    "sourceSha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681"
+  },
+  "calibrated": false,
+  "accuracyVerified": false,
+  "identified": true,
+  "specimens": [
+    {
+      "specimen": "synthetic-Z",
+      "identified": true,
+      "points": 3,
+      "parameters": {
+        "youngsModulusPa": {
+          "value": 100000000,
+          "standardError": 0,
+          "relativeStandardError": 0
+        }
+      },
+      "rSquared": 1,
+      "residualRmsPa": 0
+    },
+    {
+      "specimen": "synthetic-X",
+      "identified": true,
+      "points": 3,
+      "parameters": {
+        "youngsModulusPa": {
+          "value": 100000000,
+          "standardError": 0,
+          "relativeStandardError": 0
+        }
+      },
+      "rSquared": 1,
+      "residualRmsPa": 0
+    }
+  ],
+  "across": {
+    "youngsModulusPa": {
+      "mean": 100000000,
+      "sampleStandardDeviation": 0,
+      "specimens": 2
+    }
+  }
+}

@@ -176,6 +176,7 @@
     "printed-test-machine-profile.js",
     "printed-specimen-link.js",
     "printed-parameter-identification.js",
+    "printed-parameter-holdout.js",
     "result-selection-state.js",
     "agent-chat-state.js",
     "planar-heat-operator.js",
@@ -193,7 +194,9 @@
     "finite-visco-hencky-multiplicative.js",
     "finite-visco-prf-j2.js",
     "finite-visco-damage.js",
-    "retained-opening-surface.js"
+    "retained-opening-surface.js",
+    "printed-identification-examples.js",
+    "printed-identification-groups.js"
    ]
   },
   "operations": {
@@ -339,7 +342,8 @@
     "ui/spherical-region-ui.js",
     "ui/agent-connection-status-ui.js",
     "ui/printed-measurement-ui.js",
-    "ui/finite-history-inspector.js"
+    "ui/finite-history-inspector.js",
+    "ui/printed-identification-ui.js"
    ]
   },
   "dashboard": {
@@ -377,7 +381,8 @@
    "files": [
     "analysis.worker.js",
     "cad.worker.js",
-    "finite-visco-inspector.worker.js"
+    "finite-visco-inspector.worker.js",
+    "printed-identification.worker.js"
    ]
   }
  },
@@ -429,6 +434,12 @@
    "from": "ui/finite-history-inspector.js",
    "to": "finite-visco-inspector.worker.js",
    "reason": "The UI owns one module worker per material-point replay; messages only, never a runtime code import."
+  },
+  {
+   "kind": "edge",
+   "from": "ui/printed-identification-ui.js",
+   "to": "printed-identification.worker.js",
+   "reason": "The read-only UI owns one bounded module worker per printed-parameter identification; messages only, no solver or material mutation."
   }
  ]
 }

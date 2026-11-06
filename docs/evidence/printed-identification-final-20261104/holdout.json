@@ -1,0 +1,127 @@
+{
+  "holdoutVersion": 1,
+  "model": "linear-elastic",
+  "options": {
+    "model": "linear-elastic",
+    "maxStrain": 0.02,
+    "minPoints": 3,
+    "maxRelativeStandardError": 0.1
+  },
+  "training": {
+    "id": "synthetic-example-only",
+    "revision": "1",
+    "provenance": "synthetic",
+    "sourceSha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+    "specimens": 2,
+    "samples": 6
+  },
+  "validation": {
+    "id": "synthetic-validation-distinct",
+    "revision": "1",
+    "provenance": "synthetic",
+    "sourceSha256": "23ec20ff90c851b619bcd3a40dde35371cb2a9c60a1859f9cd8ee8ade99c3fd8",
+    "specimens": 2,
+    "samples": 6
+  },
+  "independence": "declared-only",
+  "physicalIndependenceVerified": false,
+  "calibrated": false,
+  "accuracyVerified": false,
+  "recordedConditions": "exact-normalized-match-including-batch",
+  "residualConvention": "prediction-minus-observation",
+  "protocol": "strictly-increasing-nonnegative-loading",
+  "extrapolation": false,
+  "summary": {
+    "pairs": 2,
+    "compared": 2,
+    "refused": 0
+  },
+  "pairs": [
+    {
+      "trainingSpecimenId": "synthetic-Z",
+      "validationSpecimenId": "validation-synthetic-Z",
+      "status": "compared",
+      "trainingPoints": 3,
+      "parameters": {
+        "youngsModulusPa": {
+          "value": 100000000,
+          "standardError": 0,
+          "relativeStandardError": 0
+        }
+      },
+      "metrics": {
+        "count": 3,
+        "biasPa": -39999.999999999956,
+        "meanAbsoluteErrorPa": 39999.999999999956,
+        "rootMeanSquareErrorPa": 43204.93798938568,
+        "maximumAbsoluteErrorPa": 59999.99999999988
+      },
+      "samples": [
+        {
+          "timeSeconds": 0,
+          "engineeringStrain": 0.002,
+          "observedStressPa": 220000,
+          "predictedStressPa": 200000,
+          "residualPa": -20000
+        },
+        {
+          "timeSeconds": 1,
+          "engineeringStrain": 0.004,
+          "observedStressPa": 440000,
+          "predictedStressPa": 400000,
+          "residualPa": -40000
+        },
+        {
+          "timeSeconds": 2,
+          "engineeringStrain": 0.006,
+          "observedStressPa": 659999.9999999999,
+          "predictedStressPa": 600000,
+          "residualPa": -59999.99999999988
+        }
+      ]
+    },
+    {
+      "trainingSpecimenId": "synthetic-X",
+      "validationSpecimenId": "validation-synthetic-X",
+      "status": "compared",
+      "trainingPoints": 3,
+      "parameters": {
+        "youngsModulusPa": {
+          "value": 100000000,
+          "standardError": 0,
+          "relativeStandardError": 0
+        }
+      },
+      "metrics": {
+        "count": 3,
+        "biasPa": -39999.999999999956,
+        "meanAbsoluteErrorPa": 39999.999999999956,
+        "rootMeanSquareErrorPa": 43204.93798938568,
+        "maximumAbsoluteErrorPa": 59999.99999999988
+      },
+      "samples": [
+        {
+          "timeSeconds": 0,
+          "engineeringStrain": 0.002,
+          "observedStressPa": 220000,
+          "predictedStressPa": 200000,
+          "residualPa": -20000
+        },
+        {
+          "timeSeconds": 1,
+          "engineeringStrain": 0.004,
+          "observedStressPa": 440000,
+          "predictedStressPa": 400000,
+          "residualPa": -40000
+        },
+        {
+          "timeSeconds": 2,
+          "engineeringStrain": 0.006,
+          "observedStressPa": 659999.9999999999,
+          "predictedStressPa": 600000,
+          "residualPa": -59999.99999999988
+        }
+      ]
+    }
+  ]
+}

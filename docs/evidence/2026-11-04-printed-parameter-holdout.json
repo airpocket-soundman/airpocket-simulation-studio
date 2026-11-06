@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "taskId": "PRINTMEASURE3",
+  "baseSha": "e8ce96f30a28eaeb022a0b6a0d42f24251a5c69e",
+  "branch": "codex/printed-holdout-prediction-20261104",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "implementation": {
+    "api": "comparePrintedHoldoutPrediction",
+    "fits": "One existing training-only identify call; per-mapped-specimen coefficients, no validation refit or coefficient pooling",
+    "independence": "declared-only; distinct dataset IDs and source SHA256; disjoint specimen IDs; complete one-to-one mapping",
+    "conditions": "Exact normalized direction, temperature, speed, geometry, gauge length and batch",
+    "profiles": [
+      "All nonnegative strictly increasing in-window loading points; optional zero-stress origin anchor; validation strain span within training observed span",
+      "Explicit zero anchor then exact positive constant SLS hold; validation hold amplitude/duration within training observation; first held point defines ideal-step elapsed0"
+    ],
+    "bounds": {
+      "datasetBytesEach": 2000000,
+      "pairs": 100,
+      "totalSamplesCombined": 10000,
+      "resultBytes": 4000000
+    },
+    "residualConvention": "prediction-minus-observation",
+    "calibrated": false,
+    "accuracyVerified": false,
+    "physicalIndependenceVerified": false,
+    "passThreshold": null
+  },
+  "analyticalReference": {
+    "synthetic": true,
+    "measurement": false,
+    "trainingSha256": "77c678d63950f64e97a26fc8c30d52a5ee822ab2d6ccb8aec3ea8f9159a90395",
+    "validationSha256": "fac128cefd56e0b1a54736aa5f39c422771916590499cea1c29a25cae4a9f0c7",
+    "trainingModulusPa": 700000000,
+    "validationOnlySlopeOffsetPa": 100000,
+    "expectedResidualsPa": [
+      0,
+      -100,
+      -200,
+      -300,
+      -400,
+      -500
+    ],
+    "expectedMetrics": {
+      "count": 6,
+      "biasPa": -250,
+      "meanAbsoluteErrorPa": 250,
+      "rootMeanSquareErrorPa": 302.7650354097492,
+      "maximumAbsoluteErrorPa": 500
+    },
+    "actualMetrics": {
+      "count": 6,
+      "biasPa": -249.99999999963137,
+      "meanAbsoluteErrorPa": 249.99999999963137,
+      "rootMeanSquareErrorPa": 302.7650354092814,
+      "maximumAbsoluteErrorPa": 499.9999999990687
+    },
+    "actualParameters": {
+      "youngsModulusPa": {
+        "value": 700000000.0000001,
+        "standardError": 5.11071579854666e-8,
+        "relativeStandardError": 7.30102256935237e-17
+      }
+    }
+  },
+  "tests": {
+    "new": 11,
+    "related": {
+      "command": "node --test tests/printed-parameter-holdout.test.mjs tests/printed-parameter-identification.test.mjs tests/printed-measurement-dataset.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+      "pass": 51,
+      "fail": 0,
+      "skip": 0,
+      "durationMilliseconds": 2577.7213,
+      "includesNew11": true,
+      "logSha256": "fc6968c4c4b4cc13ef029d856352286996e3c0b112a8551de7052a02ec15c5e0"
+    },
+    "contracts": {
+      "pass": true,
+      "declarationFiles": 39,
+      "logSha256": "8d9cbddea528e8d809de5a96d39ba5f34c91c9936674ca28609a061fae756bf3"
+    },
+    "independentChecks": [
+      "Linear slope/Pa metrics closed forms",
+      "Bilinear validation6points cannot refit with minPoints5 but predicts training coefficients",
+      "SLS changed hold amplitude/time origin with analytical exponential prediction",
+      "Reversed dataset ordering/explicit nonpositional pairs",
+      "ID/hash/specimen separation, all recorded conditions and whole-history rejection",
+      "Input getter/iterator0 and detached snapshot across awaits; training digest2,validation1",
+      "Exact100pairs and combined10000samples accepted; capacities+1 refused"
+    ]
+  },
+  "sourceHashes": [
+    {
+      "path": "src/printed-parameter-holdout.js",
+      "workingBytesSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9",
+      "normalizedLfSha256": "ba1a2c4c447d63bdb8046f67a34de95023f1d9ab013561c474f7b043b3cd64e9"
+    },
+    {
+      "path": "src/printed-parameter-holdout.d.ts",
+      "workingBytesSha256": "952af9d725e15f63efd8274e77248811d624f74fde69378194ac7aafe88a162d",
+      "normalizedLfSha256": "952af9d725e15f63efd8274e77248811d624f74fde69378194ac7aafe88a162d"
+    },
+    {
+      "path": "src/contracts/printed-parameter-holdout.d.ts",
+      "workingBytesSha256": "21d935330aead76c67b76200c85391799bd6ebe215d7ae8a271f440fe6e9025a",
+      "normalizedLfSha256": "21d935330aead76c67b76200c85391799bd6ebe215d7ae8a271f440fe6e9025a"
+    },
+    {
+      "path": "tests/printed-parameter-holdout.test.mjs",
+      "workingBytesSha256": "88eaff7700c33f2b43b8930ea8d0c50197daaa3d84c72989793648e014cda809",
+      "normalizedLfSha256": "88eaff7700c33f2b43b8930ea8d0c50197daaa3d84c72989793648e014cda809"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "src/main.js",
+      "gitBlobSha256": "62ad95eeb6f1a74fbd8744d8875e19caadca7331fb940d87df71a232b1d3773b",
+      "unchanged": true
+    },
+    {
+      "path": "src/progress.json",
+      "gitBlobSha256": "db41b20d04f4ce35146a060050226522c14ebcd0c4372ffc78af2353de35b231",
+      "unchanged": true
+    },
+    {
+      "path": "src/printed-parameter-identification.js",
+      "gitBlobSha256": "99c04ce0402316ab4b0d7b7a6d3ddad4839263d636eec2478a4528bfcc5438a5",
+      "unchanged": true
+    },
+    {
+      "path": "src/printed-measurement-dataset.js",
+      "gitBlobSha256": "e3df94b0399b97446388bbf33993d9a4010691d81c036f7dfb93362ec3e9431e",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/identify-printed-parameters.mjs",
+      "gitBlobSha256": "ff75e33f3f6045ec1f668da72dfed772b7e1e268e69d681dd85c1e1afc8c1a1f",
+      "unchanged": true
+    }
+  ],
+  "progressProposal": {
+    "id": "PRINTMEASURE3",
+    "statusChange": false,
+    "limitedOutcome": "Separate-declared-specimen bounded prediction-error API for three existing identification profiles; no physical independence/accuracy/calibration guarantee",
+    "remainingParentAcceptance": [
+      "Actual calibrated measurement curves and physically independent validation",
+      "Material application and accuracy evidence by build direction/conditions",
+      "General unloading/cyclic/finite-strain/multibranch histories",
+      "UI/CLI/MCP integration of this holdout API"
+    ]
+  },
+  "unverified": [
+    "Recorded IDs/conditions cannot prove physical independence; copied curves can be relabelled",
+    "SLS ideal step and constant hold are declared sample profiles, not apparatus verification",
+    "No arbitrary pass threshold, material application, physical calibration or parent completion",
+    "No new solver/SU2/GUI/codec/publication run; latest user boundary honored, no next task started"
+  ]
+}

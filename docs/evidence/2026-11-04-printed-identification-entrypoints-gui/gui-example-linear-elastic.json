@@ -1,0 +1,48 @@
+{
+  "model": "linear-elastic",
+  "loaded": {
+    "downloads": 0,
+    "options": [
+      {
+        "disabled": false,
+        "id": "printed-measurement-1-identification-model",
+        "value": "linear-elastic"
+      },
+      {
+        "disabled": false,
+        "id": "printed-measurement-1-identification-maxStrain",
+        "value": "0.01"
+      },
+      {
+        "disabled": false,
+        "id": "printed-measurement-1-identification-minPoints",
+        "value": "5"
+      },
+      {
+        "disabled": false,
+        "id": "printed-measurement-1-identification-maxRelativeStandardError",
+        "value": "0.05"
+      },
+      {
+        "disabled": true,
+        "id": "printed-measurement-1-identification-maxTangentRatio",
+        "value": ""
+      },
+      {
+        "disabled": true,
+        "id": "printed-measurement-1-identification-holdStrainTolerance",
+        "value": ""
+      }
+    ],
+    "raw": "{\n  \"schemaVersion\": 1,\n  \"id\": \"synthetic-identification-linear-elastic\",\n  \"revision\": \"1\",\n  \"provenance\": \"synthetic\",\n  \"units\": {\n    \"length\": \"mm\",\n    \"force\": \"N\",\n    \"time\": \"s\",\n    \"temperature\": \"degC\",\n    \"speed\": \"mm/s\"\n  },\n  \"instrument\": {\n    \"id\": \"invented-algorithm-example-no-device\",\n    \"hardwareRevision\": \"synthetic-1\",\n    \"softwareRevision\": \"synthetic-1\"\n  },\n  \"calibration\": {\n    \"status\": \"unverified\",\n    \"forceEvidence\": null,\n    \"displacementEvidence\": null,\n    \"dimensionEvidence\": null\n  },\n  \"specimens\": [\n    {\n      \"id\": \"synthetic-example\",\n      \"dimensions\": [\n        1,\n        1,\n        10\n      ],\n      \"gaugeLength\": 10,\n      \"buildDirection\": [\n        0,\n        0,\n        1\n      ],\n      \"batch\": \"invented-no-physical-batch\",\n      \"temperature\": 20,\n      \"speed\": 0.1,\n      \"displacementKind\": \"gauge\",\n      \"samples\": [\n        [\n          0,\n          0,\n          0\n        ],\n        [\n          1,\n          0.5,\n          0.005\n        ],\n        [\n          2,\n          1,\n          0.01\n        ],\n        [\n          3,\n          1.5,\n          0.015\n        ],\n        [\n          4,\n          2,\n          0.02\n        ],\n        [\n          5,\n          2.5,\n          0.025\n        ],\n        [\n          6,\n          3,\n          0.03\n        ],\n        [\n          7,\n          3.5,\n          0.035\n        ],\n        [\n          8,\n          4,\n          0.04\n        ],\n        [\n          9,\n          4.500000000000001,\n          0.045000000000000005\n        ],\n        [\n          10,\n          5,\n          0.05\n        ],\n        [\n          11,\n          5.5,\n          0.05499999999999999\n        ],\n        [\n          12,\n          6,\n          0.06\n        ],\n        [\n          13,\n          6.500000000000001,\n          0.065\n        ],\n        [\n          14,\n          7,\n          0.07\n        ],\n        [\n          15,\n          7.5,\n          0.075\n        ],\n        [\n          16,\n          8,\n          0.08\n        ],\n        [\n          17,\n          8.5,\n          0.085\n        ],\n        [\n          18,\n          9.000000000000002,\n          0.09000000000000001\n        ],\n        [\n          19,\n          9.5,\n          0.095\n        ],\n        [\n          20,\n          10,\n          0.1\n        ]\n      ]\n    }\n  ]\n}",
+    "result": "",
+    "status": "Invented algorithm example; not recommended material properties."
+  },
+  "completed": {
+    "cancelDisabled": true,
+    "raw": "{\n  \"schemaVersion\": 1,\n  \"id\": \"synthetic-identification-linear-elastic\",\n  \"revision\": \"1\",\n  \"provenance\": \"synthetic\",\n  \"units\": {\n    \"length\": \"mm\",\n    \"force\": \"N\",\n    \"time\": \"s\",\n    \"temperature\": \"degC\",\n    \"speed\": \"mm/s\"\n  },\n  \"instrument\": {\n    \"id\": \"invented-algorithm-example-no-device\",\n    \"hardwareRevision\": \"synthetic-1\",\n    \"softwareRevision\": \"synthetic-1\"\n  },\n  \"calibration\": {\n    \"status\": \"unverified\",\n    \"forceEvidence\": null,\n    \"displacementEvidence\": null,\n    \"dimensionEvidence\": null\n  },\n  \"specimens\": [\n    {\n      \"id\": \"synthetic-example\",\n      \"dimensions\": [\n        1,\n        1,\n        10\n      ],\n      \"gaugeLength\": 10,\n      \"buildDirection\": [\n        0,\n        0,\n        1\n      ],\n      \"batch\": \"invented-no-physical-batch\",\n      \"temperature\": 20,\n      \"speed\": 0.1,\n      \"displacementKind\": \"gauge\",\n      \"samples\": [\n        [\n          0,\n          0,\n          0\n        ],\n        [\n          1,\n          0.5,\n          0.005\n        ],\n        [\n          2,\n          1,\n          0.01\n        ],\n        [\n          3,\n          1.5,\n          0.015\n        ],\n        [\n          4,\n          2,\n          0.02\n        ],\n        [\n          5,\n          2.5,\n          0.025\n        ],\n        [\n          6,\n          3,\n          0.03\n        ],\n        [\n          7,\n          3.5,\n          0.035\n        ],\n        [\n          8,\n          4,\n          0.04\n        ],\n        [\n          9,\n          4.500000000000001,\n          0.045000000000000005\n        ],\n        [\n          10,\n          5,\n          0.05\n        ],\n        [\n          11,\n          5.5,\n          0.05499999999999999\n        ],\n        [\n          12,\n          6,\n          0.06\n        ],\n        [\n          13,\n          6.500000000000001,\n          0.065\n        ],\n        [\n          14,\n          7,\n          0.07\n        ],\n        [\n          15,\n          7.5,\n          0.075\n        ],\n        [\n          16,\n          8,\n          0.08\n        ],\n        [\n          17,\n          8.5,\n          0.085\n        ],\n        [\n          18,\n          9.000000000000002,\n          0.09000000000000001\n        ],\n        [\n          19,\n          9.5,\n          0.095\n        ],\n        [\n          20,\n          10,\n          0.1\n        ]\n      ]\n    }\n  ]\n}",
+    "result": "Synthetic data; not a measurement: synthetic-identification-linear-elastic / 1SHA-256: 16a0ab21f1b6939ea450b5cf3129e8215c75c9757ffa28d8bc00b6086fa7d0ccsynthetic-examplePoints: 21Young modulus (Pa): 1000000000; Standard error 3.4676961e-8; Relative standard error 3.4676961e-17R² / RMS (Pa): 1 / 9.0647815e-10",
+    "runDisabled": false,
+    "status": "Identification results (not applied to material)"
+  }
+}

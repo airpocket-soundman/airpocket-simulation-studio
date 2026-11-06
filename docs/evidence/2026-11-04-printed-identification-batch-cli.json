@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "task": "PRINTMEASURE3",
+  "base": "e8ce96f30a28eaeb022a0b6a0d42f24251a5c69e",
+  "scope": "Bounded sequential saved-file batch identification; no cross-dataset averaging",
+  "limits": {
+    "manifestBytes": 131072,
+    "entries": 8,
+    "totalReferencedInputBytes": 8388608,
+    "artifactBytes": 4194304,
+    "optionsBytes": 16384,
+    "datasetBytes": 2000000
+  },
+  "validation": {
+    "declarations": 38,
+    "command": "node --test tests/printed-identification-batch-cli.test.mjs tests/printed-identification-file-cli.test.mjs tests/printed-parameter-identification.test.mjs tests/docs.test.mjs",
+    "pass": 34,
+    "elapsedMs": 15917.4966,
+    "tests": 34,
+    "logSHA256": "43fd4f850d060c2614028837390b379d0f9be2ae5f02a1c88886b5c47fd62089",
+    "skip": 0,
+    "fail": 0
+  },
+  "independentOracle": "8 separate exact tensile E expectations, exact 8MiB boundary; committed pre-extraction single identified/refused artifacts compared byte-for-byte",
+  "behavior": [
+    "All expected raw SHA versions match before fitting",
+    "Individual refusals retain other ordered results",
+    "Duplicate jobs and cross-role/hardlink aliases refused",
+    "FD reads bounded; changed files and links refused",
+    "Two real CLI writers produce one exclusive complete artifact"
+  ],
+  "calibrated": false,
+  "accuracyVerified": false,
+  "nonClaims": [
+    "No new physical measurement or calibration",
+    "No GUI, material application, solver, MCP or status promotion",
+    "Batch does not close parent PRINTMEASURE3 experimental acceptance"
+  ]
+}

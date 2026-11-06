@@ -2,7 +2,7 @@
 
 [日本語](../printed-measurement-ui.md)
 
-Base `2a5fab3`. Main mounts an “Inspect printed-material measurements” accordion immediately after material-property entry. It provides JSON input, inspection, an explicitly synthetic example, specimen selection, a stress–strain plot, numeric table and source/normalized JSON download links. It neither registers project/case/solver data nor fits/applies material properties.
+Initial implementation record (base `2a5fab3`). Main mounts an “Inspect printed-material measurements” accordion immediately after material-property entry. It provides JSON input, inspection, an explicitly synthetic example, specimen selection, a stress–strain plot, numeric table and source/normalized JSON download links. The initial version neither registered project/case/solver data nor fitted/applied material properties. See the current optional identification addition below.
 
 `src/ui/printed-measurement-ui.js` directly uses existing `importPrintedMeasurementDataset`, retaining its units, exact-source SHA-256, provenance, instrument revisions, calibration report checks, nonfinite/count limits and2,000,000 UTF-8 byte ceiling. It does not duplicate normalization. Batch, direction, temperature, speed, dimensions, gauge and counts are visible; source hash/instrument/calibration details are collapsed. “Input validated” does not certify measurement accuracy or calibration certificates. Calibration status/evidence are reports inside the data, never verified equipment/certificates. Measured provenance is explicitly a user report; no real measurements were supplied in this delivery.
 
@@ -14,6 +14,9 @@ Native summary/buttons/select/textarea support keyboard use; Ctrl/⌘+Enter insp
 
 Root IAB procedure: open main at390px → “03” analysis/material controls → inspector immediately after material-property details → inspect synthetic example → switch Z/X and check1 MPa/0.01 plus directions → edit JSON to`{` and confirm prior curve/download links disappear immediately → switch EN. Compare actual exportProject/case state before/after inspection. Standalone route: `/docs/fixtures/printed-measurement-ui.html?lang=en`. DOM regression results do not establish actual IAB/mobile acceptance.
 
-Links create JSON only; no automatic download occurs. Existing2 MB/100 specimen/10,000 total sample limits remain. Unsupported units, crosshead displacement, incomplete calibration evidence and invalid specimens are rejected by the existing parser. Coupled solvers, identification, instrument calibration, experimental accuracy and automatic material changes remain unimplemented.
+Links create JSON only; no automatic download occurs. Existing2 MB/100 specimen/10,000 total sample limits remain. Unsupported units, crosshead displacement, incomplete calibration evidence and invalid specimens are rejected by the existing parser. Identification was absent in the initial implementation; the explicit-condition addition below now provides it. Coupled solvers, instrument calibration, experimental accuracy and automatic material changes remain unverified or unsupported.
 
 Actual main-mounted IAB390px validation passed bilingual specimen selection, synthetic1MPa/.01 display, invalid-input cleanup, CtrlEnter, exact project snapshot equality and Back/reload reinspection. [Evidence](../evidence/2026-10-23-print2-main-browser.json). pageshow.persisted was false; actual bfcache restoration and Blob downloads are not claimed.
+
+
+[Optional read-only identification](printed-identification-ui.md) now uses explicitly entered conditions and an owned worker; it does not apply values to materials.

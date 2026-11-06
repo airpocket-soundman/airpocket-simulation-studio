@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-04",
+  "candidate": "4e7f76f1d01be9cbe05be0165b2fe75055675489",
+  "environment": {
+    "node": "v24.11.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "sourceChangesInAudit": false,
+  "sources": [
+    {
+      "path": "src/printed-identification-examples.js",
+      "gitBlobSha256": "9a23cf90b2b76881c99cc4841caa672ca2504856b114e0ba66a9144dfe279ac9"
+    },
+    {
+      "path": "src/ui/printed-identification-ui.js",
+      "gitBlobSha256": "5e4393f4ef105a3c265db8c6168a53b8e6c4c32a60d6178355536f31baab43fa"
+    },
+    {
+      "path": "src/ui/printed-measurement-ui.js",
+      "gitBlobSha256": "616b10ee5a61afd6b881d48d771010449674b642fa6206eb6541f2644df98fba"
+    }
+  ],
+  "examples": [
+    {
+      "model": "linear-elastic",
+      "bytes": 2338,
+      "sha256": "16a0ab21f1b6939ea450b5cf3129e8215c75c9757ffa28d8bc00b6086fa7d0cc",
+      "options": {
+        "model": "linear-elastic",
+        "maxStrain": 0.01,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05
+      },
+      "syntheticTruth": {
+        "youngsModulusPa": 1000000000
+      }
+    },
+    {
+      "model": "bilinear-elastic-plastic",
+      "bytes": 8540,
+      "sha256": "7be5811b9b6fdc3ebb0a28f5a7d9f86611b4b39ca4f3a05a27707c5cc92099f0",
+      "options": {
+        "model": "bilinear-elastic-plastic",
+        "maxStrain": 0.04,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05,
+        "maxTangentRatio": 0.5
+      },
+      "syntheticTruth": {
+        "youngsModulusPa": 2000000000,
+        "yieldStressPa": 20000000,
+        "tangentModulusPa": 100000000
+      }
+    },
+    {
+      "model": "sls-relaxation",
+      "bytes": 7483,
+      "sha256": "54e79428181cba54b6f66bbd8e4290e5520c16376b0426bba3d0dd5451d360af",
+      "options": {
+        "model": "sls-relaxation",
+        "maxStrain": 0.01,
+        "minPoints": 5,
+        "maxRelativeStandardError": 0.05,
+        "holdStrainTolerance": 0.000001
+      },
+      "syntheticTruth": {
+        "equilibriumModulusPa": 1200000000,
+        "branchModulusPa": 800000000,
+        "relaxationTimeS": 2
+      }
+    }
+  ],
+  "legacyExample": {
+    "bytes": 1585,
+    "sha256": "378c09336e6da359df7ad2fe155aaf5bdbbe5c7956ff498ce1dc2824d13c4681",
+    "unchangedFromBase74": true
+  },
+  "independentGroups": 3,
+  "oracle": "Force/area and displacement/gauge, direct piecewise bilinear expression; SLS three-sample exponential difference ratio gives tau/equilibrium/branch. No fitted production parameters used as oracle.",
+  "controllers": [
+    "All three load buttons invalidate parent results/URLs and child report/worker",
+    "No automatic digest or worker during load; all options explicit/irrelevant options empty",
+    "JA/EN invented/unapplied labels; same-example ABA during pending digest and active worker cannot publish stale results"
+  ],
+  "initialRelated": {
+    "tests": 52,
+    "pass": 51,
+    "fail": 1,
+    "skip": 0,
+    "durationMilliseconds": 13713.9337,
+    "reason": "Independent helper ready() incorrectly assumed SHA completion within100 setImmediate turns; worker count0 expected1",
+    "logSha256": "6ab1fd989d116a53f7361ea5c0e45abf94eb2e43f8d7b803b014d5946d6807a3"
+  },
+  "testHarnessFix": "Wait for explicit worker postMessage notification with owned bounded watchdog; no product/assertion change",
+  "finalRelated": {
+    "command": "node --test tests/printed-identification-examples-independent.test.mjs tests/printed-identification-examples.test.mjs tests/printed-identification-ui.test.mjs tests/printed-identification-ui-independent.test.mjs tests/ui-printed-measurement.test.mjs tests/module-boundaries.test.mjs tests/docs.test.mjs",
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "skip": 0,
+    "durationMilliseconds": 6956.1554,
+    "logSha256": "944dda674b7c15a2dc43157e46ffc124c7c6124d2200af51bb384b3724e874bf"
+  },
+  "contracts": {
+    "pass": true,
+    "declarationFiles": 38,
+    "logSha256": "6e221d38413e257f365bb6425a3663add76c146f81a2cecc3ece53479788e175"
+  },
+  "mandatoryFindings": [],
+  "limitations": [
+    "Current-candidate/runtime generated raw hash identities",
+    "Controlled controller only; actual browser acceptance is root-owned",
+    "No solver, measurement, calibration, material application, progress promotion or publication claim"
+  ]
+}

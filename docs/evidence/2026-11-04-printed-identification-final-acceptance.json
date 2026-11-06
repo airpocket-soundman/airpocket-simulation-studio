@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-04",
+  "source": "6718614",
+  "scope": "Actual integrated GUI condition groups, single-entry batch CLI success and SHA mismatch refusal, distinct synthetic holdout prediction",
+  "physicalCalibration": false,
+  "generalAccuracyVerified": false,
+  "holdoutOracle": {
+    "residualPa": [
+      -20000,
+      -40000,
+      -60000
+    ],
+    "biasPa": -40000,
+    "rmsPa": 43204.93798938573
+  },
+  "files": [
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/holdout.json",
+      "bytes": 3503,
+      "sha256": "2b1a252895466056e1c3f1ae3d8771177b8d5da9a8c6896f3cd3294912e784de"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/ident-final-groups.png",
+      "bytes": 45701,
+      "sha256": "cfc8b982f873e7dc3d7c9028276987838d9988612cb9d438b15459f65921e4b3"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/ident-final-groups.txt",
+      "bytes": 1162,
+      "sha256": "0b344b42ba57db50e9347c4a893ccfba8183cdf219b68a22312c5fc55cd12b82"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/mismatch-artifact.json",
+      "bytes": 770,
+      "sha256": "eca3181ed70959134480d458593770ba721d585bc56b5c46df50a64c39ae1b4a"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/mismatch-cli.json",
+      "bytes": 590,
+      "sha256": "95a88907e9f81b0a15d9efb6339dea7e8176d3c89e1bd42ce214f352a217eaec"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/mismatch-manifest.json",
+      "bytes": 577,
+      "sha256": "01250a1504a18bf5dfd0fd1601f337ea61e8e901577b31007370c9443dd468d4"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/valid-artifact.json",
+      "bytes": 1575,
+      "sha256": "f3321c62624966c0710ea843282d392cd63b4fa693100110dd562b991e124d26"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/valid-cli.json",
+      "bytes": 529,
+      "sha256": "3032b02592080c93e071cf96b669530070584b15c61a3787991b00b523273447"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/valid-manifest.json",
+      "bytes": 577,
+      "sha256": "a174d269c02e71c38690de12a067db58730efc797af956a2bc909853e3be7a36"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/after-binding-fix.png",
+      "bytes": 45701,
+      "sha256": "cfc8b982f873e7dc3d7c9028276987838d9988612cb9d438b15459f65921e4b3"
+    },
+    {
+      "path": "docs/evidence/printed-identification-final-20261104/after-binding-fix.txt",
+      "bytes": 1162,
+      "sha256": "0b344b42ba57db50e9347c4a893ccfba8183cdf219b68a22312c5fc55cd12b82"
+    }
+  ],
+  "afterBindingFix": {
+    "source": "d8e5110",
+    "normalRealWorkerResult": "two distinct conditions, 100000000 Pa per specimen, one-member SD unknown"
+  }
+}

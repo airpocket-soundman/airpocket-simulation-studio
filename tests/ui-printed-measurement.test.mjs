@@ -22,7 +22,7 @@ test('invalid input immediately clears prior validated display and owned URLs, i
 });
 test('late SHA completions cannot restore edited ABA, replaced input or destroyed output',async()=>{
  const h=setup(),ui=h.ui,raw=syntheticPrintedMeasurementJson();ui.input.value=raw;const old=ui.inspect();ui.input.value='{';ui.input.oninput();ui.input.value=raw;ui.input.oninput();assert.equal(await old,false);assert.equal(ui.snapshot().phase,'idle');assert.equal(h.live.size,0);
- ui.input.value=raw;const previous=ui.inspect();const next=JSON.parse(raw);next.id='new-synthetic';ui.input.value=JSON.stringify(next);ui.input.oninput();const fresh=ui.inspect();assert.equal(await previous,false);assert.equal(await fresh,true);assert.match(ui.results.textContent,/new-synthetic/);
+ ui.input.value=raw;const previous=ui.inspect();const next=JSON.parse(raw);next.id='new-synthetic';ui.input.value=JSON.stringify(next);ui.input.oninput();const overlapping=ui.inspect();assert.equal(await overlapping,false);assert.equal(await previous,false);const fresh=ui.inspect();assert.equal(await fresh,true);assert.match(ui.results.textContent,/new-synthetic/);
  ui.input.value=raw;const disposing=ui.inspect();ui.destroy();ui.destroy();assert.equal(await disposing,false);assert.equal(ui.snapshot().phase,'closed');assert.equal(ui.snapshot().sourceSha256,null);assert.equal(h.live.size,0);assert.equal(h.listeners.size,0);assert.equal(h.host.children.length,0);assert.equal(ui.input.value,'');
 });
 test('dense valid input retains every JSON sample but bounds SVG to201 and table to50 rows per page',async()=>{

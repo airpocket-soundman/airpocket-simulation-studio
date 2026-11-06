@@ -1,0 +1,6 @@
+import type {PrintedIdentificationOptions,PrintedIdentificationResult,PrintedIdentificationModel} from './printed-parameter-identification.js';
+export interface PrintedIdentificationConditions {buildDirection:[number,number,number];temperatureC:number;speedMmPerSecond:number;batch:string;dimensionsMm:[number,number,number];gaugeLengthMm:number}
+export interface PrintedIdentificationConditionGroup {id:string;conditions:PrintedIdentificationConditions;members:({specimen:string;identified:true}|{specimen:string;identified:false;reason:string})[];statistics:Record<string,{mean:number;sampleStandardDeviation:number|null;specimens:number}>|null}
+export interface PrintedIdentificationGrouping {groupingVersion:1;dataset:PrintedIdentificationResult['dataset'];model:PrintedIdentificationModel;options:PrintedIdentificationOptions;calibrated:false;accuracyVerified:false;covarianceAccuracyVerified:false;mixedConditions:boolean;groups:PrintedIdentificationConditionGroup[]}
+export declare const PRINTED_IDENTIFICATION_GROUP_LIMITS:Readonly<{groups:100;specimens:100;parameters:3}>;
+export declare function identifyPrintedParametersByCondition(rawDatasetJson:string,options:PrintedIdentificationOptions):Promise<{identification:PrintedIdentificationResult;grouping:PrintedIdentificationGrouping}>;

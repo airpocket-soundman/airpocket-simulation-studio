@@ -1,0 +1,26 @@
+{
+  "baseSha": "2a18a87",
+  "task": "PRINTMEASURE3 audit fix only",
+  "finding": "A same-SHA worker response could substitute plausible condition metadata (20C to999C) without comparison to source specimen conditions.",
+  "fix": "Reuse importPrintedMeasurementDataset inside the existing single preparation slot; snapshot only normalized per-specimen conditions and dataset labels. Validate every reported member against all six original conditions with Object.is. No raw/options/core or progress changes.",
+  "ownership": "The same digestPending slot remains reserved through real importer/SHA settlement even after cancel/edit/clear/dispose; old-generation results cannot publish. Heavy numerical fitting stays in the owned worker.",
+  "regressions": [
+    "All six condition substitutions, including temperature999",
+    "Source provenance changed in both response copies",
+    "Members plus matching statistics swapped between otherwise plausible groups"
+  ],
+  "verification": {
+    "focused": {
+      "total": 60,
+      "pass": 60,
+      "fail": 0,
+      "skip": 0,
+      "durationMs": 2946.9066
+    },
+    "declarationStdout": "Contract declarations type-check (40 declaration files).",
+    "diffCheck": "pass"
+  },
+  "newFeature": false,
+  "progressChanged": false,
+  "newRealGuiOrSolver": 0
+}
